@@ -40,7 +40,7 @@ namespace OpenDentBusiness{
 		Gender,
 		///<summary>5-LabResult</summary>
 		LabResult,
-		///<summary>6-ICD9</summary>//now handled by Problem(DiseaseDef)
-		ICD9
+		/////<summary>6-ICD9</summary>//now handled by Problem(DiseaseDef)
+		//ICD9
 	}
 }

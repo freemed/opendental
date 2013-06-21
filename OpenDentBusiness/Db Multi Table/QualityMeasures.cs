@@ -314,15 +314,16 @@ namespace OpenDentBusiness {
 					command="INSERT INTO tempehrquality (PatNum,LName,FName,DateVisit,VisitCount,Icd9Code) "
 						+"SELECT patient.PatNum,LName,FName,"
 						+"MAX(ProcDate), "// most recent visit
-						+"COUNT(DISTINCT ProcDate),icd9.ICD9Code "
+						+"COUNT(DISTINCT ProcDate),diseasedef.ICD9Code "
 						+"FROM patient "
 						+"INNER JOIN procedurelog "
 						+"ON Patient.PatNum=procedurelog.PatNum "
 						+"AND procedurelog.ProcStatus=2 "//complete
 						+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
 						+"LEFT JOIN disease ON disease.PatNum=patient.PatNum "
-						+"AND disease.ICD9Num IN (SELECT ICD9Num FROM icd9 WHERE ICD9Code REGEXP '^40[1-4]') "//starts with 401 through 404
-						+"LEFT JOIN icd9 ON icd9.ICD9Num=disease.ICD9Num "
+						+"AND disease.DiseaseDefNum IN (SELECT DiseaseDefNum FROM diseasedef WHERE ICD9Code REGEXP '^40[1-4]') "//starts with 401 through 404
+						//+"LEFT JOIN icd9 ON icd9.ICD9Num=disease.ICD9Num "
+						+"LEFT JOIN diseasedef ON diseasedef.DiseaseDefNum=disease.DiseaseDefNum "
 						//+"AND icd9.ICD9Code REGEXP '^40[1-4]' "//starts with 401 through 404
 						+"WHERE Birthdate <= "+POut.Date(DateTime.Today.AddYears(-18))+" "//18+
 						+"GROUP BY patient.PatNum";
@@ -1068,14 +1069,14 @@ namespace OpenDentBusiness {
 					command="UPDATE tempehrquality "
 						+"SET HasDiagnosisDiabetes = 1 "
 						+"WHERE (SELECT COUNT(*) "
-						+"FROM disease,icd9 "
-						+"WHERE disease.ICD9Num=icd9.ICD9Num "
+						+"FROM disease,diseasedef "
+						+"WHERE disease.DiseaseDefNum=diseasedef.DiseaseDefNum "
 						+"AND disease.PatNum=tempehrquality.PatNum "
-						+"AND (icd9.ICD9Code LIKE '250%' "
-						+"OR icd9.ICD9Code LIKE '357.2' "
-						+"OR icd9.ICD9Code LIKE '362.0%' "
-						+"OR icd9.ICD9Code LIKE '366.41' "
-						+"OR icd9.ICD9Code LIKE '648.0%') "
+						+"AND (diseasedef.ICD9Code LIKE '250%' "
+						+"OR diseasedef.ICD9Code LIKE '357.2' "
+						+"OR diseasedef.ICD9Code LIKE '362.0%' "
+						+"OR diseasedef.ICD9Code LIKE '366.41' "
+						+"OR diseasedef.ICD9Code LIKE '648.0%') "
 						+"AND (disease.DateStart <= "+POut.Date(dateEnd)+" "//if there is a start date, it can't be after the period end.
 						+"OR disease.DateStart < '1880-01-01') "//no startdate
 						+"AND (disease.DateStop >= "+POut.Date(dateEnd.AddYears(-2))+" "//if there's a datestop, it can't have stopped more than 2 years ago.
@@ -1105,10 +1106,10 @@ namespace OpenDentBusiness {
 					command="UPDATE tempehrquality "
 						+"SET HasDiagnosisPolycystic = 1 "
 						+"WHERE (SELECT COUNT(*) "
-						+"FROM disease,icd9 "
-						+"WHERE disease.ICD9Num=icd9.ICD9Num "
+						+"FROM disease,diseasedef "
+						+"WHERE disease.DiseaseDefNum=diseasedef.DiseaseDefNum "
 						+"AND disease.PatNum=tempehrquality.PatNum "
-						+"AND icd9.ICD9Code = '256.4' "
+						+"AND diseasedef.ICD9Code = '256.4' "
 						+"AND (disease.DateStart <= "+POut.Date(dateEnd)+" "//if there's a datestart, it can't be after period end
 						+"OR disease.DateStart < '1880-01-01') "
 						//no restrictions on datestop.  It could still be active or could have stopped before or after the period end.
@@ -1118,11 +1119,11 @@ namespace OpenDentBusiness {
 					command="UPDATE tempehrquality "
 						+"SET HasDiagnosisAcuteDiabetes = 1 "
 						+"WHERE (SELECT COUNT(*) "
-						+"FROM disease,icd9 "
-						+"WHERE disease.ICD9Num=icd9.ICD9Num "
+						+"FROM disease,diseasedef "
+						+"WHERE disease.DiseaseDefNum=diseasedef.DiseaseDefNum "
 						+"AND disease.PatNum=tempehrquality.PatNum "
-						+"AND (icd9.ICD9Code LIKE '249%' OR icd9.ICD9Code='251.8' OR icd9.ICD9Code='962.0' "//steroid induced
-						+"OR icd9.ICD9Code LIKE '648.8%') "//gestational
+						+"AND (diseasedef.ICD9Code LIKE '249%' OR diseasedef.ICD9Code='251.8' OR diseasedef.ICD9Code='962.0' "//steroid induced
+						+"OR diseasedef.ICD9Code LIKE '648.8%') "//gestational
 						+"AND (disease.DateStart <= "+POut.Date(dateEnd)+" "//if there's a datestart, it can't be after period end
 						+"OR disease.DateStart < '1880-01-01') "
 						//no restrictions on datestop.  It could still be active or could have stopped before or after the period end.
@@ -1166,10 +1167,10 @@ namespace OpenDentBusiness {
 					command="UPDATE tempehrquality "
 						+"SET HasDiagnosisHypertension = 1 "
 						+"WHERE (SELECT COUNT(*) "
-						+"FROM disease,icd9 "
-						+"WHERE disease.ICD9Num=icd9.ICD9Num "
+						+"FROM disease,diseasedef "
+						+"WHERE disease.DiseaseDefNum=diseasedef.DiseaseDefNum "
 						+"AND disease.PatNum=tempehrquality.PatNum "
-						+"AND icd9.ICD9Code LIKE '401%' "
+						+"AND diseasedef.ICD9Code LIKE '401%' "
 						+"AND (disease.DateStart <= "+POut.Date(dateStart.AddMonths(6))+" "//if there is a start date, it can't be after this point
 						+"OR disease.DateStart < '1880-01-01') "//no startdate
 						//no restrictions on datestop.  It could still be active or could have stopped before or after the period end.
@@ -1193,17 +1194,17 @@ namespace OpenDentBusiness {
 					command="UPDATE tempehrquality "
 						+"SET HasDiagnosisPregnancy = 1 "
 						+"WHERE (SELECT COUNT(*) "
-						+"FROM disease,icd9 "
-						+"WHERE disease.ICD9Num=icd9.ICD9Num "
+						+"FROM disease,diseasedef "
+						+"WHERE disease.DiseaseDefNum=diseasedef.DiseaseDefNum "
 						+"AND disease.PatNum=tempehrquality.PatNum "
-						+"AND (icd9.ICD9Code LIKE '63%' "
-						+"OR icd9.ICD9Code LIKE '64%' "
-						+"OR icd9.ICD9Code LIKE '65%' "
-						+"OR icd9.ICD9Code LIKE '66%' "
-						+"OR icd9.ICD9Code LIKE '67%' "
-						+"OR icd9.ICD9Code LIKE 'V22%' "
-						+"OR icd9.ICD9Code LIKE 'V23%' "
-						+"OR icd9.ICD9Code LIKE 'V28%') "
+						+"AND (diseasedef.ICD9Code LIKE '63%' "
+						+"OR diseasedef.ICD9Code LIKE '64%' "
+						+"OR diseasedef.ICD9Code LIKE '65%' "
+						+"OR diseasedef.ICD9Code LIKE '66%' "
+						+"OR diseasedef.ICD9Code LIKE '67%' "
+						+"OR diseasedef.ICD9Code LIKE 'V22%' "
+						+"OR diseasedef.ICD9Code LIKE 'V23%' "
+						+"OR diseasedef.ICD9Code LIKE 'V28%') "
 						//active during the period
 						+"AND (disease.DateStart <= "+POut.Date(dateEnd)+" "//if there is a start date, it can't be after the period end.
 						+"OR disease.DateStart < '1880-01-01') "//no startdate
@@ -1215,17 +1216,17 @@ namespace OpenDentBusiness {
 					command="UPDATE tempehrquality "
 						+"SET HasDiagnosisESRD = 1 "
 						+"WHERE (SELECT COUNT(*) "
-						+"FROM disease,icd9 "
-						+"WHERE disease.ICD9Num=icd9.ICD9Num "
+						+"FROM disease,diseasedef "
+						+"WHERE disease.DiseaseDefNum=diseasedef.DiseaseDefNum "
 						+"AND disease.PatNum=tempehrquality.PatNum "
-						+"AND (icd9.ICD9Code LIKE '38.95' "
-						+"OR icd9.ICD9Code LIKE '39%' "
-						+"OR icd9.ICD9Code LIKE '54.98' "
-						+"OR icd9.ICD9Code LIKE '55.6%' "
-						+"OR icd9.ICD9Code LIKE '585%' "
-						+"OR icd9.ICD9Code LIKE 'V42.0%' "
-						+"OR icd9.ICD9Code LIKE 'V45.1%' "
-						+"OR icd9.ICD9Code LIKE 'V56%') "
+						+"AND (diseasedef.ICD9Code LIKE '38.95' "
+						+"OR diseasedef.ICD9Code LIKE '39%' "
+						+"OR diseasedef.ICD9Code LIKE '54.98' "
+						+"OR diseasedef.ICD9Code LIKE '55.6%' "
+						+"OR diseasedef.ICD9Code LIKE '585%' "
+						+"OR diseasedef.ICD9Code LIKE 'V42.0%' "
+						+"OR diseasedef.ICD9Code LIKE 'V45.1%' "
+						+"OR diseasedef.ICD9Code LIKE 'V56%') "
 						//active during the period
 						+"AND (disease.DateStart <= "+POut.Date(dateEnd)+" "
 						+"OR disease.DateStart < '1880-01-01') "

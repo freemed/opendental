@@ -3,13 +3,13 @@ using System.Collections;
 using System.Drawing;
 
 namespace OpenDentBusiness {
-	///<summary>EHR education resource.  Only one of the 4 FK fields will be used at a time.  The other two will be blank.   Displays a clickable URL if the patient meets certain criteria.  </summary>
+	///<summary>EHR education resource.  Only one of the 3 FK fields will be used at a time (DiseaseDefNum, MedicationNum, or LabResultID).  The other two will be blank.   Displays a clickable URL if the patient meets certain criteria.  </summary>
 	[Serializable]
 	public class EduResource:TableBase {
 		///<summary>Primary key.</summary>
 		[CrudColumn(IsPriKey=true)]
 		public long EduResourceNum;
-		///<summary>FK to diseasedef.DiseaseDefNum. </summary>
+		///<summary>FK to diseasedef.DiseaseDefNum.  This now also handles ICD9s and Snomeds via the entry in DiseaseDef.</summary>
 		public long DiseaseDefNum;
 		///<summary>FK to medication.MedicationNum. </summary>
 		public long MedicationNum;

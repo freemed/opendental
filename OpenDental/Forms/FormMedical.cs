@@ -735,8 +735,7 @@ namespace OpenDental{
 			FillProblems();
 		}
 
-		private void butIcd9_Click(object sender,EventArgs e) {
-			/*
+		/*private void butIcd9_Click(object sender,EventArgs e) {
 			FormIcd9s formI=new FormIcd9s();
 			formI.IsSelectionMode=true;
 			formI.ShowDialog();
@@ -745,17 +744,10 @@ namespace OpenDental{
 			}
 			Disease disease=new Disease();
 			disease.PatNum=PatCur.PatNum;
-			DiseaseDef def=DiseaseDefs.GetByICD9Code(formI.SelectedIcd9Code);
-			if(def==null) {//DiseaseDef does not exist, create it.
-				def=new DiseaseDef();
-				def.ICD9Code=formI.SelectedIcd9Code;
-				def.DiseaseName=ICD9s.GetByCode(formI.SelectedIcd9Code).Description;
-				def.DiseaseDefNum=DiseaseDefs.Insert(def);
-			}
-			disease.DiseaseDefNum=def.DiseaseDefNum;
+			disease.ICD9Num=formI.SelectedIcd9Num;
 			Diseases.Insert(disease);
-			FillProblems();*/
-		}
+			FillProblems();
+		}*/
 
 		private void gridDiseases_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			FormDiseaseEdit FormD=new FormDiseaseEdit(DiseaseList[e.Row]);

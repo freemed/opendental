@@ -295,18 +295,7 @@ namespace OpenDentBusiness {
 				Db.NonQ(command);
 				command="ALTER TABLE patient DROP COLUMN SmokeStatus";
 				Db.NonQ(command);
-				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE eduresource ADD ICD9Code varchar(255) NOT NULL";
-					Db.NonQ(command);
-				}
-				else {//oracle
-					command="ALTER TABLE eduresource ADD ICD9Code varchar2(255)";
-					Db.NonQ(command);
-				}
-				command="UPDATE eduresource,icd9 SET eduresource.ICD9Code=icd9.ICD9Code WHERE eduresource.ICD9Num=icd9.ICD9Num";
-				Db.NonQ(command);
-				command="ALTER TABLE eduresource DROP COLUMN ICD9Num";
-				Db.NonQ(command);
+				//Add ICD9Code to DiseaseDef and update eduresource and disease to use DiseaseDefNum instead of ICD9Num----------------------------------------------------
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE diseasedef ADD ICD9Code varchar(255) NOT NULL";
 					Db.NonQ(command);
@@ -315,9 +304,35 @@ namespace OpenDentBusiness {
 					command="ALTER TABLE diseasedef ADD ICD9Code varchar2(255)";
 					Db.NonQ(command);
 				}
-				command="INSERT INTO diseasedef(DiseaseName,ICD9Code) SELECT Description,ICD9Code FROM icd9,disease WHERE icd9.ICD9Num=disease.ICD9Num";
-				Db.NonQ(command);
-				command="UPDATE disease,diseasedef,icd9 SET disease.DiseaseDefNum=diseasedef.DiseaseDefNum WHERE disease.ICD9Num=icd9.ICD9Num and icd9.ICD9Code=diseasedef.ICD9Code";
+				command="SELECT MAX(ItemOrder) FROM DiseaseDef";
+				int itemOrderCur=PIn.Int(Db.GetScalar(command));
+				command="SELECT DISTINCT Description,ICD9Code,icd9.ICD9Num "
+					+"FROM icd9,eduresource,disease,reminderrule "
+					+"WHERE icd9.ICD9Num=eduresource.ICD9Num "
+					+"OR icd9.ICD9Num=disease.ICD9Num "
+					+"OR (ReminderCriterion=6 AND icd9.ICD9Num=CriterionFK)";//6=ICD9
+				table=Db.GetTable(command);
+				for(int i=0;i<table.Rows.Count;i++) {
+					itemOrderCur++;
+					if(DataConnection.DBtype==DatabaseType.MySql) {
+						command="INSERT INTO DiseaseDef(DiseaseName,ItemOrder,ICD9Code) VALUES('"
+							+POut.String(table.Rows[i]["Description"].ToString())+"',"+POut.Int(itemOrderCur)+",'"+POut.String(table.Rows[i]["ICD9Code"].ToString())+"')";
+						Db.NonQ(command);
+					}
+					else {//oracle
+						command="INSERT INTO DiseaseDef(DiseaseDefNum,DiseaseName,ItemOrder,ICD9Code) VALUES((SELECT MAX(DiseaseDefNum)+1 FROM diseasedef),'"
+							+POut.String(table.Rows[i]["Description"].ToString())+"',"+POut.Int(itemOrderCur)+",'"+POut.String(table.Rows[i]["ICD9Code"].ToString())+"')";
+						Db.NonQ(command);
+					}
+					long defNum=Db.NonQ(command,true);
+					command="UPDATE eduresource SET DiseaseDefNum="+POut.Long(defNum)+" WHERE ICD9Num="+table.Rows[i]["ICD9Num"].ToString();
+					Db.NonQ(command);
+					command="UPDATE disease SET DiseaseDefNum="+POut.Long(defNum)+" WHERE ICD9Num="+table.Rows[i]["ICD9Num"].ToString();
+					Db.NonQ(command);
+					command="UPDATE reminderrule SET CriterionFK="+POut.Long(defNum)+" WHERE CriterionFK="+table.Rows[i]["ICD9Num"].ToString()+" AND ReminderCriterion=6";
+					Db.NonQ(command);
+				}
+				command="ALTER TABLE eduresource DROP COLUMN ICD9Num";
 				Db.NonQ(command);
 				command="ALTER TABLE disease DROP COLUMN ICD9Num";
 				Db.NonQ(command);
@@ -329,6 +344,10 @@ namespace OpenDentBusiness {
 					command="ALTER TABLE diseasedef ADD SnomedCode varchar2(255)";
 					Db.NonQ(command);
 				}
+				//Update reminderrule.ReminderCriterion - set ICD9 (6) to Problem (0)------------------------------------------------------------------------------------
+				command="UPDATE reminderrule SET ReminderCriterion=0 WHERE ReminderCriterion=6";
+				Db.NonQ(command);
+				//Update patientrace-------------------------------------------------------------------------------------------------------------------------------------
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="INSERT INTO preference(PrefName,ValueString) VALUES('LanguagesIndicateNone','Declined to Specify')";
 					Db.NonQ(command);

@@ -36,11 +36,13 @@ namespace OpenDental {
 			}
 			switch((EhrCriterion)comboReminderCriterion.SelectedIndex) {
 				case EhrCriterion.Problem:
-					textCriterionFK.Text=DiseaseDefs.GetName(RuleCur.CriterionFK);
+					DiseaseDef def=DiseaseDefs.GetItem(RuleCur.CriterionFK);
+					textCriterionFK.Text=def.DiseaseName;
+					textICD9.Text=def.ICD9Code;
 					break;
-				case EhrCriterion.ICD9:
-					textCriterionFK.Text=ICD9s.GetDescription(RuleCur.CriterionFK);
-					break;
+				//case EhrCriterion.ICD9:
+				//  textCriterionFK.Text=ICD9s.GetDescription(RuleCur.CriterionFK);
+				//  break;
 				case EhrCriterion.Medication:
 					Medication tempMed = Medications.GetMedication(RuleCur.CriterionFK);
 					if(tempMed.MedicationNum==tempMed.GenericNum) {//handle generic medication names.
@@ -53,19 +55,25 @@ namespace OpenDental {
 				case EhrCriterion.Allergy:
 					textCriterionFK.Text=AllergyDefs.GetOne(RuleCur.CriterionFK).Description;
 					break;
-				default:
-					//Nothing should happen here.
+				case EhrCriterion.Age:
+					break;
+				case EhrCriterion.Gender:
+					break;
+				case EhrCriterion.LabResult:
+					break;
+				default://This should not happen.
 					break;
 			}
 		}
 
 		private void comboReminderCriterion_SelectedIndexChanged(object sender,EventArgs e) {
-			if(RuleCur.ReminderCriterion!=(EhrCriterion)comboReminderCriterion.SelectedIndex) {
-				RuleCur.CriterionFK=-1;
+			if(RuleCur.ReminderCriterion!=(EhrCriterion)comboReminderCriterion.SelectedIndex) {//if user just changed the type,
+				RuleCur.CriterionFK=-1;//clear the FK data showing
 				FillFK();
 			}
 			RuleCur.ReminderCriterion=(EhrCriterion)comboReminderCriterion.SelectedIndex;
-			if(RuleCur.ReminderCriterion==EhrCriterion.Problem || RuleCur.ReminderCriterion==EhrCriterion.Medication || RuleCur.ReminderCriterion==EhrCriterion.Allergy || RuleCur.ReminderCriterion==EhrCriterion.ICD9) {
+			//if(RuleCur.ReminderCriterion==EhrCriterion.Problem || RuleCur.ReminderCriterion==EhrCriterion.Medication || RuleCur.ReminderCriterion==EhrCriterion.Allergy || RuleCur.ReminderCriterion==EhrCriterion.ICD9) {
+			if(RuleCur.ReminderCriterion==EhrCriterion.Problem || RuleCur.ReminderCriterion==EhrCriterion.Medication || RuleCur.ReminderCriterion==EhrCriterion.Allergy) {
 				labelCriterionFK.Text=RuleCur.ReminderCriterion.ToString();
 				textCriterionValue.Visible=false;
 				labelCriterionValue.Visible=false;
@@ -73,6 +81,14 @@ namespace OpenDental {
 				labelCriterionFK.Visible=true;
 				textCriterionFK.Visible=true;
 				butSelectFK.Visible=true;
+				if(RuleCur.ReminderCriterion==EhrCriterion.Problem) {
+					labelICD9.Visible=true;
+					textICD9.Visible=true;
+				}
+				else {
+					labelICD9.Visible=false;
+					textICD9.Visible=false;
+				}
 			}
 			else {//field only used when Age, Gender, or Labresult are selected.
 				textCriterionValue.Visible=true;
@@ -116,16 +132,16 @@ namespace OpenDental {
 					}
 					RuleCur.CriterionFK=formA.SelectedAllergyDefNum;
 					break;
-				case EhrCriterion.ICD9:
-					FormIcd9s FormICD9Select = new FormIcd9s();
-					FormICD9Select.IsSelectionMode=true;
-					FormICD9Select.ShowDialog();
-					if(FormICD9Select.DialogResult!=DialogResult.OK){
-						RuleCur.CriterionFK=-1;
-						return;
-					}
-					RuleCur.CriterionFK=ICD9s.GetByCode(FormICD9Select.SelectedIcd9Code).ICD9Num;
-					break;
+				//case EhrCriterion.ICD9:
+				//  FormIcd9s FormICD9Select = new FormIcd9s();
+				//  FormICD9Select.IsSelectionMode=true;
+				//  FormICD9Select.ShowDialog();
+				//  if(FormICD9Select.DialogResult!=DialogResult.OK){
+				//    RuleCur.CriterionFK=-1;
+				//    return;
+				//  }
+				//  RuleCur.CriterionFK=ICD9s.GetByCode(FormICD9Select.SelectedIcd9Code).ICD9Num;
+				//  break;
 				default:
 					MessageBox.Show("You should never see this error message. Something has stopped working properly.");
 					break;
@@ -148,8 +164,8 @@ namespace OpenDental {
 			RuleCur.ReminderCriterion=(EhrCriterion)comboReminderCriterion.SelectedIndex;
 			if(RuleCur.ReminderCriterion==EhrCriterion.Problem 
 				|| RuleCur.ReminderCriterion==EhrCriterion.Medication 
-				|| RuleCur.ReminderCriterion==EhrCriterion.Allergy 
-				|| RuleCur.ReminderCriterion==EhrCriterion.ICD9) 
+				|| RuleCur.ReminderCriterion==EhrCriterion.Allergy)
+				//|| RuleCur.ReminderCriterion==EhrCriterion.ICD9) 
 			{
 				RuleCur.CriterionValue="";
 				if(RuleCur.CriterionFK==-1 || RuleCur.CriterionFK==0) {

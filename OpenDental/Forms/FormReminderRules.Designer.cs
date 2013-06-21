@@ -31,9 +31,9 @@
 			// butClose
 			// 
 			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butClose.Location = new System.Drawing.Point(518,380);
+			this.butClose.Location = new System.Drawing.Point(583, 380);
 			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(75,24);
+			this.butClose.Size = new System.Drawing.Size(75, 24);
 			this.butClose.TabIndex = 0;
 			this.butClose.Text = "Close";
 			this.butClose.UseVisualStyleBackColor = true;
@@ -42,9 +42,9 @@
 			// butAdd
 			// 
 			this.butAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butAdd.Location = new System.Drawing.Point(262,380);
+			this.butAdd.Location = new System.Drawing.Point(299, 380);
 			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(75,24);
+			this.butAdd.Size = new System.Drawing.Size(75, 24);
 			this.butAdd.TabIndex = 1;
 			this.butAdd.Text = "Add";
 			this.butAdd.UseVisualStyleBackColor = true;
@@ -56,10 +56,10 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(12,12);
+			this.gridMain.Location = new System.Drawing.Point(12, 12);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(581,362);
+			this.gridMain.Size = new System.Drawing.Size(646, 362);
 			this.gridMain.TabIndex = 2;
 			this.gridMain.Title = "Reminder Rules";
 			this.gridMain.TranslationName = null;
@@ -67,9 +67,9 @@
 			// 
 			// FormReminderRules
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(605,415);
+			this.ClientSize = new System.Drawing.Size(670, 415);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.butClose);

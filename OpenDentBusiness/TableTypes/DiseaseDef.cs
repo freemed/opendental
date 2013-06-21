@@ -19,9 +19,9 @@ namespace OpenDentBusiness{
 		///<summary>The last date and time this row was altered.  Not user editable.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
-		///<summary>Link to icd9.ICD9Code.</summary>
+		///<summary>Example: 250.00 for diabetes.  User allowed to enter anything, even if the ICD9 is not present in our ICD9 table.</summary>
 		public string ICD9Code;
-		///<summary>SnomedCode.</summary>
+		///<summary>Example: 230572002 for diabetic neuropathy.  Freeform text does not get validated.</summary>
 		public string SnomedCode;
 
 		///<summary></summary>

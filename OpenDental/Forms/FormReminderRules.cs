@@ -25,7 +25,7 @@ namespace OpenDental {
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col;
-			col=new ODGridColumn("Reminder Criterion",135);
+			col=new ODGridColumn("Reminder Criterion",200);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("Message",200);
 			gridMain.Columns.Add(col);
@@ -36,7 +36,8 @@ namespace OpenDental {
 				row=new ODGridRow();
 				switch(listReminders[i].ReminderCriterion) {
 					case EhrCriterion.Problem:
-						row.Cells.Add("Problem = "+DiseaseDefs.GetName(listReminders[i].CriterionFK));
+						DiseaseDef def=DiseaseDefs.GetItem(listReminders[i].CriterionFK);
+						row.Cells.Add("Problem ="+def.ICD9Code+" "+def.DiseaseName);
 						break;
 					case EhrCriterion.Medication:
 						Medication tempMed = Medications.GetMedication(listReminders[i].CriterionFK);
@@ -59,9 +60,9 @@ namespace OpenDental {
 					case EhrCriterion.LabResult:
 						row.Cells.Add("LabResult "+listReminders[i].CriterionValue);
 						break;
-					case EhrCriterion.ICD9:
-						row.Cells.Add("ICD9 "+ICD9s.GetDescription(listReminders[i].CriterionFK));
-						break;
+					//case EhrCriterion.ICD9:
+					//  row.Cells.Add("ICD9 "+ICD9s.GetDescription(listReminders[i].CriterionFK));
+					//  break;
 				}
 				row.Cells.Add(listReminders[i].Message);
 				gridMain.Rows.Add(row);
