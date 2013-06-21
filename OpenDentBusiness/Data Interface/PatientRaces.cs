@@ -121,7 +121,7 @@ namespace OpenDentBusiness{
 			}
 			string command;
 			if(listPatRaces.Count==0) { //DELETE all for the patient if listPatRaces is empty.
-				command="DELETE FROM patientrace WHERE PatNum = "+POut.Long(patNum);
+				command="DELETE FROM patientrace WHERE PatNum = "+POut.Long(patNum);//Can't use CRUD layer here because there might be multiple races for one patient.
 				Db.NonQ(command);
 				return;
 			}

@@ -1180,7 +1180,6 @@ namespace OpenDental{
 			this.comboBoxMultiRace.Size = new System.Drawing.Size(155,21);
 			this.comboBoxMultiRace.TabIndex = 124;
 			this.comboBoxMultiRace.UseCommas = true;
-			this.comboBoxMultiRace.Leave += new System.EventHandler(this.comboBoxMultiRace_Leave);
 			// 
 			// comboEthnicity
 			// 
@@ -1962,69 +1961,84 @@ namespace OpenDental{
 				comboClinic.Visible=false;
 				labelClinic.Visible=false;
 			}
-			comboBoxMultiRace.Items.Add("none");//0 none option for both regular and EHR users.
+			comboBoxMultiRace.Items.Add(Lan.g("enumPatRace","none"));//0 none option for both regular and EHR users.
 			if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
-				//comboBoxMultiRace.Items.Add("Aboriginal");//Hidden for EHR
-				comboBoxMultiRace.Items.Add("AfricanAmerican");//1
-				comboBoxMultiRace.Items.Add("AmericanIndian");//2
-				comboBoxMultiRace.Items.Add("Asian");//3
-				comboBoxMultiRace.Items.Add("DeclinedToSpecify");//4
-				comboBoxMultiRace.Items.Add("HawaiiOrPacIsland");//5
-				//comboBoxMultiRace.Items.Add("Hispanic");//Hidden for EHR. Supplemental to base 'race'
-				//comboBoxMultiRace.Items.Add("Multiracial");//Hidden for EHR
-				//comboBoxMultiRace.Items.Add("Other");//Hidden for EHR
-				comboBoxMultiRace.Items.Add("White");//6
-			}
-			else {//EHR not enabled
-				comboBoxMultiRace.Items.Add("Aboriginal");//1
-				comboBoxMultiRace.Items.Add("AfricanAmerican");//2
-				comboBoxMultiRace.Items.Add("AmericanIndian");//3
-				comboBoxMultiRace.Items.Add("Asian");//4
-				comboBoxMultiRace.Items.Add("DeclinedToSpecify");//5
-				comboBoxMultiRace.Items.Add("HawaiiOrPacIsland");//6
-				comboBoxMultiRace.Items.Add("Hispanic");//7
-				comboBoxMultiRace.Items.Add("Multiracial");//8
-				comboBoxMultiRace.Items.Add("Other");//9
-				comboBoxMultiRace.Items.Add("White");//10
-			}
-			List<int> listPatientRaces=PatientRaces.GetPatRaceList(PatCur.PatNum);
-			bool isEthnicityHispanic=false;
-			for(int i=0;i<listPatientRaces.Count;i++) {
-				PatRace race=(PatRace)listPatientRaces[i];
-				if(race==PatRace.Hispanic) {
-					isEthnicityHispanic=true;
+				//comboBoxMultiRace.Items.Add(Lan.g("enumPatRace","Aboriginal"));//Hidden for EHR
+				comboBoxMultiRace.Items.Add(Lan.g("enumPatRace","AfricanAmerican"));//1
+				comboBoxMultiRace.Items.Add(Lan.g("enumPatRace","AmericanIndian"));//2
+				comboBoxMultiRace.Items.Add(Lan.g("enumPatRace","Asian"));//3
+				comboBoxMultiRace.Items.Add(Lan.g("enumPatRace","DeclinedToSpecify"));//4
+				comboBoxMultiRace.Items.Add(Lan.g("enumPatRace","HawaiiOrPacIsland"));//5
+				//comboBoxMultiRace.Items.Add(Lan.g("enumPatRace","Hispanic"));//Hidden for EHR. Supplemental to base 'race'. Shows in comboEthnicity instead.
+				//comboBoxMultiRace.Items.Add(Lan.g("enumPatRace","Multiracial"));//Hidden for EHR
+				//comboBoxMultiRace.Items.Add(Lan.g("enumPatRace","Other"));//Hidden for EHR
+				comboBoxMultiRace.Items.Add(Lan.g("enumPatRace","White"));//6
+				List<int> listPatRaces=PatientRaces.GetPatRaceList(PatCur.PatNum);
+				bool isEthnicityHispanic=false;
+				for(int i=0;i<listPatRaces.Count;i++) {
+					PatRace race=(PatRace)listPatRaces[i];
+					if(race==PatRace.AfricanAmerican) {
+						comboBoxMultiRace.SetSelected(1,true);//AfricanAmerican
+					}
+					else if(race==PatRace.AmericanIndian) {
+						comboBoxMultiRace.SetSelected(2,true);//AmericanIndian
+					}
+					else if(race==PatRace.Asian) {
+						comboBoxMultiRace.SetSelected(3,true);//Asian
+					}
+					else if(race==PatRace.DeclinedToSpecify) {
+						comboBoxMultiRace.SetSelected(4,true);//DeclinedToSpecify
+					}
+					else if(race==PatRace.HawaiiOrPacIsland) {
+						comboBoxMultiRace.SetSelected(5,true);//HawaiiOrPacIsland
+					}
+					else if(race==PatRace.Hispanic) {//Hispanic
+						isEthnicityHispanic=true;//Do not add to comboBoxMultiRace.
+					}
+					else if(race==PatRace.White) {
+						comboBoxMultiRace.SetSelected(6,true);//White
+					}
 				}
-				if(PrefC.GetBool(PrefName.ShowFeatureEhr) && (race==PatRace.Aboriginal || race==PatRace.Hispanic || race==PatRace.Multiracial || race==PatRace.Other)) {
-					continue;//Ignore races which are hidden in EHR.
-				}
-				//selects indice based on the actual name of the enum (since indexes are different for EHR than for regular users).
-				string strRace=Enum.GetNames(typeof(PatRace))[listPatientRaces[i]].ToString();
-				comboBoxMultiRace.SetSelected(comboBoxMultiRace.Items.IndexOf(strRace),true);
-			}
-			if(comboBoxMultiRace.SelectedIndices.Count==0) {//no race set
-				comboBoxMultiRace.SetSelected(0,true);//none
-			}
-			comboBoxMultiRace.RefreshText();
-			if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
-				//The Ethnicity combobox only shows for EHR.
 				labelRaceEthnicity.Text="Race";
-				comboEthnicity.Items.Add("Not Hispanic");//0
-				comboEthnicity.Items.Add("Hispanic");//1
-				comboEthnicity.SelectedIndex=-1;//empty
-				if(listPatientRaces.Count==0 || listPatientRaces.Contains((int)PatRace.DeclinedToSpecify)) {//No race selected or declined to specify
-					//leave ethnicity empty
+				comboEthnicity.Items.Add("");//0 empty
+				comboEthnicity.Items.Add(Lan.g("comboEthnicity","DeclinedToSpecify"));//1
+				comboEthnicity.Items.Add(Lan.g("comboEthnicity","Not Hispanic"));//2
+				comboEthnicity.Items.Add(Lan.g("comboEthnicity","Hispanic"));//3
+				if(comboBoxMultiRace.SelectedIndices.Count==0) {//No race selected.
+					comboEthnicity.SelectedIndex=0;//empty
+				}
+				else if(listPatRaces.Contains((int)PatRace.DeclinedToSpecify)) {
+					comboEthnicity.SelectedIndex=1;
 				}
 				else if(isEthnicityHispanic) {
-					comboEthnicity.SelectedIndex=1;//Hispanic
+					comboEthnicity.SelectedIndex=3;//Hispanic
 				}
 				else {
-					comboEthnicity.SelectedIndex=0;//Not Hispanic
+					comboEthnicity.SelectedIndex=2;//Not Hispanic
 				}
 			}
-			else {
+			else {//EHR not enabled
+				comboBoxMultiRace.Items.Add(Lan.g("enumPatRace","Aboriginal"));//1
+				comboBoxMultiRace.Items.Add(Lan.g("enumPatRace","AfricanAmerican"));//2
+				comboBoxMultiRace.Items.Add(Lan.g("enumPatRace","AmericanIndian"));//3
+				comboBoxMultiRace.Items.Add(Lan.g("enumPatRace","Asian"));//4
+				comboBoxMultiRace.Items.Add(Lan.g("enumPatRace","DeclinedToSpecify"));//5
+				comboBoxMultiRace.Items.Add(Lan.g("enumPatRace","HawaiiOrPacIsland"));//6
+				comboBoxMultiRace.Items.Add(Lan.g("enumPatRace","Hispanic"));//7
+				comboBoxMultiRace.Items.Add(Lan.g("enumPatRace","Multiracial"));//8
+				comboBoxMultiRace.Items.Add(Lan.g("enumPatRace","Other"));//9
+				comboBoxMultiRace.Items.Add(Lan.g("enumPatRace","White"));//10
+				List<int> listPatRaces=PatientRaces.GetPatRaceList(PatCur.PatNum);
+				for(int i=0;i<listPatRaces.Count;i++) {
+					comboBoxMultiRace.SetSelected(listPatRaces[i]+1,true);//Offset by 1 because of none option at location 0.
+				}
 				labelEthnicity.Visible=false;
 				comboEthnicity.Visible=false;
 			}
+			if(comboBoxMultiRace.SelectedIndices.Count==0) {//no race set
+				comboBoxMultiRace.SetSelected(0,true);//Set to none
+			}
+			comboBoxMultiRace.RefreshText();
 			textCounty.Text=PatCur.County;
 			textSite.Text=Sites.GetDescription(PatCur.SiteNum);
 			string[] enumGrade=Enum.GetNames(typeof(PatientGrade));
@@ -2373,34 +2387,6 @@ namespace OpenDental{
 		}
 
 		#region Public Health
-
-		private void comboBoxMultiRace_Leave(object sender,EventArgs e) {
-			for(int i=0;i<comboBoxMultiRace.SelectedIndices.Count;i++) {
-				if(comboBoxMultiRace.SelectedIndices[i].ToString()=="0") {//none
-					comboBoxMultiRace.SelectedIndices.Clear();
-					comboBoxMultiRace.SetSelected(0,true);//Make sure only none is selected.
-					comboBoxMultiRace.RefreshText();
-					break;
-				}
-			}
-			int declinedToSpecifyIdx=5;
-			if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
-				declinedToSpecifyIdx=4;
-			}
-			for(int i=0;i<comboBoxMultiRace.SelectedIndices.Count;i++) {
-				if(comboBoxMultiRace.SelectedIndices[i].ToString()==declinedToSpecifyIdx.ToString()) {//DeclinedToSpecify
-					comboBoxMultiRace.SelectedIndices.Clear();
-					comboBoxMultiRace.SetSelected(declinedToSpecifyIdx,true);//Make sure only DeclinedToSpecify is selected.
-					comboBoxMultiRace.RefreshText();
-					break;
-				}
-			}
-			if(comboBoxMultiRace.SelectedIndices.Count==0) {
-				comboBoxMultiRace.SelectedIndices.Clear();
-				comboBoxMultiRace.SetSelected(0,true);
-				comboBoxMultiRace.RefreshText();
-			}
-		}
 		
 		private void textCounty_KeyUp(object sender, System.Windows.Forms.KeyEventArgs e) {
 			if(e.KeyCode==Keys.Return){
@@ -2999,15 +2985,42 @@ namespace OpenDental{
 			else{
 				PatCur.ClinicNum=Clinics.List[comboClinic.SelectedIndex-1].ClinicNum;
 			}
-			List<PatRace> listPatRaces = new List<PatRace>();
+			List<PatRace> listPatRaces=new List<PatRace>();
 			for(int i=0;i<comboBoxMultiRace.SelectedIndices.Count;i++) {
 				int selectedIdx=(int)comboBoxMultiRace.SelectedIndices[i];
-				if(selectedIdx==0) {//none
+				if(selectedIdx==0) {//If the none option was chosen, then ensure that no other race information is saved.
+					listPatRaces.Clear();
+					break;
+				}
+				if(!PrefC.GetBool(PrefName.ShowFeatureEhr)) {//If not using EHR, then the comboBoxMultiRace item locations are the same as the PatRace enum locations plus 1.
+					listPatRaces.Add((PatRace)(selectedIdx-1));
 					continue;
 				}
-				listPatRaces.Add((PatRace)Enum.Parse(typeof(PatRace),comboBoxMultiRace.Items[selectedIdx].ToString()));
+				//EHR
+				if(selectedIdx==1) {
+					listPatRaces.Add(PatRace.AfricanAmerican);
+				}
+				else if(selectedIdx==2) {
+					listPatRaces.Add(PatRace.AmericanIndian);
+				}
+				else if(selectedIdx==3) {
+					listPatRaces.Add(PatRace.Asian);
+				}
+				else if(selectedIdx==4) {
+					listPatRaces.Add(PatRace.DeclinedToSpecify);
+				}
+				else if(selectedIdx==5) {
+					listPatRaces.Add(PatRace.HawaiiOrPacIsland);
+				}
+				else if(selectedIdx==6) {
+					listPatRaces.Add(PatRace.White);
+				}
 			}
-			if(listPatRaces.Count>0 && comboEthnicity.SelectedIndex==1) {//Ethnicity of Hispanic can only be supplemental to a specified race.
+			if(listPatRaces.Contains(PatRace.DeclinedToSpecify)) {//If DeclinedToSpecify was chosen, then ensure that no other race information is saved.
+				listPatRaces.Clear();
+				listPatRaces.Add(PatRace.DeclinedToSpecify);
+			}
+			else if(listPatRaces.Count>0 && comboEthnicity.SelectedIndex==3) {//Ethnicity of Hispanic can only be supplemental to a specified race (when neither the none or the DeclinedToSpecify options were chosen for race).
 				listPatRaces.Add(PatRace.Hispanic);
 			}
 			PatientRaces.Reconcile(PatCur.PatNum,listPatRaces);//Insert, Update, Delete if needed.
