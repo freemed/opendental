@@ -23,7 +23,7 @@ namespace OpenDentBusiness {
 		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime MsgDateTime;
 		///<summary>0=neither, 1=sent, 2=received.</summary>
-		public CommSentOrReceived SentOrReceived;
+		public EmailSentOrReceived SentOrReceived;
 		///<summary>Not a database column.</summary>
 		[CrudColumn(IsNotDbColumn=true)]
 		public List<EmailAttach> Attachments;
@@ -43,6 +43,15 @@ namespace OpenDentBusiness {
 		}
 	}
 
+	///<summary>0=neither, 1=sent, 2=received.</summary>
+	public enum EmailSentOrReceived {
+		///<summary>0</summary>
+		Neither,
+		///<summary>1</summary>
+		Sent,
+		///<summary>2</summary>
+		Received
+	}
 
 
 }

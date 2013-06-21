@@ -940,7 +940,7 @@ namespace OpenDental{
 					continue;
 				}
 				message.MsgDateTime=DateTime.Now;
-				message.SentOrReceived=CommSentOrReceived.Sent;
+				message.SentOrReceived=EmailSentOrReceived.Sent;
 				EmailMessages.Insert(message);
 				Appointments.SetConfirmed(PIn.Long(Table.Rows[grid.SelectedIndices[i]]["AptNum"].ToString()),PrefC.GetLong(PrefName.ConfirmStatusEmailed));
 			}

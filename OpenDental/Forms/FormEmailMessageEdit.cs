@@ -457,7 +457,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormEmailMessageEdit_Load(object sender, System.EventArgs e) {
-			if(MessageCur.SentOrReceived==CommSentOrReceived.Neither){
+			if(MessageCur.SentOrReceived==EmailSentOrReceived.Neither){
 				labelSent.Visible=false;
 				textMsgDateTime.Text=Lan.g(this,"Unsent");
 				textMsgDateTime.ForeColor=Color.Red;
@@ -757,7 +757,7 @@ namespace OpenDental{
 				return;
 			}
 			Cursor=Cursors.WaitCursor;
-			MessageCur.SentOrReceived=CommSentOrReceived.Sent;
+			MessageCur.SentOrReceived=EmailSentOrReceived.Sent;
 			SaveMsg();
 			try{
 				SendEmail(MessageCur,emailAddress);

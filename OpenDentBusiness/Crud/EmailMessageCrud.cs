@@ -53,7 +53,7 @@ namespace OpenDentBusiness.Crud{
 				emailMessage.Subject        = PIn.String(table.Rows[i]["Subject"].ToString());
 				emailMessage.BodyText       = PIn.String(table.Rows[i]["BodyText"].ToString());
 				emailMessage.MsgDateTime    = PIn.DateT (table.Rows[i]["MsgDateTime"].ToString());
-				emailMessage.SentOrReceived = (CommSentOrReceived)PIn.Int(table.Rows[i]["SentOrReceived"].ToString());
+				emailMessage.SentOrReceived = (EmailSentOrReceived)PIn.Int(table.Rows[i]["SentOrReceived"].ToString());
 				retVal.Add(emailMessage);
 			}
 			return retVal;

@@ -1521,7 +1521,7 @@ namespace OpenDental{
 					break;
 				}
 				message.MsgDateTime=DateTime.Now;
-				message.SentOrReceived=CommSentOrReceived.Sent;
+				message.SentOrReceived=EmailSentOrReceived.Sent;
 				EmailMessages.Insert(message);
 				recallNumArray=addrTable.Rows[i]["recallNums"].ToString().Split(',');
 				patNumArray=addrTable.Rows[i]["patNums"].ToString().Split(',');
