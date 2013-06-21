@@ -4,6 +4,11 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using System.Xml;
+using System.IO;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
 
 namespace OpenDental{
 	/// <summary></summary>
@@ -40,6 +45,7 @@ namespace OpenDental{
 		private UI.Button butMoveTo;
 		private Label label13;
 		private CheckBox checkResellerCustomer;
+		private UI.Button butPracticeTitleReset;
 		public RegistrationKey RegKey;
 
 		///<summary></summary>
@@ -102,6 +108,7 @@ namespace OpenDental{
 			this.butMoveTo = new OpenDental.UI.Button();
 			this.label13 = new System.Windows.Forms.Label();
 			this.checkResellerCustomer = new System.Windows.Forms.CheckBox();
+			this.butPracticeTitleReset = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// textKey
@@ -314,7 +321,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(24, 460);
+			this.butDelete.Location = new System.Drawing.Point(24, 485);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(75, 26);
 			this.butDelete.TabIndex = 6;
@@ -329,7 +336,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(690, 419);
+			this.butOK.Location = new System.Drawing.Point(690, 444);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75, 26);
 			this.butOK.TabIndex = 1;
@@ -344,7 +351,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(690, 460);
+			this.butCancel.Location = new System.Drawing.Point(690, 485);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 26);
 			this.butCancel.TabIndex = 0;
@@ -359,7 +366,7 @@ namespace OpenDental{
 			this.butMoveTo.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butMoveTo.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butMoveTo.CornerRadius = 4F;
-			this.butMoveTo.Location = new System.Drawing.Point(406, 8);
+			this.butMoveTo.Location = new System.Drawing.Point(406, 33);
 			this.butMoveTo.Name = "butMoveTo";
 			this.butMoveTo.Size = new System.Drawing.Size(75, 24);
 			this.butMoveTo.TabIndex = 26;
@@ -389,10 +396,27 @@ namespace OpenDental{
 			this.checkResellerCustomer.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkResellerCustomer.UseVisualStyleBackColor = true;
 			// 
+			// butPracticeTitleReset
+			// 
+			this.butPracticeTitleReset.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butPracticeTitleReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butPracticeTitleReset.Autosize = true;
+			this.butPracticeTitleReset.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPracticeTitleReset.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPracticeTitleReset.CornerRadius = 4F;
+			this.butPracticeTitleReset.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butPracticeTitleReset.Location = new System.Drawing.Point(134, 485);
+			this.butPracticeTitleReset.Name = "butPracticeTitleReset";
+			this.butPracticeTitleReset.Size = new System.Drawing.Size(131, 26);
+			this.butPracticeTitleReset.TabIndex = 6;
+			this.butPracticeTitleReset.Text = "Reset Practice Title";
+			this.butPracticeTitleReset.Visible = false;
+			this.butPracticeTitleReset.Click += new System.EventHandler(this.butPracticeTitleReset_Click);
+			// 
 			// FormRegistrationKeyEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(817, 511);
+			this.ClientSize = new System.Drawing.Size(817, 536);
 			this.Controls.Add(this.label13);
 			this.Controls.Add(this.checkResellerCustomer);
 			this.Controls.Add(this.butMoveTo);
@@ -414,6 +438,7 @@ namespace OpenDental{
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.textDateStarted);
 			this.Controls.Add(this.checkForeign);
+			this.Controls.Add(this.butPracticeTitleReset);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label1);
@@ -520,6 +545,38 @@ namespace OpenDental{
 
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
+		}
+
+		/// <summary>Inserts RegistrationKey with blank PracticeTitle into bugs database so next time cusotmer hits the update service it will reset their PracticeTitle.</summary>
+		private void butPracticeTitleReset_Click(object sender,EventArgs e) {
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Are you sure you want to reset the Practice Title associated with this Registration Key? This should only be done if they are getting a message saying, \"Practice title given does not match the practice title on record,\" when connecting to the Patient Portal. It will be cleared out of the database and filled in with the appropriate Practice Title next time they connect using this Registration Key.")) {
+				return;
+			}
+			//prepare the xml document to send--------------------------------------------------------------------------------------
+			XmlWriterSettings settings = new XmlWriterSettings();
+			settings.Indent = true;
+			settings.IndentChars = ("    ");
+			StringBuilder strbuild=new StringBuilder();
+			using(XmlWriter writer=XmlWriter.Create(strbuild,settings)){
+				writer.WriteStartElement("PracticeTitleReset");
+					writer.WriteStartElement("RegistrationKey");
+						writer.WriteString(PrefC.GetString(PrefName.RegistrationKey));
+					writer.WriteEndElement();
+				writer.WriteEndElement();
+			}
+			#if DEBUG
+				OpenDental.localhost.Service1 updateService=new OpenDental.localhost.Service1();
+			#else
+				OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
+				updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress);
+			#endif
+			if(PrefC.GetString(PrefName.UpdateWebProxyAddress) !="") {
+				IWebProxy proxy = new WebProxy(PrefC.GetString(PrefName.UpdateWebProxyAddress));
+				ICredentials cred=new NetworkCredential(PrefC.GetString(PrefName.UpdateWebProxyUserName),PrefC.GetString(PrefName.UpdateWebProxyPassword));
+				proxy.Credentials=cred;
+				updateService.Proxy=proxy;
+			}
+			updateService.PracticeTitleReset(strbuild.ToString());//may throw error
 		}
 
 		
