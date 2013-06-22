@@ -2663,8 +2663,19 @@ namespace OpenDental{
 				//#endregion
 				string pdfDataStr=Convert.ToBase64String(pdfBytes);
 				if(HL7Defs.IsExistingHL7Enabled()) {
-					//DFT messages that are PDF's only and do not include FT1 segments, so proc list can be null
-					MessageConstructor.GenerateDFT(procList,EventTypeHL7.P03,PatCur,Patients.GetPat(PatCur.Guarantor),Bridges.ECW.AptNum,"treatment",pdfDataStr);
+					//DFT messages that are PDF's only and do not include FT1 segments, so proc list can be empty
+					//MessageConstructor.GenerateDFT(procList,EventTypeHL7.P03,PatCur,Patients.GetPat(PatCur.Guarantor),Bridges.ECW.AptNum,"treatment",pdfDataStr);
+					MessageHL7 messageHL7=MessageConstructor.GenerateDFT(new List<Procedure>(),EventTypeHL7.P03,PatCur,Patients.GetPat(PatCur.Guarantor),Bridges.ECW.AptNum,"treatment",pdfDataStr);
+					if(messageHL7==null) {
+						MsgBox.Show(this,"There is no DFT message type defined for the enabled HL7 definition.");
+						return;
+					}
+					HL7Msg hl7Msg=new HL7Msg();
+					hl7Msg.AptNum=0;//Prevents the appt complete button from changing to the "Revise" button prematurely.
+					hl7Msg.HL7Status=HL7MessageStatus.OutPending;//it will be marked outSent by the HL7 service.
+					hl7Msg.MsgText=messageHL7.ToString();
+					hl7Msg.PatNum=PatCur.PatNum;
+					HL7Msgs.Insert(hl7Msg);
 				}
 				else {
 					Bridges.ECW.SendHL7(Bridges.ECW.AptNum,PatCur.PriProv,PatCur,pdfDataStr,"treatment",true);

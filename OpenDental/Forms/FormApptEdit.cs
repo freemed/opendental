@@ -1178,7 +1178,15 @@ namespace OpenDental{
 				comboStatus.SelectedIndex=(int)AptCur.AptStatus-1;
 			}
 			if(AptCur.AptStatus==ApptStatus.UnschedList) {
-				comboStatus.Enabled=false;
+				if(Programs.UsingEcwTightOrFullMode()) {
+					comboStatus.Enabled=true;
+				}
+				else if(HL7Defs.GetOneDeepEnabled()!=null && !HL7Defs.GetOneDeepEnabled().ShowAppts) {
+					comboStatus.Enabled=true;
+				}
+				else {
+					comboStatus.Enabled=false;
+				}
 			}
 			//convert time pattern from 5 to current increment.
 			strBTime=new StringBuilder();
@@ -2594,13 +2602,16 @@ namespace OpenDental{
 			//no security
 			string pdfDataStr=GenerateProceduresIntoPdf();
 			if(HL7Defs.IsExistingHL7Enabled()) {
-				MessageHL7 messageHL7=MessageConstructor.GenerateDFT(procs,EventTypeHL7.P03,pat,Patients.GetPat(pat.Guarantor),AptCur.AptNum,"progressnotes",pdfDataStr);
+				//PDF messages do not contain FT1 segments, so proc list can be empty
+				//MessageHL7 messageHL7=MessageConstructor.GenerateDFT(procs,EventTypeHL7.P03,pat,Patients.GetPat(pat.Guarantor),AptCur.AptNum,"progressnotes",pdfDataStr);
+				MessageHL7 messageHL7=MessageConstructor.GenerateDFT(new List<Procedure>(),EventTypeHL7.P03,pat,Patients.GetPat(pat.Guarantor),AptCur.AptNum,"progressnotes",pdfDataStr);
 				if(messageHL7==null) {
 					MsgBox.Show(this,"There is no DFT message type defined for the enabled HL7 definition.");
 					return;
 				}
 				HL7Msg hl7Msg=new HL7Msg();
-				hl7Msg.AptNum=AptCur.AptNum;
+				//hl7Msg.AptNum=AptCur.AptNum;
+				hl7Msg.AptNum=0;//Prevents the appt complete button from changing to the "Revise" button prematurely.
 				hl7Msg.HL7Status=HL7MessageStatus.OutPending;//it will be marked outSent by the HL7 service.
 				hl7Msg.MsgText=messageHL7.ToString();
 				hl7Msg.PatNum=pat.PatNum;
@@ -2812,7 +2823,18 @@ namespace OpenDental{
 				//Send DFT to eCW containing the attached procedures for this appointment in a .pdf file.				
 				string pdfDataStr=GenerateProceduresIntoPdf();
 				if(HL7Defs.IsExistingHL7Enabled()) {
-					MessageConstructor.GenerateDFT(procs,EventTypeHL7.P03,pat,Patients.GetPat(pat.Guarantor),AptCur.AptNum,"progressnotes",pdfDataStr);
+					//MessageConstructor.GenerateDFT(procs,EventTypeHL7.P03,pat,Patients.GetPat(pat.Guarantor),AptCur.AptNum,"progressnotes",pdfDataStr);
+					MessageHL7 messageHL7=MessageConstructor.GenerateDFT(procs,EventTypeHL7.P03,pat,Patients.GetPat(pat.Guarantor),AptCur.AptNum,"progressnotes",pdfDataStr);
+					if(messageHL7==null) {
+						MsgBox.Show(this,"There is no DFT message type defined for the enabled HL7 definition.");
+						return;
+					}
+					HL7Msg hl7Msg=new HL7Msg();
+					hl7Msg.AptNum=AptCur.AptNum;
+					hl7Msg.HL7Status=HL7MessageStatus.OutPending;//it will be marked outSent by the HL7 service.
+					hl7Msg.MsgText=messageHL7.ToString();
+					hl7Msg.PatNum=pat.PatNum;
+					HL7Msgs.Insert(hl7Msg);
 				}
 				else {
 					Bridges.ECW.SendHL7(AptCur.AptNum,AptCur.ProvNum,pat,pdfDataStr,"progressnotes",false);

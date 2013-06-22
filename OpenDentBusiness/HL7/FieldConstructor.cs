@@ -12,6 +12,7 @@ namespace OpenDentBusiness.HL7 {
 	///<summary>This is the engine that will construct our outgoing HL7 message fields.</summary>
 	public class FieldConstructor {
 
+		///<summary>apt, guar, proc, prov and pdfDataString can be null and will return an empty string if a field requires that object</summary>
 		public static string GenerateDFT(HL7Def def,string fieldName,Patient pat,Provider prov,Procedure proc,Patient guar,Appointment apt,int sequenceNum,EventTypeHL7 eventType,string pdfDescription,string pdfDataString) {
 			//big long list of fieldnames that we support
 			switch(fieldName){
@@ -27,21 +28,61 @@ namespace OpenDentBusiness.HL7 {
 				case "eventType":
 					return eventType.ToString();
 				case "guar.addressCityStateZip":
-					return gConcat(def.ComponentSeparator,guar.Address,guar.Address2,guar.City,guar.State,guar.Zip);
+					if(guar==null) {
+						return "";
+					}
+					else {
+						return gConcat(def.ComponentSeparator,guar.Address,guar.Address2,guar.City,guar.State,guar.Zip);
+					}
 				case "guar.birthdateTime":
-					return gDTM(guar.Birthdate,8);
+					if(guar==null) {
+						return "";
+					}
+					else {
+						return gDTM(guar.Birthdate,8);
+					}
 				case "guar.Gender":
-					return gIS(guar);
+					if(guar==null) {
+						return "";
+					}
+					else {
+						return gIS(guar);
+					}
 				case "guar.HmPhone":
-					return gXTN(guar.HmPhone,10);
+					if(guar==null) {
+						return "";
+					}
+					else {
+						return gXTN(guar.HmPhone,10);
+					}
 				case "guar.nameLFM":
-					return gConcat(def.ComponentSeparator,guar.LName,guar.FName,guar.MiddleI);
+					if(guar==null) {
+						return "";
+					}
+					else {
+						return gConcat(def.ComponentSeparator,guar.LName,guar.FName,guar.MiddleI);
+					}
 				case "guar.PatNum":
-					return guar.PatNum.ToString();
+					if(guar==null) {
+						return "";
+					}
+					else {
+						return guar.PatNum.ToString();
+					}
 				case "guar.SSN":
-					return guar.SSN;
+					if(guar==null) {
+						return "";
+					}
+					else {
+						return guar.SSN;
+					}
 				case "guar.WkPhone":
-					return gXTN(guar.WkPhone,10);
+					if(guar==null) {
+						return "";
+					}
+					else {
+						return gXTN(guar.WkPhone,10);
+					}
 				case "messageControlId":
 					return Guid.NewGuid().ToString("N");
 				case "messageType":
@@ -71,8 +112,16 @@ namespace OpenDentBusiness.HL7 {
 				case "pdfDescription":
 					return pdfDescription;
 				case "pdfDataAsBase64":
-					return pdfDataString;
+					if(pdfDataString==null) {
+						return "";
+					}
+					else {
+						return pdfDataString;
+					}
 				case "proc.DiagnosticCode":
+					if(proc==null) {
+						return "";
+					}
 					if(proc.DiagnosticCode==null) {
 						return "";
 					}
@@ -80,17 +129,47 @@ namespace OpenDentBusiness.HL7 {
 						return proc.DiagnosticCode;
 					}
 				case "proc.procDateTime":
-					return gDTM(proc.ProcDate,14);
+					if(proc==null) {
+						return "";
+					}
+					else {
+						return gDTM(proc.ProcDate,14);
+					}
 				case "proc.ProcFee":
-					return proc.ProcFee.ToString("F2");
+					if(proc==null) {
+						return "";
+					}
+					else {
+						return proc.ProcFee.ToString("F2");
+					}
 				case "proc.ProcNum":
-					return proc.ProcNum.ToString();
+					if(proc==null) {
+						return "";
+					}
+					else {
+						return proc.ProcNum.ToString();
+					}
 				case "proc.toothSurfRange":
-					return gTreatArea(def.ComponentSeparator,proc);
+					if(proc==null) {
+						return "";
+					}
+					else {
+						return gTreatArea(def.ComponentSeparator,proc);
+					}
 				case "proccode.ProcCode":
-					return gProcCode(proc);
+					if(proc==null) {
+						return "";
+					}
+					else {
+						return gProcCode(proc);
+					}
 				case "prov.provIdNameLFM":
-					return gConcat(def.ComponentSeparator,prov.EcwID,prov.LName,prov.FName,prov.MI);
+					if(prov==null) {
+						return "";
+					}
+					else {
+						return gConcat(def.ComponentSeparator,prov.EcwID,prov.LName,prov.FName,prov.MI);
+					}
 				case "separators^~\\&":
 					return gSep(def);
 				case "sequenceNum":

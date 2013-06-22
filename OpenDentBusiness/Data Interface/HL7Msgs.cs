@@ -102,7 +102,8 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetBool(MethodBase.GetCurrentMethod(),aptNum);
 			}
-			string command="SELECT COUNT(*) FROM hl7msg WHERE AptNum="+POut.Long(aptNum);
+			//string command="SELECT COUNT(*) FROM hl7msg WHERE AptNum="+POut.Long(aptNum);
+			string command="SELECT COUNT(*) FROM hl7msg WHERE AptNum="+POut.Long(aptNum)+" AND MsgText LIKE '%DFT%'";
 			if(Db.GetCount(command)=="0") {
 				return false;
 			}

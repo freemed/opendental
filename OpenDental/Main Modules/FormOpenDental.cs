@@ -1767,7 +1767,8 @@ namespace OpenDental{
 			}
 			myOutlookBar.SelectedIndex=Security.GetModule(0);//for eCW, this fails silently.
 			//if(Programs.UsingEcwTight()) {
-			if(Programs.UsingEcwTightOrFullMode()) {
+			if(Programs.UsingEcwTightOrFullMode()
+				|| (HL7Defs.IsExistingHL7Enabled() && !HL7Defs.GetOneDeepEnabled().ShowAppts)) {
 				myOutlookBar.SelectedIndex=4;//Chart module
 				//ToolBarMain.Height=0;//this should force the modules further up on the screen
 				//ToolBarMain.Visible=false;
@@ -2074,7 +2075,7 @@ namespace OpenDental{
 				if(Programs.UsingEcwTightMode()) {//has nothing to do with HL7
 					myOutlookBar.Buttons[6].Visible=false;
 				}
-				if(HL7Defs.IsExistingHL7Enabled()) {
+				if(!Programs.UsingEcwTightOrFullMode() && HL7Defs.IsExistingHL7Enabled()) {//There may be a def enabled as well as the old program link enabled. In this case, do not look at the def for whether or not to show the appt and account modules, instead go by the eCW interface enabled.
 					HL7Def def=HL7Defs.GetOneDeepEnabled();
 					myOutlookBar.Buttons[0].Visible=def.ShowAppts;//Appt
 					myOutlookBar.Buttons[2].Visible=def.ShowAccount;//Account

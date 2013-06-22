@@ -355,6 +355,10 @@ namespace OpenDentHL7 {
 				}
 			}
 			MessageHL7 hl7Ack=MessageConstructor.GenerateACK(messageControlId,eventType,isProcessed);
+			if(hl7Ack==null) {
+				EventLog.WriteEntry("OpenDentHL7","No ACK defined for the enabled HL7 definition or no HL7 definition enabled.",EventLogEntryType.Information);
+				return;
+			}
 			byte[] ackByteOutgoing=Encoding.ASCII.GetBytes(MLLP_START_CHAR+hl7Ack.ToString()+MLLP_END_CHAR+MLLP_ENDMSG_CHAR);
 			socketIncomingWorker.Send(ackByteOutgoing);//this is a locking call
 		}

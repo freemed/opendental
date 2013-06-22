@@ -15,12 +15,16 @@ namespace OpenDentBusiness.HL7 {
 			Appointment apt=Appointments.GetOneApt(aptNum);
 			MessageHL7 messageHL7=new MessageHL7(MessageTypeHL7.DFT);
 			HL7Def hl7Def=HL7Defs.GetOneDeepEnabled();
+			if(hl7Def==null) {
+				return null;
+			}
 			//find a DFT message in the def
 			HL7DefMessage hl7DefMessage=null;
 			for(int i=0;i<hl7Def.hl7DefMessages.Count;i++) {
 				if(hl7Def.hl7DefMessages[i].MessageType==MessageTypeHL7.DFT) {
 					hl7DefMessage=hl7Def.hl7DefMessages[i];
-					continue;
+					//continue;
+					break;
 				}
 			}
 			if(hl7DefMessage==null) {//DFT message type is not defined so do nothing and return
@@ -33,7 +37,8 @@ namespace OpenDentBusiness.HL7 {
 				}
 				//for example, countRepeat can be zero in the case where we are only sending a PDF of the TP to eCW, and no procs.
 				for(int repeat=0;repeat<countRepeat;repeat++) {//FT1 is optional and can repeat so add as many FT1's as procs in procList
-					if(hl7DefMessage.hl7DefSegments[s].SegmentName==SegmentNameHL7.FT1) {
+					//if(hl7DefMessage.hl7DefSegments[s].SegmentName==SegmentNameHL7.FT1) {
+					if(hl7DefMessage.hl7DefSegments[s].SegmentName==SegmentNameHL7.FT1 && procList.Count>repeat) {
 						prov=Providers.GetProv(procList[repeat].ProvNum);
 					}
 					SegmentHL7 seg=new SegmentHL7(hl7DefMessage.hl7DefSegments[s].SegmentName);
@@ -44,8 +49,14 @@ namespace OpenDentBusiness.HL7 {
 							seg.SetField(hl7DefMessage.hl7DefSegments[s].hl7DefFields[f].OrdinalPos,hl7DefMessage.hl7DefSegments[s].hl7DefFields[f].FixedText);
 						}
 						else {
+							//seg.SetField(hl7DefMessage.hl7DefSegments[s].hl7DefFields[f].OrdinalPos,
+							//FieldConstructor.GenerateDFT(hl7Def,fieldName,pat,prov,procList[repeat],guar,apt,repeat+1,eventType,pdfDescription,pdfDataString));
+							Procedure proc=null;
+							if(procList.Count>repeat) {//procList could be an empty list
+								proc=procList[repeat];
+							}
 							seg.SetField(hl7DefMessage.hl7DefSegments[s].hl7DefFields[f].OrdinalPos,
-								FieldConstructor.GenerateDFT(hl7Def,fieldName,pat,prov,procList[repeat],guar,apt,repeat+1,eventType,pdfDescription,pdfDataString));
+								FieldConstructor.GenerateDFT(hl7Def,fieldName,pat,prov,proc,guar,apt,repeat+1,eventType,pdfDescription,pdfDataString));
 						}
 					}
 					messageHL7.Segments.Add(seg);
@@ -54,7 +65,7 @@ namespace OpenDentBusiness.HL7 {
 			return messageHL7;
 		}
 
-		///<summary>Returns null if no HL7 def is enabled.</summary>
+		///<summary>Returns null if no HL7 def is enabled or no ACK is defined in the enabled def.</summary>
 		public static MessageHL7 GenerateACK(string controlId,EventTypeHL7 eventType,bool isAck) {
 			MessageHL7 messageHL7=new MessageHL7(MessageTypeHL7.ACK);
 			messageHL7.ControlId=controlId;
@@ -68,7 +79,8 @@ namespace OpenDentBusiness.HL7 {
 			for(int i=0;i<hl7Def.hl7DefMessages.Count;i++) {
 				if(hl7Def.hl7DefMessages[i].MessageType==MessageTypeHL7.ACK) {
 					hl7DefMessage=hl7Def.hl7DefMessages[i];
-					continue;
+					//continue;
+					break;
 				}
 			}
 			if(hl7DefMessage==null) {//ACK message type is not defined so do nothing and return

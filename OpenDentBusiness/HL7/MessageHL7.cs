@@ -14,6 +14,9 @@ namespace OpenDentBusiness.HL7 {
 		///<summary>Only use this constructor when generating a message instead of parsing a message.</summary>
 		internal MessageHL7(MessageTypeHL7 msgType) {
 			Segments=new List<SegmentHL7>();
+			MsgType=msgType;
+			ControlId="";
+			AckCode="";
 		}
 
 		public MessageHL7(string msgtext) {
