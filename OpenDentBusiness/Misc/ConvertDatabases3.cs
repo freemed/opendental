@@ -304,7 +304,7 @@ namespace OpenDentBusiness {
 					command="ALTER TABLE diseasedef ADD ICD9Code varchar2(255)";
 					Db.NonQ(command);
 				}
-				command="SELECT MAX(ItemOrder) FROM DiseaseDef";
+				command="SELECT MAX(ItemOrder) FROM diseasedef";
 				int itemOrderCur=PIn.Int(Db.GetScalar(command));
 				command="SELECT DISTINCT Description,ICD9Code,icd9.ICD9Num "
 					+"FROM icd9,eduresource,disease,reminderrule "
@@ -315,12 +315,12 @@ namespace OpenDentBusiness {
 				for(int i=0;i<table.Rows.Count;i++) {
 					itemOrderCur++;
 					if(DataConnection.DBtype==DatabaseType.MySql) {
-						command="INSERT INTO DiseaseDef(DiseaseName,ItemOrder,ICD9Code) VALUES('"
+						command="INSERT INTO diseasedef(DiseaseName,ItemOrder,ICD9Code) VALUES('"
 							+POut.String(table.Rows[i]["Description"].ToString())+"',"+POut.Int(itemOrderCur)+",'"+POut.String(table.Rows[i]["ICD9Code"].ToString())+"')";
 						Db.NonQ(command);
 					}
 					else {//oracle
-						command="INSERT INTO DiseaseDef(DiseaseDefNum,DiseaseName,ItemOrder,ICD9Code) VALUES((SELECT MAX(DiseaseDefNum)+1 FROM diseasedef),'"
+						command="INSERT INTO diseasedef(DiseaseDefNum,DiseaseName,ItemOrder,ICD9Code) VALUES((SELECT MAX(DiseaseDefNum)+1 FROM diseasedef),'"
 							+POut.String(table.Rows[i]["Description"].ToString())+"',"+POut.Int(itemOrderCur)+",'"+POut.String(table.Rows[i]["ICD9Code"].ToString())+"')";
 						Db.NonQ(command);
 					}
