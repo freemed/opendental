@@ -8906,7 +8906,7 @@ namespace OpenDental{
 				if(apt.AptStatus == ApptStatus.PtNote
 					|| apt.AptStatus == ApptStatus.PtNoteCompleted
 					|| apt.AptStatus == ApptStatus.Planned
-					|| (!UsingEcwTightOrFull() && apt.AptStatus==ApptStatus.UnschedList))
+					|| apt.AptStatus==ApptStatus.UnschedList)
 				{
 					MsgBox.Show(this,"Not allowed for that status.");
 					return;
