@@ -576,7 +576,7 @@ namespace OpenDental{
 				proxy.Credentials=cred;
 				updateService.Proxy=proxy;
 			}
-			updateService.PracticeTitleReset(strbuild.ToString());//may throw error
+			//updateService.PracticeTitleReset(strbuild.ToString());//may throw error
 		}
 
 		
