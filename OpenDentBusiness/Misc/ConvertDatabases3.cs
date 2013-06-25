@@ -6,10 +6,10 @@ using System.Text;
 
 namespace OpenDentBusiness {
 	public partial class ConvertDatabases {
-		public static System.Version LatestVersion=new Version("13.2.0.0");//This value must be changed when a new conversion is to be triggered.
+		public static System.Version LatestVersion=new Version("13.3.0.0");//This value must be changed when a new conversion is to be triggered.
 
-		private static void To13_2_0() {
-			if(FromVersion<new Version("13.2.0.0")) {
+		private static void To13_2_1() {
+			if(FromVersion<new Version("13.2.1.0")) {
 				string command;
 				//Add TaskEdit permission to everyone------------------------------------------------------
 				command="SELECT DISTINCT UserGroupNum FROM grouppermission";
@@ -602,20 +602,24 @@ namespace OpenDentBusiness {
 					command="ALTER TABLE emailaddress MODIFY ServerPortIncoming NOT NULL";
 					Db.NonQ(command);
 				}
-
-
-
-
-
-
-
-
-
-
-				command="UPDATE preference SET ValueString = '13.2.0.0' WHERE PrefName = 'DataBaseVersion'";
+				command="UPDATE preference SET ValueString = '13.2.1.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
-			//To13_3_0();
+			To13_3_0();
+		}
+
+		private static void To13_3_0() {
+			if(FromVersion<new Version("13.3.0.0")) {
+				string command;
+
+
+
+
+
+				command="UPDATE preference SET ValueString = '13.3.0.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
+			//To13_4_0();
 		}
 
 
