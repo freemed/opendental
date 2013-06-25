@@ -47,6 +47,12 @@ namespace OpenDental.customerUpdates {
         
         private System.Threading.SendOrPostCallback RequestFeeSchedOperationCompleted;
         
+        private System.Threading.SendOrPostCallback ValidateResellerCredentialsOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback ValidatePatientPortalOfficeOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback PracticeTitleResetOperationCompleted;
+        
         private bool useDefaultCredentialsSetExplicitly;
         
         /// <remarks/>
@@ -111,6 +117,15 @@ namespace OpenDental.customerUpdates {
         
         /// <remarks/>
         public event RequestFeeSchedCompletedEventHandler RequestFeeSchedCompleted;
+        
+        /// <remarks/>
+        public event ValidateResellerCredentialsCompletedEventHandler ValidateResellerCredentialsCompleted;
+        
+        /// <remarks/>
+        public event ValidatePatientPortalOfficeCompletedEventHandler ValidatePatientPortalOfficeCompleted;
+        
+        /// <remarks/>
+        public event PracticeTitleResetCompletedEventHandler PracticeTitleResetCompleted;
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://open-dent.com/EstablishConnection", RequestNamespace="http://open-dent.com/", ResponseNamespace="http://open-dent.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
@@ -372,6 +387,92 @@ namespace OpenDental.customerUpdates {
         }
         
         /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://open-dent.com/ValidateResellerCredentials", RequestNamespace="http://open-dent.com/", ResponseNamespace="http://open-dent.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public string ValidateResellerCredentials(string officeData) {
+            object[] results = this.Invoke("ValidateResellerCredentials", new object[] {
+                        officeData});
+            return ((string)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void ValidateResellerCredentialsAsync(string officeData) {
+            this.ValidateResellerCredentialsAsync(officeData, null);
+        }
+        
+        /// <remarks/>
+        public void ValidateResellerCredentialsAsync(string officeData, object userState) {
+            if ((this.ValidateResellerCredentialsOperationCompleted == null)) {
+                this.ValidateResellerCredentialsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnValidateResellerCredentialsOperationCompleted);
+            }
+            this.InvokeAsync("ValidateResellerCredentials", new object[] {
+                        officeData}, this.ValidateResellerCredentialsOperationCompleted, userState);
+        }
+        
+        private void OnValidateResellerCredentialsOperationCompleted(object arg) {
+            if ((this.ValidateResellerCredentialsCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.ValidateResellerCredentialsCompleted(this, new ValidateResellerCredentialsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://open-dent.com/ValidatePatientPortalOffice", RequestNamespace="http://open-dent.com/", ResponseNamespace="http://open-dent.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public string ValidatePatientPortalOffice(string officeData) {
+            object[] results = this.Invoke("ValidatePatientPortalOffice", new object[] {
+                        officeData});
+            return ((string)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void ValidatePatientPortalOfficeAsync(string officeData) {
+            this.ValidatePatientPortalOfficeAsync(officeData, null);
+        }
+        
+        /// <remarks/>
+        public void ValidatePatientPortalOfficeAsync(string officeData, object userState) {
+            if ((this.ValidatePatientPortalOfficeOperationCompleted == null)) {
+                this.ValidatePatientPortalOfficeOperationCompleted = new System.Threading.SendOrPostCallback(this.OnValidatePatientPortalOfficeOperationCompleted);
+            }
+            this.InvokeAsync("ValidatePatientPortalOffice", new object[] {
+                        officeData}, this.ValidatePatientPortalOfficeOperationCompleted, userState);
+        }
+        
+        private void OnValidatePatientPortalOfficeOperationCompleted(object arg) {
+            if ((this.ValidatePatientPortalOfficeCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.ValidatePatientPortalOfficeCompleted(this, new ValidatePatientPortalOfficeCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://open-dent.com/PracticeTitleReset", RequestNamespace="http://open-dent.com/", ResponseNamespace="http://open-dent.com/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public void PracticeTitleReset(string officeData) {
+            this.Invoke("PracticeTitleReset", new object[] {
+                        officeData});
+        }
+        
+        /// <remarks/>
+        public void PracticeTitleResetAsync(string officeData) {
+            this.PracticeTitleResetAsync(officeData, null);
+        }
+        
+        /// <remarks/>
+        public void PracticeTitleResetAsync(string officeData, object userState) {
+            if ((this.PracticeTitleResetOperationCompleted == null)) {
+                this.PracticeTitleResetOperationCompleted = new System.Threading.SendOrPostCallback(this.OnPracticeTitleResetOperationCompleted);
+            }
+            this.InvokeAsync("PracticeTitleReset", new object[] {
+                        officeData}, this.PracticeTitleResetOperationCompleted, userState);
+        }
+        
+        private void OnPracticeTitleResetOperationCompleted(object arg) {
+            if ((this.PracticeTitleResetCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.PracticeTitleResetCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
         public new void CancelAsync(object userState) {
             base.CancelAsync(userState);
         }
@@ -623,6 +724,62 @@ namespace OpenDental.customerUpdates {
             }
         }
     }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    public delegate void ValidateResellerCredentialsCompletedEventHandler(object sender, ValidateResellerCredentialsCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class ValidateResellerCredentialsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal ValidateResellerCredentialsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public string Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((string)(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    public delegate void ValidatePatientPortalOfficeCompletedEventHandler(object sender, ValidatePatientPortalOfficeCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class ValidatePatientPortalOfficeCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal ValidatePatientPortalOfficeCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public string Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((string)(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    public delegate void PracticeTitleResetCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
 }
 
 #pragma warning restore 1591

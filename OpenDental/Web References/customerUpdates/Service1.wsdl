@@ -124,6 +124,44 @@
           </s:sequence>
         </s:complexType>
       </s:element>
+      <s:element name="ValidateResellerCredentials">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="officeData" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ValidateResellerCredentialsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ValidateResellerCredentialsResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ValidatePatientPortalOffice">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="officeData" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ValidatePatientPortalOfficeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ValidatePatientPortalOfficeResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PracticeTitleReset">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="officeData" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PracticeTitleResetResponse">
+        <s:complexType />
+      </s:element>
     </s:schema>
   </wsdl:types>
   <wsdl:message name="EstablishConnectionSoapIn">
@@ -180,6 +218,24 @@
   <wsdl:message name="RequestFeeSchedSoapOut">
     <wsdl:part name="parameters" element="tns:RequestFeeSchedResponse" />
   </wsdl:message>
+  <wsdl:message name="ValidateResellerCredentialsSoapIn">
+    <wsdl:part name="parameters" element="tns:ValidateResellerCredentials" />
+  </wsdl:message>
+  <wsdl:message name="ValidateResellerCredentialsSoapOut">
+    <wsdl:part name="parameters" element="tns:ValidateResellerCredentialsResponse" />
+  </wsdl:message>
+  <wsdl:message name="ValidatePatientPortalOfficeSoapIn">
+    <wsdl:part name="parameters" element="tns:ValidatePatientPortalOffice" />
+  </wsdl:message>
+  <wsdl:message name="ValidatePatientPortalOfficeSoapOut">
+    <wsdl:part name="parameters" element="tns:ValidatePatientPortalOfficeResponse" />
+  </wsdl:message>
+  <wsdl:message name="PracticeTitleResetSoapIn">
+    <wsdl:part name="parameters" element="tns:PracticeTitleReset" />
+  </wsdl:message>
+  <wsdl:message name="PracticeTitleResetSoapOut">
+    <wsdl:part name="parameters" element="tns:PracticeTitleResetResponse" />
+  </wsdl:message>
   <wsdl:portType name="Service1Soap">
     <wsdl:operation name="EstablishConnection">
       <wsdl:input message="tns:EstablishConnectionSoapIn" />
@@ -216,6 +272,18 @@
     <wsdl:operation name="RequestFeeSched">
       <wsdl:input message="tns:RequestFeeSchedSoapIn" />
       <wsdl:output message="tns:RequestFeeSchedSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ValidateResellerCredentials">
+      <wsdl:input message="tns:ValidateResellerCredentialsSoapIn" />
+      <wsdl:output message="tns:ValidateResellerCredentialsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ValidatePatientPortalOffice">
+      <wsdl:input message="tns:ValidatePatientPortalOfficeSoapIn" />
+      <wsdl:output message="tns:ValidatePatientPortalOfficeSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PracticeTitleReset">
+      <wsdl:input message="tns:PracticeTitleResetSoapIn" />
+      <wsdl:output message="tns:PracticeTitleResetSoapOut" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="Service1Soap" type="tns:Service1Soap">
@@ -301,6 +369,33 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="ValidateResellerCredentials">
+      <soap:operation soapAction="http://open-dent.com/ValidateResellerCredentials" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ValidatePatientPortalOffice">
+      <soap:operation soapAction="http://open-dent.com/ValidatePatientPortalOffice" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PracticeTitleReset">
+      <soap:operation soapAction="http://open-dent.com/PracticeTitleReset" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="Service1Soap12" type="tns:Service1Soap">
     <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
@@ -378,6 +473,33 @@
     </wsdl:operation>
     <wsdl:operation name="RequestFeeSched">
       <soap12:operation soapAction="http://open-dent.com/RequestFeeSched" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ValidateResellerCredentials">
+      <soap12:operation soapAction="http://open-dent.com/ValidateResellerCredentials" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ValidatePatientPortalOffice">
+      <soap12:operation soapAction="http://open-dent.com/ValidatePatientPortalOffice" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PracticeTitleReset">
+      <soap12:operation soapAction="http://open-dent.com/PracticeTitleReset" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
