@@ -1,9 +1,11 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using System.Globalization;
 
 namespace OpenDental{
 	/// <summary>
@@ -122,12 +124,144 @@ namespace OpenDental{
 		
 		}
 
+		private Claim CreateClaim(string claimType,List<PatPlan> patPlanList,List<InsPlan> planList,List<ClaimProc> claimProcList,Procedure proc,List<InsSub> subList) {
+			long claimFormNum=0;
+			InsPlan planCur=new InsPlan();
+			InsSub subCur=new InsSub();
+			Relat relatOther=Relat.Self;
+			long clinicNum=proc.ClinicNum;
+			PlaceOfService placeService=proc.PlaceService;
+			switch(claimType) {
+				case "P":
+					subCur=InsSubs.GetSub(PatPlans.GetInsSubNum(patPlanList,PatPlans.GetOrdinal(PriSecMed.Primary,patPlanList,planList,subList)),subList);
+					planCur=InsPlans.GetPlan(subCur.PlanNum,planList);
+					break;
+				case "S":
+					subCur=InsSubs.GetSub(PatPlans.GetInsSubNum(patPlanList,PatPlans.GetOrdinal(PriSecMed.Secondary,patPlanList,planList,subList)),subList);
+					planCur=InsPlans.GetPlan(subCur.PlanNum,planList);
+					break;
+				case "Med":
+					//It's already been verified that a med plan exists
+					subCur=InsSubs.GetSub(PatPlans.GetInsSubNum(patPlanList,PatPlans.GetOrdinal(PriSecMed.Medical,patPlanList,planList,subList)),subList);
+					planCur=InsPlans.GetPlan(subCur.PlanNum,planList);
+					break;
+			}
+			ClaimProc claimProcCur=Procedures.GetClaimProcEstimate(proc.ProcNum,claimProcList,planCur,subCur.InsSubNum);
+			if(claimProcCur==null) {
+				claimProcCur=new ClaimProc();
+				ClaimProcs.CreateEst(claimProcCur,proc,planCur,subCur);
+			}
+			Claim claimCur=new Claim();
+			claimCur.PatNum=proc.PatNum;
+			claimCur.DateService=proc.ProcDate;
+			claimCur.ClinicNum=proc.ClinicNum;
+			claimCur.PlaceService=proc.PlaceService;
+			claimCur.ClaimStatus="W";
+			claimCur.DateSent=DateTimeOD.Today;
+			claimCur.PlanNum=planCur.PlanNum;
+			claimCur.InsSubNum=subCur.InsSubNum;
+			InsSub sub;
+			switch(claimType) {
+				case "P":
+					claimCur.PatRelat=PatPlans.GetRelat(patPlanList,PatPlans.GetOrdinal(PriSecMed.Primary,patPlanList,planList,subList));
+					claimCur.ClaimType="P";
+					claimCur.InsSubNum2=PatPlans.GetInsSubNum(patPlanList,PatPlans.GetOrdinal(PriSecMed.Secondary,patPlanList,planList,subList));
+					sub=InsSubs.GetSub(claimCur.InsSubNum2,subList);
+					if(sub.PlanNum>0 && InsPlans.RefreshOne(sub.PlanNum).IsMedical) {
+						claimCur.PlanNum2=0;//no sec ins
+						claimCur.PatRelat2=Relat.Self;
+					}
+					else {
+						claimCur.PlanNum2=sub.PlanNum;//might be 0 if no sec ins
+						claimCur.PatRelat2=PatPlans.GetRelat(patPlanList,PatPlans.GetOrdinal(PriSecMed.Secondary,patPlanList,planList,subList));
+					}
+					break;
+				case "S":
+					claimCur.PatRelat=PatPlans.GetRelat(patPlanList,PatPlans.GetOrdinal(PriSecMed.Secondary,patPlanList,planList,subList));
+					claimCur.ClaimType="S";
+					claimCur.InsSubNum2=PatPlans.GetInsSubNum(patPlanList,PatPlans.GetOrdinal(PriSecMed.Primary,patPlanList,planList,subList));
+					sub=InsSubs.GetSub(claimCur.InsSubNum2,subList);
+					claimCur.PlanNum2=sub.PlanNum;
+					claimCur.PatRelat2=PatPlans.GetRelat(patPlanList,PatPlans.GetOrdinal(PriSecMed.Primary,patPlanList,planList,subList));
+					break;
+				case "Med":
+					claimCur.PatRelat=PatPlans.GetFromList(patPlanList,subCur.InsSubNum).Relationship;
+					claimCur.ClaimType="Other";
+					if(PrefC.GetBool(PrefName.ClaimMedTypeIsInstWhenInsPlanIsMedical)){
+						claimCur.MedType=EnumClaimMedType.Institutional;
+					}
+					else{
+						claimCur.MedType=EnumClaimMedType.Medical;
+					}
+					break;
+				case "Other":
+					claimCur.PatRelat=relatOther;
+					claimCur.ClaimType="Other";
+					//plannum2 is not automatically filled in.
+					claimCur.ClaimForm=claimFormNum;
+					if(planCur.IsMedical){
+						if(PrefC.GetBool(PrefName.ClaimMedTypeIsInstWhenInsPlanIsMedical)){
+							claimCur.MedType=EnumClaimMedType.Institutional;
+						}
+						else{
+							claimCur.MedType=EnumClaimMedType.Medical;
+						}
+					}
+					break;
+			}
+			if(planCur.PlanType=="c"){//if capitation
+				claimCur.ClaimType="Cap";
+			}
+			claimCur.ProvTreat=proc.ProvNum;
+			if(Providers.GetIsSec(proc.ProvNum)) {
+				claimCur.ProvTreat=Patients.GetPat(proc.PatNum).PriProv;
+				//OK if zero, because auto select first in list when open claim
+			}
+			claimCur.IsProsthesis="N";
+			claimCur.ProvBill=Providers.GetBillingProvNum(claimCur.ProvTreat,claimCur.ClinicNum);//OK if zero, because it will get fixed in claim
+			claimCur.EmployRelated=YN.No;
+			claimCur.ClaimForm=planCur.ClaimFormNum;
+			Claims.Insert(claimCur);
+			//attach procedure
+			claimProcCur.ClaimNum=claimCur.ClaimNum;
+			if(planCur.PlanType=="c") {//if capitation
+				claimProcCur.Status=ClaimProcStatus.CapClaim;
+			}
+			else {
+				claimProcCur.Status=ClaimProcStatus.NotReceived;
+			}
+			if(planCur.UseAltCode && (ProcedureCodes.GetProcCode(proc.CodeNum).AlternateCode1!="")) {
+				claimProcCur.CodeSent=ProcedureCodes.GetProcCode(proc.CodeNum).AlternateCode1;
+			}
+			else if(planCur.IsMedical && proc.MedicalCode!="") {
+				claimProcCur.CodeSent=proc.MedicalCode;
+			}
+			else {
+				claimProcCur.CodeSent=ProcedureCodes.GetProcCode(proc.CodeNum).ProcCode;
+				if(claimProcCur.CodeSent.Length>5 && claimProcCur.CodeSent.Substring(0,1)=="D") {
+					claimProcCur.CodeSent=claimProcCur.CodeSent.Substring(0,5);
+				}
+				if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
+					if(claimProcCur.CodeSent.Length>5) {//In Canadian e-claims, codes can contain letters or numbers and cannot be longer than 5 characters.
+						claimProcCur.CodeSent=claimProcCur.CodeSent.Substring(0,5);
+					}
+				}
+			}
+			claimProcCur.LineNumber=(byte)1;
+			ClaimProcs.Update(claimProcCur);
+			return claimCur;
+		}
+
 		private void butOK_Click(object sender, System.EventArgs e) {
-			RepeatCharge[] chargeList=RepeatCharges.Refresh(0);
+			RepeatCharge[] chargeList=RepeatCharges.Refresh(0);//Gets all repeating charges for all patients, they may be disabled
 			int countAdded=0;
+			int claimsAdded=0;
 			DateTime startDate;
 			Procedure proc;
 			for(int i=0;i<chargeList.Length;i++){
+				if(!chargeList[i].IsEnabled) {//first make sure it is not disabled
+					continue;
+				}
 				if(chargeList[i].DateStart>DateTime.Today){//not started yet
 					continue;
 				}
@@ -189,9 +323,49 @@ namespace OpenDental{
 					possibleDateOld=possibleDateOld.AddMonths(1);
 					countMonths++;
 					possibleDateNew=startDate.AddMonths(countMonths);
+					if(chargeList[i].CreatesClaim && !ProcedureCodes.GetProcCode(chargeList[i].ProcCode).NoBillIns) {
+						List<PatPlan> patPlanList=PatPlans.Refresh(chargeList[i].PatNum);
+						List<InsSub> subList=InsSubs.RefreshForFam(Patients.GetFamily(chargeList[i].PatNum));
+						List<InsPlan> insPlanList=InsPlans.RefreshForSubList(subList);;
+						List<Benefit> benefitList=Benefits.Refresh(patPlanList,subList);
+						Claim claimCur;
+						List<Procedure> procCurList=new List<Procedure>();
+						procCurList.Add(proc);
+						if(patPlanList.Count==0) {//no current insurance, do not create a claim
+							continue;
+						}
+						//create the claimprocs
+						Procedures.ComputeEstimates(proc,proc.PatNum,new List<ClaimProc>(),true,insPlanList,patPlanList,benefitList,Patients.GetPat(proc.PatNum).Age,subList);
+						//get claimprocs for this proc, may be more than one
+						List<ClaimProc> claimProcList=ClaimProcs.GetForProc(ClaimProcs.Refresh(proc.PatNum),proc.ProcNum);
+						string claimType="P";
+						if(patPlanList.Count==1 && PatPlans.GetOrdinal(PriSecMed.Medical,patPlanList,insPlanList,subList)>0) {//if there's exactly one medical plan
+							claimType="Med";
+						}
+						claimCur=CreateClaim(claimType,patPlanList,insPlanList,claimProcList,proc,subList);
+						claimProcList=ClaimProcs.Refresh(proc.PatNum);
+						if(claimCur.ClaimNum==0) {
+							continue;
+						}
+						claimsAdded++;
+						ClaimL.CalculateAndUpdate(procCurList,insPlanList,claimCur,patPlanList,benefitList,Patients.GetPat(proc.PatNum).Age,subList);
+						if(PatPlans.GetOrdinal(PriSecMed.Secondary,patPlanList,insPlanList,subList)>0 //if there exists a secondary plan
+							&& !CultureInfo.CurrentCulture.Name.EndsWith("CA"))//and not canada (don't create secondary claim for canada)
+						{
+							claimCur=CreateClaim("S",patPlanList,insPlanList,claimProcList,proc,subList);
+							if(claimCur.ClaimNum==0) {
+								continue;
+							}
+							claimsAdded++;
+							claimProcList=ClaimProcs.Refresh(proc.PatNum);
+							claimCur.ClaimStatus="H";
+							ClaimL.CalculateAndUpdate(procCurList,insPlanList,claimCur,patPlanList,benefitList,Patients.GetPat(proc.PatNum).Age,subList);
+						}
+					}
 				}
 			}
-			MessageBox.Show(countAdded.ToString()+" "+Lan.g(this,"procedures added."));
+			//MessageBox.Show(countAdded.ToString()+" "+Lan.g(this,"procedures added."));
+			MessageBox.Show(countAdded.ToString()+" "+Lan.g(this,"procedures added.")+"\r\n"+claimsAdded.ToString()+" "+Lan.g(this,"claims added."));
 			DialogResult=DialogResult.OK;
 		}
 

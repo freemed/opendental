@@ -2129,13 +2129,15 @@ namespace OpenDental {
 			gridRepeat.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableRepeatCharges","Description"),150);
 			gridRepeat.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRepeatCharges","Amount"),70,HorizontalAlignment.Right);
+			col=new ODGridColumn(Lan.g("TableRepeatCharges","Amount"),60,HorizontalAlignment.Right);
 			gridRepeat.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRepeatCharges","Start Date"),90);
+			col=new ODGridColumn(Lan.g("TableRepeatCharges","Start Date"),70,HorizontalAlignment.Center);
 			gridRepeat.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRepeatCharges","Stop Date"),90);
+			col=new ODGridColumn(Lan.g("TableRepeatCharges","Stop Date"),70,HorizontalAlignment.Center);
 			gridRepeat.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRepeatCharges","Note"),350);
+			col=new ODGridColumn(Lan.g("TableRepeatCharges","Enabled"),55,HorizontalAlignment.Center);
+			gridRepeat.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableRepeatCharges","Note"),355);
 			gridRepeat.Columns.Add(col);
 			gridRepeat.Rows.Clear();
 			UI.ODGridRow row;
@@ -2153,6 +2155,12 @@ namespace OpenDental {
 				}
 				if(RepeatChargeList[i].DateStop.Year>1880) {
 					row.Cells.Add(RepeatChargeList[i].DateStop.ToShortDateString());
+				}
+				else {
+					row.Cells.Add("");
+				}
+				if(RepeatChargeList[i].IsEnabled) {
+					row.Cells.Add("X");
 				}
 				else {
 					row.Cells.Add("");

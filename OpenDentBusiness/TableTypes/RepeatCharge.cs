@@ -27,20 +27,10 @@ namespace OpenDentBusiness{
 		public bool CreatesClaim;
 		///<summary>Defaulted to true.  Set to false to disable the repeating charge.  This allows patients to have repeating charges in their history that are not active.  Used mainly for repeating charges with notes that should not be deleted.</summary>
 		public bool IsEnabled;
+
 		///<summary></summary>
 		public RepeatCharge Copy(){
-			RepeatCharge r=new RepeatCharge();
-			r.RepeatChargeNum=RepeatChargeNum;
-			r.PatNum=PatNum;
-			r.ProcCode=ProcCode;
-			r.ChargeAmt=ChargeAmt;
-			r.DateStart=DateStart;
-			r.DateStop=DateStop;
-			r.Note=Note;
-			r.CopyNoteToProc=CopyNoteToProc;
-			r.CreatesClaim=CreatesClaim;
-			r.IsEnabled=IsEnabled;
-			return r;
+			return (RepeatCharge)this.MemberwiseClone();
 		}
 
 		

@@ -251,11 +251,14 @@ namespace OpenDentBusiness {
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE repeatcharge ADD IsEnabled tinyint NOT NULL";
 					Db.NonQ(command);
+					command="UPDATE repeatcharge SET IsEnabled = 1";
+					Db.NonQ(command);
 				}
 				else {//oracle
 					command="ALTER TABLE repeatcharge ADD IsEnabled number(3)";
 					Db.NonQ(command);
-					command="UPDATE repeatcharge SET IsEnabled = 0 WHERE IsEnabled IS NULL";
+					//command="UPDATE repeatcharge SET IsEnabled = 0 WHERE IsEnabled IS NULL";
+					command="UPDATE repeatcharge SET IsEnabled = 1 WHERE IsEnabled IS NULL";
 					Db.NonQ(command);
 					command="ALTER TABLE repeatcharge MODIFY IsEnabled NOT NULL";
 					Db.NonQ(command);

@@ -137,7 +137,7 @@ namespace OpenDentBusiness {
 		DateLastAging,
 		DefaultClaimForm,
 		DefaultProcedurePlaceService,
-		///<summary>Boolean.  Set to 1 to indicate that this database holds customers instead of patients.  Used by OD HQ.</summary>
+		///<summary>Boolean.  Set to 1 to indicate that this database holds customers instead of patients.  Used by OD HQ.  Used for showing extra phone numbers, showing some extra buttons for tools that only we use, behavior of checkboxes in repeating charge window, etc.  But phone panel visibility is based on DockPhonePanelShow.</summary>
 		DistributorKey,
 		DockPhonePanelShow,
 		///<summary>The AtoZ folder path.</summary>
