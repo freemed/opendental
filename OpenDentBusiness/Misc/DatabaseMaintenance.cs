@@ -1125,35 +1125,26 @@ namespace OpenDentBusiness {
 				}
 			}
 			else{//fix
-				//We can't touch those claimprocs because it would mess up the accounting. 
-				//For those that are not received, just warn the user
+				//We can't touch those claimprocs because it would mess up the accounting.
+ 				//We will create dummy claims for all claimprocs with invalid ClaimNums if those claimprocs have amounts entered in the InsPayAmt or Writeoff columns, otherwise you could not delete the procedure or create a new claim
 				command="SELECT * FROM claimproc WHERE claimproc.ClaimNum!=0 "
 				  +"AND NOT EXISTS(SELECT * FROM claim WHERE claim.ClaimNum=claimproc.ClaimNum) "
 					+"AND (claimproc.InsPayAmt!=0 OR claimproc.WriteOff!=0) "
-					+"AND claimproc.Status!="+POut.Int((int)ClaimProcStatus.Received);
+					+"GROUP BY claimproc.ClaimNum";
 				table=Db.GetTable(command);
 				List<ClaimProc> cpList=Crud.ClaimProcCrud.TableToList(table);
-				for(int i=0;i<cpList.Count;i++) {
-					Patient pat=Patients.GetLim(cpList[i].PatNum);
-					log+=Lans.g("FormDatabaseMaintenance","Claimproc found with invalid ClaimNum for patient: ")
-						+pat.PatNum+" - "+Patients.GetNameFL(pat.LName,pat.FName,pat.Preferred,pat.MiddleI)+", "
-						+Lans.g("FormDatabaseMaintenance","Date: ")+cpList[i].ProcDate.ToShortDateString()
-						+"\r\n";
-				}
-				//For those that are received, create dummy claim that has the specific ClaimNum that seems to be missing.
-				command="SELECT * FROM claimproc WHERE claimproc.ClaimNum!=0 "
-				  +"AND NOT EXISTS(SELECT * FROM claim WHERE claim.ClaimNum=claimproc.ClaimNum) "
-					+"AND (claimproc.InsPayAmt!=0 OR claimproc.WriteOff!=0) "
-					+"AND claimproc.Status="+POut.Int((int)ClaimProcStatus.Received);
-				table=Db.GetTable(command);
-				cpList=Crud.ClaimProcCrud.TableToList(table);
 				Claim claim;
 				for(int i=0;i<cpList.Count;i++) {
 					claim=new Claim();
 					claim.ClaimNum=cpList[i].ClaimNum;
 					claim.PatNum=cpList[i].PatNum;
 					claim.ClinicNum=cpList[i].ClinicNum;
-					claim.ClaimStatus="R";//Status received because we know it's been paid on
+					if(cpList[i].Status==ClaimProcStatus.Received) {
+						claim.ClaimStatus="R";//Status received because we know it's been paid on and the claimproc status is received
+					}
+					else {
+						claim.ClaimStatus="W";
+					}
 					claim.PlanNum=cpList[i].PlanNum;
 					claim.InsSubNum=cpList[i].InsSubNum;
 					claim.ProvTreat=cpList[i].ProvNum;
