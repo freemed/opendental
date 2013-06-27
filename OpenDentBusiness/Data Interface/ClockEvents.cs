@@ -229,7 +229,11 @@ namespace OpenDentBusiness{
 		}
 
 		public static string GetTimeCardManageCommand(DateTime startDate,DateTime stopDate) {
-			string command=@"SELECT clockevent.EmployeeNum,employee.FName,employee.LName,
+			string command=@"SELECT clockevent.EmployeeNum,";
+			if(PrefC.GetBool(PrefName.DistributorKey)) {//OD HQ
+				command+="COALESCE(wikilist_employees.ADPNum,'NotInList') AS ADPNum,";
+			}
+			command+=@"employee.FName,employee.LName,
 					SEC_TO_TIME((((TIME_TO_SEC(tempclockevent.TotalTime)-TIME_TO_SEC(tempclockevent.OverTime))
 						+TIME_TO_SEC(tempclockevent.AdjEvent))+TIME_TO_SEC(IFNULL(temptimeadjust.AdjReg,0)))
 						+(TIME_TO_SEC(tempclockevent.OverTime)+TIME_TO_SEC(IFNULL(temptimeadjust.AdjOTime,0)))) AS tempTotalTime,
@@ -271,8 +275,11 @@ namespace OpenDentBusiness{
 					AND ceb.TimeDisplayed2 > "+POut.Date(new DateTime(0001,1,1))+@"
 					AND ceb.ClockStatus = '2'
 					GROUP BY ceb.EmployeeNum) tempbreak ON clockevent.EmployeeNum=tempbreak.EmployeeNum
-				INNER JOIN employee ON clockevent.EmployeeNum=employee.EmployeeNum AND IsHidden=0
-				GROUP BY EmployeeNum
+				INNER JOIN employee ON clockevent.EmployeeNum=employee.EmployeeNum AND IsHidden=0 ";
+			if(PrefC.GetBool(PrefName.DistributorKey)) {//OD HQ
+				command+="LEFT JOIN wikilist_employees ON wikilist_employees.EmployeesNum=employee.EmployeeNum ";
+			}
+			command+=@"GROUP BY EmployeeNum
 				ORDER BY employee.LName";
 			return command;
 		}
