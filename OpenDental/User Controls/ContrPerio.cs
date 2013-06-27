@@ -581,7 +581,7 @@ namespace OpenDental
 				//font=new Font("Arial",8,FontStyle.Regular);
 				textColor=Color.Black;
 				//test for clip later
-				if(i==0){//first column
+				if(i==0){//first column (the date of the perio exam).
 					format.Alignment=StringAlignment.Far;//align right
 					e.Graphics.DrawString(DataArray[i,row].Text,font,new SolidBrush(textColor),rect,format);
 					continue;
@@ -616,9 +616,12 @@ namespace OpenDental
 						&& (DataArray[i,row].OldText==null || DataArray[i,row].OldText=="")){
 					continue;//no text to draw
 				}
-				if(DataArray[i,row].Text==null || DataArray[i,row].Text==""){
+				if(DataArray[i,row].Text==null || DataArray[i,row].Text==""){//No data recorded by user for the current cell. Display the old text from the previous perio exam.
 					drawOld=true;
 					cellValue=PIn.Int(DataArray[i,row].OldText);
+					if(cellValue>100) {//used for negative numbers
+						cellValue=100-cellValue;//i.e. 100-103 = -3
+					}
 					textColor=Color.Gray;
 				}
 				else{
