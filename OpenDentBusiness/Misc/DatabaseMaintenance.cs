@@ -2194,9 +2194,10 @@ namespace OpenDentBusiness {
 								GROUP BY PatNum,FieldName
 								HAVING COUNT(*)>1";
 			Db.NonQ(command);
-			command=@"SELECT PatNum, LName, FName
+			command=@"SELECT patient.PatNum,LName,FName
 								FROM patient 
-								WHERE (PatNum IN (SELECT DISTINCT PatNum FROM "+tableName+"))";
+								INNER JOIN "+tableName+@" t ON t.PatNum=patient.PatNum
+								GROUP BY patient.PatNum";
 			table=Db.GetTable(command);
 			if(isCheck) {
 				if(table.Rows.Count>0 || verbose) {
