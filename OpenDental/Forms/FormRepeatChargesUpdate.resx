@@ -120,9 +120,9 @@
   <data name="textBox1.Text" xml:space="preserve">
     <value>This will add completed procedures to each account that has a repeating charge set up.   The date of the procedure will be based on the settings in the repeating charge.
 
-If it has been more than a month since this was run, then more than one procedure might be added to some accounts.  You can safely run this as often as you want, because it will not add more than one procedure per month.  It will also not go back more than 3 months.
+This tool must be run at least every month for the repeating charges to be added.  The procedure will be backdated up to 20 days.  If it has been more than 1 month and 20 days since the last repeating charge was added, another procedure will not be added.
 
-If the repeating charge 'Creates Claim' check box is selected, the patient has insurance, and the procedure added is not marked as 'Do not usually bill to Ins', a claim will be created for this procedure. If the patient has a secondary insurance plan, a secondary claim will be created with a hold status.
+If the repeating charge 'Creates Claim' check box is selected, and the patient has insurance, and the procedure added is not marked as 'Do not usually bill to Ins', then a claim will be created for the procedure. If the patient has a secondary insurance plan, a secondary claim will be created with a hold status.
 
 You should run aging when you are done.</value>
   </data>

@@ -53,25 +53,21 @@ namespace OpenDental{
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormRepeatChargesUpdate));
-			this.butCancel = new OpenDental.UI.Button();
-			this.butOK = new OpenDental.UI.Button();
 			this.textBox1 = new System.Windows.Forms.TextBox();
+			this.butOK = new OpenDental.UI.Button();
+			this.butCancel = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
-			// butCancel
+			// textBox1
 			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(393, 238);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75, 26);
-			this.butCancel.TabIndex = 0;
-			this.butCancel.Text = "&Cancel";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+			this.textBox1.BackColor = System.Drawing.SystemColors.Control;
+			this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.textBox1.Location = new System.Drawing.Point(43, 13);
+			this.textBox1.Multiline = true;
+			this.textBox1.Name = "textBox1";
+			this.textBox1.Size = new System.Drawing.Size(426, 175);
+			this.textBox1.TabIndex = 3;
+			this.textBox1.Text = resources.GetString("textBox1.Text");
 			// 
 			// butOK
 			// 
@@ -88,16 +84,20 @@ namespace OpenDental{
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
-			// textBox1
+			// butCancel
 			// 
-			this.textBox1.BackColor = System.Drawing.SystemColors.Control;
-			this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.textBox1.Location = new System.Drawing.Point(43, 17);
-			this.textBox1.Multiline = true;
-			this.textBox1.Name = "textBox1";
-			this.textBox1.Size = new System.Drawing.Size(426, 169);
-			this.textBox1.TabIndex = 3;
-			this.textBox1.Text = resources.GetString("textBox1.Text");
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butCancel.Autosize = true;
+			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius = 4F;
+			this.butCancel.Location = new System.Drawing.Point(393, 238);
+			this.butCancel.Name = "butCancel";
+			this.butCancel.Size = new System.Drawing.Size(75, 26);
+			this.butCancel.TabIndex = 0;
+			this.butCancel.Text = "&Cancel";
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// FormRepeatChargesUpdate
 			// 

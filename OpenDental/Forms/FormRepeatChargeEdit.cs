@@ -459,7 +459,7 @@ namespace OpenDental{
 			checkCopyNoteToProc.Checked=RepeatCur.CopyNoteToProc;
 			checkCreatesClaim.Checked=RepeatCur.CreatesClaim;
 			checkIsEnabled.Checked=RepeatCur.IsEnabled;
-			if(PrefC.GetString(PrefName.DistributorKey)=="1") {//OD HQ disable the IsEnabled and CreatesClaim checkboxes
+			if(PrefC.GetBool(PrefName.DistributorKey)) {//OD HQ disable the IsEnabled and CreatesClaim checkboxes
 				checkCreatesClaim.Enabled=false;
 				checkIsEnabled.Enabled=false;
 			}
