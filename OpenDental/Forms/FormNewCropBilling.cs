@@ -216,6 +216,7 @@ namespace OpenDental {
 					repeatCur.ChargeAmt=15;//15$/month
 					repeatCur.DateStart=dateNewCropCharge;
 					repeatCur.Note="NPI="+npi;
+					repeatCur.IsEnabled=true;
 					RepeatCharges.Insert(repeatCur);
 					numChargesAdded++;
 				}

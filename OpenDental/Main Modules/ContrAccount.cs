@@ -3368,12 +3368,14 @@ namespace OpenDental {
 			repeat.ChargeAmt=149;
 			repeat.DateStart=DateTimeOD.Today;
 			repeat.DateStop=DateTimeOD.Today.AddMonths(11);
+			repeat.IsEnabled=true;
 			RepeatCharges.Insert(repeat);
 			repeat=new RepeatCharge();
 			repeat.PatNum=PatCur.PatNum;
 			repeat.ProcCode="001";
 			repeat.ChargeAmt=99;
 			repeat.DateStart=DateTimeOD.Today.AddYears(1);
+			repeat.IsEnabled=true;
 			RepeatCharges.Insert(repeat);
 			ModuleSelected(PatCur.PatNum);
 		}
@@ -3387,6 +3389,7 @@ namespace OpenDental {
 			repeat.ProcCode="008";
 			repeat.ChargeAmt=89;
 			repeat.DateStart=DateTimeOD.Today;
+			repeat.IsEnabled=true;
 			RepeatCharges.Insert(repeat);
 			ModuleSelected(PatCur.PatNum);
 		}
@@ -3400,6 +3403,7 @@ namespace OpenDental {
 			repeat.ProcCode="027";
 			repeat.ChargeAmt=10;
 			repeat.DateStart=DateTimeOD.Today;
+			repeat.IsEnabled=true;
 			RepeatCharges.Insert(repeat);
 			ModuleSelected(PatCur.PatNum);
 		}
@@ -3414,12 +3418,14 @@ namespace OpenDental {
 			repeat.ChargeAmt=129;
 			repeat.DateStart=DateTimeOD.Today;
 			repeat.DateStop=DateTimeOD.Today.AddMonths(11);
+			repeat.IsEnabled=true;
 			RepeatCharges.Insert(repeat);
 			repeat=new RepeatCharge();
 			repeat.PatNum=PatCur.PatNum;
 			repeat.ProcCode="001";
 			repeat.ChargeAmt=99;
 			repeat.DateStart=DateTimeOD.Today.AddYears(1);
+			repeat.IsEnabled=true;
 			RepeatCharges.Insert(repeat);
 			ModuleSelected(PatCur.PatNum);
 		}
