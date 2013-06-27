@@ -1251,39 +1251,39 @@ namespace OpenDentBusiness{
 		Recall
 	}
 
-	///<summary>0=UnknownIfEver,1=SmokerUnkownCurrent,2=NeverSmoked,3=FormerSmoker,4=CurrentSomeDay,5=CurrentEveryDay</summary>
-	public enum SmokingStatus {
-		///<summary>0</summary>
-		UnknownIfEver_Recode9,
-		///<summary>1</summary>
-		SmokerUnknownCurrent_Recode5,
-		///<summary>2</summary>
-		NeverSmoked_Recode4,
-		///<summary>3</summary>
-		FormerSmoker_Recode3,
-		///<summary>4</summary>
-		CurrentSomeDay_Recode2,
-		///<summary>5</summary>
-		CurrentEveryDay_Recode1//,//implement when we get answer from proctor
-		/////<summary>6</summary>
-		//LightSmoker,
-		/////<summary>7</summary>
-		//HeavySmoker
-	}
+	/////<summary>0=UnknownIfEver,1=SmokerUnkownCurrent,2=NeverSmoked,3=FormerSmoker,4=CurrentSomeDay,5=CurrentEveryDay</summary>
+	//public enum SmokingStatus {
+	//  ///<summary>0</summary>
+	//  UnknownIfEver_Recode9,
+	//  ///<summary>1</summary>
+	//  SmokerUnknownCurrent_Recode5,
+	//  ///<summary>2</summary>
+	//  NeverSmoked_Recode4,
+	//  ///<summary>3</summary>
+	//  FormerSmoker_Recode3,
+	//  ///<summary>4</summary>
+	//  CurrentSomeDay_Recode2,
+	//  ///<summary>5</summary>
+	//  CurrentEveryDay_Recode1//,//implement when we get answer from proctor
+	//  /////<summary>6</summary>
+	//  //LightSmoker,
+	//  /////<summary>7</summary>
+	//  //HeavySmoker
+	//}
 
 	///<summary></summary>
 	public enum SmokingSnoMed {
-		///<summary>0 - UnknownIfEver_Recode9</summary>
+		///<summary>0 - UnknownIfEver</summary>
 		_266927001,
-		///<summary>1 - SmokerUnknownCurrent_Recode5</summary>
+		///<summary>1 - SmokerUnknownCurrent</summary>
 		_77176002,
-		///<summary>2 - NeverSmoked_Recode4</summary>
+		///<summary>2 - NeverSmoked</summary>
 		_266919005,
-		///<summary>3 - FormerSmoker_Recode3</summary>
+		///<summary>3 - FormerSmoker</summary>
 		_8517006,
-		///<summary>4 - CurrentSomeDay_Recode2</summary>
+		///<summary>4 - CurrentSomeDay</summary>
 		_428041000124106,
-		///<summary>5 - CurrentEveryDay_Recode1</summary>
+		///<summary>5 - CurrentEveryDay</summary>
 		_449868002,
 		///<summary>6 - LightSmoker</summary>
 		_428061000124105,

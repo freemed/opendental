@@ -391,7 +391,6 @@ namespace OpenDentBusiness{
 					//  +"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
 					//  +"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+") "
 					//  +"AND patient.Birthdate <= "+POut.Date(DateTime.Today.AddYears(-13));//13 and older
-					//command="SELECT patient.PatNum,LName,FName,SmokeStatus FROM patient "
 					command="SELECT patient.PatNum,LName,FName,SmokingSnoMed FROM patient "
 						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
 						+"AND procedurelog.ProvNum IN("+POut.String(provs)+") "
@@ -738,10 +737,8 @@ namespace OpenDentBusiness{
 						}
 						break;
 					case EhrMeasureType.Smoking:
-						//SmokingStatus smokeStatus=(SmokingStatus)PIn.Int(tableRaw.Rows[i]["SmokeStatus"].ToString());
-						//if(smokeStatus==SmokingStatus.UnknownIfEver_Recode9) {
-						string smokeSnoMed=PIn.String(tableRaw.Rows[i]["SmokingSnoMed"].ToString());
-						if(smokeSnoMed=="266927001" || smokeSnoMed=="") {
+						string smokeSnoMed=tableRaw.Rows[i]["SmokingSnoMed"].ToString();
+						if(smokeSnoMed=="" || smokeSnoMed==SmokingSnoMed._266927001.ToString().Substring(1)) {//SmokingSnoMed for UnknownIfEver
 							explanation+="Smoking status not entered.";
 						}
 						else{
@@ -1140,8 +1137,7 @@ namespace OpenDentBusiness{
 						mu.Action="Enter vital signs";
 						break;
 					case EhrMeasureType.Smoking:
-						//if(pat.SmokeStatus==SmokingStatus.UnknownIfEver_Recode9) {
-						if(pat.SmokingSnoMed=="266927001" || pat.SmokingSnoMed=="") {//SnoMed code for Unknown if ever smoked or no status entered
+						if(pat.SmokingSnoMed=="" || pat.SmokingSnoMed==SmokingSnoMed._266927001.ToString().Substring(1)) {//SnoMed code for Unknown if ever smoked or no status entered
 							mu.Details="Smoking status not entered";
 						}
 						else {

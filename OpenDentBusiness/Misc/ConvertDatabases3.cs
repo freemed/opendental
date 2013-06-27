@@ -284,17 +284,17 @@ namespace OpenDentBusiness {
 					Db.NonQ(command);
 				}
 				//Oracle compatible
-				command="UPDATE patient SET SmokingSnoMed='449868002' WHERE SmokeStatus=5";//+POut.Int((int)SmokingStatus.CurrentEveryDay_Recode1);
+				command="UPDATE patient SET SmokingSnoMed='449868002' WHERE SmokeStatus=5";//CurrentEveryDay
 				Db.NonQ(command);
-				command="UPDATE patient SET SmokingSnoMed='428041000124106' WHERE SmokeStatus=4";//+POut.Int((int)SmokingStatus.CurrentSomeDay_Recode2);
+				command="UPDATE patient SET SmokingSnoMed='428041000124106' WHERE SmokeStatus=4";//CurrentSomeDay
 				Db.NonQ(command);
-				command="UPDATE patient SET SmokingSnoMed='8517006' WHERE SmokeStatus=3";//+POut.Int((int)SmokingStatus.FormerSmoker_Recode3);
+				command="UPDATE patient SET SmokingSnoMed='8517006' WHERE SmokeStatus=3";//FormerSmoker
 				Db.NonQ(command);
-				command="UPDATE patient SET SmokingSnoMed='266919005' WHERE SmokeStatus=2";//+POut.Int((int)SmokingStatus.NeverSmoked_Recode4);
+				command="UPDATE patient SET SmokingSnoMed='266919005' WHERE SmokeStatus=2";//NeverSmoked
 				Db.NonQ(command);
-				command="UPDATE patient SET SmokingSnoMed='77176002' WHERE SmokeStatus=1";//+POut.Int((int)SmokingStatus.SmokerUnknownCurrent_Recode5);
+				command="UPDATE patient SET SmokingSnoMed='77176002' WHERE SmokeStatus=1";//SmokerUnknownCurrent
 				Db.NonQ(command);
-				command="UPDATE patient SET SmokingSnoMed='266927001' WHERE SmokeStatus=0";//+POut.Int((int)SmokingStatus.UnknownIfEver_Recode9);
+				command="UPDATE patient SET SmokingSnoMed='266927001' WHERE SmokeStatus=0";//UnknownIfEver
 				Db.NonQ(command);
 				command="ALTER TABLE patient DROP COLUMN SmokeStatus";
 				Db.NonQ(command);
