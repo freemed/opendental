@@ -752,8 +752,18 @@ namespace OpenDentBusiness{
 				+"FROM patient "
 				+"WHERE PatStatus=0";
 			DataTable table=Db.GetTable(command);
-			for(int i=0;i<table.Rows.Count;i++){
+			for(int i=0;i<table.Rows.Count;i++) {
 				Synch(PIn.Long(table.Rows[i][0].ToString()));
+			}
+			//get all active patients with future scheduled appointments that have a procedure attached which is a recall trigger procedure
+			command="SELECT patient.PatNum "
+						+"FROM patient "
+						+"INNER JOIN appointment ON appointment.PatNum=patient.PatNum AND AptDateTime>CURDATE() AND (AptStatus=1 OR AptStatus=4) "
+						+"INNER JOIN procedurelog ON procedurelog.AptNum=appointment.AptNum "
+						+"INNER JOIN recalltrigger ON recalltrigger.CodeNum=procedurelog.CodeNum "
+						+"WHERE PatStatus=0";
+			table=Db.GetTable(command);
+			for(int i=0;i<table.Rows.Count;i++) {
 				SynchScheduledApptFull(PIn.Long(table.Rows[i][0].ToString()));
 			}
 		}
