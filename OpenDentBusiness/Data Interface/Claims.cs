@@ -59,25 +59,37 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<ClaimPaySplit>>(MethodBase.GetCurrentMethod(),carrierName);
 			}
-			string command="SELECT claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName) patName_,"
-				+"carrier.CarrierName,ClaimFee feeBilled_,SUM(claimproc.InsPayAmt) insPayAmt_,claim.ClaimNum,"//SUM(claimproc.FeeBilled) feeBilled_ was low if inspay 0 on proc
-				+"claimproc.ClaimPaymentNum,(SELECT clinic.Description FROM clinic WHERE claimproc.ClinicNum = clinic.ClinicNum) Description,claim.PatNum,PaymentRow  "
-				+"FROM claim,patient,insplan,carrier,claimproc "
-				+"WHERE claimproc.ClaimNum = claim.ClaimNum "
-				+"AND patient.PatNum = claim.PatNum "
-				+"AND insplan.PlanNum = claim.PlanNum "
-				+"AND insplan.CarrierNum = carrier.CarrierNum "
-				+"AND (claim.ClaimStatus = 'S' "
+			//string command="SELECT claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName) patName_,"
+			//  +"carrier.CarrierName,ClaimFee feeBilled_,SUM(claimproc.InsPayAmt) insPayAmt_,claim.ClaimNum,"//SUM(claimproc.FeeBilled) feeBilled_ was low if inspay 0 on proc
+			//  +"claimproc.ClaimPaymentNum,(SELECT clinic.Description FROM clinic WHERE claimproc.ClinicNum = clinic.ClinicNum) Description,claim.PatNum,PaymentRow  "
+			//  +"FROM claim,patient,insplan,carrier,claimproc "
+			//  +"WHERE claimproc.ClaimNum = claim.ClaimNum "
+			//  +"AND patient.PatNum = claim.PatNum "
+			//  +"AND insplan.PlanNum = claim.PlanNum "
+			//  +"AND insplan.CarrierNum = carrier.CarrierNum "
+			//  +"AND (claim.ClaimStatus = 'S' "
+			//    +"OR (claim.ClaimStatus='R' AND claimproc.InsPayAmt!=0)) "//certain (very few) received claims will have payment amounts entered but not attached to payment
+			//  +"AND ClaimType != 'PreAuth' "
+			//  +"AND claimproc.ClaimPaymentNum=0 "
+			//  +"AND carrier.CarrierName LIKE '%"+POut.String(carrierName)+"%' ";
+			string command="SELECT claim.DateService,claim.ProvTreat,CONCAT(patient.LName,', ',patient.FName) patName_,"
+				+"carrierA.CarrierName,ClaimFee feeBilled_,SUM(claimproc.InsPayAmt) insPayAmt_,claim.ClaimNum,"//SUM(claimproc.FeeBilled) feeBilled_ was low if inspay 0 on proc
+				+"claimproc.ClaimPaymentNum,(SELECT clinic.Description FROM clinic WHERE claimproc.ClinicNum = clinic.ClinicNum) Description,claim.PatNum,PaymentRow "
+				+"FROM (SELECT CarrierNum, CarrierName FROM carrier WHERE CarrierName LIKE '%"+POut.String(carrierName)+"%') carrierA "
+				+"INNER JOIN insplan ON insplan.CarrierNum = carrierA.CarrierNum "
+				+"INNER JOIN claim ON insplan.PlanNum = claim.PlanNum "
+				+"INNER JOIN claimproc ON claimproc.ClaimNum = claim.ClaimNum "
+				+"INNER JOIN patient ON patient.PatNum = claimproc.PatNum "
+				+"WHERE (claim.ClaimStatus = 'S' "
 					+"OR (claim.ClaimStatus='R' AND claimproc.InsPayAmt!=0)) "//certain (very few) received claims will have payment amounts entered but not attached to payment
-				+"AND ClaimType != 'PreAuth' "
-				+"AND claimproc.ClaimPaymentNum=0 "
-				+"AND carrier.CarrierName LIKE '%"+POut.String(carrierName)+"%' ";
+				+"AND ClaimType != 'PreAuth' AND claimproc.ClaimPaymentNum=0 ";
 			if(DataConnection.DBtype==DatabaseType.MySql) {
 				command+="GROUP BY claim.ClaimNum ";
 			}
 			else{//oracle
+				//js This might need some help and some testing in Oracle
 				command+="GROUP BY claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName),"
-					+"carrier.CarrierName,claim.ClaimNum,claimproc.ClaimPaymentNum,claim.PatNum ";
+					+"carrierA.CarrierName,feeBilled_,claim.ClaimNum,claimproc.ClaimPaymentNum,Description,claim.PatNum,PaymentRow ";
 			}
 			//+" HAVING SUM(claimproc.InsPayAmt)<SUM(claimproc.InsPayEst)"
 			command+="ORDER BY CarrierName,patName_";
