@@ -1860,7 +1860,7 @@ namespace OpenDental{
 				if(languageList[i]=="") {
 					continue;
 				}
-				CultureInfo culture=CodeBase.MiscUtils.GetCultureForISO639_2(languageList[i]);
+				CultureInfo culture=CodeBase.MiscUtils.GetCultureFromThreeLetter(languageList[i]);
 				if(culture==null) {//custom language
 					comboLanguage.Items.Add(languageList[i]);
 				}

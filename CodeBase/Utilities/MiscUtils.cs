@@ -56,15 +56,14 @@ namespace CodeBase {
 			}
 		}
 
-		///<summary>Accepts a 3 character string which represents a neutral culture (for example, "eng" for English).
-		///Returns null if the three letter ISO name is not known (useful for determining custom languages).</summary>
-		public static CultureInfo GetCultureForISO639_2(string strThreeLetterISOname) {
+		///<summary>Accepts a 3 character string which represents a neutral culture (for example, "eng" for English) in the ISO639-2 format.  Returns null if the three letter ISO639-2 name is not standard (useful for determining custom languages).</summary>
+		public static CultureInfo GetCultureFromThreeLetter(string strThreeLetterISOname) {
 			if(strThreeLetterISOname==null || strThreeLetterISOname.Length!=3) {//Length check helps quickly identify custom languages.
 				return null;
 			}
 			CultureInfo[] arrayCulturesNeutral=CultureInfo.GetCultures(CultureTypes.NeutralCultures);
 			for(int i=0;i<arrayCulturesNeutral.Length;i++) {
-				if(arrayCulturesNeutral[i].ThreeLetterISOLanguageName==strThreeLetterISOname) {//TODO: Should we make this case insensitive?
+				if(arrayCulturesNeutral[i].ThreeLetterISOLanguageName==strThreeLetterISOname) {
 					return arrayCulturesNeutral[i];
 				}
 			}

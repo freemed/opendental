@@ -324,7 +324,7 @@ namespace OpenDental{
 				if(LangsUsed[i]=="") {
 					continue;
 				}
-				CultureInfo culture=CodeBase.MiscUtils.GetCultureForISO639_2(LangsUsed[i]);
+				CultureInfo culture=CodeBase.MiscUtils.GetCultureFromThreeLetter(LangsUsed[i]);
 				if(culture==null) {//custom language
 					listUsed.Items.Add(LangsUsed[i]);
 				}
@@ -341,7 +341,7 @@ namespace OpenDental{
 				if(LangsUsed[i]=="") {
 					continue;
 				}
-				CultureInfo culture=CodeBase.MiscUtils.GetCultureForISO639_2(LangsUsed[i]);
+				CultureInfo culture=CodeBase.MiscUtils.GetCultureFromThreeLetter(LangsUsed[i]);
 				if(culture==null) {//custom language
 					comboLanguagesIndicateNone.Items.Add(LangsUsed[i]);//Only add custom languages to this combobox.
 					if(LangsUsed[i]==PrefC.GetString(PrefName.LanguagesIndicateNone)) {
