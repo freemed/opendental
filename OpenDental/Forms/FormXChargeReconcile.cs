@@ -72,8 +72,8 @@ namespace OpenDental {
 		private void butViewImported_Click(object sender,EventArgs e) {
 			Cursor=Cursors.WaitCursor;
 			ReportSimpleGrid report=new ReportSimpleGrid();
-			report.Query=@"SELECT TransactionDateTime,ClerkID,BatchNum,ItemNum,PatNum,CCType,CreditCardNum,Expiration,Result,Amount FROM xchargetransaction
-				WHERE TransactionDateTime BETWEEN "+POut.DateT(date1.SelectionStart)+" AND "+POut.DateT(date2.SelectionStart.AddDays(1));
+			report.Query="SELECT TransactionDateTime,ClerkID,BatchNum,ItemNum,PatNum,CCType,CreditCardNum,Expiration,Result,Amount FROM xchargetransaction "
+				+"WHERE DATE(TransactionDateTime) BETWEEN "+POut.Date(date1.SelectionStart)+" AND "+POut.Date(date2.SelectionStart);
 			FormQuery FormQuery2=new FormQuery(report);
 			FormQuery2.IsReport=true;
 			FormQuery2.SubmitReportQuery();
@@ -97,10 +97,10 @@ namespace OpenDental {
 			Cursor=Cursors.WaitCursor;
 			string programNum=ProgramProperties.GetPropVal(Programs.GetCur(ProgramName.Xcharge).ProgramNum,"PaymentType");
 			ReportSimpleGrid report=new ReportSimpleGrid();
-			report.Query=@"SET @pos=0;
-				SELECT @pos:=@pos+1 as 'Count', patient.PatNum, LName, FName, DateEntry,PayDate, PayNote,PayAmt
-				FROM patient INNER JOIN payment ON payment.PatNum=patient.PatNum
-				WHERE PayType="+programNum+" AND DateEntry BETWEEN "+POut.DateT(date1.SelectionStart)+" AND "+POut.DateT(date2.SelectionStart.AddDays(1))
+			report.Query="SET @pos=0; "
+				+"SELECT @pos:=@pos+1 as 'Count', patient.PatNum, LName, FName, DateEntry,PayDate, PayNote,PayAmt "
+				+"FROM patient INNER JOIN payment ON payment.PatNum=patient.PatNum "
+				+"WHERE PayType="+programNum+" AND DateEntry BETWEEN "+POut.Date(date1.SelectionStart)+" AND "+POut.Date(date2.SelectionStart)
 				+"ORDER BY PayDate ASC, patient.LName";
 			FormQuery FormQuery2=new FormQuery(report);
 			FormQuery2.IsReport=true;
@@ -127,9 +127,9 @@ namespace OpenDental {
 				+" FROM xchargetransaction LEFT JOIN ("
 					+" SELECT patient.PatNum,LName,FName,DateEntry,PayDate,PayAmt,PayNote"
 					+" FROM patient INNER JOIN payment ON payment.PatNum=patient.PatNum"
-					+" WHERE PayType="+programNum+" AND DateEntry BETWEEN "+POut.DateT(date1.SelectionStart)+" AND "+POut.DateT(date2.SelectionStart.AddDays(1))
+					+" WHERE PayType="+programNum+" AND DateEntry BETWEEN "+POut.Date(date1.SelectionStart)+" AND "+POut.Date(date2.SelectionStart)
 				+" ) AS P ON xchargetransaction.PatNum=P.PatNum AND DATE(xchargetransaction.TransactionDateTime)=P.DateEntry AND xchargetransaction.Amount=P.PayAmt "
-				+" WHERE TransactionDateTime BETWEEN "+POut.DateT(date1.SelectionStart)+" AND "+POut.DateT(date2.SelectionStart.AddDays(1))
+				+" WHERE DATE(TransactionDateTime) BETWEEN "+POut.Date(date1.SelectionStart)+" AND "+POut.Date(date2.SelectionStart)
 				+" AND P.PatNum IS NULL;";
 			FormQuery FormQuery2=new FormQuery(report);
 			FormQuery2.IsReport=true;
@@ -154,14 +154,14 @@ namespace OpenDental {
 			Cursor=Cursors.WaitCursor;
 			string programNum=ProgramProperties.GetPropVal(Programs.GetCur(ProgramName.Xcharge).ProgramNum,"PaymentType");
 			ReportSimpleGrid report=new ReportSimpleGrid();
-			report.Query=@"SELECT payment.PatNum, LName, FName, payment.DateEntry,payment.PayDate, payment.PayNote,payment.PayAmt
-				FROM patient INNER JOIN payment ON payment.PatNum=patient.PatNum
-				LEFT JOIN (SELECT TransactionDateTime,ClerkID,BatchNum,ItemNum,PatNum,CCType,CreditCardNum,Expiration,Result,Amount FROM xchargetransaction
-					WHERE TransactionDateTime BETWEEN "+POut.DateT(date1.SelectionStart)+" AND "+POut.DateT(date2.SelectionStart.AddDays(1))+@") AS X
-				ON X.PatNum=payment.PatNum AND DATE(X.TransactionDateTime)=payment.DateEntry AND X.Amount=payment.PayAmt
-				WHERE PayType="+programNum+" AND DateEntry BETWEEN "+POut.DateT(date1.SelectionStart)+" AND "+POut.DateT(date2.SelectionStart.AddDays(1))+@"
-				AND X.TransactionDateTime IS NULL
-				ORDER BY PayDate ASC, patient.LName";
+			report.Query="SELECT payment.PatNum, LName, FName, payment.DateEntry,payment.PayDate, payment.PayNote,payment.PayAmt "
+				+"FROM patient INNER JOIN payment ON payment.PatNum=patient.PatNum "
+				+"LEFT JOIN (SELECT TransactionDateTime,ClerkID,BatchNum,ItemNum,PatNum,CCType,CreditCardNum,Expiration,Result,Amount FROM xchargetransaction "
+					+"WHERE DATE(TransactionDateTime) BETWEEN "+POut.Date(date1.SelectionStart)+" AND "+POut.Date(date2.SelectionStart)+@") AS X "
+				+"ON X.PatNum=payment.PatNum AND DATE(X.TransactionDateTime)=payment.DateEntry AND X.Amount=payment.PayAmt "
+				+"WHERE PayType="+programNum+" AND DateEntry BETWEEN "+POut.Date(date1.SelectionStart)+" AND "+POut.Date(date2.SelectionStart)+" "
+				+"AND X.TransactionDateTime IS NULL "
+				+"ORDER BY PayDate ASC, patient.LName";
 			FormQuery FormQuery2=new FormQuery(report);
 			FormQuery2.IsReport=true;
 			FormQuery2.SubmitReportQuery();
