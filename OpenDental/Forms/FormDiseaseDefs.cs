@@ -224,10 +224,10 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Snomed Code"),100);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Description"),160);
+			col=new ODGridColumn(Lan.g(this,"Description"),250);
 			gridMain.Columns.Add(col);
-			if(IsSelectionMode) {
-				col=new ODGridColumn(Lan.g(this,"Hidden"),40);
+			if(!IsSelectionMode) {
+				col=new ODGridColumn(Lan.g(this,"Hidden"),50);
 				gridMain.Columns.Add(col);
 			}
 			gridMain.Rows.Clear();
