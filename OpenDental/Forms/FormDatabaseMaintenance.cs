@@ -459,6 +459,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.AppointmentPlannedNoPlannedApt(verbose,isCheck);
 			Application.DoEvents();
+			textLog.Text+=DatabaseMaintenance.AutoCodeItemsWithNoAutoCode(verbose,isCheck);
+			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.AutoCodesDeleteWithNoItems(verbose,isCheck);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.AutomationTriggersWithNoSheetDefs(verbose,isCheck);

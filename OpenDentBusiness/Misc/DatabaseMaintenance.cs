@@ -478,6 +478,41 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
+		public static string AutoCodeItemsWithNoAutoCode(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			if(isCheck) {
+				command=@"SELECT DISTINCT AutoCodeNum FROM autocodeitem WHERE NOT EXISTS(
+					SELECT * FROM autocode WHERE autocodeitem.AutoCodeNum=autocode.AutoCodeNum)";
+				table=Db.GetTable(command);
+				int numFound=table.Rows.Count;
+				if(numFound!=0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Auto codes missing due to invalid auto code items")+": "+numFound.ToString()+"\r\n";
+				}
+			}
+			else {
+				command=@"SELECT DISTINCT AutoCodeNum FROM autocodeitem WHERE NOT EXISTS(
+					SELECT * FROM autocode WHERE autocodeitem.AutoCodeNum=autocode.AutoCodeNum)";
+				table=Db.GetTable(command);
+				int numFixed=table.Rows.Count;
+				for(int i=0;i<table.Rows.Count;i++) {
+					AutoCode autoCode=new AutoCode();
+					autoCode.AutoCodeNum=PIn.Long(table.Rows[i]["AutoCodeNum"].ToString());
+					autoCode.Description="UNKNOWN";
+					Crud.AutoCodeCrud.Insert(autoCode,true);
+				}
+				if(numFixed>0) {
+					Signalods.SetInvalid(InvalidType.AutoCodes);
+				}
+				if(numFixed!=0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Auto codes created due to invlaid auto code items")+": "+numFixed.ToString()+"\r\n";
+				}
+			}
+			return log;
+		}
+
 		public static string AutoCodesDeleteWithNoItems(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
