@@ -52,11 +52,8 @@ namespace OpenDentBusiness{
 			return Crud.HL7DefCrud.SelectOne(command);
 		}
 
-		/// <summary>Gets from cache.  This will return null if no HL7defs are enabled.  Since only one can be enabled, this will return only the enabled one.</summary>
+		/// <summary>Gets from cache.  This will return null if no HL7defs are enabled.  Since only one can be enabled, this will return only the enabled one. No need to check RemotingRole, cache is filled by calling GetTableRemotelyIfNeeded.</summary>
 		public static HL7Def GetOneDeepEnabled() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<HL7Def>(MethodBase.GetCurrentMethod());
-			}
 			HL7Def retval=null;
 			for(int i=0;i<Listt.Count;i++) {
 				if(Listt[i].IsEnabled) {
@@ -141,16 +138,21 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets a full deep list of all defs that are not internal from the database.</summary>
-		public static List<HL7Def> GetDeepCustomList(){
+		public static List<HL7Def> GetDeepCustomList() {
+			List<HL7Def> customList=GetShallowFromDb();
+			for(int d=0;d<customList.Count;d++) {
+				customList[d].hl7DefMessages=HL7DefMessages.GetDeepFromDb(customList[d].HL7DefNum);
+			}
+			return customList;
+		}
+
+		///<summary>Gets shallow list of all defs that are not internal from the database</summary>
+		public static List<HL7Def> GetShallowFromDb() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<HL7Def>>(MethodBase.GetCurrentMethod());
 			}
 			string command="SELECT * FROM hl7def WHERE IsInternal=0";
-			List<HL7Def> customList=Crud.HL7DefCrud.SelectMany(command);
-			for(int i=0;i<customList.Count;i++) {
-				customList[i].hl7DefMessages=HL7DefMessages.GetDeepFromDb(customList[i].HL7DefNum);
-			}
-			return customList;
+			return Crud.HL7DefCrud.SelectMany(command);
 		}
 
 		///<summary>Only used from Unit Tests.  Since we clear the db of hl7Defs we have to insert this internal def not update it.</summary>
