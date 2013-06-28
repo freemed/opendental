@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Reflection;
@@ -61,14 +62,38 @@ namespace OpenDentBusiness{
 			Crud.AutoCodeCrud.Update(Cur);
 		}
 
-		///<summary>This could be improved since it does not delete any autocode items.</summary>
-		public static void Delete(AutoCode Cur){
+		///<summary>Surround with try/catch.  Currently only called from FormAutoCode and FormAutoCodeEdit.</summary>
+		public static void Delete(AutoCode autoCodeCur){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),autoCodeCur);
 				return;
 			}
-			string command= "DELETE from autocode WHERE autocodenum = '"+POut.Long(Cur.AutoCodeNum)+"'";
-			Db.NonQ(command);
+			//look for dependencies in ProcButton table.
+			string strInUse="";
+			for(int i=0;i<ProcButtons.List.Length;i++) {
+				for(int j=0;j<ProcButtonItems.List.Length;j++) {
+					if(ProcButtonItems.List[j].ProcButtonNum==ProcButtons.List[i].ProcButtonNum 
+						&& ProcButtonItems.List[j].AutoCodeNum==autoCodeCur.AutoCodeNum) 
+					{
+						if(strInUse!="") {
+							strInUse+="; ";
+						}
+						//Add the procedure button description to the list for display.
+						strInUse+=ProcButtons.List[i].Description;
+						break;//Button already added to the description, check the other buttons in the list.
+					}
+				}
+			}
+			if(strInUse!="") {
+				throw new ApplicationException(Lans.g("AutoCodes","Not allowed to delete autocode because it is in use.  Procedure buttons using this autocode include ")+strInUse);
+			}
+			List<AutoCodeItem> listAutoCodeItems=AutoCodeItems.GetListForCode(autoCodeCur.AutoCodeNum);
+			for(int i=0;i<listAutoCodeItems.Count;i++) {
+				AutoCodeItem AutoCodeItemCur=listAutoCodeItems[i];
+        AutoCodeConds.DeleteForItemNum(AutoCodeItemCur.AutoCodeItemNum);
+        AutoCodeItems.Delete(AutoCodeItemCur);
+      }
+			Crud.AutoCodeCrud.Delete(autoCodeCur.AutoCodeNum);
 		}
 
 		///<summary>Used in ProcButtons.SetToDefault.  Returns 0 if the given autocode does not exist.</summary>

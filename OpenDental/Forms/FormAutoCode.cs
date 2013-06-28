@@ -175,8 +175,14 @@ namespace OpenDental{
         MessageBox.Show(Lan.g(this,"You must first select a row"));
 				return;
       }
-      AutoCode AutoCodeCur=AutoCodeC.List[listAutoCodes.SelectedIndex];
-      AutoCodes.Delete(AutoCodeCur);
+      AutoCode autoCodeCur=AutoCodeC.List[listAutoCodes.SelectedIndex];
+			try {
+				AutoCodes.Delete(autoCodeCur);
+			}
+			catch(ApplicationException ex) {
+				MessageBox.Show(ex.Message);
+				return;
+			}
 			changed=true;
       FillList(); 		
 		}

@@ -314,12 +314,14 @@ namespace OpenDental{
 			if(DialogResult==DialogResult.OK)
 				return;
 			if(IsNew){
-        for(int i=0;i<listForCode.Count;i++){
-          AutoCodeItem AutoCodeItemCur=listForCode[i];
-          AutoCodeConds.DeleteForItemNum(AutoCodeItemCur.AutoCodeItemNum);
-          AutoCodeItems.Delete(AutoCodeItemCur);
-        }
-        AutoCodes.Delete(AutoCodeCur);
+				try {
+					AutoCodes.Delete(AutoCodeCur);
+				}
+				catch(ApplicationException ex) {
+					//should never happen
+					MessageBox.Show(ex.Message);
+					return;
+				}
       }
 		}
 

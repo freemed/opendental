@@ -76,7 +76,7 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
-		///<summary></summary>
+		///<summary>Gets from cache.  No call to db.</summary>
 		public static List<AutoCodeItem> GetListForCode(long autoCodeNum) {
 			//No need to check RemotingRole; no call to db.
 			//loop through AutoCodeItems.List to fill ListForCode
