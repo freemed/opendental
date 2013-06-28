@@ -56,10 +56,9 @@ namespace OpenDental {
 					textCriterionFK.Text=AllergyDefs.GetOne(RuleCur.CriterionFK).Description;
 					break;
 				case EhrCriterion.Age:
-					break;
 				case EhrCriterion.Gender:
-					break;
 				case EhrCriterion.LabResult:
+					//The FK boxes won't even be visible.
 					break;
 				default://This should not happen.
 					break;
