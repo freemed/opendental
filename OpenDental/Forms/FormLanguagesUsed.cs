@@ -324,11 +324,12 @@ namespace OpenDental{
 				if(LangsUsed[i]=="") {
 					continue;
 				}
-				try {
-					listUsed.Items.Add(CultureInfo.GetCultureInfo(LangsUsed[i]).DisplayName);
-				}
-				catch(ArgumentException ex) {//Custom language.  There's not an obvious better way to do this. 
+				CultureInfo culture=CodeBase.MiscUtils.GetCultureForISO639_2(LangsUsed[i]);
+				if(culture==null) {//custom language
 					listUsed.Items.Add(LangsUsed[i]);
+				}
+				else {
+					listUsed.Items.Add(culture.DisplayName);
 				}
 			}
 			FillComboLanguagesIndicateNone();
@@ -340,10 +341,8 @@ namespace OpenDental{
 				if(LangsUsed[i]=="") {
 					continue;
 				}
-				try {
-					CultureInfo.GetCultureInfo(LangsUsed[i]);//If this line works, then the language is a real language (not custom). We do not want real languages to show in this combobox.
-				}
-				catch(ArgumentException ex) {//Custom language.  There's not an obvious better way to do this. 
+				CultureInfo culture=CodeBase.MiscUtils.GetCultureForISO639_2(LangsUsed[i]);
+				if(culture==null) {//custom language
 					comboLanguagesIndicateNone.Items.Add(LangsUsed[i]);//Only add custom languages to this combobox.
 					if(LangsUsed[i]==PrefC.GetString(PrefName.LanguagesIndicateNone)) {
 						comboLanguagesIndicateNone.SelectedIndex=comboLanguagesIndicateNone.Items.Count-1;//Select the item we just added.
@@ -357,7 +356,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select a language first");
 				return;
 			}
-			string lang=AllCultures[listAvailable.SelectedIndex].Name;//en,fr, etc
+			string lang=AllCultures[listAvailable.SelectedIndex].ThreeLetterISOLanguageName;//eng,spa etc
 			if(LangsUsed.Contains(lang)) {
 				MsgBox.Show(this,"Language already added.");
 				return;

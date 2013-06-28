@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Text;
 
 namespace OpenDentBusiness {
@@ -611,6 +612,44 @@ namespace OpenDentBusiness {
 		private static void To13_3_0() {
 			if(FromVersion<new Version("13.3.0.0")) {
 				string command;
+				//Convert languages in the LanguagesUsedByPatients preference from ISO639-1 to ISO639-2 for languages which are not custom.
+				command="SELECT ValueString FROM preference WHERE PrefName='LanguagesUsedByPatients'";
+				string strLanguageList=PIn.String(Db.GetScalar(command));
+				if(strLanguageList!="") {
+					StringBuilder sb=new StringBuilder();
+					string[] lanstring=strLanguageList.Split(',');
+					for(int i=0;i<lanstring.Length;i++) {
+						if(lanstring[i]=="") {
+							continue;
+						}
+						if(sb.Length>0) {
+							sb.Append(",");
+						}
+						try {
+							sb.Append(CultureInfo.GetCultureInfo(lanstring[i]).ThreeLetterISOLanguageName);
+						}
+						catch {//custom language
+							sb.Append(lanstring[i]);
+						}						
+					}
+					command="UPDATE preference SET ValueString='"+POut.String(sb.ToString())+"' WHERE PrefName='LanguagesUsedByPatients'";
+					Db.NonQ(command);
+				}
+				//Convert languages in the patient.Langauge column from ISO639-1 to ISO639-2 for languages which are not custom.
+				command="SELECT PatNum,Language FROM patient WHERE Language<>'' AND Language IS NOT NULL";
+				DataTable tablePatLanguages=Db.GetTable(command);
+				for(int i=0;i<tablePatLanguages.Rows.Count;i++) {
+					string lang=PIn.String(tablePatLanguages.Rows[i]["Language"].ToString());
+					try {
+						lang=CultureInfo.GetCultureInfo(lang).ThreeLetterISOLanguageName;
+						long patNum=PIn.Long(tablePatLanguages.Rows[i]["PatNum"].ToString());
+						command="UPDATE patient SET Language='"+POut.String(lang)+"' WHERE PatNum="+POut.Long(patNum);
+						Db.NonQ(command);
+					}
+					catch {//Custom language
+						//Do not modify.
+					}
+				}
 
 
 

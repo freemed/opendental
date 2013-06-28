@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
@@ -53,6 +54,21 @@ namespace CodeBase {
 				MessageBox.Show("Text entered was not valid encrypted text.");
 				return "";
 			}
+		}
+
+		///<summary>Accepts a 3 character string which represents a neutral culture (for example, "eng" for English).
+		///Returns null if the three letter ISO name is not known (useful for determining custom languages).</summary>
+		public static CultureInfo GetCultureForISO639_2(string strThreeLetterISOname) {
+			if(strThreeLetterISOname==null || strThreeLetterISOname.Length!=3) {//Length check helps quickly identify custom languages.
+				return null;
+			}
+			CultureInfo[] arrayCulturesNeutral=CultureInfo.GetCultures(CultureTypes.NeutralCultures);
+			for(int i=0;i<arrayCulturesNeutral.Length;i++) {
+				if(arrayCulturesNeutral[i].ThreeLetterISOLanguageName==strThreeLetterISOname) {//TODO: Should we make this case insensitive?
+					return arrayCulturesNeutral[i];
+				}
+			}
+			return null;
 		}
 
 	}

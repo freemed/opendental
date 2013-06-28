@@ -1860,11 +1860,12 @@ namespace OpenDental{
 				if(languageList[i]=="") {
 					continue;
 				}
-				try {
-					comboLanguage.Items.Add(CultureInfo.GetCultureInfo(languageList[i]).DisplayName);
-				}
-				catch {
+				CultureInfo culture=CodeBase.MiscUtils.GetCultureForISO639_2(languageList[i]);
+				if(culture==null) {//custom language
 					comboLanguage.Items.Add(languageList[i]);
+				}
+				else {
+					comboLanguage.Items.Add(culture.DisplayName);
 				}
 				if(PatCur.Language==languageList[i]) {
 					comboLanguage.SelectedIndex=i+1;
