@@ -606,11 +606,11 @@ namespace OpenDentBusiness {
 				command="UPDATE preference SET ValueString = '13.2.1.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
-			To13_3_0();
+			To13_2_2();
 		}
 
-		private static void To13_3_0() {
-			if(FromVersion<new Version("13.3.0.0")) {
+		private static void To13_2_2() {
+			if(FromVersion<new Version("13.2.2.0")) {
 				string command;
 				//Convert languages in the LanguagesUsedByPatients preference from ISO639-1 to ISO639-2 for languages which are not custom.
 				command="SELECT ValueString FROM preference WHERE PrefName='LanguagesUsedByPatients'";
@@ -630,7 +630,7 @@ namespace OpenDentBusiness {
 						}
 						catch {//custom language
 							sb.Append(lanstring[i]);
-						}						
+						}
 					}
 					command="UPDATE preference SET ValueString='"+POut.String(sb.ToString())+"' WHERE PrefName='LanguagesUsedByPatients'";
 					Db.NonQ(command);
@@ -650,6 +650,16 @@ namespace OpenDentBusiness {
 						//Do not modify.
 					}
 				}
+				command="UPDATE preference SET ValueString = '13.2.2.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
+			To13_3_0();
+		}
+
+		private static void To13_3_0() {
+			if(FromVersion<new Version("13.3.0.0")) {
+				string command;
+				
 
 
 
