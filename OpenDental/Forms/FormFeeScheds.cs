@@ -294,7 +294,7 @@ namespace OpenDental{
 				listType.Items.Add(((FeeScheduleType)i).ToString());
 			}
 			listType.SelectedIndex=0;
-			if(!Security.IsAuthorized(Permissions.SecurityAdmin)){
+			if(!Security.IsAuthorized(Permissions.SecurityAdmin,true)){
 				butCleanUp.Visible=false;
 				labelCleanUp.Visible=false;
 			}
