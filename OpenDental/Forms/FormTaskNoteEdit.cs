@@ -10,6 +10,9 @@ using OpenDentBusiness;
 namespace OpenDental {
 	public partial class FormTaskNoteEdit:Form {
 		public TaskNote TaskNoteCur;
+		public delegate void DelegateOnEditComplete(DialogResult dialogResult);
+		///<summary>Called when this form is closed.</summary>
+		public DelegateOnEditComplete OnEditComplete;
 
 		public FormTaskNoteEdit() {
 			InitializeComponent();
@@ -32,10 +35,12 @@ namespace OpenDental {
 			}
 			if(TaskNoteCur.IsNew) {
 				DialogResult=DialogResult.Cancel;
+				Close();//Needed because the window is called as a non-modal window.
 				return;
 			}
 			TaskNotes.Delete(TaskNoteCur.TaskNoteNum);
 			DialogResult=DialogResult.OK;
+			Close();//Needed because the window is called as a non-modal window.		
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
@@ -58,10 +63,19 @@ namespace OpenDental {
 				TaskNotes.Update(TaskNoteCur);
 			}
 			DialogResult=DialogResult.OK;
+			Close();//Needed because the window is called as a non-modal window.
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
+			Close();//Needed because the window is called as a non-modal window.
+		}
+
+		private void FormTaskNoteEdit_FormClosed(object sender,FormClosedEventArgs e) {
+			if(OnEditComplete==null) {
+				return;
+			}
+			OnEditComplete(DialogResult);
 		}
 
 		

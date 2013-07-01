@@ -820,27 +820,43 @@ namespace OpenDental{
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			if(OwnedForms.Length>0) {
+				MsgBox.Show(this,"One or more task note edit windows are open and must be closed.");
+				return;
+			}
 			if(!Security.IsAuthorized(Permissions.TaskEdit)) {//Tasknotes are not editable unless user has TaskEdit permission.
 				return;
 			}
 			FormTaskNoteEdit form=new FormTaskNoteEdit();
 			form.TaskNoteCur=NoteList[e.Row];
-			form.ShowDialog();
-			if(form.DialogResult==DialogResult.OK) {
+			form.OnEditComplete=OnNoteEditComplete_CellDoubleClick;
+			form.Show(this);//non-modal subwindow, but if the parent is closed by the user when the child is open, then the child is forced closed along with the parent and after the parent.
+		}
+
+		private void OnNoteEditComplete_CellDoubleClick(DialogResult dialogResult) {
+			if(dialogResult==DialogResult.OK) {
 				notesChanged=true;
 			}
 			FillGrid();
 		}
 
 		private void butAddNote_Click(object sender,EventArgs e) {
+			if(OwnedForms.Length>0) {
+				MsgBox.Show(this,"One or more task note edit windows are open and must be closed.");
+				return;
+			}
 			FormTaskNoteEdit form=new FormTaskNoteEdit();
 			form.TaskNoteCur=new TaskNote();
 			form.TaskNoteCur.TaskNum=TaskCur.TaskNum;
 			form.TaskNoteCur.DateTimeNote=DateTime.Now;//Will be slightly adjusted at server.
 			form.TaskNoteCur.UserNum=Security.CurUser.UserNum;
 			form.TaskNoteCur.IsNew=true;
-			form.ShowDialog();
-			if(form.DialogResult!=DialogResult.OK) {
+			form.OnEditComplete=OnNoteEditComplete_Add;
+			form.Show(this);//non-modal subwindow, but if the parent is closed by the user when the child is open, then the child is forced closed along with the parent and after the parent.
+		}
+
+		private void OnNoteEditComplete_Add(DialogResult dialogResult) {
+			if(dialogResult!=DialogResult.OK) {
 				return;
 			}
 			notesChanged=true;
@@ -1079,6 +1095,10 @@ namespace OpenDental{
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
+			if(OwnedForms.Length>0) {
+				MsgBox.Show(this,"One or more task note edit windows are open and must be closed.");
+				return;
+			}
 			if(!IsNew) {
 				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete?")) {
 					return;
@@ -1094,29 +1114,25 @@ namespace OpenDental{
 			//This can't happen if IsNew
 			//This also can't happen if the task is mine with no replies.
 			//Button not visible unless a ReplyToUserNum has been calculated successfully.
+			if(OwnedForms.Length>0) {
+				MsgBox.Show(this,"One or more task note edit windows are open and must be closed.");
+				return;
+			}
 			long inbox=Userods.GetInbox(ReplyToUserNum);
 			if(inbox==0) {
 				MsgBox.Show(this,"No inbox has been set up for this user yet.");
 				return;
 			}
 			if(!notesChanged && textDescript.Text==TaskCur.Descript) {//nothing changed
-				//MsgBox.Show(this,"Please add a note before using the reply button.");
-				//return;
 				FormTaskNoteEdit form=new FormTaskNoteEdit();
 				form.TaskNoteCur=new TaskNote();
 				form.TaskNoteCur.TaskNum=TaskCur.TaskNum;
 				form.TaskNoteCur.DateTimeNote=DateTime.Now;//Will be slightly adjusted at server.
 				form.TaskNoteCur.UserNum=Security.CurUser.UserNum;
 				form.TaskNoteCur.IsNew=true;
-				form.ShowDialog();
-				if(form.DialogResult!=DialogResult.OK) {
-					return;
-				}
-				if(MightNeedSetRead) {//'new' box is checked
-					checkNew.Checked=false;
-					StatusChanged=true;
-					MightNeedSetRead=false;//so that the automation won't happen again
-				}
+				form.OnEditComplete=OnNoteEditComplete_Reply;
+				form.Show(this);//non-modal subwindow, but if the parent is closed by the user when the child is open, then the child is forced closed along with the parent and after the parent.
+				return;
 			}
 			TaskCur.TaskListNum=inbox;
 			if(!SaveCur()){
@@ -1127,9 +1143,31 @@ namespace OpenDental{
 			Close();
 		}
 
+		private void OnNoteEditComplete_Reply(DialogResult dialogResult) {
+			if(dialogResult!=DialogResult.OK) {
+				return;
+			}
+			if(MightNeedSetRead) {//'new' box is checked
+				checkNew.Checked=false;
+				StatusChanged=true;
+				MightNeedSetRead=false;//so that the automation won't happen again
+			}
+			TaskCur.TaskListNum=Userods.GetInbox(ReplyToUserNum);
+			if(!SaveCur()) {
+				return;
+			}
+			DataValid.SetInvalidTask(TaskCur.TaskNum,true);//popup
+			DialogResult=DialogResult.OK;
+			Close();
+		}
+
 		///<summary>Send to another user.</summary>
 		private void butSend_Click(object sender,EventArgs e) {
 			//This button is always present.
+			if(OwnedForms.Length>0) {
+				MsgBox.Show(this,"One or more task note edit windows are open and must be closed.");
+				return;
+			}
 			if(listObjectType.SelectedIndex==(int)TaskObjectType.Patient) {
 				FormTaskListSelect FormT=new FormTaskListSelect(TaskObjectType.Patient);
 				FormT.ShowDialog();
@@ -1163,6 +1201,10 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
+			if(OwnedForms.Length>0) {
+				MsgBox.Show(this,"One or more task note edit windows are open and must be closed.");
+				return;
+			}
 			if(!SaveCur()){//If user clicked OK without changing anything, then this will have no effect.
 				return;
 			}
@@ -1185,11 +1227,20 @@ namespace OpenDental{
 		}
 
 		private void butCancel_Click(object sender, System.EventArgs e) {
+			if(OwnedForms.Length>0) {
+				MsgBox.Show(this,"One or more task note edit windows are open and must be closed.");
+				return;
+			}
 			DialogResult=DialogResult.Cancel;
 			Close();
 		}
 
 		private void FormTaskEdit_FormClosing(object sender,FormClosingEventArgs e) {
+			if(OwnedForms.Length>0) {//This can only happen if the user closes the window using the X in the upper right, because we check elsewhere for this same condition (example on OK click) to ensure that the task does not change in any way if an edit task note window is open.
+				MsgBox.Show(this,"One or more task note edit windows are open and must be closed.");
+				e.Cancel=true;
+				return;
+			}
 			if(PrefC.GetBool(PrefName.TasksNewTrackedByUser)) {
 				//No more automation here
 			}

@@ -75,16 +75,18 @@ namespace OpenDental{
 			// 
 			// textNote
 			// 
+			this.textNote.AcceptsTab = true;
 			this.textNote.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.textNote.DetectUrls = false;
 			this.textNote.Location = new System.Drawing.Point(98,63);
-			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
 			this.textNote.QuickPasteType = OpenDentBusiness.QuickPasteType.Adjustment;
 			this.textNote.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
 			this.textNote.Size = new System.Drawing.Size(541,218);
 			this.textNote.TabIndex = 0;
+			this.textNote.Text = "";
 			// 
 			// label4
 			// 
@@ -152,6 +154,7 @@ namespace OpenDental{
 			this.Name = "FormTaskNoteEdit";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Task Note Edit";
+			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormTaskNoteEdit_FormClosed);
 			this.Load += new System.EventHandler(this.FormTaskNoteEdit_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
