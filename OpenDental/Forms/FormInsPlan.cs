@@ -1936,6 +1936,9 @@ namespace OpenDental{
 			checkAlternateCode.Checked=PlanCur.UseAltCode;
 			checkCodeSubst.Checked=PlanCur.CodeSubstNone;
 			checkIsMedical.Checked=PlanCur.IsMedical;
+			if(!PrefC.GetBool(PrefName.ShowFeatureMedicalInsurance)) {
+				checkIsMedical.Visible=false;//This line prevents most users from modifying the Medical Insurance checkbox by accident, because most offices are dental only.
+			}
 			checkClaimsUseUCR.Checked=PlanCur.ClaimsUseUCR;
 			if(IsNewPlan && PlanCur.PlanType=="" && PrefC.GetBool(PrefName.InsDefaultShowUCRonClaims) && !isPicked) {
 				checkClaimsUseUCR.Checked=true;
