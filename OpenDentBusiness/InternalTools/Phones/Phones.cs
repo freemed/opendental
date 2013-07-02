@@ -90,8 +90,8 @@ namespace OpenDentBusiness {
 			//When a user shows up as a color on the phone panel, we want a timer to be constantly going to show how long they've been off the phone.
 			string dateTimeStart="";
 			//User is going to a status of Home, Break, or Lunch.  Always clear the DateTimeStart column no matter what.
-			if(isDefaultNoColor  //User does not show as a color on the phone panels.  Always clear out the time just in case.
-				|| clockStatus==ClockStatusEnum.Home
+			//if(isDefaultNoColor//User does not show as a color on the phone panels.  Always clear out the time just in case.==Michael - Removed isDefaultNoColor check due to a bug.
+			if(clockStatus==ClockStatusEnum.Home
 				|| clockStatus==ClockStatusEnum.Lunch
 				|| clockStatus==ClockStatusEnum.Break) {
 				//The user is going home or on break.  Simply clear the DateTimeStart column.
