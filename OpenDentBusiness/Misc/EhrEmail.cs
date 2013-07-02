@@ -110,7 +110,7 @@ namespace OpenDentBusiness {
 					Health.Direct.Agent.IncomingMessage inMsg=agent.ProcessIncoming(emailMsg);
 					retVal.FromAddress=inMsg.Message.FromValue;					
 					retVal.PatNum=0;//TODO: Set for some Direct messages.
-					retVal.MsgDateTime=PIn.DateT(inMsg.Message.DateValue);//Server time	
+					retVal.MsgDateTime=DateTime.Now;//PIn.DateT(inMsg.Message.DateValue);
 					retVal.Subject=inMsg.Message.SubjectValue;
 					retVal.ToAddress=inMsg.Message.ToValue;
 					retVal.BodyText=ExtractMimeAttach(inMsg.Message.Body.Text);
@@ -118,7 +118,7 @@ namespace OpenDentBusiness {
 				else {//Unencrypted email.
 					//retVal.FromAddress=;//TODO:
 					retVal.PatNum=0;
-					//retVal.MsgDateTime=;//TODO: Server time	
+					retVal.MsgDateTime=DateTime.Now;//TODO: Server time
 					//retVal.Subject=;//TODO: 
 					retVal.ToAddress=emailAddress.EmailUsername;
 					retVal.BodyText=ExtractMimeAttach(emailBody);

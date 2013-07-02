@@ -24,7 +24,14 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List <EmailMessage>>(MethodBase.GetCurrentMethod(),emailAddress);
 			}
-			string command="SELECT * FROM emailmessage WHERE SentOrReceived="+POut.Int((int)EmailSentOrReceived.Received)+" AND ToAddress='"+POut.String(emailAddress)+"'";
+			string command="SELECT * FROM emailmessage "
+				+"WHERE SentOrReceived IN ("
+					+POut.Int((int)EmailSentOrReceived.Read)+","
+					+POut.Int((int)EmailSentOrReceived.Received)+","
+					+POut.Int((int)EmailSentOrReceived.WebMailRecdRead)+","
+					+POut.Int((int)EmailSentOrReceived.WebMailReceived)
+				+") AND ToAddress='"+POut.String(emailAddress)+"' "
+				+"ORDER BY MsgDateTime DESC";
 			return Crud.EmailMessageCrud.SelectMany(command);
 		}
 

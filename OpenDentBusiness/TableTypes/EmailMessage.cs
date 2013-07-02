@@ -45,7 +45,7 @@ namespace OpenDentBusiness {
 
 	///<summary>0=Neither, 1=Sent, 2=Receivedceived. 3=Read, 4=WebMailReceived, 5=WebMailRecdRead, 6=WebMailSent, 7=WebMailSentRead</summary>
 	public enum EmailSentOrReceived {
-		///<summary>0</summary>
+		///<summary>0 Unsent</summary>
 		Neither,
 		///<summary>1</summary>
 		Sent,
