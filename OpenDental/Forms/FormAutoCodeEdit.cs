@@ -351,17 +351,15 @@ namespace OpenDental{
 				return;
 			}
 			//Check for duplicate AutoCodeItem condition lists.-------------------------------------------------------------------------------------------
-			for(int i=1;i<listForCode.Count;i++) {//start at 1 and compare to all lower indexed entries
-				for(int j=0;j<i;j++) {
-					int matches=0;//If the number of matches equals the number of entries
-					for(int k=0;k<listForCode[i].ListConditions.Count;k++) {//For each condition in i check for matches with conditions in j
-						string test1=listForCode[i].ListConditions[k].ToString();
-						string test2=listForCode[j].ListConditions[k].ToString();
-						if(listForCode[i].ListConditions[k].Cond==listForCode[j].ListConditions[k].Cond) {
+			for(int i=1;i<listForCode.Count;i++) {//start at 1
+				for(int j=0;j<i;j++) {//loop through the lower-indexed entries
+					int matches=0;
+					for(int k=0;k<listForCode[i].ListConditions.Count;k++) {//For each condition in i, check for matches with conditions in j
+						if(listForCode[i].ListConditions[k].Cond==listForCode[j].ListConditions[k].Cond) {//if the same condition is in both rows.
 							matches++;
 						}
 					}
-					if(matches==listForCode[i].ListConditions.Count) {//Conditions match
+					if(matches==listForCode[i].ListConditions.Count) {//If the number of matches equals the number of conditions on this row
 						MsgBox.Show(this,"Cannot have two AutoCode Items with duplicate conditions.");
 						e.Cancel=true;
 						return;
@@ -371,7 +369,7 @@ namespace OpenDental{
 			//Decide which categories are involved.------------------------------------------------------------------------------------------------------
 			bool isAnt=false;//Not a category, could be isAntPost or isAntPreMol
 			bool isAntPost=false;
-			bool isAntPreMol=false;
+			bool isAntPreMol=false;//Anterior/premolar/molar
 			bool isNumSurf=false;
 			bool isFirstEachAdd=false;
 			bool isMaxMand=false;
@@ -382,6 +380,7 @@ namespace OpenDental{
 				for(int j=0;j<listForCode[i].ListConditions.Count;j++) {
 					if(listForCode[i].ListConditions[j].Cond==AutoCondition.Anterior) {
 						isAnt=true;
+						//We want to also set either isAntPost or isAntPreMol, but we don't have enough information yet to set that.
 						continue;
 					}
 					if(listForCode[i].ListConditions[j].Cond==AutoCondition.Posterior) {
@@ -430,20 +429,25 @@ namespace OpenDental{
 				}
 			}
 			//After the loop, you had better have exactly the same number of booleans true as number of conditions on each item.--------------------
+			if(isAntPost && isAntPreMol) {
+				MsgBox.Show(this,"Cannot have both Posterior and Premolar/Molar categories.");
+				e.Cancel=true;
+				return;
+			}
+			if(isAnt) {//This is the only purpose of the isAnt bool.  We won't use it anymore.
+				if(!isAntPost && !isAntPreMol) {
+					MsgBox.Show(this,"Anterior condition is present without any corresponding posterior or premolar/molar condition.");
+					e.Cancel=true;
+					return;
+				}
+			}
 			//Count how many categories were hit.
 			int numCategories=0;
-			if(isAnt) {//Not a category, could be isAntPost or isAntPreMol
-				if(isAntPost) {
-					numCategories++;
-				}
-				if(isAntPreMol){
-					numCategories++;
-					if(numCategories==2){
-						MsgBox.Show(this,"Cannot have Anterior/Posterior and Anterior/Premolar/Molar categories.");
-						e.Cancel=true;
-						return;
-					}
-				}
+			if(isAntPost) {
+				numCategories++;
+			}
+			if(isAntPreMol) {
+				numCategories++;
 			}
 			if(isNumSurf) {
 				numCategories++;
@@ -460,7 +464,7 @@ namespace OpenDental{
 			if(isPontRet) {
 				numCategories++;
 			}
-			if(numCategories!=listForCode[0].ListConditions.Count) {
+			if(numCategories!=listForCode[0].ListConditions.Count) {//Every row has to have the same number of conditions
 				MessageBox.Show(Lan.g(this,"When using ")+listForCode[0].ListConditions.Count+Lan.g(this," condition(s), you must use conditions from ")											
 					+listForCode[0].ListConditions.Count+Lan.g(this," logical categories. You are using conditions from ")+numCategories+Lan.g(this," logical categories."));
 				e.Cancel=true;
@@ -468,12 +472,20 @@ namespace OpenDental{
 			}
 			//Make sure that the number of AutoCodeItems is right. For example, if isAntPost and isNumSurf are the only true one, there should be 10 items.----------------------------------------
 			int reqNumAutoCodeItems=1;
-			if(isAnt) {//Could be isAntPost or isAntPreMol
-				if(isAntPost) {
-					reqNumAutoCodeItems=reqNumAutoCodeItems*2;
+			if(isAntPost) {
+				reqNumAutoCodeItems=reqNumAutoCodeItems*2;
+			}
+			if(isAntPreMol) {
+				if(isPriPerm) {
+					reqNumAutoCodeItems=reqNumAutoCodeItems*5;//normally this would be 2*3 but primary molars don't exist, so we have 2*3-1=5
 				}
-				if(isAntPreMol){
+				else {
 					reqNumAutoCodeItems=reqNumAutoCodeItems*3;
+				}
+			}
+			else {
+				if(isPriPerm) {
+					reqNumAutoCodeItems=reqNumAutoCodeItems*2;
 				}
 			}
 			if(isNumSurf) {
@@ -485,15 +497,12 @@ namespace OpenDental{
 			if(isMaxMand) {
 				reqNumAutoCodeItems=reqNumAutoCodeItems*2;
 			}
-			if(isPriPerm) {
-				reqNumAutoCodeItems=reqNumAutoCodeItems*2;
-			}
 			if(isPontRet) {
 				reqNumAutoCodeItems=reqNumAutoCodeItems*2;
 			}
 			if(listForCode.Count!=reqNumAutoCodeItems) {
 				MessageBox.Show(Lan.g(this,"For the condition categories you are using, you should have ")
-					+reqNumAutoCodeItems+Lan.g(this," entries in your list. You only have ")+listForCode.Count+".");
+					+reqNumAutoCodeItems+Lan.g(this," entries in your list. You have ")+listForCode.Count+".");
 				e.Cancel=true;
 				return;
 			}
