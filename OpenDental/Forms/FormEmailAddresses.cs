@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Net;
 using System.Text;
 using System.Windows.Forms;
 using OpenDental.UI;
@@ -20,9 +21,17 @@ namespace OpenDental {
 		}
 
 		private void FormEmailAddresses_Load(object sender,EventArgs e) {
-			if(!IsSelectionMode) {
-				butOK.Visible=false;
-				butCancel.Text="Close";
+			if(IsSelectionMode) {
+				labelInboxComputerName.Visible=false;
+				textInboxComputerName.Visible=false;
+				butThisComputer.Visible=false;
+				labelInboxCheckInterval.Visible=false;
+				textInboxCheckInterval.Visible=false;
+				labelInboxCheckUnits.Visible=false;
+			}
+			else {
+				textInboxComputerName.Text=PrefC.GetString(PrefName.EmailInboxComputerName);
+				textInboxCheckInterval.Text=PrefC.GetInt(PrefName.EmailInboxCheckInterval).ToString();//Calls PIn() internally.
 			}
 			FillGrid();
 		}
@@ -84,17 +93,42 @@ namespace OpenDental {
 			}
 		}
 
+		private void butThisComputer_Click(object sender,EventArgs e) {
+			textInboxComputerName.Text=Dns.GetHostName();
+		}
+
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
 
-		///<summary>This button is only visible if IsSelectionMode</summary>
 		private void butOK_Click(object sender,EventArgs e) {
-			if(gridMain.GetSelectedIndex()==-1) {
-				MsgBox.Show(this,"Please select an email address.");
-				return;
+			if(IsSelectionMode) {
+				if(gridMain.GetSelectedIndex()==-1) {
+					MsgBox.Show(this,"Please select an email address.");
+					return;
+				}
+				EmailAddressNum=EmailAddresses.Listt[gridMain.GetSelectedIndex()].EmailAddressNum;
 			}
-			EmailAddressNum=EmailAddresses.Listt[gridMain.GetSelectedIndex()].EmailAddressNum;
+			else {//The following fields are only visible when not in selection mode.
+				if(textInboxComputerName.Text.Trim().ToLower()=="localhost" || textInboxComputerName.Text.Trim()=="127.0.0.1") {
+					//If we allowed localhost, then there would potentially be email duplication in the db when emails are pulled in.
+					MsgBox.Show(this,"Computer name to fetch new email from cannot be localhost or 127.0.0.1 or any other loopback address.");
+					return;
+				}
+				int inboxCheckIntervalMinuteCount=0;
+				try {
+					inboxCheckIntervalMinuteCount=int.Parse(textInboxCheckInterval.Text);
+					if(inboxCheckIntervalMinuteCount<1 || inboxCheckIntervalMinuteCount>60) {
+						throw new ApplicationException("Invalid value.");//User never sees this message.
+					}
+				}
+				catch {
+					MsgBox.Show(this,"Inbox check interval must be between 1 and 60 inclusive.");
+					return;
+				}
+				Prefs.UpdateString(PrefName.EmailInboxComputerName,textInboxComputerName.Text);
+				Prefs.UpdateInt(PrefName.EmailInboxCheckInterval,inboxCheckIntervalMinuteCount);
+			}
 			DialogResult=DialogResult.OK;
 		}
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Globalization;
 using System.Net;
 using System.Net.Mail;
 using System.Net.Mime;
@@ -90,9 +91,22 @@ namespace OpenDentBusiness {
 				if(readData[0]=='-') {//Will be -ERR if something went wrong. 
 					throw new ApplicationException(readData);
 				}
+				retVal=new EmailMessage();
+				retVal.IsNew=true;
+				retVal.SentOrReceived=EmailSentOrReceived.Received;
+				retVal.MsgDateTime=DateTime.Now;
+				retVal.PatNum=0;
+				retVal.ToAddress=emailAddress.EmailUsername;
 				string emailMsg=readData;
-				while(readData!="") {//Gets to the message body.
+				//Reference for email format RFC2822: http://tools.ietf.org/html/rfc2822#page-9
+				while(readData!="") {//Reads email header information and gets to the message body.
 					readData=RdStrm.ReadLine();
+					if(readData.ToLower().StartsWith("subject:")) {
+						retVal.Subject=readData.Substring(8).Trim();
+					}
+					else if(readData.ToLower().StartsWith("from:")) {
+						retVal.FromAddress=readData.Substring(5).Trim().Replace("<","").Replace(">","");//We remove < and >, because addresses sometimes look like "<ehr@opendental.com>"
+					}
 					emailMsg+=readData+"\r\n";
 				}
 				readData=RdStrm.ReadLine();//Moves stream reader position to beginning of message body.
@@ -102,25 +116,18 @@ namespace OpenDentBusiness {
 					emailMsg+=readData+"\r\n";
 					readData=RdStrm.ReadLine();
 				}
-				retVal=new EmailMessage();
-				retVal.IsNew=true;
-				retVal.SentOrReceived=EmailSentOrReceived.Received;
 				if(emailMsg.Contains("application/pkcs7-mime")) {//The email MIME/body is encrypted (known as S/MIME).
-					Health.Direct.Agent.DirectAgent agent=new Health.Direct.Agent.DirectAgent("opendental.com");//TODO: We probably need a UI textbox for this.
+					string domain=retVal.ToAddress.Substring(retVal.ToAddress.IndexOf("@")+1);//Used to locate the certificate for the incoming email. For example, if ToAddress is ehr@opendental.com, then this will be opendental.com
+					Health.Direct.Agent.DirectAgent agent=new Health.Direct.Agent.DirectAgent(domain);
 					Health.Direct.Agent.IncomingMessage inMsg=agent.ProcessIncoming(emailMsg);
 					retVal.FromAddress=inMsg.Message.FromValue;					
-					retVal.PatNum=0;//TODO: Set for some Direct messages.
-					retVal.MsgDateTime=DateTime.Now;//PIn.DateT(inMsg.Message.DateValue);
+					//retVal.PatNum=0;//TODO: Set for some Direct messages.
+					//retVal.MsgDateTime=DateTime.ParseExact(inMsg.Message.DateValue,"ddd, d MMM yyyy HH:mm:ss",CultureInfo.InvariantCulture);//We could pull the email date and time from the server instead.
 					retVal.Subject=inMsg.Message.SubjectValue;
 					retVal.ToAddress=inMsg.Message.ToValue;
 					retVal.BodyText=ExtractMimeAttach(inMsg.Message.Body.Text);
 				}
-				else {//Unencrypted email.
-					//retVal.FromAddress=;//TODO:
-					retVal.PatNum=0;
-					retVal.MsgDateTime=DateTime.Now;//TODO: Server time
-					//retVal.Subject=;//TODO: 
-					retVal.ToAddress=emailAddress.EmailUsername;
+				else {//Unencrypted email.				
 					retVal.BodyText=ExtractMimeAttach(emailBody);
 				}				
 				//Delete the message on the mail server.

@@ -167,6 +167,10 @@ namespace OpenDentBusiness {
 		ElectronicRxDateStartedUsing131,
 		/// <summary>FK to EmailAddress.EmailAddressNum.  It is not required that a default be set.</summary>
 		EmailDefaultAddressNum,
+		///<summary>The name of the only computer allowed to get new email messages from an email inbox (including Direct messages).</summary>
+		EmailInboxComputerName,
+		///<summary>Time interval in minutes describing how often to automatically check the email inbox for new messages. Default is 5 minutes.</summary>
+		EmailInboxCheckInterval,
 		/// <summary>Deprecated. Use emailaddress.EmailPassword instead.</summary>
 		EmailPassword,
 		/// <summary>Deprecated. Use emailaddress.ServerPort instead.</summary>

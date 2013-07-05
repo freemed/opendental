@@ -28,6 +28,9 @@ namespace OpenDental{
 			this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
 			this.menuItemSetup = new System.Windows.Forms.MenuItem();
 			this.gridEmailMessages = new OpenDental.UI.ODGrid();
+			this.labelInboxComputerName = new System.Windows.Forms.Label();
+			this.labelThisComputer = new System.Windows.Forms.Label();
+			this.butChangePat = new OpenDental.UI.Button();
 			this.butMarkUnread = new OpenDental.UI.Button();
 			this.butMarkRead = new OpenDental.UI.Button();
 			this.butRefresh = new OpenDental.UI.Button();
@@ -56,11 +59,46 @@ namespace OpenDental{
 			this.gridEmailMessages.Name = "gridEmailMessages";
 			this.gridEmailMessages.ScrollValue = 0;
 			this.gridEmailMessages.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridEmailMessages.Size = new System.Drawing.Size(945,583);
+			this.gridEmailMessages.Size = new System.Drawing.Size(945,543);
 			this.gridEmailMessages.TabIndex = 140;
 			this.gridEmailMessages.Title = "Email Messages";
 			this.gridEmailMessages.TranslationName = "TableApptProcs";
 			this.gridEmailMessages.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridEmailMessages_CellDoubleClick);
+			// 
+			// labelInboxComputerName
+			// 
+			this.labelInboxComputerName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.labelInboxComputerName.Location = new System.Drawing.Point(9,573);
+			this.labelInboxComputerName.Name = "labelInboxComputerName";
+			this.labelInboxComputerName.Size = new System.Drawing.Size(410,16);
+			this.labelInboxComputerName.TabIndex = 144;
+			this.labelInboxComputerName.Text = "Computer Name Where New Email Is Fetched: ";
+			this.labelInboxComputerName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// labelThisComputer
+			// 
+			this.labelThisComputer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.labelThisComputer.Location = new System.Drawing.Point(127,589);
+			this.labelThisComputer.Name = "labelThisComputer";
+			this.labelThisComputer.Size = new System.Drawing.Size(292,16);
+			this.labelThisComputer.TabIndex = 145;
+			this.labelThisComputer.Text = "This Computer Name: ";
+			this.labelThisComputer.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// butChangePat
+			// 
+			this.butChangePat.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butChangePat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.butChangePat.Autosize = true;
+			this.butChangePat.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butChangePat.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butChangePat.CornerRadius = 4F;
+			this.butChangePat.Location = new System.Drawing.Point(639,0);
+			this.butChangePat.Name = "butChangePat";
+			this.butChangePat.Size = new System.Drawing.Size(75,24);
+			this.butChangePat.TabIndex = 146;
+			this.butChangePat.Text = "Change Pat";
+			this.butChangePat.Click += new System.EventHandler(this.butChangePat_Click);
 			// 
 			// butMarkUnread
 			// 
@@ -74,7 +112,7 @@ namespace OpenDental{
 			this.butMarkUnread.Name = "butMarkUnread";
 			this.butMarkUnread.Size = new System.Drawing.Size(75,24);
 			this.butMarkUnread.TabIndex = 143;
-			this.butMarkUnread.Text = "MarkUnread";
+			this.butMarkUnread.Text = "Mark Unread";
 			this.butMarkUnread.Click += new System.EventHandler(this.butMarkUnread_Click);
 			// 
 			// butMarkRead
@@ -89,7 +127,7 @@ namespace OpenDental{
 			this.butMarkRead.Name = "butMarkRead";
 			this.butMarkRead.Size = new System.Drawing.Size(75,24);
 			this.butMarkRead.TabIndex = 142;
-			this.butMarkRead.Text = "MarkRead";
+			this.butMarkRead.Text = "Mark Read";
 			this.butMarkRead.Click += new System.EventHandler(this.butMarkRead_Click);
 			// 
 			// butRefresh
@@ -115,7 +153,7 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(882,616);
+			this.butClose.Location = new System.Drawing.Point(882,576);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 2;
@@ -138,7 +176,10 @@ namespace OpenDental{
 			// FormEmailInbox
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(982,667);
+			this.ClientSize = new System.Drawing.Size(982,627);
+			this.Controls.Add(this.butChangePat);
+			this.Controls.Add(this.labelThisComputer);
+			this.Controls.Add(this.labelInboxComputerName);
 			this.Controls.Add(this.butMarkUnread);
 			this.Controls.Add(this.butMarkRead);
 			this.Controls.Add(this.butRefresh);
@@ -166,5 +207,8 @@ namespace OpenDental{
 		private UI.Button butRefresh;
 		private UI.Button butMarkRead;
 		private UI.Button butMarkUnread;
+		private System.Windows.Forms.Label labelInboxComputerName;
+		private System.Windows.Forms.Label labelThisComputer;
+		private UI.Button butChangePat;
 	}
 }
