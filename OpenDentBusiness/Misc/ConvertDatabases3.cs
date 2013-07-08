@@ -650,6 +650,15 @@ namespace OpenDentBusiness {
 						//Do not modify.
 					}
 				}
+				command="UPDATE preference SET ValueString = '13.2.2.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
+			To13_2_3();
+		}
+
+		private static void To13_2_3() {
+			if(FromVersion<new Version("13.2.3.0")) {
+				string command;
 				//Add Family Health table for EHR A.13 (Family Health History)
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS familyhealth";
@@ -682,7 +691,7 @@ namespace OpenDentBusiness {
 					command=@"CREATE INDEX familyhealth_DiseaseDefNum ON familyhealth (DiseaseDefNum)";
 					Db.NonQ(command);
 				}
-				command="UPDATE preference SET ValueString = '13.2.2.0' WHERE PrefName = 'DataBaseVersion'";
+				command="UPDATE preference SET ValueString = '13.2.3.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
 			To13_3_0();
@@ -728,44 +737,3 @@ namespace OpenDentBusiness {
 
 
 
-
-
-
-
-
-
-
-
-				/*
-				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="DROP TABLE IF EXISTS familyhealth";
-					Db.NonQ(command);
-					command=@"CREATE TABLE familyhealth (
-						FamilyHealthNum bigint NOT NULL auto_increment PRIMARY KEY,
-						PatNum bigint NOT NULL,
-						Relationship tinyint NOT NULL,
-						DiseaseDefNum bigint NOT NULL,
-						PersonName varchar(255) NOT NULL,
-						INDEX(PatNum),
-						INDEX(DiseaseDefNum)
-						) DEFAULT CHARSET=utf8";
-					Db.NonQ(command);
-				}
-				else {//oracle
-					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE familyhealth'; EXCEPTION WHEN OTHERS THEN NULL; END;";
-					Db.NonQ(command);
-					command=@"CREATE TABLE familyhealth (
-						FamilyHealthNum number(20) NOT NULL,
-						PatNum number(20) NOT NULL,
-						Relationship number(3) NOT NULL,
-						DiseaseDefNum number(20) NOT NULL,
-						PersonName varchar2(255),
-						CONSTRAINT familyhealth_FamilyHealthNum PRIMARY KEY (FamilyHealthNum)
-						)";
-					Db.NonQ(command);
-					command=@"CREATE INDEX familyhealth_PatNum ON familyhealth (PatNum)";
-					Db.NonQ(command);
-					command=@"CREATE INDEX familyhealth_DiseaseDefNum ON familyhealth (DiseaseDefNum)";
-					Db.NonQ(command);
-				}
-				*/
