@@ -4092,6 +4092,9 @@ namespace OpenDental{
 		}
 
 		private void Tool_eRx_Click() {
+			if(!Security.IsAuthorized(Permissions.RxCreate)) {
+				return;
+			}
 			string newCropAccountId=PrefC.GetString(PrefName.NewCropAccountId);
 			if(newCropAccountId==""){
 				if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Are you sure you want to enable NewCrop electronic prescriptions?  The cost is $15/month for each prescribing provider.  NewCrop only works for the United States and its territories, including Puerto Rico.")) {
@@ -4159,9 +4162,6 @@ namespace OpenDental{
 						return;
 					}
 				}
-			}
-			if(!Security.IsAuthorized(Permissions.RxCreate)) {
-				return;
 			}
 			//Validation------------------------------------------------------------------------------------------------------------------------------------------------------
 			if(Security.CurUser.EmployeeNum==0 && Security.CurUser.ProvNum==0) {
