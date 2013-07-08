@@ -258,6 +258,7 @@ namespace OpenDental{
 		private MenuItem menuItemXChargeReconcile;
 		private System.Windows.Forms.Timer timerEmailInboxCheck;
 		private FormCreditRecurringCharges FormCRC;
+		private DateTime TimeLastEmailInboxCheck;
 
 		///<summary></summary>
 		public FormOpenDental(string[] cla){
@@ -3630,6 +3631,10 @@ namespace OpenDental{
 			if(!ODEnvironment.IdIsThisComputer(PrefC.GetString(PrefName.EmailInboxComputerName))) {
 				return;//If the email inbox computer name is not setup, or if the name does not match this computer, then do not get email from this computer.
 			}
+			if((DateTime.Now-TimeLastEmailInboxCheck).TotalMinutes<PrefC.GetInt(PrefName.EmailInboxCheckInterval)) {
+				return;
+			}
+			TimeLastEmailInboxCheck=DateTime.Now;
 			EmailMessage emailMessage;
 			do {
 				emailMessage=null;

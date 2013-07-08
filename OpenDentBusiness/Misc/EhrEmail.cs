@@ -119,7 +119,17 @@ namespace OpenDentBusiness {
 				if(emailMsg.Contains("application/pkcs7-mime")) {//The email MIME/body is encrypted (known as S/MIME).
 					string domain=retVal.ToAddress.Substring(retVal.ToAddress.IndexOf("@")+1);//Used to locate the certificate for the incoming email. For example, if ToAddress is ehr@opendental.com, then this will be opendental.com
 					Health.Direct.Agent.DirectAgent agent=new Health.Direct.Agent.DirectAgent(domain);
-					Health.Direct.Agent.IncomingMessage inMsg=agent.ProcessIncoming(emailMsg);
+					Health.Direct.Agent.IncomingMessage inMsg;
+					try {
+						inMsg=agent.ProcessIncoming(emailMsg);
+					}
+					catch(Exception ex) {
+						//Delete the message on the mail server, because it is probably an untrusted email and we need to remove it to get to the other emails next time.
+						Data="DELE "+lastEmail+"\r\n";
+						sendData=System.Text.Encoding.ASCII.GetBytes(Data.ToCharArray());
+						NetStrm.Write(sendData,0,sendData.Length);
+						throw ex;
+					}
 					retVal.FromAddress=inMsg.Message.FromValue;					
 					//retVal.PatNum=0;//TODO: Set for some Direct messages.
 					//retVal.MsgDateTime=DateTime.ParseExact(inMsg.Message.DateValue,"ddd, d MMM yyyy HH:mm:ss",CultureInfo.InvariantCulture);//We could pull the email date and time from the server instead.
