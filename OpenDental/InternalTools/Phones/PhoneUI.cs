@@ -79,6 +79,7 @@ namespace OpenDental {
 				return;
 			}
 			PhoneEmpDefaults.SetAvailable(extension,employeeNum);
+			PhoneAsterisks.SetToDefaultRingGroups(extension,employeeNum);
 			Phones.SetPhoneStatus(ClockStatusEnum.Available,extension,employeeNum);//green
 		}
 
