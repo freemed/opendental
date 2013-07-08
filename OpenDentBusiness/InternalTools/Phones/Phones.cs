@@ -105,7 +105,9 @@ namespace OpenDentBusiness {
 					|| clockStatusCur==ClockStatusEnum.Lunch
 					|| clockStatusCur==ClockStatusEnum.Break) {
 					//The user is clocking in from home, lunch, or break.  Start the timer up.
-					dateTimeStart="DateTimeStart=NOW(), ";
+					if(!isDefaultNoColor) {//Dont start up the timer when someone with no color clocks in.
+						dateTimeStart="DateTimeStart=NOW(), ";
+					}
 				}
 			}
 			#endregion
