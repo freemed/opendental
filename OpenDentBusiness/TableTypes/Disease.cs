@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace OpenDentBusiness {
 
-	/// <summary>Each row is one disease that one patient has.  Now called a problem in the UI.  Must have either a DiseaseDefNum or an ICD9Num.</summary>
+	/// <summary>Each row is one disease that one patient has.  Now called a problem in the UI.  Must have a DiseaseDefNum.</summary>
 	[Serializable]
 	public class Disease:TableBase {
 		///<summary>Primary key.</summary>
