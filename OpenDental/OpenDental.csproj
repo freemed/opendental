@@ -372,12 +372,6 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FormMedicationReconcileEHR.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormMedicationReconcileEHR.designer.cs">
-      <DependentUpon>FormMedicationReconcileEHR.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\FormEmailInbox.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2800,10 +2794,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormMedicationReconcileEHR.resx">
-      <DependentUpon>FormMedicationReconcileEHR.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormEmailInbox.resx">
       <DependentUpon>FormEmailInbox.cs</DependentUpon>
