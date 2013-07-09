@@ -4085,6 +4085,29 @@ HAVING cnt>1";
 			return;
 		}
 
+		///<summary>Replaces null strings with empty strings and returns the number of rows changed.</summary>
+		public static long RemoveNullStrings() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetLong(MethodBase.GetCurrentMethod());
+			}
+			string command=@"SELECT table_name,column_name 
+				FROM information_schema.columns 
+				WHERE table_schema=(SELECT DATABASE()) 
+				AND (data_type='char' 
+					OR data_type='longtext' 
+					OR data_type='mediumtext' 
+					OR data_type='text' 
+					OR data_type='varchar') 
+				AND is_nullable='YES'";
+			DataTable table=Db.GetTable(command);
+			long changeCount=0;
+			for(int i=0;i<table.Rows.Count;i++) {
+				command="UPDATE "+table.Rows[i]["table_name"]+" SET "+table.Rows[i]["column_name"]+"='' WHERE "+table.Rows[i]["column_name"]+" IS NULL";
+				changeCount+=Db.NonQ(command);
+			}
+			return changeCount;
+		}
+
 		///<summary>Return values look like 'MyISAM' or 'InnoDB'. Will return empty string on error.</summary>
 		public static string GetStorageEngineDefaultName() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
