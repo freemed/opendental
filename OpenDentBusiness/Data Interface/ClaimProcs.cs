@@ -336,7 +336,7 @@ namespace OpenDentBusiness{
 				return false;
 			}
 			if(claimProc.Status==ClaimProcStatus.CapClaim 
-				|| claimProc.Status==ClaimProcStatus.NotReceived 
+				//|| claimProc.Status==ClaimProcStatus.NotReceived //7/9/2013 Was causing paid amounts to show on primary claims when the patient had secondary insurance, because this is the starting status of secondary claimprocs when the New Claim button is pressed.
 				|| claimProc.Status==ClaimProcStatus.Received 
 				|| claimProc.Status==ClaimProcStatus.Supplemental)
 				//Adjustment never attached to proc. Preauth, CapEstimate, CapComplete, and Estimate never paid. 
