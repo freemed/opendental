@@ -44,7 +44,9 @@ namespace OpenDental {
 
 		private void FormPhoneTiles_Load(object sender,EventArgs e) {
 			#if !DEBUG
-				if(Environment.MachineName.ToLower()!="jordans") {
+				if(Environment.MachineName.ToLower()!="jordans"
+					&& Environment.MachineName.ToLower()!="nathan") 
+				{
 					checkBoxAll.Visible=false;//so this will also be visible in debug
 				}
 			#endif
