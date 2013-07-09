@@ -564,7 +564,13 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			Schedules.SetForDay(SchedList,SchedCurDate);
+			try {
+				Schedules.SetForDay(SchedList,SchedCurDate);
+			}
+			catch(Exception ex) {
+				MsgBox.Show(this,ex.Message);
+				return;
+			}
 			if(comboProv.SelectedIndex!=-1
 				&& Prefs.UpdateLong(PrefName.ScheduleProvUnassigned,ProviderC.ListShort[comboProv.SelectedIndex].ProvNum))
 			{
