@@ -22,6 +22,7 @@ namespace OpenDental {
 			List<string> allergiesMatches=new List<string>();
 			List<string> medicationsMatches=new List<string>();
 			List<string> customMessages=new List<string>();
+			bool showHighSigOnly=PrefC.GetBool(PrefName.EhrRxAlertHighSeverity);
 			for(int i=0;i<alertList.Count;i++){
 				for(int j=0;j<diseases.Count;j++){
 					//This does not look for matches with icd9s.
@@ -47,6 +48,9 @@ namespace OpenDental {
 				}
 				for(int j=0;j<medications.Count;j++) {
 					if(alertList[i].MedicationNum==medications[j].MedicationNum) {
+						if(showHighSigOnly && !alertList[i].IsHighSignificance) {//if set to only show high significance alerts and this is not a high significance interaction, do not show alert
+							continue;
+						}
 						if(alertList[i].NotificationMsg=="") {
 							Medications.Refresh();
 							medicationsMatches.Add(Medications.GetMedication(alertList[i].MedicationNum).MedName);

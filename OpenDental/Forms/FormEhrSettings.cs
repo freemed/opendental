@@ -15,10 +15,17 @@ namespace OpenDental {
 		}
 
 		private void FormEhrSettings_Load(object sender,EventArgs e) {
+			checkAlertHighSeverity.Checked=PrefC.GetBool(PrefName.EhrRxAlertHighSeverity);
+		}
 
+		private void checkAlertHighSeverity_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.SecurityAdmin,false)) {
+				checkAlertHighSeverity.Checked=PrefC.GetBool(PrefName.EhrRxAlertHighSeverity);
+			}
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
+			Prefs.UpdateBool(PrefName.EhrRxAlertHighSeverity,checkAlertHighSeverity.Checked);
 			DialogResult=DialogResult.OK;
 		}
 

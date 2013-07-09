@@ -35,6 +35,7 @@ namespace OpenDental {
 				butEducationalResources.Visible=false;
 				butRxNorm.Visible=false;
 				butKeys.Visible=false;
+				menuItemSettings.Visible=false;
 			}
 		}
 

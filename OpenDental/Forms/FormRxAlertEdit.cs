@@ -11,7 +11,6 @@ namespace OpenDental {
 	public partial class FormRxAlertEdit:Form {
 		private RxAlert RxAlertCur;
 		private RxDef RxDefCur;
-		private string RxName;
 
 		public FormRxAlertEdit(RxAlert rxAlertCur,RxDef rxDefCur) {
 			InitializeComponent();
@@ -42,10 +41,12 @@ namespace OpenDental {
 				textRxNorm.Text=RxDefCur.RxCui.ToString()+" - "+RxNorms.GetDescByRxCui(RxDefCur.RxCui.ToString());
 			}
 			textMessage.Text=RxAlertCur.NotificationMsg;
+			checkIsHighSignificance.Checked=RxAlertCur.IsHighSignificance;
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
 			RxAlertCur.NotificationMsg=PIn.String(textMessage.Text);
+			RxAlertCur.IsHighSignificance=checkIsHighSignificance.Checked;
 			RxAlerts.Update(RxAlertCur);
 			DialogResult=DialogResult.OK;
 		}
