@@ -28,6 +28,8 @@ namespace WebForms {
 		private List<long> dateTodayList=new List<long>();
 		private List<WControl> listwc=new List<WControl>();
 		private bool doTabOrder=true;
+		private string ReturnURL="";//url the web forms will return to when all forms are complete
+		private string ButtonText="";
 		
 		protected void Page_Load(object sender,EventArgs e) {
 			try {
@@ -36,6 +38,13 @@ namespace WebForms {
 				}
 				if(Request["WebSheetDefID"]!=null) {
 					Int64.TryParse(Request["WebSheetDefID"].ToString().Trim(),out WebSheetDefID);
+				}
+				if(Request["ReturnURL"]!=null) {
+					ReturnURL=Request["ReturnURL"].ToString().Trim();
+				}
+				if(Request["ButtonText"]!=null) {
+					ButtonText=Request["ButtonText"].ToString().Trim();
+					Button1.Text=ButtonText;
 				}
 				Logger.Information("Page requested from IpAddress="+HttpContext.Current.Request.UserHostAddress+" for  DentalOfficeID="+DentalOfficeID);
 				Panel2.Visible=true;
@@ -642,11 +651,34 @@ namespace WebForms {
 		protected void Button1_Click(object sender,EventArgs e) {
 			LoopThroughControls(this.Page);// Fills FormValuesHashTable here
 			SaveFieldValuesInDB(DentalOfficeID,WebSheetDefID);
+			if(ReturnURL!=null && ReturnURL!="") {//user has added a return url (there may or may not be NextFormIDs added to the URL to loop through before navigating to ReturnURL)
+				BuildURL_Redirect();
+			}
 		}
 
+		///<summary>Used to rebuild the url for the next form in the query string sequence. Example URL for 4 forms: https://opendentalsoft.com/WebForms/Sheets.aspx?DentalOfficeID=8526&WebSheetDefID=4321&ButtonText=Next&NextFormID=4322&NextFormID=4323&NextFormID=4324&ReturnURL=http://www.afiniadental.com/ </summary>
+		private void BuildURL_Redirect() {
+			if(Request["NextFormID"]==null) {//if there was a ReturnURL parameter, but no NextFormIDs, head back to homepage
+				Response.Redirect(ReturnURL);
+				return;
+			}
+			string[] nextFormIDs=Request.QueryString.GetValues("NextFormID");
+			//build new Base URL
+			string newURL="https://opendentalsoft.com/WebForms/Sheets.aspx?DentalOfficeID="+DentalOfficeID+"&WebSheetDefID="+nextFormIDs[0]+"&ButtonText=";
+			if(ButtonText=="") {//There was no ButtonText parameter or it was not set, default to 'Submit'
+				newURL+="Submit";
+			}
+			else {
+				newURL+=ButtonText;
+			}
+			for(int i=1;i<nextFormIDs.Length;i++) {//position 0 in the array is now the WebSheetDefID, start at position 1
+				newURL+="&NextFormID="+nextFormIDs[i];
+			}
+			newURL+="&ReturnURL="+ReturnURL;
+			Response.Redirect(newURL);
+		}
+		
 
-
-
-
+		
 	}
 }
