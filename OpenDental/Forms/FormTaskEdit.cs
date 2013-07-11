@@ -829,14 +829,12 @@ namespace OpenDental{
 			}
 			FormTaskNoteEdit form=new FormTaskNoteEdit();
 			form.TaskNoteCur=NoteList[e.Row];
-			form.OnEditComplete=OnNoteEditComplete_CellDoubleClick;
+			form.EditComplete=OnNoteEditComplete_CellDoubleClick;
 			form.Show(this);//non-modal subwindow, but if the parent is closed by the user when the child is open, then the child is forced closed along with the parent and after the parent.
 		}
 
-		private void OnNoteEditComplete_CellDoubleClick(DialogResult dialogResult) {
-			if(dialogResult==DialogResult.OK) {
-				notesChanged=true;
-			}
+		private void OnNoteEditComplete_CellDoubleClick(object sender) {
+			notesChanged=true;
 			FillGrid();
 		}
 
@@ -851,14 +849,11 @@ namespace OpenDental{
 			form.TaskNoteCur.DateTimeNote=DateTime.Now;//Will be slightly adjusted at server.
 			form.TaskNoteCur.UserNum=Security.CurUser.UserNum;
 			form.TaskNoteCur.IsNew=true;
-			form.OnEditComplete=OnNoteEditComplete_Add;
+			form.EditComplete=OnNoteEditComplete_Add;
 			form.Show(this);//non-modal subwindow, but if the parent is closed by the user when the child is open, then the child is forced closed along with the parent and after the parent.
 		}
 
-		private void OnNoteEditComplete_Add(DialogResult dialogResult) {
-			if(dialogResult!=DialogResult.OK) {
-				return;
-			}
+		private void OnNoteEditComplete_Add(object sender) {
 			notesChanged=true;
 			FillGrid();
 			if(MightNeedSetRead) {//'new' box is checked
@@ -964,6 +959,10 @@ namespace OpenDental{
 		}
 
 		private void butGoto_Click(object sender, System.EventArgs e) {
+			if(OwnedForms.Length>0) {
+				MsgBox.Show(this,"One or more task note edit windows are open and must be closed.");
+				return;
+			}
 			if(!SaveCur()){
 				return;
 			}
@@ -1130,7 +1129,7 @@ namespace OpenDental{
 				form.TaskNoteCur.DateTimeNote=DateTime.Now;//Will be slightly adjusted at server.
 				form.TaskNoteCur.UserNum=Security.CurUser.UserNum;
 				form.TaskNoteCur.IsNew=true;
-				form.OnEditComplete=OnNoteEditComplete_Reply;
+				form.EditComplete=OnNoteEditComplete_Reply;
 				form.Show(this);//non-modal subwindow, but if the parent is closed by the user when the child is open, then the child is forced closed along with the parent and after the parent.
 				return;
 			}
@@ -1143,10 +1142,7 @@ namespace OpenDental{
 			Close();
 		}
 
-		private void OnNoteEditComplete_Reply(DialogResult dialogResult) {
-			if(dialogResult!=DialogResult.OK) {
-				return;
-			}
+		private void OnNoteEditComplete_Reply(object sender) {
 			if(MightNeedSetRead) {//'new' box is checked
 				checkNew.Checked=false;
 				StatusChanged=true;
@@ -1236,7 +1232,7 @@ namespace OpenDental{
 		}
 
 		private void FormTaskEdit_FormClosing(object sender,FormClosingEventArgs e) {
-			if(OwnedForms.Length>0) {//This can only happen if the user closes the window using the X in the upper right, because we check elsewhere for this same condition (example on OK click) to ensure that the task does not change in any way if an edit task note window is open.
+			if(DialogResult==DialogResult.None && OwnedForms.Length>0) {//This can only happen if the user closes the window using the X in the upper right.
 				MsgBox.Show(this,"One or more task note edit windows are open and must be closed.");
 				e.Cancel=true;
 				return;

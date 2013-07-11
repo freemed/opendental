@@ -154,7 +154,6 @@ namespace OpenDental{
 			this.Name = "FormTaskNoteEdit";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Task Note Edit";
-			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormTaskNoteEdit_FormClosed);
 			this.Load += new System.EventHandler(this.FormTaskNoteEdit_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
