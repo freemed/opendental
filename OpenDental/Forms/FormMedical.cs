@@ -265,6 +265,7 @@ namespace OpenDental{
 			this.gridMeds.Title = "Medications";
 			this.gridMeds.TranslationName = "TableMedications";
 			this.gridMeds.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMeds_CellDoubleClick);
+			this.gridMeds.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMeds_CellClick);
 			// 
 			// gridDiseases
 			// 
@@ -441,7 +442,12 @@ namespace OpenDental{
 			medList=MedicationPats.Refresh(PatCur.PatNum,checkDiscontinued.Checked);
 			gridMeds.BeginUpdate();
 			gridMeds.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableMedications","Medication"),120);
+			ODGridColumn col;
+			if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
+				col=new ODGridColumn(Lan.g("TableMedications",""),20);//infoButton
+				gridMeds.Columns.Add(col);
+			}
+			col=new ODGridColumn(Lan.g("TableMedications","Medication"),120);
 			gridMeds.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableMedications","Notes"),200);
 			gridMeds.Columns.Add(col);
@@ -453,6 +459,9 @@ namespace OpenDental{
 			ODGridRow row;
 			for(int i=0;i<medList.Count;i++) {
 				row=new ODGridRow();
+				if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
+					row.Cells.Add("info");//TODO: replace this with the infobutton graphic.
+				}
 				Medication generic=Medications.GetGeneric(medList[i].MedicationNum);
 				string medName=Medications.GetMedication(medList[i].MedicationNum).MedName;
 				if(generic.MedicationNum!=medList[i].MedicationNum) {//not generic
@@ -470,6 +479,19 @@ namespace OpenDental{
 				gridMeds.Rows.Add(row);
 			}
 			gridMeds.EndUpdate();
+		}
+
+		private void gridMeds_CellClick(object sender,ODGridClickEventArgs e) {
+			if(!PrefC.GetBool(PrefName.ShowFeatureEhr)) {
+				return;
+			}
+			if(e.Col!=0) {
+				return;
+			}
+			FormInfobutton FormIB = new FormInfobutton();
+			FormIB.MedicationCur = Medications.GetMedicationFromDb(medList[e.Row].MedicationNum);//TODO: verify that this is what we need to get.
+			FormIB.ShowDialog();
+			//Nothing to do with Dialog Result yet.
 		}
 
 		private void gridMeds_CellDoubleClick(object sender,ODGridClickEventArgs e) {

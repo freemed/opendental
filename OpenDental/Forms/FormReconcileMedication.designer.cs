@@ -66,8 +66,6 @@ namespace OpenDental{
 			this.checkDiscontinued.Tag = "";
 			this.checkDiscontinued.Text = "Show Discontinued Medications";
 			this.checkDiscontinued.UseVisualStyleBackColor = true;
-			this.checkDiscontinued.KeyUp += new System.Windows.Forms.KeyEventHandler(this.checkDiscontinued_KeyUp);
-			this.checkDiscontinued.MouseUp += new System.Windows.Forms.MouseEventHandler(this.checkDiscontinued_MouseUp);
 			// 
 			// gridMedExisting
 			// 
@@ -81,7 +79,6 @@ namespace OpenDental{
 			this.gridMedExisting.TabIndex = 65;
 			this.gridMedExisting.Title = "Existing Medications";
 			this.gridMedExisting.TranslationName = "GridMedExisting";
-			this.gridMedExisting.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMeds_CellDoubleClick);
 			// 
 			// butPickRxListImage
 			// 
@@ -95,7 +92,6 @@ namespace OpenDental{
 			this.butPickRxListImage.Size = new System.Drawing.Size(22, 24);
 			this.butPickRxListImage.TabIndex = 76;
 			this.butPickRxListImage.Text = "...";
-			this.butPickRxListImage.Click += new System.EventHandler(this.butPickRxListImage_Click);
 			// 
 			// butAdd
 			// 
@@ -112,7 +108,6 @@ namespace OpenDental{
 			this.butAdd.Size = new System.Drawing.Size(123, 23);
 			this.butAdd.TabIndex = 75;
 			this.butAdd.Text = "&Add Medication";
-			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
 			// butClose
 			// 

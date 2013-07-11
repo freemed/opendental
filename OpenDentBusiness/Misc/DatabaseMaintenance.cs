@@ -4102,7 +4102,9 @@ HAVING cnt>1";
 			DataTable table=Db.GetTable(command);
 			long changeCount=0;
 			for(int i=0;i<table.Rows.Count;i++) {
-				command="UPDATE "+table.Rows[i]["table_name"]+" SET "+table.Rows[i]["column_name"]+"='' WHERE "+table.Rows[i]["column_name"]+" IS NULL";
+				command="UPDATE "+POut.String(table.Rows[i]["table_name"].ToString())
+					+" SET "+POut.String(table.Rows[i]["column_name"].ToString())
+					+"='' WHERE "+POut.String(table.Rows[i]["column_name"].ToString())+" IS NULL";
 				changeCount+=Db.NonQ(command);
 			}
 			return changeCount;
