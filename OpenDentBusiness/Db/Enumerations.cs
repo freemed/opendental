@@ -363,13 +363,13 @@ namespace OpenDentBusiness{
 		///<summary>6- Not an actual patient yet.</summary>
 		Prospective
 	}
-	///<summary></summary>
-	public enum PatientGender{
+	///<summary>Known as administrativeGender (HL7 OID of 2.16.840.1.113883.5.1) Male=M, Female=F, Unknown=Undifferentiated=UN.</summary>
+	public enum PatientGender{//known as administrativeGender HL7 OID of 2.16.840.1.113883.5.1
 		///<summary>0</summary>
 		Male,
 		///<summary>1</summary>
 		Female,
-		///<summary>2- This is not a joke. Required by HIPAA for privacy.  Required by ehr to track missing entries.</summary>
+		///<summary>2- Not a joke. Required by HIPAA for privacy.  Required by ehr to track missing entries. EHR/HL7 known as undifferentiated (UN).</summary>
 		Unknown}
 	///<summary></summary>
 	public enum PatientPosition{
