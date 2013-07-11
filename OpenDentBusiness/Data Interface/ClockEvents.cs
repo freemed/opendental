@@ -277,7 +277,7 @@ namespace OpenDentBusiness{
 					GROUP BY ceb.EmployeeNum) tempbreak ON clockevent.EmployeeNum=tempbreak.EmployeeNum
 				INNER JOIN employee ON clockevent.EmployeeNum=employee.EmployeeNum AND IsHidden=0 ";
 			if(PrefC.GetBool(PrefName.DistributorKey)) {//OD HQ
-				command+="LEFT JOIN wikilist_employees ON wikilist_employees.EmployeesNum=employee.EmployeeNum ";
+				command+="LEFT JOIN wikilist_employees ON wikilist_employees.EmployeeNum=employee.EmployeeNum ";
 			}
 			command+=@"GROUP BY EmployeeNum
 				ORDER BY employee.LName";
