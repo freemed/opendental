@@ -9,6 +9,7 @@ namespace OpenDentBusiness {
 	public partial class ConvertDatabases {
 		public static System.Version LatestVersion=new Version("13.3.0.0");//This value must be changed when a new conversion is to be triggered.
 
+		///<summary>Oracle compatible: 07/11/2013</summary>
 		private static void To13_2_1() {
 			if(FromVersion<new Version("13.2.1.0")) {
 				string command;
@@ -46,8 +47,8 @@ namespace OpenDentBusiness {
 				else {//oracle
 					for(int i=0;i<table.Rows.Count;i++) {
 						groupNum=PIn.Long(table.Rows[i][0].ToString());
-						command="INSERT INTO grouppermission (GroupPermNum,NewerDate,UserGroupNum,PermType) "
-						+"VALUES((SELECT MAX(GroupPermNum)+1 FROM grouppermission),'0001-01-01',"+POut.Long(groupNum)+",67)";//POut.Int((int)Permissions.WikiListSetup)
+						command="INSERT INTO grouppermission (GroupPermNum,NewerDays,NewerDate,UserGroupNum,PermType) "
+						+"VALUES((SELECT MAX(GroupPermNum)+1 FROM grouppermission),0,TO_DATE('0001-01-01','YYYY-MM-DD'),"+POut.Long(groupNum)+",67)";//POut.Int((int)Permissions.WikiListSetup)
 						Db.NonQ32(command);
 					}
 				}
@@ -609,6 +610,7 @@ namespace OpenDentBusiness {
 			To13_2_2();
 		}
 
+		///<summary>Oracle compatible: 07/11/2013</summary>
 		private static void To13_2_2() {
 			if(FromVersion<new Version("13.2.2.0")) {
 				string command;
