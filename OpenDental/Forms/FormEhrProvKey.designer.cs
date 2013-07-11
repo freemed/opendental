@@ -34,6 +34,7 @@ namespace OpenDental{
 			this.label10 = new System.Windows.Forms.Label();
 			this.label8 = new System.Windows.Forms.Label();
 			this.checkHasReportAccess = new System.Windows.Forms.CheckBox();
+			this.butDelete = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// butOK
@@ -138,10 +139,28 @@ namespace OpenDental{
 			this.checkHasReportAccess.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkHasReportAccess.UseVisualStyleBackColor = true;
 			// 
+			// butDelete
+			// 
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butDelete.Autosize = true;
+			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDelete.CornerRadius = 4F;
+			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDelete.Location = new System.Drawing.Point(15,233);
+			this.butDelete.Name = "butDelete";
+			this.butDelete.Size = new System.Drawing.Size(80,24);
+			this.butDelete.TabIndex = 130;
+			this.butDelete.Text = "&Delete";
+			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
+			// 
 			// FormEhrProvKey
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(453,269);
+			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.checkHasReportAccess);
 			this.Controls.Add(this.textLName);
 			this.Controls.Add(this.textFName);
@@ -173,5 +192,6 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label10;
 		private System.Windows.Forms.Label label8;
 		private System.Windows.Forms.CheckBox checkHasReportAccess;
+		private UI.Button butDelete;
 	}
 }

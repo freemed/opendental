@@ -23,6 +23,18 @@ namespace OpenDental {
 			textEhrKey.Text=ProvCur.EhrKey;
 		}
 
+		private void butDelete_Click(object sender,EventArgs e) {
+			if(ProvCur.EhrKey=="") {
+				DialogResult=DialogResult.Cancel;//Nothing to delete.
+				return;
+			}
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete?")) {
+				return;
+			}
+			ProvCur.EhrKey="";
+			DialogResult=DialogResult.OK;//So that the change will be made in the provider edit window (parent window).
+		}
+
 		private void butOK_Click(object sender,EventArgs e) {
 			bool provKeyIsValid=false;
 			#if EHRTEST
