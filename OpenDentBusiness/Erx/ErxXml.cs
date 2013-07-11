@@ -141,7 +141,18 @@ namespace OpenDentBusiness {
 				ncScript.Location.pharmacyContactNumber=clinic.Phone;//Validated to be 10 digits within the chart.
 			}
 			ncScript.LicensedPrescriber=new LicensedPrescriberType();
-			ncScript.LicensedPrescriber.ID=prov.ProvNum.ToString();//A positive integer.
+			//Each unique provider ID sent to NewCrop will cause a billing charge. Some offices have duplicate providers that they use for different purposes, but all such providers have the same NPI.
+			//In this loop, we pick the lowest ProvNum for any provider (even hidden providers) which have an NPI that matches the provider we are sending to NewCrop.
+			long provID=prov.ProvNum;
+			for(int i=0;i<ProviderC.ListLong.Count;i++) {
+				if(ProviderC.ListLong[i].NationalProvID!=prov.NationalProvID) {
+					continue;
+				}
+				if(ProviderC.ListLong[i].ProvNum<provID) {
+					provID=ProviderC.ListLong[i].ProvNum;
+				}
+			}
+			ncScript.LicensedPrescriber.ID=provID.ToString();
 			//UPIN is obsolete
 			ncScript.LicensedPrescriber.LicensedPrescriberName=new PersonNameType();
 			ncScript.LicensedPrescriber.LicensedPrescriberName.last=prov.LName.Trim();//Cannot be blank.
