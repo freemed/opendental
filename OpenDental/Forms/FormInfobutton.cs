@@ -101,7 +101,7 @@ namespace OpenDental {
 		private string generateKnowledgeRequestNotification() {//This is also known as the HL7 CDS message type.
 			StringBuilder strb = new StringBuilder();
 			XmlWriter xmlw = XmlWriter.Create(strb);
-			xmlw.
+			//xmlw.
 			return "";
 		}
 
