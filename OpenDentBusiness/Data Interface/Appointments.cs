@@ -737,10 +737,10 @@ namespace OpenDentBusiness{
 				+"LEFT JOIN provider p1 ON p1.ProvNum=appointment.ProvNum "
 				+"LEFT JOIN provider p2 ON p2.ProvNum=appointment.ProvHyg ";
 			if(isPlanned){
-				command+="LEFT JOIN labcase ON labcase.PlannedAptNum=appointment.AptNum ";
+				command+="LEFT JOIN labcase ON labcase.PlannedAptNum=appointment.AptNum AND labcase.AptNum!=0 ";
 			}
 			else{
-				command+="LEFT JOIN labcase ON labcase.AptNum=appointment.AptNum ";
+				command+="LEFT JOIN labcase ON labcase.AptNum=appointment.AptNum AND labcase.AptNum!=0 ";
 			}
 			command+="LEFT JOIN patient guar ON guar.PatNum=patient.Guarantor "
 				+"LEFT JOIN patplan ON patplan.PatNum=patient.PatNum AND patplan.Ordinal=1 "
