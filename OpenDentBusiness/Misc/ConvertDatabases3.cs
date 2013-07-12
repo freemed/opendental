@@ -693,7 +693,7 @@ namespace OpenDentBusiness {
 					command=@"CREATE INDEX familyhealth_DiseaseDefNum ON familyhealth (DiseaseDefNum)";
 					Db.NonQ(command);
 				}
-				command="UPDATE preference SET ValueString = '13.2.3.0' WHERE PrefName = 'DataBaseVersion'";
+				command="UPDATE preference SET ValueString = '13.2.4.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
 			To13_3_0();
