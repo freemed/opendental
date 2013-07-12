@@ -655,11 +655,11 @@ namespace OpenDentBusiness {
 				command="UPDATE preference SET ValueString = '13.2.2.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
-			To13_2_3();
+			To13_2_4();
 		}
 
-		private static void To13_2_3() {
-			if(FromVersion<new Version("13.2.3.0")) {
+		private static void To13_2_4() {
+			if(FromVersion<new Version("13.2.4.0")) {
 				string command;
 				//Add Family Health table for EHR A.13 (Family Health History)
 				if(DataConnection.DBtype==DatabaseType.MySql) {
