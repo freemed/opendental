@@ -349,8 +349,11 @@ namespace OpenDental{
 			if(IsMultiSelect) {
 				SelectedDiseaseDefNums=new List<long>();
 				for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
-					SelectedDiseaseDefNums.Add(DiseaseDefs.ListLong[gridMain.SelectedIndices[i]].DiseaseDefNum);
+					SelectedDiseaseDefNums.Add(DiseaseDefs.List[gridMain.SelectedIndices[i]].DiseaseDefNum);
 				}
+			}
+			else if(IsSelectionMode) {
+				SelectedDiseaseDefNum=DiseaseDefs.List[gridMain.GetSelectedIndex()].DiseaseDefNum;
 			}
 			else {
 				SelectedDiseaseDefNum=DiseaseDefs.ListLong[gridMain.GetSelectedIndex()].DiseaseDefNum;
