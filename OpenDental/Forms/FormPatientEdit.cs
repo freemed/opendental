@@ -2001,14 +2001,14 @@ namespace OpenDental{
 					}
 				}
 				labelRaceEthnicity.Text="Race";
-				comboEthnicity.Items.Add("");//0 empty
-				comboEthnicity.Items.Add(Lan.g("comboEthnicity","DeclinedToSpecify"));//1
-				comboEthnicity.Items.Add(Lan.g("comboEthnicity","Not Hispanic"));//2
-				comboEthnicity.Items.Add(Lan.g("comboEthnicity","Hispanic"));//3
+				comboEthnicity.Items.Add(Lan.g(this,"none"));//0 
+				comboEthnicity.Items.Add(Lan.g(this,"DeclinedToSpecify"));//1
+				comboEthnicity.Items.Add(Lan.g(this,"Not Hispanic"));//2
+				comboEthnicity.Items.Add(Lan.g(this,"Hispanic"));//3
 				if(comboBoxMultiRace.SelectedIndices.Count==0) {//No race selected.
-					comboEthnicity.SelectedIndex=0;//empty
+					comboEthnicity.SelectedIndex=0;//none
 				}
-				else if(listPatRaces.Contains((int)PatRace.DeclinedToSpecify)) {
+				else if(listPatRaces.Contains((int)PatRace.DeclinedToSpecify)) {//DeclinedToSpecify forces both race and ethnicity.
 					comboEthnicity.SelectedIndex=1;
 				}
 				else if(isEthnicityHispanic) {
