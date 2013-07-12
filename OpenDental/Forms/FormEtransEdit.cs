@@ -468,7 +468,7 @@ namespace OpenDental{
 			string text;
 			float yPos=bounds.Top;
 			SolidBrush brush=new SolidBrush(Color.Black);
-			Font font=new Font(FontFamily.GenericSansSerif,9);
+			Font font=new Font(FontFamily.GenericMonospace,9);
 			float txtH;
 			RectangleF rect;
 			while(yPos<bounds.Bottom && linesPrinted<textMessageText.Lines.Length){
@@ -478,6 +478,9 @@ namespace OpenDental{
 				g.DrawString(text,font,brush,rect);
 				yPos+=rect.Height;
 				linesPrinted++;
+				if(textMessageText.Lines[linesPrinted-1].EndsWith("\f")) {//Page break.
+					break;
+				}
 			}
 			if(linesPrinted<textMessageText.Lines.Length) {
 				e.HasMorePages=true;
