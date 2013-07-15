@@ -264,10 +264,10 @@ namespace OpenDental{
 			if(IsSelectionMode) {
 				if(IsMultiSelect) {
 					SelectedDiseaseDefNums=new List<long>();
-					SelectedDiseaseDefNums.Add(DiseaseDefs.ListLong[gridMain.GetSelectedIndex()].DiseaseDefNum);
+					SelectedDiseaseDefNums.Add(DiseaseDefs.List[gridMain.GetSelectedIndex()].DiseaseDefNum);
 				}
 				else {
-					SelectedDiseaseDefNum=DiseaseDefs.ListLong[gridMain.GetSelectedIndex()].DiseaseDefNum;
+					SelectedDiseaseDefNum=DiseaseDefs.List[gridMain.GetSelectedIndex()].DiseaseDefNum;
 				}
 				DialogResult=DialogResult.OK;
 				return;
