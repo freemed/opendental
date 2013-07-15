@@ -36,6 +36,19 @@ namespace OpenDentBusiness {
 			return Crud.DiseaseCrud.SelectMany(command);
 		}
 
+		///<summary>Gets a list of all Diseases for a given patient. Show innactive returns all, otherwise only resolved and active problems.</summary>
+		public static List<Disease> Refresh(bool showInnactive,long patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Disease>>(MethodBase.GetCurrentMethod(),showInnactive,patNum);
+			}
+			string command="SELECT disease.* FROM disease "
+				+"WHERE PatNum="+POut.Long(patNum);
+			if(!showInnactive) {
+				command+=" AND (ProbStatus="+POut.Int((int)ProblemStatus.Active)+" OR ProbStatus="+POut.Int((int)ProblemStatus.Resolved)+")";
+			}
+			return Crud.DiseaseCrud.SelectMany(command);
+		}
+
 		///<summary></summary>
 		public static void Update(Disease disease) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

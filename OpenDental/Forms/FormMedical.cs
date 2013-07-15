@@ -42,6 +42,7 @@ namespace OpenDental{
 		private bool headingPrinted;
 		private UI.Button butPrintMedical;
 		private Label label1;
+		private CheckBox checkShowInactiveProblems;
 		private int headingPrintH;
 
 
@@ -96,6 +97,7 @@ namespace OpenDental{
 			this.butPrint = new OpenDental.UI.Button();
 			this.butPrintMedical = new OpenDental.UI.Button();
 			this.label1 = new System.Windows.Forms.Label();
+			this.checkShowInactiveProblems = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// butOK
@@ -385,6 +387,17 @@ namespace OpenDental{
 			this.label1.Text = "To print medications, use button at UR";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
+			// checkShowInactiveProblems
+			// 
+			this.checkShowInactiveProblems.Location = new System.Drawing.Point(129, 3);
+			this.checkShowInactiveProblems.Name = "checkShowInactiveProblems";
+			this.checkShowInactiveProblems.Size = new System.Drawing.Size(201, 23);
+			this.checkShowInactiveProblems.TabIndex = 65;
+			this.checkShowInactiveProblems.Tag = "";
+			this.checkShowInactiveProblems.Text = "Show Inactive Problems";
+			this.checkShowInactiveProblems.UseVisualStyleBackColor = true;
+			this.checkShowInactiveProblems.CheckedChanged += new System.EventHandler(this.checkShowInactiveProblems_CheckedChanged);
+			// 
 			// FormMedical
 			// 
 			this.AcceptButton = this.butOK;
@@ -394,6 +407,7 @@ namespace OpenDental{
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.butPrintMedical);
 			this.Controls.Add(this.butPrint);
+			this.Controls.Add(this.checkShowInactiveProblems);
 			this.Controls.Add(this.checkShowInactiveAllergies);
 			this.Controls.Add(this.butAddAllergy);
 			this.Controls.Add(this.gridAllergies);
@@ -681,7 +695,7 @@ namespace OpenDental{
 		}
 
 		private void FillProblems(){
-			DiseaseList=Diseases.Refresh(PatCur.PatNum);
+			DiseaseList=Diseases.Refresh(checkShowInactiveProblems.Checked,PatCur.PatNum);
 			gridDiseases.BeginUpdate();
 			gridDiseases.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableDiseases","Name"),140);//total is about 325
@@ -774,6 +788,10 @@ namespace OpenDental{
 		private void gridDiseases_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			FormDiseaseEdit FormD=new FormDiseaseEdit(DiseaseList[e.Row]);
 			FormD.ShowDialog();
+			FillProblems();
+		}
+
+		private void checkShowInactiveProblems_CheckedChanged(object sender,EventArgs e) {
 			FillProblems();
 		}
 
