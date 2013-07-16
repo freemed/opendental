@@ -520,11 +520,11 @@ namespace OpenDentBusiness{
 				DROP TABLE IF EXISTS tempfambal"+rndStr+@";
 				CREATE TABLE tempfambal"+rndStr+@"( 
 					FamBalNum int NOT NULL auto_increment,
-					PatNum bigint NOT NULL,
-					ProvNum bigint NOT NULL,
-					ClinicNum bigint NOT NULL,
-					AmtBal double NOT NULL,
-					InsEst double NOT NULL,
+					PatNum bigint NOT NULL DEFAULT 0,
+					ProvNum bigint NOT NULL DEFAULT 0,
+					ClinicNum bigint NOT NULL DEFAULT 0,
+					AmtBal double NOT NULL DEFAULT 0,
+					InsEst double NOT NULL DEFAULT 0,
 					PRIMARY KEY (FamBalNum));
 				
 				/*Completed procedures*/
