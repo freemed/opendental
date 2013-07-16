@@ -196,8 +196,8 @@ namespace OpenDentBusiness {
 				ncScript.Staff=new StaffType();
 				ncScript.Staff.ID=emp.EmployeeNum.ToString();//A positive integer.
 				ncScript.Staff.StaffName=new PersonNameType();
-				ncScript.Staff.StaffName.first=emp.FName;//First name or last name will not be blank. Validated in Employee Edit window.
-				ncScript.Staff.StaffName.last=emp.LName;//First name or last name will not be blank. Validated in Employee Edit window.
+				ncScript.Staff.StaffName.first=emp.FName;//First name or last name will not be blank. Validated in Chart.
+				ncScript.Staff.StaffName.last=emp.LName;//First name or last name will not be blank. Validated in Chart.
 				ncScript.Staff.StaffName.middle=emp.MiddleI;//May be blank.
 			}
 			ncScript.Patient=new PatientType();

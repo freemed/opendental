@@ -4329,6 +4329,14 @@ namespace OpenDental{
 			Employee emp=null;
 			if(Security.CurUser.EmployeeNum!=0) {
 				emp=Employees.GetEmp(Security.CurUser.EmployeeNum);
+				if(emp.LName=="") {//Checked in UI, but check here just in case this database was converted from another software.
+					MessageBox.Show(Lan.g(this,"Employee last name missing for user")+": "+Security.CurUser.UserName);
+					return;
+				}
+				if(emp.FName=="") {//Not validated in UI.
+					MessageBox.Show(Lan.g(this,"Employee first name missing for user")+": "+Security.CurUser.UserName);
+					return;
+				}
 			}
 			if(PatCur.Birthdate.Year<1880) {
 				MsgBox.Show(this,"Patient birthdate missing.");
