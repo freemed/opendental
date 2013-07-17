@@ -322,12 +322,10 @@ namespace OpenDentBusiness {
 					if(DataConnection.DBtype==DatabaseType.MySql) {
 						command="INSERT INTO diseasedef(DiseaseName,ItemOrder,ICD9Code) VALUES('"
 							+POut.String(table.Rows[i]["Description"].ToString())+"',"+POut.Int(itemOrderCur)+",'"+POut.String(table.Rows[i]["ICD9Code"].ToString())+"')";
-						Db.NonQ(command);
 					}
 					else {//oracle
 						command="INSERT INTO diseasedef(DiseaseDefNum,DiseaseName,ItemOrder,ICD9Code) VALUES((SELECT MAX(DiseaseDefNum)+1 FROM diseasedef),'"
 							+POut.String(table.Rows[i]["Description"].ToString())+"',"+POut.Int(itemOrderCur)+",'"+POut.String(table.Rows[i]["ICD9Code"].ToString())+"')";
-						Db.NonQ(command);
 					}
 					long defNum=Db.NonQ(command,true);
 					command="UPDATE eduresource SET DiseaseDefNum="+POut.Long(defNum)+" WHERE ICD9Num="+table.Rows[i]["ICD9Num"].ToString();
@@ -660,7 +658,56 @@ namespace OpenDentBusiness {
 
 		private static void To13_2_4() {
 			if(FromVersion<new Version("13.2.4.0")) {
+				//This fixes a bug in the conversion script above at lines 324 and 328
 				string command;
+				command="SELECT DiseaseDefNum,DiseaseName,ICD9Code,SnomedCode FROM diseasedef ORDER BY DiseaseDefNum ASC";
+				DataTable table=Db.GetTable(command);
+				for(int i=0;i<table.Rows.Count;i++) {//compare each row (i)
+					for(int j=i+1;j<table.Rows.Count;j++) {//with every row below it
+						if(PIn.String(table.Rows[i]["DiseaseName"].ToString())!=PIn.String(table.Rows[j]["DiseaseName"].ToString())
+							|| PIn.String(table.Rows[i]["ICD9Code"].ToString())!=PIn.String(table.Rows[j]["ICD9Code"].ToString())
+							|| PIn.String(table.Rows[i]["SnomedCode"].ToString())!=PIn.String(table.Rows[j]["SnomedCode"].ToString())) 
+						{
+							continue;
+						}
+						//row i and row j are "identical".  Because DiseaseDefNum is ascending, we want to keep row j, not row i.
+						//Always use POut when entering data into the database. Jordan ok'd omitting it here for readability. Do not use this as an example.
+						//The queries below will probably not make any changes.  Just if they used this part of the program heavily after the 
+						command="UPDATE eduresource SET DiseaseDefNum="+table.Rows[j]["DiseaseDefNum"].ToString()+" WHERE DiseaseDefNum="+table.Rows[i]["DiseaseDefNum"].ToString();
+						Db.NonQ(command);
+						command="UPDATE disease SET DiseaseDefNum="+table.Rows[j]["DiseaseDefNum"].ToString()+" WHERE DiseaseDefNum="+table.Rows[i]["DiseaseDefNum"].ToString();
+						Db.NonQ(command);
+						command="UPDATE reminderrule SET CriterionFK="+table.Rows[j]["DiseaseDefNum"].ToString()+" WHERE CriterionFK="+table.Rows[i]["DiseaseDefNum"].ToString()+" AND ReminderCriterion=6";
+						Db.NonQ(command);
+						command="DELETE FROM diseasedef WHERE DiseaseDefNum="+table.Rows[i]["DiseaseDefNum"].ToString();
+						Db.NonQ(command);
+					}
+				}
+				command="UPDATE preference SET ValueString = '13.2.4.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
+			To13_3_0();
+		}
+
+		private static void To13_3_0() {
+			if(FromVersion<new Version("13.3.0.0")) {
+				string command;
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('EmailInboxComputerName','')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'EmailInboxComputerName','')";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('EmailInboxCheckInterval','5')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'EmailInboxCheckInterval','5')";
+					Db.NonQ(command);
+				}
 				//Add Family Health table for EHR A.13 (Family Health History)
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS familyhealth";
@@ -693,32 +740,6 @@ namespace OpenDentBusiness {
 					command=@"CREATE INDEX familyhealth_DiseaseDefNum ON familyhealth (DiseaseDefNum)";
 					Db.NonQ(command);
 				}
-				command="UPDATE preference SET ValueString = '13.2.4.0' WHERE PrefName = 'DataBaseVersion'";
-				Db.NonQ(command);
-			}
-			To13_3_0();
-		}
-
-		private static void To13_3_0() {
-			if(FromVersion<new Version("13.3.0.0")) {
-				string command;
-				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="INSERT INTO preference(PrefName,ValueString) VALUES('EmailInboxComputerName','')";
-					Db.NonQ(command);
-				}
-				else {//oracle
-					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'EmailInboxComputerName','')";
-					Db.NonQ(command);
-				}
-				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="INSERT INTO preference(PrefName,ValueString) VALUES('EmailInboxCheckInterval','5')";
-					Db.NonQ(command);
-				}
-				else {//oracle
-					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'EmailInboxCheckInterval','5')";
-					Db.NonQ(command);
-				}
-
 
 
 
