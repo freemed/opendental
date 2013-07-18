@@ -751,7 +751,13 @@ namespace OpenDental{
 				MessageBox.Show("Addresses not allowed to be blank.");
 				return;
 			}
-			EmailAddress emailAddress=EmailAddresses.GetByClinic(PatCur.ClinicNum);
+			EmailAddress emailAddress;
+			if(PatCur==null) {//can happen if sending deposit slip by email
+				emailAddress=EmailAddresses.GetByClinic(0);//gets the practice default address
+			}
+			else {
+				emailAddress=EmailAddresses.GetByClinic(PatCur.ClinicNum);
+			}
 			if(emailAddress.SMTPserver==""){
 				MsgBox.Show(this,"The email address in email setup must have an SMTP server.");
 				return;
