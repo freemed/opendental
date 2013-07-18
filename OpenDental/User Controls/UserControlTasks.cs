@@ -319,7 +319,7 @@ namespace OpenDental {
 					repeatingLists[i].IsRepeating=false;
 					repeatingLists[i].Parent=0;
 					repeatingLists[i].ObjectType=0;//user will have to set explicitly
-					DuplicateExistingList(repeatingLists[i],true);
+					DuplicateExistingList(repeatingLists[i],null,true);//repeating lists cannot be subscribed to, so send null in as old list, will not attempt to move subscriptions
 					changeMade=true;
 				}
 				for(int i=0;i<repeatingTasks.Count;i++) {
@@ -877,12 +877,18 @@ namespace OpenDental {
 					newTL.IsRepeating=false;
 				}
 				newTL.FromNum=0;//always
+				//oldList used to move subscriptions to task list if Cut/Paste. If null, subscriptions will be deleted.
+				TaskList oldList=null;
+				if(WasCut) {
+					oldList=ClipTaskList.Copy();
+				}				
 				if(tabContr.SelectedTab==tabUser || tabContr.SelectedTab==tabMain) {
-					DuplicateExistingList(newTL,true);
+					DuplicateExistingList(newTL,oldList,true);
 				}
 				else {
-					DuplicateExistingList(newTL,false);
+					DuplicateExistingList(newTL,oldList,false);
 				}
+				DataValid.SetInvalid(InvalidType.Task);
 			}
 			if(ClipTask!=null) {//a task is on the clipboard
 				Task newT=ClipTask.Copy();
@@ -993,12 +999,15 @@ namespace OpenDental {
 			OnGoToChanged();
 		}
 
-		///<summary>A recursive function that duplicates an entire existing TaskList.  For the initial loop, make changes to the original taskList before passing it in.  That way, Date and type are only set in initial loop.  All children preserve original dates and types.  The isRepeating value will be applied in all loops.  Also, make sure to change the parent num to the new one before calling this function.  The taskListNum will always change, because we are inserting new record into database.</summary>
-		private void DuplicateExistingList(TaskList newList,bool isInMainOrUser) {
+		///<summary>A recursive function that duplicates an entire existing TaskList.  For the initial loop, make changes to the original taskList before passing it in.  That way, Date and type are only set in initial loop.  All children preserve original dates and types.  The isRepeating value will be applied in all loops.  Also, make sure to change the parent num to the new one before calling this function.  The taskListNum will always change, because we are inserting new record into database.  Sending null in for oldList will cause all existing subscriptions to the old list to be deleted.  In order for the new list to have the same subscriptions as the old list (as in a Cut/Paste), send in the old task list.</summary>
+		private void DuplicateExistingList(TaskList newList,TaskList oldList,bool isInMainOrUser) {
 			//get all children:
 			List<TaskList> childLists=TaskLists.RefreshChildren(newList.TaskListNum,Security.CurUser.UserNum,0);
 			List<Task> childTasks=Tasks.RefreshChildren(newList.TaskListNum,true,DateTime.MinValue,Security.CurUser.UserNum,0);
 			TaskLists.Insert(newList);
+			if(oldList!=null) {
+				TaskSubscriptions.UpdateAllSubs(oldList.TaskListNum,newList.TaskListNum);
+			}
 			//now we have a new taskListNum to work with
 			for(int i=0;i<childLists.Count;i++) {
 				childLists[i].Parent=newList.TaskListNum;
@@ -1014,7 +1023,12 @@ namespace OpenDental {
 					childLists[i].DateTL=DateTime.MinValue;
 					childLists[i].DateType=TaskDateType.None;
 				}
-				DuplicateExistingList(childLists[i],isInMainOrUser);
+				if(oldList==null) {
+					DuplicateExistingList(childLists[i],null,isInMainOrUser);//delete any existing subscriptions
+				}
+				else {
+					DuplicateExistingList(childLists[i],childLists[i],isInMainOrUser);
+				}
 			}
 			for(int i=0;i<childTasks.Count;i++) {
 				childTasks[i].TaskListNum=newList.TaskListNum;
@@ -1056,8 +1070,10 @@ namespace OpenDental {
 				if(!MsgBox.Show(this,true,"Delete this empty list?")) {
 					return;
 				}
+				TaskSubscriptions.UpdateAllSubs(TaskListsList[clickedI].TaskListNum,0);
 				TaskLists.Delete(TaskListsList[clickedI]);
 				//DeleteEntireList(TaskListsList[clickedI]);
+				DataValid.SetInvalid(InvalidType.Task);
 			}
 			else {//Is task
 				if(!MsgBox.Show(this,true,"Delete?")) {

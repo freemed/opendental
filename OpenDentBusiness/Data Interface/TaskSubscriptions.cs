@@ -59,7 +59,21 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
-
+		///<summary>Moves all subscriptions from taskListOld to taskListNew. Used when cutting and pasting a tasklist. Can also be used when deleting a tasklist to remove all subscriptions from the tasklist by sending in 0 as taskListNumNew.</summary>
+		public static void UpdateAllSubs(long taskListNumOld,long taskListNumNew) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),taskListNumOld,taskListNumNew);
+				return;
+			}
+			string command="";
+			if(taskListNumNew==0) {
+				command="DELETE FROM tasksubscription WHERE TaskListNum="+POut.Long(taskListNumOld);
+			}
+			else {
+				command="UPDATE tasksubscription SET TaskListNum="+POut.Long(taskListNumNew)+" WHERE TaskListNum="+POut.Long(taskListNumOld);
+			}
+			Db.NonQ(command);
+		}
 		
 		
 
