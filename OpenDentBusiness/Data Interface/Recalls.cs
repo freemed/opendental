@@ -756,9 +756,11 @@ namespace OpenDentBusiness{
 				Synch(PIn.Long(table.Rows[i][0].ToString()));
 			}
 			//get all active patients with future scheduled appointments that have a procedure attached which is a recall trigger procedure
-			command="SELECT patient.PatNum "
+			command="SELECT DISTINCT patient.PatNum "
 						+"FROM patient "
-						+"INNER JOIN appointment ON appointment.PatNum=patient.PatNum AND AptDateTime>CURDATE() AND (AptStatus=1 OR AptStatus=4) "
+						+"INNER JOIN appointment ON appointment.PatNum=patient.PatNum AND AptDateTime>CURDATE() AND AptStatus IN (1,4,5) "//Scheduled,ASAP, or Broken
+						//Broken is only included to fix a bug that existed between versions 12.4 and 13.2.  It clears out the datesched
+						//if broken future appt is the only appt with a recall trigger on it so the patient will be on the recall list again.
 						+"INNER JOIN procedurelog ON procedurelog.AptNum=appointment.AptNum "
 						+"INNER JOIN recalltrigger ON recalltrigger.CodeNum=procedurelog.CodeNum "
 						+"WHERE PatStatus=0";

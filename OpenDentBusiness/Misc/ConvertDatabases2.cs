@@ -11502,7 +11502,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="UPDATE recall SET recall.DateScheduled="+POut.Date(DateTime.MinValue);
 					Db.NonQ(command);
 					//get all active patients with future scheduled appointments that have a procedure attached which is a recall trigger procedure
-					command="SELECT patient.PatNum "
+					command="SELECT DISTINCT patient.PatNum "
 						+"FROM patient "
 						+"INNER JOIN appointment ON appointment.PatNum=patient.PatNum AND AptDateTime>CURDATE() AND (AptStatus=1 OR AptStatus=4) "
 						+"INNER JOIN procedurelog ON procedurelog.AptNum=appointment.AptNum "

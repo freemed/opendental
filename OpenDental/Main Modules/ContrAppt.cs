@@ -4595,6 +4595,7 @@ namespace OpenDental {
 				FormA.ShowDialog();
 			}
 			AutomationL.Trigger(AutomationTrigger.BreakAppointment,null,pat.PatNum);
+			Recalls.SynchScheduledApptFull(apt.PatNum);
 		}
 
 		private void OnComplete_Click() {
