@@ -22,7 +22,7 @@ namespace OpenDental{
 		private OpenDental.ODtextBox textService;
 		private OpenDental.ODtextBox textMedicalComp;
 		private OpenDental.ODtextBox textMedUrgNote;
-		private System.ComponentModel.Container components = null;
+		private IContainer components;
 		private OpenDental.UI.Button butAddDisease;// Required designer variable.
 		private Patient PatCur;
 		private OpenDental.UI.ODGrid gridMeds;
@@ -43,6 +43,7 @@ namespace OpenDental{
 		private UI.Button butPrintMedical;
 		private Label label1;
 		private CheckBox checkShowInactiveProblems;
+		private ImageList imageListInfoButton;
 		private int headingPrintH;
 
 
@@ -74,6 +75,7 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMedical));
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
@@ -98,6 +100,7 @@ namespace OpenDental{
 			this.butPrintMedical = new OpenDental.UI.Button();
 			this.label1 = new System.Windows.Forms.Label();
 			this.checkShowInactiveProblems = new System.Windows.Forms.CheckBox();
+			this.imageListInfoButton = new System.Windows.Forms.ImageList(this.components);
 			this.SuspendLayout();
 			// 
 			// butOK
@@ -400,6 +403,12 @@ namespace OpenDental{
 			this.checkShowInactiveProblems.UseVisualStyleBackColor = true;
 			this.checkShowInactiveProblems.CheckedChanged += new System.EventHandler(this.checkShowInactiveProblems_CheckedChanged);
 			// 
+			// imageListInfoButton
+			// 
+			this.imageListInfoButton.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListInfoButton.ImageStream")));
+			this.imageListInfoButton.TransparentColor = System.Drawing.Color.Transparent;
+			this.imageListInfoButton.Images.SetKeyName(0, "iButton_16px.png");
+			// 
 			// FormMedical
 			// 
 			this.AcceptButton = this.butOK;
@@ -460,14 +469,15 @@ namespace OpenDental{
 			gridMeds.Columns.Clear();
 			ODGridColumn col;
 			if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
-				col=new ODGridColumn("",20);//infoButton
+				col=new ODGridColumn("",18);//infoButton
+				col.ImageList=imageListInfoButton;
 				gridMeds.Columns.Add(col);
 			}
 			col=new ODGridColumn(Lan.g("TableMedications","Medication"),120);
 			gridMeds.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableMedications","Notes"),200);
+			col=new ODGridColumn(Lan.g("TableMedications","Notes"),190);
 			gridMeds.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableMedications","Notes for Patient"),200);
+			col=new ODGridColumn(Lan.g("TableMedications","Notes for Patient"),190);
 			gridMeds.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableMedications","Status"),60,HorizontalAlignment.Center);
 			gridMeds.Columns.Add(col);
@@ -476,7 +486,7 @@ namespace OpenDental{
 			for(int i=0;i<medList.Count;i++) {
 				row=new ODGridRow();
 				if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
-					row.Cells.Add("info");//TODO: replace this with the infobutton graphic.
+					row.Cells.Add("0");//index of infobutton
 				}
 				Medication generic=Medications.GetGeneric(medList[i].MedicationNum);
 				string medName=Medications.GetMedication(medList[i].MedicationNum).MedName;
@@ -703,7 +713,8 @@ namespace OpenDental{
 			gridDiseases.Columns.Clear();
 			ODGridColumn col;
 			if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
-				col=new ODGridColumn("",20);//infoButton
+				col=new ODGridColumn("",18);//infoButton
+				col.ImageList=imageListInfoButton;
 				gridDiseases.Columns.Add(col);
 			}
 			col=new ODGridColumn(Lan.g("TableDiseases","Name"),140);//total is about 325
@@ -717,7 +728,7 @@ namespace OpenDental{
 			for(int i=0;i<DiseaseList.Count;i++){
 				row=new ODGridRow();
 				if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
-					row.Cells.Add("info");//TODO: replace this with the infobutton graphic.
+					row.Cells.Add("0");//index of infobutton
 				}
 				if(DiseaseList[i].DiseaseDefNum!=0) {
 					row.Cells.Add(DiseaseDefs.GetName(DiseaseList[i].DiseaseDefNum));
@@ -738,7 +749,8 @@ namespace OpenDental{
 			gridAllergies.Columns.Clear();
 			ODGridColumn col;
 			if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
-				col=new ODGridColumn("",20);//infoButton
+				col=new ODGridColumn("",18);//infoButton
+				col.ImageList=imageListInfoButton;
 				gridAllergies.Columns.Add(col);
 			}
 			col=new ODGridColumn(Lan.g("TableAllergies","Allergy"),100);
@@ -752,7 +764,7 @@ namespace OpenDental{
 			for(int i=0;i<allergyList.Count;i++){
 				row=new ODGridRow();
 				if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
-					row.Cells.Add("info");//TODO: replace this with the infobutton graphic.
+					row.Cells.Add("0");//index of infobutton
 				}
 				AllergyDef allergyDef=AllergyDefs.GetOne(allergyList[i].AllergyDefNum);
 				row.Cells.Add(allergyDef.Description);
@@ -813,7 +825,7 @@ namespace OpenDental{
 			}
 			FormInfobutton FormIB = new FormInfobutton();
 			FormIB.PatCur=PatCur;
-			FormIB.ProblemCur = Diseases.GetSpecificDiseaseForPatient(PatCur.PatNum,DiseaseList[e.Row].DiseaseDefNum);//TODO: verify that this is what we need to get.
+			FormIB.ProblemCur = DiseaseDefs.GetItem(DiseaseList[e.Row].DiseaseDefNum);//TODO: verify that this is what we need to get.
 			FormIB.ShowDialog();
 			//Nothing to do with Dialog Result yet.
 		}

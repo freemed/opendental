@@ -15,16 +15,17 @@ namespace OpenDental {
 		public Patient PatCur;
 		///<summary>Usually filled from within the form by using Patcur.PriProv</summary>
 		public Provider ProvCur;
-		public Disease ProblemCur;//should this be named disease or problem? Also snomed/medication
+		public DiseaseDef ProblemCur;//should this be named disease or problem? Also snomed/medication
 		public Medication MedicationCur;
 		public LabResult LabCur;
-		public ActTaskCode ActTC;
+		private ActTaskCode ActTC;//may need to make this public later.
 		public ObservationInterpretationNormality ObsInterpretation;
 		public ActEncounterCode ActEC;
 		public bool UseAge;
 		public bool UseAgeGroup;
 		public bool PerformerIsProvider;
 		public bool RecipientIsProvider;
+		private CultureInfo[] arrayCultures;
 
 		public FormInfobutton() {
 			InitializeComponent();
@@ -34,6 +35,7 @@ namespace OpenDental {
 		private void FormInfobutton_Load(object sender,EventArgs e) {
 			fillLanguageCombos();
 			fillEncounterCombo();
+			fillTaskCombo();
 			fillContext();
 			//Fill context with provider and/or patient information.
 			if(ProblemCur!=null) {
@@ -49,12 +51,12 @@ namespace OpenDental {
 				fillLabResult();
 			}
 			else {
-				//what should we do if the info button is launched without a proper issue?
+				
 			}
 		}
 
 		private void fillLanguageCombos() {
-			CultureInfo[] arrayCultures = CultureInfo.GetCultures(CultureTypes.SpecificCultures);
+			arrayCultures = CultureInfo.GetCultures(CultureTypes.SpecificCultures);
 			for(int i=0;i<arrayCultures.Length;i++) {
 				comboPatLang.Items.Add(arrayCultures[i].DisplayName);
 				comboProvLang.Items.Add(arrayCultures[i].DisplayName);
@@ -72,6 +74,12 @@ namespace OpenDental {
 			comboEncType.Items.Add("inpatient encounter");
 			comboEncType.Items.Add("short stay");
 			comboEncType.Items.Add("virtual");
+		}
+
+		private void fillTaskCombo() {
+			comboTask.Items.Add("Order Entry");
+			comboTask.Items.Add("Patient Documentation");
+			comboTask.Items.Add("Patient Information Review");
 		}
 
 		private void fillContext() {
@@ -107,24 +115,29 @@ namespace OpenDental {
 			}
 			//Fill Organization--------------------------------------------------------------------------------------------------------------
 			textOrgName.Text=PrefC.GetString(PrefName.PracticeTitle);
-			textOrgID.Text="TODO";
 			//Fill Encounter-----------------------------------------------------------------------------------------------------------------
-			comboEncType.SelectedIndex=0;//ambulatory
+			ActEC=ActEncounterCode.AMB;
+			comboEncType.SelectedIndex=(int)ActEC;//ambulatory
 			textEncLocID.Text=PatCur.ClinicNum.ToString();//do not use to generate message if this value is zero.
 			//Fill Requestor/Recievor--------------------------------------------------------------------------------------------------------
 			radioReqProv.Checked=PerformerIsProvider;
 			radioReqPat.Checked=!PerformerIsProvider;
 			radioRecProv.Checked=RecipientIsProvider;
 			radioRecPat.Checked=!RecipientIsProvider;
+			//Fill Task Type-----------------------------------------------------------------------------------------------------------------
+			ActTC=ActTaskCode.PATINFO;//may need to change this later.
+			comboTask.SelectedIndex=(int)ActTC;
 		}
 
 		private void fillProblem() {
+			textProbName.Text=ProblemCur.DiseaseName;
+			textProbSnomedCode.Text=ProblemCur.SnomedCode;
 			//ProblemCur.DiseaseDefNum
 		}
 
 		private void fillMedication() {
 			textMedName.Text=MedicationCur.MedName;
-			//throw new NotImplementedException();
+			textProbSnomedCode.Text="TODO";
 		}
 
 		private void fillLabResult() {
@@ -147,7 +160,7 @@ namespace OpenDental {
 			string bullet="  - ";//should be used at the beggining of every warning/error
 			//Patient information-------------------------------------------------------------------------------------------------
 			if(PatCur==null) {//should never happen
-				warnings+=bullet+Lan.g(this,"No patient selected. Message will be generated without patient information.")+"\r\n";
+				warnings+=bullet+Lan.g(this,"No patient selected.")+"\r\n";
 			}
 			else {
 				if(PatCur.Birthdate==DateTime.MinValue) {
@@ -156,34 +169,72 @@ namespace OpenDental {
 			}
 			//Provider information------------------------------------------------------------------------------------------------
 			if(ProvCur==null) {
-				warnings+=bullet+Lan.g(this,"No provider selected. Message will be generated without provider information.")+"\r\n";
+				warnings+=bullet+Lan.g(this,"No provider selected.")+"\r\n";
 			}
 			else {
-				//TODO:
+				if(textProvID.Text=="") {
+					warnings+=bullet+Lan.g(this,"No povider ID.")+"\r\n";
+				}
 			}
 			//Organization information--------------------------------------------------------------------------------------------
+			if(textOrgName.Text=="") {
+				warnings+=bullet+Lan.g(this,"No organization name.")+"\r\n";
+			}
+			if(textOrgID.Text=="") {
+				warnings+=bullet+Lan.g(this,"No organization ID.")+"\r\n";
+			}
 			//Encounter information-----------------------------------------------------------------------------------------------
+			if(textEncLocID.Text=="") {
+				warnings+=bullet+Lan.g(this,"No encounter location ID.")+"\r\n";
+			}
 			//Requestor information-----------------------------------------------------------------------------------------------
+			if(radioReqPat.Checked && radioRecProv.Checked) {
+				warnings+=bullet+Lan.g(this,"It is uncommon for the requestor to be the patient and the recipient to be the provider.")+"\r\n";
+			}
 			//Recipient information-----------------------------------------------------------------------------------------------
 			//Problem, Medication, Lab Result information-------------------------------------------------------------------------
 			switch(tabControl1.SelectedTab.Name) {
 				case "tabProblem"://------------------------------------------------------------------------------------------------
 					if(ProblemCur==null) {
-						errors+=bullet+Lan.g(this,"Problem tab is selected but no problem is selected.")+"\r\n";
+						errors+=bullet+Lan.g(this,"No problem is selected.")+"\r\n";
+					}
+					else {
+						if(textProbSnomedCode.Text=="") {
+							errors+=bullet+Lan.g(this,"No SNOMED CT problem code.")+"\r\n";
+						}
+						if(textProbSnomedCode.Text!=ProblemCur.SnomedCode) {
+							warnings+=bullet+Lan.g(this,"SNOMED CT problem code has been manualy altered.")+"\r\n";
+						}
 					}
 					break;
 				case "tabMedication"://---------------------------------------------------------------------------------------------
-					if(ProblemCur==null) {
-						errors+=bullet+Lan.g(this,"Medication tab is selected but no medication is selected.")+"\r\n";
+					if(MedicationCur==null) {
+						errors+=bullet+Lan.g(this,"No medication is selected.")+"\r\n";
+					}
+					else {
+						if(textMedSnomedCode.Text=="") {
+							errors+=bullet+Lan.g(this,"No SNOMED CT medication code.")+"\r\n";
+						}
+						//if(textProbSnomedCode.Text!=MedicationCur.SnomedCode) {
+						//  warnings+=bullet+Lan.g(this,"SNOMED CT medication code has been manualy altered.")+"\r\n";
+						//}
 					}
 					break;
 				case "tabLabResult"://----------------------------------------------------------------------------------------------
-					if(ProblemCur==null) {
-						errors+=bullet+Lan.g(this,"Lab result tab is selected but no lab result is selected.")+"\r\n";
+					if(LabCur==null) {
+						errors+=bullet+Lan.g(this,"No lab result is selected.")+"\r\n";
+					}
+					else {
+						if(textMedSnomedCode.Text=="") {
+							errors+=bullet+Lan.g(this,"No SNOMED CT lab result code.")+"\r\n";
+						}
+						//if(textProbSnomedCode.Text!=LabCur.SnomedCode) {
+						//  warnings+=bullet+Lan.g(this,"SNOMED CT lab result code has been manualy altered.")+"\r\n";
+						//}
 					}
 					break;
 				default://----------------------------------------------------------------------------------------------------------
-					//either no tab is selected or the tab names above are misspelled.
+					errors+=bullet+Lan.g(this,"Problem, medication, or lab result not selected.")+"\r\n";
 					break;
 			}
 			//Generate messagebox-------------------------------------------------------------------------------------------------
@@ -294,20 +345,26 @@ namespace OpenDental {
 							w.WriteStartElement("assignedAuthorizedPerson");
 								w.WriteAttributeString("classCode","PSN");
 								w.WriteAttributeString("determinerCode","INSTANCE");
+							if(textProvID.Text!=""){
 								w.WriteStartElement("id");
-									w.WriteAttributeString("value",Security.CurUser.UserNum.ToString());
+									w.WriteAttributeString("value",textProvID.Text);
 								w.WriteEndElement();//id
+								}
 							w.WriteEndElement();//assignedAuthorizedPerson
 						if(textOrgID.Text!="" && textOrgName.Text!=""){
 							w.WriteStartElement("representedOrganization");
 								w.WriteAttributeString("classCode","ORG");
 								w.WriteAttributeString("determinerCode","INSTANCE");
+							if(textOrgID.Text!=""){
 								w.WriteStartElement("id");
 									w.WriteAttributeString("value",textOrgID.Text);
 								w.WriteEndElement();//id
+							}
+							if(textOrgName.Text!=""){
 								w.WriteStartElement("name");
 									w.WriteAttributeString("value",textOrgName.Text);
 								w.WriteEndElement();//name
+							}
 							w.WriteEndElement();//representedOrganization
 						}
 						w.WriteEndElement();//assignedEntity
@@ -332,10 +389,10 @@ namespace OpenDental {
 								w.WriteAttributeString("determinerCode","INSTANCE");
 								w.WriteStartElement("languageCommunication");
 									w.WriteStartElement("languageCommunicationCode");
-										w.WriteAttributeString("code",System.Globalization.CultureInfo.CurrentCulture.ThreeLetterISOLanguageName);
+										w.WriteAttributeString("code",arrayCultures[comboProvLang.SelectedIndex].ThreeLetterISOLanguageName);
 										w.WriteAttributeString("codeSytem","1.0.639.2");
 										w.WriteAttributeString("codeSystemName","ISO 639-2: Codes for the representation of names of languages -- Part 2: Alpha-3 code");
-										w.WriteAttributeString("displayName",System.Globalization.CultureInfo.CurrentCulture.DisplayName);
+										w.WriteAttributeString("displayName",arrayCultures[comboProvLang.SelectedIndex].DisplayName);
 									w.WriteEndElement();//languageCommunicationCode
 								w.WriteEndElement();//languageCommunication
 							w.WriteEndElement();//healthCarePerson
@@ -353,10 +410,10 @@ namespace OpenDental {
 								w.WriteAttributeString("determinerCode","INSTANCE");
 								w.WriteStartElement("languageCommunication");
 									w.WriteStartElement("languageCommunicationCode");
-										w.WriteAttributeString("code","TODO");//System.Globalization.CultureInfo.CurrentCulture.ThreeLetterISOLanguageName);
+										w.WriteAttributeString("code",arrayCultures[comboPatLang.SelectedIndex].ThreeLetterISOLanguageName);
 										w.WriteAttributeString("codeSytem","1.0.639.2");
 										w.WriteAttributeString("codeSystemName","ISO 639-2: Codes for the representation of names of languages -- Part 2: Alpha-3 code");
-										w.WriteAttributeString("displayName","TODO");//System.Globalization.CultureInfo.CurrentCulture.DisplayName);
+										w.WriteAttributeString("displayName",arrayCultures[comboPatLang.SelectedIndex].DisplayName);
 									w.WriteEndElement();//languageCommunicationCode
 								w.WriteEndElement();//languageCommunication
 							w.WriteEndElement();//patientPerson
@@ -380,10 +437,10 @@ namespace OpenDental {
 								w.WriteAttributeString("determinerCode","INSTANCE");
 								w.WriteStartElement("languageCommunication");
 									w.WriteStartElement("languageCommunicationCode");
-										w.WriteAttributeString("code",System.Globalization.CultureInfo.CurrentCulture.ThreeLetterISOLanguageName);
+										w.WriteAttributeString("code",arrayCultures[comboProvLang.SelectedIndex].ThreeLetterISOLanguageName);
 										w.WriteAttributeString("codeSytem","1.0.639.2");
 										w.WriteAttributeString("codeSystemName","ISO 639-2: Codes for the representation of names of languages -- Part 2: Alpha-3 code");
-										w.WriteAttributeString("displayName",System.Globalization.CultureInfo.CurrentCulture.DisplayName);
+										w.WriteAttributeString("displayName",arrayCultures[comboProvLang.SelectedIndex].DisplayName);
 									w.WriteEndElement();//languageCommunicationCode
 								w.WriteEndElement();//languageCommunication
 							w.WriteEndElement();//healthCarePerson
@@ -397,10 +454,10 @@ namespace OpenDental {
 								w.WriteAttributeString("determinerCode","INSTANCE");
 								w.WriteStartElement("languageCommunication");
 									w.WriteStartElement("languageCommunicationCode");
-										w.WriteAttributeString("code","TODO");//System.Globalization.CultureInfo.CurrentCulture.ThreeLetterISOLanguageName);
+										w.WriteAttributeString("code",arrayCultures[comboPatLang.SelectedIndex].ThreeLetterISOLanguageName);
 										w.WriteAttributeString("codeSytem","1.0.639.2");
 										w.WriteAttributeString("codeSystemName","ISO 639-2: Codes for the representation of names of languages -- Part 2: Alpha-3 code");
-										w.WriteAttributeString("displayName","TODO");//System.Globalization.CultureInfo.CurrentCulture.DisplayName);
+										w.WriteAttributeString("displayName",arrayCultures[comboPatLang.SelectedIndex].DisplayName);
 									w.WriteEndElement();//languageCommunicationCode
 								w.WriteEndElement();//languageCommunication
 							w.WriteEndElement();//patientPerson
@@ -451,11 +508,35 @@ namespace OpenDental {
 								w.WriteAttributeString("displayName","knowledge subject");
 							w.WriteEndElement();//code
 							w.WriteStartElement("value");
-								w.WriteAttributeString("code","TODO");
-								w.WriteAttributeString("codeSytem","2.16.840.1.113883.6.177");
-								w.WriteAttributeString("codeSystemName","MSH");
-								w.WriteAttributeString("displayName","TODO");
+						switch(tabControl1.SelectedTab.Name) {
+							case "tabProblem"://------------------------------------------------------------------------------------------------
+								w.WriteAttributeString("code","TODO:SNOMED CT Problem Code.");
+								w.WriteAttributeString("codeSytem","2.16.840.1.113883.6.96");//HL7 OID for SNOMED Clinical Terms
+								w.WriteAttributeString("codeSystemName","snomed-CT");//HL7 name for SNOMED Clinical Terms
+								w.WriteAttributeString("displayName","TODO:SNOMED CT Problem Name");
+								break;
+							case "tabMedication"://---------------------------------------------------------------------------------------------
+								w.WriteAttributeString("code","TODO:SNOMED CT Medication Code.");
+								w.WriteAttributeString("codeSytem","2.16.840.1.113883.6.96");//HL7 OID for SNOMED Clinical Terms
+								w.WriteAttributeString("codeSystemName","snomed-CT");//HL7 name for SNOMED Clinical Terms
+								w.WriteAttributeString("displayName","TODO: SNOMED CT Medication Name.");
+								break;
+							case "tabLabResult"://----------------------------------------------------------------------------------------------
+								w.WriteAttributeString("code","TODO: SNOMED CT Lab Results Code??");
+								w.WriteAttributeString("codeSytem","2.16.840.1.113883.6.96");//HL7 OID for SNOMED Clinical Terms
+								w.WriteAttributeString("codeSystemName","snomed-CT");//HL7 name for SNOMED Clinical Terms
+								w.WriteAttributeString("displayName","TODO: SNOMED CT Lab Results Name??");
+								break;
+							default://----------------------------------------------------------------------------------------------------------
+								//either no tab is selected or the tab names above are misspelled.
+								//w.WriteAttributeString("code","TODO: ");
+								//w.WriteAttributeString("codeSytem","2.16.840.1.113883.6.96");//HL7 OID for SNOMED Clinical Terms
+								//w.WriteAttributeString("codeSystemName","snomed-CT");//HL7 name for SNOMED Clinical Terms
+								//w.WriteAttributeString("displayName","TODO: ");
+								break;
+						}
 							w.WriteEndElement();//value
+						if(tabControl1.SelectedTab.Name=="tabLabResult"){
 							w.WriteStartElement("subject");
 								w.WriteAttributeString("typeCode","SUBJ");
 								w.WriteStartElement("severityObservation");
@@ -475,6 +556,7 @@ namespace OpenDental {
 									w.WriteEndElement();//value
 								w.WriteEndElement();//severityObservation
 							w.WriteEndElement();//subject
+						}
 						w.WriteEndElement();//mainSearchCriteria
 					w.WriteEndElement();//subject4
 					w.WriteStartElement("componentOf");
@@ -488,13 +570,15 @@ namespace OpenDental {
 								w.WriteAttributeString("codeSystemName","ActCode");
 								w.WriteAttributeString("displayName",EncounterCode(ActEC));
 							w.WriteEndElement();//code
+						if(textEncLocID.Text!=""){
 							w.WriteStartElement("location");
 							w.WriteAttributeString("typeCode","LOC");
 								w.WriteStartElement("serviceDeliveryLocation");
 									w.WriteAttributeString("typeCode","SDLOC");
-									w.WriteAttributeString("id","TODO");
+									w.WriteAttributeString("id",textEncLocID.Text);
 								w.WriteEndElement();//serviceDeliveryLocation
 							w.WriteEndElement();//location
+							}
 						w.WriteEndElement();//encounter
 					w.WriteEndElement();//componentOf
 				w.WriteEndElement();//knowledgeRequestNotification
@@ -851,8 +935,23 @@ namespace OpenDental {
 
 		#endregion
 
+		private void comboEncType_SelectedIndexChanged(object sender,EventArgs e) {
+			ActEC=(ActEncounterCode)comboEncType.SelectedIndex;
+		}
+
+		private void comboTask_SelectedIndexChanged(object sender,EventArgs e) {
+			ActTC=(ActTaskCode)comboTask.SelectedIndex;
+		}
+
 		private void butProbPick_Click(object sender,EventArgs e) {
-			
+			FormDiseaseDefs FormDD = new FormDiseaseDefs();
+			FormDD.IsSelectionMode=true;
+			FormDD.ShowDialog();
+			if(FormDD.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			ProblemCur=DiseaseDefs.GetItem(FormDD.SelectedDiseaseDefNum);
+			fillProblem();
 		}
 
 		private void butSend_Click(object sender,EventArgs e) {
