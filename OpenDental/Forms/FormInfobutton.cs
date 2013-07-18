@@ -8,13 +8,21 @@ using System.Windows.Forms;
 using System.Xml;
 using OpenDentBusiness;
 using CodeBase;
+using System.Globalization;
 
 namespace OpenDental {
 	public partial class FormInfobutton:Form {
 		public Patient PatCur;
+		///<summary>Usually filled from within the form by using Patcur.PriProv</summary>
+		public Provider ProvCur;
 		public Disease ProblemCur;//should this be named disease or problem? Also snomed/medication
 		public Medication MedicationCur;
 		public LabResult LabCur;
+		public ActTaskCode ActTC;
+		public ObservationInterpretationNormality ObsInterpretation;
+		public ActEncounterCode ActEC;
+		public bool UseAge;
+		public bool UseAgeGroup;
 		public bool PerformerIsProvider;
 		public bool RecipientIsProvider;
 
@@ -24,58 +32,90 @@ namespace OpenDental {
 		}
 
 		private void FormInfobutton_Load(object sender,EventArgs e) {
-			fillComboBox();
+			fillLanguageCombos();
+			fillEncounterCombo();
 			fillContext();
 			//Fill context with provider and/or patient information.
 			if(ProblemCur!=null) {
-				groupBoxProblem.Show();
+				tabControl1.SelectTab(0);
 				fillProblem();
-				comboRequestType.SelectedIndex=0;
 			}
 			else if(MedicationCur!=null) {
-				groupBoxMedication.Show();
+				tabControl1.SelectTab(1);
 				fillMedication();
-				comboRequestType.SelectedIndex=1;
 			}
 			else if(LabCur!=null) {
-				groupBoxLab.Show();
+				tabControl1.SelectTab(2);
 				fillLabResult();
-				comboRequestType.SelectedIndex=2;
 			}
 			else {
-				//dislpay nothing until user selects a request type??
-				//or should we get generic information?
+				//what should we do if the info button is launched without a proper issue?
 			}
-			displayGroupBoxesHelper();
 		}
 
-		private void fillComboBox() {
-			comboRequestType.Items.Add(Lan.g(this,"Problem"));
-			comboRequestType.Items.Add(Lan.g(this,"Medication"));
-			comboRequestType.Items.Add(Lan.g(this,"Lab Result"));
+		private void fillLanguageCombos() {
+			CultureInfo[] arrayCultures = CultureInfo.GetCultures(CultureTypes.SpecificCultures);
+			for(int i=0;i<arrayCultures.Length;i++) {
+				comboPatLang.Items.Add(arrayCultures[i].DisplayName);
+				comboProvLang.Items.Add(arrayCultures[i].DisplayName);
+			}
 		}
 
-		private void displayGroupBoxesHelper() {
-			groupBoxProblem.Hide();
-			groupBoxMedication.Hide();
-			groupBoxLab.Hide();
-			switch(comboRequestType.SelectedIndex) {
-				case 0://Problem
-					groupBoxProblem.Show();
-					break;
-				case 1://Medication
-					groupBoxMedication.Show();
-					break;
-				case 2://Lab Result
-					groupBoxLab.Show();
-					break;
-				default:
-					//should never happen.
-					break;
-			}
+		private void fillEncounterCombo() {
+			//for(int i=0;i<Enum.GetValues(typeof(ActEncounterCode)).Length;i++){
+			//  comboEncType.Items.Add(Enum.GetName(typeof(ActEncounterCode),i));
+			//}
+			comboEncType.Items.Add("ambulatory");
+			comboEncType.Items.Add("emergency");
+			comboEncType.Items.Add("field");
+			comboEncType.Items.Add("home health");
+			comboEncType.Items.Add("inpatient encounter");
+			comboEncType.Items.Add("short stay");
+			comboEncType.Items.Add("virtual");
 		}
 
 		private void fillContext() {
+			//Fill Patient-------------------------------------------------------------------------------------------------------------------
+			textPatName.Text=PatCur.GetNameFL();
+			if(PatCur.Birthdate!=DateTime.MinValue) {
+				textPatBirth.Text=PatCur.Birthdate.ToShortDateString();
+			}
+			comboPatLang.SelectedIndex=comboPatLang.Items.IndexOf(System.Globalization.CultureInfo.CurrentCulture.DisplayName);
+			switch(PatCur.Gender) {
+				case PatientGender.Female:
+					radioPatGenFem.Checked=true;
+					break;
+				case PatientGender.Male:
+					radioPatGenMale.Checked=true;
+					break;
+				case PatientGender.Unknown:
+				default:
+					radioPatGenUn.Checked=true;
+					break;
+			}
+			//Fill Provider------------------------------------------------------------------------------------------------------------------
+			if(ProvCur==null) {
+				ProvCur=Providers.GetProv(PatCur.PriProv);
+			}
+			if(ProvCur==null) {
+				ProvCur=Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv));
+			}
+			if(ProvCur!=null) {
+				textProvName.Text=ProvCur.GetFormalName();
+				textProvID.Text=ProvCur.NationalProvID;
+				comboProvLang.SelectedIndex=comboPatLang.Items.IndexOf(System.Globalization.CultureInfo.CurrentCulture.DisplayName);
+			}
+			//Fill Organization--------------------------------------------------------------------------------------------------------------
+			textOrgName.Text=PrefC.GetString(PrefName.PracticeTitle);
+			textOrgID.Text="TODO";
+			//Fill Encounter-----------------------------------------------------------------------------------------------------------------
+			comboEncType.SelectedIndex=0;//ambulatory
+			textEncLocID.Text=PatCur.ClinicNum.ToString();//do not use to generate message if this value is zero.
+			//Fill Requestor/Recievor--------------------------------------------------------------------------------------------------------
+			radioReqProv.Checked=PerformerIsProvider;
+			radioReqPat.Checked=!PerformerIsProvider;
+			radioRecProv.Checked=RecipientIsProvider;
+			radioRecPat.Checked=!RecipientIsProvider;
 		}
 
 		private void fillProblem() {
@@ -91,352 +131,847 @@ namespace OpenDental {
 			//throw new NotImplementedException();
 		}
 
-		private void comboRequestType_SelectedIndexChanged(object sender,EventArgs e) {
-			displayGroupBoxesHelper();
-		}
-
 		private void butPreview_Click(object sender,EventArgs e) {
-			MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste("");//generateKnowledgeRequestNotification());
-		}
-
-		#region generateKnowledeRequestNotification XML
-		///<summary></summary>
-		private string generateKnowledgeRequestNotification() {//This is also known as the HL7 CDS message type.
-			StringBuilder strb = new StringBuilder();
-			XmlWriter xmlw = XmlWriter.Create(strb);
-			//Each item is followed by a cardinality in the form of [n..m] where n is the least number of times the element may occur and m is the 
-			//greatest number of times an element may occur. *(asterisk) means any number of times. [1..1] is mandatory, [0..*] is optional, etc.
-			strb.Append(@"<knowledgeRequestNotification classCode=""ACT"" moodCode=""DEF"">\r\n");//[1..1]
-			strb.Append(@"<id />\r\n");//[0..*]
-			strb.Append(@"<effectiveTime value="""+DateTime.Now.ToString("YYYYMMDDhhmmss")+@"""/>\r\n");//[0..1]
-			strb.Append(subjectHelper());//[0..1]
-			strb.Append(holderHelper());//[0..1]
-			strb.Append(performerHelper());//[0..1]
-			strb.Append(informationRecipientHelper());//[0..1]
-			strb.Append(subject1Helper());//[0..1]
-			strb.Append(subject2Helper());//[0..1]
-			strb.Append(subject3Helper());//[1..1] mandatory
-			strb.Append(component1Helper());//[0..1]
-			strb.Append(@"</knowledgeRequestNotification>");
-			return strb.ToString();
-		}
-
-		///<summary>"Subject1" is a "subject" object, not a "subject1" object. Per HL7 documentation.</summary>
-		private string subjectHelper() {
-			StringBuilder strb = new StringBuilder();
-			strb.Append(@"<subject1 typeCode=""SBJ"">\r\n");//[1..1]
-			strb.Append(patientContextHelper());//[1..1]
-			strb.Append(@"</subject1>\r\n");//[1..1]
-			return strb.ToString();
-		}
-
-		private string patientContextHelper() {
-			StringBuilder strb = new StringBuilder();
-			strb.Append(@"<patientContext classCode=""PAT"">\r\n");//[1..1]
-			strb.Append(patientPersonHelper());//[0..1]
-			strb.Append(subject6Helper());//[0..*]
-			strb.Append(@"</patientContext>\r\n");//[1..1]
-			return strb.ToString();
-		}
-
-		private string patientPersonHelper() {
-			StringBuilder strb = new StringBuilder();
-			strb.Append(@"<patientPerson classCode=""PSN"" determinerCode=""INSTANCE"">\r\n");//[1..1]
-			strb.Append(administrativeGenderHelper());//[0..1]
-			strb.Append(@"</patientPerson>\r\n");//[1..1]
-			return "";
-		}
-
-		private string administrativeGenderHelper() {
-			switch(PatCur.Gender) {
-				case PatientGender.Female:
-					return @"<administrativeGender code=""F"" codeSystem=""2.16.840.1.113883.5.1"" codeSystemName=""AdministrativeGender"" displayName=""Female""/>\r\n";
-				case PatientGender.Male:
-					return @"<administrativeGender code=""M"" codeSystem=""2.16.840.1.113883.5.1"" codeSystemName=""AdministrativeGender"" displayName=""Male""/>\r\n";
-				case PatientGender.Unknown:
-				default://should never happen
-					return @"<administrativeGender code=""UN"" codeSystem=""2.16.840.1.113883.5.1"" codeSystemName=""AdministrativeGender"" displayName=""Undifferentiated""/>\r\n";
+			if(!isValidHL7DataSet()) {
+				return;
 			}
+			MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste(GenerateKnowledgeRequestNotification());
+			msgbox.ShowDialog();
 		}
 
-		///<summary>Also called both Subject6 and subjectOf in the HL7 documentation. Not to be confused with the other Subject Objects.</summary>
-		private string subject6Helper() {
-			StringBuilder strb = new StringBuilder();
-			strb.Append(@"<subjectOf typeCode=""SBJ"">\r\n");//[1..1]
-			strb.Append(ageChoiceHelper(true,true));//[1..1]
-			strb.Append(@"</subjectOf>\r\n");//[1..1]
-			return "";
-		}
-
-		///<summary>Must use one or both of the Age/AgeGroup options.</summary>
-		private string ageChoiceHelper(bool useAge, bool useAgeGroups) {
-			if(useAge&useAgeGroups==false) {
-				useAge=true;
-				useAgeGroups=true;
-			}
-			string retVal="";
-			if(useAge) {
-				retVal+=ageHelper();
-			}
-			if(useAgeGroups){
-				retVal+=ageGroupHelper();
-			}
-			return retVal;
-		}
-
-		private string ageHelper() {
-			StringBuilder strb = new StringBuilder();
-			strb.Append(@"<age classCode=""OBS"" moodCode=""DEF"">\r\n");//[1..1]
-			strb.Append(@"<code=""30525-0"" codeSystem=""2.16.840.1.113883.6.1"" codeSystemName=""LN"" displayName=""AGE""/>");//[1..1]
-			strb.Append(@"<value value="""+PatCur.Age+@""" unit=""a""/>");//[1..1]
-			strb.Append(@"</age>\r\n");//[1..1]
-			return strb.ToString();
-		}
-
-		private string ageGroupHelper() {
-			#region MeSH (Medical Subject Headers) codes used for age groups.
-						//*NEWRECORD
-						//RECTYPE = D
-						//MH = Infant, NewbornGM = birth to 1 month age group
-						//MS = An infant during the first month after birth.
-						//UI = D007231
-						//
-						//*NEWRECORD
-						//RECTYPE = D
-						//MH = Infant
-						//GM = 1 month to 2 year age group; + includes birth to 2 years; for birth to 1 month, use Infant, Newborn +
-						//MS = A child between 1 and 23 months of age.
-						//UI = D007223
-						//
-						//*NEWRECORD
-						//RECTYPE = D
-						//MH = Child, Preschool
-						//GM = 2-5 age group; for 1 month to 2 years use Infant +
-						//MS = A child between the ages of 2 and 5.
-						//UI = D002675
-						//
-						//*NEWRECORD
-						//RECTYPE = D
-						//MH = Child
-						//MH = ChildGM = 6-12 age group; for 2-5 use Child, Preschool; + includes birth to 18 year age group
-						//MS = A person 6 to 12 years of age. An individual 2 to 5 years old is CHILD, PRESCHOOL.
-						//UI = D002648
-						//
-						//*NEWRECORD
-						//RECTYPE = D
-						//MH = Adolescent
-						//AN = age 13-18 yr; IM as psychol & sociol entity; check tag ADOLESCENT for NIM; Manual 18.5.12, 34.9.5
-						//MS = A person 13 to 18 years of age.
-						//UI = D000293
-						//
-						//*NEWRECORD
-						//RECTYPE = D
-						//MH = Adult
-						//GM = 19-44 age group; older than 44, use Middle Age, Aged +, or + for all
-						//MS = A person having attained full growth or maturity. Adults are of 19 through 44 years of age. For a person between 19 and 24 years of age, YOUNG ADULT is available.
-						//UI = D000328
-						//
-						//*NEWRECORD
-						//RECTYPE = D
-						//MH = Middle Aged
-						//AN = age 45-64; IM as psychol, sociol entity: Manual 18.5.12; NIM as check tag; Manual 34.10 for indexing examples
-						//UI = D008875
-						//
-						//*NEWRECORD
-						//RECTYPE = D
-						//MH = Aged
-						//GM = 65 and older; consider also Aged, 80 and over
-						//MS = A person 65 through 79 years of age. For a person older than 79 years, AGED, 80 AND OVER is available.
-						//UI = D000368
-						//
-						//*NEWRECORD
-						//RECTYPE = D
-						//MH = Aged, 80 and over
-						//GM = consider also Aged + (65 and older)
-						//MS = A person 80 years of age and older.
-						//UI = D000369
-			#endregion
-			StringBuilder strb = new StringBuilder();
-			strb.Append(@"<ageGroup classCode=""OBS"" moodCode=""DEF"">\r\n");//[1..1]
-			strb.Append(@"<code=""46251-5"" codeSystem=""2.16.840.1.113883.6.1"" codeSystemName=""LN""/>\r\n");//[1..1]
-			if(PatCur.Birthdate.AddMonths(1)>DateTime.Now) {//less than 1mo old, newborn
-				strb.Append(@"<value code=""D007231"" codeSystem=""2.16.840.1.113883.6.1"" codeSystemName=""MSH"" displayName=""Newborn""/>\r\n");//[1..1]
-			}
-			else if(PatCur.Birthdate.AddYears(2)>DateTime.Now) {//less than 2 yrs old, Infant
-				strb.Append(@"<value code=""D007223"" codeSystem=""2.16.840.1.113883.6.1"" codeSystemName=""MSH"" displayName=""Infant""/>\r\n");//[1..1]
-			}
-			else if(PatCur.Birthdate.AddYears(5)>DateTime.Now) {//2 to 5 yrs old, Preschool
-				strb.Append(@"<value code=""D007675"" codeSystem=""2.16.840.1.113883.6.1"" codeSystemName=""MSH"" displayName=""Preschool""/>\r\n");//[1..1]
-			}
-			else if(PatCur.Birthdate.AddYears(12)>DateTime.Now) {//6 to 12 yrs old, Child
-				strb.Append(@"<value code=""D002648"" codeSystem=""2.16.840.1.113883.6.1"" codeSystemName=""MSH"" displayName=""Child""/>\r\n");//[1..1]
-			}
-			else if(PatCur.Birthdate.AddYears(18)>DateTime.Now) {//13 to 18 yrs old, Adolescent
-				strb.Append(@"<value code=""D000293"" codeSystem=""2.16.840.1.113883.6.1"" codeSystemName=""MSH"" displayName=""Adolescent""/>\r\n");//[1..1]
-			}
-			else if(PatCur.Birthdate.AddYears(44)>DateTime.Now) {//19 to 44 yrs old, Adult
-				strb.Append(@"<value code=""D000328"" codeSystem=""2.16.840.1.113883.6.1"" codeSystemName=""MSH"" displayName=""Adult""/>\r\n");//[1..1]
-			}
-			else if(PatCur.Birthdate.AddYears(64)>DateTime.Now) {//45 to 64 yrs old, Middle Aged
-				strb.Append(@"<value code=""D008875"" codeSystem=""2.16.840.1.113883.6.1"" codeSystemName=""MSH"" displayName=""Middle Aged""/>\r\n");//[1..1]
-			}
-			else if(PatCur.Birthdate.AddYears(79)>DateTime.Now) {//65 to 79 yrs old, Aged
-				strb.Append(@"<value code=""D000368"" codeSystem=""2.16.840.1.113883.6.1"" codeSystemName=""MSH"" displayName=""Aged""/>\r\n");//[1..1]
-			}
-			else{ //if(PatCur.Birthdate.AddYears(79)>DateTime.Now) {//80 yrs old or older, Aged, 80 and over
-				strb.Append(@"<value code=""D000369"" codeSystem=""2.16.840.1.113883.6.1"" codeSystemName=""MSH"" displayName=""Aged, 80 and over""/>\r\n");//[1..1]
-			}
-			strb.Append(@"</ageGroup>\r\n");//[1..1]
-			return strb.ToString();
-		}
-
-		private string holderHelper() {
-			StringBuilder strb = new StringBuilder();
-			strb.Append(@"<holder typeCode=""HLD"">\r\n");//[1..1]
-			strb.Append(assignedEntityHelper());//[1..1]
-			strb.Append(@"</holder>\r\n");//[1..1]
-			return strb.ToString();
-		}
-
-		private string assignedEntityHelper() {
-			StringBuilder strb = new StringBuilder();
-			strb.Append(@"<assignedEntity classCode=""ASSIGNED"">\r\n");//[1..1]
-			strb.Append(@"<name>"+Security.CurUser.UserName+"</name>\r\n");//[0..1]
-			strb.Append(@"<certificateText>"+Security.CurUser.Password+"</certificateText>\r\n");//[0..1]
-			strb.Append(authorizedPersonHelper());//[0..1]
-			strb.Append(organizationHelper());//[0..1]
-			strb.Append(@"</assignedEntity>\r\n");//[1..1]
-			return strb.ToString();
-		}
-
-		///<summary>Refered to as both assignedAuthorizedPerson and authorizedPerson in the HL7 documentation.</summary>
-		private string authorizedPersonHelper() {
-			StringBuilder strb = new StringBuilder();
-			strb.Append(@"<authorizedPerson classCode=""PSN"" determinerCode=""INSTANCE"">\r\n");//[1..1]
-			strb.Append(@"<id value="""+Security.CurUser.UserNum+@"""/>\r\n");//[0..*]
-			strb.Append(@"</holder>\r\n");//[1..1]
-			return strb.ToString();
-		}
-
-		///<summary>refered to as both representedOrganization and organization</summary>
-		private string organizationHelper() {
-			StringBuilder strb = new StringBuilder();
-			strb.Append(@"<organization classCode=""ORG"" determinerCode=""INSTANCE"">\r\n");//[1..1]
-			//strb.Append(@"<id value="""+PrefC.GetLong(PrefName.RegistrationKey)+@"""/>\r\n");//[0..*]
-			strb.Append(@"<name value="""+PrefC.GetLong(PrefName.PracticeTitle)+@"""/>\r\n");//[0..1]
-			strb.Append(@"</organization>\r\n");//[1..1]
-			return strb.ToString();
-		}
-
-		private string performerHelper() {
-			StringBuilder strb = new StringBuilder();
-			strb.Append(@"<performer typeCode=""PRF"">\r\n");//[1..1]
-			strb.Append(performerChoiceHelper(PerformerIsProvider));//[1..1]
-			strb.Append(@"</performer>\r\n");//[1..1]
-			return strb.ToString();
-		}
-
-		private string informationRecipientHelper() {
-			StringBuilder strb = new StringBuilder();
-			strb.Append(@"<informationRecipient typeCode=""IRCP"">\r\n");//[1..1]
-			strb.Append(performerChoiceHelper(RecipientIsProvider));//[1..1]
-			strb.Append(@"</informationRecipient>\r\n");//[1..1]
-			return strb.ToString();
-		}
-
-		private string performerChoiceHelper(bool isProvider) {
-			if(isProvider) {
-				return healthCareProviderHelper();
+		///<summary>Generates message box with all errors. Returns true if data passes validation or if user decides to "continue anyways".</summary>
+		private bool isValidHL7DataSet() {
+			string warnings="";//additional data that could be used but is not neccesary.
+			string errors="";//additional data that must be present in order to be compliant.
+			string message="";
+			string bullet="  - ";//should be used at the beggining of every warning/error
+			//Patient information-------------------------------------------------------------------------------------------------
+			if(PatCur==null) {//should never happen
+				warnings+=bullet+Lan.g(this,"No patient selected. Message will be generated without patient information.")+"\r\n";
 			}
 			else {
-				return patientHelper();
+				if(PatCur.Birthdate==DateTime.MinValue) {
+					warnings+=bullet+Lan.g(this,"Patient does not have a valid birthday.")+"\r\n";
+				}
+			}
+			//Provider information------------------------------------------------------------------------------------------------
+			if(ProvCur==null) {
+				warnings+=bullet+Lan.g(this,"No provider selected. Message will be generated without provider information.")+"\r\n";
+			}
+			else {
+				//TODO:
+			}
+			//Organization information--------------------------------------------------------------------------------------------
+			//Encounter information-----------------------------------------------------------------------------------------------
+			//Requestor information-----------------------------------------------------------------------------------------------
+			//Recipient information-----------------------------------------------------------------------------------------------
+			//Problem, Medication, Lab Result information-------------------------------------------------------------------------
+			switch(tabControl1.SelectedTab.Name) {
+				case "tabProblem"://------------------------------------------------------------------------------------------------
+					if(ProblemCur==null) {
+						errors+=bullet+Lan.g(this,"Problem tab is selected but no problem is selected.")+"\r\n";
+					}
+					break;
+				case "tabMedication"://---------------------------------------------------------------------------------------------
+					if(ProblemCur==null) {
+						errors+=bullet+Lan.g(this,"Medication tab is selected but no medication is selected.")+"\r\n";
+					}
+					break;
+				case "tabLabResult"://----------------------------------------------------------------------------------------------
+					if(ProblemCur==null) {
+						errors+=bullet+Lan.g(this,"Lab result tab is selected but no lab result is selected.")+"\r\n";
+					}
+					break;
+				default://----------------------------------------------------------------------------------------------------------
+					//either no tab is selected or the tab names above are misspelled.
+					break;
+			}
+			//Generate messagebox-------------------------------------------------------------------------------------------------
+			if(errors!="") {
+				message+=Lan.g(this,"The following errors must be corrected in order to comply with HL7 standard:")+"\r\n";
+				message+=errors;
+				message+="\r\n";
+			}
+			if(warnings!="") {
+				message+=Lan.g(this,"Fixing the following warnings may provide better knowledge request results:")+"\r\n";
+				message+=warnings;
+				message+="\r\n";
+			}
+			if(message!="") {
+				message+=Lan.g(this,"Would you like to continue anyways?");
+				if(MessageBox.Show(message,"",MessageBoxButtons.YesNo)!=DialogResult.Yes) {
+					return false;
+				}
+			}
+			return true;
+		}
+
+		private string GenerateKnowledgeRequestNotification() {
+			XmlWriterSettings xmlSettings=new XmlWriterSettings();
+			xmlSettings.Encoding=Encoding.UTF8;
+			xmlSettings.OmitXmlDeclaration=true;
+			xmlSettings.Indent=true;
+			xmlSettings.IndentChars="  ";
+			StringBuilder strBuilder=new StringBuilder();
+			using(XmlWriter w=XmlWriter.Create(strBuilder,xmlSettings)) {
+				w.WriteRaw("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n");
+				w.WriteWhitespace("\r\n");
+				w.WriteStartElement("knowledgeRequestNotification");
+					w.WriteAttributeString("classCode","ACT");
+					w.WriteAttributeString("moodCode","DEF");
+					w.WriteStartElement("id");
+						w.WriteAttributeString("value",knowledgeRequestIDHelper());
+						w.WriteAttributeString("assigningAuthority",knowledgeRequestIDAAHelper());
+					w.WriteEndElement();//id
+					w.WriteStartElement("effectiveTime");
+						w.WriteAttributeString("value",DateTime.Now.ToString("yyyyMMddhhmmss"));
+					w.WriteEndElement();//effectiveTime
+					w.WriteStartElement("subject1");
+						w.WriteAttributeString("typeCode","SBJ");
+						w.WriteStartElement("patientContext");
+							w.WriteAttributeString("classCode","PAT");
+							w.WriteStartElement("patientPerson");
+								w.WriteAttributeString("classCode","PSN");
+								w.WriteAttributeString("determinerCode","INSTANCE");
+								w.WriteStartElement("administrativeGenderCode");
+									w.WriteAttributeString("code",administrativeGenderCodeHelper(PatCur.Gender));
+									w.WriteAttributeString("codeSytem","2.16.840.1.113883.5.1");
+									w.WriteAttributeString("codeSystemName","administrativeGender");
+									w.WriteAttributeString("displayName",administrativeGenderNameHelper(PatCur.Gender));
+								w.WriteEndElement();//administrativeGenderCode
+							w.WriteEndElement();//patientPerson
+						if(PatCur.Birthdate!=DateTime.MinValue){
+							w.WriteStartElement("subjectOf");
+								w.WriteAttributeString("typeCode","SBJ");
+							if(UseAge || UseAge==UseAgeGroup) {//if true or both are false; field is required.
+								w.WriteStartElement("age");
+									w.WriteAttributeString("classCode","OBS");
+									w.WriteAttributeString("moodCode","DEF");
+									w.WriteStartElement("code");
+										w.WriteAttributeString("code","30525-0");
+										w.WriteAttributeString("codeSytem","2.16.840.1.113883.6.1");
+										w.WriteAttributeString("codeSystemName","LN");
+										w.WriteAttributeString("displayName","AGE");
+									w.WriteEndElement();//code
+									w.WriteStartElement("value");
+										w.WriteAttributeString("value",PatCur.Age.ToString());
+										w.WriteAttributeString("unit","a");
+									w.WriteEndElement();//value
+								w.WriteEndElement();//age
+							}
+							if(UseAgeGroup || UseAge==UseAgeGroup) {//if true or both are false; field is required.
+								w.WriteStartElement("ageGroup");
+									w.WriteAttributeString("classCode","OBS");
+									w.WriteAttributeString("moodCode","DEF");
+									w.WriteStartElement("code");
+										w.WriteAttributeString("code","46251-5");
+										w.WriteAttributeString("codeSytem","2.16.840.1.113883.6.1");
+										w.WriteAttributeString("codeSystemName","LN");
+										w.WriteAttributeString("displayName","Age Groups");
+									w.WriteEndElement();//code
+									w.WriteStartElement("value");
+										w.WriteAttributeString("code",AgeGroupCodeHelper(PatCur.Birthdate));
+										w.WriteAttributeString("codeSytem","2.16.840.1.113883.6.177");
+										w.WriteAttributeString("codeSystemName","MSH");
+										w.WriteAttributeString("displayName",AgeGroupNameHelper(PatCur.Birthdate));
+									w.WriteEndElement();//value
+								w.WriteEndElement();//ageGroup
+							}
+							w.WriteEndElement();//subjectOf
+						}
+						w.WriteEndElement();//patientContext
+					w.WriteEndElement();//subject1
+					w.WriteStartElement("holder");
+						w.WriteAttributeString("typeCode","HLD");
+						w.WriteStartElement("assignedEntity");
+							w.WriteAttributeString("classCode","ASSIGNED");
+							w.WriteStartElement("name");
+								w.WriteString(Security.CurUser.UserName);
+							w.WriteEndElement();//name
+							w.WriteStartElement("certificateText");
+								w.WriteString(Security.CurUser.Password);
+							w.WriteEndElement();//certificateText
+							w.WriteStartElement("assignedAuthorizedPerson");
+								w.WriteAttributeString("classCode","PSN");
+								w.WriteAttributeString("determinerCode","INSTANCE");
+								w.WriteStartElement("id");
+									w.WriteAttributeString("value",Security.CurUser.UserNum.ToString());
+								w.WriteEndElement();//id
+							w.WriteEndElement();//assignedAuthorizedPerson
+						if(textOrgID.Text!="" && textOrgName.Text!=""){
+							w.WriteStartElement("representedOrganization");
+								w.WriteAttributeString("classCode","ORG");
+								w.WriteAttributeString("determinerCode","INSTANCE");
+								w.WriteStartElement("id");
+									w.WriteAttributeString("value",textOrgID.Text);
+								w.WriteEndElement();//id
+								w.WriteStartElement("name");
+									w.WriteAttributeString("value",textOrgName.Text);
+								w.WriteEndElement();//name
+							w.WriteEndElement();//representedOrganization
+						}
+						w.WriteEndElement();//assignedEntity
+					w.WriteEndElement();//holder
+				//Performer (Requester)--------------------------------------------------------------------------------------------------------------------------
+					w.WriteStartElement("performer");
+						w.WriteAttributeString("typeCode","PRF");						
+					if(radioReqProv.Checked) {//----performer choice-----
+						w.WriteStartElement("healthCareProvider");
+							w.WriteAttributeString("classCode","PROV");
+							w.WriteStartElement("code");
+								w.WriteAttributeString("code","120000000X");
+								w.WriteAttributeString("codeSytem","2.16.840.1.113883.6.101");
+								w.WriteAttributeString("codeSystemName","NUCC Health Care Provider Taxonomy");
+								w.WriteAttributeString("displayName","Dental Providers");
+							w.WriteEndElement();//code
+						if((comboProvLang.Text!="" && radioReqProv.Checked) 
+							|| (comboPatLang.Text=="" && radioReqPat.Checked))
+						{//A missing languageCommunication field invalidates the entire Person class.
+							w.WriteStartElement("healthCarePerson");
+								w.WriteAttributeString("classCode","PSN");
+								w.WriteAttributeString("determinerCode","INSTANCE");
+								w.WriteStartElement("languageCommunication");
+									w.WriteStartElement("languageCommunicationCode");
+										w.WriteAttributeString("code",System.Globalization.CultureInfo.CurrentCulture.ThreeLetterISOLanguageName);
+										w.WriteAttributeString("codeSytem","1.0.639.2");
+										w.WriteAttributeString("codeSystemName","ISO 639-2: Codes for the representation of names of languages -- Part 2: Alpha-3 code");
+										w.WriteAttributeString("displayName",System.Globalization.CultureInfo.CurrentCulture.DisplayName);
+									w.WriteEndElement();//languageCommunicationCode
+								w.WriteEndElement();//languageCommunication
+							w.WriteEndElement();//healthCarePerson
+							}//end if no language selected.
+						w.WriteEndElement();//healthCareProvider
+					}
+					else {//Performer is patient.
+						w.WriteStartElement("patient");
+							w.WriteAttributeString("classCode","PAT");
+						if((comboProvLang.Text!="" && radioRecProv.Checked) 
+							|| (comboPatLang.Text=="" && radioRecPat.Checked))
+						{//A missing languageCommunication field invalidates the entire Person class.
+							w.WriteStartElement("patientPerson");
+								w.WriteAttributeString("classCode","PSN");
+								w.WriteAttributeString("determinerCode","INSTANCE");
+								w.WriteStartElement("languageCommunication");
+									w.WriteStartElement("languageCommunicationCode");
+										w.WriteAttributeString("code","TODO");//System.Globalization.CultureInfo.CurrentCulture.ThreeLetterISOLanguageName);
+										w.WriteAttributeString("codeSytem","1.0.639.2");
+										w.WriteAttributeString("codeSystemName","ISO 639-2: Codes for the representation of names of languages -- Part 2: Alpha-3 code");
+										w.WriteAttributeString("displayName","TODO");//System.Globalization.CultureInfo.CurrentCulture.DisplayName);
+									w.WriteEndElement();//languageCommunicationCode
+								w.WriteEndElement();//languageCommunication
+							w.WriteEndElement();//patientPerson
+							}//end if no language selected.
+						w.WriteEndElement();//patient
+					}
+					w.WriteEndElement();//performer
+				//InformationRecipient--------------------------------------------------------------------------------------------------------------------------
+					w.WriteStartElement("informationRecipient");	
+					if(radioRecProv.Checked) {//----performer choice-----
+						w.WriteStartElement("healthCareProvider");
+							w.WriteAttributeString("classCode","PROV");
+							w.WriteStartElement("code");
+								w.WriteAttributeString("code","120000000X");
+								w.WriteAttributeString("codeSytem","2.16.840.1.113883.6.101");
+								w.WriteAttributeString("codeSystemName","NUCC Health Care Provider Taxonomy");
+								w.WriteAttributeString("displayName","Dental Providers");
+							w.WriteEndElement();//code
+							w.WriteStartElement("healthCarePerson");
+								w.WriteAttributeString("classCode","PSN");
+								w.WriteAttributeString("determinerCode","INSTANCE");
+								w.WriteStartElement("languageCommunication");
+									w.WriteStartElement("languageCommunicationCode");
+										w.WriteAttributeString("code",System.Globalization.CultureInfo.CurrentCulture.ThreeLetterISOLanguageName);
+										w.WriteAttributeString("codeSytem","1.0.639.2");
+										w.WriteAttributeString("codeSystemName","ISO 639-2: Codes for the representation of names of languages -- Part 2: Alpha-3 code");
+										w.WriteAttributeString("displayName",System.Globalization.CultureInfo.CurrentCulture.DisplayName);
+									w.WriteEndElement();//languageCommunicationCode
+								w.WriteEndElement();//languageCommunication
+							w.WriteEndElement();//healthCarePerson
+						w.WriteEndElement();//healthCareProvider
+					}
+					else {//Performer is patient.
+						w.WriteStartElement("patient");
+							w.WriteAttributeString("classCode","PAT");
+							w.WriteStartElement("patientPerson");
+								w.WriteAttributeString("classCode","PSN");
+								w.WriteAttributeString("determinerCode","INSTANCE");
+								w.WriteStartElement("languageCommunication");
+									w.WriteStartElement("languageCommunicationCode");
+										w.WriteAttributeString("code","TODO");//System.Globalization.CultureInfo.CurrentCulture.ThreeLetterISOLanguageName);
+										w.WriteAttributeString("codeSytem","1.0.639.2");
+										w.WriteAttributeString("codeSystemName","ISO 639-2: Codes for the representation of names of languages -- Part 2: Alpha-3 code");
+										w.WriteAttributeString("displayName","TODO");//System.Globalization.CultureInfo.CurrentCulture.DisplayName);
+									w.WriteEndElement();//languageCommunicationCode
+								w.WriteEndElement();//languageCommunication
+							w.WriteEndElement();//patientPerson
+						w.WriteEndElement();//patient
+					}
+					w.WriteEndElement();//informationRecipient
+					w.WriteStartElement("subject2");
+						w.WriteAttributeString("typeCode","SUBJ");
+						w.WriteStartElement("taskContext");
+							w.WriteAttributeString("classCode","ACT");
+							w.WriteAttributeString("moodCode","DEF");
+							w.WriteStartElement("code");
+								w.WriteAttributeString("code",ActTaskCodeHelper());
+								w.WriteAttributeString("codeSytem","2.16.840.1.113883.5.4");
+								w.WriteAttributeString("codeSystemName","ActCode");
+								w.WriteAttributeString("displayName",ActTaskCodeNameHelper());
+							w.WriteEndElement();//code
+						w.WriteEndElement();//taskContext
+					w.WriteEndElement();//subject2
+					w.WriteStartElement("subject3");
+						w.WriteAttributeString("typeCode","SUBJ");
+						w.WriteStartElement("subTopic");
+							w.WriteAttributeString("classCode","OBS");
+							w.WriteAttributeString("moodCode","DEF");
+							w.WriteStartElement("code");
+								w.WriteAttributeString("code","KSUBT");
+								w.WriteAttributeString("codeSytem","2.16.840.1.113883.5.4");
+								w.WriteAttributeString("codeSystemName","ActCode");
+								w.WriteAttributeString("displayName","knowledge subtopic");
+							w.WriteEndElement();//code
+							w.WriteStartElement("value");
+								w.WriteAttributeString("code","TODO");
+								w.WriteAttributeString("codeSytem","2.16.840.1.113883.6.177");
+								w.WriteAttributeString("codeSystemName","MSH");
+								w.WriteAttributeString("displayName","TODO");
+							w.WriteEndElement();//value
+						w.WriteEndElement();//subTopic
+					w.WriteEndElement();//subject3
+					w.WriteStartElement("subject4");
+						w.WriteAttributeString("typeCode","SUBJ");
+						w.WriteStartElement("mainSearchCriteria");
+							w.WriteAttributeString("classCode","OBS");
+							w.WriteAttributeString("moodCode","DEF");
+							w.WriteStartElement("code");
+								w.WriteAttributeString("code","KSUBJ");
+								w.WriteAttributeString("codeSytem","2.16.840.1.113883.5.4");
+								w.WriteAttributeString("codeSystemName","ActCode");
+								w.WriteAttributeString("displayName","knowledge subject");
+							w.WriteEndElement();//code
+							w.WriteStartElement("value");
+								w.WriteAttributeString("code","TODO");
+								w.WriteAttributeString("codeSytem","2.16.840.1.113883.6.177");
+								w.WriteAttributeString("codeSystemName","MSH");
+								w.WriteAttributeString("displayName","TODO");
+							w.WriteEndElement();//value
+							w.WriteStartElement("subject");
+								w.WriteAttributeString("typeCode","SUBJ");
+								w.WriteStartElement("severityObservation");
+									w.WriteAttributeString("classCode","OBS");
+									w.WriteAttributeString("moodCode","DEF");
+									w.WriteStartElement("code");
+										w.WriteAttributeString("code","SEV");
+										w.WriteAttributeString("codeSytem","2.16.840.1.113883.5.4");
+										w.WriteAttributeString("codeSystemName","ActCode");
+										w.WriteAttributeString("displayName","Severity Observation");
+									w.WriteEndElement();//code
+									w.WriteStartElement("interpretationCode");
+										w.WriteAttributeString("code",ObservationInterpretationCodeHelper(ObsInterpretation));
+										w.WriteAttributeString("codeSytem","");
+										w.WriteAttributeString("codeSystemName","");
+										w.WriteAttributeString("displayName",ObservationInterpretationNameHelper(ObsInterpretation));
+									w.WriteEndElement();//value
+								w.WriteEndElement();//severityObservation
+							w.WriteEndElement();//subject
+						w.WriteEndElement();//mainSearchCriteria
+					w.WriteEndElement();//subject4
+					w.WriteStartElement("componentOf");
+						w.WriteAttributeString("typeCode","COMP");
+						w.WriteStartElement("encounter");
+							w.WriteAttributeString("classCode","ENC");
+							w.WriteAttributeString("moodCode","DEF");
+							w.WriteStartElement("code");
+								w.WriteAttributeString("code",EncounterCodeHelper(ActEC));
+								w.WriteAttributeString("codeSytem","2.16.840.1.113883.5.4");
+								w.WriteAttributeString("codeSystemName","ActCode");
+								w.WriteAttributeString("displayName",EncounterCode(ActEC));
+							w.WriteEndElement();//code
+							w.WriteStartElement("location");
+							w.WriteAttributeString("typeCode","LOC");
+								w.WriteStartElement("serviceDeliveryLocation");
+									w.WriteAttributeString("typeCode","SDLOC");
+									w.WriteAttributeString("id","TODO");
+								w.WriteEndElement();//serviceDeliveryLocation
+							w.WriteEndElement();//location
+						w.WriteEndElement();//encounter
+					w.WriteEndElement();//componentOf
+				w.WriteEndElement();//knowledgeRequestNotification
+			}
+			return strBuilder.ToString();
+		}
+
+		#region helper Functions Start
+
+		private string knowledgeRequestIDAAHelper() {
+			if(PrefC.GetString(PrefName.PracticeTitle)!="") {
+				return PrefC.GetString(PrefName.PracticeTitle);
+			}
+			return "Open Dental Software, version"+PrefC.GetString(PrefName.ProgramVersion);
+		}
+
+		private string knowledgeRequestIDHelper() {
+			if(PatCur!=null) {
+				return "PT"+PatCur.PatNum+DateTime.Now.ToUniversalTime().ToString("yyyyMMddhhmmss");
+			}
+			else if(ProvCur!=null) {
+				return "PV"+ProvCur.ProvNum+DateTime.Now.ToUniversalTime().ToString("yyyyMMddhhmmss");
+			}
+			else {
+				return "OD"+DateTime.Now.ToUniversalTime().ToString("yyyyMMddhhmmss");
 			}
 		}
 
-		private string healthCareProviderHelper() {
-			StringBuilder strb = new StringBuilder();
-			strb.Append(@"<healthCareProvider classCode=""PROV"">\r\n");//[1..1]
-			strb.Append(@"<code code=""120000000X"" codeSystem=""2.16.840.1.113883.6.101"" codeSystemName=""NUCC Health Care Provider Taxonomy"" displayName=""Dental Providers""/>\r\n");//[0..1] 120000000X covers all dental provider specialties ranging from Dental Hygenists to Dentists.
-			strb.Append(personHelper(true));//[0..1]
-			strb.Append(@"</healthCareProvider>\r\n");//[1..1]
-			return strb.ToString();
+		private string EncounterCodeHelper(ActEncounterCode aec) {
+			switch(aec) {
+				case ActEncounterCode.AMB:
+					return "AMB";
+				case ActEncounterCode.EMER:
+					return "EMER";
+				case ActEncounterCode.FLD:
+					return "FLD";
+				case ActEncounterCode.HH:
+					return "HH";
+				case ActEncounterCode.IMP:
+					return "IMP";
+				case ActEncounterCode.SS:
+					return "SS";
+				case ActEncounterCode.VR:
+					return "VR";
+				default:
+					return "";
+			}
 		}
 
-		///<summary>Refered to as person, patientPerson, and healthCarePerson in HL7 documentation.</summary>
-		private string personHelper(bool isHealthCarePerson) {
-			StringBuilder strb = new StringBuilder();
-			strb.Append(@"<person typeCode=""PSN"" determinerCode=""INSTANCE"">\r\n");//[1..1]
-			strb.Append(languageCommunicationHelper(System.Globalization.CultureInfo.CurrentCulture.ThreeLetterISOLanguageName,System.Globalization.CultureInfo.CurrentCulture.Name));//[1..*]
-			strb.Append(@"</person>\r\n");//[1..1]
-			return strb.ToString();
+		private string EncounterCode(ActEncounterCode aec) {
+			switch(aec) {
+				case ActEncounterCode.AMB:
+					return "ambulatory";
+				case ActEncounterCode.EMER:
+					return "emergency";
+				case ActEncounterCode.FLD:
+					return "field";
+				case ActEncounterCode.HH:
+					return "home health";
+				case ActEncounterCode.IMP:
+					return "inpatient encounter";
+				case ActEncounterCode.SS:
+					return "short stay";
+				case ActEncounterCode.VR:
+					return "virtual";
+				default:
+					return "";
+			}
 		}
 
-		///<summary>Currently only supports language used on local machine. No user input allowed yet.</summary>
-		/// <param name="cultureID">Three letter ISO 639-2 language code. System.Globalization.CultureInfo.CurrentCulture.ThreeLetterISOLanguageName</param>
-		/// <param name="cultureName">Display name for language. System.Globalization.CultureInfo.CurrentCulture.Name</param>
-		/// <returns></returns>
-		private string languageCommunicationHelper(string cultureID, string cultureName) {
-			StringBuilder strb = new StringBuilder();
-			strb.Append(@"<languageCommunication>\r\n");//[1..1]
-			strb.Append(@"<languageCode code="""+cultureID+@""" codeSystem=""1.0.639.2"" codeSystemName=""ISO 639-2: Codes for the representation of names of languages -- Part 2: Alpha-3 code"" displayName="""+cultureName+@"""/>\r\n");//[1..1] default to requesting information in the language being used on the local system.
-			strb.Append(@"</languageCommunication>\r\n");//[1..1]
-			return strb.ToString();
+		public string ObservationInterpretationCodeHelper(ObservationInterpretationNormality oin) {
+			switch(oin) {
+				case ObservationInterpretationNormality.A:
+					return "A";
+				case ObservationInterpretationNormality.AA:
+					return "AA";
+				case ObservationInterpretationNormality.HH:
+					return "HH";
+				case ObservationInterpretationNormality.LL:
+					return "LL";
+				case ObservationInterpretationNormality.H:
+					return "H";
+				case ObservationInterpretationNormality.L:
+					return "L";
+				case ObservationInterpretationNormality.N:
+					return "N";
+				default:
+					return "";
+			}
 		}
 
-		private string patientHelper() {
-			StringBuilder strb = new StringBuilder();
-			strb.Append(@"<patient classCode=""PAT"">\r\n");//[1..1]
-			strb.Append(personHelper(false));//[1..1]
-			strb.Append(@"</patient>\r\n");//[1..1]
-			return strb.ToString();
+		public string ObservationInterpretationNameHelper(ObservationInterpretationNormality oin) {
+			switch(oin) {
+				case ObservationInterpretationNormality.A:
+					return "Abnormal";
+				case ObservationInterpretationNormality.AA:
+					return "Abnormal alert";
+				case ObservationInterpretationNormality.HH:
+					return "High alert";
+				case ObservationInterpretationNormality.LL:
+					return "Low alert";
+				case ObservationInterpretationNormality.H:
+					return "High";
+				case ObservationInterpretationNormality.L:
+					return "Low";
+				case ObservationInterpretationNormality.N:
+					return "Normal";
+				default:
+					return "";
+			}
 		}
 
-		///<summary>"Subject2" is a "subject1" object, not a "subject2" object. Per HL7 documentation.</summary>
-		private string subject1Helper() {
-			StringBuilder strb = new StringBuilder();
-			strb.Append(@"<subject2 typeCode=""SUBJ"">\r\n");//[1..1]
-			strb.Append(taskContextHelper());//[1..1]
-			strb.Append(@"</subject2>\r\n");//[1..1]
-			return strb.ToString();
+		/// <summary>Returns thefirst level of ActTaskCode. OE, PATDOC, or PATINFO there are 35 total ActTaskCodes available.</summary>
+		public string ActTaskCodeHelper() {
+			switch(ActTC) {
+				case ActTaskCode.OE:
+					return "OE";
+				case ActTaskCode.PATDOC:
+					return "PATDOC";
+				case ActTaskCode.PATINFO:
+					return "PATINFO";
+				default:
+					throw new NotImplementedException();
+			}
 		}
 
-		private string taskContextHelper() {
-			StringBuilder strb = new StringBuilder();
-			strb.Append(@"<taskContext classCode=""ACT"" moodCode=""DEF"">\r\n");//[1..1]
-			strb.Append(@"<code code=""TODO"" codeSystem=""2.16.840.1.113883.5.4"" codeSystemName=""ActCode"" displayName=""TODO""");//[1..1]
-			strb.Append(@"</taskContext>\r\n");//[1..1]
-			return strb.ToString();
+		/// <summary>Returns thefirst level of ActTaskCode. OE, PATDOC, or PATINFO there are 35 total ActTaskCodes available.</summary>
+		public string ActTaskCodeNameHelper() {
+			switch(ActTC) {
+				case ActTaskCode.OE:
+					return "order entry task";
+				case ActTaskCode.PATDOC:
+					return "patient documentation task";
+				case ActTaskCode.PATINFO:
+					return "patient information review task";
+				default:
+					throw new NotImplementedException();
+			}
 		}
 
-		///<summary>"Subject3" is a "subject2" object, not a "subject3" object. Per HL7 documentation.</summary>
-		private string subject2Helper() {
-			StringBuilder strb = new StringBuilder();
-			strb.Append(@"<subject3 typeCode=""SBJ"">\r\n");//[1..1]
-			strb.Append(patientContextHelper());//[1..1]
-			strb.Append(@"</subject3>\r\n");//[1..1]
-			return strb.ToString();
+		///<summary>Returns MeSH age group code based on birthdate. i.e. &lt;2yrs==Infant==D007231</summary>
+		public string AgeGroupCodeHelper(DateTime dateTime) {
+			#region MeSH (Medical Subject Headers) codes used for age groups.
+			//*NEWRECORD
+			//RECTYPE = D
+			//MH = Infant, NewbornGM = birth to 1 month age group
+			//MS = An infant during the first month after birth.
+			//UI = D007231
+			//
+			//*NEWRECORD
+			//RECTYPE = D
+			//MH = Infant
+			//GM = 1 month to 2 year age group; + includes birth to 2 years; for birth to 1 month, use Infant, Newborn +
+			//MS = A child between 1 and 23 months of age.
+			//UI = D007223
+			//
+			//*NEWRECORD
+			//RECTYPE = D
+			//MH = Child, Preschool
+			//GM = 2-5 age group; for 1 month to 2 years use Infant +
+			//MS = A child between the ages of 2 and 5.
+			//UI = D002675
+			//
+			//*NEWRECORD
+			//RECTYPE = D
+			//MH = Child
+			//MH = ChildGM = 6-12 age group; for 2-5 use Child, Preschool; + includes birth to 18 year age group
+			//MS = A person 6 to 12 years of age. An individual 2 to 5 years old is CHILD, PRESCHOOL.
+			//UI = D002648
+			//
+			//*NEWRECORD
+			//RECTYPE = D
+			//MH = Adolescent
+			//AN = age 13-18 yr; IM as psychol & sociol entity; check tag ADOLESCENT for NIM; Manual 18.5.12, 34.9.5
+			//MS = A person 13 to 18 years of age.
+			//UI = D000293
+			//
+			//*NEWRECORD
+			//RECTYPE = D
+			//MH = Adult
+			//GM = 19-44 age group; older than 44, use Middle Age, Aged +, or + for all
+			//MS = A person having attained full growth or maturity. Adults are of 19 through 44 years of age. For a person between 19 and 24 years of age, YOUNG ADULT is available.
+			//UI = D000328
+			//
+			//*NEWRECORD
+			//RECTYPE = D
+			//MH = Middle Aged
+			//AN = age 45-64; IM as psychol, sociol entity: Manual 18.5.12; NIM as check tag; Manual 34.10 for indexing examples
+			//UI = D008875
+			//
+			//*NEWRECORD
+			//RECTYPE = D
+			//MH = Aged
+			//GM = 65 and older; consider also Aged, 80 and over
+			//MS = A person 65 through 79 years of age. For a person older than 79 years, AGED, 80 AND OVER is available.
+			//UI = D000368
+			//
+			//*NEWRECORD
+			//RECTYPE = D
+			//MH = Aged, 80 and over
+			//GM = consider also Aged + (65 and older)
+			//MS = A person 80 years of age and older.
+			//UI = D000369
+			#endregion
+			if(PatCur.Birthdate.AddMonths(1)>DateTime.Now) {//less than 1mo old, newborn
+				return "D007231";
+			}
+			else if(PatCur.Birthdate.AddYears(2)>DateTime.Now) {//less than 2 yrs old, Infant
+				return "D007223";
+			}
+			else if(PatCur.Birthdate.AddYears(5)>DateTime.Now) {//2 to 5 yrs old, Preschool
+				return "D007675";
+			}
+			else if(PatCur.Birthdate.AddYears(12)>DateTime.Now) {//6 to 12 yrs old, Child
+				return "D002648";
+			}
+			else if(PatCur.Birthdate.AddYears(18)>DateTime.Now) {//13 to 18 yrs old, Adolescent
+				return "D000293";
+			}
+			else if(PatCur.Birthdate.AddYears(44)>DateTime.Now) {//19 to 44 yrs old, Adult
+				return "D000328";
+			}
+			else if(PatCur.Birthdate.AddYears(64)>DateTime.Now) {//45 to 64 yrs old, Middle Aged
+				return "D008875";
+			}
+			else if(PatCur.Birthdate.AddYears(79)>DateTime.Now) {//65 to 79 yrs old, Aged
+				return "D000368";
+			}
+			else { //if(PatCur.Birthdate.AddYears(79)>DateTime.Now) {//80 yrs old or older, Aged, 80 and over
+				return "D000369";
+			}
 		}
 
-		///<summary>"Subject4" is a "subject3" object. Per HL7 documentation.</summary>
-		private string subject3Helper() {
-			StringBuilder strb = new StringBuilder();
-			strb.Append(@"<subject4 typeCode=""SBJ"">\r\n");//[1..1]
-			strb.Append(patientContextHelper());//[1..1]
-			strb.Append(@"</subject4>\r\n");//[1..1]
-			return strb.ToString();
+		///<summary>Returns MeSH age group name based on birthdate. i.e. &lt;2yrs==Infant.</summary>
+		public string AgeGroupNameHelper(DateTime dateTime) {
+			#region MeSH (Medical Subject Headers) codes used for age groups.
+			//*NEWRECORD
+			//RECTYPE = D
+			//MH = Infant, NewbornGM = birth to 1 month age group
+			//MS = An infant during the first month after birth.
+			//UI = D007231
+			//
+			//*NEWRECORD
+			//RECTYPE = D
+			//MH = Infant
+			//GM = 1 month to 2 year age group; + includes birth to 2 years; for birth to 1 month, use Infant, Newborn +
+			//MS = A child between 1 and 23 months of age.
+			//UI = D007223
+			//
+			//*NEWRECORD
+			//RECTYPE = D
+			//MH = Child, Preschool
+			//GM = 2-5 age group; for 1 month to 2 years use Infant +
+			//MS = A child between the ages of 2 and 5.
+			//UI = D002675
+			//
+			//*NEWRECORD
+			//RECTYPE = D
+			//MH = Child
+			//MH = ChildGM = 6-12 age group; for 2-5 use Child, Preschool; + includes birth to 18 year age group
+			//MS = A person 6 to 12 years of age. An individual 2 to 5 years old is CHILD, PRESCHOOL.
+			//UI = D002648
+			//
+			//*NEWRECORD
+			//RECTYPE = D
+			//MH = Adolescent
+			//AN = age 13-18 yr; IM as psychol & sociol entity; check tag ADOLESCENT for NIM; Manual 18.5.12, 34.9.5
+			//MS = A person 13 to 18 years of age.
+			//UI = D000293
+			//
+			//*NEWRECORD
+			//RECTYPE = D
+			//MH = Adult
+			//GM = 19-44 age group; older than 44, use Middle Age, Aged +, or + for all
+			//MS = A person having attained full growth or maturity. Adults are of 19 through 44 years of age. For a person between 19 and 24 years of age, YOUNG ADULT is available.
+			//UI = D000328
+			//
+			//*NEWRECORD
+			//RECTYPE = D
+			//MH = Middle Aged
+			//AN = age 45-64; IM as psychol, sociol entity: Manual 18.5.12; NIM as check tag; Manual 34.10 for indexing examples
+			//UI = D008875
+			//
+			//*NEWRECORD
+			//RECTYPE = D
+			//MH = Aged
+			//GM = 65 and older; consider also Aged, 80 and over
+			//MS = A person 65 through 79 years of age. For a person older than 79 years, AGED, 80 AND OVER is available.
+			//UI = D000368
+			//
+			//*NEWRECORD
+			//RECTYPE = D
+			//MH = Aged, 80 and over
+			//GM = consider also Aged + (65 and older)
+			//MS = A person 80 years of age and older.
+			//UI = D000369
+			#endregion
+			if(PatCur.Birthdate.AddMonths(1)>DateTime.Now) {//less than 1mo old, newborn
+				return "Newborn";
+			}
+			else if(PatCur.Birthdate.AddYears(2)>DateTime.Now) {//less than 2 yrs old, Infant
+				return "Infant";
+			}
+			else if(PatCur.Birthdate.AddYears(5)>DateTime.Now) {//2 to 5 yrs old, Preschool
+				return "Preschool";
+			}
+			else if(PatCur.Birthdate.AddYears(12)>DateTime.Now) {//6 to 12 yrs old, Child
+				return "Child";
+			}
+			else if(PatCur.Birthdate.AddYears(18)>DateTime.Now) {//13 to 18 yrs old, Adolescent
+				return "Adolescent";
+			}
+			else if(PatCur.Birthdate.AddYears(44)>DateTime.Now) {//19 to 44 yrs old, Adult
+				return "Adult";
+			}
+			else if(PatCur.Birthdate.AddYears(64)>DateTime.Now) {//45 to 64 yrs old, Middle Aged
+				return "Middle Aged";
+			}
+			else if(PatCur.Birthdate.AddYears(79)>DateTime.Now) {//65 to 79 yrs old, Aged
+				return "Aged";
+			}
+			else { //if(PatCur.Birthdate.AddYears(79)>DateTime.Now) {//80 yrs old or older, Aged, 80 and over
+				return "Aged, 80 and over";
+			}
 		}
 
-		private string component1Helper() {
-			throw new NotImplementedException();
+		///<summary>The gender of a person used for adminstrative purposes (as opposed to clinical gender). Empty string/value is allowed.</summary>
+		public string administrativeGenderCodeHelper(PatientGender patientGender) {
+			switch(patientGender) {
+				case PatientGender.Female:
+					return "F";
+				case PatientGender.Male:
+					return "M";
+				case PatientGender.Unknown:
+					return "UN";
+				default://should never happen
+					return " ";
+			}
+		} 
+
+		///<summary>The gender of a person used for adminstrative purposes (as opposed to clinical gender). Empty string/value is allowed.</summary>
+		public string administrativeGenderNameHelper(PatientGender patientGender) {
+			switch(patientGender) {
+				case PatientGender.Female:
+					return "Female";
+				case PatientGender.Male:
+					return "Male";
+				case PatientGender.Unknown:
+					return "Undifferentiated";
+				default://should never happen
+					return "";
+			}
 		}
 
-		private void butOK_Click(object sender,EventArgs e) {
+		#endregion
+
+		private void butProbPick_Click(object sender,EventArgs e) {
+			
+		}
+
+		private void butSend_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.OK;
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
-		#endregion
+
 	}
+
+	///<summary>Only enumerating the highest level task codes, OE, PATDOC, and PATINFO., Enum generated from HL7 ActTaskCode [2.16.840.1.113883.1.11.19846] which is a subset of ActCode [OID=2.16.840.1.113883.5.4] documentation published 20120831 10:21 AM.</summary>
+	public enum ActTaskCode {
+		///<summary>0 - order entry task</summary>
+		OE,
+		/////<summary>1 - laboratory test order entry task</summary>
+		//LABOE,
+		/////<summary>2 - medication order entry task</summary>
+		//MEDOE,
+		///<summary>1 - patient documentation task</summary>
+		PATDOC,
+		/////<summary>4 - allergy list review</summary>
+		//ALLERLREV,
+		/////<summary>5 - clinical note entry task</summary>
+		//CLINNOTEE,
+		/////<summary>6 - diagnosis list entry task</summary>
+		//DIAGLISTE,
+		/////<summary>7 - discharge summary entry task</summary>
+		//DISCHSUME,
+		/////<summary>8 - pathology report entry task</summary>
+		//PATREPE,
+		/////<summary>9 - problem list entry task</summary>
+		//PROBLISTE,
+		/////<summary>10 - radiology report entry task</summary>
+		//RADREPE,
+		/////<summary>11 - immunization list review</summary>
+		//IMMLREV,
+		/////<summary>12 - reminder list review</summary>
+		//REMLREV,
+		/////<summary>13 - wellness reminder list review</summary>
+		//WELLREMLREV,
+		///<summary>2 - patient information review task</summary>
+		PATINFO
+		/////<summary>15 - allergy list entry</summary>
+		//ALLERLE,
+		/////<summary>16 - clinical note review task</summary>
+		//CLINNOTEREV,
+		/////<summary>17 - discharge summary review task</summary>
+		//DISCHSUMREV,
+		/////<summary>18 - diagnosis list review task</summary>
+		//DIAGLISTREV,
+		/////<summary>19 - immunization list entry</summary>
+		//IMMLE,
+		/////<summary>20 - laboratory results review task</summary>
+		//LABRREV,
+		/////<summary>21 - microbiology results review task</summary>
+		//MICRORREV,
+		/////<summary>22 - microbiology organisms results review task</summary>
+		//MICROORGRREV,
+		/////<summary>23 - microbiology sensitivity test results review task</summary>
+		//MICROSENSRREV,
+		/////<summary>24 - medication list review task</summary>
+		//MLREV,
+		/////<summary>25 - medication administration record work list review task</summary>
+		//MARWLREV,
+		/////<summary>26 - orders review task</summary>
+		//OREV,
+		/////<summary>27 - pathology report review task</summary>
+		//PATREPREV,
+		/////<summary>28 - problem list review task</summary>
+		//PROBLISTREV,
+		/////<summary>29 - radiology report review task</summary>
+		//RADREPREV,
+		/////<summary>30 - reminder list entry</summary>
+		//REMLE,
+		/////<summary>31 - wellness reminder list entry</summary>
+		//WELLREMLE,
+		/////<summary>32 - risk assessment instrument task</summary>
+		//RISKASSESS,
+		/////<summary>33 - falls risk assessment instrument task</summary>
+		//FALLRISK
+	}
+
+	///<summary>Enum generated from HL7 ActEncounterCode [2.16.840.1.113883.1.11.13955] which is a subset of ActCode [OID=2.16.840.1.113883.5.4] documentation published 20120831 10:21 AM.</summary>
+	public enum ActEncounterCode {
+		///<summary>0 - ambulatory</summary>
+		AMB,
+		///<summary>1 - emergency</summary>
+		EMER,
+		///<summary>2 - field</summary>
+		FLD,
+		///<summary>3 - home health</summary>
+		HH,
+		///<summary>4 - inpatient encounter</summary>
+		IMP,
+		///<summary>5 - short stay</summary>
+		SS,
+		///<summary>6 - virtual</summary>
+		VR
+	}
+
+	///<summary>Normality, Abnormality, Alert. Concepts in this category are mutually exclusive, i.e., at most one is allowed. Enum generated from HL7 _ObservationInterpretationNormality [2.16.840.1.113883.1.11.10206] which is a subset of ObservationInterpretation [OID=2.16.840.1.113883.5.83] documentation published 20120831 10:21 AM.</summary>
+	public enum ObservationInterpretationNormality {
+		///<summary>0 - Abnormal - Abnormal (for nominal observations, all service types) </summary>
+		A,
+		///<summary>1 - Abnormal alert - Abnormal alert (for nominal observations and all service types) </summary>
+		AA,
+		///<summary>2 - High alert - Above upper alert threshold (for quantitative observations) </summary>
+		HH,
+		///<summary>3 - Low alert - Below lower alert threshold (for quantitative observations) </summary>
+		LL,
+		///<summary>4 - High - Above high normal (for quantitative observations) </summary>
+		H,
+		///<summary>5 - Low - Below low normal (for quantitative observations) </summary>
+		L,
+		///<summary>6 - Normal - Normal (for all service types) </summary>
+		N 
+	}
+
+
 }

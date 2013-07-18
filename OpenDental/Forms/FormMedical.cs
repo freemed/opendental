@@ -280,6 +280,7 @@ namespace OpenDental{
 			this.gridDiseases.Title = "Problems";
 			this.gridDiseases.TranslationName = "TableDiseases";
 			this.gridDiseases.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridDiseases_CellDoubleClick);
+			this.gridDiseases.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridDiseases_CellClick);
 			// 
 			// checkPremed
 			// 
@@ -315,6 +316,7 @@ namespace OpenDental{
 			this.gridAllergies.Title = "Allergies";
 			this.gridAllergies.TranslationName = "TableDiseases";
 			this.gridAllergies.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridAllergies_CellDoubleClick);
+			this.gridAllergies.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridAllergies_CellClick);
 			// 
 			// butAddAllergy
 			// 
@@ -458,7 +460,7 @@ namespace OpenDental{
 			gridMeds.Columns.Clear();
 			ODGridColumn col;
 			if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
-				col=new ODGridColumn(Lan.g("TableMedications",""),20);//infoButton
+				col=new ODGridColumn("",20);//infoButton
 				gridMeds.Columns.Add(col);
 			}
 			col=new ODGridColumn(Lan.g("TableMedications","Medication"),120);
@@ -503,6 +505,7 @@ namespace OpenDental{
 				return;
 			}
 			FormInfobutton FormIB = new FormInfobutton();
+			FormIB.PatCur=PatCur;
 			FormIB.MedicationCur = Medications.GetMedicationFromDb(medList[e.Row].MedicationNum);//TODO: verify that this is what we need to get.
 			FormIB.ShowDialog();
 			//Nothing to do with Dialog Result yet.
@@ -698,7 +701,12 @@ namespace OpenDental{
 			DiseaseList=Diseases.Refresh(checkShowInactiveProblems.Checked,PatCur.PatNum);
 			gridDiseases.BeginUpdate();
 			gridDiseases.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableDiseases","Name"),140);//total is about 325
+			ODGridColumn col;
+			if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
+				col=new ODGridColumn("",20);//infoButton
+				gridDiseases.Columns.Add(col);
+			}
+			col=new ODGridColumn(Lan.g("TableDiseases","Name"),140);//total is about 325
 			gridDiseases.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableDiseases","Patient Note"),145);
 			gridDiseases.Columns.Add(col);
@@ -708,6 +716,9 @@ namespace OpenDental{
 			ODGridRow row;
 			for(int i=0;i<DiseaseList.Count;i++){
 				row=new ODGridRow();
+				if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
+					row.Cells.Add("info");//TODO: replace this with the infobutton graphic.
+				}
 				if(DiseaseList[i].DiseaseDefNum!=0) {
 					row.Cells.Add(DiseaseDefs.GetName(DiseaseList[i].DiseaseDefNum));
 				}
@@ -725,7 +736,12 @@ namespace OpenDental{
 			allergyList=Allergies.GetAll(PatCur.PatNum,checkShowInactiveAllergies.Checked);
 			gridAllergies.BeginUpdate();
 			gridAllergies.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableAllergies","Allergy"),100);
+			ODGridColumn col;
+			if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
+				col=new ODGridColumn("",20);//infoButton
+				gridAllergies.Columns.Add(col);
+			}
+			col=new ODGridColumn(Lan.g("TableAllergies","Allergy"),100);
 			gridAllergies.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableAllergies","Reaction"),180);
 			gridAllergies.Columns.Add(col);
@@ -735,6 +751,9 @@ namespace OpenDental{
 			ODGridRow row;
 			for(int i=0;i<allergyList.Count;i++){
 				row=new ODGridRow();
+				if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
+					row.Cells.Add("info");//TODO: replace this with the infobutton graphic.
+				}
 				AllergyDef allergyDef=AllergyDefs.GetOne(allergyList[i].AllergyDefNum);
 				row.Cells.Add(allergyDef.Description);
 				if(allergyList[i].DateAdverseReaction<DateTime.Parse("1-1-1800")) {
@@ -785,6 +804,20 @@ namespace OpenDental{
 			FillProblems();
 		}*/
 
+		private void gridDiseases_CellClick(object sender,ODGridClickEventArgs e) {
+			if(!PrefC.GetBool(PrefName.ShowFeatureEhr)) {
+				return;
+			}
+			if(e.Col!=0) {
+				return;
+			}
+			FormInfobutton FormIB = new FormInfobutton();
+			FormIB.PatCur=PatCur;
+			FormIB.ProblemCur = Diseases.GetSpecificDiseaseForPatient(PatCur.PatNum,DiseaseList[e.Row].DiseaseDefNum);//TODO: verify that this is what we need to get.
+			FormIB.ShowDialog();
+			//Nothing to do with Dialog Result yet.
+		}
+
 		private void gridDiseases_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			FormDiseaseEdit FormD=new FormDiseaseEdit(DiseaseList[e.Row]);
 			FormD.ShowDialog();
@@ -793,6 +826,22 @@ namespace OpenDental{
 
 		private void checkShowInactiveProblems_CheckedChanged(object sender,EventArgs e) {
 			FillProblems();
+		}
+
+
+		private void gridAllergies_CellClick(object sender,ODGridClickEventArgs e) {
+			if(!PrefC.GetBool(PrefName.ShowFeatureEhr)) {
+				return;
+			}
+			if(e.Col!=0) {
+				return;
+			}
+			FormInfobutton FormIB = new FormInfobutton();
+			FormIB.PatCur=PatCur;
+			//TODO: get right object and pass it in.
+			//FormIB = Medications.GetMedicationFromDb(medList[e.Row].MedicationNum);//TODO: verify that this is what we need to get.
+			FormIB.ShowDialog();
+			//Nothing to do with Dialog Result yet.
 		}
 
 		private void gridAllergies_CellDoubleClick(object sender,ODGridClickEventArgs e) {
