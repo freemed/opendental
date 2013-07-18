@@ -1477,7 +1477,12 @@ namespace OpenDental{
 			IntPtr hbitmap=EZTwain.DIB_ToDibSection(hdib);
 			bitmapScanned=Bitmap.FromHbitmap(hbitmap);
 			bitmapScanned.SetResolution((float)xdpi,(float)ydpi);
-			Clipboard.SetImage(bitmapScanned);//We do this because a customer requested it, and some customers probably use it.
+			try {
+				Clipboard.SetImage(bitmapScanned);//We do this because a customer requested it, and some customers probably use it.
+			}
+			catch {
+				//Rarely, setting the clipboard image fails, in which case we should ignore the failure because most people do not use this feature.
+			}
 			ImageType imgType;
 			if(scanType=="xray") {
 				imgType=ImageType.Radiograph;
