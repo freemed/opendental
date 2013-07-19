@@ -309,30 +309,84 @@ namespace OpenDentBusiness {
 					command="ALTER TABLE diseasedef ADD ICD9Code varchar2(255)";
 					Db.NonQ(command);
 				}
-				command="SELECT MAX(ItemOrder) FROM diseasedef";
-				int itemOrderCur=PIn.Int(Db.GetScalar(command));
-				command="SELECT DISTINCT Description,ICD9Code,icd9.ICD9Num "
-					+"FROM icd9,eduresource,disease,reminderrule "
-					+"WHERE icd9.ICD9Num=eduresource.ICD9Num "
-					+"OR icd9.ICD9Num=disease.ICD9Num "
-					+"OR (ReminderCriterion=6 AND icd9.ICD9Num=CriterionFK)";//6=ICD9
+				//command="SELECT DISTINCT Description,ICD9Code,icd9.ICD9Num "
+				//  +"FROM icd9,eduresource,disease,reminderrule "
+				//  +"WHERE icd9.ICD9Num=eduresource.ICD9Num "
+				//  +"OR icd9.ICD9Num=disease.ICD9Num "
+				//  +"OR (ReminderCriterion=6 AND icd9.ICD9Num=CriterionFK)";//6=ICD9
+				//table=Db.GetTable(command);
+				List<string> listDescription=new List<string>();
+				List<string> listICD9Code=new List<string>();
+				List<long> listICD9Num=new List<long>();
+				command="SELECT DISTINCT icd9.Description,icd9.ICD9Code,icd9.ICD9Num "
+					+"FROM icd9,eduresource "
+					+"WHERE icd9.ICD9Num=eduresource.ICD9Num";
 				table=Db.GetTable(command);
 				for(int i=0;i<table.Rows.Count;i++) {
+					listDescription.Add(PIn.String(table.Rows[i]["Description"].ToString()));
+					listICD9Code.Add(PIn.String(table.Rows[i]["ICD9Code"].ToString()));
+					listICD9Num.Add(PIn.Long(table.Rows[i]["ICD9Num"].ToString()));
+				}
+				command="SELECT DISTINCT Description,ICD9Code,icd9.ICD9Num "
+					+"FROM icd9,disease "
+					+"WHERE icd9.ICD9Num=disease.ICD9Num ";//6=ICD9
+				table=Db.GetTable(command);
+				for(int i=0;i<table.Rows.Count;i++) {
+					if(listICD9Num.Contains(PIn.Long(table.Rows[i]["ICD9Num"].ToString()))) {
+						continue;
+					}
+					listDescription.Add(PIn.String(table.Rows[i]["Description"].ToString()));
+					listICD9Code.Add(PIn.String(table.Rows[i]["ICD9Code"].ToString()));
+					listICD9Num.Add(PIn.Long(table.Rows[i]["ICD9Num"].ToString()));
+				}
+				command="SELECT DISTINCT Description,ICD9Code,icd9.ICD9Num "
+					+"FROM icd9,reminderrule "
+					+"WHERE (ReminderCriterion=6 AND icd9.ICD9Num=CriterionFK)";//6=ICD9
+				table=Db.GetTable(command);
+				for(int i=0;i<table.Rows.Count;i++) {
+					if(listICD9Num.Contains(PIn.Long(table.Rows[i]["ICD9Num"].ToString()))) {
+						continue;
+					}
+					listDescription.Add(PIn.String(table.Rows[i]["Description"].ToString()));
+					listICD9Code.Add(PIn.String(table.Rows[i]["ICD9Code"].ToString()));
+					listICD9Num.Add(PIn.Long(table.Rows[i]["ICD9Num"].ToString()));
+				}
+				command="SELECT MAX(ItemOrder) FROM diseasedef";
+				int itemOrderCur=PIn.Int(Db.GetScalar(command));
+				//for(int i=0;i<table.Rows.Count;i++) {
+				//  itemOrderCur++;
+				//  if(DataConnection.DBtype==DatabaseType.MySql) {
+				//    command="INSERT INTO diseasedef(DiseaseName,ItemOrder,ICD9Code) VALUES('"
+				//      +POut.String(table.Rows[i]["Description"].ToString())+"',"+POut.Int(itemOrderCur)+",'"+POut.String(table.Rows[i]["ICD9Code"].ToString())+"')";
+				//  }
+				//  else {//oracle
+				//    command="INSERT INTO diseasedef(DiseaseDefNum,DiseaseName,ItemOrder,ICD9Code) VALUES((SELECT MAX(DiseaseDefNum)+1 FROM diseasedef),'"
+				//      +POut.String(table.Rows[i]["Description"].ToString())+"',"+POut.Int(itemOrderCur)+",'"+POut.String(table.Rows[i]["ICD9Code"].ToString())+"')";
+				//  }
+				//  long defNum=Db.NonQ(command,true);
+				//  command="UPDATE eduresource SET DiseaseDefNum="+POut.Long(defNum)+" WHERE ICD9Num="+table.Rows[i]["ICD9Num"].ToString();
+				//  Db.NonQ(command);
+				//  command="UPDATE disease SET DiseaseDefNum="+POut.Long(defNum)+" WHERE ICD9Num="+table.Rows[i]["ICD9Num"].ToString();
+				//  Db.NonQ(command);
+				//  command="UPDATE reminderrule SET CriterionFK="+POut.Long(defNum)+" WHERE CriterionFK="+table.Rows[i]["ICD9Num"].ToString()+" AND ReminderCriterion=6";
+				//  Db.NonQ(command);
+				//}
+				for(int i=0;i<listICD9Num.Count;i++) {
 					itemOrderCur++;
 					if(DataConnection.DBtype==DatabaseType.MySql) {
 						command="INSERT INTO diseasedef(DiseaseName,ItemOrder,ICD9Code) VALUES('"
-							+POut.String(table.Rows[i]["Description"].ToString())+"',"+POut.Int(itemOrderCur)+",'"+POut.String(table.Rows[i]["ICD9Code"].ToString())+"')";
+							+POut.String(listDescription[i])+"',"+POut.Int(itemOrderCur)+",'"+POut.String(listICD9Code[i])+"')";
 					}
 					else {//oracle
 						command="INSERT INTO diseasedef(DiseaseDefNum,DiseaseName,ItemOrder,ICD9Code) VALUES((SELECT MAX(DiseaseDefNum)+1 FROM diseasedef),'"
-							+POut.String(table.Rows[i]["Description"].ToString())+"',"+POut.Int(itemOrderCur)+",'"+POut.String(table.Rows[i]["ICD9Code"].ToString())+"')";
+							+POut.String(listDescription[i])+"',"+POut.Int(itemOrderCur)+",'"+POut.String(listICD9Code[i])+"')";
 					}
 					long defNum=Db.NonQ(command,true);
-					command="UPDATE eduresource SET DiseaseDefNum="+POut.Long(defNum)+" WHERE ICD9Num="+table.Rows[i]["ICD9Num"].ToString();
+					command="UPDATE eduresource SET DiseaseDefNum="+POut.Long(defNum)+" WHERE ICD9Num="+POut.Long(listICD9Num[i]);
 					Db.NonQ(command);
-					command="UPDATE disease SET DiseaseDefNum="+POut.Long(defNum)+" WHERE ICD9Num="+table.Rows[i]["ICD9Num"].ToString();
+					command="UPDATE disease SET DiseaseDefNum="+POut.Long(defNum)+" WHERE ICD9Num="+POut.Long(listICD9Num[i]);
 					Db.NonQ(command);
-					command="UPDATE reminderrule SET CriterionFK="+POut.Long(defNum)+" WHERE CriterionFK="+table.Rows[i]["ICD9Num"].ToString()+" AND ReminderCriterion=6";
+					command="UPDATE reminderrule SET CriterionFK="+POut.Long(defNum)+" WHERE CriterionFK="+POut.Long(listICD9Num[i])+" AND ReminderCriterion=6";
 					Db.NonQ(command);
 				}
 				command="ALTER TABLE eduresource DROP COLUMN ICD9Num";
