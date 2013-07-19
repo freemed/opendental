@@ -303,6 +303,12 @@ namespace OpenDental {
 			if(!ValidateWikiPage(true)) {
 				return;
 			}
+			WikiPage wikiPageDB=WikiPages.GetByTitle(WikiPageCur.PageTitle);
+			if(WikiPageCur.DateTimeSaved<wikiPageDB.DateTimeSaved) {
+				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"This page has been modified and saved since it was opened on this computer. Save anyways?")) {
+					return;
+				}
+			}
 			WikiPageCur.PageContent=textContent.Text;
 			//Fix case on all internal links
 			MatchCollection matches=Regex.Matches(WikiPageCur.PageContent,@"\[\[.+?\]\]");
@@ -620,7 +626,7 @@ namespace OpenDental {
 			//Invalid characters inside of various tags--------------------------------------------
 			matches=Regex.Matches(textContent.Text,@"\[\[.*?\]\]");
 			foreach(Match match in matches) {
-				if(match.Value.Contains("\"")) {
+				if(match.Value.Contains("\"") && !match.Value.StartsWith("[[color:")) {//allow colored text to have quotes.
 					MessageBox.Show(Lan.g(this,"Link cannot contain double quotes: ")+match.Value);
 					return false;
 				}
