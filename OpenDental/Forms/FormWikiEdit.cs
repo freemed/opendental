@@ -304,7 +304,7 @@ namespace OpenDental {
 				return;
 			}
 			WikiPage wikiPageDB=WikiPages.GetByTitle(WikiPageCur.PageTitle);
-			if(WikiPageCur.DateTimeSaved<wikiPageDB.DateTimeSaved) {
+			if(wikiPageDB!=null && WikiPageCur.DateTimeSaved<wikiPageDB.DateTimeSaved) {
 				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"This page has been modified and saved since it was opened on this computer. Save anyways?")) {
 					return;
 				}
