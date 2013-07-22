@@ -179,6 +179,22 @@ namespace OpenDentBusiness {
 			return "";
 		}
 
+		///<summary>Returns the name of the disease based on SNOMEDCode, then if no match tries ICD9Code, then if no match returns empty string. Used in EHR Patient Lists.</summary>
+		public static string GetNameByCode(string SNOMEDorICD9Code) {
+			//No need to check RemotingRole; no call to db.
+			for(int i=0;i<ListLong.Length;i++) {
+				if(ListLong[i].SnomedCode==SNOMEDorICD9Code) {
+					return ListLong[i].DiseaseName;
+				}
+			}
+			for(int i=0;i<ListLong.Length;i++) {
+				if(ListLong[i].ICD9Code==SNOMEDorICD9Code) {
+					return ListLong[i].DiseaseName;
+				}
+			}
+			return "";
+		}
+
 		///<summary>Returns the diseaseDef with the specified num.</summary>
 		public static DiseaseDef GetItem(long diseaseDefNum) {
 			//No need to check RemotingRole; no call to db.
