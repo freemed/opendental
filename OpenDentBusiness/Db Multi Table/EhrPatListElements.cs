@@ -13,17 +13,15 @@ namespace OpenDentBusiness {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),elementList);
 			}
 			DataTable table=new DataTable();
-			//List<long> listPatNums = getPatientsHelper(elementList);
-			string select="";
-			string from="";
-			string where="";
-			select+="SELECT patient.PatNum,patient.LName,patient.FName";
-			from+="FROM patient";
-			where+="WHERE TRUE ";//this just makes formatting easier when adding additional clauses because they will all be AND clauses.//patient.PatNum IN"+patNumHelper(listPatNums)+" ";
-			for(int i=0;i<elementList.Count;i ++){
+			string select="SELECT patient.PatNum,patient.LName,patient.FName";
+			string from="FROM patient";
+			string where="WHERE TRUE ";//Makes formatting easier when adding additional clauses because they will all be AND clauses.
+			for(int i=0;i<elementList.Count;i++) {
 				switch(elementList[i].Restriction) {
 					case EhrRestrictionType.Birthdate://---------------------------------------------------------------------------------------------------------------------------
-						select+=",patient.BirthDate";//will look odd if user adds multiple birthdate columns
+						select+=",patient.BirthDate, (YEAR(CURDATE())-YEAR(DATE(patient.Birthdate))) - (RIGHT(CURDATE(),5)<RIGHT(DATE(patient.Birthdate),5)) AS Age";
+						from+="";//only selecting from patient table
+						where+="AND (YEAR(CURDATE())-YEAR(DATE(patient.Birthdate))) - (RIGHT(CURDATE(),5)<RIGHT(DATE(patient.Birthdate),5))"+GetOperandText(elementList[i].Operand)+""+PIn.String(elementList[i].CompareString)+" ";
 						break;
 					case EhrRestrictionType.Gender://------------------------------------------------------------------------------------------------------------------------------
 						select+=",patient.Gender";//will look odd if user adds multiple gender columns, enum needs to be "decoded" when filling grid.
@@ -34,11 +32,11 @@ namespace OpenDentBusiness {
 						where+="AND labpanel"+i+".LabpanelNum=labresult"+i+".LabpanelNum AND patient.PatNum=labpanel"+i+".PatNum ";//join
 						where+="AND labresult"+i+".TestName='"+elementList[i].CompareString+"' "
 									+"AND labresult"+i+".ObsValue"+GetOperandText(elementList[i].Operand)+"'"+PIn.String(elementList[i].LabValue)+"' ";//filter
-						if(elementList[i].StartDate!=null && elementList[i].StartDate!=DateTime.MinValue) {
-							where+="AND labresult"+i+".DateTimeTest>"+elementList[i].StartDate.ToString("'yyyy-MM-dd'")+" ";//after this date
+						if(elementList[i].StartDate!=null && elementList[i].StartDate.Year>1880) {
+							where+="AND labresult"+i+".DateTimeTest>"+POut.Date(elementList[i].StartDate)+" ";//after this date
 						}
-						if(elementList[i].EndDate!=null && elementList[i].EndDate!=DateTime.MinValue) {
-							where+="AND labresult"+i+".DateTimeTest<"+elementList[i].EndDate.ToString("'yyyy-MM-dd'")+" ";//before this date
+						if(elementList[i].EndDate!=null && elementList[i].EndDate.Year>1880) {
+							where+="AND labresult"+i+".DateTimeTest<"+POut.Date(elementList[i].EndDate)+" ";//before this date
 						}
 						break;
 					case EhrRestrictionType.Medication://--------------------------------------------------------------------------------------------------------------------------
@@ -46,11 +44,11 @@ namespace OpenDentBusiness {
 						from+=",medication AS medication"+i+", medicationpat AS medicationpat"+i;
 						where+="AND medication"+i+".MedicationNum=MedicationPat"+i+".MedicationNum AND medicationpat"+i+".PatNum=patient.PatNum ";//join
 						where+="AND medication"+i+".MedName LIKE '%"+PIn.String(elementList[i].CompareString)+"%' ";//filter
-						if(elementList[i].StartDate!=null && elementList[i].StartDate!=DateTime.MinValue) {
-							where+="AND medicationpat"+i+".DateStart>"+elementList[i].StartDate.ToString("'yyyy-MM-dd'")+" ";//after this date
+						if(elementList[i].StartDate!=null && elementList[i].StartDate.Year>1880) {
+							where+="AND medicationpat"+i+".DateStart>"+POut.Date(elementList[i].StartDate)+" ";//after this date
 						}
-						if(elementList[i].EndDate!=null && elementList[i].EndDate!=DateTime.MinValue) {
-							where+="AND medicationpat"+i+".DateStart<"+elementList[i].EndDate.ToString("'yyyy-MM-dd'")+" ";//before this date
+						if(elementList[i].EndDate!=null && elementList[i].EndDate.Year>1880) {
+							where+="AND medicationpat"+i+".DateStart<"+POut.Date(elementList[i].EndDate)+" ";//before this date
 						}
 						break;
 					case EhrRestrictionType.Problem://-----------------------------------------------------------------------------------------------------------------------------
@@ -58,12 +56,29 @@ namespace OpenDentBusiness {
 						from+=",disease AS disease"+i+", diseasedef AS diseasedef"+i;
 						where+="AND diseasedef"+i+".DiseaseDefNum=disease"+i+".DiseaseDefNum AND disease"+i+".PatNum=patient.PatNum ";//join
 						where+="AND (diseasedef"+i+".ICD9Code='"+PIn.String(elementList[i].CompareString)+"' OR diseasedef"+i+".SnomedCode='"+PIn.String(elementList[i].CompareString)+"') ";//filter
-						if(elementList[i].StartDate!=null && elementList[i].StartDate!=DateTime.MinValue) {
-							where+="AND disease"+i+".DateStart>"+elementList[i].StartDate.ToString("'yyyy-MM-dd'")+" ";//after this date
+						if(elementList[i].StartDate!=null && elementList[i].StartDate.Year>1880) {
+							where+="AND disease"+i+".DateStart>"+POut.Date(elementList[i].StartDate)+" ";//after this date
 						}
-						if(elementList[i].EndDate!=null && elementList[i].EndDate!=DateTime.MinValue) {
-							where+="AND disease"+i+".DateStart<"+elementList[i].EndDate.ToString("'yyyy-MM-dd'")+" ";//before this date
+						if(elementList[i].EndDate!=null && elementList[i].EndDate.Year>1880) {
+							where+="AND disease"+i+".DateStart<"+POut.Date(elementList[i].EndDate)+" ";//before this date
 						}
+						break;
+					case EhrRestrictionType.Allergy://-----------------------------------------------------------------------------------------------------------------------------
+						select+=",allergy"+i+".DateAdverseReaction";//Name of medication will be in column title.
+						from+=",allergy AS allergy"+i+", allergydef AS allergydef"+i;
+						where+="AND allergydef"+i+".AllergyDefNum=allergy"+i+".AllergyDefNum AND allergy"+i+".PatNum=patient.PatNum ";//join
+						where+="AND diseasedef"+i+".Description='"+PIn.String(elementList[i].CompareString)+"' ";//filter
+						if(elementList[i].StartDate!=null && elementList[i].StartDate.Year>1880) {
+							where+="AND allergy"+i+".DateAdverseReaction>"+POut.Date(elementList[i].StartDate)+" ";//after this date
+						}
+						if(elementList[i].EndDate!=null && elementList[i].EndDate.Year>1880) {
+							where+="AND allergy"+i+".DateAdverseReaction<"+POut.Date(elementList[i].EndDate)+" ";//before this date
+						}
+						break;
+					case EhrRestrictionType.CommPref://----------------------------------------------------------------------------------------------------------------------------
+						select+="patient.PreferContactMethod";//Name of medication will be in column title.
+						from+="";//only selecting from patient table
+						where+="AND patient.PreferContactMethod="+PIn.Int(contactMethodHelper(elementList[i].CompareString))+" ";
 						break;
 					default:
 						//should never happen.
@@ -71,8 +86,18 @@ namespace OpenDentBusiness {
 				}
 			}
 			string command=select+" "+from+" "+where;
-			table=Db.GetTable(command);
-			return table;
+			return Db.GetTable(command);
+		}
+
+		///<summary>Tries to match input string to enum name of ContactMethod and returns an int(as a string). Returns empty string if no match.</summary>
+		private static string contactMethodHelper(string contactEnumName) {
+			string[] names=Enum.GetNames(typeof(ContactMethod));
+			for(int i=0;i<names.Length;i++) {
+				if(names[i]==contactEnumName) {
+					return i.ToString();
+				}
+			}
+			return "";
 		}
 
 		///<summary>generate list of PatNums in the format "(#,#,#,#,...)" for use in an "IN" clause. Works with empty list.</summary>
@@ -86,73 +111,73 @@ namespace OpenDentBusiness {
 			return strb.ToString();
 		}
 
-		///<summary>Returns a list of PatNums, all of which meet all of the EhrPatListElemet2014 requirements.</summary>
-		private static List<long> getPatientsHelper(List<EhrPatListElement2014> elementList) {
-			List<long> retval = new List<long>();
-			//retval.Add(1); 
-			//retval.Add(3);
-			//retval.Add(5);
-			//return retval;
-			string command="SELECT patient.PatNum,patient.LName,patient.FName FROM patient ";
-			for(int i=0;i<elementList.Count;i++) {
-				if(i==0) {
-					command+="WHERE patient.Patnum IN(";
-				}
-				else {
-					command+="AND patient.Patnum IN(";
-				}
-				string compStr=elementList[i].CompareString;
-				switch(elementList[i].Restriction) {
-					case EhrRestrictionType.Birthdate:
-						if(DataConnection.DBtype==DatabaseType.MySql) {
-							command+="SELECT patient.patnum FROM patient WHERE (YEAR(CURDATE())-YEAR(Birthdate)) - (RIGHT(CURDATE(),5)<RIGHT(Birthdate,5))"+GetOperandText(elementList[i].Operand)+PIn.Int(compStr);//works with >, <, and =
-						}
-						else {
-							command+="SELECT patient.patnum FROM patient WHERE TRUNC(MONTHS_BETWEEN(SYSDATE,Birthdate)/12)"+GetOperandText(elementList[i].Operand)+PIn.Int(compStr);//works with >, <, and =
-						}
-						break;
-					case EhrRestrictionType.Problem:
-						command+="SELECT disease.patnum FROM disease, diseasedef "
-							+"WHERE disease.diseaseDefNum=diseaseDef.diseaseDefNum "
-							+"AND (diseasedef.ICD9Code LIKE '"+PIn.String(compStr)+"%' OR diseasedef.SnomedCode LIKE '"+PIn.String(compStr)+"%') ";
-						if(elementList[i].StartDate!=null && elementList[i].StartDate!=DateTime.MinValue) {//check start date
-							if(DataConnection.DBtype==DatabaseType.MySql) {
-								command+="AND disease.DateStart>'"+elementList[i].StartDate.ToString("yyyy-MM-dd")+"' ";
-							}
-							else {
-								command+="TODO";
-							}
-						}
-						if(elementList[i].EndDate!=null && elementList[i].EndDate!=DateTime.MinValue) {//check end date
-							if(DataConnection.DBtype==DatabaseType.MySql) {
-								command+="AND disease.DateStart<'"+elementList[i].EndDate.ToString("yyyy-MM-dd")+"' ";
-								command+="AND disease.DateStart>'1800-01-01' ";//don't grab minDate values, but also do not remove results from above.
-							}
-							else {
-								command+="TODO";
-							}
-						}
+		/////<summary>Returns a list of PatNums, all of which meet all of the EhrPatListElemet2014 requirements.</summary>
+		//private static List<long> getPatientsHelper(List<EhrPatListElement2014> elementList) {
+		//  List<long> retval = new List<long>();
+		//  //retval.Add(1); 
+		//  //retval.Add(3);
+		//  //retval.Add(5);
+		//  //return retval;
+		//  string command="SELECT patient.PatNum,patient.LName,patient.FName FROM patient ";
+		//  for(int i=0;i<elementList.Count;i++) {
+		//    if(i==0) {
+		//      command+="WHERE patient.Patnum IN(";
+		//    }
+		//    else {
+		//      command+="AND patient.Patnum IN(";
+		//    }
+		//    string compStr=elementList[i].CompareString;
+		//    switch(elementList[i].Restriction) {
+		//      case EhrRestrictionType.Birthdate:
+		//        if(DataConnection.DBtype==DatabaseType.MySql) {
+		//          command+="SELECT patient.patnum FROM patient WHERE (YEAR(CURDATE())-YEAR(Birthdate)) - (RIGHT(CURDATE(),5)<RIGHT(Birthdate,5))"+GetOperandText(elementList[i].Operand)+PIn.Int(compStr);//works with >, <, and =
+		//        }
+		//        else {
+		//          command+="SELECT patient.patnum FROM patient WHERE TRUNC(MONTHS_BETWEEN(SYSDATE,Birthdate)/12)"+GetOperandText(elementList[i].Operand)+PIn.Int(compStr);//works with >, <, and =
+		//        }
+		//        break;
+		//      case EhrRestrictionType.Problem:
+		//        command+="SELECT disease.patnum FROM disease, diseasedef "
+		//          +"WHERE disease.diseaseDefNum=diseaseDef.diseaseDefNum "
+		//          +"AND (diseasedef.ICD9Code LIKE '"+PIn.String(compStr)+"%' OR diseasedef.SnomedCode LIKE '"+PIn.String(compStr)+"%') ";
+		//        if(elementList[i].StartDate!=null && elementList[i].StartDate!=DateTime.MinValue) {//check start date
+		//          if(DataConnection.DBtype==DatabaseType.MySql) {
+		//            command+="AND disease.DateStart>'"+elementList[i].StartDate.ToString("yyyy-MM-dd")+"' ";
+		//          }
+		//          else {
+		//            command+="TODO";
+		//          }
+		//        }
+		//        if(elementList[i].EndDate!=null && elementList[i].EndDate!=DateTime.MinValue) {//check end date
+		//          if(DataConnection.DBtype==DatabaseType.MySql) {
+		//            command+="AND disease.DateStart<'"+elementList[i].EndDate.ToString("yyyy-MM-dd")+"' ";
+		//            command+="AND disease.DateStart>'1800-01-01' ";//don't grab minDate values, but also do not remove results from above.
+		//          }
+		//          else {
+		//            command+="TODO";
+		//          }
+		//        }
 
-						//disease.DateStart>"elementList[i];
-						//command+=",(SELECT disease.ICD9Num FROM disease WHERE disease.PatNum=patient.PatNum AND disease.ICD9Num IN (SELECT ICD9Num FROM icd9 WHERE ICD9Code LIKE '"+compStr+"%') "
-						//  +DbHelper.LimitAnd(1)+") `"+compStr+"` ";
-						//command+=",(SELECT diseasedef.ICD9Num, diseasedef.SnomedCode FROM diseasedef,disease WHERE disease.PatNum=patient.PatNum AND diseasedef.diseasedefnum=disease.patnum AND diseaseDef.DiseaseDefNum IN (SELECT diseasedef.diseasedefnum WHERE diseasedef.ICD9Num LIKE '"+compStr+"%' OR diseasedef.SnomedCode LIKE '"+compStr+"%') "
-						//  +DbHelper.LimitAnd(1)+") `"+compStr+"` ";
-						break;
-					case EhrRestrictionType.LabResult:
-						command+=",(SELECT IFNULL(MAX(ObsValue),0) FROM labresult,labpanel WHERE labresult.LabPanelNum=labpanel.LabPanelNum AND labpanel.PatNum=patient.PatNum AND labresult.TestName='"+compStr+"') `"+compStr+"` ";
-						break;
-					case EhrRestrictionType.Medication:
-						command+=",(SELECT COUNT(*) FROM medication,medicationpat WHERE medicationpat.PatNum=patient.PatNum AND medication.MedicationNum=medicationpat.MedicationNum AND medication.MedName LIKE '%"+compStr+"%') `"+compStr+"` ";
-						break;
-					case EhrRestrictionType.Gender:
-						command+=",patient.Gender ";
-						break;
-				}
-				command+=") ";
-			}
-			return retval;
-		}
+		//        //disease.DateStart>"elementList[i];
+		//        //command+=",(SELECT disease.ICD9Num FROM disease WHERE disease.PatNum=patient.PatNum AND disease.ICD9Num IN (SELECT ICD9Num FROM icd9 WHERE ICD9Code LIKE '"+compStr+"%') "
+		//        //  +DbHelper.LimitAnd(1)+") `"+compStr+"` ";
+		//        //command+=",(SELECT diseasedef.ICD9Num, diseasedef.SnomedCode FROM diseasedef,disease WHERE disease.PatNum=patient.PatNum AND diseasedef.diseasedefnum=disease.patnum AND diseaseDef.DiseaseDefNum IN (SELECT diseasedef.diseasedefnum WHERE diseasedef.ICD9Num LIKE '"+compStr+"%' OR diseasedef.SnomedCode LIKE '"+compStr+"%') "
+		//        //  +DbHelper.LimitAnd(1)+") `"+compStr+"` ";
+		//        break;
+		//      case EhrRestrictionType.LabResult:
+		//        command+=",(SELECT IFNULL(MAX(ObsValue),0) FROM labresult,labpanel WHERE labresult.LabPanelNum=labpanel.LabPanelNum AND labpanel.PatNum=patient.PatNum AND labresult.TestName='"+compStr+"') `"+compStr+"` ";
+		//        break;
+		//      case EhrRestrictionType.Medication:
+		//        command+=",(SELECT COUNT(*) FROM medication,medicationpat WHERE medicationpat.PatNum=patient.PatNum AND medication.MedicationNum=medicationpat.MedicationNum AND medication.MedName LIKE '%"+compStr+"%') `"+compStr+"` ";
+		//        break;
+		//      case EhrRestrictionType.Gender:
+		//        command+=",patient.Gender ";
+		//        break;
+		//    }
+		//    command+=") ";
+		//  }
+		//  return retval;
+		//}
 
 		public static DataTable GetListOrderBy(List<EhrPatListElement> elementList,bool isAsc) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

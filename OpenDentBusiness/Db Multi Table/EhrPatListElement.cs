@@ -24,7 +24,9 @@ namespace OpenDentBusiness {
 		Problem,
 		Medication,
 		LabResult,
-		Gender
+		Gender,
+		CommPref,
+		Allergy
 	}
 
 	public enum EhrOperand {
@@ -37,7 +39,7 @@ namespace OpenDentBusiness {
 	public class EhrPatListElement2014 {
 		///<summary>Birthdate, Disease, Medication, or LabResult</summary>
 		public EhrRestrictionType Restriction;
-		///<summary>For all 4 types, what to compare against.  Examples:  Birthdate: '50', Disease: '4140' (icd9 code will be followed by wildcard), Medication: 'Lisinopril' (not case sensitive, surrounded by wildcards), LabResult: 'HDL-cholesterol'.</summary>
+		///<summary>For all 4 types, what to compare against.  Examples:  Birthdate: '50', Disease: '4140' (icd9 code will be followed by wildcard), Medication: 'Lisinopril' (not case sensitive, surrounded by wildcards), LabResult: 'HDL-cholesterol'. Allergy:'Allergy - Morphene'. CommPref:'MobilePh'(exact enum names)</summary>
 		public string CompareString;
 		///<summary>gt, lt, or equal.  Only used for lab and birthdate.</summary>
 		public EhrOperand Operand;
