@@ -372,6 +372,12 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormFamilyHealthEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormFamilyHealthEdit.designer.cs">
+      <DependentUpon>FormFamilyHealthEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormWebMailMessageEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2813,15 +2819,20 @@
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormFamilyHealthEdit.resx">
+      <DependentUpon>FormFamilyHealthEdit.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormWebMailMessageEdit.resx">
       <DependentUpon>FormWebMailMessageEdit.cs</DependentUpon>
-    </EmbeddedResource>    <EmbeddedResource Include="Forms\FormInfobutton.resx">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormInfobutton.resx">
       <DependentUpon>FormInfobutton.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormReconcileMedication.resx">
       <DependentUpon>FormReconcileMedication.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>    <EmbeddedResource Include="Forms\FormEmailInbox.resx">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormEmailInbox.resx">
       <DependentUpon>FormEmailInbox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormEhrSettings.resx">

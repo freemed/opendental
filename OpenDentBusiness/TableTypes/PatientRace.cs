@@ -11,7 +11,7 @@ namespace OpenDentBusiness {
 		public long PatientRaceNum;
 		///<summary>FK to patient.PatNum.</summary>
 		public long PatNum;
-		///<summary>Enum:PatRace.</summary>
+		///<summary>Enum:PatRace </summary>
 		public PatRace Race;
 
 		///<summary></summary>

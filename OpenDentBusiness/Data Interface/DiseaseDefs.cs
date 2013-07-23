@@ -88,8 +88,13 @@ namespace OpenDentBusiness {
 			//Validate patient attached
 			string command="SELECT LName,FName,patient.PatNum FROM patient,disease WHERE "
 				+"patient.PatNum=disease.PatNum "
-				+"AND disease.DiseaseDefNum='"+POut.Long(def.DiseaseDefNum)+"' "
-				+"GROUP BY patient.PatNum";
+				+"AND disease.DiseaseDefNum='"+POut.Long(def.DiseaseDefNum)+"' ";
+			if(DataConnection.DBtype==DatabaseType.MySql) {
+				command+="GROUP BY patient.PatNum";
+			}
+			else {//Oracle
+				command+="GROUP BY LName,FName,patient.PatNum";
+			}
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count>0){
 				string s=Lans.g("DiseaseDef","Not allowed to delete. Already in use by ")+table.Rows.Count.ToString()
@@ -107,6 +112,28 @@ namespace OpenDentBusiness {
 			int num=PIn.Int(Db.GetCount(command));
 			if(num>0) {
 				string s=Lans.g("DiseaseDef","Not allowed to delete.  Already attached to an EHR educational resource.");
+				throw new ApplicationException(s);
+			}
+			//Validate family health history attached
+			command="SELECT LName,FName,patient.PatNum FROM patient,familyhealth "
+				+"WHERE patient.PatNum=familyhealth.PatNum "
+				+"AND familyhealth.DiseaseDefNum='"+POut.Long(def.DiseaseDefNum)+"' ";
+			if(DataConnection.DBtype==DatabaseType.MySql) {
+				command+="GROUP BY patient.PatNum";
+			}
+			else {//Oracle
+				command+="GROUP BY LName,FName,patient.PatNum";
+			}
+			table=Db.GetTable(command);
+			if(table.Rows.Count>0) {
+				string s=Lans.g("DiseaseDef","Not allowed to delete. Already in use by")+" "+table.Rows.Count.ToString()
+					+" "+Lans.g("DiseaseDef","patient's family history, including")+": \r\n";
+				for(int i=0;i<table.Rows.Count;i++) {
+					if(i>5) {
+						break;
+					}
+					s+="#"+table.Rows[i]["PatNum"].ToString()+" "+table.Rows[i]["LName"].ToString()+", "+table.Rows[i]["FName"].ToString()+"\r\n";
+				}
 				throw new ApplicationException(s);
 			}
 			//End of validation

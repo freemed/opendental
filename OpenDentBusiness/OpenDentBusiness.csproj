@@ -218,6 +218,7 @@
     <Compile Include="Crud\ErxLogCrud.cs" />
     <Compile Include="Crud\EtransCrud.cs" />
     <Compile Include="Crud\EtransMessageTextCrud.cs" />
+    <Compile Include="Crud\FamilyHealthCrud.cs" />
     <Compile Include="Crud\FeeCrud.cs" />
     <Compile Include="Crud\FeeSchedCrud.cs" />
     <Compile Include="Crud\FormPatCrud.cs" />
@@ -373,6 +374,7 @@
     <Compile Include="Data Interface\Automations.cs" />
     <Compile Include="Data Interface\CentralConnections.cs" />
     <Compile Include="Data Interface\ChartViews.cs" />
+    <Compile Include="Data Interface\FamilyHealths.cs" />
     <Compile Include="Data Interface\PatientRaces.cs" />
     <Compile Include="Data Interface\Resellers.cs" />
     <Compile Include="Data Interface\ResellerServices.cs" />
@@ -769,6 +771,7 @@
     <Compile Include="TableTypes\AllergyDef.cs" />
     <Compile Include="TableTypes\Allergy.cs" />
     <Compile Include="TableTypes\CentralConnection.cs" />
+    <Compile Include="TableTypes\FamilyHealth.cs" />
     <Compile Include="TableTypes\PatientRace.cs" />
     <Compile Include="TableTypes\ResellerService.cs" />
     <Compile Include="TableTypes\Reseller.cs" />
