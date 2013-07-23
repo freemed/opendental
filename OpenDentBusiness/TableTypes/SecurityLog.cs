@@ -25,7 +25,7 @@ namespace OpenDentBusiness{
 		///<summary>PatNum-NameLF</summary>
 		[CrudColumn(IsNotDbColumn=true)]
 		public string PatientName;
-		///<summary>FK to relevant table.  Only used for AptNum and CodeNum so far.  Table that the FK points to is based on PermType.</summary>
+		///<summary>FK to relevant table.  Only used for AptNum, CodeNum (for procedure codes), and CarrierNum so far.  Table that the FK points to is based on PermType.</summary>
 		public long FKey;
 
 		
