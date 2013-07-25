@@ -62,6 +62,8 @@ namespace OpenDentBusiness {
 
 	///<summary>The items in this enumeration can be freely rearranged without damaging the database.  But can't change spelling or remove existing item.</summary>
 	public enum MessageTypeHL7 {
+		///<summary>Use this for unsupported message types</summary>
+		NotDefined,
 		///<summary>Message Acknowledgment</summary>
 		ACK,
 		///<summary>Demographics - A01,A04,A08,A28,A31</summary>
@@ -78,6 +80,8 @@ namespace OpenDentBusiness {
 
 	///<summary>The items in this enumeration can be freely rearranged without damaging the database.  But can't change spelling or remove existing item.</summary>
 	public enum EventTypeHL7 {
+		///<summary>Use this for unsupported event types</summary>
+		NotDefined,
 		///<summary>Only used with ADT/ACK.</summary>
 		A04,
 		///<summary>Only used with DFT/Ack.</summary>

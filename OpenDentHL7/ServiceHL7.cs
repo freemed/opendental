@@ -248,6 +248,9 @@ namespace OpenDentHL7 {
 				IPEndPoint endpointLocal=new IPEndPoint(IPAddress.Any,int.Parse(HL7DefEnabled.IncomingPort));
 				socketIncomingMain.Bind(endpointLocal);
 				socketIncomingMain.Listen(1);//Listen for and queue incoming connection requests.  There should only be one.
+				if(IsVerboseLogging) {
+					EventLog.WriteEntry("OpenDentHL7","Listening",EventLogEntryType.Information);
+				}
 				//Asynchronously process incoming connection attempts:
 				socketIncomingMain.BeginAccept(new AsyncCallback(OnConnectionAccepted),socketIncomingMain);
 			}
@@ -260,6 +263,9 @@ namespace OpenDentHL7 {
 
 		///<summary>Runs in a separate thread</summary>
 		private void OnConnectionAccepted(IAsyncResult asyncResult) {
+			if(IsVerboseLogging) {
+				EventLog.WriteEntry("OpenDentHL7","Connection Accepted",EventLogEntryType.Information);
+			}
 			try {
 				socketIncomingWorker=socketIncomingMain.EndAccept(asyncResult);//end the BeginAccept.  Get reference to new Socket.
 				//Use the worker socket to wait for data.
@@ -268,6 +274,9 @@ namespace OpenDentHL7 {
 				strbFullMsg=new StringBuilder();
 				//We will keep reusing the same workerSocket instead of maintaining a list of worker sockets
 				//because this program is guaranteed to only have one incoming connection at a time.
+				if(IsVerboseLogging) {
+					EventLog.WriteEntry("OpenDentHL7","BeginReceive",EventLogEntryType.Information);
+				}
 				socketIncomingWorker.BeginReceive(dataBufferIncoming,0,dataBufferIncoming.Length,SocketFlags.None,new AsyncCallback(OnDataReceived),null);
 				//the main socket is now free to wait for another connection.
 				socketIncomingMain.BeginAccept(new AsyncCallback(OnConnectionAccepted),socketIncomingMain);
@@ -297,7 +306,8 @@ namespace OpenDentHL7 {
 				strbFullMsg.Clear();//this must be the very end of a previously processed message.  Discard.
 				isFullMsg=false;
 			}
-			else if(strbFullMsg[0]!=MLLP_START_CHAR){
+			//else if(strbFullMsg[0]!=MLLP_START_CHAR) {
+			else if(strbFullMsg.Length>0 && strbFullMsg[0]!=MLLP_START_CHAR) {
 				//Malformed message. 
 				isFullMsg=true;//we're going to do this so that the error gets saved in the database further down.
 				isMalformed=true;
@@ -320,7 +330,7 @@ namespace OpenDentHL7 {
 				strbFullMsg.Remove(strbFullMsg.Length-1,1);//strip off the end char
 				isFullMsg=true;
 			}
-			else{
+			else {
 				isFullMsg=false;//this is an incomplete message.  Continue to receive more blocks.
 			}
 			//end of big if statement-------------------------------------------------
@@ -360,7 +370,16 @@ namespace OpenDentHL7 {
 				return;
 			}
 			byte[] ackByteOutgoing=Encoding.ASCII.GetBytes(MLLP_START_CHAR+hl7Ack.ToString()+MLLP_END_CHAR+MLLP_ENDMSG_CHAR);
+			if(IsVerboseLogging) {
+				EventLog.WriteEntry("OpenDentHL7","Beginning to send ACK.\r\n"+MLLP_START_CHAR+hl7Ack.ToString()+MLLP_END_CHAR+MLLP_ENDMSG_CHAR,EventLogEntryType.Information);
+			}
 			socketIncomingWorker.Send(ackByteOutgoing);//this is a locking call
+			//eCW uses the same worker socket to send the next message. Without this call to BeginReceive, they would attempt to send again
+			//and the send would fail since we were no longer listening in this thread. eCW would timeout after 30 seconds of waiting for their
+			//acknowledgement, then they would close their end and create a new socket for the next message. With this call, we can accept message
+			//after message without waiting for a new connection.
+			dataBufferIncoming=new byte[8];//clear the buffer
+			socketIncomingWorker.BeginReceive(dataBufferIncoming,0,dataBufferIncoming.Length,SocketFlags.None,new AsyncCallback(OnDataReceived),null);
 		}
 		
 		private void TimerCallbackSendTCP(Object stateInfo) {

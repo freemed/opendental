@@ -23,10 +23,10 @@ namespace OpenDental {
 
 		private void FormHL7DefMessageEdit_Load(object sender,EventArgs e) {
 			FillGrid();
-			for(int i=0;i<Enum.GetNames(typeof(MessageTypeHL7)).Length;i++) {
+			for(int i=1;i<Enum.GetNames(typeof(MessageTypeHL7)).Length;i++) {//Start at enum 1, 0 is NotDefined and is not displayed for user to select.  Used for unsupported message types
 				comboMsgType.Items.Add(Lan.g("enumMessageTypeHL7",Enum.GetName(typeof(MessageTypeHL7), i).ToString()));
 			}
-			for(int i=0;i<Enum.GetNames(typeof(EventTypeHL7)).Length;i++) {
+			for(int i=1;i<Enum.GetNames(typeof(EventTypeHL7)).Length;i++) {//start at enum 1, 0 is NotDefined and is not displayed for user to select.  Used for unsupported event types
 				comboEventType.Items.Add(Lan.g("enumEventTypeHL7",Enum.GetName(typeof(EventTypeHL7),i).ToString()));
 			}
 			if(HL7DefMesCur!=null) {
@@ -122,8 +122,8 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please fix data entry error first.");
 				return;
 			}
-			HL7DefMesCur.MessageType=(MessageTypeHL7)comboMsgType.SelectedIndex;
-			HL7DefMesCur.EventType=(EventTypeHL7)comboEventType.SelectedIndex;
+			HL7DefMesCur.MessageType=(MessageTypeHL7)comboMsgType.SelectedIndex+1;//+1 because 0 is NotDefined and is not displayed for user to select
+			HL7DefMesCur.EventType=(EventTypeHL7)comboEventType.SelectedIndex+1;//+1 because 0 is NotDefined and is not displayed for user to select
 			if(radioIn.Checked) {
 				HL7DefMesCur.InOrOut=InOutHL7.Incoming;
 			}

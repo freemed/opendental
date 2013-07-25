@@ -33,8 +33,12 @@ namespace OpenDentBusiness.HL7 {
 //js 7/3/12 Make this more intelligent because we also now need the suffix
 					string msgtype=segment.GetFieldComponent(8,0);//We force the user to leave the 'messageType' field in this position, position 8 of the MSH segment
 					string evnttype=segment.GetFieldComponent(8,1);
+					//If message type or event type are not in this list, they will default to the not supported type and will not be processed
 					if(msgtype==MessageTypeHL7.ADT.ToString()) {
 						MsgType=MessageTypeHL7.ADT;
+					}
+					else if(msgtype==MessageTypeHL7.ACK.ToString()) {
+						MsgType=MessageTypeHL7.ACK;
 					}
 					else if(msgtype==MessageTypeHL7.SIU.ToString()) {
 						MsgType=MessageTypeHL7.SIU;

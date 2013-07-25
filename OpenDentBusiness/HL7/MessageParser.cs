@@ -42,7 +42,7 @@ namespace OpenDentBusiness.HL7 {
 			}
 			HL7DefMessage hl7defmsg=null;
 			for(int i=0;i<def.hl7DefMessages.Count;i++) {
-				if(def.hl7DefMessages[i].MessageType==msg.MsgType && def.hl7DefMessages[i].EventType==msg.EventType) {//check event type in case same message type can have multiple event types
+				if(def.hl7DefMessages[i].MessageType==msg.MsgType) {//&& def.hl7DefMessages[i].EventType==msg.EventType) { //Ignoring event type for now, we will treat all ADT's and SIU's the same
 					hl7defmsg=def.hl7DefMessages[i];
 				}
 			}
