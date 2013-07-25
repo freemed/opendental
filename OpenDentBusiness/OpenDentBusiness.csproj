@@ -771,6 +771,7 @@
     <Compile Include="TableTypes\AllergyDef.cs" />
     <Compile Include="TableTypes\Allergy.cs" />
     <Compile Include="TableTypes\CentralConnection.cs" />
+    <Compile Include="TableTypes\SecurityLogHash.cs" />
     <Compile Include="TableTypes\FamilyHealth.cs" />
     <Compile Include="TableTypes\PatientRace.cs" />
     <Compile Include="TableTypes\ResellerService.cs" />

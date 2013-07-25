@@ -794,7 +794,31 @@ namespace OpenDentBusiness {
 					command=@"CREATE INDEX familyhealth_DiseaseDefNum ON familyhealth (DiseaseDefNum)";
 					Db.NonQ(command);
 				}
-
+				//Add securityloghash table for EHR D.2
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS securityloghash";
+					Db.NonQ(command);
+					command=@"CREATE TABLE securityloghash (
+						SecurityLogHashNum bigint NOT NULL auto_increment PRIMARY KEY,
+						SecurityLogNum bigint NOT NULL,
+						LogHash varchar(255) NOT NULL,
+						INDEX(SecurityLogNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE securityloghash'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE securityloghash (
+						SecurityLogHashNum number(20) NOT NULL,
+						SecurityLogNum number(20) NOT NULL,
+						LogHash varchar2(255),
+						CONSTRAINT securityloghash_SecurityLogHas PRIMARY KEY (SecurityLogHashNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX securityloghash_SecurityLogNum ON securityloghash (SecurityLogNum)";
+					Db.NonQ(command);
+				}
 
 				command="UPDATE preference SET ValueString = '13.3.0.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
@@ -808,8 +832,3 @@ namespace OpenDentBusiness {
 
 	}
 }
-
-
-
-
-
