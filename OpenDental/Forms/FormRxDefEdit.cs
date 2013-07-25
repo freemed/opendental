@@ -419,6 +419,7 @@ namespace OpenDental{
 		private void listAlerts_DoubleClick(object sender,EventArgs e) {
 			if(listAlerts.SelectedIndex<0) {
 				MsgBox.Show(this,"Select at least one Alert.");
+				return;
 			}
 			FormRxAlertEdit FormRAE=new FormRxAlertEdit(RxAlertList[listAlerts.SelectedIndex],RxDefCur);
 			FormRAE.ShowDialog();
