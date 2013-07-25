@@ -314,12 +314,13 @@ namespace OpenDental.Bridges {
 			finally {
 				sr.Dispose();
 			}
+			string strHistoryFile="";
 			if(PrefC.GetBool(PrefName.BillingElectSaveHistory)) {
 				string strHistoryDir=CodeBase.ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),"EHG_History");
 				if(!Directory.Exists(strHistoryDir)) {
 					Directory.CreateDirectory(strHistoryDir);
 				}
-				string strHistoryFile=CodeBase.ODFileUtils.CreateRandomFile(strHistoryDir,".txt");
+				strHistoryFile=CodeBase.ODFileUtils.CreateRandomFile(strHistoryDir,".txt");
 				File.WriteAllText(strHistoryFile,data);
 			}
 			//Step 1: Post authentication request:
@@ -360,6 +361,10 @@ namespace OpenDental.Bridges {
 			readStream=new StreamReader(response.GetResponseStream(),Encoding.ASCII);
 			str=readStream.ReadToEnd();
 			readStream.Close();
+			if(strHistoryFile!="") {//Tack the response onto the end of the saved history file if one was created above.
+				File.AppendAllText(strHistoryFile,"\r\n\r\nCONNECTION REQUEST: postData.Length="+postData.Length+" bytes.Length="+bytes.Length+"==============\r\n"
+					+" RESPONSE TO CONNECTION REQUEST================================================================\r\n"+str);
+			}
 			//Debug.WriteLine(str);
 			//MessageBox.Show(str);
 			responseParams=str.Split('&');
@@ -450,6 +455,10 @@ namespace OpenDental.Bridges {
 			readStream=new StreamReader(response.GetResponseStream(),Encoding.ASCII);
 			str=readStream.ReadToEnd();
 			readStream.Close();
+			if(strHistoryFile!="") {//Tack the response onto the end of the saved history file if one was created above.
+				File.AppendAllText(strHistoryFile,"\r\n\r\nUPLOAD REQUEST: postData.Length="+postData.Length+" bytes.Length="+bytes.Length+"==============\r\n"
+					+" RESPONSE TO DATA UPLOAD================================================================\r\n"+str);
+			}
 			errormsg="";
 			status="";
 			str=str.Replace("\r\n","");
