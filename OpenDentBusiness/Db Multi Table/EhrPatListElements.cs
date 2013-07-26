@@ -19,9 +19,9 @@ namespace OpenDentBusiness {
 			for(int i=0;i<elementList.Count;i++) {
 				switch(elementList[i].Restriction) {
 					case EhrRestrictionType.Birthdate://---------------------------------------------------------------------------------------------------------------------------
-						select+=",patient.BirthDate, (YEAR(CURDATE())-YEAR(DATE(patient.Birthdate))) - (RIGHT(CURDATE(),5)<RIGHT(DATE(patient.Birthdate),5)) AS Age";
+						select+=",patient.BirthDate, ((YEAR(CURDATE())-YEAR(DATE(patient.Birthdate))) - (RIGHT(CURDATE(),5)<RIGHT(DATE(patient.Birthdate),5))) AS Age";
 						from+="";//only selecting from patient table
-						where+="AND (YEAR(CURDATE())-YEAR(DATE(patient.Birthdate))) - (RIGHT(CURDATE(),5)<RIGHT(DATE(patient.Birthdate),5))"+GetOperandText(elementList[i].Operand)+""+PIn.String(elementList[i].CompareString)+" ";
+						where+="AND ((YEAR(CURDATE())-YEAR(DATE(patient.Birthdate))) - (RIGHT(CURDATE(),5)<RIGHT(DATE(patient.Birthdate),5)))"+GetOperandText(elementList[i].Operand)+""+PIn.String(elementList[i].CompareString)+" ";
 						break;
 					case EhrRestrictionType.Gender://------------------------------------------------------------------------------------------------------------------------------
 						select+=",patient.Gender";//will look odd if user adds multiple gender columns, enum needs to be "decoded" when filling grid.
@@ -52,7 +52,7 @@ namespace OpenDentBusiness {
 						}
 						break;
 					case EhrRestrictionType.Problem://-----------------------------------------------------------------------------------------------------------------------------
-						select+=",disease"+i+".DateStart";//Name of medication will be in column title.
+						select+=",disease"+i+".DateStart";//Name of problem will be in column title.
 						from+=",disease AS disease"+i+", diseasedef AS diseasedef"+i;
 						where+="AND diseasedef"+i+".DiseaseDefNum=disease"+i+".DiseaseDefNum AND disease"+i+".PatNum=patient.PatNum ";//join
 						where+="AND (diseasedef"+i+".ICD9Code='"+PIn.String(elementList[i].CompareString)+"' OR diseasedef"+i+".SnomedCode='"+PIn.String(elementList[i].CompareString)+"') ";//filter
@@ -64,10 +64,10 @@ namespace OpenDentBusiness {
 						}
 						break;
 					case EhrRestrictionType.Allergy://-----------------------------------------------------------------------------------------------------------------------------
-						select+=",allergy"+i+".DateAdverseReaction";//Name of medication will be in column title.
+						select+=",allergy"+i+".DateAdverseReaction";//Name of allergy will be in column title.
 						from+=",allergy AS allergy"+i+", allergydef AS allergydef"+i;
 						where+="AND allergydef"+i+".AllergyDefNum=allergy"+i+".AllergyDefNum AND allergy"+i+".PatNum=patient.PatNum ";//join
-						where+="AND diseasedef"+i+".Description='"+PIn.String(elementList[i].CompareString)+"' ";//filter
+						where+="AND allergydef"+i+".Description='"+PIn.String(elementList[i].CompareString)+"' ";//filter
 						if(elementList[i].StartDate!=null && elementList[i].StartDate.Year>1880) {
 							where+="AND allergy"+i+".DateAdverseReaction>"+POut.Date(elementList[i].StartDate)+" ";//after this date
 						}
@@ -76,7 +76,7 @@ namespace OpenDentBusiness {
 						}
 						break;
 					case EhrRestrictionType.CommPref://----------------------------------------------------------------------------------------------------------------------------
-						select+="patient.PreferContactMethod";//Name of medication will be in column title.
+						select+=",patient.PreferContactMethod";
 						from+="";//only selecting from patient table
 						where+="AND patient.PreferContactMethod="+PIn.Int(contactMethodHelper(elementList[i].CompareString))+" ";
 						break;
