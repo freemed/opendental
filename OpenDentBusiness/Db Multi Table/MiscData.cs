@@ -108,14 +108,21 @@ namespace OpenDentBusiness {
 			return PIn.String(table.Rows[0][0].ToString());
 		}
 
-		///<summary>Gets the human readable host name of the database server, even when using the middle-tier.</summary>
+		///<summary>Gets the human readable host name of the database server, even when using the middle-tier.  This will return an empty string if Dns lookup fails.</summary>
 		public static string GetODServer() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod());
 			}
 			//string command="SELECT @@hostname";//This command fails in MySQL 5.0.22 (the version of MySQL 5.0 we used to use), because the hostname variable was added in MySQL 5.0.38.
-			string rawHostName=DataConnection.GetServerName();//This could be a human readable name, or it might be "localhost" or "127.0.0.1" or another IP address.
-			return Dns.GetHostEntry(rawHostName).HostName;//Return the human readable name (full domain name) corresponding to the rawHostName.
+			//Had to strip off the port, caused Dns.GetHostEntry to fail and is not needed to get the hostname
+			string rawHostName=DataConnection.GetServerName().Split(':')[0];//This could be a human readable name, or it might be "localhost" or "127.0.0.1" or another IP address.
+			string retval="";
+			try {
+				retval=Dns.GetHostEntry(rawHostName).HostName;//Return the human readable name (full domain name) corresponding to the rawHostName.
+			}
+			catch(Exception ex) {
+			}
+			return retval;
 		}
 
 		///<summary>Returns a collection of unique AtoZ folders for the array of dbnames passed in.  It will not include the current AtoZ folder for this database, even if shared by another db.  This is used for the feature that updates multiple databases simultaneously.</summary>
