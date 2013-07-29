@@ -913,6 +913,9 @@ namespace OpenDental{
 			famH.IsNew=true;
 			FormFHE.FamilyHealthCur=famH;
 			FormFHE.ShowDialog();
+			if(FormFHE.DialogResult!=DialogResult.OK) {
+				return;
+			}
 			FillFamilyHealth();
 		}
 
