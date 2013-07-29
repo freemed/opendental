@@ -179,7 +179,7 @@ namespace OpenDentBusiness.HL7 {
 			}
 		}
 
-		public static string GenerateACK(HL7Def def,string fieldName,EventTypeHL7 eventType,string controlId,bool isAck) {
+		public static string GenerateACK(HL7Def def,string fieldName,string controlId,bool isAck,string ackEvent) {
 			//big long list of fieldnames that we support
 			switch(fieldName) {
 				case "ackCode":
@@ -189,7 +189,7 @@ namespace OpenDentBusiness.HL7 {
 				case "messageControlId":
 					return controlId;
 				case "messageType":
-					return gConcat(def.ComponentSeparator,"ACK",eventType.ToString());
+					return gConcat(def.ComponentSeparator,"ACK",ackEvent);
 				case "separators^~\\&":
 					return gSep(def);
 				default:

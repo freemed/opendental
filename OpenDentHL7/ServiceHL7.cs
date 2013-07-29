@@ -345,7 +345,7 @@ namespace OpenDentHL7 {
 			strbFullMsg.Clear();//ready for the next message
 			bool isProcessed=true;
 			string messageControlId="";
-			EventTypeHL7 eventType=EventTypeHL7.A04;
+			string ackEvent="";
 			if(isMalformed){
 				hl7Msg.HL7Status=HL7MessageStatus.InFailed;
 				hl7Msg.Note="This message is malformed so it was not processed.";
@@ -357,14 +357,14 @@ namespace OpenDentHL7 {
 				try {
 					MessageParser.Process(messageHl7Object,IsVerboseLogging);//also saves the message to the db
 					messageControlId=messageHl7Object.ControlId;
-					eventType=messageHl7Object.EventType;
+					ackEvent=messageHl7Object.AckEvent;
 				}
 				catch(Exception ex) {
 					EventLog.WriteEntry("OpenDentHL7","Error in OnDataRecieved when processing message:\r\n"+ex.Message+"\r\n"+ex.StackTrace,EventLogEntryType.Error);
 					isProcessed=false;
 				}
 			}
-			MessageHL7 hl7Ack=MessageConstructor.GenerateACK(messageControlId,eventType,isProcessed);
+			MessageHL7 hl7Ack=MessageConstructor.GenerateACK(messageControlId,isProcessed,ackEvent);
 			if(hl7Ack==null) {
 				EventLog.WriteEntry("OpenDentHL7","No ACK defined for the enabled HL7 definition or no HL7 definition enabled.",EventLogEntryType.Information);
 				return;

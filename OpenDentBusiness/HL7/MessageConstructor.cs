@@ -66,10 +66,10 @@ namespace OpenDentBusiness.HL7 {
 		}
 
 		///<summary>Returns null if no HL7 def is enabled or no ACK is defined in the enabled def.</summary>
-		public static MessageHL7 GenerateACK(string controlId,EventTypeHL7 eventType,bool isAck) {
+		public static MessageHL7 GenerateACK(string controlId,bool isAck,string ackEvent) {
 			MessageHL7 messageHL7=new MessageHL7(MessageTypeHL7.ACK);
 			messageHL7.ControlId=controlId;
-			messageHL7.EventType=eventType;
+			messageHL7.AckEvent=ackEvent;
 			HL7Def hl7Def=HL7Defs.GetOneDeepEnabled();
 			if(hl7Def==null) {
 				return null;//no def enabled, return null
@@ -77,9 +77,8 @@ namespace OpenDentBusiness.HL7 {
 			//find an ACK message in the def
 			HL7DefMessage hl7DefMessage=null;
 			for(int i=0;i<hl7Def.hl7DefMessages.Count;i++) {
-				if(hl7Def.hl7DefMessages[i].MessageType==MessageTypeHL7.ACK) {
+				if(hl7Def.hl7DefMessages[i].MessageType==MessageTypeHL7.ACK && hl7Def.hl7DefMessages[i].InOrOut==InOutHL7.Outgoing) {
 					hl7DefMessage=hl7Def.hl7DefMessages[i];
-					//continue;
 					break;
 				}
 			}
@@ -96,7 +95,7 @@ namespace OpenDentBusiness.HL7 {
 						seg.SetField(hl7DefMessage.hl7DefSegments[s].hl7DefFields[f].OrdinalPos,hl7DefMessage.hl7DefSegments[s].hl7DefFields[f].FixedText);
 					}
 					else {
-						seg.SetField(hl7DefMessage.hl7DefSegments[s].hl7DefFields[f].OrdinalPos,FieldConstructor.GenerateACK(hl7Def,fieldName,eventType,controlId,isAck));
+						seg.SetField(hl7DefMessage.hl7DefSegments[s].hl7DefFields[f].OrdinalPos,FieldConstructor.GenerateACK(hl7Def,fieldName,controlId,isAck,ackEvent));
 					}
 				}
 				messageHL7.Segments.Add(seg);
