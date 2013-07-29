@@ -48,11 +48,10 @@ namespace OpenDentBusiness.Crud{
 				lOINC=new LOINC();
 				lOINC.LOINCNum   = PIn.Long  (table.Rows[i]["LOINCNum"].ToString());
 				lOINC.LOINCCode  = PIn.String(table.Rows[i]["LOINCCode"].ToString());
-				lOINC.ExUCUMUnits= PIn.String(table.Rows[i]["ExUCUMUnits"].ToString());
+				lOINC.UCUMUnits  = PIn.String(table.Rows[i]["UCUMUnits"].ToString());
 				lOINC.LongName   = PIn.String(table.Rows[i]["LongName"].ToString());
 				lOINC.ShortName  = PIn.String(table.Rows[i]["ShortName"].ToString());
 				lOINC.OrderObs   = PIn.String(table.Rows[i]["OrderObs"].ToString());
-				lOINC.Description= PIn.String(table.Rows[i]["Description"].ToString());
 				retVal.Add(lOINC);
 			}
 			return retVal;
@@ -93,17 +92,16 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="LOINCNum,";
 			}
-			command+="LOINCCode,ExUCUMUnits,LongName,ShortName,OrderObs,Description) VALUES(";
+			command+="LOINCCode,UCUMUnits,LongName,ShortName,OrderObs) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(lOINC.LOINCNum)+",";
 			}
 			command+=
 				 "'"+POut.String(lOINC.LOINCCode)+"',"
-				+"'"+POut.String(lOINC.ExUCUMUnits)+"',"
+				+"'"+POut.String(lOINC.UCUMUnits)+"',"
 				+"'"+POut.String(lOINC.LongName)+"',"
 				+"'"+POut.String(lOINC.ShortName)+"',"
-				+"'"+POut.String(lOINC.OrderObs)+"',"
-				+"'"+POut.String(lOINC.Description)+"')";
+				+"'"+POut.String(lOINC.OrderObs)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -117,11 +115,10 @@ namespace OpenDentBusiness.Crud{
 		public static void Update(LOINC lOINC){
 			string command="UPDATE loinc SET "
 				+"LOINCCode  = '"+POut.String(lOINC.LOINCCode)+"', "
-				+"ExUCUMUnits= '"+POut.String(lOINC.ExUCUMUnits)+"', "
+				+"UCUMUnits= '"+POut.String(lOINC.UCUMUnits)+"', "
 				+"LongName   = '"+POut.String(lOINC.LongName)+"', "
 				+"ShortName  = '"+POut.String(lOINC.ShortName)+"', "
-				+"OrderObs   = '"+POut.String(lOINC.OrderObs)+"', "
-				+"Description= '"+POut.String(lOINC.Description)+"' "
+				+"OrderObs   = '"+POut.String(lOINC.OrderObs)+"'"
 				+"WHERE LOINCNum = "+POut.Long(lOINC.LOINCNum);
 			Db.NonQ(command);
 		}
@@ -133,9 +130,9 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="LOINCCode = '"+POut.String(lOINC.LOINCCode)+"'";
 			}
-			if(lOINC.ExUCUMUnits != oldLOINC.ExUCUMUnits) {
+			if(lOINC.UCUMUnits != oldLOINC.UCUMUnits) {
 				if(command!=""){ command+=",";}
-				command+="ExUCUMUnits = '"+POut.String(lOINC.ExUCUMUnits)+"'";
+				command+="UCUMUnits = '"+POut.String(lOINC.UCUMUnits)+"'";
 			}
 			if(lOINC.LongName != oldLOINC.LongName) {
 				if(command!=""){ command+=",";}
@@ -148,10 +145,6 @@ namespace OpenDentBusiness.Crud{
 			if(lOINC.OrderObs != oldLOINC.OrderObs) {
 				if(command!=""){ command+=",";}
 				command+="OrderObs = '"+POut.String(lOINC.OrderObs)+"'";
-			}
-			if(lOINC.Description != oldLOINC.Description) {
-				if(command!=""){ command+=",";}
-				command+="Description = '"+POut.String(lOINC.Description)+"'";
 			}
 			if(command==""){
 				return;
