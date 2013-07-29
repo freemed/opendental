@@ -2866,7 +2866,7 @@ namespace OpenDental{
 			perms.Add(Permissions.AppointmentCreate);
 			perms.Add(Permissions.AppointmentEdit);
 			perms.Add(Permissions.AppointmentMove);
-			FormAuditOneType FormA=new FormAuditOneType(pat.PatNum,perms,Lan.g(this,"Actions for Appointment : ")+AptCur.AptNum+" - "+AptCur.AptDateTime,AptCur.AptNum);
+			FormAuditOneType FormA=new FormAuditOneType(pat.PatNum,perms,Lan.g(this,"Audit Trail for Appointment"),AptCur.AptNum);
 			FormA.ShowDialog();
 		}
 
