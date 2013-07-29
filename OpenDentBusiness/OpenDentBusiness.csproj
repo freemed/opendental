@@ -248,6 +248,7 @@
     <Compile Include="Crud\LetterCrud.cs" />
     <Compile Include="Crud\LetterMergeCrud.cs" />
     <Compile Include="Crud\LetterMergeFieldCrud.cs" />
+    <Compile Include="Crud\LOINCCrud.cs" />
     <Compile Include="Crud\MedicalOrderCrud.cs" />
     <Compile Include="Crud\MedicationCrud.cs" />
     <Compile Include="Crud\MedicationPatCrud.cs" />
@@ -375,6 +376,7 @@
     <Compile Include="Data Interface\CentralConnections.cs" />
     <Compile Include="Data Interface\ChartViews.cs" />
     <Compile Include="Data Interface\FamilyHealths.cs" />
+    <Compile Include="Data Interface\LOINCs.cs" />
     <Compile Include="Data Interface\PatientRaces.cs" />
     <Compile Include="Data Interface\Resellers.cs" />
     <Compile Include="Data Interface\ResellerServices.cs" />
@@ -771,6 +773,7 @@
     <Compile Include="TableTypes\AllergyDef.cs" />
     <Compile Include="TableTypes\Allergy.cs" />
     <Compile Include="TableTypes\CentralConnection.cs" />
+    <Compile Include="TableTypes\LOINC.cs" />
     <Compile Include="TableTypes\SecurityLogHash.cs" />
     <Compile Include="TableTypes\FamilyHealth.cs" />
     <Compile Include="TableTypes\PatientRace.cs" />

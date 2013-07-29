@@ -819,9 +819,37 @@ namespace OpenDentBusiness {
 					command=@"CREATE INDEX securityloghash_SecurityLogNum ON securityloghash (SecurityLogNum)";
 					Db.NonQ(command);
 				}
-
-				command="UPDATE preference SET ValueString = '13.3.0.0' WHERE PrefName = 'DataBaseVersion'";
-				Db.NonQ(command);
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS loinc";
+					Db.NonQ(command);
+					command=@"CREATE TABLE loinc (
+							LOINCNum bigint NOT NULL auto_increment PRIMARY KEY,
+							LOINCCode varchar(255) NOT NULL,
+							ExUCUMUnits varchar(255) NOT NULL,
+							LongName varchar(255) NOT NULL,
+							ShortName varchar(255) NOT NULL,
+							OrderObs varchar(255) NOT NULL,
+							Description varchar(255) NOT NULL
+							) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE loinc'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE loinc (
+							LOINCNum number(20) NOT NULL,
+							LOINCCode varchar2(255),
+							ExUCUMUnits varchar2(255),
+							LongName varchar2(255),
+							ShortName varchar2(255),
+							OrderObs varchar2(255),
+							Description varchar2(255),
+							CONSTRAINT loinc_LOINCNum PRIMARY KEY (LOINCNum)
+							)";
+					Db.NonQ(command);
+					command="UPDATE preference SET ValueString = '13.3.0.0' WHERE PrefName = 'DataBaseVersion'";
+					Db.NonQ(command);
+				}
 			}
 			//To13_4_0();
 		}
