@@ -845,9 +845,11 @@ namespace OpenDentBusiness {
 							CONSTRAINT loinc_LOINCNum PRIMARY KEY (LOINCNum)
 							)";
 					Db.NonQ(command);
-					command="UPDATE preference SET ValueString = '13.3.0.0' WHERE PrefName = 'DataBaseVersion'";
-					Db.NonQ(command);
 				}
+
+
+				command="UPDATE preference SET ValueString = '13.3.0.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
 			}
 			//To13_4_0();
 		}
