@@ -85,9 +85,9 @@ namespace OpenDental {
 				else {//Headers in first line have the right names. Continue.
 					line=sr.ReadLine();
 				}
+				Cursor=Cursors.WaitCursor;
 				Snomeds.DeleteAll();//Last thing we do before looping through and adding new snomeds is to delete all the old snomeds.
 				while(line!=null) {
-					Cursor=Cursors.WaitCursor;
 					//Fields are: 0-id, 1-effectiveTime, 2-active, 3-moduleId, 4-conceptId, 5-languageCode, 6-typeId, 7-term, 8-caseSignificanceId
 					fields=line.Split(new string[1] { "\t" },StringSplitOptions.None);
 					if(fields.Length<8) {//We will attempt to access fieds 4 - conceptId (SnomedCode) and 7 - term (Description).
@@ -115,15 +115,16 @@ namespace OpenDental {
 				return;
 			}
 			changed=true;
-			FormSnomedEdit FormI=new FormSnomedEdit(SnomedList[listMain.SelectedIndex]);
-			FormI.ShowDialog();
-			if(FormI.DialogResult!=DialogResult.OK) {
+			FormSnomedEdit FormSE=new FormSnomedEdit(SnomedList[listMain.SelectedIndex]);
+			FormSE.ShowDialog();
+			if(FormSE.DialogResult!=DialogResult.OK) {
 				return;
 			}
 			FillGrid();
 		}
 
 		private void butAdd_Click(object sender,EventArgs e) {
+			//TODO: Either change to adding a snomed code instead of an ICD9 or don't allow users to add SNOMED codes other than importing.
 			changed=true;
 			ICD9 icd9=new ICD9();
 			FormIcd9Edit FormI=new FormIcd9Edit(icd9);
@@ -144,10 +145,6 @@ namespace OpenDental {
 
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
-		}
-
-		private void listView1_DoubleClick(object sender,EventArgs e) {
-
 		}
 
 	

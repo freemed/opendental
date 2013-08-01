@@ -191,6 +191,7 @@ namespace OpenDental{
 			this.butSnomed.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butSnomed.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSnomed.CornerRadius = 4F;
+			this.butSnomed.Image = global::OpenDental.Properties.Resources.Add;
 			this.butSnomed.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butSnomed.Location = new System.Drawing.Point(503, 297);
 			this.butSnomed.Name = "butSnomed";
@@ -207,6 +208,7 @@ namespace OpenDental{
 			this.butIcd9.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butIcd9.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butIcd9.CornerRadius = 4F;
+			this.butIcd9.Image = global::OpenDental.Properties.Resources.Add;
 			this.butIcd9.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butIcd9.Location = new System.Drawing.Point(503, 329);
 			this.butIcd9.Name = "butIcd9";
@@ -365,7 +367,7 @@ namespace OpenDental{
 				return;
 			}
 			if(DiseaseDefs.GetNameByCode(FormI.SelectedIcd9.ICD9Code)!="") {
-				MsgBox.Show(this,"Snomed code already exists in the problems list.");
+				MsgBox.Show(this,"ICD-9 code already exists in the problems list.");
 				return;
 			}
 			DiseaseDef newDef=new DiseaseDef();
