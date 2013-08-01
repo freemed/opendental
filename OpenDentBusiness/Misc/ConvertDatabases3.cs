@@ -846,6 +846,29 @@ namespace OpenDentBusiness {
 							)";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS snomed";
+					Db.NonQ(command);
+					command=@"CREATE TABLE snomed (
+						SnomedNum bigint NOT NULL auto_increment PRIMARY KEY,
+						SnomedCode varchar(255) NOT NULL,
+						Description varchar(255) NOT NULL,
+						DateTStamp timestamp
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE snomed'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE snomed (
+						SnomedNum number(20) NOT NULL,
+						SnomedCode varchar2(255),
+						Description varchar2(255),
+						DateTStamp timestamp,
+						CONSTRAINT snomed_SnomedNum PRIMARY KEY (SnomedNum)
+						)";
+					Db.NonQ(command);
+				}
 
 
 				command="UPDATE preference SET ValueString = '13.3.0.0' WHERE PrefName = 'DataBaseVersion'";

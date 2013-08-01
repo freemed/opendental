@@ -60,7 +60,7 @@ namespace OpenDental {
 			}
 			textProblem.Text="";
 			EduResourceCur.DiseaseDefNum=0;
-			textICD9.Text="ICD9: "+ICD9s.GetByCode(FormICD9.SelectedIcd9Code).Description;
+			textICD9.Text="ICD9: "+FormICD9.SelectedIcd9.Description;
 			textMedication.Text="";
 			EduResourceCur.MedicationNum=0;
 			textLabResultsID.Text="";

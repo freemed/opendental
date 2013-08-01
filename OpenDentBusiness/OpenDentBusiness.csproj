@@ -334,6 +334,7 @@
     <Compile Include="Crud\SigElementDefCrud.cs" />
     <Compile Include="Crud\SignalodCrud.cs" />
     <Compile Include="Crud\SiteCrud.cs" />
+    <Compile Include="Crud\SnomedCrud.cs" />
     <Compile Include="Crud\StatementCrud.cs" />
     <Compile Include="Crud\SupplierCrud.cs" />
     <Compile Include="Crud\SupplyCrud.cs" />
@@ -380,6 +381,7 @@
     <Compile Include="Data Interface\PatientRaces.cs" />
     <Compile Include="Data Interface\Resellers.cs" />
     <Compile Include="Data Interface\ResellerServices.cs" />
+    <Compile Include="Data Interface\Snomeds.cs" />
     <Compile Include="Data Interface\WikiListHeaderWidths.cs" />
     <Compile Include="Data Interface\WikiLists.cs" />
     <Compile Include="Data Interface\CreditCards.cs" />
@@ -779,6 +781,7 @@
     <Compile Include="TableTypes\PatientRace.cs" />
     <Compile Include="TableTypes\ResellerService.cs" />
     <Compile Include="TableTypes\Reseller.cs" />
+    <Compile Include="TableTypes\Snomed.cs" />
     <Compile Include="TableTypes\WikiListHeaderWidth.cs" />
     <Compile Include="TableTypes\EvaluationCriterion.cs" />
     <Compile Include="TableTypes\GradingScaleItem.cs" />

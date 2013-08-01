@@ -10,7 +10,7 @@ using OpenDentBusiness;
 namespace OpenDental {
 	public partial class FormIcd9s:Form {
 		public bool IsSelectionMode;
-		public string SelectedIcd9Code;
+		public ICD9 SelectedIcd9;
 		private List<ICD9> icd9List;
 		private bool changed;
 
@@ -52,7 +52,7 @@ namespace OpenDental {
 				return;
 			}
 			if(IsSelectionMode) {
-				SelectedIcd9Code=icd9List[listMain.SelectedIndex].ICD9Code;
+				SelectedIcd9=icd9List[listMain.SelectedIndex];
 				DialogResult=DialogResult.OK;
 				return;
 			}
@@ -80,7 +80,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please select an item first.");
 				return;
 			}
-			SelectedIcd9Code=icd9List[listMain.SelectedIndex].ICD9Code;
+			SelectedIcd9=icd9List[listMain.SelectedIndex];
 			DialogResult=DialogResult.OK;
 		}
 
