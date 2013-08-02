@@ -16,7 +16,7 @@ namespace OpenDentBusiness{
 		public string Heading;
 		///<summary>A note specific to this treatment plan that shows at the bottom.</summary>
 		public string Note;
-		///<summary>The encrypted and bound signature in base64 format.  The signature is bound to the byte sequence of the original image.</summary>
+		///<summary>The encrypted and bound signature in base64 format.  The signature is bound to the concatenation of the tp Note, DateTP, and to each proctp Descript and PatAmt.</summary>
 		public string Signature;
 		///<summary>True if the signature is in Topaz format rather than OD format.</summary>
 		public bool SigIsTopaz;
