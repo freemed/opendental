@@ -478,6 +478,7 @@ namespace OpenDentBusiness{
 						+"AND ProcDate <= "+POut.Date(dateEnd)+" "
 						//+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
 						+"AND procedurelog.ProvNum IN("+POut.String(provs)+") "
+						+"AND procedurelog.ProcStatus="+POut.Int((int)ProcStat.C)+" "
 						+"GROUP BY procedurelog.PatNum,ProcDate";
 					Db.NonQ(command);
 					command="UPDATE tempehrmeasure "
