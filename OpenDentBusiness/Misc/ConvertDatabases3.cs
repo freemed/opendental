@@ -853,7 +853,8 @@ namespace OpenDentBusiness {
 						SnomedNum bigint NOT NULL auto_increment PRIMARY KEY,
 						SnomedCode varchar(255) NOT NULL,
 						Description varchar(255) NOT NULL,
-						DateTStamp timestamp
+						IsActive tinyint NOT NULL,
+						DateOfStandard date NOT NULL DEFAULT '0001-01-01'
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
 				}
@@ -864,7 +865,8 @@ namespace OpenDentBusiness {
 						SnomedNum number(20) NOT NULL,
 						SnomedCode varchar2(255),
 						Description varchar2(255),
-						DateTStamp timestamp,
+						IsActive number(3) NOT NULL,
+						DateOfStandard date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
 						CONSTRAINT snomed_SnomedNum PRIMARY KEY (SnomedNum)
 						)";
 					Db.NonQ(command);
@@ -883,3 +885,8 @@ namespace OpenDentBusiness {
 
 	}
 }
+
+
+
+
+

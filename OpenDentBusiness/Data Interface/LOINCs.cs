@@ -63,6 +63,34 @@ namespace OpenDentBusiness{
 			return Crud.LOINCCrud.SelectMany(command);
 		}
 
+		///<summary>Gets one LOINC from the db based on LoincCode, returns null if not found.</summary>
+		public static LOINC GetByCode(string lOINCCode) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<LOINC>(MethodBase.GetCurrentMethod(),lOINCCode);
+			}
+			string command="SELECT * FROM loinc WHERE LoincCode='"+POut.String(lOINCCode)+"'";
+			List<LOINC> retVal=Crud.LOINCCrud.SelectMany(command);
+			if(retVal.Count>0) {
+				return retVal[0];
+			}
+			return null;
+		}
+
+		///<summary>CAUTION, this empties the entire loinc table. "DELETE FROM loinc"</summary>
+		public static void DeleteAll() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod());
+				return;
+			}
+			string command="DELETE FROM loinc";
+			Db.NonQ(command);
+			if(DataConnection.DBtype==DatabaseType.MySql) {
+				command="ALTER TABLE loinc AUTO_INCREMENT = 1";//resets the primary key to start counting from 1 again.
+				Db.NonQ(command);
+			}
+			return;
+		}
+
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 

@@ -102,8 +102,13 @@ namespace OpenDental {
 		}
 
 		private void butRxNorm_Click(object sender,EventArgs e) {
-			FormRxNorms formR=new FormRxNorms();
-			formR.ShowDialog();
+			FormRxNorms FormR=new FormRxNorms();
+			FormR.ShowDialog();
+		}
+
+		private void butLOINCs_Click(object sender,EventArgs e) {
+			FormLOINCs FormL=new FormLOINCs();
+			FormL.ShowDialog();
 		}
 
 		private void butKeys_Click(object sender,EventArgs e) {

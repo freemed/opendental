@@ -23,7 +23,6 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.listMain = new System.Windows.Forms.ListBox();
 			this.butAdd = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
@@ -31,19 +30,8 @@ namespace OpenDental{
 			this.label1 = new System.Windows.Forms.Label();
 			this.butSearch = new OpenDental.UI.Button();
 			this.butImport = new OpenDental.UI.Button();
+			this.gridMain = new OpenDental.UI.ODGrid();
 			this.SuspendLayout();
-			// 
-			// listMain
-			// 
-			this.listMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.listMain.IntegralHeight = false;
-			this.listMain.Location = new System.Drawing.Point(20, 36);
-			this.listMain.Name = "listMain";
-			this.listMain.Size = new System.Drawing.Size(523, 627);
-			this.listMain.TabIndex = 15;
-			this.listMain.DoubleClick += new System.EventHandler(this.listMain_DoubleClick);
 			// 
 			// butAdd
 			// 
@@ -55,7 +43,7 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(549, 516);
+			this.butAdd.Location = new System.Drawing.Point(606, 517);
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(75, 24);
 			this.butAdd.TabIndex = 16;
@@ -70,7 +58,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(549, 598);
+			this.butOK.Location = new System.Drawing.Point(606, 599);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75, 24);
 			this.butOK.TabIndex = 3;
@@ -85,7 +73,7 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(549, 639);
+			this.butClose.Location = new System.Drawing.Point(606, 640);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75, 24);
 			this.butClose.TabIndex = 2;
@@ -96,7 +84,7 @@ namespace OpenDental{
 			// 
 			this.textCode.Location = new System.Drawing.Point(180, 10);
 			this.textCode.Name = "textCode";
-			this.textCode.Size = new System.Drawing.Size(100, 20);
+			this.textCode.Size = new System.Drawing.Size(175, 20);
 			this.textCode.TabIndex = 17;
 			// 
 			// label1
@@ -115,7 +103,7 @@ namespace OpenDental{
 			this.butSearch.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butSearch.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSearch.CornerRadius = 4F;
-			this.butSearch.Location = new System.Drawing.Point(286, 8);
+			this.butSearch.Location = new System.Drawing.Point(361, 8);
 			this.butSearch.Name = "butSearch";
 			this.butSearch.Size = new System.Drawing.Size(75, 24);
 			this.butSearch.TabIndex = 19;
@@ -125,27 +113,43 @@ namespace OpenDental{
 			// butImport
 			// 
 			this.butImport.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butImport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butImport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.butImport.Autosize = true;
 			this.butImport.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butImport.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butImport.CornerRadius = 4F;
 			this.butImport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butImport.Location = new System.Drawing.Point(549, 36);
+			this.butImport.Location = new System.Drawing.Point(606, 37);
 			this.butImport.Name = "butImport";
 			this.butImport.Size = new System.Drawing.Size(75, 24);
 			this.butImport.TabIndex = 16;
 			this.butImport.Text = "&Import";
 			this.butImport.Click += new System.EventHandler(this.butImport_Click);
 			// 
+			// gridMain
+			// 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(20, 38);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.Size = new System.Drawing.Size(580, 626);
+			this.gridMain.TabIndex = 20;
+			this.gridMain.Title = "SNOMED Codes";
+			this.gridMain.TranslationName = "FormPatientList";
+			this.gridMain.WrapText = false;
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			// 
 			// FormSnomeds
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(649, 690);
+			this.ClientSize = new System.Drawing.Size(706, 691);
+			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butSearch);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.textCode);
-			this.Controls.Add(this.listMain);
 			this.Controls.Add(this.butImport);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.butOK);
@@ -163,11 +167,11 @@ namespace OpenDental{
 
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butClose;
-		private System.Windows.Forms.ListBox listMain;
 		private UI.Button butAdd;
 		private System.Windows.Forms.TextBox textCode;
 		private System.Windows.Forms.Label label1;
 		private UI.Button butSearch;
 		private UI.Button butImport;
+		private UI.ODGrid gridMain;
 	}
 }

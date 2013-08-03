@@ -16,6 +16,19 @@ namespace OpenDentBusiness{
 			return Crud.AllergyDefCrud.SelectOne(allergyDefNum);
 		}
 
+		///<summary>Gets one AllergyDef from the db with matching description, returns null if not found.</summary>
+		public static AllergyDef GetByDescription(string allergyDescription) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<AllergyDef>(MethodBase.GetCurrentMethod(),allergyDescription);
+			}
+			string command="SELECT * FROM allergyDef WHERE Description='"+POut.String(allergyDescription)+"'";
+			List<AllergyDef> retVal=Crud.AllergyDefCrud.SelectMany(command);
+			if(retVal.Count>0) {
+				return retVal[0];
+			}
+			return null;
+		}
+
 		///<summary></summary>
 		public static long Insert(AllergyDef allergyDef){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){

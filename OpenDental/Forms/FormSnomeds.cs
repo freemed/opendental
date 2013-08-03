@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
 using System.IO;
+using OpenDental.UI;
 
 namespace OpenDental {
 	public partial class FormSnomeds:Form {
@@ -33,18 +34,39 @@ namespace OpenDental {
 			FillGrid();
 		}
 
-		private void FillGrid() {
+		private void FillGridOld() {
 			Cursor=Cursors.WaitCursor;
-			SnomedList=Snomeds.GetByCodeOrDescription(textCode.Text);
-			listMain.Items.Clear();
-			if(SnomedList.Count>10000) {//List runs out of memory at 1147389 items. Tried allowing one million, took 10 minutes to load.
-				MessageBox.Show(SnomedList.Count+Lan.g(this," results. Only the first 10000 results will be shown."));
-			}
-			int itemsInList=Math.Min(SnomedList.Count,10000);
-			for(int i=0;i<itemsInList;i++) {
-				listMain.Items.Add(SnomedList[i].SnomedCode+" - "+SnomedList[i].Description);
+			long resultCount=Snomeds.GetCountSearch(textCode.Text);
+			if(resultCount>10000) {//List runs out of memory at 1147389 items. Tried allowing one million, took 10 minutes to load.
+				MessageBox.Show(resultCount+Lan.g(this," results. Only the first 10000 results will be shown."));
 			}
 			Cursor=Cursors.Default;
+		}
+
+		private void FillGrid() {
+			gridMain.BeginUpdate();
+			gridMain.Columns.Clear();
+			ODGridColumn col;
+			col=new ODGridColumn("SNOMED Code",100,HorizontalAlignment.Right);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn("Depricated",75,HorizontalAlignment.Center);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn("Description",270);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn("Date Of Standard",100);
+			gridMain.Columns.Add(col);
+			gridMain.Rows.Clear();
+			ODGridRow row;
+			SnomedList=Snomeds.GetByCodeOrDescription(textCode.Text);
+			for(int i=0;i<SnomedList.Count;i++) {
+				row=new ODGridRow();
+				row.Cells.Add(SnomedList[i].SnomedCode);
+				row.Cells.Add((SnomedList[i].IsActive?"":"X"));//IsActive==NotDepricated
+				row.Cells.Add(SnomedList[i].Description);
+				row.Cells.Add(SnomedList[i].DateOfStandard.ToShortDateString());
+				gridMain.Rows.Add(row);
+			}
+			gridMain.EndUpdate();
 		}
 
 		private void butImport_Click(object sender,EventArgs e) {
@@ -71,10 +93,10 @@ namespace OpenDental {
 			string[] fields;
 			Snomed snomed;
 			using(StreamReader sr=new StreamReader(Dlg.FileName)) {
-				string line=sr.ReadLine();
+				//string line=sr.ReadLine();
 				//Fields are: 0-id, 1-effectiveTime, 2-active, 3-moduleId, 4-conceptId, 5-languageCode, 6-typeId, 7-term, 8-caseSignificanceId
-				fields=line.Split(new string[1] { "\t" },StringSplitOptions.None);
-				if(fields.Length<8) {//We will attempt to access fieds 4 - conceptId (SnomedCode) and 7 - term (Description). 0 indexed so field 7 is the 8th field.
+				fields=sr.ReadLine().Split(new string[] { "\t" },StringSplitOptions.None);
+				if(fields.Length<8) {//We will attempt to access fields 4 - conceptId (SnomedCode) and 7 - term (Description). 0 indexed so field 7 is the 8th field.
 					MsgBox.Show(this,"You have selected the wrong file. There should be 9 columns in this file.");
 					return;
 				}
@@ -82,40 +104,57 @@ namespace OpenDental {
 					MsgBox.Show(this,"You have selected the wrong file: \"conceptId\" and \"term\" are not columns 5 and 8.");
 					return;//Headers are not right. Wrong file.
 				}
-				else {//Headers in first line have the right names. Continue.
-					line=sr.ReadLine();
-				}
+				Cursor=Cursors.WaitCursor;
 				Cursor=Cursors.WaitCursor;
 				Snomeds.DeleteAll();//Last thing we do before looping through and adding new snomeds is to delete all the old snomeds.
-				while(line!=null) {
+				while(!sr.EndOfStream) {					//line=sr.ReadLine();
 					//Fields are: 0-id, 1-effectiveTime, 2-active, 3-moduleId, 4-conceptId, 5-languageCode, 6-typeId, 7-term, 8-caseSignificanceId
-					fields=line.Split(new string[1] { "\t" },StringSplitOptions.None);
+					fields=sr.ReadLine().Split(new string[1] { "\t" },StringSplitOptions.None);
 					if(fields.Length<8) {//We will attempt to access fieds 4 - conceptId (SnomedCode) and 7 - term (Description).
 						sr.ReadLine();
 						continue;
 					}
+					if(fields[6]!="900000000000003001") {//full qualified name(FQN), alternative is "900000000000013009", "Synonym"
+						continue;//skip anything that is not an FQN
+					}
 					snomed=new Snomed();
 					snomed.SnomedCode=fields[4];
 					snomed.Description=fields[7];
+					snomed.DateOfStandard=PIn.Date(""+fields[1].Substring(4,2)+"/"+fields[1].Substring(6,2)+"/"+fields[1].Substring(0,4));//format from yyyyMMdd to MM/dd/yyyy
+					snomed.IsActive=(fields[2]=="1");//true if column equals 1, false if column equals 0 or anything else.
 					Snomeds.Insert(snomed);
-					line=sr.ReadLine();
 				}
 			}
 			Cursor=Cursors.Default;
 			MsgBox.Show(this,"Import successful.");
 		}
 
-		private void listMain_DoubleClick(object sender,System.EventArgs e) {
-			if(listMain.SelectedIndex==-1) {
-				return;
-			}
+		//private void listMain_DoubleClick(object sender,System.EventArgs e) {
+		//  if(listMain.SelectedIndex==-1) {
+		//    return;
+		//  }
+		//  if(IsSelectionMode) {
+		//    SelectedSnomed=SnomedList[listMain.SelectedIndex];
+		//    DialogResult=DialogResult.OK;
+		//    return;
+		//  }
+		//  changed=true;
+		//  FormSnomedEdit FormI=new FormSnomedEdit(SnomedList[listMain.SelectedIndex]);
+		//  FormI.ShowDialog();
+		//  if(FormI.DialogResult!=DialogResult.OK) {
+		//    return;
+		//  }
+		//  FillGrid();
+		//}
+
+		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			if(IsSelectionMode) {
-				SelectedSnomed=SnomedList[listMain.SelectedIndex];
+				SelectedSnomed=SnomedList[e.Row];
 				DialogResult=DialogResult.OK;
 				return;
 			}
 			changed=true;
-			FormSnomedEdit FormSE=new FormSnomedEdit(SnomedList[listMain.SelectedIndex]);
+			FormSnomedEdit FormSE=new FormSnomedEdit(SnomedList[e.Row]);
 			FormSE.ShowDialog();
 			if(FormSE.DialogResult!=DialogResult.OK) {
 				return;
@@ -135,11 +174,11 @@ namespace OpenDental {
 
 		private void butOK_Click(object sender,EventArgs e) {
 			//not even visible unless IsSelectionMode
-			if(listMain.SelectedIndex==-1) {
+			if(gridMain.GetSelectedIndex()==-1) {
 				MsgBox.Show(this,"Please select an item first.");
 				return;
 			}
-			SelectedSnomed=SnomedList[listMain.SelectedIndex];
+			SelectedSnomed=SnomedList[gridMain.GetSelectedIndex()];
 			DialogResult=DialogResult.OK;
 		}
 

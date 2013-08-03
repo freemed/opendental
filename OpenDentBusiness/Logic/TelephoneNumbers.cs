@@ -45,6 +45,10 @@ namespace OpenDentBusiness {
 			if(regex.IsMatch(phoneNum)) {
 				return (phoneNum.Substring(0,3)+"-"+phoneNum.Substring(3));
 			}
+			regex=new Regex(@"^\D\d{3}\D\d{3}\D\d{4}");//eg (916-363-5432
+			if(regex.IsMatch(phoneNum)) {
+				return "("+phoneNum.Substring(1,3)+")"+phoneNum.Substring(5,3)+"-"+phoneNum.Substring(9,4);
+			}
 			return phoneNum;
 		}
 

@@ -40,6 +40,7 @@ namespace OpenDental{
 			this.butKeys = new OpenDental.UI.Button();
 			this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
 			this.menuItemSettings = new System.Windows.Forms.MenuItem();
+			this.butLOINCs = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// butRxNorm
@@ -245,10 +246,25 @@ namespace OpenDental{
 			this.menuItemSettings.Text = "Settings";
 			this.menuItemSettings.Click += new System.EventHandler(this.menuItemSettings_Click);
 			// 
+			// butLOINCs
+			// 
+			this.butLOINCs.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butLOINCs.Autosize = true;
+			this.butLOINCs.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butLOINCs.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butLOINCs.CornerRadius = 4F;
+			this.butLOINCs.Location = new System.Drawing.Point(214, 22);
+			this.butLOINCs.Name = "butLOINCs";
+			this.butLOINCs.Size = new System.Drawing.Size(128, 24);
+			this.butLOINCs.TabIndex = 131;
+			this.butLOINCs.Text = "LOINCs";
+			this.butLOINCs.Click += new System.EventHandler(this.butLOINCs_Click);
+			// 
 			// FormEhrSetup
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(606, 465);
+			this.Controls.Add(this.butLOINCs);
 			this.Controls.Add(this.butKeys);
 			this.Controls.Add(this.butRxNorm);
 			this.Controls.Add(this.butEducationalResources);
@@ -290,5 +306,6 @@ namespace OpenDental{
 		private UI.Button butKeys;
 		private System.Windows.Forms.MainMenu mainMenu1;
 		private System.Windows.Forms.MenuItem menuItemSettings;
+		private UI.Button butLOINCs;
 	}
 }

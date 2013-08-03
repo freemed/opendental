@@ -46,12 +46,12 @@ namespace OpenDentBusiness.Crud{
 			LOINC lOINC;
 			for(int i=0;i<table.Rows.Count;i++) {
 				lOINC=new LOINC();
-				lOINC.LOINCNum   = PIn.Long  (table.Rows[i]["LOINCNum"].ToString());
-				lOINC.LOINCCode  = PIn.String(table.Rows[i]["LOINCCode"].ToString());
-				lOINC.UCUMUnits  = PIn.String(table.Rows[i]["UCUMUnits"].ToString());
-				lOINC.LongName   = PIn.String(table.Rows[i]["LongName"].ToString());
-				lOINC.ShortName  = PIn.String(table.Rows[i]["ShortName"].ToString());
-				lOINC.OrderObs   = PIn.String(table.Rows[i]["OrderObs"].ToString());
+				lOINC.LOINCNum = PIn.Long  (table.Rows[i]["LOINCNum"].ToString());
+				lOINC.LOINCCode= PIn.String(table.Rows[i]["LOINCCode"].ToString());
+				lOINC.UCUMUnits= PIn.String(table.Rows[i]["UCUMUnits"].ToString());
+				lOINC.LongName = PIn.String(table.Rows[i]["LongName"].ToString());
+				lOINC.ShortName= PIn.String(table.Rows[i]["ShortName"].ToString());
+				lOINC.OrderObs = PIn.String(table.Rows[i]["OrderObs"].ToString());
 				retVal.Add(lOINC);
 			}
 			return retVal;
@@ -114,11 +114,11 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one LOINC in the database.</summary>
 		public static void Update(LOINC lOINC){
 			string command="UPDATE loinc SET "
-				+"LOINCCode  = '"+POut.String(lOINC.LOINCCode)+"', "
+				+"LOINCCode= '"+POut.String(lOINC.LOINCCode)+"', "
 				+"UCUMUnits= '"+POut.String(lOINC.UCUMUnits)+"', "
-				+"LongName   = '"+POut.String(lOINC.LongName)+"', "
-				+"ShortName  = '"+POut.String(lOINC.ShortName)+"', "
-				+"OrderObs   = '"+POut.String(lOINC.OrderObs)+"'"
+				+"LongName = '"+POut.String(lOINC.LongName)+"', "
+				+"ShortName= '"+POut.String(lOINC.ShortName)+"', "
+				+"OrderObs = '"+POut.String(lOINC.OrderObs)+"' "
 				+"WHERE LOINCNum = "+POut.Long(lOINC.LOINCNum);
 			Db.NonQ(command);
 		}

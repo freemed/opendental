@@ -1,0 +1,158 @@
+﻿namespace OpenDental {
+	partial class FormLOINCs {
+		/// <summary>
+		/// Required designer variable.
+		/// </summary>
+		private System.ComponentModel.IContainer components = null;
+
+		/// <summary>
+		/// Clean up any resources being used.
+		/// </summary>
+		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+		protected override void Dispose(bool disposing) {
+			if(disposing && (components != null)) {
+				components.Dispose();
+			}
+			base.Dispose(disposing);
+		}
+
+		#region Windows Form Designer generated code
+
+		/// <summary>
+		/// Required method for Designer support - do not modify
+		/// the contents of this method with the code editor.
+		/// </summary>
+		private void InitializeComponent() {
+			this.gridMain = new OpenDental.UI.ODGrid();
+			this.label1 = new System.Windows.Forms.Label();
+			this.textCode = new System.Windows.Forms.TextBox();
+			this.butSearch = new OpenDental.UI.Button();
+			this.butImport = new OpenDental.UI.Button();
+			this.butOK = new OpenDental.UI.Button();
+			this.butCancel = new OpenDental.UI.Button();
+			this.SuspendLayout();
+			// 
+			// gridMain
+			// 
+			this.gridMain.AllowSortingByColumn = true;
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(12, 41);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.Size = new System.Drawing.Size(786, 612);
+			this.gridMain.TabIndex = 11;
+			this.gridMain.Title = "LOINC Codes";
+			this.gridMain.TranslationName = "FormMedicationPicker";
+			this.gridMain.WrapText = false;
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(15, 17);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(172, 16);
+			this.label1.TabIndex = 20;
+			this.label1.Text = "Code or Description";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// textCode
+			// 
+			this.textCode.Location = new System.Drawing.Point(190, 14);
+			this.textCode.Name = "textCode";
+			this.textCode.Size = new System.Drawing.Size(158, 20);
+			this.textCode.TabIndex = 19;
+			// 
+			// butSearch
+			// 
+			this.butSearch.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butSearch.Autosize = true;
+			this.butSearch.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSearch.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSearch.CornerRadius = 4F;
+			this.butSearch.Location = new System.Drawing.Point(354, 11);
+			this.butSearch.Name = "butSearch";
+			this.butSearch.Size = new System.Drawing.Size(75, 24);
+			this.butSearch.TabIndex = 23;
+			this.butSearch.Text = "Search";
+			this.butSearch.Click += new System.EventHandler(this.butSearch_Click);
+			// 
+			// butImport
+			// 
+			this.butImport.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butImport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.butImport.Autosize = true;
+			this.butImport.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butImport.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butImport.CornerRadius = 4F;
+			this.butImport.Location = new System.Drawing.Point(804, 41);
+			this.butImport.Name = "butImport";
+			this.butImport.Size = new System.Drawing.Size(75, 24);
+			this.butImport.TabIndex = 24;
+			this.butImport.Text = "Import";
+			this.butImport.Click += new System.EventHandler(this.butLOINCFill_Click);
+			// 
+			// butOK
+			// 
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butOK.Autosize = true;
+			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.CornerRadius = 4F;
+			this.butOK.Location = new System.Drawing.Point(804, 599);
+			this.butOK.Name = "butOK";
+			this.butOK.Size = new System.Drawing.Size(75, 24);
+			this.butOK.TabIndex = 25;
+			this.butOK.Text = "OK";
+			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			// 
+			// butCancel
+			// 
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butCancel.Autosize = true;
+			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius = 4F;
+			this.butCancel.Location = new System.Drawing.Point(804, 629);
+			this.butCancel.Name = "butCancel";
+			this.butCancel.Size = new System.Drawing.Size(75, 24);
+			this.butCancel.TabIndex = 26;
+			this.butCancel.Text = "Cancel";
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+			// 
+			// FormLOINCs
+			// 
+			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.ClientSize = new System.Drawing.Size(891, 665);
+			this.Controls.Add(this.butCancel);
+			this.Controls.Add(this.butOK);
+			this.Controls.Add(this.butImport);
+			this.Controls.Add(this.butSearch);
+			this.Controls.Add(this.label1);
+			this.Controls.Add(this.textCode);
+			this.Controls.Add(this.gridMain);
+			this.Name = "FormLOINCs";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.Text = "LOINC Codes";
+			this.Load += new System.EventHandler(this.FormLOINCPicker_Load);
+			this.ResumeLayout(false);
+			this.PerformLayout();
+
+		}
+
+		#endregion
+
+		private OpenDental.UI.ODGrid gridMain;
+		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.TextBox textCode;
+		private OpenDental.UI.Button butSearch;
+		private OpenDental.UI.Button butImport;
+		private OpenDental.UI.Button butOK;
+		private OpenDental.UI.Button butCancel;
+	}
+}

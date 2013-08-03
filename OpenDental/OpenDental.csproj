@@ -371,11 +371,24 @@
     </Compile>
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
-    </Compile>    <Compile Include="Forms\FormFamilyHealthEdit.cs">
+    </Compile>
+    <Compile Include="Forms\FormCommPrefPicker.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormCommPrefPicker.Designer.cs">
+      <DependentUpon>FormCommPrefPicker.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormFamilyHealthEdit.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FormFamilyHealthEdit.designer.cs">
       <DependentUpon>FormFamilyHealthEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormPatList2014.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormPatList2014.Designer.cs">
+      <DependentUpon>FormPatList2014.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormSnomedEdit.cs">
       <SubType>Form</SubType>
@@ -388,6 +401,24 @@
     </Compile>
     <Compile Include="Forms\FormSnomeds.designer.cs">
       <DependentUpon>FormSnomeds.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormLOINCs.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormLOINCs.Designer.cs">
+      <DependentUpon>FormLOINCs.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormPatListElementEdit2014.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormPatListElementEdit2014.Designer.cs">
+      <DependentUpon>FormPatListElementEdit2014.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormPatListResults2014.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormPatListResults2014.Designer.cs">
+      <DependentUpon>FormPatListResults2014.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormWebMailMessageEdit.cs">
       <SubType>Form</SubType>
@@ -2830,8 +2861,14 @@
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormCommPrefPicker.resx">
+      <DependentUpon>FormCommPrefPicker.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormFamilyHealthEdit.resx">
       <DependentUpon>FormFamilyHealthEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormPatList2014.resx">
+      <DependentUpon>FormPatList2014.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormSnomedEdit.resx">
       <DependentUpon>FormSnomedEdit.cs</DependentUpon>
@@ -2840,6 +2877,15 @@
     <EmbeddedResource Include="Forms\FormSnomeds.resx">
       <DependentUpon>FormSnomeds.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormLOINCs.resx">
+      <DependentUpon>FormLOINCs.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormPatListElementEdit2014.resx">
+      <DependentUpon>FormPatListElementEdit2014.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormPatListResults2014.resx">
+      <DependentUpon>FormPatListResults2014.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormWebMailMessageEdit.resx">
       <DependentUpon>FormWebMailMessageEdit.cs</DependentUpon>

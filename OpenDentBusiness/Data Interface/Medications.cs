@@ -126,8 +126,21 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Medication>(MethodBase.GetCurrentMethod(),medicationNum);
 			}
-			string command="SELECT * FROM medication WHERE MedicationNum="+POut.Long(medicationNum);
+			string command="SELECT * FROM medication WHERE MedNum="+POut.Long(medicationNum);
 			return Crud.MedicationCrud.SelectOne(command);
+		}
+
+		///<summary>//Returns first medication with matching MedName, if not found returns null.</summary>
+		public static Medication GetMedicationFromDbByName(string medicationName) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Medication>(MethodBase.GetCurrentMethod(),medicationName);
+			}
+			string command="SELECT * FROM medication WHERE MedName="+POut.String(medicationName)+" ORDER BY MedicationNum";
+			List<Medication> retVal=Crud.MedicationCrud.SelectMany(command);
+			if(retVal.Count>0) {
+				return retVal[0];
+			}
+			return null;
 		}
 
 		///<summary>Gets the generic medication for the specified medication Num.</summary>
@@ -155,6 +168,19 @@ namespace OpenDentBusiness{
 			}
 			Medication generic=(Medication)HList[med.GenericNum];
 			return retVal+"("+generic.MedName+")";
+		}
+
+		///<summary>Gets the medication name. Copied from GetDescription.</summary>
+		public static string GetNameOnly(long medNum) {
+			//No need to check RemotingRole; no call to db.
+			if(HList==null) {
+				Refresh();
+			}
+			if(!HList.ContainsKey(medNum)) {
+				return "";
+			}
+			Medication med=(Medication)HList[medNum];
+			return med.MedName;
 		}
 
 		///<summary>Gets the generic medication name, given it's generic Num.</summary>

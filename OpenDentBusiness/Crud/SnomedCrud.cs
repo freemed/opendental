@@ -46,10 +46,11 @@ namespace OpenDentBusiness.Crud{
 			Snomed snomed;
 			for(int i=0;i<table.Rows.Count;i++) {
 				snomed=new Snomed();
-				snomed.SnomedNum  = PIn.Long  (table.Rows[i]["SnomedNum"].ToString());
-				snomed.SnomedCode = PIn.String(table.Rows[i]["SnomedCode"].ToString());
-				snomed.Description= PIn.String(table.Rows[i]["Description"].ToString());
-				snomed.DateTStamp = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
+				snomed.SnomedNum     = PIn.Long  (table.Rows[i]["SnomedNum"].ToString());
+				snomed.SnomedCode    = PIn.String(table.Rows[i]["SnomedCode"].ToString());
+				snomed.Description   = PIn.String(table.Rows[i]["Description"].ToString());
+				snomed.IsActive      = PIn.Bool  (table.Rows[i]["IsActive"].ToString());
+				snomed.DateOfStandard= PIn.Date  (table.Rows[i]["DateOfStandard"].ToString());
 				retVal.Add(snomed);
 			}
 			return retVal;
@@ -90,14 +91,15 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="SnomedNum,";
 			}
-			command+="SnomedCode,Description) VALUES(";
+			command+="SnomedCode,Description,IsActive,DateOfStandard) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(snomed.SnomedNum)+",";
 			}
 			command+=
 				 "'"+POut.String(snomed.SnomedCode)+"',"
-				+"'"+POut.String(snomed.Description)+"')";
-				//DateTStamp can only be set by MySQL
+				+"'"+POut.String(snomed.Description)+"',"
+				+    POut.Bool  (snomed.IsActive)+","
+				+    POut.Date  (snomed.DateOfStandard)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -110,9 +112,10 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one Snomed in the database.</summary>
 		public static void Update(Snomed snomed){
 			string command="UPDATE snomed SET "
-				+"SnomedCode = '"+POut.String(snomed.SnomedCode)+"', "
-				+"Description= '"+POut.String(snomed.Description)+"' "
-				//DateTStamp can only be set by MySQL
+				+"SnomedCode    = '"+POut.String(snomed.SnomedCode)+"', "
+				+"Description   = '"+POut.String(snomed.Description)+"', "
+				+"IsActive      =  "+POut.Bool  (snomed.IsActive)+", "
+				+"DateOfStandard=  "+POut.Date  (snomed.DateOfStandard)+" "
 				+"WHERE SnomedNum = "+POut.Long(snomed.SnomedNum);
 			Db.NonQ(command);
 		}
@@ -128,7 +131,14 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="Description = '"+POut.String(snomed.Description)+"'";
 			}
-			//DateTStamp can only be set by MySQL
+			if(snomed.IsActive != oldSnomed.IsActive) {
+				if(command!=""){ command+=",";}
+				command+="IsActive = "+POut.Bool(snomed.IsActive)+"";
+			}
+			if(snomed.DateOfStandard != oldSnomed.DateOfStandard) {
+				if(command!=""){ command+=",";}
+				command+="DateOfStandard = "+POut.Date(snomed.DateOfStandard)+"";
+			}
 			if(command==""){
 				return;
 			}

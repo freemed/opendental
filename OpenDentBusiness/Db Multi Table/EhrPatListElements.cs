@@ -78,7 +78,7 @@ namespace OpenDentBusiness {
 					case EhrRestrictionType.CommPref://----------------------------------------------------------------------------------------------------------------------------
 						select+=",patient.PreferContactMethod";
 						from+="";//only selecting from patient table
-						where+="AND patient.PreferContactMethod="+PIn.Int(contactMethodHelper(elementList[i].CompareString))+" ";
+						where+="AND patient.PreferContactConfidential="+PIn.Int(contactMethodHelper(elementList[i].CompareString))+" ";
 						break;
 					default:
 						//should never happen.

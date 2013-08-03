@@ -45,14 +45,28 @@ namespace OpenDentBusiness{
 		}
 		#endregion
 
-		///<summary></summary>
+		///<summary>Limits results to 10,000 rows. Oracle and MySQL safe.</summary>
 		public static List<Snomed> GetByCodeOrDescription(string searchTxt){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Snomed>>(MethodBase.GetCurrentMethod(),searchTxt);
 			}
 			string command="SELECT * FROM snomed WHERE SnomedCode LIKE '%"+POut.String(searchTxt)+"%' "
 				+"OR Description LIKE '%"+POut.String(searchTxt)+"%' ORDER BY SnomedCode";
-			return Crud.SnomedCrud.SelectMany(command);
+			List<Snomed> retVal=Crud.SnomedCrud.SelectMany(command);
+			if(retVal.Count>10000){
+				retVal.RemoveRange(10000,retVal.Count-10001);
+			}
+			return retVal;
+		}
+
+		///<summary>Returns the number of rows that GetByCodeOrDescription would have returns if not limited by 10000.</summary>
+		public static long GetCountSearch(string searchTxt){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<long>(MethodBase.GetCurrentMethod(),searchTxt);
+			}
+			string command="SELECT COUNT(*) FROM snomed WHERE SnomedCode LIKE '%"+POut.String(searchTxt)+"%' "
+				+"OR Description LIKE '%"+POut.String(searchTxt)+"%' ORDER BY SnomedCode";
+			return PIn.Long(Db.GetCount(command));
 		}
 		
 		///<summary>Gets one Snomed from the db.</summary>
