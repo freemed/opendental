@@ -112,6 +112,7 @@
 			this.textCompareString.Name = "textCompareString";
 			this.textCompareString.Size = new System.Drawing.Size(137, 20);
 			this.textCompareString.TabIndex = 1;
+			this.textCompareString.TextChanged += new System.EventHandler(this.textCompareString_TextChanged);
 			// 
 			// labelLabValue
 			// 
@@ -227,6 +228,7 @@
 			this.textSNOMED.Name = "textSNOMED";
 			this.textSNOMED.Size = new System.Drawing.Size(137, 20);
 			this.textSNOMED.TabIndex = 32;
+			this.textSNOMED.TextChanged += new System.EventHandler(this.textSNOMED_TextChanged);
 			// 
 			// labelSNOMED
 			// 

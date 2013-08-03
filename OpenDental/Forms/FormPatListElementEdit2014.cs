@@ -430,6 +430,18 @@ namespace OpenDental {
 			DialogResult=DialogResult.Cancel;
 		}
 
+		private void textCompareString_TextChanged(object sender,EventArgs e) {
+			if(textCompareString.Text!="") {
+				textSNOMED.Text="";
+			}
+		}
+
+		private void textSNOMED_TextChanged(object sender,EventArgs e) {
+			if(textSNOMED.Text!="") {
+				textCompareString.Text="";
+			}
+		}
+
 		private void butOK_Click(object sender,EventArgs e) {
 			if(!IsValid()) {
 				return;
