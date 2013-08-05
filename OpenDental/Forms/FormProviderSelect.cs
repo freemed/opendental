@@ -652,7 +652,7 @@ namespace OpenDental{
 				return;
 			}
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
-				if(table.Rows[i]["UserName"].ToString()!=""){
+				if(table.Rows[gridMain.SelectedIndices[i]]["UserName"].ToString()!="") {
 					MsgBox.Show(this,"Not allowed to create users on providers which already have users.");
 					return;
 				}
