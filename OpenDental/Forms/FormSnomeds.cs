@@ -34,15 +34,6 @@ namespace OpenDental {
 			FillGrid();
 		}
 
-		private void FillGridOld() {
-			Cursor=Cursors.WaitCursor;
-			long resultCount=Snomeds.GetCountSearch(textCode.Text);
-			if(resultCount>10000) {//List runs out of memory at 1147389 items. Tried allowing one million, took 10 minutes to load.
-				MessageBox.Show(resultCount+Lan.g(this," results. Only the first 10000 results will be shown."));
-			}
-			Cursor=Cursors.Default;
-		}
-
 		private void FillGrid() {
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
@@ -58,6 +49,9 @@ namespace OpenDental {
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			SnomedList=Snomeds.GetByCodeOrDescription(textCode.Text);
+			if(SnomedList.Count==10000) {//Max number of results returned.
+				MsgBox.Show(this,"Too many results. Only the first 10,000 results will be shown.");
+			}
 			for(int i=0;i<SnomedList.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(SnomedList[i].SnomedCode);
@@ -165,8 +159,8 @@ namespace OpenDental {
 		private void butAdd_Click(object sender,EventArgs e) {
 			//TODO: Either change to adding a snomed code instead of an ICD9 or don't allow users to add SNOMED codes other than importing.
 			changed=true;
-			ICD9 icd9=new ICD9();
-			FormIcd9Edit FormI=new FormIcd9Edit(icd9);
+			Snomed snomed=new Snomed();
+			FormSnomedEdit FormI=new FormSnomedEdit(snomed);
 			FormI.IsNew=true;
 			FormI.ShowDialog();
 			FillGrid();
