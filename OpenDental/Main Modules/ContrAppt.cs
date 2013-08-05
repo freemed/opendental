@@ -4644,7 +4644,7 @@ namespace OpenDental {
 			ModuleSelected(pat.PatNum);
 			SetInvalid();
 			SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate,pat.PatNum,
-				pat.GetNameLF()+" "+apt.AptDateTime.ToShortDateString());
+				apt.ProcDescript+", "+apt.AptDateTime.ToShortDateString()+", Procedures automatically set complete due to appt being set complete",0);
 		}
 
 		private void OnDelete_Click() {

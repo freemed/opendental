@@ -7057,12 +7057,30 @@ namespace OpenDental{
 				procCodes.Add(ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode);
 			}//for n
 			//this was requiring too many irrelevant queries and going too slowly   //ModuleSelected(PatCur.PatNum);
+			string teeth = "";
+			if(newStatus==ProcStat.C) {
+				for(int i=0;i<toothChart.SelectedTeeth.Count;i++) {
+					if(i>0) {
+						teeth+=", ";
+					}
+					teeth+=toothChart.SelectedTeeth[i].ToString();
+				}
+			}
 			ToothInitialList=ToothInitials.Refresh(PatCur.PatNum);
 			FillToothChart(false);
 			ClearButtons();
 			FillProgNotes();
 			if(newStatus==ProcStat.C) {
-				SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate,PatCur.PatNum,DateTime.Today.ToShortDateString());
+				string descript="";
+				if(procCodes.Count!=0) {//probably overkill
+					descript=ProcedureCodes.GetProcCode(procCodes[0]).Descript;
+				}
+				if(teeth!="") {
+					SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate,PatCur.PatNum,descript+" created for the following teeth: "+teeth);
+				}
+				else {
+					SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate,PatCur.PatNum,descript);
+				}
 				AutomationL.Trigger(AutomationTrigger.CompleteProcedure,procCodes,PatCur.PatNum);
 			}
 		}
@@ -7436,6 +7454,15 @@ namespace OpenDental{
 				//orionProvNum=ProcCur.ProvNum;
 			}//for i
 			//this was requiring too many irrelevant queries and going too slowly   //ModuleSelected(PatCur.PatNum);
+			string teeth = "";
+			if(newStatus==ProcStat.C) {
+				for(int i=0;i<toothChart.SelectedTeeth.Count;i++) {
+					if(i>0) {
+						teeth+=", ";
+					}
+					teeth+=toothChart.SelectedTeeth[i].ToString();
+				}
+			}
 			ToothInitialList=ToothInitials.Refresh(PatCur.PatNum);
 			FillToothChart(false);
 			ClearButtons();
@@ -7445,8 +7472,12 @@ namespace OpenDental{
 				if(ProcCur!=null) {//probably overkill
 					descript=ProcedureCodes.GetProcCode(ProcCur.CodeNum).Descript;
 				}
-				SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate,PatCur.PatNum,
-					descript+", "+DateTime.Today.ToShortDateString());
+				if(teeth!="") {
+					SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate,PatCur.PatNum,descript+" created for the following teeth: "+teeth);
+				}
+				else {
+					SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate,PatCur.PatNum,descript);
+				}
 				AutomationL.Trigger(AutomationTrigger.CompleteProcedure,procCodes,PatCur.PatNum);
 			}
 		}
@@ -7594,6 +7625,16 @@ namespace OpenDental{
 				procCodes.Add(ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode);
 			}//n selected teeth
 			//this was requiring too many irrelevant queries and going too slowly   //ModuleSelected(PatCur.PatNum);
+			string teeth = "";
+			if(newStatus==ProcStat.C) {
+				//string teeth = "";
+				for(int i=0;i<toothChart.SelectedTeeth.Count;i++) {
+					if(i>0) {
+						teeth+=", ";
+					}
+					teeth+=toothChart.SelectedTeeth[i].ToString();
+				}
+			}
 			ToothInitialList=ToothInitials.Refresh(PatCur.PatNum);
 			FillToothChart(false);
 			ClearButtons();
@@ -7601,9 +7642,16 @@ namespace OpenDental{
 			textProcCode.Text="";
 			textProcCode.Select();
 			if(newStatus==ProcStat.C) {
-				SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate,PatCur.PatNum,
-					PatCur.GetNameLF()+", "
-					+DateTime.Today.ToShortDateString());
+				string descript="";
+				if(procCodes.Count!=0) {//probably overkill
+					descript=ProcedureCodes.GetProcCode(procCodes[0]).Descript;
+				}
+				if(teeth!="") {
+					SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate,PatCur.PatNum,descript+" created for the following teeth: "+teeth);
+				}
+				else {
+					SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate,PatCur.PatNum,descript);
+				}
 				AutomationL.Trigger(AutomationTrigger.CompleteProcedure,procCodes,PatCur.PatNum);
 			}
 		}
