@@ -674,7 +674,12 @@ namespace OpenDental{
 				return;
 			}
 			if(grid.SelectedIndices.Length==0) {
+				ContactMethod cmeth;
 				for(int i=0;i<Table.Rows.Count;i++) {
+					cmeth=(ContactMethod)PIn.Long(Table.Rows[i]["PreferConfirmMethod"].ToString());
+					if(cmeth!=ContactMethod.Mail && cmeth!=ContactMethod.None) {
+						continue;
+					}
 					grid.SetSelected(i,true);
 				}
 			}
