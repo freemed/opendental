@@ -215,6 +215,11 @@ namespace OpenDental {
 					FormPF.IsNew=true;
 					FormPF.ShowDialog();
 				}
+				if(PatFieldDefs.List[e.Row].FieldType==PatFieldType.Currency) {
+					FormPatFieldCurrencyEdit FormPF=new FormPatFieldCurrencyEdit(field);
+					FormPF.IsNew=true;
+					FormPF.ShowDialog();
+				}
 			}
 			else {
 				if(PatFieldDefs.List[e.Row].FieldType==PatFieldType.Text) {
@@ -231,6 +236,10 @@ namespace OpenDental {
 				}
 				if(PatFieldDefs.List[e.Row].FieldType==PatFieldType.Checkbox) {
 					FormPatFieldCheckEdit FormPF=new FormPatFieldCheckEdit(field);
+					FormPF.ShowDialog();
+				}
+				if(PatFieldDefs.List[e.Row].FieldType==PatFieldType.Currency) {
+					FormPatFieldCurrencyEdit FormPF=new FormPatFieldCurrencyEdit(field);
 					FormPF.ShowDialog();
 				}
 			}
