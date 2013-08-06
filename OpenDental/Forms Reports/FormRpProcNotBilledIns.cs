@@ -150,20 +150,6 @@ namespace OpenDental{
 				+"AND procedurelog.procstatus=2 "
 				+"AND procedurelog.ProcDate >= "+POut.Date(date1.SelectionStart)+" "
 				+"AND procedurelog.ProcDate <= "+POut.Date(date2.SelectionStart)+" "
-				//7/8/13 js The section below was added to catch
-				//completed procedures which are marked billtoins which have no associated claimprocs for patients with insurance.
-				+"UNION ALL "
-				+"SELECT CONCAT(patient.LName,', ',patient.FName,' ',patient.MiddleI) AS 'PatientName',procedurelog.ProcDate,procedurecode.Descript,procedurelog.ProcFee "
-				+"FROM procedurelog "
-				+"INNER JOIN procedurecode ON procedurecode.CodeNum=procedurelog.CodeNum AND procedurecode.NoBillIns=0 "
-				+"INNER JOIN patient ON patient.PatNum=procedurelog.PatNum "
-				+"INNER JOIN patplan ON patplan.PatNum=patient.PatNum "
-				+"INNER JOIN inssub ON inssub.InsSubNum=patplan.InsSubNum "
-				+"INNER JOIN insplan ON insplan.PlanNum=inssub.PlanNum AND insplan.IsMedical=0 "
-				+"LEFT OUTER JOIN claimproc ON claimproc.ProcNum=procedurelog.ProcNum "
-				+"WHERE claimproc.ProcNum IS NULL AND procedurelog.ProcFee>0 AND procedurelog.ProcStatus=2 "
-				+"AND procedurelog.ProcDate >= "+POut.Date(date1.SelectionStart)+" "
-				+"AND procedurelog.ProcDate <= "+POut.Date(date2.SelectionStart)+" "
 				+"GROUP BY procedurelog.ProcNum";
 			/*}
 			else{
