@@ -143,6 +143,7 @@ namespace OpenDentBusiness {
 		///<summary>The AtoZ folder path.</summary>
 		DocPath,
 		EasyBasicModules,
+		/// <summary>Depricated.</summary>
 		EasyHideAdvancedIns,
 		EasyHideCapitation,
 		EasyHideClinical,

@@ -1821,12 +1821,6 @@ namespace OpenDental{
 			if(PrefC.GetBool(PrefName.EasyHideMedicaid)) {
 				checkAlternateCode.Visible=false;
 			}
-			if(PrefC.GetBool(PrefName.EasyHideAdvancedIns)) {
-				//textOrthoMax.Visible=false;
-				//labelOrthoMax.Visible=false;
-				//panelAdvancedIns.Visible=false;
-				//panelSynch.Visible=false;
-			}
 			Program ProgramCur=Programs.GetCur(ProgramName.Trojan);
 			if(ProgramCur!=null && ProgramCur.Enabled) {
 				textTrojanID.Text=PlanCur.TrojanID;
