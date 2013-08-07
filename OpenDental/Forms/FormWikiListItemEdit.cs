@@ -28,6 +28,8 @@ namespace OpenDental {
 
 		private void FormWikiListEdit_Load(object sender,EventArgs e) {
 			TableItem = WikiLists.GetItem(WikiListCur,ItemNum);
+			//Show the PK in the title bar for informational purposes.  We don't put it in the grid because user can't change it.
+			this.Text=this.Text+" - "+TableItem.Columns[0]+" "+TableItem.Rows[0][0].ToString();//OK to use 0 indices here. If this fails something else is wrong.
 			FillGrid();
 		}
 
@@ -42,7 +44,7 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			for(int i=0;i<TableItem.Columns.Count;i++){
+			for(int i=1;i<TableItem.Columns.Count;i++){//Start at 1 since row 0 (PK) goes in the title bar.
 				row=new ODGridRow();
 				row.Cells.Add(TableItem.Columns[i].ColumnName);
 				row.Cells.Add(TableItem.Rows[0][i].ToString());
@@ -64,12 +66,11 @@ namespace OpenDental {
 		}
 
 		private void gridMain_CellLeave(object sender,ODGridClickEventArgs e) {
-			//update all cells. No call to DB, so this should be safe.
-			for(int i=1;i<gridMain.Rows.Count;i++) {//start at one, because we should never change the PK.
-				TableItem.Rows[0][i]=gridMain.Rows[i].Cells[1].Text;
+			//Save data from grid into table. No call to DB, so this should be safe.
+			for(int i=0;i<gridMain.Rows.Count;i++) {
+				TableItem.Rows[0][i+1]=gridMain.Rows[i].Cells[1].Text;//Column 0 of TableItems.Rows[0] is in the title bar, so it is off from the grid by 1.
 			}
-			//to undo changes made to PK.
-			FillGrid();
+			//FillGrid();//Causes errors with tabbing between cells. We put the PK in the title bar to fix this (now it doesn't need to be refreshed).
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
