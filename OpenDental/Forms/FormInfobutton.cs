@@ -130,6 +130,9 @@ namespace OpenDental {
 		}
 
 		private void fillProblem() {
+			if(Snomeds.GetByCode(ProblemCur.SnomedCode)==null) {
+				MsgBox.Show(this,"Selected problem does not have a valid SNOMED CT Code. Please select a SNOMED Code from the list provided.");
+			}
 			textProbName.Text=ProblemCur.DiseaseName;
 			textProbSnomedCode.Text=ProblemCur.SnomedCode;
 			//ProblemCur.DiseaseDefNum
@@ -163,6 +166,13 @@ namespace OpenDental {
 				warnings+=bullet+Lan.g(this,"No patient selected.")+"\r\n";
 			}
 			else {
+				try {
+					PatCur.Birthdate=PIn.Date(textPatBirth.Text);
+				}
+				catch {
+
+					warnings+=bullet+Lan.g(this,"Birthday.")+"\r\n";
+				}
 				if(PatCur.Birthdate==DateTime.MinValue) {
 					warnings+=bullet+Lan.g(this,"Patient does not have a valid birthday.")+"\r\n";
 				}
@@ -201,9 +211,13 @@ namespace OpenDental {
 					else {
 						if(textProbSnomedCode.Text=="") {
 							errors+=bullet+Lan.g(this,"No SNOMED CT problem code.")+"\r\n";
+							break;
 						}
 						if(textProbSnomedCode.Text!=ProblemCur.SnomedCode) {
 							warnings+=bullet+Lan.g(this,"SNOMED CT problem code has been manualy altered.")+"\r\n";
+						}
+						if(Snomeds.GetByCode(textProbSnomedCode.Text)==null) {
+							errors+=bullet+Lan.g(this,"SNOMED CT problem code does not exist in database.")+"\r\n";
 						}
 					}
 					break;

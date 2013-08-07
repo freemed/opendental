@@ -42,14 +42,19 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("Depricated",75,HorizontalAlignment.Center);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Description",270);
+			col=new ODGridColumn("Description",500);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("Date Of Standard",100);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			SnomedList=Snomeds.GetByCodeOrDescription(textCode.Text);
-			if(SnomedList.Count==10000) {//Max number of results returned.
+			if(textCode.Text.Contains(",")) {
+				SnomedList=Snomeds.GetByCodes(textCode.Text);
+			}
+			else {
+				SnomedList=Snomeds.GetByCodeOrDescription(textCode.Text);
+			}
+			if(SnomedList.Count>=10000) {//Max number of results returned.
 				MsgBox.Show(this,"Too many results. Only the first 10,000 results will be shown.");
 			}
 			for(int i=0;i<SnomedList.Count;i++) {
@@ -64,7 +69,7 @@ namespace OpenDental {
 		}
 
 		private void butImport_Click(object sender,EventArgs e) {
-			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Snomed Codes will be cleared and and completely replaced with the codes in the file you are importing. (This will not affect codes currently in use.) Continue anyways?")) {
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Snomed Codes will be cleared and and completely replaced with the codes in the file you are importing.  This will not damage patient records, but will reset any Snomed descriptions that had been changed.  Continue anyway?")) {
 				return;
 			}
 			Cursor=Cursors.WaitCursor;
@@ -164,6 +169,81 @@ namespace OpenDental {
 			FormI.IsNew=true;
 			FormI.ShowDialog();
 			FillGrid();
+		}
+
+		private void butCrossMap_Click(object sender,EventArgs e) {
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"This button takes a while to run. It imports two \"cross table\" files from the desktop (Ryan's computer only.) These tables are then used to create two more tables that contain a more useful form of the data. This button will probably not be part of the release version and if so it will behave much differently. \r\n\r\n Continue?\r\n (You should select CANCEL if you don't know exactly what this button does.)")) {
+				return;
+			}
+			string snomedMap=@"C:\Users\Ryan\Downloads\SnomedCT_Release_INT_20130131\SnomedCT_Release_INT_20130131\RF1Release\CrossMaps\ICD9\der1_CrossMaps_ICD9_INT_20130131.txt";
+			string icd9Targets=@"C:\Users\Ryan\Downloads\SnomedCT_Release_INT_20130131\SnomedCT_Release_INT_20130131\RF1Release\CrossMaps\ICD9\der1_CrossMapTargets_ICD9_INT_20130131.txt";
+			Cursor=Cursors.WaitCursor;
+			//This code is useful for debugging and should be identical to the code found in convertDB3.
+			string command="DROP TABLE IF EXISTS tempcrossmap";
+			DataCore.NonQ(command);
+			command=@"CREATE TABLE tempcrossmap (
+						TempcrossmapNum BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+						SNOMEDCode VARCHAR(255) NOT NULL,
+						TargetID VARCHAR(255) NOT NULL,
+						Mappable VARCHAR(255) NOT NULL
+						) DEFAULT CHARSET=utf8";
+			DataCore.NonQ(command); 
+			command="DROP TABLE IF EXISTS tempicd9targets";
+			DataCore.NonQ(command);
+			command=@"CREATE TABLE tempicd9targets (
+						Tempicd9targetsNum BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+						TargetID VARCHAR(255) NOT NULL,
+						ICD9Codes VARCHAR(255) NOT NULL
+						) DEFAULT CHARSET=utf8";
+			DataCore.NonQ(command);
+			//Import CrossMap Table----------------------------------------------------------------------------------------------------------
+			System.IO.StreamReader sr=new System.IO.StreamReader(snomedMap);
+			string[] arraySnomedMap;
+			sr.ReadLine();//skip headers
+			while(!sr.EndOfStream) {//each loop should read exactly one line
+				arraySnomedMap=sr.ReadLine().Split('\t');
+				command="INSERT INTO tempcrossmap (SNOMEDCode,TargetID,Mappable) VALUES ('"+arraySnomedMap[1]+"','"+arraySnomedMap[4]+"','"+arraySnomedMap[6]+"')";
+				DataCore.NonQ(command);
+			}
+			//Import Target Table----------------------------------------------------------------------------------------------------------
+			sr=new System.IO.StreamReader(icd9Targets);
+			string[] arrayTargets;
+			sr.ReadLine();//skip headers
+			while(!sr.EndOfStream) {//each loop should read exactly one line
+				arrayTargets=sr.ReadLine().Split('\t');
+				command="INSERT INTO tempicd9targets (TargetID,ICD9Codes) VALUES ('"+arrayTargets[0]+"','"+arrayTargets[2]+"')";
+				DataCore.NonQ(command);
+			}
+			//Import tac a code onto ICD9 codes...----------------------------------------------------------------------------------------------------------
+			//command="SELECT tempcrossmap.SNOMEDCode,tempicd9targets.ICD9Codes FROM tempcrossmap,tempicd9targets WHERE tempcrossmap.TargetID=tempicd9targets.TargetID";
+			//DataTable table = DataCore.GetTable(command);
+			//foreach(DataRow in table.Rows){
+				
+			//}
+			Cursor=Cursors.Default;
+
+		}
+
+		private void butMapToSnomed_Click(object sender,EventArgs e) {
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Will add SNOMED code to existing problems list only if the ICD9 code correlates to exactly one SNOMED code. If there is any ambiguity at all the code will not be added.")) {
+				return;
+			}
+			int changeCount=0;
+			Dictionary<string,string> dictionaryIcd9ToSnomed = Snomeds.GetICD9toSNOMEDDictionary();
+			DiseaseDefs.RefreshCache();
+			for(int i=0;i<DiseaseDefs.ListLong.Length;i++) {
+				if(!dictionaryIcd9ToSnomed.ContainsKey(DiseaseDefs.ListLong[i].ICD9Code)) {
+					continue;
+				}
+				DiseaseDef def=DiseaseDefs.ListLong[i];
+				if(def.SnomedCode!="") {
+					continue;
+				}
+				def.SnomedCode=dictionaryIcd9ToSnomed[def.ICD9Code];
+				DiseaseDefs.Update(def);
+				changeCount++;
+			}
+			MessageBox.Show(Lan.g(this,"SNOMED codes added: ")+changeCount);
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {

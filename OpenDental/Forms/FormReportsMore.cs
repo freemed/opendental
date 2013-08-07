@@ -398,6 +398,7 @@ namespace OpenDental {
 		private void FormReportsMore_Load(object sender,EventArgs e) {
 			Plugins.HookAddCode(this,"FormReportsMore.FormReportsMore_Load_beginning");
 			butPW.Visible=Programs.IsEnabled(ProgramName.PracticeWebReports);
+			butPatList.Visible=PrefC.GetBool(PrefName.ShowFeatureEhr);
 			listProdInc.Items.AddRange(new string[] {
 				Lan.g(this,"Today"),
 				Lan.g(this,"Yesterday"),
@@ -834,7 +835,7 @@ namespace OpenDental {
 		}
 
 		private void butPatList_Click(object sender,EventArgs e) {
-			FormPatList2014 FormPL=new FormPatList2014();
+			FormPatListEHR2014 FormPL=new FormPatListEHR2014();
 			FormPL.ElementList=new List<EhrPatListElement2014>();
 			FormPL.ShowDialog();
 		}

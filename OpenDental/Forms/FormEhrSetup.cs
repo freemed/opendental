@@ -111,6 +111,11 @@ namespace OpenDental {
 			FormL.ShowDialog();
 		}
 
+		private void butSnomeds_Click(object sender,EventArgs e) {
+			FormSnomeds FormS=new FormSnomeds();
+			FormS.ShowDialog();
+		}
+
 		private void butKeys_Click(object sender,EventArgs e) {
 			FormEhrQuarterlyKeys formK=new FormEhrQuarterlyKeys();
 			formK.ShowDialog();

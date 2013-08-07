@@ -65,20 +65,20 @@ namespace OpenDental{
 			this.label12 = new System.Windows.Forms.Label();
 			this.textProbName = new System.Windows.Forms.TextBox();
 			this.label11 = new System.Windows.Forms.Label();
-			this.butProbPick = new OpenDental.UI.Button();
 			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.tabMedication = new System.Windows.Forms.TabPage();
-			this.butMedPick = new OpenDental.UI.Button();
 			this.textMedSnomedCode = new System.Windows.Forms.TextBox();
 			this.label13 = new System.Windows.Forms.Label();
 			this.tabLabResult = new System.Windows.Forms.TabPage();
-			this.butLabPick = new OpenDental.UI.Button();
 			this.textBox4 = new System.Windows.Forms.TextBox();
 			this.label14 = new System.Windows.Forms.Label();
 			this.label15 = new System.Windows.Forms.Label();
 			this.textBox5 = new System.Windows.Forms.TextBox();
 			this.comboTask = new System.Windows.Forms.ComboBox();
 			this.label17 = new System.Windows.Forms.Label();
+			this.butProbPick = new OpenDental.UI.Button();
+			this.butMedPick = new OpenDental.UI.Button();
+			this.butLabPick = new OpenDental.UI.Button();
 			this.butPreview = new OpenDental.UI.Button();
 			this.butSend = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
@@ -459,7 +459,7 @@ namespace OpenDental{
 			// 
 			this.textMedName.Location = new System.Drawing.Point(156, 3);
 			this.textMedName.Name = "textMedName";
-			this.textMedName.Size = new System.Drawing.Size(169, 20);
+			this.textMedName.Size = new System.Drawing.Size(323, 20);
 			this.textMedName.TabIndex = 75;
 			// 
 			// label2
@@ -481,7 +481,7 @@ namespace OpenDental{
 			this.tabProblem.Controls.Add(this.butProbPick);
 			this.tabProblem.Location = new System.Drawing.Point(4, 22);
 			this.tabProblem.Name = "tabProblem";
-			this.tabProblem.Size = new System.Drawing.Size(556, 111);
+			this.tabProblem.Size = new System.Drawing.Size(556, 128);
 			this.tabProblem.TabIndex = 5;
 			this.tabProblem.Text = "Problem";
 			// 
@@ -505,7 +505,7 @@ namespace OpenDental{
 			// 
 			this.textProbName.Location = new System.Drawing.Point(156, 3);
 			this.textProbName.Name = "textProbName";
-			this.textProbName.Size = new System.Drawing.Size(169, 20);
+			this.textProbName.Size = new System.Drawing.Size(323, 20);
 			this.textProbName.TabIndex = 172;
 			// 
 			// label11
@@ -516,20 +516,6 @@ namespace OpenDental{
 			this.label11.TabIndex = 173;
 			this.label11.Text = "Name";
 			this.label11.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// butProbPick
-			// 
-			this.butProbPick.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butProbPick.Autosize = true;
-			this.butProbPick.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butProbPick.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butProbPick.CornerRadius = 4F;
-			this.butProbPick.Location = new System.Drawing.Point(3, 3);
-			this.butProbPick.Name = "butProbPick";
-			this.butProbPick.Size = new System.Drawing.Size(30, 24);
-			this.butProbPick.TabIndex = 4;
-			this.butProbPick.Text = "...";
-			this.butProbPick.Click += new System.EventHandler(this.butProbPick_Click);
 			// 
 			// tabControl1
 			// 
@@ -552,22 +538,9 @@ namespace OpenDental{
 			this.tabMedication.Controls.Add(this.textMedName);
 			this.tabMedication.Location = new System.Drawing.Point(4, 22);
 			this.tabMedication.Name = "tabMedication";
-			this.tabMedication.Size = new System.Drawing.Size(556, 111);
+			this.tabMedication.Size = new System.Drawing.Size(556, 128);
 			this.tabMedication.TabIndex = 6;
 			this.tabMedication.Text = "Medication";
-			// 
-			// butMedPick
-			// 
-			this.butMedPick.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butMedPick.Autosize = true;
-			this.butMedPick.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butMedPick.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butMedPick.CornerRadius = 4F;
-			this.butMedPick.Location = new System.Drawing.Point(3, 3);
-			this.butMedPick.Name = "butMedPick";
-			this.butMedPick.Size = new System.Drawing.Size(30, 24);
-			this.butMedPick.TabIndex = 169;
-			this.butMedPick.Text = "...";
 			// 
 			// textMedSnomedCode
 			// 
@@ -599,19 +572,6 @@ namespace OpenDental{
 			this.tabLabResult.TabIndex = 7;
 			this.tabLabResult.Text = "Lab Result";
 			// 
-			// butLabPick
-			// 
-			this.butLabPick.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butLabPick.Autosize = true;
-			this.butLabPick.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butLabPick.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butLabPick.CornerRadius = 4F;
-			this.butLabPick.Location = new System.Drawing.Point(3, 3);
-			this.butLabPick.Name = "butLabPick";
-			this.butLabPick.Size = new System.Drawing.Size(30, 24);
-			this.butLabPick.TabIndex = 174;
-			this.butLabPick.Text = "...";
-			// 
 			// textBox4
 			// 
 			this.textBox4.Location = new System.Drawing.Point(156, 26);
@@ -641,7 +601,7 @@ namespace OpenDental{
 			// 
 			this.textBox5.Location = new System.Drawing.Point(156, 3);
 			this.textBox5.Name = "textBox5";
-			this.textBox5.Size = new System.Drawing.Size(169, 20);
+			this.textBox5.Size = new System.Drawing.Size(323, 20);
 			this.textBox5.TabIndex = 170;
 			// 
 			// comboTask
@@ -663,6 +623,46 @@ namespace OpenDental{
 			this.label17.TabIndex = 129;
 			this.label17.Text = "Task Code";
 			this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// butProbPick
+			// 
+			this.butProbPick.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butProbPick.Autosize = true;
+			this.butProbPick.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butProbPick.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butProbPick.CornerRadius = 4F;
+			this.butProbPick.Location = new System.Drawing.Point(3, 3);
+			this.butProbPick.Name = "butProbPick";
+			this.butProbPick.Size = new System.Drawing.Size(30, 24);
+			this.butProbPick.TabIndex = 4;
+			this.butProbPick.Text = "...";
+			this.butProbPick.Click += new System.EventHandler(this.butProbPick_Click);
+			// 
+			// butMedPick
+			// 
+			this.butMedPick.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butMedPick.Autosize = true;
+			this.butMedPick.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butMedPick.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butMedPick.CornerRadius = 4F;
+			this.butMedPick.Location = new System.Drawing.Point(3, 3);
+			this.butMedPick.Name = "butMedPick";
+			this.butMedPick.Size = new System.Drawing.Size(30, 24);
+			this.butMedPick.TabIndex = 169;
+			this.butMedPick.Text = "...";
+			// 
+			// butLabPick
+			// 
+			this.butLabPick.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butLabPick.Autosize = true;
+			this.butLabPick.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butLabPick.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butLabPick.CornerRadius = 4F;
+			this.butLabPick.Location = new System.Drawing.Point(3, 3);
+			this.butLabPick.Name = "butLabPick";
+			this.butLabPick.Size = new System.Drawing.Size(30, 24);
+			this.butLabPick.TabIndex = 174;
+			this.butLabPick.Text = "...";
 			// 
 			// butPreview
 			// 

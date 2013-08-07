@@ -12,6 +12,8 @@ using OpenDental;
 
 namespace OpenDental {
 	public partial class FormLOINCs:Form {
+		public bool IsSelectionMode;
+		public LOINC SelectedLOINC;
 		private List<LOINC> listLOINCSearch;
 		public LOINC LOINCCur;
 
@@ -22,6 +24,7 @@ namespace OpenDental {
 		private void FormLOINCPicker_Load(object sender,EventArgs e) {
 #if !DEBUG//just in case
 			butLOINCFill.Visible=false;
+			MsgBox.Show(this,"This form still needs work.");
 #endif
 			listLOINCSearch=new List<LOINC>();
 			fillGrid();
@@ -54,8 +57,11 @@ namespace OpenDental {
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			//MedicationCur=Medications.Listt[e.Row];
-			//DialogResult=DialogResult.OK;
+			if(IsSelectionMode) {
+				SelectedLOINC=listLOINCSearch[e.Row];
+				DialogResult=DialogResult.OK;
+			}
+			//Nothing to do if not selection mode
 		}
 
 		private void butLOINCFill_Click(object sender,EventArgs e) {
@@ -97,7 +103,7 @@ namespace OpenDental {
 					}
 				}
 				string[] headers=sr.ReadLine().Split('\t');
-				if(headers.Length!=46) {
+				if(headers.Length!=48) {
 					throw new Exception(Lan.g(this,"File contains unexpected number of columns."));
 				}
 				if(headers[0].Trim('\"') !="LOINC_NUM"
@@ -131,11 +137,14 @@ namespace OpenDental {
 			fillGrid();
 		}
 
-		private void FillSNOMEDTemp() {
-
-		}
-
 		private void butOK_Click(object sender,EventArgs e) {
+			if(gridMain.GetSelectedIndex()==-1) {
+				MsgBox.Show(this,"Please select a LOINC code from the list.");
+				return;
+			}
+			if(IsSelectionMode) {
+				SelectedLOINC=listLOINCSearch[gridMain.GetSelectedIndex()];
+			}
 			DialogResult=DialogResult.OK;
 		}
 
