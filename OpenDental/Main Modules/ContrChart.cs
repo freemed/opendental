@@ -9175,7 +9175,7 @@ namespace OpenDental{
 			if(PrefC.GetBool(PrefName.ProcGroupNoteDoesAggregate)) {
 				string aggNote="";
 				for(int i=0;i<proclist.Count;i++) {
-					if(i>0) {
+					if(i>0 && proclist[i-1].Note!="") {
 						aggNote+="\r\n";
 					}
 					aggNote+=proclist[i].Note;
