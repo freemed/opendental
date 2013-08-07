@@ -481,6 +481,10 @@ namespace OpenDental{
 			}
 			textVotesAllotted.Text=RegKey.VotesAllotted.ToString();
 			textNote.Text=RegKey.Note;
+			//Make the practice title reset button visible for HQ.
+			if(PrefC.GetBool(PrefName.DockPhonePanelShow)) {
+				butPracticeTitleReset.Visible=true;
+			}
 		}
 
 		private void butMoveTo_Click(object sender,EventArgs e) {
@@ -569,7 +573,7 @@ namespace OpenDental{
 				OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
 				updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress);
 			#endif
-			if(PrefC.GetString(PrefName.UpdateWebProxyAddress) !="") {
+			if(PrefC.GetString(PrefName.UpdateWebProxyAddress)!="") {
 				IWebProxy proxy=new WebProxy(PrefC.GetString(PrefName.UpdateWebProxyAddress));
 				ICredentials cred=new NetworkCredential(PrefC.GetString(PrefName.UpdateWebProxyUserName),PrefC.GetString(PrefName.UpdateWebProxyPassword));
 				proxy.Credentials=cred;
