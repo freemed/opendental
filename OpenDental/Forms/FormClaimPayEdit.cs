@@ -420,9 +420,19 @@ namespace OpenDental{
 			try{
 				if(IsNew) {
 					ClaimPayments.Insert(ClaimPaymentCur);//error thrown if trying to change amount and already attached to a deposit.
+					SecurityLogs.MakeLogEntry(Permissions.InsPayCreate,0,
+						Lan.g(this,"Carrier Name: ")+ClaimPaymentCur.CarrierName+", "
+						+Lan.g(this,"Total Amount: ")+ClaimPaymentCur.CheckAmt.ToString("c")+", "
+						+Lan.g(this,"Check Date: ")+ClaimPaymentCur.CheckDate.ToShortDateString()+", "//Date the check is entered in the system (i.e. today)
+						+"ClaimPaymentNum: "+ClaimPaymentCur.ClaimPaymentNum);//Column name, not translated.
 				}
 				else {
 					ClaimPayments.Update(ClaimPaymentCur);//error thrown if trying to change amount and already attached to a deposit.
+					SecurityLogs.MakeLogEntry(Permissions.InsPayEdit,0,
+						Lan.g(this,"Carrier Name: ")+ClaimPaymentCur.CarrierName+", "
+						+Lan.g(this,"Total Amount: ")+ClaimPaymentCur.CheckAmt.ToString("c")+", "
+						+Lan.g(this,"Check Date: ")+ClaimPaymentCur.CheckDate.ToShortDateString()+", "//Date the check is entered in the system
+						+"ClaimPaymentNum: "+ClaimPaymentCur.ClaimPaymentNum);//Column name, not translated.
 				}
 			}
 			catch(ApplicationException ex){
