@@ -31,6 +31,7 @@ namespace OpenDental {
 		}
 
 		private void fillGrid() {
+			return;
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col;
@@ -48,8 +49,8 @@ namespace OpenDental {
 			for(int i=0;i<listLOINCSearch.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(listLOINCSearch[i].LOINCCode);
-				row.Cells.Add(listLOINCSearch[i].LongName);
-				row.Cells.Add(listLOINCSearch[i].UCUMUnits);
+				//row.Cells.Add(listLOINCSearch[i].LongName);
+				//row.Cells.Add(listLOINCSearch[i].UCUMUnits);
 				row.Cells.Add(listLOINCSearch[i].OrderObs);
 				gridMain.Rows.Add(row);
 			}
@@ -64,7 +65,7 @@ namespace OpenDental {
 			//Nothing to do if not selection mode
 		}
 
-		private void butLOINCFill_Click(object sender,EventArgs e) {
+		private void butLOINCFill_Click_Old(object sender,EventArgs e) {
 			//string loincFilePath=@"C:\Users\Ryan\Desktop\LOINCDB.txt";
 			OpenFileDialog ofd=new OpenFileDialog();
 			ofd.Title=Lan.g(this,"Please select the LOINCDB.TXT file that contains the LOINC Codes.");
@@ -120,9 +121,9 @@ namespace OpenDental {
 				while(!sr.EndOfStream) {//each loop should read exactly one line of code. and each line of code should be a unique LOINC code
 					arrayLOINC=sr.ReadLine().Split('\t');
 					loincTemp.LOINCCode		=arrayLOINC[0].Trim('\"');
-					loincTemp.UCUMUnits		=arrayLOINC[39].Trim('\"');
-					loincTemp.LongName		=arrayLOINC[34].Trim('\"');
-					loincTemp.ShortName		=arrayLOINC[28].Trim('\"');
+					//loincTemp.UCUMUnits		=arrayLOINC[39].Trim('\"');
+					//loincTemp.LongName		=arrayLOINC[34].Trim('\"');
+					//loincTemp.ShortName		=arrayLOINC[28].Trim('\"');
 					loincTemp.OrderObs		=arrayLOINC[29].Trim('\"');
 					LOINCs.Insert(loincTemp);
 				}
@@ -132,6 +133,103 @@ namespace OpenDental {
 			}
 			Cursor=Cursors.Default;
 		}
+
+		private void butLOINCFill_Click(object sender,EventArgs e) {
+			//string loincFilePath=@"C:\Users\Ryan\Desktop\LOINCDB.txt";
+			OpenFileDialog ofd=new OpenFileDialog();
+			ofd.Title=Lan.g(this,"Please select the LOINCDB.TXT file that contains the LOINC Codes.");
+			ofd.Multiselect=false;
+			ofd.ShowDialog();
+			//Validate selected file---------------------------------------------------------------------------------------------------------------
+			if(!ofd.FileName.ToLower().EndsWith(".txt")) {
+				MsgBox.Show(this,"You must select a text file.");
+			}
+			try {
+				System.IO.StreamReader sr=new System.IO.StreamReader(ofd.FileName);
+				sr.Peek();
+			}
+			catch(Exception ex) {
+				MessageBox.Show(this,Lan.g(this,"Error reading file")+":\r\n"+ex.Message);
+			}
+			Cursor=Cursors.WaitCursor;
+#if DEBUG
+			string command="DROP TABLE IF EXISTS loinc";
+			DataCore.NonQ(command);
+			command=@"CREATE TABLE loinc (
+						LOINCNum bigint NOT NULL auto_increment PRIMARY KEY,
+						LOINCCode varchar(255) NOT NULL,
+						Component varchar(255) NOT NULL,
+						PropertyObserved varchar(255) NOT NULL,
+						TimeAspct varchar(255) NOT NULL,
+						SystemMeasured varchar(255) NOT NULL,
+						ScaleType varchar(255) NOT NULL,
+						MethodType varchar(255) NOT NULL,
+						StatusOfCode varchar(255) NOT NULL,
+						NameShort varchar(255) NOT NULL,
+						ClassType int NOT NULL,
+						UnitsRequired tinyint NOT NULL,
+						OrderObs varchar(255) NOT NULL,
+						HL7FieldSubfieldID varchar(255) NOT NULL,
+						ExternalCopyrightNotice text NOT NULL,
+						NameLongCommon varchar(255) NOT NULL,
+						UnitsUCUM varchar(255) NOT NULL,
+						RankCommonTests int NOT NULL,
+						RankCommonOrders int NOT NULL
+						) DEFAULT CHARSET=utf8";
+			DataCore.NonQ(command);
+#endif
+			try {
+				System.IO.StreamReader sr=new System.IO.StreamReader(ofd.FileName);
+				while(!sr.ReadLine().StartsWith("<----Clip Here for Data----->")) {//fast forward through the header text to the data table.
+					if(sr.EndOfStream) {//prevent infinite loop in case we read through the whole file.
+						throw new Exception(Lan.g(this,"Reached end of file before finding data."));
+						//break;
+					}
+				}
+				string[] headers=sr.ReadLine().Split('\t');
+				if(headers.Length!=48) {
+					throw new Exception(Lan.g(this,"File contains unexpected number of columns."));
+				}
+				if(headers[0].Trim('\"') !="LOINC_NUM"
+					|| headers[39].Trim('\"')!="EXAMPLE_UCUM_UNITS" 
+					|| headers[34].Trim('\"')!="LONG_COMMON_NAME" 
+					|| headers[28].Trim('\"')!="SHORTNAME" 
+					|| headers[29].Trim('\"')!="ORDER_OBS") {
+					//TODO: expand this to check all columns, though this should be sufficient.
+					throw new Exception(Lan.g(this,"Column names mismatch."));
+				}
+				//Import LOINC Codes----------------------------------------------------------------------------------------------------------
+				string[] arrayLOINC;
+				LOINC loincTemp=new LOINC();
+				while(!sr.EndOfStream) {//each loop should read exactly one line of code. and each line of code should be a unique LOINC code
+					arrayLOINC=sr.ReadLine().Replace("\"","").Split('\t');
+					loincTemp.LOINCCode								=arrayLOINC[0];
+					loincTemp.Component								=arrayLOINC[1];
+					loincTemp.PropertyObserved				=arrayLOINC[2];
+					loincTemp.TimeAspct								=arrayLOINC[3];
+					loincTemp.SystemMeasured					=arrayLOINC[4];
+					loincTemp.ScaleType								=arrayLOINC[5];
+					loincTemp.MethodType							=arrayLOINC[6];
+					loincTemp.StatusOfCode						=arrayLOINC[12];
+					loincTemp.ClassType								=PIn.Int(arrayLOINC[15]);
+					loincTemp.UnitsRequired						=arrayLOINC[25]=="Y";
+					loincTemp.NameShort								=arrayLOINC[28];
+					loincTemp.OrderObs								=arrayLOINC[29];
+					loincTemp.HL7FieldSubfieldID			=arrayLOINC[31];
+					loincTemp.ExternalCopyrightNotice	=arrayLOINC[32];
+					loincTemp.NameLongCommon					=arrayLOINC[34];
+					loincTemp.UnitsUCUM								=arrayLOINC[39];
+					loincTemp.RankCommonOrders				=PIn.Int(arrayLOINC[44]);
+					loincTemp.RankCommonTests					=PIn.Int(arrayLOINC[45]);
+					LOINCs.Insert(loincTemp);
+				}
+			}
+			catch(Exception ex) {
+				MessageBox.Show(this,Lan.g(this,"Error importing LOINC codes:")+"\r\n"+ex.Message);
+			}
+			Cursor=Cursors.Default;
+		}
+
 
 		private void butSearch_Click(object sender,EventArgs e) {
 			fillGrid();

@@ -823,27 +823,53 @@ namespace OpenDentBusiness {
 					command="DROP TABLE IF EXISTS loinc";
 					Db.NonQ(command);
 					command=@"CREATE TABLE loinc (
-							LOINCNum bigint NOT NULL auto_increment PRIMARY KEY,
-							LOINCCode varchar(255) NOT NULL,
-							UCUMUnits varchar(255) NOT NULL,
-							LongName varchar(255) NOT NULL,
-							ShortName varchar(255) NOT NULL,
-							OrderObs varchar(255) NOT NULL
-							) DEFAULT CHARSET=utf8";
+						LOINCNum bigint NOT NULL auto_increment PRIMARY KEY,
+						LOINCCode varchar(255) NOT NULL,
+						Component varchar(255) NOT NULL,
+						PropertyObserved varchar(255) NOT NULL,
+						TimeAspct varchar(255) NOT NULL,
+						SystemMeasured varchar(255) NOT NULL,
+						ScaleType varchar(255) NOT NULL,
+						MethodType varchar(255) NOT NULL,
+						StatusOfCode varchar(255) NOT NULL,
+						NameShort varchar(255) NOT NULL,
+						ClassType int NOT NULL,
+						UnitsRequired tinyint NOT NULL,
+						OrderObs varchar(255) NOT NULL,
+						HL7FieldSubfieldID varchar(255) NOT NULL,
+						ExternalCopyrightNotice text NOT NULL,
+						NameLongCommon varchar(255) NOT NULL,
+						UnitsUCUM varchar(255) NOT NULL,
+						RankCommonTests int NOT NULL,
+						RankCommonOrders int NOT NULL
+						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
 				}
 				else {//oracle
 					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE loinc'; EXCEPTION WHEN OTHERS THEN NULL; END;";
 					Db.NonQ(command);
 					command=@"CREATE TABLE loinc (
-							LOINCNum number(20) NOT NULL,
-							LOINCCode varchar2(255),
-							UCUMUnits varchar2(255),
-							LongName varchar2(255),
-							ShortName varchar2(255),
-							OrderObs varchar2(255),
-							CONSTRAINT loinc_LOINCNum PRIMARY KEY (LOINCNum)
-							)";
+						LOINCNum number(20) NOT NULL,
+						LOINCCode varchar2(255),
+						Component varchar2(255),
+						PropertyObserved varchar2(255),
+						TimeAspct varchar2(255),
+						SystemMeasured varchar2(255),
+						ScaleType varchar2(255),
+						MethodType varchar2(255),
+						StatusOfCode varchar2(255),
+						NameShort varchar2(255),
+						ClassType number(11) NOT NULL,
+						UnitsRequired number(3) NOT NULL,
+						OrderObs varchar2(255),
+						HL7FieldSubfieldID varchar2(255),
+						ExternalCopyrightNotice clob,
+						NameLongCommon varchar2(255),
+						UnitsUCUM varchar2(255),
+						RankCommonTests number(11) NOT NULL,
+						RankCommonOrders number(11) NOT NULL,
+						CONSTRAINT loinc_LOINCNum PRIMARY KEY (LOINCNum)
+						)";
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
@@ -890,3 +916,6 @@ namespace OpenDentBusiness {
 
 
 
+
+
+				

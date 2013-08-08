@@ -46,12 +46,25 @@ namespace OpenDentBusiness.Crud{
 			LOINC lOINC;
 			for(int i=0;i<table.Rows.Count;i++) {
 				lOINC=new LOINC();
-				lOINC.LOINCNum = PIn.Long  (table.Rows[i]["LOINCNum"].ToString());
-				lOINC.LOINCCode= PIn.String(table.Rows[i]["LOINCCode"].ToString());
-				lOINC.UCUMUnits= PIn.String(table.Rows[i]["UCUMUnits"].ToString());
-				lOINC.LongName = PIn.String(table.Rows[i]["LongName"].ToString());
-				lOINC.ShortName= PIn.String(table.Rows[i]["ShortName"].ToString());
-				lOINC.OrderObs = PIn.String(table.Rows[i]["OrderObs"].ToString());
+				lOINC.LOINCNum               = PIn.Long  (table.Rows[i]["LOINCNum"].ToString());
+				lOINC.LOINCCode              = PIn.String(table.Rows[i]["LOINCCode"].ToString());
+				lOINC.Component              = PIn.String(table.Rows[i]["Component"].ToString());
+				lOINC.PropertyObserved       = PIn.String(table.Rows[i]["PropertyObserved"].ToString());
+				lOINC.TimeAspct              = PIn.String(table.Rows[i]["TimeAspct"].ToString());
+				lOINC.SystemMeasured         = PIn.String(table.Rows[i]["SystemMeasured"].ToString());
+				lOINC.ScaleType              = PIn.String(table.Rows[i]["ScaleType"].ToString());
+				lOINC.MethodType             = PIn.String(table.Rows[i]["MethodType"].ToString());
+				lOINC.StatusOfCode           = PIn.String(table.Rows[i]["StatusOfCode"].ToString());
+				lOINC.NameShort              = PIn.String(table.Rows[i]["NameShort"].ToString());
+				lOINC.ClassType              = PIn.Int   (table.Rows[i]["ClassType"].ToString());
+				lOINC.UnitsRequired          = PIn.Bool  (table.Rows[i]["UnitsRequired"].ToString());
+				lOINC.OrderObs               = PIn.String(table.Rows[i]["OrderObs"].ToString());
+				lOINC.HL7FieldSubfieldID     = PIn.String(table.Rows[i]["HL7FieldSubfieldID"].ToString());
+				lOINC.ExternalCopyrightNotice= PIn.String(table.Rows[i]["ExternalCopyrightNotice"].ToString());
+				lOINC.NameLongCommon         = PIn.String(table.Rows[i]["NameLongCommon"].ToString());
+				lOINC.UnitsUCUM              = PIn.String(table.Rows[i]["UnitsUCUM"].ToString());
+				lOINC.RankCommonTests        = PIn.Int   (table.Rows[i]["RankCommonTests"].ToString());
+				lOINC.RankCommonOrders       = PIn.Int   (table.Rows[i]["RankCommonOrders"].ToString());
 				retVal.Add(lOINC);
 			}
 			return retVal;
@@ -92,21 +105,38 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="LOINCNum,";
 			}
-			command+="LOINCCode,UCUMUnits,LongName,ShortName,OrderObs) VALUES(";
+			command+="LOINCCode,Component,PropertyObserved,TimeAspct,SystemMeasured,ScaleType,MethodType,StatusOfCode,NameShort,ClassType,UnitsRequired,OrderObs,HL7FieldSubfieldID,ExternalCopyrightNotice,NameLongCommon,UnitsUCUM,RankCommonTests,RankCommonOrders) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(lOINC.LOINCNum)+",";
 			}
 			command+=
 				 "'"+POut.String(lOINC.LOINCCode)+"',"
-				+"'"+POut.String(lOINC.UCUMUnits)+"',"
-				+"'"+POut.String(lOINC.LongName)+"',"
-				+"'"+POut.String(lOINC.ShortName)+"',"
-				+"'"+POut.String(lOINC.OrderObs)+"')";
+				+"'"+POut.String(lOINC.Component)+"',"
+				+"'"+POut.String(lOINC.PropertyObserved)+"',"
+				+"'"+POut.String(lOINC.TimeAspct)+"',"
+				+"'"+POut.String(lOINC.SystemMeasured)+"',"
+				+"'"+POut.String(lOINC.ScaleType)+"',"
+				+"'"+POut.String(lOINC.MethodType)+"',"
+				+"'"+POut.String(lOINC.StatusOfCode)+"',"
+				+"'"+POut.String(lOINC.NameShort)+"',"
+				+    POut.Int   (lOINC.ClassType)+","
+				+    POut.Bool  (lOINC.UnitsRequired)+","
+				+"'"+POut.String(lOINC.OrderObs)+"',"
+				+"'"+POut.String(lOINC.HL7FieldSubfieldID)+"',"
+				+DbHelper.ParamChar+"paramExternalCopyrightNotice,"
+				+"'"+POut.String(lOINC.NameLongCommon)+"',"
+				+"'"+POut.String(lOINC.UnitsUCUM)+"',"
+				+    POut.Int   (lOINC.RankCommonTests)+","
+				+    POut.Int   (lOINC.RankCommonOrders)+")";
+			if(lOINC.ExternalCopyrightNotice==null) {
+				lOINC.ExternalCopyrightNotice="";
+			}
+			OdSqlParameter paramExternalCopyrightNotice=new OdSqlParameter("paramExternalCopyrightNotice",OdDbType.Text,lOINC.ExternalCopyrightNotice);
 			if(useExistingPK || PrefC.RandomKeys) {
-				Db.NonQ(command);
+				Db.NonQ(command,paramExternalCopyrightNotice);
 			}
 			else {
-				lOINC.LOINCNum=Db.NonQ(command,true);
+				lOINC.LOINCNum=Db.NonQ(command,true,paramExternalCopyrightNotice);
 			}
 			return lOINC.LOINCNum;
 		}
@@ -114,13 +144,30 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one LOINC in the database.</summary>
 		public static void Update(LOINC lOINC){
 			string command="UPDATE loinc SET "
-				+"LOINCCode= '"+POut.String(lOINC.LOINCCode)+"', "
-				+"UCUMUnits= '"+POut.String(lOINC.UCUMUnits)+"', "
-				+"LongName = '"+POut.String(lOINC.LongName)+"', "
-				+"ShortName= '"+POut.String(lOINC.ShortName)+"', "
-				+"OrderObs = '"+POut.String(lOINC.OrderObs)+"' "
+				+"LOINCCode              = '"+POut.String(lOINC.LOINCCode)+"', "
+				+"Component              = '"+POut.String(lOINC.Component)+"', "
+				+"PropertyObserved       = '"+POut.String(lOINC.PropertyObserved)+"', "
+				+"TimeAspct              = '"+POut.String(lOINC.TimeAspct)+"', "
+				+"SystemMeasured         = '"+POut.String(lOINC.SystemMeasured)+"', "
+				+"ScaleType              = '"+POut.String(lOINC.ScaleType)+"', "
+				+"MethodType             = '"+POut.String(lOINC.MethodType)+"', "
+				+"StatusOfCode           = '"+POut.String(lOINC.StatusOfCode)+"', "
+				+"NameShort              = '"+POut.String(lOINC.NameShort)+"', "
+				+"ClassType              =  "+POut.Int   (lOINC.ClassType)+", "
+				+"UnitsRequired          =  "+POut.Bool  (lOINC.UnitsRequired)+", "
+				+"OrderObs               = '"+POut.String(lOINC.OrderObs)+"', "
+				+"HL7FieldSubfieldID     = '"+POut.String(lOINC.HL7FieldSubfieldID)+"', "
+				+"ExternalCopyrightNotice=  "+DbHelper.ParamChar+"paramExternalCopyrightNotice, "
+				+"NameLongCommon         = '"+POut.String(lOINC.NameLongCommon)+"', "
+				+"UnitsUCUM              = '"+POut.String(lOINC.UnitsUCUM)+"', "
+				+"RankCommonTests        =  "+POut.Int   (lOINC.RankCommonTests)+", "
+				+"RankCommonOrders       =  "+POut.Int   (lOINC.RankCommonOrders)+" "
 				+"WHERE LOINCNum = "+POut.Long(lOINC.LOINCNum);
-			Db.NonQ(command);
+			if(lOINC.ExternalCopyrightNotice==null) {
+				lOINC.ExternalCopyrightNotice="";
+			}
+			OdSqlParameter paramExternalCopyrightNotice=new OdSqlParameter("paramExternalCopyrightNotice",OdDbType.Text,lOINC.ExternalCopyrightNotice);
+			Db.NonQ(command,paramExternalCopyrightNotice);
 		}
 
 		///<summary>Updates one LOINC in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
@@ -130,28 +177,84 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="LOINCCode = '"+POut.String(lOINC.LOINCCode)+"'";
 			}
-			if(lOINC.UCUMUnits != oldLOINC.UCUMUnits) {
+			if(lOINC.Component != oldLOINC.Component) {
 				if(command!=""){ command+=",";}
-				command+="UCUMUnits = '"+POut.String(lOINC.UCUMUnits)+"'";
+				command+="Component = '"+POut.String(lOINC.Component)+"'";
 			}
-			if(lOINC.LongName != oldLOINC.LongName) {
+			if(lOINC.PropertyObserved != oldLOINC.PropertyObserved) {
 				if(command!=""){ command+=",";}
-				command+="LongName = '"+POut.String(lOINC.LongName)+"'";
+				command+="PropertyObserved = '"+POut.String(lOINC.PropertyObserved)+"'";
 			}
-			if(lOINC.ShortName != oldLOINC.ShortName) {
+			if(lOINC.TimeAspct != oldLOINC.TimeAspct) {
 				if(command!=""){ command+=",";}
-				command+="ShortName = '"+POut.String(lOINC.ShortName)+"'";
+				command+="TimeAspct = '"+POut.String(lOINC.TimeAspct)+"'";
+			}
+			if(lOINC.SystemMeasured != oldLOINC.SystemMeasured) {
+				if(command!=""){ command+=",";}
+				command+="SystemMeasured = '"+POut.String(lOINC.SystemMeasured)+"'";
+			}
+			if(lOINC.ScaleType != oldLOINC.ScaleType) {
+				if(command!=""){ command+=",";}
+				command+="ScaleType = '"+POut.String(lOINC.ScaleType)+"'";
+			}
+			if(lOINC.MethodType != oldLOINC.MethodType) {
+				if(command!=""){ command+=",";}
+				command+="MethodType = '"+POut.String(lOINC.MethodType)+"'";
+			}
+			if(lOINC.StatusOfCode != oldLOINC.StatusOfCode) {
+				if(command!=""){ command+=",";}
+				command+="StatusOfCode = '"+POut.String(lOINC.StatusOfCode)+"'";
+			}
+			if(lOINC.NameShort != oldLOINC.NameShort) {
+				if(command!=""){ command+=",";}
+				command+="NameShort = '"+POut.String(lOINC.NameShort)+"'";
+			}
+			if(lOINC.ClassType != oldLOINC.ClassType) {
+				if(command!=""){ command+=",";}
+				command+="ClassType = "+POut.Int(lOINC.ClassType)+"";
+			}
+			if(lOINC.UnitsRequired != oldLOINC.UnitsRequired) {
+				if(command!=""){ command+=",";}
+				command+="UnitsRequired = "+POut.Bool(lOINC.UnitsRequired)+"";
 			}
 			if(lOINC.OrderObs != oldLOINC.OrderObs) {
 				if(command!=""){ command+=",";}
 				command+="OrderObs = '"+POut.String(lOINC.OrderObs)+"'";
 			}
+			if(lOINC.HL7FieldSubfieldID != oldLOINC.HL7FieldSubfieldID) {
+				if(command!=""){ command+=",";}
+				command+="HL7FieldSubfieldID = '"+POut.String(lOINC.HL7FieldSubfieldID)+"'";
+			}
+			if(lOINC.ExternalCopyrightNotice != oldLOINC.ExternalCopyrightNotice) {
+				if(command!=""){ command+=",";}
+				command+="ExternalCopyrightNotice = "+DbHelper.ParamChar+"paramExternalCopyrightNotice";
+			}
+			if(lOINC.NameLongCommon != oldLOINC.NameLongCommon) {
+				if(command!=""){ command+=",";}
+				command+="NameLongCommon = '"+POut.String(lOINC.NameLongCommon)+"'";
+			}
+			if(lOINC.UnitsUCUM != oldLOINC.UnitsUCUM) {
+				if(command!=""){ command+=",";}
+				command+="UnitsUCUM = '"+POut.String(lOINC.UnitsUCUM)+"'";
+			}
+			if(lOINC.RankCommonTests != oldLOINC.RankCommonTests) {
+				if(command!=""){ command+=",";}
+				command+="RankCommonTests = "+POut.Int(lOINC.RankCommonTests)+"";
+			}
+			if(lOINC.RankCommonOrders != oldLOINC.RankCommonOrders) {
+				if(command!=""){ command+=",";}
+				command+="RankCommonOrders = "+POut.Int(lOINC.RankCommonOrders)+"";
+			}
 			if(command==""){
 				return;
 			}
+			if(lOINC.ExternalCopyrightNotice==null) {
+				lOINC.ExternalCopyrightNotice="";
+			}
+			OdSqlParameter paramExternalCopyrightNotice=new OdSqlParameter("paramExternalCopyrightNotice",OdDbType.Text,lOINC.ExternalCopyrightNotice);
 			command="UPDATE loinc SET "+command
 				+" WHERE LOINCNum = "+POut.Long(lOINC.LOINCNum);
-			Db.NonQ(command);
+			Db.NonQ(command,paramExternalCopyrightNotice);
 		}
 
 		///<summary>Deletes one LOINC from the database.</summary>

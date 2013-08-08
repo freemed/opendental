@@ -346,11 +346,11 @@ namespace OpenDental {
 			this.butPatList.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butPatList.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butPatList.CornerRadius = 4F;
-			this.butPatList.Location = new System.Drawing.Point(558, 87);
+			this.butPatList.Location = new System.Drawing.Point(549, 87);
 			this.butPatList.Name = "butPatList";
-			this.butPatList.Size = new System.Drawing.Size(75, 24);
+			this.butPatList.Size = new System.Drawing.Size(92, 24);
 			this.butPatList.TabIndex = 23;
-			this.butPatList.Text = "Pat List";
+			this.butPatList.Text = "EHR Patient List";
 			this.butPatList.Click += new System.EventHandler(this.butPatList_Click);
 			// 
 			// FormReportsMore
