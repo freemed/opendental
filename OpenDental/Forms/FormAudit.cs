@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDental.UI;
 using OpenDentBusiness;
+using System.Data;
 
 namespace OpenDental{
 	/// <summary>
@@ -353,17 +354,17 @@ namespace OpenDental{
 			FillGrid();
 		}
 
-		private void FillGrid(){
+		private void FillGrid() {
 			long userNum=0;
-			if(comboUser.SelectedIndex>0){
+			if(comboUser.SelectedIndex>0) {
 				userNum=UserodC.Listt[comboUser.SelectedIndex-1].UserNum;
 			}
 			SecurityLog[] logList=null;
-			if(comboPermission.SelectedIndex==0){
+			if(comboPermission.SelectedIndex==0) {
 				logList=SecurityLogs.Refresh(PIn.Date(textDateFrom.Text),PIn.Date(textDateTo.Text),
 					Permissions.None,PatNum,userNum);
 			}
-			else{
+			else {
 				logList=SecurityLogs.Refresh(PIn.Date(textDateFrom.Text),PIn.Date(textDateTo.Text),
 					(Permissions)Enum.Parse(typeof(Permissions),comboPermission.SelectedItem.ToString()),PatNum,userNum);
 			}
@@ -388,7 +389,21 @@ namespace OpenDental{
 			grid.Rows.Clear();
 			ODGridRow row;
 			Userod user;
-			for(int i=0;i<logList.Length;i++){
+			//Find deleted SecurityLog entries
+			int missingEntries=SecurityLogs.GetDeletedEntriesCount();
+			for(int j=0;j<missingEntries;j++) {
+				row=new ODGridRow();
+				row.Cells.Add("");//Date
+				row.Cells.Add("");//Time
+				row.Cells.Add("");//Patient
+				row.Cells.Add("");//User
+				row.Cells.Add("");//Permission
+				row.Cells.Add("");//Computer
+				row.Cells.Add(Lan.g("TableAuditMissingEntry","AUDIT LOG ENTRY MISSING"));//Log Text
+				row.ColorText=Color.Red;
+				grid.Rows.Add(row);
+			}
+			for(int i=0;i<logList.Length;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(logList[i].LogDateTime.ToShortDateString());
 				row.Cells.Add(logList[i].LogDateTime.ToShortTimeString());
@@ -409,6 +424,12 @@ namespace OpenDental{
 				}
 				row.Cells.Add(logList[i].CompName);
 				row.Cells.Add(logList[i].LogText);
+				//Get the hash for the audit log entry from the database and rehash to compare
+				string hashFromDb=SecurityLogHashs.GetLogHashForSecurityLog(logList[i].SecurityLogNum);
+				string newHash=SecurityLogHashs.EncryptSecurityLog(logList[i]);
+				if(hashFromDb!=newHash) {
+					row.ColorText=Color.Red; //Bad hash or no hash entry at all.  This prevents users from deleting the entire hash table to make the audit trail look valid and encrypted.
+				}
 				grid.Rows.Add(row);
 			}
 			grid.EndUpdate();

@@ -92,6 +92,14 @@ namespace OpenDentBusiness{
 			return List;*/
 		}
 
+		///<summary>Returns one SecurityLog from the db.  Called from SecurityLogHashs.CreateSecurityLogHash()</summary>
+		public static SecurityLog GetOne(long securityLogNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<SecurityLog>(MethodBase.GetCurrentMethod(),securityLogNum);
+			}
+			return Crud.SecurityLogCrud.SelectOne(securityLogNum);
+		}
+
 		///<summary>PatNum can be 0.</summary>
 		public static void MakeLogEntry(Permissions permType,long patNum,string logText) {
 			//No need to check RemotingRole; no call to db.
@@ -108,7 +116,19 @@ namespace OpenDentBusiness{
 			securityLog.CompName=Environment.MachineName;
 			securityLog.PatNum=patNum;
 			securityLog.FKey=fKey;
-			SecurityLogs.Insert(securityLog);
+			securityLog.SecurityLogNum=SecurityLogs.Insert(securityLog);
+			//Create a hash of the security log.
+			SecurityLogHashs.CreateSecurityLogHash(securityLog.SecurityLogNum);
+		}
+
+		///<summary>Returns the number of deleted entries in the Security log table.</summary>
+		public static int GetDeletedEntriesCount() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod());
+			}
+			//Find any instances where a securityloghash has a securitylognum that no longer exists.
+			string command="SELECT COUNT(*) FROM securityloghash slh WHERE slh.SecurityLogNum NOT IN (SELECT SecurityLogNum FROM securitylog)";
+			return PIn.Int(Db.GetCount(command));
 		}
 
 	}
