@@ -324,6 +324,7 @@
     <Compile Include="Crud\ScreenGroupCrud.cs" />
     <Compile Include="Crud\ScreenPatCrud.cs" />
     <Compile Include="Crud\SecurityLogCrud.cs" />
+    <Compile Include="Crud\SecurityLogHashCrud.cs" />
     <Compile Include="Crud\SheetCrud.cs" />
     <Compile Include="Crud\SheetDefCrud.cs" />
     <Compile Include="Crud\SheetFieldCrud.cs" />
@@ -381,6 +382,7 @@
     <Compile Include="Data Interface\PatientRaces.cs" />
     <Compile Include="Data Interface\Resellers.cs" />
     <Compile Include="Data Interface\ResellerServices.cs" />
+    <Compile Include="Data Interface\SecurityLogHashs.cs" />
     <Compile Include="Data Interface\Snomeds.cs" />
     <Compile Include="Data Interface\WikiListHeaderWidths.cs" />
     <Compile Include="Data Interface\WikiLists.cs" />
