@@ -480,6 +480,12 @@ namespace OpenDental{
 					break;
 				}
 			}
+			if(Security.IsAuthorized(Permissions.SecurityAdmin,DateTime.MinValue,true)) {
+				comboProv.Items.Clear();
+				for(int i=0;i<ProviderC.ListShort.Count;i++) {
+					comboProv.Items.Add(ProviderC.ListShort[i].GetLongDesc());
+				}
+			}
 			gridMain.ScrollValue=scroll;
 		}
 
