@@ -1720,6 +1720,21 @@ namespace OpenDental{
 			FillGrid();
 		}
 
+		///<summary>Returns true if there are a mixture of benefits with calendar and service year time periods.</summary>
+		private bool HasInvalidTimePeriods() {
+			//Similar code can be found in FillCalendarYear()
+			bool isCalendar=(MonthRenew==0);
+			for(int i=0;i<benefitListAll.Count;i++) {
+				if(benefitListAll[i].TimePeriod==BenefitTimePeriod.CalendarYear && !isCalendar) {
+					return true;
+				}
+				if(benefitListAll[i].TimePeriod==BenefitTimePeriod.ServiceYear && isCalendar) {
+					return true;
+				}
+			}
+			return false;
+		}
+
 		private void checkCalendarYear_Click(object sender,EventArgs e) {
 			//checkstate will have already changed.
 			//right now, change any benefits in the grid.  Upon closing, the ones in simple view will be changed.
@@ -2309,6 +2324,10 @@ namespace OpenDental{
 		private void butOK_Click(object sender, System.EventArgs e) {
 			if(!checkCalendarYear.Checked && textMonth.Text=="") {
 				MsgBox.Show(this,"Please enter a starting month for the benefit year.");
+				return;
+			}
+			if(HasInvalidTimePeriods()) {
+				MsgBox.Show(this,"A mixture of calendar and service year time periods are not allowed.");
 				return;
 			}
 			if(panelSimple.Visible){
