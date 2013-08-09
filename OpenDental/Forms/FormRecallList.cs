@@ -1426,6 +1426,9 @@ namespace OpenDental{
 					if(cmeth!=ContactMethod.Email){
 						continue;
 					}
+					if(table.Rows[i]["email"].ToString()=="") {
+						continue;
+					}
 					gridMain.SetSelected(i,true);
 				}
 				if(gridMain.SelectedIndices.Length==0){
