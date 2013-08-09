@@ -308,6 +308,39 @@ namespace OpenDentBusiness {
 
 		//Methods that apply to specific tables----------------------------------------------------------------------------------
 
+		public static string AppointmentCompleteWithTpAttached(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			command="SELECT DISTINCT ap.PatNum, "+DbHelper.Concat("p.LName","\", \"","p.FName")+" AS PatName, ap.AptDateTime "
+				+"FROM appointment ap "
+				+"INNER JOIN patient p ON p.PatNum=ap.PatNum "
+				+"INNER JOIN procedurelog pl ON pl.AptNum=ap.AptNum "
+				+"WHERE AptStatus="+POut.Int((int)ApptStatus.Complete)+" "
+				+"AND pl.ProcStatus="+POut.Int((int)ProcStat.TP)+" "
+				+"ORDER BY PatName";
+			table=Db.GetTable(command);
+			//Both check and fix need to alert the user to fix manually.
+			if(table.Rows.Count>0 || verbose) {
+				log+=Lans.g("FormDatabaseMaintenance","Completed appointments with treatment planned procedures attached")+": "+table.Rows.Count
+					+", "+Lans.g("FormDatabaseMaintenance","including")+":\r\n";
+				for(int i=0;i<table.Rows.Count;i++) {
+					if(i>15) {
+						break;
+					}
+					log+="   "+table.Rows[i]["PatNum"].ToString()
+					+"-"+table.Rows[i]["PatName"].ToString()
+					+"  Appt Date:"+PIn.DateT(table.Rows[i]["AptDateTime"].ToString()).ToShortDateString();
+					log+="\r\n";
+				}
+				if(table.Rows.Count>0) {
+					log+=Lans.g("FormDatabaseMaintenance","   They need to be fixed manually.")+"\r\n";
+				}
+			}
+			return log;
+		}
+		
 		public static string AppointmentsNoPattern(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
@@ -473,6 +506,39 @@ namespace OpenDentBusiness {
 						PlannedAppts.Insert(plannedAppt);
 					}
 					log+=Lans.g("FormDatabaseMaintenance","Planned Appointments created for Appointments with status set to planned and no Planned Appointment: ")+appts.Rows.Count+"\r\n";
+				}
+			}
+			return log;
+		}
+
+		public static string AppointmentScheduledWithCompletedProcs(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			command="SELECT DISTINCT ap.PatNum, "+DbHelper.Concat("p.LName","\', \'","p.FName")+" AS PatName, ap.AptDateTime "
+				+"FROM appointment ap "
+				+"INNER JOIN patient p ON p.PatNum=ap.PatNum "
+				+"INNER JOIN procedurelog pl ON pl.AptNum=ap.AptNum "
+				+"WHERE AptStatus="+POut.Int((int)ApptStatus.Scheduled)+" "
+				+"AND pl.ProcStatus="+POut.Int((int)ProcStat.C)+" "
+				+"ORDER BY PatName";
+			table=Db.GetTable(command);
+			//Both check and fix need to alert the user to fix manually.
+			if(table.Rows.Count>0 || verbose) {
+				log+=Lans.g("FormDatabaseMaintenance","Scheduled appointments with completed procedures attached")+": "+table.Rows.Count
+					+", "+Lans.g("FormDatabaseMaintenance","including")+":\r\n";
+				for(int i=0;i<table.Rows.Count;i++) {
+					if(i>15) {
+						break;
+					}
+					log+="   "+table.Rows[i]["PatNum"].ToString()
+					+"-"+table.Rows[i]["PatName"].ToString()
+					+"  Appt Date:"+PIn.DateT(table.Rows[i]["AptDateTime"].ToString()).ToShortDateString();
+					log+="\r\n";
+				}
+				if(table.Rows.Count>0) {
+					log+=Lans.g("FormDatabaseMaintenance","   They need to be fixed manually.")+"\r\n";
 				}
 			}
 			return log;

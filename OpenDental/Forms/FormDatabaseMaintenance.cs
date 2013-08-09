@@ -478,6 +478,8 @@ namespace OpenDental {
 			textLog.Text+=DatabaseMaintenance.SpecialCharactersInNotes(verbose,isCheck);
 			Application.DoEvents();
 			//Now, methods that apply to specific tables----------------------------------------------------------------------------
+			textLog.Text+=DatabaseMaintenance.AppointmentCompleteWithTpAttached(verbose,isCheck);
+			Application.DoEvents();			
 			textLog.Text+=DatabaseMaintenance.AppointmentsNoPattern(verbose,isCheck);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.AppointmentsNoDateOrProcs(verbose,isCheck);
@@ -487,6 +489,8 @@ namespace OpenDental {
 			textLog.Text+=DatabaseMaintenance.AppoitmentNoteTooManyNewLines(verbose,isCheck);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.AppointmentPlannedNoPlannedApt(verbose,isCheck);
+			Application.DoEvents();
+			textLog.Text+=DatabaseMaintenance.AppointmentScheduledWithCompletedProcs(verbose,isCheck);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.AutoCodeItemsWithNoAutoCode(verbose,isCheck);
 			Application.DoEvents();
