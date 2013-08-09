@@ -873,6 +873,41 @@ namespace OpenDentBusiness {
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS cqmcode";
+					Db.NonQ(command);
+					command=@"CREATE TABLE cqmcode (
+						CQMCodeNum bigint NOT NULL auto_increment PRIMARY KEY,
+						CMSID varchar(255) NOT NULL,
+						ValueSetName varchar(255) NOT NULL,
+						ValueSetOID varchar(255) NOT NULL,
+						QDMCategory varchar(255) NOT NULL,
+						Code varchar(255) NOT NULL,
+						Description text NOT NULL,
+						CodeSystem varchar(255) NOT NULL,
+						CodeSystemOID varchar(255) NOT NULL,
+						CodeSystemVersion varchar(255) NOT NULL
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE cqmcode'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE cqmcode (
+						CQMCodeNum number(20) NOT NULL,
+						CMSID varchar2(255),
+						ValueSetName varchar2(255),
+						ValueSetOID varchar2(255),
+						QDMCategory varchar2(255),
+						Code varchar2(255),
+						Description clob,
+						CodeSystem varchar2(255),
+						CodeSystemOID varchar2(255),
+						CodeSystemVersion varchar2(255),
+						CONSTRAINT cqmcode_CQMCodeNum PRIMARY KEY (CQMCodeNum)
+						)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS snomed";
 					Db.NonQ(command);
 					command=@"CREATE TABLE snomed (
@@ -917,5 +952,7 @@ namespace OpenDentBusiness {
 
 
 
+
+				
 
 				
