@@ -176,6 +176,9 @@ namespace OpenDentBusiness{
 			command="SELECT GROUP_CONCAT(provider.ProvNum) FROM provider WHERE provider.EhrKey="
 				+"(SELECT pv.EhrKey FROM provider pv WHERE pv.ProvNum="+POut.Long(provNum)+")";
 			string provs=Db.GetScalar(command);
+			//Some measures use a temp table.  Create a random number to tack onto the end of the temp table name to avoid possible table collisions.
+			Random rnd=new Random();
+			string rndStr=rnd.Next(1000000).ToString();
 			switch(mtype) {
 				case EhrMeasureType.ProblemList:
 					//command="SELECT PatNum,LName,FName, "
@@ -284,9 +287,9 @@ namespace OpenDentBusiness{
 					break;
 				case EhrMeasureType.TimelyAccess:
 					//denominator is patients
-					command="DROP TABLE IF EXISTS tempehrmeasure";
+					command="DROP TABLE IF EXISTS tempehrmeasure"+rndStr;
 					Db.NonQ(command);
-					command=@"CREATE TABLE tempehrmeasure (
+					command="CREATE TABLE tempehrmeasure"+rndStr+@" (
 						PatNum bigint NOT NULL auto_increment PRIMARY KEY,
 						LName varchar(255) NOT NULL,
 						FName varchar(255) NOT NULL,
@@ -296,7 +299,7 @@ namespace OpenDentBusiness{
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
 					//get all patients who have been seen during the period, along with the most recent visit date during the period
-					command="INSERT INTO tempehrmeasure (PatNum,LName,FName,lastVisitDate) SELECT patient.PatNum,LName,FName, "
+					command="INSERT INTO tempehrmeasure"+rndStr+" (PatNum,LName,FName,lastVisitDate) SELECT patient.PatNum,LName,FName, "
 						+"MAX(procedurelog.ProcDate) "
 						+"FROM patient,procedurelog "
 						+"WHERE patient.PatNum=procedurelog.PatNum "
@@ -308,22 +311,22 @@ namespace OpenDentBusiness{
 						+"GROUP BY patient.PatNum";
 					tableRaw=Db.GetTable(command);
 					//calculate the deadlineDate
-					command="UPDATE tempehrmeasure "
+					command="UPDATE tempehrmeasure"+rndStr+" "
 						+"SET deadlineDate = ADDDATE(lastVisitDate, INTERVAL 4 DAY)";
 					Db.NonQ(command);
-					command="UPDATE tempehrmeasure "
+					command="UPDATE tempehrmeasure"+rndStr+" "
 						+"SET deadlineDate = ADDDate(lastVisitDate, INTERVAL 2 DAY) "//add 2 more days for weekend
 						+"WHERE DAYOFWEEK(lastVisitDate) IN(3,4,5,6)";//tues, wed, thur, fri
 					Db.NonQ(command);
 					//date provided could be any date before deadline date if there was more than one visit
-					command="UPDATE tempehrmeasure,ehrmeasureevent SET accessProvided = 1 "
-						+"WHERE ehrmeasureevent.PatNum=tempehrmeasure.PatNum "
+					command="UPDATE tempehrmeasure"+rndStr+",ehrmeasureevent SET accessProvided = 1 "
+						+"WHERE ehrmeasureevent.PatNum=tempehrmeasure"+rndStr+".PatNum "
 						+"AND EventType="+POut.Int((int)EhrMeasureEventType.OnlineAccessProvided)+" "
 						+"AND DATE(ehrmeasureevent.DateTEvent) <= deadlineDate";
 					Db.NonQ(command);
-					command="SELECT * FROM tempehrmeasure";
+					command="SELECT * FROM tempehrmeasure"+rndStr;
 					tableRaw=Db.GetTable(command);
-					command="DROP TABLE IF EXISTS tempehrmeasure";
+					command="DROP TABLE IF EXISTS tempehrmeasure"+rndStr;
 					Db.NonQ(command);
 					break;
 				case EhrMeasureType.ProvOrderEntry:
@@ -418,9 +421,9 @@ namespace OpenDentBusiness{
 					tableRaw=Db.GetTable(command);
 					break;
 				case EhrMeasureType.ElectronicCopy:
-					command="DROP TABLE IF EXISTS tempehrmeasure";
+					command="DROP TABLE IF EXISTS tempehrmeasure"+rndStr;
 					Db.NonQ(command);
-					command=@"CREATE TABLE tempehrmeasure (
+					command="CREATE TABLE tempehrmeasure"+rndStr+@" (
 						TempEhrMeasureNum bigint NOT NULL auto_increment PRIMARY KEY,
 						PatNum bigint NOT NULL,
 						LName varchar(255) NOT NULL,
@@ -431,7 +434,7 @@ namespace OpenDentBusiness{
 						INDEX(PatNum)
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
-					command="INSERT INTO tempehrmeasure (PatNum,LName,FName,dateRequested) SELECT patient.PatNum,LName,FName,DATE(DateTEvent) "
+					command="INSERT INTO tempehrmeasure"+rndStr+" (PatNum,LName,FName,dateRequested) SELECT patient.PatNum,LName,FName,DATE(DateTEvent) "
 						+"FROM ehrmeasureevent,patient "
 						+"WHERE patient.PatNum=ehrmeasureevent.PatNum "
 						+"AND EventType="+POut.Int((int)EhrMeasureEventType.ElectronicCopyRequested)+" "
@@ -440,27 +443,27 @@ namespace OpenDentBusiness{
 						//+"AND patient.PriProv="+POut.Long(provNum);
 						+"AND patient.PriProv IN("+POut.String(provs)+")";
 					Db.NonQ(command);
-					command="UPDATE tempehrmeasure "
+					command="UPDATE tempehrmeasure"+rndStr+" "
 						+"SET dateDeadline = ADDDATE(dateRequested, INTERVAL 3 DAY)";
 					Db.NonQ(command);
-					command="UPDATE tempehrmeasure "
+					command="UPDATE tempehrmeasure"+rndStr+" "
 						+"SET dateDeadline = ADDDate(dateDeadline, INTERVAL 2 DAY) "//add 2 more days for weekend
 						+"WHERE DAYOFWEEK(dateRequested) IN(4,5,6)";//wed, thur, fri
 					Db.NonQ(command);
-					command="UPDATE tempehrmeasure,ehrmeasureevent SET copyProvided = 1 "
-						+"WHERE ehrmeasureevent.PatNum=tempehrmeasure.PatNum AND EventType="+POut.Int((int)EhrMeasureEventType.ElectronicCopyProvidedToPt)+" "
+					command="UPDATE tempehrmeasure"+rndStr+",ehrmeasureevent SET copyProvided = 1 "
+						+"WHERE ehrmeasureevent.PatNum=tempehrmeasure"+rndStr+".PatNum AND EventType="+POut.Int((int)EhrMeasureEventType.ElectronicCopyProvidedToPt)+" "
 						+"AND DATE(ehrmeasureevent.DateTEvent) >= dateRequested "
 						+"AND DATE(ehrmeasureevent.DateTEvent) <= dateDeadline";
 					Db.NonQ(command);
-					command="SELECT * FROM tempehrmeasure";
+					command="SELECT * FROM tempehrmeasure"+rndStr;
 					tableRaw=Db.GetTable(command);
-					command="DROP TABLE IF EXISTS tempehrmeasure";
+					command="DROP TABLE IF EXISTS tempehrmeasure"+rndStr;
 					Db.NonQ(command);
 					break;
 				case EhrMeasureType.ClinicalSummaries:
-					command="DROP TABLE IF EXISTS tempehrmeasure";
+					command="DROP TABLE IF EXISTS tempehrmeasure"+rndStr;
 					Db.NonQ(command);
-					command=@"CREATE TABLE tempehrmeasure (
+					command="CREATE TABLE tempehrmeasure"+rndStr+@" (
 						TempEhrMeasureNum bigint NOT NULL auto_increment PRIMARY KEY,
 						PatNum bigint NOT NULL,
 						LName varchar(255) NOT NULL,
@@ -471,7 +474,7 @@ namespace OpenDentBusiness{
 						INDEX(PatNum)
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
-					command="INSERT INTO tempehrmeasure (PatNum,LName,FName,visitDate) SELECT patient.PatNum,LName,FName,ProcDate "
+					command="INSERT INTO tempehrmeasure"+rndStr+" (PatNum,LName,FName,visitDate) SELECT patient.PatNum,LName,FName,ProcDate "
 						+"FROM procedurelog "
 						+"LEFT JOIN patient ON patient.PatNum=procedurelog.PatNum "
 						+"WHERE ProcDate >= "+POut.Date(dateStart)+" "
@@ -481,21 +484,21 @@ namespace OpenDentBusiness{
 						+"AND procedurelog.ProcStatus="+POut.Int((int)ProcStat.C)+" "
 						+"GROUP BY procedurelog.PatNum,ProcDate";
 					Db.NonQ(command);
-					command="UPDATE tempehrmeasure "
+					command="UPDATE tempehrmeasure"+rndStr+" "
 						+"SET deadlineDate = ADDDATE(visitDate, INTERVAL 3 DAY)";
 					Db.NonQ(command);
-					command="UPDATE tempehrmeasure "
+					command="UPDATE tempehrmeasure"+rndStr+" "
 						+"SET DeadlineDate = ADDDate(deadlineDate, INTERVAL 2 DAY) "//add 2 more days for weekend
 						+"WHERE DAYOFWEEK(visitDate) IN(4,5,6)";//wed, thur, fri
 					Db.NonQ(command);
-					command="UPDATE tempehrmeasure,ehrmeasureevent SET summaryProvided = 1 "
-						+"WHERE ehrmeasureevent.PatNum=tempehrmeasure.PatNum AND EventType="+POut.Int((int)EhrMeasureEventType.ClinicalSummaryProvidedToPt)+" "
+					command="UPDATE tempehrmeasure"+rndStr+",ehrmeasureevent SET summaryProvided = 1 "
+						+"WHERE ehrmeasureevent.PatNum=tempehrmeasure"+rndStr+".PatNum AND EventType="+POut.Int((int)EhrMeasureEventType.ClinicalSummaryProvidedToPt)+" "
 						+"AND DATE(ehrmeasureevent.DateTEvent) >= visitDate "
 						+"AND DATE(ehrmeasureevent.DateTEvent) <= deadlineDate";
 					Db.NonQ(command);
-					command="SELECT * FROM tempehrmeasure";
+					command="SELECT * FROM tempehrmeasure"+rndStr;
 					tableRaw=Db.GetTable(command);
-					command="DROP TABLE IF EXISTS tempehrmeasure";
+					command="DROP TABLE IF EXISTS tempehrmeasure"+rndStr;
 					Db.NonQ(command);
 					break;
 				case EhrMeasureType.Reminders:
@@ -523,9 +526,9 @@ namespace OpenDentBusiness{
 					tableRaw=Db.GetTable(command);
 					break;
 				case EhrMeasureType.MedReconcile:
-					command="DROP TABLE IF EXISTS tempehrmeasure";
+					command="DROP TABLE IF EXISTS tempehrmeasure"+rndStr;
 					Db.NonQ(command);
-					command=@"CREATE TABLE tempehrmeasure (
+					command="CREATE TABLE tempehrmeasure"+rndStr+@" (
 						PatNum bigint NOT NULL PRIMARY KEY,
 						LName varchar(255) NOT NULL,
 						FName varchar(255) NOT NULL,
@@ -533,7 +536,7 @@ namespace OpenDentBusiness{
 						ReconcileCount int NOT NULL
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
-					command="INSERT INTO tempehrmeasure (PatNum,LName,FName,RefCount) SELECT patient.PatNum,LName,FName,COUNT(*) "
+					command="INSERT INTO tempehrmeasure"+rndStr+" (PatNum,LName,FName,RefCount) SELECT patient.PatNum,LName,FName,COUNT(*) "
 						+"FROM refattach,patient "
 						+"WHERE patient.PatNum=refattach.PatNum "
 						//+"AND patient.PriProv="+POut.Long(provNum)+" "
@@ -543,21 +546,21 @@ namespace OpenDentBusiness{
 						+"AND IsFrom=1 AND IsTransitionOfCare=1 "
 						+"GROUP BY refattach.PatNum";
 					Db.NonQ(command);
-					command="UPDATE tempehrmeasure "
+					command="UPDATE tempehrmeasure"+rndStr+" "
 						+"SET ReconcileCount = (SELECT COUNT(*) FROM ehrmeasureevent "
-						+"WHERE ehrmeasureevent.PatNum=tempehrmeasure.PatNum AND EventType="+POut.Int((int)EhrMeasureEventType.MedicationReconcile)+" "
+						+"WHERE ehrmeasureevent.PatNum=tempehrmeasure"+rndStr+".PatNum AND EventType="+POut.Int((int)EhrMeasureEventType.MedicationReconcile)+" "
 						+"AND DATE(ehrmeasureevent.DateTEvent) >= "+POut.Date(dateStart)+" "
 						+"AND DATE(ehrmeasureevent.DateTEvent) <= "+POut.Date(dateEnd)+")";
 					Db.NonQ(command);
-					command="SELECT * FROM tempehrmeasure";
+					command="SELECT * FROM tempehrmeasure"+rndStr;
 					tableRaw=Db.GetTable(command);
-					command="DROP TABLE IF EXISTS tempehrmeasure";
+					command="DROP TABLE IF EXISTS tempehrmeasure"+rndStr;
 					Db.NonQ(command);
 					break;
 				case EhrMeasureType.SummaryOfCare:
-					command="DROP TABLE IF EXISTS tempehrmeasure";
+					command="DROP TABLE IF EXISTS tempehrmeasure"+rndStr;
 					Db.NonQ(command);
-					command=@"CREATE TABLE tempehrmeasure (
+					command="CREATE TABLE tempehrmeasure"+rndStr+@" (
 						PatNum bigint NOT NULL PRIMARY KEY,
 						LName varchar(255) NOT NULL,
 						FName varchar(255) NOT NULL,
@@ -565,7 +568,7 @@ namespace OpenDentBusiness{
 						CcdCount int NOT NULL
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
-					command="INSERT INTO tempehrmeasure (PatNum,LName,FName,RefCount) SELECT patient.PatNum,LName,FName,COUNT(*) "
+					command="INSERT INTO tempehrmeasure"+rndStr+" (PatNum,LName,FName,RefCount) SELECT patient.PatNum,LName,FName,COUNT(*) "
 						+"FROM refattach,patient "
 						+"WHERE patient.PatNum=refattach.PatNum "
 						//+"AND patient.PriProv="+POut.Long(provNum)+" "
@@ -575,15 +578,15 @@ namespace OpenDentBusiness{
 						+"AND IsFrom=0 AND IsTransitionOfCare=1 "
 						+"GROUP BY refattach.PatNum";
 					Db.NonQ(command);
-					command="UPDATE tempehrmeasure "
+					command="UPDATE tempehrmeasure"+rndStr+" "
 						+"SET CcdCount = (SELECT COUNT(*) FROM ehrmeasureevent "
-						+"WHERE ehrmeasureevent.PatNum=tempehrmeasure.PatNum AND EventType="+POut.Int((int)EhrMeasureEventType.SummaryOfCareProvidedToDr)+" "
+						+"WHERE ehrmeasureevent.PatNum=tempehrmeasure"+rndStr+".PatNum AND EventType="+POut.Int((int)EhrMeasureEventType.SummaryOfCareProvidedToDr)+" "
 						+"AND DATE(ehrmeasureevent.DateTEvent) >= "+POut.Date(dateStart)+" "
 						+"AND DATE(ehrmeasureevent.DateTEvent) <= "+POut.Date(dateEnd)+")";
 					Db.NonQ(command);
-					command="SELECT * FROM tempehrmeasure";
+					command="SELECT * FROM tempehrmeasure"+rndStr;
 					tableRaw=Db.GetTable(command);
-					command="DROP TABLE IF EXISTS tempehrmeasure";
+					command="DROP TABLE IF EXISTS tempehrmeasure"+rndStr;
 					Db.NonQ(command);
 					break;
 				default:
