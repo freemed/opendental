@@ -118,7 +118,7 @@ namespace OpenDentBusiness{
 			securityLog.FKey=fKey;
 			securityLog.SecurityLogNum=SecurityLogs.Insert(securityLog);
 			//Create a hash of the security log.
-			SecurityLogHashs.CreateSecurityLogHash(securityLog.SecurityLogNum);
+			SecurityLogHashes.CreateSecurityLogHash(securityLog.SecurityLogNum);
 		}
 
 		///<summary>Returns the number of deleted entries in the Security log table.</summary>

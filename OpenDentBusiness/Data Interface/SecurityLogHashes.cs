@@ -7,7 +7,7 @@ using System.Security.Cryptography;
 
 namespace OpenDentBusiness{
 	///<summary></summary>
-	public class SecurityLogHashs {
+	public class SecurityLogHashes{
 
 		///<summary></summary>
 		public static long Insert(SecurityLogHash securityLogHash) {

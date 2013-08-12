@@ -87,6 +87,9 @@ namespace xCrudGenerator {
 			if(typeClassName=="Etrans") {
 				return "Etranss";
 			}
+			if(typeClassName=="SecurityLogHash") {
+				return "SecurityLogHashes";
+			}
 			//if(typeClassName=="RegistrationKey") {
 			//	return "RegistrationKeys";
 			//}

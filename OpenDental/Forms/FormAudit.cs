@@ -425,8 +425,8 @@ namespace OpenDental{
 				row.Cells.Add(logList[i].CompName);
 				row.Cells.Add(logList[i].LogText);
 				//Get the hash for the audit log entry from the database and rehash to compare
-				string hashFromDb=SecurityLogHashs.GetLogHashForSecurityLog(logList[i].SecurityLogNum);
-				string newHash=SecurityLogHashs.EncryptSecurityLog(logList[i]);
+				string hashFromDb=SecurityLogHashes.GetLogHashForSecurityLog(logList[i].SecurityLogNum);
+				string newHash=SecurityLogHashes.EncryptSecurityLog(logList[i]);
 				if(hashFromDb!=newHash) {
 					row.ColorText=Color.Red; //Bad hash or no hash entry at all.  This prevents users from deleting the entire hash table to make the audit trail look valid and encrypted.
 				}
