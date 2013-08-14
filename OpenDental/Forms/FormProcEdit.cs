@@ -5045,11 +5045,12 @@ namespace OpenDental{
 					DialogResult=DialogResult.OK;
 					return;
 				}
-				if(FormA.CheckedBox){
-					AutoCodeCur.LessIntrusive=true;
-					AutoCodes.Update(AutoCodeCur);
-					DataValid.SetInvalid(InvalidType.AutoCodes);
-				}
+				//No longer allow users to hide auto code reminders from the procedure edit window.  A label lets them know to change it via Auto Codes.
+				//if(FormA.CheckedBox){
+				//  AutoCodeCur.LessIntrusive=true;
+				//  AutoCodes.Update(AutoCodeCur);
+				//  DataValid.SetInvalid(InvalidType.AutoCodes);
+				//}
 				ProcCur.CodeNum=verifyCode;
 				//ProcedureCode2=ProcedureCodes.GetProcCode(ProcCur.CodeNum);
 				//ProcCur.Code=verifyCode;
