@@ -195,6 +195,8 @@ using System.Text;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class "+Sname+@"{
+		//If this table type will exist as cached data, uncomment the CachePattern region below.
+		/*
 		#region CachePattern
 		//This region can be eliminated if this is not a table type with cached data.
 		//If leaving this region in place, be sure to add RefreshCache and FillCache 
@@ -232,7 +234,7 @@ namespace OpenDentBusiness{
 			listt=Crud."+typeClassName+@"Crud.TableToList(table);
 		}
 		#endregion
-
+		*/
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 
