@@ -33,6 +33,8 @@ namespace OpenDental{
 			this.butDelete = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butClose = new OpenDental.UI.Button();
+			this.label1 = new System.Windows.Forms.Label();
+			this.textSearch = new System.Windows.Forms.TextBox();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -160,11 +162,11 @@ namespace OpenDental{
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMain.EditableAcceptsCR = true;
 			this.gridMain.HScrollVisible = true;
-			this.gridMain.Location = new System.Drawing.Point(12, 12);
+			this.gridMain.Location = new System.Drawing.Point(12, 32);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.OneCell;
-			this.gridMain.Size = new System.Drawing.Size(842, 574);
+			this.gridMain.Size = new System.Drawing.Size(842, 554);
 			this.gridMain.TabIndex = 26;
 			this.gridMain.Title = "";
 			this.gridMain.TranslationName = "";
@@ -187,10 +189,29 @@ namespace OpenDental{
 			this.butClose.Text = "Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(12, 9);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(120, 16);
+			this.label1.TabIndex = 38;
+			this.label1.Text = "Search";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// textSearch
+			// 
+			this.textSearch.Location = new System.Drawing.Point(135, 6);
+			this.textSearch.Name = "textSearch";
+			this.textSearch.Size = new System.Drawing.Size(218, 20);
+			this.textSearch.TabIndex = 37;
+			this.textSearch.TextChanged += new System.EventHandler(this.textSearch_TextChanged);
+			// 
 			// FormWikiListEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(952, 613);
+			this.Controls.Add(this.label1);
+			this.Controls.Add(this.textSearch);
 			this.Controls.Add(this.butAddItem);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.groupBox1);
@@ -203,6 +224,7 @@ namespace OpenDental{
 			this.Load += new System.EventHandler(this.FormWikiListEdit_Load);
 			this.groupBox1.ResumeLayout(false);
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
@@ -218,6 +240,8 @@ namespace OpenDental{
 		private UI.Button butColumnDelete;
 		private UI.Button butColumnInsert;
 		private UI.Button butDelete;
+		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.TextBox textSearch;
 
 
 	}

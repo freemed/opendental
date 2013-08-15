@@ -31,6 +31,7 @@ namespace OpenDental {
 			}
 			Table=WikiLists.GetByName(WikiListCurName);
 			FillGrid();
+			ActiveControl=textSearch;//start in search box.
 		}
 
 		/// <summary></summary>
@@ -178,6 +179,22 @@ namespace OpenDental {
 			WikiLists.AddItem(WikiListCurName);
 			Table=WikiLists.GetByName(WikiListCurName);
 			FillGrid();
+		}
+
+		private void textSearch_TextChanged(object sender,EventArgs e) {
+			for(int i=0;i<gridMain.Rows.Count;i++) {
+				gridMain.Rows[i].ColorBackG=Color.White;//set all rows back to white.
+				if(textSearch.Text=="") {
+					continue;
+				}
+				for(int j=0;j<gridMain.Columns.Count;j++) {
+					if(gridMain.Rows[i].Cells[j].Text.ToUpper().Contains(textSearch.Text.ToUpper())) {
+						gridMain.Rows[i].ColorBackG=Color.FromArgb(255,255,128);
+						break;//next row
+					}
+				}//end j
+			}//end i
+			gridMain.Invalidate();
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
