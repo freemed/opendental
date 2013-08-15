@@ -184,7 +184,6 @@
     <Compile Include="Crud\CountyCrud.cs" />
     <Compile Include="Crud\CovCatCrud.cs" />
     <Compile Include="Crud\CovSpanCrud.cs" />
-    <Compile Include="Crud\CQMCodeCrud.cs" />
     <Compile Include="Crud\CreditCardCrud.cs" />
     <Compile Include="Crud\CustRefEntryCrud.cs" />
     <Compile Include="Crud\CustReferenceCrud.cs" />
@@ -781,7 +780,6 @@
     <Compile Include="TableTypes\AllergyDef.cs" />
     <Compile Include="TableTypes\Allergy.cs" />
     <Compile Include="TableTypes\CentralConnection.cs" />
-    <Compile Include="TableTypes\CQMCode.cs" />
     <Compile Include="TableTypes\EhrCode.cs" />
     <Compile Include="TableTypes\LOINC.cs" />
     <Compile Include="TableTypes\SecurityLogHash.cs" />
