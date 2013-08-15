@@ -10,7 +10,8 @@ namespace OpenDentBusiness.HL7 {
 		public EventTypeHL7 EventType;
 		public string ControlId;
 		public string AckCode;
-		public string AckEvent;//We will grab the event type sent to us to echo back to eCW in acknowledgment. All ADT's and SIU's will be treated the same, so while they may send an event type we do not have in our enumeration, we still want to process it and send back the ACK with the correct event type.
+		///<summary>We will grab the event type sent to us to echo back to eCW in acknowledgment. All ADT's and SIU's will be treated the same, so while they may send an event type we do not have in our enumeration, we still want to process it and send back the ACK with the correct event type.</summary>
+		public string AckEvent;
 
 		///<summary>Only use this constructor when generating a message instead of parsing a message.</summary>
 		internal MessageHL7(MessageTypeHL7 msgType) {

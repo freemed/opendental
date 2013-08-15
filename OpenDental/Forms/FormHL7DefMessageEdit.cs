@@ -30,8 +30,8 @@ namespace OpenDental {
 				comboEventType.Items.Add(Lan.g("enumEventTypeHL7",Enum.GetName(typeof(EventTypeHL7),i).ToString()));
 			}
 			if(HL7DefMesCur!=null) {
-				comboMsgType.SelectedIndex=(int)HL7DefMesCur.MessageType-1;
-				comboEventType.SelectedIndex=(int)HL7DefMesCur.EventType-1;
+				comboMsgType.SelectedIndex=(int)HL7DefMesCur.MessageType-1;//enum 0 is the NotDefined message type and is not in the list to select, so minus 1
+				comboEventType.SelectedIndex=(int)HL7DefMesCur.EventType-1;//enum 0 is the NotDefined event type and is not in the list to select, so minus 1
 				textItemOrder.Text=HL7DefMesCur.ItemOrder.ToString();
 				textNote.Text=HL7DefMesCur.Note;
 				if(HL7DefMesCur.InOrOut==InOutHL7.Incoming) {

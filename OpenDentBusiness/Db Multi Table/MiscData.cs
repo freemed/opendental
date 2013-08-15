@@ -114,6 +114,8 @@ namespace OpenDentBusiness {
 				return Meth.GetString(MethodBase.GetCurrentMethod());
 			}
 			//string command="SELECT @@hostname";//This command fails in MySQL 5.0.22 (the version of MySQL 5.0 we used to use), because the hostname variable was added in MySQL 5.0.38.
+			//string rawHostName=DataConnection.GetServerName();//This could be a human readable name, or it might be "localhost" or "127.0.0.1" or another IP address.
+			//return Dns.GetHostEntry(rawHostName).HostName;//Return the human readable name (full domain name) corresponding to the rawHostName.
 			//Had to strip off the port, caused Dns.GetHostEntry to fail and is not needed to get the hostname
 			string rawHostName=DataConnection.GetServerName().Split(':')[0];//This could be a human readable name, or it might be "localhost" or "127.0.0.1" or another IP address.
 			string retval="";
