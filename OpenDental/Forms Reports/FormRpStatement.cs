@@ -669,7 +669,7 @@ namespace OpenDental{
 			par=frame.AddParagraph();
 			par.Format.Font=font;
 			if(Stmt.SinglePatient){
-				par.AddText(fam.GetNameInFamFL(Stmt.PatNum));
+				par.AddText(fam.GetNameInFamFLnoPref(Stmt.PatNum));
 			}
 			else{
 				par.AddText(PatGuar.GetNameFLFormal());
