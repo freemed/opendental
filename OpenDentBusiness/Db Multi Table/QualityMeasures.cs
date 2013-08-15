@@ -7,7 +7,7 @@ using System.Text;
 namespace OpenDentBusiness {
 	///<summary>Used in Ehr quality measures.</summary>
 	public class QualityMeasures {
-		///<summary>Generates a list of all the quality measures.  Performs all calculations and manipulations.  Returns list for viewing/output.</summary>
+		///<summary>Generates a list of all the quality measures for 2011.  Performs all calculations and manipulations.  Returns list for viewing/output.</summary>
 		public static List<QualityMeasure> GetAll(DateTime dateStart,DateTime dateEnd,long provNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<QualityMeasure>>(MethodBase.GetCurrentMethod(),dateStart,dateEnd,provNum);
@@ -34,6 +34,39 @@ namespace OpenDentBusiness {
 					measure.DenominatorExplain=GetDenominatorExplain(measure.Type);
 					measure.NumeratorExplain=GetNumeratorExplain(measure.Type);
 					measure.ExclusionsExplain=GetExclusionsExplain(measure.Type);
+				}
+				list.Add(measure);
+			}
+			return list;
+		}
+
+		///<summary>Generates a list of all the quality measures for 2014.  Performs all calculations and manipulations.  Returns list for viewing/output.</summary>
+		public static List<QualityMeasure> GetAll2014(DateTime dateStart,DateTime dateEnd,long provNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<QualityMeasure>>(MethodBase.GetCurrentMethod(),dateStart,dateEnd,provNum);
+			}
+			List<QualityMeasure> list=new List<QualityMeasure>();
+			//add one of each type
+			QualityMeasure measure;
+			for(int i=0;i<Enum.GetValues(typeof(QualityType2014)).Length;i++) {
+				measure=new QualityMeasure();
+				measure.Type2014=(QualityType2014)i;
+				measure.Id=GetId2014(measure.Type2014);
+				measure.Descript=GetDescript2014(measure.Type2014);
+				DataTable table=GetTable2014(measure.Type2014,dateStart,dateEnd,provNum);
+				if(table!=null) {
+					measure.Denominator=table.Rows.Count;
+					measure.Numerator=CalcNumerator(table);
+					measure.Exclusions=CalcExclusions(table);
+					measure.NotMet=measure.Denominator-measure.Exclusions-measure.Numerator;
+					measure.ReportingRate=100;
+					measure.PerformanceRate=0;
+					if(measure.Numerator > 0) {
+						measure.PerformanceRate=(int)((float)(measure.Numerator*100)/(float)(measure.Numerator+measure.NotMet));
+					}
+					measure.DenominatorExplain=GetDenominatorExplain2014(measure.Type2014);
+					measure.NumeratorExplain=GetNumeratorExplain2014(measure.Type2014);
+					measure.ExclusionsExplain=GetExclusionsExplain2014(measure.Type2014);
 				}
 				list.Add(measure);
 			}
@@ -102,6 +135,53 @@ namespace OpenDentBusiness {
 					return "0061";
 				case QualityType.BloodPressureManage:
 					return "0018";
+				default:
+					throw new ApplicationException("Type not found: "+qtype.ToString());
+			}
+		}
+
+		private static string GetId2014(QualityType2014 qtype) {
+			switch(qtype) {
+				case QualityType2014.WeightOver65:
+					return "69-1";
+				case QualityType2014.WeightAdult:
+					return "69-2";
+				case QualityType2014.TobaccoCessation:
+					return "138";
+				case QualityType2014.Influenza:
+					return "147";
+				case QualityType2014.WeightChild_1_1:
+					return "155-1.1";
+				case QualityType2014.WeightChild_1_2:
+					return "155-1.2";
+				case QualityType2014.WeightChild_1_3:
+					return "155-1.3";
+				case QualityType2014.WeightChild_2_1:
+					return "155-2.1";
+				case QualityType2014.WeightChild_2_2:
+					return "155-2.2";
+				case QualityType2014.WeightChild_2_3:
+					return "155-2.3";
+				case QualityType2014.WeightChild_3_1:
+					return "155-3.1";
+				case QualityType2014.WeightChild_3_2:
+					return "155-3.2";
+				case QualityType2014.WeightChild_3_3:
+					return "155-3.3";
+				case QualityType2014.MedicationsEntered:
+					return "68";
+				case QualityType2014.Pneumonia:
+					return "127";
+				case QualityType2014.BloodPressureManage:
+					return "165";
+				case QualityType2014.CariesPrevent_1:
+					return "74-1";
+				case QualityType2014.CariesPrevent_2:
+					return "74-2";
+				case QualityType2014.CariesPrevent_3:
+					return "74-3";
+				case QualityType2014.ChildCaries:
+					return "75";
 				default:
 					throw new ApplicationException("Type not found: "+qtype.ToString());
 			}
@@ -190,11 +270,58 @@ namespace OpenDentBusiness {
 				case QualityType.ImmunizeChild_12:
 					return "Immun Status, Child, 1-7";
 				case QualityType.Pneumonia:
-					return "Pneumonia immunization, 64+";
+					return "Pneumonia Immunization, 64+";
 				case QualityType.DiabetesBloodPressure:
 					return "Diabetes: BP Management";
 				case QualityType.BloodPressureManage:
-					return "Controlling high BP";
+					return "Controlling High BP";
+				default:
+					throw new ApplicationException("Type not found: "+qtype.ToString());
+			}
+		}
+
+		private static string GetDescript2014(QualityType2014 qtype) {
+			switch(qtype) {
+				case QualityType2014.WeightOver65:
+					return "Weight, Adult, 65+";
+				case QualityType2014.WeightAdult:
+					return "Weight, Adult, 18 to 64";
+				case QualityType2014.TobaccoCessation:
+					return "Tobacco Cessation Intervention";
+				case QualityType2014.Influenza:
+					return "Influenza Immunization, 6 mos+";
+				case QualityType2014.WeightChild_1_1:
+					return "Weight, Child 3-17, BMI";
+				case QualityType2014.WeightChild_1_2:
+					return "Weight, Child 3-17, nutrition";
+				case QualityType2014.WeightChild_1_3:
+					return "Weight, Child 3-17, physical";
+				case QualityType2014.WeightChild_2_1:
+					return "Weight, Child 3-11, BMI";
+				case QualityType2014.WeightChild_2_2:
+					return "Weight, Child 3-11, nutrition";
+				case QualityType2014.WeightChild_2_3:
+					return "Weight, Child 3-11, physical";
+				case QualityType2014.WeightChild_3_1:
+					return "Weight, Child 12-17, BMI";
+				case QualityType2014.WeightChild_3_2:
+					return "Weight, Child 12-17, nutrition";
+				case QualityType2014.WeightChild_3_3:
+					return "Weight, Child 12-17, physical";
+				case QualityType2014.MedicationsEntered:
+					return "Document Current Medications";
+				case QualityType2014.Pneumonia:
+					return "Pneumonia Immunization, 65+";
+				case QualityType2014.BloodPressureManage:
+					return "Controlling High BP";
+				case QualityType2014.CariesPrevent_1:
+					return "Caries Prevention, 0-5";
+				case QualityType2014.CariesPrevent_2:
+					return "Caries Prevention, 6-12";
+				case QualityType2014.CariesPrevent_3:
+					return "Caries Prevention, 13-20";
+				case QualityType2014.ChildCaries:
+					return "Child Dental Decay, 0-20";
 				default:
 					throw new ApplicationException("Type not found: "+qtype.ToString());
 			}
@@ -202,7 +329,7 @@ namespace OpenDentBusiness {
 
 		public static DataTable GetTable(QualityType qtype,DateTime dateStart,DateTime dateEnd,long provNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod(),qtype,dateStart,dateEnd);
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),qtype,dateStart,dateEnd,provNum);
 			}
 			//these queries only work for mysql
 			string command="";
@@ -1919,6 +2046,459 @@ namespace OpenDentBusiness {
 			return table;
 		}
 
+		public static DataTable GetTable2014(QualityType2014 qtype,DateTime dateStart,DateTime dateEnd,long provNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),qtype,dateStart,dateEnd,provNum);
+			}
+			//these queries only work for mysql
+			string command="";
+			DataTable tableRaw=new DataTable();
+			switch(qtype) {
+				case QualityType2014.WeightOver65:
+				#region WeightOver65
+					command="";
+					tableRaw=Db.GetTable(command);
+					break;
+				#endregion
+				case QualityType2014.WeightAdult:
+				#region WeightAdult
+					command="";
+					tableRaw=Db.GetTable(command);
+					break;
+				#endregion
+				case QualityType2014.TobaccoCessation:
+				#region TobaccoCessation
+					command="";
+					tableRaw=Db.GetTable(command);
+					break;
+				#endregion
+				case QualityType2014.Influenza:
+				#region Influenza
+					command="";
+					tableRaw=Db.GetTable(command);
+					break;
+				#endregion
+				case QualityType2014.WeightChild_1_1:
+				case QualityType2014.WeightChild_1_2:
+				case QualityType2014.WeightChild_1_3:
+				#region WeightChild_1
+					command="";
+					tableRaw=Db.GetTable(command);
+					break;
+				#endregion
+				case QualityType2014.WeightChild_2_1:
+				case QualityType2014.WeightChild_2_2:
+				case QualityType2014.WeightChild_2_3:
+				#region WeightChild_2
+					command="";
+					tableRaw=Db.GetTable(command);
+					break;
+				#endregion
+				case QualityType2014.WeightChild_3_1:
+				case QualityType2014.WeightChild_3_2:
+				case QualityType2014.WeightChild_3_3:
+				#region WeightChild_3
+					command="";
+					tableRaw=Db.GetTable(command);
+					break;
+				#endregion
+				case QualityType2014.MedicationsEntered:
+				#region MedicationsEntered
+					command="";
+					tableRaw=Db.GetTable(command);
+					break;
+				#endregion
+				case QualityType2014.Pneumonia:
+				#region Pneumonia
+					command="";
+					tableRaw=Db.GetTable(command);
+					break;
+				#endregion
+				case QualityType2014.BloodPressureManage:
+				#region BloodPressureManage
+					command="";
+					tableRaw=Db.GetTable(command);
+					break;
+				#endregion
+				case QualityType2014.CariesPrevent_1:
+				#region CariesPrevent_1
+					command="";
+					tableRaw=Db.GetTable(command);
+					break;
+				#endregion
+				case QualityType2014.CariesPrevent_2:
+				#region CariesPrevent_2
+					command="";
+					tableRaw=Db.GetTable(command);
+					break;
+				#endregion
+				case QualityType2014.CariesPrevent_3:
+				#region CariesPrevent_3
+					command="";
+					tableRaw=Db.GetTable(command);
+					break;
+				#endregion
+				case QualityType2014.ChildCaries:
+				#region CariesPrevent_4
+					command="";
+					tableRaw=Db.GetTable(command);
+					break;
+				#endregion
+				default:
+					throw new ApplicationException("Type not found: "+qtype.ToString());
+			}
+			//PatNum, PatientName, Numerator(X), and Exclusion(X).
+			DataTable table=new DataTable("audit");
+			DataRow row;
+			table.Columns.Add("PatNum");
+			table.Columns.Add("patientName");
+			table.Columns.Add("numerator");//X
+			table.Columns.Add("exclusion");//X
+			table.Columns.Add("explanation");
+			List<DataRow> rows=new List<DataRow>();
+			Patient pat;
+			//string explanation;
+			for(int i=0;i<tableRaw.Rows.Count;i++) {
+				row=table.NewRow();
+				row["PatNum"]=tableRaw.Rows[i]["PatNum"].ToString();
+				pat=new Patient();
+				pat.LName=tableRaw.Rows[i]["LName"].ToString();
+				pat.FName=tableRaw.Rows[i]["FName"].ToString();
+				pat.Preferred="";
+				row["patientName"]=pat.GetNameLF();
+				row["numerator"]="";
+				row["exclusion"]="";
+				row["explanation"]="";
+				float weight=0;
+				float height=0;
+				float bmi=0;
+				DateTime dateVisit;
+				switch(qtype) {
+					case QualityType2014.WeightOver65:
+					#region DisplayWeightOver65
+						weight=PIn.Float(tableRaw.Rows[i]["Weight"].ToString());
+						height=PIn.Float(tableRaw.Rows[i]["Height"].ToString());
+						bmi=Vitalsigns.CalcBMI(weight,height);
+						bool hasFollowupPlan=PIn.Bool(tableRaw.Rows[i]["HasFollowupPlan"].ToString());
+						bool isIneligible=PIn.Bool(tableRaw.Rows[i]["IsIneligible"].ToString());
+						string documentation=tableRaw.Rows[i]["Documentation"].ToString();
+						if(bmi==0) {
+							row["explanation"]="No BMI";
+						}
+						else if(bmi < 22) {
+							row["explanation"]="Underweight";
+							if(hasFollowupPlan) {
+								row["explanation"]+=", has followup plan: "+documentation;
+								row["numerator"]="X";
+							}
+						}
+						else if(bmi < 30) {
+							row["numerator"]="X";
+							row["explanation"]="Normal weight";
+						}
+						else {
+							row["explanation"]="Overweight";
+							if(hasFollowupPlan) {
+								row["explanation"]+=", has followup plan: "+documentation;
+								row["numerator"]="X";
+							}
+						}
+						if(isIneligible) {
+							row["exclusion"]="X";
+							row["explanation"]+=", "+documentation;
+						}
+						break;
+					#endregion
+					case QualityType2014.WeightAdult:
+					#region DisplayWeightAdult
+						weight=PIn.Float(tableRaw.Rows[i]["Weight"].ToString());
+						height=PIn.Float(tableRaw.Rows[i]["Height"].ToString());
+						bmi=Vitalsigns.CalcBMI(weight,height);
+						hasFollowupPlan=PIn.Bool(tableRaw.Rows[i]["HasFollowupPlan"].ToString());
+						isIneligible=PIn.Bool(tableRaw.Rows[i]["IsIneligible"].ToString());
+						documentation=tableRaw.Rows[i]["Documentation"].ToString();
+						if(bmi==0) {
+							row["explanation"]="No BMI";
+						}
+						else if(bmi < 18.5f) {
+							row["explanation"]="Underweight";
+							if(hasFollowupPlan) {
+								row["explanation"]+=", has followup plan: "+documentation;
+								row["numerator"]="X";
+							}
+						}
+						else if(bmi < 25) {
+							row["numerator"]="X";
+							row["explanation"]="Normal weight";
+						}
+						else {
+							row["explanation"]="Overweight";
+							if(hasFollowupPlan) {
+								row["explanation"]+=", has followup plan: "+documentation;
+								row["numerator"]="X";
+							}
+						}
+						if(isIneligible) {
+							row["exclusion"]="X";
+							row["explanation"]+=", "+documentation;
+						}
+						break;
+					#endregion
+					case QualityType2014.TobaccoCessation:
+					#region DisplayTobaccoCessation
+						dateVisit=PIn.Date(tableRaw.Rows[i]["DateVisit"].ToString());
+						//visitCount=PIn.Int(tableRaw.Rows[i]["VisitCount"].ToString());
+						DateTime dateAssessment=PIn.Date(tableRaw.Rows[i]["DateAssessment"].ToString());
+						if(dateVisit<dateStart || dateVisit>dateEnd) {//no visits in the measurement period
+							continue;//don't add this row.  Not part of denominator.
+						}
+						//if(visitCount<2) {//no, as explained in comments in GetDenominatorExplain().
+						//	continue;
+						//}
+						if(dateAssessment.Year<1880) {
+							row["explanation"]="No tobacco use entered.";
+						}
+						else if(dateAssessment < dateVisit.AddYears(-2)) {
+							row["explanation"]="No tobacco use entered within timeframe.";
+						}
+						else {
+							row["numerator"]="X";
+							row["explanation"]="Tobacco use entered.";
+						}
+						break;
+					#endregion
+					case QualityType2014.Influenza:
+					#region Influenza
+						DateTime DateVaccine=PIn.Date(tableRaw.Rows[i]["DateVaccine"].ToString());
+						bool notGiven=PIn.Bool(tableRaw.Rows[i]["NotGiven"].ToString());
+						documentation=tableRaw.Rows[i]["Documentation"].ToString();
+						if(DateVaccine.Year<1880) {
+							row["explanation"]="No influenza vaccine given";
+						}
+						else if(notGiven) {
+							row["exclusion"]="X";
+							row["explanation"]+="No influenza vaccine given, "+documentation;
+						}
+						else {
+							row["numerator"]="X";
+							row["explanation"]="Influenza vaccine given";
+						}
+						break;
+					#endregion
+					case QualityType2014.WeightChild_1_1:
+					#region DisplayWeightChild_1_1
+						bool isPregnant=PIn.Bool(tableRaw.Rows[i]["IsPregnant"].ToString());
+						bool hasBMI=PIn.Bool(tableRaw.Rows[i]["HasBMI"].ToString());
+						if(isPregnant) {
+							continue;
+						}
+						if(hasBMI) {
+							row["numerator"]="X";
+							row["explanation"]="BMI entered";
+						}
+						else {
+							row["explanation"]="No BMI entered";
+						}
+						break;
+					#endregion
+					case QualityType2014.WeightChild_1_2:
+					#region DisplayWeightChild_1_2
+						isPregnant=PIn.Bool(tableRaw.Rows[i]["IsPregnant"].ToString());
+						bool ChildGotNutrition=PIn.Bool(tableRaw.Rows[i]["ChildGotNutrition"].ToString());
+						if(isPregnant) {
+							continue;
+						}
+						if(ChildGotNutrition) {
+							row["numerator"]="X";
+							row["explanation"]="Counseled for nutrition";
+						}
+						else {
+							row["explanation"]="Not counseled for nutrition";
+						}
+						break;
+					#endregion
+					case QualityType2014.WeightChild_1_3:
+					#region DisplayWeightChild_1_3
+						isPregnant=PIn.Bool(tableRaw.Rows[i]["IsPregnant"].ToString());
+						bool ChildGotPhysCouns=PIn.Bool(tableRaw.Rows[i]["ChildGotPhysCouns"].ToString());
+						if(isPregnant) {
+							continue;
+						}
+						if(ChildGotPhysCouns) {
+							row["numerator"]="X";
+							row["explanation"]="Counseled for physical activity";
+						}
+						else {
+							row["explanation"]="Not counseled for physical activity";
+						}
+						break;
+					#endregion
+					case QualityType2014.WeightChild_2_1:
+					#region DisplayWeightChild_2_1
+						isPregnant=PIn.Bool(tableRaw.Rows[i]["IsPregnant"].ToString());
+						hasBMI=PIn.Bool(tableRaw.Rows[i]["HasBMI"].ToString());
+						if(isPregnant) {
+							continue;
+						}
+						if(hasBMI) {
+							row["numerator"]="X";
+							row["explanation"]="BMI entered";
+						}
+						else {
+							row["explanation"]="No BMI entered";
+						}
+						break;
+					#endregion
+					case QualityType2014.WeightChild_2_2:
+					#region DisplayWeightChild_2_2
+						isPregnant=PIn.Bool(tableRaw.Rows[i]["IsPregnant"].ToString());
+						ChildGotNutrition=PIn.Bool(tableRaw.Rows[i]["ChildGotNutrition"].ToString());
+						if(isPregnant) {
+							continue;
+						}
+						if(ChildGotNutrition) {
+							row["numerator"]="X";
+							row["explanation"]="Counseled for nutrition";
+						}
+						else {
+							row["explanation"]="Not counseled for nutrition";
+						}
+						break;
+					#endregion
+					case QualityType2014.WeightChild_2_3:
+					#region DisplayWeightChild_2_3
+						isPregnant=PIn.Bool(tableRaw.Rows[i]["IsPregnant"].ToString());
+						ChildGotPhysCouns=PIn.Bool(tableRaw.Rows[i]["ChildGotPhysCouns"].ToString());
+						if(isPregnant) {
+							continue;
+						}
+						if(ChildGotPhysCouns) {
+							row["numerator"]="X";
+							row["explanation"]="Counseled for physical activity";
+						}
+						else {
+							row["explanation"]="Not counseled for physical activity";
+						}
+						break;
+					#endregion
+					case QualityType2014.WeightChild_3_1:
+					#region DisplayWeightChild_3_1
+						isPregnant=PIn.Bool(tableRaw.Rows[i]["IsPregnant"].ToString());
+						hasBMI=PIn.Bool(tableRaw.Rows[i]["HasBMI"].ToString());
+						if(isPregnant) {
+							continue;
+						}
+						if(hasBMI) {
+							row["numerator"]="X";
+							row["explanation"]="BMI entered";
+						}
+						else {
+							row["explanation"]="No BMI entered";
+						}
+						break;
+					#endregion
+					case QualityType2014.WeightChild_3_2:
+					#region DisplayWeightChild_3_2
+						isPregnant=PIn.Bool(tableRaw.Rows[i]["IsPregnant"].ToString());
+						ChildGotNutrition=PIn.Bool(tableRaw.Rows[i]["ChildGotNutrition"].ToString());
+						if(isPregnant) {
+							continue;
+						}
+						if(ChildGotNutrition) {
+							row["numerator"]="X";
+							row["explanation"]="Counseled for nutrition";
+						}
+						else {
+							row["explanation"]="Not counseled for nutrition";
+						}
+						break;
+					#endregion
+					case QualityType2014.WeightChild_3_3:
+					#region DisplayWeightChild_3_3
+						isPregnant=PIn.Bool(tableRaw.Rows[i]["IsPregnant"].ToString());
+						ChildGotPhysCouns=PIn.Bool(tableRaw.Rows[i]["ChildGotPhysCouns"].ToString());
+						if(isPregnant) {
+							continue;
+						}
+						if(ChildGotPhysCouns) {
+							row["numerator"]="X";
+							row["explanation"]="Counseled for physical activity";
+						}
+						else {
+							row["explanation"]="Not counseled for physical activity";
+						}
+						break;
+					#endregion
+					case QualityType2014.MedicationsEntered:
+					#region MedicationsEntered
+						break;
+					#endregion
+					case QualityType2014.Pneumonia:
+					#region DisplayPneumonia
+						DateVaccine=PIn.Date(tableRaw.Rows[i]["DateVaccine"].ToString());
+						if(DateVaccine.Year<1880) {
+							row["explanation"]="No pneumococcal vaccine given";
+						}
+						else {
+							row["numerator"]="X";
+							row["explanation"]="Pneumococcal vaccine given";
+						}
+						break;
+					#endregion
+					case QualityType2014.BloodPressureManage:
+					#region DisplayBloodPressureManage
+						bool HasDiagnosisHypertension=PIn.Bool(tableRaw.Rows[i]["HasDiagnosisHypertension"].ToString());
+						bool HasProcedureESRD=PIn.Bool(tableRaw.Rows[i]["HasProcedureESRD"].ToString());
+						bool HasDiagnosisPregnancy=PIn.Bool(tableRaw.Rows[i]["HasDiagnosisPregnancy"].ToString());
+						bool HasDiagnosisESRD=PIn.Bool(tableRaw.Rows[i]["HasDiagnosisESRD"].ToString());
+						DateTime DateBP=PIn.Date(tableRaw.Rows[i]["DateBP"].ToString());
+						int systolic=PIn.Int(tableRaw.Rows[i]["Systolic"].ToString());
+						int diastolic=PIn.Int(tableRaw.Rows[i]["Diastolic"].ToString());
+						if(!HasDiagnosisHypertension) {
+							continue;//not part of denominator
+						}
+						if(HasProcedureESRD || HasDiagnosisPregnancy || HasDiagnosisESRD) {
+							continue;//not part of denominator
+						}
+						if(DateBP.Year<1880) {
+							row["explanation"]="No BP entered";
+						}
+						else if(systolic < 90 && diastolic < 140) {
+							row["numerator"]="X";
+							row["explanation"]="Controlled blood pressure: "+systolic.ToString()+"/"+diastolic.ToString();
+						}
+						else {
+							row["explanation"]="High blood pressure: "+systolic.ToString()+"/"+diastolic.ToString();
+						}
+						break;
+					#endregion
+					case QualityType2014.CariesPrevent_1:
+					#region DisplayCariesPrevent_1
+						break;
+					#endregion
+					case QualityType2014.CariesPrevent_2:
+					#region DisplayCariesPrevent_2
+						break;
+					#endregion
+					case QualityType2014.CariesPrevent_3:
+					#region DisplayCariesPrevent_3
+						break;
+					#endregion
+					case QualityType2014.ChildCaries:
+					#region ChildCaries
+						break;
+					#endregion
+					default:
+						throw new ApplicationException("Type not found: "+qtype.ToString());
+				}
+				rows.Add(row);
+			}
+			for(int i=0;i<rows.Count;i++) {
+				table.Rows.Add(rows[i]);
+			}
+			return table;
+		}
+
 		///<summary>Just counts up the number of rows with an X in the numerator column.  Very simple.</summary>
 		public static int CalcNumerator(DataTable table) {
 			//No need to check RemotingRole; no call to db.
@@ -2119,6 +2699,181 @@ BMI 18.5-25.";
 				default:
 					throw new ApplicationException("Type not found: "+qtype.ToString());
 			}
+		}
+
+		private static string GetDenominatorExplain2014(QualityType2014 qtype) {
+			//No need to check RemotingRole; no call to db.
+			switch(qtype) {
+				case QualityType2014.WeightOver65:
+					return "All patients 65+ with at least one visit during the measurement period.";
+				case QualityType2014.WeightAdult:
+					return "All patients 18 to 64 with at least one visit during the measurement period.";
+				case QualityType2014.TobaccoCessation:
+					return "All patients 18+ with at least one visit during the measurement period; and identified as tobacco users within the 24 months prior to the last visit.";
+				case QualityType2014.Influenza:
+					return "All patients 50+ with a visit during the measurement period.";
+				case QualityType2014.WeightChild_1_1:
+				case QualityType2014.WeightChild_1_2:
+				case QualityType2014.WeightChild_1_3:
+					return "All patients 2-16 with a visit during the measurement period, unless pregnant.";
+				case QualityType2014.WeightChild_2_1:
+				case QualityType2014.WeightChild_2_2:
+				case QualityType2014.WeightChild_2_3:
+					return "All patients 2-10 with a visit during the measurement period, unless pregnant.";
+				case QualityType2014.WeightChild_3_1:
+				case QualityType2014.WeightChild_3_2:
+				case QualityType2014.WeightChild_3_3:
+					return "All patients 11-16 with a visit during the measurement period, unless pregnant.";
+				case QualityType2014.MedicationsEntered:
+					return "All patients 18+ with at least one encounter from the 'Medications Encounter Code Set' performed during the measurement period.";
+				case QualityType2014.Pneumonia:
+					return "All patients 65+ during the measurement period with a visit within 1 year before the measurement end date.";
+				case QualityType2014.BloodPressureManage:
+					return "All patients 17-74 before the measurement period who have an active diagnosis of hypertension and who are not pregnant or have ESRD.";
+				case QualityType2014.CariesPrevent_1:
+					return "";
+				case QualityType2014.CariesPrevent_2:
+					return "";
+				case QualityType2014.CariesPrevent_3:
+					return "";
+				case QualityType2014.ChildCaries:
+					return "";
+				default:
+					throw new ApplicationException("Type not found: "+qtype.ToString());
+			}
+		}
+
+		private static string GetNumeratorExplain2014(QualityType2014 qtype) {
+			//No need to check RemotingRole; no call to db.
+			switch(qtype) {
+				case QualityType2014.WeightOver65:
+					return @"BMI < 22 or >= 30 with Followup documented.
+BMI 22-30.";
+				case QualityType2014.WeightAdult:
+					return @"BMI < 18.5 or >= 25 with Followup documented.
+BMI 18.5-25.";
+				case QualityType2014.TobaccoCessation:
+					return "Tobacco cessation entry within the 24 months prior to the last visit.";
+				case QualityType2014.Influenza:
+					return "Influenza vaccine administered.";
+				case QualityType2014.WeightChild_1_1:
+					return "BMI recorded during measurement period.";
+				case QualityType2014.WeightChild_1_2:
+					return "Counseling for nutrition during measurement period.";
+				case QualityType2014.WeightChild_1_3:
+					return "Counseling for physical activity during measurement period.";
+				case QualityType2014.WeightChild_2_1:
+					return "BMI recorded during measurement period.";
+				case QualityType2014.WeightChild_2_2:
+					return "Counseling for nutrition during measurement period.";
+				case QualityType2014.WeightChild_2_3:
+					return "Counseling for physical activity during measurement period.";
+				case QualityType2014.WeightChild_3_1:
+					return "BMI recorded during measurement period.";
+				case QualityType2014.WeightChild_3_2:
+					return "Counseling for nutrition during measurement period.";
+				case QualityType2014.WeightChild_3_3:
+					return "Counseling for physical activity during measurement period.";
+				case QualityType2014.MedicationsEntered:
+					return "A 'Current Medications Documented' procedure was performed during the medications encounter.";
+				case QualityType2014.Pneumonia:
+					return "Pneumococcal vaccine before measurement end date. CVX=33,100,133";
+				case QualityType2014.BloodPressureManage:
+					return "Diastolic < 90 and systolic < 140 at most recent encounter.";
+				case QualityType2014.CariesPrevent_1:
+					return "";
+				case QualityType2014.CariesPrevent_2:
+					return "";
+				case QualityType2014.CariesPrevent_3:
+					return "";
+				case QualityType2014.ChildCaries:
+					return "";
+				default:
+					throw new ApplicationException("Type not found: "+qtype.ToString());
+			}
+			return "";
+		}
+
+		private static string GetExclusionsExplain2014(QualityType2014 qtype) {
+			//No need to check RemotingRole; no call to db.
+			switch(qtype) {
+				case QualityType2014.WeightOver65:
+					return "Marked ineligible within 6 months prior to the last visit.";
+				case QualityType2014.WeightAdult:
+					return "Terminal ineligible within 6 months prior to the last visit.";
+				case QualityType2014.TobaccoCessation:
+					return "N/A";
+				case QualityType2014.Influenza:
+					return "A valid reason was entered for medication not given.";
+				case QualityType2014.WeightChild_1_1:
+				case QualityType2014.WeightChild_1_2:
+				case QualityType2014.WeightChild_1_3:
+				case QualityType2014.WeightChild_2_1:
+				case QualityType2014.WeightChild_2_2:
+				case QualityType2014.WeightChild_2_3:
+				case QualityType2014.WeightChild_3_1:
+				case QualityType2014.WeightChild_3_2:
+				case QualityType2014.WeightChild_3_3:
+					return "N/A";
+				case QualityType2014.MedicationsEntered:
+					return "N/A";
+				case QualityType2014.Pneumonia:
+					return "N/A";
+				case QualityType2014.BloodPressureManage:
+					return "N/A";
+				case QualityType2014.CariesPrevent_1:
+					return "";
+				case QualityType2014.CariesPrevent_2:
+					return "";
+				case QualityType2014.CariesPrevent_3:
+					return "";
+				case QualityType2014.ChildCaries:
+					return "";
+				default:
+					throw new ApplicationException("Type not found: "+qtype.ToString());
+			}
+			return "";
+		}
+
+		private static string GetExceptionsExplain2014(QualityType2014 qtype) {
+			//No need to check RemotingRole; no call to db.
+			switch(qtype) {
+				case QualityType2014.WeightOver65:
+					return "Marked ineligible within 6 months prior to the last visit.";
+				case QualityType2014.WeightAdult:
+					return "Terminal ineligible within 6 months prior to the last visit.";
+				case QualityType2014.TobaccoCessation:
+					return "N/A";
+				case QualityType2014.Influenza:
+					return "A valid reason was entered for medication not given.";
+				case QualityType2014.WeightChild_1_1:
+				case QualityType2014.WeightChild_1_2:
+				case QualityType2014.WeightChild_1_3:
+				case QualityType2014.WeightChild_2_1:
+				case QualityType2014.WeightChild_2_2:
+				case QualityType2014.WeightChild_2_3:
+				case QualityType2014.WeightChild_3_1:
+				case QualityType2014.WeightChild_3_2:
+				case QualityType2014.WeightChild_3_3:
+					return "N/A";
+				case QualityType2014.MedicationsEntered:
+					return "The procedure 'Performed not done' using a 'Medical or Other reason' SNOMED-CT code was entered for this patient.";
+				case QualityType2014.Pneumonia:
+					return "N/A";
+				case QualityType2014.BloodPressureManage:
+					return "N/A";
+				case QualityType2014.CariesPrevent_1:
+					return "";
+				case QualityType2014.CariesPrevent_2:
+					return "";
+				case QualityType2014.CariesPrevent_3:
+					return "";
+				case QualityType2014.ChildCaries:
+					return "";
+				default:
+					throw new ApplicationException("Type not found: "+qtype.ToString());
+			}
+			return "";
 		}
 
 	}

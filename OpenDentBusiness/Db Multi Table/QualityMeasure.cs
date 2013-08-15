@@ -7,6 +7,7 @@ namespace OpenDentBusiness {
 	///<summary>Used by ehr.</summary>
 	public class QualityMeasure {
 		public QualityType Type;
+		public QualityType2014 Type2014;
 		public string Id;
 		public string Descript;
 		public int Denominator;
@@ -53,5 +54,28 @@ namespace OpenDentBusiness {
 		Pneumonia,
 		DiabetesBloodPressure,
 		BloodPressureManage
+	}
+
+	public enum QualityType2014 {
+		WeightOver65,
+		WeightAdult,
+		TobaccoCessation,
+		Influenza,
+		WeightChild_1_1,
+		WeightChild_1_2,
+		WeightChild_1_3,
+		WeightChild_2_1,
+		WeightChild_2_2,
+		WeightChild_2_3,
+		WeightChild_3_1,
+		WeightChild_3_2,
+		WeightChild_3_3,
+		MedicationsEntered,
+		Pneumonia,
+		BloodPressureManage,
+		CariesPrevent_1,
+		CariesPrevent_2,
+		CariesPrevent_3,
+		ChildCaries
 	}
 }
