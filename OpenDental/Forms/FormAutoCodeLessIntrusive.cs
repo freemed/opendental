@@ -104,7 +104,7 @@ namespace OpenDental{
 			this.labelPrompt.Size = new System.Drawing.Size(388, 43);
 			this.labelPrompt.TabIndex = 4;
 			this.labelPrompt.Text = "If you don\'t want to be prompted to change this type of procedure in the future, " +
-    "then edit this Autocode and check the box for \"Do not check codes...\"";
+    "then edit this Auto Code and check the box for \"Do not check codes...\"";
 			// 
 			// FormAutoCodeLessIntrusive
 			// 
