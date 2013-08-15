@@ -506,6 +506,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ClaimWithInvalidInsSubNum(verbose,isCheck);
 			Application.DoEvents();
+			textLog.Text+=DatabaseMaintenance.ClaimWithInvalidPatNum(verbose,isCheck);
+			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ClaimWriteoffSum(verbose,isCheck);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ClaimPaymentCheckAmt(verbose,isCheck);//also fixes resulting deposit misbalances.

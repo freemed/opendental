@@ -970,6 +970,39 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
+		///<summary>Also fixes situations where PatNum=0</summary>
+		public static string ClaimWithInvalidPatNum(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			command=@"SELECT claim.ClaimNum, procedurelog.PatNum patNumCorrect
+				FROM claim, claimproc, procedurelog
+				WHERE claim.PatNum NOT IN (SELECT PatNum FROM patient)
+				AND claim.ClaimNum=claimproc.ClaimNum
+				AND claimproc.ProcNum=procedurelog.ProcNum
+				AND procedurelog.PatNum!=0
+				GROUP BY claim.ClaimNum, procedurelog.PatNum";
+			table=Db.GetTable(command);
+			if(isCheck) {
+				if(table.Rows.Count>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Claims found with invalid patients attached: ")+table.Rows.Count.ToString()+"\r\n";
+				}
+			}
+			else {
+				for(int i=0;i<table.Rows.Count;i++) {
+					command="UPDATE claim SET PatNum='"+POut.Long(PIn.Long(table.Rows[i]["patNumCorrect"].ToString()))+"' "
+				    +"WHERE ClaimNum="+POut.Long(PIn.Long(table.Rows[i]["ClaimNum"].ToString()));
+					Db.NonQ(command);
+				}
+				int numberFixed=table.Rows.Count;
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Claim with invalid patients attached fixed: ")+numberFixed.ToString()+"\r\n";
+				}
+			}
+			return log;
+		}
+
 		public static string ClaimWriteoffSum(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
