@@ -22,10 +22,6 @@ namespace OpenDental {
 		}
 
 		private void FormLOINCPicker_Load(object sender,EventArgs e) {
-#if !DEBUG//just in case
-			butLOINCFill.Visible=false;
-			MsgBox.Show(this,"This form still needs work.");
-#endif
 			listLOINCSearch=new List<LOINC>();
 			fillGrid();
 		}
