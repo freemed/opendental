@@ -372,6 +372,12 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormCodeSystemsImport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormCodeSystemsImport.designer.cs">
+      <DependentUpon>FormCodeSystemsImport.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormCommPrefPicker.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2860,6 +2866,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormCodeSystemsImport.resx">
+      <DependentUpon>FormCodeSystemsImport.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormCommPrefPicker.resx">
       <DependentUpon>FormCommPrefPicker.cs</DependentUpon>

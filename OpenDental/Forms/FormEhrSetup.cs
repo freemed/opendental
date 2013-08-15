@@ -116,6 +116,98 @@ namespace OpenDental {
 			FormS.ShowDialog();
 		}
 
+		private void butICD9CM31_Click(object sender,EventArgs e) {
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"This button does not perform error checking and only works from Ryan's computer.")) {
+				return;
+			}
+			Cursor=Cursors.WaitCursor;
+			try {
+				//Import ICD9-CM DX codes with long description----------------------------------------------------------------------------------------------------------
+				MsgBox.Show(this,"Importing ICD9-CM DX codes with long description.");
+				System.IO.StreamReader sr=new System.IO.StreamReader(@"C:\Users\Ryan\Desktop\ICD9CM31\DXL.txt");
+				string command=@"DROP TABLE IF EXISTS ICD9CMDX";
+				DataCore.NonQ(command);
+				command=@"CREATE TABLE `ICD9CMDX` (
+									`ICD9CMDXNum` BIGINT(20) NOT NULL AUTO_INCREMENT,
+									`CodeString` VARCHAR(255) DEFAULT '',
+									`DescriptionLong` VARCHAR(255) DEFAULT '',
+									`DescriptionShort` VARCHAR(255) DEFAULT '',
+									INDEX(CodeString),
+									PRIMARY KEY (`ICD9CMDXNum`)
+									) DEFAULT CHARSET=utf8;";
+				DataCore.NonQ(command);
+				string[] arrayICD9CM=new string[2];
+				string line="";
+				while(!sr.EndOfStream) {//each loop should read exactly one line of code.
+					line=sr.ReadLine();
+					arrayICD9CM[0]=line.Substring(0,5).Trim();//fixed width column
+					if(arrayICD9CM[0].Length>3){
+						arrayICD9CM[0]=arrayICD9CM[0].Substring(0,3)+"."+arrayICD9CM[0].Substring(3);
+					}
+					arrayICD9CM[1]=line.Substring(6);
+					command="INSERT INTO ICD9CMDX (CodeString,DescriptionLong) VALUES ('"+POut.String(arrayICD9CM[0])+"','"+POut.String(arrayICD9CM[1])+"')";
+					DataCore.NonQ(command);
+				}
+				//Import ICD9-CM DX codes with short description----------------------------------------------------------------------------------------------------------
+				MsgBox.Show(this,"Importing ICD9-CM DX codes with short description.");
+				sr.Dispose();
+				sr=new System.IO.StreamReader(@"C:\Users\Ryan\Desktop\ICD9CM31\DXS.txt");
+				while(!sr.EndOfStream) {//each loop should read exactly one line of code.
+					line=sr.ReadLine();
+					arrayICD9CM[0]=line.Substring(0,5).Trim();//fixed width column
+					if(arrayICD9CM[0].Length>3) {
+						arrayICD9CM[0]=arrayICD9CM[0].Substring(0,3)+"."+arrayICD9CM[0].Substring(3);
+					}
+					arrayICD9CM[1]=line.Substring(6);
+					command="UPDATE ICD9CMDX SET DescriptionShort='"+POut.String(arrayICD9CM[1])+"' WHERE CodeString='"+POut.String(arrayICD9CM[0])+"'";
+					DataCore.NonQ(command);
+				}
+				//Import ICD9-CM SG codes with long description----------------------------------------------------------------------------------------------------------
+				MsgBox.Show(this,"Importing ICD9-CM SG codes with long description.");
+				sr.Dispose();
+				sr=new System.IO.StreamReader(@"C:\Users\Ryan\Desktop\ICD9CM31\SGL.txt");
+				command=@"DROP TABLE IF EXISTS ICD9CMSG";
+				DataCore.NonQ(command);
+				command=@"CREATE TABLE `ICD9CMSG` (
+									`ICD9CMSGNum` BIGINT(20) NOT NULL AUTO_INCREMENT,
+									`CodeString` VARCHAR(255) DEFAULT '',
+									`DescriptionLong` VARCHAR(255) DEFAULT '',
+									`DescriptionShort` VARCHAR(255) DEFAULT '',
+									INDEX(CodeString),
+									PRIMARY KEY (`ICD9CMSGNum`)
+									) DEFAULT CHARSET=utf8;";
+				DataCore.NonQ(command);
+				while(!sr.EndOfStream) {//each loop should read exactly one line of code.
+					line=sr.ReadLine();
+					arrayICD9CM[0]=line.Substring(0,5).Trim();//fixed width column
+					if(arrayICD9CM[0].Length>2) {
+						arrayICD9CM[0]=arrayICD9CM[0].Substring(0,2)+"."+arrayICD9CM[0].Substring(2);
+					}
+					arrayICD9CM[1]=line.Substring(5);
+					command="INSERT INTO ICD9CMSG (CodeString,DescriptionLong) VALUES ('"+POut.String(arrayICD9CM[0])+"','"+POut.String(arrayICD9CM[1])+"')";
+					DataCore.NonQ(command);
+				}
+				//Import ICD9-CM SG codes with short description----------------------------------------------------------------------------------------------------------
+				MsgBox.Show(this,"Importing ICD9-CM SG codes with short description.");
+				sr.Dispose();
+				sr=new System.IO.StreamReader(@"C:\Users\Ryan\Desktop\ICD9CM31\SGS.txt");
+				while(!sr.EndOfStream) {//each loop should read exactly one line of code.
+					line=sr.ReadLine();
+					arrayICD9CM[0]=line.Substring(0,5).Trim();//fixed width column
+					if(arrayICD9CM[0].Length>2) {
+						arrayICD9CM[0]=arrayICD9CM[0].Substring(0,2)+"."+arrayICD9CM[0].Substring(2);
+					}
+					arrayICD9CM[1]=line.Substring(5);
+					command="UPDATE ICD9CMSG SET DescriptionShort='"+POut.String(arrayICD9CM[1])+"' WHERE CodeString='"+POut.String(arrayICD9CM[0])+"'";
+					DataCore.NonQ(command);
+				}
+			}
+			catch(Exception ex) {
+				MessageBox.Show(this,Lan.g(this,"Error importing ICD9CM codes:")+"\r\n"+ex.Message);
+			}
+			Cursor=Cursors.Default;
+		}
+
 		private void butKeys_Click(object sender,EventArgs e) {
 			FormEhrQuarterlyKeys formK=new FormEhrQuarterlyKeys();
 			formK.ShowDialog();

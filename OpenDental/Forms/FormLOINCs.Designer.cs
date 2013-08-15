@@ -42,7 +42,7 @@
 			this.gridMain.Location = new System.Drawing.Point(12, 41);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(786, 612);
+			this.gridMain.Size = new System.Drawing.Size(901, 612);
 			this.gridMain.TabIndex = 11;
 			this.gridMain.Title = "LOINC Codes";
 			this.gridMain.TranslationName = "FormMedicationPicker";
@@ -87,7 +87,7 @@
 			this.butImport.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butImport.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butImport.CornerRadius = 4F;
-			this.butImport.Location = new System.Drawing.Point(804, 41);
+			this.butImport.Location = new System.Drawing.Point(919, 41);
 			this.butImport.Name = "butImport";
 			this.butImport.Size = new System.Drawing.Size(75, 24);
 			this.butImport.TabIndex = 24;
@@ -102,7 +102,7 @@
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(804, 599);
+			this.butOK.Location = new System.Drawing.Point(919, 599);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75, 24);
 			this.butOK.TabIndex = 25;
@@ -117,7 +117,7 @@
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(804, 629);
+			this.butCancel.Location = new System.Drawing.Point(919, 629);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 26;
@@ -128,7 +128,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(891, 665);
+			this.ClientSize = new System.Drawing.Size(1006, 665);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butImport);

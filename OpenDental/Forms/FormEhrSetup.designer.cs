@@ -24,6 +24,12 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent() {
 			this.components = new System.ComponentModel.Container();
+			this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
+			this.menuItemSettings = new System.Windows.Forms.MenuItem();
+			this.butICD9CM31 = new OpenDental.UI.Button();
+			this.butSnomeds = new OpenDental.UI.Button();
+			this.butLOINCs = new OpenDental.UI.Button();
+			this.butKeys = new OpenDental.UI.Button();
 			this.butRxNorm = new OpenDental.UI.Button();
 			this.butEducationalResources = new OpenDental.UI.Button();
 			this.butInboundEmail = new OpenDental.UI.Button();
@@ -37,12 +43,74 @@ namespace OpenDental{
 			this.butAllergies = new OpenDental.UI.Button();
 			this.butICD9s = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
-			this.butKeys = new OpenDental.UI.Button();
-			this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
-			this.menuItemSettings = new System.Windows.Forms.MenuItem();
-			this.butLOINCs = new OpenDental.UI.Button();
-			this.butSnomeds = new OpenDental.UI.Button();
 			this.SuspendLayout();
+			// 
+			// mainMenu1
+			// 
+			this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItemSettings});
+			// 
+			// menuItemSettings
+			// 
+			this.menuItemSettings.Index = 0;
+			this.menuItemSettings.Text = "Settings";
+			this.menuItemSettings.Click += new System.EventHandler(this.menuItemSettings_Click);
+			// 
+			// butICD9CM31
+			// 
+			this.butICD9CM31.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butICD9CM31.Autosize = true;
+			this.butICD9CM31.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butICD9CM31.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butICD9CM31.CornerRadius = 4F;
+			this.butICD9CM31.Location = new System.Drawing.Point(214, 98);
+			this.butICD9CM31.Name = "butICD9CM31";
+			this.butICD9CM31.Size = new System.Drawing.Size(128, 24);
+			this.butICD9CM31.TabIndex = 134;
+			this.butICD9CM31.Text = "ICD9-CM (31)";
+			this.butICD9CM31.Click += new System.EventHandler(this.butICD9CM31_Click);
+			// 
+			// butSnomeds
+			// 
+			this.butSnomeds.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butSnomeds.Autosize = true;
+			this.butSnomeds.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSnomeds.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSnomeds.CornerRadius = 4F;
+			this.butSnomeds.Location = new System.Drawing.Point(214, 60);
+			this.butSnomeds.Name = "butSnomeds";
+			this.butSnomeds.Size = new System.Drawing.Size(128, 24);
+			this.butSnomeds.TabIndex = 132;
+			this.butSnomeds.Text = "SNOMED CTs";
+			this.butSnomeds.Click += new System.EventHandler(this.butSnomeds_Click);
+			// 
+			// butLOINCs
+			// 
+			this.butLOINCs.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butLOINCs.Autosize = true;
+			this.butLOINCs.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butLOINCs.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butLOINCs.CornerRadius = 4F;
+			this.butLOINCs.Location = new System.Drawing.Point(214, 22);
+			this.butLOINCs.Name = "butLOINCs";
+			this.butLOINCs.Size = new System.Drawing.Size(128, 24);
+			this.butLOINCs.TabIndex = 131;
+			this.butLOINCs.Text = "LOINCs";
+			this.butLOINCs.Click += new System.EventHandler(this.butLOINCs_Click);
+			// 
+			// butKeys
+			// 
+			this.butKeys.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butKeys.Autosize = true;
+			this.butKeys.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butKeys.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butKeys.CornerRadius = 4F;
+			this.butKeys.Location = new System.Drawing.Point(27, 402);
+			this.butKeys.Name = "butKeys";
+			this.butKeys.Size = new System.Drawing.Size(128, 24);
+			this.butKeys.TabIndex = 130;
+			this.butKeys.Text = "Quarterly Keys";
+			this.butKeys.Click += new System.EventHandler(this.butKeys_Click);
 			// 
 			// butRxNorm
 			// 
@@ -215,70 +283,18 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(506, 414);
+			this.butClose.Location = new System.Drawing.Point(506, 395);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75, 24);
 			this.butClose.TabIndex = 2;
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
-			// butKeys
-			// 
-			this.butKeys.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butKeys.Autosize = true;
-			this.butKeys.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butKeys.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butKeys.CornerRadius = 4F;
-			this.butKeys.Location = new System.Drawing.Point(27, 402);
-			this.butKeys.Name = "butKeys";
-			this.butKeys.Size = new System.Drawing.Size(128, 24);
-			this.butKeys.TabIndex = 130;
-			this.butKeys.Text = "Quarterly Keys";
-			this.butKeys.Click += new System.EventHandler(this.butKeys_Click);
-			// 
-			// mainMenu1
-			// 
-			this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.menuItemSettings});
-			// 
-			// menuItemSettings
-			// 
-			this.menuItemSettings.Index = 0;
-			this.menuItemSettings.Text = "Settings";
-			this.menuItemSettings.Click += new System.EventHandler(this.menuItemSettings_Click);
-			// 
-			// butLOINCs
-			// 
-			this.butLOINCs.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butLOINCs.Autosize = true;
-			this.butLOINCs.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butLOINCs.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butLOINCs.CornerRadius = 4F;
-			this.butLOINCs.Location = new System.Drawing.Point(214, 22);
-			this.butLOINCs.Name = "butLOINCs";
-			this.butLOINCs.Size = new System.Drawing.Size(128, 24);
-			this.butLOINCs.TabIndex = 131;
-			this.butLOINCs.Text = "LOINCs";
-			this.butLOINCs.Click += new System.EventHandler(this.butLOINCs_Click);
-			// 
-			// butSnomeds
-			// 
-			this.butSnomeds.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butSnomeds.Autosize = true;
-			this.butSnomeds.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSnomeds.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butSnomeds.CornerRadius = 4F;
-			this.butSnomeds.Location = new System.Drawing.Point(214, 60);
-			this.butSnomeds.Name = "butSnomeds";
-			this.butSnomeds.Size = new System.Drawing.Size(128, 24);
-			this.butSnomeds.TabIndex = 132;
-			this.butSnomeds.Text = "SNOMED CTs";
-			this.butSnomeds.Click += new System.EventHandler(this.butSnomeds_Click);
-			// 
 			// FormEhrSetup
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(606, 465);
+			this.ClientSize = new System.Drawing.Size(606, 446);
+			this.Controls.Add(this.butICD9CM31);
 			this.Controls.Add(this.butSnomeds);
 			this.Controls.Add(this.butLOINCs);
 			this.Controls.Add(this.butKeys);
@@ -324,5 +340,6 @@ namespace OpenDental{
 		private System.Windows.Forms.MenuItem menuItemSettings;
 		private UI.Button butLOINCs;
 		private UI.Button butSnomeds;
+		private UI.Button butICD9CM31;
 	}
 }

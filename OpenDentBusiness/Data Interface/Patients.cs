@@ -1253,7 +1253,7 @@ namespace OpenDentBusiness{
 				//wireless
 				oldTel=PIn.String(table.Rows[i][17].ToString());
 				newTel=TelephoneNumbers.ReFormat(oldTel);
-				if(oldTel!=newTel) {// Keyush Shah 04/21/04 Bug, was overwriting wireless with work phone here
+				if(oldTel!=newTel) {
 					command="UPDATE patient SET wirelessphone = '"
 						+POut.String(newTel)+"' WHERE patNum = '"+idNum+"'";
 					Db.NonQ(command);

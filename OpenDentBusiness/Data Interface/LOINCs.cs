@@ -59,7 +59,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<LOINC>>(MethodBase.GetCurrentMethod(),searchText);
 			}
-			string command="SELECT * FROM loinc WHERE LOINCCode LIKE '%"+POut.String(searchText)+"%' OR LongName LIKE '%"+POut.String(searchText)+"%'";
+			string command="SELECT * FROM loinc WHERE LOINCCode LIKE '%"+POut.String(searchText)+"%' OR NameLongCommon LIKE '%"+POut.String(searchText)+"%'";
 			return Crud.LOINCCrud.SelectMany(command);
 		}
 
