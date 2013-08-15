@@ -201,6 +201,7 @@
     <Compile Include="Crud\DrugUnitCrud.cs" />
     <Compile Include="Crud\DunningCrud.cs" />
     <Compile Include="Crud\EduResourceCrud.cs" />
+    <Compile Include="Crud\EhrCodeCrud.cs" />
     <Compile Include="Crud\EhrMeasureCrud.cs" />
     <Compile Include="Crud\EhrMeasureEventCrud.cs" />
     <Compile Include="Crud\EhrProvKeyCrud.cs" />
@@ -377,6 +378,7 @@
     <Compile Include="Data Interface\Automations.cs" />
     <Compile Include="Data Interface\CentralConnections.cs" />
     <Compile Include="Data Interface\ChartViews.cs" />
+    <Compile Include="Data Interface\EhrCodes.cs" />
     <Compile Include="Data Interface\FamilyHealths.cs" />
     <Compile Include="Data Interface\LOINCs.cs" />
     <Compile Include="Data Interface\PatientRaces.cs" />
@@ -777,7 +779,7 @@
     <Compile Include="TableTypes\AllergyDef.cs" />
     <Compile Include="TableTypes\Allergy.cs" />
     <Compile Include="TableTypes\CentralConnection.cs" />
-    <Compile Include="TableTypes\CQMCode.cs" />
+    <Compile Include="TableTypes\EhrCode.cs" />
     <Compile Include="TableTypes\LOINC.cs" />
     <Compile Include="TableTypes\SecurityLogHash.cs" />
     <Compile Include="TableTypes\FamilyHealth.cs" />
