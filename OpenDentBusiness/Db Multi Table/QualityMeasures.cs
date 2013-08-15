@@ -2725,7 +2725,7 @@ BMI 18.5-25.";
 				case QualityType2014.WeightChild_3_3:
 					return "All patients 11-16 with a visit during the measurement period, unless pregnant.";
 				case QualityType2014.MedicationsEntered:
-					return "All patients 18+ with at least one encounter from the 'Medications Encounter Code Set' performed during the measurement period.";
+					return "All patients 18+ with at least one medication encounter performed during the measurement period.";
 				case QualityType2014.Pneumonia:
 					return "All patients 65+ during the measurement period with a visit within 1 year before the measurement end date.";
 				case QualityType2014.BloodPressureManage:
@@ -2857,7 +2857,7 @@ BMI 18.5-25.";
 				case QualityType2014.WeightChild_3_3:
 					return "N/A";
 				case QualityType2014.MedicationsEntered:
-					return "The procedure 'Performed not done' using a 'Medical or Other reason' SNOMED-CT code was entered for this patient.";
+					return "'Current Medications Documented' procedure was not done because of a 'Medical or Other reason' SNOMED-CT code during the medications encounter.";
 				case QualityType2014.Pneumonia:
 					return "N/A";
 				case QualityType2014.BloodPressureManage:

@@ -907,7 +907,7 @@ namespace OpenDentBusiness {
 						ValueSetOID varchar(50) NOT NULL,
 						QDMCategory varchar(30) NOT NULL,
 						CodeValue varchar(20) NOT NULL,
-						Description varchar(800) NOT NULL,
+						Description text NOT NULL,
 						CodeSystem varchar(20) NOT NULL,
 						CodeSystemOID varchar(30) NOT NULL
 						) DEFAULT CHARSET=utf8";
@@ -928,6 +928,74 @@ namespace OpenDentBusiness {
 						CodeSystemOID varchar2(30),
 						CONSTRAINT ehrcode_EhrCodeNum PRIMARY KEY (EhrCodeNum)
 						)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS ehrnotperformed";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehrnotperformed (
+						EhrNotPerformedNum bigint NOT NULL auto_increment PRIMARY KEY,
+						PatNum bigint NOT NULL,
+						ValueSetOID varchar(50) NOT NULL,
+						CodeValue varchar(20) NOT NULL,
+						CodeSystem varchar(20) NOT NULL,
+						ValueSetOIDReason varchar(50) NOT NULL,
+						CodeValueReason varchar(20) NOT NULL,
+						CodeSystemReason varchar(20) NOT NULL,
+						DateTimeEntry datetime NOT NULL DEFAULT '0001-01-01 00:00:00',
+						INDEX(PatNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE ehrnotperformed'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehrnotperformed (
+						EhrNotPerformedNum number(20) NOT NULL,
+						PatNum number(20) NOT NULL,
+						ValueSetOID varchar2(50),
+						CodeValue varchar2(20),
+						CodeSystem varchar2(20),
+						ValueSetOIDReason varchar2(50),
+						CodeValueReason varchar2(20),
+						CodeSystemReason varchar2(20),
+						DateTimeEntry date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+						CONSTRAINT ehrnotperformed_EhrNotPerforme PRIMARY KEY (EhrNotPerformedNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX ehrnotperformed_PatNum ON ehrnotperformed (PatNum)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS intervention";
+					Db.NonQ(command);
+					command=@"CREATE TABLE intervention (
+						InterventionNum bigint NOT NULL auto_increment PRIMARY KEY,
+						PatNum bigint NOT NULL,
+						ValueSetOID varchar(50) NOT NULL,
+						CodeValue varchar(20) NOT NULL,
+						CodeSystem varchar(20) NOT NULL,
+						MoreInfo text NOT NULL,
+						DateTimeEntry datetime NOT NULL DEFAULT '0001-01-01 00:00:00',
+						INDEX(PatNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE intervention'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE intervention (
+						InterventionNum number(20) NOT NULL,
+						PatNum number(20) NOT NULL,
+						ValueSetOID varchar2(50),
+						CodeValue varchar2(20),
+						CodeSystem varchar2(20),
+						MoreInfo varchar2(1000),
+						DateTimeEntry date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+						CONSTRAINT intervention_InterventionNum PRIMARY KEY (InterventionNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX intervention_PatNum ON intervention (PatNum)";
 					Db.NonQ(command);
 				}
 
@@ -951,6 +1019,6 @@ namespace OpenDentBusiness {
 
 
 
-				
 
-				
+				/*
+				*/

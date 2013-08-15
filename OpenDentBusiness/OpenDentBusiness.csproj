@@ -204,6 +204,9 @@
     <Compile Include="Crud\EhrCodeCrud.cs" />
     <Compile Include="Crud\EhrMeasureCrud.cs" />
     <Compile Include="Crud\EhrMeasureEventCrud.cs" />
+    <Compile Include="Crud\EhrNotPerformedCrud.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Crud\EhrProvKeyCrud.cs" />
     <Compile Include="Crud\EhrQuarterlyKeyCrud.cs" />
     <Compile Include="Crud\EhrSummaryCcdCrud.cs" />
@@ -238,6 +241,7 @@
     <Compile Include="Crud\InsPlanCrud.cs" />
     <Compile Include="Crud\InsSubCrud.cs" />
     <Compile Include="Crud\InstallmentPlanCrud.cs" />
+    <Compile Include="Crud\InterventionCrud.cs" />
     <Compile Include="Crud\JournalEntryCrud.cs" />
     <Compile Include="Crud\LabCaseCrud.cs" />
     <Compile Include="Crud\LaboratoryCrud.cs" />
@@ -380,7 +384,11 @@
     <Compile Include="Data Interface\ChartViews.cs" />
     <Compile Include="Data Interface\EhrCodes.cs" />
     <Compile Include="Data Interface\CodeSystems.cs" />
+    <Compile Include="Data Interface\EhrNotPerformeds.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Data Interface\FamilyHealths.cs" />
+    <Compile Include="Data Interface\Interventions.cs" />
     <Compile Include="Data Interface\LOINCs.cs" />
     <Compile Include="Data Interface\PatientRaces.cs" />
     <Compile Include="Data Interface\Resellers.cs" />
@@ -780,6 +788,8 @@
     <Compile Include="TableTypes\AllergyDef.cs" />
     <Compile Include="TableTypes\Allergy.cs" />
     <Compile Include="TableTypes\CentralConnection.cs" />
+    <Compile Include="TableTypes\Intervention.cs" />
+    <Compile Include="TableTypes\EhrNotPerformed.cs" />
     <Compile Include="TableTypes\EhrCode.cs" />
     <Compile Include="TableTypes\LOINC.cs" />
     <Compile Include="TableTypes\SecurityLogHash.cs" />
