@@ -150,7 +150,8 @@ namespace OpenDental{
 				+"AND procedurelog.procstatus=2 "
 				+"AND procedurelog.ProcDate >= "+POut.Date(date1.SelectionStart)+" "
 				+"AND procedurelog.ProcDate <= "+POut.Date(date2.SelectionStart)+" "
-				+"GROUP BY procedurelog.ProcNum";
+				+"GROUP BY procedurelog.ProcNum "
+				+"ORDER BY patient.LName,patient.FName";
 			/*}
 			else{
 				report.Query="SELECT CONCAT(patient.LName,', ',patient.FName,' ',patient.MiddleI),"
