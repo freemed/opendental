@@ -28,26 +28,25 @@ namespace OpenDentBusiness {
 			if(regex.IsMatch(phoneNum)) {
 				return "("+phoneNum.Substring(0,3)+")"+phoneNum.Substring(4);
 			}
-			//Keyush Shah 04/21/05 Added more formats:
 			regex=new Regex(@"^\d{3} \d{3} \d{4}");//eg 916 363 5432
 			if(regex.IsMatch(phoneNum)) {
-				return "("+phoneNum.Substring(0,3)+")"+phoneNum.Substring(4,3)+"-"+phoneNum.Substring(8,4);
+				return "("+phoneNum.Substring(0,3)+")"+phoneNum.Substring(4,3)+"-"+phoneNum.Substring(8);
 			}
 			regex=new Regex(@"^\(\d{3}\) \d{3} \d{4}");//eg (916) 363 5432
 			if(regex.IsMatch(phoneNum)) {
-				return "("+phoneNum.Substring(1,3)+")"+phoneNum.Substring(6,3)+"-"+phoneNum.Substring(10,4);
+				return "("+phoneNum.Substring(1,3)+")"+phoneNum.Substring(6,3)+"-"+phoneNum.Substring(10);
 			}
 			regex=new Regex(@"^\(\d{3}\) \d{3}-\d{4}");//eg (916) 363-5432
 			if(regex.IsMatch(phoneNum)) {
-				return "("+phoneNum.Substring(1,3)+")"+phoneNum.Substring(6,3)+"-"+phoneNum.Substring(10,4);
+				return "("+phoneNum.Substring(1,3)+")"+phoneNum.Substring(6,3)+"-"+phoneNum.Substring(10);
 			}
-			regex=new Regex(@"^\d{7}$");//eg 3635432
-			if(regex.IsMatch(phoneNum)) {
+			regex=new Regex(@"^\d{7}");//eg 3635432
+			if(regex.IsMatch(phoneNum)) {//this must be run after the d{10} match up above.
 				return (phoneNum.Substring(0,3)+"-"+phoneNum.Substring(3));
 			}
-			regex=new Regex(@"^\D\d{3}\D\d{3}\D\d{4}");//eg (916-363-5432
+			regex=new Regex(@"^\(\d{3}-\d{3}-\d{4}");//eg (916-363-5432
 			if(regex.IsMatch(phoneNum)) {
-				return "("+phoneNum.Substring(1,3)+")"+phoneNum.Substring(5,3)+"-"+phoneNum.Substring(9,4);
+				return "("+phoneNum.Substring(1,3)+")"+phoneNum.Substring(5,3)+"-"+phoneNum.Substring(9);
 			}
 			return phoneNum;
 		}
