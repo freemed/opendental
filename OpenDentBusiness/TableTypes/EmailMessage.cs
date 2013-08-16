@@ -18,6 +18,7 @@ namespace OpenDentBusiness {
 		///<summary>Subject line.</summary>
 		public string Subject;
 		///<summary>Body of the email</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string BodyText;
 		///<summary>Date and time the message was sent. Automated at the UI level.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
@@ -47,11 +48,11 @@ namespace OpenDentBusiness {
 	public enum EmailSentOrReceived {
 		///<summary>0 Unsent</summary>
 		Neither,
-		///<summary>1</summary>
+		///<summary>1 For regular email only.</summary>
 		Sent,
-		///<summary>2 For regular email and email encrypted using Direct.  Shows in Inbox.  Once it's attached to a patient it will also show in Chart module.</summary>
+		///<summary>2 For regular email only.  Shows in Inbox.  Once it's attached to a patient it will also show in Chart module.</summary>
 		Received,
-		///<summary>3 For regular email and email encrypted using Direct.  Has been read.  Shows in Inbox.  Once it's attached to a patient it will also show in Chart module.</summary>
+		///<summary>3 For received regular email only.  Has been read.  Shows in Inbox.  Once it's attached to a patient it will also show in Chart module.</summary>
 		Read,
 		///<summary>4 WebMail received from patient portal.  Shows in OD Inbox and in pt Chart module.  Also shows in PP as a sent and unread WebMail msg.</summary>
 		WebMailReceived,
@@ -60,7 +61,15 @@ namespace OpenDentBusiness {
 		///<summary>6 Webmail sent from provider to patient.  Shows in Chart module and also shows in PP as a received and unread WebMail msg.</summary>
 		WebMailSent,
 		///<summary>7 Webmail sent from provider to patient and read by patient.  Shows in Chart module and also shows in PP as a received and read WebMail msg.</summary>
-		WebMailSentRead
+		WebMailSentRead,
+		///<summary>8 Sent and encrypted using Direct. Required for counting messages in EHR modules g.1 and g.2, Automated Measure Calculation.</summary>
+		SentDirect,
+		///<summary>9 Received email matches application/pkcs7-mime mime type, but could not be decrypted.  Shows in Inbox.  The user can decrypt from FormEmailMessageEdit.  If the user has the correct private key, then the status will change to Read.</summary>
+		ReceivedEncrypted,
+		///<summary>10 Received email matches application/pkcs7-mime mime type and has been decrypted.  Shows in Inbox.  Once it's attached to a patient it will also show in Chart module.  When viewing inside of FormEmailMessageEdit, the XML body of the message shows as xhtml instead of raw.  Still need to work on supporting collapsing and expanding, as required for meaningful use in 2014.</summary>
+		ReceivedDirect,
+		///<summary>11 For received direct messages.  Has been read.  Shows in Inbox.  Once it's attached to a patient it will also show in Chart module.  When viewing inside of FormEmailMessageEdit, the XML body of the message shows as xhtml.</summary>
+		ReadDirect
 	}
 
 

@@ -117,25 +117,14 @@ namespace OpenDentBusiness {
 					readData=RdStrm.ReadLine();
 				}
 				if(emailMsg.Contains("application/pkcs7-mime")) {//The email MIME/body is encrypted (known as S/MIME).
-					string domain=retVal.ToAddress.Substring(retVal.ToAddress.IndexOf("@")+1);//Used to locate the certificate for the incoming email. For example, if ToAddress is ehr@opendental.com, then this will be opendental.com
-					Health.Direct.Agent.DirectAgent agent=new Health.Direct.Agent.DirectAgent(domain);
-					Health.Direct.Agent.IncomingMessage inMsg;
+					retVal.SentOrReceived=EmailSentOrReceived.ReceivedEncrypted;
+					retVal.BodyText=emailMsg;//The entire contents of the email, so that if decryption fails, the email will still be saved to the database for decryption later if possible.
 					try {
-						inMsg=agent.ProcessIncoming(emailMsg);
+						DecryptDirect(retVal);
 					}
 					catch(Exception ex) {
-						//Delete the message on the mail server, because it is probably an untrusted email and we need to remove it to get to the other emails next time.
-						Data="DELE "+lastEmail+"\r\n";
-						sendData=System.Text.Encoding.ASCII.GetBytes(Data.ToCharArray());
-						NetStrm.Write(sendData,0,sendData.Length);
-						throw ex;
+						//The encrypted message will be saved to the database so that the user can try to decrypt later in FormEmailMessageEdit.
 					}
-					retVal.FromAddress=inMsg.Message.FromValue;					
-					//retVal.PatNum=0;//TODO: Set for some Direct messages.
-					//retVal.MsgDateTime=DateTime.ParseExact(inMsg.Message.DateValue,"ddd, d MMM yyyy HH:mm:ss",CultureInfo.InvariantCulture);//We could pull the email date and time from the server instead.
-					retVal.Subject=inMsg.Message.SubjectValue;
-					retVal.ToAddress=inMsg.Message.ToValue;
-					retVal.BodyText=ExtractMimeAttach(inMsg.Message.Body.Text);
 				}
 				else {//Unencrypted email.				
 					retVal.BodyText=ExtractMimeAttach(emailBody);
@@ -161,6 +150,25 @@ namespace OpenDentBusiness {
 				throw new ApplicationException(error);
 			}
 			return retVal;
+		}
+
+		///<summary>Only for email messages with SentOrReceived set to EncryptedDirect. If decryption fails, then throws an exception and does not change email. If decryption succeeds, then emailMessage.SentOrReceived is set to ReceivedDirect and the BodyText of the email is changed from the entire encrypted email contents to the decrypted body text.</summary>
+		public static void DecryptDirect(EmailMessage emailMessage) {
+			string domain=emailMessage.ToAddress.Substring(emailMessage.ToAddress.IndexOf("@")+1);//Used to locate the certificate for the incoming email. For example, if ToAddress is ehr@opendental.com, then this will be opendental.com
+			Health.Direct.Agent.DirectAgent agent=new Health.Direct.Agent.DirectAgent(domain);
+			Health.Direct.Agent.IncomingMessage inMsg=null;
+			try {
+				inMsg=agent.ProcessIncoming(emailMessage.BodyText);//This is actually the entire contents of the email message for this specific case. Normally it would just be the body text.
+			}
+			catch(Exception ex) {
+				throw new ApplicationException("Decryption failed.\r\n"+ex.Message);
+			}
+			if(inMsg!=null) {
+				emailMessage.SentOrReceived=EmailSentOrReceived.ReceivedDirect;
+				emailMessage.BodyText=ExtractMimeAttach(inMsg.Message.Body.Text);
+				//emailMessage.PatNum=0;//TODO: Set for some Direct messages.
+				//emailMessage.MsgDateTime=DateTime.ParseExact(inMsg.Message.DateValue,"ddd, d MMM yyyy HH:mm:ss",CultureInfo.InvariantCulture);//We could pull the email date and time from the server instead. The format is more difficult than normal, and might be different depending on who sent the email.
+			}
 		}
 
 		///<summary>Receives one email from the inbox, and returns the contents of the attachment as a string.  Will throw an exception if anything goes wrong, so surround with a try-catch.</summary>

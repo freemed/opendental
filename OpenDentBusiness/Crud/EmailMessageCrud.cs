@@ -103,14 +103,18 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(emailMessage.ToAddress)+"',"
 				+"'"+POut.String(emailMessage.FromAddress)+"',"
 				+"'"+POut.String(emailMessage.Subject)+"',"
-				+"'"+POut.String(emailMessage.BodyText)+"',"
+				+DbHelper.ParamChar+"paramBodyText,"
 				+    POut.DateT (emailMessage.MsgDateTime)+","
 				+    POut.Int   ((int)emailMessage.SentOrReceived)+")";
+			if(emailMessage.BodyText==null) {
+				emailMessage.BodyText="";
+			}
+			OdSqlParameter paramBodyText=new OdSqlParameter("paramBodyText",OdDbType.Text,emailMessage.BodyText);
 			if(useExistingPK || PrefC.RandomKeys) {
-				Db.NonQ(command);
+				Db.NonQ(command,paramBodyText);
 			}
 			else {
-				emailMessage.EmailMessageNum=Db.NonQ(command,true);
+				emailMessage.EmailMessageNum=Db.NonQ(command,true,paramBodyText);
 			}
 			return emailMessage.EmailMessageNum;
 		}
@@ -122,11 +126,15 @@ namespace OpenDentBusiness.Crud{
 				+"ToAddress      = '"+POut.String(emailMessage.ToAddress)+"', "
 				+"FromAddress    = '"+POut.String(emailMessage.FromAddress)+"', "
 				+"Subject        = '"+POut.String(emailMessage.Subject)+"', "
-				+"BodyText       = '"+POut.String(emailMessage.BodyText)+"', "
+				+"BodyText       =  "+DbHelper.ParamChar+"paramBodyText, "
 				+"MsgDateTime    =  "+POut.DateT (emailMessage.MsgDateTime)+", "
 				+"SentOrReceived =  "+POut.Int   ((int)emailMessage.SentOrReceived)+" "
 				+"WHERE EmailMessageNum = "+POut.Long(emailMessage.EmailMessageNum);
-			Db.NonQ(command);
+			if(emailMessage.BodyText==null) {
+				emailMessage.BodyText="";
+			}
+			OdSqlParameter paramBodyText=new OdSqlParameter("paramBodyText",OdDbType.Text,emailMessage.BodyText);
+			Db.NonQ(command,paramBodyText);
 		}
 
 		///<summary>Updates one EmailMessage in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
@@ -150,7 +158,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(emailMessage.BodyText != oldEmailMessage.BodyText) {
 				if(command!=""){ command+=",";}
-				command+="BodyText = '"+POut.String(emailMessage.BodyText)+"'";
+				command+="BodyText = "+DbHelper.ParamChar+"paramBodyText";
 			}
 			if(emailMessage.MsgDateTime != oldEmailMessage.MsgDateTime) {
 				if(command!=""){ command+=",";}
@@ -163,9 +171,13 @@ namespace OpenDentBusiness.Crud{
 			if(command==""){
 				return;
 			}
+			if(emailMessage.BodyText==null) {
+				emailMessage.BodyText="";
+			}
+			OdSqlParameter paramBodyText=new OdSqlParameter("paramBodyText",OdDbType.Text,emailMessage.BodyText);
 			command="UPDATE emailmessage SET "+command
 				+" WHERE EmailMessageNum = "+POut.Long(emailMessage.EmailMessageNum);
-			Db.NonQ(command);
+			Db.NonQ(command,paramBodyText);
 		}
 
 		///<summary>Deletes one EmailMessage from the database.</summary>

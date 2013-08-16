@@ -998,7 +998,14 @@ namespace OpenDentBusiness {
 					command=@"CREATE INDEX intervention_PatNum ON intervention (PatNum)";
 					Db.NonQ(command);
 				}
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE emailmessage CHANGE BodyText BodyText LONGTEXT NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE emailmessage MODIFY (BodyText clob NOT NULL)";
+					Db.NonQ(command);
+				}
 
 				command="UPDATE preference SET ValueString = '13.3.0.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);

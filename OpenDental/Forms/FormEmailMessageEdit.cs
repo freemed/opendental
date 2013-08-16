@@ -9,6 +9,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Net.Mime;
 using System.Windows.Forms;
+using System.Xml;
 //using OpenDental.Reporting;
 //using Indy.Sockets.IndySMTP;
 //using Indy.Sockets.IndyMessage;
@@ -55,6 +56,9 @@ namespace OpenDental{
 		private OpenDental.UI.Button buttonFuchsMailDMF;
 		//private int PatNum;
 		private EmailMessage MessageCur;
+		private Label labelDecrypt;
+		private UI.Button butDecrypt;
+		private UI.Button butShowXhtml;
 		///<summary>Used when attaching to get AtoZ folder, and when sending to get Clinic.</summary>
 		private Patient PatCur;
 
@@ -109,14 +113,17 @@ namespace OpenDental{
 			this.menuItemOpen = new System.Windows.Forms.MenuItem();
 			this.menuItemRename = new System.Windows.Forms.MenuItem();
 			this.menuItemRemove = new System.Windows.Forms.MenuItem();
+			this.labelDecrypt = new System.Windows.Forms.Label();
+			this.butDecrypt = new OpenDental.UI.Button();
+			this.buttonFuchsMailDMF = new OpenDental.UI.Button();
+			this.buttonFuchsMailDSF = new OpenDental.UI.Button();
 			this.butAttach = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butSave = new OpenDental.UI.Button();
 			this.textBodyText = new OpenDental.ODtextBox();
 			this.butSend = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.buttonFuchsMailDSF = new OpenDental.UI.Button();
-			this.buttonFuchsMailDMF = new OpenDental.UI.Button();
+			this.butShowXhtml = new OpenDental.UI.Button();
 			this.panelTemplates.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -266,6 +273,8 @@ namespace OpenDental{
 			// 
 			// listAttachments
 			// 
+			this.listAttachments.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.listAttachments.Location = new System.Drawing.Point(612,27);
 			this.listAttachments.Name = "listAttachments";
 			this.listAttachments.Size = new System.Drawing.Size(315,56);
@@ -298,6 +307,62 @@ namespace OpenDental{
 			this.menuItemRemove.Index = 2;
 			this.menuItemRemove.Text = "Remove";
 			this.menuItemRemove.Click += new System.EventHandler(this.menuItemRemove_Click);
+			// 
+			// labelDecrypt
+			// 
+			this.labelDecrypt.Location = new System.Drawing.Point(5,401);
+			this.labelDecrypt.Name = "labelDecrypt";
+			this.labelDecrypt.Size = new System.Drawing.Size(267,59);
+			this.labelDecrypt.TabIndex = 31;
+			this.labelDecrypt.Text = "Previous attempts to decrypt this message have failed.\r\nDecryption usually fails " +
+    "when your private decryption key is not installed on the local computer.\r\nUse th" +
+    "e Decrypt button to try again.";
+			this.labelDecrypt.Visible = false;
+			// 
+			// butDecrypt
+			// 
+			this.butDecrypt.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDecrypt.Autosize = true;
+			this.butDecrypt.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDecrypt.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDecrypt.CornerRadius = 4F;
+			this.butDecrypt.Location = new System.Drawing.Point(8,463);
+			this.butDecrypt.Name = "butDecrypt";
+			this.butDecrypt.Size = new System.Drawing.Size(75,25);
+			this.butDecrypt.TabIndex = 32;
+			this.butDecrypt.Text = "Decrypt";
+			this.butDecrypt.Visible = false;
+			this.butDecrypt.Click += new System.EventHandler(this.butDecrypt_Click);
+			// 
+			// buttonFuchsMailDMF
+			// 
+			this.buttonFuchsMailDMF.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.buttonFuchsMailDMF.Autosize = true;
+			this.buttonFuchsMailDMF.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.buttonFuchsMailDMF.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.buttonFuchsMailDMF.CornerRadius = 4F;
+			this.buttonFuchsMailDMF.Location = new System.Drawing.Point(197,131);
+			this.buttonFuchsMailDMF.Name = "buttonFuchsMailDMF";
+			this.buttonFuchsMailDMF.Size = new System.Drawing.Size(75,22);
+			this.buttonFuchsMailDMF.TabIndex = 30;
+			this.buttonFuchsMailDMF.Text = "To DMF";
+			this.buttonFuchsMailDMF.Visible = false;
+			this.buttonFuchsMailDMF.Click += new System.EventHandler(this.buttonFuchsMailDMF_Click);
+			// 
+			// buttonFuchsMailDSF
+			// 
+			this.buttonFuchsMailDSF.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.buttonFuchsMailDSF.Autosize = true;
+			this.buttonFuchsMailDSF.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.buttonFuchsMailDSF.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.buttonFuchsMailDSF.CornerRadius = 4F;
+			this.buttonFuchsMailDSF.Location = new System.Drawing.Point(197,103);
+			this.buttonFuchsMailDSF.Name = "buttonFuchsMailDSF";
+			this.buttonFuchsMailDSF.Size = new System.Drawing.Size(75,22);
+			this.buttonFuchsMailDSF.TabIndex = 29;
+			this.buttonFuchsMailDSF.Text = "To DSF";
+			this.buttonFuchsMailDSF.Visible = false;
+			this.buttonFuchsMailDSF.Click += new System.EventHandler(this.buttonFuchsMailDSF_Click);
 			// 
 			// butAttach
 			// 
@@ -347,13 +412,18 @@ namespace OpenDental{
 			// 
 			// textBodyText
 			// 
+			this.textBodyText.AcceptsTab = true;
+			this.textBodyText.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.textBodyText.DetectUrls = false;
 			this.textBodyText.Location = new System.Drawing.Point(278,84);
-			this.textBodyText.Multiline = true;
 			this.textBodyText.Name = "textBodyText";
 			this.textBodyText.QuickPasteType = OpenDentBusiness.QuickPasteType.Email;
 			this.textBodyText.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
 			this.textBodyText.Size = new System.Drawing.Size(649,537);
 			this.textBodyText.TabIndex = 0;
+			this.textBodyText.Text = "";
 			this.textBodyText.TextChanged += new System.EventHandler(this.textBodyText_TextChanged);
 			// 
 			// butSend
@@ -387,40 +457,28 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// buttonFuchsMailDSF
+			// butShowXhtml
 			// 
-			this.buttonFuchsMailDSF.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.buttonFuchsMailDSF.Autosize = true;
-			this.buttonFuchsMailDSF.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.buttonFuchsMailDSF.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.buttonFuchsMailDSF.CornerRadius = 4F;
-			this.buttonFuchsMailDSF.Location = new System.Drawing.Point(197,103);
-			this.buttonFuchsMailDSF.Name = "buttonFuchsMailDSF";
-			this.buttonFuchsMailDSF.Size = new System.Drawing.Size(75,22);
-			this.buttonFuchsMailDSF.TabIndex = 29;
-			this.buttonFuchsMailDSF.Text = "To DSF";
-			this.buttonFuchsMailDSF.Visible = false;
-			this.buttonFuchsMailDSF.Click += new System.EventHandler(this.buttonFuchsMailDSF_Click);
-			// 
-			// buttonFuchsMailDMF
-			// 
-			this.buttonFuchsMailDMF.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.buttonFuchsMailDMF.Autosize = true;
-			this.buttonFuchsMailDMF.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.buttonFuchsMailDMF.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.buttonFuchsMailDMF.CornerRadius = 4F;
-			this.buttonFuchsMailDMF.Location = new System.Drawing.Point(197,131);
-			this.buttonFuchsMailDMF.Name = "buttonFuchsMailDMF";
-			this.buttonFuchsMailDMF.Size = new System.Drawing.Size(75,22);
-			this.buttonFuchsMailDMF.TabIndex = 30;
-			this.buttonFuchsMailDMF.Text = "To DMF";
-			this.buttonFuchsMailDMF.Visible = false;
-			this.buttonFuchsMailDMF.Click += new System.EventHandler(this.buttonFuchsMailDMF_Click);
+			this.butShowXhtml.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butShowXhtml.Autosize = true;
+			this.butShowXhtml.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butShowXhtml.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butShowXhtml.CornerRadius = 4F;
+			this.butShowXhtml.Location = new System.Drawing.Point(531,636);
+			this.butShowXhtml.Name = "butShowXhtml";
+			this.butShowXhtml.Size = new System.Drawing.Size(75,25);
+			this.butShowXhtml.TabIndex = 33;
+			this.butShowXhtml.Text = "Show xhtml";
+			this.butShowXhtml.Visible = false;
+			this.butShowXhtml.Click += new System.EventHandler(this.butShowXhtml_Click);
 			// 
 			// FormEmailMessageEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(941,672);
+			this.Controls.Add(this.butShowXhtml);
+			this.Controls.Add(this.butDecrypt);
+			this.Controls.Add(this.labelDecrypt);
 			this.Controls.Add(this.buttonFuchsMailDMF);
 			this.Controls.Add(this.buttonFuchsMailDSF);
 			this.Controls.Add(this.listAttachments);
@@ -442,6 +500,7 @@ namespace OpenDental{
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
+			this.MinimumSize = new System.Drawing.Size(875,575);
 			this.Name = "FormEmailMessageEdit";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -462,7 +521,7 @@ namespace OpenDental{
 				textMsgDateTime.Text=Lan.g(this,"Unsent");
 				textMsgDateTime.ForeColor=Color.Red;
 			}
-			else{//already sent
+			else{//already sent or received
 				panelTemplates.Visible=false;
 				textMsgDateTime.Text=MessageCur.MsgDateTime.ToString();
 				butAttach.Enabled=false;
@@ -478,6 +537,33 @@ namespace OpenDental{
 			if(PrefC.GetBool(PrefName.FuchsOptionsOn)){
 				buttonFuchsMailDMF.Visible=true;
 				buttonFuchsMailDSF.Visible=true;
+			}
+			if(MessageCur.SentOrReceived==EmailSentOrReceived.ReceivedEncrypted) {
+				labelDecrypt.Visible=true;
+				butDecrypt.Visible=true;
+			}
+			//For all email received types, we disable most of the controls and put the form into a mostly read-only state.
+			//There is no reason a user should ever edit a received message. The user can copy the content and send a new email if needed (perhaps we will have forward capabilities in the future).
+			if(MessageCur.SentOrReceived==EmailSentOrReceived.ReceivedEncrypted ||
+				MessageCur.SentOrReceived==EmailSentOrReceived.ReceivedDirect ||
+				MessageCur.SentOrReceived==EmailSentOrReceived.ReadDirect ||
+				MessageCur.SentOrReceived==EmailSentOrReceived.Received ||
+				MessageCur.SentOrReceived==EmailSentOrReceived.Read ||
+				MessageCur.SentOrReceived==EmailSentOrReceived.WebMailReceived ||
+				MessageCur.SentOrReceived==EmailSentOrReceived.WebMailRecdRead)
+			{
+				textBodyText.ReadOnly=true;
+				textBodyText.SpellCheckIsEnabled=false;//Prevents slowness when resizing the window, because the spell checker runs each time the resize event is fired.
+				butSave.Visible=false;
+				butSend.Visible=false;
+				butAttach.Visible=false;//We are not able to receive incoming attachments yet, although it is possible using the emailattach table and will probably happen eventually.
+				listAttachments.Visible=false;//We are not able to receive incoming attachments yet, although it is possible using the emailattach table and will probably happen eventually.
+				butCancel.Text="Close";//When opening an email from FormEmailInbox, the email status will change to read automatically, and changing the text on the cancel button helps convey that to the user.
+			}
+			if(MessageCur.SentOrReceived==EmailSentOrReceived.ReceivedDirect ||
+				MessageCur.SentOrReceived==EmailSentOrReceived.ReadDirect) 
+			{
+				butShowXhtml.Visible=true;
 			}
 		}
 
@@ -720,6 +806,20 @@ namespace OpenDental{
 			}
 		}
 
+		private void butDecrypt_Click(object sender,EventArgs e) {
+			try {
+				EhrEmail.DecryptDirect(MessageCur);//If successful, sets status to ReceivedDirect.
+				MessageCur.SentOrReceived=EmailSentOrReceived.ReadDirect;//Because we are already viewing the message within the current window.
+				EmailMessages.Update(MessageCur);
+				textBodyText.Text=MessageCur.BodyText;
+				labelDecrypt.Visible=false;
+				butDecrypt.Visible=false;
+			}
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
+			}
+		}
+
 		private void butSave_Click(object sender,EventArgs e) {
 			//this will not be available if already sent.
 			SaveMsg();
@@ -739,6 +839,15 @@ namespace OpenDental{
 			}
 			else {
 				EmailMessages.Update(MessageCur);
+			}
+		}
+
+		private void butShowXhtml_Click(object sender,EventArgs e) {
+			try {
+				EHR.FormSummaryOfCare.DisplayCCD(MessageCur.BodyText);
+			}
+			catch(Exception ex) {
+				MessageBox.Show(Lan.g(this,"Failed to display.")+" "+ex.Message);
 			}
 		}
 

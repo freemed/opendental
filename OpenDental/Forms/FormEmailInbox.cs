@@ -69,7 +69,7 @@ namespace OpenDental {
 						//Do not show message. Calling code decides to tell the user if no messages were found, because we do not want to show this message sometimes.
 					}
 					else {
-						MessageBox.Show(Lan.g(this,"Failed to receive new email: ")+ex.Message);
+						MessageBox.Show(Lan.g(this,"There is a problem reading one of your email messages")+":\r\n"+ex.Message);
 						break;//Leave while loop.
 					}
 				}
@@ -93,17 +93,23 @@ namespace OpenDental {
 			gridEmailMessages.BeginUpdate();
 			gridEmailMessages.Columns.Clear();
 			int colReceivedDatePixCount=140;
-			int colHasAttachPixCount=70;
+			int colHasAttachPixCount=80;
 			int colFromPixCount=200;
 			int colSubjectPixCount=200;
 			int colPatientPixCount=140;
 			int colVariablePixCount=gridEmailMessages.Width-22-colReceivedDatePixCount-colHasAttachPixCount-colFromPixCount-colSubjectPixCount-colPatientPixCount;
 			gridEmailMessages.Columns.Add(new UI.ODGridColumn(Lan.g(this,"ReceivedDate"),colReceivedDatePixCount,HorizontalAlignment.Center));
+			gridEmailMessages.Columns[gridEmailMessages.Columns.Count-1].SortingStrategy=UI.GridSortingStrategy.DateParse;
 			gridEmailMessages.Columns.Add(new UI.ODGridColumn(Lan.g(this,"HasAttach"),colHasAttachPixCount,HorizontalAlignment.Center));
+			gridEmailMessages.Columns[gridEmailMessages.Columns.Count-1].SortingStrategy=UI.GridSortingStrategy.StringCompare;
 			gridEmailMessages.Columns.Add(new UI.ODGridColumn(Lan.g(this,"Subject"),colSubjectPixCount,HorizontalAlignment.Left));
+			gridEmailMessages.Columns[gridEmailMessages.Columns.Count-1].SortingStrategy=UI.GridSortingStrategy.StringCompare;
 			gridEmailMessages.Columns.Add(new UI.ODGridColumn(Lan.g(this,"From"),colFromPixCount,HorizontalAlignment.Left));
+			gridEmailMessages.Columns[gridEmailMessages.Columns.Count-1].SortingStrategy=UI.GridSortingStrategy.StringCompare;
 			gridEmailMessages.Columns.Add(new UI.ODGridColumn(Lan.g(this,"Patient"),colPatientPixCount,HorizontalAlignment.Left));
+			gridEmailMessages.Columns[gridEmailMessages.Columns.Count-1].SortingStrategy=UI.GridSortingStrategy.StringCompare;
 			gridEmailMessages.Columns.Add(new UI.ODGridColumn(Lan.g(this,"Preview"),colVariablePixCount,HorizontalAlignment.Left));
+			gridEmailMessages.Columns[gridEmailMessages.Columns.Count-1].SortingStrategy=UI.GridSortingStrategy.StringCompare;
 			gridEmailMessages.Rows.Clear();
 			for(int i=0;i<ListEmailMessages.Count;i++) {
 				UI.ODGridRow row=new UI.ODGridRow();
@@ -156,6 +162,10 @@ namespace OpenDental {
 				emailMessage.SentOrReceived=EmailSentOrReceived.WebMailRecdRead;
 				EmailMessages.Update(emailMessage);//Mark read.
 			}
+			else if(emailMessage.SentOrReceived==EmailSentOrReceived.ReceivedDirect) {
+				emailMessage.SentOrReceived=EmailSentOrReceived.ReadDirect;
+				EmailMessages.Update(emailMessage);//Mark read.
+			}
 		}
 
 		private void MarkUnread(EmailMessage emailMessage) {
@@ -165,6 +175,10 @@ namespace OpenDental {
 			}
 			else if(emailMessage.SentOrReceived==EmailSentOrReceived.WebMailRecdRead) {
 				emailMessage.SentOrReceived=EmailSentOrReceived.WebMailReceived;
+				EmailMessages.Update(emailMessage);//Mark read.
+			}
+			else if(emailMessage.SentOrReceived==EmailSentOrReceived.ReadDirect) {
+				emailMessage.SentOrReceived=EmailSentOrReceived.ReceivedDirect;
 				EmailMessages.Update(emailMessage);//Mark read.
 			}
 		}

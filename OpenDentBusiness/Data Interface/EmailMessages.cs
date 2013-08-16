@@ -28,6 +28,9 @@ namespace OpenDentBusiness{
 				+"WHERE SentOrReceived IN ("
 					+POut.Int((int)EmailSentOrReceived.Read)+","
 					+POut.Int((int)EmailSentOrReceived.Received)+","
+					+POut.Int((int)EmailSentOrReceived.ReceivedEncrypted)+","
+					+POut.Int((int)EmailSentOrReceived.ReceivedDirect)+","
+					+POut.Int((int)EmailSentOrReceived.ReadDirect)+","
 					+POut.Int((int)EmailSentOrReceived.WebMailRecdRead)+","
 					+POut.Int((int)EmailSentOrReceived.WebMailReceived)
 				+") AND ToAddress='"+POut.String(emailAddress)+"' "
