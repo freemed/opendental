@@ -1,5 +1,5 @@
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDental", "OpenDental\OpenDental.csproj", "{8136317D-C936-49B6-9E31-D90F02D2F207}"
 	ProjectSection(ProjectDependencies) = postProject
 		{84688345-BB6A-4F2F-8672-A82B52FD433B} = {84688345-BB6A-4F2F-8672-A82B52FD433B}
@@ -477,8 +477,7 @@ Global
 		{A5D82653-A6AB-40FB-B266-966762FEBBA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5D82653-A6AB-40FB-B266-966762FEBBA2}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
 		{A5D82653-A6AB-40FB-B266-966762FEBBA2}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{A5D82653-A6AB-40FB-B266-966762FEBBA2}.Debug|x86.ActiveCfg = Debug|x86
-		{A5D82653-A6AB-40FB-B266-966762FEBBA2}.Debug|x86.Build.0 = Debug|x86
+		{A5D82653-A6AB-40FB-B266-966762FEBBA2}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{A5D82653-A6AB-40FB-B266-966762FEBBA2}.LinuxRelease|Any CPU.ActiveCfg = Release|Any CPU
 		{A5D82653-A6AB-40FB-B266-966762FEBBA2}.LinuxRelease|Any CPU.Build.0 = Release|Any CPU
 		{A5D82653-A6AB-40FB-B266-966762FEBBA2}.LinuxRelease|Mixed Platforms.ActiveCfg = Release|Any CPU
