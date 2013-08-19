@@ -997,7 +997,7 @@ namespace OpenDentBusiness {
 				}
 				int numberFixed=table.Rows.Count;
 				if(numberFixed>0 || verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","Claim with invalid patients attached fixed: ")+numberFixed.ToString()+"\r\n";
+					log+=Lans.g("FormDatabaseMaintenance","Claim with invalid PatNums fixed: ")+numberFixed.ToString()+"\r\n";
 				}
 			}
 			return log;
