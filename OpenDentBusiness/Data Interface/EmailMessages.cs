@@ -34,7 +34,7 @@ namespace OpenDentBusiness{
 					+POut.Int((int)EmailSentOrReceived.WebMailRecdRead)+","
 					+POut.Int((int)EmailSentOrReceived.WebMailReceived)
 				+") AND ToAddress='"+POut.String(emailAddress)+"' "
-				+"ORDER BY MsgDateTime DESC";
+				+"ORDER BY MsgDateTime";
 			return Crud.EmailMessageCrud.SelectMany(command);
 		}
 
