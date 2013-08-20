@@ -50,7 +50,8 @@ namespace OpenDental {
 			FillSubtotal();
 		}
 
-		private void FillSubtotal(){
+		private void FillSubtotal() {
+			ValidateChildren();//allows errorProvider1 to populate error message text.
 			if(textQty.errorProvider1.GetError(textQty)!=""
 				|| textPrice.errorProvider1.GetError(textPrice)!="") 
 			{	
