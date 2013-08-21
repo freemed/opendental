@@ -57,12 +57,24 @@ namespace OpenDental {
 			Patient patientFrom=Patients.GetPat(patFrom);
 			Patient patientTo=Patients.GetPat(patTo);
 			if(patientFrom.FName.Trim().ToLower()!=patientTo.FName.Trim().ToLower() ||
-				patientFrom.LName.Trim().ToLower()!=patientTo.LName.Trim().ToLower() ||
-				patientFrom.Birthdate!=patientTo.Birthdate){
-				MsgBox.Show(this,"The two selected patients do not have the same first name, last name, and date of birth.  You must set all of those the same before merge is allowed.");
-				return;//Do not merge.
+					patientFrom.LName.Trim().ToLower()!=patientTo.LName.Trim().ToLower() ||
+					patientFrom.Birthdate!=patientTo.Birthdate) 
+			{//mismatch
+				if(Programs.UsingEcwTightOrFullMode()) {
+					if(!MsgBox.Show(this,MsgBoxButtons.YesNo,@"The two selected patients do not have the same first name, last name, and date of birth.  The patients must first be merged from within eCW, then immediately merged in the same order in Open Dental.  If the patients are not merged in this manner, some information may not properly bridge between eCW and Open Dental.
+Into patient name: "+patientTo.FName+" "+patientTo.LName+", Into patient birthdate: "+patientTo.Birthdate.ToShortDateString()+@".
+From patient name: "+patientFrom.FName+" "+patientFrom.LName+", From paient birthdate: "+patientFrom.Birthdate.ToShortDateString()+@".
+Merge the patient at the bottom into the patient shown at the top?")) 
+					{
+						return;//The user chose not to merge
+					}
+				}
+				else {//not eCW
+					MsgBox.Show(this,"The two selected patients do not have the same first name, last name, and date of birth.  You must set all of those the same before merge is allowed.");
+					return;//Do not merge.
+				}
 			}
-			else{
+			else {//name and bd match
 				if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Merge the patient at the bottom into the patient shown at the top?")) {
 					return;//The user chose not to merge.
 				}
