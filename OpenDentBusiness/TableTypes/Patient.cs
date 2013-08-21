@@ -34,7 +34,7 @@ namespace OpenDentBusiness{
 		public string Address2;
 		/// <summary>.</summary>
 		public string City;
-		/// <summary>2 Char in USA</summary>
+		/// <summary>2 Char in USA.  Used to store province for Canadian users.</summary>
 		public string State;
 		/// <summary>Postal code.  For Canadian claims, it must be ANANAN.  No validation gets done except there.</summary>
 		public string Zip;
@@ -164,6 +164,8 @@ namespace OpenDentBusiness{
 		public YN TxtMsgOk;
 		///<summary>EHR smoking status as a SNOMED code.</summary>
 		public string SmokingSnoMed;
+		///<summary>Country name.  Only used by HQ to add country names to statements.</summary>
+		public string Country;
 
 
 		//<summary>Decided not to add since this data is already available and synchronizing would take too much time.  Will add later.  Not editable. If the patient happens to have a future appointment, this will contain the date of that appointment.  Once appointment is set complete, this date is deleted.  If there is more than one appointment scheduled, this will only contain the earliest one.  Used mostly to exclude patients from recall lists.  If you want all future appointments, use Appointments.GetForPat() instead. You can loop through that list and exclude appointments with dates earlier than today.</summary>

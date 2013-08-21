@@ -740,6 +740,24 @@ namespace OpenDentBusiness {
 				command="UPDATE preference SET ValueString = '13.2.4.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To13_2_7();
+		}
+
+		private static void To13_2_7() {
+			if(FromVersion<new Version("13.2.7.0")) {
+				//This fixes a bug in the conversion script above at lines 324 and 328
+				string command;
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE patient ADD Country varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE patient ADD Country varchar2(255)";
+					Db.NonQ(command);
+				}
+				command="UPDATE preference SET ValueString = '13.2.7.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To13_3_0();
 		}
 

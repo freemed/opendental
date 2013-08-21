@@ -121,6 +121,7 @@ namespace OpenDentBusiness.Crud{
 				patient.SuperFamily              = PIn.Long  (table.Rows[i]["SuperFamily"].ToString());
 				patient.TxtMsgOk                 = (YN)PIn.Int(table.Rows[i]["TxtMsgOk"].ToString());
 				patient.SmokingSnoMed            = PIn.String(table.Rows[i]["SmokingSnoMed"].ToString());
+				patient.Country                  = PIn.String(table.Rows[i]["Country"].ToString());
 				retVal.Add(patient);
 			}
 			return retVal;
@@ -161,7 +162,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="PatNum,";
 			}
-			command+="LName,FName,MiddleI,Preferred,PatStatus,Gender,Position,Birthdate,SSN,Address,Address2,City,State,Zip,HmPhone,WkPhone,WirelessPhone,Guarantor,CreditType,Email,Salutation,EstBalance,PriProv,SecProv,FeeSched,BillingType,ImageFolder,AddrNote,FamFinUrgNote,MedUrgNote,ApptModNote,StudentStatus,SchoolName,ChartNumber,MedicaidID,Bal_0_30,Bal_31_60,Bal_61_90,BalOver90,InsEst,BalTotal,EmployerNum,EmploymentNote,Race,County,GradeLevel,Urgency,DateFirstVisit,ClinicNum,HasIns,TrophyFolder,PlannedIsDone,Premed,Ward,PreferConfirmMethod,PreferContactMethod,PreferRecallMethod,SchedBeforeTime,SchedAfterTime,SchedDayOfWeek,Language,AdmitDate,Title,PayPlanDue,SiteNum,ResponsParty,CanadianEligibilityCode,AskToArriveEarly,OnlinePassword,PreferContactConfidential,SuperFamily,TxtMsgOk,SmokingSnoMed) VALUES(";
+			command+="LName,FName,MiddleI,Preferred,PatStatus,Gender,Position,Birthdate,SSN,Address,Address2,City,State,Zip,HmPhone,WkPhone,WirelessPhone,Guarantor,CreditType,Email,Salutation,EstBalance,PriProv,SecProv,FeeSched,BillingType,ImageFolder,AddrNote,FamFinUrgNote,MedUrgNote,ApptModNote,StudentStatus,SchoolName,ChartNumber,MedicaidID,Bal_0_30,Bal_31_60,Bal_61_90,BalOver90,InsEst,BalTotal,EmployerNum,EmploymentNote,Race,County,GradeLevel,Urgency,DateFirstVisit,ClinicNum,HasIns,TrophyFolder,PlannedIsDone,Premed,Ward,PreferConfirmMethod,PreferContactMethod,PreferRecallMethod,SchedBeforeTime,SchedAfterTime,SchedDayOfWeek,Language,AdmitDate,Title,PayPlanDue,SiteNum,ResponsParty,CanadianEligibilityCode,AskToArriveEarly,OnlinePassword,PreferContactConfidential,SuperFamily,TxtMsgOk,SmokingSnoMed,Country) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(patient.PatNum)+",";
 			}
@@ -239,7 +240,8 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Int   ((int)patient.PreferContactConfidential)+","
 				+    POut.Long  (patient.SuperFamily)+","
 				+    POut.Int   ((int)patient.TxtMsgOk)+","
-				+"'"+POut.String(patient.SmokingSnoMed)+"')";
+				+"'"+POut.String(patient.SmokingSnoMed)+"',"
+				+"'"+POut.String(patient.Country)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -325,7 +327,8 @@ namespace OpenDentBusiness.Crud{
 				+"PreferContactConfidential=  "+POut.Int   ((int)patient.PreferContactConfidential)+", "
 				+"SuperFamily              =  "+POut.Long  (patient.SuperFamily)+", "
 				+"TxtMsgOk                 =  "+POut.Int   ((int)patient.TxtMsgOk)+", "
-				+"SmokingSnoMed            = '"+POut.String(patient.SmokingSnoMed)+"' "
+				+"SmokingSnoMed            = '"+POut.String(patient.SmokingSnoMed)+"', "
+				+"Country                  = '"+POut.String(patient.Country)+"' "
 				+"WHERE PatNum = "+POut.Long(patient.PatNum);
 			Db.NonQ(command);
 		}
@@ -625,6 +628,10 @@ namespace OpenDentBusiness.Crud{
 			if(patient.SmokingSnoMed != oldPatient.SmokingSnoMed) {
 				if(command!=""){ command+=",";}
 				command+="SmokingSnoMed = '"+POut.String(patient.SmokingSnoMed)+"'";
+			}
+			if(patient.Country != oldPatient.Country) {
+				if(command!=""){ command+=",";}
+				command+="Country = '"+POut.String(patient.Country)+"'";
 			}
 			if(command==""){
 				return;
