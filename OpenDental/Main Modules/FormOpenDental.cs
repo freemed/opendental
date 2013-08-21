@@ -37,6 +37,7 @@ using System.Security.Policy;
 using System.Security.Principal;
 using System.Threading;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using OpenDentBusiness;
 using CodeBase;
@@ -1693,7 +1694,7 @@ namespace OpenDental{
 			foreach(MenuItem menuItem in mainMenu.MenuItems){
 				TranslateMenuItem(menuItem);
 			}
-			if(CultureInfo.CurrentCulture.Name=="en-US"){
+			if(CultureInfo.CurrentCulture.Name=="en-US") {
 				//for the business layer, this functionality is duplicated in the Lan class.  Need for SL.
 				CultureInfo cInfo=(CultureInfo)CultureInfo.CurrentCulture.Clone();
 				cInfo.DateTimeFormat.ShortDatePattern="MM/dd/yyyy";
@@ -1701,6 +1702,18 @@ namespace OpenDental{
 				//
 				//if(CultureInfo.CurrentCulture.TwoLetterISOLanguageName=="en"){
 				menuItemTranslation.Visible=false;
+			}
+			else {//not en-US
+				CultureInfo cInfo=(CultureInfo)CultureInfo.CurrentCulture.Clone();
+				string dateFormatCur=cInfo.DateTimeFormat.ShortDatePattern;
+				//The carrot indicates the beginning of a word.  {2} means that there has to be exactly 2 y's.  [^a-z] means any character except a through z.  $ means end of word.
+				if(Regex.IsMatch(dateFormatCur,"^y{2}[^a-z]")
+					|| Regex.IsMatch(dateFormatCur,"[^a-z]y{2}$")) 
+				{
+					//We know there are only two y's in the format.  Force there to be four.
+					cInfo.DateTimeFormat.ShortDatePattern=dateFormatCur.Replace("yy","yyyy");
+					Application.CurrentCulture=cInfo;
+				}
 			}
 			if(!File.Exists("Help.chm")){
 				menuItemHelpWindows.Visible=false;
