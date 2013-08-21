@@ -43,6 +43,7 @@ namespace OpenDental{
 			this.butAllergies = new OpenDental.UI.Button();
 			this.butICD9s = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
+			this.button1 = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// mainMenu1
@@ -290,10 +291,25 @@ namespace OpenDental{
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
+			// button1
+			// 
+			this.button1.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.button1.Autosize = true;
+			this.button1.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.button1.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.button1.CornerRadius = 4F;
+			this.button1.Location = new System.Drawing.Point(214, 136);
+			this.button1.Name = "button1";
+			this.button1.Size = new System.Drawing.Size(128, 24);
+			this.button1.TabIndex = 135;
+			this.button1.Text = "Code System Importer";
+			this.button1.Click += new System.EventHandler(this.button1_Click);
+			// 
 			// FormEhrSetup
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(606, 446);
+			this.Controls.Add(this.button1);
 			this.Controls.Add(this.butICD9CM31);
 			this.Controls.Add(this.butSnomeds);
 			this.Controls.Add(this.butLOINCs);
@@ -341,5 +357,6 @@ namespace OpenDental{
 		private UI.Button butLOINCs;
 		private UI.Button butSnomeds;
 		private UI.Button butICD9CM31;
+		private UI.Button button1;
 	}
 }

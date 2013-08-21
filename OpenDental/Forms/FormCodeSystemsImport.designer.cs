@@ -23,25 +23,26 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.butOK = new OpenDental.UI.Button();
+			this.butDownload = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
+			this.butCheckUpdates = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
-			// butOK
+			// butDownload
 			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(469, 12);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75, 24);
-			this.butOK.TabIndex = 3;
-			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			this.butDownload.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butDownload.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butDownload.Autosize = true;
+			this.butDownload.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDownload.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDownload.CornerRadius = 4F;
+			this.butDownload.Location = new System.Drawing.Point(225, 370);
+			this.butDownload.Name = "butDownload";
+			this.butDownload.Size = new System.Drawing.Size(106, 24);
+			this.butDownload.TabIndex = 3;
+			this.butDownload.Text = "Download Updates";
+			this.butDownload.Click += new System.EventHandler(this.butDownload_Click);
 			// 
 			// butCancel
 			// 
@@ -65,33 +66,52 @@ namespace OpenDental{
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMain.EditableAcceptsCR = true;
 			this.gridMain.HScrollVisible = true;
-			this.gridMain.Location = new System.Drawing.Point(12, 12);
+			this.gridMain.Location = new System.Drawing.Point(12, 42);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.None;
-			this.gridMain.Size = new System.Drawing.Size(451, 382);
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridMain.Size = new System.Drawing.Size(532, 317);
 			this.gridMain.TabIndex = 27;
 			this.gridMain.Title = "Code Systems Available";
 			this.gridMain.TranslationName = "";
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			// 
+			// butCheckUpdates
+			// 
+			this.butCheckUpdates.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butCheckUpdates.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butCheckUpdates.Autosize = true;
+			this.butCheckUpdates.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCheckUpdates.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCheckUpdates.CornerRadius = 4F;
+			this.butCheckUpdates.Location = new System.Drawing.Point(12, 12);
+			this.butCheckUpdates.Name = "butCheckUpdates";
+			this.butCheckUpdates.Size = new System.Drawing.Size(106, 24);
+			this.butCheckUpdates.TabIndex = 28;
+			this.butCheckUpdates.Text = "Check for Updates";
+			this.butCheckUpdates.Click += new System.EventHandler(this.butCheckUpdates_Click);
 			// 
 			// FormCodeSystemsImport
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(556, 406);
+			this.Controls.Add(this.butCheckUpdates);
 			this.Controls.Add(this.gridMain);
-			this.Controls.Add(this.butOK);
+			this.Controls.Add(this.butDownload);
 			this.Controls.Add(this.butCancel);
 			this.Name = "FormCodeSystemsImport";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Import Code Systems";
+			this.Load += new System.EventHandler(this.FormCodeSystemsImport_Load);
 			this.ResumeLayout(false);
 
 		}
 
 		#endregion
 
-		private OpenDental.UI.Button butOK;
+		private OpenDental.UI.Button butDownload;
 		private OpenDental.UI.Button butCancel;
 		private UI.ODGrid gridMain;
+		private UI.Button butCheckUpdates;
 	}
 }

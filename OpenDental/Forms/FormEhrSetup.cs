@@ -213,6 +213,11 @@ namespace OpenDental {
 			formK.ShowDialog();
 		}
 
+		private void button1_Click(object sender,EventArgs e) {
+			FormCodeSystemsImport FormCSI=new FormCodeSystemsImport();
+			FormCSI.ShowDialog();
+		}
+
 		private void butClose_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}

@@ -146,6 +146,7 @@
     <Compile Include="Crud\AccountCrud.cs" />
     <Compile Include="Crud\AccountingAutoPayCrud.cs" />
     <Compile Include="Crud\AdjustmentCrud.cs" />
+    <Compile Include="Crud\AdministrativeGenderCrud.cs" />
     <Compile Include="Crud\AllergyCrud.cs" />
     <Compile Include="Crud\AllergyDefCrud.cs" />
     <Compile Include="Crud\AppointmentCrud.cs" />
@@ -177,6 +178,7 @@
     <Compile Include="Crud\ClearinghouseCrud.cs" />
     <Compile Include="Crud\ClinicCrud.cs" />
     <Compile Include="Crud\ClockEventCrud.cs" />
+    <Compile Include="Crud\CodeSystemCrud.cs" />
     <Compile Include="Crud\CommlogCrud.cs" />
     <Compile Include="Crud\ComputerCrud.cs" />
     <Compile Include="Crud\ComputerPrefCrud.cs" />
@@ -374,6 +376,7 @@
     <Compile Include="Crud\WikiPageHistCrud.cs" />
     <Compile Include="Crud\XChargeTransactionCrud.cs" />
     <Compile Include="Crud\ZipCodeCrud.cs" />
+    <Compile Include="Data Interface\AdministrativeGenders.cs" />
     <Compile Include="Data Interface\Allergies.cs" />
     <Compile Include="Data Interface\AllergyDefs.cs" />
     <Compile Include="Data Interface\ApptFieldDefs.cs" />
@@ -382,8 +385,8 @@
     <Compile Include="Data Interface\Automations.cs" />
     <Compile Include="Data Interface\CentralConnections.cs" />
     <Compile Include="Data Interface\ChartViews.cs" />
-    <Compile Include="Data Interface\EhrCodes.cs" />
     <Compile Include="Data Interface\CodeSystems.cs" />
+    <Compile Include="Data Interface\EhrCodes.cs" />
     <Compile Include="Data Interface\EhrNotPerformeds.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -788,6 +791,8 @@
     <Compile Include="TableTypes\AllergyDef.cs" />
     <Compile Include="TableTypes\Allergy.cs" />
     <Compile Include="TableTypes\CentralConnection.cs" />
+    <Compile Include="TableTypes\CodeSystem.cs" />
+    <Compile Include="TableTypes\AdministrativeGender.cs" />
     <Compile Include="TableTypes\Intervention.cs" />
     <Compile Include="TableTypes\EhrNotPerformed.cs" />
     <Compile Include="TableTypes\EhrCode.cs" />

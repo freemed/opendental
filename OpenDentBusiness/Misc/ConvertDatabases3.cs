@@ -1019,10 +1019,82 @@ namespace OpenDentBusiness {
 					VALUES ((SELECT MAX(ClearinghouseNum+1) FROM clearinghouse),'Electronic Dental Services','"+POut.String(@"C:\EDS\Claims\In\")+"','','1','ZZ','','ZZ','EDS','P','','','0','"+POut.String(@"C:\Program Files\EDS\edsbridge.exe")+"',0,0,'','','','EDS','','','','','')";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS codesystem";
+					Db.NonQ(command);
+					command=@"CREATE TABLE codesystem (
+						CodeSystemNum bigint NOT NULL auto_increment PRIMARY KEY,
+						CodeSystemName varchar(255) NOT NULL,
+						VersionCur varchar(255) NOT NULL,
+						VersionAvail varchar(255) NOT NULL,
+						HL7OID varchar(255) NOT NULL
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE codesystem'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE codesystem (
+						CodeSystemNum number(20) NOT NULL,
+						CodeSystemName varchar2(255),
+						VersionCur varchar2(255),
+						VersionAvail varchar2(255),
+						HL7OID varchar2(255),
+						CONSTRAINT codesystem_CodeSystemNum PRIMARY KEY (CodeSystemNum)
+						)";
+					Db.NonQ(command);
+				}
+				command=@"INSERT INTO codeSystem (CodeSystemName,HL7OID) VALUES ('AdministrativeSex','2.16.840.1.113883.18.2')";
+				Db.NonQ(command);
+				command=@"INSERT INTO codeSystem (CodeSystemName,HL7OID) VALUES ('CDCREC','2.16.840.1.113883.6.238')";
+				Db.NonQ(command);
+				command=@"INSERT INTO codeSystem (CodeSystemName,HL7OID) VALUES ('CDT','2.16.840.1.113883.6.13')";
+				Db.NonQ(command);
+				command=@"INSERT INTO codeSystem (CodeSystemName,HL7OID) VALUES ('CPT','2.16.840.1.113883.6.12')";
+				Db.NonQ(command);
+				command=@"INSERT INTO codeSystem (CodeSystemName,HL7OID) VALUES ('CVX','2.16.840.1.113883.12.292')";
+				Db.NonQ(command);
+				command=@"INSERT INTO codeSystem (CodeSystemName,HL7OID) VALUES ('HCPCS','2.16.840.1.113883.6.285')";
+				Db.NonQ(command);
+				command=@"INSERT INTO codeSystem (CodeSystemName,HL7OID) VALUES ('ICD10CM','2.16.840.1.113883.6.90')";
+				Db.NonQ(command);
+				command=@"INSERT INTO codeSystem (CodeSystemName,HL7OID) VALUES ('ICD9CM','2.16.840.1.113883.6.103')";
+				Db.NonQ(command);
+				command=@"INSERT INTO codeSystem (CodeSystemName,HL7OID) VALUES ('LOINC','2.16.840.1.113883.6.1')";
+				Db.NonQ(command);
+				command=@"INSERT INTO codeSystem (CodeSystemName,HL7OID) VALUES ('RxNorm','2.16.840.1.113883.6.88')";
+				Db.NonQ(command);
+				command=@"INSERT INTO codeSystem (CodeSystemName,HL7OID) VALUES ('SNOMEDCT','2.16.840.1.113883.6.96')";
+				Db.NonQ(command);
+				command=@"INSERT INTO codeSystem (CodeSystemName,HL7OID) VALUES ('SOP','2.16.840.1.113883.3.221.5')";
+				Db.NonQ(command);
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS administrativesex";
+					Db.NonQ(command);
+					command=@"CREATE TABLE administrativesex (
+							AdministrativeSexNum bigint NOT NULL auto_increment PRIMARY KEY,
+							CodeValue varchar(255) NOT NULL,
+							DescriptionLong varchar(255) NOT NULL
+							) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE administrativesex'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE administrativesex (
+							AdministrativeSexNum number(20) NOT NULL,
+							CodeValue varchar2(255),
+							DescriptionLong varchar2(255),
+							CONSTRAINT administrativesex_Administr PRIMARY KEY (AdministrativeSexNum)
+							)";
+					Db.NonQ(command);
+				}
 
 				command="UPDATE preference SET ValueString = '13.3.0.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+
+
 			//To13_4_0();
 		}
 
@@ -1040,5 +1112,3 @@ namespace OpenDentBusiness {
 
 
 
-				/*
-				*/
