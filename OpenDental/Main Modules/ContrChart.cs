@@ -3982,13 +3982,19 @@ namespace OpenDental{
 			//Send the request to NewCrop. Always returns all current medications, and returns medications between the StartHistory and EndHistory dates if requesting archived medications.
 			//The patientIdType parameter was added for another vendor and is not often used. We do not use this field. We must pass empty string.
 			//The includeSchema parameter is useful for first-time debugging, but in release mode, we should pass N for no.
+			wsNewCrop.Timeout=3000;//3 second. The default is 100 seconds, but we cannot wait that long, because prescriptions are checked each time the Chart is refreshed. 1 second is too little, 2 seconds works most of the time. 3 seconds is safe.
 			try {
 				response=wsNewCrop.GetPatientFullMedicationHistory6(credentials,accountRequest,patientRequest,prescriptionHistoryRequest,patientInfoRequester,"","N");
 			}
-			catch {
-				MsgBox.Show(this,"Failed to communicate with NewCrop. A firewall or antivirus application might be blocking Open Dental, "
-					+"or this computer might not be able to see secure.newcropaccounts.com due to a network name resolution (DNS) issue. "
-					+"If you do not use electronic prescriptions, consider disabling the NewCrop program link in Setup | Program Links.");
+			catch { //An exception is thrown when the timeout is reached, or when the NewCrop servers are not accessible (because the servers are down, or because local internet is down).
+				//We used to show a popup here, but users found it annoying when the NewCrop severs were down.
+				//Instead, we now silently log a warning message into the Application log within the system EventViewer, so it is not annoying, but there is a way for the user to know if there was a problem.
+				if(!EventLog.SourceExists("OpenDental")) {
+					EventLog.CreateEventSource("OpenDental","Application");
+				}
+				EventLog.WriteEntry("OpenDental","Failed to communicate with NewCrop to retrieve completed prescription information. "
+					+"A firewall or antivirus application might be blocking Open Dental, or this computer might not be able to see secure.newcropaccounts.com due to a network name resolution (DNS) issue. "
+					+"If you do not use electronic prescriptions, consider disabling the NewCrop program link in Setup | Program Links.",EventLogEntryType.Warning);
 				return false;
 			}
 			//response.Message = Error message if error.
