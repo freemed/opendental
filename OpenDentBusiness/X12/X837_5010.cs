@@ -1214,6 +1214,10 @@ namespace OpenDentBusiness
 				}
 				#endregion 2310 Claim Providers (dental)
 				#region 2320 Other subscriber information
+				List<double> listProcWriteoffAmts=new List<double>();
+				List<double> listProcDeductibleAmts=new List<double>();
+				List<double> listProcPaidOtherInsAmts=new List<double>();
+				bool hasAdjForOtherPlans=false;
 				//2320 Other subscriber------------------------------------------------------------------------------------------
 				if(otherPlan!=null) {
 					//2320 SBR: Other Subscriber Information. Situational.
@@ -1234,59 +1238,69 @@ namespace OpenDentBusiness
 						+s//SBR08 2/2 Employment Status Code: Not Used.
 						+GetFilingCode(otherPlan));//SBR09 1/2 Claim Filing Indicator Code: 12=PPO,17=DMO,BL=BCBS,CI=CommercialIns,FI=FEP,HM=HMO. Will no longer be required when HIPPA National Plan ID is mandated.
 					EndSegment(sw);
-					bool hasAdjForOtherPlans=false;
-					double claimWriteoff=0;
-					double claimDeductible=0;
-					double claimPaidOtherIns=0;
+					double claimWriteoffAmt=0;
+					double claimDeductibleAmt=0;
+					double claimPaidOtherInsAmt=0;
+					double claimPatientPortionAmt=0;
 					for(int j=0;j<claimProcs.Count;j++) {//Claim procs for this claim
+						double procWriteoffAmt=0;
+						double procDeductibleAmt=0;
+						double procPaidOtherInsAmt=0;
 						for(int k=0;k<claimProcList.Count;k++) {//All claim procs for patient
 							if(ClaimProcs.IsValidClaimAdj(claimProcList[k],claimProcs[j].ProcNum,claimProcs[j].InsSubNum)) {//Adjustment due to other insurance plans.
 								hasAdjForOtherPlans=true;
-								claimWriteoff+=claimProcList[k].WriteOff;
-								claimDeductible+=claimProcList[k].DedApplied;
-								claimPaidOtherIns+=claimProcList[k].InsPayAmt;
+								claimWriteoffAmt+=claimProcList[k].WriteOff;
+								claimDeductibleAmt+=claimProcList[k].DedApplied;
+								claimPaidOtherInsAmt+=claimProcList[k].InsPayAmt;
+								procWriteoffAmt+=claimProcList[k].WriteOff;
+								procDeductibleAmt+=claimProcList[k].DedApplied;
+								procPaidOtherInsAmt+=claimProcList[k].InsPayAmt;
 							}
 						}
+						listProcWriteoffAmts.Add(procWriteoffAmt);
+						listProcDeductibleAmts.Add(procDeductibleAmt);
+						listProcPaidOtherInsAmts.Add(procPaidOtherInsAmt);
+						double procPatientPortionAmt=Math.Max(0,claimProcs[j].FeeBilled-listProcWriteoffAmts[j]-listProcDeductibleAmts[j]-listProcPaidOtherInsAmts[j]);
+						claimPatientPortionAmt+=procPatientPortionAmt;
 					}
 					//If sending the primary claim, then hasAdjForOtherPlans will be false, because all claimprocs for any other plans (secondary) will be estimates.
 					//If sending the secondary claim, then hasAdjForOtherPlans will be true, because the primary claimprocs will be received.
 					//This strategy works for dental and medical plans in any combination: D, M, DD, DM, MD, MM
 					if(hasAdjForOtherPlans) {
-						double claimPatientPortion=Math.Max(0,claim.ClaimFee-claimWriteoff-claimDeductible-claimPaidOtherIns);
 						//2320 CAS: (medical,institutional,dental) Claim Level Adjustments. Situational. We use this to show patient responsibility, because the adjustments here plus AMT D below must equal claim amount in CLM02 for Emdeon.
 						//Claim Adjustment Reason Codes can be found on the Washington Publishing Company website at: http://www.wpc-edi.com/reference/codelists/healthcare/claim-adjustment-reason-codes/
-						if(claimWriteoff>0) {
+						if(claimWriteoffAmt>0) {
 							sw.Write("CAS"+s
 								+"CO"+s//CAS01 1/2 Claim Adjustment Group Code: CO=Contractual Obligations.
 								+"45"+s//CAS02 1/5 Claim Adjustment Reason Code: 45=Charge exceeds fee schedule/maximum allowable or contracted/legislated fee arrangement.
-								+AmountToStrNoLeading(claimWriteoff));//CAS03 1/18 Monetary Amount:
+								+AmountToStrNoLeading(claimWriteoffAmt));//CAS03 1/18 Monetary Amount:
 							EndSegment(sw);
 						}
-						if(claimDeductible>0 || claimPatientPortion>0) {
+						if(claimDeductibleAmt>0 || claimPatientPortionAmt>0) {
 							sw.Write("CAS"+s
 								+"PR");//CAS01 1/2 Claim Adjustment Group Code: PR=Patient Responsibility.
-							if(claimDeductible>0) {
+							if(claimDeductibleAmt>0) {
 								sw.Write(s//end of previous field
 									+"1"+s//CAS02 1/5 Claim Adjustment Reason Code: 1=Deductible.
-									+AmountToStrNoLeading(claimDeductible)+s//CAS03 1/18 Monetary Amount:
+									+AmountToStrNoLeading(claimDeductibleAmt)+s//CAS03 1/18 Monetary Amount:
 									+"1");//CAS04 1/15 Quantity:
 							}
-							if(claimPatientPortion>0) {
+							if(claimPatientPortionAmt>0) {
 								sw.Write(s//end of previous field
 									+"3"+s//CAS02 or CAS05 1/5 Claim Adjustment Reason Code: 3=Co-payment Amount.
-									+AmountToStrNoLeading(claimPatientPortion));//CAS03 or CAS06 1/18 Monetary Amount:
+									+AmountToStrNoLeading(claimPatientPortionAmt));//CAS03 or CAS06 1/18 Monetary Amount:
 							}
 							EndSegment(sw);
 						}
 						//2320 AMT: D (medical,institutional,dental) COB Payer Paid Amount. Situational. Required when the claim has been adjudicated by payer in loop 2330B.
 						sw.Write("AMT"+s
 							+"D"+s//AMT01 1/3 Amount Qualifier Code: D=Payor Amount Paid.
-							+AmountToStrNoLeading(claimPaidOtherIns));//AMT02 1/18 Monetary Amount:
+							+AmountToStrNoLeading(claimPaidOtherInsAmt));//AMT02 1/18 Monetary Amount:
 						EndSegment(sw);//AMT03 Not used.
 						//2320 AMT: EAF (medical,institutional,dental) Remaining Patient Liability. Situational. Required when claim has been adjudicated by payer in loop 2330B.
 						sw.Write("AMT"+s
 							+"EAF"+s//AMT01 1/3 Amount Qualifier Code: EAF=Amount Owed.
-							+AmountToStrNoLeading(claimPatientPortion));//AMT02 1/18 Monetary Amount:
+							+AmountToStrNoLeading(claimPatientPortionAmt));//AMT02 1/18 Monetary Amount:
 						EndSegment(sw);//AMT03 Not used.
 						//2320 AMT: A8 (medical,institutional,dental) COB Total Non-Covered Amount. Situational. Can be set when primary claim was not adjudicated. We do not use.
 					}
@@ -1834,7 +1848,35 @@ namespace OpenDentBusiness
 					}
 					#endregion 2420 Service Providers (dental)
 					//2430 SVD: (medical,institutional,dental) Line Adjudication Information. Situational. We do not support.   
-					//2430 CAS: (medical,institutional,dental) Line Adjustment. Situational. We do not support. 
+					//2430 CAS: (medical,institutional,dental) Line Adjustment. Situational. Required when the payer identified in Loop 2330B made line level adjustments which caused the amount paid to differ from the amount originally charged.
+					//These CAS segments at the procedure level should add up to their respective claim level 2320 CAS segments.
+					//Claim Adjustment Reason Codes can be found on the Washington Publishing Company website at: http://www.wpc-edi.com/reference/codelists/healthcare/claim-adjustment-reason-codes/
+					if(hasAdjForOtherPlans && IsApex(clearhouse)) {//This section of code might work for other clearinghouses, but has not yet been tested, and nobody else has requested this information yet.
+						double procPatientPortionAmt=Math.Max(0,claimProcs[j].FeeBilled-listProcWriteoffAmts[j]-listProcDeductibleAmts[j]-listProcPaidOtherInsAmts[j]);
+						if(listProcWriteoffAmts[j]>0) {
+							sw.Write("CAS"+s
+								+"CO"+s//CAS01 1/2 Claim Adjustment Group Code: CO=Contractual Obligations.
+								+"45"+s//CAS02 1/5 Claim Adjustment Reason Code: 45=Charge exceeds fee schedule/maximum allowable or contracted/legislated fee arrangement.
+								+AmountToStrNoLeading(listProcWriteoffAmts[j]));//CAS03 1/18 Monetary Amount:
+							EndSegment(sw);
+						}
+						if(listProcDeductibleAmts[j]>0 || procPatientPortionAmt>0) {
+							sw.Write("CAS"+s
+								+"PR");//CAS01 1/2 Claim Adjustment Group Code: PR=Patient Responsibility.
+							if(listProcDeductibleAmts[j]>0) {
+								sw.Write(s//end of previous field
+									+"1"+s//CAS02 1/5 Claim Adjustment Reason Code: 1=Deductible.
+									+AmountToStrNoLeading(listProcDeductibleAmts[j])+s//CAS03 1/18 Monetary Amount:
+									+"1");//CAS04 1/15 Quantity:
+							}
+							if(procPatientPortionAmt>0) {
+								sw.Write(s//end of previous field
+									+"3"+s//CAS02 or CAS05 1/5 Claim Adjustment Reason Code: 3=Co-payment Amount.
+									+AmountToStrNoLeading(procPatientPortionAmt));//CAS03 or CAS06 1/18 Monetary Amount:
+							}
+							EndSegment(sw);
+						}
+					}
 					//2430 DTP: (medical,institutional,dental) Line Check or Remittance Date. We do not support.
 					//2430 AMT: (medical,institutional,dental) Remaining Patient Liability. We do not support.
 					//2440 LQ: (medical) Form Identification Code. Situational. We do not use.
