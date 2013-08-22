@@ -25,7 +25,6 @@ namespace OpenDental {
 
 		private void FormCodeSystemsImport_Load(object sender,EventArgs e) {
 			ListCodeSystems=CodeSystems.GetForCurrentVersion();
-			//FillGrid();//Do not fill until check for updates.
 		}
 
 		/// <summary></summary>
@@ -34,7 +33,7 @@ namespace OpenDental {
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col;
-			col=new ODGridColumn("Code System",100,false);
+			col=new ODGridColumn("Code System",200,false);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("Current Version",100,false);
 			gridMain.Columns.Add(col);
@@ -57,11 +56,9 @@ namespace OpenDental {
 				return;
 			}
 			Cursor=Cursors.WaitCursor;
-			//Application.DoEvents();//why? I don't think we need this line of code--Ryan
 			string result="";
-			//Ryan has rechecked up to here, starting from "butCheckUpdates_Click -----------------------------------------------------------------------------
 			try {
-				result=SendAndReceiveUpdateXml();
+				result=RequestCodeSystemsXml();
 			}
 			catch(Exception ex) {
 				Cursor=Cursors.Default;
@@ -73,14 +70,16 @@ namespace OpenDental {
 			List<CodeSystem> listCodeSystemsAvailable=CodeSystems.GetForCurrentVersion();
 			for(int i=0;i<listCodeSystemsAvailable.Count;i++) {
 				try {
-					XmlNode node=doc.SelectSingleNode("//"+listCodeSystemsAvailable[i].CodeSystemName);//+"/VersionAvailable");
+					XmlNode node=doc.SelectSingleNode("//"+listCodeSystemsAvailable[i].CodeSystemName);
 					if(node!=null) {
-						listCodeSystemsAvailable[i].VersionAvail=node.Attributes[0].InnerText;//VersionAvailable
+						listCodeSystemsAvailable[i].VersionAvail=node.Attributes["VersionAvailable"].InnerText;
 						CodeSystems.Update(listCodeSystemsAvailable[i]);
 					}
 				}
-				catch {
-					//Shouldn't happen, but we do not want this to break if it does.
+				catch (Exception ex){//should never happen
+					//Might happen if they are running this tool without the right rows in the CodeSystem table? Maybe.
+					MessageBox.Show(this,Lan.g(this,"Error checking for code system.\r\n")+ex.Message);
+					continue;
 				}
 			}
 			FillGrid();
@@ -97,15 +96,23 @@ namespace OpenDental {
 			}
 			Cursor=Cursors.WaitCursor;
 			Application.DoEvents();
-			for(int i=0;i<gridMain.SelectedIndices.Length;i++){//
-				requestCodeSystemDownloadHelper(ListCodeSystems[gridMain.SelectedIndices[i]].CodeSystemName);
+			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
+				try {
+					if(requestCodeSystemDownloadHelper(ListCodeSystems[gridMain.SelectedIndices[i]].CodeSystemName)) {//can throw exceptions
+						CodeSystems.UpdateCurrentVersion(ListCodeSystems[gridMain.SelectedIndices[i]]);//set current version=available version
+					}
+				}
+				catch(Exception ex) {
+					MessageBox.Show(Lan.g(this,"Error encounter while importing code system")+":"+ListCodeSystems[gridMain.SelectedIndices[i]].CodeSystemName+"\r\n"+ex.Message);
+					continue;
+				}
 			}
 			FillGrid();
 			Cursor=Cursors.Default;
 		}
 
-		///<summary>Will request, download, and import codeSystem from webservice.</summary>
-		private void requestCodeSystemDownloadHelper(string codeSystemName) {
+		///<summary>Throws exceptions, put in try catch block. Will request, download, and import codeSystem from webservice. Returns false if unsuccessful.</summary>
+		private bool requestCodeSystemDownloadHelper(string codeSystemName) {
 			string result="";
 			try {
 				result=SendAndReceiveDownloadXml(codeSystemName);
@@ -113,7 +120,7 @@ namespace OpenDental {
 			catch(Exception ex) {
 				Cursor=Cursors.Default;
 				MessageBox.Show("Error: "+ex.Message);
-				return;
+				return false;
 			}
 			XmlDocument doc=new XmlDocument();
 			doc.LoadXml(result);
@@ -127,36 +134,24 @@ namespace OpenDental {
 				codeSystemURL=node.InnerText;
 			}
 			//Download File to local machine
-			downloadFileHelper(codeSystemURL,codeSystemName);
+			downloadFileHelper(codeSystemURL,codeSystemName);//shows progress bar.
 			switch(codeSystemName) {
 				case "AdministrativeSex":
 					try {
 						CodeSystems.ImportAdministrativeSex();
+						//Do not fill grid here, or update UI, happens at end of all updates.
 						MsgBox.Show(this,"AdministrativeSex codes imported successfully.");
 					}
 					catch(Exception ex){
 						MessageBox.Show(this,ex.Message);
-						return;
+						return false;
 					}
 					break;
 				default:
 					//should never happen
 					break;
 			}
-
-
-			//switch(ListCodeSystems[
-			//System.IO.
-			//string filepath="";
-			//try {
-			//	XmlNode node=doc.SelectSingleNode("//"+"AdministrativeSex");//TODO: have this select the right node.
-			//		if(node!=null) {
-			//			filepath=node.Attributes[0].InnerText;//URL
-			//		}
-			//	}
-			//	catch {
-			//		//Shouldn't happen, but we do not want this to break if it does.
-			//	}
+			return true;
 		}
 
 		private static void downloadFileHelper(string codeSystemURL,string codeSystemName) {
@@ -258,13 +253,14 @@ namespace OpenDental {
 			return true;
 		}
 
-		private static string SendAndReceiveUpdateXml() {
+		///<summary>Throws exceptions, put in try catch block.</summary>
+		private static string RequestCodeSystemsXml() {
 			//No xml needed...? ----------------------------------------------------------------------------------------------------
 #if DEBUG
 			OpenDental.localhost.Service1 updateService=new OpenDental.localhost.Service1();
 #else
-				OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
-				updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress);
+			OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
+			updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress);
 #endif
 			if(PrefC.GetString(PrefName.UpdateWebProxyAddress) !="") {
 				IWebProxy proxy = new WebProxy(PrefC.GetString(PrefName.UpdateWebProxyAddress));
@@ -272,16 +268,7 @@ namespace OpenDental {
 				proxy.Credentials=cred;
 				updateService.Proxy=proxy;
 			}
-			string result="";
-			//try {
-			result=updateService.RequestCodeSystems("");//may throw error
-			//}
-			//catch(Exception ex) {
-			//	//Cursor=Cursors.Default;
-			//	MessageBox.Show("Error: "+ex.Message);
-			//	return "";
-			//}
-			return result;
+			return updateService.RequestCodeSystems("");//may throw error.  No security on this webmethod.
 		}
 
 		private static string SendAndReceiveDownloadXml(string codeSystemName) {
@@ -324,8 +311,7 @@ namespace OpenDental {
 			}
 			string result="";
 			try {
-				//currently does not request any user information for debugging purposes, will eventually need to explicityly request a code system.
-			result=updateService.RequestCodeSystemDownload(strbuild.ToString());//may throw error
+				result=updateService.RequestCodeSystemDownload(strbuild.ToString());//may throw error
 			}
 			catch(Exception ex) {
 				//Cursor=Cursors.Default;

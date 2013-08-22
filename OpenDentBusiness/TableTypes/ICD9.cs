@@ -3,7 +3,7 @@ using System.Collections;
 using System.Drawing;
 
 namespace OpenDentBusiness {
-	///<summary>Primary key is an arbitrary number, allowing code to change if needed, although that should generally be prohibited.  Currently synched to mobile server in a very inefficient manner.</summary>
+	///<summary>Other tables generally use the ICD9Code string as their foreign key.  Currently synched to mobile server in a very inefficient manner.  It is implied that these are all ICD9CMs, although that may not be the case in the future.</summary>
 	[Serializable]
 	public class ICD9:TableBase {
 		///<summary>Primary key.</summary>

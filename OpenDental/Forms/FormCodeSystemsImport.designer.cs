@@ -27,6 +27,7 @@ namespace OpenDental{
 			this.butCancel = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butCheckUpdates = new OpenDental.UI.Button();
+			this.butHCPCS = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// butDownload
@@ -91,10 +92,25 @@ namespace OpenDental{
 			this.butCheckUpdates.Text = "Check for Updates";
 			this.butCheckUpdates.Click += new System.EventHandler(this.butCheckUpdates_Click);
 			// 
+			// butHCPCS
+			// 
+			this.butHCPCS.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butHCPCS.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butHCPCS.Autosize = true;
+			this.butHCPCS.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butHCPCS.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butHCPCS.CornerRadius = 4F;
+			this.butHCPCS.Location = new System.Drawing.Point(12, 370);
+			this.butHCPCS.Name = "butHCPCS";
+			this.butHCPCS.Size = new System.Drawing.Size(127, 24);
+			this.butHCPCS.TabIndex = 29;
+			this.butHCPCS.Text = "Ryan\'s Tool for HCPCS";
+			// 
 			// FormCodeSystemsImport
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(556, 406);
+			this.Controls.Add(this.butHCPCS);
 			this.Controls.Add(this.butCheckUpdates);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butDownload);
@@ -113,5 +129,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button butCancel;
 		private UI.ODGrid gridMain;
 		private UI.Button butCheckUpdates;
+		private UI.Button butHCPCS;
 	}
 }

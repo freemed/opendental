@@ -11,25 +11,25 @@ using OpenDental.UI;
 using OpenDental;
 
 namespace OpenDental {
-	public partial class FormLOINCs:Form {
+	public partial class FormLoincs:Form {
 		public bool IsSelectionMode;
-		public LOINC SelectedLOINC;
-		private List<LOINC> listLOINCSearch;
-		public LOINC LOINCCur;
+		public Loinc SelectedLoinc;
+		private List<Loinc> listLoincSearch;
+		public Loinc LoincCur;
 
-		public FormLOINCs() {
+		public FormLoincs() {
 			InitializeComponent();
 		}
 
-		private void FormLOINCPicker_Load(object sender,EventArgs e) {
-			listLOINCSearch=new List<LOINC>();
+		private void FormLoincPicker_Load(object sender,EventArgs e) {
+			listLoincSearch=new List<Loinc>();
 		}
 
 		private void fillGrid() {
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col;
-			col=new ODGridColumn("LOINC Code",80);//,HorizontalAlignment.Center);
+			col=new ODGridColumn("Loinc Code",80);//,HorizontalAlignment.Center);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("Status",80);//,HorizontalAlignment.Center);
 			gridMain.Columns.Add(col);
@@ -41,14 +41,14 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			listLOINCSearch=LOINCs.GetBySearchString(textCode.Text);
-			for(int i=0;i<listLOINCSearch.Count;i++) {
+			listLoincSearch=Loincs.GetBySearchString(textCode.Text);
+			for(int i=0;i<listLoincSearch.Count;i++) {
 				row=new ODGridRow();
-				row.Cells.Add(listLOINCSearch[i].LOINCCode);
-				row.Cells.Add(listLOINCSearch[i].StatusOfCode);
-				row.Cells.Add(listLOINCSearch[i].NameLongCommon);
-				row.Cells.Add(listLOINCSearch[i].UnitsUCUM);
-				row.Cells.Add(listLOINCSearch[i].OrderObs);
+				row.Cells.Add(listLoincSearch[i].LoincCode);
+				row.Cells.Add(listLoincSearch[i].StatusOfCode);
+				row.Cells.Add(listLoincSearch[i].NameLongCommon);
+				row.Cells.Add(listLoincSearch[i].UnitsUCUM);
+				row.Cells.Add(listLoincSearch[i].OrderObs);
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
@@ -56,16 +56,16 @@ namespace OpenDental {
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			if(IsSelectionMode) {
-				SelectedLOINC=listLOINCSearch[e.Row];
+				SelectedLoinc=listLoincSearch[e.Row];
 				DialogResult=DialogResult.OK;
 			}
 			//Nothing to do if not selection mode
 		}
 
-		//private void butLOINCFill_Click_Old(object sender,EventArgs e) {
-		//  //string loincFilePath=@"C:\Users\Ryan\Desktop\LOINCDB.txt";
+		//private void butLoincFill_Click_Old(object sender,EventArgs e) {
+		//  //string loincFilePath=@"C:\Users\Ryan\Desktop\LoincDB.txt";
 		//  OpenFileDialog ofd=new OpenFileDialog();
-		//  ofd.Title=Lan.g(this,"Please select the LOINCDB.TXT file that contains the LOINC Codes.");
+		//  ofd.Title=Lan.g(this,"Please select the LoincDB.TXT file that contains the Loinc Codes.");
 		//  ofd.Multiselect=false;
 		//  ofd.ShowDialog();
 		//  //Validate selected file---------------------------------------------------------------------------------------------------------------
@@ -84,8 +84,8 @@ namespace OpenDental {
 		//  //string command="DROP TABLE IF EXISTS loinc";
 		//  //DataCore.NonQ(command);
 		//  //command=@"CREATE TABLE loinc (
-		//  //			LOINCNum BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-		//  //			LOINCCode VARCHAR(255) NOT NULL,
+		//  //			LoincNum BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+		//  //			LoincCode VARCHAR(255) NOT NULL,
 		//  //			UCUMUnits VARCHAR(255) NOT NULL,
 		//  //			LongName VARCHAR(255) NOT NULL,
 		//  //			ShortName VARCHAR(255) NOT NULL,
@@ -104,7 +104,7 @@ namespace OpenDental {
 		//    if(headers.Length!=48) {
 		//      throw new Exception(Lan.g(this,"File contains unexpected number of columns."));
 		//    }
-		//    if(headers[0].Trim('\"') !="LOINC_NUM"
+		//    if(headers[0].Trim('\"') !="Loinc_NUM"
 		//      || headers[39].Trim('\"')!="EXAMPLE_UCUM_UNITS" 
 		//      || headers[34].Trim('\"')!="LONG_COMMON_NAME" 
 		//      || headers[28].Trim('\"')!="SHORTNAME" 
@@ -112,30 +112,30 @@ namespace OpenDental {
 		//    {
 		//      throw new Exception(Lan.g(this,"Column names mismatch."));
 		//    }
-		//    //Import LOINC Codes----------------------------------------------------------------------------------------------------------
-		//    string[] arrayLOINC;
-		//    LOINC loincTemp=new LOINC();
-		//    while(!sr.EndOfStream) {//each loop should read exactly one line of code. and each line of code should be a unique LOINC code
-		//      arrayLOINC=sr.ReadLine().Split('\t');
-		//      loincTemp.LOINCCode		=arrayLOINC[0].Trim('\"');
-		//      //loincTemp.UCUMUnits		=arrayLOINC[39].Trim('\"');
-		//      //loincTemp.LongName		=arrayLOINC[34].Trim('\"');
-		//      //loincTemp.ShortName		=arrayLOINC[28].Trim('\"');
-		//      loincTemp.OrderObs		=arrayLOINC[29].Trim('\"');
-		//      LOINCs.Insert(loincTemp);
+		//    //Import Loinc Codes----------------------------------------------------------------------------------------------------------
+		//    string[] arrayLoinc;
+		//    Loinc loincTemp=new Loinc();
+		//    while(!sr.EndOfStream) {//each loop should read exactly one line of code. and each line of code should be a unique Loinc code
+		//      arrayLoinc=sr.ReadLine().Split('\t');
+		//      loincTemp.LoincCode		=arrayLoinc[0].Trim('\"');
+		//      //loincTemp.UCUMUnits		=arrayLoinc[39].Trim('\"');
+		//      //loincTemp.LongName		=arrayLoinc[34].Trim('\"');
+		//      //loincTemp.ShortName		=arrayLoinc[28].Trim('\"');
+		//      loincTemp.OrderObs		=arrayLoinc[29].Trim('\"');
+		//      Loincs.Insert(loincTemp);
 		//    }
 		//  }
 		//  catch(Exception ex) {
-		//    MessageBox.Show(this,Lan.g(this,"Error importing LOINC codes:")+"\r\n"+ex.Message);
+		//    MessageBox.Show(this,Lan.g(this,"Error importing Loinc codes:")+"\r\n"+ex.Message);
 		//  }
 		//  Cursor=Cursors.Default;
 		//}
 
-		private void butLOINCFill_Click(object sender,EventArgs e) {
+		private void butLoincFill_Click(object sender,EventArgs e) {
 			//Maybe this should access our servers and then download the file directly from us.
-			MsgBox.Show(this,"This can take several minutes to import the LOINC table.");
+			MsgBox.Show(this,"This can take several minutes to import the Loinc table.");
 			OpenFileDialog ofd=new OpenFileDialog();
-			ofd.Title=Lan.g(this,"Please select the LOINCDB.TXT file that contains the LOINC Codes.");
+			ofd.Title=Lan.g(this,"Please select the LoincDB.TXT file that contains the Loinc Codes.");
 			ofd.Multiselect=false;
 			if(ofd.ShowDialog()!=DialogResult.OK) {
 				return;
@@ -156,8 +156,8 @@ namespace OpenDental {
 			string command="DROP TABLE IF EXISTS loinc";
 			DataCore.NonQ(command);
 			command=@"CREATE TABLE loinc (
-						LOINCNum bigint NOT NULL auto_increment PRIMARY KEY,
-						LOINCCode varchar(255) NOT NULL,
+						LoincNum bigint NOT NULL auto_increment PRIMARY KEY,
+						LoincCode varchar(255) NOT NULL,
 						Component varchar(255) NOT NULL,
 						PropertyObserved varchar(255) NOT NULL,
 						TimeAspct varchar(255) NOT NULL,
@@ -190,7 +190,7 @@ namespace OpenDental {
 				if(headers.Length!=48) {
 					throw new Exception(Lan.g(this,"File contains unexpected number of columns."));
 				}
-				if(headers[0].Trim('\"') !="LOINC_NUM"
+				if(headers[0].Trim('\"') !="Loinc_NUM"
 					|| headers[39].Trim('\"')!="EXAMPLE_UCUM_UNITS" 
 					|| headers[34].Trim('\"')!="LONG_COMMON_NAME" 
 					|| headers[28].Trim('\"')!="SHORTNAME" 
@@ -198,34 +198,34 @@ namespace OpenDental {
 					//TODO: expand this to check all columns, though this should be sufficient.
 					throw new Exception(Lan.g(this,"Column names mismatch."));
 				}
-				//Import LOINC Codes----------------------------------------------------------------------------------------------------------
-				string[] arrayLOINC;
-				LOINC loincTemp=new LOINC();
-				while(!sr.EndOfStream) {//each loop should read exactly one line of code. and each line of code should be a unique LOINC code
-					arrayLOINC=sr.ReadLine().Split('\t');
-					loincTemp.LOINCCode								=arrayLOINC[0].Trim('\"');
-					loincTemp.Component								=arrayLOINC[1].Trim('\"');
-					loincTemp.PropertyObserved				=arrayLOINC[2].Trim('\"');
-					loincTemp.TimeAspct								=arrayLOINC[3].Trim('\"');
-					loincTemp.SystemMeasured					=arrayLOINC[4].Trim('\"');
-					loincTemp.ScaleType								=arrayLOINC[5].Trim('\"');
-					loincTemp.MethodType							=arrayLOINC[6].Trim('\"');
-					loincTemp.StatusOfCode						=arrayLOINC[12].Trim('\"');
-					loincTemp.ClassType								=PIn.Int(arrayLOINC[15].Trim('\"'));
-					loincTemp.UnitsRequired						=arrayLOINC[25].Trim('\"')=="Y";
-					loincTemp.NameShort								=arrayLOINC[28].Trim('\"');
-					loincTemp.OrderObs								=arrayLOINC[29].Trim('\"');
-					loincTemp.HL7FieldSubfieldID			=arrayLOINC[31].Trim('\"');
-					loincTemp.ExternalCopyrightNotice	=arrayLOINC[32].Trim('\"');
-					loincTemp.NameLongCommon					=arrayLOINC[34].Trim('\"');
-					loincTemp.UnitsUCUM								=arrayLOINC[39].Trim('\"');
-					loincTemp.RankCommonOrders				=PIn.Int(arrayLOINC[44].Trim('\"'));
-					loincTemp.RankCommonTests					=PIn.Int(arrayLOINC[45].Trim('\"'));
-					LOINCs.Insert(loincTemp);
+				//Import Loinc Codes----------------------------------------------------------------------------------------------------------
+				string[] arrayLoinc;
+				Loinc loincTemp=new Loinc();
+				while(!sr.EndOfStream) {//each loop should read exactly one line of code. and each line of code should be a unique Loinc code
+					arrayLoinc=sr.ReadLine().Split('\t');
+					loincTemp.LoincCode								=arrayLoinc[0].Trim('\"');
+					loincTemp.Component								=arrayLoinc[1].Trim('\"');
+					loincTemp.PropertyObserved				=arrayLoinc[2].Trim('\"');
+					loincTemp.TimeAspct								=arrayLoinc[3].Trim('\"');
+					loincTemp.SystemMeasured					=arrayLoinc[4].Trim('\"');
+					loincTemp.ScaleType								=arrayLoinc[5].Trim('\"');
+					loincTemp.MethodType							=arrayLoinc[6].Trim('\"');
+					loincTemp.StatusOfCode						=arrayLoinc[12].Trim('\"');
+					loincTemp.ClassType								=PIn.Int(arrayLoinc[15].Trim('\"'));
+					loincTemp.UnitsRequired						=arrayLoinc[25].Trim('\"')=="Y";
+					loincTemp.NameShort								=arrayLoinc[28].Trim('\"');
+					loincTemp.OrderObs								=arrayLoinc[29].Trim('\"');
+					loincTemp.HL7FieldSubfieldID			=arrayLoinc[31].Trim('\"');
+					loincTemp.ExternalCopyrightNotice	=arrayLoinc[32].Trim('\"');
+					loincTemp.NameLongCommon					=arrayLoinc[34].Trim('\"');
+					loincTemp.UnitsUCUM								=arrayLoinc[39].Trim('\"');
+					loincTemp.RankCommonOrders				=PIn.Int(arrayLoinc[44].Trim('\"'));
+					loincTemp.RankCommonTests					=PIn.Int(arrayLoinc[45].Trim('\"'));
+					Loincs.Insert(loincTemp);
 				}
 			}
 			catch(Exception ex) {
-				MessageBox.Show(this,Lan.g(this,"Error importing LOINC codes:")+"\r\n"+ex.Message);
+				MessageBox.Show(this,Lan.g(this,"Error importing Loinc codes:")+"\r\n"+ex.Message);
 			}
 			Cursor=Cursors.Default;
 			fillGrid();
@@ -237,11 +237,11 @@ namespace OpenDental {
 
 		private void butOK_Click(object sender,EventArgs e) {
 			if(gridMain.GetSelectedIndex()==-1) {
-				MsgBox.Show(this,"Please select a LOINC code from the list.");
+				MsgBox.Show(this,"Please select a Loinc code from the list.");
 				return;
 			}
 			if(IsSelectionMode) {
-				SelectedLOINC=listLOINCSearch[gridMain.GetSelectedIndex()];
+				SelectedLoinc=listLoincSearch[gridMain.GetSelectedIndex()];
 			}
 			DialogResult=DialogResult.OK;
 		}

@@ -783,6 +783,9 @@
     <Compile Include="Plugins\PluginBase.cs" />
     <Compile Include="Plugins\PluginContainer.cs" />
     <Compile Include="Plugins\Plugins.cs" />
+    <Compile Include="TableTypes\AdministrativeSex.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="TableTypes\Automation.cs" />
     <Compile Include="TableTypes\ApptFieldDef.cs" />
     <Compile Include="TableTypes\ApptField.cs" />
@@ -792,8 +795,11 @@
     <Compile Include="TableTypes\Allergy.cs" />
     <Compile Include="TableTypes\CentralConnection.cs" />
     <Compile Include="TableTypes\CodeSystem.cs" />
-    <Compile Include="TableTypes\AdministrativeSex.cs" />
-    <Compile Include="TableTypes\Hcpcs.cs" />
+    <Compile Include="TableTypes\Cdcrec.cs" />
+    <Compile Include="TableTypes\Hcpcs.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TableTypes\Icd10.cs" />
     <Compile Include="TableTypes\Intervention.cs" />
     <Compile Include="TableTypes\EhrNotPerformed.cs" />
     <Compile Include="TableTypes\EhrCode.cs" />

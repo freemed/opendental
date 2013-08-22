@@ -5,12 +5,12 @@ using System.Drawing;
 namespace OpenDentBusiness{
 	///<summary>Logical Observation Identifiers Names and Codes (LOINC) used to identify both lab panels and lab results. Widths specified are from LOINC documentation and may not represent length of fields in the Open Dental Database.</summary>
 	[Serializable()]
-	public class LOINC:TableBase{
+	public class Loinc:TableBase{
 		///<summary>Primary key. Internal use only.</summary>
 		[CrudColumn(IsPriKey=true)]
-		public long LOINCNum;
+		public long LoincNum;
 		///<summary>#EULA REQUIRED# Also called LOINC_NUM in the official LOINCDB. Width-10. LOINC244 column 1.</summary>
-		public string LOINCCode;//LOINC_NUM;
+		public string LoincCode;//LOINC_NUM;
 		///<summary>#EULA REQUIRED# First Major axis:component or analyte. Width-255. LOINC244 column 2.</summary>
 		public string Component;
 		///<summary>#EULA REQUIRED# Second major axis:property observed (e.g., mass vs. substance). Width-30. LOINC244 column 3.</summary>
@@ -53,8 +53,8 @@ namespace OpenDentBusiness{
 		public int RankCommonOrders;//Common_Order_Rank;
 		
 		///<summary></summary>
-		public LOINC Clone() {
-			return (LOINC)this.MemberwiseClone();
+		public Loinc Clone() {
+			return (Loinc)this.MemberwiseClone();
 		}
 
 	}

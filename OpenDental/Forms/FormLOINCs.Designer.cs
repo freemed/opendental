@@ -1,5 +1,5 @@
 ﻿namespace OpenDental {
-	partial class FormLOINCs {
+	partial class FormLoincs {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -44,7 +44,7 @@
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.Size = new System.Drawing.Size(901, 612);
 			this.gridMain.TabIndex = 11;
-			this.gridMain.Title = "LOINC Codes";
+			this.gridMain.Title = "Loinc Codes";
 			this.gridMain.TranslationName = "FormMedicationPicker";
 			this.gridMain.WrapText = false;
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
@@ -92,7 +92,7 @@
 			this.butImport.Size = new System.Drawing.Size(75, 24);
 			this.butImport.TabIndex = 24;
 			this.butImport.Text = "Import";
-			this.butImport.Click += new System.EventHandler(this.butLOINCFill_Click);
+			this.butImport.Click += new System.EventHandler(this.butLoincFill_Click);
 			// 
 			// butOK
 			// 
@@ -124,7 +124,7 @@
 			this.butCancel.Text = "Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// FormLOINCs
+			// FormLoincs
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -136,10 +136,10 @@
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.textCode);
 			this.Controls.Add(this.gridMain);
-			this.Name = "FormLOINCs";
+			this.Name = "FormLoincs";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "LOINC Codes";
-			this.Load += new System.EventHandler(this.FormLOINCPicker_Load);
+			this.Text = "Loinc Codes";
+			this.Load += new System.EventHandler(this.FormLoincPicker_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

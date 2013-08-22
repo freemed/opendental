@@ -53,8 +53,19 @@ namespace OpenDentBusiness{
 			Crud.CodeSystemCrud.Update(codeSystem);
 		}
 
+		///<summary>Updates VersionCurrent to the VersionAvail of the codeSystem object passed in. Used by code system importer.</summary>
+		public static void UpdateCurrentVersion(CodeSystem codeSystem) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),codeSystem);
+				return;
+			}
+			codeSystem.VersionCur=codeSystem.VersionAvail;
+			Crud.CodeSystemCrud.Update(codeSystem);
+		}
+
 		///<summary>Called after file is downloaded.Drops Table, Creates Table, Imports codes. Throws exceptions.</summary>
 		public static void ImportAdministrativeSex() {
+			//Dropping and refilling table is much faster and should be safe since we never reference primary keys, only CodeValue.
 			string command="";
 			if(DataConnection.DBtype==DatabaseType.MySql) {
 				command="DROP TABLE IF EXISTS administrativesex";
@@ -81,7 +92,11 @@ namespace OpenDentBusiness{
 			if(destDir==null) {//Not using A to Z folders?
 				destDir=Path.GetTempPath();
 			}
+			//Path.GetTempFileName
 			string filepath=@"c:\OpenDentImages\CodeSystems\AdministrativeSex.txt";//TODO:point this to the AtoZimages folder to import codes.
+			string[] lines=File.ReadAllLines("");
+
+
 			System.IO.StreamReader sr=new System.IO.StreamReader(filepath);
 			sr.Peek();
 			//Import AdministrativeSex Codes----------------------------------------------------------------------------------------------------------

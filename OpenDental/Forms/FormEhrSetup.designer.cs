@@ -28,7 +28,7 @@ namespace OpenDental{
 			this.menuItemSettings = new System.Windows.Forms.MenuItem();
 			this.butICD9CM31 = new OpenDental.UI.Button();
 			this.butSnomeds = new OpenDental.UI.Button();
-			this.butLOINCs = new OpenDental.UI.Button();
+			this.butLoincs = new OpenDental.UI.Button();
 			this.butKeys = new OpenDental.UI.Button();
 			this.butRxNorm = new OpenDental.UI.Button();
 			this.butEducationalResources = new OpenDental.UI.Button();
@@ -85,19 +85,19 @@ namespace OpenDental{
 			this.butSnomeds.Text = "SNOMED CTs";
 			this.butSnomeds.Click += new System.EventHandler(this.butSnomeds_Click);
 			// 
-			// butLOINCs
+			// butLoincs
 			// 
-			this.butLOINCs.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butLOINCs.Autosize = true;
-			this.butLOINCs.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butLOINCs.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butLOINCs.CornerRadius = 4F;
-			this.butLOINCs.Location = new System.Drawing.Point(214, 22);
-			this.butLOINCs.Name = "butLOINCs";
-			this.butLOINCs.Size = new System.Drawing.Size(128, 24);
-			this.butLOINCs.TabIndex = 131;
-			this.butLOINCs.Text = "LOINCs";
-			this.butLOINCs.Click += new System.EventHandler(this.butLOINCs_Click);
+			this.butLoincs.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butLoincs.Autosize = true;
+			this.butLoincs.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butLoincs.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butLoincs.CornerRadius = 4F;
+			this.butLoincs.Location = new System.Drawing.Point(214, 22);
+			this.butLoincs.Name = "butLoincs";
+			this.butLoincs.Size = new System.Drawing.Size(128, 24);
+			this.butLoincs.TabIndex = 131;
+			this.butLoincs.Text = "Loincs";
+			this.butLoincs.Click += new System.EventHandler(this.butLoincs_Click);
 			// 
 			// butKeys
 			// 
@@ -312,7 +312,7 @@ namespace OpenDental{
 			this.Controls.Add(this.button1);
 			this.Controls.Add(this.butICD9CM31);
 			this.Controls.Add(this.butSnomeds);
-			this.Controls.Add(this.butLOINCs);
+			this.Controls.Add(this.butLoincs);
 			this.Controls.Add(this.butKeys);
 			this.Controls.Add(this.butRxNorm);
 			this.Controls.Add(this.butEducationalResources);
@@ -354,7 +354,7 @@ namespace OpenDental{
 		private UI.Button butKeys;
 		private System.Windows.Forms.MainMenu mainMenu1;
 		private System.Windows.Forms.MenuItem menuItemSettings;
-		private UI.Button butLOINCs;
+		private UI.Button butLoincs;
 		private UI.Button butSnomeds;
 		private UI.Button butICD9CM31;
 		private UI.Button button1;

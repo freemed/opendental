@@ -106,8 +106,8 @@ namespace OpenDental {
 			FormR.ShowDialog();
 		}
 
-		private void butLOINCs_Click(object sender,EventArgs e) {
-			FormLOINCs FormL=new FormLOINCs();
+		private void butLoincs_Click(object sender,EventArgs e) {
+			FormLoincs FormL=new FormLoincs();
 			FormL.ShowDialog();
 		}
 

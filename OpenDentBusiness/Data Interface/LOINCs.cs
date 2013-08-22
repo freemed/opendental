@@ -6,17 +6,17 @@ using System.Text;
 
 namespace OpenDentBusiness{
 	///<summary></summary>
-	public class LOINCs{
+	public class Loincs{
 		#region CachePattern
 		//This region can be eliminated if this is not a table type with cached data.
 		//If leaving this region in place, be sure to add RefreshCache and FillCache 
 		//to the Cache.cs file with all the other Cache types.
 
-		///<summary>A list of all LOINCs.</summary>
-		private static List<LOINC> listt;
+		///<summary>A list of all Loincs.</summary>
+		private static List<Loinc> listt;
 
-		///<summary>A list of all LOINCs.</summary>
-		public static List<LOINC> Listt{
+		///<summary>A list of all Loincs.</summary>
+		public static List<Loinc> Listt{
 			get {
 				if(listt==null) {
 					RefreshCache();
@@ -33,7 +33,7 @@ namespace OpenDentBusiness{
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
 			string command="SELECT * FROM loinc ORDER BY ItemOrder";//stub query probably needs to be changed
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
-			table.TableName="LOINC";
+			table.TableName="Loinc";
 			FillCache(table);
 			return table;
 		}
@@ -41,35 +41,35 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static void FillCache(DataTable table){
 			//No need to check RemotingRole; no call to db.
-			listt=Crud.LOINCCrud.TableToList(table);
+			listt=Crud.LoincCrud.TableToList(table);
 		}
 		#endregion
 
 		///<summary></summary>
-		public static long Insert(LOINC lOINC){
+		public static long Insert(Loinc lOINC){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				lOINC.LOINCNum=Meth.GetLong(MethodBase.GetCurrentMethod(),lOINC);
-				return lOINC.LOINCNum;
+				lOINC.LoincNum=Meth.GetLong(MethodBase.GetCurrentMethod(),lOINC);
+				return lOINC.LoincNum;
 			}
-			return Crud.LOINCCrud.Insert(lOINC);
+			return Crud.LoincCrud.Insert(lOINC);
 		}
 
 		///<summary></summary>
-		public static List<LOINC> GetBySearchString(string searchText) {
+		public static List<Loinc> GetBySearchString(string searchText) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<LOINC>>(MethodBase.GetCurrentMethod(),searchText);
+				return Meth.GetObject<List<Loinc>>(MethodBase.GetCurrentMethod(),searchText);
 			}
-			string command="SELECT * FROM loinc WHERE LOINCCode LIKE '%"+POut.String(searchText)+"%' OR NameLongCommon LIKE '%"+POut.String(searchText)+"%'";
-			return Crud.LOINCCrud.SelectMany(command);
+			string command="SELECT * FROM loinc WHERE LoincCode LIKE '%"+POut.String(searchText)+"%' OR NameLongCommon LIKE '%"+POut.String(searchText)+"%'";
+			return Crud.LoincCrud.SelectMany(command);
 		}
 
-		///<summary>Gets one LOINC from the db based on LoincCode, returns null if not found.</summary>
-		public static LOINC GetByCode(string lOINCCode) {
+		///<summary>Gets one Loinc from the db based on LoincCode, returns null if not found.</summary>
+		public static Loinc GetByCode(string lOINCCode) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<LOINC>(MethodBase.GetCurrentMethod(),lOINCCode);
+				return Meth.GetObject<Loinc>(MethodBase.GetCurrentMethod(),lOINCCode);
 			}
 			string command="SELECT * FROM loinc WHERE LoincCode='"+POut.String(lOINCCode)+"'";
-			List<LOINC> retVal=Crud.LOINCCrud.SelectMany(command);
+			List<Loinc> retVal=Crud.LoincCrud.SelectMany(command);
 			if(retVal.Count>0) {
 				return retVal[0];
 			}
@@ -95,29 +95,29 @@ namespace OpenDentBusiness{
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 
 		///<summary></summary>
-		public static List<LOINC> Refresh(long patNum){
+		public static List<Loinc> Refresh(long patNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<LOINC>>(MethodBase.GetCurrentMethod(),patNum);
+				return Meth.GetObject<List<Loinc>>(MethodBase.GetCurrentMethod(),patNum);
 			}
 			string command="SELECT * FROM loinc WHERE PatNum = "+POut.Long(patNum);
-			return Crud.LOINCCrud.SelectMany(command);
+			return Crud.LoincCrud.SelectMany(command);
 		}
 
-		///<summary>Gets one LOINC from the db.</summary>
-		public static LOINC GetOne(long lOINCNum){
+		///<summary>Gets one Loinc from the db.</summary>
+		public static Loinc GetOne(long lOINCNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				return Meth.GetObject<LOINC>(MethodBase.GetCurrentMethod(),lOINCNum);
+				return Meth.GetObject<Loinc>(MethodBase.GetCurrentMethod(),lOINCNum);
 			}
-			return Crud.LOINCCrud.SelectOne(lOINCNum);
+			return Crud.LoincCrud.SelectOne(lOINCNum);
 		}
 
 		///<summary></summary>
-		public static void Update(LOINC lOINC){
+		public static void Update(Loinc lOINC){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),lOINC);
 				return;
 			}
-			Crud.LOINCCrud.Update(lOINC);
+			Crud.LoincCrud.Update(lOINC);
 		}
 
 		///<summary></summary>
@@ -126,7 +126,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),lOINCNum);
 				return;
 			}
-			string command= "DELETE FROM loinc WHERE LOINCNum = "+POut.Long(lOINCNum);
+			string command= "DELETE FROM loinc WHERE LoincNum = "+POut.Long(lOINCNum);
 			Db.NonQ(command);
 		}
 		*/

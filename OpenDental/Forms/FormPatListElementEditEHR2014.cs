@@ -127,7 +127,7 @@ namespace OpenDental {
 					//Labels
 					labelOperand.Visible=true;
 					labelCompareString.Visible=true;
-					labelCompareString.Text="LOINC Code";
+					labelCompareString.Text="Loinc Code";
 					labelLabValue.Visible=true;
 					labelAfterDate.Visible=true;
 					labelBeforeDate.Visible=true;
@@ -323,11 +323,11 @@ namespace OpenDental {
 					break;
 				case 3: //LabResult------------------------------------------------------------------------------------------------------------
 					if(textCompareString.Text=="") {
-						MsgBox.Show(this,"Please select a valid LOINC Code.");
+						MsgBox.Show(this,"Please select a valid Loinc Code.");
 						return false;
 					}
-					if(LOINCs.GetByCode(textCompareString.Text)==null) {
-						MsgBox.Show(this,"LOINC code does not exist in database, pick from list.");
+					if(Loincs.GetByCode(textCompareString.Text)==null) {
+						MsgBox.Show(this,"Loinc code does not exist in database, pick from list.");
 						return false;
 					}
 					if(textDateStart.errorProvider1.GetError(textDateStart)!=""
@@ -419,13 +419,13 @@ namespace OpenDental {
 					textCompareString.Text=Medications.GetNameOnly(FormM.SelectedMedicationNum);
 					break;
 				case 3://LabResult
-					FormLOINCs FormL=new FormLOINCs();
+					FormLoincs FormL=new FormLoincs();
 					FormL.IsSelectionMode=true;
 					FormL.ShowDialog();
 					if(FormL.DialogResult!=DialogResult.OK) {
 						return;
 					}
-					textCompareString.Text=FormL.SelectedLOINC.LOINCCode;
+					textCompareString.Text=FormL.SelectedLoinc.LoincCode;
 					break;
 				case 4://Gender
 					//Not visible

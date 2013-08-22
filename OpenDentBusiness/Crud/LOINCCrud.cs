@@ -7,47 +7,47 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	public class LOINCCrud {
-		///<summary>Gets one LOINC object from the database using the primary key.  Returns null if not found.</summary>
-		public static LOINC SelectOne(long lOINCNum){
+	public class LoincCrud {
+		///<summary>Gets one Loinc object from the database using the primary key.  Returns null if not found.</summary>
+		public static Loinc SelectOne(long lOINCNum){
 			string command="SELECT * FROM loinc "
-				+"WHERE LOINCNum = "+POut.Long(lOINCNum);
-			List<LOINC> list=TableToList(Db.GetTable(command));
+				+"WHERE LoincNum = "+POut.Long(lOINCNum);
+			List<Loinc> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
 			}
 			return list[0];
 		}
 
-		///<summary>Gets one LOINC object from the database using a query.</summary>
-		public static LOINC SelectOne(string command){
+		///<summary>Gets one Loinc object from the database using a query.</summary>
+		public static Loinc SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
-			List<LOINC> list=TableToList(Db.GetTable(command));
+			List<Loinc> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
 			}
 			return list[0];
 		}
 
-		///<summary>Gets a list of LOINC objects from the database using a query.</summary>
-		public static List<LOINC> SelectMany(string command){
+		///<summary>Gets a list of Loinc objects from the database using a query.</summary>
+		public static List<Loinc> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
-			List<LOINC> list=TableToList(Db.GetTable(command));
+			List<Loinc> list=TableToList(Db.GetTable(command));
 			return list;
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		public static List<LOINC> TableToList(DataTable table){
-			List<LOINC> retVal=new List<LOINC>();
-			LOINC lOINC;
+		public static List<Loinc> TableToList(DataTable table){
+			List<Loinc> retVal=new List<Loinc>();
+			Loinc lOINC;
 			for(int i=0;i<table.Rows.Count;i++) {
-				lOINC=new LOINC();
-				lOINC.LOINCNum               = PIn.Long  (table.Rows[i]["LOINCNum"].ToString());
-				lOINC.LOINCCode              = PIn.String(table.Rows[i]["LOINCCode"].ToString());
+				lOINC=new Loinc();
+				lOINC.LoincNum               = PIn.Long  (table.Rows[i]["LoincNum"].ToString());
+				lOINC.LoincCode              = PIn.String(table.Rows[i]["LoincCode"].ToString());
 				lOINC.Component              = PIn.String(table.Rows[i]["Component"].ToString());
 				lOINC.PropertyObserved       = PIn.String(table.Rows[i]["PropertyObserved"].ToString());
 				lOINC.TimeAspct              = PIn.String(table.Rows[i]["TimeAspct"].ToString());
@@ -70,10 +70,10 @@ namespace OpenDentBusiness.Crud{
 			return retVal;
 		}
 
-		///<summary>Inserts one LOINC into the database.  Returns the new priKey.</summary>
-		public static long Insert(LOINC lOINC){
+		///<summary>Inserts one Loinc into the database.  Returns the new priKey.</summary>
+		public static long Insert(Loinc lOINC){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				lOINC.LOINCNum=DbHelper.GetNextOracleKey("loinc","LOINCNum");
+				lOINC.LoincNum=DbHelper.GetNextOracleKey("loinc","LoincNum");
 				int loopcount=0;
 				while(loopcount<100){
 					try {
@@ -81,7 +81,7 @@ namespace OpenDentBusiness.Crud{
 					}
 					catch(Oracle.DataAccess.Client.OracleException ex){
 						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
-							lOINC.LOINCNum++;
+							lOINC.LoincNum++;
 							loopcount++;
 						}
 						else{
@@ -96,21 +96,21 @@ namespace OpenDentBusiness.Crud{
 			}
 		}
 
-		///<summary>Inserts one LOINC into the database.  Provides option to use the existing priKey.</summary>
-		public static long Insert(LOINC lOINC,bool useExistingPK){
+		///<summary>Inserts one Loinc into the database.  Provides option to use the existing priKey.</summary>
+		public static long Insert(Loinc lOINC,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
-				lOINC.LOINCNum=ReplicationServers.GetKey("loinc","LOINCNum");
+				lOINC.LoincNum=ReplicationServers.GetKey("loinc","LoincNum");
 			}
 			string command="INSERT INTO loinc (";
 			if(useExistingPK || PrefC.RandomKeys) {
-				command+="LOINCNum,";
+				command+="LoincNum,";
 			}
-			command+="LOINCCode,Component,PropertyObserved,TimeAspct,SystemMeasured,ScaleType,MethodType,StatusOfCode,NameShort,ClassType,UnitsRequired,OrderObs,HL7FieldSubfieldID,ExternalCopyrightNotice,NameLongCommon,UnitsUCUM,RankCommonTests,RankCommonOrders) VALUES(";
+			command+="LoincCode,Component,PropertyObserved,TimeAspct,SystemMeasured,ScaleType,MethodType,StatusOfCode,NameShort,ClassType,UnitsRequired,OrderObs,HL7FieldSubfieldID,ExternalCopyrightNotice,NameLongCommon,UnitsUCUM,RankCommonTests,RankCommonOrders) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
-				command+=POut.Long(lOINC.LOINCNum)+",";
+				command+=POut.Long(lOINC.LoincNum)+",";
 			}
 			command+=
-				 "'"+POut.String(lOINC.LOINCCode)+"',"
+				 "'"+POut.String(lOINC.LoincCode)+"',"
 				+"'"+POut.String(lOINC.Component)+"',"
 				+"'"+POut.String(lOINC.PropertyObserved)+"',"
 				+"'"+POut.String(lOINC.TimeAspct)+"',"
@@ -136,15 +136,15 @@ namespace OpenDentBusiness.Crud{
 				Db.NonQ(command,paramExternalCopyrightNotice);
 			}
 			else {
-				lOINC.LOINCNum=Db.NonQ(command,true,paramExternalCopyrightNotice);
+				lOINC.LoincNum=Db.NonQ(command,true,paramExternalCopyrightNotice);
 			}
-			return lOINC.LOINCNum;
+			return lOINC.LoincNum;
 		}
 
-		///<summary>Updates one LOINC in the database.</summary>
-		public static void Update(LOINC lOINC){
+		///<summary>Updates one Loinc in the database.</summary>
+		public static void Update(Loinc lOINC){
 			string command="UPDATE loinc SET "
-				+"LOINCCode              = '"+POut.String(lOINC.LOINCCode)+"', "
+				+"LoincCode              = '"+POut.String(lOINC.LoincCode)+"', "
 				+"Component              = '"+POut.String(lOINC.Component)+"', "
 				+"PropertyObserved       = '"+POut.String(lOINC.PropertyObserved)+"', "
 				+"TimeAspct              = '"+POut.String(lOINC.TimeAspct)+"', "
@@ -162,7 +162,7 @@ namespace OpenDentBusiness.Crud{
 				+"UnitsUCUM              = '"+POut.String(lOINC.UnitsUCUM)+"', "
 				+"RankCommonTests        =  "+POut.Int   (lOINC.RankCommonTests)+", "
 				+"RankCommonOrders       =  "+POut.Int   (lOINC.RankCommonOrders)+" "
-				+"WHERE LOINCNum = "+POut.Long(lOINC.LOINCNum);
+				+"WHERE LoincNum = "+POut.Long(lOINC.LoincNum);
 			if(lOINC.ExternalCopyrightNotice==null) {
 				lOINC.ExternalCopyrightNotice="";
 			}
@@ -170,78 +170,78 @@ namespace OpenDentBusiness.Crud{
 			Db.NonQ(command,paramExternalCopyrightNotice);
 		}
 
-		///<summary>Updates one LOINC in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		public static void Update(LOINC lOINC,LOINC oldLOINC){
+		///<summary>Updates one Loinc in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
+		public static void Update(Loinc lOINC,Loinc oldLoinc){
 			string command="";
-			if(lOINC.LOINCCode != oldLOINC.LOINCCode) {
+			if(lOINC.LoincCode != oldLoinc.LoincCode) {
 				if(command!=""){ command+=",";}
-				command+="LOINCCode = '"+POut.String(lOINC.LOINCCode)+"'";
+				command+="LoincCode = '"+POut.String(lOINC.LoincCode)+"'";
 			}
-			if(lOINC.Component != oldLOINC.Component) {
+			if(lOINC.Component != oldLoinc.Component) {
 				if(command!=""){ command+=",";}
 				command+="Component = '"+POut.String(lOINC.Component)+"'";
 			}
-			if(lOINC.PropertyObserved != oldLOINC.PropertyObserved) {
+			if(lOINC.PropertyObserved != oldLoinc.PropertyObserved) {
 				if(command!=""){ command+=",";}
 				command+="PropertyObserved = '"+POut.String(lOINC.PropertyObserved)+"'";
 			}
-			if(lOINC.TimeAspct != oldLOINC.TimeAspct) {
+			if(lOINC.TimeAspct != oldLoinc.TimeAspct) {
 				if(command!=""){ command+=",";}
 				command+="TimeAspct = '"+POut.String(lOINC.TimeAspct)+"'";
 			}
-			if(lOINC.SystemMeasured != oldLOINC.SystemMeasured) {
+			if(lOINC.SystemMeasured != oldLoinc.SystemMeasured) {
 				if(command!=""){ command+=",";}
 				command+="SystemMeasured = '"+POut.String(lOINC.SystemMeasured)+"'";
 			}
-			if(lOINC.ScaleType != oldLOINC.ScaleType) {
+			if(lOINC.ScaleType != oldLoinc.ScaleType) {
 				if(command!=""){ command+=",";}
 				command+="ScaleType = '"+POut.String(lOINC.ScaleType)+"'";
 			}
-			if(lOINC.MethodType != oldLOINC.MethodType) {
+			if(lOINC.MethodType != oldLoinc.MethodType) {
 				if(command!=""){ command+=",";}
 				command+="MethodType = '"+POut.String(lOINC.MethodType)+"'";
 			}
-			if(lOINC.StatusOfCode != oldLOINC.StatusOfCode) {
+			if(lOINC.StatusOfCode != oldLoinc.StatusOfCode) {
 				if(command!=""){ command+=",";}
 				command+="StatusOfCode = '"+POut.String(lOINC.StatusOfCode)+"'";
 			}
-			if(lOINC.NameShort != oldLOINC.NameShort) {
+			if(lOINC.NameShort != oldLoinc.NameShort) {
 				if(command!=""){ command+=",";}
 				command+="NameShort = '"+POut.String(lOINC.NameShort)+"'";
 			}
-			if(lOINC.ClassType != oldLOINC.ClassType) {
+			if(lOINC.ClassType != oldLoinc.ClassType) {
 				if(command!=""){ command+=",";}
 				command+="ClassType = "+POut.Int(lOINC.ClassType)+"";
 			}
-			if(lOINC.UnitsRequired != oldLOINC.UnitsRequired) {
+			if(lOINC.UnitsRequired != oldLoinc.UnitsRequired) {
 				if(command!=""){ command+=",";}
 				command+="UnitsRequired = "+POut.Bool(lOINC.UnitsRequired)+"";
 			}
-			if(lOINC.OrderObs != oldLOINC.OrderObs) {
+			if(lOINC.OrderObs != oldLoinc.OrderObs) {
 				if(command!=""){ command+=",";}
 				command+="OrderObs = '"+POut.String(lOINC.OrderObs)+"'";
 			}
-			if(lOINC.HL7FieldSubfieldID != oldLOINC.HL7FieldSubfieldID) {
+			if(lOINC.HL7FieldSubfieldID != oldLoinc.HL7FieldSubfieldID) {
 				if(command!=""){ command+=",";}
 				command+="HL7FieldSubfieldID = '"+POut.String(lOINC.HL7FieldSubfieldID)+"'";
 			}
-			if(lOINC.ExternalCopyrightNotice != oldLOINC.ExternalCopyrightNotice) {
+			if(lOINC.ExternalCopyrightNotice != oldLoinc.ExternalCopyrightNotice) {
 				if(command!=""){ command+=",";}
 				command+="ExternalCopyrightNotice = "+DbHelper.ParamChar+"paramExternalCopyrightNotice";
 			}
-			if(lOINC.NameLongCommon != oldLOINC.NameLongCommon) {
+			if(lOINC.NameLongCommon != oldLoinc.NameLongCommon) {
 				if(command!=""){ command+=",";}
 				command+="NameLongCommon = '"+POut.String(lOINC.NameLongCommon)+"'";
 			}
-			if(lOINC.UnitsUCUM != oldLOINC.UnitsUCUM) {
+			if(lOINC.UnitsUCUM != oldLoinc.UnitsUCUM) {
 				if(command!=""){ command+=",";}
 				command+="UnitsUCUM = '"+POut.String(lOINC.UnitsUCUM)+"'";
 			}
-			if(lOINC.RankCommonTests != oldLOINC.RankCommonTests) {
+			if(lOINC.RankCommonTests != oldLoinc.RankCommonTests) {
 				if(command!=""){ command+=",";}
 				command+="RankCommonTests = "+POut.Int(lOINC.RankCommonTests)+"";
 			}
-			if(lOINC.RankCommonOrders != oldLOINC.RankCommonOrders) {
+			if(lOINC.RankCommonOrders != oldLoinc.RankCommonOrders) {
 				if(command!=""){ command+=",";}
 				command+="RankCommonOrders = "+POut.Int(lOINC.RankCommonOrders)+"";
 			}
@@ -253,14 +253,14 @@ namespace OpenDentBusiness.Crud{
 			}
 			OdSqlParameter paramExternalCopyrightNotice=new OdSqlParameter("paramExternalCopyrightNotice",OdDbType.Text,lOINC.ExternalCopyrightNotice);
 			command="UPDATE loinc SET "+command
-				+" WHERE LOINCNum = "+POut.Long(lOINC.LOINCNum);
+				+" WHERE LoincNum = "+POut.Long(lOINC.LoincNum);
 			Db.NonQ(command,paramExternalCopyrightNotice);
 		}
 
-		///<summary>Deletes one LOINC from the database.</summary>
+		///<summary>Deletes one Loinc from the database.</summary>
 		public static void Delete(long lOINCNum){
 			string command="DELETE FROM loinc "
-				+"WHERE LOINCNum = "+POut.Long(lOINCNum);
+				+"WHERE LoincNum = "+POut.Long(lOINCNum);
 			Db.NonQ(command);
 		}
 
