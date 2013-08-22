@@ -77,6 +77,7 @@ namespace OpenDental{
 		private bool MightNeedSetRead;
 		private UI.Button butCopy;
 		private TextBox textBox1;
+		private UI.Button butColor;
 		///<summary>When this window is first opened, if this task is in someone else's inbox, then the "new" status is meaningless and will not show.  In that case, this variable is set to true.  Only used when tracking new status by user.</summary>
 		private bool StartedInOthersInbox;
 
@@ -144,6 +145,8 @@ namespace OpenDental{
 			this.checkDone = new System.Windows.Forms.CheckBox();
 			this.labelDoneAffectsAll = new System.Windows.Forms.Label();
 			this.gridMain = new OpenDental.UI.ODGrid();
+			this.textBox1 = new System.Windows.Forms.TextBox();
+			this.butColor = new OpenDental.UI.Button();
 			this.butChangeUser = new OpenDental.UI.Button();
 			this.butAddNote = new OpenDental.UI.Button();
 			this.butSend = new OpenDental.UI.Button();
@@ -152,11 +155,10 @@ namespace OpenDental{
 			this.butDelete = new OpenDental.UI.Button();
 			this.butNow = new OpenDental.UI.Button();
 			this.textDateTask = new OpenDental.ValidDate();
+			this.butCopy = new OpenDental.UI.Button();
 			this.textDescript = new OpenDental.ODtextBox();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.butCopy = new OpenDental.UI.Button();
-			this.textBox1 = new System.Windows.Forms.TextBox();
 			this.panelObject.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -431,6 +433,30 @@ namespace OpenDental{
 			this.gridMain.TranslationName = "FormTaskEdit";
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
+			// textBox1
+			// 
+			this.textBox1.Location = new System.Drawing.Point(454, -72);
+			this.textBox1.Name = "textBox1";
+			this.textBox1.ReadOnly = true;
+			this.textBox1.Size = new System.Drawing.Size(54, 20);
+			this.textBox1.TabIndex = 134;
+			this.textBox1.Visible = false;
+			// 
+			// butColor
+			// 
+			this.butColor.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butColor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butColor.Autosize = true;
+			this.butColor.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butColor.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butColor.CornerRadius = 4F;
+			this.butColor.Location = new System.Drawing.Point(82, 169);
+			this.butColor.Name = "butColor";
+			this.butColor.Size = new System.Drawing.Size(43, 24);
+			this.butColor.TabIndex = 155;
+			this.butColor.Text = "Color";
+			this.butColor.Click += new System.EventHandler(this.butColor_Click);
+			// 
 			// butChangeUser
 			// 
 			this.butChangeUser.AdjustImageLocation = new System.Drawing.Point(0, 0);
@@ -544,6 +570,23 @@ namespace OpenDental{
 			this.textDateTask.Size = new System.Drawing.Size(87, 20);
 			this.textDateTask.TabIndex = 2;
 			// 
+			// butCopy
+			// 
+			this.butCopy.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butCopy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butCopy.Autosize = true;
+			this.butCopy.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCopy.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCopy.CornerRadius = 4F;
+			this.butCopy.Image = global::OpenDental.Properties.Resources.butCopy;
+			this.butCopy.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butCopy.Location = new System.Drawing.Point(653, 540);
+			this.butCopy.Name = "butCopy";
+			this.butCopy.Size = new System.Drawing.Size(75, 24);
+			this.butCopy.TabIndex = 4;
+			this.butCopy.Text = "Copy";
+			this.butCopy.Click += new System.EventHandler(this.butCopy_Click);
+			// 
 			// textDescript
 			// 
 			this.textDescript.AcceptsTab = true;
@@ -589,36 +632,11 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// butCopy
-			// 
-			this.butCopy.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butCopy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCopy.Autosize = true;
-			this.butCopy.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCopy.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCopy.CornerRadius = 4F;
-			this.butCopy.Image = global::OpenDental.Properties.Resources.butCopy;
-			this.butCopy.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butCopy.Location = new System.Drawing.Point(653, 540);
-			this.butCopy.Name = "butCopy";
-			this.butCopy.Size = new System.Drawing.Size(75, 24);
-			this.butCopy.TabIndex = 4;
-			this.butCopy.Text = "Copy";
-			this.butCopy.Click += new System.EventHandler(this.butCopy_Click);
-			// 
-			// textBox1
-			// 
-			this.textBox1.Location = new System.Drawing.Point(454, -72);
-			this.textBox1.Name = "textBox1";
-			this.textBox1.ReadOnly = true;
-			this.textBox1.Size = new System.Drawing.Size(54, 20);
-			this.textBox1.TabIndex = 134;
-			this.textBox1.Visible = false;
-			// 
 			// FormTaskEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.ClientSize = new System.Drawing.Size(836, 676);
+			this.Controls.Add(this.butColor);
 			this.Controls.Add(this.textBox1);
 			this.Controls.Add(this.textTaskNum);
 			this.Controls.Add(this.labelTaskNum);
@@ -794,6 +812,9 @@ namespace OpenDental{
 				}
 				labelReply.Text=Lan.g(this,"(Send to ")+Userods.GetName(ReplyToUserNum)+")";
 			}
+			if(!PrefC.GetBool(PrefName.DockPhonePanelShow)) {
+				butColor.Visible=false;
+			}
 		}
 
 		private void FillGrid(){
@@ -922,6 +943,28 @@ namespace OpenDental{
 
 		private void butNowFinished_Click(object sender,EventArgs e) {
 			textDateTimeFinished.Text=MiscData.GetNowDateTime().ToString();
+		}
+
+		private void butColor_Click(object sender,EventArgs e) {
+			if(textDescript.Text.Contains("CUSTOMER")
+				||textDescript.Text.Contains("DOWN")
+				||textDescript.Text.Contains("URGENT")
+				||textDescript.Text.Contains("CONFERENCE")
+				||textDescript.Text.Contains("!!")) 
+			{
+				ClearTriageKeywords();
+			}
+			else {
+				textDescript.Text+=" !!";
+			}
+		}
+
+		private void ClearTriageKeywords() {
+			textDescript.Text=textDescript.Text.Replace("!!","!");
+			textDescript.Text=textDescript.Text.Replace("CUSTOMER","customer");
+			textDescript.Text=textDescript.Text.Replace("DOWN","down");
+			textDescript.Text=textDescript.Text.Replace("URGENT","urgent");
+			textDescript.Text=textDescript.Text.Replace("CONFERENCE","conference");
 		}
 
 		private void listObjectType_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e) {
@@ -1252,7 +1295,6 @@ namespace OpenDental{
 				Tasks.Delete(TaskCur.TaskNum);
 			}
 		}
-
 	
 
 		

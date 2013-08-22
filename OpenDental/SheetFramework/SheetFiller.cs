@@ -1079,6 +1079,12 @@ namespace OpenDental{
 					case "prov.stateRxID":
 						field.FieldValue=prov.StateRxID;
 						break;
+					case "prov.StateLicense":
+						field.FieldValue=prov.StateLicense;
+						break;
+					case "prov.NationalProvID":
+						field.FieldValue=prov.NationalProvID;
+						break;
 				}
 			}
 		}

@@ -363,13 +363,13 @@ namespace OpenDental{
 			saveFileDialog2.Title=Lan.g(this,"Select Folder to Save Image To");
       saveFileDialog2.InitialDirectory=PrefC.GetString(PrefName.ExportPath); 
 			saveFileDialog2.DefaultExt="jpg";
-			saveFileDialog2.Filter="jpg files(*.jpg)|*.jpg|gif files(*.gif)|*.gif|All files(*.*)|*.*";
+			saveFileDialog2.Filter="jpg files(*.jpg)|*.jpg|All files(*.*)|*.*";
       saveFileDialog2.FilterIndex=1;
 		  if(saveFileDialog2.ShowDialog()!=DialogResult.OK){
 	   	  return;
 			}
 			try{
-        imageTemp.Save(saveFileDialog2.FileName);
+        imageTemp.Save(saveFileDialog2.FileName, ImageFormat.Jpeg);
       }
       catch{
         MessageBox.Show(Lan.g(this,"File in use by another program.  Close and try again."));  
