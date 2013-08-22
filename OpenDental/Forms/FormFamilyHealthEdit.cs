@@ -27,6 +27,7 @@ namespace OpenDental {
 				return; //Don't need to set any of the info below.  All null.
 			}
 			DisDefCur=DiseaseDefs.GetItem(FamilyHealthCur.DiseaseDefNum);
+			//Validation is done when deleting diseaseDefs to make sure they are not in use by FamilyHealths.
 			textProblem.Text=DisDefCur.DiseaseName;
 			textSnomed.Text=DisDefCur.SnomedCode;
 			textName.Text=FamilyHealthCur.PersonName;

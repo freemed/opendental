@@ -127,7 +127,7 @@ namespace OpenDentBusiness {
 			table=Db.GetTable(command);
 			if(table.Rows.Count>0) {
 				string s=Lans.g("DiseaseDef","Not allowed to delete. Already in use by")+" "+table.Rows.Count.ToString()
-					+" "+Lans.g("DiseaseDef","patient's family history, including")+": \r\n";
+					+" "+Lans.g("DiseaseDef","patients' family history, including")+": \r\n";
 				for(int i=0;i<table.Rows.Count;i++) {
 					if(i>5) {
 						break;
