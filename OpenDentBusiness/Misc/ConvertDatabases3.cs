@@ -837,6 +837,7 @@ namespace OpenDentBusiness {
 					command=@"CREATE INDEX securityloghash_SecurityLogNum ON securityloghash (SecurityLogNum)";
 					Db.NonQ(command);
 				}
+				//Loinc
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS loinc";
 					Db.NonQ(command);
@@ -890,6 +891,7 @@ namespace OpenDentBusiness {
 						)";
 					Db.NonQ(command);
 				}
+				//snomed
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS snomed";
 					Db.NonQ(command);
@@ -915,6 +917,7 @@ namespace OpenDentBusiness {
 						)";
 					Db.NonQ(command);
 				}
+				//ehrcode
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS ehrcode";
 					Db.NonQ(command);
@@ -948,6 +951,7 @@ namespace OpenDentBusiness {
 						)";
 					Db.NonQ(command);
 				}
+				//ehrnotperformed
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS ehrnotperformed";
 					Db.NonQ(command);
@@ -984,6 +988,7 @@ namespace OpenDentBusiness {
 					command=@"CREATE INDEX ehrnotperformed_PatNum ON ehrnotperformed (PatNum)";
 					Db.NonQ(command);
 				}
+				//intervention
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS intervention";
 					Db.NonQ(command);
@@ -1037,6 +1042,7 @@ namespace OpenDentBusiness {
 					VALUES ((SELECT MAX(ClearinghouseNum+1) FROM clearinghouse),'Electronic Dental Services','"+POut.String(@"C:\EDS\Claims\In\")+"','','1','ZZ','','ZZ','EDS','P','','','0','"+POut.String(@"C:\Program Files\EDS\edsbridge.exe")+"',0,0,'','','','EDS','','','','','')";
 					Db.NonQ(command);
 				}
+				//codesystem
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS codesystem";
 					Db.NonQ(command);
@@ -1080,7 +1086,7 @@ namespace OpenDentBusiness {
 				Db.NonQ(command);
 				command=@"INSERT INTO codeSystem (CodeSystemName,HL7OID) VALUES ('LOINC','2.16.840.1.113883.6.1')";
 				Db.NonQ(command);
-				command=@"INSERT INTO codeSystem (CodeSystemName,HL7OID) VALUES ('RxNorm','2.16.840.1.113883.6.88')";
+				command=@"INSERT INTO codeSystem (CodeSystemName,HL7OID) VALUES ('RXNORM','2.16.840.1.113883.6.88')";
 				Db.NonQ(command);
 				command=@"INSERT INTO codeSystem (CodeSystemName,HL7OID) VALUES ('SNOMEDCT','2.16.840.1.113883.6.96')";
 				Db.NonQ(command);
