@@ -146,7 +146,7 @@
     <Compile Include="Crud\AccountCrud.cs" />
     <Compile Include="Crud\AccountingAutoPayCrud.cs" />
     <Compile Include="Crud\AdjustmentCrud.cs" />
-    <Compile Include="Crud\AdministrativeGenderCrud.cs" />
+    <Compile Include="Crud\AdministrativeSexCrud.cs" />
     <Compile Include="Crud\AllergyCrud.cs" />
     <Compile Include="Crud\AllergyDefCrud.cs" />
     <Compile Include="Crud\AppointmentCrud.cs" />
@@ -376,7 +376,7 @@
     <Compile Include="Crud\WikiPageHistCrud.cs" />
     <Compile Include="Crud\XChargeTransactionCrud.cs" />
     <Compile Include="Crud\ZipCodeCrud.cs" />
-    <Compile Include="Data Interface\AdministrativeGenders.cs" />
+    <Compile Include="Data Interface\AdministrativeSex.cs" />
     <Compile Include="Data Interface\Allergies.cs" />
     <Compile Include="Data Interface\AllergyDefs.cs" />
     <Compile Include="Data Interface\ApptFieldDefs.cs" />
@@ -792,7 +792,8 @@
     <Compile Include="TableTypes\Allergy.cs" />
     <Compile Include="TableTypes\CentralConnection.cs" />
     <Compile Include="TableTypes\CodeSystem.cs" />
-    <Compile Include="TableTypes\AdministrativeGender.cs" />
+    <Compile Include="TableTypes\AdministrativeSex.cs" />
+    <Compile Include="TableTypes\Hcpcs.cs" />
     <Compile Include="TableTypes\Intervention.cs" />
     <Compile Include="TableTypes\EhrNotPerformed.cs" />
     <Compile Include="TableTypes\EhrCode.cs" />
