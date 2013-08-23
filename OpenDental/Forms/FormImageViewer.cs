@@ -64,6 +64,14 @@ namespace OpenDental{
 					backBuffer.Dispose();
 					backBuffer=null;
 				}
+				if(renderImage!=null) {
+					renderImage.Dispose();
+					renderImage=null;
+				}
+				if(ImageCurrent!=null) {
+					ImageCurrent.Dispose();
+					ImageCurrent=null;
+				}
 			}
 			base.Dispose( disposing );
 		}
