@@ -37,7 +37,7 @@ namespace OpenDental {
 		///<summary>Gets new messages from email inbox, as well as older messages from the db. Also fills the grid.</summary>
 		private int GetMessages() {
 			Address=EmailAddresses.GetByClinic(0);//Default for clinic/practice.
-			if(Address.SMTPserverIncoming=="") {//Email address not setup.
+			if(Address.Pop3ServerIncoming=="") {//Email address not setup.
 				Text="Email Inbox";
 				Address=null;
 				MsgBox.Show(this,"Default email address has not been setup completely.");
@@ -55,31 +55,16 @@ namespace OpenDental {
 			}
 			Cursor=Cursors.WaitCursor;
 			Text="Email Inbox for "+Address.EmailUsername;
-			//Get new emails
-			int newMessagesCount=0;
-			EmailMessage emailMessage;
-			do {
-				emailMessage=null;
-				try {
-					emailMessage=EhrEmail.ReceiveFromInbox(Address);
-					newMessagesCount++;
-				}
-				catch(Exception ex) {
-					if(ex.Message=="Inbox is empty.") {
-						//Do not show message. Calling code decides to tell the user if no messages were found, because we do not want to show this message sometimes.
-					}
-					else {
-						MessageBox.Show(Lan.g(this,"There is a problem reading one of your email messages")+":\r\n"+ex.Message);
-						break;//Leave while loop.
-					}
-				}
-				if(emailMessage!=null) {
-					EmailMessages.Insert(emailMessage);
-				}
-			} while(emailMessage!=null);
+			int emailMessageCount=0;
+			try {
+				emailMessageCount=EhrEmail.ReceiveFromInbox(0,Address).Count;
+			}
+			catch(Exception ex) {
+				MessageBox.Show(Lan.g(this,"Error retreiving email messages")+": "+ex.Message);
+			}
 			FillGridEmailMessages();
 			Cursor=Cursors.Default;
-			return newMessagesCount;
+			return emailMessageCount;
 		}
 
 		///<summary>Gets new emails and also shows older emails from the database.</summary>

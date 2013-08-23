@@ -830,8 +830,9 @@ namespace OpenDental{
 		}
 
 		private void butDecrypt_Click(object sender,EventArgs e) {
+			EmailAddress emailAddress=GetEmailAddress();
 			try {
-				EhrEmail.DecryptDirect(MessageCur);//If successful, sets status to ReceivedDirect.
+				EhrEmail.DecryptDirect(MessageCur,emailAddress);//If successful, sets status to ReceivedDirect.
 				MessageCur.SentOrReceived=EmailSentOrReceived.ReadDirect;//Because we are already viewing the message within the current window.
 				EmailMessages.Update(MessageCur);
 				textBodyText.Text=MessageCur.BodyText;
@@ -874,6 +875,13 @@ namespace OpenDental{
 			}
 		}
 
+		private EmailAddress GetEmailAddress() {
+			if(PatCur==null) {//can happen if sending deposit slip by email
+				return EmailAddresses.GetByClinic(0);//gets the practice default address
+			}
+			return EmailAddresses.GetByClinic(PatCur.ClinicNum);
+		}
+
 		///<summary></summary>
 		private void butSend_Click(object sender, System.EventArgs e) {
 			//this will not be available if already sent.
@@ -883,13 +891,7 @@ namespace OpenDental{
 				MessageBox.Show("Addresses not allowed to be blank.");
 				return;
 			}
-			EmailAddress emailAddress;
-			if(PatCur==null) {//can happen if sending deposit slip by email
-				emailAddress=EmailAddresses.GetByClinic(0);//gets the practice default address
-			}
-			else {
-				emailAddress=EmailAddresses.GetByClinic(PatCur.ClinicNum);
-			}
+			EmailAddress emailAddress=GetEmailAddress();
 			if(emailAddress.SMTPserver==""){
 				MsgBox.Show(this,"The email address in email setup must have an SMTP server.");
 				return;

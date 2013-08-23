@@ -22,8 +22,8 @@ namespace OpenDentBusiness {
 		///<summary>The email address of the sender as it should appear to the recipient.</summary>
 		public string SenderAddress;
 		///<summary>For example pop.gmail.com</summary>
-		public string SMTPserverIncoming;
-		///<summary>Usuall 110, sometimes 995.</summary>
+		public string Pop3ServerIncoming;
+		///<summary>Usually 110, sometimes 995.</summary>
 		public int ServerPortIncoming;
 
 		///<summary></summary>

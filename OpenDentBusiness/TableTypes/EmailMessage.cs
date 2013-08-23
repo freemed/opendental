@@ -69,7 +69,9 @@ namespace OpenDentBusiness {
 		///<summary>10 Received email matches application/pkcs7-mime mime type and has been decrypted.  Shows in Inbox.  Once it's attached to a patient it will also show in Chart module.  When viewing inside of FormEmailMessageEdit, the XML body of the message shows as xhtml instead of raw.  Still need to work on supporting collapsing and expanding, as required for meaningful use in 2014.</summary>
 		ReceivedDirect,
 		///<summary>11 For received direct messages.  Has been read.  Shows in Inbox.  Once it's attached to a patient it will also show in Chart module.  When viewing inside of FormEmailMessageEdit, the XML body of the message shows as xhtml.</summary>
-		ReadDirect
+		ReadDirect,
+		///<summary>Message Delivery Notification (MDN) used for acks in Direct messaging.  Always outgoing.  Does not show in patient Chart, but is attached to the same patient as the incoming email which caused the MDN to be sent.</summary>
+		MDN,
 	}
 
 

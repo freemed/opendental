@@ -3638,7 +3638,7 @@ namespace OpenDental{
 		///<summary>Runs every 30 seconds. Checks for new email and stores in db.</summary>
 		private void timerEmailInboxCheck_Tick(object sender,EventArgs e) {
 			EmailAddress Address=EmailAddresses.GetByClinic(0);//Default for clinic/practice.
-			if(Address.SMTPserverIncoming=="") {//Email address not setup.
+			if(Address.Pop3ServerIncoming=="") {//Email address not setup.
 				return;
 			}
 			if(!ODEnvironment.IdIsThisComputer(PrefC.GetString(PrefName.EmailInboxComputerName))) {
@@ -3648,24 +3648,13 @@ namespace OpenDental{
 				return;
 			}
 			TimeLastEmailInboxCheck=DateTime.Now;
-			EmailMessage emailMessage;
-			do {
-				emailMessage=null;
-				try {
-					emailMessage=EhrEmail.ReceiveFromInbox(Address);
-				}
-				catch(Exception ex) {
-					if(ex.Message=="Inbox is empty.") {
-					}
-					else {
-						MessageBox.Show(Lan.g(this,"Failed to receive new email: ")+ex.Message);
-						break;//Leave while loop.
-					}
-				}
-				if(emailMessage!=null) {
-					EmailMessages.Insert(emailMessage);
-				}
-			} while(emailMessage!=null);
+			try {
+				EhrEmail.ReceiveFromInbox(0,Address);
+			}
+			catch {
+				//Do not tell the user, because it would be annoying to see an error every 30 seconds (if the server was down for instance).
+				//Maybe we could log to the system EventViewer Application log someday if users complain.
+			}
 		}
 
 		///<summary>Gets the encrypted connection string for the Oracle database from a config file.</summary>

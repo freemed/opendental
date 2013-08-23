@@ -1112,6 +1112,8 @@ namespace OpenDentBusiness {
 							)";
 					Db.NonQ(command);
 				}
+				command="ALTER TABLE emailaddress CHANGE SMTPserverIncoming Pop3ServerIncoming varchar(255) NOT NULL";//Oracle compatible too.
+				Db.NonQ(command);
 
 				command="UPDATE preference SET ValueString = '13.3.0.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);

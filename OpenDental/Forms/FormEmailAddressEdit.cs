@@ -392,7 +392,7 @@ namespace OpenDental{
 				textPort.Text=EmailAddressCur.ServerPort.ToString();
 				checkSSL.Checked=EmailAddressCur.UseSSL;
 				textSender.Text=EmailAddressCur.SenderAddress;
-				textSMTPserverIncoming.Text=EmailAddressCur.SMTPserverIncoming;
+				textSMTPserverIncoming.Text=EmailAddressCur.Pop3ServerIncoming;
 				textPortIncoming.Text=EmailAddressCur.ServerPortIncoming.ToString();
 			}
 		}
@@ -421,7 +421,7 @@ namespace OpenDental{
 			}
 			EmailAddressCur.UseSSL=checkSSL.Checked;
 			EmailAddressCur.SenderAddress=PIn.String(textSender.Text);
-			EmailAddressCur.SMTPserverIncoming=PIn.String(textSMTPserverIncoming.Text);
+			EmailAddressCur.Pop3ServerIncoming=PIn.String(textSMTPserverIncoming.Text);
 			try {
 				EmailAddressCur.ServerPortIncoming=PIn.Int(textPortIncoming.Text);
 			}

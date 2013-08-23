@@ -9,6 +9,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
 using OpenDentBusiness;
+using CodeBase;
 
 namespace OpenDentBusiness {
 	public class EhrEmail {
@@ -44,135 +45,201 @@ namespace OpenDentBusiness {
 			attach.Dispose();
 		}
 
-		///<summary>Receives one email from the inbox.  Will throw an exception if anything goes wrong, so surround with a try-catch.  Never returns null.</summary>
-		public static EmailMessage ReceiveFromInbox(EmailAddress emailAddress) {
-			EmailMessage retVal=null;
-			string Data="";
-			bool disconnect=false;
-			byte[] sendData;
-			//string message="";
-			string readData="";
-			NetworkStream NetStrm=null;
-			StreamReader RdStrm=null;
-			string error="";
-			try {
-				TcpClient Server=new TcpClient(emailAddress.SMTPserverIncoming,emailAddress.ServerPortIncoming);
-				NetStrm=Server.GetStream();
-				RdStrm=new StreamReader(Server.GetStream());
-				disconnect=true;//Always dispose of the streams unless TcpClient fails
-				RdStrm.ReadLine();//Will hang if connecting to SSL
-				Data="USER "+emailAddress.EmailUsername+"\r\n";
-				sendData=System.Text.Encoding.ASCII.GetBytes(Data.ToCharArray());
-				NetStrm.Write(sendData,0,sendData.Length);
-				RdStrm.ReadLine();//Moves reader position.
-				Data="PASS "+emailAddress.EmailPassword+"\r\n";
-				sendData=System.Text.Encoding.ASCII.GetBytes(Data.ToCharArray());
-				NetStrm.Write(sendData,0,sendData.Length);
-				if(!RdStrm.ReadLine().StartsWith("+")) {
-					throw new ApplicationException("Username or password incorrect.");
-				}
-				//Display message
-				int lastEmail=1;//Cannot be 0
-				Data="STAT \r\n";//Get the newest email recieved.
-				sendData=System.Text.Encoding.ASCII.GetBytes(Data.ToCharArray());
-				NetStrm.Write(sendData,0,sendData.Length);
-				readData=RdStrm.ReadLine();
-				if(readData.StartsWith("+OK")) {//eg. "+OK 2 342432", 2 being the message count
-					string[] str=readData.Split(' ');
-					if(str[1]=="0") {
-						throw new ApplicationException("Inbox is empty.");
-					}
-					lastEmail=PIn.Int(str[1]);
-				}
-				Data="RETR "+lastEmail+"\r\n";
-				sendData=System.Text.Encoding.ASCII.GetBytes(Data.ToCharArray());
-				NetStrm.Write(sendData,0,sendData.Length);
-				readData=RdStrm.ReadLine();
-				if(readData[0]=='-') {//Will be -ERR if something went wrong. 
-					throw new ApplicationException(readData);
-				}
-				retVal=new EmailMessage();
-				retVal.IsNew=true;
-				retVal.SentOrReceived=EmailSentOrReceived.Received;
-				retVal.MsgDateTime=DateTime.Now;
-				retVal.PatNum=0;
-				retVal.ToAddress=emailAddress.EmailUsername;
-				string emailMsg=readData;
-				//Reference for email format RFC2822: http://tools.ietf.org/html/rfc2822#page-9
-				while(readData!="") {//Reads email header information and gets to the message body.
-					readData=RdStrm.ReadLine();
-					if(readData.ToLower().StartsWith("subject:")) {
-						retVal.Subject=readData.Substring(8).Trim();
-					}
-					else if(readData.ToLower().StartsWith("from:")) {
-						retVal.FromAddress=readData.Substring(5).Trim().Replace("<","").Replace(">","");//We remove < and >, because addresses sometimes look like "<ehr@opendental.com>"
-					}
-					emailMsg+=readData+"\r\n";
-				}
-				readData=RdStrm.ReadLine();//Moves stream reader position to beginning of message body.
-				string emailBody="";
-				while(readData!=".") {//Gets the body contents then exits.
-					emailBody+=readData+"\r\n";
-					emailMsg+=readData+"\r\n";
-					readData=RdStrm.ReadLine();
-				}
-				if(emailMsg.Contains("application/pkcs7-mime")) {//The email MIME/body is encrypted (known as S/MIME).
-					retVal.SentOrReceived=EmailSentOrReceived.ReceivedEncrypted;
-					retVal.BodyText=emailMsg;//The entire contents of the email, so that if decryption fails, the email will still be saved to the database for decryption later if possible.
-					try {
-						DecryptDirect(retVal);
-					}
-					catch(Exception ex) {
-						//The encrypted message will be saved to the database so that the user can try to decrypt later in FormEmailMessageEdit.
-					}
-				}
-				else {//Unencrypted email.				
-					retVal.BodyText=ExtractMimeAttach(emailBody);
-				}				
-				//Delete the message on the mail server.
-				Data="DELE "+lastEmail+"\r\n";
-				sendData=System.Text.Encoding.ASCII.GetBytes(Data.ToCharArray());
-				NetStrm.Write(sendData,0,sendData.Length);
+		/// <summary>Used for sending Message Disposition Notification (MDN) ack messages for Direct. MDNs are a special type of Direct message, so they are required to be encrypted using the Direct protocol.</summary>
+		public static void SendMDN(Health.Direct.Agent.DirectAgent directAgent,Health.Direct.Common.Mail.Notifications.NotificationMessage notificationMsg,EmailAddress emailAddressFrom,long patNum) {
+			Health.Direct.Agent.OutgoingMessage outMsgDirect=new Health.Direct.Agent.OutgoingMessage(notificationMsg);
+			SendEmailDirect(directAgent,outMsgDirect,emailAddressFrom,patNum,EmailSentOrReceived.MDN);//Not EmailSentOrReceived.SentDirect, because we do not want these to be counted in our reports as messages sent using Direct.
+		}
+
+		///<summary>Encrypts the message, verifies trust, locates the public encryption key for the To address (if already stored locally), etc. Required by Direct protocol. emailSentOrReceived must be either SentDirect or MDN.</summary>
+		private static void SendEmailDirect(Health.Direct.Agent.DirectAgent directAgent,Health.Direct.Agent.OutgoingMessage outMsgDirect,EmailAddress emailAddressFrom,long patNum,EmailSentOrReceived emailSentOrReceived) {
+			directAgent.ProcessOutgoing(outMsgDirect);//Encrypts the message, verifies trust, locates the public encryption key for the To address (if already stored locally), etc. Required by Direct protocol.
+			EmailMessage emailMdnDirect=new EmailMessage();
+			emailMdnDirect.BodyText=outMsgDirect.SerializeMessage();//Converts the entire Direct outgoing message to a raw email message text for email archive.
+			emailMdnDirect.FromAddress=outMsgDirect.Sender.Address;
+			emailMdnDirect.MsgDateTime=DateTime.Now;
+			emailMdnDirect.PatNum=patNum;
+			emailMdnDirect.SentOrReceived=emailSentOrReceived;
+			emailMdnDirect.Subject="";
+			if(outMsgDirect.Message.SubjectValue!=null) {//Is null for MDN messages.
+				emailMdnDirect.Subject=outMsgDirect.Message.SubjectValue;
 			}
-			catch(Exception ex) {
-				//MessageBox.Show(ex.Message);
-				error=ex.Message;//this could be more elegant.
+			emailMdnDirect.ToAddress=outMsgDirect.Recipients[0].Address;
+			EmailMessages.Insert(emailMdnDirect);//Will not show in UI anywhere yet, just for history in case something goes wrong.
+			byte[] arrayBytesMdnDirect=Encoding.UTF8.GetBytes(outMsgDirect.SerializeMessage());//Uses the Direct library to create a properly structured but raw outgoing email message.
+			OpenPop.Mime.Message msgMdnDirectPop=new OpenPop.Mime.Message(arrayBytesMdnDirect);//We use this open source library to convert the raw email into an object. http://hpop.sourceforge.net
+			System.Net.Mail.MailMessage msgMdnDirect=msgMdnDirectPop.ToMailMessage();//Converts the email into a common .NET object, so we can send it using standard .NET libraries.
+			msgMdnDirect.To.Add("derek@opendental.com");//FOR TESTING ONLY!!! TODO: REMOVE LATER!
+			SendEmail(msgMdnDirect,emailAddressFrom);
+		}
+
+		//public static void SendEmailDirect(EmailMessage emailMessage,EmailAddress emailAddressFrom,long patNum) {
+		//	Health.Direct.Agent.DirectAgent directAgent=GetDirectAgentForEmailAddress(emailAddressFrom.SenderAddress);
+
+		//	Health.Direct.Agent.OutgoingMessage outMsgDirect=new Health.Direct.Agent.OutgoingMessage();
+
+
+
+		//	SendEmailDirect(directAgent,outMsgDirect,emailAddressFrom,patNum,EmailSentOrReceived.SentDirect);
+		//}
+
+		///<summary>This is the root email sending function. Sends an already prepared System.Net.Mail.MailMessage. Sender port 465 is treated as implicit email, otherwise the email is treated as explicit.</summary>
+		public static void SendEmail(System.Net.Mail.MailMessage mailMessage,EmailAddress emailAddressFrom) {
+			if(emailAddressFrom.ServerPort==465) {//implicit
+				SendEmailImplicit(mailMessage,emailAddressFrom);
 			}
-			//Disconnect
-			if(disconnect) {
-				Data="QUIT"+"\r\n";
-				sendData=System.Text.Encoding.ASCII.GetBytes(Data.ToCharArray());
-				NetStrm.Write(sendData,0,sendData.Length);
-				NetStrm.Close();
-				RdStrm.Close();
+			else {//explicit default port 587 
+				SendEmailExplicit(mailMessage,emailAddressFrom);
 			}
-			if(error!="") {
-				throw new ApplicationException(error);
-			}
+		}
+
+		///<summary>Port 465 only. Uses depricated classes, because they are the only .NET classes that support implicit.</summary>
+		private static void SendEmailImplicit(System.Net.Mail.MailMessage mailMessage,EmailAddress emailAddressFrom) {
+			//uses System.Web.Mail, which is marked as deprecated, but still supports implicit
+			System.Web.Mail.MailMessage mailMessageWeb=ConvertMailNetToMailWeb(mailMessage);
+			mailMessageWeb.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpserver",emailAddressFrom.SMTPserver);
+			mailMessageWeb.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpserverport","465");
+			mailMessageWeb.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendusing","2");//sendusing: cdoSendUsingPort, value 2, for sending the message using the network.
+			mailMessageWeb.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpauthenticate","1");//0=anonymous,1=clear text auth,2=context
+			mailMessageWeb.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendusername",emailAddressFrom.EmailUsername);
+			mailMessageWeb.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendpassword",emailAddressFrom.EmailPassword);
+			//if(PrefC.GetBool(PrefName.EmailUseSSL)) {
+			mailMessageWeb.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpusessl","true");//false was also tested and does not work			
+			System.Web.Mail.SmtpMail.SmtpServer=emailAddressFrom.SMTPserver+":465";//"smtp.gmail.com:465";
+			System.Web.Mail.SmtpMail.Send(mailMessageWeb);
+		}
+
+		private static System.Web.Mail.MailMessage ConvertMailNetToMailWeb(System.Net.Mail.MailMessage mailMessage) {
+			System.Web.Mail.MailMessage retVal=new System.Web.Mail.MailMessage();
+			//retVal.From=emailMessage.FromAddress;
+			//retVal.To=emailMessage.ToAddress;
+			//retVal.Subject=emailMessage.Subject;
+			//retVal.Body=emailMessage.BodyText;
+			////retVal.Cc=;
+			////retVal.Bcc=;
+			////retVal.UrlContentBase=;
+			////retVal.UrlContentLocation=;
+			retVal.BodyEncoding=System.Text.Encoding.UTF8;
+			retVal.BodyFormat=System.Web.Mail.MailFormat.Text;//or .Html
+			//string attachPath=GetAttachPath();
+			//System.Web.Mail.MailAttachment attach;
+			////foreach (string sSubstr in sAttach.Split(delim)){
+			//for(int i=0;i<emailMessage.Attachments.Count;i++) {
+			//	attach=new System.Web.Mail.MailAttachment(ODFileUtils.CombinePaths(attachPath,emailMessage.Attachments[i].ActualFileName));
+			//	//no way to set displayed filename
+			//	retVal.Attachments.Add(attach);
+			//}
+			//TODO
 			return retVal;
 		}
 
+		///<summary>Default port is 587.</summary>
+		private static void SendEmailExplicit(System.Net.Mail.MailMessage mailMessage,EmailAddress emailAddressFrom) {
+			SmtpClient client=new SmtpClient(emailAddressFrom.SMTPserver,emailAddressFrom.ServerPort);
+			//The default credentials are not used by default, according to: 
+			//http://msdn2.microsoft.com/en-us/library/system.net.mail.smtpclient.usedefaultcredentials.aspx
+			client.Credentials=new NetworkCredential(emailAddressFrom.EmailUsername,emailAddressFrom.EmailPassword);
+			client.DeliveryMethod=SmtpDeliveryMethod.Network;
+			client.EnableSsl=emailAddressFrom.UseSSL;
+			client.Timeout=180000;//3 minutes
+			client.Send(mailMessage);
+		}
+
+		///<summary>Fetches up to fetchCount number of messages from a POP3 server.  Set fetchCount=0 for all messages.  Typically, fetchCount is 0 or 1.
+		///Example host name, pop3.live.com. Port is Normally 110 for plain POP3, 995 for SSL POP3.  Does not currently fetch attachments.</summary>
+		public static List<EmailMessage> ReceiveFromInbox(int receiveCount,EmailAddress emailAddressInbox) {
+			List<EmailMessage> retVal=new List<EmailMessage>();
+			//This code is modified from the example at: http://hpop.sourceforge.net/exampleFetchAllMessages.php
+			using(OpenPop.Pop3.Pop3Client client=new OpenPop.Pop3.Pop3Client()) {//The client disconnects from the server when being disposed.
+				client.Connect(emailAddressInbox.Pop3ServerIncoming,emailAddressInbox.ServerPortIncoming,emailAddressInbox.UseSSL);
+				client.Authenticate(emailAddressInbox.EmailUsername,emailAddressInbox.EmailPassword,OpenPop.Pop3.AuthenticationMethod.UsernameAndPassword);
+				int messageCount=client.GetMessageCount();//Get the number of messages in the inbox.
+				List<OpenPop.Mime.Message> openPopMsgsAll=new List<OpenPop.Mime.Message>(messageCount);
+				int msgDownloadedCount=0;
+				for(int i=messageCount;i>0;i--) {//Message numbers are 1-based. Most servers give the latest message the highest number.
+					try {
+						openPopMsgsAll.Add(client.GetMessage(i));
+						OpenPop.Mime.Message openPopMsg=openPopMsgsAll[openPopMsgsAll.Count-1];
+						EmailMessage emailMessage=new EmailMessage();
+						emailMessage.IsNew=true;
+						emailMessage.SentOrReceived=EmailSentOrReceived.Received;
+						emailMessage.MsgDateTime=DateTime.Now;//Could pull from email header, but it is better to record the time that OD saved into db, since no user would view the email before it was in db.
+						emailMessage.PatNum=0;//Is automatically set for some Direct messages when decypted (if a patient match can be found).
+						emailMessage.ToAddress=emailAddressInbox.EmailUsername;
+						emailMessage.Subject=openPopMsg.Headers.Subject;
+						emailMessage.FromAddress=openPopMsg.Headers.From.Address;
+						System.Net.Mime.ContentType contentType=openPopMsg.MessagePart.ContentType;
+						if(contentType.MediaType.ToLower().Contains("application/pkcs7-mime")) {//The email MIME/body is encrypted (known as S/MIME). Treated as a Direct message.
+							emailMessage.SentOrReceived=EmailSentOrReceived.ReceivedEncrypted;
+							//The entire contents of the email are saved in the emailMessage.BodyText field, so that if decryption fails, the email will still be saved to the db for decryption later if possible.
+							emailMessage.BodyText=openPopMsg.MessagePart.BodyEncoding.GetString(openPopMsg.RawMessage);
+							try {
+								DecryptDirect(emailMessage,emailAddressInbox);//If decryption succeeds, the BodyText will be set to the body text instead of the entire raw email contents.
+							}
+							catch {
+								//The encrypted message is saved to the db below, so that the user can try to decrypt later in FormEmailMessageEdit.
+							}
+						}
+						else {//Unencrypted email.
+							emailMessage.BodyText=openPopMsg.MessagePart.GetBodyAsText();
+						}
+						EmailMessages.Insert(emailMessage);
+						retVal.Add(emailMessage);
+						client.DeleteMessage(i);//Only delete from server after successfully downloaded and stored into db.
+						msgDownloadedCount++;
+					}
+					catch {
+						//If one particular email fails to download, then skip it for now and move on to the next email.
+					}
+					if(receiveCount>0 && msgDownloadedCount>=receiveCount) {
+						break;
+					}
+				}
+				return retVal;
+			}
+		}
+
+		private static Health.Direct.Agent.DirectAgent GetDirectAgentForEmailAddress(string strEmailAddressTo) {
+			string domain=strEmailAddressTo.Substring(strEmailAddressTo.IndexOf("@")+1);//Used to locate the certificate for the incoming email. For example, if ToAddress is ehr@opendental.com, then this will be opendental.com
+			return new Health.Direct.Agent.DirectAgent(domain);
+		}
+
 		///<summary>Only for email messages with SentOrReceived set to EncryptedDirect. If decryption fails, then throws an exception and does not change email. If decryption succeeds, then emailMessage.SentOrReceived is set to ReceivedDirect and the BodyText of the email is changed from the entire encrypted email contents to the decrypted body text.</summary>
-		public static void DecryptDirect(EmailMessage emailMessage) {
-			string domain=emailMessage.ToAddress.Substring(emailMessage.ToAddress.IndexOf("@")+1);//Used to locate the certificate for the incoming email. For example, if ToAddress is ehr@opendental.com, then this will be opendental.com
-			Health.Direct.Agent.DirectAgent agent=new Health.Direct.Agent.DirectAgent(domain);
+		public static void DecryptDirect(EmailMessage emailMessage,EmailAddress emailAddressFrom) {
+			Health.Direct.Agent.DirectAgent directAgent=GetDirectAgentForEmailAddress(emailMessage.ToAddress);
 			Health.Direct.Agent.IncomingMessage inMsg=null;
 			try {
-				inMsg=agent.ProcessIncoming(emailMessage.BodyText);//This is actually the entire contents of the email message for this specific case. Normally it would just be the body text.
+				inMsg=new Health.Direct.Agent.IncomingMessage(emailMessage.BodyText);//This is actually the entire contents of the email message for this specific case. Normally it would just be the body text.
 			}
 			catch(Exception ex) {
-				throw new ApplicationException("Decryption failed.\r\n"+ex.Message);
+				throw new ApplicationException("Failed to parse Direct email message.\r\n"+ex.Message);
 			}
-			if(inMsg!=null) {
-				emailMessage.SentOrReceived=EmailSentOrReceived.ReceivedDirect;
-				emailMessage.BodyText=ExtractMimeAttach(inMsg.Message.Body.Text);
-				//emailMessage.PatNum=0;//TODO: Set for some Direct messages.
-				//emailMessage.MsgDateTime=DateTime.ParseExact(inMsg.Message.DateValue,"ddd, d MMM yyyy HH:mm:ss",CultureInfo.InvariantCulture);//We could pull the email date and time from the server instead. The format is more difficult than normal, and might be different depending on who sent the email.
+			try {				
+				directAgent.ProcessIncoming(inMsg);
+			}
+			catch(Exception ex) {
+				throw new ApplicationException("Email message decryption failed.\r\n"+ex.Message);
+			}
+			emailMessage.SentOrReceived=EmailSentOrReceived.ReceivedDirect;
+			Health.Direct.Common.Mime.MimeEntity mime=inMsg.Message.ExtractMimeEntity();
+			emailMessage.BodyText=mime.Body.Text;
+			//emailMessage.PatNum=0;//TODO: Set for some Direct messages.
+			//We could pull the email date and time from the server instead. The format is more difficult than normal, and might be different depending on who sent the email.
+			//emailMessage.MsgDateTime=DateTime.ParseExact(inMsg.Message.DateValue,"ddd, d MMM yyyy HH:mm:ss",CultureInfo.InvariantCulture);
+			//Send a Message Disposition Notification (MDN) message to the sender, as required by the Direct messaging specifications.
+			IEnumerable <Health.Direct.Common.Mail.Notifications.NotificationMessage> notificationMsgs=inMsg.CreateAcks("OpenDental","",Health.Direct.Common.Mail.Notifications.MDNStandard.NotificationType.Processed);
+			foreach(Health.Direct.Common.Mail.Notifications.NotificationMessage notificationMsg in notificationMsgs) {
+				try {
+					SendMDN(directAgent,notificationMsg,emailAddressFrom,emailMessage.PatNum);//The MDN will be attached to the same patient as the incoming message.
+				}
+				catch {
+					//Nothing to do. Just an MDN. The sender can resend the email to us if they believe that we did not receive the message (due to lack of MDN response).
+				}
 			}
 		}
 
 		///<summary>Receives one email from the inbox, and returns the contents of the attachment as a string.  Will throw an exception if anything goes wrong, so surround with a try-catch.</summary>
-		public static string Receive() {
+		public static string ReceiveOneForEhrTest() {
 			if(PrefC.GetString(PrefName.EHREmailToAddress)=="") {//this pref is hidden, so no practical way for user to turn this on.
 				throw new ApplicationException("This feature cannot be used except in a test environment because email is not secure.");
 			}
@@ -180,133 +247,11 @@ namespace OpenDentBusiness {
 				throw new ApplicationException("No POP server set up.");
 			}
 			EmailAddress emailAddress=new EmailAddress();
-			emailAddress.SMTPserverIncoming=PrefC.GetString(PrefName.EHREmailPOPserver);
+			emailAddress.Pop3ServerIncoming=PrefC.GetString(PrefName.EHREmailPOPserver);
 			emailAddress.ServerPortIncoming=PrefC.GetInt(PrefName.EHREmailPort);
 			emailAddress.EmailUsername=PrefC.GetString(PrefName.EHREmailFromAddress);
 			emailAddress.EmailPassword=PrefC.GetString(PrefName.EHREmailPassword);
-			return ReceiveFromInbox(emailAddress).BodyText;
-		}
-
-		private static string ExtractMimeAttach(string fullMsg) {
-			fullMsg=fullMsg.Trim();//removes any extra lines at the end, too.
-			//break the message into lines
-			string[] separator=new string[1];
-			separator[0]="\r\n";
-			string[] lines=fullMsg.Split(separator,StringSplitOptions.None);//keep blank lines
-			//start at the end of the message and go backwards to establish the boundary string.
-			string boundary="";
-			for(int i=lines.Length-1;i>=0;i--) {
-				if(!lines[i].EndsWith("--")) {
-					continue;
-				}
-				if(!lines[i].StartsWith("--")) {
-					continue;
-				}
-				boundary=lines[i].TrimEnd('-');
-				//Example boundaries:
-				//------=_NextPart_000_001A_01CC0FCF.42154980
-				//--------------070304090505090508040909
-				break;
-			}
-			string attach="";
-			if(boundary!="") {
-				//find the last section of the message, which will certainly be the attachment.
-				fullMsg=fullMsg.TrimEnd('-');
-				separator=new string[1];
-				separator[0]=boundary;
-				string[] sections=fullMsg.Split(separator,StringSplitOptions.RemoveEmptyEntries);
-				if(sections.Length==0) {
-					throw new ApplicationException("No sections found in MIME message.");
-				}
-				attach=sections[sections.Length-1];
-			}
-			else {
-				attach=fullMsg;//Some unencrypted emails do not have mime boundries. For example, Godaddy email messages in html format.
-			}
-			separator=new string[1];
-			separator[0]="\r\n";
-			lines=attach.Split(separator,StringSplitOptions.None);//keep blank lines
-			//determine how many lines are header.
-			int contentStartI=0;
-			bool headerPassed=false;//the first line might be blank.  We are looking for the blank line that follows the header.
-			bool isbase64=false;
-			for(int i=0;i<lines.Length;i++) {
-				if(lines[i].Contains("base64")) {
-					isbase64=true;
-				}
-				if(lines[i].StartsWith("Content-")) {
-					headerPassed=true;
-					continue;
-				}
-				if(lines[i].StartsWith("\t")) {
-					continue;
-				}
-				if(!headerPassed) {
-					continue;
-				}
-				if(lines[i]!="") {//a Content line can wrap.  This skips such a wrapped line.
-					continue;
-				}
-				//we have hit a blank line
-				contentStartI=i+1;
-				break;
-				//throw new ApplicationException("Header break not found for attachment section of MIME message.");
-			}
-			string retVal="";
-			for(int i=contentStartI;i<lines.Length;i++) {
-				if(isbase64) {
-					retVal+=lines[i];
-				}
-				else {
-					retVal+=lines[i]+"\r\n";
-				}
-			}
-			if(isbase64) {
-				byte[] rawData=Convert.FromBase64String(retVal);
-				StringBuilder strb=new StringBuilder();
-				for(int i=0;i<rawData.Length;i++){
-					strb.Append((char)rawData[i]);
-				}
-				retVal=strb.ToString();
-			}
-			else{//qp encoding
-				retVal=retVal.Replace("=\r\n","");//gets rid of the = at the end of wrapped lines.
-				//Get rid of QP encoded characters (=xx).
-				MatchCollection matches=Regex.Matches(retVal,@"=\w\w");
-				//already wrote it to go backwards, but it doesn't actually matter.
-				for(int i=matches.Count-1;i>=0;i--) {
-					string matchRaw=matches[i].Value;
-					char char1=matchRaw[1];
-					byte byte1=CharToByte(char1);
-					char char2=matchRaw[2];
-					byte byte2=CharToByte(char2);
-					byte byteFinal=(byte)((byte1*16)+byte2);
-					char charFinal=(char)byteFinal;
-					retVal=retVal.Replace(matchRaw,charFinal.ToString());
-				}
-			}
-			return retVal;
-		}
-
-		private static byte CharToByte(char mychar) {
-			if(mychar >= '0' && mychar <= '9') {
-				return byte.Parse(mychar.ToString());
-			}
-			switch(mychar) {
-				case 'A':
-					return 10;
-				case 'B':
-					return 11;
-				case 'C':
-					return 12;
-				case 'D':
-					return 13;
-				case 'E':
-					return 14;
-				case 'F':
-					return 15;
-			}
-			throw new ApplicationException("char not convertible to byte:"+mychar.ToString());
+			return ReceiveFromInbox(1,emailAddress)[0].BodyText;//List might be zero in length, but the caller is supposed to surround with try/catch anyway.
 		}
 
 		private static string GetTestEmail1() {
