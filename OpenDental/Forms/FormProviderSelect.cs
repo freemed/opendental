@@ -363,9 +363,10 @@ namespace OpenDental{
 				for(int i=0;i<UserGroups.List.Length;i++){
 					comboUserGroup.Items.Add(UserGroups.List[i].Description);
 				}
-				for(int i=0;i<ProviderC.ListShort.Count;i++) {
-					comboProv.Items.Add(ProviderC.ListShort[i].GetLongDesc());
-				}
+				//Moved to FillGrid in case the order is manipulated by the user.
+				//for(int i=0;i<ProviderC.ListShort.Count;i++) {
+				//	comboProv.Items.Add(ProviderC.ListShort[i].GetLongDesc());
+				//}
 			}
 			if(PrefC.GetBool(PrefName.EasyHideDentalSchools)){
 				groupDentalSchools.Visible=false;
@@ -480,7 +481,8 @@ namespace OpenDental{
 					break;
 				}
 			}
-			if(Security.IsAuthorized(Permissions.SecurityAdmin,DateTime.MinValue,true)) {
+			//Done filling the grid.  Update the provider combo box in case its order changed.
+			if(groupMovePats.Visible){
 				comboProv.Items.Clear();
 				for(int i=0;i<ProviderC.ListShort.Count;i++) {
 					comboProv.Items.Add(ProviderC.ListShort[i].GetLongDesc());
