@@ -313,12 +313,12 @@ namespace OpenDentBusiness {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
-			command="SELECT DISTINCT ap.PatNum, "+DbHelper.Concat("p.LName","\", \"","p.FName")+" AS PatName, ap.AptDateTime "
-				+"FROM appointment ap "
-				+"INNER JOIN patient p ON p.PatNum=ap.PatNum "
-				+"INNER JOIN procedurelog pl ON pl.AptNum=ap.AptNum "
+			command="SELECT DISTINCT appointment.PatNum, "+DbHelper.Concat("LName","\", \"","FName")+" AS PatName, AptDateTime "
+				+"FROM appointment "
+				+"INNER JOIN patient ON patient.PatNum=appointment.PatNum "
+				+"INNER JOIN procedurelog ON procedurelog.AptNum=appointment.AptNum "
 				+"WHERE AptStatus="+POut.Int((int)ApptStatus.Complete)+" "
-				+"AND pl.ProcStatus="+POut.Int((int)ProcStat.TP)+" "
+				+"AND procedurelog.ProcStatus="+POut.Int((int)ProcStat.TP)+" "
 				+"ORDER BY PatName";
 			table=Db.GetTable(command);
 			//Both check and fix need to alert the user to fix manually.
@@ -326,7 +326,7 @@ namespace OpenDentBusiness {
 				log+=Lans.g("FormDatabaseMaintenance","Completed appointments with treatment planned procedures attached")+": "+table.Rows.Count
 					+", "+Lans.g("FormDatabaseMaintenance","including")+":\r\n";
 				for(int i=0;i<table.Rows.Count;i++) {
-					if(i>15) {
+					if(i>10) {
 						break;
 					}
 					log+="   "+table.Rows[i]["PatNum"].ToString()
@@ -516,12 +516,12 @@ namespace OpenDentBusiness {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
-			command="SELECT DISTINCT ap.PatNum, "+DbHelper.Concat("p.LName","\', \'","p.FName")+" AS PatName, ap.AptDateTime "
-				+"FROM appointment ap "
-				+"INNER JOIN patient p ON p.PatNum=ap.PatNum "
-				+"INNER JOIN procedurelog pl ON pl.AptNum=ap.AptNum "
+			command="SELECT DISTINCT appointment.PatNum, "+DbHelper.Concat("LName","\', \'","FName")+" AS PatName, appointment.AptDateTime "
+				+"FROM appointment "
+				+"INNER JOIN patient ON patient.PatNum=appointment.PatNum "
+				+"INNER JOIN procedurelog ON procedurelog.AptNum=appointment.AptNum "
 				+"WHERE AptStatus="+POut.Int((int)ApptStatus.Scheduled)+" "
-				+"AND pl.ProcStatus="+POut.Int((int)ProcStat.C)+" "
+				+"AND procedurelog.ProcStatus="+POut.Int((int)ProcStat.C)+" "
 				+"ORDER BY PatName";
 			table=Db.GetTable(command);
 			//Both check and fix need to alert the user to fix manually.
@@ -529,7 +529,7 @@ namespace OpenDentBusiness {
 				log+=Lans.g("FormDatabaseMaintenance","Scheduled appointments with completed procedures attached")+": "+table.Rows.Count
 					+", "+Lans.g("FormDatabaseMaintenance","including")+":\r\n";
 				for(int i=0;i<table.Rows.Count;i++) {
-					if(i>15) {
+					if(i>10) {
 						break;
 					}
 					log+="   "+table.Rows[i]["PatNum"].ToString()
