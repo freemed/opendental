@@ -503,6 +503,7 @@ namespace OpenDental{
 			}
 			else {
 				e.HasMorePages=false;
+				pagesPrinted=0;
 			}
 			g.Dispose();
 		}
