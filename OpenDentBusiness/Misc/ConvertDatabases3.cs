@@ -1114,6 +1114,42 @@ namespace OpenDentBusiness {
 				}
 				command="ALTER TABLE emailaddress CHANGE SMTPserverIncoming Pop3ServerIncoming varchar(255) NOT NULL";//Oracle compatible too.
 				Db.NonQ(command);
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE medicationpat ADD MedDescript varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE medicationpat ADD MedDescript varchar2(255)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE medicationpat ADD RxCui bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE medicationpat ADD INDEX (RxCui)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE medicationpat ADD RxCui number(20)";
+					Db.NonQ(command);
+					command="UPDATE medicationpat SET RxCui = 0 WHERE RxCui IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE medicationpat MODIFY RxCui NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX medicationpat_RxCui ON medicationpat (RxCui)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE medicationpat ADD NewCropGuid varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE medicationpat ADD NewCropGuid varchar2(255)";
+					Db.NonQ(command);
+				}
+
+
+
+
 
 				command="UPDATE preference SET ValueString = '13.3.0.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);

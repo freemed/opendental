@@ -54,6 +54,9 @@ namespace OpenDentBusiness.Crud{
 				medicationPat.DateStart       = PIn.Date  (table.Rows[i]["DateStart"].ToString());
 				medicationPat.DateStop        = PIn.Date  (table.Rows[i]["DateStop"].ToString());
 				medicationPat.ProvNum         = PIn.Long  (table.Rows[i]["ProvNum"].ToString());
+				medicationPat.MedDescript     = PIn.String(table.Rows[i]["MedDescript"].ToString());
+				medicationPat.RxCui           = PIn.Long  (table.Rows[i]["RxCui"].ToString());
+				medicationPat.NewCropGuid     = PIn.String(table.Rows[i]["NewCropGuid"].ToString());
 				retVal.Add(medicationPat);
 			}
 			return retVal;
@@ -94,7 +97,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="MedicationPatNum,";
 			}
-			command+="PatNum,MedicationNum,PatNote,DateStart,DateStop,ProvNum) VALUES(";
+			command+="PatNum,MedicationNum,PatNote,DateStart,DateStop,ProvNum,MedDescript,RxCui,NewCropGuid) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(medicationPat.MedicationPatNum)+",";
 			}
@@ -105,7 +108,10 @@ namespace OpenDentBusiness.Crud{
 				//DateTStamp can only be set by MySQL
 				+    POut.Date  (medicationPat.DateStart)+","
 				+    POut.Date  (medicationPat.DateStop)+","
-				+    POut.Long  (medicationPat.ProvNum)+")";
+				+    POut.Long  (medicationPat.ProvNum)+","
+				+"'"+POut.String(medicationPat.MedDescript)+"',"
+				+    POut.Long  (medicationPat.RxCui)+","
+				+"'"+POut.String(medicationPat.NewCropGuid)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -124,7 +130,10 @@ namespace OpenDentBusiness.Crud{
 				//DateTStamp can only be set by MySQL
 				+"DateStart       =  "+POut.Date  (medicationPat.DateStart)+", "
 				+"DateStop        =  "+POut.Date  (medicationPat.DateStop)+", "
-				+"ProvNum         =  "+POut.Long  (medicationPat.ProvNum)+" "
+				+"ProvNum         =  "+POut.Long  (medicationPat.ProvNum)+", "
+				+"MedDescript     = '"+POut.String(medicationPat.MedDescript)+"', "
+				+"RxCui           =  "+POut.Long  (medicationPat.RxCui)+", "
+				+"NewCropGuid     = '"+POut.String(medicationPat.NewCropGuid)+"' "
 				+"WHERE MedicationPatNum = "+POut.Long(medicationPat.MedicationPatNum);
 			Db.NonQ(command);
 		}
@@ -156,6 +165,18 @@ namespace OpenDentBusiness.Crud{
 			if(medicationPat.ProvNum != oldMedicationPat.ProvNum) {
 				if(command!=""){ command+=",";}
 				command+="ProvNum = "+POut.Long(medicationPat.ProvNum)+"";
+			}
+			if(medicationPat.MedDescript != oldMedicationPat.MedDescript) {
+				if(command!=""){ command+=",";}
+				command+="MedDescript = '"+POut.String(medicationPat.MedDescript)+"'";
+			}
+			if(medicationPat.RxCui != oldMedicationPat.RxCui) {
+				if(command!=""){ command+=",";}
+				command+="RxCui = "+POut.Long(medicationPat.RxCui)+"";
+			}
+			if(medicationPat.NewCropGuid != oldMedicationPat.NewCropGuid) {
+				if(command!=""){ command+=",";}
+				command+="NewCropGuid = '"+POut.String(medicationPat.NewCropGuid)+"'";
 			}
 			if(command==""){
 				return;

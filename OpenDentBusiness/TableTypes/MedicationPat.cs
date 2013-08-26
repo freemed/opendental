@@ -10,7 +10,7 @@ namespace OpenDentBusiness{
 		public long MedicationPatNum;
 		///<summary>FK to patient.PatNum.</summary>
 		public long PatNum;
-		///<summary>FK to medication.MedicationNum.</summary>
+		///<summary>FK to medication.MedicationNum.  If 0, implies that the medication order came from NewCrop.</summary>
 		public long MedicationNum;
 		///<summary>Medication notes specific to this patient.</summary>
 		public string PatNote;
@@ -23,6 +23,13 @@ namespace OpenDentBusiness{
 		public DateTime DateStop;
 		///<summary>FK to provider.ProvNum. Can be 0. Gets set to the patient's primary provider when adding a new med.  If adding the med from EHR, gets set to the ProvNum of the logged-in user.</summary>
 		public long ProvNum;
+		///<summary>Only use when MedicationNum=0.  For medication orders pulled back from NewCrop during synch.</summary>
+		public string MedDescript;
+		///<summary>Only use when MedicationNum=0.  For medication orders pulled back from NewCrop during synch.  We should have used a string type.</summary>
+		public long RxCui;
+		///<summary>Only use when MedicationNum=0.  For medication orders pulled back from NewCrop during synch.  The NewCrop GUID which uniquely identifies the prescription corresponding to the medical order. Allows us to update existing NewCrop medical orders when refreshing prescriptions in the Chart (similar to how prescriptions are updated).</summary>
+		public string NewCropGuid;
+
 	}
 
 
