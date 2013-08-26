@@ -15,7 +15,7 @@ namespace OpenDentBusiness
 		private static string s="*";
 		///<summary>Component element separator character. Almost always ':', the ASCII hexadecimal value of 3A. For Denti-Cal, ASCII hexadecimal value of 22 which is '"'.</summary>
 		private static string isa16=":";
-		///<summary>Segment terminator character plus newline. Almost always '~', the ASCII hexadecimal value of 7E. For Denti-Cal, ASCII hexadecimal value of 1C which is an unprintable character.</summary>
+		///<summary>Segment terminator character.  We also add the newline to this variable, although we plan to move that into EndSegment() eventually.  Almost always '~', the ASCII hexadecimal value of 7E. For Denti-Cal, ASCII hexadecimal value of 1C which is an unprintable character.</summary>
 		private static string endSegment="~"+Environment.NewLine;
 		private static int seg;//segments for a particular ST-SE transaction
 
@@ -457,7 +457,7 @@ namespace OpenDentBusiness
 				if(IsClaimConnect(clearhouse) || IsEmdeonDental(clearhouse) || IsEmdeonMedical(clearhouse) || IsLindsayTechnicalConsultants(clearhouse) || IsOfficeAlly(clearhouse)) {
 					subscIncludeAddressAndGender=true;
 				}
-				else {//X12 standard behavior for everyone else, including: PostNTrack, BCBSIdaho.
+				else {//X12 standard behavior for everyone else, including: BCBSIdaho, ColoradoMedicaid, Denti-Cal, PostNTrack, WashingtonMedicaid.
 					if(subscriber.PatNum==patient.PatNum) {//[js 3/14/13 only include when subscriber==patient]
 						subscIncludeAddressAndGender=true;
 					}
@@ -2352,11 +2352,13 @@ namespace OpenDentBusiness
 		}
 
 		///<summary>Converts any string to an acceptable format for X12. Converts to all caps and strips off all invalid characters. Optionally shortens the string to the specified length and/or makes sure the string is long enough by padding with spaces.</summary>
-		private static string Sout(string intputStr,int maxL,int minL) {
-			string retStr=intputStr.ToUpper();
-			//Debug.Write(retStr+",");
+		private static string Sout(string inputStr,int maxL,int minL) {
+			string retStr=inputStr.ToUpper();
+			retStr=retStr.Replace(s,"");//Remove any instances of data element separator in inputStr to protect integrity of overall output.
+			retStr=retStr.Replace(isa16,"");//Remove any instances of data component separator in inputStr to protect integrity of overall output.  Example: " for Dentical.
+			retStr=retStr.Replace(endSegment.Substring(0),"");//Remove any instances of segment separator in inputStr to protect integrity of overall output. The endSegment has \r\n tacked on end, so we only want Substring(0).
 			retStr=Regex.Replace(retStr,//replaces characters in this input string
-				//Allowed: !"&'()+,-./;?=(space)#   # is actually part of extended character set
+				//Allowed: !"&'()+,-./;?=(space)#   # is actually part of extended character set. For Denti-Cal, the component element separator is double-quote, which is removed above.
 				"[^\\w!\"&'\\(\\)\\+,-\\./;\\?= #]",//[](any single char)^(that is not)\w(A-Z or 0-9) or one of the above chars.
 				"");
 			retStr=Regex.Replace(retStr,"[_]","");//replaces _
