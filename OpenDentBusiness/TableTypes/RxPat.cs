@@ -33,7 +33,7 @@ namespace OpenDentBusiness{
 		public DateTime DateTStamp;
 		///<summary>Enum:RxSendStatus </summary>
 		public RxSendStatus SendStatus;
-		///<summary>RxNorm Code identifier.</summary>
+		///<summary>RxNorm Code identifier.  We should have used a string type.</summary>
 		public long RxCui;
 		///<summary>NCI Pharmaceutical Dosage Form code.  Only used with ehr.  For example, C48542 is the code for “Tablet dosing unit”.  User enters code manually, and it's only used for Rx Send, which will be deprecated with 2014 cert.  Guaranteed that nobody actually uses or cares about this field.</summary>
 		public string DosageCode;

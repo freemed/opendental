@@ -17,7 +17,7 @@ namespace OpenDentBusiness{
 		///<summary>The last date and time this row was altered.  Not user editable.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
-		///<summary>RxNorm Code identifier.</summary>
+		///<summary>RxNorm Code identifier.  We should have used a string type.</summary>
 		public long RxCui;
 	}
 	
