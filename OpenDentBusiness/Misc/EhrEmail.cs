@@ -45,13 +45,13 @@ namespace OpenDentBusiness {
 			attach.Dispose();
 		}
 
-		/// <summary>Used for sending Message Disposition Notification (MDN) ack messages for Direct. MDNs are a special type of Direct message, so they are required to be encrypted using the Direct protocol.</summary>
-		public static void SendMDN(Health.Direct.Agent.DirectAgent directAgent,Health.Direct.Common.Mail.Notifications.NotificationMessage notificationMsg,EmailAddress emailAddressFrom,long patNum) {
+		/// <summary>Used for sending Message Disposition Notification (MDN) ack messages for Direct.  Encrypted using the Direct protocol.</summary>
+		public static void SendAckDirect(Health.Direct.Agent.DirectAgent directAgent,Health.Direct.Common.Mail.Notifications.NotificationMessage notificationMsg,EmailAddress emailAddressFrom,long patNum) {
 			Health.Direct.Agent.OutgoingMessage outMsgDirect=new Health.Direct.Agent.OutgoingMessage(notificationMsg);
-			SendEmailDirect(directAgent,outMsgDirect,emailAddressFrom,patNum,EmailSentOrReceived.MDN);//Not EmailSentOrReceived.SentDirect, because we do not want these to be counted in our reports as messages sent using Direct.
+			SendEmailDirect(directAgent,outMsgDirect,emailAddressFrom,patNum,EmailSentOrReceived.AckDirect);//Not EmailSentOrReceived.SentDirect, because we do not want these to be counted in our reports as messages sent using Direct.
 		}
 
-		///<summary>Encrypts the message, verifies trust, locates the public encryption key for the To address (if already stored locally), etc. Required by Direct protocol. emailSentOrReceived must be either SentDirect or MDN.</summary>
+		///<summary>Encrypts the message, verifies trust, locates the public encryption key for the To address (if already stored locally), etc. Required by Direct protocol. emailSentOrReceived must be either SentDirect or AckDirect.</summary>
 		private static void SendEmailDirect(Health.Direct.Agent.DirectAgent directAgent,Health.Direct.Agent.OutgoingMessage outMsgDirect,EmailAddress emailAddressFrom,long patNum,EmailSentOrReceived emailSentOrReceived) {
 			directAgent.ProcessOutgoing(outMsgDirect);//Encrypts the message, verifies trust, locates the public encryption key for the To address (if already stored locally), etc. Required by Direct protocol.
 			EmailMessage emailMdnDirect=new EmailMessage();
@@ -61,7 +61,7 @@ namespace OpenDentBusiness {
 			emailMdnDirect.PatNum=patNum;
 			emailMdnDirect.SentOrReceived=emailSentOrReceived;
 			emailMdnDirect.Subject="";
-			if(outMsgDirect.Message.SubjectValue!=null) {//Is null for MDN messages.
+			if(outMsgDirect.Message.SubjectValue!=null) {//Is null for DirectAck messages.
 				emailMdnDirect.Subject=outMsgDirect.Message.SubjectValue;
 			}
 			emailMdnDirect.ToAddress=outMsgDirect.Recipients[0].Address;
@@ -230,7 +230,7 @@ namespace OpenDentBusiness {
 			IEnumerable <Health.Direct.Common.Mail.Notifications.NotificationMessage> notificationMsgs=inMsg.CreateAcks("OpenDental","",Health.Direct.Common.Mail.Notifications.MDNStandard.NotificationType.Processed);
 			foreach(Health.Direct.Common.Mail.Notifications.NotificationMessage notificationMsg in notificationMsgs) {
 				try {
-					SendMDN(directAgent,notificationMsg,emailAddressFrom,emailMessage.PatNum);//The MDN will be attached to the same patient as the incoming message.
+					SendAckDirect(directAgent,notificationMsg,emailAddressFrom,emailMessage.PatNum);//The MDN will be attached to the same patient as the incoming message.
 				}
 				catch {
 					//Nothing to do. Just an MDN. The sender can resend the email to us if they believe that we did not receive the message (due to lack of MDN response).
