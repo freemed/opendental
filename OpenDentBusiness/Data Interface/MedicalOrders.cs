@@ -73,7 +73,7 @@ namespace OpenDentBusiness{
 			if(!includeDiscontinued) {//exclude invalid orders
 				command+=" AND DateStart > "+POut.Date(new DateTime(1880,1,1))+" AND PatNote !='' "
 					+"AND (DateStop < "+POut.Date(new DateTime(1880,1,1))+" "//no date stop
-					+"OR DateStop > "+POut.Date(DateTime.Today)+")";//date stop hasn't happened yet
+					+"OR DateStop >= "+POut.Date(DateTime.Today)+")";//date stop hasn't happened yet
 			}
 			DataTable rawMed=Db.GetTable(command);
 			DateTime dateStop;

@@ -533,7 +533,7 @@ namespace OpenDental{
 				row.Cells.Add(medName);
 				row.Cells.Add(Medications.GetGeneric(medList[i].MedicationNum).Notes);
 				row.Cells.Add(medList[i].PatNote);
-				if(medList[i].DateStop.Year>1880) {
+				if(medList[i].DateStop.Year>1880 && medList[i].DateStop<DateTimeOD.Today) {
 					row.Cells.Add("Inactive");
 				}
 				else {
