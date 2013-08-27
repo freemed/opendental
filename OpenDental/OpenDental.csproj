@@ -1131,12 +1131,6 @@
     <Compile Include="Forms\FormCreditRecurringCharges.designer.cs">
       <DependentUpon>FormCreditRecurringCharges.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FormRxSend.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormRxSend.designer.cs">
-      <DependentUpon>FormRxSend.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\FormXchargeTrans.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3324,9 +3318,6 @@
     <EmbeddedResource Include="Forms\FormCreditRecurringCharges.resx">
       <DependentUpon>FormCreditRecurringCharges.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormRxSend.resx">
-      <DependentUpon>FormRxSend.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormXchargeTrans.resx">
       <DependentUpon>FormXchargeTrans.cs</DependentUpon>
