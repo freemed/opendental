@@ -1222,7 +1222,7 @@ namespace OpenDental{
 			// menuItemMobileSetup
 			// 
 			this.menuItemMobileSetup.Index = 12;
-			this.menuItemMobileSetup.Text = "Mobile and Patient Portal Synch";
+			this.menuItemMobileSetup.Text = "Mobile Synch";
 			this.menuItemMobileSetup.Click += new System.EventHandler(this.menuItemMobileSetup_Click);
 			// 
 			// menuItemNewCropBilling
