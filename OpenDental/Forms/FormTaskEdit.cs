@@ -845,9 +845,6 @@ namespace OpenDental{
 				MsgBox.Show(this,"One or more task note edit windows are open and must be closed.");
 				return;
 			}
-			if(!Security.IsAuthorized(Permissions.TaskEdit)) {//Tasknotes are not editable unless user has TaskEdit permission.
-				return;
-			}
 			FormTaskNoteEdit form=new FormTaskNoteEdit();
 			form.TaskNoteCur=NoteList[e.Row];
 			form.EditComplete=OnNoteEditComplete_CellDoubleClick;

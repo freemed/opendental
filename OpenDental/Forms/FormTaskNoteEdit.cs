@@ -28,6 +28,10 @@ namespace OpenDental {
 			if(TaskNoteCur.IsNew) {
 				textDateTime.ReadOnly=true;
 			}
+			else if(!Security.IsAuthorized(Permissions.TaskEdit)) {//Tasknotes are not editable unless user has TaskEdit permission.
+				butOK.Enabled=false;
+				butDelete.Enabled=false;
+			}
 		}
 
 		private void OnEditComplete() {
