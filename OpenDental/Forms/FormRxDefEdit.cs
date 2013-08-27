@@ -430,7 +430,6 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			//RxCui was set when butRxNormSelect was clicked.
 			RxDefCur.Drug=textDrug.Text;
 			RxDefCur.Sig=textSig.Text;
 			RxDefCur.Disp=textDisp.Text;

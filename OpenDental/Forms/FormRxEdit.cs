@@ -515,7 +515,6 @@ namespace OpenDental{
 			if(listProv.SelectedIndex!=-1){
 				RxPatCur.ProvNum=ProviderC.ListShort[listProv.SelectedIndex].ProvNum;
 			}
-			//RxCui was set when butRxNormSelect was clicked.
 			RxPatCur.RxDate=PIn.Date(textDate.Text);
 			RxPatCur.Drug=textDrug.Text;
 			RxPatCur.IsControlled=checkControlled.Checked;

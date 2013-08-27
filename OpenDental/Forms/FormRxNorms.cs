@@ -13,7 +13,7 @@ using OpenDental.UI;
 namespace OpenDental {
 	public partial class FormRxNorms:Form {
 		private List<RxNorm> rxList;
-		///<summary>When this window is used for selecting an RxNorm (medication.RxCui or rxpat.RxCui), then use must click OK, None, or double click in grid.  In those cases, this field will have a value.  If None was clicked, it will be a new RxNorm with an RxCui of zero.</summary>
+		///<summary>When this window is used for selecting an RxNorm (medication.RxCui), then use must click OK, None, or double click in grid.  In those cases, this field will have a value.  If None was clicked, it will be a new RxNorm with an RxCui of zero.</summary>
 		public RxNorm SelectedRxNorm;
 
 		public FormRxNorms() {

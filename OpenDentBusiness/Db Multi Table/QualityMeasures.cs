@@ -1178,10 +1178,9 @@ namespace OpenDentBusiness {
 					command="UPDATE tempehrquality "
 						+"SET HasMedication = 1 "
 						+"WHERE (SELECT COUNT(*) "
-						+"FROM medicationpat,medication "
-						+"WHERE medicationpat.MedicationNum=medication.MedicationNum "
-						+"AND medicationpat.PatNum=tempehrquality.PatNum "
-						+"AND medication.RxCui IN(199149, 199150, 200132, 205329, 205330, 205331, 401938,"//alph-glucosidas
+						+"FROM medicationpat "
+						+"WHERE medicationpat.PatNum=tempehrquality.PatNum "
+						+"AND medicationpat.RxCui IN(199149, 199150, 200132, 205329, 205330, 205331, 401938,"//alph-glucosidas
 						+"200256, 200257, 200258, 311919, 314142, 389139, 861035, 861039, 861042, 861044, 861787, 861790,"//amylin analogs
 						+"744863 , 847910 , 847915,"//antidiabetic
 						+"602544, 602549, 602550, 647237, 647239, 706895, 706896, 861731, 861736, 861740, 861743, 861748, 861753, 861760, 861763, 861769, 861783, 861787, 861790, 861795, 861806, 861816, 861819, 861822,"//antidiabetic combos

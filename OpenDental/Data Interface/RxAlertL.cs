@@ -6,7 +6,7 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	public class RxAlertL {
-		///<summary>Returns false if user does not with to continue after seeing alert.  If called from FormRxSelect, then rxCui will be 0.  If called from CPOE, then rxDefNum will be 0.</summary>
+		///<summary>Returns false if user does not wish to continue after seeing alert.  If called from FormRxSelect, then rxCui will be 0.  If called from CPOE, then rxDefNum will be 0.</summary>
 		public static bool DisplayAlerts(long patNum,long rxCui,long rxDefNum){
 			List<RxAlert> alertList=null;
 			if(rxDefNum==0){
