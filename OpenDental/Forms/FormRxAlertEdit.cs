@@ -17,10 +17,6 @@ namespace OpenDental {
 			Lan.F(this);
 			RxAlertCur=rxAlertCur;
 			RxDefCur=rxDefCur;
-			if(!PrefC.GetBool(PrefName.ShowFeatureEhr)){
-				textRxNorm.Visible=false;
-				labelRxNorm.Visible=false;
-			}
 		}
 
 		private void FormRxAlertEdit_Load(object sender,EventArgs e) {
@@ -36,9 +32,6 @@ namespace OpenDental {
 			if(RxAlertCur.MedicationNum>0) {
 				labelName.Text=Lan.g(this,"If the patient is already taking this medication");
 				textName.Text=Medications.GetMedicationFromDb(RxAlertCur.MedicationNum).MedName;
-			}
-			if(RxDefCur.RxCui!=0){
-				textRxNorm.Text=RxDefCur.RxCui.ToString()+" - "+RxNorms.GetDescByRxCui(RxDefCur.RxCui.ToString());
 			}
 			textMessage.Text=RxAlertCur.NotificationMsg;
 			checkIsHighSignificance.Checked=RxAlertCur.IsHighSignificance;

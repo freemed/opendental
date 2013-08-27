@@ -132,6 +132,29 @@ namespace OpenDentBusiness{
 			string command="UPDATE medicationpat SET DateTStamp = CURRENT_TIMESTAMP WHERE PatNum ="+POut.Long(patNum);
 			Db.NonQ(command);
 		}
+
+		///<summary>Used for NewCrop medication orders only.</summary>
+		public static MedicationPat GetMedicationOrderByNewCropGuid(string newCropGuid) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<MedicationPat>(MethodBase.GetCurrentMethod(),newCropGuid);
+			}
+			string command="SELECT * FROM medicationpat WHERE NewCropGuid='"+POut.String(newCropGuid)+"'";
+			List<MedicationPat> medicationOrderNewCrop=Crud.MedicationPatCrud.SelectMany(command);
+			if(medicationOrderNewCrop.Count==0) {
+				return null;
+			}
+			return medicationOrderNewCrop[0];
+		}
+
+		///<summary>Used to synch medication.RxCui with medicationpat.RxCui.  Updates all medicationpat.RxCui to the given value for those medication pats linked to the given medication num.</summary>
+		public static void UpdateRxCuiForMedication(long medicationNum,long rxCui) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),medicationNum,rxCui);
+				return;
+			}
+			string command="UPDATE medicationpat SET RxCui="+POut.Long(rxCui)+" WHERE MedicationNum="+POut.Long(medicationNum);
+			Db.NonQ(command);
+		}
 	
 	
 	

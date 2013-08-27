@@ -33,8 +33,6 @@ namespace OpenDental{
 			this.textRxName = new System.Windows.Forms.TextBox();
 			this.labelRx = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
-			this.textRxNorm = new System.Windows.Forms.TextBox();
-			this.labelRxNorm = new System.Windows.Forms.Label();
 			this.groupBox = new System.Windows.Forms.GroupBox();
 			this.checkIsHighSignificance = new System.Windows.Forms.CheckBox();
 			this.groupBox.SuspendLayout();
@@ -147,29 +145,10 @@ namespace OpenDental{
 			this.label1.Text = "Then the user will see a default alert message.";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textRxNorm
-			// 
-			this.textRxNorm.Location = new System.Drawing.Point(303, 45);
-			this.textRxNorm.Name = "textRxNorm";
-			this.textRxNorm.ReadOnly = true;
-			this.textRxNorm.Size = new System.Drawing.Size(308, 20);
-			this.textRxNorm.TabIndex = 15;
-			// 
-			// labelRxNorm
-			// 
-			this.labelRxNorm.Location = new System.Drawing.Point(5, 45);
-			this.labelRxNorm.Name = "labelRxNorm";
-			this.labelRxNorm.Size = new System.Drawing.Size(294, 20);
-			this.labelRxNorm.TabIndex = 14;
-			this.labelRxNorm.Text = "or a Medication Order with this RxNorm code is entered";
-			this.labelRxNorm.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
 			// groupBox
 			// 
 			this.groupBox.Controls.Add(this.textRxName);
-			this.groupBox.Controls.Add(this.textRxNorm);
 			this.groupBox.Controls.Add(this.labelRx);
-			this.groupBox.Controls.Add(this.labelRxNorm);
 			this.groupBox.Location = new System.Drawing.Point(9, 44);
 			this.groupBox.Name = "groupBox";
 			this.groupBox.Size = new System.Drawing.Size(636, 75);
@@ -225,8 +204,6 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textRxName;
 		private System.Windows.Forms.Label labelRx;
 		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.TextBox textRxNorm;
-		private System.Windows.Forms.Label labelRxNorm;
 		private System.Windows.Forms.GroupBox groupBox;
 		private System.Windows.Forms.CheckBox checkIsHighSignificance;
 	}

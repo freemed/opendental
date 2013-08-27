@@ -409,6 +409,7 @@ namespace OpenDental{
 			}
 			//MedicationCur has its RxCui set when the butRxNormSelect button is pressed.
 			Medications.Update(MedicationCur);
+			MedicationPats.UpdateRxCuiForMedication(MedicationCur.MedicationNum,MedicationCur.RxCui);
 			DialogResult=DialogResult.OK;
 		}
 

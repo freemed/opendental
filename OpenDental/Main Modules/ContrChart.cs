@@ -4032,6 +4032,7 @@ namespace OpenDental{
 				rx.SendStatus=RxSendStatus.SentElect;
 				rx.Sig="";
 				string additionalSig="";
+				MedicationPat medOrder=new MedicationPat();//The medication order corresponding to the prescription.
 				foreach(XmlNode nodeRxFieldParent in nodeTable.ChildNodes) {
 					XmlNode nodeRxField=nodeRxFieldParent.FirstChild;
 					if(nodeRxField==null) {
@@ -4065,7 +4066,7 @@ namespace OpenDental{
 							rx.Refills=nodeRxField.Value;
 							break;
 						case "rxcui"://ex 311354
-							rx.RxCui=PIn.Long(nodeRxField.Value);
+							medOrder.RxCui=PIn.Long(nodeRxField.Value);//The RxCui is not returned with all prescriptions, so it can be zero (not set).
 							break;
 						case "prescriptiondate":
 							rx.RxDate=PIn.DateT(nodeRxField.Value);

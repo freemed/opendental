@@ -21,7 +21,7 @@ namespace OpenDentBusiness{
 		public string Notes;
 		///<summary>Is a controlled substance.  This will affect the way it prints.</summary>
 		public bool IsControlled;
-		///<summary>RxNorm Code identifier.  This is used to enhance the RxAlert functionality.  Usually, RxAlerts are triggered when an Rx is entered from an RxDef.  But if an alert needs to be triggered when entering a medication through the ehr CPOE, then this RxCui matching the RxCui of the medication is the trigger.  This is clearly not practical because there are so many RxCuis that an exact match would be extremely rare.  So the only reason this field is here is to pass ehr certification.  We should have used a string type.</summary>
+		///<summary>RxNorm Code identifier.  Deprecated.  Used to copy down into rxpat.RxCui, but rxpat.RxCui is now deprecated.  No longer in use anywhere.  Still exists in db for now.</summary>
 		public long RxCui;
 
 		///<summary></summary>
