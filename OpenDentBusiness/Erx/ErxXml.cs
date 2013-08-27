@@ -194,7 +194,7 @@ namespace OpenDentBusiness {
 			//ncScript.LicensedPrescriber.freeformCredentials=;//This is where DDS and DMD should go, but we don't support this yet. Probably not necessary anyway.
 			if(emp!=null) {
 				ncScript.Staff=new StaffType();
-				ncScript.Staff.ID=emp.EmployeeNum.ToString();//A positive integer.
+				ncScript.Staff.ID="emp"+emp.EmployeeNum.ToString();//A positive integer. Returned in the ExternalUserID field when retreiving prescriptions from NewCrop. Also, provider ID is returned in the same field if a provider created the prescription, so that we can create a distintion between employee IDs and provider IDs.
 				ncScript.Staff.StaffName=new PersonNameType();
 				ncScript.Staff.StaffName.first=emp.FName;//First name or last name will not be blank. Validated in Chart.
 				ncScript.Staff.StaffName.last=emp.LName;//First name or last name will not be blank. Validated in Chart.
