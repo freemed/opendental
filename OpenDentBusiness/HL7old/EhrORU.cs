@@ -31,6 +31,9 @@ namespace OpenDentBusiness.HL7 {
 			PID(pat);
 			for(int p=0;p<panels.Count;p++) {
 				List<LabResult> results=LabResults.GetForPanel(panels[p].LabPanelNum);
+				if(results.Count==0) {
+					break;//Simply shows an empty lab panel to the user.
+				}
 				OBR(panels[p],results[0].DateTimeTest);
 				for(int r=0;r<results.Count;r++) {
 					OBX(results[r],r);
