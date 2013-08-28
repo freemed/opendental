@@ -154,7 +154,7 @@ namespace OpenDentBusiness{
 		public byte CanadianEligibilityCode;
 		///<summary>Number of minutes patient is asked to come early to appointments.</summary>
 		public int AskToArriveEarly;
-		///<summary>If this is blank, then the chart info for this patient will not be uploaded.  If this has a value, then this is the password that a patient must use to access their info online.</summary>
+		///<summary>The hashed password for online access to patient portal for this patient.  Blank if no password set yet.  Blank password indicates no online access.</summary>
 		public string OnlinePassword;
 		///<summary>Enum:ContactMethod  Used for EHR.</summary>
 		public ContactMethod PreferContactConfidential;
