@@ -28,8 +28,6 @@ namespace OpenDental{
 		///<summary>If IsMultiSelect, then this will contain a list of numbers when closing with OK.</summary>
 		public List<long> SelectedDiseaseDefNums;
 		private ODGrid gridMain;
-		private UI.Button butSnomed;
-		private UI.Button butIcd9;
 		private bool IsChanged;
 
 		///<summary></summary>
@@ -74,8 +72,6 @@ namespace OpenDental{
 			this.butUp = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
 			this.butAdd = new OpenDental.UI.Button();
-			this.butSnomed = new OpenDental.UI.Button();
-			this.butIcd9 = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -183,40 +179,6 @@ namespace OpenDental{
 			this.butAdd.Text = "&Add";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
-			// butSnomed
-			// 
-			this.butSnomed.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butSnomed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butSnomed.Autosize = true;
-			this.butSnomed.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSnomed.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butSnomed.CornerRadius = 4F;
-			this.butSnomed.Image = global::OpenDental.Properties.Resources.Add;
-			this.butSnomed.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butSnomed.Location = new System.Drawing.Point(503, 297);
-			this.butSnomed.Name = "butSnomed";
-			this.butSnomed.Size = new System.Drawing.Size(79, 26);
-			this.butSnomed.TabIndex = 7;
-			this.butSnomed.Text = "Snomed";
-			this.butSnomed.Click += new System.EventHandler(this.butSnomed_Click);
-			// 
-			// butIcd9
-			// 
-			this.butIcd9.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butIcd9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butIcd9.Autosize = true;
-			this.butIcd9.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butIcd9.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butIcd9.CornerRadius = 4F;
-			this.butIcd9.Image = global::OpenDental.Properties.Resources.Add;
-			this.butIcd9.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butIcd9.Location = new System.Drawing.Point(503, 329);
-			this.butIcd9.Name = "butIcd9";
-			this.butIcd9.Size = new System.Drawing.Size(79, 26);
-			this.butIcd9.TabIndex = 7;
-			this.butIcd9.Text = "ICD-9";
-			this.butIcd9.Click += new System.EventHandler(this.butIcd9_Click);
-			// 
 			// FormDiseaseDefs
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
@@ -227,8 +189,6 @@ namespace OpenDental{
 			this.Controls.Add(this.butUp);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.butClose);
-			this.Controls.Add(this.butIcd9);
-			this.Controls.Add(this.butSnomed);
 			this.Controls.Add(this.butAdd);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
@@ -336,44 +296,6 @@ namespace OpenDental{
 			if(FormD.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			IsChanged=true;
-			FillGrid();
-		}
-
-		private void butSnomed_Click(object sender,EventArgs e) {
-			FormSnomeds FormS=new FormSnomeds();
-			FormS.IsSelectionMode=true;
-			FormS.ShowDialog();
-			if(FormS.DialogResult!=DialogResult.OK) {
-				return;
-			}
-			if(DiseaseDefs.GetNameByCode(FormS.SelectedSnomed.SnomedCode)!=""){
-				MsgBox.Show(this,"Snomed code already exists in the problems list.");
-				return;
-			}
-			DiseaseDef newDef=new DiseaseDef();
-			newDef.DiseaseName=FormS.SelectedSnomed.Description;
-			newDef.SnomedCode=FormS.SelectedSnomed.SnomedCode;
-			DiseaseDefs.Insert(newDef);
-			IsChanged=true;
-			FillGrid();
-		}
-
-		private void butIcd9_Click(object sender,EventArgs e) {
-			FormIcd9s FormI=new FormIcd9s();
-			FormI.IsSelectionMode=true;
-			FormI.ShowDialog();
-			if(FormI.DialogResult!=DialogResult.OK) {
-				return;
-			}
-			if(DiseaseDefs.GetNameByCode(FormI.SelectedIcd9.ICD9Code)!="") {
-				MsgBox.Show(this,"ICD-9 code already exists in the problems list.");
-				return;
-			}
-			DiseaseDef newDef=new DiseaseDef();
-			newDef.DiseaseName=FormI.SelectedIcd9.Description;
-			newDef.ICD9Code=FormI.SelectedIcd9.ICD9Code;
-			DiseaseDefs.Insert(newDef);
 			IsChanged=true;
 			FillGrid();
 		}
