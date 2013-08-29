@@ -66,9 +66,9 @@ namespace OpenDentBusiness{
 				rows.Add(row);
 			}
 			//MedicationPats
-			command="SELECT DateStart,DateStop,MedicationPatNum,MedName,PatNote,ProvNum "
+			command="SELECT DateStart,DateStop,MedicationPatNum,CASE WHEN medication.MedName IS NULL THEN medicationpat.MedDescript ELSE medication.MedName END MedName,PatNote,ProvNum "
 				+"FROM medicationpat "
-				+"LEFT JOIN medication ON medication.MedicationNum=medicationpat.MedicationNum "
+				+"LEFT OUTER JOIN medication ON medication.MedicationNum=medicationpat.MedicationNum "
 				+"WHERE PatNum = "+POut.Long(patNum);
 			if(!includeDiscontinued) {//exclude invalid orders
 				command+=" AND DateStart > "+POut.Date(new DateTime(1880,1,1))+" AND PatNote !='' "

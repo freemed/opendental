@@ -525,19 +525,25 @@ namespace OpenDental{
 				if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
 					row.Cells.Add("0");//index of infobutton
 				}
-				Medication generic=Medications.GetGeneric(medList[i].MedicationNum);
-				string medName=Medications.GetMedication(medList[i].MedicationNum).MedName;
-				if(generic.MedicationNum!=medList[i].MedicationNum) {//not generic
-					medName+=" ("+generic.MedName+")";
-				}
-				row.Cells.Add(medName);
-				row.Cells.Add(Medications.GetGeneric(medList[i].MedicationNum).Notes);
-				row.Cells.Add(medList[i].PatNote);
-				if(medList[i].DateStop.Year>1880 && medList[i].DateStop<DateTimeOD.Today) {
-					row.Cells.Add("Inactive");
+				if(medList[i].MedicationNum==0) {
+					row.Cells.Add(medList[i].MedDescript);
+					row.Cells.Add("");//generic notes
 				}
 				else {
+					Medication generic=Medications.GetGeneric(medList[i].MedicationNum);
+					string medName=Medications.GetMedication(medList[i].MedicationNum).MedName;
+					if(generic.MedicationNum!=medList[i].MedicationNum) {//not generic
+						medName+=" ("+generic.MedName+")";
+					}
+					row.Cells.Add(medName);
+					row.Cells.Add(Medications.GetGeneric(medList[i].MedicationNum).Notes);
+				}
+				row.Cells.Add(medList[i].PatNote);
+				if(MedicationPats.IsMedActive(medList[i])) {
 					row.Cells.Add("Active");
+				}
+				else {
+					row.Cells.Add("Inactive");
 				}
 				gridMeds.Rows.Add(row);
 			}
@@ -553,6 +559,7 @@ namespace OpenDental{
 			}
 			FormInfobutton FormIB = new FormInfobutton();
 			FormIB.PatCur=PatCur;
+			//FormInfoButton allows MedicationCur to be null, so this will still work for medication orders returned from NewCrop (because MedicationNum will be 0).
 			FormIB.MedicationCur = Medications.GetMedicationFromDb(medList[e.Row].MedicationNum);//TODO: verify that this is what we need to get.
 			FormIB.ShowDialog();
 			//Nothing to do with Dialog Result yet.

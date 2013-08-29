@@ -155,6 +155,13 @@ namespace OpenDentBusiness{
 			string command="UPDATE medicationpat SET RxCui="+POut.Long(rxCui)+" WHERE MedicationNum="+POut.Long(medicationNum);
 			Db.NonQ(command);
 		}
+
+		public static bool IsMedActive(MedicationPat medicationPat) {
+			if(medicationPat.DateStop.Year<1880 || medicationPat.DateStop<DateTime.Today) {
+				return true;
+			}
+			return false;
+		}
 	
 	
 	

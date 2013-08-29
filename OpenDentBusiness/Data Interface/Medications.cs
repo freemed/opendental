@@ -135,7 +135,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Medication>(MethodBase.GetCurrentMethod(),medicationName);
 			}
-			string command="SELECT * FROM medication WHERE MedName="+POut.String(medicationName)+" ORDER BY MedicationNum";
+			string command="SELECT * FROM medication WHERE MedName='"+POut.String(medicationName)+"' ORDER BY MedicationNum";
 			List<Medication> retVal=Crud.MedicationCrud.SelectMany(command);
 			if(retVal.Count>0) {
 				return retVal[0];

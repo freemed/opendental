@@ -2256,16 +2256,16 @@ namespace OpenDentBusiness {
 			}
 			string log="";
 			if(isCheck){
-				command="SELECT COUNT(*) FROM medicationpat WHERE NOT EXISTS(SELECT * FROM medication "
-				  +"WHERE medication.MedicationNum=medicationpat.MedicationNum)";
+				command="SELECT COUNT(*) FROM medicationpat WHERE (medicationpat.MedicationNum=0 AND medicationpat.NewCropGuid='') OR "
+					+"(medicationpat.MedicationNum<>0 AND NOT EXISTS(SELECT * FROM medication WHERE medication.MedicationNum=medicationpat.MedicationNum))";
 				int numFound=PIn.Int(Db.GetCount(command));
 				if(numFound>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Medications found where no defition exists for them: ")+numFound+"\r\n";
 				}
 			}
 			else{
-				command="DELETE FROM medicationpat WHERE NOT EXISTS(SELECT * FROM medication "
-				  +"WHERE medication.MedicationNum=medicationpat.MedicationNum)";
+				command="DELETE FROM medicationpat WHERE (medicationpat.MedicationNum=0 AND medicationpat.NewCropGuid='') OR "
+					+"(medicationpat.MedicationNum<>0 AND NOT EXISTS(SELECT * FROM medication WHERE medication.MedicationNum=medicationpat.MedicationNum))";
 				long numberFixed=Db.NonQ(command);
 				if(numberFixed>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Medications deleted because no definition exists for them: ")+numberFixed.ToString()+"\r\n";

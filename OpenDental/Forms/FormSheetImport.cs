@@ -1224,8 +1224,7 @@ namespace OpenDental {
 						if(Medications.GetDescription(meds[j].MedicationNum)==currentMedList[i].FieldValue) {
 							List<MedicationPat> medList=MedicationPats.GetMedicationPatsByMedicationNum(meds[j].MedicationNum,PatCur.PatNum);
 							for(int k=0;k<medList.Count;k++) {
-								//Check if medication is active.
-								if(medList[k].DateStop.Year < 1880 || medList[k].DateStop > DateTime.Now) {
+								if(MedicationPats.IsMedActive(medList[k])) {
 									row.OldValDisplay="Y";
 								}
 							}
@@ -2485,13 +2484,12 @@ namespace OpenDental {
 					    List<MedicationPat> patMeds=MedicationPats.GetMedicationPatsByMedicationNum(oldMed.MedicationNum,PatCur.PatNum);
 					    for(int j=0;j<patMeds.Count;j++) {
 					      if(hasValue==YN.Yes) {
-					        //Check if med is currently inactive.
-					        if(patMeds[j].DateStop.Year>1880 && patMeds[j].DateStop<=DateTime.Now) {
+					        if(!MedicationPats.IsMedActive(patMeds[j])) {
 					          patMeds[j].DateStop=new DateTime(0001,1,1);//This will activate the med.
 					        }
 					      }
 								else {
-									patMeds[j].DateStop=DateTime.Now;//Set the med as inactive.
+									patMeds[j].DateStop=DateTime.Today;//Set the med as inactive.
 								}
 					      MedicationPats.Update(patMeds[j]);
 					    }

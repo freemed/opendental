@@ -4023,6 +4023,7 @@ namespace OpenDental{
 			XmlNode nodeNewDataSet=xml.FirstChild;
 			foreach(XmlNode nodeTable in nodeNewDataSet.ChildNodes) {
 				RxPat rxOld=null;
+				MedicationPat medOrderOld=null;
 				RxPat rx=new RxPat();
 				rx.Disp="";
 				rx.DosageCode="";
@@ -4032,6 +4033,7 @@ namespace OpenDental{
 				rx.SendStatus=RxSendStatus.SentElect;
 				rx.Sig="";
 				string additionalSig="";
+				long employeeNum=0;//FK to employee table. The employee who ordered the prescription, not a provider.
 				MedicationPat medOrder=new MedicationPat();//The medication order corresponding to the prescription.
 				foreach(XmlNode nodeRxFieldParent in nodeTable.ChildNodes) {
 					XmlNode nodeRxField=nodeRxFieldParent.FirstChild;
@@ -4074,6 +4076,12 @@ namespace OpenDental{
 						case "prescriptionguid"://32 characters with 4 hyphens. ex ba4d4a84-af0a-4cbf-9437-36feda97d1b6
 							rx.NewCropGuid=nodeRxField.Value;
 							rxOld=RxPats.GetRxNewCrop(nodeRxField.Value);
+							medOrderOld=MedicationPats.GetMedicationOrderByNewCropGuid(nodeRxField.Value);
+							break;
+						case "externaluserid"://The person who ordered the prescription. Is a ProvNum when provider, or an EmployeeNum when an employee. If EmployeeNum, then is prepended with "emp".
+							if(nodeRxField.Value.StartsWith("emp")) {
+								employeeNum=PIn.Long(nodeRxField.Value.Substring(3));//Everything after the "emp".
+							}
 							break;
 					}
 				}//end inner foreach
@@ -4093,6 +4101,28 @@ namespace OpenDental{
 				else {//The prescription was already in our database. Update it.
 					rx.RxNum=rxOld.RxNum;
 					RxPats.Update(rx);
+				}
+				medOrder.DateStart=rx.RxDate;
+				medOrder.DateStop=rx.RxDate.AddDays(7);//TODO: Is there a way to easily calculate this information from the prescription information? Makes medication show as inactive.
+				medOrder.MedicationNum=0;//We should not automatically create a medication, because we do not want to bloat the medication list in OD. In this special situation, we instead set the MedDescript, RxCui and NewCropGuid columns.
+				medOrder.MedDescript=rx.Drug;
+				medOrder.NewCropGuid=rx.NewCropGuid;
+				medOrder.PatNote=rx.Sig;
+				medOrder.PatNum=rx.PatNum;
+				//For EHR CPOE, we need to record the provider on the medication order only when the provider wrote the prescription. If another employee wrote the prescription, then we leave the provider number 0.
+				if(employeeNum==0) {//The order was completed by a provider.
+					medOrder.ProvNum=rx.ProvNum;
+				}
+				else {//The order was completed by an employee.
+					medOrder.ProvNum=0;
+				}
+				if(medOrderOld==null) {
+					medOrder.IsNew=true;//Might not be necessary, but does not hurt.
+					MedicationPats.Insert(medOrder);
+				}
+				else {//The medication order was already in our database. Update it.
+					medOrder.MedicationPatNum=medOrderOld.MedicationPatNum;
+					MedicationPats.Update(medOrder);
 				}
 			}//end foreach
 			return true;
@@ -5074,14 +5104,22 @@ namespace OpenDental{
 						Medication med;
 						for(int i=0;i<medList.Count;i++) {
 							row=new ODGridRow();
-							med=Medications.GetMedication(medList[i].MedicationNum);
-							text=med.MedName;
-							if(med.MedicationNum != med.GenericNum) {
-								text+="("+Medications.GetMedication(med.GenericNum).MedName+")";
+							if(medList[i].MedicationNum==0) {//NewCrop medication order.
+								row.Cells.Add(medList[i].MedDescript);
 							}
-							row.Cells.Add(text);
+							else {
+								med=Medications.GetMedication(medList[i].MedicationNum);
+								text=med.MedName;
+								if(med.MedicationNum != med.GenericNum) {
+									text+="("+Medications.GetMedication(med.GenericNum).MedName+")";
+								}
+								row.Cells.Add(text);
+							}
 							text=medList[i].PatNote;
-							string noteMedGeneric=Medications.GetGeneric(medList[i].MedicationNum).Notes;
+							string noteMedGeneric="";
+							if(medList[i].MedicationNum!=0) {
+								noteMedGeneric=Medications.GetGeneric(medList[i].MedicationNum).Notes;
+							}
 							if(noteMedGeneric!="") {
 								text+="("+noteMedGeneric+")";
 							}

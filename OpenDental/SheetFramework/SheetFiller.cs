@@ -1535,7 +1535,12 @@ namespace OpenDental{
 					if(i==inputMedList.Count) {
 						break;//Pat has more medications than inputMed fields on sheet.
 					}
-					inputMedList[i].FieldValue=Medications.GetDescription(medPatList[i].MedicationNum);
+					if(medPatList[i].MedicationNum==0) {
+						inputMedList[i].FieldValue=medPatList[i].MedDescript;
+					}
+					else {
+						inputMedList[i].FieldValue=Medications.GetDescription(medPatList[i].MedicationNum);
+					}
 					inputMedList[i].FieldType=SheetFieldType.OutputText;//Don't try to import as a new medication.
 				}
 			}

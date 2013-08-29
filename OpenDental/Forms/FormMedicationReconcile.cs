@@ -34,24 +34,29 @@ namespace OpenDental {
 			gridMeds.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableMedications","Notes for Patient"),225);
 			gridMeds.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableMedications","Disc"),10,HorizontalAlignment.Center);
+			col=new ODGridColumn(Lan.g("TableMedications","Disc"),10,HorizontalAlignment.Center);//discontinued
 			gridMeds.Columns.Add(col);
 			gridMeds.Rows.Clear();
 			ODGridRow row;
 			for(int i=0;i<medList.Count;i++) {
 				row=new ODGridRow();
-				Medication generic=Medications.GetGeneric(medList[i].MedicationNum);
-				string medName=Medications.GetMedication(medList[i].MedicationNum).MedName;
-				if(generic.MedicationNum!=medList[i].MedicationNum) {//not generic
-					medName+=" ("+generic.MedName+")";
-				}
-				row.Cells.Add(medName);
-				row.Cells.Add(medList[i].PatNote);
-				if(medList[i].DateStop.Year>1880) {
-					row.Cells.Add("X");
+				if(medList[i].MedicationNum==0) {
+					row.Cells.Add(medList[i].MedDescript);
 				}
 				else {
+					Medication generic=Medications.GetGeneric(medList[i].MedicationNum);
+					string medName=Medications.GetMedication(medList[i].MedicationNum).MedName;
+					if(generic.MedicationNum!=medList[i].MedicationNum) {//not generic
+						medName+=" ("+generic.MedName+")";
+					}
+					row.Cells.Add(medName);
+				}
+				row.Cells.Add(medList[i].PatNote);
+				if(MedicationPats.IsMedActive(medList[i])) {
 					row.Cells.Add("");
+				}
+				else {//discontinued
+					row.Cells.Add("X");
 				}
 				gridMeds.Rows.Add(row);
 			}
