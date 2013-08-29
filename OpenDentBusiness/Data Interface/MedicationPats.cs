@@ -157,7 +157,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static bool IsMedActive(MedicationPat medicationPat) {
-			if(medicationPat.DateStop.Year<1880 || medicationPat.DateStop<DateTime.Today) {
+			if(medicationPat.DateStop.Year<1880 || medicationPat.DateStop>DateTime.Today) {
 				return true;
 			}
 			return false;
