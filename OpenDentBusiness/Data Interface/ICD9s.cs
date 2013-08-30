@@ -162,10 +162,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Returns the code and description of the icd9.</summary>
-		public static string GetDescription(long icd9Num) {
+		public static string GetCodeAndDescription(string icd9Code) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<Listt.Count;i++) {
-				if(Listt[i].ICD9Num==icd9Num) {
+				if(Listt[i].ICD9Code==icd9Code) {
 					return Listt[i].ICD9Code+"-"+Listt[i].Description;
 				}
 			}

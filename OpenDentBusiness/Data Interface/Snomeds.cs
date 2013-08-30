@@ -12,10 +12,10 @@ namespace OpenDentBusiness{
 		//If leaving this region in place, be sure to add RefreshCache and FillCache 
 		//to the Cache.cs file with all the other Cache types.
 
-		///<summary>A list of all ICD9s.</summary>
+		///<summary>A list of all Snomeds.</summary>
 		private static List<Snomed> listt;
 
-		///<summary>A list of all ICD9s.</summary>
+		///<summary>A list of all Snomeds.</summary>
 		public static List<Snomed> Listt{
 			get {
 				if(listt==null) {
@@ -135,10 +135,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Returns the code and description of the snomed.</summary>
-		public static string GetDescription(long snomedNum) {
+		public static string GetCodeAndDescription(string snomed) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<Listt.Count;i++) {
-				if(Listt[i].SnomedNum==snomedNum) {
+				if(Listt[i].SnomedCode==snomed) {
 					return Listt[i].SnomedCode+"-"+Listt[i].Description;
 				}
 			}
