@@ -22,6 +22,8 @@ namespace OpenDental{
 		private Label label2;
 		private TextBox textSnomed;
 		private Label label3;
+		private UI.Button butSnomed;
+		private UI.Button butIcd9;
 		public DiseaseDef DiseaseDefCur;
 
 		///<summary></summary>
@@ -68,6 +70,8 @@ namespace OpenDental{
 			this.label2 = new System.Windows.Forms.Label();
 			this.textSnomed = new System.Windows.Forms.TextBox();
 			this.label3 = new System.Windows.Forms.Label();
+			this.butSnomed = new OpenDental.UI.Button();
+			this.butIcd9 = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -79,7 +83,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(350, 188);
+			this.butCancel.Location = new System.Drawing.Point(372, 172);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 25);
 			this.butCancel.TabIndex = 4;
@@ -94,7 +98,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(350, 147);
+			this.butOK.Location = new System.Drawing.Point(372, 136);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75, 25);
 			this.butOK.TabIndex = 3;
@@ -111,14 +115,14 @@ namespace OpenDental{
 			// buttonDelete
 			// 
 			this.buttonDelete.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.buttonDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.buttonDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.buttonDelete.Autosize = true;
 			this.buttonDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.buttonDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.buttonDelete.CornerRadius = 4F;
 			this.buttonDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.buttonDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.buttonDelete.Location = new System.Drawing.Point(116, 188);
+			this.buttonDelete.Location = new System.Drawing.Point(30, 172);
 			this.buttonDelete.Name = "buttonDelete";
 			this.buttonDelete.Size = new System.Drawing.Size(82, 25);
 			this.buttonDelete.TabIndex = 5;
@@ -138,7 +142,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(10, 75);
+			this.label1.Location = new System.Drawing.Point(12, 75);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(100, 23);
 			this.label1.TabIndex = 5;
@@ -149,12 +153,13 @@ namespace OpenDental{
 			// 
 			this.textICD9.Location = new System.Drawing.Point(116, 25);
 			this.textICD9.Name = "textICD9";
-			this.textICD9.Size = new System.Drawing.Size(82, 20);
+			this.textICD9.ReadOnly = true;
+			this.textICD9.Size = new System.Drawing.Size(273, 20);
 			this.textICD9.TabIndex = 0;
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(10, 23);
+			this.label2.Location = new System.Drawing.Point(12, 23);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(100, 23);
 			this.label2.TabIndex = 5;
@@ -165,24 +170,57 @@ namespace OpenDental{
 			// 
 			this.textSnomed.Location = new System.Drawing.Point(116, 51);
 			this.textSnomed.Name = "textSnomed";
-			this.textSnomed.Size = new System.Drawing.Size(136, 20);
+			this.textSnomed.ReadOnly = true;
+			this.textSnomed.Size = new System.Drawing.Size(273, 20);
 			this.textSnomed.TabIndex = 1;
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(10, 49);
+			this.label3.Location = new System.Drawing.Point(12, 49);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(100, 23);
 			this.label3.TabIndex = 5;
 			this.label3.Text = "Snomed Code";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// butSnomed
+			// 
+			this.butSnomed.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butSnomed.Autosize = true;
+			this.butSnomed.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSnomed.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSnomed.CornerRadius = 4F;
+			this.butSnomed.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butSnomed.Location = new System.Drawing.Point(395, 49);
+			this.butSnomed.Name = "butSnomed";
+			this.butSnomed.Size = new System.Drawing.Size(29, 25);
+			this.butSnomed.TabIndex = 8;
+			this.butSnomed.Text = "...";
+			this.butSnomed.Click += new System.EventHandler(this.butSnomed_Click);
+			// 
+			// butIcd9
+			// 
+			this.butIcd9.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butIcd9.Autosize = true;
+			this.butIcd9.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butIcd9.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butIcd9.CornerRadius = 4F;
+			this.butIcd9.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butIcd9.Location = new System.Drawing.Point(395, 22);
+			this.butIcd9.Name = "butIcd9";
+			this.butIcd9.Size = new System.Drawing.Size(29, 25);
+			this.butIcd9.TabIndex = 9;
+			this.butIcd9.Text = "...";
+			this.butIcd9.Click += new System.EventHandler(this.butIcd9_Click);
+			// 
 			// FormDiseaseDefEdit
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(445, 237);
+			this.ClientSize = new System.Drawing.Size(460, 208);
+			this.Controls.Add(this.butIcd9);
+			this.Controls.Add(this.butSnomed);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label1);
@@ -212,6 +250,34 @@ namespace OpenDental{
 			textICD9.Text=DiseaseDefCur.ICD9Code;
 			textSnomed.Text=DiseaseDefCur.SnomedCode;
 			checkIsHidden.Checked=DiseaseDefCur.IsHidden;
+		}
+
+		private void butSnomed_Click(object sender,EventArgs e) {
+			FormSnomeds FormS=new FormSnomeds();
+			FormS.IsSelectionMode=true;
+			FormS.ShowDialog();
+			if(FormS.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			if(DiseaseDefs.ContainsSnomed(FormS.SelectedSnomed.SnomedCode,DiseaseDefCur.DiseaseDefNum)) {//DiseaseDefNum could be zero
+				MsgBox.Show(this,"Snomed code already exists in the problems list.");
+				return;
+			}
+			textSnomed.Text=FormS.SelectedSnomed.SnomedCode;
+		}
+
+		private void butIcd9_Click(object sender,EventArgs e) {
+			FormIcd9s FormI=new FormIcd9s();
+			FormI.IsSelectionMode=true;
+			FormI.ShowDialog();
+			if(FormI.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			if(DiseaseDefs.ContainsICD9(FormI.SelectedIcd9.ICD9Code,DiseaseDefCur.DiseaseDefNum)) {
+				MsgBox.Show(this,"ICD-9 code already exists in the problems list.");
+				return;
+			}
+			textICD9.Text=FormI.SelectedIcd9.ICD9Code;
 		}
 
 		private void buttonDelete_Click(object sender,EventArgs e) {
