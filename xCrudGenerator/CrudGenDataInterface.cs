@@ -195,7 +195,7 @@ using System.Text;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class "+Sname+@"{
-		//If this table type will exist as cached data, uncomment the CachePattern region below.
+		//If this table type will exist as cached data, uncomment the CachePattern region below and edit.
 		/*
 		#region CachePattern
 		//This region can be eliminated if this is not a table type with cached data.
