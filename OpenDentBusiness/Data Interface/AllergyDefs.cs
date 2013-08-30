@@ -61,7 +61,6 @@ namespace OpenDentBusiness{
 			}
 			string command= "DELETE FROM allergydef WHERE AllergyDefNum = "+POut.Long(allergyDefNum);
 			Db.NonQ(command);
-			DeletedObjects.SetDeleted(DeletedObjectType.AllergyDef,allergyDefNum);
 		}
 
 		///<summary>Gets all AllergyDefs based on hidden status.</summary>

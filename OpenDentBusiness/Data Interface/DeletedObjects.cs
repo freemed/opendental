@@ -72,46 +72,6 @@ namespace OpenDentBusiness{
 				if(list[i].ObjectType==DeletedObjectType.Appointment) {
 					Mobile.Crud.AppointmentmCrud.Delete(customerNum,list[i].ObjectNum);
 				}
-				if(list[i].ObjectType==DeletedObjectType.RxPat) {
-					Mobile.Crud.RxPatmCrud.Delete(customerNum,list[i].ObjectNum);
-				}
-				//pat portal
-				if(list[i].ObjectType==DeletedObjectType.LabPanel) {
-					Mobile.Crud.LabPanelmCrud.Delete(customerNum,list[i].ObjectNum);
-				}
-				if(list[i].ObjectType==DeletedObjectType.LabResult) {
-					Mobile.Crud.LabResultmCrud.Delete(customerNum,list[i].ObjectNum);
-				}
-				if(list[i].ObjectType==DeletedObjectType.Medication) {
-					Mobile.Crud.MedicationmCrud.Delete(customerNum,list[i].ObjectNum);
-				}
-				if(list[i].ObjectType==DeletedObjectType.MedicationPat) {
-					Mobile.Crud.MedicationPatmCrud.Delete(customerNum,list[i].ObjectNum);
-				}
-				if(list[i].ObjectType==DeletedObjectType.Allergy) {
-					Mobile.Crud.AllergymCrud.Delete(customerNum,list[i].ObjectNum);
-				}
-				if(list[i].ObjectType==DeletedObjectType.AllergyDef) {
-					Mobile.Crud.AllergyDefmCrud.Delete(customerNum,list[i].ObjectNum);
-				}
-				if(list[i].ObjectType==DeletedObjectType.Disease) {
-					Mobile.Crud.DiseasemCrud.Delete(customerNum,list[i].ObjectNum);
-				}
-				if(list[i].ObjectType==DeletedObjectType.DiseaseDef) {
-					Mobile.Crud.DiseaseDefmCrud.Delete(customerNum,list[i].ObjectNum);
-				}
-				if(list[i].ObjectType==DeletedObjectType.ICD9) {
-					Mobile.Crud.ICD9mCrud.Delete(customerNum,list[i].ObjectNum);
-				}
-				if(list[i].ObjectType==DeletedObjectType.Statement) {
-					Mobile.Crud.StatementmCrud.Delete(customerNum,list[i].ObjectNum);
-				}
-				if(list[i].ObjectType==DeletedObjectType.Document) {
-					Mobile.Crud.DocumentmCrud.Delete(customerNum,list[i].ObjectNum);
-				}
-				if(list[i].ObjectType==DeletedObjectType.Recall) {
-					Mobile.Crud.RecallmCrud.Delete(customerNum,list[i].ObjectNum);
-				}
 			}
 		}
 

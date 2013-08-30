@@ -56,7 +56,6 @@ namespace OpenDentBusiness{
 				return;
 			}
 			Crud.PharmacyCrud.Delete(pharmacyNum);
-			DeletedObjects.SetDeleted(DeletedObjectType.Pharmacy,pharmacyNum);
 		}
 
 		public static string GetDescription(long PharmacyNum) {

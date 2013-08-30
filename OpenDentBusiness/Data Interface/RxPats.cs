@@ -53,7 +53,6 @@ namespace OpenDentBusiness{
 			}
 			string command= "DELETE FROM rxpat WHERE RxNum = '"+POut.Long(rxNum)+"'";
 			Db.NonQ(command);
-			DeletedObjects.SetDeleted(DeletedObjectType.RxPat,rxNum);
 		}
 
 		public static List<long> GetChangedSinceRxNums(DateTime changedSince) {

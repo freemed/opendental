@@ -6,15 +6,15 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	public class RxAlertL {
-		///<summary>Returns false if user does not wish to continue after seeing alert.  If called from FormRxSelect, then rxCui will be 0.  If called from CPOE, then rxDefNum will be 0.</summary>
-		public static bool DisplayAlerts(long patNum,long rxCui,long rxDefNum){
+		///<summary>Returns false if user does not wish to continue after seeing alert.</summary>
+		public static bool DisplayAlerts(long patNum,long rxDefNum){
 			List<RxAlert> alertList=null;
-			if(rxDefNum==0){
-				alertList=RxAlerts.RefreshByRxCui(rxCui);//for CPOE
-			}
-			else{
-				alertList=RxAlerts.Refresh(rxDefNum);//for Rx
-			}
+			//if(rxDefNum==0){
+			//	alertList=RxAlerts.RefreshByRxCui(rxCui);//for CPOE
+			//}
+			//else{
+			alertList=RxAlerts.Refresh(rxDefNum);//for Rx
+			//}
 			List<Disease> diseases=Diseases.Refresh(patNum);
 			List<Allergy> allergies=Allergies.Refresh(patNum);
 			List<Medication> medications=Medications.GetMedicationsByPat(patNum);

@@ -1225,14 +1225,15 @@ namespace OpenDentBusiness{
 		///<summary>3</summary>
 		Electronic
 	}
-	/* dennis add other objects type here */
+
 	public enum DeletedObjectType{
 		///<summary>0</summary>
 		Appointment,
 		///<summary>1 - A schedule object.  Only provider schedules are tracked for deletion.</summary>
 		ScheduleProv,
 		///<summary>2 - When a recall row is deleted, this records the PatNum for which it was deleted.</summary>
-		RecallPatNum,
+		RecallPatNum
+		/*
 		RxPat,
 		LabPanel,
 		LabResult,
@@ -1248,7 +1249,7 @@ namespace OpenDentBusiness{
 		Pharmacy,
 		Statement,
 		Document,
-		Recall
+		Recall*/
 	}
 
 	/////<summary>0=UnknownIfEver,1=SmokerUnkownCurrent,2=NeverSmoked,3=FormerSmoker,4=CurrentSomeDay,5=CurrentEveryDay</summary>

@@ -433,7 +433,6 @@ namespace OpenDentBusiness{
 			string command= "DELETE from recall WHERE RecallNum = "+POut.Long(recall.RecallNum);
 			Db.NonQ(command);
 			DeletedObjects.SetDeleted(DeletedObjectType.RecallPatNum,recall.PatNum);
-			DeletedObjects.SetDeleted(DeletedObjectType.Recall,recall.RecallNum);// this line ultimately leads to the recall being deleted on the Mobile Web/Patient Portal
 		}
 
 		/*//<summary>Will only return true if not disabled, date previous is empty, DateDue is same as DateDueCalc, etc.</summary>

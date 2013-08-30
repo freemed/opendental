@@ -118,7 +118,6 @@ namespace OpenDentBusiness{
 			}
 			command= "DELETE FROM icd9 WHERE ICD9Num = "+POut.Long(icd9Num);
 			Db.NonQ(command);
-			DeletedObjects.SetDeleted(DeletedObjectType.ICD9,icd9Num);
 		}
 
 		///<summary>This method uploads only the ICD9s that are used by the disease table. This is to reduce upload time.</summary>

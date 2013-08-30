@@ -139,7 +139,6 @@ namespace OpenDentBusiness {
 			//End of validation
 			command="DELETE FROM diseasedef WHERE DiseaseDefNum ="+POut.Long(def.DiseaseDefNum);
 			Db.NonQ(command);
-			DeletedObjects.SetDeleted(DeletedObjectType.DiseaseDef,def.DiseaseDefNum);
 		}
 
 		///<summary>Moves the selected item up in the listLong.</summary>

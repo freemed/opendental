@@ -75,7 +75,6 @@ namespace OpenDentBusiness {
 			}
 			string command="DELETE FROM disease WHERE DiseaseNum ="+POut.Long(disease.DiseaseNum);
 			Db.NonQ(command);
-			DeletedObjects.SetDeleted(DeletedObjectType.Disease,disease.DiseaseNum);
 		}
 
 		///<summary>Deletes all diseases for one patient.</summary>

@@ -37,7 +37,6 @@ namespace OpenDentBusiness{
 			}
 			string command= "DELETE FROM labpanel WHERE LabPanelNum = "+POut.Long(labPanelNum);
 			Db.NonQ(command);
-			DeletedObjects.SetDeleted(DeletedObjectType.LabPanel,labPanelNum);
 		}
 
 		public static List<long> GetChangedSinceLabPanelNums(DateTime changedSince,List<long> eligibleForUploadPatNumList) {

@@ -90,7 +90,6 @@ namespace OpenDentBusiness{
 			}
 			command= "DELETE FROM drugunit WHERE DrugUnitNum = "+POut.Long(drugUnitNum);
 			Db.NonQ(command);
-			DeletedObjects.SetDeleted(DeletedObjectType.DrugUnit,drugUnitNum);
 		}
 
 		/*

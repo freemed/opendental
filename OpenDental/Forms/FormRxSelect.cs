@@ -191,7 +191,7 @@ namespace OpenDental{
 			}
 			RxDef RxDefCur=RxDefList[gridMain.GetSelectedIndex()];
 			//Alert
-			if(!RxAlertL.DisplayAlerts(PatCur.PatNum,0,RxDefCur.RxDefNum)){
+			if(!RxAlertL.DisplayAlerts(PatCur.PatNum,RxDefCur.RxDefNum)){
 				return;
 			}
 			//User OK with alert

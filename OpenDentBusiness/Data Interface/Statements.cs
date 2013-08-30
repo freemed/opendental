@@ -46,7 +46,6 @@ namespace OpenDentBusiness{
 			}
 			//validate that not already in use.
 			Crud.StatementCrud.Delete(statement.StatementNum);
-			DeletedObjects.SetDeleted(DeletedObjectType.Statement,statement.StatementNum);
 		}
 
 		public static void DeleteObject(long statementNum) {
@@ -55,7 +54,6 @@ namespace OpenDentBusiness{
 				return;
 			}
 			Crud.StatementCrud.Delete(statementNum);
-			DeletedObjects.SetDeleted(DeletedObjectType.Statement,statementNum);
 		}
 
 		///<summary>For deleting a statement when user clicks Cancel.  No need to make entry in DeletedObject table.</summary>

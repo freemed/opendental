@@ -1388,7 +1388,7 @@ namespace OpenDentBusiness{
 		Online,
 		MedReconcile,
 		Referrals,
-		MedicationPatNew,
+		//MedicationPatNew,
 		MedicationPatEdit
 	}
 }

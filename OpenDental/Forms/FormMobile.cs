@@ -283,6 +283,7 @@ namespace OpenDental {
 				List<long> allergyDefNumList=AllergyDefms.GetChangedSinceAllergyDefNums(changedSince);
 				List<long> allergyNumList=Allergyms.GetChangedSinceAllergyNums(changedSince);
 				//exclusively Patient Portal
+				/*
 				List<long> eligibleForUploadPatNumList=Patientms.GetPatNumsEligibleForSynch();
 				List<long> labPanelNumList=LabPanelms.GetChangedSinceLabPanelNums(changedSince,eligibleForUploadPatNumList);
 				List<long> labResultNumList=LabResultms.GetChangedSinceLabResultNums(changedSince);
@@ -293,14 +294,14 @@ namespace OpenDental {
 				List<long> icd9NumList=ICD9ms.GetChangedSinceICD9Nums(changedSince);
 				List<long> statementNumList=Statementms.GetChangedSinceStatementNums(changedStatement,eligibleForUploadPatNumList,statementLimitPerPatient);
 				List<long> documentNumList=Documentms.GetChangedSinceDocumentNums(changedDocument,statementNumList);
-				List<long> recallNumList=Recallms.GetChangedSinceRecallNums(changedRecall);
+				List<long> recallNumList=Recallms.GetChangedSinceRecallNums(changedRecall);*/
 				List<long> delPatNumList=Patientms.GetPatNumsForDeletion();
 				//List<DeletedObject> dO=DeletedObjects.GetDeletedSince(changedDeleted);dennis: delete this line later
-				List<long> deletedObjectNumList=DeletedObjects.GetChangedSinceDeletedObjectNums(changedDeleted);
+				List<long> deletedObjectNumList=DeletedObjects.GetChangedSinceDeletedObjectNums(changedDeleted);//to delete appointments from mobile
 				totalCount= patNumList.Count+aptNumList.Count+rxNumList.Count+provNumList.Count+pharNumList.Count
-					+labPanelNumList.Count+labResultNumList.Count+medicationNumList.Count+medicationPatNumList.Count
-					+allergyDefNumList.Count+allergyNumList.Count+diseaseDefNumList.Count+diseaseNumList.Count+icd9NumList.Count
-					+statementNumList.Count+documentNumList.Count+recallNumList.Count
+					//+labPanelNumList.Count+labResultNumList.Count+medicationNumList.Count+medicationPatNumList.Count
+					+allergyDefNumList.Count//+allergyNumList.Count+diseaseDefNumList.Count+diseaseNumList.Count+icd9NumList.Count
+					//+statementNumList.Count+documentNumList.Count+recallNumList.Count
 					+deletedObjectNumList.Count;
 				if(synchDelPat) {
 					totalCount+=delPatNumList.Count;
@@ -317,6 +318,7 @@ namespace OpenDental {
 				SynchGeneric(provNumList,SynchEntity.provider,totalCount,ref currentVal);
 				SynchGeneric(pharNumList,SynchEntity.pharmacy,totalCount,ref currentVal);
 				//pat portal
+				/*
 				SynchGeneric(labPanelNumList,SynchEntity.labpanel,totalCount,ref currentVal);
 				SynchGeneric(labResultNumList,SynchEntity.labresult,totalCount,ref currentVal);
 				SynchGeneric(medicationNumList,SynchEntity.medication,totalCount,ref currentVal);
@@ -328,7 +330,7 @@ namespace OpenDental {
 				SynchGeneric(icd9NumList,SynchEntity.icd9,totalCount,ref currentVal);
 				SynchGeneric(statementNumList,SynchEntity.statement,totalCount,ref currentVal);
 				SynchGeneric(documentNumList,SynchEntity.document,totalCount,ref currentVal);
-				SynchGeneric(recallNumList,SynchEntity.recall,totalCount,ref currentVal);
+				SynchGeneric(recallNumList,SynchEntity.recall,totalCount,ref currentVal);*/
 				if(synchDelPat) {
 					SynchGeneric(delPatNumList,SynchEntity.patientdel,totalCount,ref currentVal);
 				}

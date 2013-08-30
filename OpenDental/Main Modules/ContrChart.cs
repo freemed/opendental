@@ -4034,7 +4034,7 @@ namespace OpenDental{
 				rx.Sig="";
 				string additionalSig="";
 				long employeeNum=0;//FK to employee table. The employee who ordered the prescription, not a provider.
-				MedicationPat medOrder=new MedicationPat();//The medication order corresponding to the prescription.
+				long rxCui=0;
 				foreach(XmlNode nodeRxFieldParent in nodeTable.ChildNodes) {
 					XmlNode nodeRxField=nodeRxFieldParent.FirstChild;
 					if(nodeRxField==null) {
@@ -4068,7 +4068,7 @@ namespace OpenDental{
 							rx.Refills=nodeRxField.Value;
 							break;
 						case "rxcui"://ex 311354
-							medOrder.RxCui=PIn.Long(nodeRxField.Value);//The RxCui is not returned with all prescriptions, so it can be zero (not set).
+							rxCui=PIn.Long(nodeRxField.Value);//The RxCui is not returned with all prescriptions, so it can be zero (not set).
 							break;
 						case "prescriptiondate":
 							rx.RxDate=PIn.DateT(nodeRxField.Value);
@@ -4102,30 +4102,39 @@ namespace OpenDental{
 					rx.RxNum=rxOld.RxNum;
 					RxPats.Update(rx);
 				}
-				medOrder.DateStart=rx.RxDate;
-				medOrder.DateStop=rx.RxDate.AddDays(7);//TODO: Is there a way to easily calculate this information from the prescription information? Makes medication show as inactive.
-				medOrder.MedicationNum=0;//We should not automatically create a medication, because we do not want to bloat the medication list in OD. In this special situation, we instead set the MedDescript, RxCui and NewCropGuid columns.
-				medOrder.MedDescript=rx.Drug;
-				medOrder.NewCropGuid=rx.NewCropGuid;
-				medOrder.PatNote=rx.Sig;
-				medOrder.PatNum=rx.PatNum;
-				//For EHR CPOE, we need to record the provider on the medication order only when the provider wrote the prescription. If another employee wrote the prescription, then we leave the provider number 0.
-				if(employeeNum==0) {//The order was completed by a provider.
-					medOrder.ProvNum=rx.ProvNum;
-				}
-				else {//The order was completed by an employee.
-					medOrder.ProvNum=0;
-				}
-				if(medOrderOld==null) {
-					medOrder.IsNew=true;//Might not be necessary, but does not hurt.
-					MedicationPats.Insert(medOrder);
-				}
-				else {//The medication order was already in our database. Update it.
-					medOrder.MedicationPatNum=medOrderOld.MedicationPatNum;
-					MedicationPats.Update(medOrder);
-				}
+				MedOrderInsertOrUpdateForRx(rx,rxCui,employeeNum);
 			}//end foreach
 			return true;
+		}
+
+		///<summary>For CPOE.  Used for manual precriptions and NewCrop prescriptions.  Creates or updates a medical order given the corresponding prescription.
+		///Since rxCui is not part of the prescription, it must be passed in as a separate parameter. Set employeeNum to 0 if the prescription was directly created by a provider,
+		///otherwise pass the employeeNum of the user who is entering the prescription (so the order provider can be set correctly for CPOE).</summary>
+		private void MedOrderInsertOrUpdateForRx(RxPat rxPat,long rxCui,long employeeNum) {
+			MedicationPat medOrder=new MedicationPat();//The medication order corresponding to the prescription.
+			medOrder.DateStart=rxPat.RxDate;
+			medOrder.DateStop=rxPat.RxDate.AddDays(7);//Is there a way to easily calculate this information from the prescription information? The medical order will be inactive the day after this date passes.
+			medOrder.MedicationNum=0;//We should not automatically create a medication, because we do not want to bloat the medication list in OD. In this special situation, we instead set the MedDescript, RxCui and NewCropGuid columns.
+			medOrder.MedDescript=rxPat.Drug;
+			medOrder.NewCropGuid=rxPat.NewCropGuid;
+			medOrder.PatNote=rxPat.Sig;
+			medOrder.PatNum=rxPat.PatNum;
+			//For EHR CPOE, we need to record the provider on the medication order only when the provider wrote the prescription. If another employee wrote the prescription, then we leave the provider number 0.
+			if(employeeNum==0) {//The order was completed by a provider.
+				medOrder.ProvNum=rxPat.ProvNum;
+			}
+			else {//The order was completed by an employee.
+				medOrder.ProvNum=0;
+			}
+			MedicationPat medOrderOld=MedicationPats.GetMedicationOrderByNewCropGuid(rxPat.NewCropGuid);
+			if(medOrderOld==null) {
+				medOrder.IsNew=true;//Might not be necessary, but does not hurt.
+				MedicationPats.Insert(medOrder);
+			}
+			else {//The medication order was already in our database. Update it.
+				medOrder.MedicationPatNum=medOrderOld.MedicationPatNum;
+				MedicationPats.Update(medOrder);
+			}
 		}
 
 		private void Tool_eRx_Click() {
@@ -4675,6 +4684,7 @@ namespace OpenDental{
 					ModuleSelected(PatCur.PatNum);
 					Tool_EHR_Click(true);
 				}
+				/*No longer allowed to create medication orders from the MedicalOrder (CPOE) window.
 				else if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.MedicationPatNew) {
 					//This cannot happen unless a provider is logged in with a valid ehr key
 					FormMedications FormM=new FormMedications();
@@ -4699,7 +4709,7 @@ namespace OpenDental{
 						}
 					}
 					Tool_EHR_Click(true);
-				}
+				}*/
 			#endif
 		}
 
