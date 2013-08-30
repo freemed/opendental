@@ -30,7 +30,6 @@ namespace OpenDental{
 		private OpenDental.ODtextBox textPatNote;
 		///<summary></summary>
 		public bool IsNew;
-		private UI.Button butFormulary;
 		private GroupBox groupOrder;
 		private ValidDate textDateStop;
 		private Label label7;
@@ -98,7 +97,6 @@ namespace OpenDental{
 			this.butRemove = new OpenDental.UI.Button();
 			this.label5 = new System.Windows.Forms.Label();
 			this.textPatNote = new OpenDental.ODtextBox();
-			this.butFormulary = new OpenDental.UI.Button();
 			this.groupOrder = new System.Windows.Forms.GroupBox();
 			this.label8 = new System.Windows.Forms.Label();
 			this.comboProv = new System.Windows.Forms.ComboBox();
@@ -316,21 +314,6 @@ namespace OpenDental{
 			this.textPatNote.TabIndex = 11;
 			this.textPatNote.Text = "";
 			// 
-			// butFormulary
-			// 
-			this.butFormulary.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butFormulary.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butFormulary.Autosize = true;
-			this.butFormulary.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butFormulary.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butFormulary.CornerRadius = 4F;
-			this.butFormulary.Location = new System.Drawing.Point(217, 457);
-			this.butFormulary.Name = "butFormulary";
-			this.butFormulary.Size = new System.Drawing.Size(117, 24);
-			this.butFormulary.TabIndex = 63;
-			this.butFormulary.Text = "Check &Formulary";
-			this.butFormulary.Click += new System.EventHandler(this.butFormulary_Click);
-			// 
 			// groupOrder
 			// 
 			this.groupOrder.Controls.Add(this.label8);
@@ -434,7 +417,6 @@ namespace OpenDental{
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(685, 523);
 			this.Controls.Add(this.groupOrder);
-			this.Controls.Add(this.butFormulary);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
@@ -462,9 +444,10 @@ namespace OpenDental{
 				labelPatNote.Text="Count, Instructions, and Refills";
 				groupOrder.Text="Medication Order";
 			}
-			else {
-				butFormulary.Visible=false;
-			}
+			//Formulary checks now handled in NewCrop
+			//else {
+			//	butFormulary.Visible=false;
+			//}
 			textRxNormDesc.Text=RxNorms.GetDescByRxCui(MedicationPatCur.RxCui.ToString());
 			if(MedicationPatCur.MedicationNum==0) {
 				textMedName.Text=MedicationPatCur.MedDescript;
@@ -512,7 +495,8 @@ namespace OpenDental{
 			textDateStop.Text=DateTime.Today.ToShortDateString();
 		}
 
-		private void butFormulary_Click(object sender,EventArgs e) {
+		//New Crop now handles formulary checks
+		/*private void butFormulary_Click(object sender,EventArgs e) {
 			FormFormularies FormF=new FormFormularies();
 			FormF.IsSelectionMode=true;
 			FormF.ShowDialog();
@@ -535,7 +519,7 @@ namespace OpenDental{
 			else {
 				MsgBox.Show(this,"This medication is not in the selected forumulary.");
 			}
-		}
+		}*/
 
 		private void butRxNormSelect_Click(object sender,EventArgs e) {
 			FormRxNorms FormRN=new FormRxNorms();

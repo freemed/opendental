@@ -233,8 +233,6 @@
     <Compile Include="Crud\FeeCrud.cs" />
     <Compile Include="Crud\FeeSchedCrud.cs" />
     <Compile Include="Crud\FormPatCrud.cs" />
-    <Compile Include="Crud\FormularyCrud.cs" />
-    <Compile Include="Crud\FormularyMedCrud.cs" />
     <Compile Include="Crud\GroupPermissionCrud.cs" />
     <Compile Include="Crud\GuardianCrud.cs" />
     <Compile Include="Crud\HL7DefCrud.cs" />
@@ -260,7 +258,7 @@
     <Compile Include="Crud\LetterCrud.cs" />
     <Compile Include="Crud\LetterMergeCrud.cs" />
     <Compile Include="Crud\LetterMergeFieldCrud.cs" />
-    <Compile Include="Crud\LOINCCrud.cs" />
+    <Compile Include="Crud\LoincCrud.cs" />
     <Compile Include="Crud\MedicalOrderCrud.cs" />
     <Compile Include="Crud\MedicationCrud.cs" />
     <Compile Include="Crud\MedicationPatCrud.cs" />
@@ -397,7 +395,7 @@
     </Compile>
     <Compile Include="Data Interface\FamilyHealths.cs" />
     <Compile Include="Data Interface\Interventions.cs" />
-    <Compile Include="Data Interface\LOINCs.cs" />
+    <Compile Include="Data Interface\Loincs.cs" />
     <Compile Include="Data Interface\PatientRaces.cs" />
     <Compile Include="Data Interface\Resellers.cs" />
     <Compile Include="Data Interface\ResellerServices.cs" />
@@ -425,8 +423,6 @@
     <Compile Include="Data Interface\EmailAddresses.cs" />
     <Compile Include="Data Interface\EobAttaches.cs" />
     <Compile Include="Data Interface\ErxLogs.cs" />
-    <Compile Include="Data Interface\Formularies.cs" />
-    <Compile Include="Data Interface\FormularyMeds.cs" />
     <Compile Include="Data Interface\Guardians.cs" />
     <Compile Include="Data Interface\Equipments.cs" />
     <Compile Include="Data Interface\HL7DefFields.cs" />
@@ -808,7 +804,7 @@
     <Compile Include="TableTypes\Intervention.cs" />
     <Compile Include="TableTypes\EhrNotPerformed.cs" />
     <Compile Include="TableTypes\EhrCode.cs" />
-    <Compile Include="TableTypes\LOINC.cs" />
+    <Compile Include="TableTypes\Loinc.cs" />
     <Compile Include="TableTypes\SecurityLogHash.cs" />
     <Compile Include="TableTypes\FamilyHealth.cs" />
     <Compile Include="TableTypes\PatientRace.cs" />
@@ -844,8 +840,6 @@
     <Compile Include="TableTypes\EduResource.cs" />
     <Compile Include="TableTypes\EhrMeasure.cs" />
     <Compile Include="TableTypes\EhrMeasureEvent.cs" />
-    <Compile Include="TableTypes\Formulary.cs" />
-    <Compile Include="TableTypes\FormularyMed.cs" />
     <Compile Include="TableTypes\HL7DefMessage.cs" />
     <Compile Include="TableTypes\HL7DefSegment.cs" />
     <Compile Include="TableTypes\HL7Def.cs" />

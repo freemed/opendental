@@ -26,7 +26,8 @@ namespace OpenDental {
 				//Hide all the buttons except Emergency Now and Close.
 				butICD9s.Visible=false;
 				butAllergies.Visible=false;
-				butFormularies.Visible=false;
+				//Forumularies will now be checked through New Crop
+				//butFormularies.Visible=false;
 				butVaccineDef.Visible=false;
 				butDrugManufacturer.Visible=false;
 				butDrugUnit.Visible=false;
@@ -54,10 +55,11 @@ namespace OpenDental {
 			FAS.ShowDialog();
 		}
 
-		private void butFormularies_Click(object sender,EventArgs e) {
-			FormFormularies FormE=new FormFormularies();
-			FormE.ShowDialog();
-		}
+		//Formularies will now be checked through New Crop
+		//private void butFormularies_Click(object sender,EventArgs e) {
+		//	FormFormularies FormE=new FormFormularies();
+		//	FormE.ShowDialog();
+		//}
 
 		private void butVaccineDef_Click(object sender,EventArgs e) {
 			FormVaccineDefSetup FormE=new FormVaccineDefSetup();

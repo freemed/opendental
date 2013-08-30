@@ -390,6 +390,12 @@
     <Compile Include="Forms\FormFamilyHealthEdit.designer.cs">
       <DependentUpon>FormFamilyHealthEdit.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormLoincs.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormLoincs.Designer.cs">
+      <DependentUpon>FormLoincs.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormPatListEHR2014.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -407,12 +413,6 @@
     </Compile>
     <Compile Include="Forms\FormSnomeds.designer.cs">
       <DependentUpon>FormSnomeds.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\FormLoincs.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormLoincs.Designer.cs">
-      <DependentUpon>FormLoincs.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormPatListElementEditEHR2014.cs">
       <SubType>Form</SubType>
@@ -912,12 +912,6 @@
     <Compile Include="Forms\FormTestLatency.designer.cs">
       <DependentUpon>FormTestLatency.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FormFormularyMedEdit.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormFormularyMedEdit.designer.cs">
-      <DependentUpon>FormFormularyMedEdit.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\FormOrthoChartAddDate.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -986,18 +980,6 @@
     </Compile>
     <Compile Include="Forms\FormEmailSetupEHR.designer.cs">
       <DependentUpon>FormEmailSetupEHR.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\FormFormularies.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormFormularies.Designer.cs">
-      <DependentUpon>FormFormularies.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\FormFormularyEdit.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormFormularyEdit.Designer.cs">
-      <DependentUpon>FormFormularyEdit.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormPatFieldCheckEdit.cs">
       <SubType>Form</SubType>
@@ -2870,6 +2852,9 @@
     <EmbeddedResource Include="Forms\FormFamilyHealthEdit.resx">
       <DependentUpon>FormFamilyHealthEdit.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormLoincs.resx">
+      <DependentUpon>FormLoincs.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormPatListEHR2014.resx">
       <DependentUpon>FormPatListEHR2014.cs</DependentUpon>
     </EmbeddedResource>
@@ -2880,9 +2865,6 @@
     <EmbeddedResource Include="Forms\FormSnomeds.resx">
       <DependentUpon>FormSnomeds.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormLoincs.resx">
-      <DependentUpon>FormLoincs.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormPatListElementEditEHR2014.resx">
       <DependentUpon>FormPatListElementEditEHR2014.cs</DependentUpon>
@@ -3174,10 +3156,6 @@
       <DependentUpon>FormTestLatency.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormFormularyMedEdit.resx">
-      <DependentUpon>FormFormularyMedEdit.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormOrthoChartAddDate.resx">
       <DependentUpon>FormOrthoChartAddDate.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -3223,12 +3201,6 @@
     <EmbeddedResource Include="Forms\FormEmailSetupEHR.resx">
       <DependentUpon>FormEmailSetupEHR.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormFormularies.resx">
-      <DependentUpon>FormFormularies.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormFormularyEdit.resx">
-      <DependentUpon>FormFormularyEdit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormPatFieldCheckEdit.resx">
       <DependentUpon>FormPatFieldCheckEdit.cs</DependentUpon>

@@ -47,8 +47,8 @@ namespace OpenDentBusiness.Crud{
 			for(int i=0;i<table.Rows.Count;i++) {
 				administrativeSex=new AdministrativeSex();
 				administrativeSex.AdministrativeSexNum= PIn.Long  (table.Rows[i]["AdministrativeSexNum"].ToString());
-				administrativeSex.CodeValue              = PIn.String(table.Rows[i]["CodeValue"].ToString());
-				administrativeSex.DescriptionLong        = PIn.String(table.Rows[i]["DescriptionLong"].ToString());
+				administrativeSex.CodeValue           = PIn.String(table.Rows[i]["CodeValue"].ToString());
+				administrativeSex.DescriptionLong     = PIn.String(table.Rows[i]["DescriptionLong"].ToString());
 				retVal.Add(administrativeSex);
 			}
 			return retVal;
@@ -108,8 +108,8 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one AdministrativeSex in the database.</summary>
 		public static void Update(AdministrativeSex administrativeSex){
 			string command="UPDATE administrativesex SET "
-				+"CodeValue              = '"+POut.String(administrativeSex.CodeValue)+"', "
-				+"DescriptionLong        = '"+POut.String(administrativeSex.DescriptionLong)+"' "
+				+"CodeValue           = '"+POut.String(administrativeSex.CodeValue)+"', "
+				+"DescriptionLong     = '"+POut.String(administrativeSex.DescriptionLong)+"' "
 				+"WHERE AdministrativeSexNum = "+POut.Long(administrativeSex.AdministrativeSexNum);
 			Db.NonQ(command);
 		}
