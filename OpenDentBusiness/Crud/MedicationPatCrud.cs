@@ -57,6 +57,7 @@ namespace OpenDentBusiness.Crud{
 				medicationPat.MedDescript     = PIn.String(table.Rows[i]["MedDescript"].ToString());
 				medicationPat.RxCui           = PIn.Long  (table.Rows[i]["RxCui"].ToString());
 				medicationPat.NewCropGuid     = PIn.String(table.Rows[i]["NewCropGuid"].ToString());
+				medicationPat.IsCpoe          = PIn.Bool  (table.Rows[i]["IsCpoe"].ToString());
 				retVal.Add(medicationPat);
 			}
 			return retVal;
@@ -97,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="MedicationPatNum,";
 			}
-			command+="PatNum,MedicationNum,PatNote,DateStart,DateStop,ProvNum,MedDescript,RxCui,NewCropGuid) VALUES(";
+			command+="PatNum,MedicationNum,PatNote,DateStart,DateStop,ProvNum,MedDescript,RxCui,NewCropGuid,IsCpoe) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(medicationPat.MedicationPatNum)+",";
 			}
@@ -111,7 +112,8 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (medicationPat.ProvNum)+","
 				+"'"+POut.String(medicationPat.MedDescript)+"',"
 				+    POut.Long  (medicationPat.RxCui)+","
-				+"'"+POut.String(medicationPat.NewCropGuid)+"')";
+				+"'"+POut.String(medicationPat.NewCropGuid)+"',"
+				+    POut.Bool  (medicationPat.IsCpoe)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -133,7 +135,8 @@ namespace OpenDentBusiness.Crud{
 				+"ProvNum         =  "+POut.Long  (medicationPat.ProvNum)+", "
 				+"MedDescript     = '"+POut.String(medicationPat.MedDescript)+"', "
 				+"RxCui           =  "+POut.Long  (medicationPat.RxCui)+", "
-				+"NewCropGuid     = '"+POut.String(medicationPat.NewCropGuid)+"' "
+				+"NewCropGuid     = '"+POut.String(medicationPat.NewCropGuid)+"', "
+				+"IsCpoe          =  "+POut.Bool  (medicationPat.IsCpoe)+" "
 				+"WHERE MedicationPatNum = "+POut.Long(medicationPat.MedicationPatNum);
 			Db.NonQ(command);
 		}
@@ -177,6 +180,10 @@ namespace OpenDentBusiness.Crud{
 			if(medicationPat.NewCropGuid != oldMedicationPat.NewCropGuid) {
 				if(command!=""){ command+=",";}
 				command+="NewCropGuid = '"+POut.String(medicationPat.NewCropGuid)+"'";
+			}
+			if(medicationPat.IsCpoe != oldMedicationPat.IsCpoe) {
+				if(command!=""){ command+=",";}
+				command+="IsCpoe = "+POut.Bool(medicationPat.IsCpoe)+"";
 			}
 			if(command==""){
 				return;

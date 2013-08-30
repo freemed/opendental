@@ -1154,6 +1154,39 @@ namespace OpenDentBusiness {
 					command="ALTER TABLE medicationpat ADD NewCropGuid varchar2(255)";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE medicationpat ADD IsCpoe tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE medicationpat ADD IsCpoe number(3)";
+					Db.NonQ(command);
+					command="UPDATE medicationpat SET IsCpoe = 0 WHERE IsCpoe IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE medicationpat MODIFY IsCpoe NOT NULL";
+					Db.NonQ(command);
+				}
+				//oracle compatible
+				command="UPDATE medicationpat SET IsCpoe=1 "
+						+"WHERE PatNote!='' AND DateStart > "+POut.Date((new DateTime(1880,1,1)));
+				Db.NonQ(command);
+				//Add additional EHR Measures to DB
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO ehrmeasure(MeasureType,Numerator,Denominator) VALUES(16,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(MeasureType,Numerator,Denominator) VALUES(17,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(MeasureType,Numerator,Denominator) VALUES(18,-1,-1)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM ehrmeasure),16,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM ehrmeasure),17,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM ehrmeasure),18,-1,-1)";
+					Db.NonQ(command);
+				}
 
 
 
@@ -1181,3 +1214,6 @@ namespace OpenDentBusiness {
 
 
 
+
+
+				

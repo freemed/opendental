@@ -29,7 +29,8 @@ namespace OpenDentBusiness{
 		public long RxCui;
 		///<summary>Only use when MedicationNum=0.  For medication orders pulled back from NewCrop during synch.  The NewCrop GUID which uniquely identifies the prescription corresponding to the medical order. Allows us to update existing NewCrop medical orders when refreshing prescriptions in the Chart (similar to how prescriptions are updated).</summary>
 		public string NewCropGuid;
-
+		///<summary>If NewCrop is used to prescribe a medication, a medication order is created automatically within Open Dental.  If a provider is logged in, then this is CPOE (Computerized Provider Order Entry), and this will be true.  If a staff person is logged in, or if a provider enters an Rx through Open Dental instead of NewCrop,then this is non-CPOE, so false.</summary>
+		public bool IsCpoe;
 	}
 
 
