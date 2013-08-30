@@ -4233,6 +4233,8 @@ namespace OpenDental{
 			if(SubCur!=null) {
 				//SubCur.PlanNum=PlanCur.PlanNum;//done above
 				InsSubs.Update(SubCur);//also saves the other fields besides PlanNum
+				//Udate all claims, claimprocs, payplans, and etrans that are pointing at the inssub.InsSubNum since it may now be pointing at a new insplan.PlanNum.
+				InsSubs.SynchPlanNumsForNewPlan(SubCur);
 				InsPlans.ComputeEstimatesForSubscriber(SubCur.Subscriber);
 			}
 			//Check for changes in the carrier

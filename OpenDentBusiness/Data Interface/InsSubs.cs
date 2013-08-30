@@ -218,6 +218,34 @@ namespace OpenDentBusiness{
 			return Db.NonQ(command);
 		}
 
+		///<summary>This will assign all PlanNums to new value when Create New Plan If Needed is selected and there are multiple subscribers to a plan and an inssub object has been updated to point at a new PlanNum.  The PlanNum values need to be reflected in the claim, claimproc, payplan, and etrans tables, since those all both store inssub.InsSubNum and insplan.PlanNum.</summary>
+		public static void SynchPlanNumsForNewPlan(InsSub SubCur) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),SubCur);
+				return;
+			}
+			//claim.PlanNum
+			string command="UPDATE claim SET claim.PlanNum="+POut.Long(SubCur.PlanNum)+" "
+				+"WHERE claim.InsSubNum="+POut.Long(SubCur.InsSubNum)+" AND claim.PlanNum!="+POut.Long(SubCur.PlanNum);
+			Db.NonQ(command);
+			//claim.PlanNum2
+			command="UPDATE claim SET claim.PlanNum2="+POut.Long(SubCur.PlanNum)+" "
+				+"WHERE claim.InsSubNum2="+POut.Long(SubCur.InsSubNum)+" AND claim.PlanNum2!="+POut.Long(SubCur.PlanNum);
+			Db.NonQ(command);
+			//claimproc.PlanNum
+			command="UPDATE claimproc SET claimproc.PlanNum="+POut.Long(SubCur.PlanNum)+" "
+				+"WHERE claimproc.InsSubNum="+POut.Long(SubCur.InsSubNum)+" AND claimproc.PlanNum!="+POut.Long(SubCur.PlanNum);
+			Db.NonQ(command);
+			//payplan.PlanNum
+			command="UPDATE payplan SET payplan.PlanNum="+POut.Long(SubCur.PlanNum)+" "
+				+"WHERE payplan.InsSubNum="+POut.Long(SubCur.InsSubNum)+" AND payplan.PlanNum!="+POut.Long(SubCur.PlanNum);
+			Db.NonQ(command);
+			//etrans.PlanNum, only used if EtransType.BenefitInquiry270 and BenefitResponse271 and Eligibility_CA.
+			command="UPDATE etrans SET etrans.PlanNum="+POut.Long(SubCur.PlanNum)+" "
+				+"WHERE etrans.InsSubNum!=0 AND etrans.InsSubNum="+POut.Long(SubCur.InsSubNum)+" AND etrans.PlanNum!="+POut.Long(SubCur.PlanNum);
+			Db.NonQ(command);
+		}
+
 
 
 	}
