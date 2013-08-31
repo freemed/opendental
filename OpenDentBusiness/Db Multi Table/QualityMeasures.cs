@@ -174,6 +174,8 @@ namespace OpenDentBusiness {
 					return "127";
 				case QualityType2014.BloodPressureManage:
 					return "165";
+				case QualityType2014.CariesPrevent:
+					return "74";
 				case QualityType2014.CariesPrevent_1:
 					return "74-1";
 				case QualityType2014.CariesPrevent_2:
@@ -314,6 +316,8 @@ namespace OpenDentBusiness {
 					return "Pneumonia Immunization, 65+";
 				case QualityType2014.BloodPressureManage:
 					return "Controlling High BP";
+				case QualityType2014.CariesPrevent:
+					return "Caries Prevention, 0-20";
 				case QualityType2014.CariesPrevent_1:
 					return "Caries Prevention, 0-5";
 				case QualityType2014.CariesPrevent_2:
@@ -2119,6 +2123,12 @@ namespace OpenDentBusiness {
 					tableRaw=Db.GetTable(command);
 					break;
 				#endregion
+				case QualityType2014.CariesPrevent:
+				#region CariesPrevent
+					command="";
+					tableRaw=Db.GetTable(command);
+					break;
+				#endregion
 				case QualityType2014.CariesPrevent_1:
 				#region CariesPrevent_1
 					command="";
@@ -2471,6 +2481,10 @@ namespace OpenDentBusiness {
 						}
 						break;
 					#endregion
+					case QualityType2014.CariesPrevent:
+					#region DisplayCariesPrevent
+						break;
+					#endregion
 					case QualityType2014.CariesPrevent_1:
 					#region DisplayCariesPrevent_1
 						break;
@@ -2704,11 +2718,11 @@ BMI 18.5-25.";
 			//No need to check RemotingRole; no call to db.
 			switch(qtype) {
 				case QualityType2014.WeightOver65:
-					return "All patients 65+ with at least one visit during the measurement period.";
+					return "All patients age 65+ before the start of the measurement period with an eligible encounter during the measurement period.  Not including encounters where the patient is receiving palliative care, patients that refuse measurement of height and/or weight, patients in an urgent or emergent medical situation, or there is any other qualified reason documented explaining why BMI measurement was not appropriate.";
 				case QualityType2014.WeightAdult:
-					return "All patients 18 to 64 with at least one visit during the measurement period.";
+					return "All patients age 18 to 64 before the start of the measurement period with an eligible encounter during the measurement period. Not including encounters where the patient is receiving palliative care, patients that refuse measurement of height and/or weight, patients in an urgent or emergent medical situation, or there is any other qualified reason documented explaining why BMI measurement was not appropriate.";
 				case QualityType2014.TobaccoCessation:
-					return "All patients 18+ with at least one visit during the measurement period; and identified as tobacco users within the 24 months prior to the last visit.";
+					return "All patients age 18+ with at least one visit during the measurement period; and identified as tobacco users within the 24 months prior to the last visit.";
 				case QualityType2014.Influenza:
 					return "All patients 50+ with a visit during the measurement period.";
 				case QualityType2014.WeightChild_1_1:
@@ -2724,19 +2738,21 @@ BMI 18.5-25.";
 				case QualityType2014.WeightChild_3_3:
 					return "All patients 11-16 with a visit during the measurement period, unless pregnant.";
 				case QualityType2014.MedicationsEntered:
-					return "All patients 18+ with at least one medication encounter performed during the measurement period.";
+					return "All patients age 18+ before the start of the measurement period with at least one medication encounter performed during the measurement period.";
 				case QualityType2014.Pneumonia:
-					return "All patients 65+ during the measurement period with a visit within 1 year before the measurement end date.";
+					return "All patients age 65+ before the start of the measurement period with an eligible encounter during the measurement period.";
 				case QualityType2014.BloodPressureManage:
 					return "All patients 17-74 before the measurement period who have an active diagnosis of hypertension and who are not pregnant or have ESRD.";
+				case QualityType2014.CariesPrevent:
+					return "Children age 0-19 before the start of the measurement period with an eligible encounter performed during the measurement period.";
 				case QualityType2014.CariesPrevent_1:
-					return "";
+					return "Children age 0-5 before the start of the measurement period with an eligible encounter performed during the measurement period.";
 				case QualityType2014.CariesPrevent_2:
-					return "";
+					return "Children age 6-12 before the start of the measurement period with an eligible encounter performed during the measurement period.";
 				case QualityType2014.CariesPrevent_3:
-					return "";
+					return "Children age 13-19 before the start of the measurement period with an eligible encounter performed during the measurement period.";
 				case QualityType2014.ChildCaries:
-					return "";
+					return "Childred age 0-20 before the start of the measurement period with an eligible encounter performed during the measurement period.";
 				default:
 					throw new ApplicationException("Type not found: "+qtype.ToString());
 			}
@@ -2746,11 +2762,9 @@ BMI 18.5-25.";
 			//No need to check RemotingRole; no call to db.
 			switch(qtype) {
 				case QualityType2014.WeightOver65:
-					return @"BMI < 22 or >= 30 with Followup documented.
-BMI 22-30.";
+					return "Patients age 65+ before the start of the measurement period with a physical examination documenting BMI during the encounter or during the previous six months, and when the BMI is outside of normal parameters, a follow-up plan is documented during the encounter or during the previous six months of the encounter with the BMI outside of normal parameters.  The follow-up plan can either be an intervention ordered for follow-up, an intervention ordered for a referral where weight assessment may occur, or a medication ordered.";
 				case QualityType2014.WeightAdult:
-					return @"BMI < 18.5 or >= 25 with Followup documented.
-BMI 18.5-25.";
+					return "Patients age 18 to 64 before the start of the measurement period with a physical examination documenting BMI during the encounter or during the previous six months, and when the BMI is outside of normal parameters, a follow-up plan is documented during the encounter or during the previous six months of the encounter with the BMI outside of normal parameters.  The follow-up plan can either be an intervention ordered for follow-up, an intervention ordered for a referral where weight assessment may occur, or a medication ordered.";
 				case QualityType2014.TobaccoCessation:
 					return "Tobacco cessation entry within the 24 months prior to the last visit.";
 				case QualityType2014.Influenza:
@@ -2774,19 +2788,21 @@ BMI 18.5-25.";
 				case QualityType2014.WeightChild_3_3:
 					return "Counseling for physical activity during measurement period.";
 				case QualityType2014.MedicationsEntered:
-					return "A 'Current Medications Documented' procedure was performed during the medications encounter.";
+					return "All patients age 18+ with a 'Current Medications Documented' procedure performed during the medications encounter.";
 				case QualityType2014.Pneumonia:
-					return "Pneumococcal vaccine before measurement end date. CVX=33,100,133";
+					return "All patients age 65+ before the start of the measurement period with a Pneumococcal vaccine with qualified code administered or a history of the vaccine documented before or during the measurement period.";
 				case QualityType2014.BloodPressureManage:
 					return "Diastolic < 90 and systolic < 140 at most recent encounter.";
+				case QualityType2014.CariesPrevent:
+					return "Childred age 0-20 before the start of the measurement period with an eligible flouride varnish application procedure performed during the measurement period.";
 				case QualityType2014.CariesPrevent_1:
-					return "";
+					return "Childred age 0-5 before the start of the measurement period with an eligible flouride varnish application procedure performed during the measurement period.";
 				case QualityType2014.CariesPrevent_2:
-					return "";
+					return "Childred age 6-12 before the start of the measurement period with an eligible flouride varnish application procedure performed during the measurement period.";
 				case QualityType2014.CariesPrevent_3:
-					return "";
+					return "Childred age 13-20 before the start of the measurement period with an eligible flouride varnish application procedure performed during the measurement period.";
 				case QualityType2014.ChildCaries:
-					return "";
+					return "Childred age 0-20 before the start of the measurement period with an active diagnosis of caries with a qualified code during the measurement period.";
 				default:
 					throw new ApplicationException("Type not found: "+qtype.ToString());
 			}
@@ -2797,9 +2813,9 @@ BMI 18.5-25.";
 			//No need to check RemotingRole; no call to db.
 			switch(qtype) {
 				case QualityType2014.WeightOver65:
-					return "Marked ineligible within 6 months prior to the last visit.";
+					return "Patients who are pregnant during any of the measurement period.";
 				case QualityType2014.WeightAdult:
-					return "Terminal ineligible within 6 months prior to the last visit.";
+					return "Patients who are pregnant during any of the measurement period.";
 				case QualityType2014.TobaccoCessation:
 					return "N/A";
 				case QualityType2014.Influenza:
@@ -2820,14 +2836,16 @@ BMI 18.5-25.";
 					return "N/A";
 				case QualityType2014.BloodPressureManage:
 					return "N/A";
+				case QualityType2014.CariesPrevent:
+					return "N/A";
 				case QualityType2014.CariesPrevent_1:
-					return "";
+					return "N/A";
 				case QualityType2014.CariesPrevent_2:
-					return "";
+					return "N/A";
 				case QualityType2014.CariesPrevent_3:
-					return "";
+					return "N/A";
 				case QualityType2014.ChildCaries:
-					return "";
+					return "N/A";
 				default:
 					throw new ApplicationException("Type not found: "+qtype.ToString());
 			}
@@ -2838,9 +2856,9 @@ BMI 18.5-25.";
 			//No need to check RemotingRole; no call to db.
 			switch(qtype) {
 				case QualityType2014.WeightOver65:
-					return "Marked ineligible within 6 months prior to the last visit.";
+					return "N/A";
 				case QualityType2014.WeightAdult:
-					return "Terminal ineligible within 6 months prior to the last visit.";
+					return "N/A";
 				case QualityType2014.TobaccoCessation:
 					return "N/A";
 				case QualityType2014.Influenza:
@@ -2856,19 +2874,21 @@ BMI 18.5-25.";
 				case QualityType2014.WeightChild_3_3:
 					return "N/A";
 				case QualityType2014.MedicationsEntered:
-					return "'Current Medications Documented' procedure was not done because of a 'Medical or Other reason' SNOMED-CT code during the medications encounter.";
+					return "'Current Medications Documented' procedure was not performed due to a medical or other reason with qualified SNOMED-CT code during the medications encounter.";
 				case QualityType2014.Pneumonia:
 					return "N/A";
 				case QualityType2014.BloodPressureManage:
 					return "N/A";
+				case QualityType2014.CariesPrevent:
+					return "N/A";
 				case QualityType2014.CariesPrevent_1:
-					return "";
+					return "N/A";
 				case QualityType2014.CariesPrevent_2:
-					return "";
+					return "N/A";
 				case QualityType2014.CariesPrevent_3:
-					return "";
+					return "N/A";
 				case QualityType2014.ChildCaries:
-					return "";
+					return "N/A";
 				default:
 					throw new ApplicationException("Type not found: "+qtype.ToString());
 			}

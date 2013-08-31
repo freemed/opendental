@@ -73,8 +73,13 @@ namespace OpenDentBusiness {
 		///<summary>14</summary>
 		MedReconcile,
 		///<summary>15- Summary of care record for transition or referral.</summary>
-		SummaryOfCare
-
+		SummaryOfCare,
+		///<summary>16</summary>
+		VitalSignsBMIOnly,
+		///<summary>17</summary>
+		VitalSignsBPOnly,
+		///<summary>18</summary>
+		ProvOrderEntryAlt
 	}
 
 	///<summary>Helps track whether the current patient has met the measurement objectives.</summary>

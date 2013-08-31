@@ -73,6 +73,7 @@ namespace OpenDentBusiness {
 		MedicationsEntered,
 		Pneumonia,
 		BloodPressureManage,
+		CariesPrevent,
 		CariesPrevent_1,
 		CariesPrevent_2,
 		CariesPrevent_3,
