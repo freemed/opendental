@@ -292,6 +292,26 @@ namespace OpenDentBusiness {
 			return diseaseDefList;
 		}
 
+		public static bool ContainsSnomed(string snomedCode, long excludeDefNum) {
+			//No need to check RemotingRole; no call to db.
+			for(int i=0;i<ListLong.Length;i++) {
+				if(ListLong[i].SnomedCode==snomedCode && ListLong[i].DiseaseDefNum!=excludeDefNum) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		public static bool ContainsICD9(string icd9Code,long excludeDefNum) {
+			//No need to check RemotingRole; no call to db.
+			for(int i=0;i<ListLong.Length;i++) {
+				if(ListLong[i].ICD9Code==icd9Code && ListLong[i].DiseaseDefNum!=excludeDefNum) {
+					return true;
+				}
+			}
+			return false;
+		}
+
 		/*public static DiseaseDef GetByICD9Code(string ICD9Code) {///<summary>Returns the diseasedef that has a name exactly matching the specified string. Returns null if no match.  Does not match hidden diseases.</summary>
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<List.Length;i++) {
