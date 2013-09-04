@@ -170,6 +170,7 @@
     <Compile Include="Crud\BenefitCrud.cs" />
     <Compile Include="Crud\CanadianNetworkCrud.cs" />
     <Compile Include="Crud\CarrierCrud.cs" />
+    <Compile Include="Crud\CdcrecCrud.cs" />
     <Compile Include="Crud\CentralConnectionCrud.cs" />
     <Compile Include="Crud\ChartViewCrud.cs" />
     <Compile Include="Crud\ClaimAttachCrud.cs" />
@@ -194,6 +195,7 @@
     <Compile Include="Crud\CreditCardCrud.cs" />
     <Compile Include="Crud\CustRefEntryCrud.cs" />
     <Compile Include="Crud\CustReferenceCrud.cs" />
+    <Compile Include="Crud\CvxCrud.cs" />
     <Compile Include="Crud\DashboardARCrud.cs" />
     <Compile Include="Crud\DefCrud.cs" />
     <Compile Include="Crud\DeletedObjectCrud.cs" />
@@ -235,11 +237,13 @@
     <Compile Include="Crud\FormPatCrud.cs" />
     <Compile Include="Crud\GroupPermissionCrud.cs" />
     <Compile Include="Crud\GuardianCrud.cs" />
+    <Compile Include="Crud\HcpcsCrud.cs" />
     <Compile Include="Crud\HL7DefCrud.cs" />
     <Compile Include="Crud\HL7DefFieldCrud.cs" />
     <Compile Include="Crud\HL7DefMessageCrud.cs" />
     <Compile Include="Crud\HL7DefSegmentCrud.cs" />
     <Compile Include="Crud\HL7MsgCrud.cs" />
+    <Compile Include="Crud\Icd10Crud.cs" />
     <Compile Include="Crud\ICD9Crud.cs" />
     <Compile Include="Crud\InsFilingCodeCrud.cs" />
     <Compile Include="Crud\InsFilingCodeSubtypeCrud.cs" />
@@ -346,6 +350,7 @@
     <Compile Include="Crud\SignalodCrud.cs" />
     <Compile Include="Crud\SiteCrud.cs" />
     <Compile Include="Crud\SnomedCrud.cs" />
+    <Compile Include="Crud\SopCrud.cs" />
     <Compile Include="Crud\StatementCrud.cs" />
     <Compile Include="Crud\SupplierCrud.cs" />
     <Compile Include="Crud\SupplyCrud.cs" />
@@ -379,21 +384,25 @@
     <Compile Include="Crud\WikiPageHistCrud.cs" />
     <Compile Include="Crud\XChargeTransactionCrud.cs" />
     <Compile Include="Crud\ZipCodeCrud.cs" />
-    <Compile Include="Data Interface\AdministrativeSex.cs" />
+    <Compile Include="Data Interface\AdministrativeSexs.cs" />
     <Compile Include="Data Interface\Allergies.cs" />
     <Compile Include="Data Interface\AllergyDefs.cs" />
     <Compile Include="Data Interface\ApptFieldDefs.cs" />
     <Compile Include="Data Interface\ApptFields.cs" />
     <Compile Include="Data Interface\AutomationConditions.cs" />
     <Compile Include="Data Interface\Automations.cs" />
+    <Compile Include="Data Interface\Cdcrecs.cs" />
     <Compile Include="Data Interface\CentralConnections.cs" />
     <Compile Include="Data Interface\ChartViews.cs" />
     <Compile Include="Data Interface\CodeSystems.cs" />
+    <Compile Include="Data Interface\Cvxs.cs" />
     <Compile Include="Data Interface\EhrCodes.cs" />
     <Compile Include="Data Interface\EhrNotPerformeds.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Data Interface\FamilyHealths.cs" />
+    <Compile Include="Data Interface\Hcpcses.cs" />
+    <Compile Include="Data Interface\Icd10s.cs" />
     <Compile Include="Data Interface\Interventions.cs" />
     <Compile Include="Data Interface\Loincs.cs" />
     <Compile Include="Data Interface\PatientRaces.cs" />
@@ -401,6 +410,7 @@
     <Compile Include="Data Interface\ResellerServices.cs" />
     <Compile Include="Data Interface\SecurityLogHashes.cs" />
     <Compile Include="Data Interface\Snomeds.cs" />
+    <Compile Include="Data Interface\Sops.cs" />
     <Compile Include="Data Interface\WikiListHeaderWidths.cs" />
     <Compile Include="Data Interface\WikiLists.cs" />
     <Compile Include="Data Interface\CreditCards.cs" />
@@ -797,6 +807,9 @@
     <Compile Include="TableTypes\CentralConnection.cs" />
     <Compile Include="TableTypes\CodeSystem.cs" />
     <Compile Include="TableTypes\Cdcrec.cs" />
+    <Compile Include="TableTypes\Cpt.cs" />
+    <Compile Include="TableTypes\SOP.cs" />
+    <Compile Include="TableTypes\Cvx.cs" />
     <Compile Include="TableTypes\Hcpcs.cs">
       <SubType>Code</SubType>
     </Compile>

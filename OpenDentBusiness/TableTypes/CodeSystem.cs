@@ -17,6 +17,8 @@ namespace OpenDentBusiness{
 		public string VersionAvail;
 		///<summary>Example: 2.16.840.1.113883.6.13</summary>
 		public string HL7OID;
+		///<summary>Notes to display to user. Examples: "CDT codes distributed via program updates.", "CPT codes require purchase and download from www.ama.com</summary>
+		public string Note;
 
 		///<summary></summary>
 		public CodeSystem Clone() {

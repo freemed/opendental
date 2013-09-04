@@ -51,6 +51,7 @@ namespace OpenDentBusiness.Crud{
 				codeSystem.VersionCur    = PIn.String(table.Rows[i]["VersionCur"].ToString());
 				codeSystem.VersionAvail  = PIn.String(table.Rows[i]["VersionAvail"].ToString());
 				codeSystem.HL7OID        = PIn.String(table.Rows[i]["HL7OID"].ToString());
+				codeSystem.Note          = PIn.String(table.Rows[i]["Note"].ToString());
 				retVal.Add(codeSystem);
 			}
 			return retVal;
@@ -91,7 +92,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="CodeSystemNum,";
 			}
-			command+="CodeSystemName,VersionCur,VersionAvail,HL7OID) VALUES(";
+			command+="CodeSystemName,VersionCur,VersionAvail,HL7OID,Note) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(codeSystem.CodeSystemNum)+",";
 			}
@@ -99,7 +100,8 @@ namespace OpenDentBusiness.Crud{
 				 "'"+POut.String(codeSystem.CodeSystemName)+"',"
 				+"'"+POut.String(codeSystem.VersionCur)+"',"
 				+"'"+POut.String(codeSystem.VersionAvail)+"',"
-				+"'"+POut.String(codeSystem.HL7OID)+"')";
+				+"'"+POut.String(codeSystem.HL7OID)+"',"
+				+"'"+POut.String(codeSystem.Note)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -115,7 +117,8 @@ namespace OpenDentBusiness.Crud{
 				+"CodeSystemName= '"+POut.String(codeSystem.CodeSystemName)+"', "
 				+"VersionCur    = '"+POut.String(codeSystem.VersionCur)+"', "
 				+"VersionAvail  = '"+POut.String(codeSystem.VersionAvail)+"', "
-				+"HL7OID        = '"+POut.String(codeSystem.HL7OID)+"' "
+				+"HL7OID        = '"+POut.String(codeSystem.HL7OID)+"', "
+				+"Note          = '"+POut.String(codeSystem.Note)+"' "
 				+"WHERE CodeSystemNum = "+POut.Long(codeSystem.CodeSystemNum);
 			Db.NonQ(command);
 		}
@@ -138,6 +141,10 @@ namespace OpenDentBusiness.Crud{
 			if(codeSystem.HL7OID != oldCodeSystem.HL7OID) {
 				if(command!=""){ command+=",";}
 				command+="HL7OID = '"+POut.String(codeSystem.HL7OID)+"'";
+			}
+			if(codeSystem.Note != oldCodeSystem.Note) {
+				if(command!=""){ command+=",";}
+				command+="Note = '"+POut.String(codeSystem.Note)+"'";
 			}
 			if(command==""){
 				return;

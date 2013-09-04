@@ -3,7 +3,7 @@ using System.Collections;
 using System.Drawing;
 
 namespace OpenDentBusiness {
-	///<summary>Other tables generally use the ICD9Code string as their foreign key.  Currently synched to mobile server in a very inefficient manner.  It is implied that these are all ICD9CMs, although that may not be the case in the future.</summary>
+	///<summary>CDC Race and Ethnicity.  About 200 rows.  This table is only used in our software as a reference for CQMs.</summary>
 	[Serializable]
 	public class Cdcrec:TableBase {
 		///<summary>Primary key.</summary>

@@ -836,86 +836,6 @@ namespace OpenDentBusiness {
 					command=@"CREATE INDEX securityloghash_SecurityLogNum ON securityloghash (SecurityLogNum)";
 					Db.NonQ(command);
 				}
-				//Loinc
-				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="DROP TABLE IF EXISTS loinc";
-					Db.NonQ(command);
-					command=@"CREATE TABLE loinc (
-						LOINCNum bigint NOT NULL auto_increment PRIMARY KEY,
-						LOINCCode varchar(255) NOT NULL,
-						Component varchar(255) NOT NULL,
-						PropertyObserved varchar(255) NOT NULL,
-						TimeAspct varchar(255) NOT NULL,
-						SystemMeasured varchar(255) NOT NULL,
-						ScaleType varchar(255) NOT NULL,
-						MethodType varchar(255) NOT NULL,
-						StatusOfCode varchar(255) NOT NULL,
-						NameShort varchar(255) NOT NULL,
-						ClassType int NOT NULL,
-						UnitsRequired tinyint NOT NULL,
-						OrderObs varchar(255) NOT NULL,
-						HL7FieldSubfieldID varchar(255) NOT NULL,
-						ExternalCopyrightNotice text NOT NULL,
-						NameLongCommon varchar(255) NOT NULL,
-						UnitsUCUM varchar(255) NOT NULL,
-						RankCommonTests int NOT NULL,
-						RankCommonOrders int NOT NULL
-						) DEFAULT CHARSET=utf8";
-					Db.NonQ(command);
-				}
-				else {//oracle
-					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE loinc'; EXCEPTION WHEN OTHERS THEN NULL; END;";
-					Db.NonQ(command);
-					command=@"CREATE TABLE loinc (
-						LOINCNum number(20) NOT NULL,
-						LOINCCode varchar2(255),
-						Component varchar2(255),
-						PropertyObserved varchar2(255),
-						TimeAspct varchar2(255),
-						SystemMeasured varchar2(255),
-						ScaleType varchar2(255),
-						MethodType varchar2(255),
-						StatusOfCode varchar2(255),
-						NameShort varchar2(255),
-						ClassType number(11) NOT NULL,
-						UnitsRequired number(3) NOT NULL,
-						OrderObs varchar2(255),
-						HL7FieldSubfieldID varchar2(255),
-						ExternalCopyrightNotice clob,
-						NameLongCommon varchar2(255),
-						UnitsUCUM varchar2(255),
-						RankCommonTests number(11) NOT NULL,
-						RankCommonOrders number(11) NOT NULL,
-						CONSTRAINT loinc_LOINCNum PRIMARY KEY (LOINCNum)
-						)";
-					Db.NonQ(command);
-				}
-				//snomed
-				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="DROP TABLE IF EXISTS snomed";
-					Db.NonQ(command);
-					command=@"CREATE TABLE snomed (
-						SnomedNum bigint NOT NULL auto_increment PRIMARY KEY,
-						SnomedCode varchar(255) NOT NULL,
-						Description varchar(255) NOT NULL,
-						IsActive tinyint NOT NULL,
-						DateOfStandard date NOT NULL DEFAULT '0001-01-01'
-						) DEFAULT CHARSET=utf8";
-					Db.NonQ(command);
-				}
-				else {//oracle
-					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE snomed'; EXCEPTION WHEN OTHERS THEN NULL; END;";
-					Db.NonQ(command);
-					command=@"CREATE TABLE snomed (
-						SnomedNum number(20) NOT NULL,
-						SnomedCode varchar2(255),
-						Description varchar2(255),
-						IsActive number(3) NOT NULL,
-						DateOfStandard date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
-						CONSTRAINT snomed_SnomedNum PRIMARY KEY (SnomedNum)
-						)";
-					Db.NonQ(command);
-				}
 				//ehrcode
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS ehrcode";
@@ -1050,7 +970,8 @@ namespace OpenDentBusiness {
 						CodeSystemName varchar(255) NOT NULL,
 						VersionCur varchar(255) NOT NULL,
 						VersionAvail varchar(255) NOT NULL,
-						HL7OID varchar(255) NOT NULL
+						HL7OID varchar(255) NOT NULL,
+						Note varchar(255) NOT NULL
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
 				}
@@ -1063,41 +984,46 @@ namespace OpenDentBusiness {
 						VersionCur varchar2(255),
 						VersionAvail varchar2(255),
 						HL7OID varchar2(255),
+						Note varchar2(255),
 						CONSTRAINT codesystem_CodeSystemNum PRIMARY KEY (CodeSystemNum)
 						)";
 					Db.NonQ(command);
 				}
-				command=@"INSERT INTO codeSystem (CodeSystemName,HL7OID) VALUES ('AdministrativeSex','2.16.840.1.113883.18.2')";
+				//No need for mysql/oracle split
+				command=@"INSERT INTO codeSystem (CodeSystemNum,CodeSystemName,HL7OID,VersionAvail,VersionCur,Note) VALUES (1,'AdministrativeSex','2.16.840.1.113883.18.2','HL7v2.5','HL7v2.5','')";
 				Db.NonQ(command);
-				command=@"INSERT INTO codeSystem (CodeSystemName,HL7OID) VALUES ('CDCREC','2.16.840.1.113883.6.238')";
+				command=@"INSERT INTO codeSystem (CodeSystemNum,CodeSystemName,HL7OID) VALUES (2,'CDCREC','2.16.840.1.113883.6.238')";
 				Db.NonQ(command);
-				command=@"INSERT INTO codeSystem (CodeSystemName,HL7OID) VALUES ('CDT','2.16.840.1.113883.6.13')";
+				command=@"INSERT INTO codeSystem (CodeSystemNum,CodeSystemName,HL7OID) VALUES (3,'CDT','2.16.840.1.113883.6.13')";
 				Db.NonQ(command);
-				command=@"INSERT INTO codeSystem (CodeSystemName,HL7OID) VALUES ('CPT','2.16.840.1.113883.6.12')";
+				command=@"INSERT INTO codeSystem (CodeSystemNum,CodeSystemName,HL7OID) VALUES (4,'CPT','2.16.840.1.113883.6.12')";
 				Db.NonQ(command);
-				command=@"INSERT INTO codeSystem (CodeSystemName,HL7OID) VALUES ('CVX','2.16.840.1.113883.12.292')";
+				command=@"INSERT INTO codeSystem (CodeSystemNum,CodeSystemName,HL7OID) VALUES (5,'CVX','2.16.840.1.113883.12.292')";
 				Db.NonQ(command);
-				command=@"INSERT INTO codeSystem (CodeSystemName,HL7OID) VALUES ('HCPCS','2.16.840.1.113883.6.285')";
+				command=@"INSERT INTO codeSystem (CodeSystemNum,CodeSystemName,HL7OID) VALUES (6,'HCPCS','2.16.840.1.113883.6.285')";
 				Db.NonQ(command);
-				command=@"INSERT INTO codeSystem (CodeSystemName,HL7OID) VALUES ('ICD10CM','2.16.840.1.113883.6.90')";
+				command=@"INSERT INTO codeSystem (CodeSystemNum,CodeSystemName,HL7OID) VALUES (7,'ICD10CM','2.16.840.1.113883.6.90')";
 				Db.NonQ(command);
-				command=@"INSERT INTO codeSystem (CodeSystemName,HL7OID) VALUES ('ICD9CM','2.16.840.1.113883.6.103')";
+				command=@"INSERT INTO codeSystem (CodeSystemNum,CodeSystemName,HL7OID) VALUES (8,'ICD9CM','2.16.840.1.113883.6.103')";
 				Db.NonQ(command);
-				command=@"INSERT INTO codeSystem (CodeSystemName,HL7OID) VALUES ('LOINC','2.16.840.1.113883.6.1')";
+				command=@"INSERT INTO codeSystem (CodeSystemNum,CodeSystemName,HL7OID) VALUES (9,'LOINC','2.16.840.1.113883.6.1')";
 				Db.NonQ(command);
-				command=@"INSERT INTO codeSystem (CodeSystemName,HL7OID) VALUES ('RXNORM','2.16.840.1.113883.6.88')";
+				command=@"INSERT INTO codeSystem (CodeSystemNum,CodeSystemName,HL7OID) VALUES (10,'RXNORM','2.16.840.1.113883.6.88')";
 				Db.NonQ(command);
-				command=@"INSERT INTO codeSystem (CodeSystemName,HL7OID) VALUES ('SNOMEDCT','2.16.840.1.113883.6.96')";
+				command=@"INSERT INTO codeSystem (CodeSystemNum,CodeSystemName,HL7OID) VALUES (11,'SNOMEDCT','2.16.840.1.113883.6.96')";
 				Db.NonQ(command);
-				command=@"INSERT INTO codeSystem (CodeSystemName,HL7OID) VALUES ('SOP','2.16.840.1.113883.3.221.5')";
+				command=@"INSERT INTO codeSystem (CodeSystemNum,CodeSystemName,HL7OID) VALUES (12,'SOP','2.16.840.1.113883.3.221.5')";
 				Db.NonQ(command);
+#region Create Code Systems Tables
+				//administrativesex-------------------------------------------------------------------------------------------------------------------
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS administrativesex";
 					Db.NonQ(command);
 					command=@"CREATE TABLE administrativesex (
 							AdministrativeSexNum bigint NOT NULL auto_increment PRIMARY KEY,
 							CodeValue varchar(255) NOT NULL,
-							DescriptionLong varchar(255) NOT NULL
+							Description varchar(255) NOT NULL,
+							INDEX(CodeValue)
 							) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
 				}
@@ -1107,11 +1033,265 @@ namespace OpenDentBusiness {
 					command=@"CREATE TABLE administrativesex (
 							AdministrativeSexNum number(20) NOT NULL,
 							CodeValue varchar2(255),
-							DescriptionLong varchar2(255),
+							Description varchar2(255),
 							CONSTRAINT administrativesex_Administr PRIMARY KEY (AdministrativeSexNum)
 							)";
 					Db.NonQ(command);
+					command=@"CREATE INDEX administrativesex_CodeValue ON intervention (CodeValue)";
+					Db.NonQ(command);
 				}
+				//no need for mysql/Oracle split
+				command="INSERT INTO administrativesex(AdministrativeSexNum,CodeValue,Description) VALUES(1,'F','Female')";
+				Db.NonQ(command);
+				command="INSERT INTO administrativesex(AdministrativeSexNum,CodeValue,Description) VALUES(2,'M','Male')";
+				Db.NonQ(command);
+				command="INSERT INTO administrativesex(AdministrativeSexNum,CodeValue,Description) VALUES(3,'U','Unknown')";
+				Db.NonQ(command);
+				//CDCREC (CDC Race and Ethnicity)-------------------------------------------------------------------------------------------------------------------------
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS cdcrec";
+					Db.NonQ(command);
+					command=@"CREATE TABLE cdcrec (
+						CdcrecNum bigint NOT NULL auto_increment PRIMARY KEY,
+						CdcrecCode varchar(255) NOT NULL,
+						HeirarchicalCode varchar(255) NOT NULL,
+						Description varchar(255) NOT NULL,
+						INDEX(CdcrecCode)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE cdcrec'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE cdcrec (
+						CdcrecNum number(20) NOT NULL,
+						CdcrecCode varchar2(255),
+						HeirarchicalCode varchar2(255),
+						Description varchar2(255),
+						CONSTRAINT cdcrec_CdcrecNum PRIMARY KEY (CdcrecNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX administrativesex_CodeValue ON intervention (CodeValue)";
+					Db.NonQ(command);
+				}
+				//CDT ----------------------------------------------------------------------------------------------------------------------------------------------------
+				//Not neccesary, stored in ProcCode table
+				//CPT (Current Procedure Terminology)---------------------------------------------------------------------------------------------------------------------
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS cpt";
+					Db.NonQ(command);
+					command=@"CREATE TABLE cpt (
+						CptNum bigint NOT NULL auto_increment PRIMARY KEY,
+						CptCode varchar(255) NOT NULL,
+						Description varchar(255) NOT NULL,
+						INDEX(CptCode)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE cpt'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE cpt (
+						CptNum number(20) NOT NULL,
+						CptCode varchar2(255),
+						Description varchar2(255),
+						CONSTRAINT cpt_CptNum PRIMARY KEY (CptNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX cpt_CptCode ON cpt (CptCode)";
+					Db.NonQ(command);
+				}
+				//CVX (Vaccine Administered)------------------------------------------------------------------------------------------------------------------------------
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS cvx";
+					Db.NonQ(command);
+					command=@"CREATE TABLE cvx (
+						CvxNum bigint NOT NULL auto_increment PRIMARY KEY,
+						CvxCode varchar(255) NOT NULL,
+						Description varchar(255) NOT NULL,
+						IsActive varchar(255) NOT NULL,
+						INDEX(CvxCode)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE cvx'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE cvx (
+						CvxNum number(20) NOT NULL,
+						CvxCode varchar2(255),
+						Description varchar2(255),
+						IsActive varchar2(255),
+						CONSTRAINT cvx_CvxNum PRIMARY KEY (CvxNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX cvx_CvxCode ON cvx (CvxCode)";
+					Db.NonQ(command);
+				}
+				//HCPCS (Healhtcare Common Procedure Coding System)-------------------------------------------------------------------------------------------------------
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS hcpcs";
+					Db.NonQ(command);
+					command=@"CREATE TABLE hcpcs (
+						HcpcsNum bigint NOT NULL auto_increment PRIMARY KEY,
+						HcpcsCode varchar(255) NOT NULL,
+						DescriptionShort varchar(255) NOT NULL,
+						INDEX(HcpcsCode)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE hcpcs'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE hcpcs (
+						HcpcsNum number(20) NOT NULL,
+						HcpcsCode varchar2(255),
+						DescriptionShort varchar2(255),
+						CONSTRAINT hcpcs_HcpcsNum PRIMARY KEY (HcpcsNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX hcpcs_HcpcsCode ON hcpcs (HcpcsCode)";
+					Db.NonQ(command);
+				}
+				//ICD10CM International Classification of Diseases, 10th Revision, Clinical Modification------------------------------------------------------------------
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS icd10";
+					Db.NonQ(command);
+					command=@"CREATE TABLE icd10 (
+						Icd10Num bigint NOT NULL auto_increment PRIMARY KEY,
+						Icd10Code varchar(255) NOT NULL,
+						Description varchar(255) NOT NULL,
+						IsCode varchar(255) NOT NULL,
+						INDEX(Icd10Code)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE icd10'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE icd10 (
+						Icd10Num number(20) NOT NULL,
+						Icd10Code varchar2(255),
+						Description varchar2(255),
+						IsCode varchar2(255),
+						CONSTRAINT icd10_Icd10Num PRIMARY KEY (Icd10Num)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX icd10_Icd10Code ON icd10 (Icd10Code)";
+					Db.NonQ(command);
+				}
+				//ICD9CM International Classification of Diseases, 9th Revision, Clinical Modification--------------------------------------------------------------------
+				//Already Exists.
+				//LOINC (Logical Observation Identifier Names and Codes)--------------------------------------------------------------------------------------------------
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS loinc";
+					Db.NonQ(command);
+					command=@"CREATE TABLE loinc (
+						LoincNum bigint NOT NULL auto_increment PRIMARY KEY,
+						LoincCode varchar(255) NOT NULL,
+						Component varchar(255) NOT NULL,
+						PropertyObserved varchar(255) NOT NULL,
+						TimeAspct varchar(255) NOT NULL,
+						SystemMeasured varchar(255) NOT NULL,
+						ScaleType varchar(255) NOT NULL,
+						MethodType varchar(255) NOT NULL,
+						StatusOfCode varchar(255) NOT NULL,
+						NameShort varchar(255) NOT NULL,
+						ClassType int NOT NULL,
+						UnitsRequired tinyint NOT NULL,
+						OrderObs varchar(255) NOT NULL,
+						HL7FieldSubfieldID varchar(255) NOT NULL,
+						ExternalCopyrightNotice text NOT NULL,
+						NameLongCommon varchar(255) NOT NULL,
+						UnitsUCUM varchar(255) NOT NULL,
+						RankCommonTests int NOT NULL,
+						RankCommonOrders int NOT NULL,
+						INDEX(LoincCode)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE loinc'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE loinc (
+						LoincNum number(20) NOT NULL,
+						LoincCode varchar2(255),
+						Component varchar2(255),
+						PropertyObserved varchar2(255),
+						TimeAspct varchar2(255),
+						SystemMeasured varchar2(255),
+						ScaleType varchar2(255),
+						MethodType varchar2(255),
+						StatusOfCode varchar2(255),
+						NameShort varchar2(255),
+						ClassType number(11) NOT NULL,
+						UnitsRequired number(3) NOT NULL,
+						OrderObs varchar2(255),
+						HL7FieldSubfieldID varchar2(255),
+						ExternalCopyrightNotice varchar2(4000),
+						NameLongCommon varchar2(255),
+						UnitsUCUM varchar2(255),
+						RankCommonTests number(11) NOT NULL,
+						RankCommonOrders number(11) NOT NULL,
+						CONSTRAINT loinc_LoincNum PRIMARY KEY (LoincNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX loinc_LoincCode ON loinc (LoincCode)";
+					Db.NonQ(command);
+				}
+				//RXNORM--------------------------------------------------------------------------------------------------------------------------------------------------
+				//Already Exists.
+				//SNOMEDCT (Systematic Nomencalture of Medicine Clinical Terms)-------------------------------------------------------------------------------------------
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS snomed";
+					Db.NonQ(command);
+					command=@"CREATE TABLE snomed (
+						SnomedNum bigint NOT NULL auto_increment PRIMARY KEY,
+						SnomedCode varchar(255) NOT NULL,
+						Description varchar(255) NOT NULL,
+						INDEX(SnomedCode)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE snomed'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE snomed (
+						SnomedNum number(20) NOT NULL,
+						SnomedCode varchar2(255),
+						Description varchar2(255),
+						CONSTRAINT snomed_SnomedNum PRIMARY KEY (SnomedNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX snomed_SnomedCode ON snomed (SnomedCode)";
+					Db.NonQ(command);
+				}
+				//SOP (Source of Payment Typology)------------------------------------------------------------------------------------------------------------------------
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS sop";
+					Db.NonQ(command);
+					command=@"CREATE TABLE sop (
+						SopNum bigint NOT NULL auto_increment PRIMARY KEY,
+						SopCode varchar(255) NOT NULL,
+						Description varchar(255) NOT NULL,
+						INDEX(SopCode)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE sop'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE sop (
+						SopNum number(20) NOT NULL,
+						SopCode varchar2(255),
+						Description varchar2(255),
+						CONSTRAINT sop_SopNum PRIMARY KEY (SopNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX sop_SopCode ON sop (SopCode)";
+					Db.NonQ(command);
+				}
+#endregion
 				command="ALTER TABLE emailaddress CHANGE SMTPserverIncoming Pop3ServerIncoming varchar(255) NOT NULL";//Oracle compatible too.
 				Db.NonQ(command);
 				if(DataConnection.DBtype==DatabaseType.MySql) {
@@ -1228,4 +1408,23 @@ namespace OpenDentBusiness {
 
 
 
-				
+
+				/*				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE administrativesex ADD Description varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE administrativesex ADD Description varchar2(255)";
+					Db.NonQ(command);
+				}
+				*/
+
+				/*				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE icd10 ADD IsCode varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE icd10 ADD IsCode varchar2(255)";
+					Db.NonQ(command);
+				}
+				*/

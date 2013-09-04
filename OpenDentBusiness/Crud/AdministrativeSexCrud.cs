@@ -48,7 +48,7 @@ namespace OpenDentBusiness.Crud{
 				administrativeSex=new AdministrativeSex();
 				administrativeSex.AdministrativeSexNum= PIn.Long  (table.Rows[i]["AdministrativeSexNum"].ToString());
 				administrativeSex.CodeValue           = PIn.String(table.Rows[i]["CodeValue"].ToString());
-				administrativeSex.DescriptionLong     = PIn.String(table.Rows[i]["DescriptionLong"].ToString());
+				administrativeSex.Description         = PIn.String(table.Rows[i]["Description"].ToString());
 				retVal.Add(administrativeSex);
 			}
 			return retVal;
@@ -89,13 +89,13 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="AdministrativeSexNum,";
 			}
-			command+="CodeValue,DescriptionLong) VALUES(";
+			command+="CodeValue,Description) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(administrativeSex.AdministrativeSexNum)+",";
 			}
 			command+=
 				 "'"+POut.String(administrativeSex.CodeValue)+"',"
-				+"'"+POut.String(administrativeSex.DescriptionLong)+"')";
+				+"'"+POut.String(administrativeSex.Description)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -109,7 +109,7 @@ namespace OpenDentBusiness.Crud{
 		public static void Update(AdministrativeSex administrativeSex){
 			string command="UPDATE administrativesex SET "
 				+"CodeValue           = '"+POut.String(administrativeSex.CodeValue)+"', "
-				+"DescriptionLong     = '"+POut.String(administrativeSex.DescriptionLong)+"' "
+				+"Description         = '"+POut.String(administrativeSex.Description)+"' "
 				+"WHERE AdministrativeSexNum = "+POut.Long(administrativeSex.AdministrativeSexNum);
 			Db.NonQ(command);
 		}
@@ -121,9 +121,9 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="CodeValue = '"+POut.String(administrativeSex.CodeValue)+"'";
 			}
-			if(administrativeSex.DescriptionLong != oldAdministrativeSex.DescriptionLong) {
+			if(administrativeSex.Description != oldAdministrativeSex.Description) {
 				if(command!=""){ command+=",";}
-				command+="DescriptionLong = '"+POut.String(administrativeSex.DescriptionLong)+"'";
+				command+="Description = '"+POut.String(administrativeSex.Description)+"'";
 			}
 			if(command==""){
 				return;

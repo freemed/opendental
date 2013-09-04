@@ -102,9 +102,10 @@ namespace OpenDental{
 			this.butHCPCS.CornerRadius = 4F;
 			this.butHCPCS.Location = new System.Drawing.Point(12, 370);
 			this.butHCPCS.Name = "butHCPCS";
-			this.butHCPCS.Size = new System.Drawing.Size(127, 24);
+			this.butHCPCS.Size = new System.Drawing.Size(143, 24);
 			this.butHCPCS.TabIndex = 29;
-			this.butHCPCS.Text = "Ryan\'s Tool for HCPCS";
+			this.butHCPCS.Text = "Ryan\'s Tool for SNOMEDs";
+			this.butHCPCS.Click += new System.EventHandler(this.butHCPCS_Click);
 			// 
 			// FormCodeSystemsImport
 			// 

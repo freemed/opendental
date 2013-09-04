@@ -56,7 +56,7 @@ namespace OpenDentBusiness{
 			return false;
 		}
 
-		///<summary>Truncates the current rxnorm and refills based on the rxnorm.zip resource.  May take a few seconds.</summary>
+		///<summary>Depricated. Truncates the current rxnorm and refills based on the rxnorm.zip resource.  May take a few seconds.</summary>
 		public static void CreateFreshRxNormTableFromZip() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod());
@@ -143,6 +143,29 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<RxNorm>(MethodBase.GetCurrentMethod(),rxNormNum);
 			}
 			return Crud.RxNormCrud.SelectOne(rxNormNum);
+		}
+
+		///<summary></summary>
+		public static long Insert(RxNorm rxNorm) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				rxNorm.RxNormNum=Meth.GetLong(MethodBase.GetCurrentMethod(),rxNorm);
+				return rxNorm.RxNormNum;
+			}
+			return Crud.RxNormCrud.Insert(rxNorm);
+		}
+
+		///<summary>Returns a list of just the codes for use in update or insert logic.</summary>
+		public static List<string> GetAllCodes() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<string>>(MethodBase.GetCurrentMethod());
+			}
+			List<string> retVal=new List<string>();
+			string command="SELECT RxCui FROM rxnorm";//will return some duplicates due to the nature of the data in the table. This is acceptable.
+			DataTable table=DataCore.GetTable(command);
+			foreach(DataRow row in table.Rows) {
+				retVal.Add(row.ItemArray[0].ToString());
+			}
+			return retVal;
 		}
 
 		/*

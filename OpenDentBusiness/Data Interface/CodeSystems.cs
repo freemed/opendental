@@ -11,37 +11,13 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class CodeSystems{
 
-		///<summary>Returns a hard coded list of code systems available for current version. Adding codes to this list also requires codes to be added to Webservice.</summary>
+		///<summary>Returns a list of code all systems In the code system table.</summary>
 		public static List<CodeSystem> GetForCurrentVersion() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<CodeSystem>>(MethodBase.GetCurrentMethod());
 			}
-			//Hard Coded list prevents users from "spoofing" code systems for use in the code system import window by adding them to the table.
-			List<CodeSystem> retVal=new List<CodeSystem>();
-			retVal.Add(new CodeSystem("AdministrativeSex"));
-			retVal.Add(new CodeSystem("CDCREC"));
-			retVal.Add(new CodeSystem("CDT"));//already provided using procedure code tools
-			retVal.Add(new CodeSystem("CPT"));
-			retVal.Add(new CodeSystem("CVX"));
-			retVal.Add(new CodeSystem("HCPCS"));
-			retVal.Add(new CodeSystem("ICD10CM"));
-			retVal.Add(new CodeSystem("ICD9CM"));//different than our old icd9 codes.
-			retVal.Add(new CodeSystem("LOINC"));
-			retVal.Add(new CodeSystem("RxNorm"));
-			retVal.Add(new CodeSystem("SNOMEDCT"));
-			retVal.Add(new CodeSystem("SOP"));
-			retVal.Add(new CodeSystem("UCUM???"));
-			retVal.Add(new CodeSystem("ThisOneDoesntExistOnTheServer"));
-			string command="SELECT * FROM codesystem";
-			List<CodeSystem> listCodeSystemsDB=Crud.CodeSystemCrud.SelectMany(command);
-			for(int i=0;i<retVal.Count;i++) {
-				for(int j=0;j<listCodeSystemsDB.Count;j++) {
-					if(retVal[i].CodeSystemName==listCodeSystemsDB[j].CodeSystemName) {
-						retVal[i]=listCodeSystemsDB[j];//updates retVal with values from the DB, to include current version and version available.
-					}
-				}
-			}
-			return retVal;
+			string command="SELECT * FROM codesystem WHERE codesystemname!='AdministrativeSex'";
+			return Crud.CodeSystemCrud.SelectMany(command);
 		}
 
 		///<summary></summary>
@@ -53,7 +29,7 @@ namespace OpenDentBusiness{
 			Crud.CodeSystemCrud.Update(codeSystem);
 		}
 
-		///<summary>Updates VersionCurrent to the VersionAvail of the codeSystem object passed in. Used by code system importer.</summary>
+		///<summary>Updates VersionCurrent to the VersionAvail of the codeSystem object passed in. Used by code system importer after successful import.</summary>
 		public static void UpdateCurrentVersion(CodeSystem codeSystem) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),codeSystem);
@@ -63,52 +39,197 @@ namespace OpenDentBusiness{
 			Crud.CodeSystemCrud.Update(codeSystem);
 		}
 
-		///<summary>Called after file is downloaded.Drops Table, Creates Table, Imports codes. Throws exceptions.</summary>
-		public static void ImportAdministrativeSex() {
-			//Dropping and refilling table is much faster and should be safe since we never reference primary keys, only CodeValue.
-			string command="";
-			if(DataConnection.DBtype==DatabaseType.MySql) {
-				command="DROP TABLE IF EXISTS administrativesex";
-				Db.NonQ(command);
-				command=@"CREATE TABLE administrativesex (
-							AdministrativeSexNum bigint NOT NULL auto_increment PRIMARY KEY,
-							CodeValue varchar(255) NOT NULL,
-							DescriptionLong varchar(255) NOT NULL
-							) DEFAULT CHARSET=utf8";
-				Db.NonQ(command);
-			}
-			else {//oracle
-				command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE administrativesex'; EXCEPTION WHEN OTHERS THEN NULL; END;";
-				Db.NonQ(command);
-				command=@"CREATE TABLE administrativesex (
-							AdministrativeSexNum number(20) NOT NULL,
-							CodeValue varchar2(255),
-							DescriptionLong varchar2(255),
-							CONSTRAINT administrativesex_Administr PRIMARY KEY (AdministrativeSexNum)
-							)";
-				Db.NonQ(command);
-			}
-			string destDir=ImageStore.GetPreferredAtoZpath();
-			if(destDir==null) {//Not using A to Z folders?
-				destDir=Path.GetTempPath();
-			}
-			//Path.GetTempFileName
-			string filepath=@"c:\OpenDentImages\CodeSystems\AdministrativeSex.txt";//TODO:point this to the AtoZimages folder to import codes.
-			string[] lines=File.ReadAllLines("");
+		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
+	//public static void ImportAdministrativeSex(string tempFileName) ... not necessary.
 
-
-			System.IO.StreamReader sr=new System.IO.StreamReader(filepath);
-			sr.Peek();
-			//Import AdministrativeSex Codes----------------------------------------------------------------------------------------------------------
-			string[] arrayAdministrativeSex;
-			AdministrativeSex administrativeSexTemp=new AdministrativeSex();
-			while(!sr.EndOfStream) {//each loop should read exactly one line of code. and each line of code should be a unique LOINC code
-				arrayAdministrativeSex=sr.ReadLine().Split('\t');
-				administrativeSexTemp.CodeValue				=arrayAdministrativeSex[0];
-				administrativeSexTemp.DescriptionLong	=arrayAdministrativeSex[1];
-				AdministrativeSexes.Insert(administrativeSexTemp);
+		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
+		public static void ImportCdcrec(string tempFileName) {
+			List<string> codeList=Cdcrecs.GetAllCodes();
+			string[] lines=File.ReadAllLines(tempFileName);
+			string[] arrayCDCREC;
+			Cdcrec cdcrecTemp=new Cdcrec();
+			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
+				arrayCDCREC=lines[i].Split('\t');
+				if(codeList.Contains(arrayCDCREC[0])){//code already existed
+					continue;
+				}
+				cdcrecTemp.CdcrecCode				=arrayCDCREC[0];
+				cdcrecTemp.HeirarchicalCode	=arrayCDCREC[1];
+				cdcrecTemp.Description			=arrayCDCREC[2];
+				Cdcrecs.Insert(cdcrecTemp);
 			}
-			//TODO: delete code file?
+			File.Delete(tempFileName);
+		}
+
+		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
+	//public static void ImportCDT(string tempFileName) ... not necessary.
+
+		///<summary>Called after user provides resource file.  Throws exceptions.</summary>
+		public static void ImportCpt(string tempFileName) {
+			throw new Exception("Not Implemented.");
+			//handled differently because users must download and provide resource files independantly
+		}
+
+		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
+		public static void ImportCvx(string tempFileName) {
+			List<string> codeList=Cvxs.GetAllCodes();
+			string[] lines=File.ReadAllLines(tempFileName);
+			string[] arrayCvx;
+			Cvx cvxTemp=new Cvx();
+			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
+				arrayCvx=lines[i].Split('\t');
+				if(codeList.Contains(arrayCvx[0])) {//code already exists
+					continue;
+				}
+				cvxTemp.CvxCode			=arrayCvx[0];
+				cvxTemp.Description	=arrayCvx[1];
+				Cvxs.Insert(cvxTemp);
+			}
+			File.Delete(tempFileName);
+		}
+
+		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
+		public static void ImportHcpcs(string tempFileName) {
+			List<string> codeList=Hcpcses.GetAllCodes();
+			string[] lines=File.ReadAllLines(tempFileName);
+			string[] arrayHCPCS;
+			Hcpcs hcpcsTemp=new Hcpcs();
+			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
+				arrayHCPCS=lines[i].Split('\t');
+				if(codeList.Contains(arrayHCPCS[0])) {//code already exists
+					continue;
+				}
+				hcpcsTemp.HcpcsCode					=arrayHCPCS[0];
+				hcpcsTemp.DescriptionShort	=arrayHCPCS[1];
+				Hcpcses.Insert(hcpcsTemp);
+			}
+			File.Delete(tempFileName);
+		}
+
+		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
+		public static void ImportIcd10(string tempFileName) {
+			List<string> codeList=Icd10s.GetAllCodes();
+			string[] lines=File.ReadAllLines(tempFileName);
+			string[] arrayICD10;
+			Icd10 icd10Temp=new Icd10();
+			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
+				arrayICD10=lines[i].Split('\t');
+				if(codeList.Contains(arrayICD10[0])) {//code already exists
+					continue;
+				}
+				icd10Temp.Icd10Code		=arrayICD10[0];
+				icd10Temp.Description	=arrayICD10[1];
+				icd10Temp.IsCode		=arrayICD10[2];
+				Icd10s.Insert(icd10Temp);
+			}
+			File.Delete(tempFileName);
+		}
+
+		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
+		public static void ImportIcd9(string tempFileName) {
+			List<string> codeList=ICD9s.GetAllCodes();
+			string[] lines=File.ReadAllLines(tempFileName);
+			string[] arrayICD9;
+			ICD9 icd9Temp=new ICD9();
+			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
+				arrayICD9=lines[i].Split('\t');
+				if(codeList.Contains(arrayICD9[0])) {//code already exists
+					continue;
+				}
+				icd9Temp.ICD9Code		=arrayICD9[0];
+				icd9Temp.Description=arrayICD9[1];
+				ICD9s.Insert(icd9Temp);
+			}
+			File.Delete(tempFileName);
+		}
+
+		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
+		public static void ImportLoinc(string tempFileName) {
+			List<string> codeList=Loincs.GetAllCodes();
+			string[] lines=File.ReadAllLines(tempFileName);
+			string[] arrayLoinc;
+			Loinc loincTemp=new Loinc();
+			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
+				arrayLoinc=lines[i].Split('\t');
+				if(codeList.Contains(arrayLoinc[0])) {//code already exists
+					continue;
+				}
+				loincTemp.LoincCode								=arrayLoinc[0];
+				loincTemp.Component								=arrayLoinc[1];
+				loincTemp.PropertyObserved				=arrayLoinc[2];
+				loincTemp.TimeAspct								=arrayLoinc[3];
+				loincTemp.SystemMeasured					=arrayLoinc[4];
+				loincTemp.ScaleType								=arrayLoinc[5];
+				loincTemp.MethodType							=arrayLoinc[6];
+				loincTemp.StatusOfCode						=arrayLoinc[7];
+				loincTemp.NameShort								=arrayLoinc[8];
+				loincTemp.ClassType								=PIn.Int(arrayLoinc[9]);
+				loincTemp.UnitsRequired						=arrayLoinc[10]=="Y";
+				loincTemp.OrderObs								=arrayLoinc[11];
+				loincTemp.HL7FieldSubfieldID			=arrayLoinc[12];
+				loincTemp.ExternalCopyrightNotice	=arrayLoinc[13];
+				loincTemp.NameLongCommon					=arrayLoinc[14];
+				loincTemp.UnitsUCUM								=arrayLoinc[15];
+				loincTemp.RankCommonTests					=PIn.Int(arrayLoinc[16]);
+				loincTemp.RankCommonOrders				=PIn.Int(arrayLoinc[17]);
+				Loincs.Insert(loincTemp);
+			}
+			File.Delete(tempFileName);
+		}
+
+		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
+		public static void ImportRxNorm(string tempFileName) {
+			List<string> codeList=RxNorms.GetAllCodes();
+			string[] lines=File.ReadAllLines(tempFileName);
+			string[] arrayRxNorm;
+			RxNorm rxNormTemp=new RxNorm();
+			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
+				arrayRxNorm=lines[i].Split('\t');
+				if(codeList.Contains(arrayRxNorm[0])) {//code already exists
+					continue;
+				}
+				rxNormTemp.RxCui				=arrayRxNorm[0];
+				rxNormTemp.MmslCode			=arrayRxNorm[1];
+				rxNormTemp.Description	=arrayRxNorm[2];
+				RxNorms.Insert(rxNormTemp);
+			}
+			File.Delete(tempFileName);
+		}
+
+		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
+		public static void ImportSnomed(string tempFileName) {
+			List<string> codeList=Snomeds.GetAllCodes();
+			string[] lines=File.ReadAllLines(tempFileName);
+			string[] arraySnomed;
+			Snomed snomedTemp=new Snomed();
+			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
+				arraySnomed=lines[i].Split('\t');
+				if(codeList.Contains(arraySnomed[0])) {//code already exists
+					continue;
+				}
+				snomedTemp.SnomedCode		=arraySnomed[0];
+				snomedTemp.Description	=arraySnomed[1];
+				Snomeds.Insert(snomedTemp);
+			}
+			File.Delete(tempFileName);
+		}
+
+		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
+		public static void ImportSop(string tempFileName) {
+			List<string> codeList=Sops.GetAllCodes();
+			string[] lines=File.ReadAllLines(tempFileName);
+			string[] arraySop;
+			Sop sopTemp=new Sop();
+			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
+				arraySop=lines[i].Split('\t');
+				if(codeList.Contains(arraySop[0])) {//code already exists
+					continue;
+				}
+				sopTemp.SopCode			=arraySop[0];
+				sopTemp.Description	=arraySop[1];
+				Sops.Insert(sopTemp);
+			}
+			File.Delete(tempFileName);
 		}
 
 

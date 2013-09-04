@@ -60,9 +60,9 @@ namespace OpenDental {
 			for(int i=0;i<SnomedList.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(SnomedList[i].SnomedCode);
-				row.Cells.Add((SnomedList[i].IsActive?"":"X"));//IsActive==NotDepricated
+				row.Cells.Add("");//IsActive==NotDepricated
 				row.Cells.Add(SnomedList[i].Description);
-				row.Cells.Add(SnomedList[i].DateOfStandard.ToShortDateString());
+				row.Cells.Add("");
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
@@ -119,8 +119,8 @@ namespace OpenDental {
 					snomed=new Snomed();
 					snomed.SnomedCode=fields[4];
 					snomed.Description=fields[7];
-					snomed.DateOfStandard=PIn.Date(""+fields[1].Substring(4,2)+"/"+fields[1].Substring(6,2)+"/"+fields[1].Substring(0,4));//format from yyyyMMdd to MM/dd/yyyy
-					snomed.IsActive=(fields[2]=="1");//true if column equals 1, false if column equals 0 or anything else.
+					//snomed.DateOfStandard=DateTime.MinValue();//=PIn.Date(""+fields[1].Substring(4,2)+"/"+fields[1].Substring(6,2)+"/"+fields[1].Substring(0,4));//format from yyyyMMdd to MM/dd/yyyy
+					//snomed.IsActive=(fields[2]=="1");//true if column equals 1, false if column equals 0 or anything else.
 					Snomeds.Insert(snomed);
 				}
 			}

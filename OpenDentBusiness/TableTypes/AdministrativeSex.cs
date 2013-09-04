@@ -12,7 +12,7 @@ namespace OpenDentBusiness{
 		///<summary>Codes used in this code system. M, F, or U</summary>
 		public string CodeValue;
 		///<summary>Long description of the code.</summary>
-		public string DescriptionLong;
+		public string Description;
 
 		///<summary></summary>
 		public AdministrativeSex Clone() {

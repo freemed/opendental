@@ -40,7 +40,7 @@ namespace OpenDentBusiness{
 		public string OrderObs;
 		///<summary>A value in this field means that the content should be delivered in the named field/subfield of the HL7 message. When NULL, the data for this data element should be sent in an OBX segment with this LOINC code stored in OBX-3 and with the value in the OBX-5. Width 50. LOINC244 column 32.</summary>
 		public string HL7FieldSubfieldID;//HL7_Field_Subfield_ID;
-		///<summary>External copyright holders copyright notice for this LOINC code. LOINC244 column 33.</summary>
+		///<summary>External copyright holders copyright notice for this LOINC code. LOINC244 column 33.  Colwidth=4000.</summary>
 		public string ExternalCopyrightNotice;//External_Copyright_Notice;
 		///<summary>This field contains the LOINC term in a more readable format than the fully specified name. The long common names have been created via a table driven algorithmic process. Most abbreviations and acronyms that are used in the LOINC database have been fully spelled out in English. Width 255. LOINC244 column 35.</summary>
 		public string NameLongCommon;//LONG_COMMON_NAME;

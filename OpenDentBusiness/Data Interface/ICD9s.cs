@@ -182,5 +182,19 @@ namespace OpenDentBusiness{
 			}
 			return null;
 		}
+
+		///<summary>Returns a list of just the codes for use in update or insert logic.</summary>
+		public static List<string> GetAllCodes() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<string>>(MethodBase.GetCurrentMethod());
+			}
+			List<string> retVal=new List<string>();
+			string command="SELECT icd9code FROM icd9";
+			DataTable table=DataCore.GetTable(command);
+			foreach(DataRow row in table.Rows) {
+				retVal.Add(row.ItemArray[0].ToString());
+			}
+			return retVal;
+		}
 	}
 }

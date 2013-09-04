@@ -91,6 +91,20 @@ namespace OpenDentBusiness{
 			return;
 		}
 
+		///<summary>Returns a list of just the codes for use in update or insert logic.</summary>
+		public static List<string> GetAllCodes() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<string>>(MethodBase.GetCurrentMethod());
+			}
+			List<string> retVal=new List<string>();
+			string command="SELECT LoincCode FROM loinc";
+			DataTable table=DataCore.GetTable(command);
+			foreach(DataRow row in table.Rows) {
+				retVal.Add(row.ItemArray[0].ToString());
+			}
+			return retVal;
+		}
+
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 

@@ -123,20 +123,16 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Bool  (loinc.UnitsRequired)+","
 				+"'"+POut.String(loinc.OrderObs)+"',"
 				+"'"+POut.String(loinc.HL7FieldSubfieldID)+"',"
-				+DbHelper.ParamChar+"paramExternalCopyrightNotice,"
+				+"'"+POut.String(loinc.ExternalCopyrightNotice)+"',"
 				+"'"+POut.String(loinc.NameLongCommon)+"',"
 				+"'"+POut.String(loinc.UnitsUCUM)+"',"
 				+    POut.Int   (loinc.RankCommonTests)+","
 				+    POut.Int   (loinc.RankCommonOrders)+")";
-			if(loinc.ExternalCopyrightNotice==null) {
-				loinc.ExternalCopyrightNotice="";
-			}
-			OdSqlParameter paramExternalCopyrightNotice=new OdSqlParameter("paramExternalCopyrightNotice",OdDbType.Text,loinc.ExternalCopyrightNotice);
 			if(useExistingPK || PrefC.RandomKeys) {
-				Db.NonQ(command,paramExternalCopyrightNotice);
+				Db.NonQ(command);
 			}
 			else {
-				loinc.LoincNum=Db.NonQ(command,true,paramExternalCopyrightNotice);
+				loinc.LoincNum=Db.NonQ(command,true);
 			}
 			return loinc.LoincNum;
 		}
@@ -157,17 +153,13 @@ namespace OpenDentBusiness.Crud{
 				+"UnitsRequired          =  "+POut.Bool  (loinc.UnitsRequired)+", "
 				+"OrderObs               = '"+POut.String(loinc.OrderObs)+"', "
 				+"HL7FieldSubfieldID     = '"+POut.String(loinc.HL7FieldSubfieldID)+"', "
-				+"ExternalCopyrightNotice=  "+DbHelper.ParamChar+"paramExternalCopyrightNotice, "
+				+"ExternalCopyrightNotice= '"+POut.String(loinc.ExternalCopyrightNotice)+"', "
 				+"NameLongCommon         = '"+POut.String(loinc.NameLongCommon)+"', "
 				+"UnitsUCUM              = '"+POut.String(loinc.UnitsUCUM)+"', "
 				+"RankCommonTests        =  "+POut.Int   (loinc.RankCommonTests)+", "
 				+"RankCommonOrders       =  "+POut.Int   (loinc.RankCommonOrders)+" "
 				+"WHERE LoincNum = "+POut.Long(loinc.LoincNum);
-			if(loinc.ExternalCopyrightNotice==null) {
-				loinc.ExternalCopyrightNotice="";
-			}
-			OdSqlParameter paramExternalCopyrightNotice=new OdSqlParameter("paramExternalCopyrightNotice",OdDbType.Text,loinc.ExternalCopyrightNotice);
-			Db.NonQ(command,paramExternalCopyrightNotice);
+			Db.NonQ(command);
 		}
 
 		///<summary>Updates one Loinc in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
@@ -227,7 +219,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(loinc.ExternalCopyrightNotice != oldLoinc.ExternalCopyrightNotice) {
 				if(command!=""){ command+=",";}
-				command+="ExternalCopyrightNotice = "+DbHelper.ParamChar+"paramExternalCopyrightNotice";
+				command+="ExternalCopyrightNotice = '"+POut.String(loinc.ExternalCopyrightNotice)+"'";
 			}
 			if(loinc.NameLongCommon != oldLoinc.NameLongCommon) {
 				if(command!=""){ command+=",";}
@@ -248,13 +240,9 @@ namespace OpenDentBusiness.Crud{
 			if(command==""){
 				return;
 			}
-			if(loinc.ExternalCopyrightNotice==null) {
-				loinc.ExternalCopyrightNotice="";
-			}
-			OdSqlParameter paramExternalCopyrightNotice=new OdSqlParameter("paramExternalCopyrightNotice",OdDbType.Text,loinc.ExternalCopyrightNotice);
 			command="UPDATE loinc SET "+command
 				+" WHERE LoincNum = "+POut.Long(loinc.LoincNum);
-			Db.NonQ(command,paramExternalCopyrightNotice);
+			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one Loinc from the database.</summary>
