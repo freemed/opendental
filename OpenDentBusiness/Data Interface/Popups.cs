@@ -47,6 +47,7 @@ namespace OpenDentBusiness{
 				command+="OR PatNum IN (SELECT PatNum FROM patient "
 					+"WHERE SuperFamily = "+POut.Long(pat.SuperFamily)+") ";
 			}
+			command+="ORDER BY PatNum";
 			return Crud.PopupCrud.SelectMany(command);
 		}
 
