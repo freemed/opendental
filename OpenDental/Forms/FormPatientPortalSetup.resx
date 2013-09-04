@@ -118,13 +118,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="label1.Text" xml:space="preserve">
-    <value>This will be the link that patient's will use to reach your office's patient portal that you are hosting.
-Example: https://93.24.120.12/GWT/PatientPortal/PatientPortal.html
+    <value>This will be the link that patients will use to reach your office's patient portal that you are hosting.
+This is also the URL that will be on the printout given to patients. 
+Example: https://93.24.120.12/OpenDental/OpenDentalWebService/GWT/PatientPortal/PatientPortal.html
 
-- A certificate will need to be installed so that patients will not get an untrusted site error.
-- A port on your router will need to be forwarded so that patients can access this page from outside the dental office.
 - Some offices might use a shorter URL that redirects traffic to the PatientPortal.html page. 
 Example: https://www.myoffice.com/login.html
+
+If hosting your own Patient Portal:
+- A certificate will need to be installed so that patients will not get an untrusted site error.
+- A port on your router will need to be forwarded so that patients can access this page from outside the dental office.
 
 For more information, see our online manual.</value>
   </data>

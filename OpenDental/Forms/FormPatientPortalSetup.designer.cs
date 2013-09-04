@@ -29,12 +29,16 @@ namespace OpenDental{
 			this.label5 = new System.Windows.Forms.Label();
 			this.textPatientPortalURL = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
+			this.label2 = new System.Windows.Forms.Label();
+			this.buttonGetURL = new System.Windows.Forms.Button();
+			this.label3 = new System.Windows.Forms.Label();
+			this.textOpenDentalURl = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
 			// 
 			// butOK
 			// 
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Location = new System.Drawing.Point(533, 197);
+			this.butOK.Location = new System.Drawing.Point(531, 294);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75, 23);
 			this.butOK.TabIndex = 2;
@@ -45,7 +49,7 @@ namespace OpenDental{
 			// butCancel
 			// 
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Location = new System.Drawing.Point(615, 197);
+			this.butCancel.Location = new System.Drawing.Point(613, 294);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 23);
 			this.butCancel.TabIndex = 3;
@@ -55,7 +59,7 @@ namespace OpenDental{
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(23, 34);
+			this.label5.Location = new System.Drawing.Point(12, 98);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(100, 17);
 			this.label5.TabIndex = 31;
@@ -64,23 +68,68 @@ namespace OpenDental{
 			// 
 			// textPatientPortalURL
 			// 
-			this.textPatientPortalURL.Location = new System.Drawing.Point(129, 33);
+			this.textPatientPortalURL.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.textPatientPortalURL.Location = new System.Drawing.Point(118, 97);
 			this.textPatientPortalURL.Name = "textPatientPortalURL";
 			this.textPatientPortalURL.Size = new System.Drawing.Size(561, 20);
 			this.textPatientPortalURL.TabIndex = 30;
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(126, 56);
+			this.label1.Location = new System.Drawing.Point(115, 120);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(564, 139);
+			this.label1.Size = new System.Drawing.Size(564, 171);
 			this.label1.TabIndex = 39;
 			this.label1.Text = resources.GetString("label1.Text");
+			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(12, 26);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(100, 17);
+			this.label2.TabIndex = 40;
+			this.label2.Text = "Open Dental URL";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// buttonGetURL
+			// 
+			this.buttonGetURL.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.buttonGetURL.Location = new System.Drawing.Point(604, 23);
+			this.buttonGetURL.Name = "buttonGetURL";
+			this.buttonGetURL.Size = new System.Drawing.Size(75, 23);
+			this.buttonGetURL.TabIndex = 41;
+			this.buttonGetURL.Text = "Get URL";
+			this.buttonGetURL.UseVisualStyleBackColor = true;
+			this.buttonGetURL.Click += new System.EventHandler(this.buttonGetURL_Click);
+			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(118, 48);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(589, 37);
+			this.label3.TabIndex = 42;
+			this.label3.Text = "Only used when Open Dental is hosting your patient portal.  \r\nThis is the URL tha" +
+    "t patients need to use to access their portal OR this is the URL to which any re" +
+    "directs need to point.";
+			// 
+			// textOpenDentalURl
+			// 
+			this.textOpenDentalURl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.textOpenDentalURl.Location = new System.Drawing.Point(118, 25);
+			this.textOpenDentalURl.Name = "textOpenDentalURl";
+			this.textOpenDentalURl.Size = new System.Drawing.Size(480, 20);
+			this.textOpenDentalURl.TabIndex = 43;
 			// 
 			// FormPatientPortalSetup
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(711, 232);
+			this.ClientSize = new System.Drawing.Size(709, 329);
+			this.Controls.Add(this.textOpenDentalURl);
+			this.Controls.Add(this.label3);
+			this.Controls.Add(this.buttonGetURL);
+			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.label5);
 			this.Controls.Add(this.textPatientPortalURL);
@@ -102,6 +151,10 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.TextBox textPatientPortalURL;
 		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.Button buttonGetURL;
+		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.TextBox textOpenDentalURl;
 
 	}
 }
