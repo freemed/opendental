@@ -32,6 +32,9 @@ namespace OpenDentBusiness{
 				}
 				retVal[i].NumeratorExplain=GetNumeratorExplain(retVal[i].MeasureType);
 				retVal[i].DenominatorExplain=GetDenominatorExplain(retVal[i].MeasureType);
+				retVal[i].ExclusionExplain=GetExclusionExplain(retVal[i].MeasureType);
+				retVal[i].ExclusionCount=GetExclusionCount(retVal[i].MeasureType,dateStart,dateEnd,provNum);
+				retVal[i].ExclusionCountDescript=GetExclusionCountDescript(retVal[i].MeasureType);
 				s.Stop();
 				retVal[i].ElapsedTime=s.Elapsed;
 			}
@@ -65,7 +68,9 @@ namespace OpenDentBusiness{
 					return "Provide patients with timely electronic access to their health information (including lab results, problem list, medication lists, medication allergies) within four business days of the information being available to the EP";
 				case EhrMeasureType.ProvOrderEntry:
 					return "Use CPOE for medication orders directly entered by any licensed healthcare professional who can enter orders into the medical record per state, local and professional guidelines.";
-				case EhrMeasureType.ProvOrderEntryAlt:
+				case EhrMeasureType.CPOE_MedOrdersOnly:
+					return "Use CPOE for medication orders directly entered by any licensed healthcare professional who can enter orders into the medical record per state, local and professional guidelines.";
+				case EhrMeasureType.CPOE_PreviouslyOrdered:
 					return "Use CPOE for medication orders directly entered by any licensed healthcare professional who can enter orders into the medical record per state, local and professional guidelines.";
 				case EhrMeasureType.Rx:
 					return "Generate and transmit permissible prescriptions electronically (eRx).";
@@ -99,6 +104,8 @@ namespace OpenDentBusiness{
 			switch(mtype) {
 				case EhrMeasureType.ProblemList:
 					return "More than 80% of all unique patients seen by the Provider have at least one entry or an indication that no problems are known for the patient recorded as structured data.";
+					//Leaving original wording so change will not require re-testing to meet 2011 certification.  The wording below may be used in 2014 MU 1 as it is more accurate.
+					//return "More than 80% of all unique patients seen by the Provider have at least one problem entered with an ICD-9 code or SNOMED code attached or an indication that no problems are known for the patient recorded as structured data.";
 				case EhrMeasureType.MedicationList:
 					return "More than 80% of all unique patients seen by the Provider have at least one entry (or an indication that the patient is not currently prescribed any medication) recorded as structured data.";
 				case EhrMeasureType.AllergyList:
@@ -111,8 +118,10 @@ namespace OpenDentBusiness{
 					return "More than 10% of all unique patients seen by the Provider are provided timely (available to the patient within four business days of being updated in the certified EHR technology) electronic access to their health information subject to the Provider’s discretion to withhold certain information.";
 				case EhrMeasureType.ProvOrderEntry:
 					return "More than 30% of unique patients with at least one medication in their medication list seen by the Provider have at least one medication order entered using CPOE.";
-				case EhrMeasureType.ProvOrderEntryAlt:
+				case EhrMeasureType.CPOE_MedOrdersOnly:
 					return "More than 30% of medication orders created by the Provider during the reporting period are entered using CPOE.";
+				case EhrMeasureType.CPOE_PreviouslyOrdered:
+					return "More than 30% of unique patients with at least one medication in their medication list seen by the Provider for whom the Provider has previously ordered medication have at least one medication order entered using CPOE.";
 				case EhrMeasureType.Rx:
 					return "More than 40% of all permissible prescriptions written by the Provider are transmitted electronically using certified EHR technology.";
 				case EhrMeasureType.VitalSigns:
@@ -157,7 +166,9 @@ namespace OpenDentBusiness{
 					return 10;
 				case EhrMeasureType.ProvOrderEntry:
 					return 30;
-				case EhrMeasureType.ProvOrderEntryAlt:
+				case EhrMeasureType.CPOE_MedOrdersOnly:
+					return 30;
+				case EhrMeasureType.CPOE_PreviouslyOrdered:
 					return 30;
 				case EhrMeasureType.Rx:
 					return 40;
@@ -200,6 +211,7 @@ namespace OpenDentBusiness{
 			switch(mtype) {
 				#region ProblemList
 				case EhrMeasureType.ProblemList:
+					//Jordan's original query
 					//command="SELECT PatNum,LName,FName, "
 					//  +"(SELECT COUNT(*) FROM disease WHERE PatNum=patient.PatNum AND DiseaseDefNum="
 					//    +POut.Long(PrefC.GetLong(PrefName.ProblemsIndicateNone))+") AS problemsNone, "
@@ -210,6 +222,17 @@ namespace OpenDentBusiness{
 					//  +"AND procedurelog.ProvNum IN("+POut.String(provs)+") "
 					//  +"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
 					//  +"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+")";
+					//Query optimized to be faster by Cameron
+					//command="SELECT A.*,COALESCE(problemsNone.Count,0) AS problemsNone,COALESCE(problemsAll.Count,0) AS problemsAll "
+					//	+"FROM (SELECT patient.PatNum,LName,FName FROM patient "
+					//	+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
+					//	+"AND procedurelog.ProvNum IN("+POut.String(provs)+") "
+					//	+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+					//	+"GROUP BY patient.PatNum) A "
+					//	+"LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM disease WHERE DiseaseDefNum="+POut.Long(PrefC.GetLong(PrefName.ProblemsIndicateNone))+" "
+					//	+"GROUP BY PatNum) problemsNone ON problemsNone.PatNum=A.PatNum "
+					//	+"LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM disease GROUP BY PatNum) problemsAll ON problemsAll.PatNum=A.PatNum";
+					//Query modified to count only problems with ICD9 or SNOMED code attached
 					command="SELECT A.*,COALESCE(problemsNone.Count,0) AS problemsNone,COALESCE(problemsAll.Count,0) AS problemsAll "
 						+"FROM (SELECT patient.PatNum,LName,FName FROM patient "
 						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
@@ -218,7 +241,10 @@ namespace OpenDentBusiness{
 						+"GROUP BY patient.PatNum) A "
 						+"LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM disease WHERE DiseaseDefNum="+POut.Long(PrefC.GetLong(PrefName.ProblemsIndicateNone))+" "
 						+"GROUP BY PatNum) problemsNone ON problemsNone.PatNum=A.PatNum "
-						+"LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM disease GROUP BY PatNum) problemsAll ON problemsAll.PatNum=A.PatNum";
+						+"LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM disease "
+						+"INNER JOIN diseasedef ON disease.DiseaseDefNum=diseasedef.DiseaseDefNum "
+						+"WHERE (diseasedef.SnomedCode!='' OR diseasedef.ICD9Code!='') "
+						+"GROUP BY PatNum) problemsAll ON problemsAll.PatNum=A.PatNum";
 					tableRaw=Db.GetTable(command);
 					break;
 				#endregion
@@ -239,6 +265,7 @@ namespace OpenDentBusiness{
 				#endregion
 				#region AllergyList
 				case EhrMeasureType.AllergyList:
+					//Jordan's original query
 					//command="SELECT PatNum,LName,FName, "
 					//  +"(SELECT COUNT(*) FROM allergy WHERE PatNum=patient.PatNum AND AllergyDefNum="
 					//    +POut.Long(PrefC.GetLong(PrefName.AllergiesIndicateNone))+") AS allergiesNone, "
@@ -249,6 +276,7 @@ namespace OpenDentBusiness{
 					//  +"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
 					//  +"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
 					//  +"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+")";
+					//Query optimized to be faster by Cameron
 					command="SELECT A.*,COALESCE(allergiesNone.Count,0) AS allergiesNone,COALESCE(allergiesAll.Count,0) AS allergiesAll "
 						+"FROM (SELECT patient.PatNum,LName,FName	FROM patient "
 						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum	AND procedurelog.ProcStatus=2 "
@@ -265,6 +293,7 @@ namespace OpenDentBusiness{
 				#region Demographics
 				case EhrMeasureType.Demographics:
 					//language, gender, race, ethnicity, and birthdate
+					//Jordan's original query
 					//command="SELECT PatNum,LName,FName,Birthdate,Gender,Race,Language "
 					//  +"FROM patient "
 					//  +"WHERE EXISTS(SELECT * FROM procedurelog WHERE patient.PatNum=procedurelog.PatNum "
@@ -272,6 +301,7 @@ namespace OpenDentBusiness{
 					//  +"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
 					//  +"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
 					//  +"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+")";
+					//Query optimized to be faster by Cameron
 					command="SELECT patient.PatNum,LName,FName,Birthdate,Gender,Race,Language "
 						+"FROM patient "
 						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
@@ -283,6 +313,7 @@ namespace OpenDentBusiness{
 				#endregion
 				#region Education
 				case EhrMeasureType.Education:
+					//Jordan's original query
 					//command="SELECT PatNum,LName,FName, "
 					//  +"(SELECT COUNT(*) FROM ehrmeasureevent WHERE PatNum=patient.PatNum AND EventType="+POut.Int((int)EhrMeasureEventType.EducationProvided)+") AS edCount "
 					//  +"FROM patient "
@@ -291,6 +322,7 @@ namespace OpenDentBusiness{
 					//  +"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
 					//  +"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
 					//  +"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+")";
+					//Query optimized to be faster by Cameron
 					command="SELECT A.*,COALESCE(edCount.Count,0) AS edCount "
 						+"FROM (SELECT patient.PatNum,LName,FName	FROM patient "
 						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
@@ -351,6 +383,7 @@ namespace OpenDentBusiness{
 				#endregion
 				#region ProvOrderEntry
 				case EhrMeasureType.ProvOrderEntry:
+					//Jordan's original query
 					//command="SELECT PatNum,LName,FName, "
 					//  +"(SELECT COUNT(*) FROM medicationpat mp2 WHERE mp2.PatNum=patient.PatNum "
 					//  +"AND mp2.PatNote != '' AND mp2.DateStart > "+POut.Date(new DateTime(1880,1,1))+") AS countOrders "
@@ -361,41 +394,60 @@ namespace OpenDentBusiness{
 					//  +"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
 					//  +"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+") "
 					//  +"AND EXISTS(SELECT * FROM medicationpat WHERE medicationpat.PatNum=patient.PatNum)";//at least one medication
-					command="SELECT A.*,COALESCE(countOrders.Count,0) AS countOrders "
-						+"FROM (SELECT patient.PatNum,LName,FName FROM patient "
+					//Query optimized to be faster by Cameron
+					//command="SELECT A.*,COALESCE(countOrders.Count,0) AS countOrders "
+					//	+"FROM (SELECT patient.PatNum,LName,FName FROM patient "
+					//	+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
+					//	+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
+					//	+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+					//	+"INNER JOIN medicationpat ON medicationpat.PatNum=patient.PatNum "
+					//	+"GROUP BY patient.PatNum) A "
+					//	+"LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM medicationpat mp2 "
+					//	+"WHERE mp2.PatNote!='' AND mp2.DateStart > "+POut.Date(new DateTime(1880,1,1))+" "
+					//	+"GROUP BY PatNum) countOrders ON countOrders.PatNum=A.PatNum";
+					//Now using IsCpoe flag instead of PatNote and DateStart to mark as an order
+					command="SELECT A.*,COALESCE(CountCpoe.Count,0) AS CountCpoe "
+						+"FROM (SELECT patient.PatNum,patient.LName,patient.FName FROM patient "
 						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
 						+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
 						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
 						+"INNER JOIN medicationpat ON medicationpat.PatNum=patient.PatNum "
 						+"GROUP BY patient.PatNum) A "
-						+"LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM medicationpat mp2 "
-						+"WHERE mp2.PatNote!='' AND mp2.DateStart > "+POut.Date(new DateTime(1880,1,1))+" "
-						+"GROUP BY PatNum) countOrders ON countOrders.PatNum=A.PatNum";
+						+"LEFT JOIN (SELECT medicationpat.PatNum,COUNT(*) AS 'Count' FROM medicationpat "
+						+"WHERE medicationpat.IsCpoe=1 GROUP BY PatNum) CountCpoe ON CountCpoe.PatNum=A.PatNum";
 					tableRaw=Db.GetTable(command);
 					break;
 				#endregion
-				#region ProvOrderEntryAlt
-				case EhrMeasureType.ProvOrderEntryAlt:
-					//command="SELECT PatNum,LName,FName, "
-					//  +"(SELECT COUNT(*) FROM medicationpat mp2 WHERE mp2.PatNum=patient.PatNum "
-					//  +"AND mp2.PatNote != '' AND mp2.DateStart > "+POut.Date(new DateTime(1880,1,1))+") AS countOrders "
-					//  +"FROM patient "
-					//  +"WHERE EXISTS(SELECT * FROM procedurelog WHERE patient.PatNum=procedurelog.PatNum "//at least one procedure in the period
-					//  +"AND procedurelog.ProcStatus=2 "//complete
-					//  +"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
-					//  +"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
-					//  +"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+") "
-					//  +"AND EXISTS(SELECT * FROM medicationpat WHERE medicationpat.PatNum=patient.PatNum)";//at least one medication
-					command="SELECT A.*,COALESCE(countOrders.Count,0) AS countOrders "
-						+"FROM (SELECT patient.PatNum,LName,FName FROM patient "
-						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
-						+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
-						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+				#region CPOE_MedOrdersOnly
+				case EhrMeasureType.CPOE_MedOrdersOnly:
+					//This optional alternate no longer counts patients with meds in med list, instead we will count the orders created by the Provider during the reporting period and what percentage are CPOE (meaning they were entered through NewCrop)
+					command="SELECT patient.PatNum,patient.LName,patient.FName,medicationpat.MedicationPatNum,"
+						+"COALESCE(medication.MedName,medicationpat.MedDescript) AS MedName,medicationpat.DateStart,"
+						+"medicationpat.IsCpoe FROM patient "
 						+"INNER JOIN medicationpat ON medicationpat.PatNum=patient.PatNum "
+						+"AND medicationpat.ProvNum IN("+POut.String(provs)+")	"
+						+"AND medicationpat.PatNote!='' "
+						+"AND medicationpat.DateStart BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+						+"LEFT JOIN medication ON medication.MedicationNum=medicationpat.MedicationNum";
+					tableRaw=Db.GetTable(command);
+					break;
+				#endregion
+				#region CPOE_PreviouslyOrdered
+				case EhrMeasureType.CPOE_PreviouslyOrdered:
+					//For details regarding this optional alternate see: https://questions.cms.gov/faq.php?id=5005&faqId=3257, summmary: If you prescribe more than 100 meds during the reporting period, maintain medication lists that include meds the Provider did not order, and orders meds for less than 30% of patients with meds in med list during the reporting period, then the denominator can be limited to only those patients for whom the Provider has previously ordered meds.
+					command="SELECT A.*,COALESCE(CountCpoe.Count,0) AS CountCpoe "
+						+"FROM (SELECT patient.PatNum,patient.LName,patient.FName FROM patient "
+						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
+						+"AND procedurelog.ProvNum IN("+POut.String(provs)+") "
+						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+						+"INNER JOIN medicationpat ON medicationpat.PatNum=patient.PatNum ";
+					//this next join limits to only patients for whom the provider has previously ordered medications
+					command+="INNER JOIN (SELECT PatNum FROM medicationpat "
+						+"WHERE PatNote!='' AND DateStart > "+POut.Date(new DateTime(1880,1,1))+" "
+						+"AND ProvNum IN("+POut.String(provs)+") GROUP BY PatNum) B ON B.PatNum=patient.PatNum "
 						+"GROUP BY patient.PatNum) A "
-						+"LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM medicationpat mp2 "
-						+"WHERE mp2.PatNote!='' AND mp2.DateStart > "+POut.Date(new DateTime(1880,1,1))+" "
-						+"GROUP BY PatNum) countOrders ON countOrders.PatNum=A.PatNum";
+						+"LEFT JOIN (SELECT medicationpat.PatNum,COUNT(*) AS 'Count' FROM medicationpat "
+						+"WHERE medicationpat.IsCpoe=1 GROUP BY PatNum) CountCpoe ON CountCpoe.PatNum=A.PatNum";
 					tableRaw=Db.GetTable(command);
 					break;
 				#endregion
@@ -414,6 +466,7 @@ namespace OpenDentBusiness{
 				#endregion
 				#region VitalSigns
 				case EhrMeasureType.VitalSigns:
+					//Jordan's original query
 					//command="SELECT PatNum,LName,FName, "
 					//  +"(SELECT COUNT(*) FROM vitalsign WHERE vitalsign.PatNum=patient.PatNum AND Height>0 AND Weight>0) AS hwCount, "
 					//  +"(SELECT COUNT(*) FROM vitalsign WHERE vitalsign.PatNum=patient.PatNum AND BpSystolic>0 AND BpDiastolic>0) AS bpCount "
@@ -424,6 +477,7 @@ namespace OpenDentBusiness{
 					//  +"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
 					//  +"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+") "
 					//  +"AND patient.Birthdate <= "+POut.Date(DateTime.Today.AddYears(-2));//2 and older
+					//Query optimized to be faster by Cameron
 					//command="SELECT A.*,COALESCE(hwCount.Count,0) AS hwCount,COALESCE(bpCount.Count,0) AS bpCount "
 					//	+"FROM (SELECT patient.PatNum,LName,FName FROM patient "
 					//	+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
@@ -433,8 +487,9 @@ namespace OpenDentBusiness{
 					//	+"GROUP BY patient.PatNum) A "
 					//	+"LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM vitalsign	WHERE Height>0 AND Weight>0 GROUP BY PatNum) hwCount ON hwCount.PatNum=A.PatNum "
 					//	+"LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM vitalsign WHERE BpSystolic>0 AND BpDiastolic>0 GROUP BY PatNum) bpCount ON bpCount.PatNum=A.PatNum";
+					//Query modified for new requirements (Optional 2013, Required 2014 and beyond).  BP 3 and older only, Height/Weight all ages
 					command="SELECT A.*,COALESCE(hwCount.Count,0) AS hwCount,"
-						+"(CASE WHEN A.Birthdate <= (LastVisitInDateRange-INTERVAL 3 YEAR) ";//BP count only if 3 and older at time of last visit in date range
+						+"(CASE WHEN A.Birthdate <= (A.LastVisitInDateRange-INTERVAL 3 YEAR) ";//BP count only if 3 and older at time of last visit in date range
 					command+="THEN COALESCE(bpCount.Count,0) ELSE 1 END) AS bpCount "
 						+"FROM (SELECT patient.PatNum,LName,FName,Birthdate,MAX(procedurelog.ProcDate) AS LastVisitInDateRange "
 						+"FROM patient "
@@ -449,15 +504,6 @@ namespace OpenDentBusiness{
 				#endregion
 				#region VitalSignsBMIOnly
 				case EhrMeasureType.VitalSignsBMIOnly:
-					//command="SELECT A.*,COALESCE(hwCount.Count,0) AS hwCount,COALESCE(bpCount.Count,0) AS bpCount "
-					//	+"FROM (SELECT patient.PatNum,LName,FName FROM patient "
-					//	+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
-					//	+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
-					//	+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
-					//	+"WHERE patient.Birthdate <= "+POut.Date(DateTime.Today.AddYears(-2))+" "//2 and older
-					//	+"GROUP BY patient.PatNum) A "
-					//	+"LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM vitalsign	WHERE Height>0 AND Weight>0 GROUP BY PatNum) hwCount ON hwCount.PatNum=A.PatNum "
-					//	+"LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM vitalsign WHERE BpSystolic>0 AND BpDiastolic>0 GROUP BY PatNum) bpCount ON bpCount.PatNum=A.PatNum";
 					command="SELECT A.*,COALESCE(hwCount.Count,0) AS hwCount "
 						+"FROM (SELECT patient.PatNum,LName,FName FROM patient "
 						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
@@ -470,17 +516,10 @@ namespace OpenDentBusiness{
 				#endregion
 				#region VitalSignsBPOnly
 				case EhrMeasureType.VitalSignsBPOnly:
-					//command="SELECT A.*,COALESCE(hwCount.Count,0) AS hwCount,COALESCE(bpCount.Count,0) AS bpCount "
-					//	+"FROM (SELECT patient.PatNum,LName,FName FROM patient "
-					//	+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
-					//	+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
-					//	+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
-					//	+"WHERE patient.Birthdate <= "+POut.Date(DateTime.Today.AddYears(-2))+" "//2 and older
-					//	+"GROUP BY patient.PatNum) A "
-					//	+"LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM vitalsign	WHERE Height>0 AND Weight>0 GROUP BY PatNum) hwCount ON hwCount.PatNum=A.PatNum "
-					//	+"LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM vitalsign WHERE BpSystolic>0 AND BpDiastolic>0 GROUP BY PatNum) bpCount ON bpCount.PatNum=A.PatNum";
-					command="SELECT A.*,COALESCE(bpCount.Count,0) AS bpCount "
-						+"(CASE WHEN A.Birthdate <= (LastVisitInDateRange-INTERVAL 3 YEAR) ";//BP count only if 3 and older at time of last visit in date range
+					command="SELECT A.*,"
+						+"(CASE WHEN A.Birthdate <= (A.LastVisitInDateRange-INTERVAL 3 YEAR) ";//BP count only if 3 and older at time of last visit in date range
+					command+="THEN COALESCE(bpCount.Count,0) ELSE 1 END) AS bpCount, "
+						+"A.Birthdate>A.LastVisitInDateRange-INTERVAL 3 YEAR AS IsUnder3 ";//Use this bool to indicate the patient was under three at the time of their last visit in date range
 					command+="FROM (SELECT patient.PatNum,LName,FName,Birthdate,MAX(procedurelog.ProcDate) AS LastVisitInDateRange "
 						+"FROM patient "
 						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
@@ -493,6 +532,7 @@ namespace OpenDentBusiness{
 				#endregion
 				#region Smoking
 				case EhrMeasureType.Smoking:
+					//Jordan's original query
 					//command="SELECT PatNum,LName,FName,SmokeStatus "
 					//  +"FROM patient "
 					//  +"WHERE EXISTS(SELECT * FROM procedurelog WHERE patient.PatNum=procedurelog.PatNum "
@@ -501,6 +541,7 @@ namespace OpenDentBusiness{
 					//  +"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
 					//  +"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+") "
 					//  +"AND patient.Birthdate <= "+POut.Date(DateTime.Today.AddYears(-13));//13 and older
+					//Query optimized to be faster by Cameron
 					command="SELECT patient.PatNum,LName,FName,SmokingSnoMed FROM patient "
 						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
 						+"AND procedurelog.ProvNum IN("+POut.String(provs)+") "
@@ -512,6 +553,7 @@ namespace OpenDentBusiness{
 				#endregion
 				#region Lab
 				case EhrMeasureType.Lab:
+					//Jordan's original query
 					//command="SELECT patient.PatNum,LName,FName,DateTimeOrder, "
 					//  +"(SELECT COUNT(*) FROM labpanel WHERE labpanel.MedicalOrderNum=medicalorder.MedicalOrderNum) AS panelCount "
 					//  +"FROM medicalorder,patient "
@@ -520,6 +562,7 @@ namespace OpenDentBusiness{
 					//  +"AND medicalorder.ProvNum="+POut.Long(provNum)+" "
 					//  +"AND DATE(DateTimeOrder) >= "+POut.Date(dateStart)+" "
 					//  +"AND DATE(DateTimeOrder) <= "+POut.Date(dateEnd);
+					//Query optimized to be faster by Cameron
 					command="SELECT patient.PatNum,LName,FName,DateTimeOrder,COALESCE(panelCount.Count,0) AS panelCount FROM patient "
 						+"INNER JOIN medicalorder ON patient.PatNum=medicalorder.PatNum "
 						+"AND MedOrderType="+POut.Int((int)MedicalOrderType.Laboratory)+" "
@@ -617,6 +660,7 @@ namespace OpenDentBusiness{
 				#endregion
 				#region Reminders
 				case EhrMeasureType.Reminders:
+					//Jordan's original query
 					//command="SELECT PatNum,LName,FName, "
 					//  +"(SELECT COUNT(*) FROM ehrmeasureevent WHERE PatNum=patient.PatNum AND EventType="+POut.Int((int)EhrMeasureEventType.ReminderSent)+" "
 					//  +"AND DATE(ehrmeasureevent.DateTEvent) >= "+POut.Date(dateStart)+" "
@@ -628,6 +672,7 @@ namespace OpenDentBusiness{
 					//  +"OR patient.Birthdate <= "+POut.Date(DateTime.Today.AddYears(-65))+") "//65+
 					//  +"AND patient.PatStatus="+POut.Int((int)PatientStatus.Patient)+" "
 					//  +"AND patient.PriProv="+POut.Long(provNum);
+					//Query optimized to be faster by Cameron
 					command="SELECT patient.PatNum,LName,FName,COALESCE(reminderCount.Count,0) AS reminderCount FROM patient "
 						+"LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM ehrmeasureevent "
 						+"WHERE EventType="+POut.Int((int)EhrMeasureEventType.ReminderSent)+" "
@@ -736,7 +781,7 @@ namespace OpenDentBusiness{
 					#region ProblemList
 					case EhrMeasureType.ProblemList:
 						if(tableRaw.Rows[i]["problemsNone"].ToString()!="0") {
-							explanation="Problems indicated 'None'";
+							explanation="Problems indicated 'None'.";
 							row["met"]="X";
 						}
 						else if(tableRaw.Rows[i]["problemsAll"].ToString()!="0") {
@@ -744,7 +789,8 @@ namespace OpenDentBusiness{
 							row["met"]="X";
 						}
 						else{
-							explanation="No Problems entered";
+							//explanation="No Problems entered";
+							explanation="No Problems entered with ICD-9 code or SNOMED code attached.";
 						}
 						break;
 					#endregion
@@ -836,7 +882,8 @@ namespace OpenDentBusiness{
 					#endregion
 					#region ProvOrderEntry
 					case EhrMeasureType.ProvOrderEntry:
-						if(tableRaw.Rows[i]["countOrders"].ToString()=="0") {
+					case EhrMeasureType.CPOE_PreviouslyOrdered:
+						if(tableRaw.Rows[i]["countCpoe"].ToString()=="0") {
 							explanation="No medication order through CPOE";
 						}
 						else {
@@ -845,13 +892,11 @@ namespace OpenDentBusiness{
 						}
 						break;
 					#endregion
-					#region ProvOrderEntryAlt
-					case EhrMeasureType.ProvOrderEntryAlt:
-						if(tableRaw.Rows[i]["countOrders"].ToString()=="0") {
-							explanation="No medication order through CPOE";
-						}
-						else {
-							explanation="Medication order in CPOE";
+					#region CPOE_MedOrdersOnly
+					case EhrMeasureType.CPOE_MedOrdersOnly:
+						DateTime medOrderStartDate=PIn.Date(tableRaw.Rows[i]["DateStart"].ToString());
+						explanation="Medication order: "+tableRaw.Rows[i]["MedName"].ToString()+", start date: "+medOrderStartDate.ToShortDateString()+".";
+						if(tableRaw.Rows[i]["IsCpoe"].ToString()=="1") {
 							row["met"]="X";
 						}
 						break;
@@ -909,7 +954,12 @@ namespace OpenDentBusiness{
 							explanation+="blood pressure";
 						}
 						if(explanation=="") {
-							explanation="Vital signs entered";
+							if(tableRaw.Rows[i]["IsUnder3"].ToString()=="1") {
+								explanation="Under 3, BP not required";
+							}
+							else {
+								explanation="Vital signs entered";
+							}
 							row["met"]="X";
 						}
 						else {
@@ -1033,6 +1083,8 @@ namespace OpenDentBusiness{
 			switch(mtype) {
 				case EhrMeasureType.ProblemList:
 					return "Patients with at least one problem list entry or an indication of 'None' on problem list.";
+					//Leaving original wording so change will not require re-testing to meet 2011 certification.  The wording below may be used in 2014 MU 1 as it is more accurate.
+					//return "Patients with at least one problem entered with an ICD-9 code or SNOMED code attached or an indication of 'None' in their problem list.";
 				case EhrMeasureType.MedicationList:
 					return "Patients with at least one medication list entry or an indication of 'None' on medication list.";
 				case EhrMeasureType.AllergyList:
@@ -1045,8 +1097,10 @@ namespace OpenDentBusiness{
 					return "Electronic access of health information provided to seen patients within 4 business days of being entered into their EHR, not dependent on requests.";
 				case EhrMeasureType.ProvOrderEntry:
 					return "Patients with a medication order entered using CPOE.";
-				case EhrMeasureType.ProvOrderEntryAlt:
+				case EhrMeasureType.CPOE_MedOrdersOnly:
 					return "The number of medication orders entered by the Provider during the reporting period using CPOE.";
+				case EhrMeasureType.CPOE_PreviouslyOrdered:
+					return "Patients with a medication order entered using CPOE.";
 				case EhrMeasureType.Rx:
 					return "Permissible prescriptions transmitted electronically.";
 				case EhrMeasureType.VitalSigns:
@@ -1091,8 +1145,10 @@ namespace OpenDentBusiness{
 					return "All unique patients with at least one completed procedure by the Provider during the reporting period.";
 				case EhrMeasureType.ProvOrderEntry:
 					return "All unique patients with at least one completed procedure by the Provider during the reporting period and with at least one medication in their medication list.";
-				case EhrMeasureType.ProvOrderEntryAlt:
+				case EhrMeasureType.CPOE_MedOrdersOnly:
 					return "The number of medication orders created by the Provider during the reporting period.";
+				case EhrMeasureType.CPOE_PreviouslyOrdered:
+					return "All unique patients with at least one completed procedure by the Provider during the reporting period, with at least one medication in their medication list, and for whom the Provider has previously ordered medications.";
 				case EhrMeasureType.Rx:
 					return "All permissible prescriptions by the Provider during the reporting period.";
 				case EhrMeasureType.VitalSigns:
@@ -1119,7 +1175,212 @@ namespace OpenDentBusiness{
 			throw new ApplicationException("Type not found: "+mtype.ToString());
 		}
 
-		///<summary></summary>
+		///<summary>Returns the explanation of the exclusion if there is one, if none returns 'No exclusions.'.</summary>
+		private static string GetExclusionExplain(EhrMeasureType mtype) {
+			//No need to check RemotingRole; no call to db.
+			switch(mtype) {
+				case EhrMeasureType.ProblemList:
+				case EhrMeasureType.MedicationList:
+				case EhrMeasureType.AllergyList:
+				case EhrMeasureType.Demographics:
+				case EhrMeasureType.Education:
+					return "No exclusions.";
+				case EhrMeasureType.TimelyAccess:
+					return "Any Provider that neither orders nor creates lab tests or information that would be contained in the problem list, medication list, or medication allergy list during the reporting period.";
+				case EhrMeasureType.ProvOrderEntry:
+				case EhrMeasureType.CPOE_MedOrdersOnly:
+				case EhrMeasureType.CPOE_PreviouslyOrdered:
+					return "Any Provider who writes fewer than 100 prescriptions during the reporting period.";
+				case EhrMeasureType.Rx:
+					return @"1. Any Provider who writes fewer than 100 prescriptions during the reporting period.
+2. Any Provider who does not have a pharmacy within their organization and there are no pharmacies that accept electronic prescriptions within 10 miles of the practice at the start of the reporting period.";
+				case EhrMeasureType.VitalSigns:
+					return @"1. Any Provider who sees no patients 3 years or older is excluded from recording blood pressure.
+2. Any Provider who believes that all three vital signs of height, weight, and blood pressure have no relevance to their scope of practice is excluded from recording them.
+3. Any Provider who believes that height and weight are relevant to their scope of practice, but blood pressure is not, is excluded from recording blood pressure.
+4. Any Provider who believes that blood pressure is relevant to their scope of practice, but height and weight are not, is excluded from recording height and weight.";
+				case EhrMeasureType.VitalSignsBMIOnly:
+					return "Any Provider who believes that height and weight are not relevant to their scope of practice is excluded from recording them.";
+				case EhrMeasureType.VitalSignsBPOnly:
+					return @"1. Any Provider who sees no patients 3 years or older is excluded from recording blood pressure.
+2. Any Provider who believes that blood pressure is not relevant to their scope of practice is excluded from recording it.";
+				case EhrMeasureType.Smoking:
+					return "Any Provider who sees no patients 13 years or older during the reporting period.";
+				case EhrMeasureType.Lab:
+					return "Any Provider who orders no lab tests whose results are either in a positive/negative or numeric format during the reporting period.";
+				case EhrMeasureType.ElectronicCopy:
+					return "Any Provider who has no requests from patients or their agents for an electronic copy of patient health information during the reporting period.";
+				case EhrMeasureType.ClinicalSummaries:
+					return "Any Provider who has no completed procedures during the reporting period.";
+				case EhrMeasureType.Reminders:
+					return "Any Provider who has no patients 65 years or older or 5 years or younger.";
+				case EhrMeasureType.MedReconcile:
+					return "Any Provider who was not the recipient of any transitions of care during the reporting period.";
+				case EhrMeasureType.SummaryOfCare:
+					return "Any Provider who neither transfers a patient to another setting nor refers a patient to another provider during the reporting period.";
+			}
+			throw new ApplicationException("Type not found: "+mtype.ToString());
+		}
+
+		///<summary>Returns the count the office will need to report in order to attest to being excluded from this measure.  Will return -1 if there is no applicable count for this measure.</summary>
+		private static int GetExclusionCount(EhrMeasureType mtype,DateTime dateStart,DateTime dateEnd,long provNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),mtype);
+			}
+			int retval=0;
+			string command="";
+			DataTable tableRaw=new DataTable();
+			command="SELECT GROUP_CONCAT(provider.ProvNum) FROM provider WHERE provider.EhrKey="
+				+"(SELECT pv.EhrKey FROM provider pv WHERE pv.ProvNum="+POut.Long(provNum)+")";
+			string provs=Db.GetScalar(command);
+			switch(mtype) {
+				case EhrMeasureType.ProblemList:
+				case EhrMeasureType.MedicationList:
+				case EhrMeasureType.AllergyList:
+				case EhrMeasureType.Demographics:
+				case EhrMeasureType.Education:
+				case EhrMeasureType.VitalSignsBMIOnly:
+				case EhrMeasureType.ElectronicCopy:
+				case EhrMeasureType.Lab:
+				case EhrMeasureType.MedReconcile:
+				case EhrMeasureType.SummaryOfCare:
+					return retval=-1;
+				#region TimelyAccess
+				case EhrMeasureType.TimelyAccess:
+					//Exlcuded if no lab tests are ordered or created for patients seen in reporting period
+					command="SELECT COUNT(*) AS 'Count' "
+						+"FROM (SELECT patient.PatNum	FROM patient "
+						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum	AND procedurelog.ProcStatus=2 "
+						+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
+						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+						+"GROUP BY patient.PatNum) A "
+						+"INNER JOIN medicalorder ON A.PatNum=medicalorder.PatNum "
+						+"AND MedOrderType="+POut.Int((int)MedicalOrderType.Laboratory)+" "
+						+"AND medicalorder.ProvNum IN("+POut.String(provs)+") "
+						+"AND DATE(DateTimeOrder) BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" ";
+					retval+=PIn.Int(Db.GetCount(command));
+					//Excluded if problems, medications, or medication allergy information is not ordered or created for patients seen in the reporting period
+					command="SELECT SUM(COALESCE(allergies.Count,0)+COALESCE(problems.Count,0)+COALESCE(meds.Count,0)) AS 'Count' "
+						+"FROM (SELECT patient.PatNum	FROM patient "
+						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum	AND procedurelog.ProcStatus=2 "
+						+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
+						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+						+"GROUP BY patient.PatNum) A ";
+					//left join allergies with DateTStamp within reporting period
+					command+="LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM allergy "
+						+"WHERE "+DbHelper.DateColumn("DateTStamp")+" BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+						+"GROUP BY PatNum) allergies ON allergies.PatNum=A.PatNum ";
+					//left join problems with DateTStamp within reporting period
+					command+="LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM disease "
+						+"WHERE "+DbHelper.DateColumn("DateTStamp")+" BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+						+"GROUP BY PatNum) problems ON problems.PatNum=A.PatNum ";
+					//left join medications with DateStart or DateTStamp within reporting period
+					command+="LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM medicationpat "
+						+"WHERE DateStart BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+						+"OR "+DbHelper.DateColumn("DateTStamp")+" BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+						+"GROUP BY PatNum) meds ON meds.PatNum=A.PatNum";
+					return retval+=PIn.Int(Db.GetScalar(command));
+				#endregion
+				#region CPOE_Rx
+				case EhrMeasureType.ProvOrderEntry:
+				case EhrMeasureType.CPOE_MedOrdersOnly:
+				case EhrMeasureType.CPOE_PreviouslyOrdered:
+				case EhrMeasureType.Rx:
+					//Excluded if Provider writes fewer than 100 Tx's during the reporting period
+					command="SELECT COUNT(DISTINCT rxpat.RxNum) AS 'Count' "
+						+"FROM patient "
+						+"INNER JOIN rxpat ON rxpat.PatNum=patient.PatNum "
+						+"AND rxpat.ProvNum IN("+POut.String(provs)+")	"
+						+"AND RxDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd);
+					return retval=PIn.Int(Db.GetScalar(command));
+				#endregion
+				#region VitalSigns
+				case EhrMeasureType.VitalSigns:
+				case EhrMeasureType.VitalSignsBPOnly:
+					//Excluded if Provider sees no patients 3 years or older at the time of their last visit in reporting period.
+					command="SELECT SUM((CASE WHEN A.Birthdate <= (A.LastVisitInDateRange-INTERVAL 3 YEAR) THEN 1 ELSE 0 END)) AS 'Count' "
+						+"FROM (SELECT Birthdate,MAX(procedurelog.ProcDate) AS LastVisitInDateRange "
+						+"FROM patient "
+						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
+						+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
+						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+						+"GROUP BY patient.PatNum) A ";
+					return retval=PIn.Int(Db.GetScalar(command));
+				#endregion
+				#region Smoking
+				case EhrMeasureType.Smoking:
+					//Excluded if Provider sees no patients 13 years or older at the time of their last visit in reporting period.
+					command="SELECT SUM((CASE WHEN A.Birthdate <= (A.LastVisitInDateRange-INTERVAL 13 YEAR) THEN 1 ELSE 0 END)) AS 'Count' "
+						+"FROM (SELECT Birthdate,MAX(procedurelog.ProcDate) AS LastVisitInDateRange "
+						+"FROM patient "
+						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
+						+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
+						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+						+"GROUP BY patient.PatNum) A ";
+					return retval=PIn.Int(Db.GetScalar(command));
+				#endregion
+				#region ClinicalSummaries
+				case EhrMeasureType.ClinicalSummaries:
+					//Excluded if no completed procedures during the reporting period
+					command="SELECT COUNT(DISTINCT ProcNum) FROM procedurelog "
+						+"WHERE ProcStatus=2 AND ProvNum IN("+POut.String(provs)+")	"
+						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" ";
+					return retval=PIn.Int(Db.GetScalar(command));
+				#endregion
+				#region Reminders
+				case EhrMeasureType.Reminders:
+					//Excluded if Provider sees no patients 65 years or older or 5 years or younger at the time of their last visit in reporting period.
+					command="SELECT SUM((CASE WHEN (A.Birthdate > (A.LastVisitInDateRange-INTERVAL 6 YEAR) ";//6th birthday had not happened by date of last visit, 5 years or younger
+					command+="OR A.Birthdate <= (A.LastVisitInDateRange-INTERVAL 65 YEAR)) ";//had 65th birthday by date of last vist, 65 or older
+					command+="THEN 1 ELSE 0 END)) AS 'Count' "
+						+"FROM (SELECT Birthdate,MAX(procedurelog.ProcDate) AS LastVisitInDateRange "
+						+"FROM patient "
+						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
+						+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
+						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+						+"GROUP BY patient.PatNum) A ";
+					return retval=PIn.Int(Db.GetScalar(command));
+				#endregion
+			}
+			throw new ApplicationException("Type not found: "+mtype.ToString());
+		}
+		
+		///<summary>Returns the description of what the count displayed is.  May be count of patients under a certain age or number of Rx's written, this will be the label that describes the number.</summary>
+		private static string GetExclusionCountDescript(EhrMeasureType mtype) {
+			//No need to check RemotingRole; no call to db.
+			switch(mtype) {
+				case EhrMeasureType.ProblemList:
+				case EhrMeasureType.MedicationList:
+				case EhrMeasureType.AllergyList:
+				case EhrMeasureType.Demographics:
+				case EhrMeasureType.Education:
+				case EhrMeasureType.VitalSignsBMIOnly:
+				case EhrMeasureType.ElectronicCopy:
+				case EhrMeasureType.Lab:
+				case EhrMeasureType.MedReconcile:
+				case EhrMeasureType.SummaryOfCare:
+					return "";
+				case EhrMeasureType.TimelyAccess:
+					return "Count of lab orders, problems, medications, and medication allergies entered during the reporting period.";
+				case EhrMeasureType.ProvOrderEntry:
+				case EhrMeasureType.CPOE_MedOrdersOnly:
+				case EhrMeasureType.CPOE_PreviouslyOrdered:
+				case EhrMeasureType.Rx:
+					return "Count of prescriptions entered during the reporting period.";
+				case EhrMeasureType.VitalSigns:
+				case EhrMeasureType.VitalSignsBPOnly:
+					return "Count of patients seen who were 3 years or older at the time of their last visit during the reporting period.";
+				case EhrMeasureType.Smoking:
+					return "Count of patients seen who were 13 years or older at the time of their last visit during the reporting period.";
+				case EhrMeasureType.ClinicalSummaries:
+					return "Count of procedures completed during the reporting period.";
+				case EhrMeasureType.Reminders:
+					return "Count of patients 65 years or older or 5 years or younger at the time of their last visit during the reporting period.";
+			}
+			throw new ApplicationException("Type not found: "+mtype.ToString());
+		}
+
+		///<summary>Only called from FormEHR to load the patient specific MU data and tell the user what action to take to get closer to meeting MU.</summary>
 		public static List<EhrMu> GetMu(Patient pat) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<EhrMu>>(MethodBase.GetCurrentMethod(),pat);
@@ -1136,26 +1397,43 @@ namespace OpenDentBusiness{
 				mu.Met=MuMet.False;
 				mu.MeasureType=(EhrMeasureType)i;
 				switch(mu.MeasureType) {
+					#region ProblemList
 					case EhrMeasureType.ProblemList:
 						List<Disease> listDisease=Diseases.Refresh(pat.PatNum);
+						int validDiseaseCount=0;
 						if(listDisease.Count==0){
 							mu.Details="No problems entered.";
 						}
 						else{
-							mu.Met=MuMet.True;
 							bool diseasesNone=false;
 							if(listDisease.Count==1 && listDisease[0].DiseaseDefNum==PrefC.GetLong(PrefName.ProblemsIndicateNone)){
 								diseasesNone=true;
 							}
 							if(diseasesNone){
+								mu.Met=MuMet.True;
 								mu.Details="Problems marked 'none'.";
 							}
 							else{
-								mu.Details="Problems entered: "+listDisease.Count.ToString();
+								for(int m=0;m<listDisease.Count;m++) {
+									DiseaseDef diseaseCur=DiseaseDefs.GetItem(listDisease[m].DiseaseDefNum);
+									if(diseaseCur.ICD9Code=="" && diseaseCur.SnomedCode=="") {
+										continue;
+									}
+									validDiseaseCount++;
+								}
+								if(validDiseaseCount==0) {
+									mu.Details="No problems with ICD-9 or Snomed code entered.";
+								}
+								else {
+									mu.Met=MuMet.True;
+									mu.Details="Problems with ICD-9 or Snomed code entered: "+validDiseaseCount.ToString();
+								}
 							}
 						}
 						mu.Action="Enter problems";
 						break;
+					#endregion
+					#region MedicationList
 					case EhrMeasureType.MedicationList:
 						if(medList.Count==0) {
 							mu.Details="No medications entered.";
@@ -1175,6 +1453,8 @@ namespace OpenDentBusiness{
 						}
 						mu.Action="Enter medications";
 						break;
+					#endregion
+					#region AllergyList
 					case EhrMeasureType.AllergyList:
 						List<Allergy> listAllergies=Allergies.Refresh(pat.PatNum);
 						if(listAllergies.Count==0) {
@@ -1195,6 +1475,8 @@ namespace OpenDentBusiness{
 						}
 						mu.Action="Enter allergies";
 						break;
+					#endregion
+					#region Demographics
 					case EhrMeasureType.Demographics:
 						explanation="";
 						if(pat.Birthdate.Year<1880) {
@@ -1227,6 +1509,8 @@ namespace OpenDentBusiness{
 						}
 						mu.Action="Enter demographics";
 						break;
+					#endregion
+					#region Education
 					case EhrMeasureType.Education:
 						List<EhrMeasureEvent> listEd=EhrMeasureEvents.RefreshByType(pat.PatNum,EhrMeasureEventType.EducationProvided);
 						if(listEd.Count==0) {
@@ -1238,6 +1522,8 @@ namespace OpenDentBusiness{
 						}
 						mu.Action="Provide education resources";
 						break;
+					#endregion
+					#region TimelyAccess
 					case EhrMeasureType.TimelyAccess:
 						List<EhrMeasureEvent> listOnline=EhrMeasureEvents.RefreshByType(pat.PatNum,EhrMeasureEventType.OnlineAccessProvided);
 						if(listOnline.Count==0) {
@@ -1249,18 +1535,48 @@ namespace OpenDentBusiness{
 						}
 						mu.Action="Provide online Access";
 						break;
+					#endregion
+					#region ProvOrderEntry
 					case EhrMeasureType.ProvOrderEntry:
-						int medOrderCount=0;
+						//int medOrderCount=0;
+						int medOrderCpoeCount=0;
 						for(int mo=0;mo<medList.Count;mo++){
-							if(medList[mo].DateStart.Year>1880 && medList[mo].PatNote!=""){
-								medOrderCount++;
+							//if(medList[mo].DateStart.Year>1880 && medList[mo].PatNote!=""){
+							if(medList[mo].IsCpoe){
+								medOrderCpoeCount++;
 							}
 						}
 						if(medList.Count==0) {
 							mu.Met=MuMet.NA;
 							mu.Details="No meds.";
 						}
-						else if(medOrderCount==0) {
+						else if(medOrderCpoeCount==0) {
+							mu.Details="No medication order in CPOE.";
+						}
+						else {
+							mu.Details="Medications entered in CPOE: "+medOrderCpoeCount.ToString();
+							mu.Met=MuMet.True;
+						}
+						mu.Action="CPOE - Provider Order Entry";
+						break;
+					#endregion
+					#region CPOE_MedOrdersOnly
+					case EhrMeasureType.CPOE_MedOrdersOnly:
+						int medOrderCount=0;
+						medOrderCpoeCount=0;
+						for(int m=0;m<medList.Count;m++) {
+							//Using the last year as the reporting period, following pattern in ElectronicCopy, ClinicalSummaries, Reminders...
+							if(medList[m].DateStart<DateTime.Now.AddYears(-1)) {//either no start date so not an order, or not within the last year so not during the reporting period
+								continue;
+							}
+							else if(medList[m].PatNote!="" && medList[m].ProvNum==pat.PriProv) {//if there's a note and it was created by the patient's PriProv, then count as order created by this provider and would count toward the denominator for MU
+								medOrderCount++;
+								if(medList[m].IsCpoe) {//if also marked as CPOE, then this would count in the numerator of the calculation MU
+									medOrderCpoeCount++;
+								}
+							}
+						}
+						if(medOrderCount==0) {
 							mu.Details="No medication order in CPOE.";
 						}
 						else {
@@ -1269,26 +1585,43 @@ namespace OpenDentBusiness{
 						}
 						mu.Action="CPOE - Provider Order Entry";
 						break;
-					case EhrMeasureType.ProvOrderEntryAlt:
-						medOrderCount=0;
-						for(int mo=0;mo<medList.Count;mo++) {
-							if(medList[mo].DateStart.Year>1880 && medList[mo].PatNote!="") {
-								medOrderCount++;
+					#endregion
+					#region CPOE_PreviouslyOrdered
+					case EhrMeasureType.CPOE_PreviouslyOrdered:
+						//first determine if this patient has ever had a medication ordered by this Provider
+						bool prevOrderExists=false;
+						for(int m=0;m<medList.Count;m++) {
+							//if this is an order (defined as having instructions and a start date) and was entered by this provider, then this pat will be counted in the denominator
+							if(medList[m].PatNote!="" && medList[m].DateStart.Year>1880 && medList[m].ProvNum==pat.PriProv) {
+								prevOrderExists=true;
+								break;
+							}
+						}
+						medOrderCpoeCount=0;
+						for(int mo=0;mo<medList.Count;mo++){
+							if(medList[mo].IsCpoe){
+								medOrderCpoeCount++;
 							}
 						}
 						if(medList.Count==0) {
 							mu.Met=MuMet.NA;
 							mu.Details="No meds.";
 						}
-						else if(medOrderCount==0) {
+						else if(!prevOrderExists) {
+							mu.Met=MuMet.NA;
+							mu.Details="No previous medication orders by this Provider.";
+						}
+						else if(medOrderCpoeCount==0) {
 							mu.Details="No medication order in CPOE.";
 						}
 						else {
-							mu.Details="Medications entered in CPOE: "+medOrderCount.ToString();
+							mu.Details="Medications entered in CPOE: "+medOrderCpoeCount.ToString();
 							mu.Met=MuMet.True;
 						}
 						mu.Action="CPOE - Provider Order Entry";
 						break;
+					#endregion
+					#region Rx
 					case EhrMeasureType.Rx:
 						List<RxPat> listRx=RxPats.GetPermissableForDateRange(pat.PatNum,DateTime.Today.AddYears(-1),DateTime.Today);
 						if(listRx.Count==0){
@@ -1317,6 +1650,8 @@ namespace OpenDentBusiness{
 						}
 						mu.Action="(edit Rxs from Chart)";//no action
 						break;
+					#endregion
+					#region VitalSigns
 					case EhrMeasureType.VitalSigns:
 						List<Vitalsign> vitalsignList=Vitalsigns.Refresh(pat.PatNum);
 						if(vitalsignList.Count==0) {
@@ -1364,6 +1699,8 @@ namespace OpenDentBusiness{
 						}
 						mu.Action="Enter vital signs";
 						break;
+					#endregion
+					#region VitalSignsBMIOnly
 					case EhrMeasureType.VitalSignsBMIOnly:
 						vitalsignList=Vitalsigns.Refresh(pat.PatNum);
 						if(vitalsignList.Count==0) {
@@ -1400,6 +1737,8 @@ namespace OpenDentBusiness{
 						}
 						mu.Action="Enter vital signs";
 						break;
+					#endregion
+					#region VitalSignsBPOnly
 					case EhrMeasureType.VitalSignsBPOnly:
 						vitalsignList=Vitalsigns.Refresh(pat.PatNum);
 						if(pat.Birthdate>DateTime.Today.AddYears(-3)) {//3 and older for BP
@@ -1422,6 +1761,8 @@ namespace OpenDentBusiness{
 						}
 						mu.Action="Enter vital signs";
 						break;
+					#endregion
+					#region Smoking
 					case EhrMeasureType.Smoking:
 						if(pat.SmokingSnoMed=="" || pat.SmokingSnoMed==SmokingSnoMed._266927001.ToString().Substring(1)) {//SnoMed code for Unknown if ever smoked or no status entered
 							mu.Details="Smoking status not entered";
@@ -1432,6 +1773,8 @@ namespace OpenDentBusiness{
 						}
 						mu.Action="Edit smoking status";
 						break;
+					#endregion
+					#region Lab
 					case EhrMeasureType.Lab:
 						List<MedicalOrder> listLabOrders=MedicalOrders.GetLabsByDate(pat.PatNum,DateTime.Today.AddYears(-1),DateTime.Today);
 						if(listLabOrders.Count==0) {
@@ -1457,6 +1800,8 @@ namespace OpenDentBusiness{
 						mu.Action="Edit lab panels";
 						mu.Action2="Import lab results";
 						break;
+					#endregion
+					#region ElectronicCopy
 					case EhrMeasureType.ElectronicCopy:
 						List<EhrMeasureEvent> listRequests=EhrMeasureEvents.GetByType(listMeasureEvents,EhrMeasureEventType.ElectronicCopyRequested);
 						List<EhrMeasureEvent> listRequestsPeriod=new List<EhrMeasureEvent>();
@@ -1507,6 +1852,8 @@ namespace OpenDentBusiness{
 						}
 						mu.Action="Provide elect copy to Pt";
 						break;
+					#endregion
+					#region ClinicalSummaries
 					case EhrMeasureType.ClinicalSummaries:
 						List<DateTime> listVisits=new List<DateTime>();//for this year
 						List<Procedure> listProcs=Procedures.Refresh(pat.PatNum);
@@ -1556,6 +1903,8 @@ namespace OpenDentBusiness{
 						}
 						mu.Action="Send clinical summary to Pt";
 						break;
+					#endregion
+					#region Reminders
 					case EhrMeasureType.Reminders:
 						if(pat.PatStatus!=PatientStatus.Patient) {
 							mu.Met=MuMet.NA;
@@ -1588,6 +1937,8 @@ namespace OpenDentBusiness{
 						}
 						mu.Action="Send reminders";
 						break;
+					#endregion
+					#region MedReconcile
 					case EhrMeasureType.MedReconcile:
 						int countFromRef=0;
 						int countFromRefPeriod=0;
@@ -1623,6 +1974,8 @@ namespace OpenDentBusiness{
 						mu.Action="Reconcile medications";
 						mu.Action2="Enter Referrals";
 						break;
+					#endregion
+					#region SummaryOfCare
 					case EhrMeasureType.SummaryOfCare:
 						int countToRefPeriod=0;
 						for(int c=0;c<listRefAttach.Count;c++) {
@@ -1652,6 +2005,7 @@ namespace OpenDentBusiness{
 						mu.Action="Send/Receive summary of care";
 						mu.Action2="Enter Referrals";
 						break;
+					#endregion
 				}
 				list.Add(mu);
 			}
