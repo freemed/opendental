@@ -33,6 +33,15 @@ namespace OpenDentBusiness {
 		///<summary>Not a database column.  Used for timing calculation of each measure.</summary>
 		[CrudColumn(IsNotDbColumn=true)]
 		public TimeSpan ElapsedTime;
+		///<summary>Not a database column.  An explanation of the conditions which would allow a Provider to be excluded from this requirement.</summary>
+		[CrudColumn(IsNotDbColumn=true)]
+		public string ExclusionExplain;
+		///<summary>Not a database column.  Some exclusions have an associated count that the Provider must report if they are to attest to exclusion from this requirement.  Can be 0.</summary>
+		[CrudColumn(IsNotDbColumn=true)]
+		public int ExclusionCount;
+		///<summary>Not a database column.  A description of what the count is.  Example: If a Provider writes fewer than 100 Rx's during the reporting period, they can be excluded from reporting the ProvOrderEntry - CPOE measure.  The count would be the number of Rx's entered by the Provider during the reporting period and the label would identify the number as such.</summary>
+		[CrudColumn(IsNotDbColumn=true)]
+		public string ExclusionCountDescript;
 
 		///<summary></summary>
 		public EhrMeasure Copy() {
@@ -57,29 +66,31 @@ namespace OpenDentBusiness {
 		///<summary>6</summary>
 		ProvOrderEntry,
 		///<summary>7</summary>
-		Rx,
+		CPOE_MedOrdersOnly,
 		///<summary>8</summary>
-		VitalSigns,
+		CPOE_PreviouslyOrdered,
 		///<summary>9</summary>
-		Smoking,
+		Rx,
 		///<summary>10</summary>
-		Lab,
+		VitalSigns,
 		///<summary>11</summary>
-		ElectronicCopy,
-		///<summary>12</summary>
-		ClinicalSummaries,
-		///<summary>13</summary>
-		Reminders,
-		///<summary>14</summary>
-		MedReconcile,
-		///<summary>15- Summary of care record for transition or referral.</summary>
-		SummaryOfCare,
-		///<summary>16</summary>
 		VitalSignsBMIOnly,
-		///<summary>17</summary>
+		///<summary>12</summary>
 		VitalSignsBPOnly,
+		///<summary>13</summary>
+		Smoking,
+		///<summary>14</summary>
+		Lab,
+		///<summary>15</summary>
+		ElectronicCopy,
+		///<summary>16</summary>
+		ClinicalSummaries,
+		///<summary>17</summary>
+		Reminders,
 		///<summary>18</summary>
-		ProvOrderEntryAlt
+		MedReconcile,
+		///<summary>19- Summary of care record for transition or referral.</summary>
+		SummaryOfCare
 	}
 
 	///<summary>Helps track whether the current patient has met the measurement objectives.</summary>

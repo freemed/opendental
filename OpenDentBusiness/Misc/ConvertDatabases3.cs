@@ -1168,7 +1168,7 @@ namespace OpenDentBusiness {
 				}
 				//oracle compatible
 				command="UPDATE medicationpat SET IsCpoe=1 "
-						+"WHERE PatNote!='' AND DateStart > "+POut.Date((new DateTime(1880,1,1)));
+						+"WHERE PatNote!='' AND DateStart > "+POut.Date((new DateTime(1880,1,1)))+" AND ProvNum!=0";
 				Db.NonQ(command);
 				//Add additional EHR Measures to DB
 				if(DataConnection.DBtype==DatabaseType.MySql) {
@@ -1178,6 +1178,8 @@ namespace OpenDentBusiness {
 					Db.NonQ(command);
 					command="INSERT INTO ehrmeasure(MeasureType,Numerator,Denominator) VALUES(18,-1,-1)";
 					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(MeasureType,Numerator,Denominator) VALUES(19,-1,-1)";
+					Db.NonQ(command);
 				}
 				else {//oracle
 					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM ehrmeasure),16,-1,-1)";
@@ -1185,6 +1187,16 @@ namespace OpenDentBusiness {
 					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM ehrmeasure),17,-1,-1)";
 					Db.NonQ(command);
 					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM ehrmeasure),18,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM ehrmeasure),19,-1,-1)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('MeaningfulUseTwo','0')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'MeaningfulUseTwo','0')";
 					Db.NonQ(command);
 				}
 

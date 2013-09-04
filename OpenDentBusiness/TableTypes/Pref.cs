@@ -220,6 +220,8 @@ namespace OpenDentBusiness {
 		LanguagesUsedByPatients,
 		LetterMergePath,
 		MainWindowTitle,
+		///<summary>0=Meaningful Use Stage 1, 1=Meaningful Use Stage 2.  Global, affects all providers.  Changes the MU grid that is seen for individual patients and for summary reports.</summary>
+		MeaningfulUseTwo,
 		///<summary>New procs will use the fee amount tied to the medical code instead of the ADA code.</summary>
 		MedicalFeeUsedForNewProcs,
 		///<summary>FK to medication.MedicationNum</summary>
