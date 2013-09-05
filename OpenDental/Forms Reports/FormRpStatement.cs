@@ -690,6 +690,10 @@ namespace OpenDental{
 			else {
 				par.AddText(PatGuar.City+", "+PatGuar.State+" "+PatGuar.Zip);
 			}
+			if(PatGuar.Country!="") {
+				par.AddLineBreak();
+				par.AddText(PatGuar.Country);
+			}
 			//perforated line------------------------------------------------------------------------------------------------------
 			//yPos=350;//3.62 inches from top, 1/3 page down
 			frame=MigraDocHelper.CreateContainer(section,0,350,850,30);
@@ -1301,6 +1305,7 @@ namespace OpenDental{
 					patAddress+=PatGuar.Address2+"\r\n";
 				}
 				patAddress+=PatGuar.Zip+" "+PatGuar.City;
+				patAddress+=((PatGuar.Country=="")?"":"\r\n"+PatGuar.Country);
 				MigraDocHelper.DrawString(frame,text,swfont,495,218);//middle left
 				MigraDocHelper.DrawString(frame,text,swfont,30,263);//Lower left
 				//Compute Reference#------------------------------------------------------

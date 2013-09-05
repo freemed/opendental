@@ -158,6 +158,9 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("Address2",0,category));
 				list.Add(new DisplayField("City",0,category));
 				list.Add(new DisplayField("State",0,category));
+				if(PrefC.GetBool(PrefName.DockPhonePanelShow)) {
+					list.Add(new DisplayField("Country",0,category));
+				}
 				list.Add(new DisplayField("Zip",0,category));
 				list.Add(new DisplayField("Hm Phone",0,category));
 				list.Add(new DisplayField("Wk Phone",0,category));
@@ -354,6 +357,9 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("Address2",0,category));
 				list.Add(new DisplayField("City",0,category));
 				list.Add(new DisplayField("State",0,category));
+				if(PrefC.GetBool(PrefName.DockPhonePanelShow)) {
+					list.Add(new DisplayField("Country",0,category));
+				}
 				list.Add(new DisplayField("Zip",0,category));
 				list.Add(new DisplayField("Hm Phone",0,category));
 				list.Add(new DisplayField("Wk Phone",0,category));

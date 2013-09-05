@@ -149,6 +149,10 @@ namespace OpenDental {
 				textReferral.Enabled=false;
 				textReferralFName.Enabled=false;
 			}
+			if(!PrefC.GetBool(PrefName.DockPhonePanelShow)) {
+				labelST.Text="ST";
+				textCountry.Visible=false;
+			}
 			FillComboZip();
 			ResetSubscriberLists();
 		}
@@ -1332,6 +1336,7 @@ namespace OpenDental {
 			guar.Address2=textAddress2.Text;
 			guar.City=textCity.Text;
 			guar.State=textState.Text;
+			guar.Country=textCountry.Text;
 			guar.Zip=textZip.Text;
 			guar.AddrNote=textAddrNotes.Text;
 			guar.ClinicNum=Security.CurUser.ClinicNum;
@@ -1397,6 +1402,7 @@ namespace OpenDental {
 				pat2.Address2=textAddress2.Text;
 				pat2.City=textCity.Text;
 				pat2.State=textState.Text;
+				pat2.Country=textCountry.Text;
 				pat2.Zip=textZip.Text;
 				pat2.AddrNote=textAddrNotes.Text;
 				pat2.ClinicNum=Security.CurUser.ClinicNum;
@@ -1441,6 +1447,7 @@ namespace OpenDental {
 				pat3.Address2=textAddress2.Text;
 				pat3.City=textCity.Text;
 				pat3.State=textState.Text;
+				pat3.Country=textCountry.Text;
 				pat3.Zip=textZip.Text;
 				pat3.AddrNote=textAddrNotes.Text;
 				pat3.ClinicNum=Security.CurUser.ClinicNum;
@@ -1485,6 +1492,7 @@ namespace OpenDental {
 				pat4.Address2=textAddress2.Text;
 				pat4.City=textCity.Text;
 				pat4.State=textState.Text;
+				pat4.Country=textCountry.Text;
 				pat4.Zip=textZip.Text;
 				pat4.AddrNote=textAddrNotes.Text;
 				pat4.ClinicNum=Security.CurUser.ClinicNum;
@@ -1529,6 +1537,7 @@ namespace OpenDental {
 				pat5.Address2=textAddress2.Text;
 				pat5.City=textCity.Text;
 				pat5.State=textState.Text;
+				pat5.Country=textCountry.Text;
 				pat5.Zip=textZip.Text;
 				pat5.AddrNote=textAddrNotes.Text;
 				pat5.ClinicNum=Security.CurUser.ClinicNum;

@@ -733,6 +733,9 @@ namespace OpenDental{
 					case "State":
 						row.Cells.Add(PatCur.State);
 						break;
+					case "Country":
+						row.Cells.Add(PatCur.Country);
+						break;
 					case "Zip":
 						row.Cells.Add(PatCur.Zip);
 						break;
