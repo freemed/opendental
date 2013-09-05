@@ -51,9 +51,9 @@ namespace OpenDental {
 			XmlNode node=doc.SelectSingleNode("//CustomerIdResponse");
 			if(node!=null) {
 				patNum=node.InnerText;
-				textOpenDentalURl.Text="https://www.opendental.com/PatientPortal/PatientPortal.html?ID="+patNum;
+				textOpenDentalURl.Text="https://www.opendentalsoft.com/PatientPortal/PatientPortal.html?ID="+patNum;
 				if(textPatientPortalURL.Text=="") {
-					textPatientPortalURL.Text="https://www.opendental.com/PatientPortal/PatientPortal.html?ID="+patNum;
+					textPatientPortalURL.Text="https://www.opendentalsoft.com/PatientPortal/PatientPortal.html?ID="+patNum;
 				}
 			}
 			if(patNum=="") {
