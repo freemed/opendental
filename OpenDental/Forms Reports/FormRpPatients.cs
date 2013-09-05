@@ -605,7 +605,7 @@ namespace OpenDental{
 			ALpatFilter.Add("Referred From Dentist");//new, need to add functionality
 			ALpatFilter.Add("Referred From Patient");//new, need to add functionality 
       ALpatFilter.Add("Salutation"); 
-      ALpatFilter.Add("Secondary Carrier");
+      //ALpatFilter.Add("Secondary Carrier");
       ALpatFilter.Add("SecProv"); 
       ALpatFilter.Add("SecRelationship"); 
       ALpatFilter.Add("SchoolName"); 
