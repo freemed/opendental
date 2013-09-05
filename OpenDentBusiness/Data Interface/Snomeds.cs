@@ -156,6 +156,16 @@ namespace OpenDentBusiness{
 			return null;
 		}
 
+		///<summary></summary>
+		public static void TruncateAll() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod());
+				return;
+			}
+			string command="TRUNCATE TABLE cdcrec";//Oracle compatible
+			DataCore.NonQ(command);
+		}
+
 		///<summary>Returns dictionary&lt;ICD9Code,SNOMEDCode&gt; for crossmapping exact matches between ICD9 and SNOMED.</summary>
 		public static Dictionary<string,string> GetICD9toSNOMEDDictionary() {
 			//No need to check RemotingRole; no call to db.

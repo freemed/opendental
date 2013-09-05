@@ -80,6 +80,16 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
+		///<summary></summary>
+		public static void TruncateAll() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod());
+				return;
+			}
+			string command="TRUNCATE TABLE cdcrec";//Oracle compatible
+			DataCore.NonQ(command);
+		}
+
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 

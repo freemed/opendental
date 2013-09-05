@@ -44,13 +44,13 @@ namespace OpenDentBusiness{
 
 		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
 		public static void ImportCdcrec(string tempFileName) {
-			List<string> codeList=Cdcrecs.GetAllCodes();
+			HashSet<string> codeHash=new HashSet<string>(Cdcrecs.GetAllCodes());
 			string[] lines=File.ReadAllLines(tempFileName);
 			string[] arrayCDCREC;
 			Cdcrec cdcrecTemp=new Cdcrec();
 			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
 				arrayCDCREC=lines[i].Split('\t');
-				if(codeList.Contains(arrayCDCREC[0])){//code already existed
+				if(codeHash.Contains(arrayCDCREC[0])) {//code already existed
 					continue;
 				}
 				cdcrecTemp.CdcrecCode				=arrayCDCREC[0];
@@ -73,13 +73,13 @@ namespace OpenDentBusiness{
 
 		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
 		public static void ImportCvx(string tempFileName) {
-			List<string> codeList=Cvxs.GetAllCodes();
+			HashSet<string> codeHash=new HashSet<string>(Cvxs.GetAllCodes());
 			string[] lines=File.ReadAllLines(tempFileName);
 			string[] arrayCvx;
 			Cvx cvxTemp=new Cvx();
 			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
 				arrayCvx=lines[i].Split('\t');
-				if(codeList.Contains(arrayCvx[0])) {//code already exists
+				if(codeHash.Contains(arrayCvx[0])) {//code already exists
 					continue;
 				}
 				cvxTemp.CvxCode			=arrayCvx[0];
@@ -91,13 +91,13 @@ namespace OpenDentBusiness{
 
 		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
 		public static void ImportHcpcs(string tempFileName) {
-			List<string> codeList=Hcpcses.GetAllCodes();
+			HashSet<string> codeHash=new HashSet<string>(Hcpcses.GetAllCodes());
 			string[] lines=File.ReadAllLines(tempFileName);
 			string[] arrayHCPCS;
 			Hcpcs hcpcsTemp=new Hcpcs();
 			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
 				arrayHCPCS=lines[i].Split('\t');
-				if(codeList.Contains(arrayHCPCS[0])) {//code already exists
+				if(codeHash.Contains(arrayHCPCS[0])) {//code already exists
 					continue;
 				}
 				hcpcsTemp.HcpcsCode					=arrayHCPCS[0];
@@ -109,18 +109,18 @@ namespace OpenDentBusiness{
 
 		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
 		public static void ImportIcd10(string tempFileName) {
-			List<string> codeList=Icd10s.GetAllCodes();
+			HashSet<string> codeHash=new HashSet<string>(Icd10s.GetAllCodes());
 			string[] lines=File.ReadAllLines(tempFileName);
 			string[] arrayICD10;
 			Icd10 icd10Temp=new Icd10();
 			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
 				arrayICD10=lines[i].Split('\t');
-				if(codeList.Contains(arrayICD10[0])) {//code already exists
+				if(codeHash.Contains(arrayICD10[0])) {//code already exists
 					continue;
 				}
 				icd10Temp.Icd10Code		=arrayICD10[0];
 				icd10Temp.Description	=arrayICD10[1];
-				icd10Temp.IsCode		=arrayICD10[2];
+				icd10Temp.IsCode			=arrayICD10[2];
 				Icd10s.Insert(icd10Temp);
 			}
 			File.Delete(tempFileName);
@@ -128,13 +128,13 @@ namespace OpenDentBusiness{
 
 		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
 		public static void ImportIcd9(string tempFileName) {
-			List<string> codeList=ICD9s.GetAllCodes();
+			HashSet<string> codeHash=new HashSet<string>(ICD9s.GetAllCodes());
 			string[] lines=File.ReadAllLines(tempFileName);
 			string[] arrayICD9;
 			ICD9 icd9Temp=new ICD9();
 			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
 				arrayICD9=lines[i].Split('\t');
-				if(codeList.Contains(arrayICD9[0])) {//code already exists
+				if(codeHash.Contains(arrayICD9[0])) {//code already exists
 					continue;
 				}
 				icd9Temp.ICD9Code		=arrayICD9[0];
@@ -146,13 +146,13 @@ namespace OpenDentBusiness{
 
 		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
 		public static void ImportLoinc(string tempFileName) {
-			List<string> codeList=Loincs.GetAllCodes();
+			HashSet<string> codeHash=new HashSet<string>(Loincs.GetAllCodes());
 			string[] lines=File.ReadAllLines(tempFileName);
 			string[] arrayLoinc;
 			Loinc loincTemp=new Loinc();
 			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
 				arrayLoinc=lines[i].Split('\t');
-				if(codeList.Contains(arrayLoinc[0])) {//code already exists
+				if(codeHash.Contains(arrayLoinc[0])) {//code already exists
 					continue;
 				}
 				loincTemp.LoincCode								=arrayLoinc[0];
@@ -180,13 +180,13 @@ namespace OpenDentBusiness{
 
 		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
 		public static void ImportRxNorm(string tempFileName) {
-			List<string> codeList=RxNorms.GetAllCodes();
+			HashSet<string> codeHash=new HashSet<string>(RxNorms.GetAllCodes());
 			string[] lines=File.ReadAllLines(tempFileName);
 			string[] arrayRxNorm;
 			RxNorm rxNormTemp=new RxNorm();
 			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
 				arrayRxNorm=lines[i].Split('\t');
-				if(codeList.Contains(arrayRxNorm[0])) {//code already exists
+				if(codeHash.Contains(arrayRxNorm[0])) {//code already exists
 					continue;
 				}
 				rxNormTemp.RxCui				=arrayRxNorm[0];
@@ -199,13 +199,13 @@ namespace OpenDentBusiness{
 
 		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
 		public static void ImportSnomed(string tempFileName) {
-			List<string> codeList=Snomeds.GetAllCodes();
+			HashSet<string> codeHash=new HashSet<string>(Snomeds.GetAllCodes());
 			string[] lines=File.ReadAllLines(tempFileName);
 			string[] arraySnomed;
 			Snomed snomedTemp=new Snomed();
 			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
 				arraySnomed=lines[i].Split('\t');
-				if(codeList.Contains(arraySnomed[0])) {//code already exists
+				if(codeHash.Contains(arraySnomed[0])) {//code already exists
 					continue;
 				}
 				snomedTemp.SnomedCode		=arraySnomed[0];
@@ -217,13 +217,13 @@ namespace OpenDentBusiness{
 
 		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
 		public static void ImportSop(string tempFileName) {
-			List<string> codeList=Sops.GetAllCodes();
+			HashSet<string> codeHash=new HashSet<string>(Sops.GetAllCodes());
 			string[] lines=File.ReadAllLines(tempFileName);
 			string[] arraySop;
 			Sop sopTemp=new Sop();
 			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
 				arraySop=lines[i].Split('\t');
-				if(codeList.Contains(arraySop[0])) {//code already exists
+				if(codeHash.Contains(arraySop[0])) {//code already exists
 					continue;
 				}
 				sopTemp.SopCode			=arraySop[0];

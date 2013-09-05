@@ -30,6 +30,8 @@ namespace OpenDental{
 		public int NumberMultiplication;
 		private Label labelError;
 		public string ErrorMessage;
+		///<summary>Sets the number of milliseconds between ticks. Must be >0, default is 200.</summary>
+		public int TickMS;
 
 		///<summary></summary>
 		public FormProgress(){
@@ -74,31 +76,31 @@ namespace OpenDental{
 			// 
 			// butCancel
 			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCancel.Autosize = true;
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(376,215);
+			this.butCancel.Location = new System.Drawing.Point(376, 215);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.Size = new System.Drawing.Size(75, 26);
 			this.butCancel.TabIndex = 0;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// progressBar1
 			// 
-			this.progressBar1.Location = new System.Drawing.Point(73,99);
+			this.progressBar1.Location = new System.Drawing.Point(73, 99);
 			this.progressBar1.Name = "progressBar1";
-			this.progressBar1.Size = new System.Drawing.Size(377,23);
+			this.progressBar1.Size = new System.Drawing.Size(377, 23);
 			this.progressBar1.TabIndex = 2;
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(71,69);
+			this.label1.Location = new System.Drawing.Point(71, 69);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(100,23);
+			this.label1.Size = new System.Drawing.Size(100, 23);
 			this.label1.TabIndex = 3;
 			this.label1.Text = "Progress";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -111,27 +113,27 @@ namespace OpenDental{
 			// 
 			// labelProgress
 			// 
-			this.labelProgress.Location = new System.Drawing.Point(71,135);
+			this.labelProgress.Location = new System.Drawing.Point(71, 135);
 			this.labelProgress.Name = "labelProgress";
-			this.labelProgress.Size = new System.Drawing.Size(402,55);
+			this.labelProgress.Size = new System.Drawing.Size(402, 55);
 			this.labelProgress.TabIndex = 4;
 			this.labelProgress.Text = "Preparing for Upload";
 			// 
 			// labelError
 			// 
-			this.labelError.Font = new System.Drawing.Font("Microsoft Sans Serif",10F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.labelError.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.labelError.ForeColor = System.Drawing.Color.DarkRed;
-			this.labelError.Location = new System.Drawing.Point(32,13);
+			this.labelError.Location = new System.Drawing.Point(32, 13);
 			this.labelError.Name = "labelError";
-			this.labelError.Size = new System.Drawing.Size(456,41);
+			this.labelError.Size = new System.Drawing.Size(456, 41);
 			this.labelError.TabIndex = 5;
 			this.labelError.Text = "Error Message";
 			this.labelError.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// FormProgress
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(500,294);
+			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+			this.ClientSize = new System.Drawing.Size(500, 294);
 			this.Controls.Add(this.labelError);
 			this.Controls.Add(this.labelProgress);
 			this.Controls.Add(this.label1);
@@ -152,6 +154,9 @@ namespace OpenDental{
 		private void FormProgress_Load(object sender, System.EventArgs e) {
 			progressBar1.Maximum=(int)(MaxVal*NumberMultiplication);
 			labelError.Visible=false;
+			if(TickMS!=null && TickMS>0) {
+				timer1.Interval=TickMS;
+			}
 		}
 		
 		///<summary>Happens every 200 ms</summary>

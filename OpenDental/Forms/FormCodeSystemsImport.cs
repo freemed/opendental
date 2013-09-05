@@ -83,6 +83,7 @@ namespace OpenDental {
 			}
 			FillGrid();
 			Cursor=Cursors.Default;
+			butDownload.Visible=true;
 		}
 
 		private void butDownload_Click(object sender,EventArgs e) {
@@ -156,7 +157,7 @@ subject to the End User limitations noted in 4.","SNOMED CT sub-license End User
 			doc.LoadXml(result);
 			XmlNode node=doc.SelectSingleNode("//Error");
 			if(node!=null) {
-				//throw new Exception(node.InnerText);
+				throw new Exception(node.InnerText);
 			}
 			node=doc.SelectSingleNode("//CodeSystemURL");
 			string codeSystemURL="";
@@ -164,9 +165,7 @@ subject to the End User limitations noted in 4.","SNOMED CT sub-license End User
 				codeSystemURL=node.InnerText;
 			}
 			//Download File to local machine
-			string tempFile=downloadFileHelper("http://localhost/codesystems/SNOMEDCT.zip");//codeSystemURL);//shows progress bar.
-			Stopwatch sw = new Stopwatch();
-			sw.Start();
+			string tempFile=downloadFileHelper(codeSystemURL);//shows progress bar."http://localhost/codesystems/SNOMEDCT.zip");//
 			try {//moved try/catch outside of switch statement to make code more readable, functions the same.
 				switch(codeSystemName) {
 					case "AdministrativeSex":
@@ -174,8 +173,6 @@ subject to the End User limitations noted in 4.","SNOMED CT sub-license End User
 						return false;
 					case "CDCREC":
 						CodeSystems.ImportCdcrec(tempFile);
-						sw.Stop();
-						MessageBox.Show("Seconds elapsed:"+sw.ElapsedMilliseconds/1000);
 						MsgBox.Show(this,"CDCREC codes imported successfully.");
 						break;
 					case "CDT":
@@ -184,56 +181,38 @@ subject to the End User limitations noted in 4.","SNOMED CT sub-license End User
 					case "CPT":
 						//Handled slightly differenly before getting here. User must provide resource file using file picker, which will be pre-processed elsewhere.
 						CodeSystems.ImportCpt(tempFile);
-						sw.Stop();
-						MessageBox.Show("Seconds elapsed:"+sw.ElapsedMilliseconds/1000);
 						MsgBox.Show(this,"CPT codes imported successfully.");
 						break;
 					case "CVX":
 						CodeSystems.ImportCvx(tempFile);
-						sw.Stop();
-						MessageBox.Show("Seconds elapsed:"+sw.ElapsedMilliseconds/1000);
 						MsgBox.Show(this,"CVX codes imported successfully.");
 						break;
 					case "HCPCS":
 						CodeSystems.ImportHcpcs(tempFile);
-						sw.Stop();
-						MessageBox.Show("Seconds elapsed:"+sw.ElapsedMilliseconds/1000);
 						MsgBox.Show(this,"HCPCS codes imported successfully.");
 						break;
 					case "ICD10CM":
 						CodeSystems.ImportIcd10(tempFile);
-						sw.Stop();
-						MessageBox.Show("Seconds elapsed:"+sw.ElapsedMilliseconds/1000);
 						MsgBox.Show(this,"ICD10CM codes imported successfully.");
 						break;
 					case "ICD9CM":
 						CodeSystems.ImportIcd9(tempFile);
-						sw.Stop();
-						MessageBox.Show("Seconds elapsed:"+sw.ElapsedMilliseconds/1000);
 						MsgBox.Show(this,"ICD9CM codes imported successfully.");
 						break;
 					case "LOINC":
 						CodeSystems.ImportLoinc(tempFile);
-						sw.Stop();
-						MessageBox.Show("Seconds elapsed:"+sw.ElapsedMilliseconds/1000);
 						MsgBox.Show(this,"LOINC codes imported successfully.");
 						break;
 					case "RXNORM":
 						CodeSystems.ImportRxNorm(tempFile);
-						sw.Stop();
-						MessageBox.Show("Seconds elapsed:"+sw.ElapsedMilliseconds/1000);
 						MsgBox.Show(this,"RXNORM codes imported successfully.");
 						break;
 					case "SNOMEDCT":
 						CodeSystems.ImportSnomed(tempFile);
-						sw.Stop();
-						MessageBox.Show("Seconds elapsed:"+sw.ElapsedMilliseconds/1000);
 						MsgBox.Show(this,"SNOMED CT codes imported successfully.");
 						break;
 					case "SOP":
 						CodeSystems.ImportSop(tempFile);
-						sw.Stop();
-						MessageBox.Show("Seconds elapsed:"+sw.ElapsedMilliseconds/1000);
 						MsgBox.Show(this,"SOP codes imported successfully.");
 						break;
 					default:
@@ -262,22 +241,30 @@ subject to the End User limitations noted in 4.","SNOMED CT sub-license End User
 				msgbox.ShowDialog();
 				return null;
 			}
-			int fileSize=(int)webResp.ContentLength/1024;
+			int fileSize=(int)webResp.ContentLength/1024;//KB
 			FormProgress FormP=new FormProgress();
+			//display the progress dialog to the user:
+			FormP.MaxVal=(double)fileSize/1024;//MB
+			FormP.NumberMultiplication=100;
+			FormP.DisplayText="?currentVal MB of ?maxVal MB copied";
+			FormP.NumberFormat="F";
+			FormP.TickMS=10;
+			//FormP.MaxVal=fileSize;//to keep the form from closing until the real MaxVal is set.
+			//FormP.NumberMultiplication=1;
+			//FormP.DisplayText="Preparing records for upload.";
+			//FormP.NumberFormat="F0";
 			//start the thread that will perform the download
 			System.Threading.ThreadStart downloadDelegate= delegate { DownloadFileWorker(codeSystemURL,zipFileDestination,ref FormP); };
 			Thread workerThread=new System.Threading.Thread(downloadDelegate);
 			workerThread.Start();
-			//display the progress dialog to the user:
-			FormP.MaxVal=(double)fileSize/1024;
-			FormP.NumberMultiplication=100;
-			FormP.DisplayText="?currentVal MB of ?maxVal MB copied";
-			FormP.NumberFormat="F";
 			FormP.ShowDialog();
 			if(FormP.DialogResult==DialogResult.Cancel) {
 				workerThread.Abort();
 				return null;
 			}
+			FormP.Dispose();
+			Application.DoEvents();//allow progress window to go away when download is complete.
+			Thread.Sleep(100);//allow file to be released for use by the unzipper.
 			//Unzip the compressed file-----------------------------------------------------------------------------------------------------
 			MemoryStream ms=new MemoryStream();
 			using(ZipFile unzipped=ZipFile.Read(zipFileDestination)) {
@@ -321,27 +308,6 @@ subject to the End User limitations noted in 4.","SNOMED CT sub-license End User
 			//myWebClient.DownloadFile(downloadUri,ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),"Setup.exe"));
 		}
 
-		/////<summary><para>Returns false if not allowed. Generates error messages. Checks remoting role, and replication status.</para>
-		/////<para>This is different than the server side validation that happens when codes are requested.</para></summary>
-		//private bool IsValidUserRequest() {
-		//	return true;//no longer needed.
-		//	if(RemotingClient.RemotingRole==RemotingRole.ServerWeb) {
-		//		MsgBox.Show(this,"Importing codes is only allowed from the web server");
-		//		return false;
-		//	}
-		//	if(PrefC.GetString(PrefName.WebServiceServerName)!="" //using web service
-		//		&&!ODEnvironment.IdIsThisComputer(PrefC.GetString(PrefName.WebServiceServerName).ToLower()))//and not on web server 
-		//	{
-		//		MessageBox.Show(Lan.g(this,"Importing codes is only allowed from the web server: ")+PrefC.GetString(PrefName.WebServiceServerName));
-		//		return false;
-		//	}
-		//	if(ReplicationServers.ServerIsBlocked()) {
-		//		MsgBox.Show(this,"Importing codes is not allowed on this replication server");
-		//		return false;
-		//	}
-		//	return true;
-		//}
-
 		///<summary>Throws exceptions, put in try catch block.</summary>
 		private static string RequestCodeSystemsXml() {
 			//No xml needed...? ----------------------------------------------------------------------------------------------------
@@ -374,6 +340,9 @@ subject to the End User limitations noted in 4.","SNOMED CT sub-license End User
 				writer.WriteEndElement();
 				writer.WriteStartElement("PracticeTitle");
 				writer.WriteString(PrefC.GetString(PrefName.PracticeTitle));
+				writer.WriteEndElement();
+				writer.WriteStartElement("PracticeAddress");
+				writer.WriteString(PrefC.GetString(PrefName.PracticeAddress));
 				writer.WriteEndElement();
 				writer.WriteStartElement("PracticePhone");
 				writer.WriteString(PrefC.GetString(PrefName.PracticePhone));

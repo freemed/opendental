@@ -43,6 +43,7 @@ namespace OpenDental{
 			this.butDownload.Size = new System.Drawing.Size(106, 24);
 			this.butDownload.TabIndex = 3;
 			this.butDownload.Text = "Download Updates";
+			this.butDownload.Visible = false;
 			this.butDownload.Click += new System.EventHandler(this.butDownload_Click);
 			// 
 			// butCancel
