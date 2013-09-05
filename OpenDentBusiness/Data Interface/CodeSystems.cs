@@ -66,6 +66,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Called after user provides resource file.  Throws exceptions.</summary>
 		public static void ImportCpt(string tempFileName) {
+			//need to provide users a file picker interface to provide the raw files and then process them.
 			throw new Exception("Not Implemented.");
 			//handled differently because users must download and provide resource files independantly
 		}
@@ -163,7 +164,7 @@ namespace OpenDentBusiness{
 				loincTemp.MethodType							=arrayLoinc[6];
 				loincTemp.StatusOfCode						=arrayLoinc[7];
 				loincTemp.NameShort								=arrayLoinc[8];
-				loincTemp.ClassType								=PIn.Int(arrayLoinc[9]);
+				loincTemp.ClassType								=arrayLoinc[9];
 				loincTemp.UnitsRequired						=arrayLoinc[10]=="Y";
 				loincTemp.OrderObs								=arrayLoinc[11];
 				loincTemp.HL7FieldSubfieldID			=arrayLoinc[12];

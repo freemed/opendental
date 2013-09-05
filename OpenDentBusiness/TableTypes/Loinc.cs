@@ -33,7 +33,7 @@ namespace OpenDentBusiness{
 		///<summary>#EULA REQUIRED# Introduced in version 2.07, this field is a concatenation of the fully specified LOINC name. The field width may change in a future release. Width 40. LOINC244 column 29.</summary>
 		public string NameShort;//ShortName;
 		///<summary>1=Laboratory class; 2=Clinical class; 3=Claims attachments; 4=Surveys. LOINC244 column 16.</summary>
-		public int ClassType;
+		public string ClassType;
 		///<summary>Y/N field that indicates that units are required when this LOINC is included as an OBX segment in a HIPAA attachment. LOINC244 column 26.</summary>
 		public bool UnitsRequired;
 		///<summary>Defines term as order only, observation only, or both. A fourth category, Subset, is used for terms that are subsets of a panel but do not represent a package that is known to be orderable we have defined them only to make it easier to maintain panels or other sets within the LOINC construct. LOINC244 column 30.</summary>

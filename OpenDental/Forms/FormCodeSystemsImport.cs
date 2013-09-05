@@ -12,6 +12,8 @@ using System.Xml;
 using System.Net;
 using System.IO;
 using System.Threading;
+using Ionic.Zip;
+using System.Diagnostics;
 
 namespace OpenDental {
 	public partial class FormCodeSystemsImport:Form {
@@ -154,7 +156,7 @@ subject to the End User limitations noted in 4.","SNOMED CT sub-license End User
 			doc.LoadXml(result);
 			XmlNode node=doc.SelectSingleNode("//Error");
 			if(node!=null) {
-				throw new Exception(node.InnerText);
+				//throw new Exception(node.InnerText);
 			}
 			node=doc.SelectSingleNode("//CodeSystemURL");
 			string codeSystemURL="";
@@ -162,7 +164,9 @@ subject to the End User limitations noted in 4.","SNOMED CT sub-license End User
 				codeSystemURL=node.InnerText;
 			}
 			//Download File to local machine
-			string tempFile=downloadFileHelper(codeSystemURL);//shows progress bar.
+			string tempFile=downloadFileHelper("http://localhost/codesystems/SNOMEDCT.zip");//codeSystemURL);//shows progress bar.
+			Stopwatch sw = new Stopwatch();
+			sw.Start();
 			try {//moved try/catch outside of switch statement to make code more readable, functions the same.
 				switch(codeSystemName) {
 					case "AdministrativeSex":
@@ -170,6 +174,8 @@ subject to the End User limitations noted in 4.","SNOMED CT sub-license End User
 						return false;
 					case "CDCREC":
 						CodeSystems.ImportCdcrec(tempFile);
+						sw.Stop();
+						MessageBox.Show("Seconds elapsed:"+sw.ElapsedMilliseconds/1000);
 						MsgBox.Show(this,"CDCREC codes imported successfully.");
 						break;
 					case "CDT":
@@ -178,38 +184,56 @@ subject to the End User limitations noted in 4.","SNOMED CT sub-license End User
 					case "CPT":
 						//Handled slightly differenly before getting here. User must provide resource file using file picker, which will be pre-processed elsewhere.
 						CodeSystems.ImportCpt(tempFile);
+						sw.Stop();
+						MessageBox.Show("Seconds elapsed:"+sw.ElapsedMilliseconds/1000);
 						MsgBox.Show(this,"CPT codes imported successfully.");
 						break;
 					case "CVX":
 						CodeSystems.ImportCvx(tempFile);
+						sw.Stop();
+						MessageBox.Show("Seconds elapsed:"+sw.ElapsedMilliseconds/1000);
 						MsgBox.Show(this,"CVX codes imported successfully.");
 						break;
 					case "HCPCS":
 						CodeSystems.ImportHcpcs(tempFile);
+						sw.Stop();
+						MessageBox.Show("Seconds elapsed:"+sw.ElapsedMilliseconds/1000);
 						MsgBox.Show(this,"HCPCS codes imported successfully.");
 						break;
 					case "ICD10CM":
 						CodeSystems.ImportIcd10(tempFile);
+						sw.Stop();
+						MessageBox.Show("Seconds elapsed:"+sw.ElapsedMilliseconds/1000);
 						MsgBox.Show(this,"ICD10CM codes imported successfully.");
 						break;
 					case "ICD9CM":
 						CodeSystems.ImportIcd9(tempFile);
+						sw.Stop();
+						MessageBox.Show("Seconds elapsed:"+sw.ElapsedMilliseconds/1000);
 						MsgBox.Show(this,"ICD9CM codes imported successfully.");
 						break;
 					case "LOINC":
 						CodeSystems.ImportLoinc(tempFile);
+						sw.Stop();
+						MessageBox.Show("Seconds elapsed:"+sw.ElapsedMilliseconds/1000);
 						MsgBox.Show(this,"LOINC codes imported successfully.");
 						break;
 					case "RXNORM":
 						CodeSystems.ImportRxNorm(tempFile);
+						sw.Stop();
+						MessageBox.Show("Seconds elapsed:"+sw.ElapsedMilliseconds/1000);
 						MsgBox.Show(this,"RXNORM codes imported successfully.");
 						break;
 					case "SNOMEDCT":
 						CodeSystems.ImportSnomed(tempFile);
+						sw.Stop();
+						MessageBox.Show("Seconds elapsed:"+sw.ElapsedMilliseconds/1000);
 						MsgBox.Show(this,"SNOMED CT codes imported successfully.");
 						break;
 					case "SOP":
 						CodeSystems.ImportSop(tempFile);
+						sw.Stop();
+						MessageBox.Show("Seconds elapsed:"+sw.ElapsedMilliseconds/1000);
 						MsgBox.Show(this,"SOP codes imported successfully.");
 						break;
 					default:
@@ -224,10 +248,10 @@ subject to the End User limitations noted in 4.","SNOMED CT sub-license End User
 			return true;
 		}
 
-		///<summary>Returns temp file name used to download file.  Returns null if the file was not downloaded.</summary>
+		///<summary>Returns temp file name used to download file.  Returns null if the file was not downloaded.  Throws errors if problem unzipping.</summary>
 		private static string downloadFileHelper(string codeSystemURL) {
-			string destinationPath=Path.GetTempFileName();//@"c:\users\ryan\desktop\"+codeSystemName+".txt";
-			File.Delete(destinationPath);
+			string zipFileDestination=Path.GetTempFileName();//@"c:\users\ryan\desktop\"+codeSystemName+".txt";
+			File.Delete(zipFileDestination);
 			WebRequest wr=WebRequest.Create(codeSystemURL);
 			WebResponse webResp=null;
 			try {
@@ -241,7 +265,7 @@ subject to the End User limitations noted in 4.","SNOMED CT sub-license End User
 			int fileSize=(int)webResp.ContentLength/1024;
 			FormProgress FormP=new FormProgress();
 			//start the thread that will perform the download
-			System.Threading.ThreadStart downloadDelegate= delegate { DownloadInstallPatchWorker(codeSystemURL,destinationPath,ref FormP); };
+			System.Threading.ThreadStart downloadDelegate= delegate { DownloadFileWorker(codeSystemURL,zipFileDestination,ref FormP); };
 			Thread workerThread=new System.Threading.Thread(downloadDelegate);
 			workerThread.Start();
 			//display the progress dialog to the user:
@@ -254,11 +278,17 @@ subject to the End User limitations noted in 4.","SNOMED CT sub-license End User
 				workerThread.Abort();
 				return null;
 			}
-			return destinationPath;
+			//Unzip the compressed file-----------------------------------------------------------------------------------------------------
+			MemoryStream ms=new MemoryStream();
+			using(ZipFile unzipped=ZipFile.Read(zipFileDestination)) {
+				ZipEntry ze=unzipped[0];
+				ze.Extract(Path.GetTempPath(),ExtractExistingFileAction.OverwriteSilently);
+				return Path.GetTempPath()+unzipped[0].FileName;
+			}
 		}
 
 		///<summary>This is the function that the worker thread uses to actually perform the download.  Can also call this method in the ordinary way if the file to be transferred is short.</summary>
-		private static void DownloadInstallPatchWorker(string downloadUri,string destinationPath,ref FormProgress progressIndicator) {
+		private static void DownloadFileWorker(string downloadUri,string destinationPath,ref FormProgress progressIndicator) {
 			int chunk=10;//KB
 			byte[] buffer;
 			int i=0;

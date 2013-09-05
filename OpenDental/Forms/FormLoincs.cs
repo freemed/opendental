@@ -211,7 +211,7 @@ namespace OpenDental {
 					loincTemp.ScaleType								=arrayLoinc[5].Trim('\"');
 					loincTemp.MethodType							=arrayLoinc[6].Trim('\"');
 					loincTemp.StatusOfCode						=arrayLoinc[12].Trim('\"');
-					loincTemp.ClassType								=PIn.Int(arrayLoinc[15].Trim('\"'));
+					//loincTemp.ClassType								=PIn.Int(arrayLoinc[15].Trim('\"'));
 					loincTemp.UnitsRequired						=arrayLoinc[25].Trim('\"')=="Y";
 					loincTemp.NameShort								=arrayLoinc[28].Trim('\"');
 					loincTemp.OrderObs								=arrayLoinc[29].Trim('\"');

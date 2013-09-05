@@ -56,7 +56,7 @@ namespace OpenDentBusiness.Crud{
 				loinc.MethodType             = PIn.String(table.Rows[i]["MethodType"].ToString());
 				loinc.StatusOfCode           = PIn.String(table.Rows[i]["StatusOfCode"].ToString());
 				loinc.NameShort              = PIn.String(table.Rows[i]["NameShort"].ToString());
-				loinc.ClassType              = PIn.Int   (table.Rows[i]["ClassType"].ToString());
+				loinc.ClassType              = PIn.String(table.Rows[i]["ClassType"].ToString());
 				loinc.UnitsRequired          = PIn.Bool  (table.Rows[i]["UnitsRequired"].ToString());
 				loinc.OrderObs               = PIn.String(table.Rows[i]["OrderObs"].ToString());
 				loinc.HL7FieldSubfieldID     = PIn.String(table.Rows[i]["HL7FieldSubfieldID"].ToString());
@@ -119,7 +119,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(loinc.MethodType)+"',"
 				+"'"+POut.String(loinc.StatusOfCode)+"',"
 				+"'"+POut.String(loinc.NameShort)+"',"
-				+    POut.Int   (loinc.ClassType)+","
+				+"'"+POut.String(loinc.ClassType)+"',"
 				+    POut.Bool  (loinc.UnitsRequired)+","
 				+"'"+POut.String(loinc.OrderObs)+"',"
 				+"'"+POut.String(loinc.HL7FieldSubfieldID)+"',"
@@ -149,7 +149,7 @@ namespace OpenDentBusiness.Crud{
 				+"MethodType             = '"+POut.String(loinc.MethodType)+"', "
 				+"StatusOfCode           = '"+POut.String(loinc.StatusOfCode)+"', "
 				+"NameShort              = '"+POut.String(loinc.NameShort)+"', "
-				+"ClassType              =  "+POut.Int   (loinc.ClassType)+", "
+				+"ClassType              = '"+POut.String(loinc.ClassType)+"', "
 				+"UnitsRequired          =  "+POut.Bool  (loinc.UnitsRequired)+", "
 				+"OrderObs               = '"+POut.String(loinc.OrderObs)+"', "
 				+"HL7FieldSubfieldID     = '"+POut.String(loinc.HL7FieldSubfieldID)+"', "
@@ -203,7 +203,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(loinc.ClassType != oldLoinc.ClassType) {
 				if(command!=""){ command+=",";}
-				command+="ClassType = "+POut.Int(loinc.ClassType)+"";
+				command+="ClassType = '"+POut.String(loinc.ClassType)+"'";
 			}
 			if(loinc.UnitsRequired != oldLoinc.UnitsRequired) {
 				if(command!=""){ command+=",";}

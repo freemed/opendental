@@ -1197,7 +1197,7 @@ namespace OpenDentBusiness {
 						MethodType varchar(255) NOT NULL,
 						StatusOfCode varchar(255) NOT NULL,
 						NameShort varchar(255) NOT NULL,
-						ClassType int NOT NULL,
+						ClassType varchar(255) NOT NULL,
 						UnitsRequired tinyint NOT NULL,
 						OrderObs varchar(255) NOT NULL,
 						HL7FieldSubfieldID varchar(255) NOT NULL,
@@ -1224,7 +1224,7 @@ namespace OpenDentBusiness {
 						MethodType varchar2(255),
 						StatusOfCode varchar2(255),
 						NameShort varchar2(255),
-						ClassType number(11) NOT NULL,
+						ClassType varchar2(255) NOT NULL,
 						UnitsRequired number(3) NOT NULL,
 						OrderObs varchar2(255),
 						HL7FieldSubfieldID varchar2(255),
@@ -1403,28 +1403,3 @@ namespace OpenDentBusiness {
 
 
 
-
-
-
-
-
-
-				/*				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE administrativesex ADD Description varchar(255) NOT NULL";
-					Db.NonQ(command);
-				}
-				else {//oracle
-					command="ALTER TABLE administrativesex ADD Description varchar2(255)";
-					Db.NonQ(command);
-				}
-				*/
-
-				/*				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE icd10 ADD IsCode varchar(255) NOT NULL";
-					Db.NonQ(command);
-				}
-				else {//oracle
-					command="ALTER TABLE icd10 ADD IsCode varchar2(255)";
-					Db.NonQ(command);
-				}
-				*/
