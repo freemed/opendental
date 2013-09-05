@@ -803,11 +803,12 @@ namespace OpenDentBusiness
 						+"TES"+claim.ClaimNum.ToString());//PWK06: Identification Code.
 				 	EndSegment(sw);
 				}*/
-				//No validation is done.  However, warnings are displayed if:
+				//If Attachment ID # is present but no attachment flag, then sending is blocked.
+				//No other validation is done.  However, warnings are displayed if:
 				//Warning if attachments are listed as Mail even though we are sending electronically.
 				//Warning if any PWK segments are needed, and there is no ID code.
-				//PWK can repeat max 10 times.
-				string pwk01="  ";
+				//PWK can repeat max 10 times.  However, we only write one PWK segment, because the user can only enter one Attachment Control Number.
+				string pwk01="  ";//This double blank will never actually get sent because of the trim and if statement around the PWK creation.
 				if(claim.AttachedFlags.Contains("EoB")) {
 					pwk01="EB";//Explaination of Benefits
 				}
@@ -840,18 +841,18 @@ namespace OpenDentBusiness
 						pwk02="EL";//Elect
 					}
 				}
-				string idCode=claim.AttachmentID;
-				if(idCode=="") {//must be min of two char, so we need to make one up.
-					idCode="00";
+				string pwk06=claim.AttachmentID;
+				if(pwk02=="BM" && pwk06=="") {//If By Mail is checked, they will typically leave attachment ID blank, but X12 requires a value, so we make one up.
+					pwk06="00";
 				}
-				idCode=Sout(idCode,80,2);
-				if(pwk01.Trim()!="") {
+				pwk06=Sout(pwk06,80,2);
+				if(pwk01.Trim()!="" && pwk06!="") {
 					sw.Write("PWK"+s
 						+pwk01+s//PWK01 2/2 Report Type Code:
 						+pwk02+s//PWK02 1/2 Report Transmission Code: EL=Electronically Only, BM=By Mail.
 						+s+s//PWK03 and PWK04: Not Used.
 						+"AC"+s//PWK05 1/2 Identification Code Qualifier: AC=Attachment Control Number.
-						+idCode);//PWK06 2/80 Identification Code:
+						+pwk06);//PWK06 2/80 Identification Code:
 					EndSegment(sw);//PWK07 through PWK09 are not used.
 				}
 				#endregion Claim PWK
@@ -2727,6 +2728,11 @@ namespace OpenDentBusiness
 				if(warning!="")
 					warning+=",";
 				warning+="Attachment ID missing";
+			}
+			//If Attachment ID # is present but no attachment flag, then sending is blocked.
+			if(!pwkNeeded && claim.AttachmentID!="") {
+				Comma(strb);
+				strb.Append("Attachment type missing");
 			}
 			if(claim.MedType==EnumClaimMedType.Institutional) {
 				if(claim.UniformBillType.Length!=3) {
