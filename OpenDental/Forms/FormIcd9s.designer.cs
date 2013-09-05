@@ -24,7 +24,6 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent() {
 			this.listMain = new System.Windows.Forms.ListBox();
-			this.butAdd = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
 			this.textCode = new System.Windows.Forms.TextBox();
@@ -43,23 +42,6 @@ namespace OpenDental{
 			this.listMain.Size = new System.Drawing.Size(501, 642);
 			this.listMain.TabIndex = 15;
 			this.listMain.DoubleClick += new System.EventHandler(this.listMain_DoubleClick);
-			// 
-			// butAdd
-			// 
-			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butAdd.Autosize = true;
-			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAdd.CornerRadius = 4F;
-			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
-			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(549, 516);
-			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(75, 24);
-			this.butAdd.TabIndex = 16;
-			this.butAdd.Text = "&Add";
-			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
 			// butOK
 			// 
@@ -129,7 +111,6 @@ namespace OpenDental{
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.textCode);
 			this.Controls.Add(this.listMain);
-			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butClose);
 			this.Name = "FormIcd9s";
@@ -146,7 +127,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butClose;
 		private System.Windows.Forms.ListBox listMain;
-		private UI.Button butAdd;
 		private System.Windows.Forms.TextBox textCode;
 		private System.Windows.Forms.Label label1;
 		private UI.Button butSearch;

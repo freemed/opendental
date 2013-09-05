@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using OpenDentBusiness;
 
 namespace OpenDental {
+	/// <summary>This window cannot even be accessed any longer.</summary>
 	public partial class FormIcd9Edit:Form {
 		private ICD9 Icd9Cur;
 		public bool IsNew;
@@ -59,7 +60,7 @@ namespace OpenDental {
 			DialogResult=DialogResult.OK;
 		}
 
-		private void butCancel_Click(object sender,EventArgs e) {
+		private void butClose_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
 

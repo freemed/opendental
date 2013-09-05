@@ -56,15 +56,18 @@ namespace OpenDental {
 				DialogResult=DialogResult.OK;
 				return;
 			}
+			/* Commented to prevent Icd9 edit window from being shown
 			changed=true;
 			FormIcd9Edit FormI=new FormIcd9Edit(icd9List[listMain.SelectedIndex]);
 			FormI.ShowDialog();
 			if(FormI.DialogResult!=DialogResult.OK) {
 				return;
 			}
+			*/
 			FillGrid();
 		}
 
+		/* Deprecated. This is populated from a list and follows a standard so we do not allow custom ICD-9 Codes.
 		private void butAdd_Click(object sender,EventArgs e) {
 			changed=true;
 			ICD9 icd9=new ICD9();
@@ -73,7 +76,8 @@ namespace OpenDental {
 			FormI.ShowDialog();
 			FillGrid();
 		}
-
+		*/
+		
 		private void butOK_Click(object sender,EventArgs e) {
 			//not even visible unless IsSelectionMode
 			if(listMain.SelectedIndex==-1) {

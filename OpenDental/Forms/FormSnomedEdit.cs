@@ -8,9 +8,10 @@ using System.Windows.Forms;
 using OpenDentBusiness;
 
 namespace OpenDental {
+	///<summary>Users are not allowed to edit or delete individual SNOMED codes so this is really a view only form.</summary>
 	public partial class FormSnomedEdit:Form {
 		private Snomed SnomedCur;
-		public bool IsNew;
+		//public bool IsNew;
 
 		public FormSnomedEdit(Snomed snomedCur) {
 			InitializeComponent();
@@ -18,14 +19,14 @@ namespace OpenDental {
 			SnomedCur=snomedCur;
 		}
 
-		private void FormIcd9Edit_Load(object sender,EventArgs e) {
-			if(!IsNew) {
-				textCode.Enabled=false;
-			}
+		private void FormSnomedEdit_Load(object sender,EventArgs e) {
+			//if(!IsNew) {
+			//	textCode.Enabled=false;
+			//}
 			textCode.Text=SnomedCur.SnomedCode;
 			textDescription.Text=SnomedCur.Description;
 		}
-
+/*
 		private void buttonDelete_Click(object sender,EventArgs e) {
 			if(IsNew) {
 				DialogResult=DialogResult.Cancel;
@@ -35,7 +36,7 @@ namespace OpenDental {
 				return;
 			}
 			try {
-				ICD9s.Delete(SnomedCur.SnomedNum);
+				Snomeds.Delete(SnomedCur.SnomedNum);
 				DialogResult=DialogResult.OK;
 			}
 			catch(ApplicationException ex) {
@@ -43,6 +44,7 @@ namespace OpenDental {
 			}
 		}
 
+		 Users are not allowed to add or edit SNOMED codes.
 		private void butOK_Click(object sender,EventArgs e) {
 			SnomedCur.SnomedCode=textCode.Text;
 			SnomedCur.Description=textDescription.Text;
@@ -58,8 +60,9 @@ namespace OpenDental {
 			}
 			DialogResult=DialogResult.OK;
 		}
+		*/
 
-		private void butCancel_Click(object sender,EventArgs e) {
+		private void butClose_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
 
