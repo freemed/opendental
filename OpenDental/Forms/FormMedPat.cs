@@ -230,12 +230,12 @@ namespace OpenDental{
 			this.butRxNormSelect.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRxNormSelect.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRxNormSelect.CornerRadius = 4F;
-			this.butRxNormSelect.Enabled = false;
 			this.butRxNormSelect.Location = new System.Drawing.Point(533, 11);
 			this.butRxNormSelect.Name = "butRxNormSelect";
 			this.butRxNormSelect.Size = new System.Drawing.Size(22, 22);
 			this.butRxNormSelect.TabIndex = 65;
 			this.butRxNormSelect.Text = "...";
+			this.butRxNormSelect.Visible = false;
 			this.butRxNormSelect.Click += new System.EventHandler(this.butRxNormSelect_Click);
 			// 
 			// textRxNormDesc
@@ -449,7 +449,7 @@ namespace OpenDental{
 			//	butFormulary.Visible=false;
 			//}
 			textRxNormDesc.Text=RxNorms.GetDescByRxCui(MedicationPatCur.RxCui.ToString());
-			if(MedicationPatCur.MedicationNum==0) {
+			if(MedicationPatCur.MedicationNum==0) {//Probably a medical order created during NewCrop prescription fetching, but not necessarily.
 				textMedName.Text=MedicationPatCur.MedDescript;
 				labelGenericNotes.Visible=false;
 				labelGenericName.Visible=false;
@@ -462,6 +462,12 @@ namespace OpenDental{
 				textMedName.Text=Medications.GetMedication(MedicationPatCur.MedicationNum).MedName;
 				textGenericName.Text=Medications.GetGeneric(MedicationPatCur.MedicationNum).MedName;
 				textMedNote.Text=Medications.GetGeneric(MedicationPatCur.MedicationNum).Notes;
+			}
+			if(!String.IsNullOrEmpty(MedicationPatCur.NewCropGuid)) {//This is a medical order that was automatically created when fetching prescriptions from NewCrop.
+				//We allow the user to change the RxCui on the medical order, because NewCrop does not always supply an RxCui.
+				//Also the MedicaitonNum on the order will always be 0, so there is no link between the order and the medication table.
+				//If MedicationOrder was non-zero and we changed the RxCui on the order, then the automatic sync between medicationpat.RxCui and medication.RxCui would be tainted.
+				butRxNormSelect.Visible=true;
 			}
 			comboProv.Items.Add(Lan.g(this,"none"));
 			for(int i=0;i<ProviderC.ListShort.Count;i++) {
