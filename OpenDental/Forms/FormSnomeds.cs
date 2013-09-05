@@ -155,13 +155,13 @@ namespace OpenDental {
 			changed=true;
 			FormSnomedEdit FormSE=new FormSnomedEdit(SnomedList[e.Row]);
 			FormSE.ShowDialog();
-			if(FormSE.DialogResult!=DialogResult.OK) {
-				return;
-			}
-			FillGrid();
+			//if(FormSE.DialogResult!=DialogResult.OK) {
+			//	return;
+			//}
+			//FillGrid();
 		}
 
-		private void butAdd_Click(object sender,EventArgs e) {
+		/*private void butAdd_Click(object sender,EventArgs e) {
 			//TODO: Either change to adding a snomed code instead of an ICD9 or don't allow users to add SNOMED codes other than importing.
 			changed=true;
 			Snomed snomed=new Snomed();
@@ -169,7 +169,7 @@ namespace OpenDental {
 			FormI.IsNew=true;
 			FormI.ShowDialog();
 			FillGrid();
-		}
+		}*/
 
 		private void butCrossMap_Click(object sender,EventArgs e) {
 			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"This button takes a while to run. It imports two \"cross table\" files from the desktop (Ryan's computer only.) These tables are then used to create two more tables that contain a more useful form of the data. This button will probably not be part of the release version and if so it will behave much differently. \r\n\r\n Continue?\r\n (You should select CANCEL if you don't know exactly what this button does.)")) {
