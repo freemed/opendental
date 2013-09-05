@@ -1064,7 +1064,15 @@ namespace OpenDental{
 				Family fam=Patients.GetFamily(StmtCur.PatNum);
 				Patient pat=fam.GetPatient(StmtCur.PatNum);
 				DataSet dataSet=AccountModules.GetStatementDataSet(StmtCur);
-				FormST.PrintStatement(StmtCur,true,dataSet,fam,pat);
+				//Would throw exception if no printer is installed.
+				try {
+					FormST.PrintStatement(StmtCur,true,dataSet,fam,pat);
+				}
+				catch {
+					MsgBox.Show(this,"No printers installed.");
+					Cursor=Cursors.Default;
+					return;
+				}
 				FormST.ShowDialog();
 				Cursor=Cursors.Default;
 			}

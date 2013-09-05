@@ -328,8 +328,13 @@ namespace OpenDental{
 		///<summary>Prints one statement.  Does not generate pdf or print from existing pdf.</summary>
 		public void PrintStatement(Statement stmt,bool previewOnly,DataSet dataSet,Family fam,Patient pat) {
 			PrintDocument pd=new PrintDocument();
-			if(!PrinterL.SetPrinter(pd,PrintSituation.Statement)){
-				return;
+			if(previewOnly) {
+				//Don't want to have print dialogue come up when not printing.
+			}
+			else {
+				if(!PrinterL.SetPrinter(pd,PrintSituation.Statement)) {
+					return;
+				}
 			}
 			PrintStatement(stmt,previewOnly,pd,dataSet,fam,pat);
 		}
