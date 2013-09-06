@@ -1410,6 +1410,98 @@ namespace OpenDentBusiness {
 				Db.NonQ(command);
 				command="ALTER TABLE clockevent DROP COLUMN AmountBonusAuto";
 				Db.NonQ(command);
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS ehramendment";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehramendment (
+						EhrAmendmentNum bigint NOT NULL auto_increment PRIMARY KEY,
+						PatNum bigint NOT NULL,
+						IsAccepted tinyint NOT NULL,
+						Description varchar(255) NOT NULL,
+						Source tinyint NOT NULL,
+						DateTCreated datetime NOT NULL DEFAULT '0001-01-01 00:00:00',
+						FileName varchar(255) NOT NULL,
+						RawBase64 longtext NOT NULL,
+						INDEX(PatNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE ehramendment'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehramendment (
+						EhrAmendmentNum number(20) NOT NULL,
+						PatNum number(20) NOT NULL,
+						IsAccepted number(3) NOT NULL,
+						Description varchar2(255),
+						Source number(3) NOT NULL,
+						DateTCreated date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+						FileName varchar2(255),
+						RawBase64 clob,
+						CONSTRAINT ehramendment_EhrAmendmentNum PRIMARY KEY (EhrAmendmentNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX ehramendment_PatNum ON ehramendment (PatNum)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE popup ADD UserNum bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE popup ADD INDEX (UserNum)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE popup ADD UserNum number(20)";
+					Db.NonQ(command);
+					command="UPDATE popup SET UserNum = 0 WHERE UserNum IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE popup MODIFY UserNum NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX popup_UserNum ON popup (UserNum)";
+					Db.NonQ(command);
+				} 
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE popup ADD DateTimeEntry datetime NOT NULL";
+					Db.NonQ(command);
+					command="UPDATE popup SET DateTimeEntry='0001-01-01 00:00:00'";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE popup ADD DateTimeEntry date";
+					Db.NonQ(command);
+					command="UPDATE popup SET DateTimeEntry = TO_DATE('0001-01-01','YYYY-MM-DD') WHERE DateTimeEntry IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE popup MODIFY DateTimeEntry NOT NULL";
+					Db.NonQ(command);
+				} 
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE popup ADD IsArchived tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE popup ADD IsArchived number(3)";
+					Db.NonQ(command);
+					command="UPDATE popup SET IsArchived = 0 WHERE IsArchived IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE popup MODIFY IsArchived NOT NULL";
+					Db.NonQ(command);
+				} 
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE popup ADD PopupNumArchive bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE popup ADD INDEX (PopupNumArchive)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE popup ADD PopupNumArchive number(20)";
+					Db.NonQ(command);
+					command="UPDATE popup SET PopupNumArchive = 0 WHERE PopupNumArchive IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE popup MODIFY PopupNumArchive NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX popup_PopupNumArchive ON popup (PopupNumArchive)";
+					Db.NonQ(command);
+				}
 
 
 
@@ -1435,6 +1527,3 @@ namespace OpenDentBusiness {
 
 
 
-
-				/*
-				*/
