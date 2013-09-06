@@ -21,7 +21,7 @@ namespace OpenDentBusiness{
 		public string Notes;
 		///<summary>Is a controlled substance.  This will affect the way it prints.</summary>
 		public bool IsControlled;
-		///<summary>RxNorm Code identifier.  Deprecated.  Previously, copied down into rxpat.RxCui, but rxpat.RxCui is now deprecated.  No longer in use anywhere.  Still exists in db for now.</summary>
+		///<summary>RxNorm Code identifier.  Copied down into medicationpat.RxCui (medical order) when a prescription is written.</summary>
 		public long RxCui;
 
 		///<summary></summary>

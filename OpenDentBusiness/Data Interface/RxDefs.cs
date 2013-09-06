@@ -17,6 +17,13 @@ namespace OpenDentBusiness{
 			return Crud.RxDefCrud.SelectMany(command).ToArray();
 		}
 
+		public static RxDef GetOne(long rxDefNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<RxDef>(MethodBase.GetCurrentMethod(),rxDefNum);
+			}
+			return Crud.RxDefCrud.SelectOne(rxDefNum);
+		}
+
 		///<summary></summary>
 		public static void Update(RxDef def) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -52,10 +59,6 @@ namespace OpenDentBusiness{
 			command= "DELETE FROM rxdef WHERE RxDefNum = "+POut.Long(def.RxDefNum);
 			Db.NonQ(command);
 		}
-
-
-
-
 	
 	
 	

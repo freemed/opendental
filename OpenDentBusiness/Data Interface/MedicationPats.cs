@@ -50,6 +50,39 @@ namespace OpenDentBusiness{
 			return Crud.MedicationPatCrud.Insert(Cur);
 		}
 
+		///<summary>For CPOE.  Used for both manual rx and eRx through NewCrop.  Creates or updates a medical order using the given prescription information.
+		///Since rxCui is not part of the prescription, it must be passed in as a separate parameter.
+		///If isProvOrder is true, then the medical order provNum will be set to the prescription provNum.  If isProvOrder is false, then the medical order provNum will be set to 0.
+		///The MedDescript and NewCropGuid will always be copied from the prescription to the medical order and the medical order MedicationNum will be set to 0.</summary>
+		public static void InsertOrUpdateMedOrderForRx(RxPat rxPat,long rxCui,bool isProvOrder) {
+			MedicationPat medOrder=new MedicationPat();//The medication order corresponding to the prescription.
+			medOrder.DateStart=rxPat.RxDate;
+			medOrder.DateStop=rxPat.RxDate.AddDays(7);//Is there a way to easily calculate this information from the prescription information? The medical order will be inactive after this date.
+			medOrder.MedDescript=rxPat.Drug;
+			medOrder.RxCui=rxCui;
+			medOrder.NewCropGuid=rxPat.NewCropGuid;
+			medOrder.PatNote=rxPat.Sig;
+			medOrder.PatNum=rxPat.PatNum;
+			if(isProvOrder) {
+				medOrder.ProvNum=rxPat.ProvNum;
+			}
+			if(isProvOrder && !String.IsNullOrEmpty(rxPat.NewCropGuid)) {//CPOE if ordered by a provider through directly through NewCrop only.
+				medOrder.IsCpoe=true;
+			}
+			MedicationPat medOrderOld=null;
+			if(!String.IsNullOrEmpty(rxPat.NewCropGuid)) { //This check prevents an extra db call when the order is being created for a prescription written from inside of OD manually instead of using NewCrop.
+				medOrderOld=MedicationPats.GetMedicationOrderByNewCropGuid(rxPat.NewCropGuid);
+			}
+			if(medOrderOld==null) {
+				medOrder.IsNew=true;//Might not be necessary, but does not hurt.
+				MedicationPats.Insert(medOrder);
+			}
+			else {//The medication order was already in our database. Update it.
+				medOrder.MedicationPatNum=medOrderOld.MedicationPatNum;
+				MedicationPats.Update(medOrder);
+			}
+		}
+
 		///<summary></summary>
 		public static void Delete(MedicationPat Cur){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
