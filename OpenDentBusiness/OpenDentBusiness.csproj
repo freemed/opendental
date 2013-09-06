@@ -210,6 +210,7 @@
     <Compile Include="Crud\DrugUnitCrud.cs" />
     <Compile Include="Crud\DunningCrud.cs" />
     <Compile Include="Crud\EduResourceCrud.cs" />
+    <Compile Include="Crud\EhrAmendmentCrud.cs" />
     <Compile Include="Crud\EhrCodeCrud.cs" />
     <Compile Include="Crud\EhrMeasureCrud.cs" />
     <Compile Include="Crud\EhrMeasureEventCrud.cs" />
@@ -396,6 +397,7 @@
     <Compile Include="Data Interface\ChartViews.cs" />
     <Compile Include="Data Interface\CodeSystems.cs" />
     <Compile Include="Data Interface\Cvxs.cs" />
+    <Compile Include="Data Interface\EhrAmendments.cs" />
     <Compile Include="Data Interface\EhrCodes.cs" />
     <Compile Include="Data Interface\EhrNotPerformeds.cs">
       <SubType>Code</SubType>
@@ -797,6 +799,7 @@
     <Compile Include="TableTypes\AdministrativeSex.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TableTypes\EhrAmendment.cs" />
     <Compile Include="TableTypes\Automation.cs" />
     <Compile Include="TableTypes\ApptFieldDef.cs" />
     <Compile Include="TableTypes\ApptField.cs" />
