@@ -1723,13 +1723,25 @@ namespace OpenDental{
 		///<summary>Returns true if there are a mixture of benefits with calendar and service year time periods.</summary>
 		private bool HasInvalidTimePeriods() {
 			//Similar code can be found in FillCalendarYear()
-			bool isCalendar=(MonthRenew==0);
-			for(int i=0;i<benefitListAll.Count;i++) {
-				if(benefitListAll[i].TimePeriod==BenefitTimePeriod.CalendarYear && !isCalendar) {
-					return true;
+			bool isCalendar=(!textMonth.Enabled);
+			if(panelSimple.Visible) {
+				for(int i=0;i<benefitListAll.Count;i++) {
+					if(benefitListAll[i].TimePeriod==BenefitTimePeriod.CalendarYear && !isCalendar) {
+						return true;
+					}
+					if(benefitListAll[i].TimePeriod==BenefitTimePeriod.ServiceYear && isCalendar) {
+						return true;
+					}
 				}
-				if(benefitListAll[i].TimePeriod==BenefitTimePeriod.ServiceYear && isCalendar) {
-					return true;
+			}
+			else {
+				for(int i=0;i<benefitList.Count;i++) {
+					if(benefitList[i].TimePeriod==BenefitTimePeriod.CalendarYear && !isCalendar) {
+						return true;
+					}
+					if(benefitList[i].TimePeriod==BenefitTimePeriod.ServiceYear && isCalendar) {
+						return true;
+					}
 				}
 			}
 			return false;
@@ -2326,12 +2338,12 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please enter a starting month for the benefit year.");
 				return;
 			}
-			if(HasInvalidTimePeriods()) {
-				MsgBox.Show(this,"A mixture of calendar and service year time periods are not allowed.");
-				return;
-			}
-			if(panelSimple.Visible){
-				if(!ConvertFormToBenefits()){
+			if(panelSimple.Visible) {
+				if(!ConvertFormToBenefits()) {
+					return;
+				}
+				if(HasInvalidTimePeriods()) {
+					MsgBox.Show(this,"A mixture of calendar and service year time periods are not allowed.");
 					return;
 				}
 				//OriginalBenList.Clear();
@@ -2339,9 +2351,9 @@ namespace OpenDental{
 				//	OriginalBenList.Add(benefitListAll[i]);
 				//}
 				//We can't just clear the list.  Then, we wouldn't be able to test it for most efficient db queries.
-				for(int i=OriginalBenList.Count-1;i>=0;i--){//loop through the old list, backwards.
+				for(int i=OriginalBenList.Count-1;i>=0;i--) {//loop through the old list, backwards.
 					bool matchFound=false;
-					for(int j=0;j<benefitListAll.Count;j++){
+					for(int j=0;j<benefitListAll.Count;j++) {
 						if(benefitListAll[j].IsSimilar(OriginalBenList[i])) {
 							matchFound=true;
 						}
@@ -2364,9 +2376,13 @@ namespace OpenDental{
 					}
 				}
 			}
-			else{//not simple view.  Will optimize this later for speed.  Should be easier.
+			else {//not simple view.  Will optimize this later for speed.  Should be easier.
+				if(HasInvalidTimePeriods()) {
+					MsgBox.Show(this,"A mixture of calendar and service year time periods are not allowed.");
+					return;
+				}
 				OriginalBenList.Clear();
-				for(int i=0;i<benefitList.Count;i++){
+				for(int i=0;i<benefitList.Count;i++) {
 					OriginalBenList.Add(benefitList[i]);
 				}
 			}
