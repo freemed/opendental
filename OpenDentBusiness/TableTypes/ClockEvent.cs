@@ -45,10 +45,14 @@ namespace OpenDentBusiness{
 		public TimeSpan AdjustAuto;
 		///<summary>True if AdjustAuto is overridden by Adjust.</summary>
 		public bool AdjustIsOverridden;
-		///<summary>Override for AmountBonusAuto. -1 indicates no override.</summary>
-		public double AmountBonus;
-		///<summary>Automatically created bonus (due to differential and OT hours worked). -1 will indicate no bonus calculated.</summary>
-		public double AmountBonusAuto;
+		///<summary>This is a manual override for DiffAuto.  Typically -1 hour (-01:00:00) to indicate no override.  When used as override, allowed values are zero or positive.  This is an alternative to using a TimeAdjust row.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.TimeSpanNeg)]
+		[XmlIgnore]
+		public TimeSpan DiffHours;
+		///<summary>Automatically calculated Differential pay.  Will be zero if none.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.TimeSpanNeg)]
+		[XmlIgnore]
+		public TimeSpan DiffAuto;
 
 		///<summary>Used only for serialization purposes</summary>
 		[XmlElement("OTimeHours",typeof(long))]
@@ -91,6 +95,28 @@ namespace OpenDentBusiness{
 			}
 			set {
 				AdjustAuto = TimeSpan.FromTicks(value);
+			}
+		}
+
+		///<summary>Used only for serialization purposes</summary>
+		[XmlElement("DiffHours",typeof(long))]
+		public long DiffHoursXml {
+			get {
+				return DiffHours.Ticks;
+			}
+			set {
+				DiffHours = TimeSpan.FromTicks(value);
+			}
+		}
+
+		///<summary>Used only for serialization purposes</summary>
+		[XmlElement("DiffAuto",typeof(long))]
+		public long DiffAutoXml {
+			get {
+				return DiffAuto.Ticks;
+			}
+			set {
+				DiffAuto = TimeSpan.FromTicks(value);
 			}
 		}
 

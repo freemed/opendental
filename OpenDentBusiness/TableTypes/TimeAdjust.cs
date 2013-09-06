@@ -27,6 +27,10 @@ namespace OpenDentBusiness{
 		public string Note;
 		///<summary>Set to true if this adjustment was automatically made by the system.  When the calc weekly ot tool is run, these types of adjustments are fair game for deletion.  Other adjustments are preserved.</summary>
 		public bool IsAuto;
+		///<summary>Differential hours. Usually +.  Automatically combined with a - adj to RegHours.  Another option is clockevent.DiffHours.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.TimeSpanNeg)]
+		[XmlIgnore]
+		public TimeSpan DiffHours;
 
 		///<summary>Used only for serialization purposes</summary>
 		[XmlElement("RegHours",typeof(long))]
@@ -47,6 +51,17 @@ namespace OpenDentBusiness{
 			}
 			set {
 				OTimeHours = TimeSpan.FromTicks(value);
+			}
+		}
+
+		///<summary>Used only for serialization purposes</summary>
+		[XmlElement("DiffHours",typeof(long))]
+		public long DiffHoursXml {
+			get {
+				return DiffHours.Ticks;
+			}
+			set {
+				DiffHours = TimeSpan.FromTicks(value);
 			}
 		}
 		

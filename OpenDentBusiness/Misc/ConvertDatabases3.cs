@@ -1379,6 +1379,37 @@ namespace OpenDentBusiness {
 					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'MeaningfulUseTwo','0')";
 					Db.NonQ(command);
 				}
+				//Time Card Overhaul for differential pay----------------------------------------------------------------------------------------------------------------
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE clockevent ADD DiffHours time NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE clockevent ADD DiffHours varchar2(255)";
+					Db.NonQ(command);
+				}				
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE clockevent ADD DiffAuto time NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE clockevent ADD DiffAuto varchar2(255)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE timeadjust ADD DiffHours time NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE timeadjust ADD DiffHours varchar2(255)";
+					Db.NonQ(command);
+				}
+				command="ALTER TABLE timecardrule DROP COLUMN AmtDiff";
+				Db.NonQ(command);
+				command="ALTER TABLE clockevent DROP COLUMN AmountBonus";
+				Db.NonQ(command);
+				command="ALTER TABLE clockevent DROP COLUMN AmountBonusAuto";
+				Db.NonQ(command);
 
 
 
@@ -1403,3 +1434,7 @@ namespace OpenDentBusiness {
 
 
 
+
+
+				/*
+				*/

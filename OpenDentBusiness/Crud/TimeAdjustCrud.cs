@@ -53,6 +53,7 @@ namespace OpenDentBusiness.Crud{
 				timeAdjust.OTimeHours   = PIn.TSpan (table.Rows[i]["OTimeHours"].ToString());
 				timeAdjust.Note         = PIn.String(table.Rows[i]["Note"].ToString());
 				timeAdjust.IsAuto       = PIn.Bool  (table.Rows[i]["IsAuto"].ToString());
+				timeAdjust.DiffHours    = PIn.TSpan (table.Rows[i]["DiffHours"].ToString());
 				retVal.Add(timeAdjust);
 			}
 			return retVal;
@@ -93,7 +94,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="TimeAdjustNum,";
 			}
-			command+="EmployeeNum,TimeEntry,RegHours,OTimeHours,Note,IsAuto) VALUES(";
+			command+="EmployeeNum,TimeEntry,RegHours,OTimeHours,Note,IsAuto,DiffHours) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(timeAdjust.TimeAdjustNum)+",";
 			}
@@ -103,7 +104,8 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.TSpan (timeAdjust.RegHours)+"',"
 				+"'"+POut.TSpan (timeAdjust.OTimeHours)+"',"
 				+"'"+POut.String(timeAdjust.Note)+"',"
-				+    POut.Bool  (timeAdjust.IsAuto)+")";
+				+    POut.Bool  (timeAdjust.IsAuto)+","
+				+"'"+POut.TSpan (timeAdjust.DiffHours)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -121,7 +123,8 @@ namespace OpenDentBusiness.Crud{
 				+"RegHours     = '"+POut.TSpan (timeAdjust.RegHours)+"', "
 				+"OTimeHours   = '"+POut.TSpan (timeAdjust.OTimeHours)+"', "
 				+"Note         = '"+POut.String(timeAdjust.Note)+"', "
-				+"IsAuto       =  "+POut.Bool  (timeAdjust.IsAuto)+" "
+				+"IsAuto       =  "+POut.Bool  (timeAdjust.IsAuto)+", "
+				+"DiffHours    = '"+POut.TSpan (timeAdjust.DiffHours)+"' "
 				+"WHERE TimeAdjustNum = "+POut.Long(timeAdjust.TimeAdjustNum);
 			Db.NonQ(command);
 		}
@@ -152,6 +155,10 @@ namespace OpenDentBusiness.Crud{
 			if(timeAdjust.IsAuto != oldTimeAdjust.IsAuto) {
 				if(command!=""){ command+=",";}
 				command+="IsAuto = "+POut.Bool(timeAdjust.IsAuto)+"";
+			}
+			if(timeAdjust.DiffHours != oldTimeAdjust.DiffHours) {
+				if(command!=""){ command+=",";}
+				command+="DiffHours = '"+POut.TSpan (timeAdjust.DiffHours)+"'";
 			}
 			if(command==""){
 				return;

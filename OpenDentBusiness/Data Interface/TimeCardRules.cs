@@ -310,12 +310,7 @@ namespace OpenDentBusiness{
 					else if(ClockEventList[i].TimeDisplayed2.TimeOfDay > afterTimeRule.AfterTimeOfDay) {//only the second time is after time
 						afterTime=ClockEventList[i].TimeDisplayed2.TimeOfDay-afterTimeRule.AfterTimeOfDay;//only a portion of the pairTotal is OT
 					}
-					if(afterTimeRule.AmtDiff>0) {
-						ClockEventList[i].AmountBonusAuto=afterTimeRule.AmtDiff*((double)afterTime.Hours + (double)afterTime.Minutes/60);
-					}
-					else {
-						ClockEventList[i].OTimeAuto=afterTime;
-					}
+					ClockEventList[i].OTimeAuto=afterTime;
 				}
 				if(beforeTimeRule != null) {
 					//test to see if this span is after specified time
@@ -326,12 +321,7 @@ namespace OpenDentBusiness{
 					else if(ClockEventList[i].TimeDisplayed1.TimeOfDay < beforeTimeRule.BeforeTimeOfDay) {//only the first time is before time
 						beforeTime+=beforeTimeRule.BeforeTimeOfDay-ClockEventList[i].TimeDisplayed1.TimeOfDay;//only a portion of the pairTotal is OT
 					} 
-					if(beforeTimeRule.AmtDiff>0) {
-						ClockEventList[i].AmountBonusAuto+=beforeTimeRule.AmtDiff*((double)beforeTime.Hours + (double)beforeTime.Minutes/60);
-					}
-					else {
-						ClockEventList[i].OTimeAuto+=beforeTime;
-					}
+					ClockEventList[i].OTimeAuto+=beforeTime;
 				}
 				if(overHoursRule != null) {
 					//test dailyTotal
@@ -339,12 +329,7 @@ namespace OpenDentBusiness{
 					if(dailyTotal > overHoursRule.OverHoursPerDay) {
 						overHours=dailyTotal-overHoursRule.OverHoursPerDay;
 						dailyTotal=overHoursRule.OverHoursPerDay;//e.g. reset to 8.  Any further pairs on this date will be wholly OT
-						if(overHoursRule.AmtDiff>0) {
-							ClockEventList[i].AmountBonus+=overHoursRule.AmtDiff*((double)overHours.Hours + (double)overHours.Minutes/60);
-						}
-						else {
-							ClockEventList[i].OTimeAuto+=overHours;
-						}
+						ClockEventList[i].OTimeAuto+=overHours;
 					}
 				}
 				ClockEvents.Update(ClockEventList[i]);

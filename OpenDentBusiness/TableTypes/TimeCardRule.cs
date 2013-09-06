@@ -16,15 +16,12 @@ namespace OpenDentBusiness{
 		///<summary>Typical example is 8:00.  In California, any work after the first 8 hours is overtime.</summary>
 		[XmlIgnore]
 		public TimeSpan OverHoursPerDay;
-		///<summary>Typical example is 16:00 to indicate that all time worked after 4pm for specific employees is overtime.</summary>
+		///<summary>Typical example is 16:00 to indicate that all time worked after 4pm for specific employees is at rateB.</summary>
 		[XmlIgnore]
 		public TimeSpan AfterTimeOfDay;
-		///<summary>Typical example is 6:00 to indicate that all time worked before 6am for specific employees is overtime.</summary>
+		///<summary>Typical example is 6:00 to indicate that all time worked before 6am for specific employees is at rateB.</summary>
 		[XmlIgnore]
 		public TimeSpan BeforeTimeOfDay;
-		///<summary>Differential paid to employees working before or after the specified times.</summary>
-		public double AmtDiff;
-
 
 		///<summary>Used only for serialization purposes</summary>
 		[XmlElement("OverHoursPerDay",typeof(long))]
