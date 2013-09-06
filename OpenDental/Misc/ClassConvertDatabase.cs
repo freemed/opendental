@@ -71,6 +71,11 @@ namespace OpenDental{
 				MsgBox.Show(this,"This replication server is blocked from performing updates.");
 				return false;
 			}
+#if TRIALONLY
+			//Trial users should never be able to update a database.
+			MsgBox.Show(this,"Trial versions cannot connect to live databases.  Please run the Setup.exe in the AtoZ folder to reinstall your original version.");
+			return false;
+#endif
 			if(PrefC.GetString(PrefName.WebServiceServerName)!="" //using web service
 				&& !ODEnvironment.IdIsThisComputer(PrefC.GetString(PrefName.WebServiceServerName).ToLower()))//and not on web server 
 			{
