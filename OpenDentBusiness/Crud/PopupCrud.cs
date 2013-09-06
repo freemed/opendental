@@ -46,11 +46,15 @@ namespace OpenDentBusiness.Crud{
 			Popup popup;
 			for(int i=0;i<table.Rows.Count;i++) {
 				popup=new Popup();
-				popup.PopupNum   = PIn.Long  (table.Rows[i]["PopupNum"].ToString());
-				popup.PatNum     = PIn.Long  (table.Rows[i]["PatNum"].ToString());
-				popup.Description= PIn.String(table.Rows[i]["Description"].ToString());
-				popup.IsDisabled = PIn.Bool  (table.Rows[i]["IsDisabled"].ToString());
-				popup.PopupLevel = (EnumPopupLevel)PIn.Int(table.Rows[i]["PopupLevel"].ToString());
+				popup.PopupNum       = PIn.Long  (table.Rows[i]["PopupNum"].ToString());
+				popup.PatNum         = PIn.Long  (table.Rows[i]["PatNum"].ToString());
+				popup.Description    = PIn.String(table.Rows[i]["Description"].ToString());
+				popup.IsDisabled     = PIn.Bool  (table.Rows[i]["IsDisabled"].ToString());
+				popup.PopupLevel     = (EnumPopupLevel)PIn.Int(table.Rows[i]["PopupLevel"].ToString());
+				popup.UserNum        = PIn.Long  (table.Rows[i]["UserNum"].ToString());
+				popup.DateTimeEntry  = PIn.DateT (table.Rows[i]["DateTimeEntry"].ToString());
+				popup.IsArchived     = PIn.Bool  (table.Rows[i]["IsArchived"].ToString());
+				popup.PopupNumArchive= PIn.Long  (table.Rows[i]["PopupNumArchive"].ToString());
 				retVal.Add(popup);
 			}
 			return retVal;
@@ -91,7 +95,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="PopupNum,";
 			}
-			command+="PatNum,Description,IsDisabled,PopupLevel) VALUES(";
+			command+="PatNum,Description,IsDisabled,PopupLevel,UserNum,DateTimeEntry,IsArchived,PopupNumArchive) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(popup.PopupNum)+",";
 			}
@@ -99,7 +103,11 @@ namespace OpenDentBusiness.Crud{
 				     POut.Long  (popup.PatNum)+","
 				+"'"+POut.String(popup.Description)+"',"
 				+    POut.Bool  (popup.IsDisabled)+","
-				+    POut.Int   ((int)popup.PopupLevel)+")";
+				+    POut.Int   ((int)popup.PopupLevel)+","
+				+    POut.Long  (popup.UserNum)+","
+				+    DbHelper.Now()+","
+				+    POut.Bool  (popup.IsArchived)+","
+				+    POut.Long  (popup.PopupNumArchive)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -112,10 +120,14 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one Popup in the database.</summary>
 		public static void Update(Popup popup){
 			string command="UPDATE popup SET "
-				+"PatNum     =  "+POut.Long  (popup.PatNum)+", "
-				+"Description= '"+POut.String(popup.Description)+"', "
-				+"IsDisabled =  "+POut.Bool  (popup.IsDisabled)+", "
-				+"PopupLevel =  "+POut.Int   ((int)popup.PopupLevel)+" "
+				+"PatNum         =  "+POut.Long  (popup.PatNum)+", "
+				+"Description    = '"+POut.String(popup.Description)+"', "
+				+"IsDisabled     =  "+POut.Bool  (popup.IsDisabled)+", "
+				+"PopupLevel     =  "+POut.Int   ((int)popup.PopupLevel)+", "
+				+"UserNum        =  "+POut.Long  (popup.UserNum)+", "
+				//DateTimeEntry not allowed to change
+				+"IsArchived     =  "+POut.Bool  (popup.IsArchived)+", "
+				+"PopupNumArchive=  "+POut.Long  (popup.PopupNumArchive)+" "
 				+"WHERE PopupNum = "+POut.Long(popup.PopupNum);
 			Db.NonQ(command);
 		}
@@ -138,6 +150,19 @@ namespace OpenDentBusiness.Crud{
 			if(popup.PopupLevel != oldPopup.PopupLevel) {
 				if(command!=""){ command+=",";}
 				command+="PopupLevel = "+POut.Int   ((int)popup.PopupLevel)+"";
+			}
+			if(popup.UserNum != oldPopup.UserNum) {
+				if(command!=""){ command+=",";}
+				command+="UserNum = "+POut.Long(popup.UserNum)+"";
+			}
+			//DateTimeEntry not allowed to change
+			if(popup.IsArchived != oldPopup.IsArchived) {
+				if(command!=""){ command+=",";}
+				command+="IsArchived = "+POut.Bool(popup.IsArchived)+"";
+			}
+			if(popup.PopupNumArchive != oldPopup.PopupNumArchive) {
+				if(command!=""){ command+=",";}
+				command+="PopupNumArchive = "+POut.Long(popup.PopupNumArchive)+"";
 			}
 			if(command==""){
 				return;
