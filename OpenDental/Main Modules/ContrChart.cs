@@ -4611,7 +4611,7 @@ namespace OpenDental{
 					Tool_EHR_Click(true);
 				}
 			#else
-				Type type=FormOpenDental.AssemblyEHR.GetType("EHR.FormEHR");//namespace.class
+				//Type type=FormOpenDental.AssemblyEHR.GetType("OpenDental.FormEHR");//namespace.class
 				object[] args;
 				EhrQuarterlyKey keyThisQ=EhrQuarterlyKeys.GetKeyThisQuarter();
 				if(keyThisQ==null) {
@@ -4620,70 +4620,75 @@ namespace OpenDental{
 				}
 				args=new object[] { (DateTime.Today.Year-2000).ToString(),EhrQuarterlyKeys.MonthToQuarter(DateTime.Today.Month).ToString(),
 					PrefC.GetString(PrefName.PracticeTitle),keyThisQ.KeyValue };
-				if(!(bool)type.InvokeMember("QuarterlyKeyIsValid",System.Reflection.BindingFlags.InvokeMethod,null,FormOpenDental.FormEHR,args)) {
-					MessageBox.Show("Invalid quarterly key.");
-					return;
-				}
-				args=new object[] {PatCur.PatNum};
-				type.InvokeMember("PatNum",System.Reflection.BindingFlags.SetField,null,FormOpenDental.FormEHR,args);
-				type.InvokeMember("ShowDialog",System.Reflection.BindingFlags.InvokeMethod,null,FormOpenDental.FormEHR,null);
-				if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.None) {
-					return;
-				}
-				if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.RxEdit) {
-					long launchRxNum=(long)type.InvokeMember("LaunchRxNum",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null);
-					FormRxEdit FormRXE=new FormRxEdit(PatCur,RxPats.GetRx(launchRxNum));
-					FormRXE.ShowDialog();
-					ModuleSelected(PatCur.PatNum);
-					Tool_EHR_Click(false);
-				}
-				else if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.RxSelect) {
-					FormRxSelect FormRS=new FormRxSelect(PatCur);
-					FormRS.ShowDialog();
-					ModuleSelected(PatCur.PatNum);
-					Tool_EHR_Click(false);
-				}
-				else if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.Medical) {
-					FormMedical formM=new FormMedical(PatientNoteCur,PatCur);
-					formM.ShowDialog();
-					ModuleSelected(PatCur.PatNum);
-					Tool_EHR_Click(false);
-				}
-				else if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.PatientEdit) {
-					FormPatientEdit formP=new FormPatientEdit(PatCur,FamCur);
-					formP.ShowDialog();
-					ModuleSelected(PatCur.PatNum);
-					Tool_EHR_Click(false);
-				}
-				else if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.Online) {
-					FormPatientPortal formPP=new FormPatientPortal();
-					formPP.PatCur=PatCur;
-					formPP.ShowDialog();
-					ModuleSelected(PatCur.PatNum);
-					Tool_EHR_Click(false);
-				}
-				else if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.MedReconcile) {
-					FormMedicationReconcile FormMR=new FormMedicationReconcile();
-					FormMR.PatCur=PatCur;
-					FormMR.ShowDialog();
-					ModuleSelected(PatCur.PatNum);
-					Tool_EHR_Click(false);
-				}
-				else if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.Referrals) {
-					FormReferralsPatient formRP=new FormReferralsPatient();
-					formRP.PatNum=PatCur.PatNum;
-					formRP.ShowDialog();
-					ModuleSelected(PatCur.PatNum);
-					Tool_EHR_Click(false);
-				}
-				else if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.MedicationPatEdit) {
-					long medicationPatNum=(long)type.InvokeMember("LaunchMedicationPatNum",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null);
-					FormMedPat formMP=new FormMedPat();
-					formMP.MedicationPatCur=MedicationPats.GetOne(medicationPatNum);
-					formMP.ShowDialog();
-					ModuleSelected(PatCur.PatNum);
-					Tool_EHR_Click(true);
-				}
+				FormEHR Ehr = new FormEHR();
+				Ehr.PatNum=PatCur.PatNum;
+				Ehr.PatNotCur=PatientNoteCur;
+				Ehr.PatFamCur=FamCur;
+				Ehr.ShowDialog();
+				//if(!(bool)type.InvokeMember("QuarterlyKeyIsValid",System.Reflection.BindingFlags.InvokeMethod,null,FormOpenDental.FormEHR,args)) {
+				//	MessageBox.Show("Invalid quarterly key.");
+				//	return;
+				//}
+				//args=new object[] {PatCur.PatNum};
+				//type.InvokeMember("PatNum",System.Reflection.BindingFlags.SetField,null,FormOpenDental.FormEHR,args);
+				//type.InvokeMember("ShowDialog",System.Reflection.BindingFlags.InvokeMethod,null,FormOpenDental.FormEHR,null);
+				//if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.None) {
+				//	return;
+				//}
+				//if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.RxEdit) {
+				//	long launchRxNum=(long)type.InvokeMember("LaunchRxNum",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null);
+				//	FormRxEdit FormRXE=new FormRxEdit(PatCur,RxPats.GetRx(launchRxNum));
+				//	FormRXE.ShowDialog();
+				//	ModuleSelected(PatCur.PatNum);
+				//	Tool_EHR_Click(false);
+				//}
+				//else if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.RxSelect) {
+				//	FormRxSelect FormRS=new FormRxSelect(PatCur);
+				//	FormRS.ShowDialog();
+				//	ModuleSelected(PatCur.PatNum);
+				//	Tool_EHR_Click(false);
+				//}
+				//else if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.Medical) {
+				//	FormMedical formM=new FormMedical(PatientNoteCur,PatCur);
+				//	formM.ShowDialog();
+				//	ModuleSelected(PatCur.PatNum);
+				//	Tool_EHR_Click(false);
+				//}
+				//else if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.PatientEdit) {
+				//	FormPatientEdit formP=new FormPatientEdit(PatCur,FamCur);
+				//	formP.ShowDialog();
+				//	ModuleSelected(PatCur.PatNum);
+				//	Tool_EHR_Click(false);
+				//}
+				//else if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.Online) {
+				//	FormPatientPortal formPP=new FormPatientPortal();
+				//	formPP.PatCur=PatCur;
+				//	formPP.ShowDialog();
+				//	ModuleSelected(PatCur.PatNum);
+				//	Tool_EHR_Click(false);
+				//}
+				//else if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.MedReconcile) {
+				//	FormMedicationReconcile FormMR=new FormMedicationReconcile();
+				//	FormMR.PatCur=PatCur;
+				//	FormMR.ShowDialog();
+				//	ModuleSelected(PatCur.PatNum);
+				//	Tool_EHR_Click(false);
+				//}
+				//else if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.Referrals) {
+				//	FormReferralsPatient formRP=new FormReferralsPatient();
+				//	formRP.PatNum=PatCur.PatNum;
+				//	formRP.ShowDialog();
+				//	ModuleSelected(PatCur.PatNum);
+				//	Tool_EHR_Click(false);
+				//}
+				//else if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.MedicationPatEdit) {
+				//	long medicationPatNum=(long)type.InvokeMember("LaunchMedicationPatNum",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null);
+				//	FormMedPat formMP=new FormMedPat();
+				//	formMP.MedicationPatCur=MedicationPats.GetOne(medicationPatNum);
+				//	formMP.ShowDialog();
+				//	ModuleSelected(PatCur.PatNum);
+				//	Tool_EHR_Click(true);
+				//}
 				/*No longer allowed to create medication orders from the MedicalOrder (CPOE) window.
 				else if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.MedicationPatNew) {
 					//This cannot happen unless a provider is logged in with a valid ehr key

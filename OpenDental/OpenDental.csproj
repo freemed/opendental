@@ -384,6 +384,24 @@
     <Compile Include="Forms\FormCommPrefPicker.Designer.cs">
       <DependentUpon>FormCommPrefPicker.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormEHR.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormEHR.Designer.cs">
+      <DependentUpon>FormEHR.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormEhrAmendmentEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormEhrAmendmentEdit.Designer.cs">
+      <DependentUpon>FormEhrAmendmentEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormEhrAmendments.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormEhrAmendments.Designer.cs">
+      <DependentUpon>FormEhrAmendments.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormFamilyHealthEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2849,6 +2867,15 @@
     <EmbeddedResource Include="Forms\FormCommPrefPicker.resx">
       <DependentUpon>FormCommPrefPicker.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormEHR.resx">
+      <DependentUpon>FormEHR.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormEhrAmendmentEdit.resx">
+      <DependentUpon>FormEhrAmendmentEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormEhrAmendments.resx">
+      <DependentUpon>FormEhrAmendments.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormFamilyHealthEdit.resx">
       <DependentUpon>FormFamilyHealthEdit.cs</DependentUpon>
     </EmbeddedResource>
@@ -4796,6 +4823,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <BaseApplicationManifest Include="Properties\app.manifest" />
+    <None Include="ClassDiagram2.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
