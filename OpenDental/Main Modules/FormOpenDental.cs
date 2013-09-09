@@ -1849,20 +1849,10 @@ namespace OpenDental{
 				Computers.UpdateHeartBeat(Environment.MachineName,true);
 			}
 			catch { }
-			string dllPathEHR=ODFileUtils.CombinePaths(Application.StartupPath,"EHR.dll");
+			//string dllPathEHR=ODFileUtils.CombinePaths(Application.StartupPath,"EHR.dll");
 			if(PrefC.GetBoolSilent(PrefName.ShowFeatureEhr,false)) {
-				#if EHRTEST
-					FormEHR=new FormEHR();
-					ContrChart2.InitializeLocalData();//because toolbar is now missing the EHR button.  Only a problem if a db conversion is done when opening the program.
-				#else
-					FormEHR=null;
-					AssemblyEHR=null;
-					if(File.Exists(dllPathEHR)) {//EHR.dll is available, so load it up
-						AssemblyEHR=Assembly.LoadFile(dllPathEHR);
-						Type type=AssemblyEHR.GetType("EHR.FormEHR");//namespace.class
-						FormEHR=Activator.CreateInstance(type);
-					}
-				#endif
+				FormEHR=new FormEHR();
+				ContrChart2.InitializeLocalData();//because toolbar is now missing the EHR button.  Only a problem if a db conversion is done when opening the program.
 			}
 			dateTimeLastActivity=DateTime.Now;
 			timerLogoff.Enabled=true;
