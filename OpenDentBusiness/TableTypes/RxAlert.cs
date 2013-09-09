@@ -3,23 +3,23 @@ using System.Collections;
 
 namespace OpenDentBusiness {
 
-	/// <summary>Many-to-many relationship connecting Rx with DiseaseDef, AllergyDef, or Medication.  Only one of those links may be specified in a single row; the other two will be 0.</summary>
+	/// <summary>Many-to-many relationship connecting RxDef with AllergyDef.</summary>
 	[Serializable]
 	public class RxAlert:TableBase {
 		///<summary>Primary key.</summary>
 		[CrudColumn(IsPriKey=true)]
 		public long RxAlertNum;
-		///<summary>FK to rxdef.RxDefNum.</summary>
+		///<summary>FK to rxdef.RxDefNum.  This alert is to be shown when user attempts to write an Rx for this RxDef.</summary>
 		public long RxDefNum;
-		///<summary>FK to diseasedef.DiseaseDefNum.  Only if DrugProblem interaction.  This is compared against disease.DiseaseDefNum using PatNum.</summary>
+		///<summary>Deprecated, but we left these rows in the db.</summary>
 		public long DiseaseDefNum;
-		///<summary>FK to allergydef.AllergyDefNum.  Only if DrugAllergy interaction.  The allergy and allergydef tables do not yet exist.  Once they are in place in place, this will be compared against allergy.AllergyDefNum using PatNum.</summary>
+		///<summary>FK to allergydef.AllergyDefNum.  Compared against allergy.AllergyDefNum using PatNum.  Drug-Allergy checking is also perfomed in NewCrop.</summary>
 		public long AllergyDefNum;
-		///<summary>FK to medication.MedicationNum.  Only if DrugDrug interaction.  This will be compared against medicationpat.MedicationNum using PatNum.</summary>
+		///<summary>Deprecated, but we left these rows in the db.</summary>
 		public long MedicationNum;
 		///<summary>This is typically blank, so a default message will be displayed by OD.  But if this contains a message, then this message will be used instead.</summary>
 		public string NotificationMsg;
-		///<summary>False by default.  Set to true to flag the drug-drug or drug-allergy intervention as high significance.</summary>
+		///<summary>Deprecated</summary>
 		public bool IsHighSignificance;
 
 		///<summary></summary>

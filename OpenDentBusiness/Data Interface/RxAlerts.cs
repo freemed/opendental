@@ -14,7 +14,7 @@ namespace OpenDentBusiness {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<RxAlert>>(MethodBase.GetCurrentMethod(),rxDefNum);
 			}
-			string command="SELECT * FROM rxalert WHERE RxDefNum="+POut.Long(rxDefNum);
+			string command="SELECT * FROM rxalert WHERE RxDefNum="+POut.Long(rxDefNum)+" AND AllergyDefNum<>0";//AllergyDefNum could be 0 in db if the alert was for an old disease or medication alert, both of which have been deprecated.
 			return Crud.RxAlertCrud.SelectMany(command);
 		}
 

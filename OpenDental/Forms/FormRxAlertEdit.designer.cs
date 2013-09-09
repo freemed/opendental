@@ -34,7 +34,6 @@ namespace OpenDental{
 			this.labelRx = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
 			this.groupBox = new System.Windows.Forms.GroupBox();
-			this.checkIsHighSignificance = new System.Windows.Forms.CheckBox();
 			this.groupBox.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -44,7 +43,7 @@ namespace OpenDental{
 			this.labelName.Name = "labelName";
 			this.labelName.Size = new System.Drawing.Size(241, 20);
 			this.labelName.TabIndex = 7;
-			this.labelName.Text = "If the patient is already taking this medication";
+			this.labelName.Text = "If the patient already has this Allergy";
 			this.labelName.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textMessage
@@ -156,22 +155,10 @@ namespace OpenDental{
 			this.groupBox.TabStop = false;
 			this.groupBox.Text = "And then,";
 			// 
-			// checkIsHighSignificance
-			// 
-			this.checkIsHighSignificance.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkIsHighSignificance.Location = new System.Drawing.Point(144, 258);
-			this.checkIsHighSignificance.Name = "checkIsHighSignificance";
-			this.checkIsHighSignificance.Size = new System.Drawing.Size(181, 18);
-			this.checkIsHighSignificance.TabIndex = 18;
-			this.checkIsHighSignificance.Text = "Is High Significance";
-			this.checkIsHighSignificance.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkIsHighSignificance.UseVisualStyleBackColor = true;
-			// 
 			// FormRxAlertEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(697, 328);
-			this.Controls.Add(this.checkIsHighSignificance);
 			this.Controls.Add(this.groupBox);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.textName);
@@ -205,6 +192,5 @@ namespace OpenDental{
 		private System.Windows.Forms.Label labelRx;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.GroupBox groupBox;
-		private System.Windows.Forms.CheckBox checkIsHighSignificance;
 	}
 }

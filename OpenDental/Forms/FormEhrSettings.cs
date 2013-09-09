@@ -15,14 +15,7 @@ namespace OpenDental {
 		}
 
 		private void FormEhrSettings_Load(object sender,EventArgs e) {
-			checkAlertHighSeverity.Checked=PrefC.GetBool(PrefName.EhrRxAlertHighSeverity);
 			checkMU2.Checked=PrefC.GetBool(PrefName.MeaningfulUseTwo);
-		}
-
-		private void checkAlertHighSeverity_Click(object sender,EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.SecurityAdmin,false)) {
-				checkAlertHighSeverity.Checked=PrefC.GetBool(PrefName.EhrRxAlertHighSeverity);
-			}
 		}
 
 		private void checkMU2_Click(object sender,EventArgs e) {
@@ -32,7 +25,6 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			Prefs.UpdateBool(PrefName.EhrRxAlertHighSeverity,checkAlertHighSeverity.Checked);
 			Prefs.UpdateBool(PrefName.MeaningfulUseTwo,checkMU2.Checked);
 			DialogResult=DialogResult.OK;
 		}

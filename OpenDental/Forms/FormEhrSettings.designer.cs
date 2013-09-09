@@ -24,24 +24,10 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent() {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormEhrSettings));
-			this.checkAlertHighSeverity = new System.Windows.Forms.CheckBox();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.checkMU2 = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
-			// 
-			// checkAlertHighSeverity
-			// 
-			this.checkAlertHighSeverity.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkAlertHighSeverity.Location = new System.Drawing.Point(43, 32);
-			this.checkAlertHighSeverity.Name = "checkAlertHighSeverity";
-			this.checkAlertHighSeverity.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-			this.checkAlertHighSeverity.Size = new System.Drawing.Size(280, 20);
-			this.checkAlertHighSeverity.TabIndex = 4;
-			this.checkAlertHighSeverity.Text = "Only show high significance Rx alerts";
-			this.checkAlertHighSeverity.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkAlertHighSeverity.UseVisualStyleBackColor = true;
-			this.checkAlertHighSeverity.Click += new System.EventHandler(this.checkAlertHighSeverity_Click);
 			// 
 			// butOK
 			// 
@@ -91,7 +77,6 @@ namespace OpenDental{
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(401, 148);
 			this.Controls.Add(this.checkMU2);
-			this.Controls.Add(this.checkAlertHighSeverity);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -107,7 +92,6 @@ namespace OpenDental{
 
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butCancel;
-		private System.Windows.Forms.CheckBox checkAlertHighSeverity;
 		private System.Windows.Forms.CheckBox checkMU2;
 	}
 }
