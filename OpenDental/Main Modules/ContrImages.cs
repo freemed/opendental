@@ -1419,7 +1419,14 @@ namespace OpenDental{
 			Cursor=Cursors.WaitCursor;
 			Bitmap bitmapScanned=null;
 			IntPtr hdib=IntPtr.Zero;
-			xImageDeviceManager.Obfuscator.ActivateEZTwain();
+			try {
+				xImageDeviceManager.Obfuscator.ActivateEZTwain();
+			}
+			catch {
+				Cursor=Cursors.Default;
+				MsgBox.Show(this,"No Twain or WIA driver detected.  Please install a scanner.");
+				return;
+			}
 			if(ComputerPrefs.LocalComputer.ScanDocSelectSource) {
 				if(!EZTwain.SelectImageSource(this.Handle)) {//dialog to select source
 					Cursor=Cursors.Default;
