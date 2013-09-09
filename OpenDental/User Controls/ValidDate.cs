@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Data;
 using System.Globalization;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using CodeBase;
 
@@ -106,12 +107,17 @@ namespace OpenDental{
 		///<summary></summary>
 		protected override void OnKeyPress(KeyPressEventArgs e) {
 			base.OnKeyPress(e);
-			if(CultureInfo.CurrentCulture.Name=="fr-CA" || CultureInfo.CurrentCulture.Name=="en-CA") {
-				return;//because they use - in their regular dates which interferes with this feature.
-			}
+			//if(CultureInfo.CurrentCulture.Name=="fr-CA" || CultureInfo.CurrentCulture.Name=="en-CA") {
+			//	return;//because they use - in their regular dates which interferes with this feature.
+			//}
 			if(e.KeyChar!='+' && e.KeyChar!='-'){
 				//base.OnKeyPress (e);
 				return;
+			}
+			//The user might not be done typing in the date.  Make sure that there are at least two non-numeric characters before subtracting days.
+			Regex regEx=new Regex("[^0-9]");
+			if(regEx.Matches(Text).Count < 2) {
+				return;//Not a complete date yet.
 			}
 			DateTime dateDisplayed;
 			try{
