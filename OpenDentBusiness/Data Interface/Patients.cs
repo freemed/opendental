@@ -1150,7 +1150,8 @@ namespace OpenDentBusiness{
 				+"AND SUBSTRING(Birthdate,6,5) <= '"+dateTo.ToString("MM-dd")+"' "
 				+"AND Birthdate > '1880-01-01' "
 				+"AND PatStatus=0	"
-				+"ORDER BY "+DbHelper.DateFormatColumn("Birthdate","%m/%d/%Y");
+				//+"ORDER BY "+DbHelper.DateFormatColumn("Birthdate","%m/%d/%Y");
+				+"ORDER BY MONTH(Birthdate),DAY(Birthdate)";
 			DataTable table=Db.GetTable(command);
 			table.Columns.Add("Age");
 			for(int i=0;i<table.Rows.Count;i++){
