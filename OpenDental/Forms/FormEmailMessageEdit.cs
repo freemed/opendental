@@ -833,11 +833,12 @@ namespace OpenDental{
 			EmailAddress emailAddress=GetEmailAddress();
 			try {
 				EhrEmail.DecryptDirect(MessageCur,emailAddress);//If successful, sets status to ReceivedDirect.
-				MessageCur.SentOrReceived=EmailSentOrReceived.ReadDirect;//Because we are already viewing the message within the current window.
-				EmailMessages.Update(MessageCur);
 				textBodyText.Text=MessageCur.BodyText;
 				labelDecrypt.Visible=false;
 				butDecrypt.Visible=false;
+				MessageCur.SentOrReceived=EmailSentOrReceived.ReadDirect;//Because we are already viewing the message within the current window.
+				EmailMessages.Update(MessageCur);
+				//TODO: Send Direct Ack.
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);

@@ -46,14 +46,38 @@ namespace OpenDentBusiness {
 		}
 
 		/// <summary>Used for sending Message Disposition Notification (MDN) ack messages for Direct.  Encrypted using the Direct protocol.</summary>
-		public static void SendAckDirect(Health.Direct.Agent.DirectAgent directAgent,Health.Direct.Common.Mail.Notifications.NotificationMessage notificationMsg,EmailAddress emailAddressFrom,long patNum) {
-			Health.Direct.Agent.OutgoingMessage outMsgDirect=new Health.Direct.Agent.OutgoingMessage(notificationMsg);
-			SendEmailDirect(directAgent,outMsgDirect,emailAddressFrom,patNum,EmailSentOrReceived.AckDirect);//Not EmailSentOrReceived.SentDirect, because we do not want these to be counted in our reports as messages sent using Direct.
+		public static void SendAckDirect(Health.Direct.Agent.DirectAgent directAgent,Health.Direct.Agent.IncomingMessage inMsg,EmailAddress emailAddressFrom,long patNum) {
+			//The CreateAcks() function handles the case where the incoming message is an MDN, in which case we do not reply with anything.
+			//The CreateAcks() function also takes care of figuring out where to send the MDN, because the rules are complicated.
+			//According to http://wiki.directproject.org/Applicability+Statement+for+Secure+Health+Transport+Working+Version#x3.0%20Message%20Disposition%20Notification,
+			//The MDN must be sent to the first available of: Disposition-Notification-To header, MAIL FROM SMTP command, Sender header, From header.
+			IEnumerable<Health.Direct.Common.Mail.Notifications.NotificationMessage> notificationMsgs=inMsg.CreateAcks("OpenDental","",Health.Direct.Common.Mail.Notifications.MDNStandard.NotificationType.Processed);
+			if(notificationMsgs==null) {
+				return;
+			}
+			foreach(Health.Direct.Common.Mail.Notifications.NotificationMessage notificationMsg in notificationMsgs) {
+				try {
+					//Health.Direct.Agent.MessageEnvelope envelope=new Health.Direct.Agent.MessageEnvelope(rawMsg);
+					Health.Direct.Agent.OutgoingMessage outMsgDirect=new Health.Direct.Agent.OutgoingMessage(notificationMsg);
+					outMsgDirect.IsMDN=true;
+					//TODO: http://tools.ietf.org/html/rfc2046, http://tools.ietf.org/html/rfc3462#page-2, http://tools.ietf.org/html/rfc3798#page-3
+					//Used EmailSentOrReceived.AckDirect, not EmailSentOrReceived.SentDirect, because we do not want these to be counted in our reports as messages sent using Direct.
+					SendEmailDirect(directAgent,outMsgDirect,emailAddressFrom,patNum,EmailSentOrReceived.AckDirect);
+				}
+				catch {
+					//Nothing to do. Just an MDN. The sender can resend the email to us if they believe that we did not receive the message (due to lack of MDN response).
+				}
+			}
 		}
 
 		///<summary>Encrypts the message, verifies trust, locates the public encryption key for the To address (if already stored locally), etc. Required by Direct protocol. emailSentOrReceived must be either SentDirect or AckDirect.</summary>
 		private static void SendEmailDirect(Health.Direct.Agent.DirectAgent directAgent,Health.Direct.Agent.OutgoingMessage outMsgDirect,EmailAddress emailAddressFrom,long patNum,EmailSentOrReceived emailSentOrReceived) {
-			directAgent.ProcessOutgoing(outMsgDirect);//Encrypts the message, verifies trust, locates the public encryption key for the To address (if already stored locally), etc. Required by Direct protocol.
+			outMsgDirect=directAgent.ProcessOutgoing(outMsgDirect);//Encrypts the message, verifies trust, locates the public encryption key for the To address (if already stored locally), etc. Required by Direct protocol.
+			byte[] arrayBytesMdnDirect=Encoding.UTF8.GetBytes(outMsgDirect.SerializeMessage());//Uses the Direct library to create a properly structured but raw outgoing email message.
+			OpenPop.Mime.Message msgMdnDirectPop=new OpenPop.Mime.Message(arrayBytesMdnDirect);//We use this open source library to convert the raw email into an object. http://hpop.sourceforge.net
+			System.Net.Mail.MailMessage msgMdnDirect=msgMdnDirectPop.ToMailMessage();//Converts the email into a common .NET object, so we can send it using standard .NET libraries.
+			msgMdnDirect.To.Add("derek@opendental.com");//FOR TESTING ONLY!!! TODO: REMOVE LATER!
+			SendEmail(msgMdnDirect,emailAddressFrom);
 			EmailMessage emailMdnDirect=new EmailMessage();
 			emailMdnDirect.BodyText=outMsgDirect.SerializeMessage();//Converts the entire Direct outgoing message to a raw email message text for email archive.
 			emailMdnDirect.FromAddress=outMsgDirect.Sender.Address;
@@ -66,11 +90,6 @@ namespace OpenDentBusiness {
 			}
 			emailMdnDirect.ToAddress=outMsgDirect.Recipients[0].Address;
 			EmailMessages.Insert(emailMdnDirect);//Will not show in UI anywhere yet, just for history in case something goes wrong.
-			byte[] arrayBytesMdnDirect=Encoding.UTF8.GetBytes(outMsgDirect.SerializeMessage());//Uses the Direct library to create a properly structured but raw outgoing email message.
-			OpenPop.Mime.Message msgMdnDirectPop=new OpenPop.Mime.Message(arrayBytesMdnDirect);//We use this open source library to convert the raw email into an object. http://hpop.sourceforge.net
-			System.Net.Mail.MailMessage msgMdnDirect=msgMdnDirectPop.ToMailMessage();//Converts the email into a common .NET object, so we can send it using standard .NET libraries.
-			msgMdnDirect.To.Add("derek@opendental.com");//FOR TESTING ONLY!!! TODO: REMOVE LATER!
-			SendEmail(msgMdnDirect,emailAddressFrom);
 		}
 
 		//public static void SendEmailDirect(EmailMessage emailMessage,EmailAddress emailAddressFrom,long patNum) {
@@ -174,16 +193,17 @@ namespace OpenDentBusiness {
 							//The entire contents of the email are saved in the emailMessage.BodyText field, so that if decryption fails, the email will still be saved to the db for decryption later if possible.
 							emailMessage.BodyText=openPopMsg.MessagePart.BodyEncoding.GetString(openPopMsg.RawMessage);
 							try {
-								DecryptDirect(emailMessage,emailAddressInbox);//If decryption succeeds, the BodyText will be set to the body text instead of the entire raw email contents.
+								DecryptDirect(emailMessage,emailAddressInbox);//If decryption succeeds, the BodyText will be set to the body text instead of the entire raw email contents and the email will be saved to db.
 							}
 							catch {
-								//The encrypted message is saved to the db below, so that the user can try to decrypt later in FormEmailMessageEdit.
+								//The encrypted message is saved to the db, so that the user can try to decrypt later in FormEmailMessageEdit.
+								EmailMessages.Insert(emailMessage);
 							}
 						}
 						else {//Unencrypted email.
 							emailMessage.BodyText=openPopMsg.MessagePart.GetBodyAsText();
+							EmailMessages.Insert(emailMessage);
 						}
-						EmailMessages.Insert(emailMessage);
 						retVal.Add(emailMessage);
 						client.DeleteMessage(i);//Only delete from server after successfully downloaded and stored into db.
 						msgDownloadedCount++;
@@ -204,7 +224,7 @@ namespace OpenDentBusiness {
 			return new Health.Direct.Agent.DirectAgent(domain);
 		}
 
-		///<summary>Only for email messages with SentOrReceived set to EncryptedDirect. If decryption fails, then throws an exception and does not change email. If decryption succeeds, then emailMessage.SentOrReceived is set to ReceivedDirect and the BodyText of the email is changed from the entire encrypted email contents to the decrypted body text.</summary>
+		///<summary>Only for email messages with SentOrReceived set to EncryptedDirect. If decryption fails, then throws an exception and does not change email. If decryption succeeds, then emailMessage.SentOrReceived is set to ReceivedDirect and the BodyText of the email is changed from the entire encrypted email contents to the decrypted body text. Automatically sends an Direct "processed" acknowledgement (MDN) if the message is decrypted.</summary>
 		public static void DecryptDirect(EmailMessage emailMessage,EmailAddress emailAddressFrom) {
 			Health.Direct.Agent.DirectAgent directAgent=GetDirectAgentForEmailAddress(emailMessage.ToAddress);
 			Health.Direct.Agent.IncomingMessage inMsg=null;
@@ -226,16 +246,14 @@ namespace OpenDentBusiness {
 			//emailMessage.PatNum=0;//TODO: Set for some Direct messages.
 			//We could pull the email date and time from the server instead. The format is more difficult than normal, and might be different depending on who sent the email.
 			//emailMessage.MsgDateTime=DateTime.ParseExact(inMsg.Message.DateValue,"ddd, d MMM yyyy HH:mm:ss",CultureInfo.InvariantCulture);
-			//Send a Message Disposition Notification (MDN) message to the sender, as required by the Direct messaging specifications.
-			IEnumerable <Health.Direct.Common.Mail.Notifications.NotificationMessage> notificationMsgs=inMsg.CreateAcks("OpenDental","",Health.Direct.Common.Mail.Notifications.MDNStandard.NotificationType.Processed);
-			foreach(Health.Direct.Common.Mail.Notifications.NotificationMessage notificationMsg in notificationMsgs) {
-				try {
-					SendAckDirect(directAgent,notificationMsg,emailAddressFrom,emailMessage.PatNum);//The MDN will be attached to the same patient as the incoming message.
-				}
-				catch {
-					//Nothing to do. Just an MDN. The sender can resend the email to us if they believe that we did not receive the message (due to lack of MDN response).
-				}
+			if(emailMessage.IsNew && emailMessage.EmailMessageNum==0) {
+				EmailMessages.Insert(emailMessage);
 			}
+			else {
+				EmailMessages.Update(emailMessage);
+			}
+			//Send a Message Disposition Notification (MDN) message to the sender, as required by the Direct messaging specifications.
+			SendAckDirect(directAgent,inMsg,emailAddressFrom,emailMessage.PatNum);//The MDN will be attached to the same patient as the incoming message.
 		}
 
 		///<summary>Receives one email from the inbox, and returns the contents of the attachment as a string.  Will throw an exception if anything goes wrong, so surround with a try-catch.</summary>
