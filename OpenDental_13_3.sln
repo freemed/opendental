@@ -56,8 +56,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xCentralManager", "CentralM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xEHR", "..\..\Shared Projects Subversion\EHR\EHR_head\EHR\xEHR.csproj", "{5ABF1D9D-2B93-4217-AFA6-9EECCF6F525F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatientPortal", "PatientPortal\PatientPortal.csproj", "{A5D82653-A6AB-40FB-B266-966762FEBBA2}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xCrudGenerator", "xCrudGenerator\xCrudGenerator.csproj", "{76227E95-B261-4B6A-A97C-3764E7EDDF97}"
 EndProject
 Global

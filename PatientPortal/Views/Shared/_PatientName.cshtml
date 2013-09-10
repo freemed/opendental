@@ -1,9 +1,0 @@
-﻿@using OpenDentBusiness;
-@using OpenDentBusiness.Mobile;
-
-@{
-	if(Session["Patient"]!=null) {
-	Patientm pat=((Patientm)Session["Patient"]);
-		<text><strong>Patient Name:</strong> @pat.LName, @pat.FName</text>
-	}
-}
