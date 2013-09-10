@@ -131,9 +131,19 @@ namespace OpenDental {
 							FormPpw.LnameEntered=lName;
 							FormPpw.FnameEntered=fName;
 							FormPpw.BdateEntered=bDate;
-							FormPpw.ShowDialog();
-							if(FormPpw.DialogResult!=DialogResult.OK) {
-								break;//out of loop
+							FormPpw.ShowDialog();							
+							if(FormPpw.DialogResult==DialogResult.Cancel) {
+								//user wants to stop importing altogether
+								//we will pick up where we left off here next time
+								break;
+							}
+							else if(FormPpw.DialogResult==DialogResult.Ignore) {
+								//user wants to skip this patient import only
+								continue;								
+								//future feature suggestion... 4th state = discard
+								//mark this patient's import sheet for delete go to the next patient
+								//SheetsForDeletion.Add(arraySheets[i].web_sheet.SheetID);
+								//continue
 							}
 							patNum=FormPpw.SelectedPatNum;//might be zero to indicate new patient
 						}

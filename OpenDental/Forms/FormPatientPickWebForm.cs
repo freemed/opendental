@@ -82,9 +82,12 @@ namespace OpenDental {
 			DialogResult=DialogResult.OK;
 		}
 
+		private void butSkip_Click(object sender,EventArgs e) {
+			DialogResult=DialogResult.Ignore;
+		}		
+
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
-		
 	}
 }
