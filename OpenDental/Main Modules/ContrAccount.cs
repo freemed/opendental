@@ -3702,7 +3702,7 @@ namespace OpenDental {
 		}
 
 		/// <summary>Saves the statement.  Attaches a pdf to it by creating a doc object.  Prints it or emails it.  </summary>
-		private void PrintStatement(Statement stmt){
+		private void PrintStatement(Statement stmt) {
 			Cursor=Cursors.WaitCursor;
 			Statements.Insert(stmt);
 			FormRpStatement FormST=new FormRpStatement();
@@ -3714,7 +3714,7 @@ namespace OpenDental {
 			Patient guar=Patients.GetPat(stmt.PatNum);
 			string guarFolder=ImageStore.GetPatientFolder(guar,ImageStore.GetPreferredAtoZpath());
 			//OpenDental.Imaging.ImageStoreBase imageStore = OpenDental.Imaging.ImageStore.GetImageStore(guar);
-			if(stmt.Mode_==StatementMode.Email){
+			if(stmt.Mode_==StatementMode.Email) {
 				string attachPath=FormEmailMessageEdit.GetAttachPath();
 				Random rnd=new Random();
 				string fileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf";
@@ -3747,8 +3747,25 @@ namespace OpenDental {
 				FormEmailMessageEdit FormE=new FormEmailMessageEdit(message);
 				FormE.IsNew=true;
 				FormE.ShowDialog();
+				//If user clicked delete or cancel, delete pdf and statement
+				if(FormE.DialogResult==DialogResult.Cancel) {
+					Patient pat;
+					string patFolder;
+					if(stmt.DocNum!=0) {
+						//delete the pdf
+						pat=Patients.GetPat(stmt.PatNum);
+						patFolder=ImageStore.GetPatientFolder(pat,ImageStore.GetPreferredAtoZpath());
+						List<Document> listdocs=new List<Document>();
+						listdocs.Add(Documents.GetByNum(stmt.DocNum));
+						ImageStore.DeleteDocuments(listdocs,patFolder);
+					}
+					//delete statement
+					Procedures.DetachFromInvoice(stmt.StatementNum);
+					Adjustments.DetachFromInvoice(stmt.StatementNum);
+					Statements.DeleteObject(stmt);
+				}
 			}
-			else{
+			else {//not email
 				#if DEBUG
 					//don't bother to check valid path because it's just debug.
 					string imgPath=ImageStore.GetFilePath(Documents.GetByNum(stmt.DocNum),guarFolder);
