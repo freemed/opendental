@@ -1559,7 +1559,14 @@ namespace OpenDental{
 
 		private void ToolBarScanMulti_Click() {
 			string tempFile=Path.GetTempFileName().Replace(".tmp", ".pdf");
-			xImageDeviceManager.Obfuscator.ActivateEZTwain();
+			try {
+				xImageDeviceManager.Obfuscator.ActivateEZTwain();
+			}
+			catch {
+				Cursor=Cursors.Default;
+				MsgBox.Show(this,"No Twain or WIA driver detected.  Please install a scanner.");
+				return;
+			}
 			if(ComputerPrefs.LocalComputer.ScanDocSelectSource) {
 				if(!EZTwain.SelectImageSource(this.Handle)) {
 					return;//User clicked cancel.
