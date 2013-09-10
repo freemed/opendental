@@ -280,12 +280,12 @@ namespace OpenDental{
 				int countMonths=0;
 				//start looping through possible dates, beginning with the start date of the repeating charge
 				while(possibleDateNew<=DateTime.Today) {
-					//Only allow back dating up to 20 days.
-					if(possibleDateNew<DateTime.Today.AddDays(-20)) {
+					//Only allow back dating up to one month and 20 days.
+					if(possibleDateNew<DateTime.Today.AddDays(-50)) {
 						possibleDateOld=possibleDateOld.AddMonths(1);
 						countMonths++;
 						possibleDateNew=startDate.AddMonths(countMonths);
-						continue;//don't go back more than 20 days
+						continue;//don't go back more than one month and 20 days
 					}
 					//check to see if the possible date is present in the list
 					if(ALdates.Contains(possibleDateNew)
