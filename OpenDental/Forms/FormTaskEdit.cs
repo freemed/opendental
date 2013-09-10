@@ -1022,6 +1022,9 @@ namespace OpenDental{
 		}
 
 		private void textDescript_TextChanged(object sender,EventArgs e) {
+			if(textDescript.ReadOnly) {//resets the text if user presses any number of hotkeys that bypasses edit security.
+				textDescript.Text=TaskCur.Descript;
+			}
 			if(MightNeedSetRead) {//'new' box is checked
 				checkNew.Checked=false;
 				StatusChanged=true;
