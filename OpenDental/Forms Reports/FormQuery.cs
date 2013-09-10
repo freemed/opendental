@@ -42,7 +42,7 @@ namespace OpenDental{
 		private System.Windows.Forms.PrintPreviewControl printPreviewControl2;
 		private bool tablePrinted;
 		private System.Drawing.Font titleFont = new System.Drawing.Font("Arial",14,FontStyle.Bold);
-		private System.Drawing.Font subtitleFont=new System.Drawing.Font("Arial",9,FontStyle.Bold);
+		private System.Drawing.Font subtitleFont=new System.Drawing.Font("Arial",8,FontStyle.Bold);
 		private System.Drawing.Font colCaptFont=new System.Drawing.Font("Arial",8,FontStyle.Bold);
 		private System.Drawing.Font bodyFont = new System.Drawing.Font("Arial", 8);
 		private OpenDental.UI.Button butFullPage;
