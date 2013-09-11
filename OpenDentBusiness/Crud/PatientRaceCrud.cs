@@ -49,6 +49,7 @@ namespace OpenDentBusiness.Crud{
 				patientRace.PatientRaceNum= PIn.Long  (table.Rows[i]["PatientRaceNum"].ToString());
 				patientRace.PatNum        = PIn.Long  (table.Rows[i]["PatNum"].ToString());
 				patientRace.Race          = (PatRace)PIn.Int(table.Rows[i]["Race"].ToString());
+				patientRace.CdcrecCode    = PIn.String(table.Rows[i]["CdcrecCode"].ToString());
 				retVal.Add(patientRace);
 			}
 			return retVal;
@@ -89,13 +90,14 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="PatientRaceNum,";
 			}
-			command+="PatNum,Race) VALUES(";
+			command+="PatNum,Race,CdcrecCode) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(patientRace.PatientRaceNum)+",";
 			}
 			command+=
 				     POut.Long  (patientRace.PatNum)+","
-				+    POut.Int   ((int)patientRace.Race)+")";
+				+    POut.Int   ((int)patientRace.Race)+","
+				+"'"+POut.String(patientRace.CdcrecCode)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -109,7 +111,8 @@ namespace OpenDentBusiness.Crud{
 		public static void Update(PatientRace patientRace){
 			string command="UPDATE patientrace SET "
 				+"PatNum        =  "+POut.Long  (patientRace.PatNum)+", "
-				+"Race          =  "+POut.Int   ((int)patientRace.Race)+" "
+				+"Race          =  "+POut.Int   ((int)patientRace.Race)+", "
+				+"CdcrecCode    = '"+POut.String(patientRace.CdcrecCode)+"' "
 				+"WHERE PatientRaceNum = "+POut.Long(patientRace.PatientRaceNum);
 			Db.NonQ(command);
 		}
@@ -124,6 +127,10 @@ namespace OpenDentBusiness.Crud{
 			if(patientRace.Race != oldPatientRace.Race) {
 				if(command!=""){ command+=",";}
 				command+="Race = "+POut.Int   ((int)patientRace.Race)+"";
+			}
+			if(patientRace.CdcrecCode != oldPatientRace.CdcrecCode) {
+				if(command!=""){ command+=",";}
+				command+="CdcrecCode = '"+POut.String(patientRace.CdcrecCode)+"'";
 			}
 			if(command==""){
 				return;

@@ -48,7 +48,6 @@ namespace OpenDentBusiness.Crud{
 				intervention=new Intervention();
 				intervention.InterventionNum= PIn.Long  (table.Rows[i]["InterventionNum"].ToString());
 				intervention.PatNum         = PIn.Long  (table.Rows[i]["PatNum"].ToString());
-				intervention.ValueSetOID    = PIn.String(table.Rows[i]["ValueSetOID"].ToString());
 				intervention.CodeValue      = PIn.String(table.Rows[i]["CodeValue"].ToString());
 				intervention.CodeSystem     = PIn.String(table.Rows[i]["CodeSystem"].ToString());
 				intervention.MoreInfo       = PIn.String(table.Rows[i]["MoreInfo"].ToString());
@@ -93,13 +92,12 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="InterventionNum,";
 			}
-			command+="PatNum,ValueSetOID,CodeValue,CodeSystem,MoreInfo,DateTimeEntry) VALUES(";
+			command+="PatNum,CodeValue,CodeSystem,MoreInfo,DateTimeEntry) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(intervention.InterventionNum)+",";
 			}
 			command+=
 				     POut.Long  (intervention.PatNum)+","
-				+"'"+POut.String(intervention.ValueSetOID)+"',"
 				+"'"+POut.String(intervention.CodeValue)+"',"
 				+"'"+POut.String(intervention.CodeSystem)+"',"
 				+"'"+POut.String(intervention.MoreInfo)+"',"
@@ -117,7 +115,6 @@ namespace OpenDentBusiness.Crud{
 		public static void Update(Intervention intervention){
 			string command="UPDATE intervention SET "
 				+"PatNum         =  "+POut.Long  (intervention.PatNum)+", "
-				+"ValueSetOID    = '"+POut.String(intervention.ValueSetOID)+"', "
 				+"CodeValue      = '"+POut.String(intervention.CodeValue)+"', "
 				+"CodeSystem     = '"+POut.String(intervention.CodeSystem)+"', "
 				+"MoreInfo       = '"+POut.String(intervention.MoreInfo)+"', "
@@ -132,10 +129,6 @@ namespace OpenDentBusiness.Crud{
 			if(intervention.PatNum != oldIntervention.PatNum) {
 				if(command!=""){ command+=",";}
 				command+="PatNum = "+POut.Long(intervention.PatNum)+"";
-			}
-			if(intervention.ValueSetOID != oldIntervention.ValueSetOID) {
-				if(command!=""){ command+=",";}
-				command+="ValueSetOID = '"+POut.String(intervention.ValueSetOID)+"'";
 			}
 			if(intervention.CodeValue != oldIntervention.CodeValue) {
 				if(command!=""){ command+=",";}
