@@ -10,7 +10,7 @@ namespace OpenDentBusiness{
 		public long FeeSchedNum;
 		///<summary>The name of the fee schedule.</summary>
 		public string Description;
-		///<summary>Enum:FeeScheduleType</summary>
+		///<summary>Enum:FeeScheduleType </summary>
 		public FeeScheduleType FeeSchedType;
 		///<summary>Unlike with the old definition table, this ItemOrder is not as critical in the caching of data.  The item order is only for fee schedules of the same type.</summary>
 		public int ItemOrder;
