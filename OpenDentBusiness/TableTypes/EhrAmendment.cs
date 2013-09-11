@@ -30,19 +30,18 @@ namespace OpenDentBusiness {
 			return (EhrAmendment)this.MemberwiseClone();
 		}
 
-		///<summary>Source Enumeration</summary>
-		public enum AmendmentSource {
-			///<summary>0</summary>
-			Patient,
-			///<summary>1</summary>
-			Provider,
-			///<summary>2</summary>
-			Organization,
-			///<summary>3</summary>
-			Other
-		}
-
 	}
 
+	///<summary>Source Enumeration</summary>
+	public enum AmendmentSource {
+		///<summary>0</summary>
+		Patient,
+		///<summary>1</summary>
+		Provider,
+		///<summary>2</summary>
+		Organization,
+		///<summary>3</summary>
+		Other
+	}
 
 }
