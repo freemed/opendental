@@ -13,6 +13,7 @@ namespace OpenDentBusiness {
 		public string SnomedCode;
 		///<summary>Also called "Term", "Name", or "Fully Specified Name".  Not editable and doesn't change.</summary>
 		public string Description;
+		//We might add IsActive later.  Adding a column to the text import would be backward compatible.
 
 		///<summary></summary>
 		public Snomed Copy() {

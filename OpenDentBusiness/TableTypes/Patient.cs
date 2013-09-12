@@ -99,7 +99,7 @@ namespace OpenDentBusiness{
 		public long EmployerNum;
 		/// <summary>Not used since version 2.8.</summary>
 		public string EmploymentNote;
-		/// <summary>Enum:PatientRaceOld Race and ethnicity.</summary>
+		/// <summary>Enum:PatientRaceOld Race and ethnicity.  Mostly deprecated.  Only used in FormScreenGroup.  Was replaced by the patientrace table so that we could attach multiple races.</summary>
 		public PatientRaceOld Race;
 		/// <summary>FK to county.CountyName, although it will not crash if key absent.</summary>
 		public string County;

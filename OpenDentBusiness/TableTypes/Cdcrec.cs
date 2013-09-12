@@ -3,7 +3,7 @@ using System.Collections;
 using System.Drawing;
 
 namespace OpenDentBusiness {
-	///<summary>CDC Race and Ethnicity.  About 200 rows.  This table is only used in our software as a reference for CQMs.</summary>
+	///<summary>CDC Race and Ethnicity.  About 200 rows.  This table is not used anywhere right now.</summary>
 	[Serializable]
 	public class Cdcrec:TableBase {
 		///<summary>Primary key.</summary>
