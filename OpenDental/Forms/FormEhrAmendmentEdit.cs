@@ -18,7 +18,7 @@ namespace OpenDental {
 		}
 
 		private void FormEhrAmendmentEdit_Load(object sender,EventArgs e) {
-			string[] sourceList = Enum.GetNames(typeof(EhrAmendment.AmendmentSource));
+			string[] sourceList = Enum.GetNames(typeof(AmendmentSource));
 			for(int i=0;i<sourceList.Length;i++) {
 				comboSource.Items.Add(sourceList[i]);
 			}
