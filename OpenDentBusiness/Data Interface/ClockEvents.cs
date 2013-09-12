@@ -221,19 +221,21 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Returns clockevent information for all non-hidden employees.  Used only in the time card manage window.</summary>
-		public static DataTable GetTimeCardManage(DateTime startDate,DateTime stopDate) {
+		/// <param name="IsPrintReport">Only applicable to ODHQ. If true, will add ADP pay numer and notes. The query takes about 9 seconds if this is set top true vs. about 2 seconds if set to false.</param>
+		public static DataTable GetTimeCardManage(DateTime startDate,DateTime stopDate,bool isPrintReport) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<DataTable>(MethodBase.GetCurrentMethod(),startDate,stopDate);
+				return Meth.GetObject<DataTable>(MethodBase.GetCurrentMethod(),startDate,stopDate,isPrintReport);
 			}
-			return Db.GetTable(GetTimeCardManageCommand(startDate,stopDate));
+			return Db.GetTable(GetTimeCardManageCommand(startDate,stopDate,isPrintReport));
 		}
 
-		public static string GetTimeCardManageCommand(DateTime startDate,DateTime stopDate) {
+		/// <param name="IsPrintReport">Only applicable to ODHQ. If true, will add ADP pay numer and notes. The query takes about 9 seconds if this is set top true vs. about 2 seconds if set to false.</param>
+		public static string GetTimeCardManageCommand(DateTime startDate,DateTime stopDate,bool isPrintReport) {
 			string command=@"SELECT clockevent.EmployeeNum,";
-			if(PrefC.GetBool(PrefName.DistributorKey)) {//OD HQ
+			if(PrefC.GetBool(PrefName.DistributorKey) && isPrintReport) {//OD HQ
 				command+="COALESCE(wikilist_employees.ADPNum,'NotInList') AS ADPNum,";
 			}
-			command+=@"employee.FName,employee.LName,
+			command += @"employee.FName,employee.LName,
 					SEC_TO_TIME((((TIME_TO_SEC(tempclockevent.TotalTime)-TIME_TO_SEC(tempclockevent.OverTime))
 						+TIME_TO_SEC(tempclockevent.AdjEvent))+TIME_TO_SEC(IFNULL(temptimeadjust.AdjReg,0)))
 						+(TIME_TO_SEC(tempclockevent.OverTime)+TIME_TO_SEC(IFNULL(temptimeadjust.AdjOTime,0)))) AS tempTotalTime,
@@ -243,19 +245,25 @@ namespace OpenDentBusiness{
 					tempclockevent.AdjEvent,
 					temptimeadjust.AdjReg,
 					temptimeadjust.AdjOTime,
-					SEC_TO_TIME(TIME_TO_SEC(tempbreak.BreakTime)+TIME_TO_SEC(AdjEvent)) AS BreakTime,
-					tempclockevent.Note
-				FROM clockevent	
+					SEC_TO_TIME(TIME_TO_SEC(tempbreak.BreakTime)+TIME_TO_SEC(AdjEvent)) AS BreakTime";
+			if(isPrintReport){
+				command+=",tempclockevent.Note ";
+			}
+			command+=@"FROM clockevent	
 				LEFT JOIN (SELECT ce.EmployeeNum,SEC_TO_TIME(IFNULL(SUM(UNIX_TIMESTAMP(ce.TimeDisplayed2)),0)-IFNULL(SUM(UNIX_TIMESTAMP(ce.TimeDisplayed1)),0)) AS TotalTime,
 					SEC_TO_TIME(IFNULL(SUM(TIME_TO_SEC(CASE WHEN ce.OTimeHours='-01:00:00' THEN ce.OTimeAuto ELSE ce.OTimeHours END)),0)) AS OverTime,
-					SEC_TO_TIME(IFNULL(SUM(TIME_TO_SEC(CASE WHEN ce.AdjustIsOverridden='1' THEN ce.Adjust ELSE ce.AdjustAuto END)),0)) AS AdjEvent,
+					SEC_TO_TIME(IFNULL(SUM(TIME_TO_SEC(CASE WHEN ce.AdjustIsOverridden='1' THEN ce.Adjust ELSE ce.AdjustAuto END)),0)) AS AdjEvent";
+			if(isPrintReport) {
+				command+=@",
 					(SELECT CASE WHEN cev.Note !="""" THEN cev.Note ELSE """" END FROM clockevent cev 
 						WHERE cev.TimeDisplayed1 >= "+POut.Date(startDate)+@"
 						AND cev.TimeDisplayed1 <= "+POut.Date(stopDate.AddDays(1))+@" 
 						AND cev.TimeDisplayed2 > "+POut.Date(new DateTime(0001,1,1))+@"
 						AND (cev.ClockStatus = '0' OR cev.ClockStatus = '1')
 						AND cev.EmployeeNum=ce.EmployeeNum
-						ORDER BY cev.TimeDisplayed2 LIMIT 1) AS Note
+						ORDER BY cev.TimeDisplayed2 LIMIT 1) AS Note";
+			}
+			command+=@"
 					FROM clockevent ce
 					WHERE ce.TimeDisplayed1 >= "+POut.Date(startDate)+@"
 					AND ce.TimeDisplayed1 <= "+POut.Date(stopDate.AddDays(1))+@" 
@@ -276,7 +284,7 @@ namespace OpenDentBusiness{
 					AND ceb.ClockStatus = '2'
 					GROUP BY ceb.EmployeeNum) tempbreak ON clockevent.EmployeeNum=tempbreak.EmployeeNum
 				INNER JOIN employee ON clockevent.EmployeeNum=employee.EmployeeNum AND IsHidden=0 ";
-			if(PrefC.GetBool(PrefName.DistributorKey)) {//OD HQ
+			if(PrefC.GetBool(PrefName.DistributorKey) && isPrintReport) {//OD HQ
 				command+="LEFT JOIN wikilist_employees ON wikilist_employees.EmployeeNum=employee.EmployeeNum ";
 			}
 			command+=@"GROUP BY EmployeeNum

@@ -42,7 +42,7 @@ namespace OpenDental {
 		}
 
 		private void FillMain() {
-			MainTable=ClockEvents.GetTimeCardManage(DateStart,DateStop);
+			MainTable=ClockEvents.GetTimeCardManage(DateStart,DateStop,false);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g(this,"Employee"),140);
@@ -68,8 +68,8 @@ namespace OpenDental {
 			col=new ODGridColumn(Lan.g(this,"Breaks"),64);
 			col.TextAlign=HorizontalAlignment.Right;
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Notes"),0);
-			gridMain.Columns.Add(col);
+			//col=new ODGridColumn(Lan.g(this,"Notes"),0);
+			//gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			for(int i=0;i<MainTable.Rows.Count;i++) {
@@ -93,7 +93,7 @@ namespace OpenDental {
 					row.Cells.Add(PIn.Time(MainTable.Rows[i]["AdjOTime"].ToString()).ToStringHmm());
 					row.Cells.Add(PIn.Time(MainTable.Rows[i]["BreakTime"].ToString()).ToStringHmm());
 				}
-				row.Cells.Add(MainTable.Rows[i]["Note"].ToString());
+				//row.Cells.Add(MainTable.Rows[i]["Note"].ToString());
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
@@ -143,7 +143,7 @@ namespace OpenDental {
 			gridTimeCard.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Weekday"),70);
 			gridTimeCard.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Altered"),50,HorizontalAlignment.Center);
+			col = new ODGridColumn(Lan.g(this, "Altered"), 50, HorizontalAlignment.Center);
 			gridTimeCard.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"In"),60,HorizontalAlignment.Right);
 			gridTimeCard.Columns.Add(col);
@@ -215,12 +215,19 @@ namespace OpenDental {
 					//row.Cells.Add(clock.ClockStatus.ToString());
 					//in------------------------------------------
 					row.Cells.Add(clock.TimeDisplayed1.ToShortTimeString());
+					if(clock.TimeEntered1!=clock.TimeDisplayed1){
+						row.Cells[row.Cells.Count-1].ColorText = Color.Red;
+					}
 					//out-----------------------------
 					if(clock.TimeDisplayed2.Year<1880){
 						row.Cells.Add("");//not clocked out yet
 					}
 					else{
 						row.Cells.Add(clock.TimeDisplayed2.ToShortTimeString());
+						if (clock.TimeEntered2!=clock.TimeDisplayed2)
+						{
+							row.Cells[row.Cells.Count-1].ColorText = Color.Red;
+						}
 					}
 					//total-------------------------------
 					if(clock.TimeDisplayed2.Year<1880){
@@ -489,7 +496,7 @@ namespace OpenDental {
 				return;
 			}
 			//Basically a preview of gridMain (every employee on one page), allow user to export as excel sheet or print it.
-			string query=ClockEvents.GetTimeCardManageCommand(DateStart,DateStop);
+			string query=ClockEvents.GetTimeCardManageCommand(DateStart,DateStop,true);//true to get extra columns for printing.
 			ReportSimpleGrid rsg=new ReportSimpleGrid();
 			rsg.Query=query;
 			FormQuery FormQ=new FormQuery(rsg);
