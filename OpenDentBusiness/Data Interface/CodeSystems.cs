@@ -16,7 +16,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<CodeSystem>>(MethodBase.GetCurrentMethod());
 			}
-			string command="SELECT * FROM codesystem WHERE codesystemname!='AdministrativeSex'";
+			string command="SELECT * FROM codesystem WHERE CodeSystemName!='AdministrativeSex'";
 			return Crud.CodeSystemCrud.SelectMany(command);
 		}
 
@@ -47,16 +47,16 @@ namespace OpenDentBusiness{
 			HashSet<string> codeHash=new HashSet<string>(Cdcrecs.GetAllCodes());
 			string[] lines=File.ReadAllLines(tempFileName);
 			string[] arrayCDCREC;
-			Cdcrec cdcrecTemp=new Cdcrec();
+			Cdcrec cdcrec=new Cdcrec();
 			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
 				arrayCDCREC=lines[i].Split('\t');
 				if(codeHash.Contains(arrayCDCREC[0])) {//code already existed
 					continue;
 				}
-				cdcrecTemp.CdcrecCode				=arrayCDCREC[0];
-				cdcrecTemp.HeirarchicalCode	=arrayCDCREC[1];
-				cdcrecTemp.Description			=arrayCDCREC[2];
-				Cdcrecs.Insert(cdcrecTemp);
+				cdcrec.CdcrecCode				=arrayCDCREC[0];
+				cdcrec.HeirarchicalCode	=arrayCDCREC[1];
+				cdcrec.Description			=arrayCDCREC[2];
+				Cdcrecs.Insert(cdcrec);
 			}
 			File.Delete(tempFileName);
 		}
@@ -76,15 +76,15 @@ namespace OpenDentBusiness{
 			HashSet<string> codeHash=new HashSet<string>(Cvxs.GetAllCodes());
 			string[] lines=File.ReadAllLines(tempFileName);
 			string[] arrayCvx;
-			Cvx cvxTemp=new Cvx();
+			Cvx cvx=new Cvx();
 			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
 				arrayCvx=lines[i].Split('\t');
 				if(codeHash.Contains(arrayCvx[0])) {//code already exists
 					continue;
 				}
-				cvxTemp.CvxCode			=arrayCvx[0];
-				cvxTemp.Description	=arrayCvx[1];
-				Cvxs.Insert(cvxTemp);
+				cvx.CvxCode			=arrayCvx[0];
+				cvx.Description	=arrayCvx[1];
+				Cvxs.Insert(cvx);
 			}
 			File.Delete(tempFileName);
 		}
@@ -94,15 +94,15 @@ namespace OpenDentBusiness{
 			HashSet<string> codeHash=new HashSet<string>(Hcpcses.GetAllCodes());
 			string[] lines=File.ReadAllLines(tempFileName);
 			string[] arrayHCPCS;
-			Hcpcs hcpcsTemp=new Hcpcs();
+			Hcpcs hcpcs=new Hcpcs();
 			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
 				arrayHCPCS=lines[i].Split('\t');
 				if(codeHash.Contains(arrayHCPCS[0])) {//code already exists
 					continue;
 				}
-				hcpcsTemp.HcpcsCode					=arrayHCPCS[0];
-				hcpcsTemp.DescriptionShort	=arrayHCPCS[1];
-				Hcpcses.Insert(hcpcsTemp);
+				hcpcs.HcpcsCode					=arrayHCPCS[0];
+				hcpcs.DescriptionShort	=arrayHCPCS[1];
+				Hcpcses.Insert(hcpcs);
 			}
 			File.Delete(tempFileName);
 		}
@@ -112,16 +112,16 @@ namespace OpenDentBusiness{
 			HashSet<string> codeHash=new HashSet<string>(Icd10s.GetAllCodes());
 			string[] lines=File.ReadAllLines(tempFileName);
 			string[] arrayICD10;
-			Icd10 icd10Temp=new Icd10();
+			Icd10 icd10=new Icd10();
 			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
 				arrayICD10=lines[i].Split('\t');
 				if(codeHash.Contains(arrayICD10[0])) {//code already exists
 					continue;
 				}
-				icd10Temp.Icd10Code		=arrayICD10[0];
-				icd10Temp.Description	=arrayICD10[1];
-				icd10Temp.IsCode			=arrayICD10[2];
-				Icd10s.Insert(icd10Temp);
+				icd10.Icd10Code		=arrayICD10[0];
+				icd10.Description	=arrayICD10[1];
+				icd10.IsCode			=arrayICD10[2];
+				Icd10s.Insert(icd10);
 			}
 			File.Delete(tempFileName);
 		}
@@ -131,15 +131,15 @@ namespace OpenDentBusiness{
 			HashSet<string> codeHash=new HashSet<string>(ICD9s.GetAllCodes());
 			string[] lines=File.ReadAllLines(tempFileName);
 			string[] arrayICD9;
-			ICD9 icd9Temp=new ICD9();
+			ICD9 icd9=new ICD9();
 			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
 				arrayICD9=lines[i].Split('\t');
 				if(codeHash.Contains(arrayICD9[0])) {//code already exists
 					continue;
 				}
-				icd9Temp.ICD9Code		=arrayICD9[0];
-				icd9Temp.Description=arrayICD9[1];
-				ICD9s.Insert(icd9Temp);
+				icd9.ICD9Code		=arrayICD9[0];
+				icd9.Description=arrayICD9[1];
+				ICD9s.Insert(icd9);
 			}
 			File.Delete(tempFileName);
 		}
@@ -149,31 +149,31 @@ namespace OpenDentBusiness{
 			HashSet<string> codeHash=new HashSet<string>(Loincs.GetAllCodes());
 			string[] lines=File.ReadAllLines(tempFileName);
 			string[] arrayLoinc;
-			Loinc loincTemp=new Loinc();
+			Loinc loinc=new Loinc();
 			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
 				arrayLoinc=lines[i].Split('\t');
 				if(codeHash.Contains(arrayLoinc[0])) {//code already exists
 					continue;
 				}
-				loincTemp.LoincCode								=arrayLoinc[0];
-				loincTemp.Component								=arrayLoinc[1];
-				loincTemp.PropertyObserved				=arrayLoinc[2];
-				loincTemp.TimeAspct								=arrayLoinc[3];
-				loincTemp.SystemMeasured					=arrayLoinc[4];
-				loincTemp.ScaleType								=arrayLoinc[5];
-				loincTemp.MethodType							=arrayLoinc[6];
-				loincTemp.StatusOfCode						=arrayLoinc[7];
-				loincTemp.NameShort								=arrayLoinc[8];
-				loincTemp.ClassType								=arrayLoinc[9];
-				loincTemp.UnitsRequired						=arrayLoinc[10]=="Y";
-				loincTemp.OrderObs								=arrayLoinc[11];
-				loincTemp.HL7FieldSubfieldID			=arrayLoinc[12];
-				loincTemp.ExternalCopyrightNotice	=arrayLoinc[13];
-				loincTemp.NameLongCommon					=arrayLoinc[14];
-				loincTemp.UnitsUCUM								=arrayLoinc[15];
-				loincTemp.RankCommonTests					=PIn.Int(arrayLoinc[16]);
-				loincTemp.RankCommonOrders				=PIn.Int(arrayLoinc[17]);
-				Loincs.Insert(loincTemp);
+				loinc.LoincCode								=arrayLoinc[0];
+				loinc.Component								=arrayLoinc[1];
+				loinc.PropertyObserved				=arrayLoinc[2];
+				loinc.TimeAspct								=arrayLoinc[3];
+				loinc.SystemMeasured					=arrayLoinc[4];
+				loinc.ScaleType								=arrayLoinc[5];
+				loinc.MethodType							=arrayLoinc[6];
+				loinc.StatusOfCode						=arrayLoinc[7];
+				loinc.NameShort								=arrayLoinc[8];
+				loinc.ClassType								=arrayLoinc[9];
+				loinc.UnitsRequired						=arrayLoinc[10]=="Y";
+				loinc.OrderObs								=arrayLoinc[11];
+				loinc.HL7FieldSubfieldID			=arrayLoinc[12];
+				loinc.ExternalCopyrightNotice	=arrayLoinc[13];
+				loinc.NameLongCommon					=arrayLoinc[14];
+				loinc.UnitsUCUM								=arrayLoinc[15];
+				loinc.RankCommonTests					=PIn.Int(arrayLoinc[16]);
+				loinc.RankCommonOrders				=PIn.Int(arrayLoinc[17]);
+				Loincs.Insert(loinc);
 			}
 			File.Delete(tempFileName);
 		}
@@ -183,16 +183,16 @@ namespace OpenDentBusiness{
 			HashSet<string> codeHash=new HashSet<string>(RxNorms.GetAllCodes());
 			string[] lines=File.ReadAllLines(tempFileName);
 			string[] arrayRxNorm;
-			RxNorm rxNormTemp=new RxNorm();
+			RxNorm rxNorm=new RxNorm();
 			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
 				arrayRxNorm=lines[i].Split('\t');
 				if(codeHash.Contains(arrayRxNorm[0])) {//code already exists
 					continue;
 				}
-				rxNormTemp.RxCui				=arrayRxNorm[0];
-				rxNormTemp.MmslCode			=arrayRxNorm[1];
-				rxNormTemp.Description	=arrayRxNorm[2];
-				RxNorms.Insert(rxNormTemp);
+				rxNorm.RxCui				=arrayRxNorm[0];
+				rxNorm.MmslCode			=arrayRxNorm[1];
+				rxNorm.Description	=arrayRxNorm[2];
+				RxNorms.Insert(rxNorm);
 			}
 			File.Delete(tempFileName);
 		}
@@ -202,15 +202,15 @@ namespace OpenDentBusiness{
 			HashSet<string> codeHash=new HashSet<string>(Snomeds.GetAllCodes());
 			string[] lines=File.ReadAllLines(tempFileName);
 			string[] arraySnomed;
-			Snomed snomedTemp=new Snomed();
+			Snomed snomed=new Snomed();
 			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
 				arraySnomed=lines[i].Split('\t');
 				if(codeHash.Contains(arraySnomed[0])) {//code already exists
 					continue;
 				}
-				snomedTemp.SnomedCode		=arraySnomed[0];
-				snomedTemp.Description	=arraySnomed[1];
-				Snomeds.Insert(snomedTemp);
+				snomed.SnomedCode		=arraySnomed[0];
+				snomed.Description	=arraySnomed[1];
+				Snomeds.Insert(snomed);
 			}
 			File.Delete(tempFileName);
 		}
@@ -220,15 +220,15 @@ namespace OpenDentBusiness{
 			HashSet<string> codeHash=new HashSet<string>(Sops.GetAllCodes());
 			string[] lines=File.ReadAllLines(tempFileName);
 			string[] arraySop;
-			Sop sopTemp=new Sop();
+			Sop sop=new Sop();
 			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
 				arraySop=lines[i].Split('\t');
 				if(codeHash.Contains(arraySop[0])) {//code already exists
 					continue;
 				}
-				sopTemp.SopCode			=arraySop[0];
-				sopTemp.Description	=arraySop[1];
-				Sops.Insert(sopTemp);
+				sop.SopCode			=arraySop[0];
+				sop.Description	=arraySop[1];
+				Sops.Insert(sop);
 			}
 			File.Delete(tempFileName);
 		}
