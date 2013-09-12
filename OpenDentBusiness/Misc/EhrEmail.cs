@@ -57,10 +57,17 @@ namespace OpenDentBusiness {
 			}
 			foreach(Health.Direct.Common.Mail.Notifications.NotificationMessage notificationMsg in notificationMsgs) {
 				try {
-					//Health.Direct.Agent.MessageEnvelope envelope=new Health.Direct.Agent.MessageEnvelope(rawMsg);
+					//According to RFC3798, section 3 - Format of a Message Disposition Notification http://tools.ietf.org/html/rfc3798#page-3
+					//A message disposition notification is a MIME message with a top-level
+					//content-type of multipart/report (defined in [RFC-REPORT]).  When
+					//multipart/report content is used to transmit an MDN:
+					//(a)  The report-type parameter of the multipart/report content is "disposition-notification".
+					//(b)  The first component of the multipart/report contains a human-readable explanation of the MDN, as described in [RFC-REPORT].
+					//(c)  The second component of the multipart/report is of content-type message/disposition-notification, described in section 3.1 of this document.
+					//(d)  If the original message or a portion of the message is to be returned to the sender, it appears as the third component of the multipart/report.
+					//     The decision of whether or not to return the message or part of the message is up to the MUA generating the MDN.  However, in the case of 
+					//     encrypted messages requesting MDNs, encrypted message text MUST be returned, if it is returned at all, only in its original encrypted form.
 					Health.Direct.Agent.OutgoingMessage outMsgDirect=new Health.Direct.Agent.OutgoingMessage(notificationMsg);
-					outMsgDirect.IsMDN=true;
-					//TODO: http://tools.ietf.org/html/rfc2046, http://tools.ietf.org/html/rfc3462#page-2, http://tools.ietf.org/html/rfc3798#page-3
 					//Used EmailSentOrReceived.AckDirect, not EmailSentOrReceived.SentDirect, because we do not want these to be counted in our reports as messages sent using Direct.
 					SendEmailDirect(directAgent,outMsgDirect,emailAddressFrom,patNum,EmailSentOrReceived.AckDirect);
 				}
@@ -72,35 +79,32 @@ namespace OpenDentBusiness {
 
 		///<summary>Encrypts the message, verifies trust, locates the public encryption key for the To address (if already stored locally), etc. Required by Direct protocol. emailSentOrReceived must be either SentDirect or AckDirect.</summary>
 		private static void SendEmailDirect(Health.Direct.Agent.DirectAgent directAgent,Health.Direct.Agent.OutgoingMessage outMsgDirect,EmailAddress emailAddressFrom,long patNum,EmailSentOrReceived emailSentOrReceived) {
+			//outMsgDirect.Message.ToValue="ehr@sparksalert.com";//TODO: FOR TESTING ONLY! REMOVE LATER!
 			outMsgDirect=directAgent.ProcessOutgoing(outMsgDirect);//Encrypts the message, verifies trust, locates the public encryption key for the To address (if already stored locally), etc. Required by Direct protocol.
 			byte[] arrayBytesMdnDirect=Encoding.UTF8.GetBytes(outMsgDirect.SerializeMessage());//Uses the Direct library to create a properly structured but raw outgoing email message.
-			OpenPop.Mime.Message msgMdnDirectPop=new OpenPop.Mime.Message(arrayBytesMdnDirect);//We use this open source library to convert the raw email into an object. http://hpop.sourceforge.net
-			System.Net.Mail.MailMessage msgMdnDirect=msgMdnDirectPop.ToMailMessage();//Converts the email into a common .NET object, so we can send it using standard .NET libraries.
-			msgMdnDirect.To.Add("derek@opendental.com");//FOR TESTING ONLY!!! TODO: REMOVE LATER!
+			//Convert the email into a common .NET object, so we can send it using standard .NET libraries.
+			System.Net.Mail.MailMessage msgMdnDirect=new MailMessage(outMsgDirect.Message.FromValue,outMsgDirect.Message.ToValue,outMsgDirect.Message.SubjectValue,"");
+			for(int i=0;i<outMsgDirect.Message.Headers.Count;i++) {
+				msgMdnDirect.Headers.Add(outMsgDirect.Message.Headers[i].Name,outMsgDirect.Message.Headers[i].ValueRaw);
+			}
+			Health.Direct.Common.Mime.MimeEntity mimeEntity=outMsgDirect.Message.ExtractMimeEntity();
+			byte[] mimeBytes=Encoding.UTF7.GetBytes(mimeEntity.Body.Text);
+			MemoryStream ms=new MemoryStream(mimeBytes);
+			ms.Position=0;
+			AlternateView alternateView=new AlternateView(ms,"application/pkcs7-mime; smime-type=enveloped-data; name=smime.p7m;");
+			msgMdnDirect.AlternateViews.Add(alternateView);
 			SendEmail(msgMdnDirect,emailAddressFrom);
+			ms.Dispose();
 			EmailMessage emailMdnDirect=new EmailMessage();
 			emailMdnDirect.BodyText=outMsgDirect.SerializeMessage();//Converts the entire Direct outgoing message to a raw email message text for email archive.
-			emailMdnDirect.FromAddress=outMsgDirect.Sender.Address;
+			emailMdnDirect.FromAddress=msgMdnDirect.From.Address;
 			emailMdnDirect.MsgDateTime=DateTime.Now;
 			emailMdnDirect.PatNum=patNum;
 			emailMdnDirect.SentOrReceived=emailSentOrReceived;
-			emailMdnDirect.Subject="";
-			if(outMsgDirect.Message.SubjectValue!=null) {//Is null for DirectAck messages.
-				emailMdnDirect.Subject=outMsgDirect.Message.SubjectValue;
-			}
-			emailMdnDirect.ToAddress=outMsgDirect.Recipients[0].Address;
-			EmailMessages.Insert(emailMdnDirect);//Will not show in UI anywhere yet, just for history in case something goes wrong.
+			emailMdnDirect.Subject=msgMdnDirect.Subject;
+			emailMdnDirect.ToAddress=msgMdnDirect.Sender.Address;
+			EmailMessages.Insert(emailMdnDirect);//Will not show in UI anywhere yet, just for history in case something goes wrong.			
 		}
-
-		//public static void SendEmailDirect(EmailMessage emailMessage,EmailAddress emailAddressFrom,long patNum) {
-		//	Health.Direct.Agent.DirectAgent directAgent=GetDirectAgentForEmailAddress(emailAddressFrom.SenderAddress);
-
-		//	Health.Direct.Agent.OutgoingMessage outMsgDirect=new Health.Direct.Agent.OutgoingMessage();
-
-
-
-		//	SendEmailDirect(directAgent,outMsgDirect,emailAddressFrom,patNum,EmailSentOrReceived.SentDirect);
-		//}
 
 		///<summary>This is the root email sending function. Sends an already prepared System.Net.Mail.MailMessage. Sender port 465 is treated as implicit email, otherwise the email is treated as explicit.</summary>
 		public static void SendEmail(System.Net.Mail.MailMessage mailMessage,EmailAddress emailAddressFrom) {
@@ -201,7 +205,9 @@ namespace OpenDentBusiness {
 							}
 						}
 						else {//Unencrypted email.
-							emailMessage.BodyText=openPopMsg.MessagePart.GetBodyAsText();
+							if(openPopMsg.MessagePart.Body!=null) {//Is null when a Direct Ack message (MDN) comes in.
+								emailMessage.BodyText=openPopMsg.MessagePart.GetBodyAsText();
+							}
 							EmailMessages.Insert(emailMessage);
 						}
 						retVal.Add(emailMessage);
@@ -221,7 +227,9 @@ namespace OpenDentBusiness {
 
 		private static Health.Direct.Agent.DirectAgent GetDirectAgentForEmailAddress(string strEmailAddressTo) {
 			string domain=strEmailAddressTo.Substring(strEmailAddressTo.IndexOf("@")+1);//Used to locate the certificate for the incoming email. For example, if ToAddress is ehr@opendental.com, then this will be opendental.com
-			return new Health.Direct.Agent.DirectAgent(domain);
+			Health.Direct.Agent.DirectAgent directAgent=new Health.Direct.Agent.DirectAgent(domain);
+			directAgent.EncryptMessages=true;
+			return directAgent;
 		}
 
 		///<summary>Only for email messages with SentOrReceived set to EncryptedDirect. If decryption fails, then throws an exception and does not change email. If decryption succeeds, then emailMessage.SentOrReceived is set to ReceivedDirect and the BodyText of the email is changed from the entire encrypted email contents to the decrypted body text. Automatically sends an Direct "processed" acknowledgement (MDN) if the message is decrypted.</summary>
@@ -242,7 +250,7 @@ namespace OpenDentBusiness {
 			}
 			emailMessage.SentOrReceived=EmailSentOrReceived.ReceivedDirect;
 			Health.Direct.Common.Mime.MimeEntity mime=inMsg.Message.ExtractMimeEntity();
-			emailMessage.BodyText=mime.Body.Text;
+			emailMessage.BodyText=mime.Body.SourceText.Source;
 			//emailMessage.PatNum=0;//TODO: Set for some Direct messages.
 			//We could pull the email date and time from the server instead. The format is more difficult than normal, and might be different depending on who sent the email.
 			//emailMessage.MsgDateTime=DateTime.ParseExact(inMsg.Message.DateValue,"ddd, d MMM yyyy HH:mm:ss",CultureInfo.InvariantCulture);
