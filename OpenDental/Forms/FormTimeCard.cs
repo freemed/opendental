@@ -561,8 +561,8 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Weekday"),70);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Altered"),50,HorizontalAlignment.Center);
-			gridMain.Columns.Add(col);
+			//col=new ODGridColumn(Lan.g(this,"Altered"),50,HorizontalAlignment.Center);
+			//gridMain.Columns.Add(col);
 			if(IsBreaks){
 				col=new ODGridColumn(Lan.g(this,"Out"),60,HorizontalAlignment.Right);
 				gridMain.Columns.Add(col);
@@ -626,37 +626,43 @@ namespace OpenDental{
 						row.Cells.Add(curDate.DayOfWeek.ToString());
 					}
 					//altered--------------------------------------
-					string str="";
-					if(clock.TimeEntered1!=clock.TimeDisplayed1){
-						if(IsBreaks){
-							str=Lan.g(this,"out");
-						}
-						else{
-							str=Lan.g(this,"in");
-						}
-					}
-					if(clock.TimeEntered2!=clock.TimeDisplayed2){
-						if(str!="") {
-							str+="/";
-						}
-						if(IsBreaks){
-							str+=Lan.g(this,"in");
-						}
-						else{
-							str+=Lan.g(this,"out");
-						}
-					}
-					row.Cells.Add(str);
+					//string str="";
+					//if(clock.TimeEntered1!=clock.TimeDisplayed1){
+					//	if(IsBreaks){
+					//		str=Lan.g(this,"out");
+					//	}
+					//	else{
+					//		str=Lan.g(this,"in");
+					//	}
+					//}
+					//if(clock.TimeEntered2!=clock.TimeDisplayed2){
+					//	if(str!="") {
+					//		str+="/";
+					//	}
+					//	if(IsBreaks){
+					//		str+=Lan.g(this,"in");
+					//	}
+					//	else{
+					//		str+=Lan.g(this,"out");
+					//	}
+					//}
+					//row.Cells.Add(str);
 					//status--------------------------------------
 					//row.Cells.Add(clock.ClockStatus.ToString());
 					//in------------------------------------------
 					row.Cells.Add(clock.TimeDisplayed1.ToShortTimeString());
+					if (clock.TimeEntered1!=clock.TimeDisplayed1){
+						row.Cells[row.Cells.Count-1].ColorText = Color.Red;
+					}
 					//out-----------------------------
 					if(clock.TimeDisplayed2.Year<1880){
 						row.Cells.Add("");//not clocked out yet
 					}
 					else{
 						row.Cells.Add(clock.TimeDisplayed2.ToShortTimeString());
+						if (clock.TimeEntered2!=clock.TimeDisplayed2){
+							row.Cells[row.Cells.Count-1].ColorText = Color.Red;
+						}
 					}
 					//total-------------------------------
 					if(IsBreaks){ //breaks

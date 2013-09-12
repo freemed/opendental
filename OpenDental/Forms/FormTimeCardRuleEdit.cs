@@ -66,6 +66,28 @@ namespace OpenDental {
 			textBeforeTimeOfDay.Text=dt.ToShortTimeString();
 		}
 
+		///<summary>If entering text in overtime, clear differential text boxes.</summary>
+		private void textOverHoursPerDay_TextChanged(object sender,EventArgs e) {
+			if(textOverHoursPerDay.Text!="") {
+				textAfterTimeOfDay.Text="";
+				textBeforeTimeOfDay.Text="";
+			}
+		}
+
+		///<summary>If entering text in differential boxes, clear overtime text box.</summary>
+		private void textBeforeTimeOfDay_TextChanged(object sender,EventArgs e) {
+			if(textBeforeTimeOfDay.Text!="") {
+				textOverHoursPerDay.Text="";
+			}
+		}
+
+		///<summary>If entering text in differential boxes, clear overtime text box.</summary>
+		private void textAfterTimeOfDay_TextChanged(object sender,EventArgs e) {
+			if(textAfterTimeOfDay.Text!="") {
+				textOverHoursPerDay.Text="";
+			}
+		}
+
 		private void butDelete_Click(object sender,EventArgs e) {
 			if(timeCardRule.IsNew) {
 				DialogResult=DialogResult.Cancel;
@@ -139,6 +161,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Either over hours, after or before time of day must be entered.");
 				return;
 			}
+//todo: Block entries in both places
 			//save-------------------------------------------------
 			if(listEmployees.SelectedIndex==0) {
 				timeCardRule.EmployeeNum=0;//All employees.
