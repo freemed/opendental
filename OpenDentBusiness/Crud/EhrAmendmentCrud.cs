@@ -48,12 +48,15 @@ namespace OpenDentBusiness.Crud{
 				ehrAmendment=new EhrAmendment();
 				ehrAmendment.EhrAmendmentNum= PIn.Long  (table.Rows[i]["EhrAmendmentNum"].ToString());
 				ehrAmendment.PatNum         = PIn.Long  (table.Rows[i]["PatNum"].ToString());
-				ehrAmendment.IsAccepted     = PIn.Bool  (table.Rows[i]["IsAccepted"].ToString());
+				ehrAmendment.IsAccepted     = (YN)PIn.Int(table.Rows[i]["IsAccepted"].ToString());
 				ehrAmendment.Description    = PIn.String(table.Rows[i]["Description"].ToString());
 				ehrAmendment.Source         = (AmendmentSource)PIn.Int(table.Rows[i]["Source"].ToString());
-				ehrAmendment.DateTCreated   = PIn.DateT (table.Rows[i]["DateTCreated"].ToString());
+				ehrAmendment.SourceName     = PIn.String(table.Rows[i]["SourceName"].ToString());
 				ehrAmendment.FileName       = PIn.String(table.Rows[i]["FileName"].ToString());
 				ehrAmendment.RawBase64      = PIn.String(table.Rows[i]["RawBase64"].ToString());
+				ehrAmendment.DateTRequest   = PIn.DateT (table.Rows[i]["DateTRequest"].ToString());
+				ehrAmendment.DateTAcceptDeny= PIn.DateT (table.Rows[i]["DateTAcceptDeny"].ToString());
+				ehrAmendment.DateTAppend    = PIn.DateT (table.Rows[i]["DateTAppend"].ToString());
 				retVal.Add(ehrAmendment);
 			}
 			return retVal;
@@ -94,18 +97,21 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="EhrAmendmentNum,";
 			}
-			command+="PatNum,IsAccepted,Description,Source,DateTCreated,FileName,RawBase64) VALUES(";
+			command+="PatNum,IsAccepted,Description,Source,SourceName,FileName,RawBase64,DateTRequest,DateTAcceptDeny,DateTAppend) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(ehrAmendment.EhrAmendmentNum)+",";
 			}
 			command+=
 				     POut.Long  (ehrAmendment.PatNum)+","
-				+    POut.Bool  (ehrAmendment.IsAccepted)+","
+				+    POut.Int   ((int)ehrAmendment.IsAccepted)+","
 				+"'"+POut.String(ehrAmendment.Description)+"',"
 				+    POut.Int   ((int)ehrAmendment.Source)+","
-				+    POut.DateT (ehrAmendment.DateTCreated)+","
+				+"'"+POut.String(ehrAmendment.SourceName)+"',"
 				+"'"+POut.String(ehrAmendment.FileName)+"',"
-				+DbHelper.ParamChar+"paramRawBase64)";
+				+DbHelper.ParamChar+"paramRawBase64,"
+				+    POut.DateT (ehrAmendment.DateTRequest)+","
+				+    POut.DateT (ehrAmendment.DateTAcceptDeny)+","
+				+    POut.DateT (ehrAmendment.DateTAppend)+")";
 			if(ehrAmendment.RawBase64==null) {
 				ehrAmendment.RawBase64="";
 			}
@@ -123,12 +129,15 @@ namespace OpenDentBusiness.Crud{
 		public static void Update(EhrAmendment ehrAmendment){
 			string command="UPDATE ehramendment SET "
 				+"PatNum         =  "+POut.Long  (ehrAmendment.PatNum)+", "
-				+"IsAccepted     =  "+POut.Bool  (ehrAmendment.IsAccepted)+", "
+				+"IsAccepted     =  "+POut.Int   ((int)ehrAmendment.IsAccepted)+", "
 				+"Description    = '"+POut.String(ehrAmendment.Description)+"', "
 				+"Source         =  "+POut.Int   ((int)ehrAmendment.Source)+", "
-				+"DateTCreated   =  "+POut.DateT (ehrAmendment.DateTCreated)+", "
+				+"SourceName     = '"+POut.String(ehrAmendment.SourceName)+"', "
 				+"FileName       = '"+POut.String(ehrAmendment.FileName)+"', "
-				+"RawBase64      =  "+DbHelper.ParamChar+"paramRawBase64 "
+				+"RawBase64      =  "+DbHelper.ParamChar+"paramRawBase64, "
+				+"DateTRequest   =  "+POut.DateT (ehrAmendment.DateTRequest)+", "
+				+"DateTAcceptDeny=  "+POut.DateT (ehrAmendment.DateTAcceptDeny)+", "
+				+"DateTAppend    =  "+POut.DateT (ehrAmendment.DateTAppend)+" "
 				+"WHERE EhrAmendmentNum = "+POut.Long(ehrAmendment.EhrAmendmentNum);
 			if(ehrAmendment.RawBase64==null) {
 				ehrAmendment.RawBase64="";
@@ -146,7 +155,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(ehrAmendment.IsAccepted != oldEhrAmendment.IsAccepted) {
 				if(command!=""){ command+=",";}
-				command+="IsAccepted = "+POut.Bool(ehrAmendment.IsAccepted)+"";
+				command+="IsAccepted = "+POut.Int   ((int)ehrAmendment.IsAccepted)+"";
 			}
 			if(ehrAmendment.Description != oldEhrAmendment.Description) {
 				if(command!=""){ command+=",";}
@@ -156,9 +165,9 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="Source = "+POut.Int   ((int)ehrAmendment.Source)+"";
 			}
-			if(ehrAmendment.DateTCreated != oldEhrAmendment.DateTCreated) {
+			if(ehrAmendment.SourceName != oldEhrAmendment.SourceName) {
 				if(command!=""){ command+=",";}
-				command+="DateTCreated = "+POut.DateT(ehrAmendment.DateTCreated)+"";
+				command+="SourceName = '"+POut.String(ehrAmendment.SourceName)+"'";
 			}
 			if(ehrAmendment.FileName != oldEhrAmendment.FileName) {
 				if(command!=""){ command+=",";}
@@ -167,6 +176,18 @@ namespace OpenDentBusiness.Crud{
 			if(ehrAmendment.RawBase64 != oldEhrAmendment.RawBase64) {
 				if(command!=""){ command+=",";}
 				command+="RawBase64 = "+DbHelper.ParamChar+"paramRawBase64";
+			}
+			if(ehrAmendment.DateTRequest != oldEhrAmendment.DateTRequest) {
+				if(command!=""){ command+=",";}
+				command+="DateTRequest = "+POut.DateT(ehrAmendment.DateTRequest)+"";
+			}
+			if(ehrAmendment.DateTAcceptDeny != oldEhrAmendment.DateTAcceptDeny) {
+				if(command!=""){ command+=",";}
+				command+="DateTAcceptDeny = "+POut.DateT(ehrAmendment.DateTAcceptDeny)+"";
+			}
+			if(ehrAmendment.DateTAppend != oldEhrAmendment.DateTAppend) {
+				if(command!=""){ command+=",";}
+				command+="DateTAppend = "+POut.DateT(ehrAmendment.DateTAppend)+"";
 			}
 			if(command==""){
 				return;

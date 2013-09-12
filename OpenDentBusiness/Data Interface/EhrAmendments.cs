@@ -47,6 +47,8 @@ namespace OpenDentBusiness{
 		}
 		#endregion
 		*/
+		/*
+		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 
 		///<summary></summary>
 		public static List<EhrAmendment> Refresh(long patNum){
@@ -56,7 +58,7 @@ namespace OpenDentBusiness{
 			string command="SELECT * FROM ehramendment WHERE PatNum = "+POut.Long(patNum);
 			return Crud.EhrAmendmentCrud.SelectMany(command);
 		}
-/*
+
 		///<summary>Gets one EhrAmendment from the db.</summary>
 		public static EhrAmendment GetOne(long ehrAmendmentNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
@@ -64,7 +66,7 @@ namespace OpenDentBusiness{
 			}
 			return Crud.EhrAmendmentCrud.SelectOne(ehrAmendmentNum);
 		}
-		*/
+
 		///<summary></summary>
 		public static long Insert(EhrAmendment ehrAmendment){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
@@ -82,7 +84,7 @@ namespace OpenDentBusiness{
 			}
 			Crud.EhrAmendmentCrud.Update(ehrAmendment);
 		}
-		
+
 		///<summary></summary>
 		public static void Delete(long ehrAmendmentNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -92,7 +94,7 @@ namespace OpenDentBusiness{
 			string command= "DELETE FROM ehramendment WHERE EhrAmendmentNum = "+POut.Long(ehrAmendmentNum);
 			Db.NonQ(command);
 		}
-		
+		*/
 
 
 

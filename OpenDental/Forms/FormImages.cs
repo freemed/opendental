@@ -9,8 +9,9 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class FormImages:Form {
-		///<summary>Right now, this form only supports claimpayment mode.   Others will be added later.</summary>
+		///<summary>Right now, this form only supports claimpayment and amendment mode.   Others will be added later.</summary>
 		public long ClaimPaymentNum;
+		public EhrAmendment AmendmentCur;
 
 		public FormImages() {
 			InitializeComponent();
@@ -20,7 +21,12 @@ namespace OpenDental {
 
 		private void FormImages_Load(object sender,EventArgs e) {
 			contrImagesMain.InitializeOnStartup();
-			contrImagesMain.ModuleSelectedClaimPayment(ClaimPaymentNum);
+			if(ClaimPaymentNum!=0) {
+				contrImagesMain.ModuleSelectedClaimPayment(ClaimPaymentNum);
+			}
+			else if(AmendmentCur!=null) {
+				//contrImagesMain.ModuleSelectedAmendment(AmendmentCur);
+			}
 		}
 
 		void contrImagesMain_CloseClick(object sender,EventArgs e) {

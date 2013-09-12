@@ -1443,11 +1443,14 @@ namespace OpenDentBusiness {
 						EhrAmendmentNum bigint NOT NULL auto_increment PRIMARY KEY,
 						PatNum bigint NOT NULL,
 						IsAccepted tinyint NOT NULL,
-						Description varchar(255) NOT NULL,
+						Description text NOT NULL,
 						Source tinyint NOT NULL,
-						DateTCreated datetime NOT NULL DEFAULT '0001-01-01 00:00:00',
+						SourceName text NOT NULL,
 						FileName varchar(255) NOT NULL,
 						RawBase64 longtext NOT NULL,
+						DateTRequest datetime NOT NULL DEFAULT '0001-01-01 00:00:00',
+						DateTAcceptDeny datetime NOT NULL DEFAULT '0001-01-01 00:00:00',
+						DateTAppend datetime NOT NULL DEFAULT '0001-01-01 00:00:00',
 						INDEX(PatNum)
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
@@ -1459,11 +1462,14 @@ namespace OpenDentBusiness {
 						EhrAmendmentNum number(20) NOT NULL,
 						PatNum number(20) NOT NULL,
 						IsAccepted number(3) NOT NULL,
-						Description varchar2(255),
+						Description varchar2(2000),
 						Source number(3) NOT NULL,
-						DateTCreated date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+						SourceName varchar2(2000),
 						FileName varchar2(255),
 						RawBase64 clob,
+						DateTRequest date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+						DateTAcceptDeny date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+						DateTAppend date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
 						CONSTRAINT ehramendment_EhrAmendmentNum PRIMARY KEY (EhrAmendmentNum)
 						)";
 					Db.NonQ(command);
@@ -1563,9 +1569,6 @@ namespace OpenDentBusiness {
 
 	}
 }
-
-
-
 
 
 

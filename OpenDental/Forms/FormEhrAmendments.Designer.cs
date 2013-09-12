@@ -36,8 +36,7 @@
 			this.gridMain.Location = new System.Drawing.Point(18, 12);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.None;
-			this.gridMain.Size = new System.Drawing.Size(476, 384);
+			this.gridMain.Size = new System.Drawing.Size(470, 384);
 			this.gridMain.TabIndex = 25;
 			this.gridMain.Title = "Amendments";
 			this.gridMain.TranslationName = null;
@@ -74,6 +73,7 @@
 			this.Controls.Add(this.butClose);
 			this.Controls.Add(this.gridMain);
 			this.Name = "FormEhrAmendments";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Amendments";
 			this.Load += new System.EventHandler(this.FormEhrAmendments_Load);
 			this.ResumeLayout(false);

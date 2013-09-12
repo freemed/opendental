@@ -18,23 +18,23 @@ namespace OpenDental {
 		}
 
 		private void FormEhrAmendmentEdit_Load(object sender,EventArgs e) {
-			string[] sourceList = Enum.GetNames(typeof(AmendmentSource));
-			for(int i=0;i<sourceList.Length;i++) {
-				comboSource.Items.Add(sourceList[i]);
-			}
-			if(!IsNew) {
-				if(AmdCur.IsAccepted) {
-					radioIsAccepted.Checked=true;
-				}
-				else {
-					radioIsDenied.Checked=true; ;
-				}
-				comboSource.SelectedValue=AmdCur.Source;
-				textDescription.Text=AmdCur.Description;
-				if(AmdCur.FileName!="") {
-					textAmdIsScanned.Text="Yes";
-				}
-			}
+			//string[] sourceList = Enum.GetNames(typeof(AmendmentSource));
+			//for(int i=0;i<sourceList.Length;i++) {
+			//	comboSource.Items.Add(sourceList[i]);
+			//}
+			//if(!IsNew) {
+			//	if(AmdCur.IsAccepted) {
+			//		radioIsAccepted.Checked=true;
+			//	}
+			//	else {
+			//		radioIsDenied.Checked=true; ;
+			//	}
+			//	comboSource.SelectedValue=AmdCur.Source;
+			//	textDescription.Text=AmdCur.Description;
+			//	if(AmdCur.FileName!="") {
+			//		textAmdIsScanned.Text="Yes";
+			//	}
+			//}
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
@@ -43,7 +43,7 @@ namespace OpenDental {
 			//	return;
 			//}
 			try {
-				EhrAmendments.Delete(AmdCur.EhrAmendmentNum);
+				//EhrAmendments.Delete(AmdCur.EhrAmendmentNum);
 				DialogResult=DialogResult.OK;
 			}
 			catch(Exception ex) {
@@ -67,7 +67,7 @@ namespace OpenDental {
 
 		private void butOK_Click(object sender,EventArgs e) {
 			try {
-				EhrAmendments.Insert(AmdCur);
+				//EhrAmendments.Insert(AmdCur);
 				DialogResult=DialogResult.OK;
 			}
 			catch(Exception ex) {

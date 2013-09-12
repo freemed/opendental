@@ -11,19 +11,27 @@ namespace OpenDentBusiness {
 		///<summary>FK to patient.PatNum</summary>
 		public long PatNum;
 		///<summary>Indicates whether the amendment was accepted or denied.</summary>
-		public bool IsAccepted;
-		///<summary>User-defined description of the amendment</summary>
+		public YN IsAccepted;
+		///<summary>Description or user-defined location of the amendment.  Max length 2000.</summary>
 		public string Description;
 		///<summary>Enum:AmendmentSource Patient, Provider, Organization, Other.</summary>
 		public AmendmentSource Source;
-		///<summary>Date and time of the amendment entry.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
-		public DateTime DateTCreated;
-		///<summary>The file is stored in the A-Z folder in 'EhrAmendments' folder.  This field stores the name of the file.  The files are named automatically based on Date/time along with EhrAmendmentNum for uniqueness.</summary>
+		///<summary>User-defined name of the amendment source.  For example, a patient name or organization name.  Max length 2000.</summary>
+		public string SourceName;
+		///<summary>The file is stored in the A-Z folder in 'EhrAmendments' folder.  This field stores the name of the file.  The files are named automatically based on Date/time along with EhrAmendmentNum for uniqueness.  This meets the requirement of "appending" to the patient's record.</summary>
 		public string FileName;
-		///<summary>The raw file data encoded as base64.  Only used if there is no AtoZ folder.</summary>
+		///<summary>The raw file data encoded as base64.  Only used if there is no AtoZ folder.  This meets the requirement of "appending" to the patient's record.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string RawBase64;
+		///<summary>Date and time of the amendment request.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		public DateTime DateTRequest;
+		///<summary>Date and time of the amendment acceptance or denial.  If there is a date here, then the IsAccepted will be set.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		public DateTime DateTAcceptDeny;
+		///<summary>Date and time of the file being appended to the amendment or a link provided.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		public DateTime DateTAppend;
 
 		///<summary></summary>
 		public EhrAmendment Clone() {
