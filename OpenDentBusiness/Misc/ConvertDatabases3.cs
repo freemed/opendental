@@ -1041,38 +1041,6 @@ namespace OpenDentBusiness {
 				command=@"INSERT INTO codeSystem (CodeSystemNum,CodeSystemName,HL7OID) VALUES (12,'SOP','2.16.840.1.113883.3.221.5')";
 				Db.NonQ(command);
 #region Create Code Systems Tables
-				//administrativesex-------------------------------------------------------------------------------------------------------------------
-				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="DROP TABLE IF EXISTS administrativesex";
-					Db.NonQ(command);
-					command=@"CREATE TABLE administrativesex (
-							AdministrativeSexNum bigint NOT NULL auto_increment PRIMARY KEY,
-							CodeValue varchar(255) NOT NULL,
-							Description varchar(255) NOT NULL,
-							INDEX(CodeValue)
-							) DEFAULT CHARSET=utf8";
-					Db.NonQ(command);
-				}
-				else {//oracle
-					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE administrativesex'; EXCEPTION WHEN OTHERS THEN NULL; END;";
-					Db.NonQ(command);
-					command=@"CREATE TABLE administrativesex (
-							AdministrativeSexNum number(20) NOT NULL,
-							CodeValue varchar2(255),
-							Description varchar2(255),
-							CONSTRAINT administrativesex_Administr PRIMARY KEY (AdministrativeSexNum)
-							)";
-					Db.NonQ(command);
-					command=@"CREATE INDEX administrativesex_CodeValue ON intervention (CodeValue)";
-					Db.NonQ(command);
-				}
-				//no need for mysql/Oracle split
-				command="INSERT INTO administrativesex(AdministrativeSexNum,CodeValue,Description) VALUES(1,'F','Female')";
-				Db.NonQ(command);
-				command="INSERT INTO administrativesex(AdministrativeSexNum,CodeValue,Description) VALUES(2,'M','Male')";
-				Db.NonQ(command);
-				command="INSERT INTO administrativesex(AdministrativeSexNum,CodeValue,Description) VALUES(3,'U','Unknown')";
-				Db.NonQ(command);
 				//CDCREC (CDC Race and Ethnicity)-------------------------------------------------------------------------------------------------------------------------
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS cdcrec";
