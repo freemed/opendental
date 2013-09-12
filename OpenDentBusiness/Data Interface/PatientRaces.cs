@@ -70,7 +70,7 @@ namespace OpenDentBusiness{
 			return PatientRaceOld.Unknown;
 		}
 
-		///<summary>Gets a list of PatRaces that corrispond to a PatientRaceOld enum.</summary>
+		///<summary>Gets a list of PatRaces that correspond to a PatientRaceOld enum.</summary>
 		public static List<PatRace> GetPatRacesFromPatientRaceOld(PatientRaceOld raceOld) {
 			List<PatRace> retVal=new List<PatRace>();
 			switch(raceOld) {

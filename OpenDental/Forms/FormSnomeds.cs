@@ -40,7 +40,7 @@ namespace OpenDental {
 			ODGridColumn col;
 			col=new ODGridColumn("SNOMED Code",100,HorizontalAlignment.Right);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Depricated",75,HorizontalAlignment.Center);
+			col=new ODGridColumn("Deprecated",75,HorizontalAlignment.Center);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("Description",500);
 			gridMain.Columns.Add(col);
@@ -60,7 +60,7 @@ namespace OpenDental {
 			for(int i=0;i<SnomedList.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(SnomedList[i].SnomedCode);
-				row.Cells.Add("");//IsActive==NotDepricated
+				row.Cells.Add("");//IsActive==NotDeprecated
 				row.Cells.Add(SnomedList[i].Description);
 				row.Cells.Add("");
 				gridMain.Rows.Add(row);
