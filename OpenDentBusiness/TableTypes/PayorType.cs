@@ -15,7 +15,7 @@ namespace OpenDentBusiness {
 		public DateTime DateStart;
 		///<summary>FK to sop.SopCode. Examples: 121, 3115, etc. </summary>
 		public string SopCode;
-		///<summary>.</summary>
+		///<summary>Max length 2000.</summary>
 		public string Note;
 
 		///<summary>Returns a copy of this PayorType.</summary>

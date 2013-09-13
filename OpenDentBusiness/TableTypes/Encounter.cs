@@ -19,7 +19,7 @@ namespace OpenDentBusiness {
 		public string CodeValue;
 		///<summary>We only allow the following CodeSystemNames in this table: CDT, CPT, HCPCS, and SNOMEDCT. </summary>
 		public string CodeSystemName;
-		///<summary>.</summary>
+		///<summary>Max length 2000.</summary>
 		public string Note;
 
 		///<summary>Returns a copy of this Encounter.</summary>
