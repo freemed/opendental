@@ -13,14 +13,17 @@ namespace OpenDentBusiness {
 		public int Denominator;
 		public int Numerator;
 		public int Exclusions;
+		public int Exceptions;
+		///<summary>Denominator-Exceptions-Exclusions-Numerator.  Those that do not fall into a sub-population.</summary>
 		public int NotMet;
-		///<summary>Always 100</summary>
+		///<summary>This represents the percentage of patients in the denominator who fall into one of the other sub-populations.  The Reporting Rate is calculated as: Rate=(Numerator+Exclusions+Exceptions)/Denominator. See \\SERVERFILES\storage\EHR\Quality Measures\QRDA\CDAR2_QRDA_CATIII_DSTU_R1_2012NOV\CDAR2_QRDAIII_DSTU_R1_2012NOV.pdf page 86.</summary>
 		public int ReportingRate;
-		///<summary>Numerator/(Numerator+NotMet)</summary>
+		///<summary>The performance rate is a ratio of patients that meet the numerator criteria divided by patients in the denominator (after accounting for exclusions and exceptions).  Rate = Numerator/(Denominator-Exclusions-Exceptions).</summary>
 		public int PerformanceRate;
 		public string DenominatorExplain;
 		public string NumeratorExplain;
 		public string ExclusionsExplain;
+		public string ExceptionsExplain;
 	}
 
 	public enum QualityType {
@@ -57,8 +60,15 @@ namespace OpenDentBusiness {
 	}
 
 	public enum QualityType2014 {
+		MedicationsEntered,
 		WeightOver65,
 		WeightAdult,
+		CariesPrevent,
+		CariesPrevent_1,
+		CariesPrevent_2,
+		CariesPrevent_3,
+		ChildCaries,
+		Pneumonia,
 		TobaccoCessation,
 		Influenza,
 		WeightChild_1_1,
@@ -70,13 +80,6 @@ namespace OpenDentBusiness {
 		WeightChild_3_1,
 		WeightChild_3_2,
 		WeightChild_3_3,
-		MedicationsEntered,
-		Pneumonia,
-		BloodPressureManage,
-		CariesPrevent,
-		CariesPrevent_1,
-		CariesPrevent_2,
-		CariesPrevent_3,
-		ChildCaries
+		BloodPressureManage
 	}
 }
