@@ -1642,6 +1642,43 @@ namespace OpenDentBusiness {
 					command=@"CREATE INDEX payortype_SopCode ON payortype (SopCode)";
 					Db.NonQ(command);
 				}
+				//oracle compatible
+				command="UPDATE patientrace SET CdcrecCode='2054-5' WHERE Race=1";//AfricanAmerican
+				Db.NonQ(command);
+				command="UPDATE patientrace SET CdcrecCode='1002-5' WHERE Race=2";//AmericanIndian
+				Db.NonQ(command);
+				command="UPDATE patientrace SET CdcrecCode='2028-9' WHERE Race=3";//Asian
+				Db.NonQ(command);
+				command="UPDATE patientrace SET CdcrecCode='2076-8' WHERE Race=5";//HawaiiOrPacIsland
+				Db.NonQ(command);
+				command="UPDATE patientrace SET CdcrecCode='2135-2' WHERE Race=6";//Hispanic
+				Db.NonQ(command);
+				command="UPDATE patientrace SET CdcrecCode='2131-1' WHERE Race=8";//Other
+				Db.NonQ(command);
+				command="UPDATE patientrace SET CdcrecCode='2106-3' WHERE Race=9";//White
+				Db.NonQ(command);
+				command="UPDATE patientrace SET CdcrecCode='2186-5' WHERE Race=10";//NotHispanic
+				Db.NonQ(command);
+				//oracle compatible
+				//We will insert another patientrace row specifying 'NotHispanic' if there is not a Hispanic entry or a DeclinedToSpecify entry but there is at least one other patientrace entry.  The absence of ethnicity was assumed NotHispanic in the past, now we are going to explicitly store that value.  enum=10, CdcrecCode='2186-5'
+				command="SELECT DISTINCT PatNum FROM patientrace WHERE PatNum NOT IN(SELECT PatNum FROM patientrace WHERE Race IN(4,6))";//4=DeclinedToSpecify,6=Hispanic
+				DataTable table=Db.GetTable(command);
+				long patNum=0;
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					for(int i=0;i<table.Rows.Count;i++) {
+						patNum=PIn.Long(table.Rows[i]["PatNum"].ToString());
+						command="INSERT INTO patientrace (PatNum,Race,CdcrecCode) VALUES("+POut.Long(patNum)+",10,'2186-5')";
+						Db.NonQ(command);
+					}
+				}
+				else {//oracle
+					for(int i=0;i<table.Rows.Count;i++) {
+						patNum=PIn.Long(table.Rows[i]["PatNum"].ToString());
+						command="INSERT INTO patientrace (PatientRaceNum,PatNum,Race,CdcrecCode) "
+							+"VALUES((SELECT MAX(PatientRaceNum)+1 FROM patientrace),"+POut.Long(patNum)+",10,'2186-5')";
+						Db.NonQ(command);
+					}
+				}
 
 
 
