@@ -372,6 +372,18 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormEncounters.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormEncounters.designer.cs">
+      <DependentUpon>FormEncounters.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormEhrNotPerformed.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormEhrNotPerformed.designer.cs">
+      <DependentUpon>FormEhrNotPerformed.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormCodeSystemsImport.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2860,6 +2872,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormEncounters.resx">
+      <DependentUpon>FormEncounters.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormEhrNotPerformed.resx">
+      <DependentUpon>FormEhrNotPerformed.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormCodeSystemsImport.resx">
       <DependentUpon>FormCodeSystemsImport.cs</DependentUpon>
