@@ -42,6 +42,8 @@
 			this.label3 = new System.Windows.Forms.Label();
 			this.butLabPanelLOINC = new System.Windows.Forms.Button();
 			this.butAmendments = new System.Windows.Forms.Button();
+			this.butEncounters = new System.Windows.Forms.Button();
+			this.butEhrNotPerformed = new System.Windows.Forms.Button();
 			this.groupBox4.SuspendLayout();
 			this.groupBox5.SuspendLayout();
 			this.SuspendLayout();
@@ -233,11 +235,33 @@
 			this.butAmendments.UseVisualStyleBackColor = true;
 			this.butAmendments.Click += new System.EventHandler(this.butAmendments_Click);
 			// 
+			// butEncounters
+			// 
+			this.butEncounters.Location = new System.Drawing.Point(709, 437);
+			this.butEncounters.Name = "butEncounters";
+			this.butEncounters.Size = new System.Drawing.Size(86, 23);
+			this.butEncounters.TabIndex = 37;
+			this.butEncounters.Text = "Encounters";
+			this.butEncounters.UseVisualStyleBackColor = true;
+			this.butEncounters.Click += new System.EventHandler(this.butEncounters_Click);
+			// 
+			// butEhrNotPerformed
+			// 
+			this.butEhrNotPerformed.Location = new System.Drawing.Point(709, 408);
+			this.butEhrNotPerformed.Name = "butEhrNotPerformed";
+			this.butEhrNotPerformed.Size = new System.Drawing.Size(86, 23);
+			this.butEhrNotPerformed.TabIndex = 38;
+			this.butEhrNotPerformed.Text = "Not Performed";
+			this.butEhrNotPerformed.UseVisualStyleBackColor = true;
+			this.butEhrNotPerformed.Click += new System.EventHandler(this.butEhrNotPerformed_Click);
+			// 
 			// FormEHR
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(817, 674);
+			this.Controls.Add(this.butEhrNotPerformed);
+			this.Controls.Add(this.butEncounters);
 			this.Controls.Add(this.butAmendments);
 			this.Controls.Add(this.butLabPanelLOINC);
 			this.Controls.Add(this.label3);
@@ -251,6 +275,7 @@
 			this.Controls.Add(this.groupBox4);
 			this.Controls.Add(this.gridMu);
 			this.Controls.Add(this.butClose);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "FormEHR";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "EHR";
@@ -282,5 +307,7 @@
 		private System.Windows.Forms.Button butLabPanelLOINC;
 		private System.Windows.Forms.Button but2014CQM;
 		private System.Windows.Forms.Button butAmendments;
+		private System.Windows.Forms.Button butEncounters;
+		private System.Windows.Forms.Button butEhrNotPerformed;
 	}
 }

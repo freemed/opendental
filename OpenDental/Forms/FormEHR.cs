@@ -348,6 +348,20 @@ namespace OpenDental {
 			//FormLP.ShowDialog();
 		}
 
+		private void butAmendments_Click(object sender,EventArgs e) {
+			FormEhrAmendments FormAmd=new FormEhrAmendments();
+			FormAmd.PatCur=PatCur;
+			FormAmd.ShowDialog();
+		}
+
+		private void butEhrNotPerformed_Click(object sender,EventArgs e) {
+			
+		}
+
+		private void butEncounters_Click(object sender,EventArgs e) {
+
+		}
+
 		public bool ProvKeyIsValid(string lName,string fName,bool hasReportAccess,string provKey) {
 			return ProvKey.ProvKeyIsValid(lName,fName,hasReportAccess,provKey);
 		}
@@ -358,12 +372,6 @@ namespace OpenDental {
 
 		private void butClose_Click(object sender,EventArgs e) {
 			Close();
-		}
-
-		private void butAmendments_Click(object sender,EventArgs e) {
-			FormEhrAmendments FormAmd=new FormEhrAmendments();
-			FormAmd.PatCur=PatCur;
-			FormAmd.ShowDialog();
 		}
 
 
