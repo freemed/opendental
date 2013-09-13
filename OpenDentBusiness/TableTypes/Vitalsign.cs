@@ -29,8 +29,8 @@ namespace OpenDentBusiness {
 		public bool ChildGotNutrition;
 		///<summary>.</summary>//intervention? I think these should be deprecated and use an Intervention object instead.
 		public bool ChildGotPhysCouns;
-		/////<summary>Used for CQMs.  SNOMED CT code either Normal="", Overweight="238131007", or Underweight="248342006".  Set when BMI is found to be "out of range", based on age groups.  Should be calculated when vital sign is saved.  Calculate based on age as of Jan 1 of the year vitals were taken.  Not currently displayed to user.</summary>
-		//public string WeightCode;
+		///<summary>Used for CQMs.  SNOMED CT code either Normal="", Overweight="238131007", or Underweight="248342006".  Set when BMI is found to be "out of range", based on age groups.  Should be calculated when vital sign is saved.  Calculate based on age as of Jan 1 of the year vitals were taken.  Not currently displayed to user.</summary>
+		public string WeightCode;
 
 		///<summary></summary>
 		public Vitalsign Copy() {

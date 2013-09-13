@@ -58,6 +58,7 @@ namespace OpenDentBusiness.Crud{
 				vitalsign.Documentation    = PIn.String(table.Rows[i]["Documentation"].ToString());
 				vitalsign.ChildGotNutrition= PIn.Bool  (table.Rows[i]["ChildGotNutrition"].ToString());
 				vitalsign.ChildGotPhysCouns= PIn.Bool  (table.Rows[i]["ChildGotPhysCouns"].ToString());
+				vitalsign.WeightCode       = PIn.String(table.Rows[i]["WeightCode"].ToString());
 				retVal.Add(vitalsign);
 			}
 			return retVal;
@@ -98,7 +99,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="VitalsignNum,";
 			}
-			command+="PatNum,Height,Weight,BpSystolic,BpDiastolic,DateTaken,HasFollowupPlan,IsIneligible,Documentation,ChildGotNutrition,ChildGotPhysCouns) VALUES(";
+			command+="PatNum,Height,Weight,BpSystolic,BpDiastolic,DateTaken,HasFollowupPlan,IsIneligible,Documentation,ChildGotNutrition,ChildGotPhysCouns,WeightCode) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(vitalsign.VitalsignNum)+",";
 			}
@@ -113,7 +114,8 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Bool  (vitalsign.IsIneligible)+","
 				+"'"+POut.String(vitalsign.Documentation)+"',"
 				+    POut.Bool  (vitalsign.ChildGotNutrition)+","
-				+    POut.Bool  (vitalsign.ChildGotPhysCouns)+")";
+				+    POut.Bool  (vitalsign.ChildGotPhysCouns)+","
+				+"'"+POut.String(vitalsign.WeightCode)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -136,7 +138,8 @@ namespace OpenDentBusiness.Crud{
 				+"IsIneligible     =  "+POut.Bool  (vitalsign.IsIneligible)+", "
 				+"Documentation    = '"+POut.String(vitalsign.Documentation)+"', "
 				+"ChildGotNutrition=  "+POut.Bool  (vitalsign.ChildGotNutrition)+", "
-				+"ChildGotPhysCouns=  "+POut.Bool  (vitalsign.ChildGotPhysCouns)+" "
+				+"ChildGotPhysCouns=  "+POut.Bool  (vitalsign.ChildGotPhysCouns)+", "
+				+"WeightCode       = '"+POut.String(vitalsign.WeightCode)+"' "
 				+"WHERE VitalsignNum = "+POut.Long(vitalsign.VitalsignNum);
 			Db.NonQ(command);
 		}
@@ -187,6 +190,10 @@ namespace OpenDentBusiness.Crud{
 			if(vitalsign.ChildGotPhysCouns != oldVitalsign.ChildGotPhysCouns) {
 				if(command!=""){ command+=",";}
 				command+="ChildGotPhysCouns = "+POut.Bool(vitalsign.ChildGotPhysCouns)+"";
+			}
+			if(vitalsign.WeightCode != oldVitalsign.WeightCode) {
+				if(command!=""){ command+=",";}
+				command+="WeightCode = '"+POut.String(vitalsign.WeightCode)+"'";
 			}
 			if(command==""){
 				return;

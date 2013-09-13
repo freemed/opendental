@@ -997,7 +997,8 @@ namespace OpenDentBusiness {
 						VersionCur varchar(255) NOT NULL,
 						VersionAvail varchar(255) NOT NULL,
 						HL7OID varchar(255) NOT NULL,
-						Note varchar(255) NOT NULL
+						Note varchar(255) NOT NULL,
+						INDEX(CodeSystemName)
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
 				}
@@ -1013,6 +1014,8 @@ namespace OpenDentBusiness {
 						Note varchar2(255),
 						CONSTRAINT codesystem_CodeSystemNum PRIMARY KEY (CodeSystemNum)
 						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX codesystem_CodeSystemName ON codesystem (CodeSystemName)";
 					Db.NonQ(command);
 				}
 				//No need for mysql/oracle split
@@ -1518,6 +1521,47 @@ namespace OpenDentBusiness {
 					command=@"CREATE INDEX patientrace_CdcrecCode ON intervention (CdcrecCode)";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE vitalsign ADD WeightCode varchar(255) NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE vitalsign ADD INDEX (WeightCode)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE vitalsign ADD WeightCode varchar2(255)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX vitalsign_WeightCode ON vitalsign (WeightCode)";
+					Db.NonQ(command);
+				}
+				//Add indexes for code systems------------------------------------------------------------------------------------------------------
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE diseasedef ADD INDEX (Icd9Code)";
+					Db.NonQ(command);
+					command="ALTER TABLE diseasedef ADD INDEX (SnomedCode)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command=@"CREATE INDEX diseasedef_Icd9Code ON diseasedef (Icd9Code)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX diseasedef_SnomedCode ON diseasedef (SnomedCode)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE icd9 ADD INDEX (Icd9Code)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command=@"CREATE INDEX icd9_Icd9Code ON icd9 (Icd9Code)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE rxnorm ADD INDEX (RxCui)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command=@"CREATE INDEX rxnorm_RxCui ON rxnorm (RxCui)";
+					Db.NonQ(command);
+				}
 
 
 
@@ -1537,6 +1581,3 @@ namespace OpenDentBusiness {
 
 	}
 }
-
-
-
