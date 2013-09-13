@@ -9,6 +9,7 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class FormEncounters:Form {
+
 		public FormEncounters() {
 			InitializeComponent();
 		}
