@@ -226,6 +226,7 @@
     <Compile Include="Crud\EmailTemplateCrud.cs" />
     <Compile Include="Crud\EmployeeCrud.cs" />
     <Compile Include="Crud\EmployerCrud.cs" />
+    <Compile Include="Crud\EncounterCrud.cs" />
     <Compile Include="Crud\EobAttachCrud.cs" />
     <Compile Include="Crud\EquipmentCrud.cs" />
     <Compile Include="Crud\ErxLogCrud.cs" />
@@ -280,6 +281,7 @@
     <Compile Include="Crud\PatientRaceCrud.cs" />
     <Compile Include="Crud\PatPlanCrud.cs" />
     <Compile Include="Crud\PaymentCrud.cs" />
+    <Compile Include="Crud\PayorTypeCrud.cs" />
     <Compile Include="Crud\PayPeriodCrud.cs" />
     <Compile Include="Crud\PayPlanChargeCrud.cs" />
     <Compile Include="Crud\PayPlanCrud.cs" />
@@ -400,12 +402,14 @@
     <Compile Include="Data Interface\EhrNotPerformeds.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Data Interface\Encounters.cs" />
     <Compile Include="Data Interface\FamilyHealths.cs" />
     <Compile Include="Data Interface\Hcpcses.cs" />
     <Compile Include="Data Interface\Icd10s.cs" />
     <Compile Include="Data Interface\Interventions.cs" />
     <Compile Include="Data Interface\Loincs.cs" />
     <Compile Include="Data Interface\PatientRaces.cs" />
+    <Compile Include="Data Interface\PayorTypes.cs" />
     <Compile Include="Data Interface\Resellers.cs" />
     <Compile Include="Data Interface\ResellerServices.cs" />
     <Compile Include="Data Interface\SecurityLogHashes.cs" />
@@ -806,6 +810,8 @@
     <Compile Include="TableTypes\CodeSystem.cs" />
     <Compile Include="TableTypes\Cdcrec.cs" />
     <Compile Include="TableTypes\Cpt.cs" />
+    <Compile Include="TableTypes\Encounter.cs" />
+    <Compile Include="TableTypes\PayorType.cs" />
     <Compile Include="TableTypes\SOP.cs" />
     <Compile Include="TableTypes\Cvx.cs" />
     <Compile Include="TableTypes\Hcpcs.cs">

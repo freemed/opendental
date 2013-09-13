@@ -1562,6 +1562,87 @@ namespace OpenDentBusiness {
 					command=@"CREATE INDEX rxnorm_RxCui ON rxnorm (RxCui)";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS encounter";
+					Db.NonQ(command);
+					command=@"CREATE TABLE encounter (
+						EncounterNum bigint NOT NULL auto_increment PRIMARY KEY,
+						DateEncounter date NOT NULL DEFAULT '0001-01-01',
+						PatNum bigint NOT NULL,
+						ProvNum bigint NOT NULL,
+						CodeValue varchar(255) NOT NULL,
+						CodeSystemName varchar(255) NOT NULL,
+						Note text NOT NULL,
+						INDEX(PatNum),
+						INDEX(ProvNum),
+						INDEX(CodeValue),
+						INDEX(CodeSystemName)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE encounter'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE encounter (
+						EncounterNum number(20) NOT NULL,
+						DateEncounter date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+						PatNum number(20) NOT NULL,
+						ProvNum number(20) NOT NULL,
+						CodeValue varchar2(255),
+						CodeSystemName varchar2(255),
+						Note varchar2(2000),
+						CONSTRAINT encounter_EncounterNum PRIMARY KEY (EncounterNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX encounter_PatNum ON encounter (PatNum)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX encounter_ProvNum ON encounter (ProvNum)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX encounter_CodeValue ON encounter (CodeValue)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX encounter_CodeSystemName ON encounter (CodeSystemName)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE insplan ADD SopCode varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE insplan ADD SopCode varchar2(255)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS payortype";
+					Db.NonQ(command);
+					command=@"CREATE TABLE payortype (
+						PayorTypeNum bigint NOT NULL auto_increment PRIMARY KEY,
+						PatNum bigint NOT NULL,
+						DateStart date NOT NULL DEFAULT '0001-01-01',
+						SopCode varchar(255) NOT NULL,
+						Note text NOT NULL,
+						INDEX(PatNum),
+						INDEX(SopCode)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE payortype'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE payortype (
+						PayorTypeNum number(20) NOT NULL,
+						PatNum number(20) NOT NULL,
+						DateStart date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+						SopCode varchar2(255),
+						Note varchar2(2000),
+						CONSTRAINT payortype_PayorTypeNum PRIMARY KEY (PayorTypeNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX payortype_PatNum ON payortype (PatNum)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX payortype_SopCode ON payortype (SopCode)";
+					Db.NonQ(command);
+				}
+
 
 
 
@@ -1581,3 +1662,5 @@ namespace OpenDentBusiness {
 
 	}
 }
+
+

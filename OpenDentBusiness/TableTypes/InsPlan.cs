@@ -51,7 +51,7 @@ namespace OpenDentBusiness{
 		public bool IsHidden;
 		///<summary>The month, 1 through 12 when the insurance plan renews.  It will renew on the first of the month.  To indicate calendar year, set renew month to 0.</summary>
 		public byte MonthRenew;
-		///<summary>FK to insfilingcodesubtype.insfilingcodesubtypenum</summary>
+		///<summary>FK to insfilingcodesubtype.InsFilingCodeSubtypeNum</summary>
 		public long FilingCodeSubtype;
 		///<summary>Canadian C12.  Single char, usually blank.  If non-blank, then it's one of three kinds of Provincial Medical Plans.  A=Newfoundland MCP Plan.  V=Veteran's Affairs Plan.  N=NIHB.  N and V are not yet in use, so they will result in blank being sent instead.  See Elig5.</summary>
 		public string CanadianPlanFlag;
@@ -63,6 +63,8 @@ namespace OpenDentBusiness{
 		public string RxBIN;
 		///<summary>Enum:EnumCobRule. 0=Basic, 1=Standard, 2=CarveOut. </summary>
 		public EnumCobRule CobRule;
+		///<summary>FK to sop.SopCode. Examples: 121, 3115, etc.  Acts as default for all patients using this insurance.  When code is changed for an insplan, it should change automatically for patients having that primary insurance. </summary>
+		public string SopCode;
 		
 
 		///<summary>This is not a database column.  It is just used to display the number of plans with the same info.</summary>
