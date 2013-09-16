@@ -85,6 +85,7 @@ namespace OpenDental {
 				//IgnoreCertificateErrors();// used with faulty certificates only while debugging.
 				#endif
 				WebSheets.Sheets wh=new WebSheets.Sheets();
+				wh.Timeout=300000;//5 minutes.  Default is 100000 (1.66667 minutes).
 				wh.Url=PrefC.GetString(PrefName.WebHostSynchServerURL);
 				string RegistrationKey=PrefC.GetString(PrefName.RegistrationKey);
 				if(wh.GetDentalOfficeID(RegistrationKey)==0) {
@@ -173,7 +174,9 @@ namespace OpenDental {
 			}
 			catch(Exception e) {
 				MessageBox.Show(e.Message);
+				return;
 			}
+			MsgBox.Show(this,"Done");
 		}
 
 		/// <summary>Compares values of the sheet with values that have been inserted into the db.  Returns false if the data was not saved properly.</summary>
