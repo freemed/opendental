@@ -98,7 +98,16 @@ namespace OpenDentBusiness {
 			Crud.ComputerPrefCrud.Update(computerPref);
 		}
 
-		
+		///<summary>Sets the GraphicsSimple column to 1.  Added to fix machines (lately tablets) that are having graphics problems and cannot start OpenDental.</summary>
+		public static void SetToSimpleGraphics(string computerName) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),computerName);
+				return;
+			}
+			string command="UPDATE computerpref SET GraphicsSimple=1 WHERE ComputerName='"+POut.String(computerName)+"'";
+			Db.NonQ(command);
+		}
+
 
 	}
 
