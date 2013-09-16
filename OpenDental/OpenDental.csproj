@@ -426,6 +426,12 @@
     <Compile Include="Forms\FormLoincs.Designer.cs">
       <DependentUpon>FormLoincs.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormMedicationUpdate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormMedicationUpdate.designer.cs">
+      <DependentUpon>FormMedicationUpdate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormPatListEHR2014.cs">
       <SubType>Form</SubType>
     </Compile>
