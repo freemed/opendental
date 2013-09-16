@@ -1442,11 +1442,29 @@ namespace OpenDental{
 					case "appt.procedures":
 						str="";
 						List<Procedure> procs=Procedures.GetProcsForSingle(apt.AptNum,false);
+						bool isOnlyTP=true;
 						for(int i=0;i<procs.Count;i++) {
-							if(i>0){
-								str+="\r\n";
+							if(procs[i].ProcStatus!=ProcStat.TP) {
+								isOnlyTP=false;
+								break;
 							}
-							str+=Procedures.GetDescription(procs[i]);
+						}
+						if(isOnlyTP) {
+							Procedure[] procListTP=Procedures.GetListTP(procs);//this sorts.  Doesn't work unless all are TP.
+							for(int i=0;i<procListTP.Length;i++) {
+								if(i>0) {
+									str+="\r\n";
+								}
+								str+=Procedures.GetDescription(procListTP[i]);
+							}
+						}
+						else {
+							for(int i=0;i<procs.Count;i++) {
+								if(i>0) {
+									str+="\r\n";
+								}
+								str+=Procedures.GetDescription(procs[i]);
+							}
 						}
 						field.FieldValue=str;
 						break;
