@@ -1534,34 +1534,43 @@ namespace OpenDentBusiness {
 					Db.NonQ(command);
 				}
 				//Add indexes for code systems------------------------------------------------------------------------------------------------------
-				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE diseasedef ADD INDEX (Icd9Code)";
-					Db.NonQ(command);
-					command="ALTER TABLE diseasedef ADD INDEX (SnomedCode)";
-					Db.NonQ(command);
+				try {
+					if(DataConnection.DBtype==DatabaseType.MySql) {
+						command="ALTER TABLE diseasedef ADD INDEX (Icd9Code)";
+						Db.NonQ(command);
+						command="ALTER TABLE diseasedef ADD INDEX (SnomedCode)";
+						Db.NonQ(command);
+					}
+					else {//oracle
+						command=@"CREATE INDEX diseasedef_Icd9Code ON diseasedef (Icd9Code)";
+						Db.NonQ(command);
+						command=@"CREATE INDEX diseasedef_SnomedCode ON diseasedef (SnomedCode)";
+						Db.NonQ(command);
+					}
 				}
-				else {//oracle
-					command=@"CREATE INDEX diseasedef_Icd9Code ON diseasedef (Icd9Code)";
-					Db.NonQ(command);
-					command=@"CREATE INDEX diseasedef_SnomedCode ON diseasedef (SnomedCode)";
-					Db.NonQ(command);
+				catch(Exception ex) { }//Only an index. (Exception ex) required to catch thrown exception
+				try {
+					if(DataConnection.DBtype==DatabaseType.MySql) {
+						command="ALTER TABLE icd9 ADD INDEX (Icd9Code)";
+						Db.NonQ(command);
+					}
+					else {//oracle
+						command=@"CREATE INDEX icd9_Icd9Code ON icd9 (Icd9Code)";
+						Db.NonQ(command);
+					}
 				}
-				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE icd9 ADD INDEX (Icd9Code)";
-					Db.NonQ(command);
-				}
-				else {//oracle
-					command=@"CREATE INDEX icd9_Icd9Code ON icd9 (Icd9Code)";
-					Db.NonQ(command);
-				}
-				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE rxnorm ADD INDEX (RxCui)";
-					Db.NonQ(command);
-				}
-				else {//oracle
-					command=@"CREATE INDEX rxnorm_RxCui ON rxnorm (RxCui)";
-					Db.NonQ(command);
-				}
+				catch(Exception ex) { }//Only an index. (Exception ex) required to catch thrown exception
+				try {
+					if(DataConnection.DBtype==DatabaseType.MySql) {
+						command="ALTER TABLE rxnorm ADD INDEX (RxCui)";
+						Db.NonQ(command);
+					}
+					else {//oracle
+						command=@"CREATE INDEX rxnorm_RxCui ON rxnorm (RxCui)";
+						Db.NonQ(command);
+					}
+				}	
+				catch(Exception ex) { }//Only an index. (Exception ex) required to catch thrown exception
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS encounter";
 					Db.NonQ(command);
@@ -1679,7 +1688,6 @@ namespace OpenDentBusiness {
 						Db.NonQ(command);
 					}
 				}
-
 
 
 
