@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Globalization;
@@ -13,6 +14,10 @@ using CodeBase;
 
 namespace OpenDentBusiness {
 	public class EhrEmail {
+
+		///<summary>Used to cache DirectAgent objects, because creating a new DirectAgent object takes up to 10 seconds. If we did not cache, then inbox load would be slow and so would Direct message sending.</summary>
+		private static Hashtable HashDirectAgents=new Hashtable();
+
 		///<summary>This method is only for ehr testing purposes, and it always uses the hidden pref EHREmailToAddress to send to.  For privacy reasons, this cannot be used with production patient info.  AttachName should include extension.</summary>
 		public static void Send(string subjectAndBody,string attachName,string attachContents) {
 			Send(subjectAndBody,attachName,attachContents,"","");
@@ -20,33 +25,36 @@ namespace OpenDentBusiness {
 
 		///<summary>This method is only for ehr testing purposes, and it always uses the hidden pref EHREmailToAddress to send to.  For privacy reasons, this cannot be used with production patient info.  AttachName should include extension.</summary>
 		public static void Send(string subjectAndBody,string attachName1,string attachContents1,string attachName2,string attachContents2) {
-			if(PrefC.GetString(PrefName.EHREmailToAddress)=="") {
+			string strTo=PrefC.GetString(PrefName.EHREmailToAddress);
+			if(strTo=="") {
 				throw new ApplicationException("This feature cannot be used except in a test environment because email is not secure.");
 			}
-			EmailAddress emailAddress=EmailAddresses.GetByClinic(0);
-			SmtpClient client=new SmtpClient(emailAddress.SMTPserver,emailAddress.ServerPort);
-			client.Credentials=new NetworkCredential(emailAddress.EmailUsername,emailAddress.EmailPassword);
-			client.DeliveryMethod=SmtpDeliveryMethod.Network;
-			client.EnableSsl=emailAddress.UseSSL;
-			client.Timeout=180000;//Timeout of 3 minutes (in milliseconds).
+			EmailAddress emailAddressFrom=EmailAddresses.GetByClinic(0);
 			MailMessage message=new MailMessage();
-			message.From=new MailAddress(emailAddress.SenderAddress);
-			message.To.Add(PrefC.GetString(PrefName.EHREmailToAddress));
+			message.From=new MailAddress(emailAddressFrom.EmailUsername);//This probably cannot be emailAddressFrom.SenderAddress, because of strict security regarding Direct messages.
+			message.To.Add(strTo);
 			message.Subject=subjectAndBody;
 			message.Body=subjectAndBody;
 			message.IsBodyHtml=false;
-			Attachment attach=Attachment.CreateAttachmentFromString(attachContents1,attachName1);
-			message.Attachments.Add(attach);
+			List<Health.Direct.Common.Mime.MimeEntity> listAttachments=new List<Health.Direct.Common.Mime.MimeEntity>();
+			listAttachments.Add(CreateTextAttachment(attachContents1,attachName1));
 			if(attachContents2!="" && attachName2!="") {
-				Attachment attach2=Attachment.CreateAttachmentFromString(attachContents2,attachName2);
-				message.Attachments.Add(attach2);
+				listAttachments.Add(CreateTextAttachment(attachContents2,attachName2));
 			}
-			client.Send(message);
-			attach.Dispose();
+			EhrEmail.SendEmailDirect(strTo,emailAddressFrom,subjectAndBody,0,listAttachments);
+		}
+
+		///<summary>Converts the strBodyContents into base64, then creates a new mime attachment using the base64 data.</summary>
+		public static Health.Direct.Common.Mime.MimeEntity CreateTextAttachment(string strBodyContents,string strFileName) {
+			Health.Direct.Common.Mime.MimeEntity mimeEntity=new Health.Direct.Common.Mime.MimeEntity(Convert.ToBase64String(Encoding.UTF8.GetBytes(strBodyContents)));
+			mimeEntity.ContentDisposition="attachment;";
+			mimeEntity.ContentTransferEncoding="base64;";
+			mimeEntity.ContentType="text/plain; name="+strFileName+";";
+			return mimeEntity;
 		}
 
 		/// <summary>Used for sending Message Disposition Notification (MDN) ack messages for Direct.  Encrypted using the Direct protocol.</summary>
-		public static void SendAckDirect(Health.Direct.Agent.DirectAgent directAgent,Health.Direct.Agent.IncomingMessage inMsg,EmailAddress emailAddressFrom,long patNum) {
+		public static void SendAckDirect(Health.Direct.Agent.IncomingMessage inMsg,EmailAddress emailAddressFrom,long patNum) {
 			//The CreateAcks() function handles the case where the incoming message is an MDN, in which case we do not reply with anything.
 			//The CreateAcks() function also takes care of figuring out where to send the MDN, because the rules are complicated.
 			//According to http://wiki.directproject.org/Applicability+Statement+for+Secure+Health+Transport+Working+Version#x3.0%20Message%20Disposition%20Notification,
@@ -68,8 +76,10 @@ namespace OpenDentBusiness {
 					//     The decision of whether or not to return the message or part of the message is up to the MUA generating the MDN.  However, in the case of 
 					//     encrypted messages requesting MDNs, encrypted message text MUST be returned, if it is returned at all, only in its original encrypted form.
 					Health.Direct.Agent.OutgoingMessage outMsgDirect=new Health.Direct.Agent.OutgoingMessage(notificationMsg);
+					Health.Direct.Agent.DirectAgent directAgent=GetDirectAgentForEmailAddress(emailAddressFrom.EmailUsername);//Cannot be emailAddressFrom.SenderAddress, or else will not find the right encryption certificate.
+					outMsgDirect=directAgent.ProcessOutgoing(outMsgDirect);
 					//Used EmailSentOrReceived.AckDirect, not EmailSentOrReceived.SentDirect, because we do not want these to be counted in our reports as messages sent using Direct.
-					SendEmailDirect(directAgent,outMsgDirect,emailAddressFrom,patNum,EmailSentOrReceived.AckDirect);
+					SendEmailDirect(outMsgDirect,emailAddressFrom,patNum,EmailSentOrReceived.AckDirect);
 				}
 				catch {
 					//Nothing to do. Just an MDN. The sender can resend the email to us if they believe that we did not receive the message (due to lack of MDN response).
@@ -77,32 +87,43 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		///<summary>Encrypts the message, verifies trust, locates the public encryption key for the To address (if already stored locally), etc. Required by Direct protocol. emailSentOrReceived must be either SentDirect or AckDirect.</summary>
-		private static void SendEmailDirect(Health.Direct.Agent.DirectAgent directAgent,Health.Direct.Agent.OutgoingMessage outMsgDirect,EmailAddress emailAddressFrom,long patNum,EmailSentOrReceived emailSentOrReceived) {
-			//outMsgDirect.Message.ToValue="ehr@sparksalert.com";//TODO: FOR TESTING ONLY! REMOVE LATER!
-			outMsgDirect=directAgent.ProcessOutgoing(outMsgDirect);//Encrypts the message, verifies trust, locates the public encryption key for the To address (if already stored locally), etc. Required by Direct protocol.
-			byte[] arrayBytesMdnDirect=Encoding.UTF8.GetBytes(outMsgDirect.SerializeMessage());//Uses the Direct library to create a properly structured but raw outgoing email message.
+		///<summary>Encrypts the message, verifies trust, locates the public encryption key for the To address (if already stored locally), etc. Required by Direct protocol.</summary>
+		public static void SendEmailDirect(string strTo,EmailAddress emailAddressFrom,string strBodyText,long patNum,List<Health.Direct.Common.Mime.MimeEntity> listAttachments) {
+			Health.Direct.Agent.DirectAgent directAgent=GetDirectAgentForEmailAddress(emailAddressFrom.EmailUsername);//Cannot be emailAddressFrom.SenderAddress, or else will not find the right encryption certificate.
+			Health.Direct.Common.Mail.Message message=new Health.Direct.Common.Mail.Message(strTo,emailAddressFrom.EmailUsername,strBodyText);//Don't think emailAddressFrom.SenderAddress would work, because of how strict encryption is.
+			if(listAttachments.Count>0) {
+				message.SetParts(listAttachments,"multipart/mixed; boundary="+CodeBase.MiscUtils.CreateRandomAlphaNumericString(32)+";");
+			}
+			Health.Direct.Agent.MessageEnvelope messageEnvelope=new Health.Direct.Agent.MessageEnvelope(message);
+			//Encrypt, verify trust, locate the public encryption key for the To address (if already stored locally), etc. Required by Direct protocol.
+			Health.Direct.Agent.OutgoingMessage outMsgDirect=directAgent.ProcessOutgoing(messageEnvelope);
+			SendEmailDirect(outMsgDirect,emailAddressFrom,patNum,EmailSentOrReceived.SentDirect);
+		}
+
+		///<summary>outMsgDirect must already be encrypted. emailSentOrReceived must be either SentDirect or AckDirect.</summary>
+		private static void SendEmailDirect(Health.Direct.Agent.OutgoingMessage outMsgDirect,EmailAddress emailAddressFrom,long patNum,EmailSentOrReceived emailSentOrReceived) {
+			MailMessage msgMdnDirect=new MailMessage(outMsgDirect.Message.FromValue,outMsgDirect.Message.ToValue,outMsgDirect.Message.SubjectValue,"");
 			//Convert the email into a common .NET object, so we can send it using standard .NET libraries.
-			System.Net.Mail.MailMessage msgMdnDirect=new MailMessage(outMsgDirect.Message.FromValue,outMsgDirect.Message.ToValue,outMsgDirect.Message.SubjectValue,"");
 			for(int i=0;i<outMsgDirect.Message.Headers.Count;i++) {
 				msgMdnDirect.Headers.Add(outMsgDirect.Message.Headers[i].Name,outMsgDirect.Message.Headers[i].ValueRaw);
 			}
-			Health.Direct.Common.Mime.MimeEntity mimeEntity=outMsgDirect.Message.ExtractMimeEntity();
-			byte[] mimeBytes=Encoding.UTF7.GetBytes(mimeEntity.Body.Text);
-			MemoryStream ms=new MemoryStream(mimeBytes);
+			byte[] arrayEncryptedBody=Encoding.UTF8.GetBytes(outMsgDirect.Message.Body.Text);
+			MemoryStream ms=new MemoryStream(arrayEncryptedBody);
 			ms.Position=0;
-			AlternateView alternateView=new AlternateView(ms,"application/pkcs7-mime; smime-type=enveloped-data; name=smime.p7m;");
+			//The memory stream for the alternate view must be mime (not an entire email), based on AlternateView use example http://msdn.microsoft.com/en-us/library/system.net.mail.mailmessage.alternateviews.aspx
+			AlternateView alternateView=new AlternateView(ms,outMsgDirect.Message.ContentType);//Causes the receiver to recognize this email as an encrypted email.
+			alternateView.TransferEncoding=TransferEncoding.SevenBit;
 			msgMdnDirect.AlternateViews.Add(alternateView);
 			SendEmail(msgMdnDirect,emailAddressFrom);
 			ms.Dispose();
 			EmailMessage emailMdnDirect=new EmailMessage();
 			emailMdnDirect.BodyText=outMsgDirect.SerializeMessage();//Converts the entire Direct outgoing message to a raw email message text for email archive.
-			emailMdnDirect.FromAddress=msgMdnDirect.From.Address;
+			emailMdnDirect.FromAddress=outMsgDirect.Message.FromValue;
 			emailMdnDirect.MsgDateTime=DateTime.Now;
 			emailMdnDirect.PatNum=patNum;
 			emailMdnDirect.SentOrReceived=emailSentOrReceived;
-			emailMdnDirect.Subject=msgMdnDirect.Subject;
-			emailMdnDirect.ToAddress=msgMdnDirect.Sender.Address;
+			emailMdnDirect.Subject=outMsgDirect.Message.SubjectValue;
+			emailMdnDirect.ToAddress=outMsgDirect.Message.ToValue;
 			EmailMessages.Insert(emailMdnDirect);//Will not show in UI anywhere yet, just for history in case something goes wrong.			
 		}
 
@@ -179,7 +200,7 @@ namespace OpenDentBusiness {
 				int messageCount=client.GetMessageCount();//Get the number of messages in the inbox.
 				List<OpenPop.Mime.Message> openPopMsgsAll=new List<OpenPop.Mime.Message>(messageCount);
 				int msgDownloadedCount=0;
-				for(int i=messageCount;i>0;i--) {//Message numbers are 1-based. Most servers give the latest message the highest number.
+				for(int i=messageCount;i>0;i--) {//Message numbers are 1-based. Most servers give the newest message the highest number.
 					try {
 						openPopMsgsAll.Add(client.GetMessage(i));
 						OpenPop.Mime.Message openPopMsg=openPopMsgsAll[openPopMsgsAll.Count-1];
@@ -225,10 +246,14 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		private static Health.Direct.Agent.DirectAgent GetDirectAgentForEmailAddress(string strEmailAddressTo) {
-			string domain=strEmailAddressTo.Substring(strEmailAddressTo.IndexOf("@")+1);//Used to locate the certificate for the incoming email. For example, if ToAddress is ehr@opendental.com, then this will be opendental.com
-			Health.Direct.Agent.DirectAgent directAgent=new Health.Direct.Agent.DirectAgent(domain);
-			directAgent.EncryptMessages=true;
+		private static Health.Direct.Agent.DirectAgent GetDirectAgentForEmailAddress(string strEmailAddress) {
+			string domain=strEmailAddress.Substring(strEmailAddress.IndexOf("@")+1);//Used to locate the certificate for the incoming email. For example, if ToAddress is ehr@opendental.com, then this will be opendental.com
+			Health.Direct.Agent.DirectAgent directAgent=(Health.Direct.Agent.DirectAgent)HashDirectAgents[domain];
+			if(directAgent==null) {				
+				directAgent=new Health.Direct.Agent.DirectAgent(domain);
+				directAgent.EncryptMessages=true;
+				HashDirectAgents[domain]=directAgent;
+			}
 			return directAgent;
 		}
 
@@ -243,14 +268,26 @@ namespace OpenDentBusiness {
 				throw new ApplicationException("Failed to parse Direct email message.\r\n"+ex.Message);
 			}
 			try {				
-				directAgent.ProcessIncoming(inMsg);
+				inMsg=directAgent.ProcessIncoming(inMsg);
 			}
 			catch(Exception ex) {
 				throw new ApplicationException("Email message decryption failed.\r\n"+ex.Message);
 			}
 			emailMessage.SentOrReceived=EmailSentOrReceived.ReceivedDirect;
-			Health.Direct.Common.Mime.MimeEntity mime=inMsg.Message.ExtractMimeEntity();
-			emailMessage.BodyText=mime.Body.SourceText.Source;
+			StringBuilder sbBodyText=new StringBuilder();
+			Health.Direct.Common.Mime.MimeEntity mimeEntity=inMsg.Message.ExtractMimeEntity();
+			List<Health.Direct.Common.Mime.MimeEntity> listAttachments=new List<Health.Direct.Common.Mime.MimeEntity>();
+			foreach(Health.Direct.Common.Mime.MimeEntity mimePart in mimeEntity.GetParts()) {
+				if(mimePart.ContentDisposition!=null && mimePart.ContentDisposition.ToLower().Contains("attachment")) {
+					listAttachments.Add(mimePart);//File is created below, after the email message is inserted, because we need the primary key.
+					continue;
+				}
+				if(sbBodyText.Length>0) {
+					sbBodyText.Append("\r\n\r\n");
+				}
+				sbBodyText.Append(mimePart.Body.Text);
+			}
+			emailMessage.BodyText=sbBodyText.ToString();
 			//emailMessage.PatNum=0;//TODO: Set for some Direct messages.
 			//We could pull the email date and time from the server instead. The format is more difficult than normal, and might be different depending on who sent the email.
 			//emailMessage.MsgDateTime=DateTime.ParseExact(inMsg.Message.DateValue,"ddd, d MMM yyyy HH:mm:ss",CultureInfo.InvariantCulture);
@@ -260,8 +297,56 @@ namespace OpenDentBusiness {
 			else {
 				EmailMessages.Update(emailMessage);
 			}
+			for(int i=0;i<listAttachments.Count;i++) {
+				string strAttachText=listAttachments[i].Body.Text;
+				try {
+					if(listAttachments[i].ContentTransferEncoding.ToLower().Contains("base64")) {
+						strAttachText=Encoding.UTF8.GetString(Convert.FromBase64String(listAttachments[i].Body.Text));
+					}
+				}
+				catch {
+				}
+				CreateAttachFromText(strAttachText,listAttachments[i].ParsedContentType.Name,emailMessage.EmailMessageNum);
+			}
 			//Send a Message Disposition Notification (MDN) message to the sender, as required by the Direct messaging specifications.
-			SendAckDirect(directAgent,inMsg,emailAddressFrom,emailMessage.PatNum);//The MDN will be attached to the same patient as the incoming message.
+			SendAckDirect(inMsg,emailAddressFrom,emailMessage.PatNum);//The MDN will be attached to the same patient as the incoming message.
+		}
+
+		public static string GetEmailAttachPath() {
+			string attachPath;
+			if(PrefC.AtoZfolderUsed) {
+				attachPath=ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),"EmailAttachments");
+				if(!Directory.Exists(attachPath)) {
+					Directory.CreateDirectory(attachPath);
+				}
+			}
+			else {
+				//For users who have the A to Z folders disabled, there is no defined image path, so we
+				//have to use a temp path.  This means that the attachments might be available immediately afterward,
+				//but probably not later.
+				attachPath=Path.GetTempPath();
+			}
+			return attachPath;
+		}
+
+		///<summary>The strAttachFileName variable must include the extension.</summary>
+		public static EmailAttach CreateAttachFromText(string strText,string strAttachFileName,long emailMessageNum) {
+			string strAttachPath=GetEmailAttachPath();
+			string strAttachFileNameAdjusted=strAttachFileName;
+			if(String.IsNullOrEmpty(strAttachFileName)) {
+				strAttachFileNameAdjusted=MiscUtils.CreateRandomAlphaNumericString(8)+".txt";//just in case
+			}
+			string strAttachFile=ODFileUtils.CombinePaths(strAttachPath,DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+"_"+strAttachFileNameAdjusted);
+			while(File.Exists(strAttachFile)) {
+				strAttachFile=ODFileUtils.CombinePaths(strAttachPath,DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+"_"+strAttachFileNameAdjusted);
+			}
+			File.WriteAllText(strAttachFile,strText);
+			EmailAttach attach=new EmailAttach();
+			attach.ActualFileName=Path.GetFileName(strAttachFile);
+			attach.DisplayedFileName=Path.GetFileName(strAttachFile);
+			attach.EmailMessageNum=emailMessageNum;
+			EmailAttaches.Insert(attach);
+			return attach;
 		}
 
 		///<summary>Receives one email from the inbox, and returns the contents of the attachment as a string.  Will throw an exception if anything goes wrong, so surround with a try-catch.</summary>

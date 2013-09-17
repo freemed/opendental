@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
 
@@ -15,6 +16,13 @@ namespace OpenDentBusiness{
 			return Crud.EmailAttachCrud.Insert(attach);
 		}
 
+		public static List<EmailAttach> GetForEmail(long emailMessageNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<EmailAttach>>(MethodBase.GetCurrentMethod(),emailMessageNum);
+			}
+			string command="SELECT * FROM emailattach WHERE EmailMessageNum="+POut.Long(emailMessageNum);
+			return Crud.EmailAttachCrud.SelectMany(command);
+		}
 
 	}
 

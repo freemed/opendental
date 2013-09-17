@@ -556,7 +556,6 @@ namespace OpenDental{
 			textToAddress.Text=MessageCur.ToAddress;
 			textSubject.Text=MessageCur.Subject;
 			textBodyText.Text=MessageCur.BodyText;
-			FillAttachments();
 			FillList();
 			if(PrefC.GetBool(PrefName.FuchsOptionsOn)){
 				buttonFuchsMailDMF.Visible=true;
@@ -581,10 +580,21 @@ namespace OpenDental{
 				textBodyText.SpellCheckIsEnabled=false;//Prevents slowness when resizing the window, because the spell checker runs each time the resize event is fired.
 				butSave.Visible=false;
 				butSend.Visible=false;
-				butAttach.Visible=false;//We are not able to receive incoming attachments yet, although it is possible using the emailattach table and will probably happen eventually.
-				listAttachments.Visible=false;//We are not able to receive incoming attachments yet, although it is possible using the emailattach table and will probably happen eventually.
+				butAttach.Visible=false;//We do not allow changing the attachments on an email which was received.
 				butCancel.Text="Close";//When opening an email from FormEmailInbox, the email status will change to read automatically, and changing the text on the cancel button helps convey that to the user.
 			}
+			//Attachments are being created for received direct messages, but nothing else yet.
+			if(MessageCur.SentOrReceived==EmailSentOrReceived.ReceivedEncrypted ||
+				MessageCur.SentOrReceived==EmailSentOrReceived.Received ||
+				MessageCur.SentOrReceived==EmailSentOrReceived.Read ||
+				MessageCur.SentOrReceived==EmailSentOrReceived.WebMailReceived ||
+				MessageCur.SentOrReceived==EmailSentOrReceived.WebMailRecdRead) {
+				listAttachments.Visible=false;//We are not able to receive incoming attachments for these types of messages yet.
+			}
+			if(listAttachments.Visible) {
+				MessageCur.Attachments=EmailAttaches.GetForEmail(MessageCur.EmailMessageNum);
+			}
+			FillAttachments();
 			if((MessageCur.SentOrReceived==EmailSentOrReceived.ReceivedDirect || MessageCur.SentOrReceived==EmailSentOrReceived.ReadDirect) && EHR.FormSummaryOfCare.IsCCD(textBodyText.Text)) {
 				butShowXhtml.Visible=true;
 			}
@@ -667,7 +677,7 @@ namespace OpenDental{
 			messageChanged=true;
 		}
 
-		///<summary>This is a stupid place for this, but keeping it around because it's used from many places.</summary>
+		///<summary>Deprecated.  Use EhrEmail.GetEmailAttachPath().  This is a stupid place for this, but keeping it around because it's used from many places.</summary>
 		public static string GetAttachPath(){
 			string attachPath;
 			if(PrefC.AtoZfolderUsed) {
