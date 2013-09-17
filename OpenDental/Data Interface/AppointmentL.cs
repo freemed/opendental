@@ -333,7 +333,7 @@ namespace OpenDental{
 				}
 			}
 			if(recallCur==null){// || recallCur.DateDue.Year<1880){
-				throw new ApplicationException(Lan.g("AppointmentL","No recall is due."));//should never happen because everyone has a recall.
+				throw new ApplicationException(Lan.g("AppointmentL","No special type recall is due."));//Typically never happens because everyone has a recall.  However, it can happen when patients have custom recalls due
 			}
 			if(recallCur.DateScheduled.Date>DateTime.Today) {
 				throw new ApplicationException(Lan.g("AppointmentL","Recall has already been scheduled for ")+recallCur.DateScheduled.ToShortDateString());
