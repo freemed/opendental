@@ -501,7 +501,7 @@ namespace OpenDental{
 				}
 				//Recall--------------------------------------------------------------------------------------------------------------------
 				Recall recall=Recalls.GetRecallProphyOrPerio(pat.PatNum);
-				if(recall!=null) {
+				if(recall!=null && !recall.IsDisabled) {
 					if(recall.DateDue.Year>1880) {
 						dateRecallDue=recall.DateDue.ToShortDateString();
 					}
