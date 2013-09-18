@@ -48,9 +48,10 @@ namespace OpenDentBusiness.Crud{
 				intervention=new Intervention();
 				intervention.InterventionNum= PIn.Long  (table.Rows[i]["InterventionNum"].ToString());
 				intervention.PatNum         = PIn.Long  (table.Rows[i]["PatNum"].ToString());
+				intervention.ProvNum        = PIn.Long  (table.Rows[i]["ProvNum"].ToString());
 				intervention.CodeValue      = PIn.String(table.Rows[i]["CodeValue"].ToString());
 				intervention.CodeSystem     = PIn.String(table.Rows[i]["CodeSystem"].ToString());
-				intervention.MoreInfo       = PIn.String(table.Rows[i]["MoreInfo"].ToString());
+				intervention.Note           = PIn.String(table.Rows[i]["Note"].ToString());
 				intervention.DateTimeEntry  = PIn.DateT (table.Rows[i]["DateTimeEntry"].ToString());
 				retVal.Add(intervention);
 			}
@@ -92,15 +93,16 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="InterventionNum,";
 			}
-			command+="PatNum,CodeValue,CodeSystem,MoreInfo,DateTimeEntry) VALUES(";
+			command+="PatNum,ProvNum,CodeValue,CodeSystem,Note,DateTimeEntry) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(intervention.InterventionNum)+",";
 			}
 			command+=
 				     POut.Long  (intervention.PatNum)+","
+				+    POut.Long  (intervention.ProvNum)+","
 				+"'"+POut.String(intervention.CodeValue)+"',"
 				+"'"+POut.String(intervention.CodeSystem)+"',"
-				+"'"+POut.String(intervention.MoreInfo)+"',"
+				+"'"+POut.String(intervention.Note)+"',"
 				+    DbHelper.Now()+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -115,9 +117,10 @@ namespace OpenDentBusiness.Crud{
 		public static void Update(Intervention intervention){
 			string command="UPDATE intervention SET "
 				+"PatNum         =  "+POut.Long  (intervention.PatNum)+", "
+				+"ProvNum        =  "+POut.Long  (intervention.ProvNum)+", "
 				+"CodeValue      = '"+POut.String(intervention.CodeValue)+"', "
 				+"CodeSystem     = '"+POut.String(intervention.CodeSystem)+"', "
-				+"MoreInfo       = '"+POut.String(intervention.MoreInfo)+"', "
+				+"Note           = '"+POut.String(intervention.Note)+"', "
 				+"DateTimeEntry  =  "+POut.DateT (intervention.DateTimeEntry)+" "
 				+"WHERE InterventionNum = "+POut.Long(intervention.InterventionNum);
 			Db.NonQ(command);
@@ -130,6 +133,10 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="PatNum = "+POut.Long(intervention.PatNum)+"";
 			}
+			if(intervention.ProvNum != oldIntervention.ProvNum) {
+				if(command!=""){ command+=",";}
+				command+="ProvNum = "+POut.Long(intervention.ProvNum)+"";
+			}
 			if(intervention.CodeValue != oldIntervention.CodeValue) {
 				if(command!=""){ command+=",";}
 				command+="CodeValue = '"+POut.String(intervention.CodeValue)+"'";
@@ -138,9 +145,9 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="CodeSystem = '"+POut.String(intervention.CodeSystem)+"'";
 			}
-			if(intervention.MoreInfo != oldIntervention.MoreInfo) {
+			if(intervention.Note != oldIntervention.Note) {
 				if(command!=""){ command+=",";}
-				command+="MoreInfo = '"+POut.String(intervention.MoreInfo)+"'";
+				command+="Note = '"+POut.String(intervention.Note)+"'";
 			}
 			if(intervention.DateTimeEntry != oldIntervention.DateTimeEntry) {
 				if(command!=""){ command+=",";}

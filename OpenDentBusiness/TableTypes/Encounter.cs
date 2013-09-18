@@ -9,18 +9,18 @@ namespace OpenDentBusiness {
 		///<summary>Primary key.</summary>
 		[CrudColumn(IsPriKey=true)]
 		public long EncounterNum;
-		///<summary>Date the encounter occurred</summary>
-		public DateTime DateEncounter;
-		///<summary>FK to Patient. </summary>
+		///<summary>FK to patient.PatNum. </summary>
 		public long PatNum;
-		///<summary>FK to Provider. </summary>
+		///<summary>FK to provider.ProvNum. </summary>
 		public long ProvNum;
-		///<summary>Code value that acts as FK.</summary>
+		///<summary>FK to ehrcode.CodeValue.  This code may not exist in the ehrcode table, it may have been chosen from a bigger list of available codes.  In that case, this will be a FK to a specific code system table identified by the CodeSystem column.  The code for this item from one of the code systems supported.  Examples: 185349003 or 406547006.</summary>
 		public string CodeValue;
-		///<summary>We only allow the following CodeSystemNames in this table: CDT, CPT, HCPCS, and SNOMEDCT. </summary>
+		///<summary>FK to codesystem.CodeSystemName. This will determine which specific code system table the CodeValue is a FK to.  We only allow the following CodeSystems in this table: CDT, CPT, HCPCS, and SNOMEDCT. </summary>
 		public string CodeSystem;
 		///<summary>Max length 2000.</summary>
 		public string Note;
+		///<summary>Date the encounter occurred</summary>
+		public DateTime DateEncounter;
 
 		///<summary>Returns a copy of this Encounter.</summary>
 		public Encounter Clone() {

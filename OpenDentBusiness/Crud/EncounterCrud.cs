@@ -46,13 +46,13 @@ namespace OpenDentBusiness.Crud{
 			Encounter encounter;
 			for(int i=0;i<table.Rows.Count;i++) {
 				encounter=new Encounter();
-				encounter.EncounterNum  = PIn.Long  (table.Rows[i]["EncounterNum"].ToString());
-				encounter.DateEncounter = PIn.Date  (table.Rows[i]["DateEncounter"].ToString());
-				encounter.PatNum        = PIn.Long  (table.Rows[i]["PatNum"].ToString());
-				encounter.ProvNum       = PIn.Long  (table.Rows[i]["ProvNum"].ToString());
-				encounter.CodeValue     = PIn.String(table.Rows[i]["CodeValue"].ToString());
-				encounter.CodeSystem= PIn.String(table.Rows[i]["CodeSystemName"].ToString());
-				encounter.Note          = PIn.String(table.Rows[i]["Note"].ToString());
+				encounter.EncounterNum = PIn.Long  (table.Rows[i]["EncounterNum"].ToString());
+				encounter.DateEncounter= PIn.Date  (table.Rows[i]["DateEncounter"].ToString());
+				encounter.PatNum       = PIn.Long  (table.Rows[i]["PatNum"].ToString());
+				encounter.ProvNum      = PIn.Long  (table.Rows[i]["ProvNum"].ToString());
+				encounter.CodeValue    = PIn.String(table.Rows[i]["CodeValue"].ToString());
+				encounter.CodeSystem   = PIn.String(table.Rows[i]["CodeSystem"].ToString());
+				encounter.Note         = PIn.String(table.Rows[i]["Note"].ToString());
 				retVal.Add(encounter);
 			}
 			return retVal;
@@ -93,7 +93,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="EncounterNum,";
 			}
-			command+="DateEncounter,PatNum,ProvNum,CodeValue,CodeSystemName,Note) VALUES(";
+			command+="DateEncounter,PatNum,ProvNum,CodeValue,CodeSystem,Note) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(encounter.EncounterNum)+",";
 			}
@@ -116,12 +116,12 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one Encounter in the database.</summary>
 		public static void Update(Encounter encounter){
 			string command="UPDATE encounter SET "
-				+"DateEncounter =  "+POut.Date  (encounter.DateEncounter)+", "
-				+"PatNum        =  "+POut.Long  (encounter.PatNum)+", "
-				+"ProvNum       =  "+POut.Long  (encounter.ProvNum)+", "
-				+"CodeValue     = '"+POut.String(encounter.CodeValue)+"', "
-				+"CodeSystemName= '"+POut.String(encounter.CodeSystem)+"', "
-				+"Note          = '"+POut.String(encounter.Note)+"' "
+				+"DateEncounter=  "+POut.Date  (encounter.DateEncounter)+", "
+				+"PatNum       =  "+POut.Long  (encounter.PatNum)+", "
+				+"ProvNum      =  "+POut.Long  (encounter.ProvNum)+", "
+				+"CodeValue    = '"+POut.String(encounter.CodeValue)+"', "
+				+"CodeSystem   = '"+POut.String(encounter.CodeSystem)+"', "
+				+"Note         = '"+POut.String(encounter.Note)+"' "
 				+"WHERE EncounterNum = "+POut.Long(encounter.EncounterNum);
 			Db.NonQ(command);
 		}
@@ -147,7 +147,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(encounter.CodeSystem != oldEncounter.CodeSystem) {
 				if(command!=""){ command+=",";}
-				command+="CodeSystemName = '"+POut.String(encounter.CodeSystem)+"'";
+				command+="CodeSystem = '"+POut.String(encounter.CodeSystem)+"'";
 			}
 			if(encounter.Note != oldEncounter.Note) {
 				if(command!=""){ command+=",";}

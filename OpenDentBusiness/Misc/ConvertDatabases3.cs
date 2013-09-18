@@ -882,95 +882,6 @@ namespace OpenDentBusiness {
 					command=@"CREATE INDEX ehrcode_CodeSystemOID ON ehrcode (CodeSystemOID)";
 					Db.NonQ(command);
 				}
-				//ehrnotperformed
-				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="DROP TABLE IF EXISTS ehrnotperformed";
-					Db.NonQ(command);
-					command=@"CREATE TABLE ehrnotperformed (
-						EhrNotPerformedNum bigint NOT NULL auto_increment PRIMARY KEY,
-						PatNum bigint NOT NULL,
-						ProvNum bigint NOT NULL,
-						CodeValue varchar(20) NOT NULL,
-						CodeSystem varchar(20) NOT NULL,
-						CodeValueReason varchar(20) NOT NULL,
-						CodeSystemReason varchar(20) NOT NULL,
-						DateTimeEntry datetime NOT NULL DEFAULT '0001-01-01 00:00:00',
-						Note text NOT NULL,
-						INDEX(PatNum),
-						INDEX(ProvNum),
-						INDEX(CodeValue),
-						INDEX(CodeSystem),
-						INDEX(CodeValueReason),
-						INDEX(CodeSystemReason)
-						) DEFAULT CHARSET=utf8";
-					Db.NonQ(command);
-				}
-				else {//oracle
-					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE ehrnotperformed'; EXCEPTION WHEN OTHERS THEN NULL; END;";
-					Db.NonQ(command);
-					command=@"CREATE TABLE ehrnotperformed (
-						EhrNotPerformedNum number(20) NOT NULL,
-						PatNum number(20) NOT NULL,
-						ProvNum number(20) NOT NULL,
-						CodeValue varchar2(20),
-						CodeSystem varchar2(20),
-						CodeValueReason varchar2(20),
-						CodeSystemReason varchar2(20),
-						DateTimeEntry date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
-						Note varchar2(4000),
-						CONSTRAINT ehrnotperformed_EhrNotPerforme PRIMARY KEY (EhrNotPerformedNum)
-						)";
-					Db.NonQ(command);
-					command=@"CREATE INDEX ehrnotperformed_PatNum ON ehrnotperformed (PatNum)";
-					Db.NonQ(command);
-					command=@"CREATE INDEX ehrnotperformed_ProvNum ON ehrnotperformed (ProvNum)";
-					Db.NonQ(command);
-					command=@"CREATE INDEX ehrnotperformed_CodeValue ON ehrnotperformed (CodeValue)";
-					Db.NonQ(command);
-					command=@"CREATE INDEX ehrnotperformed_CodeSystem ON ehrnotperformed (CodeSystem)";
-					Db.NonQ(command);
-					command=@"CREATE INDEX ehrnotperformed_CodeValueReason ON ehrnotperformed (CodeValueReason)";
-					Db.NonQ(command);
-					command=@"CREATE INDEX ehrnotperformed_CodeSystemReason ON ehrnotperformed (CodeSystemReason)";
-					Db.NonQ(command);
-				}
-				//intervention
-				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="DROP TABLE IF EXISTS intervention";
-					Db.NonQ(command);
-					command=@"CREATE TABLE intervention (
-						InterventionNum bigint NOT NULL auto_increment PRIMARY KEY,
-						PatNum bigint NOT NULL,
-						CodeValue varchar(20) NOT NULL,
-						CodeSystem varchar(20) NOT NULL,
-						MoreInfo text NOT NULL,
-						DateTimeEntry datetime NOT NULL DEFAULT '0001-01-01 00:00:00',
-						INDEX(PatNum),
-						INDEX(CodeValue),
-						INDEX(CodeSystem)
-						) DEFAULT CHARSET=utf8";
-					Db.NonQ(command);
-				}
-				else {//oracle
-					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE intervention'; EXCEPTION WHEN OTHERS THEN NULL; END;";
-					Db.NonQ(command);
-					command=@"CREATE TABLE intervention (
-						InterventionNum number(20) NOT NULL,
-						PatNum number(20) NOT NULL,
-						CodeValue varchar2(20),
-						CodeSystem varchar2(20),
-						MoreInfo varchar2(4000),
-						DateTimeEntry date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
-						CONSTRAINT intervention_InterventionNum PRIMARY KEY (InterventionNum)
-						)";
-					Db.NonQ(command);
-					command=@"CREATE INDEX intervention_PatNum ON intervention (PatNum)";
-					Db.NonQ(command);
-					command=@"CREATE INDEX intervention_CodeValue ON intervention (CodeValue)";
-					Db.NonQ(command);
-					command=@"CREATE INDEX intervention_CodeSystem ON intervention (CodeSystem)";
-					Db.NonQ(command);
-				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE emailmessage CHANGE BodyText BodyText LONGTEXT NOT NULL";
 					Db.NonQ(command);
@@ -1577,47 +1488,6 @@ namespace OpenDentBusiness {
 				}	
 				catch(Exception ex) { }//Only an index. (Exception ex) required to catch thrown exception
 				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="DROP TABLE IF EXISTS encounter";
-					Db.NonQ(command);
-					command=@"CREATE TABLE encounter (
-						EncounterNum bigint NOT NULL auto_increment PRIMARY KEY,
-						DateEncounter date NOT NULL DEFAULT '0001-01-01',
-						PatNum bigint NOT NULL,
-						ProvNum bigint NOT NULL,
-						CodeValue varchar(255) NOT NULL,
-						CodeSystem varchar(255) NOT NULL,
-						Note text NOT NULL,
-						INDEX(PatNum),
-						INDEX(ProvNum),
-						INDEX(CodeValue),
-						INDEX(CodeSystem)
-						) DEFAULT CHARSET=utf8";
-					Db.NonQ(command);
-				}
-				else {//oracle
-					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE encounter'; EXCEPTION WHEN OTHERS THEN NULL; END;";
-					Db.NonQ(command);
-					command=@"CREATE TABLE encounter (
-						EncounterNum number(20) NOT NULL,
-						DateEncounter date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
-						PatNum number(20) NOT NULL,
-						ProvNum number(20) NOT NULL,
-						CodeValue varchar2(255),
-						CodeSystem varchar2(255),
-						Note varchar2(2000),
-						CONSTRAINT encounter_EncounterNum PRIMARY KEY (EncounterNum)
-						)";
-					Db.NonQ(command);
-					command=@"CREATE INDEX encounter_PatNum ON encounter (PatNum)";
-					Db.NonQ(command);
-					command=@"CREATE INDEX encounter_ProvNum ON encounter (ProvNum)";
-					Db.NonQ(command);
-					command=@"CREATE INDEX encounter_CodeValue ON encounter (CodeValue)";
-					Db.NonQ(command);
-					command=@"CREATE INDEX encounter_CodeSystem ON encounter (CodeSystem)";
-					Db.NonQ(command);
-				}
-				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE insplan ADD SopCode varchar(255) NOT NULL";
 					Db.NonQ(command);
 				}
@@ -1693,6 +1563,130 @@ namespace OpenDentBusiness {
 						Db.NonQ(command);
 					}
 				}
+				//intervention
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS intervention";
+					Db.NonQ(command);
+					command=@"CREATE TABLE intervention (
+						InterventionNum bigint NOT NULL auto_increment PRIMARY KEY,
+						PatNum bigint NOT NULL,
+						ProvNum bigint NOT NULL,
+						CodeValue varchar(30) NOT NULL,
+						CodeSystem varchar(30) NOT NULL,
+						Note text NOT NULL,
+						DateTimeEntry datetime NOT NULL DEFAULT '0001-01-01 00:00:00',
+						INDEX(PatNum),
+						INDEX(ProvNum),
+						INDEX(CodeValue)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE intervention'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE intervention (
+						InterventionNum number(20) NOT NULL,
+						PatNum number(20) NOT NULL,
+						ProvNum number(20) NOT NULL,
+						CodeValue varchar2(30),
+						CodeSystem varchar2(30),
+						Note varchar2(4000),
+						DateTimeEntry date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+						CONSTRAINT intervention_InterventionNum PRIMARY KEY (InterventionNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX intervention_PatNum ON intervention (PatNum)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX intervention_ProvNum ON intervention (ProvNum)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX intervention_CodeValue ON intervention (CodeValue)";
+					Db.NonQ(command);
+				}
+				//ehrnotperformed
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS ehrnotperformed";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehrnotperformed (
+						EhrNotPerformedNum bigint NOT NULL auto_increment PRIMARY KEY,
+						PatNum bigint NOT NULL,
+						ProvNum bigint NOT NULL,
+						CodeValue varchar(30) NOT NULL,
+						CodeSystem varchar(30) NOT NULL,
+						CodeValueReason varchar(30) NOT NULL,
+						CodeSystemReason varchar(30) NOT NULL,
+						Note text NOT NULL,
+						DateTimeEntry datetime NOT NULL DEFAULT '0001-01-01 00:00:00',
+						INDEX(PatNum),
+						INDEX(ProvNum),
+						INDEX(CodeValue),
+						INDEX(CodeValueReason)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE ehrnotperformed'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehrnotperformed (
+						EhrNotPerformedNum number(20) NOT NULL,
+						PatNum number(20) NOT NULL,
+						ProvNum number(20) NOT NULL,
+						CodeValue varchar2(30),
+						CodeSystem varchar2(30),
+						CodeValueReason varchar2(30),
+						CodeSystemReason varchar2(30),
+						Note varchar2(4000),
+						DateTimeEntry date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+						CONSTRAINT ehrnotperformed_EhrNotPerforme PRIMARY KEY (EhrNotPerformedNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX ehrnotperformed_PatNum ON ehrnotperformed (PatNum)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX ehrnotperformed_ProvNum ON ehrnotperformed (ProvNum)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX ehrnotperformed_CodeValueReason ON ehrnotperformed (CodeValueReason)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX ehrnotperformed_CodeValueReason ON ehrnotperformed (CodeValueReason)";
+					Db.NonQ(command);
+				}
+				//encounter
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS encounter";
+					Db.NonQ(command);
+					command=@"CREATE TABLE encounter (
+						EncounterNum bigint NOT NULL auto_increment PRIMARY KEY,
+						PatNum bigint NOT NULL,
+						ProvNum bigint NOT NULL,
+						CodeValue varchar(30) NOT NULL,
+						CodeSystem varchar(30) NOT NULL,
+						Note text NOT NULL,
+						DateEncounter date NOT NULL DEFAULT '0001-01-01',
+						INDEX(PatNum),
+						INDEX(ProvNum),
+						INDEX(CodeValue)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE encounter'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE encounter (
+						EncounterNum number(20) NOT NULL,
+						PatNum number(20) NOT NULL,
+						ProvNum number(20) NOT NULL,
+						CodeValue varchar2(30),
+						CodeSystem varchar2(30),
+						Note varchar2(4000),
+						DateEncounter date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+						CONSTRAINT encounter_EncounterNum PRIMARY KEY (EncounterNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX encounter_PatNum ON encounter (PatNum)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX encounter_ProvNum ON encounter (ProvNum)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX encounter_CodeValue ON encounter (CodeValue)";
+					Db.NonQ(command);
+				}
 
 
 
@@ -1717,3 +1711,5 @@ namespace OpenDentBusiness {
 
 
 				
+
+		
