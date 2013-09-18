@@ -9,13 +9,15 @@ namespace OpenDentBusiness {
 		public long EhrNotPerformedNum;
 		///<summary>FK to patient.PatNum.</summary>
 		public long PatNum;
-		///<summary>FK to ehrcode.CodeValue.  The code for this item from one of the code systems supported.  Examples: 666.22 or 10197000.</summary>
+		///<summary>FK to provider.ProvNum.</summary>
+		public long ProvNum;
+		///<summary>FK to ehrcode.CodeValue.  The code for this item from one of the code systems supported.  Examples: 90656 or 442333005.</summary>
 		public string CodeValue;
-		///<summary>FK to ehrcode.CodeSystem. The code system name for this code.  Possible values are: CDCREC, CDT, CPT, CVX, HCPCS, ICD9CM, ICD10CM, LOINC, RXNORM, SNOMEDCT, and SOP.</summary>
+		///<summary>FK to ehrcode.CodeSystem. The code system name for this code.  Possible values are: CPT, CVX, LOINC, SNOMEDCT.</summary>
 		public string CodeSystem;
-		///<summary>FK to ehrcode.CodeValue.  The code for this item from one of the code systems supported.  Examples: 666.22 or 10197000.</summary>
+		///<summary>FK to ehrcode.CodeValue.  The code for the reason the item was not performed from one of the code systems supported.  Examples: 182856006 or 419808006.</summary>
 		public string CodeValueReason;
-		///<summary>FK to ehrcode.CodeSystem. The code system name for this code.  Possible values are: CDCREC, CDT, CPT, CVX, HCPCS, ICD9CM, ICD10CM, LOINC, RXNORM, SNOMEDCT, and SOP.</summary>
+		///<summary>FK to ehrcode.CodeSystem. The code system name for this code.  Possible values are: SNOMEDCT.</summary>
 		public string CodeSystemReason;
 		///<summary>The date and time this item was created.  Can be edited to the date and time the item actually occurred.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.DateTEntryEditable)]

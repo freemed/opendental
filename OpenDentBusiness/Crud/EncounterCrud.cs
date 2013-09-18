@@ -51,7 +51,7 @@ namespace OpenDentBusiness.Crud{
 				encounter.PatNum        = PIn.Long  (table.Rows[i]["PatNum"].ToString());
 				encounter.ProvNum       = PIn.Long  (table.Rows[i]["ProvNum"].ToString());
 				encounter.CodeValue     = PIn.String(table.Rows[i]["CodeValue"].ToString());
-				encounter.CodeSystemName= PIn.String(table.Rows[i]["CodeSystemName"].ToString());
+				encounter.CodeSystem= PIn.String(table.Rows[i]["CodeSystemName"].ToString());
 				encounter.Note          = PIn.String(table.Rows[i]["Note"].ToString());
 				retVal.Add(encounter);
 			}
@@ -102,7 +102,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (encounter.PatNum)+","
 				+    POut.Long  (encounter.ProvNum)+","
 				+"'"+POut.String(encounter.CodeValue)+"',"
-				+"'"+POut.String(encounter.CodeSystemName)+"',"
+				+"'"+POut.String(encounter.CodeSystem)+"',"
 				+"'"+POut.String(encounter.Note)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -120,7 +120,7 @@ namespace OpenDentBusiness.Crud{
 				+"PatNum        =  "+POut.Long  (encounter.PatNum)+", "
 				+"ProvNum       =  "+POut.Long  (encounter.ProvNum)+", "
 				+"CodeValue     = '"+POut.String(encounter.CodeValue)+"', "
-				+"CodeSystemName= '"+POut.String(encounter.CodeSystemName)+"', "
+				+"CodeSystemName= '"+POut.String(encounter.CodeSystem)+"', "
 				+"Note          = '"+POut.String(encounter.Note)+"' "
 				+"WHERE EncounterNum = "+POut.Long(encounter.EncounterNum);
 			Db.NonQ(command);
@@ -145,9 +145,9 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="CodeValue = '"+POut.String(encounter.CodeValue)+"'";
 			}
-			if(encounter.CodeSystemName != oldEncounter.CodeSystemName) {
+			if(encounter.CodeSystem != oldEncounter.CodeSystem) {
 				if(command!=""){ command+=",";}
-				command+="CodeSystemName = '"+POut.String(encounter.CodeSystemName)+"'";
+				command+="CodeSystemName = '"+POut.String(encounter.CodeSystem)+"'";
 			}
 			if(encounter.Note != oldEncounter.Note) {
 				if(command!=""){ command+=",";}

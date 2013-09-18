@@ -889,6 +889,7 @@ namespace OpenDentBusiness {
 					command=@"CREATE TABLE ehrnotperformed (
 						EhrNotPerformedNum bigint NOT NULL auto_increment PRIMARY KEY,
 						PatNum bigint NOT NULL,
+						ProvNum bigint NOT NULL,
 						CodeValue varchar(20) NOT NULL,
 						CodeSystem varchar(20) NOT NULL,
 						CodeValueReason varchar(20) NOT NULL,
@@ -896,6 +897,7 @@ namespace OpenDentBusiness {
 						DateTimeEntry datetime NOT NULL DEFAULT '0001-01-01 00:00:00',
 						Note text NOT NULL,
 						INDEX(PatNum),
+						INDEX(ProvNum),
 						INDEX(CodeValue),
 						INDEX(CodeSystem),
 						INDEX(CodeValueReason),
@@ -909,6 +911,7 @@ namespace OpenDentBusiness {
 					command=@"CREATE TABLE ehrnotperformed (
 						EhrNotPerformedNum number(20) NOT NULL,
 						PatNum number(20) NOT NULL,
+						ProvNum number(20) NOT NULL,
 						CodeValue varchar2(20),
 						CodeSystem varchar2(20),
 						CodeValueReason varchar2(20),
@@ -919,6 +922,8 @@ namespace OpenDentBusiness {
 						)";
 					Db.NonQ(command);
 					command=@"CREATE INDEX ehrnotperformed_PatNum ON ehrnotperformed (PatNum)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX ehrnotperformed_ProvNum ON ehrnotperformed (ProvNum)";
 					Db.NonQ(command);
 					command=@"CREATE INDEX ehrnotperformed_CodeValue ON ehrnotperformed (CodeValue)";
 					Db.NonQ(command);
@@ -1580,7 +1585,7 @@ namespace OpenDentBusiness {
 						PatNum bigint NOT NULL,
 						ProvNum bigint NOT NULL,
 						CodeValue varchar(255) NOT NULL,
-						CodeSystemName varchar(255) NOT NULL,
+						CodeSystem varchar(255) NOT NULL,
 						Note text NOT NULL,
 						INDEX(PatNum),
 						INDEX(ProvNum),
@@ -1598,7 +1603,7 @@ namespace OpenDentBusiness {
 						PatNum number(20) NOT NULL,
 						ProvNum number(20) NOT NULL,
 						CodeValue varchar2(255),
-						CodeSystemName varchar2(255),
+						CodeSystem varchar2(255),
 						Note varchar2(2000),
 						CONSTRAINT encounter_EncounterNum PRIMARY KEY (EncounterNum)
 						)";
@@ -1709,3 +1714,6 @@ namespace OpenDentBusiness {
 }
 
 
+
+
+				

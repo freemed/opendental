@@ -48,6 +48,7 @@ namespace OpenDentBusiness.Crud{
 				ehrNotPerformed=new EhrNotPerformed();
 				ehrNotPerformed.EhrNotPerformedNum= PIn.Long  (table.Rows[i]["EhrNotPerformedNum"].ToString());
 				ehrNotPerformed.PatNum            = PIn.Long  (table.Rows[i]["PatNum"].ToString());
+				ehrNotPerformed.ProvNum           = PIn.Long  (table.Rows[i]["ProvNum"].ToString());
 				ehrNotPerformed.CodeValue         = PIn.String(table.Rows[i]["CodeValue"].ToString());
 				ehrNotPerformed.CodeSystem        = PIn.String(table.Rows[i]["CodeSystem"].ToString());
 				ehrNotPerformed.CodeValueReason   = PIn.String(table.Rows[i]["CodeValueReason"].ToString());
@@ -94,12 +95,13 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="EhrNotPerformedNum,";
 			}
-			command+="PatNum,CodeValue,CodeSystem,CodeValueReason,CodeSystemReason,DateTimeEntry,Note) VALUES(";
+			command+="PatNum,ProvNum,CodeValue,CodeSystem,CodeValueReason,CodeSystemReason,DateTimeEntry,Note) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(ehrNotPerformed.EhrNotPerformedNum)+",";
 			}
 			command+=
 				     POut.Long  (ehrNotPerformed.PatNum)+","
+				+    POut.Long  (ehrNotPerformed.ProvNum)+","
 				+"'"+POut.String(ehrNotPerformed.CodeValue)+"',"
 				+"'"+POut.String(ehrNotPerformed.CodeSystem)+"',"
 				+"'"+POut.String(ehrNotPerformed.CodeValueReason)+"',"
@@ -119,6 +121,7 @@ namespace OpenDentBusiness.Crud{
 		public static void Update(EhrNotPerformed ehrNotPerformed){
 			string command="UPDATE ehrnotperformed SET "
 				+"PatNum            =  "+POut.Long  (ehrNotPerformed.PatNum)+", "
+				+"ProvNum           =  "+POut.Long  (ehrNotPerformed.ProvNum)+", "
 				+"CodeValue         = '"+POut.String(ehrNotPerformed.CodeValue)+"', "
 				+"CodeSystem        = '"+POut.String(ehrNotPerformed.CodeSystem)+"', "
 				+"CodeValueReason   = '"+POut.String(ehrNotPerformed.CodeValueReason)+"', "
@@ -135,6 +138,10 @@ namespace OpenDentBusiness.Crud{
 			if(ehrNotPerformed.PatNum != oldEhrNotPerformed.PatNum) {
 				if(command!=""){ command+=",";}
 				command+="PatNum = "+POut.Long(ehrNotPerformed.PatNum)+"";
+			}
+			if(ehrNotPerformed.ProvNum != oldEhrNotPerformed.ProvNum) {
+				if(command!=""){ command+=",";}
+				command+="ProvNum = "+POut.Long(ehrNotPerformed.ProvNum)+"";
 			}
 			if(ehrNotPerformed.CodeValue != oldEhrNotPerformed.CodeValue) {
 				if(command!=""){ command+=",";}
