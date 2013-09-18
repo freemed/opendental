@@ -1024,29 +1024,29 @@ namespace OpenDentBusiness {
 					Db.NonQ(command);
 				}
 				//No need for mysql/oracle split
-				command=@"INSERT INTO codeSystem (CodeSystemNum,CodeSystemName,HL7OID,VersionAvail,VersionCur,Note) VALUES (1,'AdministrativeSex','2.16.840.1.113883.18.2','HL7v2.5','HL7v2.5','')";
+				command=@"INSERT INTO codesystem (CodeSystemNum,CodeSystemName,HL7OID,VersionAvail,VersionCur,Note) VALUES (1,'AdministrativeSex','2.16.840.1.113883.18.2','HL7v2.5','HL7v2.5','')";
 				Db.NonQ(command);
-				command=@"INSERT INTO codeSystem (CodeSystemNum,CodeSystemName,HL7OID) VALUES (2,'CDCREC','2.16.840.1.113883.6.238')";
+				command=@"INSERT INTO codesystem (CodeSystemNum,CodeSystemName,HL7OID) VALUES (2,'CDCREC','2.16.840.1.113883.6.238')";
 				Db.NonQ(command);
-				command=@"INSERT INTO codeSystem (CodeSystemNum,CodeSystemName,HL7OID) VALUES (3,'CDT','2.16.840.1.113883.6.13')";
+				command=@"INSERT INTO codesystem (CodeSystemNum,CodeSystemName,HL7OID) VALUES (3,'CDT','2.16.840.1.113883.6.13')";
 				Db.NonQ(command);
-				command=@"INSERT INTO codeSystem (CodeSystemNum,CodeSystemName,HL7OID) VALUES (4,'CPT','2.16.840.1.113883.6.12')";
+				command=@"INSERT INTO codesystem (CodeSystemNum,CodeSystemName,HL7OID) VALUES (4,'CPT','2.16.840.1.113883.6.12')";
 				Db.NonQ(command);
-				command=@"INSERT INTO codeSystem (CodeSystemNum,CodeSystemName,HL7OID) VALUES (5,'CVX','2.16.840.1.113883.12.292')";
+				command=@"INSERT INTO codesystem (CodeSystemNum,CodeSystemName,HL7OID) VALUES (5,'CVX','2.16.840.1.113883.12.292')";
 				Db.NonQ(command);
-				command=@"INSERT INTO codeSystem (CodeSystemNum,CodeSystemName,HL7OID) VALUES (6,'HCPCS','2.16.840.1.113883.6.285')";
+				command=@"INSERT INTO codesystem (CodeSystemNum,CodeSystemName,HL7OID) VALUES (6,'HCPCS','2.16.840.1.113883.6.285')";
 				Db.NonQ(command);
-				command=@"INSERT INTO codeSystem (CodeSystemNum,CodeSystemName,HL7OID) VALUES (7,'ICD10CM','2.16.840.1.113883.6.90')";
+				command=@"INSERT INTO codesystem (CodeSystemNum,CodeSystemName,HL7OID) VALUES (7,'ICD10CM','2.16.840.1.113883.6.90')";
 				Db.NonQ(command);
-				command=@"INSERT INTO codeSystem (CodeSystemNum,CodeSystemName,HL7OID) VALUES (8,'ICD9CM','2.16.840.1.113883.6.103')";
+				command=@"INSERT INTO codesystem (CodeSystemNum,CodeSystemName,HL7OID) VALUES (8,'ICD9CM','2.16.840.1.113883.6.103')";
 				Db.NonQ(command);
-				command=@"INSERT INTO codeSystem (CodeSystemNum,CodeSystemName,HL7OID) VALUES (9,'LOINC','2.16.840.1.113883.6.1')";
+				command=@"INSERT INTO codesystem (CodeSystemNum,CodeSystemName,HL7OID) VALUES (9,'LOINC','2.16.840.1.113883.6.1')";
 				Db.NonQ(command);
-				command=@"INSERT INTO codeSystem (CodeSystemNum,CodeSystemName,HL7OID) VALUES (10,'RXNORM','2.16.840.1.113883.6.88')";
+				command=@"INSERT INTO codesystem (CodeSystemNum,CodeSystemName,HL7OID) VALUES (10,'RXNORM','2.16.840.1.113883.6.88')";
 				Db.NonQ(command);
-				command=@"INSERT INTO codeSystem (CodeSystemNum,CodeSystemName,HL7OID) VALUES (11,'SNOMEDCT','2.16.840.1.113883.6.96')";
+				command=@"INSERT INTO codesystem (CodeSystemNum,CodeSystemName,HL7OID) VALUES (11,'SNOMEDCT','2.16.840.1.113883.6.96')";
 				Db.NonQ(command);
-				command=@"INSERT INTO codeSystem (CodeSystemNum,CodeSystemName,HL7OID) VALUES (12,'SOP','2.16.840.1.113883.3.221.5')";
+				command=@"INSERT INTO codesystem (CodeSystemNum,CodeSystemName,HL7OID) VALUES (12,'SOP','2.16.840.1.113883.3.221.5')";
 				Db.NonQ(command);
 #region Create Code Systems Tables
 				//CDCREC (CDC Race and Ethnicity)-------------------------------------------------------------------------------------------------------------------------
@@ -1590,7 +1590,7 @@ namespace OpenDentBusiness {
 						INDEX(PatNum),
 						INDEX(ProvNum),
 						INDEX(CodeValue),
-						INDEX(CodeSystemName)
+						INDEX(CodeSystem)
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
 				}
@@ -1614,7 +1614,7 @@ namespace OpenDentBusiness {
 					Db.NonQ(command);
 					command=@"CREATE INDEX encounter_CodeValue ON encounter (CodeValue)";
 					Db.NonQ(command);
-					command=@"CREATE INDEX encounter_CodeSystemName ON encounter (CodeSystemName)";
+					command=@"CREATE INDEX encounter_CodeSystem ON encounter (CodeSystem)";
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
