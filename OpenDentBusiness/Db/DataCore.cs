@@ -6,7 +6,7 @@ using System.Text;
 using System.Xml;
 
 namespace OpenDentBusiness {
-	///<summary></summary>
+	///<summary>You don't generally use this class.  Use Db instead except in special situations.</summary>
 	public class DataCore {
 		///<summary></summary>
 		public static DataTable GetTable(string command) {

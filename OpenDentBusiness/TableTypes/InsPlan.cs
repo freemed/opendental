@@ -2,8 +2,8 @@ using System;
 using System.Collections;
 
 namespace OpenDentBusiness{
-
-	///<summary>Subscribers can share insplans by using the InsSub table.  The patplan table determines coverage for individual patients.  InsPlans can also exist without any subscriber.</summary>
+	//Any changes made to this tabletype needs to be documented on the Online Manual
+	///<summary>Subscribers can share insplans by using the InsSub table.  The patplan table determines coverage for individual patients.  InsPlans can also exist without any subscriber. </summary>
 	[Serializable]
 	public class InsPlan:TableBase{
 		///<summary>Primary key.</summary>
