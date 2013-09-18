@@ -865,6 +865,7 @@ namespace OpenDentBusiness{
 					+"AND claimproc.NoBillIns=0 "
 					+"AND procedurelog.ProcFee>0 "
 					+"AND claimproc.Status=6 "//estimate
+					+"AND ((CASE WHEN claimproc.InsEstTotalOverride>-1 THEN claimproc.InsEstTotalOverride ELSE claimproc.InsEstTotal END) > 0) "
 					+"AND procedurelog.procstatus=2 "
 					+"AND procedurelog.ProcDate >= "+POut.Date(DateTime.Now.AddYears(-1))+" "//I'm sure this is the slow part.  Should be easy to make faster with less range
 					+"AND procedurelog.ProcDate <= "+POut.Date(DateTime.Now)+ " "
