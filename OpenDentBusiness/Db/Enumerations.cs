@@ -288,7 +288,9 @@ namespace OpenDentBusiness{
 		///<summary>55. Caches the wiki master page and the wikiListHeaderWidths</summary>
 		Wiki,
 		///<summary>56</summary>
-		Snomeds
+		Snomeds,
+		///<summary>57. SourceOfPayment</summary>
+		Sops
 	}
 	//<summary></summary>
 	/*public enum ButtonType{

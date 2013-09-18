@@ -438,6 +438,18 @@
     <Compile Include="Forms\FormPatListEHR2014.Designer.cs">
       <DependentUpon>FormPatListEHR2014.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormPayorTypeEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormPayorTypeEdit.Designer.cs">
+      <DependentUpon>FormPayorTypeEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormPayorTypes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormPayorTypes.Designer.cs">
+      <DependentUpon>FormPayorTypes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormSnomedEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2908,6 +2920,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormPatListEHR2014.resx">
       <DependentUpon>FormPatListEHR2014.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormPayorTypeEdit.resx">
+      <DependentUpon>FormPayorTypeEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormPayorTypes.resx">
+      <DependentUpon>FormPayorTypes.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormSnomedEdit.resx">
       <DependentUpon>FormSnomedEdit.cs</DependentUpon>

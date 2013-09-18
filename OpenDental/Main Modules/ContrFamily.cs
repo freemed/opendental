@@ -516,6 +516,11 @@ namespace OpenDental{
 					FormReferenceEntryEdit FormRE=new FormReferenceEntryEdit((CustRefEntry)gridPat.Rows[e.Row].Tag);
 					FormRE.ShowDialog();
 				}
+				else if(gridPat.Rows[e.Row].Tag.ToString().Equals("Payor Types")) {
+					FormPayorTypes FormPT = new FormPayorTypes();
+					FormPT.PatCur=PatCur;
+					FormPT.ShowDialog();
+				}
 				else {//patfield
 					string tag=gridPat.Rows[e.Row].Tag.ToString();
 					tag=tag.Substring(8);//strips off all but the number: PatField1
@@ -794,6 +799,10 @@ namespace OpenDental{
 						else{
 							row.Cells.Add("None");
 						}
+						break;
+					case "Payor Types":
+						row.Tag="Payor Types";
+						row.Cells.Add(PayorTypes.GetCurrentDescription(PatCur.PatNum));
 						break;
 					case "Language":
 						if(PatCur.Language=="" || PatCur.Language==null){

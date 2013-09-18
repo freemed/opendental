@@ -4934,6 +4934,10 @@ namespace OpenDental{
 						}
 						row.Tag=null;
 						break;
+					case "Payor Types":
+						row.Tag="Payor Types";
+						row.Cells.Add(PayorTypes.GetCurrentDescription(PatCur.PatNum));
+						break;
 					case "Registration Keys":
 						//Not even available to most users.
 						RegistrationKey[] keys=RegistrationKeys.GetForPatient(PatCur.PatNum);
@@ -8748,6 +8752,15 @@ namespace OpenDental{
 					FormPP.PatCur=PatCur;
 					FormPP.ShowDialog();
 					if(FormPP.DialogResult==DialogResult.OK) {
+						FillPtInfo();
+					}
+					return;
+				}
+				if(gridPtInfo.Rows[e.Row].Tag.ToString()=="Payor Types") {
+					FormPayorTypes FormPT=new FormPayorTypes();
+					FormPT.PatCur=PatCur;
+					FormPT.ShowDialog();
+					if(FormPT.DialogResult==DialogResult.OK) {
 						FillPtInfo();
 					}
 					return;

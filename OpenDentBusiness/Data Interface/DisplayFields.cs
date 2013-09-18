@@ -174,6 +174,7 @@ namespace OpenDentBusiness {
 				//list.Add(new DisplayField("AdmitDate",0,category));
 				list.Add(new DisplayField("Primary Provider",0,category));
 				list.Add(new DisplayField("Sec. Provider",0,category));
+				list.Add(new DisplayField("Payor Types",0,category));
 				list.Add(new DisplayField("Language",0,category));
 				//list.Add(new DisplayField("Clinic",0,category));
 				//list.Add(new DisplayField("ResponsParty",0,category));
@@ -221,6 +222,7 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("Prov. (Pri, Sec)",0,category));
 				list.Add(new DisplayField("Pri Ins",0,category));
 				list.Add(new DisplayField("Sec Ins",0,category));
+				list.Add(new DisplayField("Payor Types",0,category));
 				if(PrefC.GetBool(PrefName.DistributorKey)) {
 					list.Add(new DisplayField("Registration Keys",0,category));
 					list.Add(new DisplayField("Ehr Provider Keys",0,category));
@@ -373,6 +375,7 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("AdmitDate",0,category));
 				list.Add(new DisplayField("Primary Provider",0,category));
 				list.Add(new DisplayField("Sec. Provider",0,category));
+				list.Add(new DisplayField("Payor Types",0,category));
 				list.Add(new DisplayField("Language",0,category));
 				list.Add(new DisplayField("Clinic",0,category));
 				list.Add(new DisplayField("ResponsParty",0,category));
@@ -420,6 +423,7 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("Prov. (Pri, Sec)",0,category));
 				list.Add(new DisplayField("Pri Ins",0,category));
 				list.Add(new DisplayField("Sec Ins",0,category));
+				list.Add(new DisplayField("Payor Types",0,category));
 				if(PrefC.GetBool(PrefName.DistributorKey)) {
 					list.Add(new DisplayField("Registration Keys",0,category));
 					list.Add(new DisplayField("Ehr Provider Keys",0,category));

@@ -6,57 +6,27 @@ using System.Text;
 
 namespace OpenDentBusiness{
 	///<summary></summary>
-	public class PayorTypes{
-		//If this table type will exist as cached data, uncomment the CachePattern region below and edit.
-		/*
-		#region CachePattern
-		//This region can be eliminated if this is not a table type with cached data.
-		//If leaving this region in place, be sure to add RefreshCache and FillCache 
-		//to the Cache.cs file with all the other Cache types.
-
-		///<summary>A list of all PayorTypes.</summary>
-		private static List<PayorType> listt;
-
-		///<summary>A list of all PayorTypes.</summary>
-		public static List<PayorType> Listt{
-			get {
-				if(listt==null) {
-					RefreshCache();
-				}
-				return listt;
-			}
-			set {
-				listt=value;
-			}
-		}
-
-		///<summary></summary>
-		public static DataTable RefreshCache(){
-			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
-			string command="SELECT * FROM payortype ORDER BY ItemOrder";//stub query probably needs to be changed
-			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
-			table.TableName="PayorType";
-			FillCache(table);
-			return table;
-		}
-
-		///<summary></summary>
-		public static void FillCache(DataTable table){
-			//No need to check RemotingRole; no call to db.
-			listt=Crud.PayorTypeCrud.TableToList(table);
-		}
-		#endregion
-		*/
-		/*
-		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
-
+	public class PayorTypes{		
 		///<summary></summary>
 		public static List<PayorType> Refresh(long patNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<PayorType>>(MethodBase.GetCurrentMethod(),patNum);
 			}
-			string command="SELECT * FROM payortype WHERE PatNum = "+POut.Long(patNum);
+			string command="SELECT * FROM payortype WHERE PatNum = "+POut.Long(patNum)+" ORDER BY DateStart";
 			return Crud.PayorTypeCrud.SelectMany(command);
+		}
+
+		///<summary>Gets most recent PayorType entry.</summary>
+		public static string GetCurrentDescription(long patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),patNum);
+			}
+			string command=DbHelper.LimitOrderBy("SELECT * FROM payortype WHERE PatNum = "+POut.Long(patNum)+" ORDER BY DateStart DESC",1);
+			PayorType payorType=Crud.PayorTypeCrud.SelectOne(command);
+			if(payorType==null) {
+				return "";
+			}
+			return Sops.GetRecentPayorTypeDescription(payorType.SopCode);
 		}
 
 		///<summary>Gets one PayorType from the db.</summary>
@@ -94,7 +64,6 @@ namespace OpenDentBusiness{
 			string command= "DELETE FROM payortype WHERE PayorTypeNum = "+POut.Long(payorTypeNum);
 			Db.NonQ(command);
 		}
-		*/
 
 
 

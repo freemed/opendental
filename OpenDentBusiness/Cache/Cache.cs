@@ -218,6 +218,9 @@ namespace OpenDentBusiness {
 			if(itypes.Contains((int)InvalidType.Snomeds) || isAll) {
 				ds.Tables.Add(Snomeds.RefreshCache());
 			}
+			if(itypes.Contains((int)InvalidType.Sops) || isAll) {
+				ds.Tables.Add(Sops.RefreshCache());
+			}
 			//InvalidTypes.Tasks not handled here.
 			if(itypes.Contains((int)InvalidType.TimeCardRules) || isAll) {
 				ds.Tables.Add(TimeCardRules.RefreshCache());
@@ -404,8 +407,11 @@ namespace OpenDentBusiness {
 			if(itypes.Contains((int)InvalidType.Sites) || isAll) {
 				Sites.FillCache(ds.Tables["Site"]);
 			}
-			if(itypes.Contains((int)InvalidType.Sites) || isAll) {
-				Sites.FillCache(ds.Tables["Snomed"]);
+			if(itypes.Contains((int)InvalidType.Snomeds) || isAll) {
+				Snomeds.FillCache(ds.Tables["Snomed"]);
+			}
+			if(itypes.Contains((int)InvalidType.Sops) || isAll) {
+				Sops.FillCache(ds.Tables["Sop"]);
 			}
 			if(itypes.Contains((int)InvalidType.TimeCardRules) || isAll) {
 				TimeCardRules.FillCache(ds.Tables["TimeCardRule"]);
