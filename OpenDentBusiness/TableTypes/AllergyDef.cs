@@ -16,9 +16,9 @@ namespace OpenDentBusiness {
 		///<summary>The last date and time this row was altered.  Not user editable.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
-		///<summary>Enum:SnomedAllergy SNOMED Allergy Type Code.</summary>
+		///<summary>Enum:SnomedAllergy SNOMED Allergy Type Code.  Only used to create CCD in FormSummaryOfCare.</summary>
 		public SnomedAllergy Snomed;
-		///<summary>FK to Medication.MedicationNum. Optional.</summary>
+		///<summary>FK to Medication.MedicationNum.  Optional.  Only used to create CCD in FormSummaryOfCare.</summary>
 		public long MedicationNum;
 
 		///<summary></summary>
