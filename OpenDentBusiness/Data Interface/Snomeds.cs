@@ -31,7 +31,8 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static DataTable RefreshCache(){
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
-			string command="SELECT * FROM snomed ORDER BY SnomedCode";
+			//string command="SELECT * FROM snomed ORDER BY SnomedCode";
+			string command="SELECT * FROM snomed";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="Snomed";
 			FillCache(table);
@@ -146,14 +147,23 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Returns the Snomed of the code passed in by looking in cache.  If code does not exist, returns null.</summary>
+		//public static Snomed GetByCode(string snomedCode) {
+		//	//No need to check RemotingRole; no call to db.
+		//	for(int i=0;i<Listt.Count;i++) {
+		//		if(Listt[i].SnomedCode==snomedCode) {
+		//			return Listt[i];
+		//		}
+		//	}
+		//	return null;
+		//}
+
+		///<summary>Gets one snomed object directly from the database by CodeValue.  If code does not exist, returns null.</summary>
 		public static Snomed GetByCode(string snomedCode) {
-			//No need to check RemotingRole; no call to db.
-			for(int i=0;i<Listt.Count;i++) {
-				if(Listt[i].SnomedCode==snomedCode) {
-					return Listt[i];
-				}
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Snomed>(MethodBase.GetCurrentMethod(),snomedCode);
 			}
-			return null;
+			string command="SELECT * FROM snomed WHERE SnomedCode='"+POut.String(snomedCode)+"'";
+			return Crud.SnomedCrud.SelectOne(command);
 		}
 
 		///<summary></summary>

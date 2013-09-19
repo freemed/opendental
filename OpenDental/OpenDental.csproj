@@ -372,6 +372,24 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormEhrNotPerformedEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormEhrNotPerformedEdit.designer.cs">
+      <DependentUpon>FormEhrNotPerformedEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormCQM2014Setup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormCQM2014Setup.designer.cs">
+      <DependentUpon>FormCQM2014Setup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormEncounterEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormEncounterEdit.designer.cs">
+      <DependentUpon>FormEncounterEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormEncounters.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2890,6 +2908,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormEhrNotPerformedEdit.resx">
+      <DependentUpon>FormEhrNotPerformedEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormCQM2014Setup.resx">
+      <DependentUpon>FormCQM2014Setup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormEncounterEdit.resx">
+      <DependentUpon>FormEncounterEdit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormEncounters.resx">
       <DependentUpon>FormEncounters.cs</DependentUpon>
