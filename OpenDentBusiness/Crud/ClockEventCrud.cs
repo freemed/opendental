@@ -59,8 +59,8 @@ namespace OpenDentBusiness.Crud{
 				clockEvent.Adjust            = PIn.TSpan (table.Rows[i]["Adjust"].ToString());
 				clockEvent.AdjustAuto        = PIn.TSpan (table.Rows[i]["AdjustAuto"].ToString());
 				clockEvent.AdjustIsOverridden= PIn.Bool  (table.Rows[i]["AdjustIsOverridden"].ToString());
-				clockEvent.DiffHours         = PIn.TSpan (table.Rows[i]["DiffHours"].ToString());
-				clockEvent.DiffAuto          = PIn.TSpan (table.Rows[i]["DiffAuto"].ToString());
+				clockEvent.Rate2Hours        = PIn.TSpan (table.Rows[i]["Rate2Hours"].ToString());
+				clockEvent.Rate2Auto         = PIn.TSpan (table.Rows[i]["Rate2Auto"].ToString());
 				retVal.Add(clockEvent);
 			}
 			return retVal;
@@ -101,7 +101,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="ClockEventNum,";
 			}
-			command+="EmployeeNum,TimeEntered1,TimeDisplayed1,ClockStatus,Note,TimeEntered2,TimeDisplayed2,OTimeHours,OTimeAuto,Adjust,AdjustAuto,AdjustIsOverridden,DiffHours,DiffAuto) VALUES(";
+			command+="EmployeeNum,TimeEntered1,TimeDisplayed1,ClockStatus,Note,TimeEntered2,TimeDisplayed2,OTimeHours,OTimeAuto,Adjust,AdjustAuto,AdjustIsOverridden,Rate2Hours,Rate2Auto) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(clockEvent.ClockEventNum)+",";
 			}
@@ -118,8 +118,8 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.TSpan (clockEvent.Adjust)+"',"
 				+"'"+POut.TSpan (clockEvent.AdjustAuto)+"',"
 				+    POut.Bool  (clockEvent.AdjustIsOverridden)+","
-				+"'"+POut.TSpan (clockEvent.DiffHours)+"',"
-				+"'"+POut.TSpan (clockEvent.DiffAuto)+"')";
+				+"'"+POut.TSpan (clockEvent.Rate2Hours)+"',"
+				+"'"+POut.TSpan (clockEvent.Rate2Auto)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -144,8 +144,8 @@ namespace OpenDentBusiness.Crud{
 				+"Adjust            = '"+POut.TSpan (clockEvent.Adjust)+"', "
 				+"AdjustAuto        = '"+POut.TSpan (clockEvent.AdjustAuto)+"', "
 				+"AdjustIsOverridden=  "+POut.Bool  (clockEvent.AdjustIsOverridden)+", "
-				+"DiffHours         = '"+POut.TSpan (clockEvent.DiffHours)+"', "
-				+"DiffAuto          = '"+POut.TSpan (clockEvent.DiffAuto)+"' "
+				+"Rate2Hours        = '"+POut.TSpan (clockEvent.Rate2Hours)+"', "
+				+"Rate2Auto         = '"+POut.TSpan (clockEvent.Rate2Auto)+"' "
 				+"WHERE ClockEventNum = "+POut.Long(clockEvent.ClockEventNum);
 			Db.NonQ(command);
 		}
@@ -198,13 +198,13 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="AdjustIsOverridden = "+POut.Bool(clockEvent.AdjustIsOverridden)+"";
 			}
-			if(clockEvent.DiffHours != oldClockEvent.DiffHours) {
+			if(clockEvent.Rate2Hours != oldClockEvent.Rate2Hours) {
 				if(command!=""){ command+=",";}
-				command+="DiffHours = '"+POut.TSpan (clockEvent.DiffHours)+"'";
+				command+="Rate2Hours = '"+POut.TSpan (clockEvent.Rate2Hours)+"'";
 			}
-			if(clockEvent.DiffAuto != oldClockEvent.DiffAuto) {
+			if(clockEvent.Rate2Auto != oldClockEvent.Rate2Auto) {
 				if(command!=""){ command+=",";}
-				command+="DiffAuto = '"+POut.TSpan (clockEvent.DiffAuto)+"'";
+				command+="Rate2Auto = '"+POut.TSpan (clockEvent.Rate2Auto)+"'";
 			}
 			if(command==""){
 				return;

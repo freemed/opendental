@@ -1294,27 +1294,19 @@ namespace OpenDentBusiness {
 				}
 				//Time Card Overhaul for differential pay----------------------------------------------------------------------------------------------------------------
 				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE clockevent ADD DiffHours time NOT NULL";
+					command="ALTER TABLE clockevent ADD Rate2Hours time NOT NULL";
 					Db.NonQ(command);
 				}
 				else {//oracle
-					command="ALTER TABLE clockevent ADD DiffHours varchar2(255)";
+					command="ALTER TABLE clockevent ADD Rate2Hours varchar2(255)";
 					Db.NonQ(command);
 				}				
 				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE clockevent ADD DiffAuto time NOT NULL";
+					command="ALTER TABLE clockevent ADD Rate2Auto time NOT NULL";
 					Db.NonQ(command);
 				}
 				else {//oracle
-					command="ALTER TABLE clockevent ADD DiffAuto varchar2(255)";
-					Db.NonQ(command);
-				}
-				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE timeadjust ADD DiffHours time NOT NULL";
-					Db.NonQ(command);
-				}
-				else {//oracle
-					command="ALTER TABLE timeadjust ADD DiffHours varchar2(255)";
+					command="ALTER TABLE clockevent ADD Rate2Auto varchar2(255)";
 					Db.NonQ(command);
 				}
 				command="ALTER TABLE timecardrule DROP COLUMN AmtDiff";
@@ -1713,3 +1705,73 @@ namespace OpenDentBusiness {
 				
 
 		
+
+				/*				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE clockevent ADD Rate2Hours time NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE clockevent ADD Rate2Hours varchar2(255)";
+					Db.NonQ(command);
+				}				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE clockevent ADD Rate2Auto time NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE clockevent ADD Rate2Auto varchar2(255)";
+					Db.NonQ(command);
+				}
+				*/
+
+				/*				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE ehrnotperformed ADD ProvNum bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE ehrnotperformed ADD INDEX (ProvNum)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE ehrnotperformed ADD ProvNum number(20)";
+					Db.NonQ(command);
+					command="UPDATE ehrnotperformed SET ProvNum = 0 WHERE ProvNum IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE ehrnotperformed MODIFY ProvNum NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX ehrnotperformed_ProvNum ON ehrnotperformed (ProvNum)";
+					Db.NonQ(command);
+				}
+				*/
+
+				/*				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE encounter ADD CodeSystem varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE encounter ADD CodeSystem varchar2(255)";
+					Db.NonQ(command);
+				}
+				*/
+
+				/*				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE intervention ADD ProvNum bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE intervention ADD INDEX (ProvNum)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE intervention ADD ProvNum number(20)";
+					Db.NonQ(command);
+					command="UPDATE intervention SET ProvNum = 0 WHERE ProvNum IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE intervention MODIFY ProvNum NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX intervention_ProvNum ON intervention (ProvNum)";
+					Db.NonQ(command);
+				}				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE intervention ADD Note varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE intervention ADD Note varchar2(255)";
+					Db.NonQ(command);
+				}
+				*/
