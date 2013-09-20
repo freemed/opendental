@@ -492,6 +492,18 @@
     <Compile Include="Forms\FormPatListResultsEHR2014.Designer.cs">
       <DependentUpon>FormPatListResultsEHR2014.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormVitalsignEdit2014.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormVitalsignEdit2014.Designer.cs">
+      <DependentUpon>FormVitalsignEdit2014.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormVitalsigns.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormVitalsigns.Designer.cs">
+      <DependentUpon>FormVitalsigns.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormWebMailMessageEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2967,6 +2979,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormPatListResultsEHR2014.resx">
       <DependentUpon>FormPatListResultsEHR2014.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormVitalsignEdit2014.resx">
+      <DependentUpon>FormVitalsignEdit2014.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormVitalsigns.resx">
+      <DependentUpon>FormVitalsigns.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormWebMailMessageEdit.resx">
       <DependentUpon>FormWebMailMessageEdit.cs</DependentUpon>
