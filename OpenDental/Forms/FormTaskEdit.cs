@@ -689,31 +689,31 @@ namespace OpenDental{
 		}
 		#endregion
 
-		private void FormTaskListEdit_Load(object sender, System.EventArgs e) {
+		private void FormTaskListEdit_Load(object sender,System.EventArgs e) {
 			#if DEBUG
-				labelTaskNum.Visible=true;
-				textTaskNum.Visible=true;
-				textTaskNum.Text=TaskCur.TaskNum.ToString();
+			labelTaskNum.Visible=true;
+			textTaskNum.Visible=true;
+			textTaskNum.Text=TaskCur.TaskNum.ToString();
 			#endif
-			if(!(Security.IsAuthorized(Permissions.TaskEdit,true) || IsNew)) {//Task description is ReadOnly and cannot be deleted unless new or user has TaskEdit permission.
+			if(!(IsNew || Security.IsAuthorized(Permissions.TaskEdit,true))) {//Task description is ReadOnly and cannot be deleted unless new or user has TaskEdit permission.
 				butDelete.Enabled=false;
 				textDescript.ReadOnly=true;
 				textDescript.BackColor=System.Drawing.SystemColors.Window;
 			}
 			textUser.Text=Userods.GetName(TaskCur.UserNum);//might be blank.
-			if(TaskListCur!=null){
+			if(TaskListCur!=null) {
 				textTaskList.Text=TaskListCur.Descript;
 			}
-			if(TaskCur.DateTimeEntry.Year<1880){
+			if(TaskCur.DateTimeEntry.Year<1880) {
 				textDateTimeEntry.Text=DateTime.Now.ToString();
 			}
-			else{
+			else {
 				textDateTimeEntry.Text=TaskCur.DateTimeEntry.ToString();
 			}
-			if(TaskCur.DateTimeFinished.Year<1880){
+			if(TaskCur.DateTimeFinished.Year<1880) {
 				textDateTimeFinished.Text="";//DateTime.Now.ToString();
 			}
-			else{
+			else {
 				textDateTimeFinished.Text=TaskCur.DateTimeFinished.ToString();
 			}
 			textDescript.Text=TaskCur.Descript;
@@ -750,37 +750,37 @@ namespace OpenDental{
 					}
 				}
 			}
-			if(TaskCur.DateTask.Year>1880){
+			if(TaskCur.DateTask.Year>1880) {
 				textDateTask.Text=TaskCur.DateTask.ToShortDateString();
 			}
-			if(TaskCur.IsRepeating){
+			if(TaskCur.IsRepeating) {
 				checkNew.Enabled=false;
 				checkDone.Enabled=false;
 				textDateTask.Enabled=false;
 				listObjectType.Enabled=false;
-				if(TaskCur.TaskListNum!=0){//not a main parent
+				if(TaskCur.TaskListNum!=0) {//not a main parent
 					comboDateType.Enabled=false;
 				}
 			}
-			for(int i=0;i<Enum.GetNames(typeof(TaskDateType)).Length;i++){
+			for(int i=0;i<Enum.GetNames(typeof(TaskDateType)).Length;i++) {
 				comboDateType.Items.Add(Lan.g("enumTaskDateType",Enum.GetNames(typeof(TaskDateType))[i]));
-				if((int)TaskCur.DateType==i){
+				if((int)TaskCur.DateType==i) {
 					comboDateType.SelectedIndex=i;
 				}
 			}
-			if(TaskCur.FromNum==0){
+			if(TaskCur.FromNum==0) {
 				checkFromNum.Checked=false;
 				checkFromNum.Enabled=false;
 			}
-			else{
+			else {
 				checkFromNum.Checked=true;
 			}
-			for(int i=0;i<Enum.GetNames(typeof(TaskObjectType)).Length;i++){
+			for(int i=0;i<Enum.GetNames(typeof(TaskObjectType)).Length;i++) {
 				listObjectType.Items.Add(Lan.g("enumTaskObjectType",Enum.GetNames(typeof(TaskObjectType))[i]));
 			}
 			FillObject();
 			FillGrid();//Need this in order to pick ReplyToUserNum next.
-			if(IsNew){
+			if(IsNew) {
 				labelReply.Visible=false;
 				butReply.Visible=false;
 			}
@@ -949,19 +949,15 @@ namespace OpenDental{
 				||textDescript.Text.Contains("CONFERENCE")
 				||textDescript.Text.Contains("!!")) 
 			{
-				ClearTriageKeywords();
+				textDescript.Text=textDescript.Text.Replace("!!","!");
+				textDescript.Text=textDescript.Text.Replace("CUSTOMER","customer");
+				textDescript.Text=textDescript.Text.Replace("DOWN","down");
+				textDescript.Text=textDescript.Text.Replace("URGENT","urgent");
+				textDescript.Text=textDescript.Text.Replace("CONFERENCE","conference");
 			}
 			else {
 				textDescript.Text+=" !!";
 			}
-		}
-
-		private void ClearTriageKeywords() {
-			textDescript.Text=textDescript.Text.Replace("!!","!");
-			textDescript.Text=textDescript.Text.Replace("CUSTOMER","customer");
-			textDescript.Text=textDescript.Text.Replace("DOWN","down");
-			textDescript.Text=textDescript.Text.Replace("URGENT","urgent");
-			textDescript.Text=textDescript.Text.Replace("CONFERENCE","conference");
 		}
 
 		private void listObjectType_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e) {
@@ -1022,9 +1018,9 @@ namespace OpenDental{
 		}
 
 		private void textDescript_TextChanged(object sender,EventArgs e) {
-			if(textDescript.ReadOnly) {//resets the text if user presses any number of hotkeys that bypasses edit security.
-				textDescript.Text=TaskCur.Descript;
-			}
+			//if(textDescript.ReadOnly) {
+			//	textDescript.Text=TaskCur.Descript;//resets the text if user presses any number of hotkeys that bypasses edit security.
+			//}
 			if(MightNeedSetRead) {//'new' box is checked
 				checkNew.Checked=false;
 				StatusChanged=true;
