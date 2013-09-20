@@ -995,7 +995,7 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		/// <summary>Only used from FormInsPlan. Throws ApplicationException if any dependencies. This is quite complex, because it also must update all claimprocs for all patients affected by the deletion.  Also deletes patplans, benefits, and claimprocs.</summary>
+		/// <summary>Only used from FormInsPlan. Throws ApplicationException if any dependencies. This is quite complex, because it also must update all claimprocs for all patients affected by the deletion.  Also deletes patplans, benefits, claimprocs, and possibly inssubs.</summary>
 		public static void Delete(InsPlan plan) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),plan);
@@ -1025,12 +1025,15 @@ namespace OpenDentBusiness {
 			}
 			else if(table.Rows.Count==1) {//if there's only one inssub, delete it.
 				long insSubNum=PIn.Long(table.Rows[0]["InsSubNum"].ToString());
+				//Remove from the patplan table just in case it is still there.
 				command="SELECT PatPlanNum FROM patplan WHERE InsSubNum = "+POut.Long(insSubNum);
 				table=Db.GetTable(command);
 				for(int i=0;i<table.Rows.Count;i++) {
 					//benefits with this PatPlanNum are also deleted here
 					PatPlans.Delete(PIn.Long(table.Rows[i]["PatPlanNum"].ToString()));
 				}
+				//Now remove the inssub entry.  This removes the entry from the Insurance Plans for Family window.
+				InsSubs.Delete(insSubNum);
 			}		
 			command="DELETE FROM benefit WHERE PlanNum="+POut.Long(plan.PlanNum);
 			Db.NonQ(command);
