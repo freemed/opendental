@@ -6276,6 +6276,7 @@ namespace OpenDental{
 			}
 			int selectedPrognosis=comboPrognosis.SelectedIndex;//retain prognosis selection
 			comboPrognosis.Items.Clear();
+			comboPrognosis.Items.Add(Lan.g(this,"no prognosis"));
 			for(int i=0;i<DefC.Short[(int)DefCat.Prognosis].Length;i++) {
 				comboPrognosis.Items.Add(DefC.Short[(int)DefCat.Prognosis][i].ItemName);
 			}
@@ -6287,6 +6288,9 @@ namespace OpenDental{
 			}
 			if(selectedPrognosis>0 && selectedPrognosis<comboPrognosis.Items.Count) {
 				comboPrognosis.SelectedIndex=selectedPrognosis;
+			}
+			else {
+				comboPrognosis.SelectedIndex=0;
 			}
 			if(selectedPriority>0 && selectedPriority<comboPriority.Items.Count)
 				//set the selected to what it was before.
@@ -6787,8 +6791,11 @@ namespace OpenDental{
 			if(listDx.SelectedIndex!=-1) {
 				ProcCur.Dx=DefC.Short[(int)DefCat.Diagnosis][listDx.SelectedIndex].DefNum;
 			}
-			if(comboPrognosis.SelectedIndex!=-1) {
-				ProcCur.Prognosis=DefC.Short[(int)DefCat.Prognosis][comboPrognosis.SelectedIndex].DefNum;
+			if(comboPrognosis.SelectedIndex==0) {
+				ProcCur.Prognosis=0;
+			}
+			else {
+				ProcCur.Prognosis=DefC.Short[(int)DefCat.Prognosis][comboPrognosis.SelectedIndex-1].DefNum;
 			}
 			//nextaptnum
 			ProcCur.DateEntryC=DateTime.Now;

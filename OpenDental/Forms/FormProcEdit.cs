@@ -2733,10 +2733,12 @@ namespace OpenDental{
 					comboDx.SelectedIndex=i;
 			}
 			comboPrognosis.Items.Clear();
+			comboPrognosis.Items.Add(Lan.g(this,"no prognosis"));
+			comboPrognosis.SelectedIndex=0;
 			for(int i=0;i<DefC.Short[(int)DefCat.Prognosis].Length;i++) {
 				comboPrognosis.Items.Add(DefC.Short[(int)DefCat.Prognosis][i].ItemName);
 				if(DefC.Short[(int)DefCat.Prognosis][i].DefNum==ProcCur.Prognosis)
-					comboPrognosis.SelectedIndex=i;
+					comboPrognosis.SelectedIndex=i+1;
 			}
 			checkHideGraphics.Checked=ProcCur.HideGraphics;
 			if(Programs.UsingOrion && this.IsNew && !OrionDentist){
@@ -4691,8 +4693,11 @@ namespace OpenDental{
 			if(comboDx.SelectedIndex!=-1) {
 				ProcCur.Dx=DefC.Short[(int)DefCat.Diagnosis][comboDx.SelectedIndex].DefNum;
 			}
-			if(comboPrognosis.SelectedIndex!=-1) {
-				ProcCur.Prognosis=DefC.Short[(int)DefCat.Prognosis][comboPrognosis.SelectedIndex].DefNum;
+			if(comboPrognosis.SelectedIndex==0) {
+				ProcCur.Prognosis=0;
+			}
+			else {
+				ProcCur.Prognosis=DefC.Short[(int)DefCat.Prognosis][comboPrognosis.SelectedIndex-1].DefNum;
 			}
 			if(comboPriority.SelectedIndex==0) {
 				ProcCur.Priority=0;
