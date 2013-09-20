@@ -70,8 +70,8 @@ namespace OpenDentBusiness {
 		ReceivedDirect,
 		///<summary>11 For received direct messages.  Has been read.  Shows in Inbox.  Once it's attached to a patient it will also show in Chart module.  When viewing inside of FormEmailMessageEdit, the XML body of the message shows as xhtml.</summary>
 		ReadDirect,
-		///<summary>Known as Message Delivery Notification (MDN).  Always outgoing.  Does not show in patient Chart, but is attached to the same patient as the incoming email which caused the MDN to be sent.</summary>
-		AckDirect,
+		///<summary>Message Delivery Notification (MDN) processed.  Always outgoing.  Indicates to sender that a Direct message was received and decrypted, but not necessarily displayed for the user.  Does not show in patient Chart.  Attached to the same patient as the incoming email which caused the MDN to be sent.</summary>
+		AckDirectProcessed,
 	}
 
 

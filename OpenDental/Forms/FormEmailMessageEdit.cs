@@ -540,12 +540,16 @@ namespace OpenDental{
 		#endregion
 
 		private void FormEmailMessageEdit_Load(object sender, System.EventArgs e) {
-			if(MessageCur.SentOrReceived==EmailSentOrReceived.Neither){
+			RefreshAll();
+		}
+
+		private void RefreshAll() {
+			if(MessageCur.SentOrReceived==EmailSentOrReceived.Neither) {
 				labelSent.Visible=false;
 				textMsgDateTime.Text=Lan.g(this,"Unsent");
 				textMsgDateTime.ForeColor=Color.Red;
 			}
-			else{//already sent or received
+			else {//already sent or received
 				panelTemplates.Visible=false;
 				textMsgDateTime.Text=MessageCur.MsgDateTime.ToString();
 				butAttach.Enabled=false;
@@ -557,7 +561,7 @@ namespace OpenDental{
 			textSubject.Text=MessageCur.Subject;
 			textBodyText.Text=MessageCur.BodyText;
 			FillList();
-			if(PrefC.GetBool(PrefName.FuchsOptionsOn)){
+			if(PrefC.GetBool(PrefName.FuchsOptionsOn)) {
 				buttonFuchsMailDMF.Visible=true;
 				buttonFuchsMailDSF.Visible=true;
 			}
@@ -565,6 +569,10 @@ namespace OpenDental{
 			if(MessageCur.SentOrReceived==EmailSentOrReceived.ReceivedEncrypted) {
 				labelDecrypt.Visible=true;
 				butDecrypt.Visible=true;
+			}
+			else {
+				labelDecrypt.Visible=false;
+				butDecrypt.Visible=false;
 			}
 			//For all email received types, we disable most of the controls and put the form into a mostly read-only state.
 			//There is no reason a user should ever edit a received message. The user can copy the content and send a new email if needed (perhaps we will have forward capabilities in the future).
@@ -574,8 +582,7 @@ namespace OpenDental{
 				MessageCur.SentOrReceived==EmailSentOrReceived.Received ||
 				MessageCur.SentOrReceived==EmailSentOrReceived.Read ||
 				MessageCur.SentOrReceived==EmailSentOrReceived.WebMailReceived ||
-				MessageCur.SentOrReceived==EmailSentOrReceived.WebMailRecdRead)
-			{
+				MessageCur.SentOrReceived==EmailSentOrReceived.WebMailRecdRead) {
 				textBodyText.ReadOnly=true;
 				textBodyText.SpellCheckIsEnabled=false;//Prevents slowness when resizing the window, because the spell checker runs each time the resize event is fired.
 				butSave.Visible=false;
@@ -840,19 +847,18 @@ namespace OpenDental{
 		}
 
 		private void butDecrypt_Click(object sender,EventArgs e) {
+			Cursor=Cursors.WaitCursor;
 			EmailAddress emailAddress=GetEmailAddress();
 			try {
-				EhrEmail.DecryptDirect(MessageCur,emailAddress);//If successful, sets status to ReceivedDirect.
-				textBodyText.Text=MessageCur.BodyText;
-				labelDecrypt.Visible=false;
-				butDecrypt.Visible=false;
+				MessageCur=EhrEmail.ProcessRawEmailMessage(MessageCur.BodyText,MessageCur.EmailMessageNum,emailAddress);//If successful, sets status to ReceivedDirect.
 				MessageCur.SentOrReceived=EmailSentOrReceived.ReadDirect;//Because we are already viewing the message within the current window.
 				EmailMessages.Update(MessageCur);
-				//TODO: Send Direct Ack.
+				RefreshAll();
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
 			}
+			Cursor=Cursors.Default;
 		}
 
 		private void butSave_Click(object sender,EventArgs e) {

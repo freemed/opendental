@@ -73,7 +73,7 @@ namespace OpenDental {
 				ListEmailMessages=new List<EmailMessage>();
 			}
 			else {
-				ListEmailMessages=EmailMessages.GetReceivedForAddress(Address.EmailUsername);
+				ListEmailMessages=EmailMessages.GetInboxForAddress(Address.EmailUsername);
 			}
 			gridEmailMessages.BeginUpdate();
 			gridEmailMessages.Columns.Clear();
@@ -130,38 +130,8 @@ namespace OpenDental {
 			EmailMessage emailMessage=ListEmailMessages[e.Row];
 			FormEmailMessageEdit formEME=new FormEmailMessageEdit(emailMessage);
 			formEME.ShowDialog();
-			MarkRead(emailMessage);
+			EhrEmail.MarkMessageRead(emailMessage);
 			FillGridEmailMessages();//To show the email is read.
-		}
-
-		private void MarkRead(EmailMessage emailMessage) {
-			if(emailMessage.SentOrReceived==EmailSentOrReceived.Received) {
-				emailMessage.SentOrReceived=EmailSentOrReceived.Read;
-				EmailMessages.Update(emailMessage);//Mark read.
-			}
-			else if(emailMessage.SentOrReceived==EmailSentOrReceived.WebMailReceived) {
-				emailMessage.SentOrReceived=EmailSentOrReceived.WebMailRecdRead;
-				EmailMessages.Update(emailMessage);//Mark read.
-			}
-			else if(emailMessage.SentOrReceived==EmailSentOrReceived.ReceivedDirect) {
-				emailMessage.SentOrReceived=EmailSentOrReceived.ReadDirect;
-				EmailMessages.Update(emailMessage);//Mark read.
-			}
-		}
-
-		private void MarkUnread(EmailMessage emailMessage) {
-			if(emailMessage.SentOrReceived==EmailSentOrReceived.Read) {
-				emailMessage.SentOrReceived=EmailSentOrReceived.Received;
-				EmailMessages.Update(emailMessage);//Mark read.
-			}
-			else if(emailMessage.SentOrReceived==EmailSentOrReceived.WebMailRecdRead) {
-				emailMessage.SentOrReceived=EmailSentOrReceived.WebMailReceived;
-				EmailMessages.Update(emailMessage);//Mark read.
-			}
-			else if(emailMessage.SentOrReceived==EmailSentOrReceived.ReadDirect) {
-				emailMessage.SentOrReceived=EmailSentOrReceived.ReceivedDirect;
-				EmailMessages.Update(emailMessage);//Mark read.
-			}
 		}
 
 		private void butChangePat_Click(object sender,EventArgs e) {
@@ -186,7 +156,7 @@ namespace OpenDental {
 			Cursor=Cursors.WaitCursor;
 			for(int i=0;i<gridEmailMessages.SelectedIndices.Length;i++) {
 				EmailMessage emailMessage=ListEmailMessages[gridEmailMessages.SelectedIndices[i]];
-				MarkUnread(emailMessage);
+				EhrEmail.MarkMessageUnread(emailMessage);
 			}
 			FillGridEmailMessages();
 			Cursor=Cursors.Default;
@@ -196,7 +166,7 @@ namespace OpenDental {
 			Cursor=Cursors.WaitCursor;
 			for(int i=0;i<gridEmailMessages.SelectedIndices.Length;i++) {
 				EmailMessage emailMessage=ListEmailMessages[gridEmailMessages.SelectedIndices[i]];
-				MarkRead(emailMessage);
+				EhrEmail.MarkMessageRead(emailMessage);
 			}
 			FillGridEmailMessages();
 			Cursor=Cursors.Default;

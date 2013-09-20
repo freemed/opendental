@@ -62,15 +62,20 @@ namespace OpenDentBusiness {
 
 		/// <summary>Used for sending encrypted Message Disposition Notification (MDN) ack messages for Direct.
 		/// An ack must be sent when a message is received, and other acks must be sent when other events occur (for example, when the user reads a decrypted message we must send an ack with notification type of Displayed).</summary>
-		public static void SendAckDirect(Health.Direct.Agent.IncomingMessage inMsg,EmailAddress emailAddressFrom,long patNum,Health.Direct.Common.Mail.Notifications.MDNStandard.NotificationType notificationType) {
+		public static void SendAckDirect(Health.Direct.Agent.IncomingMessage inMsg,EmailAddress emailAddressFrom,long patNum,EmailSentOrReceived emailSentOrReceivedAck) {
 			//The CreateAcks() function handles the case where the incoming message is an MDN, in which case we do not reply with anything.
 			//The CreateAcks() function also takes care of figuring out where to send the MDN, because the rules are complicated.
 			//According to http://wiki.directproject.org/Applicability+Statement+for+Secure+Health+Transport+Working+Version#x3.0%20Message%20Disposition%20Notification,
 			//The MDN must be sent to the first available of: Disposition-Notification-To header, MAIL FROM SMTP command, Sender header, From header.
+			Health.Direct.Common.Mail.Notifications.MDNStandard.NotificationType notificationType=Health.Direct.Common.Mail.Notifications.MDNStandard.NotificationType.Failed;
+			if(emailSentOrReceivedAck==EmailSentOrReceived.AckDirectProcessed) {
+				notificationType=Health.Direct.Common.Mail.Notifications.MDNStandard.NotificationType.Processed;
+			}
 			IEnumerable<Health.Direct.Common.Mail.Notifications.NotificationMessage> notificationMsgs=inMsg.CreateAcks("OpenDental","",notificationType);
 			if(notificationMsgs==null) {
 				return;
 			}
+			Health.Direct.Agent.DirectAgent directAgent=GetDirectAgentForEmailAddress(emailAddressFrom.EmailUsername);//Cannot be emailAddressFrom.SenderAddress, or else will not find the right encryption certificate.
 			foreach(Health.Direct.Common.Mail.Notifications.NotificationMessage notificationMsg in notificationMsgs) {
 				try {
 					//According to RFC3798, section 3 - Format of a Message Disposition Notification http://tools.ietf.org/html/rfc3798#page-3
@@ -84,10 +89,8 @@ namespace OpenDentBusiness {
 					//     The decision of whether or not to return the message or part of the message is up to the MUA generating the MDN.  However, in the case of 
 					//     encrypted messages requesting MDNs, encrypted message text MUST be returned, if it is returned at all, only in its original encrypted form.
 					Health.Direct.Agent.OutgoingMessage outMsgDirect=new Health.Direct.Agent.OutgoingMessage(notificationMsg);
-					Health.Direct.Agent.DirectAgent directAgent=GetDirectAgentForEmailAddress(emailAddressFrom.EmailUsername);//Cannot be emailAddressFrom.SenderAddress, or else will not find the right encryption certificate.
 					outMsgDirect=directAgent.ProcessOutgoing(outMsgDirect);
-					//Used EmailSentOrReceived.AckDirect, not EmailSentOrReceived.SentDirect, because we do not want these to be counted in our reports as messages sent using Direct.
-					SendEmailDirect(outMsgDirect,emailAddressFrom,patNum,EmailSentOrReceived.AckDirect);
+					SendEmailDirect(outMsgDirect,emailAddressFrom,patNum,emailSentOrReceivedAck);
 				}
 				catch {
 					//Nothing to do. Just an MDN. The sender can resend the email to us if they believe that we did not receive the message (due to lack of MDN response).
@@ -134,42 +137,15 @@ namespace OpenDentBusiness {
 				client.Connect(emailAddressInbox.Pop3ServerIncoming,emailAddressInbox.ServerPortIncoming,emailAddressInbox.UseSSL);
 				client.Authenticate(emailAddressInbox.EmailUsername,emailAddressInbox.EmailPassword,OpenPop.Pop3.AuthenticationMethod.UsernameAndPassword);
 				int messageCount=client.GetMessageCount();//Get the number of messages in the inbox.
-				List<OpenPop.Mime.Message> openPopMsgsAll=new List<OpenPop.Mime.Message>(messageCount);
 				int msgDownloadedCount=0;
 				for(int i=messageCount;i>0;i--) {//Message numbers are 1-based. Most servers give the newest message the highest number.
 					try {
-						openPopMsgsAll.Add(client.GetMessage(i));
-						OpenPop.Mime.Message openPopMsg=openPopMsgsAll[openPopMsgsAll.Count-1];
-						EmailMessage emailMessage=new EmailMessage();
-						emailMessage.IsNew=true;
-						emailMessage.SentOrReceived=EmailSentOrReceived.Received;
-						emailMessage.MsgDateTime=DateTime.Now;//Could pull from email header, but it is better to record the time that OD saved into db, since no user would view the email before it was in db.
-						emailMessage.PatNum=0;//Is automatically set for some Direct messages when decypted (if a patient match can be found).
-						emailMessage.ToAddress=emailAddressInbox.EmailUsername;
-						emailMessage.Subject=openPopMsg.Headers.Subject;
-						emailMessage.FromAddress=openPopMsg.Headers.From.Address;
-						System.Net.Mime.ContentType contentType=openPopMsg.MessagePart.ContentType;
-						if(contentType.MediaType.ToLower().Contains("application/pkcs7-mime")) {//The email MIME/body is encrypted (known as S/MIME). Treated as a Direct message.
-							emailMessage.SentOrReceived=EmailSentOrReceived.ReceivedEncrypted;
-							//The entire contents of the email are saved in the emailMessage.BodyText field, so that if decryption fails, the email will still be saved to the db for decryption later if possible.
-							emailMessage.BodyText=openPopMsg.MessagePart.BodyEncoding.GetString(openPopMsg.RawMessage);
-							try {
-								DecryptDirect(emailMessage,emailAddressInbox);//If decryption succeeds, the BodyText will be set to the body text instead of the entire raw email contents and the email will be saved to db.
-							}
-							catch {
-								//The encrypted message is saved to the db, so that the user can try to decrypt later in FormEmailMessageEdit.
-								EmailMessages.Insert(emailMessage);
-							}
-						}
-						else {//Unencrypted email.
-							if(openPopMsg.MessagePart.Body!=null) {//Is null when a Direct Ack message (MDN) comes in.
-								emailMessage.BodyText=openPopMsg.MessagePart.GetBodyAsText();
-							}
-							EmailMessages.Insert(emailMessage);
-						}
+						OpenPop.Mime.Message openPopMsg=client.GetMessage(i);
+						string strRawEmail=openPopMsg.MessagePart.BodyEncoding.GetString(openPopMsg.RawMessage);
+						EmailMessage emailMessage=ProcessRawEmailMessage(strRawEmail,0,emailAddressInbox);
 						retVal.Add(emailMessage);
-						client.DeleteMessage(i);//Only delete from server after successfully downloaded and stored into db.
 						msgDownloadedCount++;
+						client.DeleteMessage(i);//Only delete from server after successfully downloaded and stored into db.
 					}
 					catch {
 						//If one particular email fails to download, then skip it for now and move on to the next email.
@@ -195,49 +171,85 @@ namespace OpenDentBusiness {
 			return directAgent;
 		}
 
-		///<summary>Only for email messages with SentOrReceived set to EncryptedDirect.
-		///If decryption fails, then throws an exception and does not change email.
-		///If decryption succeeds, then emailMessage.SentOrReceived is set to ReceivedDirect and the BodyText of the email is changed from the entire encrypted email contents to the decrypted body text.
-		///Automatically sends a Direct "processed" acknowledgement (MDN) to the sender if the message is decrypted.</summary>
-		public static void DecryptDirect(EmailMessage emailMessage,EmailAddress emailAddressFrom) {
-			Health.Direct.Agent.DirectAgent directAgent=GetDirectAgentForEmailAddress(emailMessage.ToAddress);
+		///<summary>Converts any raw email message (encrypted or not) into an EmailMessage object, and saves any email attachments to the emailattach table in the db.
+		///The emailMessageNum will be used to set EmailMessage.EmailMessageNum.  If emailMessageNum is 0, then the EmailMessage will be inserted into the db, otherwise the EmailMessage will be updated in the db.
+		///If the raw message is encrypted, then will attempt to decrypt.  If decryption fails, then the EmailMessage SentOrReceived will be ReceivedEncrypted and the EmailMessage body will be set to the entire contents of the raw email.  If decryption succeeds, then EmailMessage SentOrReceived will be set to ReceivedDirect, the EmailMessage body will contain the decrypted body text, and a Direct Ack "processed" message will be sent back to the sender using the email settings from emailAddressReceiver.</summary>
+		public static EmailMessage ProcessRawEmailMessage(string strRawEmail,long emailMessageNum,EmailAddress emailAddressReceiver) {
 			Health.Direct.Agent.IncomingMessage inMsg=null;
 			try {
-				inMsg=new Health.Direct.Agent.IncomingMessage(emailMessage.BodyText);//This is actually the entire contents of the email message for this specific case. Normally it would just be the body text.
+				inMsg=new Health.Direct.Agent.IncomingMessage(strRawEmail);//Used to parse all email (encrypted or not).
 			}
 			catch(Exception ex) {
-				throw new ApplicationException("Failed to parse Direct email message.\r\n"+ex.Message);
+				throw new ApplicationException("Failed to parse raw email message.\r\n"+ex.Message);
 			}
-			try {				
-				inMsg=directAgent.ProcessIncoming(inMsg);
+			bool isEncrypted=false;
+			if(inMsg.Message.ContentType.ToLower().Contains("application/pkcs7-mime")) {//The email MIME/body is encrypted (known as S/MIME). Treated as a Direct message.
+				isEncrypted=true;
 			}
-			catch(Exception ex) {
-				throw new ApplicationException("Email message decryption failed.\r\n"+ex.Message);
+			EmailMessage emailMessage=new EmailMessage();
+			emailMessage.EmailMessageNum=emailMessageNum;
+			emailMessage.MsgDateTime=DateTime.Now;//Could pull from email header, but it is better to record the time that OD saved into db, since no user would view the email before it was in db.
+			emailMessage.PatNum=0;//Is automatically set for some Direct messages below.  Always 0 for unencrypted emails.
+			emailMessage.ToAddress=inMsg.Message.ToValue;
+			emailMessage.Subject=inMsg.Message.SubjectValue;
+			emailMessage.FromAddress=inMsg.Message.FromValue;
+			if(isEncrypted) {
+				emailMessage.SentOrReceived=EmailSentOrReceived.ReceivedEncrypted;
+				//The entire contents of the email are saved in the emailMessage.BodyText field, so that if decryption fails, the email will still be saved to the db for decryption later if possible.
+				emailMessage.BodyText=strRawEmail;
+				try {
+					Health.Direct.Agent.DirectAgent directAgent=GetDirectAgentForEmailAddress(inMsg.Message.ToValue);
+					//throw new ApplicationException("test decryption failure");
+					inMsg=directAgent.ProcessIncoming(inMsg);//Decrypts, valudates trust, etc.
+					emailMessage.SentOrReceived=EmailSentOrReceived.ReceivedDirect;
+					emailMessage.ToAddress=inMsg.Message.ToValue;//If the message was wrapped, then this value can change after decryption, so we have to set it again.
+					emailMessage.Subject=inMsg.Message.SubjectValue;//If the message was wrapped, then this value can change after decryption, so we have to set it again.
+					emailMessage.FromAddress=inMsg.Message.FromValue;//If the message was wrapped, then this value can change after decryption, so we have to set it again.
+				}
+				catch(Exception) {
+					if(emailMessageNum==0) {
+						emailMessage.IsNew=true;
+						EmailMessages.Insert(emailMessage);
+					}
+					else {
+						EmailMessages.Update(emailMessage);
+					}
+					return emailMessage;//SentOrReceived will be ReceivedEncrypted, indicating to the calling code that decryption failed.
+				}
+				//emailMessage.PatNum=0;//TODO: Set automatically for some Direct messages.
 			}
-			emailMessage.SentOrReceived=EmailSentOrReceived.ReceivedDirect;
+			else {//Unencrypted email.
+				emailMessage.SentOrReceived=EmailSentOrReceived.Received;
+			}
 			StringBuilder sbBodyText=new StringBuilder();
-			Health.Direct.Common.Mime.MimeEntity mimeEntity=inMsg.Message.ExtractMimeEntity();
 			List<Health.Direct.Common.Mime.MimeEntity> listAttachments=new List<Health.Direct.Common.Mime.MimeEntity>();
-			foreach(Health.Direct.Common.Mime.MimeEntity mimePart in mimeEntity.GetParts()) {
-				if(mimePart.ContentDisposition!=null && mimePart.ContentDisposition.ToLower().Contains("attachment")) {
-					listAttachments.Add(mimePart);//File is created below, after the email message is inserted, because we need the primary key.
-					continue;
+			if(inMsg.Message.IsMultiPart) {
+				Health.Direct.Common.Mime.MimeEntity mimeEntity=inMsg.Message.ExtractMimeEntity();
+				foreach(Health.Direct.Common.Mime.MimeEntity mimePart in mimeEntity.GetParts()) {
+					if(mimePart.ContentDisposition!=null && mimePart.ContentDisposition.ToLower().Contains("attachment")) {
+						listAttachments.Add(mimePart);//File is created below, after the EmailMessage is inserted, because we need the primary key.
+						continue;
+					}
+					if(sbBodyText.Length>0) {
+						//Separate distinct mime text parts with some space.  Normally there should only be one mime part which is text and the others would be attachments.  This is here just in case.
+						sbBodyText.Append("\r\n\r\n");
+					}
+					sbBodyText.Append(mimePart.Body.Text);
 				}
-				if(sbBodyText.Length>0) {
-					sbBodyText.Append("\r\n\r\n");
-				}
-				sbBodyText.Append(mimePart.Body.Text);
+				emailMessage.BodyText=sbBodyText.ToString();
 			}
-			emailMessage.BodyText=sbBodyText.ToString();
-			//emailMessage.PatNum=0;//TODO: Set for some Direct messages.
-			//We could pull the email date and time from the server instead. The format is more difficult than normal, and might be different depending on who sent the email.
-			//emailMessage.MsgDateTime=DateTime.ParseExact(inMsg.Message.DateValue,"ddd, d MMM yyyy HH:mm:ss",CultureInfo.InvariantCulture);
-			if(emailMessage.IsNew && emailMessage.EmailMessageNum==0) {
+			else {//single body part
+				emailMessage.BodyText=inMsg.Message.Body.Text;
+			}
+			if(emailMessageNum==0) {
+				emailMessage.IsNew=true;
 				EmailMessages.Insert(emailMessage);
 			}
 			else {
-				EmailMessages.Update(emailMessage);
+				EmailMessages.Update(emailMessage);//Deletes all existing attachments.
 			}
+			//If the email is new, then attachments list is empty, and it is also empty if the email message was existing, becauese of the update call above.
+			emailMessage.Attachments=new List<EmailAttach>();//Create a new list, in case the email is new, because emailMessage.Attachments would be null otherwise.
 			for(int i=0;i<listAttachments.Count;i++) {
 				string strAttachText=listAttachments[i].Body.Text;
 				try {
@@ -247,11 +259,14 @@ namespace OpenDentBusiness {
 				}
 				catch {
 				}
-				CreateAttachFromText(strAttachText,listAttachments[i].ParsedContentType.Name,emailMessage.EmailMessageNum);
+				emailMessage.Attachments.Add(InsertAttachIncoming(strAttachText,listAttachments[i].ParsedContentType.Name,emailMessage.EmailMessageNum));
 			}
-			//Send a Message Disposition Notification (MDN) message to the sender, as required by the Direct messaging specifications.
-			//The MDN will be attached to the same patient as the incoming message.
-			SendAckDirect(inMsg,emailAddressFrom,emailMessage.PatNum,Health.Direct.Common.Mail.Notifications.MDNStandard.NotificationType.Processed);
+			if(isEncrypted) {
+				//Send a Message Disposition Notification (MDN) message to the sender, as required by the Direct messaging specifications.
+				//The MDN will be attached to the same patient as the incoming message.
+				SendAckDirect(inMsg,emailAddressReceiver,emailMessage.PatNum,EmailSentOrReceived.AckDirectProcessed);
+			}
+			return emailMessage;
 		}
 
 		public static string GetEmailAttachPath() {
@@ -272,7 +287,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>The strAttachFileName variable must include the extension.</summary>
-		public static EmailAttach CreateAttachFromText(string strText,string strAttachFileName,long emailMessageNum) {
+		public static EmailAttach InsertAttachIncoming(string strText,string strAttachFileName,long emailMessageNum) {
 			string strAttachPath=GetEmailAttachPath();
 			string strAttachFileNameAdjusted=strAttachFileName;
 			if(String.IsNullOrEmpty(strAttachFileName)) {
@@ -292,7 +307,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Converts the strBodyContents into base64, then creates a new mime attachment using the base64 data.</summary>
-		public static Health.Direct.Common.Mime.MimeEntity CreateTextAttachment(string strBodyContents,string strFileName) {
+		public static Health.Direct.Common.Mime.MimeEntity GetAttachOutgoing(string strBodyContents,string strFileName) {
 			Health.Direct.Common.Mime.MimeEntity mimeEntity=new Health.Direct.Common.Mime.MimeEntity(Convert.ToBase64String(Encoding.UTF8.GetBytes(strBodyContents)));
 			mimeEntity.ContentDisposition="attachment;";
 			mimeEntity.ContentTransferEncoding="base64;";
@@ -324,9 +339,39 @@ namespace OpenDentBusiness {
 			return retVal;
 		}
 
+		public static void MarkMessageRead(EmailMessage emailMessage) {
+			if(emailMessage.SentOrReceived==EmailSentOrReceived.Received) {
+				emailMessage.SentOrReceived=EmailSentOrReceived.Read;
+				EmailMessages.Update(emailMessage);//Mark read in db.
+			}
+			else if(emailMessage.SentOrReceived==EmailSentOrReceived.WebMailReceived) {
+				emailMessage.SentOrReceived=EmailSentOrReceived.WebMailRecdRead;
+				EmailMessages.Update(emailMessage);//Mark read in db.
+			}
+			else if(emailMessage.SentOrReceived==EmailSentOrReceived.ReceivedDirect) {
+				emailMessage.SentOrReceived=EmailSentOrReceived.ReadDirect;
+				EmailMessages.Update(emailMessage);//Mark read in db.
+			}
+		}
+
+		public static void MarkMessageUnread(EmailMessage emailMessage) {
+			if(emailMessage.SentOrReceived==EmailSentOrReceived.Read) {
+				emailMessage.SentOrReceived=EmailSentOrReceived.Received;
+				EmailMessages.Update(emailMessage);//Mark unread in db.
+			}
+			else if(emailMessage.SentOrReceived==EmailSentOrReceived.WebMailRecdRead) {
+				emailMessage.SentOrReceived=EmailSentOrReceived.WebMailReceived;
+				EmailMessages.Update(emailMessage);//Mark unread in db.
+			}
+			else if(emailMessage.SentOrReceived==EmailSentOrReceived.ReadDirect) {
+				emailMessage.SentOrReceived=EmailSentOrReceived.ReceivedDirect;
+				EmailMessages.Update(emailMessage);//Mark unread in db.
+			}
+		}
+
 		#endregion Helpers
 
-		#region Test
+		#region Testing
 
 		///<summary>This method is only for ehr testing purposes, and it always uses the hidden pref EHREmailToAddress to send to.  For privacy reasons, this cannot be used with production patient info.  AttachName should include extension.</summary>
 		public static void SendTest(string subjectAndBody,string attachName,string attachContents) {
@@ -347,9 +392,9 @@ namespace OpenDentBusiness {
 			message.Body=subjectAndBody;
 			message.IsBodyHtml=false;
 			List<Health.Direct.Common.Mime.MimeEntity> listAttachments=new List<Health.Direct.Common.Mime.MimeEntity>();
-			listAttachments.Add(CreateTextAttachment(attachContents1,attachName1));
+			listAttachments.Add(GetAttachOutgoing(attachContents1,attachName1));
 			if(attachContents2!="" && attachName2!="") {
-				listAttachments.Add(CreateTextAttachment(attachContents2,attachName2));
+				listAttachments.Add(GetAttachOutgoing(attachContents2,attachName2));
 			}
 			EhrEmail.SendEmailDirect(strTo,emailAddressFrom,subjectAndBody,0,listAttachments);
 		}
@@ -904,7 +949,7 @@ b21wb25lbnQ+DQogICA8L2NvbXBvbmVudD4NCjwvQ2xpbmljYWxEb2N1bWVudD4=
 ";
 		}
 
-		#endregion Test
+		#endregion Testing
 
 
 

@@ -20,9 +20,9 @@ namespace OpenDentBusiness{
 			return message;
 		}
 
-		public static List<EmailMessage> GetReceivedForAddress(string emailAddress) {
+		public static List<EmailMessage> GetInboxForAddress(string emailAddressInbox) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List <EmailMessage>>(MethodBase.GetCurrentMethod(),emailAddress);
+				return Meth.GetObject<List <EmailMessage>>(MethodBase.GetCurrentMethod(),emailAddressInbox);
 			}
 			string command="SELECT * FROM emailmessage "
 				+"WHERE SentOrReceived IN ("
@@ -33,7 +33,7 @@ namespace OpenDentBusiness{
 					+POut.Int((int)EmailSentOrReceived.ReadDirect)+","
 					+POut.Int((int)EmailSentOrReceived.WebMailRecdRead)+","
 					+POut.Int((int)EmailSentOrReceived.WebMailReceived)
-				+") AND ToAddress='"+POut.String(emailAddress)+"' "
+				+") AND ToAddress='"+POut.String(emailAddressInbox)+"' "
 				+"ORDER BY MsgDateTime";
 			return Crud.EmailMessageCrud.SelectMany(command);
 		}
