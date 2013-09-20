@@ -16,10 +16,10 @@ namespace OpenDentBusiness{
 		///<summary>Typical example is 8:00.  In California, any work after the first 8 hours is overtime.</summary>
 		[XmlIgnore]
 		public TimeSpan OverHoursPerDay;
-		///<summary>Typical example is 16:00 to indicate that all time worked after 4pm for specific employees is at rateB.</summary>
+		///<summary>Typical example is 16:00 to indicate that all time worked after 4pm for specific employees is at differential rate.</summary>
 		[XmlIgnore]
 		public TimeSpan AfterTimeOfDay;
-		///<summary>Typical example is 6:00 to indicate that all time worked before 6am for specific employees is at rateB.</summary>
+		///<summary>Typical example is 6:00 to indicate that all time worked before 6am for specific employees is at differential rate.</summary>
 		[XmlIgnore]
 		public TimeSpan BeforeTimeOfDay;
 

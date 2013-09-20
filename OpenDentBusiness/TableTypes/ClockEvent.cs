@@ -48,11 +48,11 @@ namespace OpenDentBusiness{
 		///<summary>This is a manual override for Rate2Auto.  Typically -1 hour (-01:00:00) to indicate no override.  When used as override, allowed values are zero or positive.  This is the portion of the hours worked which are at Rate2, so it's not in addition to the hours worked.  Also used to calculate the Rate2 OT.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TimeSpanNeg)]
 		[XmlIgnore]
-		public TimeSpan DiffHours;
+		public TimeSpan Rate2Hours;
 		///<summary>Automatically calculated rate2 pay.  Will be zero if none.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TimeSpanNeg)]
 		[XmlIgnore]
-		public TimeSpan DiffAuto;
+		public TimeSpan Rate2Auto;
 
 		///<summary>Used only for serialization purposes</summary>
 		[XmlElement("OTimeHours",typeof(long))]
@@ -99,24 +99,24 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used only for serialization purposes</summary>
-		[XmlElement("DiffHours",typeof(long))]
+		[XmlElement("Rate2Hours",typeof(long))]
 		public long DiffHoursXml {
 			get {
-				return DiffHours.Ticks;
+				return Rate2Hours.Ticks;
 			}
 			set {
-				DiffHours = TimeSpan.FromTicks(value);
+				Rate2Hours = TimeSpan.FromTicks(value);
 			}
 		}
 
 		///<summary>Used only for serialization purposes</summary>
-		[XmlElement("DiffAuto",typeof(long))]
+		[XmlElement("Rate2Auto",typeof(long))]
 		public long DiffAutoXml {
 			get {
-				return DiffAuto.Ticks;
+				return Rate2Auto.Ticks;
 			}
 			set {
-				DiffAuto = TimeSpan.FromTicks(value);
+				Rate2Auto = TimeSpan.FromTicks(value);
 			}
 		}
 
