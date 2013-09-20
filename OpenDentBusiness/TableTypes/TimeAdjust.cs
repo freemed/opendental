@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 
 namespace OpenDentBusiness{
 
-	///<summary>Used on employee timecards to make adjustments.</summary>
+	///<summary>Used on employee timecards to make adjustments.  Used to make the end-of-the week OT entries.  Can be used instead of a clock event by admin so that a clock event doesn't have to be created.</summary>
 	[Serializable]
 	public class TimeAdjust:TableBase{
 		///<summary>Primary key.</summary>
@@ -25,9 +25,9 @@ namespace OpenDentBusiness{
 		public TimeSpan OTimeHours;
 		///<summary>.</summary>
 		public string Note;
-		///<summary>Set to true if this adjustment was automatically made by the system.  When the calc weekly ot tool is run, these types of adjustments are fair game for deletion.  Other adjustments are preserved.</summary>
+		///<summary>Set to true if this adjustment was automatically made by the system.  When the calc weekly OT tool is run, these types of adjustments are fair game for deletion.  Other adjustments are preserved.</summary>
 		public bool IsAuto;
-		///<summary>Differential hours. Usually +.  Automatically combined with a - adj to RegHours.  Another option is clockevent.DiffHours.</summary>
+		///<summary>Hours worked at rate2. Usually +.  .  Another option is clockevent.Rate2Hours.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TimeSpanNeg)]
 		[XmlIgnore]
 		public TimeSpan DiffHours;

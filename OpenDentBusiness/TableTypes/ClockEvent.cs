@@ -45,11 +45,11 @@ namespace OpenDentBusiness{
 		public TimeSpan AdjustAuto;
 		///<summary>True if AdjustAuto is overridden by Adjust.</summary>
 		public bool AdjustIsOverridden;
-		///<summary>This is a manual override for DiffAuto.  Typically -1 hour (-01:00:00) to indicate no override.  When used as override, allowed values are zero or positive.  This is an alternative to using a TimeAdjust row.</summary>
+		///<summary>This is a manual override for Rate2Auto.  Typically -1 hour (-01:00:00) to indicate no override.  When used as override, allowed values are zero or positive.  This is the portion of the hours worked which are at Rate2, so it's not in addition to the hours worked.  Also used to calculate the Rate2 OT.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TimeSpanNeg)]
 		[XmlIgnore]
 		public TimeSpan DiffHours;
-		///<summary>Automatically calculated Differential pay.  Will be zero if none.</summary>
+		///<summary>Automatically calculated rate2 pay.  Will be zero if none.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TimeSpanNeg)]
 		[XmlIgnore]
 		public TimeSpan DiffAuto;

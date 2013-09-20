@@ -162,7 +162,7 @@ namespace OpenDentBusiness{
 		public long SuperFamily;
 		///<summary>Enum:YN</summary>
 		public YN TxtMsgOk;
-		///<summary>EHR smoking status as a SNOMED code.</summary>
+		///<summary>EHR smoking status as a SNOMED code.  See SmokingSnoMed enum in approx line 1275 of Enumerations.cs.</summary>
 		public string SmokingSnoMed;
 		///<summary>Country name.  Only used by HQ to add country names to statements.</summary>
 		public string Country;
