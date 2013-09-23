@@ -23,161 +23,296 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.radioIsAccepted = new System.Windows.Forms.RadioButton();
-			this.radioIsDenied = new System.Windows.Forms.RadioButton();
 			this.label5 = new System.Windows.Forms.Label();
 			this.textDescription = new System.Windows.Forms.TextBox();
-			this.textAmdIsScanned = new System.Windows.Forms.TextBox();
-			this.label1 = new System.Windows.Forms.Label();
+			this.labelScan = new System.Windows.Forms.Label();
 			this.comboSource = new System.Windows.Forms.ComboBox();
 			this.label7 = new System.Windows.Forms.Label();
-			this.butCancel = new System.Windows.Forms.Button();
-			this.butOK = new System.Windows.Forms.Button();
-			this.butView = new System.Windows.Forms.Button();
-			this.butDelete = new System.Windows.Forms.Button();
+			this.textSourceName = new System.Windows.Forms.TextBox();
+			this.label2 = new System.Windows.Forms.Label();
+			this.label3 = new System.Windows.Forms.Label();
+			this.label4 = new System.Windows.Forms.Label();
+			this.label6 = new System.Windows.Forms.Label();
+			this.listAmdStatus = new System.Windows.Forms.ListBox();
+			this.label8 = new System.Windows.Forms.Label();
+			this.butNowReq = new OpenDental.UI.Button();
+			this.butNowAcc = new OpenDental.UI.Button();
+			this.butNowApp = new OpenDental.UI.Button();
+			this.butDelete = new OpenDental.UI.Button();
+			this.butScan = new OpenDental.UI.Button();
+			this.butCancel = new OpenDental.UI.Button();
+			this.butOK = new OpenDental.UI.Button();
+			this.textDateAcc = new System.Windows.Forms.TextBox();
+			this.textDateReq = new System.Windows.Forms.TextBox();
+			this.textDateApp = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
-			// 
-			// radioIsAccepted
-			// 
-			this.radioIsAccepted.Checked = true;
-			this.radioIsAccepted.Location = new System.Drawing.Point(105, 12);
-			this.radioIsAccepted.Name = "radioIsAccepted";
-			this.radioIsAccepted.Size = new System.Drawing.Size(71, 17);
-			this.radioIsAccepted.TabIndex = 5;
-			this.radioIsAccepted.TabStop = true;
-			this.radioIsAccepted.Text = "Accepted";
-			this.radioIsAccepted.UseVisualStyleBackColor = true;
-			// 
-			// radioIsDenied
-			// 
-			this.radioIsDenied.Location = new System.Drawing.Point(182, 12);
-			this.radioIsDenied.Name = "radioIsDenied";
-			this.radioIsDenied.Size = new System.Drawing.Size(59, 17);
-			this.radioIsDenied.TabIndex = 6;
-			this.radioIsDenied.Text = "Denied";
-			this.radioIsDenied.UseVisualStyleBackColor = true;
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(29, 70);
+			this.label5.Location = new System.Drawing.Point(68, 198);
 			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(70, 16);
+			this.label5.Size = new System.Drawing.Size(60, 39);
 			this.label5.TabIndex = 16;
-			this.label5.Text = "Description";
-			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.label5.Text = "Description/Location";
+			this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// textDescription
 			// 
-			this.textDescription.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.textDescription.Location = new System.Drawing.Point(105, 70);
+			this.textDescription.Location = new System.Drawing.Point(130, 199);
 			this.textDescription.Multiline = true;
 			this.textDescription.Name = "textDescription";
-			this.textDescription.Size = new System.Drawing.Size(242, 101);
+			this.textDescription.Size = new System.Drawing.Size(435, 54);
 			this.textDescription.TabIndex = 17;
 			// 
-			// textAmdIsScanned
+			// labelScan
 			// 
-			this.textAmdIsScanned.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.textAmdIsScanned.Location = new System.Drawing.Point(27, 151);
-			this.textAmdIsScanned.MaxLength = 25;
-			this.textAmdIsScanned.Name = "textAmdIsScanned";
-			this.textAmdIsScanned.ReadOnly = true;
-			this.textAmdIsScanned.Size = new System.Drawing.Size(72, 20);
-			this.textAmdIsScanned.TabIndex = 112;
-			// 
-			// label1
-			// 
-			this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.label1.Location = new System.Drawing.Point(-1, 132);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(100, 16);
-			this.label1.TabIndex = 111;
-			this.label1.Text = "Scanned";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.labelScan.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.labelScan.Location = new System.Drawing.Point(123, 279);
+			this.labelScan.Name = "labelScan";
+			this.labelScan.Size = new System.Drawing.Size(176, 16);
+			this.labelScan.TabIndex = 111;
+			this.labelScan.Text = "An amendment has been scanned";
+			this.labelScan.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.labelScan.Visible = false;
 			// 
 			// comboSource
 			// 
 			this.comboSource.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboSource.FormattingEnabled = true;
-			this.comboSource.Location = new System.Drawing.Point(105, 43);
+			this.comboSource.Location = new System.Drawing.Point(130, 145);
 			this.comboSource.Name = "comboSource";
-			this.comboSource.Size = new System.Drawing.Size(178, 21);
+			this.comboSource.Size = new System.Drawing.Size(121, 21);
 			this.comboSource.TabIndex = 114;
 			// 
 			// label7
 			// 
-			this.label7.Location = new System.Drawing.Point(13, 47);
+			this.label7.Location = new System.Drawing.Point(42, 146);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(86, 17);
 			this.label7.TabIndex = 113;
 			this.label7.Text = "Source";
 			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// textSourceName
+			// 
+			this.textSourceName.Location = new System.Drawing.Point(130, 172);
+			this.textSourceName.Multiline = true;
+			this.textSourceName.Name = "textSourceName";
+			this.textSourceName.Size = new System.Drawing.Size(435, 21);
+			this.textSourceName.TabIndex = 119;
+			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(42, 171);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(87, 21);
+			this.label2.TabIndex = 120;
+			this.label2.Text = "Source Name";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(42, 17);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(86, 17);
+			this.label3.TabIndex = 129;
+			this.label3.Text = "Date Requested";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(7, 44);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(121, 17);
+			this.label4.TabIndex = 130;
+			this.label4.Text = "Date Accepted/Denied";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label6
+			// 
+			this.label6.Location = new System.Drawing.Point(7, 71);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(121, 17);
+			this.label6.TabIndex = 131;
+			this.label6.Text = "Date Appended";
+			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// listAmdStatus
+			// 
+			this.listAmdStatus.FormattingEnabled = true;
+			this.listAmdStatus.Location = new System.Drawing.Point(130, 98);
+			this.listAmdStatus.Name = "listAmdStatus";
+			this.listAmdStatus.Size = new System.Drawing.Size(120, 43);
+			this.listAmdStatus.TabIndex = 138;
+			// 
+			// label8
+			// 
+			this.label8.Location = new System.Drawing.Point(43, 98);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(86, 17);
+			this.label8.TabIndex = 139;
+			this.label8.Text = "Status";
+			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// butNowReq
+			// 
+			this.butNowReq.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butNowReq.Autosize = true;
+			this.butNowReq.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butNowReq.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butNowReq.CornerRadius = 4F;
+			this.butNowReq.Location = new System.Drawing.Point(304, 13);
+			this.butNowReq.Name = "butNowReq";
+			this.butNowReq.Size = new System.Drawing.Size(75, 24);
+			this.butNowReq.TabIndex = 134;
+			this.butNowReq.Text = "Now";
+			this.butNowReq.Click += new System.EventHandler(this.butNowReq_Click);
+			// 
+			// butNowAcc
+			// 
+			this.butNowAcc.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butNowAcc.Autosize = true;
+			this.butNowAcc.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butNowAcc.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butNowAcc.CornerRadius = 4F;
+			this.butNowAcc.Location = new System.Drawing.Point(304, 40);
+			this.butNowAcc.Name = "butNowAcc";
+			this.butNowAcc.Size = new System.Drawing.Size(75, 24);
+			this.butNowAcc.TabIndex = 133;
+			this.butNowAcc.Text = "Now";
+			this.butNowAcc.Click += new System.EventHandler(this.butNowAcc_Click);
+			// 
+			// butNowApp
+			// 
+			this.butNowApp.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butNowApp.Autosize = true;
+			this.butNowApp.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butNowApp.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butNowApp.CornerRadius = 4F;
+			this.butNowApp.Location = new System.Drawing.Point(304, 67);
+			this.butNowApp.Name = "butNowApp";
+			this.butNowApp.Size = new System.Drawing.Size(75, 24);
+			this.butNowApp.TabIndex = 132;
+			this.butNowApp.Text = "Now";
+			this.butNowApp.Click += new System.EventHandler(this.butNowApp_Click);
+			// 
+			// butDelete
+			// 
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butDelete.Autosize = true;
+			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDelete.CornerRadius = 4F;
+			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDelete.Location = new System.Drawing.Point(17, 275);
+			this.butDelete.Name = "butDelete";
+			this.butDelete.Size = new System.Drawing.Size(75, 24);
+			this.butDelete.TabIndex = 124;
+			this.butDelete.Text = "Delete";
+			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
+			// 
+			// butScan
+			// 
+			this.butScan.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butScan.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butScan.Autosize = true;
+			this.butScan.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butScan.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butScan.CornerRadius = 4F;
+			this.butScan.Location = new System.Drawing.Point(301, 275);
+			this.butScan.Name = "butScan";
+			this.butScan.Size = new System.Drawing.Size(75, 24);
+			this.butScan.TabIndex = 123;
+			this.butScan.Text = "Scan";
+			this.butScan.Click += new System.EventHandler(this.butScan_Click);
+			// 
 			// butCancel
 			// 
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Location = new System.Drawing.Point(324, 192);
+			this.butCancel.Autosize = true;
+			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius = 4F;
+			this.butCancel.Location = new System.Drawing.Point(517, 275);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75, 23);
-			this.butCancel.TabIndex = 115;
+			this.butCancel.Size = new System.Drawing.Size(75, 24);
+			this.butCancel.TabIndex = 122;
 			this.butCancel.Text = "Cancel";
-			this.butCancel.UseVisualStyleBackColor = true;
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// butOK
 			// 
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Location = new System.Drawing.Point(243, 192);
+			this.butOK.Autosize = true;
+			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.CornerRadius = 4F;
+			this.butOK.Location = new System.Drawing.Point(436, 275);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75, 23);
-			this.butOK.TabIndex = 116;
+			this.butOK.Size = new System.Drawing.Size(75, 24);
+			this.butOK.TabIndex = 121;
 			this.butOK.Text = "OK";
-			this.butOK.UseVisualStyleBackColor = true;
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
-			// butView
+			// textDateAcc
 			// 
-			this.butView.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butView.Location = new System.Drawing.Point(105, 192);
-			this.butView.Name = "butView";
-			this.butView.Size = new System.Drawing.Size(75, 23);
-			this.butView.TabIndex = 117;
-			this.butView.Text = "View";
-			this.butView.UseVisualStyleBackColor = true;
-			this.butView.Click += new System.EventHandler(this.butView_Click);
+			this.textDateAcc.Location = new System.Drawing.Point(130, 42);
+			this.textDateAcc.Multiline = true;
+			this.textDateAcc.Name = "textDateAcc";
+			this.textDateAcc.Size = new System.Drawing.Size(168, 21);
+			this.textDateAcc.TabIndex = 140;
 			// 
-			// butDelete
+			// textDateReq
 			// 
-			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butDelete.Location = new System.Drawing.Point(12, 192);
-			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(75, 23);
-			this.butDelete.TabIndex = 118;
-			this.butDelete.Text = "Delete";
-			this.butDelete.UseVisualStyleBackColor = true;
-			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
+			this.textDateReq.Location = new System.Drawing.Point(130, 15);
+			this.textDateReq.Multiline = true;
+			this.textDateReq.Name = "textDateReq";
+			this.textDateReq.Size = new System.Drawing.Size(168, 21);
+			this.textDateReq.TabIndex = 141;
+			// 
+			// textDateApp
+			// 
+			this.textDateApp.Location = new System.Drawing.Point(130, 69);
+			this.textDateApp.Multiline = true;
+			this.textDateApp.Name = "textDateApp";
+			this.textDateApp.Size = new System.Drawing.Size(168, 21);
+			this.textDateApp.TabIndex = 142;
 			// 
 			// FormEhrAmendmentEdit
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(411, 227);
+			this.ClientSize = new System.Drawing.Size(604, 310);
+			this.Controls.Add(this.textDateApp);
+			this.Controls.Add(this.textDateReq);
+			this.Controls.Add(this.textDateAcc);
+			this.Controls.Add(this.label8);
+			this.Controls.Add(this.listAmdStatus);
+			this.Controls.Add(this.butNowReq);
+			this.Controls.Add(this.butNowAcc);
+			this.Controls.Add(this.butNowApp);
+			this.Controls.Add(this.label6);
+			this.Controls.Add(this.label4);
+			this.Controls.Add(this.label3);
 			this.Controls.Add(this.butDelete);
-			this.Controls.Add(this.butView);
-			this.Controls.Add(this.butOK);
+			this.Controls.Add(this.butScan);
 			this.Controls.Add(this.butCancel);
+			this.Controls.Add(this.butOK);
+			this.Controls.Add(this.label2);
+			this.Controls.Add(this.textSourceName);
 			this.Controls.Add(this.comboSource);
 			this.Controls.Add(this.label7);
-			this.Controls.Add(this.textAmdIsScanned);
-			this.Controls.Add(this.label1);
+			this.Controls.Add(this.labelScan);
 			this.Controls.Add(this.textDescription);
 			this.Controls.Add(this.label5);
-			this.Controls.Add(this.radioIsDenied);
-			this.Controls.Add(this.radioIsAccepted);
 			this.Name = "FormEhrAmendmentEdit";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Edit Amendment";
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormEhrAmendmentEdit_Closing);
 			this.Load += new System.EventHandler(this.FormEhrAmendmentEdit_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
@@ -186,17 +321,27 @@
 
 		#endregion
 
-		private System.Windows.Forms.RadioButton radioIsAccepted;
-		private System.Windows.Forms.RadioButton radioIsDenied;
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.TextBox textDescription;
-		private System.Windows.Forms.TextBox textAmdIsScanned;
-		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Label labelScan;
 		private System.Windows.Forms.ComboBox comboSource;
 		private System.Windows.Forms.Label label7;
-		private System.Windows.Forms.Button butCancel;
-		private System.Windows.Forms.Button butOK;
-		private System.Windows.Forms.Button butView;
-		private System.Windows.Forms.Button butDelete;
+		private System.Windows.Forms.TextBox textSourceName;
+		private System.Windows.Forms.Label label2;
+		private UI.Button butOK;
+		private UI.Button butCancel;
+		private UI.Button butScan;
+		private UI.Button butDelete;
+		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.Label label4;
+		private System.Windows.Forms.Label label6;
+		private UI.Button butNowApp;
+		private UI.Button butNowAcc;
+		private UI.Button butNowReq;
+		private System.Windows.Forms.ListBox listAmdStatus;
+		private System.Windows.Forms.Label label8;
+		private System.Windows.Forms.TextBox textDateAcc;
+		private System.Windows.Forms.TextBox textDateReq;
+		private System.Windows.Forms.TextBox textDateApp;
 	}
 }

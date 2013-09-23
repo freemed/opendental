@@ -13,7 +13,7 @@ using System.Diagnostics;
 
 namespace OpenDentBusiness {
 	/// <summary></summary>
-	public class ImageStore  {
+	public class ImageStore {
 		///<summary>Remembers the computerpref.AtoZpath.  Set to empty string on startup.  If set to something else, this path will override all other paths.</summary>
 		public static string LocalAtoZpath=null;
 
@@ -26,7 +26,7 @@ namespace OpenDentBusiness {
 				LocalAtoZpath=ComputerPrefs.LocalComputer.AtoZpath;
 			}
 			string replicationAtoZ=ReplicationServers.GetAtoZpath();
-			if(replicationAtoZ!=""){
+			if(replicationAtoZ!="") {
 				return replicationAtoZ;
 			}
 			if(LocalAtoZpath!="") {
@@ -99,8 +99,17 @@ namespace OpenDentBusiness {
 			return retVal;
 		}
 
+		///<summary>Will create folder if needed.  Will validate that folder exists.</summary>
+		public static string GetAmdFolder() {
+			string retVal=ODFileUtils.CombinePaths(GetPreferredAtoZpath(),"Amendments");
+			if(!Directory.Exists(retVal)) {
+				Directory.CreateDirectory(retVal);
+			}
+			return retVal;
+		}
+
 		///<summary>When the Image module is opened, this loads newly added files.</summary>
-		public static void AddMissingFilesToDatabase(Patient pat){
+		public static void AddMissingFilesToDatabase(Patient pat) {
 			string patFolder=GetPatientFolder(pat,GetPreferredAtoZpath());
 			DirectoryInfo di = new DirectoryInfo(patFolder);
 			FileInfo[] fiList = di.GetFiles();
@@ -109,7 +118,7 @@ namespace OpenDentBusiness {
 				fileList.Add(fiList[i].FullName);
 			}
 			int countAdded = Documents.InsertMissing(pat,fileList);
-		//should notify user
+			//should notify user
 			//if(countAdded > 0) {
 			//	Debug.WriteLine(countAdded.ToString() + " documents found and added to the first category.");
 			//}
@@ -128,8 +137,8 @@ namespace OpenDentBusiness {
 			byte[] filebytes = GetBytes(doc,patFolder);
 			int fileLength = filebytes.Length;
 			byte[] buffer = new byte[textbytes.Length + filebytes.Length];
-			Array.Copy(filebytes, 0, buffer, 0, fileLength);
-			Array.Copy(textbytes, 0, buffer, fileLength, textbytes.Length);
+			Array.Copy(filebytes,0,buffer,0,fileLength);
+			Array.Copy(textbytes,0,buffer,fileLength,textbytes.Length);
 			HashAlgorithm algorithm = MD5.Create();
 			byte[] hash = algorithm.ComputeHash(buffer);//always results in length of 16.
 			return Encoding.ASCII.GetString(hash);
@@ -152,7 +161,7 @@ namespace OpenDentBusiness {
 		public static Bitmap[] OpenImages(Document[] documents,string patFolder) {
 			Bitmap[] values = new Bitmap[documents.Length];
 			Collection<Bitmap> bitmaps = OpenImages(new Collection<Document>(documents),patFolder);
-			bitmaps.CopyTo(values, 0);
+			bitmaps.CopyTo(values,0);
 			return values;
 		}
 
@@ -212,17 +221,46 @@ namespace OpenDentBusiness {
 			return values;
 		}
 
+		public static Bitmap[] OpenImagesAmd(EhrAmendment amd) {
+			Bitmap[] values = new Bitmap[1];
+			if(PrefC.AtoZfolderUsed) {
+				string amdFolder=GetAmdFolder();
+				string srcFileName = ODFileUtils.CombinePaths(amdFolder,amd.FileName);
+				if(HasImageExtension(srcFileName)) {
+					if(File.Exists(srcFileName)) {
+						values[0]=new Bitmap(srcFileName);
+					}
+					else {
+						//throw new Exception();
+						values[0]= null;
+					}
+				}
+				else {
+					values[0]= null;
+				}
+			}
+			else {
+				if(HasImageExtension(amd.FileName)) {
+					values[0]= PIn.Bitmap(amd.RawBase64);
+				}
+				else {
+					values[0]= null;
+				}
+			}
+			return values;
+		}
+
 		///<summary>Takes in a mount object and finds all the images pertaining to the mount, then combines them together into one large, unscaled image and returns that image. For use in other modules.</summary>
 		public static Bitmap GetMountImage(Mount mount,string patFolder) {
 			//string patFolder=GetPatientFolder(pat);
-			List <MountItem> mountItems = MountItems.GetItemsForMount(mount.MountNum);
+			List<MountItem> mountItems = MountItems.GetItemsForMount(mount.MountNum);
 			Document[] documents = Documents.GetDocumentsForMountItems(mountItems);
 			Bitmap[] originalImages = OpenImages(documents,patFolder);
-			Bitmap mountImage = new Bitmap(mount.Width, mount.Height);
-			ImageHelper.RenderMountImage(mountImage, originalImages, mountItems, documents, -1);
+			Bitmap mountImage = new Bitmap(mount.Width,mount.Height);
+			ImageHelper.RenderMountImage(mountImage,originalImages,mountItems,documents,-1);
 			return mountImage;
 		}
-		
+
 		public static byte[] GetBytes(Document doc,string patFolder) {
 			/*if(ImageStoreIsDatabase) {not supported
 				byte[] buffer;
@@ -264,7 +302,7 @@ namespace OpenDentBusiness {
 			if(Path.GetExtension(pathImportFrom)=="") {//If the file has no extension
 				doc.FileName=".jpg";
 			}
-			else{
+			else {
 				doc.FileName = Path.GetExtension(pathImportFrom);
 			}
 			doc.DateCreated = File.GetLastWriteTime(pathImportFrom);
@@ -320,13 +358,13 @@ namespace OpenDentBusiness {
 			ImageCodecInfo[] encoders;
 			encoders = ImageCodecInfo.GetImageEncoders();
 			myImageCodecInfo = null;
-			for(int j = 0; j < encoders.Length; j++) {
+			for(int j = 0;j < encoders.Length;j++) {
 				if(encoders[j].MimeType == "image/jpeg") {
 					myImageCodecInfo = encoders[j];
 				}
 			}
 			EncoderParameters myEncoderParameters = new EncoderParameters(1);
-			EncoderParameter myEncoderParameter = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, qualityL);
+			EncoderParameter myEncoderParameter = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality,qualityL);
 			myEncoderParameters.Param[0] = myEncoderParameter;
 			//AutoCrop()?
 			try {
@@ -348,7 +386,7 @@ namespace OpenDentBusiness {
 			string patFolder=GetPatientFolder(pat,GetPreferredAtoZpath());
 			string pathSourceFile = ODFileUtils.CombinePaths(GetPreferredAtoZpath(),"Forms",form);
 			if(!File.Exists(pathSourceFile)) {
-				throw new Exception(Lans.g("ContrDocs", "Could not find file: ") + pathSourceFile);
+				throw new Exception(Lans.g("ContrDocs","Could not find file: ") + pathSourceFile);
 			}
 			Document doc = new Document();
 			doc.FileName = Path.GetExtension(pathSourceFile);
@@ -443,7 +481,7 @@ namespace OpenDentBusiness {
 			if(Path.GetExtension(pathImportFrom)=="") {//If the file has no extension
 				eob.FileName=".jpg";
 			}
-			else{
+			else {
 				eob.FileName=Path.GetExtension(pathImportFrom);
 			}
 			eob.DateTCreated=File.GetLastWriteTime(pathImportFrom);
@@ -461,6 +499,71 @@ namespace OpenDentBusiness {
 				throw;
 			}
 			return eob;
+		}
+
+		public static EhrAmendment ImportAmdAttach(Bitmap image,EhrAmendment amd) {
+			string amdFolder="";
+			if(PrefC.AtoZfolderUsed) {
+				amdFolder=GetAmdFolder();
+			}
+			amd.FileName=DateTime.Now.ToString("yyyyMMdd_HHmmss_")+amd.EhrAmendmentNum;
+			amd.FileName+=".jpg";
+			amd.DateTAppend=DateTime.Now;
+			EhrAmendments.Update(amd);
+			amd=EhrAmendments.GetOne(amd.EhrAmendmentNum);
+			long qualityL=(long)ComputerPrefs.LocalComputer.ScanDocQuality;
+			ImageCodecInfo myImageCodecInfo;
+			ImageCodecInfo[] encoders;
+			encoders = ImageCodecInfo.GetImageEncoders();
+			myImageCodecInfo = null;
+			for(int j = 0;j < encoders.Length;j++) {
+				if(encoders[j].MimeType == "image/jpeg") {
+					myImageCodecInfo = encoders[j];
+				}
+			}
+			EncoderParameters myEncoderParameters = new EncoderParameters(1);
+			EncoderParameter myEncoderParameter = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality,qualityL);
+			myEncoderParameters.Param[0] = myEncoderParameter;
+			try {
+				SaveAmdAttach(amd,image,myImageCodecInfo,myEncoderParameters,amdFolder);
+			}
+			catch {
+				//EhrAmendments.Delete(amd.EhrAmendmentNum);
+				throw;
+			}
+			if(!PrefC.AtoZfolderUsed) {
+				//EhrAmendments.Update(amd);
+				//no thumbnail
+			}
+			return amd;
+		}
+
+		public static EhrAmendment ImportAmdAttach(string pathImportFrom,EhrAmendment amd) {
+			string amdFolder="";
+			string amdFilename="";
+			if(PrefC.AtoZfolderUsed) {
+				amdFolder=GetAmdFolder();
+				amdFilename=amd.FileName;
+			}
+			amd.FileName=DateTime.Now.ToString("yyyyMMdd_HHmmss_")+amd.EhrAmendmentNum+Path.GetExtension(pathImportFrom);
+			if(Path.GetExtension(pathImportFrom)=="") {//If the file has no extension
+				amd.FileName+=".jpg";
+			}
+			//EhrAmendments.Update(amd);
+			//amd=EhrAmendments.GetOne(amd.EhrAmendmentNum);
+			try {
+				SaveAmdAttach(amd,pathImportFrom,amdFolder);
+			}
+			catch {
+				//EhrAmendments.Delete(amd.EhrAmendmentNum);
+				throw;
+			}
+			if(PrefC.AtoZfolderUsed) {
+				amd.DateTAppend=DateTime.Now;
+				EhrAmendments.Update(amd);
+				CleanAmdAttach(amdFilename);
+			}
+			return amd;
 		}
 
 		///<summary> Save a Document to another location on the disk (outside of Open Dental). </summary>
@@ -488,6 +591,23 @@ namespace OpenDentBusiness {
 			}
 			else {//image is in database
 				byte[] rawData=Convert.FromBase64String(eob.RawBase64);
+				Image image=null;
+				using(MemoryStream stream=new MemoryStream()) {
+					stream.Read(rawData,0,rawData.Length);
+					image=Image.FromStream(stream);
+				}
+				image.Save(saveToPath);
+			}
+		}
+
+		///<summary> Save an Eob to another location on the disk (outside of Open Dental). </summary>
+		public static void ExportAmdAttach(string saveToPath,EhrAmendment amd) {
+			if(PrefC.AtoZfolderUsed) {
+				string amdFolder=GetAmdFolder();
+				File.Copy(ODFileUtils.CombinePaths(amdFolder,amd.FileName),saveToPath);
+			}
+			else {//image is in database
+				byte[] rawData=Convert.FromBase64String(amd.RawBase64);
 				Image image=null;
 				using(MemoryStream stream=new MemoryStream()) {
 					stream.Read(rawData,0,rawData.Length);
@@ -551,7 +671,22 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		///<summary>If usingAtoZfoler, then eobFolder must be fully qualified and valid.  If not usingAtoZ folder, this fills the eob.RawBase64 which must then be updated to db.</summary>
+		///<summary>If usingAtoZfolder, then patFolder must be fully qualified and valid.  If not usingAtoZ folder, this fills the eob.RawBase64 which must then be updated to db.</summary>
+		public static void SaveAmdAttach(EhrAmendment amd,Bitmap image,ImageCodecInfo codec,EncoderParameters encoderParameters,string amdFolder) {
+			if(PrefC.AtoZfolderUsed) {
+				image.Save(ODFileUtils.CombinePaths(amdFolder,amd.FileName),codec,encoderParameters);
+			}
+			else {//saving to db
+				using(MemoryStream stream=new MemoryStream()) {
+					image.Save(stream,codec,encoderParameters);
+					byte[] rawData=stream.ToArray();
+					amd.RawBase64=Convert.ToBase64String(rawData);
+					EhrAmendments.Update(amd);
+				}
+			}
+		}
+
+		///<summary>If usingAtoZfolder, then eobFolder must be fully qualified and valid.  If not usingAtoZ folder, this fills the eob.RawBase64 which must then be updated to db.</summary>
 		public static void SaveEobAttach(EobAttach eob,string pathSourceFile,string eobFolder) {
 			if(PrefC.AtoZfolderUsed) {
 				File.Copy(pathSourceFile,ODFileUtils.CombinePaths(eobFolder,eob.FileName));
@@ -562,14 +697,26 @@ namespace OpenDentBusiness {
 			}
 		}
 
+		///<summary>If usingAtoZfoler, then eobFolder must be fully qualified and valid.  If not usingAtoZ folder, this fills the eob.RawBase64 which must then be updated to db.</summary>
+		public static void SaveAmdAttach(EhrAmendment amd,string pathSourceFile,string amdFolder) {
+			if(PrefC.AtoZfolderUsed) {
+				File.Copy(pathSourceFile,ODFileUtils.CombinePaths(amdFolder,amd.FileName));
+			}
+			else {//saving to db
+				byte[] rawData=File.ReadAllBytes(pathSourceFile);
+				amd.RawBase64=Convert.ToBase64String(rawData);
+				EhrAmendments.Update(amd);
+			}
+		}
+
 		///<summary>For each of the documents in the list, deletes row from db and image from AtoZ folder if needed.</summary>
 		public static void DeleteDocuments(IList<Document> documents,string patFolder) {
-			for(int i=0;i<documents.Count;i++){
-				if(documents[i]==null){
+			for(int i=0;i<documents.Count;i++) {
+				if(documents[i]==null) {
 					continue;
 				}
 				if(PrefC.AtoZfolderUsed) {
-					try{
+					try {
 						string filePath = ODFileUtils.CombinePaths(patFolder,documents[i].FileName);
 						if(File.Exists(filePath)) {
 							File.Delete(filePath);
@@ -600,6 +747,45 @@ namespace OpenDentBusiness {
 			}
 			//db
 			EobAttaches.Delete(eob.EobAttachNum);
+		}
+
+		///<summary>Also handles deletion of db object.</summary>
+		public static void DeleteAmdAttach(EhrAmendment amendment) {
+			if(PrefC.AtoZfolderUsed) {
+				string amdFolder=GetAmdFolder();
+				string filePath=ODFileUtils.CombinePaths(amdFolder,amendment.FileName);
+				if(File.Exists(filePath)) {
+					try {
+						File.Delete(filePath);
+					}
+					catch {
+						MessageBox.Show("Delete was unsuccessful. The file may be in use.");
+						return;
+					}//file seems to be frequently locked.
+				}
+			}
+			//db
+			amendment.DateTAppend=DateTime.MinValue;
+			amendment.FileName="";
+			amendment.RawBase64="";
+			EhrAmendments.Update(amendment);
+		}
+
+		///<summary>Cleans up unreferenced Amendments</summary>
+		public static void CleanAmdAttach(string amdFileName) {
+			if(PrefC.AtoZfolderUsed) {
+				string amdFolder=GetAmdFolder();
+				string filePath=ODFileUtils.CombinePaths(amdFolder,amdFileName);
+				if(File.Exists(filePath)) {
+					try {
+						File.Delete(filePath);
+					}
+					catch {
+						//MessageBox.Show("Delete was unsuccessful. The file may be in use.");
+						return;
+					}//file seems to be frequently locked.
+				}
+			}
 		}
 
 		///<summary></summary>
@@ -641,7 +827,7 @@ namespace OpenDentBusiness {
 			//string patFolder=GetPatientFolder(pat);
 			return ODFileUtils.CombinePaths(patFolder,doc.FileName);
 		}
-		
+
 		/*
 		public static bool IsImageFile(string filename) {
 			try {
@@ -662,8 +848,5 @@ namespace OpenDentBusiness {
 			return (ext == ".jpg" || ext == ".jpeg" || ext == ".tga" || ext == ".bmp" || ext == ".tif" ||
 				ext == ".tiff" || ext == ".gif" || ext == ".emf" || ext == ".exif" || ext == ".ico" || ext == ".png" || ext == ".wmf");
 		}
-
-		
-	
 	}
 }

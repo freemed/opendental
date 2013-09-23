@@ -11,7 +11,7 @@ namespace OpenDental {
 	public partial class FormImages:Form {
 		///<summary>Right now, this form only supports claimpayment and amendment mode.   Others will be added later.</summary>
 		public long ClaimPaymentNum;
-		public EhrAmendment AmendmentCur;
+		public EhrAmendment EhrAmendmentCur;
 
 		public FormImages() {
 			InitializeComponent();
@@ -24,8 +24,8 @@ namespace OpenDental {
 			if(ClaimPaymentNum!=0) {
 				contrImagesMain.ModuleSelectedClaimPayment(ClaimPaymentNum);
 			}
-			else if(AmendmentCur!=null) {
-				//contrImagesMain.ModuleSelectedAmendment(AmendmentCur);
+			else if(EhrAmendmentCur!=null) {
+				contrImagesMain.ModuleSelectedAmendment(EhrAmendmentCur);
 			}
 		}
 

@@ -10,11 +10,11 @@ namespace OpenDentBusiness {
 		public long EhrAmendmentNum;
 		///<summary>FK to patient.PatNum</summary>
 		public long PatNum;
-		///<summary>Indicates whether the amendment was accepted or denied.</summary>
+		///<summary>Enum:YN Y=accepted, N=denied, U=requested.</summary>
 		public YN IsAccepted;
 		///<summary>Description or user-defined location of the amendment.  Max length 2000.</summary>
 		public string Description;
-		///<summary>Enum:AmendmentSource Patient, Provider, Organization, Other.</summary>
+		///<summary>Enum:AmendmentSource Patient, Provider, Organization, Other.  Required.</summary>
 		public AmendmentSource Source;
 		///<summary>User-defined name of the amendment source.  For example, a patient name or organization name.  Max length 2000.</summary>
 		public string SourceName;

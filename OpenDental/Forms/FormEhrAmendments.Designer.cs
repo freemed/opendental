@@ -24,19 +24,21 @@
 		/// </summary>
 		private void InitializeComponent() {
 			this.gridMain = new OpenDental.UI.ODGrid();
-			this.butClose = new System.Windows.Forms.Button();
-			this.butAdd = new System.Windows.Forms.Button();
+			this.butClose = new OpenDental.UI.Button();
+			this.butAdd = new OpenDental.UI.Button();
+			this.label3 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// gridMain
 			// 
-			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(18, 12);
+			this.gridMain.Location = new System.Drawing.Point(18, 48);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(470, 384);
+			this.gridMain.Size = new System.Drawing.Size(470, 222);
 			this.gridMain.TabIndex = 25;
 			this.gridMain.Title = "Amendments";
 			this.gridMain.TranslationName = null;
@@ -44,31 +46,51 @@
 			// 
 			// butClose
 			// 
+			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butClose.Location = new System.Drawing.Point(500, 373);
+			this.butClose.Autosize = true;
+			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClose.CornerRadius = 4F;
+			this.butClose.Location = new System.Drawing.Point(501, 246);
 			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(75, 23);
-			this.butClose.TabIndex = 26;
-			this.butClose.Text = "Close";
-			this.butClose.UseVisualStyleBackColor = true;
+			this.butClose.Size = new System.Drawing.Size(75, 24);
+			this.butClose.TabIndex = 28;
+			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
 			// butAdd
 			// 
-			this.butAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butAdd.Location = new System.Drawing.Point(500, 184);
+			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.butAdd.Autosize = true;
+			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAdd.CornerRadius = 4F;
+			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAdd.Location = new System.Drawing.Point(501, 48);
 			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(75, 23);
-			this.butAdd.TabIndex = 27;
+			this.butAdd.Size = new System.Drawing.Size(75, 24);
+			this.butAdd.TabIndex = 29;
 			this.butAdd.Text = "Add";
-			this.butAdd.UseVisualStyleBackColor = true;
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
+			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(15, 9);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(473, 33);
+			this.label3.TabIndex = 130;
+			this.label3.Text = "Patients can bring in documents and request that they be appended to their record" +
+    ".  They can then be scanned or the hardcopy filed.";
 			// 
 			// FormEhrAmendments
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(587, 408);
+			this.ClientSize = new System.Drawing.Size(588, 282);
+			this.Controls.Add(this.label3);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.butClose);
 			this.Controls.Add(this.gridMain);
@@ -82,8 +104,10 @@
 
 		#endregion
 
-		private OpenDental.UI.ODGrid gridMain;
-		private System.Windows.Forms.Button butClose;
-		private System.Windows.Forms.Button butAdd;
+		private UI.ODGrid gridMain;
+		private UI.Button butClose;
+		private UI.Button butAdd;
+		private System.Windows.Forms.Label label3;
+
 	}
 }
