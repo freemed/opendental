@@ -785,21 +785,34 @@ Laboratory Test Results
 					XmlNode xmlNodeName=xmlNodePat.ChildNodes[i];
 					for(int j=0;j<xmlNodeName.ChildNodes.Count;j++) {
 						if(xmlNodeName.ChildNodes[j].Name.Trim().ToLower()=="given") {
-							string strGivenName=xmlNodeName.ChildNodes[j].Value;
+							string strGivenName=xmlNodeName.ChildNodes[j].InnerText;
 							if(fName=="") {//The first and middle names are both referred to as "given" name, so we assume the first given name is the patient's first name.
 								fName=strGivenName;
 							}
 						}
 						else if(xmlNodeName.ChildNodes[j].Name.Trim().ToLower()=="family") {
-							lName=xmlNodeName.ChildNodes[j].Value;
+							lName=xmlNodeName.ChildNodes[j].InnerText;
 						}
 					}
 				}
 				else if(xmlNodePat.ChildNodes[i].Name.Trim().ToLower()=="birthtime") {
-					int birthYear=int.Parse(xmlNodePat.ChildNodes[i].Value.Substring(0,4));
-					int birthMonth=int.Parse(xmlNodePat.ChildNodes[i].Value.Substring(4,2));
-					int birthDay=int.Parse(xmlNodePat.ChildNodes[i].Value.Substring(6,2));
-					birthDate=new DateTime(birthYear,birthMonth,birthDay);
+					XmlNode xmlNodeBirthtime=xmlNodePat.ChildNodes[i];
+					for(int j=0;j<xmlNodeBirthtime.Attributes.Count;j++) {
+						if(xmlNodeBirthtime.Attributes[j].Name.Trim().ToLower()!="value") {
+							continue;
+						}
+						string strBirthTimeVal=xmlNodeBirthtime.Attributes[j].Value;
+						int birthYear=int.Parse(strBirthTimeVal.Substring(0,4));//Year will always be in the first 4 digits of the date, for all flavors of the HL7 TS type.
+						int birthMonth=1;
+						if(strBirthTimeVal.Length>=6) {
+							birthMonth=int.Parse(strBirthTimeVal.Substring(4,2));//If specified, month will always be in the 5th-6th digits of the date, for all flavors of the HL7 TS type.
+						}
+						int birthDay=1;
+						if(strBirthTimeVal.Length>=8) {
+							birthDay=int.Parse(strBirthTimeVal.Substring(6,2));//If specified, day will always be in the 7th-8th digits of the date, for all flavors of the HL7 TS type.
+						}
+						birthDate=new DateTime(birthYear,birthMonth,birthDay);
+					}
 				}
 			}
 			if(lName=="" || fName=="" || birthDate.Year<1880) {

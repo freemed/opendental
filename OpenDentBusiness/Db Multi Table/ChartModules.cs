@@ -966,8 +966,8 @@ namespace OpenDentBusiness {
 				#region email
 				command="SELECT EmailMessageNum,MsgDateTime,Subject,BodyText,PatNum,SentOrReceived "
 				+"FROM emailmessage "
-				+"WHERE PatNum="+POut.Long(patNum)
-				+" ORDER BY MsgDateTime";
+				+"WHERE PatNum="+POut.Long(patNum)+" AND SentOrReceived<>12 "//Do not show Direct message acknowledgements in Chart progress notes
+				+"ORDER BY MsgDateTime";
 				DataTable rawEmail=dcon.GetTable(command);
 				for(int i=0;i<rawEmail.Rows.Count;i++) {
 					row=table.NewRow();

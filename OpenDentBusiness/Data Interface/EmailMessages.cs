@@ -284,7 +284,6 @@ namespace OpenDentBusiness{
 				}
 				catch(Exception) {
 					if(emailMessageNum==0) {
-						emailMessage.IsNew=true;
 						EmailMessages.Insert(emailMessage);
 					}
 					else {
@@ -312,24 +311,9 @@ namespace OpenDentBusiness{
 					sbBodyText.Append(ProcessMimeTextPart(mimePart.Body.Text));
 				}
 				emailMessage.BodyText=sbBodyText.ToString();
-				if(isEncrypted && listAttachments.Count>0) {//A Direct message with attachments.
-					for(int i=0;i<listAttachments.Count;i++) {
-						//if(EHR.EhrCCD.IsCCD(listAttachments[i].Body.Text)) {//Try to match the first CCD document with a patient. A match is not guaranteed, which is why we have a button to allow the user to change the patient.
-						//	emailMessage.PatNum=;
-						//	break;
-						//}
-					}
-				}
 			}
 			else {//single body part
 				emailMessage.BodyText=ProcessMimeTextPart(inMsg.Message.Body.Text);
-			}
-			if(emailMessageNum==0) {
-				emailMessage.IsNew=true;
-				EmailMessages.Insert(emailMessage);
-			}
-			else {
-				EmailMessages.Update(emailMessage);//Deletes all existing attachments.
 			}
 			//If the email is new, then attachments list is empty, and it is also empty if the email message was existing, becauese of the update call above.
 			emailMessage.Attachments=new List<EmailAttach>();//Create a new list, in case the email is new, because emailMessage.Attachments would be null otherwise.
@@ -342,7 +326,31 @@ namespace OpenDentBusiness{
 				}
 				catch {
 				}
-				emailMessage.Attachments.Add(InsertAttachIncoming(strAttachText,listAttachments[i].ParsedContentType.Name,emailMessage.EmailMessageNum));
+				if(isEncrypted && emailMessage.PatNum==0) {//Direct message with email attachments.  If no patient is assigned to the email yet and a CCD message is present in the email attachments, then we must try to automatically attach the email message to the patient account.
+					if(EhrCCD.IsCCD(strAttachText)) {
+						emailMessage.PatNum=EhrCCD.GetCCDpat(strAttachText);// A match is not guaranteed, which is why we have a button to allow the user to change the patient.
+					}
+				}
+				string strAttachPath=GetEmailAttachPath();
+				string strAttachFileNameAdjusted=listAttachments[i].ParsedContentType.Name;
+				if(String.IsNullOrEmpty(listAttachments[i].ParsedContentType.Name)) {
+					strAttachFileNameAdjusted=MiscUtils.CreateRandomAlphaNumericString(8)+".txt";//just in case
+				}
+				string strAttachFile=ODFileUtils.CombinePaths(strAttachPath,DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+"_"+strAttachFileNameAdjusted);
+				while(File.Exists(strAttachFile)) {
+					strAttachFile=ODFileUtils.CombinePaths(strAttachPath,DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+"_"+strAttachFileNameAdjusted);
+				}
+				File.WriteAllText(strAttachFile,strAttachText);
+				EmailAttach emailAttach=new EmailAttach();
+				emailAttach.ActualFileName=Path.GetFileName(strAttachFile);
+				emailAttach.DisplayedFileName=Path.GetFileName(strAttachFile);
+				emailMessage.Attachments.Add(emailAttach);//The attachment EmailMessageNum is set when the emailMessage is inserted/updated below.
+			}
+			if(emailMessageNum==0) {
+				EmailMessages.Insert(emailMessage);//Also inserts all of the attachments in emailMessage.Attachments after setting each attachment EmailMessageNum properly.
+			}
+			else {
+				EmailMessages.Update(emailMessage);//Also deletes all previous attachments, then recreates all of the attachments in emailMessage.Attachments after setting each attachment EmailMessageNum properly.
 			}
 			if(isEncrypted) {
 				//Send a Message Disposition Notification (MDN) message to the sender, as required by the Direct messaging specifications.
@@ -406,26 +414,6 @@ namespace OpenDentBusiness{
 			return attachPath;
 		}
 
-		///<summary>The strAttachFileName variable must include the extension.</summary>
-		public static EmailAttach InsertAttachIncoming(string strText,string strAttachFileName,long emailMessageNum) {
-			string strAttachPath=GetEmailAttachPath();
-			string strAttachFileNameAdjusted=strAttachFileName;
-			if(String.IsNullOrEmpty(strAttachFileName)) {
-				strAttachFileNameAdjusted=MiscUtils.CreateRandomAlphaNumericString(8)+".txt";//just in case
-			}
-			string strAttachFile=ODFileUtils.CombinePaths(strAttachPath,DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+"_"+strAttachFileNameAdjusted);
-			while(File.Exists(strAttachFile)) {
-				strAttachFile=ODFileUtils.CombinePaths(strAttachPath,DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+"_"+strAttachFileNameAdjusted);
-			}
-			File.WriteAllText(strAttachFile,strText);
-			EmailAttach attach=new EmailAttach();
-			attach.ActualFileName=Path.GetFileName(strAttachFile);
-			attach.DisplayedFileName=Path.GetFileName(strAttachFile);
-			attach.EmailMessageNum=emailMessageNum;
-			EmailAttaches.Insert(attach);
-			return attach;
-		}
-
 		///<summary>Converts the strBodyContents into base64, then creates a new mime attachment using the base64 data.</summary>
 		public static Health.Direct.Common.Mime.MimeEntity GetAttachOutgoing(string strBodyContents,string strFileName) {
 			Health.Direct.Common.Mime.MimeEntity mimeEntity=new Health.Direct.Common.Mime.MimeEntity(Convert.ToBase64String(Encoding.UTF8.GetBytes(strBodyContents)));
@@ -460,33 +448,41 @@ namespace OpenDentBusiness{
 		}
 
 		public static void MarkMessageRead(EmailMessage emailMessage) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),emailMessage);
+				return;
+			}
+			EmailSentOrReceived sentOrReceived=emailMessage.SentOrReceived;
 			if(emailMessage.SentOrReceived==EmailSentOrReceived.Received) {
-				emailMessage.SentOrReceived=EmailSentOrReceived.Read;
-				EmailMessages.Update(emailMessage);//Mark read in db.
+				sentOrReceived=EmailSentOrReceived.Read;
 			}
 			else if(emailMessage.SentOrReceived==EmailSentOrReceived.WebMailReceived) {
-				emailMessage.SentOrReceived=EmailSentOrReceived.WebMailRecdRead;
-				EmailMessages.Update(emailMessage);//Mark read in db.
+				sentOrReceived=EmailSentOrReceived.WebMailRecdRead;
 			}
 			else if(emailMessage.SentOrReceived==EmailSentOrReceived.ReceivedDirect) {
-				emailMessage.SentOrReceived=EmailSentOrReceived.ReadDirect;
-				EmailMessages.Update(emailMessage);//Mark read in db.
+				sentOrReceived=EmailSentOrReceived.ReadDirect;
 			}
+			string command="UPDATE emailmessage SET SentOrReceived="+POut.Int((int)sentOrReceived)+" WHERE EmailMessageNum="+POut.Long(emailMessage.EmailMessageNum);
+			Db.NonQ(command);
 		}
 
 		public static void MarkMessageUnread(EmailMessage emailMessage) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),emailMessage);
+				return;
+			}
+			EmailSentOrReceived sentOrReceived=emailMessage.SentOrReceived;
 			if(emailMessage.SentOrReceived==EmailSentOrReceived.Read) {
-				emailMessage.SentOrReceived=EmailSentOrReceived.Received;
-				EmailMessages.Update(emailMessage);//Mark unread in db.
+				sentOrReceived=EmailSentOrReceived.Received;
 			}
 			else if(emailMessage.SentOrReceived==EmailSentOrReceived.WebMailRecdRead) {
-				emailMessage.SentOrReceived=EmailSentOrReceived.WebMailReceived;
-				EmailMessages.Update(emailMessage);//Mark unread in db.
+				sentOrReceived=EmailSentOrReceived.WebMailReceived;
 			}
 			else if(emailMessage.SentOrReceived==EmailSentOrReceived.ReadDirect) {
-				emailMessage.SentOrReceived=EmailSentOrReceived.ReceivedDirect;
-				EmailMessages.Update(emailMessage);//Mark unread in db.
+				sentOrReceived=EmailSentOrReceived.ReceivedDirect;
 			}
+			string command="UPDATE emailmessage SET SentOrReceived="+POut.Int((int)sentOrReceived)+" WHERE EmailMessageNum="+POut.Long(emailMessage.EmailMessageNum);
+			Db.NonQ(command);
 		}
 
 		#endregion Helpers
