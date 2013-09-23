@@ -223,7 +223,7 @@ namespace OpenDentBusiness {
 			}
 			StringBuilder sbBodyText=new StringBuilder();
 			List<Health.Direct.Common.Mime.MimeEntity> listAttachments=new List<Health.Direct.Common.Mime.MimeEntity>();
-			if(inMsg.Message.IsMultiPart) {
+			if(inMsg.Message.IsMultiPart) {//multiple body parts
 				Health.Direct.Common.Mime.MimeEntity mimeEntity=inMsg.Message.ExtractMimeEntity();
 				foreach(Health.Direct.Common.Mime.MimeEntity mimePart in mimeEntity.GetParts()) {
 					if(mimePart.ContentDisposition!=null && mimePart.ContentDisposition.ToLower().Contains("attachment")) {
@@ -234,12 +234,12 @@ namespace OpenDentBusiness {
 						//Separate distinct mime text parts with some space.  Normally there should only be one mime part which is text and the others would be attachments.  This is here just in case.
 						sbBodyText.Append("\r\n\r\n");
 					}
-					sbBodyText.Append(mimePart.Body.Text);
+					sbBodyText.Append(ProcessMimeTextPart(mimePart.Body.Text));
 				}
 				emailMessage.BodyText=sbBodyText.ToString();
 			}
 			else {//single body part
-				emailMessage.BodyText=inMsg.Message.Body.Text;
+				emailMessage.BodyText=ProcessMimeTextPart(inMsg.Message.Body.Text);
 			}
 			if(emailMessageNum==0) {
 				emailMessage.IsNew=true;
@@ -267,6 +267,43 @@ namespace OpenDentBusiness {
 				SendAckDirect(inMsg,emailAddressReceiver,emailMessage.PatNum,EmailSentOrReceived.AckDirectProcessed);
 			}
 			return emailMessage;
+		}
+
+		private static string ProcessMimeTextPart(string strBody) {
+			//For unencrypted emails from GoDaddy, the body text is html, but each line is wrapped at 75 characters and an extra '=' is appended.
+			//Our algorithm to handle the extra equal signs is more generic, in case GoDaddy every changes their wrap character count, or in case other email providers manimulate the email body in a similar manner.
+			bool isWrappedEmail=true;
+			string[] arrayMimeBodyLines=strBody.Split(new string[] { "\r\n","\r","\n" },StringSplitOptions.None);
+			int lastTextLineIndex=arrayMimeBodyLines.Length-1;//GoDaddy emails also have trailing blank lines after the body text, which we need to ignore when determining if the email is wrapped or not.
+			while(arrayMimeBodyLines[lastTextLineIndex].Length==0 && lastTextLineIndex>0) {
+				lastTextLineIndex--;
+			}
+			for(int i=0;i<lastTextLineIndex;i++) {//Ignore the last line in this consideration, because it is almost always a shorter line than the wrapped lines.
+				if(arrayMimeBodyLines[i].Length<50) {//Why would any email provider wrap an email to less than 50 characters?
+					isWrappedEmail=false;
+					break;
+				}
+				if(i>0 && arrayMimeBodyLines[i].Length!=arrayMimeBodyLines[i-1].Length) {//Wrapped email messages have lines of the same length (excluding the last line)
+					isWrappedEmail=false;
+					break;
+				}
+				if(!arrayMimeBodyLines[i].EndsWith("=")) {
+					isWrappedEmail=false;
+					break;
+				}
+			}
+			string retVal=strBody;
+			if(isWrappedEmail) {
+				StringBuilder sbBodyText=new StringBuilder();
+				for(int i=0;i<lastTextLineIndex;i++) {
+					sbBodyText.Append(arrayMimeBodyLines[i].Substring(0,arrayMimeBodyLines[i].Length-1));//The whole line, excluding the last character.
+				}
+				for(int i=lastTextLineIndex;i<arrayMimeBodyLines.Length;i++) {//Copy the the last text line and all trailing blank lines as is.
+					sbBodyText.Append(arrayMimeBodyLines[i]);
+				}
+				retVal=sbBodyText.ToString();
+			}
+			return retVal;
 		}
 
 		public static string GetEmailAttachPath() {
