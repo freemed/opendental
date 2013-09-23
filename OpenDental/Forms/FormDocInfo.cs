@@ -330,9 +330,21 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e){
-			if(textDate.errorProvider1.GetError(textDate)!=""){
+			if(textDate.errorProvider1.GetError(textDate)!="") {
 				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
 				return;
+			}
+			//We had a security bug where users could change the date to a more recent date, and then subsequently delete.
+			//The code below is for that specific scenario.
+			DateTime dateEntered=PIn.Date(textDate.Text);
+			if(dateEntered>DocCur.DateCreated) {
+				//user is trying to change the date to some date after the previously linked date
+				//is the new doc date allowed?
+				if(!Security.IsAuthorized(Permissions.ImageDelete,DocCur.DateCreated,true)) {
+					//suppress the default security message above (it's too confusing for this case) and generate our own here
+					MessageBox.Show(this,Lan.g(this,"Image forward-date edit not allowed")+": "+DocCur.DateCreated.ToShortDateString()+" to "+dateEntered.ToShortDateString()+"\r\n"+Lan.g(this,"Requires 'Image Delete' Security Permission."));
+					return;
+				}
 			}
 			try{
 				DocCur.ToothNumbers=Tooth.FormatRangeForDb(textToothNumbers.Text);
@@ -343,8 +355,8 @@ namespace OpenDental{
 			}
 			DocCur.DocCategory=DefC.Short[(int)DefCat.ImageCats][listCategory.SelectedIndex].DefNum;
 			DocCur.ImgType=(ImageType)listType.SelectedIndex;
-			DocCur.Description=textDescript.Text;
-			DocCur.DateCreated=DateTime.Parse(textDate.Text);
+			DocCur.Description=textDescript.Text;			
+			DocCur.DateCreated=dateEntered;	
 			try{//incomplete
 				DocCur.ToothNumbers=Tooth.FormatRangeForDb(textToothNumbers.Text);
 			}
