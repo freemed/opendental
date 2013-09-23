@@ -3639,7 +3639,7 @@ namespace OpenDental{
 			}
 			TimeLastEmailInboxCheck=DateTime.Now;
 			try {
-				EhrEmail.ReceiveFromInbox(0,Address);
+				EmailMessages.ReceiveFromInbox(0,Address);
 			}
 			catch {
 				//Do not tell the user, because it would be annoying to see an error every 30 seconds (if the server was down for instance).

@@ -536,7 +536,7 @@
     <Compile Include="InternalTools\Phones\TableTypes\PhoneMetric.cs" />
     <Compile Include="InternalTools\Phones\TableTypes\PhoneNumber.cs" />
     <Compile Include="Misc\ConvertDatabases3.cs" />
-    <Compile Include="Misc\EhrEmail.cs" />
+    <Compile Include="Misc\EhrCCD.cs" />
     <Compile Include="Misc\InnoDb.cs" />
     <Compile Include="Misc\ConvertDatabases2.cs" />
     <Compile Include="Misc\ConvertDatabases1.cs" />

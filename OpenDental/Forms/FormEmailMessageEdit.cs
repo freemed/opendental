@@ -586,7 +586,7 @@ namespace OpenDental{
 				//If an html body is received, then we display the body using a webbrowser control, so the user sees the message formatted as intended.
 				if(MessageCur.BodyText.Trim().StartsWith("<html>")) {
 					textBodyText.Visible=false;
-					webBrowser.DocumentText=MessageCur.BodyText;//Test for html format. Will throw an exception if not html.
+					webBrowser.DocumentText=MessageCur.BodyText;
 					webBrowser.Location=textBodyText.Location;
 					webBrowser.Size=textBodyText.Size;
 					webBrowser.Anchor=textBodyText.Anchor;
@@ -674,7 +674,7 @@ namespace OpenDental{
 			messageChanged=true;
 		}
 
-		///<summary>Deprecated.  Use EhrEmail.GetEmailAttachPath().  This is a stupid place for this, but keeping it around because it's used from many places.</summary>
+		///<summary>Deprecated.  Use EmailMessages.GetEmailAttachPath().  This is a stupid place for this, but keeping it around because it's used from many places.</summary>
 		public static string GetAttachPath(){
 			string attachPath;
 			if(PrefC.AtoZfolderUsed) {
@@ -784,7 +784,7 @@ namespace OpenDental{
 				//For Direct messages, the content of the message will be within a .xml attachment.
 				if((MessageCur.SentOrReceived==EmailSentOrReceived.ReceivedDirect || MessageCur.SentOrReceived==EmailSentOrReceived.ReadDirect) && Path.GetExtension(strFilePathAttach).ToLower()==".xml") {
 					string strTextXml=File.ReadAllText(strFilePathAttach);
-					if(EHR.FormSummaryOfCare.IsCCD(strTextXml)) {
+					if(EhrCCD.IsCCD(strTextXml)) {
 						EHR.FormSummaryOfCare.DisplayCCD(strTextXml);
 						return;
 					}	
@@ -844,7 +844,7 @@ namespace OpenDental{
 			Cursor=Cursors.WaitCursor;
 			EmailAddress emailAddress=GetEmailAddress();
 			try {
-				MessageCur=EhrEmail.ProcessRawEmailMessage(MessageCur.BodyText,MessageCur.EmailMessageNum,emailAddress);//If decryption is successful, sets status to ReceivedDirect.
+				MessageCur=EmailMessages.ProcessRawEmailMessage(MessageCur.BodyText,MessageCur.EmailMessageNum,emailAddress);//If decryption is successful, sets status to ReceivedDirect.
 				if(MessageCur.SentOrReceived==EmailSentOrReceived.ReceivedDirect) {//The Direct message was decrypted.
 					MessageCur.SentOrReceived=EmailSentOrReceived.ReadDirect;//Mark read, because we are already viewing the message within the current window.
 					EmailMessages.Update(MessageCur);

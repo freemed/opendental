@@ -57,7 +57,7 @@ namespace OpenDental {
 			Text="Email Inbox for "+Address.EmailUsername;
 			int emailMessageCount=0;
 			try {
-				emailMessageCount=EhrEmail.ReceiveFromInbox(0,Address).Count;
+				emailMessageCount=EmailMessages.ReceiveFromInbox(0,Address).Count;
 			}
 			catch(Exception ex) {
 				MessageBox.Show(Lan.g(this,"Error retreiving email messages")+": "+ex.Message);
@@ -130,7 +130,7 @@ namespace OpenDental {
 			EmailMessage emailMessage=ListEmailMessages[e.Row];
 			FormEmailMessageEdit formEME=new FormEmailMessageEdit(emailMessage);
 			formEME.ShowDialog();
-			EhrEmail.MarkMessageRead(emailMessage);
+			EmailMessages.MarkMessageRead(emailMessage);
 			FillGridEmailMessages();//To show the email is read.
 		}
 
@@ -156,7 +156,7 @@ namespace OpenDental {
 			Cursor=Cursors.WaitCursor;
 			for(int i=0;i<gridEmailMessages.SelectedIndices.Length;i++) {
 				EmailMessage emailMessage=ListEmailMessages[gridEmailMessages.SelectedIndices[i]];
-				EhrEmail.MarkMessageUnread(emailMessage);
+				EmailMessages.MarkMessageUnread(emailMessage);
 			}
 			FillGridEmailMessages();
 			Cursor=Cursors.Default;
@@ -166,7 +166,7 @@ namespace OpenDental {
 			Cursor=Cursors.WaitCursor;
 			for(int i=0;i<gridEmailMessages.SelectedIndices.Length;i++) {
 				EmailMessage emailMessage=ListEmailMessages[gridEmailMessages.SelectedIndices[i]];
-				EhrEmail.MarkMessageRead(emailMessage);
+				EmailMessages.MarkMessageRead(emailMessage);
 			}
 			FillGridEmailMessages();
 			Cursor=Cursors.Default;
