@@ -17,6 +17,10 @@ using CodeBase;
 namespace OpenDentBusiness{
 	///<summary>An email message is always attached to a patient.</summary>
 	public class EmailMessages{
+
+		///<summary>Used to cache DirectAgent objects, because creating a new DirectAgent object takes up to 10 seconds. If we did not cache, then inbox load would be slow and so would Direct message sending.</summary>
+		private static Hashtable HashDirectAgents=new Hashtable();
+
 		///<summary>Gets one email message from the database.</summary>
 		public static EmailMessage GetOne(long msgNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -44,7 +48,12 @@ namespace OpenDentBusiness{
 					+POut.Int((int)EmailSentOrReceived.WebMailReceived)
 				+") AND ToAddress='"+POut.String(emailAddressInbox)+"' "
 				+"ORDER BY MsgDateTime";
-			return Crud.EmailMessageCrud.SelectMany(command);
+			List<EmailMessage> retVal=Crud.EmailMessageCrud.SelectMany(command);
+			for(int i=0;i<retVal.Count;i++) {
+				command="SELECT * FROM emailattach WHERE EmailMessageNum = "+POut.Long(retVal[i].EmailMessageNum);
+				retVal[i].Attachments=Crud.EmailAttachCrud.SelectMany(command);
+			}
+			return retVal;
 		}
 
 		///<summary></summary>
@@ -90,9 +99,6 @@ namespace OpenDentBusiness{
 			string command="DELETE FROM emailmessage WHERE EmailMessageNum="+POut.Long(message.EmailMessageNum);
 			Db.NonQ(command);
 		}
-
-		///<summary>Used to cache DirectAgent objects, because creating a new DirectAgent object takes up to 10 seconds. If we did not cache, then inbox load would be slow and so would Direct message sending.</summary>
-		private static Hashtable HashDirectAgents=new Hashtable();
 
 		#region Sending
 
@@ -297,6 +303,7 @@ namespace OpenDentBusiness{
 			}
 			StringBuilder sbBodyText=new StringBuilder();
 			emailMessage.Attachments=new List<EmailAttach>();//Create a new list, in case the email is new, because emailMessage.Attachments would be null otherwise.
+			EhrSummaryCcd ehrSummaryCcd=null;//Will only be set if there is a CCD attachment in this email.
 			if(!inMsg.Message.IsMultiPart) {//Single body part.  No attachments.
 				emailMessage.BodyText=ProcessMimeTextPart(inMsg.Message.Body.Text);
 			}
@@ -328,6 +335,13 @@ namespace OpenDentBusiness{
 					//A Direct message with an XML CCD attachment.  If no patient already assigned to the email, then we must try to automatically attach the email message to the patient account.
 					if(isEncrypted && Path.GetExtension(strAttachFileNameAdjusted).ToLower()==".xml" && EhrCCD.IsCCD(strAttachText) && emailMessage.PatNum==0) {
 						emailMessage.PatNum=EhrCCD.GetCCDpat(strAttachText);// A match is not guaranteed, which is why we have a button to allow the user to change the patient.
+						if(emailMessage.PatNum!=0) {//A match was found
+							ehrSummaryCcd=new EhrSummaryCcd();
+							ehrSummaryCcd.ContentSummary=strAttachText;
+							ehrSummaryCcd.DateSummary=DateTime.Today;
+							ehrSummaryCcd.EmailAttachNum=emailMessage.Attachments.Count;//Temporary value.  At this point, we do not have the primary key for the attachment until after the emailMessage insert/update below.
+							ehrSummaryCcd.PatNum=emailMessage.PatNum;
+						}
 					}
 					string strAttachFile=ODFileUtils.CombinePaths(strAttachPath,DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+"_"+strAttachFileNameAdjusted);
 					while(File.Exists(strAttachFile)) {
@@ -346,6 +360,10 @@ namespace OpenDentBusiness{
 			}
 			else {
 				EmailMessages.Update(emailMessage);//Also deletes all previous attachments, then recreates all of the attachments in emailMessage.Attachments after setting each attachment EmailMessageNum properly.
+			}
+			if(ehrSummaryCcd!=null) {//There was a CCD attachment
+				ehrSummaryCcd.EmailAttachNum=emailMessage.Attachments[(int)ehrSummaryCcd.EmailAttachNum].EmailAttachNum;//Convert the saved index from above into an actual FK.
+				EhrSummaryCcds.Insert(ehrSummaryCcd);
 			}
 			if(isEncrypted) {
 				//Send a Message Disposition Notification (MDN) message to the sender, as required by the Direct messaging specifications.
