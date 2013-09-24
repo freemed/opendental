@@ -153,18 +153,17 @@ namespace OpenDental {
 			else {
 				EhrAmendmentCur.DateTRequest=DateTime.Parse(textDateReq.Text);
 			}
-//todo:
-			if(textDateAcc.Text!="") {
-				EhrAmendmentCur.DateTAcceptDeny=DateTime.Parse(textDateAcc.Text);
-			}
-			else {
+			if(textDateAcc.Text=="") {
 				EhrAmendmentCur.DateTAcceptDeny=DateTime.MinValue;
 			}
-			if(textDateApp.Text!="") {
-				EhrAmendmentCur.DateTAppend=DateTime.Parse(textDateApp.Text);
+			else {
+				EhrAmendmentCur.DateTAcceptDeny=DateTime.Parse(textDateAcc.Text);
+			}
+			if(textDateApp.Text=="") {
+				EhrAmendmentCur.DateTAppend=DateTime.MinValue;
 			}
 			else {
-				EhrAmendmentCur.DateTAppend=DateTime.MinValue;
+				EhrAmendmentCur.DateTAppend=DateTime.Parse(textDateApp.Text);
 			}
 			EhrAmendmentCur.IsAccepted=status;
 			EhrAmendmentCur.Source=(AmendmentSource)comboSource.SelectedIndex;
