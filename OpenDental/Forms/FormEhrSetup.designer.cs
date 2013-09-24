@@ -24,10 +24,10 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent() {
 			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormEhrSetup));
 			this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
 			this.menuItemSettings = new System.Windows.Forms.MenuItem();
 			this.button1 = new OpenDental.UI.Button();
-			this.butICD9CM31 = new OpenDental.UI.Button();
 			this.butSnomeds = new OpenDental.UI.Button();
 			this.butLoincs = new OpenDental.UI.Button();
 			this.butKeys = new OpenDental.UI.Button();
@@ -43,6 +43,8 @@ namespace OpenDental{
 			this.butAllergies = new OpenDental.UI.Button();
 			this.butICD9s = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
+			this.groupCodeSystems = new System.Windows.Forms.GroupBox();
+			this.groupCodeSystems.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// mainMenu1
@@ -63,26 +65,12 @@ namespace OpenDental{
 			this.button1.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.button1.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.button1.CornerRadius = 4F;
-			this.button1.Location = new System.Drawing.Point(214, 136);
+			this.button1.Location = new System.Drawing.Point(12, 174);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(128, 24);
-			this.button1.TabIndex = 135;
+			this.button1.TabIndex = 14;
 			this.button1.Text = "Code System Importer";
 			this.button1.Click += new System.EventHandler(this.button1_Click);
-			// 
-			// butICD9CM31
-			// 
-			this.butICD9CM31.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butICD9CM31.Autosize = true;
-			this.butICD9CM31.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butICD9CM31.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butICD9CM31.CornerRadius = 4F;
-			this.butICD9CM31.Location = new System.Drawing.Point(214, 98);
-			this.butICD9CM31.Name = "butICD9CM31";
-			this.butICD9CM31.Size = new System.Drawing.Size(128, 24);
-			this.butICD9CM31.TabIndex = 134;
-			this.butICD9CM31.Text = "ICD9-CM (31)";
-			this.butICD9CM31.Click += new System.EventHandler(this.butICD9CM31_Click);
 			// 
 			// butSnomeds
 			// 
@@ -91,10 +79,10 @@ namespace OpenDental{
 			this.butSnomeds.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butSnomeds.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSnomeds.CornerRadius = 4F;
-			this.butSnomeds.Location = new System.Drawing.Point(214, 60);
+			this.butSnomeds.Location = new System.Drawing.Point(12, 136);
 			this.butSnomeds.Name = "butSnomeds";
 			this.butSnomeds.Size = new System.Drawing.Size(128, 24);
-			this.butSnomeds.TabIndex = 132;
+			this.butSnomeds.TabIndex = 12;
 			this.butSnomeds.Text = "SNOMED CTs";
 			this.butSnomeds.Click += new System.EventHandler(this.butSnomeds_Click);
 			// 
@@ -105,10 +93,10 @@ namespace OpenDental{
 			this.butLoincs.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butLoincs.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butLoincs.CornerRadius = 4F;
-			this.butLoincs.Location = new System.Drawing.Point(214, 22);
+			this.butLoincs.Location = new System.Drawing.Point(12, 98);
 			this.butLoincs.Name = "butLoincs";
 			this.butLoincs.Size = new System.Drawing.Size(128, 24);
-			this.butLoincs.TabIndex = 131;
+			this.butLoincs.TabIndex = 11;
 			this.butLoincs.Text = "Loincs";
 			this.butLoincs.Click += new System.EventHandler(this.butLoincs_Click);
 			// 
@@ -119,10 +107,10 @@ namespace OpenDental{
 			this.butKeys.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butKeys.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butKeys.CornerRadius = 4F;
-			this.butKeys.Location = new System.Drawing.Point(27, 364);
+			this.butKeys.Location = new System.Drawing.Point(27, 288);
 			this.butKeys.Name = "butKeys";
 			this.butKeys.Size = new System.Drawing.Size(128, 24);
-			this.butKeys.TabIndex = 130;
+			this.butKeys.TabIndex = 8;
 			this.butKeys.Text = "Quarterly Keys";
 			this.butKeys.Click += new System.EventHandler(this.butKeys_Click);
 			// 
@@ -133,10 +121,10 @@ namespace OpenDental{
 			this.butRxNorm.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRxNorm.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRxNorm.CornerRadius = 4F;
-			this.butRxNorm.Location = new System.Drawing.Point(27, 326);
+			this.butRxNorm.Location = new System.Drawing.Point(12, 60);
 			this.butRxNorm.Name = "butRxNorm";
 			this.butRxNorm.Size = new System.Drawing.Size(128, 24);
-			this.butRxNorm.TabIndex = 129;
+			this.butRxNorm.TabIndex = 10;
 			this.butRxNorm.Text = "RxNorms";
 			this.butRxNorm.Click += new System.EventHandler(this.butRxNorm_Click);
 			// 
@@ -147,10 +135,10 @@ namespace OpenDental{
 			this.butEducationalResources.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butEducationalResources.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butEducationalResources.CornerRadius = 4F;
-			this.butEducationalResources.Location = new System.Drawing.Point(27, 288);
+			this.butEducationalResources.Location = new System.Drawing.Point(27, 250);
 			this.butEducationalResources.Name = "butEducationalResources";
 			this.butEducationalResources.Size = new System.Drawing.Size(128, 24);
-			this.butEducationalResources.TabIndex = 128;
+			this.butEducationalResources.TabIndex = 7;
 			this.butEducationalResources.Text = "Educational Resources";
 			this.butEducationalResources.Click += new System.EventHandler(this.butEducationalResources_Click);
 			// 
@@ -161,10 +149,10 @@ namespace OpenDental{
 			this.butInboundEmail.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butInboundEmail.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butInboundEmail.CornerRadius = 4F;
-			this.butInboundEmail.Location = new System.Drawing.Point(27, 250);
+			this.butInboundEmail.Location = new System.Drawing.Point(27, 212);
 			this.butInboundEmail.Name = "butInboundEmail";
 			this.butInboundEmail.Size = new System.Drawing.Size(128, 24);
-			this.butInboundEmail.TabIndex = 127;
+			this.butInboundEmail.TabIndex = 6;
 			this.butInboundEmail.Text = "Inbound Email";
 			this.butInboundEmail.Click += new System.EventHandler(this.butInboundEmail_Click);
 			// 
@@ -175,17 +163,17 @@ namespace OpenDental{
 			this.butReminderRules.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butReminderRules.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butReminderRules.CornerRadius = 4F;
-			this.butReminderRules.Location = new System.Drawing.Point(27, 212);
+			this.butReminderRules.Location = new System.Drawing.Point(27, 174);
 			this.butReminderRules.Name = "butReminderRules";
 			this.butReminderRules.Size = new System.Drawing.Size(128, 24);
-			this.butReminderRules.TabIndex = 126;
+			this.butReminderRules.TabIndex = 5;
 			this.butReminderRules.Text = "Reminder Rules";
 			this.butReminderRules.Click += new System.EventHandler(this.butReminderRules_Click);
 			// 
 			// panelEmergencyNow
 			// 
 			this.panelEmergencyNow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.panelEmergencyNow.Location = new System.Drawing.Point(549, 60);
+			this.panelEmergencyNow.Location = new System.Drawing.Point(505, 60);
 			this.panelEmergencyNow.Name = "panelEmergencyNow";
 			this.panelEmergencyNow.Size = new System.Drawing.Size(24, 24);
 			this.panelEmergencyNow.TabIndex = 125;
@@ -198,10 +186,10 @@ namespace OpenDental{
 			this.butEmergencyNow.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butEmergencyNow.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butEmergencyNow.CornerRadius = 4F;
-			this.butEmergencyNow.Location = new System.Drawing.Point(445, 60);
+			this.butEmergencyNow.Location = new System.Drawing.Point(401, 60);
 			this.butEmergencyNow.Name = "butEmergencyNow";
 			this.butEmergencyNow.Size = new System.Drawing.Size(98, 24);
-			this.butEmergencyNow.TabIndex = 124;
+			this.butEmergencyNow.TabIndex = 15;
 			this.butEmergencyNow.Text = "Emergency Now";
 			this.butEmergencyNow.Click += new System.EventHandler(this.butEmergencyNow_Click);
 			// 
@@ -212,10 +200,10 @@ namespace OpenDental{
 			this.butDrugUnit.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butDrugUnit.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butDrugUnit.CornerRadius = 4F;
-			this.butDrugUnit.Location = new System.Drawing.Point(27, 174);
+			this.butDrugUnit.Location = new System.Drawing.Point(27, 136);
 			this.butDrugUnit.Name = "butDrugUnit";
 			this.butDrugUnit.Size = new System.Drawing.Size(128, 24);
-			this.butDrugUnit.TabIndex = 124;
+			this.butDrugUnit.TabIndex = 4;
 			this.butDrugUnit.Text = "Drug Unit";
 			this.butDrugUnit.Click += new System.EventHandler(this.butDrugUnit_Click);
 			// 
@@ -226,10 +214,10 @@ namespace OpenDental{
 			this.butDrugManufacturer.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butDrugManufacturer.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butDrugManufacturer.CornerRadius = 4F;
-			this.butDrugManufacturer.Location = new System.Drawing.Point(27, 136);
+			this.butDrugManufacturer.Location = new System.Drawing.Point(27, 98);
 			this.butDrugManufacturer.Name = "butDrugManufacturer";
 			this.butDrugManufacturer.Size = new System.Drawing.Size(128, 24);
-			this.butDrugManufacturer.TabIndex = 123;
+			this.butDrugManufacturer.TabIndex = 3;
 			this.butDrugManufacturer.Text = "Drug Manufacturer";
 			this.butDrugManufacturer.Click += new System.EventHandler(this.butDrugManufacturer_Click);
 			// 
@@ -240,10 +228,10 @@ namespace OpenDental{
 			this.butVaccineDef.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butVaccineDef.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butVaccineDef.CornerRadius = 4F;
-			this.butVaccineDef.Location = new System.Drawing.Point(27, 98);
+			this.butVaccineDef.Location = new System.Drawing.Point(27, 60);
 			this.butVaccineDef.Name = "butVaccineDef";
 			this.butVaccineDef.Size = new System.Drawing.Size(128, 24);
-			this.butVaccineDef.TabIndex = 122;
+			this.butVaccineDef.TabIndex = 2;
 			this.butVaccineDef.Text = "Vaccine Def";
 			this.butVaccineDef.Click += new System.EventHandler(this.butVaccineDef_Click);
 			// 
@@ -254,10 +242,10 @@ namespace OpenDental{
 			this.butAllergies.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAllergies.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAllergies.CornerRadius = 4F;
-			this.butAllergies.Location = new System.Drawing.Point(27, 60);
+			this.butAllergies.Location = new System.Drawing.Point(27, 22);
 			this.butAllergies.Name = "butAllergies";
 			this.butAllergies.Size = new System.Drawing.Size(128, 24);
-			this.butAllergies.TabIndex = 120;
+			this.butAllergies.TabIndex = 1;
 			this.butAllergies.Text = "Allergies";
 			this.butAllergies.Click += new System.EventHandler(this.butAllergies_Click);
 			// 
@@ -268,10 +256,10 @@ namespace OpenDental{
 			this.butICD9s.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butICD9s.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butICD9s.CornerRadius = 4F;
-			this.butICD9s.Location = new System.Drawing.Point(27, 22);
+			this.butICD9s.Location = new System.Drawing.Point(12, 22);
 			this.butICD9s.Name = "butICD9s";
 			this.butICD9s.Size = new System.Drawing.Size(128, 24);
-			this.butICD9s.TabIndex = 119;
+			this.butICD9s.TabIndex = 9;
 			this.butICD9s.Text = "ICD9s";
 			this.butICD9s.Click += new System.EventHandler(this.butICD9s_Click);
 			// 
@@ -283,23 +271,33 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(506, 354);
+			this.butClose.Location = new System.Drawing.Point(462, 288);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75, 24);
-			this.butClose.TabIndex = 2;
+			this.butClose.TabIndex = 16;
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
+			// 
+			// groupCodeSystems
+			// 
+			this.groupCodeSystems.Controls.Add(this.button1);
+			this.groupCodeSystems.Controls.Add(this.butLoincs);
+			this.groupCodeSystems.Controls.Add(this.butRxNorm);
+			this.groupCodeSystems.Controls.Add(this.butSnomeds);
+			this.groupCodeSystems.Controls.Add(this.butICD9s);
+			this.groupCodeSystems.Location = new System.Drawing.Point(202, 0);
+			this.groupCodeSystems.Name = "groupCodeSystems";
+			this.groupCodeSystems.Size = new System.Drawing.Size(152, 207);
+			this.groupCodeSystems.TabIndex = 136;
+			this.groupCodeSystems.TabStop = false;
+			this.groupCodeSystems.Text = "Code Systems";
 			// 
 			// FormEhrSetup
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(606, 405);
-			this.Controls.Add(this.button1);
-			this.Controls.Add(this.butICD9CM31);
-			this.Controls.Add(this.butSnomeds);
-			this.Controls.Add(this.butLoincs);
+			this.ClientSize = new System.Drawing.Size(562, 339);
+			this.Controls.Add(this.groupCodeSystems);
 			this.Controls.Add(this.butKeys);
-			this.Controls.Add(this.butRxNorm);
 			this.Controls.Add(this.butEducationalResources);
 			this.Controls.Add(this.butInboundEmail);
 			this.Controls.Add(this.butReminderRules);
@@ -309,13 +307,14 @@ namespace OpenDental{
 			this.Controls.Add(this.butDrugManufacturer);
 			this.Controls.Add(this.butVaccineDef);
 			this.Controls.Add(this.butAllergies);
-			this.Controls.Add(this.butICD9s);
 			this.Controls.Add(this.butClose);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Menu = this.mainMenu1;
 			this.Name = "FormEhrSetup";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Electronic Health Record (EHR) Setup";
 			this.Load += new System.EventHandler(this.FormEhrSetup_Load);
+			this.groupCodeSystems.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -339,7 +338,7 @@ namespace OpenDental{
 		private System.Windows.Forms.MenuItem menuItemSettings;
 		private UI.Button butLoincs;
 		private UI.Button butSnomeds;
-		private UI.Button butICD9CM31;
 		private UI.Button button1;
+		private System.Windows.Forms.GroupBox groupCodeSystems;
 	}
 }
