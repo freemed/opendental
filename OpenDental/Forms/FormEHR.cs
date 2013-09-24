@@ -283,16 +283,19 @@ namespace OpenDental {
 			}
 			else*/
 			if(FormOrd.LaunchMedicationPat) {
-				if(FormOrd.LaunchMedicationPatNum==0) {
-					ResultOnClosing=EhrFormResult.MedicationPatNew;//This cannot happen unless a provider is logged in with a valid ehr key
-				}
-				else {
-					ResultOnClosing=EhrFormResult.MedicationPatEdit;
-					LaunchMedicationPatNum=FormOrd.LaunchMedicationPatNum;
-				}
-				Close();
-			}
-			else {
+				//if(FormOrd.LaunchMedicationPatNum==0) {
+				//	ResultOnClosing=EhrFormResult.MedicationPatNew;//This cannot happen unless a provider is logged in with a valid ehr key
+				//}
+				//else {
+				FormMedPat formMP=new FormMedPat();
+				formMP.MedicationPatCur=MedicationPats.GetOne(FormOrd.LaunchMedicationPatNum);
+				formMP.ShowDialog();
+					//ResultOnClosing=EhrFormResult.MedicationPatEdit;
+					//LaunchMedicationPatNum=FormOrd.LaunchMedicationPatNum;
+				//}
+				//Close();
+			//}
+			//else {
 				FillGridMu();
 			}
 		}
