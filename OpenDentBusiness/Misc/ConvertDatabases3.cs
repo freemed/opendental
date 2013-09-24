@@ -1687,6 +1687,22 @@ namespace OpenDentBusiness {
 					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'NistTimeServerUrl','nist-time-server.eoni.com')";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE ehrsummaryccd ADD EmailAttachNum bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE ehrsummaryccd ADD INDEX (EmailAttachNum)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE ehrsummaryccd ADD EmailAttachNum number(20)";
+					Db.NonQ(command);
+					command="UPDATE ehrsummaryccd SET EmailAttachNum = 0 WHERE EmailAttachNum IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE ehrsummaryccd MODIFY EmailAttachNum NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX ehrsummaryccd_EmailAttachNum ON ehrsummaryccd (EmailAttachNum)";
+					Db.NonQ(command);
+				}
 
 
 

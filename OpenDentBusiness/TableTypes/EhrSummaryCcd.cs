@@ -16,6 +16,8 @@ namespace OpenDentBusiness {
 		///<summary>The xml content of the received text file.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string ContentSummary;
+		///<summary>FK to emailattach.EmailAttachNum.  The Direct email attachment where the CCD xml message came from.  Needed to sync PatNum with the email PatNum if the PatNum is changed on the email.</summary>
+		public long EmailAttachNum;
 
 		///<summary></summary>
 		public EhrSummaryCcd Copy() {

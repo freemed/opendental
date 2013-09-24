@@ -50,6 +50,7 @@ namespace OpenDentBusiness.Crud{
 				ehrSummaryCcd.PatNum          = PIn.Long  (table.Rows[i]["PatNum"].ToString());
 				ehrSummaryCcd.DateSummary     = PIn.Date  (table.Rows[i]["DateSummary"].ToString());
 				ehrSummaryCcd.ContentSummary  = PIn.String(table.Rows[i]["ContentSummary"].ToString());
+				ehrSummaryCcd.EmailAttachNum  = PIn.Long  (table.Rows[i]["EmailAttachNum"].ToString());
 				retVal.Add(ehrSummaryCcd);
 			}
 			return retVal;
@@ -90,14 +91,15 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="EhrSummaryCcdNum,";
 			}
-			command+="PatNum,DateSummary,ContentSummary) VALUES(";
+			command+="PatNum,DateSummary,ContentSummary,EmailAttachNum) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(ehrSummaryCcd.EhrSummaryCcdNum)+",";
 			}
 			command+=
 				     POut.Long  (ehrSummaryCcd.PatNum)+","
 				+    POut.Date  (ehrSummaryCcd.DateSummary)+","
-				+DbHelper.ParamChar+"paramContentSummary)";
+				+DbHelper.ParamChar+"paramContentSummary,"
+				+    POut.Long  (ehrSummaryCcd.EmailAttachNum)+")";
 			if(ehrSummaryCcd.ContentSummary==null) {
 				ehrSummaryCcd.ContentSummary="";
 			}
@@ -116,7 +118,8 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE ehrsummaryccd SET "
 				+"PatNum          =  "+POut.Long  (ehrSummaryCcd.PatNum)+", "
 				+"DateSummary     =  "+POut.Date  (ehrSummaryCcd.DateSummary)+", "
-				+"ContentSummary  =  "+DbHelper.ParamChar+"paramContentSummary "
+				+"ContentSummary  =  "+DbHelper.ParamChar+"paramContentSummary, "
+				+"EmailAttachNum  =  "+POut.Long  (ehrSummaryCcd.EmailAttachNum)+" "
 				+"WHERE EhrSummaryCcdNum = "+POut.Long(ehrSummaryCcd.EhrSummaryCcdNum);
 			if(ehrSummaryCcd.ContentSummary==null) {
 				ehrSummaryCcd.ContentSummary="";
@@ -139,6 +142,10 @@ namespace OpenDentBusiness.Crud{
 			if(ehrSummaryCcd.ContentSummary != oldEhrSummaryCcd.ContentSummary) {
 				if(command!=""){ command+=",";}
 				command+="ContentSummary = "+DbHelper.ParamChar+"paramContentSummary";
+			}
+			if(ehrSummaryCcd.EmailAttachNum != oldEhrSummaryCcd.EmailAttachNum) {
+				if(command!=""){ command+=",";}
+				command+="EmailAttachNum = "+POut.Long(ehrSummaryCcd.EmailAttachNum)+"";
 			}
 			if(command==""){
 				return;
