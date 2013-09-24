@@ -249,6 +249,8 @@ namespace OpenDentBusiness {
 		NewCropPartnerName,
 		/// <summary>There is no UI for user to change this. For resellers, this is part of the credentials.  OD credentials are not stored here, but are hard-coded.</summary>
 		NewCropPassword,
+		///<summary>URL of the time server to use for EHR time synchronization.  Only used for EHR.  Example nist-time-server.eoni.com</summary>
+		NistTimeServerUrl,
 		OpenDentalVendor,
 		OracleInsertId,
 		PasswordsMustBeStrong,

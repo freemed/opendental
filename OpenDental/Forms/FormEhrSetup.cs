@@ -210,6 +210,11 @@ namespace OpenDental {
 //			Cursor=Cursors.Default;
 //		}
 
+		private void butTimeSynch_Click(object sender,EventArgs e) {
+			FormEhrTimeSynch formET = new FormEhrTimeSynch();
+			formET.ShowDialog();
+		}
+
 		private void butKeys_Click(object sender,EventArgs e) {
 			FormEhrQuarterlyKeys formK=new FormEhrQuarterlyKeys();
 			formK.ShowDialog();

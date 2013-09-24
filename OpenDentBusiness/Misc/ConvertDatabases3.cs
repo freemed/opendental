@@ -1679,6 +1679,14 @@ namespace OpenDentBusiness {
 					command=@"CREATE INDEX encounter_CodeValue ON encounter (CodeValue)";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('NistTimeServerUrl','nist-time-server.eoni.com')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'NistTimeServerUrl','nist-time-server.eoni.com')";
+					Db.NonQ(command);
+				}
 
 
 

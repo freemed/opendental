@@ -540,6 +540,8 @@
     <Compile Include="Misc\InnoDb.cs" />
     <Compile Include="Misc\ConvertDatabases2.cs" />
     <Compile Include="Misc\ConvertDatabases1.cs" />
+    <Compile Include="Misc\NTPv4.cs" />
+    <Compile Include="Misc\WindowsTime.cs" />
     <Compile Include="Mobile\Crud\AllergyDefmCrud.cs" />
     <Compile Include="Mobile\Crud\AllergymCrud.cs" />
     <Compile Include="Mobile\Crud\DiseaseDefmCrud.cs" />

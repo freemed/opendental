@@ -23,6 +23,33 @@ namespace OpenDentBusiness {
 			return PIn.DateT(table.Rows[0][0].ToString());
 		}
 
+		///<summary>Gets the current date/Time with milliseconds directly from server.  In Mysql we must query the server until the second rolls over, which may take up to one second.  Used to confirm synchronization in time for EHR.</summary>
+		public static DateTime GetNowDateTimeWithMilli() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<DateTime>(MethodBase.GetCurrentMethod());
+			}
+			string command;
+			string dbtime;
+			if(DataConnection.DBtype==DatabaseType.MySql) {
+				command="SELECT NOW()"; //Only up to 1 second precision pre-Mysql 5.6.4.  Does not round milliseconds.
+				dbtime=Db.GetScalar(command);
+				int secondInit=PIn.DateT(dbtime).Second;
+				int secondCur;
+				//Continue querying server for current time until second changes (milliseconds will be close to 0)
+				do {
+					dbtime=Db.GetScalar(command);
+					secondCur=PIn.DateT(dbtime).Second;
+				}
+				while(secondInit==secondCur);
+			}
+			else {
+				command="SELECT CURRENT_TIMESTAMP(3) FROM DUAL"; //Timestamp with milliseconds
+				dbtime=Db.GetScalar(command);
+			}
+			return PIn.DateT(dbtime);
+		}
+
+
 		///<summary>Used in MakeABackup to ensure a unique backup database name.</summary>
 		private static bool Contains(string[] arrayToSearch,string valueToTest) {
 			//No need to check RemotingRole; no call to db.
