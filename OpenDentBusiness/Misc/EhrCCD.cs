@@ -785,13 +785,12 @@ Laboratory Test Results
 					XmlNode xmlNodeName=xmlNodePat.ChildNodes[i];
 					for(int j=0;j<xmlNodeName.ChildNodes.Count;j++) {
 						if(xmlNodeName.ChildNodes[j].Name.Trim().ToLower()=="given") {
-							string strGivenName=xmlNodeName.ChildNodes[j].InnerText;
-							if(fName=="") {//The first and middle names are both referred to as "given" name, so we assume the first given name is the patient's first name.
-								fName=strGivenName;
+							if(fName=="") {//The first and middle names are both referred to as "given" name.  The first given name is the patient's first name.
+								fName=xmlNodeName.ChildNodes[j].InnerText.Trim();
 							}
 						}
 						else if(xmlNodeName.ChildNodes[j].Name.Trim().ToLower()=="family") {
-							lName=xmlNodeName.ChildNodes[j].InnerText;
+							lName=xmlNodeName.ChildNodes[j].InnerText.Trim();
 						}
 					}
 				}
@@ -815,6 +814,10 @@ Laboratory Test Results
 					}
 				}
 			}
+			//A match cannot be made unless the CCD message includes first and last name as well as a specified birthdate, 
+			//because we do not want to automatically attach Direct messages to patients unless we are certain that the match makes sense.
+			//The user can always manually attach the incoming Direct message to a patient if the automatic matching fails, so it is good that the automatic matching is strict.
+			//Automatic matching is not required for EHR, but it is "highly recommended when possible" according to Drummond.
 			if(lName=="" || fName=="" || birthDate.Year<1880) {
 				return 0;
 			}

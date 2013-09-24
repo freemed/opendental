@@ -180,7 +180,7 @@ namespace OpenDental{
 			Random rnd=new Random();
 			string newName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()
 				+Path.GetExtension(oldPath);
-			string attachPath=FormEmailMessageEdit.GetAttachPath();
+			string attachPath=EmailMessages.GetEmailAttachPath();
 			string newPath=ODFileUtils.CombinePaths(attachPath,newName);
 			try {
 				if(ImageHelper.HasImageExtension(oldPath)) {

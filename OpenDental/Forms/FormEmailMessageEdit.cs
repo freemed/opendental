@@ -602,6 +602,9 @@ namespace OpenDental{
 			for(int i=0;i<MessageCur.Attachments.Count;i++){
 				listAttachments.Items.Add(MessageCur.Attachments[i].DisplayedFileName);
 			}
+			if(MessageCur.Attachments.Count>0) {
+				listAttachments.SelectedIndex=0;
+			}
 		}
 
 		private void FillList(){
@@ -674,24 +677,6 @@ namespace OpenDental{
 			messageChanged=true;
 		}
 
-		///<summary>Deprecated.  Use EmailMessages.GetEmailAttachPath().  This is a stupid place for this, but keeping it around because it's used from many places.</summary>
-		public static string GetAttachPath(){
-			string attachPath;
-			if(PrefC.AtoZfolderUsed) {
-				attachPath=ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),"EmailAttachments");
-				if(!Directory.Exists(attachPath)) {
-					Directory.CreateDirectory(attachPath);
-				}
-			}
-			else{
-				//For users who have the A to Z folders disabled, there is no defined image path, so we
-				//have to use a temp path.  This means that the attachments might be available immediately afterward,
-				//but probably not later.
-				attachPath=Path.GetTempPath();
-			}
-			return attachPath;
-		}
-
 		private void butAttach_Click(object sender,EventArgs e) {
 			OpenFileDialog dlg=new OpenFileDialog();
 			dlg.Multiselect=true;
@@ -713,7 +698,7 @@ namespace OpenDental{
 			Random rnd=new Random();
 			string newName;
 			EmailAttach attach;
-			string attachPath=GetAttachPath();
+			string attachPath=EmailMessages.GetEmailAttachPath();
 			try{
 				for(int i=0;i<dlg.FileNames.Length;i++){
 					//copy the file
@@ -779,7 +764,7 @@ namespace OpenDental{
 		}
 
 		private void OpenFile(){
-			string strFilePathAttach=ODFileUtils.CombinePaths(GetAttachPath(),MessageCur.Attachments[listAttachments.SelectedIndex].ActualFileName);
+			string strFilePathAttach=ODFileUtils.CombinePaths(EmailMessages.GetEmailAttachPath(),MessageCur.Attachments[listAttachments.SelectedIndex].ActualFileName);
 			try{
 				//For Direct messages, the content of the message will be within a .xml attachment.
 				if((MessageCur.SentOrReceived==EmailSentOrReceived.ReceivedDirect || MessageCur.SentOrReceived==EmailSentOrReceived.ReadDirect) && Path.GetExtension(strFilePathAttach).ToLower()==".xml") {
@@ -943,7 +928,7 @@ namespace OpenDental{
 				//message.UrlContentLocation=;
 				message.BodyEncoding=System.Text.Encoding.UTF8;
 				message.BodyFormat=System.Web.Mail.MailFormat.Text;//or .Html
-				string attachPath=GetAttachPath();
+				string attachPath=EmailMessages.GetEmailAttachPath();
 				System.Web.Mail.MailAttachment attach;
 				//foreach (string sSubstr in sAttach.Split(delim)){
 				for(int i=0;i<emailMessage.Attachments.Count;i++) {
@@ -969,7 +954,7 @@ namespace OpenDental{
 				message.Subject=emailMessage.Subject;
 				message.Body=emailMessage.BodyText;
 				message.IsBodyHtml=false;
-				string attachPath=GetAttachPath();
+				string attachPath=EmailMessages.GetEmailAttachPath();
 				for(int i=0;i<emailMessage.Attachments.Count;i++) {
 					attach=new Attachment(ODFileUtils.CombinePaths(attachPath,emailMessage.Attachments[i].ActualFileName));
 					//@"C:\OpenDentalData\EmailAttachments\1");

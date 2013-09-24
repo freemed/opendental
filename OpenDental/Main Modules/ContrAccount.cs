@@ -3715,7 +3715,7 @@ namespace OpenDental {
 			string guarFolder=ImageStore.GetPatientFolder(guar,ImageStore.GetPreferredAtoZpath());
 			//OpenDental.Imaging.ImageStoreBase imageStore = OpenDental.Imaging.ImageStore.GetImageStore(guar);
 			if(stmt.Mode_==StatementMode.Email) {
-				string attachPath=FormEmailMessageEdit.GetAttachPath();
+				string attachPath=EmailMessages.GetEmailAttachPath();
 				Random rnd=new Random();
 				string fileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf";
 				string filePathAndName=ODFileUtils.CombinePaths(attachPath,fileName);

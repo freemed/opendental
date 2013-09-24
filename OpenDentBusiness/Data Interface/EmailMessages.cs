@@ -296,55 +296,50 @@ namespace OpenDentBusiness{
 				emailMessage.SentOrReceived=EmailSentOrReceived.Received;
 			}
 			StringBuilder sbBodyText=new StringBuilder();
-			List<Health.Direct.Common.Mime.MimeEntity> listAttachments=new List<Health.Direct.Common.Mime.MimeEntity>();
-			if(inMsg.Message.IsMultiPart) {//multiple body parts
-				Health.Direct.Common.Mime.MimeEntity mimeEntity=inMsg.Message.ExtractMimeEntity();
-				foreach(Health.Direct.Common.Mime.MimeEntity mimePart in mimeEntity.GetParts()) {
-					if(mimePart.ContentDisposition!=null && mimePart.ContentDisposition.ToLower().Contains("attachment")) {
-						listAttachments.Add(mimePart);//File is created below, after the EmailMessage is inserted, because we need the primary key.
-						continue;
-					}
-					if(sbBodyText.Length>0) {
-						//Separate distinct mime text parts with some space.  Normally there should only be one mime part which is text and the others would be attachments.  This is here just in case.
-						sbBodyText.Append("\r\n\r\n");
-					}
-					sbBodyText.Append(ProcessMimeTextPart(mimePart.Body.Text));
-				}
-				emailMessage.BodyText=sbBodyText.ToString();
-			}
-			else {//single body part
+			emailMessage.Attachments=new List<EmailAttach>();//Create a new list, in case the email is new, because emailMessage.Attachments would be null otherwise.
+			if(!inMsg.Message.IsMultiPart) {//Single body part.  No attachments.
 				emailMessage.BodyText=ProcessMimeTextPart(inMsg.Message.Body.Text);
 			}
-			//If the email is new, then attachments list is empty, and it is also empty if the email message was existing, becauese of the update call above.
-			emailMessage.Attachments=new List<EmailAttach>();//Create a new list, in case the email is new, because emailMessage.Attachments would be null otherwise.
-			for(int i=0;i<listAttachments.Count;i++) {
-				string strAttachText=listAttachments[i].Body.Text;
-				try {
-					if(listAttachments[i].ContentTransferEncoding.ToLower().Contains("base64")) {
-						strAttachText=Encoding.UTF8.GetString(Convert.FromBase64String(listAttachments[i].Body.Text));
+			else {//multiple body parts
+				Health.Direct.Common.Mime.MimeEntity mimeEntity=inMsg.Message.ExtractMimeEntity();
+				foreach(Health.Direct.Common.Mime.MimeEntity mimePart in mimeEntity.GetParts()) {
+					if(mimePart.ContentDisposition==null || !mimePart.ContentDisposition.ToLower().Contains("attachment")) {//Not an email attachment.  Treat as body text.
+						if(sbBodyText.Length>0) {
+							//Separate distinct mime text parts with some space.  Normally there should only be one mime part which is text and the others would be attachments.  This is here just in case.
+							sbBodyText.Append("\r\n\r\n");
+						}
+						sbBodyText.Append(ProcessMimeTextPart(mimePart.Body.Text));
+						continue;
 					}
-				}
-				catch {
-				}
-				if(isEncrypted && emailMessage.PatNum==0) {//Direct message with email attachments.  If no patient is assigned to the email yet and a CCD message is present in the email attachments, then we must try to automatically attach the email message to the patient account.
-					if(EhrCCD.IsCCD(strAttachText)) {
+					//Email attachment.
+					string strAttachText=mimePart.Body.Text;
+					try {
+						if(mimePart.ContentTransferEncoding.ToLower().Contains("base64")) {
+							strAttachText=Encoding.UTF8.GetString(Convert.FromBase64String(mimePart.Body.Text));
+						}
+					}
+					catch {
+					}
+					string strAttachPath=GetEmailAttachPath();
+					string strAttachFileNameAdjusted=mimePart.ParsedContentType.Name;
+					if(String.IsNullOrEmpty(mimePart.ParsedContentType.Name)) {
+						strAttachFileNameAdjusted=MiscUtils.CreateRandomAlphaNumericString(8)+".txt";//just in case
+					}
+					//A Direct message with an XML CCD attachment.  If no patient already assigned to the email, then we must try to automatically attach the email message to the patient account.
+					if(isEncrypted && Path.GetExtension(strAttachFileNameAdjusted).ToLower()==".xml" && EhrCCD.IsCCD(strAttachText) && emailMessage.PatNum==0) {
 						emailMessage.PatNum=EhrCCD.GetCCDpat(strAttachText);// A match is not guaranteed, which is why we have a button to allow the user to change the patient.
 					}
+					string strAttachFile=ODFileUtils.CombinePaths(strAttachPath,DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+"_"+strAttachFileNameAdjusted);
+					while(File.Exists(strAttachFile)) {
+						strAttachFile=ODFileUtils.CombinePaths(strAttachPath,DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+"_"+strAttachFileNameAdjusted);
+					}
+					File.WriteAllText(strAttachFile,strAttachText);
+					EmailAttach emailAttach=new EmailAttach();
+					emailAttach.ActualFileName=Path.GetFileName(strAttachFile);
+					emailAttach.DisplayedFileName=Path.GetFileName(strAttachFileNameAdjusted);//shorter name, excludes date and time stamp info.
+					emailMessage.Attachments.Add(emailAttach);//The attachment EmailMessageNum is set when the emailMessage is inserted/updated below.					
 				}
-				string strAttachPath=GetEmailAttachPath();
-				string strAttachFileNameAdjusted=listAttachments[i].ParsedContentType.Name;
-				if(String.IsNullOrEmpty(listAttachments[i].ParsedContentType.Name)) {
-					strAttachFileNameAdjusted=MiscUtils.CreateRandomAlphaNumericString(8)+".txt";//just in case
-				}
-				string strAttachFile=ODFileUtils.CombinePaths(strAttachPath,DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+"_"+strAttachFileNameAdjusted);
-				while(File.Exists(strAttachFile)) {
-					strAttachFile=ODFileUtils.CombinePaths(strAttachPath,DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+"_"+strAttachFileNameAdjusted);
-				}
-				File.WriteAllText(strAttachFile,strAttachText);
-				EmailAttach emailAttach=new EmailAttach();
-				emailAttach.ActualFileName=Path.GetFileName(strAttachFile);
-				emailAttach.DisplayedFileName=Path.GetFileName(strAttachFile);
-				emailMessage.Attachments.Add(emailAttach);//The attachment EmailMessageNum is set when the emailMessage is inserted/updated below.
+				emailMessage.BodyText=sbBodyText.ToString();
 			}
 			if(emailMessageNum==0) {
 				EmailMessages.Insert(emailMessage);//Also inserts all of the attachments in emailMessage.Attachments after setting each attachment EmailMessageNum properly.

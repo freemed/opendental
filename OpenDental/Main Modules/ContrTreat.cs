@@ -1850,7 +1850,7 @@ namespace OpenDental{
 				}
 			}
 			PrepImageForPrinting();
-			string attachPath=FormEmailMessageEdit.GetAttachPath();
+			string attachPath=EmailMessages.GetEmailAttachPath();
 			Random rnd=new Random();
 			string fileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf";
 			string filePathAndName=ODFileUtils.CombinePaths(attachPath,fileName);

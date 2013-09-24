@@ -855,7 +855,7 @@ namespace OpenDental{
 					Statements.MarkSent(stmt.StatementNum,stmt.DateSent);
 				}
 				if(stmt.Mode_==StatementMode.Email){
-					attachPath=FormEmailMessageEdit.GetAttachPath();
+					attachPath=EmailMessages.GetEmailAttachPath();
 					rnd=new Random();
 					fileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf";
 					filePathAndName=ODFileUtils.CombinePaths(attachPath,fileName);
