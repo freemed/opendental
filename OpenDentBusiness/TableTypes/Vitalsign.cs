@@ -39,7 +39,7 @@ namespace OpenDentBusiness {
 		public string BMIExamCode;
 		///<summary>FK to ehrnotperformed.EhrNotPerformedNum.  This will link a vitalsign to the EhrNotPerformed object where the reason not performed will be stored.  The linking will allow us to display the not performed reason directly in the vital sign window and will make CQM queries easier.  Will be 0 if not linked to an EhrNotPerformed object.</summary>
 		public long EhrNotPerformedNum;
-		///<summary>FK to diseasedef.DiseaseDefNum.  This will link this vitalsign object to a pregnancy diagnosis definition.  It will be 0 for non pregnant patients.</summary>
+		///<summary>FK to diseasedef.DiseaseDefNum.  This will link this vitalsign object to a pregnancy diagnosis definition.  It will be 0 for non pregnant patients.  A disease also gets automatically inserted for the patient.</summary>
 		public long PregDiseaseDefNum;
 		///<summary>FK to intervention.InterventionNum.  This will link a vitalsign to the intervention object for nutrition counseling.  This may be 0 and if they delete the Intervention object we will have to clear this field.</summary>
 		public long NutrInterventionNum;
