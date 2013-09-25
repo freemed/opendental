@@ -1977,6 +1977,7 @@ namespace OpenDental{
 			}
 			comboBoxMultiRace.Items.Add(Lan.g("enumPatRace","none"));//0 none option for both regular and EHR users.
 			if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
+				labelRaceEthnicity.Text="Race";
 				//comboBoxMultiRace.Items.Add(Lan.g("enumPatRace","Aboriginal"));//Hidden for EHR
 				comboBoxMultiRace.Items.Add(Lan.g("enumPatRace","AfricanAmerican"));//1
 				comboBoxMultiRace.Items.Add(Lan.g("enumPatRace","AmericanIndian"));//2
@@ -1987,8 +1988,11 @@ namespace OpenDental{
 				//comboBoxMultiRace.Items.Add(Lan.g("enumPatRace","Multiracial"));//Hidden for EHR
 				//comboBoxMultiRace.Items.Add(Lan.g("enumPatRace","Other"));//Hidden for EHR
 				comboBoxMultiRace.Items.Add(Lan.g("enumPatRace","White"));//6
+				comboEthnicity.Items.Add(Lan.g(this,"none"));//0 
+				comboEthnicity.Items.Add(Lan.g(this,"DeclinedToSpecify"));//1
+				comboEthnicity.Items.Add(Lan.g(this,"Not Hispanic"));//2
+				comboEthnicity.Items.Add(Lan.g(this,"Hispanic"));//3
 				List<int> listPatRaces=PatientRaces.GetPatRaceList(PatCur.PatNum);
-				bool isEthnicityHispanic=false;
 				for(int i=0;i<listPatRaces.Count;i++) {
 					PatRace race=(PatRace)listPatRaces[i];
 					if(race==PatRace.AfricanAmerican) {
@@ -2006,29 +2010,21 @@ namespace OpenDental{
 					else if(race==PatRace.HawaiiOrPacIsland) {
 						comboBoxMultiRace.SetSelected(5,true);//HawaiiOrPacIsland
 					}
-					else if(race==PatRace.Hispanic) {//Hispanic
-						isEthnicityHispanic=true;//Do not add to comboBoxMultiRace.
+					else if(race==PatRace.Hispanic) {
+						comboEthnicity.SelectedIndex=3;//Hispanic
+					}
+					else if(race==PatRace.NotHispanic) {
+						comboEthnicity.SelectedIndex=2;//Not Hispanic
 					}
 					else if(race==PatRace.White) {
 						comboBoxMultiRace.SetSelected(6,true);//White
 					}
 				}
-				labelRaceEthnicity.Text="Race";
-				comboEthnicity.Items.Add(Lan.g(this,"none"));//0 
-				comboEthnicity.Items.Add(Lan.g(this,"DeclinedToSpecify"));//1
-				comboEthnicity.Items.Add(Lan.g(this,"Not Hispanic"));//2
-				comboEthnicity.Items.Add(Lan.g(this,"Hispanic"));//3
-				if(comboBoxMultiRace.SelectedIndices.Count==0) {//No race selected.
+				if(comboBoxMultiRace.SelectedIndices.Count==0) {//No race selected, ethnicity cannot exist without a race
 					comboEthnicity.SelectedIndex=0;//none
 				}
 				else if(listPatRaces.Contains((int)PatRace.DeclinedToSpecify)) {//DeclinedToSpecify forces both race and ethnicity.
 					comboEthnicity.SelectedIndex=1;
-				}
-				else if(isEthnicityHispanic) {
-					comboEthnicity.SelectedIndex=3;//Hispanic
-				}
-				else {
-					comboEthnicity.SelectedIndex=2;//Not Hispanic
 				}
 			}
 			else {//EHR not enabled
@@ -3039,8 +3035,12 @@ namespace OpenDental{
 				listPatRaces.Clear();
 				listPatRaces.Add(PatRace.DeclinedToSpecify);
 			}
-			else if(listPatRaces.Count>0 && comboEthnicity.SelectedIndex==3) {//Ethnicity of Hispanic can only be supplemental to a specified race (when neither the none or the DeclinedToSpecify options were chosen for race).
+			//Ethnicity of Hispanic/NotHispanic can only be supplemental to a specified race (when neither the none or the DeclinedToSpecify options were chosen for race).
+			else if(listPatRaces.Count>0 && comboEthnicity.SelectedIndex==3) {//Hispanic
 				listPatRaces.Add(PatRace.Hispanic);
+			}
+			else if(listPatRaces.Count>0) {//NotHispanic, this will be set if they have selected a race that is not DeclinedToSpecify or 'none', and they either choose NotHispanic, or do not chose any ethnicity
+				listPatRaces.Add(PatRace.NotHispanic);
 			}
 			PatientRaces.Reconcile(PatCur.PatNum,listPatRaces);//Insert, Update, Delete if needed.
 			PatCur.County=textCounty.Text;
