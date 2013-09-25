@@ -288,7 +288,7 @@ namespace OpenDentBusiness{
 		///<summary>55. Caches the wiki master page and the wikiListHeaderWidths</summary>
 		Wiki,
 		///<summary>56</summary>
-		Snomeds,
+		EhrCodes,
 		///<summary>57. SourceOfPayment</summary>
 		Sops
 	}
