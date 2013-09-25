@@ -1703,6 +1703,187 @@ namespace OpenDentBusiness {
 					command=@"CREATE INDEX ehrsummaryccd_EmailAttachNum ON ehrsummaryccd (EmailAttachNum)";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE vitalsign ADD HeightExamCode varchar(30) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE vitalsign ADD HeightExamCode varchar2(30)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE vitalsign ADD WeightExamCode varchar(30) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE vitalsign ADD WeightExamCode varchar2(30)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE vitalsign ADD BMIExamCode varchar(30) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE vitalsign ADD BMIExamCode varchar2(30)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE vitalsign ADD EhrNotPerformedNum bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE vitalsign ADD INDEX (EhrNotPerformedNum)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE vitalsign ADD EhrNotPerformedNum number(20)";
+					Db.NonQ(command);
+					command="UPDATE vitalsign SET EhrNotPerformedNum = 0 WHERE EhrNotPerformedNum IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE vitalsign MODIFY EhrNotPerformedNum NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX vitalsign_EhrNotPerformedNum ON vitalsign (EhrNotPerformedNum)";
+					Db.NonQ(command);
+				}
+				//Add exam codes to vital sign rows currently in the db using the most generic code from each set
+				command="UPDATE vitalsign SET HeightExamCode='8302-2' WHERE Height!=0";//8302-2 is "Body height"
+				Db.NonQ(command);
+				command="UPDATE vitalsign SET WeightExamCode='29463-7' WHERE Weight!=0";//29463-7 is "Body weight"
+				Db.NonQ(command);
+				command="UPDATE vitalsign SET BMIExamCode='59574-4' WHERE Height!=0 AND Weight!=0";//59574-4 is "Body mass index (BMI) [Percentile]"
+				Db.NonQ(command);
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					//Update over/underweight code, only 1 LOINC code for overweight and 1 for underweight
+					//Based on age before the start of the measurement period, which is age before any birthday in the year of DateTaken.  Different range for 18-64 and 65+.  Under 18 not classified under/over
+					command="UPDATE vitalsign,patient SET WeightCode='238131007'/*Overweight*/ "
+						+"WHERE patient.PatNum=vitalsign.PatNum AND Height!=0 AND Weight!=0 "
+						+"AND Birthdate>'1880-01-01' AND ("
+						+"(YEAR(DateTaken)-YEAR(Birthdate)-1>=65 AND (Weight*703)/(Height*Height)>=30) "
+						+"OR "
+						+"(YEAR(DateTaken)-YEAR(Birthdate)-1 BETWEEN 18 AND 64 AND (Weight*703)/(Height*Height)>=25))";
+					Db.NonQ(command);
+					command="UPDATE vitalsign,patient	SET WeightCode='248342006'/*Underweight*/ "
+						+"WHERE patient.PatNum=vitalsign.PatNum	AND Height!=0 AND Weight!=0 "
+						+"AND Birthdate>'1880-01-01' AND ("
+						+"(YEAR(DateTaken)-YEAR(patient.Birthdate)-1>=65 AND (Weight*703)/(Height*Height)<23) "
+						+"OR "
+						+"(YEAR(DateTaken)-YEAR(patient.Birthdate)-1 BETWEEN 18 AND 64 AND (Weight*703)/(Height*Height)<18.5))";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					//EHR not oracle compatible so the vital sign WeightCode will not be used, only for ehr reporting
+				} 
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE vitalsign ADD PregDiseaseDefNum bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE vitalsign ADD INDEX (PregDiseaseDefNum)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE vitalsign ADD PregDiseaseDefNum number(20)";
+					Db.NonQ(command);
+					command="UPDATE vitalsign SET PregDiseaseDefNum = 0 WHERE PregDiseaseDefNum IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE vitalsign MODIFY PregDiseaseDefNum NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX vitalsign_PregDiseaseDefNum ON vitalsign (PregDiseaseDefNum)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE vitalsign ADD NutrInterventionNum bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE vitalsign ADD INDEX (NutrInterventionNum)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE vitalsign ADD NutrInterventionNum number(20)";
+					Db.NonQ(command);
+					command="UPDATE vitalsign SET NutrInterventionNum = 0 WHERE NutrInterventionNum IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE vitalsign MODIFY NutrInterventionNum NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX vitalsign_NutrInterventionNum ON vitalsign (NutrInterventionNum)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE vitalsign ADD PhyActInterventionNum bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE vitalsign ADD INDEX (PhyActInterventionNum)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE vitalsign ADD PhyActInterventionNum number(20)";
+					Db.NonQ(command);
+					command="UPDATE vitalsign SET PhyActInterventionNum = 0 WHERE PhyActInterventionNum IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE vitalsign MODIFY PhyActInterventionNum NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX vitalsign_PhyActInterventionNum ON vitalsign (PhyActInterventionNum)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE vitalsign ADD OverUnderInterventionNum bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE vitalsign ADD INDEX (OverUnderInterventionNum)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE vitalsign ADD OverUnderInterventionNum number(20)";
+					Db.NonQ(command);
+					command="UPDATE vitalsign SET OverUnderInterventionNum = 0 WHERE OverUnderInterventionNum IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE vitalsign MODIFY OverUnderInterventionNum NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX vitalsign_OverUnderInterventionNum ON vitalsign (OverUnderInterventionNum)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE vitalsign ADD MedicationPatNum bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE vitalsign ADD INDEX (MedicationPatNum)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE vitalsign ADD MedicationPatNum number(20)";
+					Db.NonQ(command);
+					command="UPDATE vitalsign SET MedicationPatNum = 0 WHERE MedicationPatNum IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE vitalsign MODIFY MedicationPatNum NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX vitalsign_MedicationPatNum ON vitalsign (MedicationPatNum)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('CQMDefaultEncounterCodeValue','308335008')";//SNOMED CT code for "Patient encounter procedure (procedure)"
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'CQMDefaultEncounterCodeValue','308335008')";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('CQMDefaultEncounterCodeSystem','SNOMEDCT')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'CQMDefaultEncounterCodeSystem','SNOMEDCT')";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('PregnancyDefaultCodeValue','77386006')";//SNOMED CT code for "Patient currently pregnant (finding)"
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'PregnancyDefaultCodeValue','77386006')";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('PregnancyDefaultCodeSystem','SNOMEDCT')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'PregnancyDefaultCodeSystem','SNOMEDCT')";
+					Db.NonQ(command);
+				}
+
 
 
 
@@ -1728,74 +1909,4 @@ namespace OpenDentBusiness {
 
 				
 
-		
 
-				/*				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE clockevent ADD Rate2Hours time NOT NULL";
-					Db.NonQ(command);
-				}
-				else {//oracle
-					command="ALTER TABLE clockevent ADD Rate2Hours varchar2(255)";
-					Db.NonQ(command);
-				}				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE clockevent ADD Rate2Auto time NOT NULL";
-					Db.NonQ(command);
-				}
-				else {//oracle
-					command="ALTER TABLE clockevent ADD Rate2Auto varchar2(255)";
-					Db.NonQ(command);
-				}
-				*/
-
-				/*				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE ehrnotperformed ADD ProvNum bigint NOT NULL";
-					Db.NonQ(command);
-					command="ALTER TABLE ehrnotperformed ADD INDEX (ProvNum)";
-					Db.NonQ(command);
-				}
-				else {//oracle
-					command="ALTER TABLE ehrnotperformed ADD ProvNum number(20)";
-					Db.NonQ(command);
-					command="UPDATE ehrnotperformed SET ProvNum = 0 WHERE ProvNum IS NULL";
-					Db.NonQ(command);
-					command="ALTER TABLE ehrnotperformed MODIFY ProvNum NOT NULL";
-					Db.NonQ(command);
-					command=@"CREATE INDEX ehrnotperformed_ProvNum ON ehrnotperformed (ProvNum)";
-					Db.NonQ(command);
-				}
-				*/
-
-				/*				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE encounter ADD CodeSystem varchar(255) NOT NULL";
-					Db.NonQ(command);
-				}
-				else {//oracle
-					command="ALTER TABLE encounter ADD CodeSystem varchar2(255)";
-					Db.NonQ(command);
-				}
-				*/
-
-				/*				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE intervention ADD ProvNum bigint NOT NULL";
-					Db.NonQ(command);
-					command="ALTER TABLE intervention ADD INDEX (ProvNum)";
-					Db.NonQ(command);
-				}
-				else {//oracle
-					command="ALTER TABLE intervention ADD ProvNum number(20)";
-					Db.NonQ(command);
-					command="UPDATE intervention SET ProvNum = 0 WHERE ProvNum IS NULL";
-					Db.NonQ(command);
-					command="ALTER TABLE intervention MODIFY ProvNum NOT NULL";
-					Db.NonQ(command);
-					command=@"CREATE INDEX intervention_ProvNum ON intervention (ProvNum)";
-					Db.NonQ(command);
-				}				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE intervention ADD Note varchar(255) NOT NULL";
-					Db.NonQ(command);
-				}
-				else {//oracle
-					command="ALTER TABLE intervention ADD Note varchar2(255)";
-					Db.NonQ(command);
-				}
-				*/

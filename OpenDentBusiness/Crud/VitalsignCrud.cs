@@ -46,19 +46,28 @@ namespace OpenDentBusiness.Crud{
 			Vitalsign vitalsign;
 			for(int i=0;i<table.Rows.Count;i++) {
 				vitalsign=new Vitalsign();
-				vitalsign.VitalsignNum     = PIn.Long  (table.Rows[i]["VitalsignNum"].ToString());
-				vitalsign.PatNum           = PIn.Long  (table.Rows[i]["PatNum"].ToString());
-				vitalsign.Height           = PIn.Float (table.Rows[i]["Height"].ToString());
-				vitalsign.Weight           = PIn.Float (table.Rows[i]["Weight"].ToString());
-				vitalsign.BpSystolic       = PIn.Int   (table.Rows[i]["BpSystolic"].ToString());
-				vitalsign.BpDiastolic      = PIn.Int   (table.Rows[i]["BpDiastolic"].ToString());
-				vitalsign.DateTaken        = PIn.Date  (table.Rows[i]["DateTaken"].ToString());
-				vitalsign.HasFollowupPlan  = PIn.Bool  (table.Rows[i]["HasFollowupPlan"].ToString());
-				vitalsign.IsIneligible     = PIn.Bool  (table.Rows[i]["IsIneligible"].ToString());
-				vitalsign.Documentation    = PIn.String(table.Rows[i]["Documentation"].ToString());
-				vitalsign.ChildGotNutrition= PIn.Bool  (table.Rows[i]["ChildGotNutrition"].ToString());
-				vitalsign.ChildGotPhysCouns= PIn.Bool  (table.Rows[i]["ChildGotPhysCouns"].ToString());
-				vitalsign.WeightCode       = PIn.String(table.Rows[i]["WeightCode"].ToString());
+				vitalsign.VitalsignNum            = PIn.Long  (table.Rows[i]["VitalsignNum"].ToString());
+				vitalsign.PatNum                  = PIn.Long  (table.Rows[i]["PatNum"].ToString());
+				vitalsign.Height                  = PIn.Float (table.Rows[i]["Height"].ToString());
+				vitalsign.Weight                  = PIn.Float (table.Rows[i]["Weight"].ToString());
+				vitalsign.BpSystolic              = PIn.Int   (table.Rows[i]["BpSystolic"].ToString());
+				vitalsign.BpDiastolic             = PIn.Int   (table.Rows[i]["BpDiastolic"].ToString());
+				vitalsign.DateTaken               = PIn.Date  (table.Rows[i]["DateTaken"].ToString());
+				vitalsign.HasFollowupPlan         = PIn.Bool  (table.Rows[i]["HasFollowupPlan"].ToString());
+				vitalsign.IsIneligible            = PIn.Bool  (table.Rows[i]["IsIneligible"].ToString());
+				vitalsign.Documentation           = PIn.String(table.Rows[i]["Documentation"].ToString());
+				vitalsign.ChildGotNutrition       = PIn.Bool  (table.Rows[i]["ChildGotNutrition"].ToString());
+				vitalsign.ChildGotPhysCouns       = PIn.Bool  (table.Rows[i]["ChildGotPhysCouns"].ToString());
+				vitalsign.WeightCode              = PIn.String(table.Rows[i]["WeightCode"].ToString());
+				vitalsign.HeightExamCode          = PIn.String(table.Rows[i]["HeightExamCode"].ToString());
+				vitalsign.WeightExamCode          = PIn.String(table.Rows[i]["WeightExamCode"].ToString());
+				vitalsign.BMIExamCode             = PIn.String(table.Rows[i]["BMIExamCode"].ToString());
+				vitalsign.EhrNotPerformedNum      = PIn.Long  (table.Rows[i]["EhrNotPerformedNum"].ToString());
+				vitalsign.PregDiseaseDefNum       = PIn.Long  (table.Rows[i]["PregDiseaseDefNum"].ToString());
+				vitalsign.NutrInterventionNum     = PIn.Long  (table.Rows[i]["NutrInterventionNum"].ToString());
+				vitalsign.PhyActInterventionNum   = PIn.Long  (table.Rows[i]["PhyActInterventionNum"].ToString());
+				vitalsign.OverUnderInterventionNum= PIn.Long  (table.Rows[i]["OverUnderInterventionNum"].ToString());
+				vitalsign.MedicationPatNum        = PIn.Long  (table.Rows[i]["MedicationPatNum"].ToString());
 				retVal.Add(vitalsign);
 			}
 			return retVal;
@@ -99,7 +108,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="VitalsignNum,";
 			}
-			command+="PatNum,Height,Weight,BpSystolic,BpDiastolic,DateTaken,HasFollowupPlan,IsIneligible,Documentation,ChildGotNutrition,ChildGotPhysCouns,WeightCode) VALUES(";
+			command+="PatNum,Height,Weight,BpSystolic,BpDiastolic,DateTaken,HasFollowupPlan,IsIneligible,Documentation,ChildGotNutrition,ChildGotPhysCouns,WeightCode,HeightExamCode,WeightExamCode,BMIExamCode,EhrNotPerformedNum,PregDiseaseDefNum,NutrInterventionNum,PhyActInterventionNum,OverUnderInterventionNum,MedicationPatNum) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(vitalsign.VitalsignNum)+",";
 			}
@@ -115,7 +124,16 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(vitalsign.Documentation)+"',"
 				+    POut.Bool  (vitalsign.ChildGotNutrition)+","
 				+    POut.Bool  (vitalsign.ChildGotPhysCouns)+","
-				+"'"+POut.String(vitalsign.WeightCode)+"')";
+				+"'"+POut.String(vitalsign.WeightCode)+"',"
+				+"'"+POut.String(vitalsign.HeightExamCode)+"',"
+				+"'"+POut.String(vitalsign.WeightExamCode)+"',"
+				+"'"+POut.String(vitalsign.BMIExamCode)+"',"
+				+    POut.Long  (vitalsign.EhrNotPerformedNum)+","
+				+    POut.Long  (vitalsign.PregDiseaseDefNum)+","
+				+    POut.Long  (vitalsign.NutrInterventionNum)+","
+				+    POut.Long  (vitalsign.PhyActInterventionNum)+","
+				+    POut.Long  (vitalsign.OverUnderInterventionNum)+","
+				+    POut.Long  (vitalsign.MedicationPatNum)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -128,18 +146,27 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one Vitalsign in the database.</summary>
 		public static void Update(Vitalsign vitalsign){
 			string command="UPDATE vitalsign SET "
-				+"PatNum           =  "+POut.Long  (vitalsign.PatNum)+", "
-				+"Height           =  "+POut.Float (vitalsign.Height)+", "
-				+"Weight           =  "+POut.Float (vitalsign.Weight)+", "
-				+"BpSystolic       =  "+POut.Int   (vitalsign.BpSystolic)+", "
-				+"BpDiastolic      =  "+POut.Int   (vitalsign.BpDiastolic)+", "
-				+"DateTaken        =  "+POut.Date  (vitalsign.DateTaken)+", "
-				+"HasFollowupPlan  =  "+POut.Bool  (vitalsign.HasFollowupPlan)+", "
-				+"IsIneligible     =  "+POut.Bool  (vitalsign.IsIneligible)+", "
-				+"Documentation    = '"+POut.String(vitalsign.Documentation)+"', "
-				+"ChildGotNutrition=  "+POut.Bool  (vitalsign.ChildGotNutrition)+", "
-				+"ChildGotPhysCouns=  "+POut.Bool  (vitalsign.ChildGotPhysCouns)+", "
-				+"WeightCode       = '"+POut.String(vitalsign.WeightCode)+"' "
+				+"PatNum                  =  "+POut.Long  (vitalsign.PatNum)+", "
+				+"Height                  =  "+POut.Float (vitalsign.Height)+", "
+				+"Weight                  =  "+POut.Float (vitalsign.Weight)+", "
+				+"BpSystolic              =  "+POut.Int   (vitalsign.BpSystolic)+", "
+				+"BpDiastolic             =  "+POut.Int   (vitalsign.BpDiastolic)+", "
+				+"DateTaken               =  "+POut.Date  (vitalsign.DateTaken)+", "
+				+"HasFollowupPlan         =  "+POut.Bool  (vitalsign.HasFollowupPlan)+", "
+				+"IsIneligible            =  "+POut.Bool  (vitalsign.IsIneligible)+", "
+				+"Documentation           = '"+POut.String(vitalsign.Documentation)+"', "
+				+"ChildGotNutrition       =  "+POut.Bool  (vitalsign.ChildGotNutrition)+", "
+				+"ChildGotPhysCouns       =  "+POut.Bool  (vitalsign.ChildGotPhysCouns)+", "
+				+"WeightCode              = '"+POut.String(vitalsign.WeightCode)+"', "
+				+"HeightExamCode          = '"+POut.String(vitalsign.HeightExamCode)+"', "
+				+"WeightExamCode          = '"+POut.String(vitalsign.WeightExamCode)+"', "
+				+"BMIExamCode             = '"+POut.String(vitalsign.BMIExamCode)+"', "
+				+"EhrNotPerformedNum      =  "+POut.Long  (vitalsign.EhrNotPerformedNum)+", "
+				+"PregDiseaseDefNum       =  "+POut.Long  (vitalsign.PregDiseaseDefNum)+", "
+				+"NutrInterventionNum     =  "+POut.Long  (vitalsign.NutrInterventionNum)+", "
+				+"PhyActInterventionNum   =  "+POut.Long  (vitalsign.PhyActInterventionNum)+", "
+				+"OverUnderInterventionNum=  "+POut.Long  (vitalsign.OverUnderInterventionNum)+", "
+				+"MedicationPatNum        =  "+POut.Long  (vitalsign.MedicationPatNum)+" "
 				+"WHERE VitalsignNum = "+POut.Long(vitalsign.VitalsignNum);
 			Db.NonQ(command);
 		}
@@ -194,6 +221,42 @@ namespace OpenDentBusiness.Crud{
 			if(vitalsign.WeightCode != oldVitalsign.WeightCode) {
 				if(command!=""){ command+=",";}
 				command+="WeightCode = '"+POut.String(vitalsign.WeightCode)+"'";
+			}
+			if(vitalsign.HeightExamCode != oldVitalsign.HeightExamCode) {
+				if(command!=""){ command+=",";}
+				command+="HeightExamCode = '"+POut.String(vitalsign.HeightExamCode)+"'";
+			}
+			if(vitalsign.WeightExamCode != oldVitalsign.WeightExamCode) {
+				if(command!=""){ command+=",";}
+				command+="WeightExamCode = '"+POut.String(vitalsign.WeightExamCode)+"'";
+			}
+			if(vitalsign.BMIExamCode != oldVitalsign.BMIExamCode) {
+				if(command!=""){ command+=",";}
+				command+="BMIExamCode = '"+POut.String(vitalsign.BMIExamCode)+"'";
+			}
+			if(vitalsign.EhrNotPerformedNum != oldVitalsign.EhrNotPerformedNum) {
+				if(command!=""){ command+=",";}
+				command+="EhrNotPerformedNum = "+POut.Long(vitalsign.EhrNotPerformedNum)+"";
+			}
+			if(vitalsign.PregDiseaseDefNum != oldVitalsign.PregDiseaseDefNum) {
+				if(command!=""){ command+=",";}
+				command+="PregDiseaseDefNum = "+POut.Long(vitalsign.PregDiseaseDefNum)+"";
+			}
+			if(vitalsign.NutrInterventionNum != oldVitalsign.NutrInterventionNum) {
+				if(command!=""){ command+=",";}
+				command+="NutrInterventionNum = "+POut.Long(vitalsign.NutrInterventionNum)+"";
+			}
+			if(vitalsign.PhyActInterventionNum != oldVitalsign.PhyActInterventionNum) {
+				if(command!=""){ command+=",";}
+				command+="PhyActInterventionNum = "+POut.Long(vitalsign.PhyActInterventionNum)+"";
+			}
+			if(vitalsign.OverUnderInterventionNum != oldVitalsign.OverUnderInterventionNum) {
+				if(command!=""){ command+=",";}
+				command+="OverUnderInterventionNum = "+POut.Long(vitalsign.OverUnderInterventionNum)+"";
+			}
+			if(vitalsign.MedicationPatNum != oldVitalsign.MedicationPatNum) {
+				if(command!=""){ command+=",";}
+				command+="MedicationPatNum = "+POut.Long(vitalsign.MedicationPatNum)+"";
 			}
 			if(command==""){
 				return;

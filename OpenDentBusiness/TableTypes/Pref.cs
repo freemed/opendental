@@ -129,6 +129,9 @@ namespace OpenDentBusiness {
 		ConfirmTextMessage,
 		CoPay_FeeSchedule_BlankLikeZero,
 		CorruptedDatabase,
+		///<summary>This is the default encounter code used for automatically generating encounters when specific actions are performed in Open Dental.  The code is displayed/set in FormEhrSettings.  We will set it and give the user a list of 9 suggested codes to use such that the encounters generated will cause the pateint to be considered part of the initial patient population in the 9 clinical quality measures tracked by OD.  CQMDefaultEncounterCodeSystem will identify the code system this code is from and the code value will be a FK to that code system.</summary>
+		CQMDefaultEncounterCodeValue,
+		CQMDefaultEncounterCodeSystem,
 		CropDelta,
 		CustomizedForPracticeWeb,
 		DatabaseConvertedForMySql41,
@@ -295,6 +298,9 @@ namespace OpenDentBusiness {
 		PracticeST,
 		PracticeTitle,
 		PracticeZip,
+		///<summary>This is the default pregnancy code used for diagnosing pregnancy from FormVitalSignEdit2014 and is displayed/set in FormEhrSettings.  When the check box for BMI and BP not taken due to pregnancy Dx is selected, this code value will be inserted into the diseasedef table in the column identified by the PregnancyDefaultCodeSystem (i.e. diseasedef.SnomedCode, diseasedef.ICD9Code).  It will then be a FK in the diseasedef table to the associated code system table.</summary>
+		PregnancyDefaultCodeValue,
+		PregnancyDefaultCodeSystem,
 		///<summary>FK to diseasedef.DiseaseDefNum</summary>
 		ProblemsIndicateNone,
 		///<summary>In FormProcCodes, this is the default for the ShowHidden checkbox.</summary>
