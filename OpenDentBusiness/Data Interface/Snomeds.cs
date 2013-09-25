@@ -7,6 +7,9 @@ using System.Text;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class Snomeds{
+		//Not going to use the cache pattern for snomed, takes approximately 100 MB of ram.
+		//If this table type will exist as cached data, uncomment the CachePattern region below.
+		/*
 		#region CachePattern
 		//This region can be eliminated if this is not a table type with cached data.
 		//If leaving this region in place, be sure to add RefreshCache and FillCache 
@@ -45,6 +48,7 @@ namespace OpenDentBusiness{
 			listt=Crud.SnomedCrud.TableToList(table);
 		}
 		#endregion
+		*/
 
 		///<summary>For FormSnomeds to get the list to be displayed in the ListBox. Only gets the first 10,000 in order to remain fast.</summary>		
 		public static List<Snomed> GetByCodeOrDescription(string searchTxt){
@@ -135,18 +139,29 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
-		///<summary>Returns the code and description of the snomed.</summary>
-		public static string GetCodeAndDescription(string snomed) {
-			//No need to check RemotingRole; no call to db.
-			for(int i=0;i<Listt.Count;i++) {
-				if(Listt[i].SnomedCode==snomed) {
-					return Listt[i].SnomedCode+"-"+Listt[i].Description;
-				}
+		//Not going to use the cache pattern for snomed, takes approximately 100 MB of ram.
+		/////<summary>Returns the code and description of the snomed.</summary>
+		//public static string GetCodeAndDescription(string snomed) {
+		//	//No need to check RemotingRole; no call to db.
+		//	for(int i=0;i<Listt.Count;i++) {
+		//		if(Listt[i].SnomedCode==snomed) {
+		//			return Listt[i].SnomedCode+"-"+Listt[i].Description;
+		//		}
+		//	}
+		//	return "";
+		//}
+
+		///<summary>Gets the code and description of the snomed directly from the database by code value.  Re-written to not utilize the cache.</summary>
+		public static string GetCodeAndDescription(string snomedCode) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),snomedCode);
 			}
-			return "";
+			string command="SELECT CONCAT(CONCAT(SnomedCode,'-'),Description) AS CodeAndDescription FROM snomed WHERE SnomedCode='"+POut.String(snomedCode)+"'";
+			return Db.GetScalar(command);
 		}
 
-		///<summary>Returns the Snomed of the code passed in by looking in cache.  If code does not exist, returns null.</summary>
+		//Not going to use the cache pattern for snomed, takes approximately 100 MB of ram.
+		/////<summary>Returns the Snomed of the code passed in by looking in cache.  If code does not exist, returns null.</summary>
 		//public static Snomed GetByCode(string snomedCode) {
 		//	//No need to check RemotingRole; no call to db.
 		//	for(int i=0;i<Listt.Count;i++) {
