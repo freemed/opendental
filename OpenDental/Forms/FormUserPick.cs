@@ -29,6 +29,10 @@ namespace OpenDental {
 			if(listUser.SelectedIndex==-1) {
 				return;
 			}
+			if(!Security.IsAuthorized(Permissions.TaskEdit,true) && Userods.GetInbox(shortList[listUser.SelectedIndex].UserNum)!=0) {
+				MsgBox.Show(this,"Please select a user that does not have an inbox.");
+				return;
+			}
 			SelectedUserNum=shortList[listUser.SelectedIndex].UserNum;
 			DialogResult=DialogResult.OK;
 		}
@@ -36,6 +40,10 @@ namespace OpenDental {
 		private void butOK_Click(object sender,EventArgs e) {
 			if(listUser.SelectedIndex==-1) {
 				MsgBox.Show(this,"Please pick a user first.");
+				return;
+			}
+			if(!Security.IsAuthorized(Permissions.TaskEdit,true) && Userods.GetInbox(shortList[listUser.SelectedIndex].UserNum)!=0) {
+				MsgBox.Show(this,"Please select a user that does not have an inbox.");
 				return;
 			}
 			SelectedUserNum=shortList[listUser.SelectedIndex].UserNum;
