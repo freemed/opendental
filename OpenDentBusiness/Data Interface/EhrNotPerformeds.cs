@@ -47,8 +47,6 @@ namespace OpenDentBusiness{
 		}
 		#endregion
 		*/
-		/*
-		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 
 		///<summary></summary>
 		public static List<EhrNotPerformed> Refresh(long patNum){
@@ -57,14 +55,6 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT * FROM ehrnotperformed WHERE PatNum = "+POut.Long(patNum);
 			return Crud.EhrNotPerformedCrud.SelectMany(command);
-		}
-
-		///<summary>Gets one EhrNotPerformed from the db.</summary>
-		public static EhrNotPerformed GetOne(long ehrNotPerformedNum){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				return Meth.GetObject<EhrNotPerformed>(MethodBase.GetCurrentMethod(),ehrNotPerformedNum);
-			}
-			return Crud.EhrNotPerformedCrud.SelectOne(ehrNotPerformedNum);
 		}
 
 		///<summary></summary>
@@ -93,6 +83,20 @@ namespace OpenDentBusiness{
 			}
 			string command= "DELETE FROM ehrnotperformed WHERE EhrNotPerformedNum = "+POut.Long(ehrNotPerformedNum);
 			Db.NonQ(command);
+		}
+
+
+
+		/*
+		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
+
+
+		///<summary>Gets one EhrNotPerformed from the db.</summary>
+		public static EhrNotPerformed GetOne(long ehrNotPerformedNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				return Meth.GetObject<EhrNotPerformed>(MethodBase.GetCurrentMethod(),ehrNotPerformedNum);
+			}
+			return Crud.EhrNotPerformedCrud.SelectOne(ehrNotPerformedNum);
 		}
 		*/
 
