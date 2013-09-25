@@ -33,7 +33,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static DataTable RefreshCache(){
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
-			string command="SELECT * FROM hcpcs ORDER BY ItemOrder";//stub query probably needs to be changed
+			string command="SELECT * FROM hcpcs";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="Hcpcs";
 			FillCache(table);
@@ -71,6 +71,14 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
+		///<summary>Returns the Hcpcs of the code passed in by looking in cache.  If code does not exist, returns null.</summary>
+		public static Hcpcs GetByCode(string hcpcsCode) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Hcpcs>(MethodBase.GetCurrentMethod(),hcpcsNum);
+			}
+			string command="SELECT * FROM hcpcs WHERE HcpcsCode='"+POut.String(hcpcsCode)+"'";
+			return Crud.HcpcsCrud.SelectOne(command);
+		}
 
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
@@ -82,14 +90,6 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT * FROM hcpcs WHERE PatNum = "+POut.Long(patNum);
 			return Crud.HcpcsCrud.SelectMany(command);
-		}
-
-		///<summary>Gets one Hcpcs from the db.</summary>
-		public static Hcpcs GetOne(long hcpcsNum){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				return Meth.GetObject<Hcpcs>(MethodBase.GetCurrentMethod(),hcpcsNum);
-			}
-			return Crud.HcpcsCrud.SelectOne(hcpcsNum);
 		}
 
 		///<summary></summary>
