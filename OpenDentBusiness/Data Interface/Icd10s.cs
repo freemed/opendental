@@ -70,6 +70,15 @@ namespace OpenDentBusiness{
 			}
 			return retVal;
 		}
+		
+		///<summary>Gets one ICD10 object directly from the database by CodeValue.  If code does not exist, returns null.</summary>
+		public static Icd10 GetByCode(string Icd10Code) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Icd10>(MethodBase.GetCurrentMethod(),Icd10Code);
+			}
+			string command="SELECT * FROM icd10 WHERE SnomedCode='"+POut.String(Icd10Code)+"'";
+			return Crud.Icd10Crud.SelectOne(command);
+		}
 
 
 		/*
