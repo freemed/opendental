@@ -47,8 +47,8 @@ namespace OpenDentBusiness.Crud{
 			for(int i=0;i<table.Rows.Count;i++) {
 				phoneEmpDefault=new PhoneEmpDefault();
 				phoneEmpDefault.EmployeeNum     = PIn.Long  (table.Rows[i]["EmployeeNum"].ToString());
-				phoneEmpDefault.NoGraph         = PIn.Bool  (table.Rows[i]["NoGraph"].ToString());
-				phoneEmpDefault.NoColor         = PIn.Bool  (table.Rows[i]["NoColor"].ToString());
+				phoneEmpDefault.IsGraphed       = PIn.Bool  (table.Rows[i]["IsGraphed"].ToString());
+				phoneEmpDefault.HasColor        = PIn.Bool  (table.Rows[i]["HasColor"].ToString());
 				phoneEmpDefault.RingGroups      = (AsteriskRingGroups)PIn.Int(table.Rows[i]["RingGroups"].ToString());
 				phoneEmpDefault.EmpName         = PIn.String(table.Rows[i]["EmpName"].ToString());
 				phoneEmpDefault.PhoneExt        = PIn.Int   (table.Rows[i]["PhoneExt"].ToString());
@@ -97,13 +97,13 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="EmployeeNum,";
 			}
-			command+="NoGraph,NoColor,RingGroups,EmpName,PhoneExt,StatusOverride,Notes,ComputerName,IsPrivateScreen,IsTriageOperator) VALUES(";
+			command+="IsGraphed,HasColor,RingGroups,EmpName,PhoneExt,StatusOverride,Notes,ComputerName,IsPrivateScreen,IsTriageOperator) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(phoneEmpDefault.EmployeeNum)+",";
 			}
 			command+=
-				     POut.Bool  (phoneEmpDefault.NoGraph)+","
-				+    POut.Bool  (phoneEmpDefault.NoColor)+","
+				     POut.Bool  (phoneEmpDefault.IsGraphed)+","
+				+    POut.Bool  (phoneEmpDefault.HasColor)+","
 				+    POut.Int   ((int)phoneEmpDefault.RingGroups)+","
 				+"'"+POut.String(phoneEmpDefault.EmpName)+"',"
 				+    POut.Int   (phoneEmpDefault.PhoneExt)+","
@@ -124,8 +124,8 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one PhoneEmpDefault in the database.</summary>
 		public static void Update(PhoneEmpDefault phoneEmpDefault){
 			string command="UPDATE phoneempdefault SET "
-				+"NoGraph         =  "+POut.Bool  (phoneEmpDefault.NoGraph)+", "
-				+"NoColor         =  "+POut.Bool  (phoneEmpDefault.NoColor)+", "
+				+"IsGraphed       =  "+POut.Bool  (phoneEmpDefault.IsGraphed)+", "
+				+"HasColor        =  "+POut.Bool  (phoneEmpDefault.HasColor)+", "
 				+"RingGroups      =  "+POut.Int   ((int)phoneEmpDefault.RingGroups)+", "
 				+"EmpName         = '"+POut.String(phoneEmpDefault.EmpName)+"', "
 				+"PhoneExt        =  "+POut.Int   (phoneEmpDefault.PhoneExt)+", "
@@ -141,13 +141,13 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one PhoneEmpDefault in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
 		public static void Update(PhoneEmpDefault phoneEmpDefault,PhoneEmpDefault oldPhoneEmpDefault){
 			string command="";
-			if(phoneEmpDefault.NoGraph != oldPhoneEmpDefault.NoGraph) {
+			if(phoneEmpDefault.IsGraphed != oldPhoneEmpDefault.IsGraphed) {
 				if(command!=""){ command+=",";}
-				command+="NoGraph = "+POut.Bool(phoneEmpDefault.NoGraph)+"";
+				command+="IsGraphed = "+POut.Bool(phoneEmpDefault.IsGraphed)+"";
 			}
-			if(phoneEmpDefault.NoColor != oldPhoneEmpDefault.NoColor) {
+			if(phoneEmpDefault.HasColor != oldPhoneEmpDefault.HasColor) {
 				if(command!=""){ command+=",";}
-				command+="NoColor = "+POut.Bool(phoneEmpDefault.NoColor)+"";
+				command+="HasColor = "+POut.Bool(phoneEmpDefault.HasColor)+"";
 			}
 			if(phoneEmpDefault.RingGroups != oldPhoneEmpDefault.RingGroups) {
 				if(command!=""){ command+=",";}

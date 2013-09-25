@@ -49,8 +49,10 @@ namespace OpenDentBusiness{
 		public Phone Copy() {
 			return (Phone)this.MemberwiseClone();
 		}
-		
-		
+
+		public override string ToString() {
+			return this.EmployeeName + " - " + this.Extension;
+		}
 	}
 
 	public enum ClockStatusEnum {

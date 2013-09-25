@@ -59,7 +59,7 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),clockStatus,extens,employeeNum);
 				return;
 			}
-			string command=@"SELECT phoneempdefault.EmployeeNum,Description,phoneempdefault.EmpName,NoColor,phone.ClockStatus "
+			string command=@"SELECT phoneempdefault.EmployeeNum,Description,phoneempdefault.EmpName,HasColor,phone.ClockStatus "
 				+"FROM phone "
 				+"LEFT JOIN phoneempdefault ON phone.Extension=phoneempdefault.PhoneExt "
 				+"WHERE phone.Extension="+POut.Long(extens);
@@ -81,7 +81,7 @@ namespace OpenDentBusiness {
 			}
 			//if these values are null because of missing phoneempdefault row, they will default to false
 			//PhoneEmpStatusOverride statusOverride=(PhoneEmpStatusOverride)PIn.Int(tablePhone.Rows[0]["StatusOverride"].ToString());
-			bool isDefaultNoColor=PIn.Bool(tablePhone.Rows[0]["NoColor"].ToString());
+			bool isColor=PIn.Bool(tablePhone.Rows[0]["HasColor"].ToString());
 			bool isInUse=false;
 			if(tablePhone.Rows[0]["Description"].ToString()=="In use") {
 				isInUse=true;
@@ -105,13 +105,13 @@ namespace OpenDentBusiness {
 					|| clockStatusCur==ClockStatusEnum.Lunch
 					|| clockStatusCur==ClockStatusEnum.Break) {
 					//The user is clocking in from home, lunch, or break.  Start the timer up.
-					if(!isDefaultNoColor) {//Dont start up the timer when someone with no color clocks in.
+					if(isColor) {//Dont start up the timer when someone with no color clocks in.
 						dateTimeStart="DateTimeStart=NOW(), ";
 					}
 				}
 			}
 			#endregion
-			Color colorBar=GetColorBar(clockStatus,empNum,isInUse,isDefaultNoColor);
+			Color colorBar=GetColorBar(clockStatus,empNum,isInUse,isColor);
 			string clockStatusStr=clockStatus.ToString();
 			if(clockStatus==ClockStatusEnum.None) {
 				clockStatusStr="";
@@ -126,13 +126,13 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary></summary>
-		public static Color GetColorBar(ClockStatusEnum clockStatus,long empNum,bool isInUse,bool isDefaultNoColor) {
+		public static Color GetColorBar(ClockStatusEnum clockStatus,long empNum,bool isInUse,bool isColor) {
 			//No need to check RemotingRole; no call to db.
 			Color colorBar=Color.White;
 			if(empNum==0) {
 				//no colors
 			}
-			else if(isDefaultNoColor) {
+			else if(!isColor) {
 				//no colors
 			}
 			else if(isInUse) {

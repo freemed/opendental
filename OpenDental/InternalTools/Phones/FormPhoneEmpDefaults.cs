@@ -132,9 +132,9 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("EmpName",90);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("NoGraph",55,HorizontalAlignment.Center);
+			col=new ODGridColumn("IsGraphed",65,HorizontalAlignment.Center);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("NoColor",55,HorizontalAlignment.Center);
+			col=new ODGridColumn("HasColor",60,HorizontalAlignment.Center);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("RingGroup",65);
 			gridMain.Columns.Add(col);
@@ -157,8 +157,8 @@ namespace OpenDental{
 				row=new ODGridRow();
 				row.Cells.Add(ListPED[i].EmployeeNum.ToString());
 				row.Cells.Add(ListPED[i].EmpName);
-				row.Cells.Add(ListPED[i].NoGraph?"X":"");
-				row.Cells.Add(ListPED[i].NoColor?"X":"");
+				row.Cells.Add(ListPED[i].IsGraphed?"X":"");
+				row.Cells.Add(ListPED[i].HasColor?"X":"");
 				row.Cells.Add(ListPED[i].RingGroups.ToString());
 				row.Cells.Add(ListPED[i].PhoneExt.ToString());
 				if(ListPED[i].StatusOverride==PhoneEmpStatusOverride.None) {

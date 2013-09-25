@@ -51,11 +51,11 @@ namespace OpenDentBusiness{
 			return Crud.PhoneEmpDefaultCrud.SelectMany(command);
 		}
 		
-		public static bool IsNoGraph(long employeeNum,List<PhoneEmpDefault> listPED) {
+		public static bool IsGraphed(long employeeNum,List<PhoneEmpDefault> listPED) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<listPED.Count;i++) {
 				if(listPED[i].EmployeeNum==employeeNum) {
-					return listPED[i].NoGraph;
+					return listPED[i].IsGraphed;
 				}
 			}
 			return false;

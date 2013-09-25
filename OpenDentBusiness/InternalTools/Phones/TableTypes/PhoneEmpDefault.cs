@@ -11,9 +11,9 @@ namespace OpenDentBusiness{
 		[CrudColumn(IsPriKey=true)]
 		public long EmployeeNum;
 		///<summary></summary>
-		public bool NoGraph;
+		public bool IsGraphed;
 		///<summary></summary>
-		public bool NoColor;
+		public bool HasColor;
 		///<summary>Enum:AsteriskRingGroups 0=all, 1=none, 2=backup</summary>
 		public AsteriskRingGroups RingGroups;
 		///<summary>Just makes management easier.  Not used by the program.</summary>
@@ -57,8 +57,8 @@ namespace OpenDentBusiness{
 
 	/*CREATE TABLE phoneempdefault (  
 		EmployeeNum BIGINT NOT NULL,      
-		NoGraph TINYINT NOT NULL,      
-		NoColor TINYINT NOT NULL,      
+		IsGraphed TINYINT NOT NULL,      
+		HasColor TINYINT NOT NULL,      
 		RingGroups INT NOT NULL,      
 		EmpName VARCHAR(255) NOT NULL,      
 		PRIMARY KEY (EmployeeNum)      
