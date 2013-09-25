@@ -81,7 +81,7 @@ namespace OpenDentBusiness {
 			}
 			//if these values are null because of missing phoneempdefault row, they will default to false
 			//PhoneEmpStatusOverride statusOverride=(PhoneEmpStatusOverride)PIn.Int(tablePhone.Rows[0]["StatusOverride"].ToString());
-			bool isColor=PIn.Bool(tablePhone.Rows[0]["HasColor"].ToString());
+			bool hasColor=PIn.Bool(tablePhone.Rows[0]["HasColor"].ToString());
 			bool isInUse=false;
 			if(tablePhone.Rows[0]["Description"].ToString()=="In use") {
 				isInUse=true;
@@ -103,15 +103,16 @@ namespace OpenDentBusiness {
 				//Start the clock if the user is going from a break status to any other non-break status.
 				if(clockStatusCur==ClockStatusEnum.Home
 					|| clockStatusCur==ClockStatusEnum.Lunch
-					|| clockStatusCur==ClockStatusEnum.Break) {
+					|| clockStatusCur==ClockStatusEnum.Break) 
+				{
 					//The user is clocking in from home, lunch, or break.  Start the timer up.
-					if(isColor) {//Dont start up the timer when someone with no color clocks in.
+					if(hasColor) {//Only start up the timer when someone with color clocks in.
 						dateTimeStart="DateTimeStart=NOW(), ";
 					}
 				}
 			}
 			#endregion
-			Color colorBar=GetColorBar(clockStatus,empNum,isInUse,isColor);
+			Color colorBar=GetColorBar(clockStatus,empNum,isInUse,hasColor);
 			string clockStatusStr=clockStatus.ToString();
 			if(clockStatus==ClockStatusEnum.None) {
 				clockStatusStr="";
