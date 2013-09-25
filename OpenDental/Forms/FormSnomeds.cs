@@ -28,6 +28,7 @@ namespace OpenDental {
 			else {
 				butOK.Visible=false;
 			}
+			ActiveControl=textCode;
 		}
 		
 		private void butSearch_Click(object sender,EventArgs e) {
@@ -38,14 +39,16 @@ namespace OpenDental {
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col;
-			col=new ODGridColumn("SNOMED Code",100,HorizontalAlignment.Right);
+			col=new ODGridColumn("SNOMED Code",100);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Deprecated",75,HorizontalAlignment.Center);
-			gridMain.Columns.Add(col);
+			//col=new ODGridColumn("Deprecated",75,HorizontalAlignment.Center);
+			//gridMain.Columns.Add(col);
 			col=new ODGridColumn("Description",500);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Date Of Standard",100);
+			col=new ODGridColumn("Used By CQM's",75);
 			gridMain.Columns.Add(col);
+			//col=new ODGridColumn("Date Of Standard",100);
+			//gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			if(textCode.Text.Contains(",")) {
@@ -57,15 +60,38 @@ namespace OpenDental {
 			if(SnomedList.Count>=10000) {//Max number of results returned.
 				MsgBox.Show(this,"Too many results. Only the first 10,000 results will be shown.");
 			}
+			List<ODGridRow> listAll=new List<ODGridRow>();
 			for(int i=0;i<SnomedList.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(SnomedList[i].SnomedCode);
-				row.Cells.Add("");//IsActive==NotDeprecated
+				//row.Cells.Add("");//IsActive==NotDeprecated
 				row.Cells.Add(SnomedList[i].Description);
-				row.Cells.Add("");
-				gridMain.Rows.Add(row);
+				row.Cells.Add(EhrCodes.GetMeasureIdsForCode(SnomedList[i].SnomedCode,"SNOMEDCT"));
+				row.Tag=SnomedList[i];
+				//row.Cells.Add("");
+				listAll.Add(row);
+			}
+			listAll.Sort(SortMeasuresMet);
+			for(int i=0;i<listAll.Count;i++) {
+				gridMain.Rows.Add(listAll[i]);
 			}
 			gridMain.EndUpdate();
+		}
+
+		///<summary>Sort function to put the codes that apply to the most number of CQM's at the top so the user can see which codes they should select.</summary>
+		private int SortMeasuresMet(ODGridRow row1,ODGridRow row2) {
+			//First sort by the number of measures the codes apply to in a comma delimited list
+			int diff=row2.Cells[2].Text.Split(new string[] { "," },StringSplitOptions.RemoveEmptyEntries).Length-row1.Cells[2].Text.Split(new string[] { "," },StringSplitOptions.RemoveEmptyEntries).Length;
+			if(diff!=0) {
+				return diff;
+			}
+			try {
+				//if the codes apply to the same number of CQMs, order by the code values
+				return PIn.Long(row1.Cells[0].Text).CompareTo(PIn.Long(row2.Cells[0].Text));
+			}
+			catch(Exception ex) {
+				return 0;
+			}
 		}
 
 		private void butImport_Click(object sender,EventArgs e) {
@@ -148,12 +174,12 @@ namespace OpenDental {
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			if(IsSelectionMode) {
-				SelectedSnomed=SnomedList[e.Row];
+				SelectedSnomed=(Snomed)gridMain.Rows[e.Row].Tag;
 				DialogResult=DialogResult.OK;
 				return;
 			}
 			changed=true;
-			FormSnomedEdit FormSE=new FormSnomedEdit(SnomedList[e.Row]);
+			FormSnomedEdit FormSE=new FormSnomedEdit((Snomed)gridMain.Rows[e.Row].Tag);
 			FormSE.ShowDialog();
 			//if(FormSE.DialogResult!=DialogResult.OK) {
 			//	return;
@@ -252,7 +278,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please select an item first.");
 				return;
 			}
-			SelectedSnomed=SnomedList[gridMain.GetSelectedIndex()];
+			SelectedSnomed=(Snomed)gridMain.Rows[gridMain.GetSelectedIndex()].Tag;
 			DialogResult=DialogResult.OK;
 		}
 
