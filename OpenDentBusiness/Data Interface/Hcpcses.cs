@@ -74,7 +74,7 @@ namespace OpenDentBusiness{
 		///<summary>Returns the Hcpcs of the code passed in by looking in cache.  If code does not exist, returns null.</summary>
 		public static Hcpcs GetByCode(string hcpcsCode) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<Hcpcs>(MethodBase.GetCurrentMethod(),hcpcsNum);
+				return Meth.GetObject<Hcpcs>(MethodBase.GetCurrentMethod(),hcpcsCode);
 			}
 			string command="SELECT * FROM hcpcs WHERE HcpcsCode='"+POut.String(hcpcsCode)+"'";
 			return Crud.HcpcsCrud.SelectOne(command);
