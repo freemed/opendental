@@ -69,18 +69,23 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			try {
-				EncCur.DateEncounter=DateTime.Parse(textDateTimeEnc.Text);//because this must always be valid
-			}
-			catch {			
-				MsgBox.Show(this,"Please enter a valid encounter date and time.");
-				return;
-			}
-			EncCur.ProvNum=ProviderC.ListShort[comboProv.SelectedIndex].ProvNum;
+
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
+
+		}
+
+		private void butSnomed_Click(object sender,EventArgs e) {
+
+		}
+
+		private void butHcpcs_Click(object sender,EventArgs e) {
+
+		}
+
+		private void butCdtCpt_Click(object sender,EventArgs e) {
+
 		}
 	}
 }

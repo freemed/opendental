@@ -24,57 +24,26 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent() {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormEncounterEdit));
-			this.butDelete = new System.Windows.Forms.Button();
-			this.butCancel = new System.Windows.Forms.Button();
-			this.butOK = new System.Windows.Forms.Button();
 			this.label9 = new System.Windows.Forms.Label();
 			this.comboProv = new System.Windows.Forms.ComboBox();
 			this.label1 = new System.Windows.Forms.Label();
-			this.butPickProv = new System.Windows.Forms.Button();
 			this.label3 = new System.Windows.Forms.Label();
 			this.textNote = new OpenDental.ODtextBox();
 			this.textDateTimeEnc = new System.Windows.Forms.TextBox();
 			this.textCodeDescript = new OpenDental.ODtextBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.textCodeValue = new System.Windows.Forms.TextBox();
-			this.butCodePicker = new System.Windows.Forms.Button();
 			this.label4 = new System.Windows.Forms.Label();
 			this.textBox1 = new System.Windows.Forms.TextBox();
 			this.label5 = new System.Windows.Forms.Label();
+			this.butCancel = new OpenDental.UI.Button();
+			this.butDelete = new OpenDental.UI.Button();
+			this.butOK = new OpenDental.UI.Button();
+			this.butHcpcs = new OpenDental.UI.Button();
+			this.butSnomed = new OpenDental.UI.Button();
+			this.butCdtCpt = new OpenDental.UI.Button();
+			this.butPickProv = new OpenDental.UI.Button();
 			this.SuspendLayout();
-			// 
-			// butDelete
-			// 
-			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butDelete.Location = new System.Drawing.Point(12, 380);
-			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(75, 23);
-			this.butDelete.TabIndex = 10;
-			this.butDelete.Text = "&Delete";
-			this.butDelete.UseVisualStyleBackColor = true;
-			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
-			// 
-			// butCancel
-			// 
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Location = new System.Drawing.Point(393, 380);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75, 23);
-			this.butCancel.TabIndex = 9;
-			this.butCancel.Text = "&Cancel";
-			this.butCancel.UseVisualStyleBackColor = true;
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// butOK
-			// 
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Location = new System.Drawing.Point(312, 380);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75, 23);
-			this.butOK.TabIndex = 8;
-			this.butOK.Text = "&OK";
-			this.butOK.UseVisualStyleBackColor = true;
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// label9
 			// 
@@ -104,16 +73,6 @@ namespace OpenDental{
 			this.label1.Text = "Provider";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// butPickProv
-			// 
-			this.butPickProv.Location = new System.Drawing.Point(281, 46);
-			this.butPickProv.Name = "butPickProv";
-			this.butPickProv.Size = new System.Drawing.Size(26, 21);
-			this.butPickProv.TabIndex = 3;
-			this.butPickProv.Text = "...";
-			this.butPickProv.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPickProv.UseVisualStyleBackColor = true;
-			// 
 			// label3
 			// 
 			this.label3.Location = new System.Drawing.Point(12, 256);
@@ -131,7 +90,7 @@ namespace OpenDental{
 			this.textNote.Name = "textNote";
 			this.textNote.QuickPasteType = OpenDentBusiness.QuickPasteType.None;
 			this.textNote.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-			this.textNote.Size = new System.Drawing.Size(348, 109);
+			this.textNote.Size = new System.Drawing.Size(369, 109);
 			this.textNote.TabIndex = 8;
 			this.textNote.Text = "";
 			// 
@@ -151,7 +110,7 @@ namespace OpenDental{
 			this.textCodeDescript.QuickPasteType = OpenDentBusiness.QuickPasteType.None;
 			this.textCodeDescript.ReadOnly = true;
 			this.textCodeDescript.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-			this.textCodeDescript.Size = new System.Drawing.Size(348, 125);
+			this.textCodeDescript.Size = new System.Drawing.Size(369, 125);
 			this.textCodeDescript.TabIndex = 7;
 			this.textCodeDescript.Text = "";
 			// 
@@ -171,17 +130,6 @@ namespace OpenDental{
 			this.textCodeValue.ReadOnly = true;
 			this.textCodeValue.Size = new System.Drawing.Size(158, 20);
 			this.textCodeValue.TabIndex = 4;
-			// 
-			// butCodePicker
-			// 
-			this.butCodePicker.Location = new System.Drawing.Point(281, 72);
-			this.butCodePicker.Name = "butCodePicker";
-			this.butCodePicker.Size = new System.Drawing.Size(26, 21);
-			this.butCodePicker.TabIndex = 5;
-			this.butCodePicker.Text = "...";
-			this.butCodePicker.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butCodePicker.UseVisualStyleBackColor = true;
-			this.butCodePicker.Click += new System.EventHandler(this.butCodePicker_Click);
 			// 
 			// label4
 			// 
@@ -210,27 +158,130 @@ namespace OpenDental{
 			this.label5.Text = "Code System";
 			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// butCancel
+			// 
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butCancel.Autosize = true;
+			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius = 4F;
+			this.butCancel.Location = new System.Drawing.Point(414, 380);
+			this.butCancel.Name = "butCancel";
+			this.butCancel.Size = new System.Drawing.Size(75, 24);
+			this.butCancel.TabIndex = 126;
+			this.butCancel.Text = "&Cancel";
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+			// 
+			// butDelete
+			// 
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butDelete.Autosize = true;
+			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDelete.CornerRadius = 4F;
+			this.butDelete.Location = new System.Drawing.Point(33, 380);
+			this.butDelete.Name = "butDelete";
+			this.butDelete.Size = new System.Drawing.Size(75, 24);
+			this.butDelete.TabIndex = 125;
+			this.butDelete.Text = "&Delete";
+			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
+			// 
+			// butOK
+			// 
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butOK.Autosize = true;
+			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.CornerRadius = 4F;
+			this.butOK.Location = new System.Drawing.Point(333, 380);
+			this.butOK.Name = "butOK";
+			this.butOK.Size = new System.Drawing.Size(75, 24);
+			this.butOK.TabIndex = 127;
+			this.butOK.Text = "&OK";
+			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			// 
+			// butHcpcs
+			// 
+			this.butHcpcs.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butHcpcs.Autosize = true;
+			this.butHcpcs.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butHcpcs.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butHcpcs.CornerRadius = 4F;
+			this.butHcpcs.Location = new System.Drawing.Point(367, 72);
+			this.butHcpcs.Name = "butHcpcs";
+			this.butHcpcs.Size = new System.Drawing.Size(58, 21);
+			this.butHcpcs.TabIndex = 131;
+			this.butHcpcs.Text = "HCPCS";
+			this.butHcpcs.Click += new System.EventHandler(this.butHcpcs_Click);
+			// 
+			// butSnomed
+			// 
+			this.butSnomed.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butSnomed.Autosize = true;
+			this.butSnomed.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSnomed.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSnomed.CornerRadius = 4F;
+			this.butSnomed.Location = new System.Drawing.Point(284, 72);
+			this.butSnomed.Name = "butSnomed";
+			this.butSnomed.Size = new System.Drawing.Size(77, 21);
+			this.butSnomed.TabIndex = 132;
+			this.butSnomed.Text = "SNOMED CT";
+			this.butSnomed.Click += new System.EventHandler(this.butSnomed_Click);
+			// 
+			// butCdtCpt
+			// 
+			this.butCdtCpt.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butCdtCpt.Autosize = true;
+			this.butCdtCpt.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCdtCpt.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCdtCpt.CornerRadius = 4F;
+			this.butCdtCpt.Location = new System.Drawing.Point(431, 72);
+			this.butCdtCpt.Name = "butCdtCpt";
+			this.butCdtCpt.Size = new System.Drawing.Size(58, 21);
+			this.butCdtCpt.TabIndex = 130;
+			this.butCdtCpt.Text = "CDT/CPT";
+			this.butCdtCpt.Click += new System.EventHandler(this.butCdtCpt_Click);
+			// 
+			// butPickProv
+			// 
+			this.butPickProv.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butPickProv.Autosize = true;
+			this.butPickProv.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPickProv.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPickProv.CornerRadius = 4F;
+			this.butPickProv.Location = new System.Drawing.Point(284, 46);
+			this.butPickProv.Name = "butPickProv";
+			this.butPickProv.Size = new System.Drawing.Size(26, 21);
+			this.butPickProv.TabIndex = 129;
+			this.butPickProv.Text = "...";
+			this.butPickProv.Click += new System.EventHandler(this.butPickProv_Click);
+			// 
 			// FormEncounterEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(480, 415);
+			this.ClientSize = new System.Drawing.Size(501, 415);
+			this.Controls.Add(this.butHcpcs);
+			this.Controls.Add(this.butSnomed);
+			this.Controls.Add(this.butCdtCpt);
+			this.Controls.Add(this.butPickProv);
+			this.Controls.Add(this.butOK);
+			this.Controls.Add(this.butCancel);
+			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.textBox1);
 			this.Controls.Add(this.label5);
 			this.Controls.Add(this.textCodeValue);
-			this.Controls.Add(this.butCodePicker);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.textCodeDescript);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.textDateTimeEnc);
 			this.Controls.Add(this.textNote);
 			this.Controls.Add(this.label3);
-			this.Controls.Add(this.butPickProv);
 			this.Controls.Add(this.comboProv);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.label9);
-			this.Controls.Add(this.butOK);
-			this.Controls.Add(this.butDelete);
-			this.Controls.Add(this.butCancel);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "FormEncounterEdit";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -243,22 +294,24 @@ namespace OpenDental{
 
 		#endregion
 
-		private System.Windows.Forms.Button butDelete;
-		private System.Windows.Forms.Button butCancel;
-		private System.Windows.Forms.Button butOK;
 		private System.Windows.Forms.Label label9;
 		private System.Windows.Forms.ComboBox comboProv;
 		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.Button butPickProv;
 		private System.Windows.Forms.Label label3;
 		private ODtextBox textNote;
 		private System.Windows.Forms.TextBox textDateTimeEnc;
 		private ODtextBox textCodeDescript;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.TextBox textCodeValue;
-		private System.Windows.Forms.Button butCodePicker;
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.TextBox textBox1;
 		private System.Windows.Forms.Label label5;
+		private UI.Button butCancel;
+		private UI.Button butDelete;
+		private UI.Button butOK;
+		private UI.Button butHcpcs;
+		private UI.Button butSnomed;
+		private UI.Button butCdtCpt;
+		private UI.Button butPickProv;
 	}
 }

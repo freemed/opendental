@@ -25,12 +25,15 @@ namespace OpenDental{
 		private void InitializeComponent() {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormEncounters));
 			this.gridMain = new OpenDental.UI.ODGrid();
-			this.butAdd = new System.Windows.Forms.Button();
-			this.butClose = new System.Windows.Forms.Button();
+			this.butClose = new OpenDental.UI.Button();
+			this.butAdd = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// gridMain
 			// 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMain.HScrollVisible = false;
 			this.gridMain.Location = new System.Drawing.Point(28, 25);
 			this.gridMain.Name = "gridMain";
@@ -39,38 +42,50 @@ namespace OpenDental{
 			this.gridMain.TabIndex = 26;
 			this.gridMain.Title = "Encounters";
 			this.gridMain.TranslationName = null;
-			// 
-			// butAdd
-			// 
-			this.butAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butAdd.Location = new System.Drawing.Point(30, 383);
-			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(75, 23);
-			this.butAdd.TabIndex = 29;
-			this.butAdd.Text = "Add";
-			this.butAdd.UseVisualStyleBackColor = true;
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
 			// butClose
 			// 
+			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butClose.Autosize = true;
+			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClose.CornerRadius = 4F;
 			this.butClose.Location = new System.Drawing.Point(625, 383);
 			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(75, 23);
-			this.butClose.TabIndex = 28;
-			this.butClose.Text = "Close";
-			this.butClose.UseVisualStyleBackColor = true;
+			this.butClose.Size = new System.Drawing.Size(75, 24);
+			this.butClose.TabIndex = 124;
+			this.butClose.Text = "&Close";
+			this.butClose.Click += new System.EventHandler(this.butClose_Click);
+			// 
+			// butAdd
+			// 
+			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butAdd.Autosize = true;
+			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAdd.CornerRadius = 4F;
+			this.butAdd.Location = new System.Drawing.Point(30, 383);
+			this.butAdd.Name = "butAdd";
+			this.butAdd.Size = new System.Drawing.Size(75, 24);
+			this.butAdd.TabIndex = 123;
+			this.butAdd.Text = "&Add";
+			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
 			// FormEncounters
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(727, 418);
-			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.butClose);
+			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.gridMain);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "FormEncounters";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Encounters";
+			this.Load += new System.EventHandler(this.FormEncounters_Load);
 			this.ResumeLayout(false);
 
 		}
@@ -78,7 +93,7 @@ namespace OpenDental{
 		#endregion
 
 		private UI.ODGrid gridMain;
-		private System.Windows.Forms.Button butAdd;
-		private System.Windows.Forms.Button butClose;
+		private UI.Button butClose;
+		private UI.Button butAdd;
 	}
 }
