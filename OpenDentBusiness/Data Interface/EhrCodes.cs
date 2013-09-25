@@ -7,8 +7,6 @@ using System.Text;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class EhrCodes{
-		//If this table type will exist as cached data, uncomment the CachePattern region below.
-		/*
 		#region CachePattern
 		//This region can be eliminated if this is not a table type with cached data.
 		//If leaving this region in place, be sure to add RefreshCache and FillCache 
@@ -33,7 +31,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static DataTable RefreshCache(){
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
-			string command="SELECT * FROM ehrcode ORDER BY ItemOrder";//stub query probably needs to be changed
+			string command="SELECT * FROM ehrcode";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="EhrCode";
 			FillCache(table);
@@ -46,7 +44,27 @@ namespace OpenDentBusiness{
 			listt=Crud.EhrCodeCrud.TableToList(table);
 		}
 		#endregion
-		*/
+
+		///<summary></summary>
+		public static string GetMeasureIdsForCode(string codeValue,string codeSystem) {
+			//No need to check RemotingRole; no call to db.
+			string retval="";
+			for(int i=0;i<Listt.Count;i++) {
+				if(Listt[i].CodeValue==codeValue && Listt[i].CodeSystem==codeSystem) {
+					if(retval.Contains(Listt[i].MeasureIds)) {
+						continue;
+					}
+					if(retval!="") {
+						retval+=",";
+					}
+					retval+=Listt[i].MeasureIds;
+				}
+			}
+			return retval;
+		}
+
+
+
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 
