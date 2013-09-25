@@ -221,6 +221,28 @@ namespace OpenDentBusiness {
 			return "";
 		}
 
+		///<summary>Returns the DiseaseDefNum based on SNOMEDCode, then if no match tries ICD9Code, then if no match tries ICD10Code, then if no match returns 0. Used in EHR Patient Lists and when automatically inserting pregnancy Dx from FormVitalsignEdit2014.  Will match hidden diseases.</summary>
+		public static long GetNumFromCode(string CodeValue) {
+			//No need to check RemotingRole; no call to db.
+			for(int i=0;i<ListLong.Length;i++) {
+				if(ListLong[i].SnomedCode==CodeValue) {
+					return ListLong[i].DiseaseDefNum;
+				}
+			}
+			for(int i=0;i<ListLong.Length;i++) {
+				if(ListLong[i].ICD9Code==CodeValue) {
+					return ListLong[i].DiseaseDefNum;
+				}
+			}
+//TODO add ICD10Code column to diseasedef table
+			//for(int i=0;i<ListLong.Length;i++) {
+			//	if(ListLong[i].ICD10Code==CodeValue) {
+			//		return ListLong[i].DiseaseDefNum;
+			//	}
+			//}
+			return 0;
+		}
+
 		///<summary>Returns the diseaseDef with the specified num.</summary>
 		public static DiseaseDef GetItem(long diseaseDefNum) {
 			//No need to check RemotingRole; no call to db.
