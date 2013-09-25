@@ -358,11 +358,15 @@ namespace OpenDental {
 		}
 
 		private void butEhrNotPerformed_Click(object sender,EventArgs e) {
-			
+			FormEhrNotPerformed formNp=new FormEhrNotPerformed();
+			formNp.PatCur=PatCur;
+			formNp.ShowDialog();
 		}
 
 		private void butEncounters_Click(object sender,EventArgs e) {
-
+			FormEncounters formEnc=new FormEncounters();
+			formEnc.PatCur=PatCur;
+			formEnc.ShowDialog();
 		}
 
 		public bool ProvKeyIsValid(string lName,string fName,bool hasReportAccess,string provKey) {
