@@ -348,21 +348,21 @@ namespace OpenDentBusiness.HL7 {
 			}
 			//Only process GT1 if either guar.PatNum or guar.ChartNumber is included and both guar.LName and guar.FName are included
 			long guarPatNum=0;
-			long guarChartNum=0; 
+			string guarChartNum="";
 			if(guarPatNumOrdinal!=-1) {
 				guarPatNum=PIn.Long(seg.GetFieldFullText(guarPatNumOrdinal));
 			}
 			if(guarChartNumOrdinal!=-1) {
-				guarChartNum=PIn.Long(seg.GetFieldComponent(guarChartNumOrdinal));
+				guarChartNum=seg.GetFieldComponent(guarChartNumOrdinal);
 			}
-			if(guarPatNum==0 && guarChartNum==0) {//because we have an example where they sent us this (position 2 (guarPatNumOrder or guarChartNumOrder for eCW) is empty): GT1|1||^^||^^^^||||||||
+			if(guarPatNum==0 && guarChartNum=="") {//because we have an example where they sent us this (position 2 (guarPatNumOrder or guarChartNumOrder for eCW) is empty): GT1|1||^^||^^^^||||||||
 				HL7MsgCur.Note="Guarantor not processed due to missing both guar.PatNum and guar.ChartNumber.  One of those numbers must be included.  PatNum of patient:"+pat.PatNum.ToString();
 				HL7Msgs.Update(HL7MsgCur);
 				EventLog.WriteEntry("OpenDentHL7","Guarantor not processed due to missing both guar.PatNum and guar.ChartNumber.  One of those numbers must be included.  PatNum of patient:"+pat.PatNum.ToString()
 					,EventLogEntryType.Information);
 				return;
 			}
-			if(guarPatNum==pat.PatNum || guarChartNum.ToString()==pat.ChartNumber) {//if relationship is self
+			if(guarPatNum==pat.PatNum || guarChartNum==pat.ChartNumber) {//if relationship is self
 				return;
 			}
 			//Guar must be someone else
@@ -374,7 +374,7 @@ namespace OpenDentBusiness.HL7 {
 			}
 			else {//guarPatNum was 0 so try to get guar by guar.ChartNumber or name and birthdate
 				//try to find guarantor using chartNumber
-				guar=Patients.GetPatByChartNumber(guarChartNum.ToString());
+				guar=Patients.GetPatByChartNumber(guarChartNum);
 				if(guar==null) {
 					//try to find the guarantor by using name and birthdate
 					string guarLName=seg.GetFieldComponent(guarNameOrdinal,0);
@@ -387,7 +387,7 @@ namespace OpenDentBusiness.HL7 {
 					else {
 						guar=Patients.GetPat(guarNumByName);
 						guarOld=guar.Copy();
-						guar.ChartNumber=guarChartNum.ToString();//from now on, we will be able to find guar by chartNumber
+						guar.ChartNumber=guarChartNum;//from now on, we will be able to find guar by chartNumber
 						Patients.Update(guar,guarOld);
 					}
 				}
@@ -400,7 +400,7 @@ namespace OpenDentBusiness.HL7 {
 					guar.PatNum=guarPatNum;
 				}
 				else {
-					guar.ChartNumber=guarChartNum.ToString();
+					guar.ChartNumber=guarChartNum;
 				}
 				guar.PriProv=PrefC.GetLong(PrefName.PracticeDefaultProv);
 				guar.BillingType=PrefC.GetLong(PrefName.PracticeDefaultBillType);
