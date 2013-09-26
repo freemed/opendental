@@ -102,6 +102,7 @@ namespace OpenDental{
 
 		///<summary>Pat can be null sometimes.  For example, in deposit slip.</summary>
 		private static void FillFieldsInStaticText(Sheet sheet,Patient pat) {
+			#region Instantiate Strings
 			string fldval="";
 			string address="";
 			string apptsAllFuture="";
@@ -174,9 +175,12 @@ namespace OpenDental{
 			string guarantorNameL="";
 			string guarantorNamePref="";
 			string guarantorNameLF="";
+			#endregion
 			Family fam=null;
 			Provider priProv=null;
+			#region Patient Fields
 			if(pat!=null) {
+				#region Gender
 				switch(pat.Gender) {
 					case PatientGender.Male:
 						genderHeShe="He";
@@ -215,6 +219,8 @@ namespace OpenDental{
 						genderhishers="the patient's";
 						break;
 				}
+				#endregion
+				#region Guarantor
 				Patient guar=Patients.GetPat(pat.Guarantor);
 				if(guar!=null) {
 					guarantorNameF=guar.FName;
@@ -223,19 +229,27 @@ namespace OpenDental{
 					guarantorNameLF=guar.GetNameLF();
 					guarantorNamePref=guar.Preferred;
 				}
+				#endregion
+				#region Address
 				address=pat.Address;
 				if(pat.Address2!="") {
 					address+=", "+pat.Address2;
 				}
+				#endregion
+				#region Birthdate
 				birthdate=pat.Birthdate.ToShortDateString();
 				if(pat.Birthdate.Year<1880) {
 					birthdate="";
 				}
+				#endregion
+				#region Date First Visit
 				dateFirstVisit=pat.DateFirstVisit.ToShortDateString();
 				if(pat.DateFirstVisit.Year<1880) {
 					dateFirstVisit="";
 				}
+				#endregion
 				fam=Patients.GetFamily(pat.PatNum);
+				#region Treatment Plan Procs
 				//todo some day: move this section down to TP section
 				List<Procedure> procsList=null;//there is another variable that does the same thing. Carefully combine them.
 				if(Sheets.ContainsStaticField(sheet,"treatmentPlanProcs") || Sheets.ContainsStaticField(sheet,"plannedAppointmentInfo")) {
@@ -255,7 +269,9 @@ namespace OpenDental{
 						}
 					}
 				}
+				#endregion
 				serviceNote=PatientNotes.Refresh(pat.PatNum,pat.Guarantor).Service;
+				#region Referrals
 				List<RefAttach> RefAttachList=RefAttaches.Refresh(pat.PatNum);
 				Referral tempReferralFrom = Referrals.GetReferralForPat(pat.PatNum);
 				if(Referrals.GetReferralForPat(pat.PatNum)!=null) {
@@ -278,6 +294,8 @@ namespace OpenDental{
 						referredTo+=tempRef.FName+" "+tempRef.LName+" "+RefAttachList[i].RefDate.ToShortDateString()+"\r\n";
 					}
 				}
+				#endregion
+				#region Insurance
 				//Insurance-------------------------------------------------------------------------------------------------------------------
 				List<InsSub> subList=InsSubs.RefreshForFam(fam);
 				List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
@@ -433,6 +451,8 @@ namespace OpenDental{
 						ins2Percentages+=CovCats.GetDesc(benefitList[j].CovCatNum)+" "+benefitList[j].Percent.ToString()+"%";
 					}
 				}
+				#endregion
+				#region Treatment Plan
 				//Treatment plan-----------------------------------------------------------------------------------------------------------
 				TreatPlan[] treatPlanList=TreatPlans.Refresh(pat.PatNum);
 				TreatPlan treatPlan=null;
@@ -449,6 +469,8 @@ namespace OpenDental{
 						tpResponsPartyNameFL=patRespParty.GetNameFL();
 					}
 				}
+				#endregion
+				#region Procedure Log
 				//Procedure Log-------------------------------------------------------------------------------------------------------------
 				List<Procedure> proceduresList=Procedures.Refresh(pat.PatNum);
 				DateTime dBW=DateTime.MinValue;
@@ -499,6 +521,8 @@ namespace OpenDental{
 						dateLastProphy=proc.ProcDate.ToShortDateString(); ;
 					}
 				}
+				#endregion
+				#region Recall
 				//Recall--------------------------------------------------------------------------------------------------------------------
 				Recall recall=Recalls.GetRecallProphyOrPerio(pat.PatNum);
 				if(recall!=null && !recall.IsDisabled) {
@@ -507,6 +531,8 @@ namespace OpenDental{
 					}
 					recallInterval=recall.RecallInterval.ToString();
 				}
+				#endregion
+				#region Appointments
 				//Appointments--------------------------------------------------------------------------------------------------------------
 				List<Appointment> apptList=Appointments.GetListForPat(pat.PatNum);
 				List<Appointment> apptFutureList=Appointments.GetFutureSchedApts(pat.PatNum);
@@ -578,6 +604,8 @@ namespace OpenDental{
 						}
 					}
 				}
+				#endregion
+				#region Clinic
 				priProv=Providers.GetProv(Patients.GetProvNum(pat));//guaranteed to work
 				//Clinic-------------------------------------------------------------------------------------------------------------
 				Clinic clinic=Clinics.GetClinic(pat.ClinicNum);
@@ -605,7 +633,10 @@ namespace OpenDental{
 				else {
 					clinicPhone=phone;
 				}
+				#endregion
 			}//End of if(pat!=null)
+			#endregion
+			#region Fill Fields
 			//Fill fields---------------------------------------------------------------------------------------------------------
 			foreach(SheetField field in sheet.SheetFields) {
 				if(field.FieldType!=SheetFieldType.StaticText) {
@@ -719,6 +750,8 @@ namespace OpenDental{
 				fldval=fldval.Replace("[practiceTitle]",PrefC.GetString(PrefName.PracticeTitle));
 				field.FieldValue=fldval;
 			}
+			#endregion
+			#region Fill Exam Sheet Fields
 			//Fill Exam Sheet Fields----------------------------------------------------------------------------------------------
 			//Example: ExamSheet:MyExamSheet;MyField
 			if(sheet.SheetType==SheetTypeEnum.PatientLetter && pat!=null) {
@@ -766,6 +799,7 @@ namespace OpenDental{
 					field.FieldValue=fldval;
 				}
 			}
+			#endregion
 		}
 
 		private static string StripPhoneBeyondSpace(string phone) {
