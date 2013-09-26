@@ -503,12 +503,12 @@ namespace OpenDentBusiness{
 		#region Testing
 
 		///<summary>This method is only for ehr testing purposes, and it always uses the hidden pref EHREmailToAddress to send to.  For privacy reasons, this cannot be used with production patient info.  AttachName should include extension.</summary>
-		public static void SendTest(string subjectAndBody,string attachName,string attachContents) {
-			SendTest(subjectAndBody,attachName,attachContents,"","");
+		public static void SendTestUnsecure(string subjectAndBody,string attachName,string attachContents) {
+			SendTestUnsecure(subjectAndBody,attachName,attachContents,"","");
 		}
 
 		///<summary>This method is only for ehr testing purposes, and it always uses the hidden pref EHREmailToAddress to send to.  For privacy reasons, this cannot be used with production patient info.  AttachName should include extension.</summary>
-		public static void SendTest(string subjectAndBody,string attachName1,string attachContents1,string attachName2,string attachContents2) {
+		public static void SendTestUnsecure(string subjectAndBody,string attachName1,string attachContents1,string attachName2,string attachContents2) {
 			string strTo=PrefC.GetString(PrefName.EHREmailToAddress);
 			if(strTo=="") {
 				throw new ApplicationException("This feature cannot be used except in a test environment because email is not secure.");
@@ -520,12 +520,20 @@ namespace OpenDentBusiness{
 			message.Subject=subjectAndBody;
 			message.Body=subjectAndBody;
 			message.IsBodyHtml=false;
-			List<Health.Direct.Common.Mime.MimeEntity> listAttachments=new List<Health.Direct.Common.Mime.MimeEntity>();
-			listAttachments.Add(GetAttachOutgoing(attachContents1,attachName1));
-			if(attachContents2!="" && attachName2!="") {
-				listAttachments.Add(GetAttachOutgoing(attachContents2,attachName2));
+			byte[] arrayBytes1=Encoding.UTF8.GetBytes(attachContents1);
+			MemoryStream ms1=new MemoryStream(arrayBytes1);
+			message.Attachments.Add(new Attachment(ms1,attachName1));
+			MemoryStream ms2=null;
+			if(attachName2!="") {
+				byte[] arrayBytes2=Encoding.UTF8.GetBytes(attachContents2);
+				ms2=new MemoryStream(arrayBytes2);
+				message.Attachments.Add(new Attachment(ms2,attachName2));
 			}
-			EmailMessages.SendEmailDirect(strTo,emailAddressFrom,subjectAndBody,0,listAttachments);
+			EmailMessages.SendEmailUnsecure(message,emailAddressFrom);
+			ms1.Dispose();
+			if(ms2!=null) {
+				ms2.Dispose();
+			}
 		}
 
 		///<summary>Receives one email from the inbox, and returns the contents of the attachment as a string.  Will throw an exception if anything goes wrong, so surround with a try-catch.</summary>

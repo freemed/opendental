@@ -770,7 +770,7 @@ namespace OpenDental{
 				if((MessageCur.SentOrReceived==EmailSentOrReceived.ReceivedDirect || MessageCur.SentOrReceived==EmailSentOrReceived.ReadDirect) && Path.GetExtension(strFilePathAttach).ToLower()==".xml") {
 					string strTextXml=File.ReadAllText(strFilePathAttach);
 					if(EhrCCD.IsCCD(strTextXml)) {
-						EHR.FormSummaryOfCare.DisplayCCD(strTextXml);
+						EHR.FormSummaryOfCare.DisplayCCD(strTextXml,true);
 						return;
 					}	
 				}
