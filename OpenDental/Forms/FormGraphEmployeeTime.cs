@@ -18,23 +18,10 @@ namespace OpenDental {
 		private int[] minutesBehind;
 		///<summary>Retrieved once when opening the form, then reused.</summary>
 		private List<PhoneEmpDefault> ListPED;
-		//used to show hover info
-		private ToolTip toolTip=new ToolTip();
-		private List<Region> regions = new List<Region>();
-		private int currentRegionIndex=-1;
-		private Dictionary<int/*key = the bucket index*/,List<PhoneEmpDefault>/*value = list of employees in this bucket*/> employeesPerBucket = new Dictionary<int,List<PhoneEmpDefault>>();
 
 		public FormGraphEmployeeTime() {
 			InitializeComponent();
 			Lan.F(this);
-			toolTip.ToolTipTitle = Lan.g(this,"Employees");
-			toolTip.UseFading = true;
-			toolTip.UseAnimation = true;
-			toolTip.IsBalloon = true;
-			toolTip.ShowAlways = true;
-			toolTip.AutoPopDelay = 5000;
-			toolTip.InitialDelay = 50;
-			toolTip.ReshowDelay = 50;
 		}
 
 		private void FormGraphEmployeeTime_Load(object sender,EventArgs e) {
@@ -44,7 +31,6 @@ namespace OpenDental {
 		}
 
 		private void FillData() {
-			employeesPerBucket.Clear();
 			labelDate.Text=dateShowing.ToString("dddd, MMMM d");
 			listCalls=new List<PointF>();
 			if(dateShowing.DayOfWeek==DayOfWeek.Friday) {
@@ -98,8 +84,6 @@ namespace OpenDental {
 				if(!PhoneEmpDefaults.IsGraphed(scheds[i].EmployeeNum,ListPED)) {
 					continue;
 				}
-				//get this employee
-				PhoneEmpDefault ped = PhoneEmpDefaults.GetEmpDefault(scheds[i].EmployeeNum,ListPED);
 				//TimeSpan lunch=scheds[i].StartTime + new TimeSpan((scheds[i].StopTime-scheds[i].StartTime).Ticks/2) - new TimeSpan(0,37,0);//subtract 37 minutes to make it fall within a bucket, and because people seem to like to take lunch early, and because the logic will bump it forward if lunch already used.
 				for(int b=0;b<buckets.Length;b++) {
 					time1=new TimeSpan(5,0,0) + new TimeSpan(0,b*30,0);
@@ -116,8 +100,7 @@ namespace OpenDental {
 					}*/
 					//situation 1: this bucket is completely within the start and stop times.
 					if(scheds[i].StartTime <= time1 && scheds[i].StopTime >= time2) {
-						AddEmployeeToBucket(b,ped);
-						//buckets[b]+=1;
+						buckets[b]+=1;
 					}
 					//situation 2: the start time is after this bucket
 					else if(scheds[i].StartTime >= time2) {
@@ -130,18 +113,12 @@ namespace OpenDental {
 					//situation 4: start time falls within this bucket
 					if(scheds[i].StartTime > time1) {
 						delta=scheds[i].StartTime - time1;
-						if(delta.TotalMinutes > 15) { //has to work more than 15 minutes to be considered *in* this bucket
-							AddEmployeeToBucket(b,ped);												
-						}
-						//buckets[b]+= (float)delta.TotalHours * 2f;//example, .5 hours would add 1 to the bucket
+						buckets[b]+= (float)delta.TotalHours * 2f;//example, .5 hours would add 1 to the bucket
 					}
 					//situation 5: stop time falls within this bucket
 					if(scheds[i].StopTime < time2) {
 						delta= time2 - scheds[i].StopTime;
-						if(delta.TotalMinutes > 15) { //has to work more than 15 minutes to be considered *in* this bucket
-							AddEmployeeToBucket(b,ped);
-						}
-						//buckets[b]+= (float)delta.TotalHours * 2f;
+						buckets[b]+= (float)delta.TotalHours * 2f;
 					}
 				}
 				//break;//just show one sched for debugging.
@@ -163,20 +140,7 @@ namespace OpenDental {
 			this.Invalidate();
 		}
 
-		private void AddEmployeeToBucket(int bucketIndex, PhoneEmpDefault ped){
-			buckets[bucketIndex]+=1;
-			List<PhoneEmpDefault> peds = null;
-			if(!employeesPerBucket.TryGetValue(bucketIndex,out peds)) {
-				peds=new List<PhoneEmpDefault>();
-			}
-			if(ped!=null) {
-				peds.Add(ped);
-			}
-			employeesPerBucket[bucketIndex]=peds;
-		}
-
 		private void FormGraphEmployeeTime_Paint(object sender,PaintEventArgs e) {
-			regions.Clear();
 			e.Graphics.SmoothingMode=SmoothingMode.HighQuality;
 			RectangleF rec=new RectangleF(panel1.Left,panel1.Top,panel1.Width,panel1.Height);
 			e.Graphics.FillRectangle(Brushes.White,rec);
@@ -193,7 +157,7 @@ namespace OpenDental {
 			float x1;
 			float y1;
 			float x2;
-			float y2=0;
+			float y2;
 			//draw grid
 			//vertical
 			for(int i=1;i<(int)totalhrs;i++) {
@@ -245,10 +209,8 @@ namespace OpenDental {
 				x=rec.X + firstbar + (float)i*barspacing - barW/2f;
 				y=rec.Y+rec.Height-h;
 				w=barW;
-				RectangleF rc = new RectangleF(x,y,w,h);
-				e.Graphics.FillRectangle(Brushes.LightBlue,rc);
-				regions.Add(new System.Drawing.Region(rc)); //save this bucket for hover tooltip event
-				//draw bar increments						
+				e.Graphics.FillRectangle(Brushes.LightBlue,x,y,w,h);
+				//draw bar increments
 				for(int o=1;o<buckets[i];o++) {
 					x1=x;
 					y1=rec.Y+rec.Height-(o*hOne);
@@ -256,9 +218,6 @@ namespace OpenDental {
 					y2=rec.Y+rec.Height-(o*hOne);
 					e.Graphics.DrawLine(Pens.Black,x1,y1,x2,y2);
 				}
-				//draw the number of employees in this bucket
-				SizeF sf=e.Graphics.MeasureString(buckets[i].ToString(),SystemFonts.DefaultFont);
-				e.Graphics.DrawString(buckets[i].ToString(),SystemFonts.DefaultFont,Brushes.Blue,x+(barW-sf.Width)/2,y-(sf.Height+1));
 			}
 			//Line graph in red
 			float peakH=rec.Height * peak / superPeak;
@@ -293,35 +252,6 @@ namespace OpenDental {
 			}
 			redPen.Dispose();
 			blueBrush.Dispose();
-		}
-
-		private void panel1_MouseMove(object sender,MouseEventArgs e) {
-			//there is 1 region per bucket (synced in paint event), loop through the regions and see if we are hovering over one of them
-			for(int i = 0;i < regions.Count;i++) {
-				if(regions[i].IsVisible(new Point(e.X,e.Y))) {//we are hovering over this bucket
-					if(i==currentRegionIndex) {//only activate this bucket once (prevents flicker)
-						return;
-					}
-					//build the display string for this hover bucket
-					List<PhoneEmpDefault> peds = null;
-					string employees = "";
-					if(employeesPerBucket.TryGetValue(i,out peds)) {
-						peds.Sort(new PhoneEmpDefaults.SortEmpDefaults(PhoneEmpDefaults.SortEmpDefaults.SortyBy.empName));
-						for(int j=0;j<peds.Count;j++) {
-							employees += peds[j].ForGraphDisplay + Environment.NewLine;
-						}
-					}
-					//activate and show this bucket's tooltip
-					toolTip.Active=true;
-					toolTip.SetToolTip(this,string.Format("{0}",employees));
-					//save this region as current so we only activate it once
-					currentRegionIndex=i;
-					return;
-				}
-			}
-			//not hovering over a bucket so kill the tooltip
-			toolTip.Active=false;
-			currentRegionIndex=-1;
 		}
 
 		private void buttonLeft_Click(object sender,EventArgs e) {

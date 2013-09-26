@@ -533,7 +533,6 @@
     <Compile Include="InternalTools\Phones\Phones.cs" />
     <Compile Include="InternalTools\Phones\TableTypes\Phone.cs" />
     <Compile Include="InternalTools\Phones\TableTypes\PhoneEmpDefault.cs" />
-    <Compile Include="InternalTools\Phones\TableTypes\PhoneGraph.cs" />
     <Compile Include="InternalTools\Phones\TableTypes\PhoneMetric.cs" />
     <Compile Include="InternalTools\Phones\TableTypes\PhoneNumber.cs" />
     <Compile Include="Misc\ConvertDatabases3.cs" />

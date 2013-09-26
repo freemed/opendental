@@ -61,16 +61,6 @@ namespace OpenDentBusiness{
 			return false;
 		}
 
-		public static PhoneEmpDefault GetEmpDefault(long employeeNum,List<PhoneEmpDefault> listPED) {
-			//No need to check RemotingRole; no call to db.
-			for(int i=0;i<listPED.Count;i++) {
-				if(listPED[i].EmployeeNum==employeeNum) {
-					return listPED[i];
-				}
-			}
-			return null;
-		}
-
 		///<summary>Can return null.</summary>
 		public static PhoneEmpDefault GetByExtAndEmp(int extension,long employeeNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -144,25 +134,6 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
-		/// <summary>sorting class used to sort PhoneEmpDefault in various ways</summary>
-		public class SortEmpDefaults : IComparer<PhoneEmpDefault> {
-			public enum SortyBy { empName, ext, empNum };
-			private SortyBy _sortBy = SortyBy.empName;
-			public SortEmpDefaults(SortyBy sortBy) {
-				_sortBy=sortBy;
-			}
-			public int Compare(PhoneEmpDefault x,PhoneEmpDefault y) {
-				switch(_sortBy) {
-					case SortyBy.empNum:
-						return x.EmployeeNum.CompareTo(y.EmployeeNum);
-					case SortyBy.ext:
-						return x.PhoneExt.CompareTo(y.PhoneExt);
-					case SortyBy.empName:
-					default:
-						return x.EmpName.CompareTo(y.EmpName);
-				}
-			}
-		}
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 
