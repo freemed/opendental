@@ -6937,8 +6937,11 @@ namespace OpenDental{
 			if(listDx.SelectedIndex!=-1) {
 				ProcCur.Dx=DefC.Short[(int)DefCat.Diagnosis][listDx.SelectedIndex].DefNum;
 			}
-			if(comboPrognosis.SelectedIndex!=-1) {
-				ProcCur.Prognosis=DefC.Short[(int)DefCat.Prognosis][comboPrognosis.SelectedIndex].DefNum;
+			if(comboPrognosis.SelectedIndex==0) {
+				ProcCur.Prognosis=0;
+			}
+			else {
+				ProcCur.Prognosis=DefC.Short[(int)DefCat.Prognosis][comboPrognosis.SelectedIndex-1].DefNum;
 			}
 			ProcCur.BaseUnits=ProcedureCodes.GetProcCode(ProcCur.CodeNum).BaseUnits;
 			ProcCur.SiteNum=PatCur.SiteNum;
