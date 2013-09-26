@@ -70,6 +70,18 @@ namespace OpenDentBusiness{
 			Ops=new List<long>();
 		}
 
+		public override string ToString() {
+			string ret = this.SchedType.ToString();
+			if(this.SchedType==ScheduleType.Provider){
+					 ret += " " + this.ProvNum.ToString();
+			}
+			else if(this.SchedType==ScheduleType.Employee){
+					 ret += " " + this.EmployeeNum.ToString();
+			}
+
+			ret += string.Format(@": {0} {1}-{2}",this.SchedDate.ToString("M-dd-yy"),new DateTime(this.StartTime.Ticks).ToString("h:mmt"),new DateTime(this.StopTime.Ticks).ToString("h:mmt"));
+			return ret;
+		}
 		/*
 		public Schedule(long scheduleNum,DateTime schedDate,TimeSpan startTime,TimeSpan stopTime,ScheduleType schedType,
 			long provNum,long blockoutType,string note,SchedStatus status,long employeeNum)

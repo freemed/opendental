@@ -4,6 +4,9 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using OpenDental.UI;
+using System.Data;
+using System.Collections.Generic;
 
 namespace OpenDental{
 	/// <summary>
@@ -48,9 +51,10 @@ namespace OpenDental{
 		private Label label17;
 		private CheckBox checkIsTriageOperator;
 		public PhoneEmpDefault PedCur;
+		private UI.ODGrid gridGraph;
 		///<summary>Will always be the override status upon load.</summary>
 		private PhoneEmpStatusOverride StatusOld;
-
+		
 		///<summary></summary>
 		public FormPhoneEmpDefaultEdit()
 		{
@@ -115,6 +119,7 @@ namespace OpenDental{
 			this.butDelete = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.gridGraph = new OpenDental.UI.ODGrid();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -384,7 +389,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(28, 467);
+			this.butDelete.Location = new System.Drawing.Point(28, 456);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(84, 24);
 			this.butDelete.TabIndex = 13;
@@ -399,7 +404,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(539, 467);
+			this.butOK.Location = new System.Drawing.Point(742, 456);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75, 24);
 			this.butOK.TabIndex = 11;
@@ -414,17 +419,32 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(632, 467);
+			this.butCancel.Location = new System.Drawing.Point(835, 456);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 12;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// gridGraph
+			// 
+			this.gridGraph.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridGraph.HScrollVisible = false;
+			this.gridGraph.Location = new System.Drawing.Point(745, 12);
+			this.gridGraph.Name = "gridGraph";
+			this.gridGraph.ScrollValue = 0;
+			this.gridGraph.Size = new System.Drawing.Size(165, 410);
+			this.gridGraph.TabIndex = 47;
+			this.gridGraph.Title = "Graph Ammendments";
+			this.gridGraph.TranslationName = "TablePhoneGraph";
+			// 
 			// FormPhoneEmpDefaultEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(724, 504);
+			this.ClientSize = new System.Drawing.Size(927, 493);
+			this.Controls.Add(this.gridGraph);
 			this.Controls.Add(this.checkIsTriageOperator);
 			this.Controls.Add(this.listStatusOverride);
 			this.Controls.Add(this.label17);
@@ -492,6 +512,28 @@ namespace OpenDental{
 			textComputerName.Text=PedCur.ComputerName;
 			checkIsPrivateScreen.Checked=PedCur.IsPrivateScreen;
 			checkIsTriageOperator.Checked=PedCur.IsTriageOperator;
+			FillGrid();
+		}
+
+		private void FillGrid() {
+			//todo: get PhoneGraphs for this employee num
+			List<PhoneGraph> phoneGraphs=new List<PhoneGraph>();//=PhoneGraphs.GetForEmployee(PedCur.EmployeeNum);			
+			gridGraph.BeginUpdate();
+			gridGraph.Columns.Clear();
+			ODGridColumn col=new ODGridColumn(Lan.g("TablePhoneGraph","Date"),90);
+			gridGraph.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TablePhoneGraph","IsGraphed"),60);
+			gridGraph.Columns.Add(col);
+			gridGraph.Rows.Clear();
+			ODGridRow row;			
+			for(int i=0;i<phoneGraphs.Count;i++) {
+				row=new ODGridRow();
+				row.Cells.Add(phoneGraphs[i].DateEntry.ToShortDateString());
+				row.Cells.Add(phoneGraphs[i].IsGraphed?"X":"");
+				row.Tag=phoneGraphs[i];
+				gridGraph.Rows.Add(row);
+			}			
+			gridGraph.EndUpdate();
 		}
 
 		private void checkIsPrivateScreen_Click(object sender,EventArgs e) {

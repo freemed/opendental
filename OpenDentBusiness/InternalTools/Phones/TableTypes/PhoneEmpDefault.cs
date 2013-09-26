@@ -35,6 +35,14 @@ namespace OpenDentBusiness{
 		public PhoneEmpDefault Clone() {
 			return (PhoneEmpDefault)this.MemberwiseClone();
 		}
+
+		/// <summary>used by FormGraphEmployeeTime to show employee info</summary>
+		[System.Xml.Serialization.XmlIgnore]
+		public string ForGraphDisplay {
+			get{
+				return string.Format("{0} - Ext: {1}",this.EmpName,this.PhoneExt);
+			}			
+		}
 	}
 
 	public enum AsteriskRingGroups {
