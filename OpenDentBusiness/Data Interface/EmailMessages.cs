@@ -104,23 +104,23 @@ namespace OpenDentBusiness{
 
 		///<summary>Encrypts the message, verifies trust, locates the public encryption key for the To address (if already stored locally), etc.  patNum can be zero.  listAttachments can be null.</summary>
 		public static void SendEmailDirect(string strTo,EmailAddress emailAddressFrom,string strBodyText,long patNum,List<Health.Direct.Common.Mime.MimeEntity> listAttachments) {
-			Health.Direct.Agent.DirectAgent directAgent=GetDirectAgentForEmailAddress(emailAddressFrom.EmailUsername);//Cannot be emailAddressFrom.SenderAddress, or else will not find the right encryption certificate.
 			Health.Direct.Common.Mail.Message message=new Health.Direct.Common.Mail.Message(strTo,emailAddressFrom.EmailUsername,strBodyText);//Don't think emailAddressFrom.SenderAddress would work, because of how strict encryption is.
 			if(listAttachments!=null && listAttachments.Count>0) {
 				message.SetParts(listAttachments,"multipart/mixed; boundary="+CodeBase.MiscUtils.CreateRandomAlphaNumericString(32)+";");
 			}
 			Health.Direct.Agent.MessageEnvelope messageEnvelope=new Health.Direct.Agent.MessageEnvelope(message);
-			//Encrypt, verify trust, locate the public encryption key for the To address (if already stored locally), etc. Required by Direct protocol.
-			Health.Direct.Agent.OutgoingMessage outMsgDirect=directAgent.ProcessOutgoing(messageEnvelope);
-			SendEmailDirect(outMsgDirect,emailAddressFrom,patNum,EmailSentOrReceived.SentDirect);
+			Health.Direct.Agent.OutgoingMessage outMsgDirect=new Health.Direct.Agent.OutgoingMessage(messageEnvelope);
+			SendEmailDirect(outMsgDirect,emailAddressFrom,patNum,EmailSentOrReceived.SentDirect);//encryption is performed in this step
 		}
 
-		///<summary>outMsgDirect must already be encrypted. emailSentOrReceived must be either SentDirect or AckDirect.</summary>
+		///<summary>outMsgDirect must be unencrypted, because this function will encrypt.  Encrypts the message, verifies trust, locates the public encryption key for the To address (if already stored locally), etc.  patNum can be zero.  emailSentOrReceived must be either SentDirect or AckDirect.</summary>
 		private static void SendEmailDirect(Health.Direct.Agent.OutgoingMessage outMsgDirect,EmailAddress emailAddressFrom,long patNum,EmailSentOrReceived emailSentOrReceived) {
-			MailMessage msgMdnDirect=new MailMessage(outMsgDirect.Message.FromValue,outMsgDirect.Message.ToValue,outMsgDirect.Message.SubjectValue,"");
-			//Convert the email into a common .NET object, so we can send it using standard .NET libraries.
+			Health.Direct.Agent.DirectAgent directAgent=GetDirectAgentForEmailAddress(emailAddressFrom.EmailUsername);//Cannot be emailAddressFrom.SenderAddress, or else will not find the right encryption certificate.
+			outMsgDirect=directAgent.ProcessOutgoing(outMsgDirect);
+			MailMessage mailMsgDirect=new MailMessage(outMsgDirect.Message.FromValue,outMsgDirect.Message.ToValue,outMsgDirect.Message.SubjectValue,"");
+			//Convert the Direct email into a common .NET object, so we can send it using standard .NET libraries.
 			for(int i=0;i<outMsgDirect.Message.Headers.Count;i++) {
-				msgMdnDirect.Headers.Add(outMsgDirect.Message.Headers[i].Name,outMsgDirect.Message.Headers[i].ValueRaw);
+				mailMsgDirect.Headers.Add(outMsgDirect.Message.Headers[i].Name,outMsgDirect.Message.Headers[i].ValueRaw);
 			}
 			byte[] arrayEncryptedBody=Encoding.UTF8.GetBytes(outMsgDirect.Message.Body.Text);
 			MemoryStream ms=new MemoryStream(arrayEncryptedBody);
@@ -128,18 +128,18 @@ namespace OpenDentBusiness{
 			//The memory stream for the alternate view must be mime (not an entire email), based on AlternateView use example http://msdn.microsoft.com/en-us/library/system.net.mail.mailmessage.alternateviews.aspx
 			AlternateView alternateView=new AlternateView(ms,outMsgDirect.Message.ContentType);//Causes the receiver to recognize this email as an encrypted email.
 			alternateView.TransferEncoding=TransferEncoding.SevenBit;
-			msgMdnDirect.AlternateViews.Add(alternateView);
-			SendEmailUnsecure(msgMdnDirect,emailAddressFrom);//Not really unsecure in this spot, because the message is already encrypted.
+			mailMsgDirect.AlternateViews.Add(alternateView);
+			SendEmailUnsecure(mailMsgDirect,emailAddressFrom);//Not really unsecure in this spot, because the message is already encrypted.
 			ms.Dispose();
-			EmailMessage emailMdnDirect=new EmailMessage();
-			emailMdnDirect.BodyText=outMsgDirect.SerializeMessage();//Converts the entire Direct outgoing message to a raw email message text for email archive.
-			emailMdnDirect.FromAddress=outMsgDirect.Message.FromValue;
-			emailMdnDirect.MsgDateTime=DateTime.Now;
-			emailMdnDirect.PatNum=patNum;
-			emailMdnDirect.SentOrReceived=emailSentOrReceived;
-			emailMdnDirect.Subject=outMsgDirect.Message.SubjectValue;
-			emailMdnDirect.ToAddress=outMsgDirect.Message.ToValue;
-			EmailMessages.Insert(emailMdnDirect);//Will not show in UI anywhere yet, just for history in case something goes wrong.			
+			EmailMessage emailMessageDirect=new EmailMessage();
+			emailMessageDirect.BodyText=outMsgDirect.SerializeMessage();//Converts the entire Direct outgoing message to a raw email message text for email archive.
+			emailMessageDirect.FromAddress=outMsgDirect.Message.FromValue;
+			emailMessageDirect.MsgDateTime=DateTime.Now;
+			emailMessageDirect.PatNum=patNum;
+			emailMessageDirect.SentOrReceived=emailSentOrReceived;
+			emailMessageDirect.Subject=outMsgDirect.Message.SubjectValue;
+			emailMessageDirect.ToAddress=outMsgDirect.Message.ToValue;
+			EmailMessages.Insert(emailMessageDirect);//Will not show in UI anywhere yet, just for history in case something goes wrong.			
 		}
 
 		/// <summary>Used for sending encrypted Message Disposition Notification (MDN) ack messages for Direct.
@@ -157,7 +157,6 @@ namespace OpenDentBusiness{
 			if(notificationMsgs==null) {
 				return;
 			}
-			Health.Direct.Agent.DirectAgent directAgent=GetDirectAgentForEmailAddress(emailAddressFrom.EmailUsername);//Cannot be emailAddressFrom.SenderAddress, or else will not find the right encryption certificate.
 			foreach(Health.Direct.Common.Mail.Notifications.NotificationMessage notificationMsg in notificationMsgs) {
 				try {
 					//According to RFC3798, section 3 - Format of a Message Disposition Notification http://tools.ietf.org/html/rfc3798#page-3
@@ -171,8 +170,7 @@ namespace OpenDentBusiness{
 					//     The decision of whether or not to return the message or part of the message is up to the MUA generating the MDN.  However, in the case of 
 					//     encrypted messages requesting MDNs, encrypted message text MUST be returned, if it is returned at all, only in its original encrypted form.
 					Health.Direct.Agent.OutgoingMessage outMsgDirect=new Health.Direct.Agent.OutgoingMessage(notificationMsg);
-					outMsgDirect=directAgent.ProcessOutgoing(outMsgDirect);
-					SendEmailDirect(outMsgDirect,emailAddressFrom,patNum,emailSentOrReceivedAck);
+					SendEmailDirect(outMsgDirect,emailAddressFrom,patNum,emailSentOrReceivedAck);//encryption is performed in this step
 				}
 				catch {
 					//Nothing to do. Just an MDN. The sender can resend the email to us if they believe that we did not receive the message (due to lack of MDN response).
@@ -515,7 +513,7 @@ namespace OpenDentBusiness{
 			}
 			EmailAddress emailAddressFrom=EmailAddresses.GetByClinic(0);
 			MailMessage message=new MailMessage();
-			message.From=new MailAddress(emailAddressFrom.EmailUsername);//This probably cannot be emailAddressFrom.SenderAddress, because of strict security regarding Direct messages.
+			message.From=new MailAddress(emailAddressFrom.EmailUsername);
 			message.To.Add(strTo);
 			message.Subject=subjectAndBody;
 			message.Body=subjectAndBody;
