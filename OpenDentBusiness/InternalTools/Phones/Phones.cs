@@ -70,6 +70,7 @@ namespace OpenDentBusiness {
 			}
 			long empNum=PIn.Long(tablePhone.Rows[0]["EmployeeNum"].ToString());
 			string empName=PIn.String(tablePhone.Rows[0]["EmpName"].ToString());
+			string clockStatusDb=PIn.String(tablePhone.Rows[0]["ClockStatus"].ToString());
 			Employee emp=Employees.GetEmp(employeeNum);
 			if(emp!=null) {//A new employee is going to take over this extension.
 				empName=emp.FName;
@@ -89,17 +90,21 @@ namespace OpenDentBusiness {
 			#region DateTimeStart
 			//When a user shows up as a color on the phone panel, we want a timer to be constantly going to show how long they've been off the phone.
 			string dateTimeStart="";
+			//It's possible that a new user has never clocked in before, therefore their clockStatus will be empty.  Simply set it to the status that they are trying to go to.
+			if(clockStatusDb=="") {
+				clockStatusDb=clockStatus.ToString();
+			}
 			//User is going to a status of Home, Break, or Lunch.  Always clear the DateTimeStart column no matter what.
-			//if(isDefaultNoColor//User does not show as a color on the phone panels.  Always clear out the time just in case.==Michael - Removed isDefaultNoColor check due to a bug.
 			if(clockStatus==ClockStatusEnum.Home
 				|| clockStatus==ClockStatusEnum.Lunch
-				|| clockStatus==ClockStatusEnum.Break) {
+				|| clockStatus==ClockStatusEnum.Break) 
+			{
 				//The user is going home or on break.  Simply clear the DateTimeStart column.
 				dateTimeStart="DateTimeStart='0001-01-01', ";
 			}
 			else {//User shows as a color on big phones and is not going to a status of Home, Lunch, or Break.  Example: Available, Training etc.
 				//Get the current clock status from the database.
-				ClockStatusEnum clockStatusCur=(ClockStatusEnum)Enum.Parse(typeof(ClockStatusEnum),tablePhone.Rows[0]["ClockStatus"].ToString());
+				ClockStatusEnum clockStatusCur=(ClockStatusEnum)Enum.Parse(typeof(ClockStatusEnum),clockStatusDb);
 				//Start the clock if the user is going from a break status to any other non-break status.
 				if(clockStatusCur==ClockStatusEnum.Home
 					|| clockStatusCur==ClockStatusEnum.Lunch
@@ -112,14 +117,15 @@ namespace OpenDentBusiness {
 				}
 			}
 			#endregion
-			Color colorBar=GetColorBar(clockStatus,empNum,isInUse,hasColor);
-			string clockStatusStr=clockStatus.ToString();
+			//Update the phone row to reflect the new clock status of the user.
+			Color colorBarNew=GetColorBar(clockStatus,empNum,isInUse,hasColor);
+			string clockStatusNew=clockStatus.ToString();
 			if(clockStatus==ClockStatusEnum.None) {
-				clockStatusStr="";
+				clockStatusNew="";
 			}
-			command="UPDATE phone SET ClockStatus='"+POut.String(clockStatusStr)+"', "
+			command="UPDATE phone SET ClockStatus='"+POut.String(clockStatusNew)+"', "
 				+dateTimeStart
-				+"ColorBar="+colorBar.ToArgb().ToString()+", "
+				+"ColorBar="+colorBarNew.ToArgb().ToString()+", "
 				+"EmployeeNum="+POut.Long(empNum)+", "
 				+"EmployeeName='"+POut.String(empName)+"' "
 				+"WHERE Extension="+extens;
