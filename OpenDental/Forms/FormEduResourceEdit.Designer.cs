@@ -158,9 +158,9 @@
 			// 
 			this.label4.Location = new System.Drawing.Point(12, 237);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(100, 17);
+			this.label4.Size = new System.Drawing.Size(599, 17);
 			this.label4.TabIndex = 13;
-			this.label4.Text = "Resource URL";
+			this.label4.Text = "Resource URL.  Must be a full URL. Example: http://webmd.com/diabetesoverview";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// textUrl
