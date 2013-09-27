@@ -6612,9 +6612,14 @@ namespace OpenDental{
 			}
 			else if(row["TaskNum"].ToString()!="0") {
 				Task task=Tasks.GetOne(PIn.Long(row["TaskNum"].ToString()));
-				FormTaskEdit FormT=new FormTaskEdit(task,task.Copy());
-				FormT.Closing+=new CancelEventHandler(TaskGoToEvent);
-				FormT.Show();//non-modal
+				if(task==null) {
+					MsgBox.Show(this,"This task has been deleted by another user.");
+				}
+				else {
+					FormTaskEdit FormT=new FormTaskEdit(task,task.Copy());
+					FormT.Closing+=new CancelEventHandler(TaskGoToEvent);
+					FormT.Show();//non-modal
+				}
 			}
 			else if(row["AptNum"].ToString()!="0") {
 				//Appointment apt=Appointments.GetOneApt(
@@ -7188,6 +7193,7 @@ namespace OpenDental{
 				else if(row["LabCaseNum"].ToString()!="0") {
 					skippedLabCases++;
 				}
+
 			}
 			Recalls.Synch(PatCur.PatNum);
 			if(skippedC>0){
