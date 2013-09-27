@@ -30,15 +30,15 @@ namespace OpenDental {
 			NewEncCodeSystem=defaultEncCodeSystem;
 			OldEncListSelectedIdx=-1;
 			for(int i=0;i<ListRecEncCodes.Count;i++) {
-				listEncCodes.Items.Add(ListRecEncCodes[i]);
+				comboEncCodes.Items.Add(ListRecEncCodes[i]);
 				if(ListRecEncCodes[i]==defaultEncCode && defaultEncCodeSystem=="SNOMEDCT") {//just in case the same code can exist in multiple tables, make sure it is SNOMEDCT before setting list selected item
-					listEncCodes.SetSelected(i,true);
+					comboEncCodes.SelectedIndex=i;
 					OldEncListSelectedIdx=i;
 					if(i==0) {//if "none" set as default
 						continue;
 					}
 					labelEncWarning.Visible=false;
-					Snomed sEnc=Snomeds.GetByCode(listEncCodes.SelectedItem.ToString());
+					Snomed sEnc=Snomeds.GetByCode(comboEncCodes.SelectedItem.ToString());
 					if(sEnc==null) {
 						MsgBox.Show(this,"The snomed table does not contain this code.  The code should be added to the snomed table by running the Code System Importer tool.");
 					}
@@ -47,7 +47,7 @@ namespace OpenDental {
 					}
 				}
 			}
-			if(listEncCodes.SelectedIndex==-1) {//default enc code set to code not in recommended list and not 'none'
+			if(comboEncCodes.SelectedIndex==-1) {//default enc code set to code not in recommended list and not 'none'
 				switch(defaultEncCodeSystem) {
 					case "CDTCPT":
 						ProcedureCode pEnc=ProcedureCodes.GetProcCode(defaultEncCode);
@@ -82,15 +82,15 @@ namespace OpenDental {
 			NewPregCodeSystem=defaultPregCodeSystem;
 			OldPregListSelectedIdx=-1;
 			for(int i=0;i<ListRecPregCodes.Count;i++) {
-				listPregCodes.Items.Add(ListRecPregCodes[i]);
+				comboPregCodes.Items.Add(ListRecPregCodes[i]);
 				if(ListRecPregCodes[i]==defaultPregCode && defaultPregCodeSystem=="SNOMEDCT") {//just in case the same code can exist in multiple tables, make sure it is SNOMEDCT before setting list selected item
-					listPregCodes.SetSelected(i,true);
+					comboPregCodes.SelectedIndex=i;
 					OldPregListSelectedIdx=i;
 					if(i==0) {//if "none" set as default
 						continue;
 					}
 					labelPregWarning.Visible=false;
-					Snomed sPreg=Snomeds.GetByCode(listPregCodes.SelectedItem.ToString());
+					Snomed sPreg=Snomeds.GetByCode(comboPregCodes.SelectedItem.ToString());
 					if(sPreg==null) {
 						MsgBox.Show(this,"The snomed table does not contain this code.  The code should be added to the snomed table by running the Code System Importer tool.");
 					}
@@ -99,7 +99,7 @@ namespace OpenDental {
 					}
 				}
 			}
-			if(listPregCodes.SelectedIndex==-1) {//default preg code set to code not in recommended list and not 'none'
+			if(comboPregCodes.SelectedIndex==-1) {//default preg code set to code not in recommended list and not 'none'
 				switch(defaultPregCodeSystem) {
 					case "ICD9CM":
 						ICD9 i9Preg=ICD9s.GetByCode(defaultPregCode);
@@ -163,19 +163,19 @@ namespace OpenDental {
 			}
 		}
 
-		private void listEncCodes_Click(object sender,EventArgs e) {
+		private void comboEncCodes_SelectionChangeCommitted(object sender,EventArgs e) {
 			if(!Security.IsAuthorized(Permissions.SecurityAdmin,false)) {
-				listEncCodes.SelectedIndex=OldEncListSelectedIdx;
+				comboEncCodes.SelectedIndex=OldEncListSelectedIdx;
 				return;
 			}
 			NewEncCodeSystem="SNOMEDCT";
 			textEncCodeValue.Text="";
-			if(listEncCodes.SelectedIndex==0) {//none
+			if(comboEncCodes.SelectedIndex==0) {//none
 				textEncCodeDescript.Clear();
 				labelEncWarning.Visible=true;
 			}
 			else {
-				Snomed sEnc=Snomeds.GetByCode(listEncCodes.SelectedItem.ToString());
+				Snomed sEnc=Snomeds.GetByCode(comboEncCodes.SelectedItem.ToString());
 				if(sEnc==null) {
 					MsgBox.Show(this,"The snomed table does not contain this code.  The code should be added to the snomed table by running the Code System Importer tool.");
 				}
@@ -186,19 +186,19 @@ namespace OpenDental {
 			}
 		}
 
-		private void listPregCodes_Click(object sender,EventArgs e) {
+		private void comboPregCodes_SelectionChangeCommitted(object sender,EventArgs e) {
 			if(!Security.IsAuthorized(Permissions.SecurityAdmin,false)) {
-				listPregCodes.SelectedIndex=OldPregListSelectedIdx;
+				comboPregCodes.SelectedIndex=OldPregListSelectedIdx;
 				return;
 			}
 			NewPregCodeSystem="SNOMEDCT";
 			textPregCodeValue.Text="";
-			if(listPregCodes.SelectedIndex==0) {//none
+			if(comboPregCodes.SelectedIndex==0) {//none
 				textPregCodeDescript.Clear();
 				labelPregWarning.Visible=true;
 			}
 			else {
-				Snomed sPreg=Snomeds.GetByCode(listPregCodes.SelectedItem.ToString());
+				Snomed sPreg=Snomeds.GetByCode(comboPregCodes.SelectedItem.ToString());
 				if(sPreg==null) {
 					MsgBox.Show(this,"The snomed table does not contain this code.  The code should be added to the snomed table by running the Code System Importer tool.");
 				}
@@ -220,16 +220,16 @@ namespace OpenDental {
 			formS.ShowDialog();
 			if(formS.DialogResult==DialogResult.OK) {
 				NewEncCodeSystem="SNOMEDCT";
-				for(int i=1;i<listEncCodes.Items.Count;i++) {
-					if(formS.SelectedSnomed.SnomedCode==listEncCodes.Items[i].ToString()) {//if they go to snomed list and select one of the recommended codes, select in list
-						listEncCodes.SetSelected(i,true);
+				for(int i=1;i<comboEncCodes.Items.Count;i++) {
+					if(formS.SelectedSnomed.SnomedCode==comboEncCodes.Items[i].ToString()) {//if they go to snomed list and select one of the recommended codes, select in list
+						comboEncCodes.SelectedIndex=i;
 						textEncCodeValue.Clear();
 						textEncCodeDescript.Text=formS.SelectedSnomed.Description;
 						labelEncWarning.Visible=false;
 						return;
 					}
 				}
-				listEncCodes.ClearSelected();
+				comboEncCodes.SelectedIndex=-1;
 				textEncCodeValue.Text=formS.SelectedSnomed.SnomedCode;
 				textEncCodeDescript.Text=formS.SelectedSnomed.Description;
 				labelEncWarning.Visible=true;
@@ -248,7 +248,7 @@ namespace OpenDental {
 			//formH.ShowDialog();
 			//if(formH.DialogResult==DialogResult.OK) {
 			//	NewEncCodeSystem="HCPCS";
-			//	listEncCodes.ClearSelected();
+			//	comboEncCodes.SelectedIndex=-1;
 			//	textEncCodeValue.Text=formH.SelectedHcpcs.HcpcsCode;
 			//	textEncCodeDescript.Text=formH.SelectedHcpcs.Description;
 			//	labelEncounterWarning.Visible=true;
@@ -266,7 +266,7 @@ namespace OpenDental {
 			formP.ShowDialog();
 			if(formP.DialogResult==DialogResult.OK) {
 				NewEncCodeSystem="CDTCPT";
-				listEncCodes.ClearSelected();
+				comboEncCodes.SelectedIndex=-1;
 				ProcedureCode procCur=ProcedureCodes.GetProcCode(formP.SelectedCodeNum);
 				textEncCodeValue.Text=procCur.ProcCode;
 				textEncCodeDescript.Text=procCur.Descript;
@@ -287,16 +287,16 @@ namespace OpenDental {
 			formS.ShowDialog();
 			if(formS.DialogResult==DialogResult.OK) {
 				NewPregCodeSystem="SNOMEDCT";
-				for(int i=1;i<listPregCodes.Items.Count;i++) {
-					if(formS.SelectedSnomed.SnomedCode==listPregCodes.Items[i].ToString()) {//if they go to snomed list and select one of the recommended codes, select in list
-						listPregCodes.SetSelected(i,true);
+				for(int i=1;i<comboPregCodes.Items.Count;i++) {
+					if(formS.SelectedSnomed.SnomedCode==comboPregCodes.Items[i].ToString()) {//if they go to snomed list and select one of the recommended codes, select in list
+						comboPregCodes.SelectedIndex=i;
 						textPregCodeValue.Clear();
 						textPregCodeDescript.Text=formS.SelectedSnomed.Description;
 						labelPregWarning.Visible=false;
 						return;
 					}
 				}
-				listPregCodes.ClearSelected();
+				comboPregCodes.SelectedIndex=-1;
 				textPregCodeValue.Text=formS.SelectedSnomed.SnomedCode;
 				textPregCodeDescript.Text=formS.SelectedSnomed.Description;
 				labelPregWarning.Visible=true;
@@ -314,7 +314,7 @@ namespace OpenDental {
 			formI9.ShowDialog();
 			if(formI9.DialogResult==DialogResult.OK) {
 				NewPregCodeSystem="ICD9CM";
-				listPregCodes.ClearSelected();
+				comboPregCodes.SelectedIndex=-1;
 				textPregCodeValue.Text=formI9.SelectedIcd9.ICD9Code;
 				textPregCodeDescript.Text=formI9.SelectedIcd9.Description;
 				labelPregWarning.Visible=true;
@@ -333,7 +333,7 @@ namespace OpenDental {
 			//formI10.ShowDialog();
 			//if(formI10.DialogResult==DialogResult.OK) {
 			//	NewPregCodeSystem="ICD10CM";
-			//	listPregCodes.ClearSelected();
+			//	comboPregCodes.SelectedIndex=-1;
 			//	textPregCodeValue.Text=formI10.SelectedIcd10.ICD9Code;
 			//	textPregCodeDescript.Text=formI10.SelectedIcd10.Description;
 			//	labelPregWarning.Visible=true;
@@ -344,19 +344,23 @@ namespace OpenDental {
 			Prefs.UpdateBool(PrefName.MeaningfulUseTwo,checkMU2.Checked);
 			Prefs.UpdateString(PrefName.CQMDefaultEncounterCodeSystem,NewEncCodeSystem);
 			Prefs.UpdateString(PrefName.PregnancyDefaultCodeSystem,NewPregCodeSystem);
-			if(listEncCodes.SelectedIndex==-1) {
+			if(comboEncCodes.SelectedIndex==-1) {
 				Prefs.UpdateString(PrefName.CQMDefaultEncounterCodeValue,textEncCodeValue.Text);
 			}
 			else {
-				Prefs.UpdateString(PrefName.CQMDefaultEncounterCodeValue,listEncCodes.SelectedItem.ToString());
+				Prefs.UpdateString(PrefName.CQMDefaultEncounterCodeValue,comboEncCodes.SelectedItem.ToString());
 			}
-			if(listPregCodes.SelectedIndex==-1) {
+			if(comboPregCodes.SelectedIndex==-1) {
 				Prefs.UpdateString(PrefName.PregnancyDefaultCodeValue,textPregCodeValue.Text);
 			}
 			else {
-				Prefs.UpdateString(PrefName.PregnancyDefaultCodeValue,listPregCodes.SelectedItem.ToString());
+				Prefs.UpdateString(PrefName.PregnancyDefaultCodeValue,comboPregCodes.SelectedItem.ToString());
 			}
-//TODO: Create a diseasedef object with this pregnancy code if one does not exist with DiseaseName="Pregnant (default EHR)". If that name already exists but the code is now different, intelligently rename the current def (like Pregnant (old default 1...N)).  If this code already exists in the diseasedef table, tack (default EHR) on the end of the DiseaseName. ItemOrder=0, IsHidden=0, ICD9Code/SnomedCode=textPregCodeValue/listPregCodes.SelectedItem.
+			//Insert a diseasedef for the selected default preg Dx code if there is not one in their def table
+			if(comboPregCodes.SelectedIndex!=0) {//'none' disables auto inserts, no need to create def
+				//bool codeInTable=
+			}
+//TODO: Create a diseasedef object with this pregnancy code if one does not exist with DiseaseName="Pregnant (default EHR)". If that name already exists but the code is now different, intelligently rename the current def (like Pregnant (old default 1...N)).  If this code already exists in the diseasedef table, tack (default EHR) on the end of the DiseaseName. ItemOrder=0, IsHidden=0, ICD9Code/SnomedCode=textPregCodeValue/comboPregCodes.SelectedItem.ToString()
 //What to do if it is an ICD10? New column in diseasedef table?
 			DialogResult=DialogResult.OK;
 		}
