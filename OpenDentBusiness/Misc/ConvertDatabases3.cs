@@ -1883,6 +1883,26 @@ namespace OpenDentBusiness {
 					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'PregnancyDefaultCodeSystem','SNOMEDCT')";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE diseasedef ADD ICD10Code varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE diseasedef ADD ICD10Code varchar2(255)";
+					Db.NonQ(command);
+				}
+				//Add indexes for code systems------------------------------------------------------------------------------------------------------
+				try {
+					if(DataConnection.DBtype==DatabaseType.MySql) {
+						command="ALTER TABLE diseasedef ADD INDEX (ICD10Code)";
+						Db.NonQ(command);
+					}
+					else {//oracle
+						command=@"CREATE INDEX diseasedef_ICD10Code ON diseasedef (ICD10Code)";
+						Db.NonQ(command);
+					}
+				}
+				catch(Exception ex) { }//Only an index. (Exception ex) required to catch thrown exception
 
 
 
@@ -1908,5 +1928,4 @@ namespace OpenDentBusiness {
 
 
 				
-
 
