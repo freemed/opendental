@@ -823,7 +823,7 @@ namespace OpenDental{
 						}
 					}
 					else {//They have clocked out.
-						MsgBox.Show(this,"Overtime and adjustments cannot excede the total time.");
+						MsgBox.Show(this,"Overtime and adjustments cannot exceed the total time.");
 						return;
 					}
 				}

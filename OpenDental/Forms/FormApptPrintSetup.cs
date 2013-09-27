@@ -42,7 +42,7 @@ namespace OpenDental {
 				return false;
 			}
 			if(stop.Hour!=0 && stop.Hour<start.Hour) {//If stop time is earlier than start time.
-				MsgBox.Show(this,"Start time cannot excede stop time.");
+				MsgBox.Show(this,"Start time cannot exceed stop time.");
 				return false;
 			}
 			if(start==DateTime.MinValue) {
