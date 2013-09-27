@@ -69,10 +69,7 @@ namespace OpenDental {
 			EhrAmendment ehrAmd=ListAmendments[e.Row];
 			FormEhrAmendmentEdit FormEAE=new FormEhrAmendmentEdit(ehrAmd);
 			FormEAE.ShowDialog();
-			if(FormEAE.DialogResult!=DialogResult.OK) {
-				return;
-			}
-			FillGrid();
+			FillGrid();//Always have to refresh grid due to using the images module to update the db.
 		}
 
 		private void butAdd_Click(object sender,EventArgs e) {
@@ -82,10 +79,7 @@ namespace OpenDental {
 			EhrAmendments.Insert(ehrAmd);
 			FormEhrAmendmentEdit FormEAE=new FormEhrAmendmentEdit(ehrAmd);
 			FormEAE.ShowDialog();
-			if(FormEAE.DialogResult!=DialogResult.OK) {
-				return;
-			}
-			FillGrid();
+			FillGrid();//Always have to refresh grid due to using the images module to update the db.
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {
