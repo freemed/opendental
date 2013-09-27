@@ -116,6 +116,9 @@ namespace OpenDentBusiness{
 		///<summary>outMsgDirect must be unencrypted, because this function will encrypt.  Encrypts the message, verifies trust, locates the public encryption key for the To address (if already stored locally), etc.  patNum can be zero.  emailSentOrReceived must be either SentDirect or AckDirect.</summary>
 		private static void SendEmailDirect(Health.Direct.Agent.OutgoingMessage outMsgDirect,EmailAddress emailAddressFrom,long patNum,EmailSentOrReceived emailSentOrReceived) {
 			Health.Direct.Agent.DirectAgent directAgent=GetDirectAgentForEmailAddress(emailAddressFrom.EmailUsername);//Cannot be emailAddressFrom.SenderAddress, or else will not find the right encryption certificate.
+			EmailMessage emailMessageDirect=ConvertMessageToEmailMessage(outMsgDirect.Message,true);
+			emailMessageDirect.PatNum=patNum;
+			emailMessageDirect.SentOrReceived=emailSentOrReceived;
 			outMsgDirect=directAgent.ProcessOutgoing(outMsgDirect);
 			MailMessage mailMsgDirect=new MailMessage(outMsgDirect.Message.FromValue,outMsgDirect.Message.ToValue,outMsgDirect.Message.SubjectValue,"");
 			//Convert the Direct email into a common .NET object, so we can send it using standard .NET libraries.
@@ -131,15 +134,7 @@ namespace OpenDentBusiness{
 			mailMsgDirect.AlternateViews.Add(alternateView);
 			SendEmailUnsecure(mailMsgDirect,emailAddressFrom);//Not really unsecure in this spot, because the message is already encrypted.
 			ms.Dispose();
-			EmailMessage emailMessageDirect=new EmailMessage();
-			emailMessageDirect.BodyText=outMsgDirect.SerializeMessage();//Converts the entire Direct outgoing message to a raw email message text for email archive.
-			emailMessageDirect.FromAddress=outMsgDirect.Message.FromValue;
-			emailMessageDirect.MsgDateTime=DateTime.Now;
-			emailMessageDirect.PatNum=patNum;
-			emailMessageDirect.SentOrReceived=emailSentOrReceived;
-			emailMessageDirect.Subject=outMsgDirect.Message.SubjectValue;
-			emailMessageDirect.ToAddress=outMsgDirect.Message.ToValue;
-			EmailMessages.Insert(emailMessageDirect);//Will not show in UI anywhere yet, just for history in case something goes wrong.			
+			EmailMessages.Insert(emailMessageDirect);//Will not show in UI anywhere yet, just for history in case something goes wrong.  Inserted last to ensure that it is only recorded if the message was sent successfully.
 		}
 
 		/// <summary>Used for sending encrypted Message Disposition Notification (MDN) ack messages for Direct.
@@ -266,14 +261,10 @@ namespace OpenDentBusiness{
 			if(inMsg.Message.ContentType.ToLower().Contains("application/pkcs7-mime")) {//The email MIME/body is encrypted (known as S/MIME). Treated as a Direct message.
 				isEncrypted=true;
 			}
-			EmailMessage emailMessage=new EmailMessage();
-			emailMessage.EmailMessageNum=emailMessageNum;
-			emailMessage.MsgDateTime=DateTime.Now;//Could pull from email header, but it is better to record the time that OD saved into db, since no user would view the email before it was in db.
-			emailMessage.PatNum=0;//Is automatically set for some Direct messages below.  Always 0 for unencrypted emails.
-			emailMessage.ToAddress=inMsg.Message.ToValue;
-			emailMessage.Subject=inMsg.Message.SubjectValue;
-			emailMessage.FromAddress=inMsg.Message.FromValue;
+			EmailMessage emailMessage=null;
 			if(isEncrypted) {
+				emailMessage=ConvertMessageToEmailMessage(inMsg.Message,false);//Exclude attachments until we decrypt.
+				emailMessage.EmailMessageNum=emailMessageNum;
 				emailMessage.SentOrReceived=EmailSentOrReceived.ReceivedEncrypted;
 				//The entire contents of the email are saved in the emailMessage.BodyText field, so that if decryption fails, the email will still be saved to the db for decryption later if possible.
 				emailMessage.BodyText=strRawEmail;
@@ -281,10 +272,9 @@ namespace OpenDentBusiness{
 					Health.Direct.Agent.DirectAgent directAgent=GetDirectAgentForEmailAddress(inMsg.Message.ToValue);
 					//throw new ApplicationException("test decryption failure");
 					inMsg=directAgent.ProcessIncoming(inMsg);//Decrypts, valudates trust, etc.
+					emailMessage=ConvertMessageToEmailMessage(inMsg.Message,true);//If the message was wrapped, then the To, From, Subject and Date can change after decyption. We also need to create the attachments for the decrypted message.
+					emailMessage.EmailMessageNum=emailMessageNum;
 					emailMessage.SentOrReceived=EmailSentOrReceived.ReceivedDirect;
-					emailMessage.ToAddress=inMsg.Message.ToValue;//If the message was wrapped, then this value can change after decryption, so we have to set it again.
-					emailMessage.Subject=inMsg.Message.SubjectValue;//If the message was wrapped, then this value can change after decryption, so we have to set it again.
-					emailMessage.FromAddress=inMsg.Message.FromValue;//If the message was wrapped, then this value can change after decryption, so we have to set it again.
 				}
 				catch(Exception) {
 					if(emailMessageNum==0) {
@@ -296,17 +286,61 @@ namespace OpenDentBusiness{
 					return emailMessage;//SentOrReceived will be ReceivedEncrypted, indicating to the calling code that decryption failed.
 				}
 			}
-			else {//Unencrypted email.
+			else {//Unencrypted
+				emailMessage=ConvertMessageToEmailMessage(inMsg.Message,true);
+				emailMessage.EmailMessageNum=emailMessageNum;
 				emailMessage.SentOrReceived=EmailSentOrReceived.Received;
 			}
-			StringBuilder sbBodyText=new StringBuilder();
-			emailMessage.Attachments=new List<EmailAttach>();//Create a new list, in case the email is new, because emailMessage.Attachments would be null otherwise.
-			EhrSummaryCcd ehrSummaryCcd=null;//Will only be set if there is a CCD attachment in this email.
-			if(!inMsg.Message.IsMultiPart) {//Single body part.  No attachments.
-				emailMessage.BodyText=ProcessMimeTextPart(inMsg.Message.Body.Text);
+			if(isEncrypted) {
+				for(int i=0;i<emailMessage.Attachments.Count;i++) {
+					if(Path.GetExtension(emailMessage.Attachments[i].ActualFileName).ToLower()!=".xml") {
+						continue;
+					}
+					string strAttachPath=GetEmailAttachPath();
+					string strAttachFile=ODFileUtils.CombinePaths(strAttachPath,emailMessage.Attachments[i].ActualFileName);
+					string strAttachText=File.ReadAllText(strAttachFile);
+					if(EhrCCD.IsCCD(strAttachText)) {
+						if(emailMessage.PatNum==0) {
+							emailMessage.PatNum=EhrCCD.GetCCDpat(strAttachText);// A match is not guaranteed, which is why we have a button to allow the user to change the patient.
+						}
+						EhrSummaryCcd ehrSummaryCcd=new EhrSummaryCcd();
+						ehrSummaryCcd.ContentSummary=strAttachText;
+						ehrSummaryCcd.DateSummary=DateTime.Today;
+						ehrSummaryCcd.EmailAttachNum=emailMessage.Attachments[i].EmailAttachNum;
+						ehrSummaryCcd.PatNum=emailMessage.PatNum;
+						EhrSummaryCcds.Insert(ehrSummaryCcd);
+						break;//We can only handle one CCD message per email, because we only have one patnum field per email record and the ehrsummaryccd record requires a patnum.
+					}
+				}
 			}
-			else {//multiple body parts
-				Health.Direct.Common.Mime.MimeEntity mimeEntity=inMsg.Message.ExtractMimeEntity();
+			if(emailMessageNum==0) {
+				EmailMessages.Insert(emailMessage);//Also inserts all of the attachments in emailMessage.Attachments after setting each attachment EmailMessageNum properly.
+			}
+			else {
+				EmailMessages.Update(emailMessage);//Also deletes all previous attachments, then recreates all of the attachments in emailMessage.Attachments after setting each attachment EmailMessageNum properly.
+			}
+			if(isEncrypted) {
+				//Send a Message Disposition Notification (MDN) message to the sender, as required by the Direct messaging specifications.
+				//The MDN will be attached to the same patient as the incoming message.
+				SendAckDirect(inMsg,emailAddressReceiver,emailMessage.PatNum,EmailSentOrReceived.AckDirectProcessed);
+			}
+			return emailMessage;
+		}
+
+		///<summary>Converts the Health.Direct.Common.Mail.Message into an OD EmailMessage.  The Direct library is used for both encrypted and unencrypted email.  Set hasAttachments to false to exclude attachments.</summary>
+		private static EmailMessage ConvertMessageToEmailMessage(Health.Direct.Common.Mail.Message message,bool hasAttachments) {
+			EmailMessage emailMessage=new EmailMessage();
+			emailMessage.FromAddress=message.FromValue;
+			emailMessage.MsgDateTime=DateTime.Now;
+			emailMessage.Subject=message.SubjectValue;
+			emailMessage.ToAddress=message.ToValue;			
+			if(!message.IsMultiPart) {//Single body part.  No attachments.
+				emailMessage.BodyText=ProcessMimeTextPart(message.Body.Text);
+			}
+			else {//Multiple body parts.  Probably has attachments.
+				StringBuilder sbBodyText=new StringBuilder();
+				emailMessage.Attachments=new List<EmailAttach>();
+				Health.Direct.Common.Mime.MimeEntity mimeEntity=message.ExtractMimeEntity();
 				foreach(Health.Direct.Common.Mime.MimeEntity mimePart in mimeEntity.GetParts()) {
 					if(mimePart.ContentDisposition==null || !mimePart.ContentDisposition.ToLower().Contains("attachment")) {//Not an email attachment.  Treat as body text.
 						if(sbBodyText.Length>0) {
@@ -315,6 +349,9 @@ namespace OpenDentBusiness{
 						}
 						sbBodyText.Append(ProcessMimeTextPart(mimePart.Body.Text));
 						continue;
+					}
+					if(!hasAttachments) {
+						continue;//Skip attachments.
 					}
 					//Email attachment.
 					string strAttachText=mimePart.Body.Text;
@@ -330,17 +367,6 @@ namespace OpenDentBusiness{
 					if(String.IsNullOrEmpty(mimePart.ParsedContentType.Name)) {
 						strAttachFileNameAdjusted=MiscUtils.CreateRandomAlphaNumericString(8)+".txt";//just in case
 					}
-					//A Direct message with an XML CCD attachment.  If no patient already assigned to the email, then we must try to automatically attach the email message to the patient account.
-					if(isEncrypted && Path.GetExtension(strAttachFileNameAdjusted).ToLower()==".xml" && EhrCCD.IsCCD(strAttachText) && emailMessage.PatNum==0) {
-						emailMessage.PatNum=EhrCCD.GetCCDpat(strAttachText);// A match is not guaranteed, which is why we have a button to allow the user to change the patient.
-						if(emailMessage.PatNum!=0) {//A match was found
-							ehrSummaryCcd=new EhrSummaryCcd();
-							ehrSummaryCcd.ContentSummary=strAttachText;
-							ehrSummaryCcd.DateSummary=DateTime.Today;
-							ehrSummaryCcd.EmailAttachNum=emailMessage.Attachments.Count;//Temporary value.  At this point, we do not have the primary key for the attachment until after the emailMessage insert/update below.
-							ehrSummaryCcd.PatNum=emailMessage.PatNum;
-						}
-					}
 					string strAttachFile=ODFileUtils.CombinePaths(strAttachPath,DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+"_"+strAttachFileNameAdjusted);
 					while(File.Exists(strAttachFile)) {
 						strAttachFile=ODFileUtils.CombinePaths(strAttachPath,DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+"_"+strAttachFileNameAdjusted);
@@ -352,21 +378,6 @@ namespace OpenDentBusiness{
 					emailMessage.Attachments.Add(emailAttach);//The attachment EmailMessageNum is set when the emailMessage is inserted/updated below.					
 				}
 				emailMessage.BodyText=sbBodyText.ToString();
-			}
-			if(emailMessageNum==0) {
-				EmailMessages.Insert(emailMessage);//Also inserts all of the attachments in emailMessage.Attachments after setting each attachment EmailMessageNum properly.
-			}
-			else {
-				EmailMessages.Update(emailMessage);//Also deletes all previous attachments, then recreates all of the attachments in emailMessage.Attachments after setting each attachment EmailMessageNum properly.
-			}
-			if(ehrSummaryCcd!=null) {//There was a CCD attachment
-				ehrSummaryCcd.EmailAttachNum=emailMessage.Attachments[(int)ehrSummaryCcd.EmailAttachNum].EmailAttachNum;//Convert the saved index from above into an actual FK.
-				EhrSummaryCcds.Insert(ehrSummaryCcd);
-			}
-			if(isEncrypted) {
-				//Send a Message Disposition Notification (MDN) message to the sender, as required by the Direct messaging specifications.
-				//The MDN will be attached to the same patient as the incoming message.
-				SendAckDirect(inMsg,emailAddressReceiver,emailMessage.PatNum,EmailSentOrReceived.AckDirectProcessed);
 			}
 			return emailMessage;
 		}
@@ -473,6 +484,9 @@ namespace OpenDentBusiness{
 			else if(emailMessage.SentOrReceived==EmailSentOrReceived.ReceivedDirect) {
 				sentOrReceived=EmailSentOrReceived.ReadDirect;
 			}
+			if(sentOrReceived==emailMessage.SentOrReceived) {
+				return;//Nothing to do.
+			}
 			string command="UPDATE emailmessage SET SentOrReceived="+POut.Int((int)sentOrReceived)+" WHERE EmailMessageNum="+POut.Long(emailMessage.EmailMessageNum);
 			Db.NonQ(command);
 		}
@@ -491,6 +505,9 @@ namespace OpenDentBusiness{
 			}
 			else if(emailMessage.SentOrReceived==EmailSentOrReceived.ReadDirect) {
 				sentOrReceived=EmailSentOrReceived.ReceivedDirect;
+			}
+			if(sentOrReceived==emailMessage.SentOrReceived) {
+				return;//Nothing to do.
 			}
 			string command="UPDATE emailmessage SET SentOrReceived="+POut.Int((int)sentOrReceived)+" WHERE EmailMessageNum="+POut.Long(emailMessage.EmailMessageNum);
 			Db.NonQ(command);
