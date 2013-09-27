@@ -53,7 +53,7 @@ namespace OpenDentBusiness.Crud{
 				diseaseDef.DateTStamp   = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
 				diseaseDef.ICD9Code     = PIn.String(table.Rows[i]["ICD9Code"].ToString());
 				diseaseDef.SnomedCode   = PIn.String(table.Rows[i]["SnomedCode"].ToString());
-				diseaseDef.ICD10Code    = PIn.String(table.Rows[i]["ICD10Code"].ToString());
+				diseaseDef.Icd10Code    = PIn.String(table.Rows[i]["Icd10Code"].ToString());
 				retVal.Add(diseaseDef);
 			}
 			return retVal;
@@ -94,7 +94,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="DiseaseDefNum,";
 			}
-			command+="DiseaseName,ItemOrder,IsHidden,ICD9Code,SnomedCode,ICD10Code) VALUES(";
+			command+="DiseaseName,ItemOrder,IsHidden,ICD9Code,SnomedCode,Icd10Code) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(diseaseDef.DiseaseDefNum)+",";
 			}
@@ -105,7 +105,7 @@ namespace OpenDentBusiness.Crud{
 				//DateTStamp can only be set by MySQL
 				+"'"+POut.String(diseaseDef.ICD9Code)+"',"
 				+"'"+POut.String(diseaseDef.SnomedCode)+"',"
-				+"'"+POut.String(diseaseDef.ICD10Code)+"')";
+				+"'"+POut.String(diseaseDef.Icd10Code)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -124,7 +124,7 @@ namespace OpenDentBusiness.Crud{
 				//DateTStamp can only be set by MySQL
 				+"ICD9Code     = '"+POut.String(diseaseDef.ICD9Code)+"', "
 				+"SnomedCode   = '"+POut.String(diseaseDef.SnomedCode)+"', "
-				+"ICD10Code    = '"+POut.String(diseaseDef.ICD10Code)+"' "
+				+"Icd10Code    = '"+POut.String(diseaseDef.Icd10Code)+"' "
 				+"WHERE DiseaseDefNum = "+POut.Long(diseaseDef.DiseaseDefNum);
 			Db.NonQ(command);
 		}
@@ -153,9 +153,9 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="SnomedCode = '"+POut.String(diseaseDef.SnomedCode)+"'";
 			}
-			if(diseaseDef.ICD10Code != oldDiseaseDef.ICD10Code) {
+			if(diseaseDef.Icd10Code != oldDiseaseDef.Icd10Code) {
 				if(command!=""){ command+=",";}
-				command+="ICD10Code = '"+POut.String(diseaseDef.ICD10Code)+"'";
+				command+="Icd10Code = '"+POut.String(diseaseDef.Icd10Code)+"'";
 			}
 			if(command==""){
 				return;

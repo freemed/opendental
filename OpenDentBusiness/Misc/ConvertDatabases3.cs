@@ -1884,21 +1884,21 @@ namespace OpenDentBusiness {
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE diseasedef ADD ICD10Code varchar(255) NOT NULL";
+					command="ALTER TABLE diseasedef ADD Icd10Code varchar(255) NOT NULL";
 					Db.NonQ(command);
 				}
 				else {//oracle
-					command="ALTER TABLE diseasedef ADD ICD10Code varchar2(255)";
+					command="ALTER TABLE diseasedef ADD Icd10Code varchar2(255)";
 					Db.NonQ(command);
 				}
 				//Add indexes for code systems------------------------------------------------------------------------------------------------------
 				try {
 					if(DataConnection.DBtype==DatabaseType.MySql) {
-						command="ALTER TABLE diseasedef ADD INDEX (ICD10Code)";
+						command="ALTER TABLE diseasedef ADD INDEX (Icd10Code)";
 						Db.NonQ(command);
 					}
 					else {//oracle
-						command=@"CREATE INDEX diseasedef_ICD10Code ON diseasedef (ICD10Code)";
+						command=@"CREATE INDEX diseasedef_Icd10Code ON diseasedef (Icd10Code)";
 						Db.NonQ(command);
 					}
 				}
@@ -1928,4 +1928,3 @@ namespace OpenDentBusiness {
 
 
 				
-
