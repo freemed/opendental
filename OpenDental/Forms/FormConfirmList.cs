@@ -938,7 +938,7 @@ namespace OpenDental{
 				str=str.Replace("[time]",((DateTime)Table.Rows[grid.SelectedIndices[i]]["AptDateTime"]).ToShortTimeString());
 				message.BodyText=str;
 				try {
-					FormEmailMessageEdit.SendEmail(message,emailAddress);
+					EmailMessages.SendEmailUnsecure(message,emailAddress);
 				}
 				catch {
 					patNumsFailed.Add(message.PatNum);

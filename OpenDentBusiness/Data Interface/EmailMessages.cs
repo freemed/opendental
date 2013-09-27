@@ -201,6 +201,67 @@ namespace OpenDentBusiness{
 			}
 		}
 
+		/// <summary>This is used from wherever email needs to be sent throughout the program.  If a message must be encrypted, then encrypt it before calling this function.</summary>
+		public static void SendEmailUnsecure(EmailMessage emailMessage,EmailAddress emailAddress) {
+			if(emailAddress.ServerPort==465) {//implicit
+				//uses System.Web.Mail, which is marked as deprecated, but still supports implicit
+				System.Web.Mail.MailMessage message = new System.Web.Mail.MailMessage();
+				message.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpserver",emailAddress.SMTPserver);
+				message.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpserverport","465");
+				message.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendusing","2");//sendusing: cdoSendUsingPort, value 2, for sending the message using the network.
+				message.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpauthenticate","1");//0=anonymous,1=clear text auth,2=context
+				message.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendusername",emailAddress.EmailUsername);
+				message.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendpassword",emailAddress.EmailPassword);
+				//if(PrefC.GetBool(PrefName.EmailUseSSL)) {
+				message.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpusessl","true");//false was also tested and does not work
+				message.From=emailMessage.FromAddress;
+				message.To=emailMessage.ToAddress;
+				message.Subject=emailMessage.Subject;
+				message.Body=emailMessage.BodyText;
+				//message.Cc=;
+				//message.Bcc=;
+				//message.UrlContentBase=;
+				//message.UrlContentLocation=;
+				message.BodyEncoding=System.Text.Encoding.UTF8;
+				message.BodyFormat=System.Web.Mail.MailFormat.Text;//or .Html
+				string attachPath=EmailMessages.GetEmailAttachPath();
+				System.Web.Mail.MailAttachment attach;
+				//foreach (string sSubstr in sAttach.Split(delim)){
+				for(int i=0;i<emailMessage.Attachments.Count;i++) {
+					attach=new System.Web.Mail.MailAttachment(ODFileUtils.CombinePaths(attachPath,emailMessage.Attachments[i].ActualFileName));
+					//no way to set displayed filename
+					message.Attachments.Add(attach);
+				}
+				System.Web.Mail.SmtpMail.SmtpServer=emailAddress.SMTPserver+":465";//"smtp.gmail.com:465";
+				System.Web.Mail.SmtpMail.Send(message);
+			}
+			else {//explicit default port 587 
+				SmtpClient client=new SmtpClient(emailAddress.SMTPserver,emailAddress.ServerPort);
+				//The default credentials are not used by default, according to: 
+				//http://msdn2.microsoft.com/en-us/library/system.net.mail.smtpclient.usedefaultcredentials.aspx
+				client.Credentials=new NetworkCredential(emailAddress.EmailUsername,emailAddress.EmailPassword);
+				client.DeliveryMethod=SmtpDeliveryMethod.Network;
+				client.EnableSsl=emailAddress.UseSSL;
+				client.Timeout=180000;//3 minutes
+				MailMessage message=new MailMessage();
+				Attachment attach;
+				message.From=new MailAddress(emailMessage.FromAddress);
+				message.To.Add(emailMessage.ToAddress);
+				message.Subject=emailMessage.Subject;
+				message.Body=emailMessage.BodyText;
+				message.IsBodyHtml=false;
+				string attachPath=EmailMessages.GetEmailAttachPath();
+				for(int i=0;i<emailMessage.Attachments.Count;i++) {
+					attach=new Attachment(ODFileUtils.CombinePaths(attachPath,emailMessage.Attachments[i].ActualFileName));
+					//@"C:\OpenDentalData\EmailAttachments\1");
+					attach.Name=emailMessage.Attachments[i].DisplayedFileName;
+					//"canadian.gif";
+					message.Attachments.Add(attach);
+				}
+				client.Send(message);
+			}
+		}
+
 		#endregion Sending
 
 		///<summary>Fetches up to fetchCount number of messages from a POP3 server.  Set fetchCount=0 for all messages.  Typically, fetchCount is 0 or 1.

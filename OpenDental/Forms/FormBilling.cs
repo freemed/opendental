@@ -885,7 +885,7 @@ namespace OpenDental{
 					attach.ActualFileName=fileName;
 					message.Attachments.Add(attach);
 					try{
-						FormEmailMessageEdit.SendEmail(message,emailAddress);
+						EmailMessages.SendEmailUnsecure(message,emailAddress);
 						message.SentOrReceived=EmailSentOrReceived.Sent;
 						message.MsgDateTime=DateTime.Now;
 						EmailMessages.Insert(message);

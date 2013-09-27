@@ -1512,7 +1512,7 @@ namespace OpenDental{
 				}
 				message.BodyText=str;
 				try{
-					FormEmailMessageEdit.SendEmail(message,emailAddress);
+					EmailMessages.SendEmailUnsecure(message,emailAddress);
 				}
 				catch(Exception ex){
 					Cursor=Cursors.Default;
