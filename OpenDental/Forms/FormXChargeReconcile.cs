@@ -58,6 +58,10 @@ namespace OpenDental {
 					trans.ItemNum=fields[12];
 					trans.ApprCode=fields[13];
 					trans.TransactionDateTime=PIn.Date(fields[14]).AddHours(PIn.Double(fields[15].Substring(0,2))).AddMinutes(PIn.Double(fields[15].Substring(3,2)));
+					if(trans.BatchNum=="" || trans.ItemNum=="") {
+						line=sr.ReadLine();
+						continue;
+					}
 					transCheck=XChargeTransactions.CheckByBatchItem(trans.BatchNum,trans.ItemNum);
 					if(transCheck==null) {
 						XChargeTransactions.Insert(trans);
