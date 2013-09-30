@@ -705,6 +705,7 @@ Laboratory Test Results
 				End(w,"component");
 				End(w,"ClinicalDocument");
 			}
+			SecurityLogs.MakeLogEntry(Permissions.Copy,pat.PatNum,"CCD generated");			//Create audit log entry.
 			return strBuilder.ToString();
 		}
 
