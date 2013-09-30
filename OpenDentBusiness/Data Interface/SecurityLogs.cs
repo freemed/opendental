@@ -9,13 +9,13 @@ namespace OpenDentBusiness{
 	public class SecurityLogs {
 
 		///<summary>Used when viewing securityLog from the security admin window.  PermTypes can be length 0 to get all types.</summary>
-		public static SecurityLog[] Refresh(DateTime dateFrom,DateTime dateTo,Permissions permType,long patNum,
-			long userNum) {
+		public static SecurityLog[] Refresh(DateTime dateFrom,DateTime dateTo,Permissions permType,long patNum,long userNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<SecurityLog[]>(MethodBase.GetCurrentMethod(),dateFrom,dateTo,permType,patNum,userNum);
 			}
-			string command="SELECT securitylog.*,LName,FName,Preferred,MiddleI FROM securitylog "
+			string command="SELECT securitylog.*,LName,FName,Preferred,MiddleI,LogHash FROM securitylog "
 				+"LEFT JOIN patient ON patient.PatNum=securitylog.PatNum "
+				+"LEFT JOIN securityloghash ON securityloghash.SecurityLogNum=securitylog.SecurityLogNum "
 				+"WHERE LogDateTime >= "+POut.Date(dateFrom)+" "
 				+"AND LogDateTime <= "+POut.Date(dateTo.AddDays(1));
 			if(patNum !=0) {
@@ -41,6 +41,7 @@ namespace OpenDentBusiness{
 						,table.Rows[i]["Preferred"].ToString()
 						,table.Rows[i]["MiddleI"].ToString());
 				}
+				list[i].LogHash=table.Rows[i]["LogHash"].ToString();
 			}
 			return list.ToArray();
 		}
@@ -118,18 +119,9 @@ namespace OpenDentBusiness{
 			securityLog.FKey=fKey;
 			securityLog.SecurityLogNum=SecurityLogs.Insert(securityLog);
 			//Create a hash of the security log.
-			SecurityLogHashes.CreateSecurityLogHash(securityLog.SecurityLogNum);
+			SecurityLogHashes.InsertSecurityLogHash(securityLog.SecurityLogNum);//uses db date/time
 		}
 
-		///<summary>Returns the number of deleted entries in the Security log table.</summary>
-		public static int GetDeletedEntriesCount() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod());
-			}
-			//Find any instances where a securityloghash has a securitylognum that no longer exists.
-			string command="SELECT COUNT(*) FROM securityloghash slh WHERE slh.SecurityLogNum NOT IN (SELECT SecurityLogNum FROM securitylog)";
-			return PIn.Int(Db.GetCount(command));
-		}
 
 	}
 }

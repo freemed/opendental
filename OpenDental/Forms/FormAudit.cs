@@ -389,20 +389,6 @@ namespace OpenDental{
 			grid.Rows.Clear();
 			ODGridRow row;
 			Userod user;
-			//Find deleted SecurityLog entries
-			int missingEntries=SecurityLogs.GetDeletedEntriesCount();
-			for(int j=0;j<missingEntries;j++) {
-				row=new ODGridRow();
-				row.Cells.Add("");//Date
-				row.Cells.Add("");//Time
-				row.Cells.Add("");//Patient
-				row.Cells.Add("");//User
-				row.Cells.Add("");//Permission
-				row.Cells.Add("");//Computer
-				row.Cells.Add(Lan.g("TableAuditMissingEntry","AUDIT LOG ENTRY MISSING"));//Log Text
-				row.ColorText=Color.Red;
-				grid.Rows.Add(row);
-			}
 			for(int i=0;i<logList.Length;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(logList[i].LogDateTime.ToShortDateString());
@@ -425,10 +411,10 @@ namespace OpenDental{
 				row.Cells.Add(logList[i].CompName);
 				row.Cells.Add(logList[i].LogText);
 				//Get the hash for the audit log entry from the database and rehash to compare
-				string hashFromDb=SecurityLogHashes.GetLogHashForSecurityLog(logList[i].SecurityLogNum);
-				string newHash=SecurityLogHashes.EncryptSecurityLog(logList[i]);
-				if(hashFromDb!=newHash) {
+				string newHash=SecurityLogHashes.GetHashString(logList[i]);
+				if(logList[i].LogHash!=newHash) {
 					row.ColorText=Color.Red; //Bad hash or no hash entry at all.  This prevents users from deleting the entire hash table to make the audit trail look valid and encrypted.
+					//historical entries will show as red.
 				}
 				grid.Rows.Add(row);
 			}
@@ -460,11 +446,11 @@ namespace OpenDental{
 			}
 			headingPrinted=false;
 			#if DEBUG
-				FormPrintPreview printPreview=new FormPrintPreview(PrintSituation.Default,pd,1);
+				FormPrintPreview printPreview=new FormPrintPreview(PrintSituation.Default,pd,1,0,"Audit trail printed");
 				printPreview.ShowDialog();
 			#else
 				try {
-					if(PrinterL.SetPrinter(pd,PrintSituation.Default)) {
+					if(PrinterL.SetPrinter(pd,PrintSituation.Default,0,"Audit trail printed")) {
 						pd.Print();
 					}
 				}

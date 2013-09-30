@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Reflection;
 using System.Text;
 using System.Security.Cryptography;
@@ -9,7 +10,7 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class SecurityLogHashes{
 
-		///<summary></summary>
+		///<summary>Inserts securityloghash into Db.</summary>
 		public static long Insert(SecurityLogHash securityLogHash) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				securityLogHash.SecurityLogHashNum=Meth.GetLong(MethodBase.GetCurrentMethod(),securityLogHash);
@@ -19,62 +20,39 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Creates a new SecurityLogHash entry in the Db.</summary>
-		public static void CreateSecurityLogHash(long securityLogNum) {
-			SecurityLog securityLog=SecurityLogs.GetOne(securityLogNum);
+		public static void InsertSecurityLogHash(long securityLogNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),securityLogNum);
+				return;
+			}
+			SecurityLog securityLog=SecurityLogs.GetOne(securityLogNum); //need a fresh copy because of time stamps, etc.
 			SecurityLogHash securityLogHash=new SecurityLogHash();
 			//Set the FK
 			securityLogHash.SecurityLogNum=securityLog.SecurityLogNum;
 			//Hash the securityLog
-			securityLogHash.LogHash=EncryptSecurityLog(securityLog);
+			securityLogHash.LogHash=GetHashString(securityLog);
 			Insert(securityLogHash);
 		}
 
-		///<summary>Returns a SHA-256 hash of the entire security log.  Only called from CreateSecurityLogHash() and FormAudit.FillGrid()</summary>
-		public static string EncryptSecurityLog(SecurityLog securityLog) {
-			HashAlgorithm algorithm=HashAlgorithm.Create("SHA-256");
+		///<summary>Does not make a call to the db.  Returns a SHA-256 hash of the entire security log.  Length of 32 bytes.  Only called from CreateSecurityLogHash() and FormAudit.FillGrid()</summary>
+		public static string GetHashString(SecurityLog securityLog) {
+			//No need to check RemotingRole; no call to db.
+			HashAlgorithm algorithm=SHA256.Create();
 			//Build string to hash
 			string logString="";
-			logString+=securityLog.SecurityLogNum;
-			logString+=securityLog.PermType;
+			//logString+=securityLog.SecurityLogNum;
+			logString+=((int)securityLog.PermType).ToString();
 			logString+=securityLog.UserNum;
-			//Now add YearMonthDayHourMinuteSecondMillisecond
-			logString+=securityLog.LogDateTime.Year.ToString()
-				+securityLog.LogDateTime.Month.ToString()
-				+securityLog.LogDateTime.Day.ToString()
-				+securityLog.LogDateTime.Hour.ToString()
-				+securityLog.LogDateTime.Minute.ToString()
-				+securityLog.LogDateTime.Second.ToString()
-				+securityLog.LogDateTime.Millisecond.ToString();
+			logString+=POut.DateT(securityLog.LogDateTime,false);
 			logString+=securityLog.LogText;
-			logString+=securityLog.CompName;
+			//logString+=securityLog.CompName;
 			logString+=securityLog.PatNum;
-			logString+=securityLog.FKey.ToString();
+			//logString+=securityLog.FKey.ToString();
 			byte[] unicodeBytes=Encoding.Unicode.GetBytes(logString);
 			byte[] hashbytes=algorithm.ComputeHash(unicodeBytes);
 			return Convert.ToBase64String(hashbytes);
 		}
-
-		///<summary>Returns HashLog entry for SecurityLogNum.  If no entry exists, returns empty string.</summary>
-		public static string GetLogHashForSecurityLog(long securityLogNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),securityLogNum);
-			}
-			SecurityLogHash securityLogHash=GetForSecurityLog(securityLogNum);
-			if(securityLogHash==null) {
-				return "";
-			}
-			return securityLogHash.LogHash;
-		}
-
-		///<summary>Gets a SecurityLogHash entery from the db.</summary>
-		public static SecurityLogHash GetForSecurityLog(long securityLogNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<SecurityLogHash>(MethodBase.GetCurrentMethod(),securityLogNum);
-			}
-			string command = "SELECT * FROM securityloghash WHERE SecurityLogNum = "+POut.Long(securityLogNum);
-			return Crud.SecurityLogHashCrud.SelectOne(command);
-		}
-
+		
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 

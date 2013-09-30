@@ -22,13 +22,15 @@ namespace OpenDentBusiness{
 		public long PatNum;
 		///<summary>.</summary>
 		public string CompName;
-		///<summary>PatNum-NameLF</summary>
-		[CrudColumn(IsNotDbColumn=true)]
-		public string PatientName;
 		///<summary>FK to relevant table.  Only used for AptNum, CodeNum (for procedure codes), and CarrierNum so far.  Table that the FK points to is based on PermType.</summary>
 		public long FKey;
 
-		
+		///<summary>PatNum-NameLF</summary>
+		[CrudColumn(IsNotDbColumn=true)]
+		public string PatientName;
+		///<summary>Existing LogHash from SecurityLogHash table</summary>
+		[CrudColumn(IsNotDbColumn=true)]
+		public string LogHash;
 
 	}
 
