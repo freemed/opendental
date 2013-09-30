@@ -562,6 +562,12 @@ namespace OpenDental{
 				return;
 			}
 			MedicationPats.Delete(MedicationPatCur);
+			if(MedicationPatCur.MedicationNum==0) {
+				SecurityLogs.MakeLogEntry(Permissions.PatMedicationListEdit,MedicationPatCur.PatNum,MedicationPatCur.MedDescript+" deleted");
+			}
+			else {
+				SecurityLogs.MakeLogEntry(Permissions.PatMedicationListEdit,MedicationPatCur.PatNum,Medications.GetMedication(MedicationPatCur.MedicationNum).MedName+" deleted");
+			}
 			DialogResult=DialogResult.OK;
 		}
 
@@ -593,9 +599,21 @@ namespace OpenDental{
 			MedicationPatCur.DateStop=PIn.Date(textDateStop.Text);
 			if(IsNew){
 				MedicationPats.Insert(MedicationPatCur);
+				if(MedicationPatCur.MedicationNum==0) {
+					SecurityLogs.MakeLogEntry(Permissions.PatMedicationListEdit,MedicationPatCur.PatNum,MedicationPatCur.MedDescript+" added");
+				}
+				else {
+					SecurityLogs.MakeLogEntry(Permissions.PatMedicationListEdit,MedicationPatCur.PatNum,Medications.GetMedication(MedicationPatCur.MedicationNum).MedName+" added");
+				}
 			}
 			else{
 				MedicationPats.Update(MedicationPatCur);
+				if(MedicationPatCur.MedicationNum==0) {
+					SecurityLogs.MakeLogEntry(Permissions.PatMedicationListEdit,MedicationPatCur.PatNum,MedicationPatCur.MedDescript+" edited");
+				}
+				else {
+					SecurityLogs.MakeLogEntry(Permissions.PatMedicationListEdit,MedicationPatCur.PatNum,Medications.GetMedication(MedicationPatCur.MedicationNum).MedName+" edited");
+				}
 			}
 			DialogResult=DialogResult.OK;
 		}

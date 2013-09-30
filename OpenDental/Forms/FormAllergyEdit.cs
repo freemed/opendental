@@ -56,6 +56,7 @@ namespace OpenDental {
 				return;
 			}
 			Allergies.Delete(AllergyCur.AllergyNum);
+			SecurityLogs.MakeLogEntry(Permissions.PatAllergyListEdit,AllergyCur.PatNum,AllergyDefs.GetDescription(AllergyCur.AllergyDefNum)+" deleted");
 			DialogResult=DialogResult.OK;
 		}
 
@@ -82,9 +83,11 @@ namespace OpenDental {
 			AllergyCur.StatusIsActive=checkActive.Checked;
 			if(AllergyCur.IsNew) {
 				Allergies.Insert(AllergyCur);
+				SecurityLogs.MakeLogEntry(Permissions.PatAllergyListEdit,AllergyCur.PatNum,AllergyDefs.GetDescription(AllergyCur.AllergyDefNum)+" added");
 			}
 			else {
 				Allergies.Update(AllergyCur);
+				SecurityLogs.MakeLogEntry(Permissions.PatAllergyListEdit,AllergyCur.PatNum,AllergyDefs.GetDescription(AllergyCur.AllergyDefNum)+" edited");
 			}
 			DialogResult=DialogResult.OK;
 		}

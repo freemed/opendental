@@ -352,12 +352,14 @@ namespace OpenDental{
 
 		private void butDelete_Click(object sender,EventArgs e) {
 			if(IsNew) {
+				//This code is never hit in current implementation 09/26/2013.
 				DialogResult=DialogResult.Cancel;
 				return;
 			}
 			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete?")) {
 				return;
 			}
+			SecurityLogs.MakeLogEntry(Permissions.PatProblemListEdit,DiseaseCur.PatNum,DiseaseDefs.GetName(DiseaseCur.DiseaseDefNum)+" deleted");
 			Diseases.Delete(DiseaseCur);
 			DialogResult=DialogResult.OK;
 		}
@@ -375,10 +377,13 @@ namespace OpenDental{
 			DiseaseCur.PatNote=textNote.Text;
 			//Todo: Save DateStop and DateStart values.
 			if(IsNew){
+				//This code is never hit in current implementation 09/26/2013.
 				Diseases.Insert(DiseaseCur);
+				SecurityLogs.MakeLogEntry(Permissions.PatProblemListEdit,DiseaseCur.PatNum,DiseaseDefs.GetName(DiseaseCur.DiseaseDefNum)+" added");
 			}
 			else{
 				Diseases.Update(DiseaseCur);
+				SecurityLogs.MakeLogEntry(Permissions.PatProblemListEdit,DiseaseCur.PatNum,DiseaseDefs.GetName(DiseaseCur.DiseaseDefNum)+" edited");
 			}
 			DialogResult=DialogResult.OK;
 		}
