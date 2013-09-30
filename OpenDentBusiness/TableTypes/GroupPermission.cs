@@ -162,7 +162,21 @@ namespace OpenDentBusiness{
 		///<summary>66- When editing an existing task: delete the task, edit original description, or double click on note rows.  Even if you don't have the permission, you can still edit your own task description (but not the notes) as long as it's in your inbox and as long as nobody but you has added any notes.</summary>
 		TaskEdit,
 		///<summary>67- Add or delete lists and list columns..</summary>
-		WikiListSetup
+		WikiListSetup,
+		///<summary>68- There is no user interface in the security window for this permission.  It is only used for tracking.  Tracks copying of patient information.  Required by EHR.</summary>
+		Copy,
+		///<summary>69- There is no user interface in the security window for this permission.  It is only used for tracking.  Tracks printing of patient information.  Required by EHR.</summary>
+		Printing,
+		///<summary>70- There is no user interface in the security window for this permission.  It is only used for tracking.  Tracks viewing of patient medical information.</summary>
+		MedicalInfoViewed,
+		///<summary>71- There is no user interface in the security window for this permission.  It is only used for tracking.  Tracks creation and editing of patient problems.</summary>
+		PatProblemListEdit,
+		///<summary>72- There is no user interface in the security window for this permission.  It is only used for tracking.  Tracks creation and edting of patient medications.</summary>
+		PatMedicationListEdit,
+		///<summary>73- There is no user interface in the security window for this permission.  It is only used for tracking.  Tracks creation and editing of patient allergies.</summary>
+		PatAllergyListEdit,
+		///<summary>74- There is no user interface in the security window for this permission.  It is only used for tracking.  Tracks creation and editing of patient family health history.</summary>
+		PatFamilyHealthEdit
 	}
 
 	
