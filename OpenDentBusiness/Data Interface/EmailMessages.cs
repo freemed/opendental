@@ -103,39 +103,22 @@ namespace OpenDentBusiness{
 
 		#region Sending
 
-		///<summary>Encrypts the message, verifies trust, locates the public encryption key for the To address (if already stored locally), etc.  patNum can be 0.
-		///Any number of attachments can be included after strBodyText.  For each attachment, specify two strings: 1) the filename (not file path), 2) then the file text/contents.</summary>
-		public static void SendEmailDirect(long patNum,string strTo,EmailAddress emailAddressFrom,string strBodyText,params string[] arrayAttachments) {
-			//We need to use emailAddressFrom.Username instead of emailAddressFrom.SenderAddress, because of how strict encryption is for matching the name to the certificate.
-			Health.Direct.Common.Mail.Message message=new Health.Direct.Common.Mail.Message(strTo,emailAddressFrom.EmailUsername,strBodyText);
-			if(arrayAttachments!=null && arrayAttachments.Length>0) {
-				List<Health.Direct.Common.Mime.MimeEntity> listAttachmentsMime=new List<Health.Direct.Common.Mime.MimeEntity>();
-				for(int i=0;i<arrayAttachments.Length;i+=2) {
-					string strAttachFileName=arrayAttachments[i];
-					string strAttachText=arrayAttachments[i+1];
-					Health.Direct.Common.Mime.MimeEntity mimeEntity=new Health.Direct.Common.Mime.MimeEntity(Convert.ToBase64String(Encoding.UTF8.GetBytes(strAttachText)));
-					mimeEntity.ContentDisposition="attachment;";
-					mimeEntity.ContentTransferEncoding="base64;";
-					mimeEntity.ContentType="text/plain; name="+strAttachFileName+";";
-					listAttachmentsMime.Add(mimeEntity);
-				}
-				message.SetParts(listAttachmentsMime,"multipart/mixed; boundary="+CodeBase.MiscUtils.CreateRandomAlphaNumericString(32)+";");
-			}
-			Health.Direct.Agent.MessageEnvelope messageEnvelope=new Health.Direct.Agent.MessageEnvelope(message);
-			Health.Direct.Agent.OutgoingMessage outMsgDirect=new Health.Direct.Agent.OutgoingMessage(messageEnvelope);
-			SendEmailDirect(outMsgDirect,emailAddressFrom,patNum,EmailSentOrReceived.SentDirect);//encryption is performed in this step
+		///<summary>Encrypts the message, verifies trust, locates the public encryption key for the To address (if already stored locally), etc.  emailMessage.  
+		///Use this polymorphism when the attachments have already been saved to the email attachments folder in file form.  patNum can be 0.</summary>
+		public static void SendEmailDirect(EmailMessage emailMessage,EmailAddress emailAddressFrom) {
+			emailMessage.FromAddress=emailAddressFrom.EmailUsername;//Cannot be emailAddressFrom.SenderAddress, or else will not find the correct encryption certificate.  Used in ConvertEmailMessageToMessage().
+			//Start by converting the emailMessage to an unencrypted message using the Direct libraries. The email must be in this form to carry out encryption.
+			Health.Direct.Common.Mail.Message msgUnencrypted=ConvertEmailMessageToMessage(emailMessage,true);
+			Health.Direct.Agent.MessageEnvelope msgEnvelopeUnencrypted=new Health.Direct.Agent.MessageEnvelope(msgUnencrypted);
+			Health.Direct.Agent.OutgoingMessage outMsgUnencrypted=new Health.Direct.Agent.OutgoingMessage(msgEnvelopeUnencrypted);
+			SendEmailDirect(outMsgUnencrypted,emailAddressFrom);
 		}
 
 		///<summary>outMsgDirect must be unencrypted, because this function will encrypt.  Encrypts the message, verifies trust, locates the public encryption key for the To address (if already stored locally), etc.  patNum can be zero.  emailSentOrReceived must be either SentDirect or a Direct Ack type such as AckDirectProcessed.</summary>
-		private static void SendEmailDirect(Health.Direct.Agent.OutgoingMessage outMsgUnencrypted,EmailAddress emailAddressFrom,long patNum,EmailSentOrReceived emailSentOrReceived) {
+		private static void SendEmailDirect(Health.Direct.Agent.OutgoingMessage outMsgUnencrypted,EmailAddress emailAddressFrom) {
 			Health.Direct.Agent.DirectAgent directAgent=GetDirectAgentForEmailAddress(emailAddressFrom.EmailUsername);//Cannot be emailAddressFrom.SenderAddress, or else will not find the right encryption certificate.
-			EmailMessage emailMessageUnencrypted=ConvertMessageToEmailMessage(outMsgUnencrypted.Message,true);
-			emailMessageUnencrypted.PatNum=patNum;
-			emailMessageUnencrypted.SentOrReceived=emailSentOrReceived;
 			Health.Direct.Agent.OutgoingMessage outMsgEncrypted=directAgent.ProcessOutgoing(outMsgUnencrypted);//This is where encryption and trust verification occurs.
 			EmailMessage emailMessageEncrypted=ConvertMessageToEmailMessage(outMsgEncrypted.Message,false);//No point in saving the encrypted attachment, because nobody can read it and it will bloat the OpenDentImages folder.
-			emailMessageEncrypted.PatNum=patNum;
-			emailMessageEncrypted.SentOrReceived=emailSentOrReceived;
 			NameValueCollection nameValueCollectionHeaders=new NameValueCollection();
 			for(int i=0;i<outMsgEncrypted.Message.Headers.Count;i++) {
 				nameValueCollectionHeaders.Add(outMsgEncrypted.Message.Headers[i].Name,outMsgEncrypted.Message.Headers[i].ValueRaw);
@@ -148,7 +131,6 @@ namespace OpenDentBusiness{
 			alternateView.TransferEncoding=TransferEncoding.SevenBit;
 			SendEmailUnsecure(emailMessageEncrypted,emailAddressFrom,nameValueCollectionHeaders,alternateView);//Not really unsecure in this spot, because the message is already encrypted.
 			ms.Dispose();
-			Insert(emailMessageUnencrypted);//Inserted last to ensure that it is only recorded if the message was sent successfully.  Unencrypted in db to make readable if debugging is needed.
 		}
 
 		/// <summary>Used for sending encrypted Message Disposition Notification (MDN) ack messages for Direct.
@@ -179,7 +161,14 @@ namespace OpenDentBusiness{
 					//     The decision of whether or not to return the message or part of the message is up to the MUA generating the MDN.  However, in the case of 
 					//     encrypted messages requesting MDNs, encrypted message text MUST be returned, if it is returned at all, only in its original encrypted form.
 					Health.Direct.Agent.OutgoingMessage outMsgDirect=new Health.Direct.Agent.OutgoingMessage(notificationMsg);
-					SendEmailDirect(outMsgDirect,emailAddressFrom,patNum,emailSentOrReceivedAck);//encryption is performed in this step
+					if(notificationMsg.ToValue.Trim().ToLower()==notificationMsg.FromValue.Trim().ToLower()) {
+						continue;//Do not send an ack to self.
+					}
+					SendEmailDirect(outMsgDirect,emailAddressFrom);//encryption is performed in this step
+					EmailMessage emailMessage=ConvertMessageToEmailMessage(outMsgDirect.Message,false);
+					emailMessage.PatNum=patNum;
+					emailMessage.SentOrReceived=emailSentOrReceivedAck;
+					Insert(emailMessage);
 				}
 				catch {
 					//Nothing to do. Just an MDN. The sender can resend the email to us if they believe that we did not receive the message (due to lack of MDN response).
@@ -267,6 +256,8 @@ namespace OpenDentBusiness{
 
 		#endregion Sending
 
+		#region Receiving
+
 		///<summary>Fetches up to fetchCount number of messages from a POP3 server.  Set fetchCount=0 for all messages.  Typically, fetchCount is 0 or 1.
 		///Example host name, pop3.live.com. Port is Normally 110 for plain POP3, 995 for SSL POP3.  Does not currently fetch attachments.</summary>
 		public static List<EmailMessage> ReceiveFromInbox(int receiveCount,EmailAddress emailAddressInbox) {
@@ -296,6 +287,8 @@ namespace OpenDentBusiness{
 				return retVal;
 			}
 		}
+
+		#endregion Receiving
 
 		#region Helpers
 
@@ -355,6 +348,7 @@ namespace OpenDentBusiness{
 				emailMessage.EmailMessageNum=emailMessageNum;
 				emailMessage.SentOrReceived=EmailSentOrReceived.Received;
 			}
+			EhrSummaryCcd ehrSummaryCcd=null;
 			if(isEncrypted) {
 				for(int i=0;i<emailMessage.Attachments.Count;i++) {
 					if(Path.GetExtension(emailMessage.Attachments[i].ActualFileName).ToLower()!=".xml") {
@@ -367,12 +361,11 @@ namespace OpenDentBusiness{
 						if(emailMessage.PatNum==0) {
 							emailMessage.PatNum=EhrCCD.GetCCDpat(strAttachText);// A match is not guaranteed, which is why we have a button to allow the user to change the patient.
 						}
-						EhrSummaryCcd ehrSummaryCcd=new EhrSummaryCcd();
+						ehrSummaryCcd=new EhrSummaryCcd();
 						ehrSummaryCcd.ContentSummary=strAttachText;
 						ehrSummaryCcd.DateSummary=DateTime.Today;
-						ehrSummaryCcd.EmailAttachNum=emailMessage.Attachments[i].EmailAttachNum;
+						ehrSummaryCcd.EmailAttachNum=i;//Temporary value, so we can locate the FK down below.
 						ehrSummaryCcd.PatNum=emailMessage.PatNum;
-						EhrSummaryCcds.Insert(ehrSummaryCcd);
 						break;//We can only handle one CCD message per email, because we only have one patnum field per email record and the ehrsummaryccd record requires a patnum.
 					}
 				}
@@ -382,6 +375,10 @@ namespace OpenDentBusiness{
 			}
 			else {
 				EmailMessages.Update(emailMessage);//Also deletes all previous attachments, then recreates all of the attachments in emailMessage.Attachments after setting each attachment EmailMessageNum properly.
+			}
+			if(ehrSummaryCcd!=null) {
+				ehrSummaryCcd.EmailAttachNum=emailMessage.Attachments[(int)ehrSummaryCcd.EmailAttachNum].EmailAttachNum;
+				EhrSummaryCcds.Insert(ehrSummaryCcd);
 			}
 			if(isEncrypted) {
 				//Send a Message Disposition Notification (MDN) message to the sender, as required by the Direct messaging specifications.
@@ -399,7 +396,14 @@ namespace OpenDentBusiness{
 			emailMessage.Subject=message.SubjectValue;
 			emailMessage.ToAddress=message.ToValue;
 			List<Health.Direct.Common.Mime.MimeEntity> listMimeParts=new List<Health.Direct.Common.Mime.MimeEntity>();//We want to treat one part and multiple part emails the same way below, so we make our own list.  If GetParts() is called when IsMultiPart is false, then an exception will be thrown by the Direct library.
-			Health.Direct.Common.Mime.MimeEntity mimeEntity=message.ExtractMimeEntity();
+			Health.Direct.Common.Mime.MimeEntity mimeEntity=null;
+			try {
+				mimeEntity=message.ExtractMimeEntity();
+			}
+			catch {
+				emailMessage.BodyText=message.Body.Text;
+				return emailMessage;
+			}
 			if(message.IsMultiPart) {
 				foreach(Health.Direct.Common.Mime.MimeEntity mimePart in mimeEntity.GetParts()) {
 					listMimeParts.Add(mimePart);
@@ -408,35 +412,102 @@ namespace OpenDentBusiness{
 			else {//Single body part.
 				listMimeParts.Add(mimeEntity);
 			}
-			StringBuilder sbBodyText=new StringBuilder();
-			emailMessage.Attachments=new List<EmailAttach>();
+			List<Health.Direct.Common.Mime.MimeEntity> listMimeBodyTextParts=new List<Health.Direct.Common.Mime.MimeEntity>();
+			List<Health.Direct.Common.Mime.MimeEntity> listMimeAttachParts=new List<Health.Direct.Common.Mime.MimeEntity>();
 			for(int i=0;i<listMimeParts.Count;i++) {
 				Health.Direct.Common.Mime.MimeEntity mimePart=listMimeParts[i];
 				if(mimePart.ContentDisposition==null || !mimePart.ContentDisposition.ToLower().Contains("attachment")) {//Not an email attachment.  Treat as body text.
-					if(sbBodyText.Length>0) {
-						//Separate distinct mime text parts with some space.  Normally there should only be one mime part which is text and the others would be attachments.  This is here just in case.
-						sbBodyText.Append("\r\n\r\n");
-					}
-					sbBodyText.Append(ProcessMimeTextPart(mimePart.Body.Text));
-					continue;
+					listMimeBodyTextParts.Add(mimePart);
 				}
-				//Email attachment.
-				if(!hasAttachments) {
-					continue;//Skip attachments.
+				else {
+					listMimeAttachParts.Add(mimePart);
 				}
-				string strAttachText=mimePart.Body.Text;
+			}
+			string strTextPartBoundary="";
+			if(listMimeBodyTextParts.Count>1) {
+				strTextPartBoundary=message.ParsedContentType.Boundary;
+			}
+			StringBuilder sbBodyText=new StringBuilder();
+			for(int i=0;i<listMimeBodyTextParts.Count;i++) {
+				if(strTextPartBoundary!="") {//For incoming Direct Ack messages.
+					sbBodyText.Append("\r\n--"+strTextPartBoundary+"\r\n");
+					sbBodyText.Append(listMimeBodyTextParts[i].ToString());//Includes not only the body text, but also content type and content disposition.
+				}
+				else {
+					sbBodyText.Append(listMimeBodyTextParts[i].Body.Text);
+				}
+			}
+			if(strTextPartBoundary!="") {
+				sbBodyText.Append("\r\n--"+strTextPartBoundary+"--\r\n");
+			}
+			emailMessage.BodyText=sbBodyText.ToString();
+			emailMessage.Attachments=new List<EmailAttach>();
+			if(!hasAttachments) {
+				return emailMessage;
+			}
+			for(int i=0;i<listMimeAttachParts.Count;i++) {
+				Health.Direct.Common.Mime.MimeEntity mimePartAttach=listMimeAttachParts[i];
+				string strAttachText=mimePartAttach.Body.Text;
 				try {
-					if(mimePart.ContentTransferEncoding.ToLower().Contains("base64")) {
-						strAttachText=Encoding.UTF8.GetString(Convert.FromBase64String(mimePart.Body.Text));
+					if(mimePartAttach.ContentTransferEncoding.ToLower().Contains("base64")) {
+						strAttachText=Encoding.UTF8.GetString(Convert.FromBase64String(mimePartAttach.Body.Text));
 					}
 				}
 				catch {
 				}
-				EmailAttach emailAttach=CreateAttachInAttachPath(mimePart.ParsedContentType.Name,strAttachText);
+				EmailAttach emailAttach=CreateAttachInAttachPath(mimePartAttach.ParsedContentType.Name,strAttachText);
+				if(mimePartAttach.ParsedContentType.Name.ToLower()=="smime.p7m") {//encrypted attachment
+					message.ContentType="application/pkcs7-mime; name=smime.p7m; boundary="+strTextPartBoundary+";";
+				}
 				emailMessage.Attachments.Add(emailAttach);//The attachment EmailMessageNum is set when the emailMessage is inserted/updated below.					
 			}
-			emailMessage.BodyText=sbBodyText.ToString();
 			return emailMessage;
+		}
+
+		private static Health.Direct.Common.Mail.Message ConvertEmailMessageToMessage(EmailMessage emailMessage,bool hasAttachments) {
+			//We need to use emailAddressFrom.Username instead of emailAddressFrom.SenderAddress, because of how strict encryption is for matching the name to the certificate.
+			Health.Direct.Common.Mail.Message message=new Health.Direct.Common.Mail.Message(emailMessage.ToAddress,emailMessage.FromAddress);
+			Health.Direct.Common.Mime.Header headerSubject=new Health.Direct.Common.Mime.Header("Subject",emailMessage.Subject);
+			message.Headers.Add(headerSubject);
+			string strBoundry="";
+			List<Health.Direct.Common.Mime.MimeEntity> listMimeParts=new List<Health.Direct.Common.Mime.MimeEntity>();
+			if(emailMessage.BodyText.Trim().Length>4 && emailMessage.BodyText.Trim().StartsWith("--") && emailMessage.BodyText.Trim().EndsWith("--")) {//The body text is multi-part.
+				strBoundry=emailMessage.BodyText.Trim().Split(new string[] { "\r\n","\r","\n" },StringSplitOptions.None)[0];
+				string[] arrayBodyTextParts=emailMessage.BodyText.Trim().TrimEnd('-').Split(new string[] { strBoundry },StringSplitOptions.RemoveEmptyEntries);
+				for(int i=0;i<arrayBodyTextParts.Length;i++) {
+					Health.Direct.Common.Mime.MimeEntity mimeEntityBodyText=new Health.Direct.Common.Mime.MimeEntity(arrayBodyTextParts[i]);
+					mimeEntityBodyText.ContentType="text/plain;";
+					listMimeParts.Add(mimeEntityBodyText);
+				}
+			}
+			else {
+				Health.Direct.Common.Mime.MimeEntity mimeEntityBodyText=new Health.Direct.Common.Mime.MimeEntity(emailMessage.BodyText);
+				mimeEntityBodyText.ContentType="text/plain;";
+				listMimeParts.Add(mimeEntityBodyText);
+			}
+			if(hasAttachments && emailMessage.Attachments!=null && emailMessage.Attachments.Count>0) {
+				string strAttachPath=GetEmailAttachPath();
+				for(int i=0;i<emailMessage.Attachments.Count;i++) {
+					string strAttachFileName=emailMessage.Attachments[i].DisplayedFileName;
+					string strAttachFile=ODFileUtils.CombinePaths(strAttachPath,emailMessage.Attachments[i].ActualFileName);
+					string strAttachText=File.ReadAllText(strAttachFile);
+					Health.Direct.Common.Mime.MimeEntity mimeEntityAttach=new Health.Direct.Common.Mime.MimeEntity(Convert.ToBase64String(Encoding.UTF8.GetBytes(strAttachText)));
+					mimeEntityAttach.ContentDisposition="attachment;";
+					mimeEntityAttach.ContentTransferEncoding="base64;";
+					mimeEntityAttach.ContentType="text/plain; name="+strAttachFileName+";";
+					listMimeParts.Add(mimeEntityAttach);
+				}
+			}
+			if(strBoundry=="") {
+				strBoundry=CodeBase.MiscUtils.CreateRandomAlphaNumericString(32);
+			}
+			if(listMimeParts.Count==1) {//Single body part
+				message.Body=listMimeParts[0].Body;
+			}
+			else if(listMimeParts.Count>1) {//multiple body parts
+				message.SetParts(listMimeParts,"multipart/mixed; boundary="+strBoundry+";");
+			}
+			return message;
 		}
 
 		///<summary>Creates a new file inside of the email attachment path (inside OpenDentImages) and returns an EmailAttach object referencing the new file, but with EmailMessageNum set to zero so it can be set later.</summary>
@@ -601,7 +672,16 @@ namespace OpenDentBusiness{
 			emailAddress.ServerPortIncoming=PrefC.GetInt(PrefName.EHREmailPort);
 			emailAddress.EmailUsername=PrefC.GetString(PrefName.EHREmailFromAddress);
 			emailAddress.EmailPassword=PrefC.GetString(PrefName.EHREmailPassword);
-			return ReceiveFromInbox(1,emailAddress)[0].BodyText;//List might be zero in length, but the caller is supposed to surround with try/catch anyway.
+			List<EmailMessage> emailMessages=ReceiveFromInbox(1,emailAddress);
+			if(emailMessages.Count==0) {
+				throw new Exception("Inbox empty.");
+			}
+			EmailMessage emailMessage=emailMessages[0];
+			if(emailMessage.Attachments==null || emailMessage.Attachments.Count==0) {
+				throw new Exception("No attachments");
+			}
+			string strAttachFile=ODFileUtils.CombinePaths(GetEmailAttachPath(),emailMessage.Attachments[0].ActualFileName);
+			return File.ReadAllText(strAttachFile);
 		}
 
 		private static string GetTestEmail1() {
