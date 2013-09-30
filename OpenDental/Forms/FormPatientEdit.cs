@@ -963,9 +963,9 @@ namespace OpenDental{
 			this.butEditZip.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butEditZip.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butEditZip.CornerRadius = 4F;
-			this.butEditZip.Location = new System.Drawing.Point(349, 134);
+			this.butEditZip.Location = new System.Drawing.Point(349, 135);
 			this.butEditZip.Name = "butEditZip";
-			this.butEditZip.Size = new System.Drawing.Size(73, 23);
+			this.butEditZip.Size = new System.Drawing.Size(73, 22);
 			this.butEditZip.TabIndex = 62;
 			this.butEditZip.TabStop = false;
 			this.butEditZip.Text = "&Edit Zip";
@@ -1046,6 +1046,7 @@ namespace OpenDental{
 			this.textAddrNotes.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
 			this.textAddrNotes.Size = new System.Drawing.Size(224, 59);
 			this.textAddrNotes.TabIndex = 0;
+			this.textAddrNotes.Text = "";
 			// 
 			// checkNotesSame
 			// 
