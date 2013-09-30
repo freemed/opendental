@@ -332,7 +332,7 @@ namespace OpenDental{
 				//Don't want to have print dialogue come up when not printing.
 			}
 			else {
-				if(!PrinterL.SetPrinter(pd,PrintSituation.Statement)) {
+				if(!PrinterL.SetPrinter(pd,PrintSituation.Statement,pat.PatNum,"Statement from "+stmt.DateTStamp.ToShortDateString()+" printed")) {
 					return;
 				}
 			}

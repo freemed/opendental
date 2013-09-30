@@ -259,7 +259,7 @@ namespace OpenDental{
 				pd.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
 			}
 			try{
-				if(PrinterL.SetPrinter(pd,PrintSituation.Default)){
+				if(PrinterL.SetPrinter(pd,PrintSituation.Default,0,"Report printed "+pd.DocumentName)){
 					if(pd.PrinterSettings.PrintRange==PrintRange.Selection) {
 						pd.PrinterSettings.FromPage=viewer.PageCurrent;
 					}

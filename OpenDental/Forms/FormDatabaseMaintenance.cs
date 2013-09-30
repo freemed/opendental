@@ -704,7 +704,7 @@ namespace OpenDental {
 			pd2.DefaultPageSettings.Margins=new Margins(40,50,50,60);
 			try {
 				#if DEBUG
-				FormPrintPreview printPreview=new FormPrintPreview(PrintSituation.Default,pd2,0);
+				FormPrintPreview printPreview=new FormPrintPreview(PrintSituation.Default,pd2,0,0,"Database Maintenance log printed");
 				printPreview.ShowDialog();
 				#else
 				pd2.Print();

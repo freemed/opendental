@@ -277,7 +277,7 @@ namespace OpenDental {
 		private void butPrint_Click(object sender,EventArgs e) {
 			PrintDocument pd=new PrintDocument();
 			pd.PrintPage += new PrintPageEventHandler(this.pd2_PrintPage);
-			if(PrinterL.SetPrinter(pd,PrintSituation.Default)) {
+			if(PrinterL.SetPrinter(pd,PrintSituation.Default,0,"Employee time graph printed")) {
 				pd.Print();
 			}
 		}

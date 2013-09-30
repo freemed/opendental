@@ -529,7 +529,7 @@ namespace OpenDental{
 					pView.ShowDialog();
 				}
 				else {
-					if(PrinterL.SetPrinter(pd2,PrintSituation.Default)) {
+					if(PrinterL.SetPrinter(pd2,PrintSituation.Default,0,"Accounting transaction history for "+AccountCur.Description+" printed")) {
 						pd2.Print();
 					}
 				}

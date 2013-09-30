@@ -260,7 +260,7 @@ namespace OpenDental {
 			pView.printPreviewControl2.Document=pd2;
 			pView.ShowDialog();
 #else
-				if(PrinterL.SetPrinter(pd2,PrintSituation.Default)) {
+				if(PrinterL.SetPrinter(pd2,PrintSituation.Default,0,"Supplies order from "+ListOrders[gridOrders.GetSelectedIndex()].DatePlaced.ToShortDateString()+" printed")) {
 					try{
 						pd2.Print();
 					}

@@ -335,7 +335,7 @@ namespace OpenDental{
 				if(justPreview){
 					printPreviewControl2.Document=pd2;
 				}
-				else if(PrinterL.SetPrinter(pd2,PrintSituation.Default)){
+				else if(PrinterL.SetPrinter(pd2,PrintSituation.Default,0,"Print screen printed")){
 					pd2.Print();
 				}
 			}

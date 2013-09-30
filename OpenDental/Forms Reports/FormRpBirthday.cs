@@ -427,7 +427,7 @@ namespace OpenDental
 				pd.DefaultPageSettings.Landscape=true;
 			}
 			printPreview=new FormPrintPreview(PrintSituation.Postcard,pd,
-							(int)Math.Ceiling((double)BirthdayTable.Rows.Count/(double)PrefC.GetLong(PrefName.RecallPostcardsPerSheet)));
+				(int)Math.Ceiling((double)BirthdayTable.Rows.Count/(double)PrefC.GetLong(PrefName.RecallPostcardsPerSheet)),0,"Birthday report postcards printed");
 			printPreview.ShowDialog();
 		}
 

@@ -5140,7 +5140,7 @@ namespace OpenDental{
 			}
 			UpdateClaim();
 			PrintDocument pd=new PrintDocument();
-			if(!PrinterL.SetPrinter(pd,PrintSituation.Claim)) {
+			if(!PrinterL.SetPrinter(pd,PrintSituation.Claim,PatCur.PatNum,"Claim from "+ClaimCur.DateService.ToShortDateString()+" printed")) {
 				return;
 			}
 			FormClaimPrint FormCP=new FormClaimPrint();

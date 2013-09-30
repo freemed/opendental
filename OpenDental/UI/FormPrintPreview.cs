@@ -24,13 +24,17 @@ namespace OpenDental.UI{
 		private PrintDocument Document;
 		///<summary></summary>
 		private PrintSituation Sit;
+		long PatNumCur;
+		string AuditDescription;
 
-		///<summary>Must supply the printSituation so that when user clicks print, we know where to send it.  Must supply total pages</summary>
-		public FormPrintPreview(PrintSituation sit,PrintDocument document,int totalPages) {
+		///<summary>Must supply the printSituation so that when user clicks print, we know where to send it.  Must supply total pages.  PatNum and AuditDescription used to make audit log entry.  PatNum can be 0.  Audit Log Text will show AuditDescription exactly.</summary>
+		public FormPrintPreview(PrintSituation sit,PrintDocument document,int totalPages,long patNum,string auditDescription) {
 			InitializeComponent();// Required for Windows Form Designer support
 			Sit=sit;
 			Document=document;
 			TotalPages=totalPages;
+			PatNumCur=patNum;
+			AuditDescription=auditDescription;
 		}
 
 		/// <summary>Clean up any resources being used.</summary>
@@ -171,7 +175,7 @@ namespace OpenDental.UI{
 		}
 
 		private void OnPrint_Click() {
-			if(!PrinterL.SetPrinter(Document,Sit)){
+			if(!PrinterL.SetPrinter(Document,Sit,PatNumCur,AuditDescription)){
 				return;
 			}
 			if(Document.OriginAtMargins){

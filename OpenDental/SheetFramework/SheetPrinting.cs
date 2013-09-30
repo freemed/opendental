@@ -48,11 +48,11 @@ namespace OpenDental {
 			//later: add a check here for print preview.
 			#if DEBUG
 				pd.DefaultPageSettings.Margins=new Margins(20,20,0,0);
-				FormPrintPreview printPreview=new FormPrintPreview(sit,pd,SheetList.Count);
+				FormPrintPreview printPreview=new FormPrintPreview(sit,pd,SheetList.Count,0,"Batch of "+sheetBatch[0].Description+" printed");
 				printPreview.ShowDialog();
 			#else
 				try {
-					if(!PrinterL.SetPrinter(pd,sit)) {
+					if(!PrinterL.SetPrinter(pd,sit,0,"Batch of "+sheetBatch[0].Description+" printed")) {
 						return;
 					}
 					pd.DefaultPageSettings.Margins=new Margins(0,0,0,0);
@@ -128,12 +128,20 @@ namespace OpenDental {
 			//later: add a check here for print preview.
 			#if DEBUG
 				pd.DefaultPageSettings.Margins=new Margins(20,20,0,0);
-				FormPrintPreview printPreview=new FormPrintPreview(sit,pd,SheetList.Count);
+				FormPrintPreview printPreview;
+				printPreview=new FormPrintPreview(sit,pd,SheetList.Count,sheet.PatNum,sheet.Description+" sheet from "+sheet.DateTimeSheet.ToShortDateString()+" printed");
 				printPreview.ShowDialog();
 			#else
 				try {
-					if(!PrinterL.SetPrinter(pd,sit)) {
-						return;
+					if(sheet.PatNum!=null){
+						if(!PrinterL.SetPrinter(pd,sit,sheet.PatNum,sheet.Description+" sheet from "+sheet.DateTimeSheet.ToShortDateString()+" printed")) {
+							return;
+						}
+					}
+					else{
+						if(!PrinterL.SetPrinter(pd,sit,0,sheet.Description+" sheet from "+sheet.DateTimeSheet.ToShortDateString()+" printed")) {
+							return;
+						}
 					}
 					pd.DefaultPageSettings.Margins=new Margins(0,0,0,0);
 					pd.Print();

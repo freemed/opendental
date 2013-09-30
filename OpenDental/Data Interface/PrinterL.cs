@@ -8,8 +8,8 @@ using OpenDentBusiness;
 namespace OpenDental{
 	public class PrinterL{
 
-		///<summary>Called from many places in the program.  Every single time we print, this function is used to figure out which printer to use.  It also handles displaying the dialog if necessary.  Tests to see if the selected printer is valid, and if not, then it gives user the option to print to an available printer.</summary>
-		public static bool SetPrinter(PrintDocument pd,PrintSituation sit){
+		///<summary>Called from many places in the program.  Every single time we print, this function is used to figure out which printer to use.  It also handles displaying the dialog if necessary.  Tests to see if the selected printer is valid, and if not, then it gives user the option to print to an available printer.  PatNum and AuditDescription used to make audit log entry.  PatNum can be 0.  Audit Log Text will show AuditDescription exactly.</summary>
+		public static bool SetPrinter(PrintDocument pd,PrintSituation sit,long patNum,string auditDescription){
 			PrinterSettings pSet=pd.PrinterSettings;
 			//pSet will always be new when this function is called
 			//0.5. Get the name of the Windows default printer.
@@ -42,6 +42,8 @@ namespace OpenDental{
 			}
 			//4. Present the dialog
 			if(!doPrompt){
+				//Create audit log entry for printing.  PatNum can be 0.
+				SecurityLogs.MakeLogEntry(Permissions.Printing,patNum,auditDescription);
 				return true;
 			}
 			PrintDialog dialog=new PrintDialog();
@@ -49,7 +51,7 @@ namespace OpenDental{
 			dialog.PrinterSettings=pSet;
 			dialog.UseEXDialog=true;
 			#if DEBUG
-				return true;
+				//just use defaults
 			#else
 				DialogResult result=dialog.ShowDialog();
 				//but dialog.PrinterSettings.Collate is false here.  I don't know what triggers the change.
@@ -60,8 +62,10 @@ namespace OpenDental{
 				//if(!dialog.PrinterSettings.IsValid){//not needed since we have already checked each name.
 				//pd2.PrinterSettings=printDialog2.PrinterSettings;
 				//}
-				return true;
 			#endif
+			//Create audit log entry for printing.  PatNum can be 0.
+			SecurityLogs.MakeLogEntry(Permissions.Printing,patNum,auditDescription);
+			return true;
 		}
 
 	}

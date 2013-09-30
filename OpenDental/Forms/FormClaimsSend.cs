@@ -623,7 +623,7 @@ namespace OpenDental{
 
 		private void toolBarButBlank_Click(){
 			PrintDocument pd=new PrintDocument();
-			if(!PrinterL.SetPrinter(pd,PrintSituation.Claim)){
+			if(!PrinterL.SetPrinter(pd,PrintSituation.Claim,0,"Blank claim printed")){
 				return;
 			}
 			FormClaimPrint FormCP=new FormClaimPrint();
@@ -646,7 +646,7 @@ namespace OpenDental{
 				}
 			}
 			PrintDocument pd=new PrintDocument();
-			if(!PrinterL.SetPrinter(pd,PrintSituation.Claim)){
+			if(!PrinterL.SetPrinter(pd,PrintSituation.Claim,0,"Multiple claims printed")){
 				return;
 			}
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
@@ -1173,7 +1173,7 @@ namespace OpenDental{
 					pView.ShowDialog();
 				}
 				else {
-					if(PrinterL.SetPrinter(pd2,PrintSituation.Default)) {
+					if(PrinterL.SetPrinter(pd2,PrintSituation.Default,0,"Claim history list printed")) {
 						pd2.Print();
 					}
 				}

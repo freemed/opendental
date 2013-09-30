@@ -444,7 +444,7 @@ namespace OpenDental{
 		}
 
 		private void OnPrint_Click() {
-			if(!PrinterL.SetPrinter(Document,PrintSituation.TPPerio)){
+			if(!PrinterL.SetPrinter(Document,PrintSituation.TPPerio,TPcur.PatNum,"Signed treatment plan from "+TPcur.DateTP.ToShortDateString()+" printed")){
 				return;
 			}
 			if(Document.OriginAtMargins){

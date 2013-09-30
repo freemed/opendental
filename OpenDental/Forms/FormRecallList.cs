@@ -1098,7 +1098,7 @@ namespace OpenDental{
 			pd.OriginAtMargins=true;
 			pd.DefaultPageSettings.Margins=new Margins(0,0,0,0);
 			printPreview=new FormPrintPreview(PrintSituation.LabelSheet
-				,pd,(int)Math.Ceiling((double)addrTable.Rows.Count/30));
+				,pd,(int)Math.Ceiling((double)addrTable.Rows.Count/30),0,"Recall list labels printed");
 			//printPreview.Document=pd;
 			//printPreview.TotalPages=;
 			printPreview.ShowDialog();
@@ -1216,7 +1216,7 @@ namespace OpenDental{
 				pd.DefaultPageSettings.Landscape=true;
 			}
 			int totalPages=(int)Math.Ceiling((double)addrTable.Rows.Count/(double)PrefC.GetLong(PrefName.RecallPostcardsPerSheet));
-			printPreview=new FormPrintPreview(PrintSituation.Postcard,pd,totalPages);
+			printPreview=new FormPrintPreview(PrintSituation.Postcard,pd,totalPages,0,"Recall list postcards printed");
 			printPreview.ShowDialog();
 			if(MsgBox.Show(this,MsgBoxButtons.YesNo,"Did all the postcards finish printing correctly?  Statuses will be changed and commlog entries made for all of the selected patients.  Click Yes only if postcards printed successfully.")) {
 				Cursor=Cursors.WaitCursor;
@@ -1887,10 +1887,10 @@ namespace OpenDental{
 					pView.printPreviewControl2.Document=pd;
 					pView.ShowDialog();
 				#else
-					if(PrinterL.SetPrinter(pd,PrintSituation.Default)) {
+					if(PrinterL.SetPrinter(pd,PrintSituation.Default,0,"Recall list printed")) {
 						pd.Print();
 					}
-				#endif
+#endif
 			}
 			catch {
 				MessageBox.Show(Lan.g(this,"Printer not available"));

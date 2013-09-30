@@ -532,7 +532,7 @@ namespace OpenDental{
 			pView.ShowDialog();
 #else
 			//Always prints to the Windows default printer.
-			if(PrinterL.SetPrinter(pd2,PrintSituation.Default)){
+			if(PrinterL.SetPrinter(pd2,PrintSituation.Default,0,"Reconcile list printed")){
 				printdoc.Print();
 			}
 #endif

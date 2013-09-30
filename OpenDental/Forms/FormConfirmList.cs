@@ -663,7 +663,7 @@ namespace OpenDental{
 			pd.OriginAtMargins=true;
 			pd.DefaultPageSettings.Margins=new Margins(0,0,0,0);
 			printPreview=new FormPrintPreview(PrintSituation.LabelSheet
-				,pd,(int)Math.Ceiling((double)AddrTable.Rows.Count/30));
+				,pd,(int)Math.Ceiling((double)AddrTable.Rows.Count/30),0,"Confirmation list labels printed");
 			printPreview.ShowDialog();
 		}
 
@@ -706,7 +706,7 @@ namespace OpenDental{
 				pd.DefaultPageSettings.Landscape=true;
 			}
 			printPreview=new FormPrintPreview(PrintSituation.Postcard,pd,
-				(int)Math.Ceiling((double)AddrTable.Rows.Count/(double)PrefC.GetLong(PrefName.RecallPostcardsPerSheet)));
+				(int)Math.Ceiling((double)AddrTable.Rows.Count/(double)PrefC.GetLong(PrefName.RecallPostcardsPerSheet)),0,"Confirmation list postcards printed");
 			printPreview.ShowDialog();
 		}
 
@@ -1098,7 +1098,7 @@ namespace OpenDental{
 				pView.printPreviewControl2.Document=pd;
 				pView.ShowDialog();
 				#else
-					if(PrinterL.SetPrinter(pd,PrintSituation.Default)) {
+					if(PrinterL.SetPrinter(pd,PrintSituation.Default,0,"Confirmation list printed")) {
 						pd.Print();
 					}
 				#endif

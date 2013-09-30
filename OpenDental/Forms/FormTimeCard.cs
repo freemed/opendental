@@ -909,11 +909,11 @@ namespace OpenDental{
 			pd.DefaultPageSettings.Margins=new Margins(0,0,0,0);
 			pd.OriginAtMargins=true;
 			#if DEBUG
-				FormPrintPreview printPreview=new FormPrintPreview(PrintSituation.Default,pd,1);
+				FormPrintPreview printPreview=new FormPrintPreview(PrintSituation.Default,pd,1,0,"Time card for "+EmployeeCur.LName+","+EmployeeCur.FName+" printed");
 				printPreview.ShowDialog();
 			#else
 				try {
-					if(PrinterL.SetPrinter(pd,PrintSituation.Default)) {
+					if(PrinterL.SetPrinter(pd,PrintSituation.Default,0,"Time card for "+EmployeeCur.LName+","+EmployeeCur.FName+" printed")) {
 						pd.Print();
 					}
 				}

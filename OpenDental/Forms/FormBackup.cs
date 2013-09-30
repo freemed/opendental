@@ -538,6 +538,7 @@ namespace OpenDental{
 				workerThread.Abort();
 				return;
 			}
+			SecurityLogs.MakeLogEntry(Permissions.Copy,0,"Database backup created at "+PrefC.GetString(PrefName.BackupToPath));
 			MessageBox.Show(Lan.g(this,"Backup complete."));
 			Close();
 		}

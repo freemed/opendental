@@ -734,7 +734,7 @@ namespace OpenDental{
 			pd.OriginAtMargins=true;
 			pd.DefaultPageSettings.Margins=new Margins(0,0,0,0);
 			FormPrintPreview printPreview=new FormPrintPreview(PrintSituation.LabelSheet
-			  ,pd,(int)Math.Ceiling((double)gridMain.SelectedIndices.Length/30));
+			  ,pd,(int)Math.Ceiling((double)gridMain.SelectedIndices.Length/30),0,"Treatment finder labels printed");
 			printPreview.ShowDialog();
 		}
 
@@ -895,7 +895,7 @@ namespace OpenDental{
 					pView.printPreviewControl2.Document=pd;
 					pView.ShowDialog();
 				#else
-					if(PrinterL.SetPrinter(pd,PrintSituation.Default)) {
+					if(PrinterL.SetPrinter(pd,PrintSituation.Default,0,"Treatment finder list printed")) {
 						pd.Print();
 					}
 				#endif

@@ -318,7 +318,7 @@ namespace OpenDental.ReportingOld2
 		///<summary></summary>
 		private void PrintReport(){
 			try{
-				if(PrinterL.SetPrinter(pd2,PrintSituation.Default)){
+				if(PrinterL.SetPrinter(pd2,PrintSituation.Default,0,"Report printed "+MyReport.ReportName)){
 					pd2.Print();
 				}
 			}

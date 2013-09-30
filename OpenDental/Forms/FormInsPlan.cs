@@ -3232,7 +3232,7 @@ namespace OpenDental{
 		private void butLabel_Click(object sender,System.EventArgs e) {
 			//LabelSingle label=new LabelSingle();
 			PrintDocument pd=new PrintDocument();//only used to pass printerName
-			if(!PrinterL.SetPrinter(pd,PrintSituation.LabelSingle)) {
+			if(!PrinterL.SetPrinter(pd,PrintSituation.LabelSingle,PatPlanCur.PatNum,textCarrier.Text+" insurance plan label printed")) {
 				return;
 			}
 			Carrier carrier=new Carrier();

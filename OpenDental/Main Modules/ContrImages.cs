@@ -2039,6 +2039,7 @@ namespace OpenDental {
 				//bitmapCopy.Dispose();
 				//bitmapCopy=null;
 			}
+			SecurityLogs.MakeLogEntry(Permissions.Copy,PatCur.PatNum,"Patient image "+Documents.GetByNum(nodeId.PriKey).FileName+" copied to clipboard");
 			Cursor=Cursors.Default;
 		}
 

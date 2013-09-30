@@ -61,7 +61,7 @@ namespace OpenDental {
 			Cursor.Current=Cursors.WaitCursor;
 			PrintDocument pd=new PrintDocument();
 			pd.PrintPage+=new PrintPageEventHandler(this.pdAgeGender_PrintPage);
-			FormPrintPreview printPreview=new FormPrintPreview(PrintSituation.Default,pd,1);
+			FormPrintPreview printPreview=new FormPrintPreview(PrintSituation.Default,pd,1,0,"UDS reporting 3A-AgeGender printed");
 			printPreview.ShowDialog();
 		}
 

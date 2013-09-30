@@ -488,6 +488,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormMedical_Load(object sender, System.EventArgs e){
+			SecurityLogs.MakeLogEntry(Permissions.MedicalInfoViewed,PatCur.PatNum,"Patient medical information viewed");
 			checkPremed.Checked=PatCur.Premed;
 			textMedUrgNote.Text=PatCur.MedUrgNote;
 			textMedical.Text=PatientNoteCur.Medical;
@@ -611,7 +612,7 @@ namespace OpenDental{
         pView.printPreviewControl2.Document=pd;
         pView.ShowDialog();
 #else
-					if(PrinterL.SetPrinter(pd,PrintSituation.Default)) {
+					if(PrinterL.SetPrinter(pd,PrintSituation.Default,PatCur.PatNum,"Medications printed")) {
 						pd.Print();
 					}
 #endif
@@ -668,7 +669,7 @@ namespace OpenDental{
         pView.printPreviewControl2.Document=pd;
         pView.ShowDialog();
 #else
-					if(PrinterL.SetPrinter(pd,PrintSituation.Default)) {
+					if(PrinterL.SetPrinter(pd,PrintSituation.Default,PatCur.PatNum,"Medical information printed")) {
 						pd.Print();
 					}
 #endif
@@ -860,6 +861,7 @@ namespace OpenDental{
 				return;
 			}
 			for(int i=0;i<formDD.SelectedDiseaseDefNums.Count;i++) {
+				SecurityLogs.MakeLogEntry(Permissions.PatProblemListEdit,PatCur.PatNum,DiseaseDefs.GetName(formDD.SelectedDiseaseDefNums[i])+" added"); //Audit log made outside form because the form is just a list of problems and is called from many places.
 				Disease disease=new Disease();
 				disease.PatNum=PatCur.PatNum;
 				disease.DiseaseDefNum=formDD.SelectedDiseaseDefNums[i];

@@ -404,7 +404,7 @@ namespace OpenDental{
 			pd2.OriginAtMargins=true;
 			pd2.DefaultPageSettings.Margins=new Margins(0,0,0,0);
 			pagesPrinted=0;
-			if(PrinterL.SetPrinter(pd2,PrintSituation.Claim)) {
+			if(PrinterL.SetPrinter(pd2,PrintSituation.Claim,PatNumCur,"Claim from "+ClaimCur.DateService.ToShortDateString()+" printed")) {
 				try {
 					pd2.Print();
 				}

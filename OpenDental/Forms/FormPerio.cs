@@ -1594,7 +1594,7 @@ namespace OpenDental{
 			pd2.PrintPage+=new PrintPageEventHandler(this.pd2_PrintPage);
 			pd2.OriginAtMargins=true;
 			pd2.DefaultPageSettings.Margins=new Margins(0,0,0,0);
-			if(!PrinterL.SetPrinter(pd2,PrintSituation.TPPerio)){
+			if(!PrinterL.SetPrinter(pd2,PrintSituation.TPPerio,PatCur.PatNum,"Perio chart from "+PerioExamCur.ExamDate+" printed")){
 				return;
 			}
 			try{

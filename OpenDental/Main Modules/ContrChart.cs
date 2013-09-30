@@ -9375,7 +9375,7 @@ namespace OpenDental{
 					pView.ShowDialog();				
 			  }
 				else{
-					if(PrinterL.SetPrinter(pd2,PrintSituation.Default)){
+					if(PrinterL.SetPrinter(pd2,PrintSituation.Default,PatCur.PatNum,"Progress notes printed")){
 						pd2.Print();
 					}
 				}
@@ -9434,7 +9434,7 @@ namespace OpenDental{
 					pView.ShowDialog();
 				}
 				else {
-					if(PrinterL.SetPrinter(pd2,PrintSituation.Default)) {
+					if(PrinterL.SetPrinter(pd2,PrintSituation.Default,PatCur.PatNum,"Day report for hospital printed")) {
 						pd2.Print();
 					}
 				}

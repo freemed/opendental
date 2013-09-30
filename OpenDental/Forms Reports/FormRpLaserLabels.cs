@@ -1205,7 +1205,7 @@ namespace OpenDental {
 				pd.OriginAtMargins = true;
 				pd.DefaultPageSettings.Margins = new Margins(0,0,0,0);
 				printPreview = new FormPrintPreview(PrintSituation.LabelSheet
-						,pd,(int)Math.Ceiling((double)AddrTable.Rows.Count / 30));
+						,pd,(int)Math.Ceiling((double)AddrTable.Rows.Count / 30),0,"Laser labels printed");
 				printPreview.ShowDialog();
 			}
 			else {

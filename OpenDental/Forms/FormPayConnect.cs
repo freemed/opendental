@@ -286,7 +286,7 @@ namespace OpenDental {
 			pView.printPreviewControl2.Document=printdoc;
 			pView.ShowDialog();
 #else
-				if(PrinterL.SetPrinter(pd2,PrintSituation.Receipt)){
+				if(PrinterL.SetPrinter(pd2,PrintSituation.Receipt,PatCur.PatNum,"PayConnect receipt printed")){
 					printdoc.PrinterSettings=pd2.PrinterSettings;
 					printdoc.Print();
 				}

@@ -449,7 +449,7 @@ namespace OpenDental{
 					pView.printPreviewControl2.Document=pd2;
 					pView.ShowDialog();
 				#else 
-					if(PrinterL.SetPrinter(pd2,PrintSituation.Default)) {
+					if(PrinterL.SetPrinter(pd2,PrintSituation.Default,EtransCur.PatNum,"Etrans message text from "+EtransCur.DateTimeTrans.ToShortDateString()+" printed")) {
 						pd2.Print();
 					}
 				#endif

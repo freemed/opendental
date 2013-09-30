@@ -247,7 +247,7 @@ namespace OpenDental {
 				pView.printPreviewControl2.Document=pd;
 				pView.ShowDialog();
 				#else
-						if(PrinterL.SetPrinter(pd,PrintSituation.Default)) {
+						if(PrinterL.SetPrinter(pd,PrintSituation.Default,PatCur.PatNum,"Patient portal login information printed")) {
 							pd.Print();
 						}
 				#endif

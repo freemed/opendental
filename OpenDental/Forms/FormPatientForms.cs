@@ -197,6 +197,7 @@ namespace OpenDental {
 						gridMain.SetSelected(i,true);
 					}
 				}
+				SecurityLogs.MakeLogEntry(Permissions.Copy,PatNum,"Patient form "+sheet.Description+" from "+sheet.DateTimeSheet.ToString()+" copied");
 			}
 		}
 		

@@ -189,7 +189,7 @@ namespace OpenDental {
 					pView.printPreviewControl2.Document=pd;
 					pView.ShowDialog();
 				#else
-					if(PrinterL.SetPrinter(pd,PrintSituation.Default)) {
+					if(PrinterL.SetPrinter(pd,PrintSituation.Default,0,"CreditCard recurring charges list printed")) {
 						pd.Print();
 					}
 				#endif

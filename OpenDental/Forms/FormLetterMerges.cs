@@ -475,7 +475,7 @@ namespace OpenDental{
 				return;
 			}
 			PrintDocument pd=new PrintDocument();
-			if(!PrinterL.SetPrinter(pd,PrintSituation.Default)){
+			if(!PrinterL.SetPrinter(pd,PrintSituation.Default,PatCur.PatNum,"Letter merge "+letterCur.Description+" printed")) {
 				return;
 			}
 			if(!CreateDataFile(dataFile,letterCur)){

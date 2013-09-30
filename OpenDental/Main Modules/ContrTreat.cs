@@ -1832,7 +1832,7 @@ namespace OpenDental{
 				pView.printPreviewControl2.Document=printdoc;
 				pView.ShowDialog();			
 			#else
-				if(PrinterL.SetPrinter(pd2,PrintSituation.TPPerio)){
+				if(PrinterL.SetPrinter(pd2,PrintSituation.TPPerio,PatCur.PatNum,"Treatment plan for printed")){
 					printdoc.PrinterSettings=pd2.PrinterSettings;
 					printdoc.Print();
 				}

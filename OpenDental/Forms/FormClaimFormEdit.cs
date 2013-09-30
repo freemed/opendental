@@ -1176,7 +1176,7 @@ namespace OpenDental{
 			pd2.OriginAtMargins=true;
 			pd2.DefaultPageSettings.Margins=new Margins(0,0,0,0);
 			pd2.PrintPage+=new PrintPageEventHandler(this.pd2_PrintPage);
-			if(!PrinterL.SetPrinter(pd2,PrintSituation.Default)){
+			if(!PrinterL.SetPrinter(pd2,PrintSituation.Default,0,"Claim form "+ClaimFormCur.Description+" printed")){
 				return;
 			}
 			try{
