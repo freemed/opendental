@@ -62,6 +62,25 @@ namespace OpenDentBusiness{
 			}
 			return Crud.EhrSummaryCcdCrud.Insert(ehrSummaryCcd);
 		}
+
+		///<summary>Returns null if no record is found.</summary>
+		public static EhrSummaryCcd GetOneForEmailAttach(long emailAttachNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<EhrSummaryCcd>(MethodBase.GetCurrentMethod(),emailAttachNum);
+			}
+			string command="SELECT * FROM ehrsummaryccd WHERE EmailAttachNum="+POut.Long(emailAttachNum)+" LIMIT 1";
+			return Crud.EhrSummaryCcdCrud.SelectOne(command);
+		}
+
+		///<summary></summary>
+		public static void Update(EhrSummaryCcd ehrSummaryCcd) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),ehrSummaryCcd);
+				return;
+			}
+			Crud.EhrSummaryCcdCrud.Update(ehrSummaryCcd);
+		}
+
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 
@@ -72,15 +91,6 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<EhrSummaryCcd>(MethodBase.GetCurrentMethod(),ehrSummaryCcdNum);
 			}
 			return Crud.EhrSummaryCcdCrud.SelectOne(ehrSummaryCcdNum);
-		}
-
-		///<summary></summary>
-		public static void Update(EhrSummaryCcd ehrSummaryCcd){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),ehrSummaryCcd);
-				return;
-			}
-			Crud.EhrSummaryCcdCrud.Update(ehrSummaryCcd);
 		}
 
 		///<summary></summary>

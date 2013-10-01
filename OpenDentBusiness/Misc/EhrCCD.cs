@@ -328,7 +328,7 @@ Allergies
 				w.WriteStartElement("section");
 				TemplateId(w,"2.16.840.1.113883.3.88.11.83.102","HITSP/C83");
 				TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.3.13","IHE PCC");
-				TemplateId(w,"2.16.840.1.113883.10.20.1.2","HL7 CCD");
+				TemplateId(w,"2.16.840.1.113883.10.20.1.2","HL7 CCD");//Alerts section
 				w.WriteComment("Allergies/Reactions section template");
 				StartAndEnd(w,"code","code","48765-2","codeSystem","2.16.840.1.113883.6.1","codeSystemName","LOINC","displayName","Allergies");
 				w.WriteStartElement("title");

@@ -12,7 +12,7 @@ using OpenDentBusiness;
 namespace OpenDental {
 	public partial class FormEmailInbox:Form {
 
-		private EmailAddress Address;
+		private EmailAddress AddressInbox;
 		private List<EmailMessage> ListEmailMessages;
 
 		public FormEmailInbox() {
@@ -36,17 +36,19 @@ namespace OpenDental {
 
 		///<summary>Gets new messages from email inbox, as well as older messages from the db. Also fills the grid.</summary>
 		private int GetMessages() {
-			Address=EmailAddresses.GetByClinic(0);//Default for clinic/practice.
-			if(Address.Pop3ServerIncoming=="") {//Email address not setup.
+			AddressInbox=EmailAddresses.GetByClinic(0);//Default for clinic/practice.
+			if(AddressInbox.Pop3ServerIncoming=="") {//Email address not setup.
 				Text="Email Inbox";
-				Address=null;
+				AddressInbox=null;
 				MsgBox.Show(this,"Default email address has not been setup completely.");
 				return 0;
-			}			
+			}
+			Text="Email Inbox for "+AddressInbox.EmailUsername;
+			Cursor=Cursors.WaitCursor;
+			FillGridEmailMessages();//Show what is in db.
+			Cursor=Cursors.Default;
+			Application.DoEvents();//So that something is showing while the page is loading.
 			if(!CodeBase.ODEnvironment.IdIsThisComputer(PrefC.GetString(PrefName.EmailInboxComputerName))) {//This is not the computer to get new messages from.
-				Cursor=Cursors.WaitCursor;
-				FillGridEmailMessages();//Get from db only.
-				Cursor=Cursors.Default;
 				return 0;
 			}
 			if(PrefC.GetString(PrefName.EmailInboxComputerName)=="") {
@@ -54,13 +56,16 @@ namespace OpenDental {
 				return 0;
 			}
 			Cursor=Cursors.WaitCursor;
-			Text="Email Inbox for "+Address.EmailUsername;
 			int emailMessageCount=0;
+			Text="Email Inbox for "+AddressInbox.EmailUsername+" - Fetching new email...";
 			try {
-				emailMessageCount=EmailMessages.ReceiveFromInbox(0,Address).Count;
+				emailMessageCount=EmailMessages.ReceiveFromInbox(0,AddressInbox).Count;
 			}
 			catch(Exception ex) {
 				MessageBox.Show(Lan.g(this,"Error retreiving email messages")+": "+ex.Message);
+			}
+			finally {
+				Text="Email Inbox for "+AddressInbox.EmailUsername;
 			}
 			FillGridEmailMessages();
 			Cursor=Cursors.Default;
@@ -69,11 +74,11 @@ namespace OpenDental {
 
 		///<summary>Gets new emails and also shows older emails from the database.</summary>
 		private void FillGridEmailMessages() {
-			if(Address==null) {
+			if(AddressInbox==null) {
 				ListEmailMessages=new List<EmailMessage>();
 			}
 			else {
-				ListEmailMessages=EmailMessages.GetInboxForAddress(Address.EmailUsername);
+				ListEmailMessages=EmailMessages.GetInboxForAddress(AddressInbox.EmailUsername);
 			}
 			gridEmailMessages.BeginUpdate();
 			gridEmailMessages.Columns.Clear();
@@ -130,7 +135,7 @@ namespace OpenDental {
 			EmailMessage emailMessage=ListEmailMessages[e.Row];
 			FormEmailMessageEdit formEME=new FormEmailMessageEdit(emailMessage);
 			formEME.ShowDialog();
-			EmailMessages.MarkMessageRead(emailMessage);
+			EmailMessages.UpdateSentOrReceivedRead(emailMessage);
 			FillGridEmailMessages();//To show the email is read.
 		}
 
@@ -146,7 +151,7 @@ namespace OpenDental {
 			for(int i=0;i<gridEmailMessages.SelectedIndices.Length;i++) {
 				EmailMessage emailMessage=ListEmailMessages[gridEmailMessages.SelectedIndices[i]];
 				emailMessage.PatNum=form.SelectedPatNum;
-				EmailMessages.Update(emailMessage);
+				EmailMessages.UpdatePatNum(emailMessage);
 			}
 			MessageBox.Show(Lan.g(this,"Email messages moved successfully")+": "+gridEmailMessages.SelectedIndices.Length);
 			FillGridEmailMessages();//Refresh grid to show changed patient.
@@ -156,7 +161,7 @@ namespace OpenDental {
 			Cursor=Cursors.WaitCursor;
 			for(int i=0;i<gridEmailMessages.SelectedIndices.Length;i++) {
 				EmailMessage emailMessage=ListEmailMessages[gridEmailMessages.SelectedIndices[i]];
-				EmailMessages.MarkMessageUnread(emailMessage);
+				EmailMessages.UpdateSentOrReceivedUnread(emailMessage);
 			}
 			FillGridEmailMessages();
 			Cursor=Cursors.Default;
@@ -166,7 +171,7 @@ namespace OpenDental {
 			Cursor=Cursors.WaitCursor;
 			for(int i=0;i<gridEmailMessages.SelectedIndices.Length;i++) {
 				EmailMessage emailMessage=ListEmailMessages[gridEmailMessages.SelectedIndices[i]];
-				EmailMessages.MarkMessageRead(emailMessage);
+				EmailMessages.UpdateSentOrReceivedRead(emailMessage);
 			}
 			FillGridEmailMessages();
 			Cursor=Cursors.Default;

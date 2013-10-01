@@ -73,6 +73,72 @@ namespace OpenDentBusiness{
 			}
 		}
 
+		///<summary>Updates SentOrReceived and saves changes to db.  Better than using Update(), because does not delete and add attachments back into db.</summary>
+		public static void UpdateSentOrReceivedRead(EmailMessage emailMessage) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),emailMessage);
+				return;
+			}
+			EmailSentOrReceived sentOrReceived=emailMessage.SentOrReceived;
+			if(emailMessage.SentOrReceived==EmailSentOrReceived.Received) {
+				sentOrReceived=EmailSentOrReceived.Read;
+			}
+			else if(emailMessage.SentOrReceived==EmailSentOrReceived.WebMailReceived) {
+				sentOrReceived=EmailSentOrReceived.WebMailRecdRead;
+			}
+			else if(emailMessage.SentOrReceived==EmailSentOrReceived.ReceivedDirect) {
+				sentOrReceived=EmailSentOrReceived.ReadDirect;
+			}
+			if(sentOrReceived==emailMessage.SentOrReceived) {
+				return;//Nothing to do.
+			}
+			string command="UPDATE emailmessage SET SentOrReceived="+POut.Int((int)sentOrReceived)+" WHERE EmailMessageNum="+POut.Long(emailMessage.EmailMessageNum);
+			Db.NonQ(command);
+		}
+
+		///<summary>Updates SentOrReceived and saves changes to db.  Better than using Update(), because does not delete and add attachments back into db.</summary>
+		public static void UpdateSentOrReceivedUnread(EmailMessage emailMessage) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),emailMessage);
+				return;
+			}
+			EmailSentOrReceived sentOrReceived=emailMessage.SentOrReceived;
+			if(emailMessage.SentOrReceived==EmailSentOrReceived.Read) {
+				sentOrReceived=EmailSentOrReceived.Received;
+			}
+			else if(emailMessage.SentOrReceived==EmailSentOrReceived.WebMailRecdRead) {
+				sentOrReceived=EmailSentOrReceived.WebMailReceived;
+			}
+			else if(emailMessage.SentOrReceived==EmailSentOrReceived.ReadDirect) {
+				sentOrReceived=EmailSentOrReceived.ReceivedDirect;
+			}
+			if(sentOrReceived==emailMessage.SentOrReceived) {
+				return;//Nothing to do.
+			}
+			string command="UPDATE emailmessage SET SentOrReceived="+POut.Int((int)sentOrReceived)+" WHERE EmailMessageNum="+POut.Long(emailMessage.EmailMessageNum);
+			Db.NonQ(command);
+		}
+
+		///<summary>Updates SentOrReceived and saves changes to db.  Better than using Update(), because does not delete and add attachments back into db.</summary>
+		public static void UpdatePatNum(EmailMessage emailMessage) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),emailMessage);
+				return;
+			}
+			string command="UPDATE emailmessage SET PatNum="+POut.Long(emailMessage.PatNum)+" WHERE EmailMessageNum="+POut.Long(emailMessage.EmailMessageNum);
+			Db.NonQ(command);
+			if(emailMessage.Attachments==null) {
+				return;
+			}
+			for(int i=0;i<emailMessage.Attachments.Count;i++) {
+				EhrSummaryCcd ehrSummaryCcd=EhrSummaryCcds.GetOneForEmailAttach(emailMessage.Attachments[i].EmailAttachNum);
+				if(ehrSummaryCcd!=null) {
+					ehrSummaryCcd.PatNum=emailMessage.PatNum;
+					EhrSummaryCcds.Update(ehrSummaryCcd);
+				}
+			}
+		}
+
 		///<summary></summary>
 		public static long Insert(EmailMessage message) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -580,50 +646,6 @@ namespace OpenDentBusiness{
 				attachPath=Path.GetTempPath();
 			}
 			return attachPath;
-		}
-
-		public static void MarkMessageRead(EmailMessage emailMessage) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),emailMessage);
-				return;
-			}
-			EmailSentOrReceived sentOrReceived=emailMessage.SentOrReceived;
-			if(emailMessage.SentOrReceived==EmailSentOrReceived.Received) {
-				sentOrReceived=EmailSentOrReceived.Read;
-			}
-			else if(emailMessage.SentOrReceived==EmailSentOrReceived.WebMailReceived) {
-				sentOrReceived=EmailSentOrReceived.WebMailRecdRead;
-			}
-			else if(emailMessage.SentOrReceived==EmailSentOrReceived.ReceivedDirect) {
-				sentOrReceived=EmailSentOrReceived.ReadDirect;
-			}
-			if(sentOrReceived==emailMessage.SentOrReceived) {
-				return;//Nothing to do.
-			}
-			string command="UPDATE emailmessage SET SentOrReceived="+POut.Int((int)sentOrReceived)+" WHERE EmailMessageNum="+POut.Long(emailMessage.EmailMessageNum);
-			Db.NonQ(command);
-		}
-
-		public static void MarkMessageUnread(EmailMessage emailMessage) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),emailMessage);
-				return;
-			}
-			EmailSentOrReceived sentOrReceived=emailMessage.SentOrReceived;
-			if(emailMessage.SentOrReceived==EmailSentOrReceived.Read) {
-				sentOrReceived=EmailSentOrReceived.Received;
-			}
-			else if(emailMessage.SentOrReceived==EmailSentOrReceived.WebMailRecdRead) {
-				sentOrReceived=EmailSentOrReceived.WebMailReceived;
-			}
-			else if(emailMessage.SentOrReceived==EmailSentOrReceived.ReadDirect) {
-				sentOrReceived=EmailSentOrReceived.ReceivedDirect;
-			}
-			if(sentOrReceived==emailMessage.SentOrReceived) {
-				return;//Nothing to do.
-			}
-			string command="UPDATE emailmessage SET SentOrReceived="+POut.Int((int)sentOrReceived)+" WHERE EmailMessageNum="+POut.Long(emailMessage.EmailMessageNum);
-			Db.NonQ(command);
 		}
 
 		#endregion Helpers
