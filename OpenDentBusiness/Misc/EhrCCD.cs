@@ -361,6 +361,9 @@ Allergies
 						continue;
 					}
 					med=Medications.GetMedication(allergyDef.MedicationNum);
+					if(med.RxCui==0) {
+						continue;
+					}
 					w.WriteStartElement("tr");
 					w.WriteStartElement("td");
 					w.WriteString(AllergyDefs.GetSnomedAllergyDesc(allergyDef.Snomed));
@@ -385,6 +388,9 @@ Allergies
 						continue;
 					}
 					med=Medications.GetMedication(allergyDef.MedicationNum);
+					if(med.RxCui==0) {
+						continue;
+					}
 					Start(w,"entry","typeCode","DRIV");
 					Start(w,"act","classCode","ACT","moodCode","EVN");
 					TemplateId(w,"2.16.840.1.113883.3.88.11.83.6","HITSP C83");
@@ -505,6 +511,9 @@ Medications
 						rxCui=med.RxCui;
 						strMedNameGeneric=Medications.GetGenericName(med.GenericNum);
 					}
+					if(rxCui==0) {
+						continue;
+					}
 					w.WriteStartElement("tr");
 					w.WriteStartElement("td");
 					w.WriteString(rxCui.ToString());//RxNorm Code
@@ -533,12 +542,15 @@ Medications
 				w.WriteEndElement();//End table
 				w.WriteEndElement();//End text
 				for(int i=0;i<listMedPat.Count;i++) {
-					long strMedRxCui=listMedPat[i].RxCui;
+					long rxCui=listMedPat[i].RxCui;
 					string strMedName=listMedPat[i].MedDescript;
 					if(listMedPat[i].MedicationNum!=0) {
 						med=Medications.GetMedication(listMedPat[i].MedicationNum);
-						strMedRxCui=med.RxCui;
+						rxCui=med.RxCui;
 						strMedName=med.MedName;
+					}
+					if(rxCui==0) {
+						continue;
 					}
 					Start(w,"entry","typeCode","DRIV");
 					Start(w,"substanceAdministration","classCode","SBADM","moodCode","EVN");
@@ -568,7 +580,7 @@ Medications
 					TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.4.7.2","IHE PCC");
 					w.WriteComment("Product template");
 					Start(w,"manufacturedMaterial");
-					Start(w,"code","code",strMedRxCui.ToString(),"codeSystem","2.16.840.1.113883.6.88",
+					Start(w,"code","code",rxCui.ToString(),"codeSystem","2.16.840.1.113883.6.88",
 						"displayName",strMedName,"codeSystemName","RxNorm");
 					Start(w,"originalText");
 					w.WriteString(strMedName);
