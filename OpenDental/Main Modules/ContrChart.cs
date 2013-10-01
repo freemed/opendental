@@ -4025,6 +4025,7 @@ namespace OpenDental{
 				RxPat rxOld=null;
 				MedicationPat medOrderOld=null;
 				RxPat rx=new RxPat();
+				//rx.IsControlled not important.  Only used in sending, but this Rx was already sent.
 				rx.Disp="";
 				rx.DosageCode="";
 				rx.Drug="";
@@ -4035,6 +4036,8 @@ namespace OpenDental{
 				string additionalSig="";
 				bool isProv=true;
 				long rxCui=0;
+				string strDrugName="";
+				string strGenericName="";
 				foreach(XmlNode nodeRxFieldParent in nodeTable.ChildNodes) {
 					XmlNode nodeRxField=nodeRxFieldParent.FirstChild;
 					if(nodeRxField==null) {
@@ -4047,28 +4050,29 @@ namespace OpenDental{
 						case "druginfo"://ex lisinopril 5 mg Tab
 							rx.Drug=nodeRxField.Value;
 							break;
-						//rx.IsControlled not important.  Only used in sending, but this Rx was already sent.
-						case "patientfriendlysig"://The concat of all the codified fields.
-							rx.Sig=nodeRxField.Value;
-							break;
-						case "prescriptionnotes"://from the Additional Sig box at the bottom
-							additionalSig=nodeRxField.Value;
+						case "drugname"://ex lisinopril
+							strDrugName=nodeRxField.Value;
 							break;
 						case "externalpatientid"://patnum passed back from the compose request that initiated this prescription
 							rx.PatNum=PIn.Long(nodeRxField.Value);
 							break;
-						case "pharmacyncpdp"://ex 9998888
-							//We will use this information in the future to find a pharmacy already entered into OD, or to create one dynamically if it does not exist.
-							//rx.PharmacyNum;//Get the pharmacy where pharmacy.PharmID = node.Value
-							break;
 						case "externalphysicianid"://provnum passed back from the compose request that initiated this prescription
 							rx.ProvNum=PIn.Long(nodeRxField.Value);
 							break;
-						case "refills"://ex 1
-							rx.Refills=nodeRxField.Value;
+						case "externaluserid"://The person who ordered the prescription. Is a ProvNum when provider, or an EmployeeNum when an employee. If EmployeeNum, then is prepended with "emp" because of how we sent it to NewCrop in the first place.
+							if(nodeRxField.Value.StartsWith("emp")) {
+								isProv=false;
+							}
 							break;
-						case "rxcui"://ex 311354
-							rxCui=PIn.Long(nodeRxField.Value);//The RxCui is not returned with all prescriptions, so it can be zero (not set).
+						case "genericname":
+							strGenericName=nodeRxField.Value;
+							break;
+						case "patientfriendlysig"://The concat of all the codified fields.
+							rx.Sig=nodeRxField.Value;
+							break;
+						case "pharmacyncpdp"://ex 9998888
+							//We will use this information in the future to find a pharmacy already entered into OD, or to create one dynamically if it does not exist.
+							//rx.PharmacyNum;//Get the pharmacy where pharmacy.PharmID = node.Value
 							break;
 						case "prescriptiondate":
 							rx.RxDate=PIn.DateT(nodeRxField.Value);
@@ -4078,11 +4082,15 @@ namespace OpenDental{
 							rxOld=RxPats.GetRxNewCrop(nodeRxField.Value);
 							medOrderOld=MedicationPats.GetMedicationOrderByNewCropGuid(nodeRxField.Value);
 							break;
-						case "externaluserid"://The person who ordered the prescription. Is a ProvNum when provider, or an EmployeeNum when an employee. If EmployeeNum, then is prepended with "emp" because of how we sent it to NewCrop in the first place.
-							if(nodeRxField.Value.StartsWith("emp")) {
-								isProv=false;
-							}
+						case "prescriptionnotes"://from the Additional Sig box at the bottom
+							additionalSig=nodeRxField.Value;
 							break;
+						case "refills"://ex 1
+							rx.Refills=nodeRxField.Value;
+							break;
+						case "rxcui"://ex 311354
+							rxCui=PIn.Long(nodeRxField.Value);//The RxCui is not returned with all prescriptions, so it can be zero (not set).
+							break;						
 					}
 				}//end inner foreach
 				if(rx.RxDate<rxStartDateT) {//Ignore prescriptions created before version 13.1.14, because those prescriptions were entered manually by the user.
@@ -4101,6 +4109,27 @@ namespace OpenDental{
 				else {//The prescription was already in our database. Update it.
 					rx.RxNum=rxOld.RxNum;
 					RxPats.Update(rx);
+				}
+				//If rxCui==0, then NewCrop did not provide an RxCui.  Attempt to locate an RxCui using the other provided drug information.  An RxCui is not required for our program.  Meds missing an RxCui are not exported in CCD messages.
+				if(rxCui==0 && strDrugName!="") {
+					List<RxNorm> listRxNorms=RxNorms.GetListByCodeOrDesc(strDrugName,true,true);//Exact case insensitive match ignoring numbers.
+					if(listRxNorms.Count>0) {
+						rxCui=PIn.Long(listRxNorms[0].RxCui);
+					}					
+				}
+				//If rxCui==0, then NewCrop did not provide an RxCui and we could not locate an RxCui by DrugName.  Try searching by GenericName.
+				if(rxCui==0 && strGenericName!="") {
+					List<RxNorm> listRxNorms=RxNorms.GetListByCodeOrDesc(strGenericName,true,true);//Exact case insensitive match ignoring numbers.
+					if(listRxNorms.Count>0) {
+						rxCui=PIn.Long(listRxNorms[0].RxCui);
+					}
+				}
+				//If rxCui==0, then NewCrop did not provide an RxCui and we could not locate an RxCui by DrugName or GenericName.
+				if(rxCui==0) {
+					//We may need to enhance in future to support more advanced RxNorm searches.
+					//For example: DrugName=Cafatine, DrugInfo=Cafatine 1 mg-100 mg Tab, GenericName=ergotamine-caffeine.
+					//This drug could not be found by DrugName nor GenericName, but could be found when the GenericName was split by non-alpha characters, then the words in the generic name were swapped.
+					//Namely, "caffeine ergotamine" is in the RxNorm table.
 				}
 				MedicationPats.InsertOrUpdateMedOrderForRx(rx,rxCui,isProv);//MedicationNum of 0, because we do not want to bloat the medication list in OD. In this special situation, we instead set the MedDescript, RxCui and NewCropGuid columns.
 			}//end foreach
