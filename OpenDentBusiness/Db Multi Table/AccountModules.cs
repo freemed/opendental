@@ -669,7 +669,7 @@ namespace OpenDentBusiness {
 				if(isNoBill){
 					row["description"]+=" "+Lans.g("ContrAccount","(NoBillIns)");
 				}
-				if(rawProc.Rows[i]["unsent_"].ToString()=="0" && !isNoBill){
+				if(rawProc.Rows[i]["unsent_"].ToString()=="0" && !isNoBill){//no claim attached
 					row["description"]+=" "+Lans.g("ContrAccount","(unsent)");
 				}
 				insPayAmt=PIn.Decimal(rawProc.Rows[i]["insPayAmt_"].ToString());
