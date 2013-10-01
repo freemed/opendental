@@ -2047,7 +2047,7 @@ namespace OpenDental{
 				comboLinked.SelectedIndex=0;
 			}
 		}
-
+		
 		private void FillPatientAdjustments() {
 			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(PatPlanCur.PatNum);
 			AdjAL=new ArrayList();//move selected claimprocs into ALAdj
@@ -3224,6 +3224,23 @@ namespace OpenDental{
 
 		private void butDrop_Click(object sender,System.EventArgs e) {
 			//should we save the plan info first?  Probably not.
+			//--
+			//If they have a claim for this ins with today's date, don't let them drop.
+			//We already have code in place to delete claimprocs when we drop ins, but the claimprocs attached to claims are protected.
+			//The claim clearly needs to be deleted if they are dropping.  We need the user to delete the claim before they drop the plan.
+			//We also have code in place to add new claimprocs when they add the correct insurance.
+			List<Claim> claimList=Claims.Refresh(PatPlanCur.PatNum);
+			for(int j=0;j<claimList.Count;j++) {
+				if(claimList[j].PlanNum!=PlanCur.PlanNum) {//different insplan
+					continue;
+				}
+				if(claimList[j].DateService!=DateTime.Today) {//not today
+					continue;
+				}
+				//Patient currently has a claim for the insplan they are trying to drop
+				MsgBox.Show(this,"Please delete all of today's claims for this patient before dropping this plan.");
+				return;
+			}
 			PatPlans.Delete(PatPlanCur.PatPlanNum);//Estimates recomputed within Delete()
 			//PlanCur.ComputeEstimatesForCur();
 			DialogResult=DialogResult.OK;
