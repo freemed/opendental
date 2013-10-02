@@ -8927,6 +8927,7 @@ namespace OpenDental{
 				else{
 					menuItemPrintDay.Visible=true;
 				}
+				Plugins.HookAddCode(this,"ContrChart.gridProg_MouseUp_end",menuProgRight,gridProg,PatCur);
 				menuProgRight.Show(gridProg,new Point(e.X,e.Y));
 			}
 		}
