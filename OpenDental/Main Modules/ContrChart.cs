@@ -7186,6 +7186,7 @@ namespace OpenDental{
 			int skippedC=0;
 			int skippedComlog=0;
 			int skippedLabCases=0;
+			int skippedSheets=0;
 			DataRow row;
 			for(int i=0;i<gridProg.SelectedIndices.Length;i++){
 				row=(DataRow)gridProg.Rows[gridProg.SelectedIndices[i]].Tag;
@@ -7222,7 +7223,9 @@ namespace OpenDental{
 				else if(row["LabCaseNum"].ToString()!="0") {
 					skippedLabCases++;
 				}
-
+				else if(row["SheetNum"].ToString()!="0") {
+					skippedSheets++;
+				}
 			}
 			Recalls.Synch(PatCur.PatNum);
 			if(skippedC>0){
@@ -7240,6 +7243,10 @@ namespace OpenDental{
 			if(skippedLabCases>0) {
 				MessageBox.Show(Lan.g(this,"Not allowed to delete lab case entries from here.")+"\r"
 					+skippedLabCases.ToString()+" "+Lan.g(this,"item(s) skipped."));
+			}
+			if(skippedSheets>0) {
+				MessageBox.Show(Lan.g(this,"Not allowed to delete sheets from here.")+"\r"
+					+skippedSheets.ToString()+" "+Lan.g(this,"item(s) skipped."));
 			}
 			ModuleSelected(PatCur.PatNum);
 		}
