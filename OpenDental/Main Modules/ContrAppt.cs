@@ -3160,7 +3160,8 @@ namespace OpenDental {
 				}
 				//if no dentist/hygenist is assigned to spot, then keep the original dentist/hygenist without prompt.  All appts must have prov.
 				if((assignedDent!=0 && assignedDent!=apt.ProvNum) || (assignedHyg!=0 && assignedHyg!=apt.ProvHyg)) {
-					if(MessageBox.Show(Lan.g(this,"Change provider?"),"",MessageBoxButtons.YesNo)==DialogResult.Yes) {
+					if(Plugins.HookMethod(this, "ContrAppt.ContrApptSheet2_MouseUp_apptProvChangeQuestion",apt.AptStatus)
+						|| MsgBox.Show(this,MsgBoxButtons.YesNo,"Change provider?")) {
 						if(assignedDent!=0) {//the dentist will only be changed if the spot has a dentist.
 							apt.ProvNum=assignedDent;
 						}
@@ -3200,9 +3201,16 @@ namespace OpenDental {
 								}
 							}
 							else {//appt time not locked
+								object[] parameters = { apt.Pattern,calcPattern };
+								if((Plugins.HookMethod(this,"ContrAppt.ContrApptSheet2_MouseUp_changeProvApptLength",parameters))) {
+									apt.Pattern = (string)parameters[0];
+									calcPattern = (string)parameters[1];
+									goto PluginSkipQuestionProvLength;
+								}
 								if(MsgBox.Show(this,MsgBoxButtons.YesNo,"Change length for new provider?")) {
 									apt.Pattern=calcPattern;
 								}
+								PluginSkipQuestionProvLength: { }
 							}
 						}
 					}
@@ -3254,9 +3262,15 @@ namespace OpenDental {
 					}
 				}
 			}
+			object[] parameters2 = { apt.AptDateTime,aptOld.AptDateTime,apt.AptStatus };
+			if((Plugins.HookMethod(this,"ContrAppt.ContrApptSheet2_MouseUp_apptDoNotUnbreakApptSameDay",parameters2))) {
+				apt.AptStatus = (ApptStatus)parameters2[2];
+				goto PluginApptDoNotUnbreakApptSameDay;
+			}
 			if(apt.AptStatus==ApptStatus.Broken && timeWasMoved) {
 				apt.AptStatus=ApptStatus.Scheduled;
 			}
+			PluginApptDoNotUnbreakApptSameDay: { }
 			//original location of provider code
 			if(curOp.ClinicNum==0){
 				apt.ClinicNum=PatCur.ClinicNum;
@@ -3653,7 +3667,7 @@ namespace OpenDental {
 					}
 				}
 				else {//new patient not added
-					if(Appointments.HasPlannedEtc(PatCur.PatNum)) {
+					if(Appointments.HasPlannedEtc(PatCur.PatNum) | (Plugins.HookMethod(this,"ContrAppt.ContrApptSheet2_DoubleClick_apptOtherShow"))) {
 						DisplayOtherDlg(true);
 					}
 					else {
