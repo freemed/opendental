@@ -145,6 +145,10 @@ namespace OpenDental {
 			}		
 			string patFolder=ImageStore.GetPatientFolder(PatCur,ImageStore.GetPreferredAtoZpath());
 			Document doc=Documents.GetByNum(formIS.SelectedDocNum);
+			if(!ImageStore.HasImageExtension(doc.FileName)) {
+				MsgBox.Show(this,"The selected file is not a supported image type.");
+				return;
+			}
 			textDocDateDesc.Text=doc.DateTStamp.ToShortDateString()+" - "+doc.Description.ToString();
 			if(BitmapOriginal!=null) {
 				BitmapOriginal.Dispose();
