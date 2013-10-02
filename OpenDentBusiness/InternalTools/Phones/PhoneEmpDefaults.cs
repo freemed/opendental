@@ -50,15 +50,32 @@ namespace OpenDentBusiness{
 			string command="SELECT * FROM phoneempdefault ORDER BY PhoneExt";//because that's the order we are used to in the phone panel.
 			return Crud.PhoneEmpDefaultCrud.SelectMany(command);
 		}
-		
-		public static bool IsGraphed(long employeeNum,List<PhoneEmpDefault> listPED) {
+
+		/// <summary>use sparingly as this makes a db call every time. only used for validating user is not modifying "dirty" data</summary>
+		public static bool GetGraphedStatusForEmployeeDate(long employeeNum,DateTime dateEntry) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),employeeNum,dateEntry);
+			}
+			PhoneEmpDefault phoneEmpDefault=Crud.PhoneEmpDefaultCrud.SelectOne(employeeNum);
+			if(phoneEmpDefault==null) {
+				return false;
+			}
+			bool isGraphed=phoneEmpDefault.IsGraphed; //get employee default
+			PhoneGraph phoneGraph=PhoneGraphs.GetForEmployeeNumAndDate(employeeNum,dateEntry); //check for exception
+			if(phoneGraph!=null) {//exception found so use that
+				isGraphed=phoneGraph.IsGraphed;
+			}
+			return isGraphed;
+		}
+
+		public static PhoneEmpDefault GetEmpDefault(long employeeNum,List<PhoneEmpDefault> listPED) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<listPED.Count;i++) {
 				if(listPED[i].EmployeeNum==employeeNum) {
-					return listPED[i].IsGraphed;
+					return listPED[i];
 				}
 			}
-			return false;
+			return null;
 		}
 
 		///<summary>Can return null.</summary>
@@ -134,6 +151,35 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
+		/// <summary>sorting class used to sort PhoneEmpDefaultComparer in various ways</summary>
+		public class PhoneEmpDefaultComparer:IComparer<PhoneEmpDefault> {
+			
+			public enum SortBy { ext, empNum, name };
+			
+			private SortBy _sortBy = SortBy.name;
+			
+			public PhoneEmpDefaultComparer(SortBy sortBy) {
+				_sortBy=sortBy;
+			}
+			
+			public int Compare(PhoneEmpDefault x,PhoneEmpDefault y) {
+				int retVal = 0;
+				switch(_sortBy) {
+					case SortBy.empNum:
+						retVal = x.EmployeeNum.CompareTo(y.EmployeeNum); break;
+					case SortBy.ext:
+						retVal = x.PhoneExt.CompareTo(y.PhoneExt); break;
+					case SortBy.name:
+					default:
+						retVal = x.EmpName.CompareTo(y.EmpName); break;					
+				}
+				if(retVal==0) {//last name is tie breaker
+					return x.EmpName.CompareTo(y.EmpName);
+				}
+				//we got here so our sort was successful
+				return retVal;
+			}
+		}
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 

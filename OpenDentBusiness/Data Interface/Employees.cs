@@ -178,6 +178,7 @@ namespace OpenDentBusiness{
 			return "";
 		}
 
+		///<summary>From cache</summary>
 		public static Employee GetEmp(long employeeNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<ListLong.Length;i++) {
@@ -213,11 +214,38 @@ namespace OpenDentBusiness{
 			}
 			return -1;
 		}
-
 		
+		/// <summary>sorting class used to sort Employee in various ways</summary>
+		public class EmployeeComparer:IComparer<Employee> {
+
+			public enum SortBy { ext, empNum, firstName, lastName };
 		
-
-
+			private SortBy _sortBy = SortBy.lastName;
+			
+			public EmployeeComparer(SortBy sortBy) {
+				_sortBy=sortBy;
+			}
+			
+			public int Compare(Employee x,Employee y) {
+				int ret = 0;
+				switch(_sortBy) {
+					case SortBy.empNum:
+						ret = x.EmployeeNum.CompareTo(y.EmployeeNum); break;
+					case SortBy.ext:
+						ret = x.PhoneExt.CompareTo(y.PhoneExt); break;
+					case SortBy.firstName:
+						ret = x.FName.CompareTo(y.FName); break;
+					case SortBy.lastName:
+					default:
+						ret = x.LName.CompareTo(y.LName); break;
+				}
+				if(ret==0) {//last name is tie breaker
+					return x.LName.CompareTo(y.LName);
+				}
+				//we got here so our sort was successful
+				return ret;
+			}
+		}
 	}
 
 	

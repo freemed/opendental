@@ -2701,11 +2701,23 @@
     <Compile Include="Forms\FormTPsign.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="InternalTools\Phones\FormPhoneGraphDateEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="InternalTools\Phones\FormPhoneGraphDateEdit.Designer.cs">
+      <DependentUpon>FormPhoneGraphDateEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="InternalTools\Phones\FormPhoneEmpDefaultEdit.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="InternalTools\Phones\FormPhoneEmpDefaults.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="InternalTools\Phones\FormPhoneGraphEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="InternalTools\Phones\FormPhoneGraphEdit.Designer.cs">
+      <DependentUpon>FormPhoneGraphEdit.cs</DependentUpon>
     </Compile>
     <Compile Include="InternalTools\Phones\FormScreenshotBrowse.cs">
       <SubType>Form</SubType>
@@ -4648,11 +4660,17 @@
       <DependentUpon>FormTPsign.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="InternalTools\Phones\FormPhoneGraphDateEdit.resx">
+      <DependentUpon>FormPhoneGraphDateEdit.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="InternalTools\Phones\FormPhoneEmpDefaultEdit.resx">
       <DependentUpon>FormPhoneEmpDefaultEdit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="InternalTools\Phones\FormPhoneEmpDefaults.resx">
       <DependentUpon>FormPhoneEmpDefaults.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InternalTools\Phones\FormPhoneGraphEdit.resx">
+      <DependentUpon>FormPhoneGraphEdit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="InternalTools\Phones\FormScreenshotBrowse.resx">
       <DependentUpon>FormScreenshotBrowse.cs</DependentUpon>

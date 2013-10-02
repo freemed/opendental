@@ -278,6 +278,18 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
+		///<summary>Supply a list of Schedule . Then, this filters out for an employee.</summary>
+		public static List<Schedule> GetForEmployee(List<Schedule> ListDay,long employeeNum) {
+			//No need to check RemotingRole; no call to db.
+			List<Schedule> retVal=new List<Schedule>();
+			for(int i=0;i<ListDay.Count;i++) {
+				if(ListDay[i].SchedType==ScheduleType.Employee && ListDay[i].EmployeeNum==employeeNum) {
+					retVal.Add(ListDay[i]);
+				}
+			}
+			return retVal;
+		}
+
 		///<summary>This overload is for when the listForPeriod includes multiple days.</summary>
 		public static List<Schedule> GetSchedsForOp(List<Schedule> listForPeriod,DayOfWeek dayOfWeek,Operatory op){
 			//No need to check RemotingRole; no call to db.
@@ -369,6 +381,18 @@ namespace OpenDentBusiness{
 				return op.ProvDentist;
 			}
 			//return 0;//none
+		}
+
+		///<summary>Comma delimits multiple schedules and creates a nice clean sting for screen ledgibility</summary>
+		public static string GetCommaDelimStringForScheds(List<Schedule> listSchedules) {
+			string retVal="";
+			for(int s=0;s<listSchedules.Count;s++) {
+				if(s>0) {
+					retVal+=",";
+				}
+				retVal+=" "+listSchedules[s].StartTime.ToShortTimeString()+" - "+listSchedules[s].StopTime.ToShortTimeString();
+			}
+			return retVal;
 		}
 
 		///<summary>Clears all blockouts for day.</summary>

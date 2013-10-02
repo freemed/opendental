@@ -13,27 +13,38 @@ namespace OpenDental {
 	public partial class FormGraphEmployeeTime:Form {
 		private List<PointF> listCalls;
 		private float[] buckets;//a bucket can hold partial people.
-		private bool[] usedLunch;
-		private DateTime dateShowing;
+		private DateTime DateShowing;
 		private int[] minutesBehind;
 		///<summary>Retrieved once when opening the form, then reused.</summary>
 		private List<PhoneEmpDefault> ListPED;
+		private List<Schedule> ListScheds;
+		private List<Region> ListRegions;
+		private int CurrentHoverRegionIdx=-1;
+		///<summary>holds employee info gathered on paint and displayed on hover</summary>
+		private Dictionary<int/*key = the bucket index*/,List<Employee>/*value = list of employees in this bucket*/> DictEmployeesPerBucket;
 
 		public FormGraphEmployeeTime() {
 			InitializeComponent();
 			Lan.F(this);
+			toolTip.ToolTipTitle=Lan.g(this,"Employees");
+			ListRegions=new List<Region>();
 		}
 
 		private void FormGraphEmployeeTime_Load(object sender,EventArgs e) {
+			butEdit.Visible=Security.IsAuthorized(Permissions.Schedules);
 			ListPED=PhoneEmpDefaults.Refresh();
-			dateShowing=AppointmentL.DateSelected;
+			DateShowing=AppointmentL.DateSelected.Date;
+			//fill in the missing PhoneGraph entries for today
+			PhoneGraphs.AddMissingEntriesForToday(ListPED);
 			FillData();
 		}
 
 		private void FillData() {
-			labelDate.Text=dateShowing.ToString("dddd, MMMM d");
+			DictEmployeesPerBucket=new Dictionary<int,List<Employee>>();
+			labelDate.Text=DateShowing.ToString("dddd, MMMM d");
+			butEdit.Enabled=DateShowing.Date>=DateTime.Today; //do not allow editing of past dates
 			listCalls=new List<PointF>();
-			if(dateShowing.DayOfWeek==DayOfWeek.Friday) {
+			if(DateShowing.DayOfWeek==DayOfWeek.Friday) {
 				listCalls.Add(new PointF(5f,0));
 				listCalls.Add(new PointF(5.5f,50));//5-6am
 				listCalls.Add(new PointF(6.5f,133));
@@ -72,53 +83,74 @@ namespace OpenDental {
 				listCalls.Add(new PointF(17.5f,0));
 			}
 			buckets=new float[28];//every 30 minutes, starting at 5:15
-			//usedLunch=new bool[28];
-			List<Schedule> scheds=Schedules.GetDayList(dateShowing);
+			ListScheds=Schedules.GetDayList(DateShowing);
+			//PhoneGraph exceptions will take precedence over employee default
+			List<PhoneGraph> listPhoneGraphs=PhoneGraphs.GetAllForDate(DateShowing);			
 			TimeSpan time1;
 			TimeSpan time2;
 			TimeSpan delta;
-			for(int i=0;i<scheds.Count;i++) {
-				if(scheds[i].SchedType!=ScheduleType.Employee) {
+			for(int i=0;i<ListScheds.Count;i++) {
+				if(ListScheds[i].SchedType!=ScheduleType.Employee) {
 					continue;
 				}
-				if(!PhoneEmpDefaults.IsGraphed(scheds[i].EmployeeNum,ListPED)) {
+				//get this employee
+				Employee employee=Employees.GetEmp(ListScheds[i].EmployeeNum);
+				if(employee==null) {//employees will NEVER be deleted. even after they cease to work here. but just in case.
 					continue;
 				}
-				//TimeSpan lunch=scheds[i].StartTime + new TimeSpan((scheds[i].StopTime-scheds[i].StartTime).Ticks/2) - new TimeSpan(0,37,0);//subtract 37 minutes to make it fall within a bucket, and because people seem to like to take lunch early, and because the logic will bump it forward if lunch already used.
+				bool hasPhoneGraphEntry=false;
+				bool isGraphed=false; 
+				//PhoneGraph entries will take priority over the default employee graph state
+				for(int iPG=0;iPG<listPhoneGraphs.Count;iPG++) {
+					if(listPhoneGraphs[iPG].EmployeeNum==employee.EmployeeNum) {
+						isGraphed=listPhoneGraphs[iPG].IsGraphed;
+						hasPhoneGraphEntry=true;
+						break;
+					}
+				}
+				if(!hasPhoneGraphEntry) {//no phone graph entry found (likely for a future date which does not have entries created yet OR past date where current employee didn't work here yet)
+					if(DateShowing<=DateTime.Today) {//no phone graph entry and we are on a past OR current date. if it's not already created then don't graph this employee for this date
+						continue;
+					}
+					//we are on a future date AND we don't have a PhoneGraph entry explicitly set so use the default for this employee
+					PhoneEmpDefault ped=PhoneEmpDefaults.GetEmpDefault(ListScheds[i].EmployeeNum,ListPED);
+					if(ped==null) {//we will default to PhoneEmpDefault.IsGraphed so make sure the deafult exists
+						continue;
+					}
+					//no entry in PhoneGraph for the employee on this date so use the default
+					isGraphed=ped.IsGraphed;
+				}
+				if(!isGraphed) {//only care about employees that are being graphed
+					continue;
+				}				
 				for(int b=0;b<buckets.Length;b++) {
 					time1=new TimeSpan(5,0,0) + new TimeSpan(0,b*30,0);
 					time2=new TimeSpan(5,30,0) + new TimeSpan(0,b*30,0);
-					//if the lunchtime is within this bucket
-					/*if(lunch >= time1 && lunch < time2) {
-						if(usedLunch[b]) {//can't use this bucket for lunch because someone else already did.
-							lunch+=new TimeSpan(0,30,0);//move lunch forward half an hour
-						}
-						else {
-							usedLunch[b]=true;
-							continue;//used this bucket for lunch (don't add a drop to the bucket)
-						}
-					}*/
 					//situation 1: this bucket is completely within the start and stop times.
-					if(scheds[i].StartTime <= time1 && scheds[i].StopTime >= time2) {
-						buckets[b]+=1;
+					if(ListScheds[i].StartTime <= time1 && ListScheds[i].StopTime >= time2) {
+						AddEmployeeToBucket(b,employee);
 					}
 					//situation 2: the start time is after this bucket
-					else if(scheds[i].StartTime >= time2) {
+					else if(ListScheds[i].StartTime >= time2) {
 						continue;
 					}
 					//situation 3: the stop time is before this bucket
-					else if(scheds[i].StopTime <= time1) {
+					else if(ListScheds[i].StopTime <= time1) {
 						continue;
 					}
 					//situation 4: start time falls within this bucket
-					if(scheds[i].StartTime > time1) {
-						delta=scheds[i].StartTime - time1;
-						buckets[b]+= (float)delta.TotalHours * 2f;//example, .5 hours would add 1 to the bucket
+					if(ListScheds[i].StartTime > time1) {
+						delta=ListScheds[i].StartTime - time1;
+						if(delta.TotalMinutes > 15) { //has to work more than 15 minutes to be considered *in* this bucket
+							AddEmployeeToBucket(b,employee);												
+						}
 					}
 					//situation 5: stop time falls within this bucket
-					if(scheds[i].StopTime < time2) {
-						delta= time2 - scheds[i].StopTime;
-						buckets[b]+= (float)delta.TotalHours * 2f;
+					if(ListScheds[i].StopTime < time2) {
+						delta= time2 - ListScheds[i].StopTime;
+						if(delta.TotalMinutes > 15) { //has to work more than 15 minutes to be considered *in* this bucket
+							AddEmployeeToBucket(b,employee);
+						}
 					}
 				}
 				//break;//just show one sched for debugging.
@@ -136,11 +168,24 @@ namespace OpenDental {
 			//  }
 			//}
 			//Minutes Behind
-			minutesBehind=PhoneMetrics.AverageMinutesBehind(dateShowing);
+			minutesBehind=PhoneMetrics.AverageMinutesBehind(DateShowing);
 			this.Invalidate();
 		}
 
+		private void AddEmployeeToBucket(int bucketIndex, Employee employee){
+			buckets[bucketIndex]+=1;
+			List<Employee> employees = null;
+			if(!DictEmployeesPerBucket.TryGetValue(bucketIndex,out employees)) {
+				employees=new List<Employee>();
+			}
+			if(employee!=null) {
+				employees.Add(employee);
+			}
+			DictEmployeesPerBucket[bucketIndex]=employees;
+		}
+
 		private void FormGraphEmployeeTime_Paint(object sender,PaintEventArgs e) {
+			ListRegions.Clear();
 			e.Graphics.SmoothingMode=SmoothingMode.HighQuality;
 			RectangleF rec=new RectangleF(panel1.Left,panel1.Top,panel1.Width,panel1.Height);
 			e.Graphics.FillRectangle(Brushes.White,rec);
@@ -157,7 +202,7 @@ namespace OpenDental {
 			float x1;
 			float y1;
 			float x2;
-			float y2;
+			float y2=0;
 			//draw grid
 			//vertical
 			for(int i=1;i<(int)totalhrs;i++) {
@@ -185,7 +230,7 @@ namespace OpenDental {
 			}
 			//find the biggest bar
 			float peak=PIn.Int(PrefC.GetRaw("GraphEmployeeTimesPeak"));//The ideal peak.  Each day should look the same, except Friday.
-			if(dateShowing.DayOfWeek==DayOfWeek.Friday) {
+			if(DateShowing.DayOfWeek==DayOfWeek.Friday) {
 				peak=peak*0.8f;//The Friday graph is actually smaller than the other graphs.
 			}
 			float superPeak=PIn.Int(PrefC.GetRaw("GraphEmployeeTimesSuperPeak"));//the most staff possible to schedule
@@ -209,8 +254,10 @@ namespace OpenDental {
 				x=rec.X + firstbar + (float)i*barspacing - barW/2f;
 				y=rec.Y+rec.Height-h;
 				w=barW;
-				e.Graphics.FillRectangle(Brushes.LightBlue,x,y,w,h);
-				//draw bar increments
+				RectangleF rc = new RectangleF(x,y,w,h);
+				e.Graphics.FillRectangle(Brushes.LightBlue,rc);
+				ListRegions.Add(new System.Drawing.Region(rc)); //save this bucket for hover tooltip event
+				//draw bar increments						
 				for(int o=1;o<buckets[i];o++) {
 					x1=x;
 					y1=rec.Y+rec.Height-(o*hOne);
@@ -218,6 +265,9 @@ namespace OpenDental {
 					y2=rec.Y+rec.Height-(o*hOne);
 					e.Graphics.DrawLine(Pens.Black,x1,y1,x2,y2);
 				}
+				//draw the number of employees in this bucket
+				SizeF sf=e.Graphics.MeasureString(buckets[i].ToString(),SystemFonts.DefaultFont);
+				e.Graphics.DrawString(buckets[i].ToString(),SystemFonts.DefaultFont,Brushes.Blue,x+(barW-sf.Width)/2,y-(sf.Height+1));
 			}
 			//Line graph in red
 			float peakH=rec.Height * peak / superPeak;
@@ -237,11 +287,11 @@ namespace OpenDental {
 				str=minutesBehind[i].ToString();
 				strW=e.Graphics.MeasureString(str,Font).Width;
 				x1=rec.X + barW + ((float)i * rec.Width / totalhrs / 2) - strW / 2f;
-				y1=rec.Y+rec.Height-17;
+				y1=rec.Y+rec.Height-(17*2);
 				e.Graphics.DrawString(str,Font,Brushes.Red,x1,y1);
 			}
 			//Vertical red line for current time
-			if(DateTime.Today.Date==dateShowing.Date) {
+			if(DateTime.Today.Date==DateShowing.Date) {
 				TimeSpan now=DateTime.Now.AddHours(-5).TimeOfDay;
 				float shift=(float)now.TotalHours * rec.Width / totalhrs;
 				x1=rec.X + shift;
@@ -254,24 +304,65 @@ namespace OpenDental {
 			blueBrush.Dispose();
 		}
 
+		private void panel1_MouseMove(object sender,MouseEventArgs e) {
+			//there is 1 region per bucket (synced in paint event), loop through the regions and see if we are hovering over one of them
+			for(int i=0;i<ListRegions.Count;i++) {
+				if(!ListRegions[i].IsVisible(new Point(e.X,e.Y))) {//we are hovering over this bucket
+					continue;
+				}
+				if(i==CurrentHoverRegionIdx) {//only activate this bucket once (prevents flicker)
+					return;
+				}
+				//build the display string for this hover bucket
+				List<Employee> listEmps=null;
+				TimeSpan tsStart=new TimeSpan(5,(i*30),0);
+				toolTip.ToolTipTitle=tsStart.ToShortTimeString()+" - "+tsStart.Add(TimeSpan.FromMinutes(30)).ToShortTimeString();
+				string employees="";
+				if(DictEmployeesPerBucket.TryGetValue(i,out listEmps)) {
+					listEmps.Sort(new Employees.EmployeeComparer(Employees.EmployeeComparer.SortBy.firstName));
+					for(int p=0;p<listEmps.Count;p++) {
+						List<Schedule> sch=Schedules.GetForEmployee(ListScheds,listEmps[p].EmployeeNum);
+						employees+=listEmps[p].FName;
+						employees+=Schedules.GetCommaDelimStringForScheds(sch);
+						employees+="\r\n";
+					}
+				}
+				//activate and show this bucket's tooltip
+				toolTip.Active=true;
+				toolTip.SetToolTip(this,employees);
+				//save this region as current so we only activate it once
+				CurrentHoverRegionIdx=i;
+				return;
+			}
+			//not hovering over a bucket so kill the tooltip
+			toolTip.Active=false;
+			CurrentHoverRegionIdx=-1;
+		}
+
 		private void buttonLeft_Click(object sender,EventArgs e) {
-			if(dateShowing.DayOfWeek==DayOfWeek.Monday) {
-				dateShowing=dateShowing.AddDays(-3);
+			if(DateShowing.DayOfWeek==DayOfWeek.Monday) {
+				DateShowing=DateShowing.AddDays(-3);
 			}
 			else {
-				dateShowing=dateShowing.AddDays(-1);
+				DateShowing=DateShowing.AddDays(-1);
 			}
 			FillData();
 		}
 
 		private void buttonRight_Click(object sender,EventArgs e) {
-			if(dateShowing.DayOfWeek==DayOfWeek.Friday) {
-				dateShowing=dateShowing.AddDays(+3);
+			if(DateShowing.DayOfWeek==DayOfWeek.Friday) {
+				DateShowing=DateShowing.AddDays(+3);
 			}
 			else {
-				dateShowing=dateShowing.AddDays(+1);
+				DateShowing=DateShowing.AddDays(+1);
 			}
 			FillData();
+		}
+
+		private void butEdit_Click(object sender,EventArgs e) {
+			FormPhoneGraphDateEdit FormPGDE=new FormPhoneGraphDateEdit(DateShowing);
+			FormPGDE.ShowDialog();
+			FillData(); //always refill, we may have new entries regardless of form dialog result
 		}
 
 		private void butPrint_Click(object sender,EventArgs e) {
