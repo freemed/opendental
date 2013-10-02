@@ -224,6 +224,7 @@ namespace OpenDental {
 						break;
 					case EhrMeasureType.MedReconcile:
 						FormMedicationReconcile FormMedRec=new FormMedicationReconcile();
+						FormMedRec.PatCur=PatCur;
 						FormMedRec.ShowDialog();
 						FillGridMu();
 						//ResultOnClosing=EhrFormResult.MedReconcile;
