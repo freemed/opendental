@@ -673,16 +673,30 @@ namespace OpenDentBusiness{
 					//  +"AND patient.PatStatus="+POut.Int((int)PatientStatus.Patient)+" "
 					//  +"AND patient.PriProv="+POut.Long(provNum);
 					//Query optimized to be faster by Cameron
+					//command="SELECT patient.PatNum,LName,FName,COALESCE(reminderCount.Count,0) AS reminderCount FROM patient "
+					//	+"LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM ehrmeasureevent "
+					//	+"WHERE EventType="+POut.Int((int)EhrMeasureEventType.ReminderSent)+" "
+					//	+"AND DATE(ehrmeasureevent.DateTEvent) BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+					//	+"GROUP BY PatNum) reminderCount ON reminderCount.PatNum=patient.PatNum "
+					//	+"WHERE patient.Birthdate > '1880-01-01' "//a birthdate is entered
+					//	+"AND (patient.Birthdate > "+POut.Date(DateTime.Today.AddYears(-6))+" "//5 years or younger
+					//	+"OR patient.Birthdate <= "+POut.Date(DateTime.Today.AddYears(-65))+") "//65+
+					//	+"AND patient.PatStatus="+POut.Int((int)PatientStatus.Patient)+" "
+					//	+"AND patient.PriProv IN("+POut.String(provs)+")";
+					//Query modified to only return patients that have been seen by any provider in the last 3 years based on dateStart of measurement period
 					command="SELECT patient.PatNum,LName,FName,COALESCE(reminderCount.Count,0) AS reminderCount FROM patient "
-						+"LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM ehrmeasureevent "
+						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum "
+						+"AND ProcStatus=2 AND ProcDate>"+POut.Date(dateStart)+"-INTERVAL 3 YEAR "
+						+"LEFT JOIN (SELECT ehrmeasureevent.PatNum,COUNT(*) AS 'Count' FROM ehrmeasureevent "
 						+"WHERE EventType="+POut.Int((int)EhrMeasureEventType.ReminderSent)+" "
 						+"AND DATE(ehrmeasureevent.DateTEvent) BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
-						+"GROUP BY PatNum) reminderCount ON reminderCount.PatNum=patient.PatNum "
+						+"GROUP BY ehrmeasureevent.PatNum) reminderCount ON reminderCount.PatNum=patient.PatNum "
 						+"WHERE patient.Birthdate > '1880-01-01' "//a birthdate is entered
-						+"AND (patient.Birthdate > "+POut.Date(DateTime.Today.AddYears(-6))+" "//5 years or younger
-						+"OR patient.Birthdate <= "+POut.Date(DateTime.Today.AddYears(-65))+") "//65+
+						+"AND (patient.Birthdate > "+POut.Date(dateStart)+"-INTERVAL 5 YEAR "//5 years or younger as of start of measurement period
+						+"OR patient.Birthdate <= "+POut.Date(dateStart)+"-INTERVAL 65 YEAR) "//65+ as of start of measurement period
 						+"AND patient.PatStatus="+POut.Int((int)PatientStatus.Patient)+" "
-						+"AND patient.PriProv IN("+POut.String(provs)+")";
+						+"AND patient.PriProv IN("+POut.String(provs)+") "
+						+"GROUP BY patient.PatNum";
 					tableRaw=Db.GetTable(command);
 					break;
 				#endregion
@@ -1166,7 +1180,8 @@ namespace OpenDentBusiness{
 				case EhrMeasureType.ClinicalSummaries:
 					return "All office visits during the reporting period.  An office visit is calculated as any number of completed procedures by the Provider for a given date.";
 				case EhrMeasureType.Reminders:
-					return "All unique patients of the Provider 65+ or 5-.  Not restricted to those seen during the reporting period.  Must have status of Patient rather than Inactive, Nonpatient, Deceased, etc.";
+					//return "All unique patients of the Provider 65+ or 5-.  Not restricted to those seen during the reporting period.  Must have status of Patient rather than Inactive, Nonpatient, Deceased, etc.";
+					return "All unique patients of the Provider 65+ or 5-.  Must have status of Patient rather than Inactive, Nonpatient, Deceased, etc.";
 				case EhrMeasureType.MedReconcile:
 					return "Number of incoming transitions of care from another provider during the reporting period.";
 				case EhrMeasureType.SummaryOfCare:
