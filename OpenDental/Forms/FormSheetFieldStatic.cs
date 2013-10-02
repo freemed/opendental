@@ -148,6 +148,7 @@ namespace OpenDental {
 				"salutation",
 				"serviceNote",
 				"siteDescription",
+				"SSN",
 				"subscriberID",
 				"subscriberNameFL",
 				"subscriber2NameFL",

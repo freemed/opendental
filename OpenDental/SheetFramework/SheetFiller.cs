@@ -735,6 +735,7 @@ namespace OpenDental{
 					fldval=fldval.Replace("[salutation]",pat.GetSalutation());
 					fldval=fldval.Replace("[serviceNote]",serviceNote);
 					fldval=fldval.Replace("[siteDescription]",Sites.GetDescription(pat.SiteNum));
+					fldval=fldval.Replace("[SSN]",pat.SSN);
 					fldval=fldval.Replace("[subscriberID]",subscriberId);
 					fldval=fldval.Replace("[subscriberNameFL]",subscriberNameFL);
 					fldval=fldval.Replace("[subscriber2NameFL]",subscriber2NameFL);
