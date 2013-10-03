@@ -1167,7 +1167,7 @@ namespace OpenDentBusiness
 						//2310B PRV: PE (dental) Rendering Provider Specialty Information.
 						WritePRV_PE(sw,provTreat);
 						//2310B REF: (dental) Rendering Provider Secondary Identification. Situational. Not required because we always send NPI. Max repeat of 4.
-						if(IsEmdeonDental(clearhouse)) { //Always required by Emdeon Dental.
+						if(IsClaimConnect(clearhouse) || IsEmdeonDental(clearhouse)) {
 							//The state licence number can be anywhere between 4 and 14 characters depending on state, and most states have more than one state license format. 
 							//Therefore, we only validate that the state license is present or not.
 							if(provTreat.StateLicense!="") { 
@@ -1176,6 +1176,8 @@ namespace OpenDentBusiness
 									+Sout(provTreat.StateLicense,50));//REF02 1/50 Reference Identification:
 								EndSegment(sw);//REF03 and REF04 are not used.
 							}
+						}
+						if(IsEmdeonDental(clearhouse)) { //Always required by Emdeon Dental.
 							WriteProv_REFG2orLU(sw,provTreat,carrier.ElectID);
 						}
 					}
