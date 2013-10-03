@@ -137,6 +137,10 @@ namespace WebHostSynch {
 						  where wsf.webforms_preference.DentalOfficeID==DentalOfficeID
 						  select wsf;
 				for(int i=0;i<wsRes.Count();i++) {
+					//Only download 20 sheets at a time.  This an attempt to fix DeleteSheetData from timing out after all sheets have been imported.
+					if(i>19) {
+						break;
+					}
 					var wsobj=wsRes.ToList()[i];
 					wsobj.webforms_sheetfield.Load();
 					var sheetfieldList=wsobj.webforms_sheetfield;
