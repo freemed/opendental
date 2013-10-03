@@ -10,6 +10,7 @@ using System.Net.Mail;
 using System.Net.Mime;
 using System.Net.Sockets;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
 using OpenDentBusiness;
@@ -183,6 +184,21 @@ namespace OpenDentBusiness{
 		///<summary>outMsgDirect must be unencrypted, because this function will encrypt.  Encrypts the message, verifies trust, locates the public encryption key for the To address (if already stored locally), etc.  patNum can be zero.  emailSentOrReceived must be either SentDirect or a Direct Ack type such as AckDirectProcessed.</summary>
 		private static void SendEmailDirect(Health.Direct.Agent.OutgoingMessage outMsgUnencrypted,EmailAddress emailAddressFrom) {
 			Health.Direct.Agent.DirectAgent directAgent=GetDirectAgentForEmailAddress(emailAddressFrom.EmailUsername);//Cannot be emailAddressFrom.SenderAddress, or else will not find the right encryption certificate.
+			////Locate trust anchors from local certificate cache.  We must automatically trust any certificate discovered which was created in association with a trust anchor.
+			//for(int i=0;i<outMsgUnencrypted.Recipients.Count;i++) {
+			//	if(outMsgUnencrypted.Recipients[i].TrustAnchors!=null) {
+			//		continue;//The trust anchor(s) for this recipient were already located somehow. Skip.
+			//	}
+			//	Health.Direct.Common.Certificates.ICertificateResolver certResolverLocalTrustAnchorCache=directAgent.TrustAnchors.OutgoingAnchors;//Corresponds to the NHINDAnchors/Certificates folder in the local certificate store.
+			//	outMsgUnencrypted.Recipients[i].TrustAnchors=certResolverLocalTrustAnchorCache.GetCertificates(new MailAddress(outMsgUnencrypted.Recipients[i].Address));
+			//}
+			//Locate or discover public certificates for receivers for encryption.
+			for(int i=0;i<outMsgUnencrypted.Recipients.Count;i++) {
+				if(outMsgUnencrypted.Recipients[i].Certificates!=null) {
+					continue;//The certificate(s) for this recipient were already located somehow. Skip.
+				}
+				LocateOrDiscoverCertsForAddress(directAgent,outMsgUnencrypted.Recipients[i].Address);
+			}
 			Health.Direct.Agent.OutgoingMessage outMsgEncrypted=directAgent.ProcessOutgoing(outMsgUnencrypted);//This is where encryption and trust verification occurs.
 			EmailMessage emailMessageEncrypted=ConvertMessageToEmailMessage(outMsgEncrypted.Message,false);//No point in saving the encrypted attachment, because nobody can read it and it will bloat the OpenDentImages folder.
 			NameValueCollection nameValueCollectionHeaders=new NameValueCollection();
@@ -197,6 +213,35 @@ namespace OpenDentBusiness{
 			alternateView.TransferEncoding=TransferEncoding.SevenBit;
 			SendEmailUnsecure(emailMessageEncrypted,emailAddressFrom,nameValueCollectionHeaders,alternateView);//Not really unsecure in this spot, because the message is already encrypted.
 			ms.Dispose();
+		}
+
+		///<summary>First attemtps to locate the certificate for the provided recipient address and returns the located certificate if found.
+		///If the certificate could not be located from the local certificate store, then this function will search the internet for the hosted certificate.
+		///Returns null when no certificate could be located.</summary>
+		private static X509Certificate2Collection LocateOrDiscoverCertsForAddress(Health.Direct.Agent.DirectAgent directAgent,string strToAddress) {
+			X509Certificate2Collection retVal=null;
+			MailAddress mailAddressTo=new MailAddress(strToAddress);
+			Health.Direct.Common.Certificates.ICertificateResolver certResolverLocalCache=directAgent.PublicCertResolver;//Corresponds to the NHINDExternal/Certificates folder in the local certificate store.
+			if(certResolverLocalCache!=null) {
+				retVal=certResolverLocalCache.GetCertificates(mailAddressTo);
+				if(retVal!=null) {
+					return retVal;//The certificate was found in the local certificate store within Windows. Returns the located certificate and do not query the Internet.
+				}
+			}
+			//const string strDnsServer = "184.73.237.102";//Amazon - This is the DNS server used within the Direct resolverPlugins test project. Appears to have worked the best for them, compared to the others listed below.
+			//const string strDnsServer = "10.110.22.16";//This address was tried in the Direct resolverPlugins test project and is commented out, implying that it might not be the best DNS server to use.
+			//const string strDnsServer = "207.170.210.162";//This address was tried in the Direct resolverPlugins test project and is commented out, implying that it might not be the best DNS server to use.
+			const string strDnsServer = "8.8.8.8";//Google - This address was tried in the Direct resolverPlugins test project and is commented out, implying that it might not be the best DNS server to use.
+			Health.Direct.Common.Certificates.ICertificateResolver certResolverInternet=new Health.Direct.Common.Certificates.DnsCertResolver(IPAddress.Parse(strDnsServer));
+			retVal=certResolverInternet.GetCertificates(mailAddressTo);//Can return null.
+			if(retVal!=null) {
+				//TODO: Ask user if they want to store in db, instead of assuming. For now, automatically add for testing purposes.
+				X509Store storeNhindExternal=new X509Store("NHINDExternal",StoreLocation.LocalMachine);
+				storeNhindExternal.Open(OpenFlags.ReadWrite);
+				storeNhindExternal.AddRange(retVal);
+				//TODO: Refresh the directAgent to reflect the newly added certificates.
+			}
+			return retVal;
 		}
 
 		/// <summary>Used for sending encrypted Message Disposition Notification (MDN) ack messages for Direct.
