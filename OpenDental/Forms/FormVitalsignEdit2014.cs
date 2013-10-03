@@ -315,20 +315,26 @@ namespace EHR {
 		}
 
 		private void checkNotPerf_Click(object sender,EventArgs e) {
-			FormEhrNotPerformedEdit formNP=new FormEhrNotPerformedEdit();
-			formNP.EhrNotPerfCur=new EhrNotPerformed();
-			formNP.EhrNotPerfCur.PatNum=patCur.PatNum;
-			formNP.EhrNotPerfCur.ProvNum=patCur.PriProv;
-			formNP.EhrNotPerfCur.CodeValue="39156-5";//This is the only code allowed for the BMI procedure
-			formNP.EhrNotPerfCur.CodeSystem="LOINC";
-			formNP.EhrNotPerfCur.DateTimeEntry=PIn.Date(textDateTaken.Text);
-			formNP.ShowDialog();
-			if(formNP.DialogResult==DialogResult.OK) {
-				VitalsignCur.EhrNotPerformedNum=formNP.EhrNotPerfCur.EhrNotPerformedNum;
-				textReasonCode.Text=formNP.EhrNotPerfCur.CodeValueReason;
-				Snomed sCur=Snomeds.GetByCode(formNP.EhrNotPerfCur.CodeValueReason);
-				if(sCur!=null) {
-					textReasonDescript.Text=sCur.Description;
+			if(checkNotPerf.Checked) {
+				FormEhrNotPerformedEdit formNP=new FormEhrNotPerformedEdit();
+				formNP.EhrNotPerfCur=new EhrNotPerformed();
+				formNP.EhrNotPerfCur.PatNum=patCur.PatNum;
+				formNP.EhrNotPerfCur.ProvNum=patCur.PriProv;
+				formNP.SelectedItemIndex=(int)EhrNotPerformedItem.BMIExam;//The code and code value will be set in FormEhrNotPerformedEdit, set the selected index to the EhrNotPerformedItem enum index for BMIExam
+				formNP.EhrNotPerfCur.DateEntry=PIn.Date(textDateTaken.Text);
+				formNP.ShowDialog();
+				if(formNP.DialogResult==DialogResult.OK) {
+					VitalsignCur.EhrNotPerformedNum=formNP.EhrNotPerfCur.EhrNotPerformedNum;
+					textReasonCode.Text=formNP.EhrNotPerfCur.CodeValueReason;
+					Snomed sCur=Snomeds.GetByCode(formNP.EhrNotPerfCur.CodeValueReason);
+					if(sCur!=null) {
+						textReasonDescript.Text=sCur.Description;
+					}
+				}
+				else {
+					checkNotPerf.Checked=false;
+					textReasonCode.Clear();
+					textReasonDescript.Clear();
 				}
 			}
 		}
@@ -354,7 +360,7 @@ namespace EHR {
 				DialogResult=DialogResult.Cancel;
 				return;
 			}
-			if(MessageBox.Show("Delete?","",MessageBoxButtons.OKCancel)!=DialogResult.OK){
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete?")) {
 				return;
 			}
 			Vitalsigns.Delete(VitalsignCur.VitalsignNum);
@@ -365,14 +371,14 @@ namespace EHR {
 			//validate
 			DateTime date;
 			if(textDateTaken.Text=="") {
-				MessageBox.Show("Please enter a date.");
+				MsgBox.Show(this,"Please enter a date.");
 				return;
 			}
 			try {
 				date=DateTime.Parse(textDateTaken.Text);
 			}
 			catch {
-				MessageBox.Show("Please fix date first.");
+				MsgBox.Show(this,"Please fix date first.");
 				return;
 			}
 			//validate height
@@ -383,7 +389,7 @@ namespace EHR {
 				}
 			}
 			catch {
-				MessageBox.Show("Please fix height first.");
+				MsgBox.Show(this,"Please fix height first.");
 				return;
 			}
 			//validate weight
@@ -394,7 +400,7 @@ namespace EHR {
 				}
 			}
 			catch {
-				MessageBox.Show("Please fix weight first.");
+				MsgBox.Show(this,"Please fix weight first.");
 				return;
 			}
 			//validate bp
@@ -409,7 +415,7 @@ namespace EHR {
 				}
 			}
 			catch {
-				MessageBox.Show("Please fix BP first.");
+				MsgBox.Show(this,"Please fix BP first.");
 				return;
 			}
 			//save------------------------------------------------------------------

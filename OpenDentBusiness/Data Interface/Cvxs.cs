@@ -71,6 +71,15 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
+		///<summary>Gets one Cvx by CvxNum directly from the db.</summary>
+		public static Cvx GetOneFromDb(string cvxCode) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Cvx>(MethodBase.GetCurrentMethod(),cvxCode);
+			}
+			string command="SELECT * FROM cvx WHERE CvxCode='"+POut.String(cvxCode)+"'";
+			return Crud.CvxCrud.SelectOne(command);
+		}
+
 
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.

@@ -112,7 +112,7 @@
 			// 
 			// labelBPs
 			// 
-			this.labelBPs.Location = new System.Drawing.Point(26, 43);
+			this.labelBPs.Location = new System.Drawing.Point(26, 44);
 			this.labelBPs.Name = "labelBPs";
 			this.labelBPs.Size = new System.Drawing.Size(93, 17);
 			this.labelBPs.TabIndex = 4;
@@ -152,7 +152,7 @@
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 23);
 			this.butCancel.TabIndex = 6;
-			this.butCancel.Text = "Cancel";
+			this.butCancel.Text = "&Cancel";
 			this.butCancel.UseVisualStyleBackColor = true;
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
@@ -163,7 +163,7 @@
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75, 23);
 			this.butOK.TabIndex = 5;
-			this.butOK.Text = "OK";
+			this.butOK.Text = "&OK";
 			this.butOK.UseVisualStyleBackColor = true;
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
@@ -175,7 +175,7 @@
 			this.butDelete.Size = new System.Drawing.Size(75, 23);
 			this.butDelete.TabIndex = 10;
 			this.butDelete.TabStop = false;
-			this.butDelete.Text = "Delete";
+			this.butDelete.Text = "&Delete";
 			this.butDelete.UseVisualStyleBackColor = true;
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
@@ -302,7 +302,7 @@
 			// 
 			// labelBPd
 			// 
-			this.labelBPd.Location = new System.Drawing.Point(26, 67);
+			this.labelBPd.Location = new System.Drawing.Point(26, 68);
 			this.labelBPd.Name = "labelBPd";
 			this.labelBPd.Size = new System.Drawing.Size(93, 17);
 			this.labelBPd.TabIndex = 33;
@@ -457,9 +457,9 @@
 			// labelPregNotice
 			// 
 			this.labelPregNotice.ForeColor = System.Drawing.Color.Red;
-			this.labelPregNotice.Location = new System.Drawing.Point(6, 63);
+			this.labelPregNotice.Location = new System.Drawing.Point(20, 63);
 			this.labelPregNotice.Name = "labelPregNotice";
-			this.labelPregNotice.Size = new System.Drawing.Size(261, 42);
+			this.labelPregNotice.Size = new System.Drawing.Size(247, 39);
 			this.labelPregNotice.TabIndex = 130;
 			this.labelPregNotice.Text = "A diagnosis of pregnancy with this code will be added to the patient\'s medical hi" +
     "story with a start date equal to the date of this exam.";

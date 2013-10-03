@@ -54,7 +54,7 @@ namespace OpenDentBusiness.Crud{
 				ehrNotPerformed.CodeValueReason   = PIn.String(table.Rows[i]["CodeValueReason"].ToString());
 				ehrNotPerformed.CodeSystemReason  = PIn.String(table.Rows[i]["CodeSystemReason"].ToString());
 				ehrNotPerformed.Note              = PIn.String(table.Rows[i]["Note"].ToString());
-				ehrNotPerformed.DateTimeEntry     = PIn.DateT (table.Rows[i]["DateTimeEntry"].ToString());
+				ehrNotPerformed.DateEntry         = PIn.Date  (table.Rows[i]["DateEntry"].ToString());
 				retVal.Add(ehrNotPerformed);
 			}
 			return retVal;
@@ -95,7 +95,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="EhrNotPerformedNum,";
 			}
-			command+="PatNum,ProvNum,CodeValue,CodeSystem,CodeValueReason,CodeSystemReason,Note,DateTimeEntry) VALUES(";
+			command+="PatNum,ProvNum,CodeValue,CodeSystem,CodeValueReason,CodeSystemReason,Note,DateEntry) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(ehrNotPerformed.EhrNotPerformedNum)+",";
 			}
@@ -107,7 +107,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(ehrNotPerformed.CodeValueReason)+"',"
 				+"'"+POut.String(ehrNotPerformed.CodeSystemReason)+"',"
 				+"'"+POut.String(ehrNotPerformed.Note)+"',"
-				+    DbHelper.Now()+")";
+				+    POut.Date  (ehrNotPerformed.DateEntry)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -127,7 +127,7 @@ namespace OpenDentBusiness.Crud{
 				+"CodeValueReason   = '"+POut.String(ehrNotPerformed.CodeValueReason)+"', "
 				+"CodeSystemReason  = '"+POut.String(ehrNotPerformed.CodeSystemReason)+"', "
 				+"Note              = '"+POut.String(ehrNotPerformed.Note)+"', "
-				+"DateTimeEntry     =  "+POut.DateT (ehrNotPerformed.DateTimeEntry)+" "
+				+"DateEntry         =  "+POut.Date  (ehrNotPerformed.DateEntry)+" "
 				+"WHERE EhrNotPerformedNum = "+POut.Long(ehrNotPerformed.EhrNotPerformedNum);
 			Db.NonQ(command);
 		}
@@ -163,9 +163,9 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="Note = '"+POut.String(ehrNotPerformed.Note)+"'";
 			}
-			if(ehrNotPerformed.DateTimeEntry != oldEhrNotPerformed.DateTimeEntry) {
+			if(ehrNotPerformed.DateEntry != oldEhrNotPerformed.DateEntry) {
 				if(command!=""){ command+=",";}
-				command+="DateTimeEntry = "+POut.DateT(ehrNotPerformed.DateTimeEntry)+"";
+				command+="DateEntry = "+POut.Date(ehrNotPerformed.DateEntry)+"";
 			}
 			if(command==""){
 				return;

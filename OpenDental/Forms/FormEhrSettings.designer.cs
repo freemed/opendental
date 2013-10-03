@@ -25,39 +25,39 @@ namespace OpenDental{
 		private void InitializeComponent() {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormEhrSettings));
 			this.checkMU2 = new System.Windows.Forms.CheckBox();
-			this.groupDefaultEncCode = new System.Windows.Forms.GroupBox();
+			this.groupEncounter = new System.Windows.Forms.GroupBox();
 			this.comboEncCodes = new System.Windows.Forms.ComboBox();
 			this.label5 = new System.Windows.Forms.Label();
 			this.labelEncWarning = new System.Windows.Forms.Label();
 			this.label6 = new System.Windows.Forms.Label();
 			this.textEncCodeValue = new System.Windows.Forms.TextBox();
+			this.textEncCodeDescript = new OpenDental.ODtextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
+			this.butEncHcpcs = new OpenDental.UI.Button();
 			this.label3 = new System.Windows.Forms.Label();
-			this.groupDefaultPregCode = new System.Windows.Forms.GroupBox();
+			this.butEncSnomed = new OpenDental.UI.Button();
+			this.butEncCdtCpt = new OpenDental.UI.Button();
+			this.groupPregnancy = new System.Windows.Forms.GroupBox();
 			this.comboPregCodes = new System.Windows.Forms.ComboBox();
 			this.labelPregWarning = new System.Windows.Forms.Label();
 			this.label8 = new System.Windows.Forms.Label();
 			this.label9 = new System.Windows.Forms.Label();
 			this.textPregCodeValue = new System.Windows.Forms.TextBox();
+			this.textPregCodeDescript = new OpenDental.ODtextBox();
 			this.label10 = new System.Windows.Forms.Label();
+			this.butPregIcd9 = new OpenDental.UI.Button();
+			this.butPregSnomed = new OpenDental.UI.Button();
+			this.butPregIcd10 = new OpenDental.UI.Button();
 			this.label11 = new System.Windows.Forms.Label();
 			this.label12 = new System.Windows.Forms.Label();
 			this.label13 = new System.Windows.Forms.Label();
 			this.groupGlobalSettings = new System.Windows.Forms.GroupBox();
-			this.textPregCodeDescript = new OpenDental.ODtextBox();
-			this.butPregIcd9 = new OpenDental.UI.Button();
-			this.butPregSnomed = new OpenDental.UI.Button();
-			this.butPregIcd10 = new OpenDental.UI.Button();
-			this.textEncCodeDescript = new OpenDental.ODtextBox();
-			this.butEncHcpcs = new OpenDental.UI.Button();
-			this.butEncSnomed = new OpenDental.UI.Button();
-			this.butEncCdtCpt = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.groupDefaultEncCode.SuspendLayout();
-			this.groupDefaultPregCode.SuspendLayout();
+			this.groupEncounter.SuspendLayout();
+			this.groupPregnancy.SuspendLayout();
 			this.groupGlobalSettings.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -74,27 +74,27 @@ namespace OpenDental{
 			this.checkMU2.UseVisualStyleBackColor = true;
 			this.checkMU2.Click += new System.EventHandler(this.checkMU2_Click);
 			// 
-			// groupDefaultEncCode
+			// groupEncounter
 			// 
-			this.groupDefaultEncCode.Controls.Add(this.comboEncCodes);
-			this.groupDefaultEncCode.Controls.Add(this.label5);
-			this.groupDefaultEncCode.Controls.Add(this.labelEncWarning);
-			this.groupDefaultEncCode.Controls.Add(this.label6);
-			this.groupDefaultEncCode.Controls.Add(this.textEncCodeValue);
-			this.groupDefaultEncCode.Controls.Add(this.textEncCodeDescript);
-			this.groupDefaultEncCode.Controls.Add(this.label1);
-			this.groupDefaultEncCode.Controls.Add(this.label2);
-			this.groupDefaultEncCode.Controls.Add(this.label4);
-			this.groupDefaultEncCode.Controls.Add(this.butEncHcpcs);
-			this.groupDefaultEncCode.Controls.Add(this.label3);
-			this.groupDefaultEncCode.Controls.Add(this.butEncSnomed);
-			this.groupDefaultEncCode.Controls.Add(this.butEncCdtCpt);
-			this.groupDefaultEncCode.Location = new System.Drawing.Point(12, 70);
-			this.groupDefaultEncCode.Name = "groupDefaultEncCode";
-			this.groupDefaultEncCode.Size = new System.Drawing.Size(453, 265);
-			this.groupDefaultEncCode.TabIndex = 119;
-			this.groupDefaultEncCode.TabStop = false;
-			this.groupDefaultEncCode.Text = "Default Encounter Code";
+			this.groupEncounter.Controls.Add(this.comboEncCodes);
+			this.groupEncounter.Controls.Add(this.label5);
+			this.groupEncounter.Controls.Add(this.labelEncWarning);
+			this.groupEncounter.Controls.Add(this.label6);
+			this.groupEncounter.Controls.Add(this.textEncCodeValue);
+			this.groupEncounter.Controls.Add(this.textEncCodeDescript);
+			this.groupEncounter.Controls.Add(this.label1);
+			this.groupEncounter.Controls.Add(this.label2);
+			this.groupEncounter.Controls.Add(this.label4);
+			this.groupEncounter.Controls.Add(this.butEncHcpcs);
+			this.groupEncounter.Controls.Add(this.label3);
+			this.groupEncounter.Controls.Add(this.butEncSnomed);
+			this.groupEncounter.Controls.Add(this.butEncCdtCpt);
+			this.groupEncounter.Location = new System.Drawing.Point(12, 70);
+			this.groupEncounter.Name = "groupEncounter";
+			this.groupEncounter.Size = new System.Drawing.Size(453, 265);
+			this.groupEncounter.TabIndex = 119;
+			this.groupEncounter.TabStop = false;
+			this.groupEncounter.Text = "Default Encounter Code";
 			// 
 			// comboEncCodes
 			// 
@@ -144,6 +144,20 @@ namespace OpenDental{
 			this.textEncCodeValue.Size = new System.Drawing.Size(158, 20);
 			this.textEncCodeValue.TabIndex = 126;
 			// 
+			// textEncCodeDescript
+			// 
+			this.textEncCodeDescript.AcceptsTab = true;
+			this.textEncCodeDescript.BackColor = System.Drawing.SystemColors.ControlLightLight;
+			this.textEncCodeDescript.DetectUrls = false;
+			this.textEncCodeDescript.Location = new System.Drawing.Point(124, 102);
+			this.textEncCodeDescript.Name = "textEncCodeDescript";
+			this.textEncCodeDescript.QuickPasteType = OpenDentBusiness.QuickPasteType.None;
+			this.textEncCodeDescript.ReadOnly = true;
+			this.textEncCodeDescript.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+			this.textEncCodeDescript.Size = new System.Drawing.Size(323, 46);
+			this.textEncCodeDescript.TabIndex = 108;
+			this.textEncCodeDescript.Text = "";
+			// 
 			// label1
 			// 
 			this.label1.Location = new System.Drawing.Point(6, 16);
@@ -171,6 +185,20 @@ namespace OpenDental{
 			this.label4.Text = "Recommended Codes";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// butEncHcpcs
+			// 
+			this.butEncHcpcs.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butEncHcpcs.Autosize = true;
+			this.butEncHcpcs.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butEncHcpcs.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butEncHcpcs.CornerRadius = 4F;
+			this.butEncHcpcs.Location = new System.Drawing.Point(288, 181);
+			this.butEncHcpcs.Name = "butEncHcpcs";
+			this.butEncHcpcs.Size = new System.Drawing.Size(75, 24);
+			this.butEncHcpcs.TabIndex = 124;
+			this.butEncHcpcs.Text = "HCPCS";
+			this.butEncHcpcs.Click += new System.EventHandler(this.butEncHcpcs_Click);
+			// 
 			// label3
 			// 
 			this.label3.Location = new System.Drawing.Point(124, 152);
@@ -180,27 +208,55 @@ namespace OpenDental{
 			this.label3.Text = "Choosing a code not in the recommended list might make it more difficult to incre" +
     "ase your CQM percentages.";
 			// 
-			// groupDefaultPregCode
+			// butEncSnomed
 			// 
-			this.groupDefaultPregCode.Controls.Add(this.comboPregCodes);
-			this.groupDefaultPregCode.Controls.Add(this.labelPregWarning);
-			this.groupDefaultPregCode.Controls.Add(this.label8);
-			this.groupDefaultPregCode.Controls.Add(this.label9);
-			this.groupDefaultPregCode.Controls.Add(this.textPregCodeValue);
-			this.groupDefaultPregCode.Controls.Add(this.textPregCodeDescript);
-			this.groupDefaultPregCode.Controls.Add(this.label10);
-			this.groupDefaultPregCode.Controls.Add(this.butPregIcd9);
-			this.groupDefaultPregCode.Controls.Add(this.butPregSnomed);
-			this.groupDefaultPregCode.Controls.Add(this.butPregIcd10);
-			this.groupDefaultPregCode.Controls.Add(this.label11);
-			this.groupDefaultPregCode.Controls.Add(this.label12);
-			this.groupDefaultPregCode.Controls.Add(this.label13);
-			this.groupDefaultPregCode.Location = new System.Drawing.Point(12, 341);
-			this.groupDefaultPregCode.Name = "groupDefaultPregCode";
-			this.groupDefaultPregCode.Size = new System.Drawing.Size(453, 265);
-			this.groupDefaultPregCode.TabIndex = 120;
-			this.groupDefaultPregCode.TabStop = false;
-			this.groupDefaultPregCode.Text = "Default Pregnancy Diagnosis Code";
+			this.butEncSnomed.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butEncSnomed.Autosize = true;
+			this.butEncSnomed.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butEncSnomed.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butEncSnomed.CornerRadius = 4F;
+			this.butEncSnomed.Location = new System.Drawing.Point(124, 181);
+			this.butEncSnomed.Name = "butEncSnomed";
+			this.butEncSnomed.Size = new System.Drawing.Size(77, 24);
+			this.butEncSnomed.TabIndex = 125;
+			this.butEncSnomed.Text = "SNOMED CT";
+			this.butEncSnomed.Click += new System.EventHandler(this.butEncSnomed_Click);
+			// 
+			// butEncCdtCpt
+			// 
+			this.butEncCdtCpt.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butEncCdtCpt.Autosize = true;
+			this.butEncCdtCpt.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butEncCdtCpt.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butEncCdtCpt.CornerRadius = 4F;
+			this.butEncCdtCpt.Location = new System.Drawing.Point(207, 181);
+			this.butEncCdtCpt.Name = "butEncCdtCpt";
+			this.butEncCdtCpt.Size = new System.Drawing.Size(75, 24);
+			this.butEncCdtCpt.TabIndex = 123;
+			this.butEncCdtCpt.Text = "CDT/CPT";
+			this.butEncCdtCpt.Click += new System.EventHandler(this.butEncCdtCpt_Click);
+			// 
+			// groupPregnancy
+			// 
+			this.groupPregnancy.Controls.Add(this.comboPregCodes);
+			this.groupPregnancy.Controls.Add(this.labelPregWarning);
+			this.groupPregnancy.Controls.Add(this.label8);
+			this.groupPregnancy.Controls.Add(this.label9);
+			this.groupPregnancy.Controls.Add(this.textPregCodeValue);
+			this.groupPregnancy.Controls.Add(this.textPregCodeDescript);
+			this.groupPregnancy.Controls.Add(this.label10);
+			this.groupPregnancy.Controls.Add(this.butPregIcd9);
+			this.groupPregnancy.Controls.Add(this.butPregSnomed);
+			this.groupPregnancy.Controls.Add(this.butPregIcd10);
+			this.groupPregnancy.Controls.Add(this.label11);
+			this.groupPregnancy.Controls.Add(this.label12);
+			this.groupPregnancy.Controls.Add(this.label13);
+			this.groupPregnancy.Location = new System.Drawing.Point(12, 341);
+			this.groupPregnancy.Name = "groupPregnancy";
+			this.groupPregnancy.Size = new System.Drawing.Size(453, 265);
+			this.groupPregnancy.TabIndex = 120;
+			this.groupPregnancy.TabStop = false;
+			this.groupPregnancy.Text = "Default Pregnancy Diagnosis Code";
 			// 
 			// comboPregCodes
 			// 
@@ -249,52 +305,6 @@ namespace OpenDental{
 			this.textPregCodeValue.Size = new System.Drawing.Size(158, 20);
 			this.textPregCodeValue.TabIndex = 126;
 			// 
-			// label10
-			// 
-			this.label10.Location = new System.Drawing.Point(6, 102);
-			this.label10.Name = "label10";
-			this.label10.Size = new System.Drawing.Size(115, 17);
-			this.label10.TabIndex = 109;
-			this.label10.Text = "Description";
-			this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label11
-			// 
-			this.label11.Location = new System.Drawing.Point(6, 16);
-			this.label11.Name = "label11";
-			this.label11.Size = new System.Drawing.Size(441, 55);
-			this.label11.TabIndex = 4;
-			this.label11.Text = resources.GetString("label11.Text");
-			// 
-			// label12
-			// 
-			this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label12.Location = new System.Drawing.Point(6, 78);
-			this.label12.Name = "label12";
-			this.label12.Size = new System.Drawing.Size(115, 17);
-			this.label12.TabIndex = 110;
-			this.label12.Text = "Recommended Codes";
-			this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label13
-			// 
-			this.label13.Location = new System.Drawing.Point(124, 152);
-			this.label13.Name = "label13";
-			this.label13.Size = new System.Drawing.Size(290, 26);
-			this.label13.TabIndex = 113;
-			this.label13.Text = "Choosing a code not in the recommended list will generate a Dx that might not exc" +
-    "lude the patient from certain measures.";
-			// 
-			// groupGlobalSettings
-			// 
-			this.groupGlobalSettings.Controls.Add(this.checkMU2);
-			this.groupGlobalSettings.Location = new System.Drawing.Point(12, 12);
-			this.groupGlobalSettings.Name = "groupGlobalSettings";
-			this.groupGlobalSettings.Size = new System.Drawing.Size(453, 52);
-			this.groupGlobalSettings.TabIndex = 121;
-			this.groupGlobalSettings.TabStop = false;
-			this.groupGlobalSettings.Text = "Global Settings";
-			// 
 			// textPregCodeDescript
 			// 
 			this.textPregCodeDescript.AcceptsTab = true;
@@ -308,6 +318,15 @@ namespace OpenDental{
 			this.textPregCodeDescript.Size = new System.Drawing.Size(323, 46);
 			this.textPregCodeDescript.TabIndex = 108;
 			this.textPregCodeDescript.Text = "";
+			// 
+			// label10
+			// 
+			this.label10.Location = new System.Drawing.Point(6, 102);
+			this.label10.Name = "label10";
+			this.label10.Size = new System.Drawing.Size(115, 17);
+			this.label10.TabIndex = 109;
+			this.label10.Text = "Description";
+			this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// butPregIcd9
 			// 
@@ -351,61 +370,42 @@ namespace OpenDental{
 			this.butPregIcd10.Text = "ICD10CM";
 			this.butPregIcd10.Click += new System.EventHandler(this.butPregIcd10_Click);
 			// 
-			// textEncCodeDescript
+			// label11
 			// 
-			this.textEncCodeDescript.AcceptsTab = true;
-			this.textEncCodeDescript.BackColor = System.Drawing.SystemColors.ControlLightLight;
-			this.textEncCodeDescript.DetectUrls = false;
-			this.textEncCodeDescript.Location = new System.Drawing.Point(124, 102);
-			this.textEncCodeDescript.Name = "textEncCodeDescript";
-			this.textEncCodeDescript.QuickPasteType = OpenDentBusiness.QuickPasteType.None;
-			this.textEncCodeDescript.ReadOnly = true;
-			this.textEncCodeDescript.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-			this.textEncCodeDescript.Size = new System.Drawing.Size(323, 46);
-			this.textEncCodeDescript.TabIndex = 108;
-			this.textEncCodeDescript.Text = "";
+			this.label11.Location = new System.Drawing.Point(6, 16);
+			this.label11.Name = "label11";
+			this.label11.Size = new System.Drawing.Size(441, 55);
+			this.label11.TabIndex = 4;
+			this.label11.Text = resources.GetString("label11.Text");
 			// 
-			// butEncHcpcs
+			// label12
 			// 
-			this.butEncHcpcs.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butEncHcpcs.Autosize = true;
-			this.butEncHcpcs.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butEncHcpcs.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butEncHcpcs.CornerRadius = 4F;
-			this.butEncHcpcs.Location = new System.Drawing.Point(288, 181);
-			this.butEncHcpcs.Name = "butEncHcpcs";
-			this.butEncHcpcs.Size = new System.Drawing.Size(75, 24);
-			this.butEncHcpcs.TabIndex = 124;
-			this.butEncHcpcs.Text = "HCPCS";
-			this.butEncHcpcs.Click += new System.EventHandler(this.butEncHcpcs_Click);
+			this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label12.Location = new System.Drawing.Point(6, 78);
+			this.label12.Name = "label12";
+			this.label12.Size = new System.Drawing.Size(115, 17);
+			this.label12.TabIndex = 110;
+			this.label12.Text = "Recommended Codes";
+			this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// butEncSnomed
+			// label13
 			// 
-			this.butEncSnomed.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butEncSnomed.Autosize = true;
-			this.butEncSnomed.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butEncSnomed.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butEncSnomed.CornerRadius = 4F;
-			this.butEncSnomed.Location = new System.Drawing.Point(124, 181);
-			this.butEncSnomed.Name = "butEncSnomed";
-			this.butEncSnomed.Size = new System.Drawing.Size(77, 24);
-			this.butEncSnomed.TabIndex = 125;
-			this.butEncSnomed.Text = "SNOMED CT";
-			this.butEncSnomed.Click += new System.EventHandler(this.butEncSnomed_Click);
+			this.label13.Location = new System.Drawing.Point(124, 152);
+			this.label13.Name = "label13";
+			this.label13.Size = new System.Drawing.Size(290, 26);
+			this.label13.TabIndex = 113;
+			this.label13.Text = "Choosing a code not in the recommended list will generate a Dx that might not exc" +
+    "lude the patient from certain measures.";
 			// 
-			// butEncCdtCpt
+			// groupGlobalSettings
 			// 
-			this.butEncCdtCpt.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butEncCdtCpt.Autosize = true;
-			this.butEncCdtCpt.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butEncCdtCpt.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butEncCdtCpt.CornerRadius = 4F;
-			this.butEncCdtCpt.Location = new System.Drawing.Point(207, 181);
-			this.butEncCdtCpt.Name = "butEncCdtCpt";
-			this.butEncCdtCpt.Size = new System.Drawing.Size(75, 24);
-			this.butEncCdtCpt.TabIndex = 123;
-			this.butEncCdtCpt.Text = "CDT/CPT";
-			this.butEncCdtCpt.Click += new System.EventHandler(this.butEncCdtCpt_Click);
+			this.groupGlobalSettings.Controls.Add(this.checkMU2);
+			this.groupGlobalSettings.Location = new System.Drawing.Point(12, 12);
+			this.groupGlobalSettings.Name = "groupGlobalSettings";
+			this.groupGlobalSettings.Size = new System.Drawing.Size(453, 52);
+			this.groupGlobalSettings.TabIndex = 121;
+			this.groupGlobalSettings.TabStop = false;
+			this.groupGlobalSettings.Text = "Global Settings";
 			// 
 			// butOK
 			// 
@@ -415,7 +415,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(309, 616);
+			this.butOK.Location = new System.Drawing.Point(309, 621);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75, 24);
 			this.butOK.TabIndex = 3;
@@ -430,7 +430,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(390, 616);
+			this.butCancel.Location = new System.Drawing.Point(390, 621);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 2;
@@ -440,10 +440,10 @@ namespace OpenDental{
 			// FormEhrSettings
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(477, 652);
+			this.ClientSize = new System.Drawing.Size(477, 657);
 			this.Controls.Add(this.groupGlobalSettings);
-			this.Controls.Add(this.groupDefaultPregCode);
-			this.Controls.Add(this.groupDefaultEncCode);
+			this.Controls.Add(this.groupPregnancy);
+			this.Controls.Add(this.groupEncounter);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -451,10 +451,10 @@ namespace OpenDental{
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "EHR Settings";
 			this.Load += new System.EventHandler(this.FormEhrSettings_Load);
-			this.groupDefaultEncCode.ResumeLayout(false);
-			this.groupDefaultEncCode.PerformLayout();
-			this.groupDefaultPregCode.ResumeLayout(false);
-			this.groupDefaultPregCode.PerformLayout();
+			this.groupEncounter.ResumeLayout(false);
+			this.groupEncounter.PerformLayout();
+			this.groupPregnancy.ResumeLayout(false);
+			this.groupPregnancy.PerformLayout();
 			this.groupGlobalSettings.ResumeLayout(false);
 			this.ResumeLayout(false);
 
@@ -465,7 +465,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butCancel;
 		private System.Windows.Forms.CheckBox checkMU2;
-		private System.Windows.Forms.GroupBox groupDefaultEncCode;
+		private System.Windows.Forms.GroupBox groupEncounter;
 		private System.Windows.Forms.Label labelEncWarning;
 		private System.Windows.Forms.Label label6;
 		private System.Windows.Forms.Label label5;
@@ -478,7 +478,7 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.Label label3;
-		private System.Windows.Forms.GroupBox groupDefaultPregCode;
+		private System.Windows.Forms.GroupBox groupPregnancy;
 		private System.Windows.Forms.Label labelPregWarning;
 		private System.Windows.Forms.Label label8;
 		private System.Windows.Forms.Label label9;

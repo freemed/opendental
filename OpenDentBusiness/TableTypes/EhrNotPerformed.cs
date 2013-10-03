@@ -22,14 +22,24 @@ namespace OpenDentBusiness {
 		///<summary>Relevant notes for this not performed item.  Just in case users want it, does not get reported in EHR quality measure reporting.  Max length 4000.</summary>
 		public string Note;
 		///<summary>The date and time this item was created.  Can be edited to the date and time the item actually occurred.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateTEntryEditable)]
-		public DateTime DateTimeEntry;
+		public DateTime DateEntry;
 
 		///<summary></summary>
 		public EhrNotPerformed Copy() {
 			return (EhrNotPerformed)MemberwiseClone();
 		}
 
+	}
+
+	public enum EhrNotPerformedItem {
+		///<summary>0 - BMI Exam, physical exam</summary>
+		BMIExam,
+		///<summary>1 - Influenza Vaccination, procedure or medication</summary>
+		InfluenzaVaccination,
+		///<summary>2 - Tobacco Use Screening, risk category/assessment</summary>
+		TobaccoScreening,
+		///<summary>3 - Current Medications Documented, procedure</summary>
+		DocumentCurrentMeds
 	}
 
 }

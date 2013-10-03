@@ -1607,7 +1607,7 @@ namespace OpenDentBusiness {
 						CodeValueReason varchar(30) NOT NULL,
 						CodeSystemReason varchar(30) NOT NULL,
 						Note text NOT NULL,
-						DateTimeEntry datetime NOT NULL DEFAULT '0001-01-01 00:00:00',
+						DateEntry date NOT NULL DEFAULT '0001-01-01',
 						INDEX(PatNum),
 						INDEX(ProvNum),
 						INDEX(CodeValue),
@@ -1627,7 +1627,7 @@ namespace OpenDentBusiness {
 						CodeValueReason varchar2(30),
 						CodeSystemReason varchar2(30),
 						Note varchar2(4000),
-						DateTimeEntry date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+						DateEntry date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
 						CONSTRAINT ehrnotperformed_EhrNotPerforme PRIMARY KEY (EhrNotPerformedNum)
 						)";
 					Db.NonQ(command);
@@ -1927,4 +1927,3 @@ namespace OpenDentBusiness {
 
 
 
-				

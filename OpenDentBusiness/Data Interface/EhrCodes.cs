@@ -31,7 +31,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static DataTable RefreshCache(){
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
-			string command="SELECT * FROM ehrcode";
+			string command="SELECT * FROM ehrcode ORDER BY EhrCodeNum";//Order by is important, since combo boxes will have codes in them in the same order as this table
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="EhrCode";
 			FillCache(table);
@@ -58,6 +58,17 @@ namespace OpenDentBusiness{
 						retval+=",";
 					}
 					retval+=Listt[i].MeasureIds;
+				}
+			}
+			return retval;
+		}
+
+		///<summary>Returns a list of EhrCode objects that belong to one of the value sets identified by the ValueSetOIDs supplied.</summary>
+		public static List<EhrCode> GetForValueSetOIDs(List<string> listValueSetOIDs) {
+			List<EhrCode> retval=new List<EhrCode>();
+			for(int i=0;i<Listt.Count;i++) {
+				if(listValueSetOIDs.Contains(Listt[i].ValueSetOID)) {
+					retval.Add(Listt[i]);
 				}
 			}
 			return retval;
@@ -113,6 +124,7 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 		*/
+
 
 
 
