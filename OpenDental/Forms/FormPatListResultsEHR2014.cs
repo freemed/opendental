@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
 using OpenDental.UI;
+using System.Drawing.Printing;
 
 namespace OpenDental {
 	public partial class FormPatListResultsEHR2014:Form {
@@ -174,7 +175,28 @@ namespace OpenDental {
 		}
 
 		private void butPrint_Click(object sender,EventArgs e) {
-
+			PrintDocument pd=new PrintDocument();
+			pd.PrintPage += new PrintPageEventHandler(this.pd_PrintPage);
+			pd.DefaultPageSettings.Margins=new Margins(25,25,40,40);
+			//pd.OriginAtMargins=true;
+			if(pd.DefaultPageSettings.PrintableArea.Height==0) {
+				pd.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
+			}
+			#if DEBUG
+				FormRpPrintPreview pView = new FormRpPrintPreview();
+				pView.printPreviewControl2.Document=pd;
+				pView.ShowDialog();
+			#else
+				if(!PrinterL.SetPrinter(pd,PrintSituation.Default,0,"Printed patient list from EHR")) {
+					return;
+				}
+				try{
+					pd.Print();
+				}
+				catch(Exception ex){
+					MessageBox.Show(ex.Message);
+				}
+#endif	
 		}
 
 		private void pd_PrintPage(object sender,System.Drawing.Printing.PrintPageEventArgs e) {
@@ -197,6 +219,12 @@ namespace OpenDental {
 			#endregion
 			yPos=gridMain.PrintPage(g,pagesPrinted,bounds,yPos);
 			pagesPrinted++;
+			if(yPos==-1) {
+				e.HasMorePages=true;
+			}
+			else {
+				e.HasMorePages=false;
+			}
 			g.Dispose();
 		}
 
