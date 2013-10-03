@@ -3413,6 +3413,7 @@ namespace OpenDental{
 			//ComputerPref localComputerPrefs=ComputerPrefs.GetForLocalComputer();
 			this.toothChart.DeviceFormat=new ToothChartDirectX.DirectXDeviceFormat(ComputerPrefs.LocalComputer.DirectXFormat);
 			this.toothChart.DrawMode=ComputerPrefs.LocalComputer.GraphicsSimple;//triggers ResetControls.
+			Plugins.HookAddCode(this,"ContrChart.InitializeOnStartup_end",PatCur);
 		}
 
 		///<summary>Called every time prefs are changed from any workstation.</summary>
