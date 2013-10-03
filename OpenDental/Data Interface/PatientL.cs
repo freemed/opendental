@@ -77,6 +77,9 @@ namespace OpenDental{
 		///<summary>Accepts null.</summary>
 		public static string GetMainTitle(Patient pat) {
 			string retVal=PrefC.GetString(PrefName.MainWindowTitle);
+			object[] parameters = { retVal };
+			Plugins.HookAddCode(null,"PatientL.GetMainTitle_beginning",parameters);
+			retVal = (string)parameters[0];  
 			if(Security.CurUser!=null){
 				retVal+=" {"+Security.CurUser.UserName+"}";
 			}
