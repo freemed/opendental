@@ -1687,7 +1687,6 @@ namespace OpenDental {
 					label3,
 					labelUrgFinNote,
 					labelFamFinancial,
-					butRefresh,
 					gridAccount,
 					gridAcctPat,
 					gridComm,
