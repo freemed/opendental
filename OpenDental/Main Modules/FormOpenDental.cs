@@ -1632,6 +1632,7 @@ namespace OpenDental{
 					}
 				}
 				Cursor=Cursors.WaitCursor;
+				Plugins.LoadAllPlugins(this);//moved up from near RefreshLocalData(invalidTypes). New position might cause problems.
 				Splash=new FormSplash();
 				if(CommandLineArgs.Length==0) {
 					Splash.Show();
@@ -1667,8 +1668,9 @@ namespace OpenDental{
 			else{
 				invalidTypes.Add(InvalidType.Signals);//so when mouse moves over light buttons, it won't crash
 			}
-			Plugins.LoadAllPlugins(this);//moved up from right after optimizing tooth chart graphics.  New position might cause problems.
+			//Plugins.LoadAllPlugins(this);//moved up from right after optimizing tooth chart graphics.  New position might cause problems.
 			//It was moved because RefreshLocalData()=>RefreshLocalDataPostCleanup()=>ContrChart2.InitializeLocalData()=>LayoutToolBar() has a hook.
+			//Moved it up again on 10/3/13
 			RefreshLocalData(invalidTypes.ToArray());
 			FillSignalButtons(null);
 			ContrManage2.InitializeOnStartup();//so that when a signal is received, it can handle it.

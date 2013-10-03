@@ -27,6 +27,9 @@ namespace OpenDental
 					if(File.Exists(Directory.GetCurrentDirectory()+@"\Splash.jpg")) {
 						BackgroundImage=new Bitmap(Directory.GetCurrentDirectory()+@"\Splash.jpg");
 					}
+					if(Plugins.PluginsAreLoaded) {
+						Plugins.HookAddCode(this,"FormSplash.FormSplash_Load_end");
+					}
         }
     }
 }
