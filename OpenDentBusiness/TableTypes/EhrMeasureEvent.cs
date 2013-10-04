@@ -12,7 +12,7 @@ namespace OpenDentBusiness {
 		///<summary>Date and time of measure event.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTEvent;
-		///<summary>Enum: EhrMeasureEventType. </summary>
+		///<summary>Enum:EhrMeasureEventType .</summary>
 		public EhrMeasureEventType EventType;
 		///<summary>FK to patient.PatNum</summary>
 		public long PatNum;

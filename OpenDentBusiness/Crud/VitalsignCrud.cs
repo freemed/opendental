@@ -63,7 +63,7 @@ namespace OpenDentBusiness.Crud{
 				vitalsign.WeightExamCode          = PIn.String(table.Rows[i]["WeightExamCode"].ToString());
 				vitalsign.BMIExamCode             = PIn.String(table.Rows[i]["BMIExamCode"].ToString());
 				vitalsign.EhrNotPerformedNum      = PIn.Long  (table.Rows[i]["EhrNotPerformedNum"].ToString());
-				vitalsign.PregDiseaseDefNum       = PIn.Long  (table.Rows[i]["PregDiseaseDefNum"].ToString());
+				vitalsign.PregDiseaseNum          = PIn.Long  (table.Rows[i]["PregDiseaseNum"].ToString());
 				vitalsign.NutrInterventionNum     = PIn.Long  (table.Rows[i]["NutrInterventionNum"].ToString());
 				vitalsign.PhyActInterventionNum   = PIn.Long  (table.Rows[i]["PhyActInterventionNum"].ToString());
 				vitalsign.OverUnderInterventionNum= PIn.Long  (table.Rows[i]["OverUnderInterventionNum"].ToString());
@@ -108,7 +108,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="VitalsignNum,";
 			}
-			command+="PatNum,Height,Weight,BpSystolic,BpDiastolic,DateTaken,HasFollowupPlan,IsIneligible,Documentation,ChildGotNutrition,ChildGotPhysCouns,WeightCode,HeightExamCode,WeightExamCode,BMIExamCode,EhrNotPerformedNum,PregDiseaseDefNum,NutrInterventionNum,PhyActInterventionNum,OverUnderInterventionNum,MedicationPatNum) VALUES(";
+			command+="PatNum,Height,Weight,BpSystolic,BpDiastolic,DateTaken,HasFollowupPlan,IsIneligible,Documentation,ChildGotNutrition,ChildGotPhysCouns,WeightCode,HeightExamCode,WeightExamCode,BMIExamCode,EhrNotPerformedNum,PregDiseaseNum,NutrInterventionNum,PhyActInterventionNum,OverUnderInterventionNum,MedicationPatNum) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(vitalsign.VitalsignNum)+",";
 			}
@@ -129,7 +129,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(vitalsign.WeightExamCode)+"',"
 				+"'"+POut.String(vitalsign.BMIExamCode)+"',"
 				+    POut.Long  (vitalsign.EhrNotPerformedNum)+","
-				+    POut.Long  (vitalsign.PregDiseaseDefNum)+","
+				+    POut.Long  (vitalsign.PregDiseaseNum)+","
 				+    POut.Long  (vitalsign.NutrInterventionNum)+","
 				+    POut.Long  (vitalsign.PhyActInterventionNum)+","
 				+    POut.Long  (vitalsign.OverUnderInterventionNum)+","
@@ -162,7 +162,7 @@ namespace OpenDentBusiness.Crud{
 				+"WeightExamCode          = '"+POut.String(vitalsign.WeightExamCode)+"', "
 				+"BMIExamCode             = '"+POut.String(vitalsign.BMIExamCode)+"', "
 				+"EhrNotPerformedNum      =  "+POut.Long  (vitalsign.EhrNotPerformedNum)+", "
-				+"PregDiseaseDefNum       =  "+POut.Long  (vitalsign.PregDiseaseDefNum)+", "
+				+"PregDiseaseNum          =  "+POut.Long  (vitalsign.PregDiseaseNum)+", "
 				+"NutrInterventionNum     =  "+POut.Long  (vitalsign.NutrInterventionNum)+", "
 				+"PhyActInterventionNum   =  "+POut.Long  (vitalsign.PhyActInterventionNum)+", "
 				+"OverUnderInterventionNum=  "+POut.Long  (vitalsign.OverUnderInterventionNum)+", "
@@ -238,9 +238,9 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="EhrNotPerformedNum = "+POut.Long(vitalsign.EhrNotPerformedNum)+"";
 			}
-			if(vitalsign.PregDiseaseDefNum != oldVitalsign.PregDiseaseDefNum) {
+			if(vitalsign.PregDiseaseNum != oldVitalsign.PregDiseaseNum) {
 				if(command!=""){ command+=",";}
-				command+="PregDiseaseDefNum = "+POut.Long(vitalsign.PregDiseaseDefNum)+"";
+				command+="PregDiseaseNum = "+POut.Long(vitalsign.PregDiseaseNum)+"";
 			}
 			if(vitalsign.NutrInterventionNum != oldVitalsign.NutrInterventionNum) {
 				if(command!=""){ command+=",";}

@@ -996,7 +996,7 @@ namespace OpenDentBusiness {
 					command=@"CREATE TABLE cpt (
 						CptNum bigint NOT NULL auto_increment PRIMARY KEY,
 						CptCode varchar(255) NOT NULL,
-						Description varchar(255) NOT NULL,
+						Description varchar(4000) NOT NULL,
 						INDEX(CptCode)
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
@@ -1007,7 +1007,7 @@ namespace OpenDentBusiness {
 					command=@"CREATE TABLE cpt (
 						CptNum number(20) NOT NULL,
 						CptCode varchar2(255),
-						Description varchar2(255),
+						Description varchar2(4000),
 						CONSTRAINT cpt_CptNum PRIMARY KEY (CptNum)
 						)";
 					Db.NonQ(command);
@@ -1770,21 +1770,21 @@ namespace OpenDentBusiness {
 				}
 				else {//oracle
 					//EHR not oracle compatible so the vital sign WeightCode will not be used, only for ehr reporting
-				} 
+				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE vitalsign ADD PregDiseaseDefNum bigint NOT NULL";
+					command="ALTER TABLE vitalsign ADD PregDiseaseNum bigint NOT NULL";
 					Db.NonQ(command);
-					command="ALTER TABLE vitalsign ADD INDEX (PregDiseaseDefNum)";
+					command="ALTER TABLE vitalsign ADD INDEX (PregDiseaseNum)";
 					Db.NonQ(command);
 				}
 				else {//oracle
-					command="ALTER TABLE vitalsign ADD PregDiseaseDefNum number(20)";
+					command="ALTER TABLE vitalsign ADD PregDiseaseNum number(20)";
 					Db.NonQ(command);
-					command="UPDATE vitalsign SET PregDiseaseDefNum = 0 WHERE PregDiseaseDefNum IS NULL";
+					command="UPDATE vitalsign SET PregDiseaseNum = 0 WHERE PregDiseaseNum IS NULL";
 					Db.NonQ(command);
-					command="ALTER TABLE vitalsign MODIFY PregDiseaseDefNum NOT NULL";
+					command="ALTER TABLE vitalsign MODIFY PregDiseaseNum NOT NULL";
 					Db.NonQ(command);
-					command=@"CREATE INDEX vitalsign_PregDiseaseDefNum ON vitalsign (PregDiseaseDefNum)";
+					command=@"CREATE INDEX vitalsign_PregDiseaseNum ON vitalsign (PregDiseaseNum)";
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
