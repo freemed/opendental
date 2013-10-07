@@ -187,14 +187,22 @@ namespace OpenDentBusiness{
 		///Returns an empty string upon success, or an error string if there were errors.  It is possible that the email was sent to some trusted recipients and not sent to untrusted recipients (in which case there would be errors but some recipients would receive successfully).</summary>
 		private static string SendEmailDirect(Health.Direct.Agent.OutgoingMessage outMsgUnencrypted,EmailAddress emailAddressFrom) {
 			string strErrors="";
-			Health.Direct.Agent.DirectAgent directAgent=GetDirectAgentForEmailAddress(emailAddressFrom.EmailUsername);//Cannot be emailAddressFrom.SenderAddress, or else will not find the right encryption certificate.
+			string strSenderAddress=emailAddressFrom.EmailUsername;//Cannot be emailAddressFrom.SenderAddress, or else will not find the right encryption certificate.
+			Health.Direct.Agent.DirectAgent directAgent=GetDirectAgentForEmailAddress(strSenderAddress);
 			//Locate or discover public certificates for each receiver for encryption purposes.
 			for(int i=0;i<outMsgUnencrypted.Recipients.Count;i++) {
 				if(outMsgUnencrypted.Recipients[i].Certificates!=null) {
 					continue;//The certificate(s) for this recipient were already located somehow. Skip.
 				}
 				try {
-					directAgent=FindCertForRecipient(emailAddressFrom.EmailUsername,outMsgUnencrypted.Recipients[i].Address);//Cannot be emailAddressFrom.SenderAddress, or else will not find the right encryption certificate.
+					int certNewCount=FindPublicCertForAddress(outMsgUnencrypted.Recipients[i].Address);
+					if(certNewCount>0) {
+						string strSenderDomain=strSenderAddress.Substring(strSenderAddress.IndexOf("@")+1);//For example, if strSenderAddress is ehr@opendental.com, then this will be opendental.com
+						//Refresh the directAgent class using the updated list of public certs while leaving everything else alone. This must be done, or else the certificate will not be found when encrypting the outgoing email.
+						directAgent=new Health.Direct.Agent.DirectAgent(strSenderDomain,directAgent.PrivateCertResolver,Health.Direct.Common.Certificates.SystemX509Store.OpenExternal().CreateResolver(),directAgent.TrustAnchors);
+						directAgent.EncryptMessages=true;
+						HashDirectAgents[strSenderDomain]=directAgent;
+					}
 				}
 				catch(Exception ex) {
 					if(strErrors!="") {
@@ -230,17 +238,17 @@ namespace OpenDentBusiness{
 			return strErrors;
 		}
 
-		///<summary>First attemtps to locate the certificate for the provided recipient address and returns the located certificate if found.
-		///If the certificate could not be located from the local certificate store, then this function will search the internet for the hosted certificate.
-		///If the a certificate is discovered from the Internet, then it will be added to the certificate store, but the trust for the certificate must be added separately.
-		///Returns null when no certificate could be located.  Throws exceptions when there is a networking failure or when no certificates were found.</summary>
-		private static Health.Direct.Agent.DirectAgent FindCertForRecipient(string strSenderAddress,string strRecipientAddress) {
-			Health.Direct.Agent.DirectAgent retVal=GetDirectAgentForEmailAddress(strSenderAddress);
+		///<summary>First attemtps to find the public certificate for the provided address in the public certificate store and returns the located certificate if found.
+		///If the public certificate could not be found from the public certificate store, then this function will search the internet for the hosted public certificate.
+		///If a public certificate is discovered from the Internet, then it will be added to the public certificate store, but the trust for any certificate must be added separately.
+		///Returns the number of new public certificates discovered (could be 2 certs if one for the address and domain separately).  Throws exceptions when no certificates were found or if there was a network failure.</summary>
+		private static int FindPublicCertForAddress(string strAddressQuery) {
+			Health.Direct.Common.Certificates.SystemX509Store storePublicCerts=Health.Direct.Common.Certificates.SystemX509Store.OpenExternalEdit();//Open for read and write.  Corresponds to NHINDExternal/Certificates.
 			X509Certificate2Collection collectionCerts=null;
-			MailAddress mailAddressRecipient=new MailAddress(strRecipientAddress);
-			Health.Direct.Common.Certificates.ICertificateResolver certResolverLocalCache=retVal.PublicCertResolver;//Corresponds to the NHINDExternal/Certificates folder in the local certificate store.
+			MailAddress mailAddressQuery=new MailAddress(strAddressQuery);
+			Health.Direct.Common.Certificates.ICertificateResolver certResolverLocalCache=storePublicCerts.CreateResolver();
 			if(certResolverLocalCache!=null) {
-				collectionCerts=certResolverLocalCache.GetCertificates(mailAddressRecipient);
+				collectionCerts=certResolverLocalCache.GetCertificates(mailAddressQuery);
 				if(collectionCerts!=null) {
 					for(int i=0;i<collectionCerts.Count;i++) {
 						if(DateTime.Now<collectionCerts[i].NotBefore || DateTime.Now>collectionCerts[i].NotAfter) {
@@ -248,8 +256,8 @@ namespace OpenDentBusiness{
 							continue;
 						}
 						string strCertSubjectName=collectionCerts[i].Subject.Trim().ToLower();
-						if(strCertSubjectName.Contains("e="+strRecipientAddress.ToLower())) {
-							return retVal;//The certificate was found in the local certificate store within Windows and is already loaded into memory for the specific recipient address given.  No need to query the Internet.
+						if(strCertSubjectName.Contains("e="+strAddressQuery.ToLower())) {
+							return 0;//The certificate was found in the local certificate store within Windows and is already loaded into memory for the specific recipient address given.  No need to query the Internet.
 						}
 					}
 					//A certificate was found in the local store, but it was a domain level certificate and was not for the specific address provided.
@@ -265,7 +273,7 @@ namespace OpenDentBusiness{
 			IPAddress ipAddressGlobalDnsServer=IPAddress.Parse(strGlobalDnsServer);
 			//Attempt to discover the certificate via DNS.
 			Health.Direct.Common.Certificates.ICertificateResolver certResolverInternetDns=new Health.Direct.Common.Certificates.DnsCertResolver(ipAddressGlobalDnsServer);
-			collectionCerts=certResolverInternetDns.GetCertificates(mailAddressRecipient);//Can return null.
+			collectionCerts=certResolverInternetDns.GetCertificates(mailAddressQuery);//Can return null.
 			List<X509Certificate2> listCertsDiscoveredActive=new List<X509Certificate2>();
 			List<X509Certificate2> listCertsDiscoveredInactive=new List<X509Certificate2>();
 			if(collectionCerts!=null) {//Certificates found via DNS. Remove any invalid or expired certificates.
@@ -280,7 +288,7 @@ namespace OpenDentBusiness{
 			}
 			if(listCertsDiscoveredActive.Count==0) {//A valid certificate was not found via DNS.  Attempt to locate via LDAP.
 				Health.Direct.Common.Certificates.ICertificateResolver certResolverInternetLdap=new Health.Direct.ResolverPlugins.LdapCertResolver(ipAddressGlobalDnsServer,TimeSpan.FromMinutes(3));
-				collectionCerts=certResolverInternetLdap.GetCertificates(mailAddressRecipient);//Can return null.
+				collectionCerts=certResolverInternetLdap.GetCertificates(mailAddressQuery);//Can return null.
 				if(collectionCerts!=null) {
 					for(int i=0;i<collectionCerts.Count;i++) {
 						if(DateTime.Now<collectionCerts[i].NotBefore || DateTime.Now>collectionCerts[i].NotAfter) {
@@ -293,21 +301,15 @@ namespace OpenDentBusiness{
 				}
 			}
 			if(listCertsDiscoveredActive.Count==0) { //A certificate was not discovered via DNS or LDAP.
-				string strErrorMessage=Lans.g("EmailMessages","No active certificates discovered for recipient")+" "+strRecipientAddress;
+				string strErrorMessage=Lans.g("EmailMessages","No active certificates discovered for recipient")+" "+strAddressQuery;
 				if(listCertsDiscoveredInactive.Count>0) {
 					strErrorMessage+="\r\n"+Lans.g("EmailMessages","Inactive certificates discovered")+": "+listCertsDiscoveredInactive.Count;
 				}
 				throw new ApplicationException(strErrorMessage);
 			}
 			//A certificate was discovered via DNS or LDAP.  Save it locally for later reference.
-			Health.Direct.Common.Certificates.SystemX509Store storePublicCerts=Health.Direct.Common.Certificates.SystemX509Store.OpenExternalEdit();//Open for read and write.
 			storePublicCerts.Add(listCertsDiscoveredActive);//Write the discovered certificate to the Windows certificate store for future reference.
-			string domain=strSenderAddress.Substring(strSenderAddress.IndexOf("@")+1);//For example, if strSenderAddress is ehr@opendental.com, then this will be opendental.com
-			//Refresh the directAgent class using the updated list of public certs while leaving everything else alone. This must be done, or else the certificate will not be found when encrypting the outgoing email.
-			retVal=new Health.Direct.Agent.DirectAgent(domain,retVal.PrivateCertResolver,storePublicCerts.CreateResolver(),retVal.TrustAnchors);
-			retVal.EncryptMessages=true;
-			HashDirectAgents[domain]=retVal;
-			return retVal;
+			return listCertsDiscoveredActive.Count;
 		}
 
 		/// <summary>Used for sending encrypted Message Disposition Notification (MDN) ack messages for Direct.
