@@ -822,13 +822,15 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<PatAging>>(MethodBase.GetCurrentMethod(),age,lastStatement,billingNums,excludeAddr,excludeNeg,excludeLessThan,excludeInactive,includeChanged,excludeInsPending,excludeIfUnsentProcs,ignoreInPerson,clinicNum);
 			}
 			string command="";
+			Random rnd=new Random();
+			string rndStr=rnd.Next(1000000).ToString();
 			if(includeChanged){
-				command+=@"DROP TABLE IF EXISTS templastproc;
-					CREATE TABLE templastproc(
+				command+=@"DROP TABLE IF EXISTS templastproc"+rndStr+@";
+					CREATE TABLE templastproc"+rndStr+@"(
 					Guarantor bigint unsigned NOT NULL,
 					LastProc date NOT NULL,
 					PRIMARY KEY (Guarantor));
-					INSERT INTO templastproc
+					INSERT INTO templastproc"+rndStr+@"
 					SELECT patient.Guarantor,MAX(ProcDate)
 					FROM procedurelog,patient
 					WHERE patient.PatNum=procedurelog.PatNum
@@ -836,12 +838,12 @@ namespace OpenDentBusiness{
 					AND procedurelog.ProcFee>0
 					GROUP BY patient.Guarantor;
 					
-					DROP TABLE IF EXISTS templastpay;
-					CREATE TABLE templastpay(
+					DROP TABLE IF EXISTS templastpay"+rndStr+@";
+					CREATE TABLE templastpay"+rndStr+@"(
 					Guarantor bigint unsigned NOT NULL,
 					LastPay date NOT NULL,
 					PRIMARY KEY (Guarantor));
-					INSERT INTO templastpay
+					INSERT INTO templastpay"+rndStr+@"
 					SELECT patient.Guarantor,MAX(DateCP)
 					FROM claimproc,patient
 					WHERE claimproc.PatNum=patient.PatNum
@@ -849,12 +851,12 @@ namespace OpenDentBusiness{
 					GROUP BY patient.Guarantor;";					
 			}
 			if(excludeInsPending) {
-				command+=@"DROP TABLE IF EXISTS tempclaimspending;
-					CREATE TABLE tempclaimspending(
+				command+=@"DROP TABLE IF EXISTS tempclaimspending"+rndStr+@";
+					CREATE TABLE tempclaimspending"+rndStr+@"(
 					Guarantor bigint unsigned NOT NULL,
 					PendingClaimCount int NOT NULL,
 					PRIMARY KEY (Guarantor));
-					INSERT INTO tempclaimspending
+					INSERT INTO tempclaimspending"+rndStr+@"
 					SELECT patient.Guarantor,COUNT(*)
 					FROM claim,patient
 					WHERE claim.PatNum=patient.PatNum
@@ -863,12 +865,12 @@ namespace OpenDentBusiness{
 					GROUP BY patient.Guarantor;";
 			}
 			if(excludeIfUnsentProcs) {
-				command+=@"DROP TABLE IF EXISTS tempunsentprocs;
-					CREATE TABLE tempunsentprocs(
+				command+=@"DROP TABLE IF EXISTS tempunsentprocs"+rndStr+@";
+					CREATE TABLE tempunsentprocs"+rndStr+@"(
 					Guarantor bigint unsigned NOT NULL,
 					UnsentProcCount int NOT NULL,
 					PRIMARY KEY (Guarantor));
-					INSERT INTO tempunsentprocs
+					INSERT INTO tempunsentprocs"+rndStr+@"
 					SELECT patient.Guarantor,COUNT(*)
 					FROM patient,procedurecode,procedurelog,claimproc 
 					WHERE claimproc.procnum=procedurelog.procnum
@@ -878,20 +880,21 @@ namespace OpenDentBusiness{
 					AND procedurelog.ProcFee>0
 					AND claimproc.Status=6
 					AND procedurelog.procstatus=2
-					GROUP BY patient.Guarantor;";
+					AND procedurelog.ProcDate > "+DbHelper.DateAddMonth(DbHelper.Curdate(),"-6")+" "
+					+"GROUP BY patient.Guarantor;";
 			}
 			command+="SELECT patient.PatNum,Bal_0_30,Bal_31_60,Bal_61_90,BalOver90,BalTotal,BillingType,"
 				+"InsEst,LName,FName,MiddleI,PayPlanDue,Preferred, "
 				+"IFNULL(MAX(statement.DateSent),'0001-01-01') AS LastStatement ";
 			if(includeChanged){
-				command+=",IFNULL(templastproc.LastProc,'0001-01-01') AS LastChange,"
-					+"IFNULL(templastpay.LastPay,'0001-01-01') AS LastPayment ";
+				command+=",IFNULL(templastproc"+rndStr+@".LastProc,'0001-01-01') AS LastChange,"
+					+"IFNULL(templastpay"+rndStr+@".LastPay,'0001-01-01') AS LastPayment ";
 			}
 			if(excludeInsPending){
-				command+=",IFNULL(tempclaimspending.PendingClaimCount,'0') AS ClaimCount ";
+				command+=",IFNULL(tempclaimspending"+rndStr+@".PendingClaimCount,'0') AS ClaimCount ";
 			}
 			if(excludeIfUnsentProcs) {
-				command+=",IFNULL(tempunsentprocs.UnsentProcCount,'0') AS unsentProcCount_ ";
+				command+=",IFNULL(tempunsentprocs"+rndStr+@".UnsentProcCount,'0') AS unsentProcCount_ ";
 			}
 			command+=
 				"FROM patient "//actually only gets guarantors since others are 0.
@@ -900,14 +903,14 @@ namespace OpenDentBusiness{
 				command+="AND statement.Mode_ != 1 ";
 			}
 			if(includeChanged){
-				command+="LEFT JOIN templastproc ON patient.PatNum=templastproc.Guarantor "
-					+"LEFT JOIN templastpay ON patient.PatNum=templastpay.Guarantor ";
+				command+="LEFT JOIN templastproc"+rndStr+@" ON patient.PatNum=templastproc"+rndStr+@".Guarantor "
+					+"LEFT JOIN templastpay"+rndStr+@" ON patient.PatNum=templastpay"+rndStr+@".Guarantor ";
 			}
 			if(excludeInsPending){
-				command+="LEFT JOIN tempclaimspending ON patient.PatNum=tempclaimspending.Guarantor ";
+				command+="LEFT JOIN tempclaimspending"+rndStr+@" ON patient.PatNum=tempclaimspending"+rndStr+@".Guarantor ";
 			}
 			if(excludeIfUnsentProcs) {
-				command+="LEFT JOIN tempunsentprocs ON patient.PatNum=tempunsentprocs.Guarantor ";
+				command+="LEFT JOIN tempunsentprocs"+rndStr+@" ON patient.PatNum=tempunsentprocs"+rndStr+@".Guarantor ";
 			}
 			command+="WHERE ";
 			if(excludeInactive){
@@ -1019,17 +1022,17 @@ namespace OpenDentBusiness{
 			//	retVal[i]=agingList[i];
 			//}
 			if(includeChanged){
-				command="DROP TABLE IF EXISTS templastproc";
+				command="DROP TABLE IF EXISTS templastproc"+rndStr+@"";
 				Db.NonQ(command);
-				command="DROP TABLE IF EXISTS templastpay";
+				command="DROP TABLE IF EXISTS templastpay"+rndStr+@"";
 				Db.NonQ(command);
 			}
 			if(excludeInsPending){
-				command="DROP TABLE IF EXISTS tempclaimspending";
+				command="DROP TABLE IF EXISTS tempclaimspending"+rndStr+@"";
 				Db.NonQ(command);
 			}
 			if(excludeIfUnsentProcs){
-				command="DROP TABLE IF EXISTS tempunsentprocs";
+				command="DROP TABLE IF EXISTS tempunsentprocs"+rndStr+@"";
 				Db.NonQ(command);
 			}
 			return agingList;
