@@ -108,9 +108,6 @@ namespace OpenDental{
 			this.label4 = new System.Windows.Forms.Label();
 			this.listTemplates = new System.Windows.Forms.ListBox();
 			this.panelTemplates = new System.Windows.Forms.Panel();
-			this.butInsert = new OpenDental.UI.Button();
-			this.butDeleteTemplate = new OpenDental.UI.Button();
-			this.butAdd = new OpenDental.UI.Button();
 			this.listAttachments = new System.Windows.Forms.ListBox();
 			this.contextMenuAttachments = new System.Windows.Forms.ContextMenu();
 			this.menuItemOpen = new System.Windows.Forms.MenuItem();
@@ -127,6 +124,9 @@ namespace OpenDental{
 			this.butAttach = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butSave = new OpenDental.UI.Button();
+			this.butInsert = new OpenDental.UI.Button();
+			this.butDeleteTemplate = new OpenDental.UI.Button();
+			this.butAdd = new OpenDental.UI.Button();
 			this.textBodyText = new OpenDental.ODtextBox();
 			this.butSend = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
@@ -147,14 +147,14 @@ namespace OpenDental{
 			this.textSubject.Location = new System.Drawing.Point(278, 83);
 			this.textSubject.Name = "textSubject";
 			this.textSubject.Size = new System.Drawing.Size(328, 20);
-			this.textSubject.TabIndex = 1;
+			this.textSubject.TabIndex = 2;
 			// 
 			// textToAddress
 			// 
 			this.textToAddress.Location = new System.Drawing.Point(278, 62);
 			this.textToAddress.Name = "textToAddress";
 			this.textToAddress.Size = new System.Drawing.Size(328, 20);
-			this.textToAddress.TabIndex = 2;
+			this.textToAddress.TabIndex = 3;
 			// 
 			// label1
 			// 
@@ -170,7 +170,7 @@ namespace OpenDental{
 			this.textFromAddress.Location = new System.Drawing.Point(278, 41);
 			this.textFromAddress.Name = "textFromAddress";
 			this.textFromAddress.Size = new System.Drawing.Size(328, 20);
-			this.textFromAddress.TabIndex = 10;
+			this.textFromAddress.TabIndex = 4;
 			// 
 			// label3
 			// 
@@ -215,7 +215,8 @@ namespace OpenDental{
 			this.listTemplates.Location = new System.Drawing.Point(10, 26);
 			this.listTemplates.Name = "listTemplates";
 			this.listTemplates.Size = new System.Drawing.Size(164, 277);
-			this.listTemplates.TabIndex = 17;
+			this.listTemplates.TabIndex = 0;
+			this.listTemplates.TabStop = false;
 			this.listTemplates.DoubleClick += new System.EventHandler(this.listTemplates_DoubleClick);
 			// 
 			// panelTemplates
@@ -228,56 +229,7 @@ namespace OpenDental{
 			this.panelTemplates.Location = new System.Drawing.Point(8, 9);
 			this.panelTemplates.Name = "panelTemplates";
 			this.panelTemplates.Size = new System.Drawing.Size(180, 370);
-			this.panelTemplates.TabIndex = 24;
-			// 
-			// butInsert
-			// 
-			this.butInsert.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butInsert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.butInsert.Autosize = true;
-			this.butInsert.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butInsert.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butInsert.CornerRadius = 4F;
-			this.butInsert.Image = global::OpenDental.Properties.Resources.Right;
-			this.butInsert.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butInsert.Location = new System.Drawing.Point(102, 305);
-			this.butInsert.Name = "butInsert";
-			this.butInsert.Size = new System.Drawing.Size(74, 26);
-			this.butInsert.TabIndex = 23;
-			this.butInsert.Text = "Insert";
-			this.butInsert.Click += new System.EventHandler(this.butInsert_Click);
-			// 
-			// butDeleteTemplate
-			// 
-			this.butDeleteTemplate.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butDeleteTemplate.Autosize = true;
-			this.butDeleteTemplate.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDeleteTemplate.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDeleteTemplate.CornerRadius = 4F;
-			this.butDeleteTemplate.Image = global::OpenDental.Properties.Resources.deleteX;
-			this.butDeleteTemplate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDeleteTemplate.Location = new System.Drawing.Point(7, 339);
-			this.butDeleteTemplate.Name = "butDeleteTemplate";
-			this.butDeleteTemplate.Size = new System.Drawing.Size(75, 26);
-			this.butDeleteTemplate.TabIndex = 21;
-			this.butDeleteTemplate.Text = "Delete";
-			this.butDeleteTemplate.Click += new System.EventHandler(this.butDeleteTemplate_Click);
-			// 
-			// butAdd
-			// 
-			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butAdd.Autosize = true;
-			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAdd.CornerRadius = 4F;
-			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
-			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(7, 305);
-			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(75, 26);
-			this.butAdd.TabIndex = 19;
-			this.butAdd.Text = "&Add";
-			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
+			this.panelTemplates.TabIndex = 0;
 			// 
 			// listAttachments
 			// 
@@ -286,7 +238,8 @@ namespace OpenDental{
 			this.listAttachments.Location = new System.Drawing.Point(612, 21);
 			this.listAttachments.Name = "listAttachments";
 			this.listAttachments.Size = new System.Drawing.Size(315, 82);
-			this.listAttachments.TabIndex = 28;
+			this.listAttachments.TabIndex = 0;
+			this.listAttachments.TabStop = false;
 			this.listAttachments.DoubleClick += new System.EventHandler(this.listAttachments_DoubleClick);
 			this.listAttachments.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listAttachments_MouseDown);
 			// 
@@ -356,7 +309,7 @@ namespace OpenDental{
 			this.butEncryptAndSend.Location = new System.Drawing.Point(659, 635);
 			this.butEncryptAndSend.Name = "butEncryptAndSend";
 			this.butEncryptAndSend.Size = new System.Drawing.Size(106, 25);
-			this.butEncryptAndSend.TabIndex = 37;
+			this.butEncryptAndSend.TabIndex = 8;
 			this.butEncryptAndSend.Text = "Encrypt and Send";
 			this.butEncryptAndSend.Click += new System.EventHandler(this.butEncryptAndSend_Click);
 			// 
@@ -369,7 +322,8 @@ namespace OpenDental{
 			this.webBrowser.Name = "webBrowser";
 			this.webBrowser.ScriptErrorsSuppressed = true;
 			this.webBrowser.Size = new System.Drawing.Size(46, 25);
-			this.webBrowser.TabIndex = 36;
+			this.webBrowser.TabIndex = 0;
+			this.webBrowser.TabStop = false;
 			this.webBrowser.Visible = false;
 			this.webBrowser.WebBrowserShortcutsEnabled = false;
 			// 
@@ -383,7 +337,7 @@ namespace OpenDental{
 			this.butDecrypt.Location = new System.Drawing.Point(8, 463);
 			this.butDecrypt.Name = "butDecrypt";
 			this.butDecrypt.Size = new System.Drawing.Size(75, 25);
-			this.butDecrypt.TabIndex = 32;
+			this.butDecrypt.TabIndex = 7;
 			this.butDecrypt.Text = "Decrypt";
 			this.butDecrypt.Visible = false;
 			this.butDecrypt.Click += new System.EventHandler(this.butDecrypt_Click);
@@ -428,7 +382,7 @@ namespace OpenDental{
 			this.butAttach.Location = new System.Drawing.Point(612, 0);
 			this.butAttach.Name = "butAttach";
 			this.butAttach.Size = new System.Drawing.Size(75, 20);
-			this.butAttach.TabIndex = 27;
+			this.butAttach.TabIndex = 5;
 			this.butAttach.Text = "Attach...";
 			this.butAttach.Click += new System.EventHandler(this.butAttach_Click);
 			// 
@@ -445,7 +399,7 @@ namespace OpenDental{
 			this.butDelete.Location = new System.Drawing.Point(8, 635);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(75, 26);
-			this.butDelete.TabIndex = 26;
+			this.butDelete.TabIndex = 11;
 			this.butDelete.Text = "Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
@@ -460,9 +414,58 @@ namespace OpenDental{
 			this.butSave.Location = new System.Drawing.Point(278, 635);
 			this.butSave.Name = "butSave";
 			this.butSave.Size = new System.Drawing.Size(75, 25);
-			this.butSave.TabIndex = 25;
+			this.butSave.TabIndex = 6;
 			this.butSave.Text = "Save";
 			this.butSave.Click += new System.EventHandler(this.butSave_Click);
+			// 
+			// butInsert
+			// 
+			this.butInsert.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butInsert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.butInsert.Autosize = true;
+			this.butInsert.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butInsert.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butInsert.CornerRadius = 4F;
+			this.butInsert.Image = global::OpenDental.Properties.Resources.Right;
+			this.butInsert.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butInsert.Location = new System.Drawing.Point(102, 305);
+			this.butInsert.Name = "butInsert";
+			this.butInsert.Size = new System.Drawing.Size(74, 26);
+			this.butInsert.TabIndex = 2;
+			this.butInsert.Text = "Insert";
+			this.butInsert.Click += new System.EventHandler(this.butInsert_Click);
+			// 
+			// butDeleteTemplate
+			// 
+			this.butDeleteTemplate.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butDeleteTemplate.Autosize = true;
+			this.butDeleteTemplate.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDeleteTemplate.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDeleteTemplate.CornerRadius = 4F;
+			this.butDeleteTemplate.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butDeleteTemplate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDeleteTemplate.Location = new System.Drawing.Point(7, 339);
+			this.butDeleteTemplate.Name = "butDeleteTemplate";
+			this.butDeleteTemplate.Size = new System.Drawing.Size(75, 26);
+			this.butDeleteTemplate.TabIndex = 3;
+			this.butDeleteTemplate.Text = "Delete";
+			this.butDeleteTemplate.Click += new System.EventHandler(this.butDeleteTemplate_Click);
+			// 
+			// butAdd
+			// 
+			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butAdd.Autosize = true;
+			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAdd.CornerRadius = 4F;
+			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAdd.Location = new System.Drawing.Point(7, 305);
+			this.butAdd.Name = "butAdd";
+			this.butAdd.Size = new System.Drawing.Size(75, 26);
+			this.butAdd.TabIndex = 1;
+			this.butAdd.Text = "&Add";
+			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
 			// textBodyText
 			// 
@@ -471,12 +474,12 @@ namespace OpenDental{
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.textBodyText.DetectUrls = false;
-			this.textBodyText.Location = new System.Drawing.Point(278, 104);
+			this.textBodyText.Location = new System.Drawing.Point(278, 109);
 			this.textBodyText.Name = "textBodyText";
 			this.textBodyText.QuickPasteType = OpenDentBusiness.QuickPasteType.Email;
 			this.textBodyText.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
 			this.textBodyText.Size = new System.Drawing.Size(649, 517);
-			this.textBodyText.TabIndex = 0;
+			this.textBodyText.TabIndex = 1;
 			this.textBodyText.Text = "";
 			this.textBodyText.TextChanged += new System.EventHandler(this.textBodyText_TextChanged);
 			// 
@@ -491,7 +494,7 @@ namespace OpenDental{
 			this.butSend.Location = new System.Drawing.Point(771, 635);
 			this.butSend.Name = "butSend";
 			this.butSend.Size = new System.Drawing.Size(75, 25);
-			this.butSend.TabIndex = 2;
+			this.butSend.TabIndex = 9;
 			this.butSend.Text = "&Send";
 			this.butSend.Click += new System.EventHandler(this.butSend_Click);
 			// 
@@ -507,7 +510,7 @@ namespace OpenDental{
 			this.butCancel.Location = new System.Drawing.Point(852, 635);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 25);
-			this.butCancel.TabIndex = 3;
+			this.butCancel.TabIndex = 10;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
@@ -614,6 +617,7 @@ namespace OpenDental{
 			}
 			MessageCur.Attachments=EmailAttaches.GetForEmail(MessageCur.EmailMessageNum);
 			FillAttachments();
+			textBodyText.Select();
 		}
 
 		private void FillAttachments(){
@@ -908,8 +912,13 @@ namespace OpenDental{
 			MessageCur.SentOrReceived=EmailSentOrReceived.SentDirect;
 			SaveMsg();
 			try {
-				EmailMessages.SendEmailDirect(MessageCur,emailAddressFrom);
-				MsgBox.Show(this,"Sent");
+				string strErrors=EmailMessages.SendEmailDirect(MessageCur,emailAddressFrom);
+				if(strErrors!="") {
+					MessageBox.Show(strErrors);
+				}
+				else {
+					MsgBox.Show(this,"Sent");
+				}
 			}
 			catch(Exception ex) {
 				Cursor=Cursors.Default;

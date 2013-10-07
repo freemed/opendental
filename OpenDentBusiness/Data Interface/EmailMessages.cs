@@ -171,19 +171,23 @@ namespace OpenDentBusiness{
 		#region Sending
 
 		///<summary>Encrypts the message, verifies trust, locates the public encryption key for the To address (if already stored locally), etc.  emailMessage.  
-		///Use this polymorphism when the attachments have already been saved to the email attachments folder in file form.  patNum can be 0.</summary>
-		public static void SendEmailDirect(EmailMessage emailMessage,EmailAddress emailAddressFrom) {
+		///Use this polymorphism when the attachments have already been saved to the email attachments folder in file form.  patNum can be 0.
+		///Returns an empty string upon success, or an error string if there were errors.  It is possible that the email was sent to some trusted recipients and not sent to untrusted recipients (in which case there would be errors but some recipients would receive successfully).</summary>
+		public static string SendEmailDirect(EmailMessage emailMessage,EmailAddress emailAddressFrom) {
 			emailMessage.FromAddress=emailAddressFrom.EmailUsername;//Cannot be emailAddressFrom.SenderAddress, or else will not find the correct encryption certificate.  Used in ConvertEmailMessageToMessage().
 			//Start by converting the emailMessage to an unencrypted message using the Direct libraries. The email must be in this form to carry out encryption.
 			Health.Direct.Common.Mail.Message msgUnencrypted=ConvertEmailMessageToMessage(emailMessage,true);
 			Health.Direct.Agent.MessageEnvelope msgEnvelopeUnencrypted=new Health.Direct.Agent.MessageEnvelope(msgUnencrypted);
 			Health.Direct.Agent.OutgoingMessage outMsgUnencrypted=new Health.Direct.Agent.OutgoingMessage(msgEnvelopeUnencrypted);
-			SendEmailDirect(outMsgUnencrypted,emailAddressFrom);
+			return SendEmailDirect(outMsgUnencrypted,emailAddressFrom);
 		}
 
-		///<summary>outMsgDirect must be unencrypted, because this function will encrypt.  Encrypts the message, verifies trust, locates the public encryption key for the To address (if already stored locally), etc.  patNum can be zero.  emailSentOrReceived must be either SentDirect or a Direct Ack type such as AckDirectProcessed.</summary>
-		private static void SendEmailDirect(Health.Direct.Agent.OutgoingMessage outMsgUnencrypted,EmailAddress emailAddressFrom) {
-			Health.Direct.Agent.DirectAgent directAgent=null;
+		///<summary>outMsgDirect must be unencrypted, because this function will encrypt.  Encrypts the message, verifies trust, locates the public encryption key for the To address (if already stored locally), etc.
+		///patNum can be zero.  emailSentOrReceived must be either SentDirect or a Direct Ack type such as AckDirectProcessed.
+		///Returns an empty string upon success, or an error string if there were errors.  It is possible that the email was sent to some trusted recipients and not sent to untrusted recipients (in which case there would be errors but some recipients would receive successfully).</summary>
+		private static string SendEmailDirect(Health.Direct.Agent.OutgoingMessage outMsgUnencrypted,EmailAddress emailAddressFrom) {
+			string strErrors="";
+			Health.Direct.Agent.DirectAgent directAgent=GetDirectAgentForEmailAddress(emailAddressFrom.EmailUsername);//Cannot be emailAddressFrom.SenderAddress, or else will not find the right encryption certificate.
 			//Locate or discover public certificates for each receiver for encryption purposes.
 			for(int i=0;i<outMsgUnencrypted.Recipients.Count;i++) {
 				if(outMsgUnencrypted.Recipients[i].Certificates!=null) {
@@ -192,10 +196,24 @@ namespace OpenDentBusiness{
 				try {
 					directAgent=FindCertForRecipient(emailAddressFrom.EmailUsername,outMsgUnencrypted.Recipients[i].Address);//Cannot be emailAddressFrom.SenderAddress, or else will not find the right encryption certificate.
 				}
-				catch {
+				catch(Exception ex) {
+					if(strErrors!="") {
+						strErrors+="\r\n";
+					}
+					strErrors+=ex.Message;
 				}
 			}
-			Health.Direct.Agent.OutgoingMessage outMsgEncrypted=directAgent.ProcessOutgoing(outMsgUnencrypted);//This is where encryption and trust verification occurs.
+			Health.Direct.Agent.OutgoingMessage outMsgEncrypted=null;
+			try {
+				outMsgEncrypted=directAgent.ProcessOutgoing(outMsgUnencrypted);//This is where encryption and trust verification occurs.
+			}
+			catch(Exception ex) {
+				if(strErrors!="") {
+					strErrors+="\r\n";
+				}
+				strErrors+=ex.Message;
+				return strErrors;//Cannot recover from an encryption error.
+			}
 			EmailMessage emailMessageEncrypted=ConvertMessageToEmailMessage(outMsgEncrypted.Message,false);//No point in saving the encrypted attachment, because nobody can read it and it will bloat the OpenDentImages folder.
 			NameValueCollection nameValueCollectionHeaders=new NameValueCollection();
 			for(int i=0;i<outMsgEncrypted.Message.Headers.Count;i++) {
@@ -209,51 +227,92 @@ namespace OpenDentBusiness{
 			alternateView.TransferEncoding=TransferEncoding.SevenBit;
 			SendEmailUnsecure(emailMessageEncrypted,emailAddressFrom,nameValueCollectionHeaders,alternateView);//Not really unsecure in this spot, because the message is already encrypted.
 			ms.Dispose();
+			return strErrors;
 		}
 
 		///<summary>First attemtps to locate the certificate for the provided recipient address and returns the located certificate if found.
 		///If the certificate could not be located from the local certificate store, then this function will search the internet for the hosted certificate.
 		///If the a certificate is discovered from the Internet, then it will be added to the certificate store, but the trust for the certificate must be added separately.
-		///Returns null when no certificate could be located.  Throws exceptions when there is a networking failure.</summary>
+		///Returns null when no certificate could be located.  Throws exceptions when there is a networking failure or when no certificates were found.</summary>
 		private static Health.Direct.Agent.DirectAgent FindCertForRecipient(string strSenderAddress,string strRecipientAddress) {
-			Health.Direct.Agent.DirectAgent directAgent=GetDirectAgentForEmailAddress(strSenderAddress);
-			X509Certificate2Collection retVal=null;
+			Health.Direct.Agent.DirectAgent retVal=GetDirectAgentForEmailAddress(strSenderAddress);
+			X509Certificate2Collection collectionCerts=null;
 			MailAddress mailAddressRecipient=new MailAddress(strRecipientAddress);
-			Health.Direct.Common.Certificates.ICertificateResolver certResolverLocalCache=directAgent.PublicCertResolver;//Corresponds to the NHINDExternal/Certificates folder in the local certificate store.
+			Health.Direct.Common.Certificates.ICertificateResolver certResolverLocalCache=retVal.PublicCertResolver;//Corresponds to the NHINDExternal/Certificates folder in the local certificate store.
 			if(certResolverLocalCache!=null) {
-				retVal=certResolverLocalCache.GetCertificates(mailAddressRecipient);
-				if(retVal!=null) {
-					for(int i=0;i<retVal.Count;i++) {
-						string strCertSubjectName=retVal[i].Subject.Trim().ToLower();
+				collectionCerts=certResolverLocalCache.GetCertificates(mailAddressRecipient);
+				if(collectionCerts!=null) {
+					for(int i=0;i<collectionCerts.Count;i++) {
+						if(DateTime.Now<collectionCerts[i].NotBefore || DateTime.Now>collectionCerts[i].NotAfter) {
+							//If the certificate is not yet valid or is expired, then discard so we can possibly discover a better certificate below.
+							continue;
+						}
+						string strCertSubjectName=collectionCerts[i].Subject.Trim().ToLower();
 						if(strCertSubjectName.Contains("e="+strRecipientAddress.ToLower())) {
-							return directAgent;//The certificate was found in the local certificate store within Windows and is already loaded into memory.  No need to query the Internet.
+							return retVal;//The certificate was found in the local certificate store within Windows and is already loaded into memory for the specific recipient address given.  No need to query the Internet.
 						}
 					}
 					//A certificate was found in the local store, but it was a domain level certificate and was not for the specific address provided.
 					//Attempt to discover the certificate for the exact recipient address provided (below) before using the domain level certificate.					
 				}
 			}
-			//An address specific certificate was not found in the local certificate store.  Attempt to discover an address specific certificate by querying the Internet. 
+			//An address specific certificate was not found in the local certificate store.  Attempt to discover an address specific certificate by querying the Internet.
+			//It may be useful in the future to attempt communicating with a secondary DNS server if the primary DNS is not available.
 			//const string strDnsServer = "184.73.237.102";//Amazon - This is the DNS server used within the Direct resolverPlugins test project. Appears to have worked the best for them, compared to the others listed below, but was not accessible.
 			//const string strDnsServer = "10.110.22.16";//This address was tried in the Direct resolverPlugins test project and is commented out, implying that it might not be the best DNS server to use.
 			//const string strDnsServer = "207.170.210.162";//This address was tried in the Direct resolverPlugins test project and is commented out, implying that it might not be the best DNS server to use.
-			const string strDnsServer = "8.8.8.8";//Google - This address was tried in the Direct resolverPlugins test project and is commented out, implying that it might not be the best DNS server to use.
-			Health.Direct.Common.Certificates.ICertificateResolver certResolverInternet=new Health.Direct.Common.Certificates.DnsCertResolver(IPAddress.Parse(strDnsServer));
-			retVal=certResolverInternet.GetCertificates(mailAddressRecipient);//Can return null.
-			if(retVal!=null) {//A certificate was discovered.
-				Health.Direct.Common.Certificates.SystemX509Store storePublicCerts=Health.Direct.Common.Certificates.SystemX509Store.OpenExternalEdit();//Open for read and write.
-				storePublicCerts.Add(retVal);//Write the discovered certificate to the Windows certificate store for future reference.
-				string domain=strSenderAddress.Substring(strSenderAddress.IndexOf("@")+1);//For example, if ToAddress is ehr@opendental.com, then this will be opendental.com
-				directAgent=new Health.Direct.Agent.DirectAgent(domain,directAgent.PrivateCertResolver,storePublicCerts.CreateResolver(),directAgent.TrustAnchors);//Refresh the directAgent class using the update list of public certs.
-				directAgent.EncryptMessages=true;
-				HashDirectAgents[domain]=directAgent;
+			const string strGlobalDnsServer = "8.8.8.8";//Google - This address was tried in the Direct resolverPlugins test project and is commented out, implying that it might not be the best DNS server to use.
+			IPAddress ipAddressGlobalDnsServer=IPAddress.Parse(strGlobalDnsServer);
+			//Attempt to discover the certificate via DNS.
+			Health.Direct.Common.Certificates.ICertificateResolver certResolverInternetDns=new Health.Direct.Common.Certificates.DnsCertResolver(ipAddressGlobalDnsServer);
+			collectionCerts=certResolverInternetDns.GetCertificates(mailAddressRecipient);//Can return null.
+			List<X509Certificate2> listCertsDiscoveredActive=new List<X509Certificate2>();
+			List<X509Certificate2> listCertsDiscoveredInactive=new List<X509Certificate2>();
+			if(collectionCerts!=null) {//Certificates found via DNS. Remove any invalid or expired certificates.
+				for(int i=0;i<collectionCerts.Count;i++) {
+					if(DateTime.Now<collectionCerts[i].NotBefore || DateTime.Now>collectionCerts[i].NotAfter) {
+						//If the certificate is not yet valid or is expired, then discard so we can possibly discover a better certificate below.
+						listCertsDiscoveredInactive.Add(collectionCerts[i]);
+						continue;
+					}
+					listCertsDiscoveredActive.Add(collectionCerts[i]);
+				}
 			}
-			return directAgent;
+			if(listCertsDiscoveredActive.Count==0) {//A valid certificate was not found via DNS.  Attempt to locate via LDAP.
+				Health.Direct.Common.Certificates.ICertificateResolver certResolverInternetLdap=new Health.Direct.ResolverPlugins.LdapCertResolver(ipAddressGlobalDnsServer,TimeSpan.FromMinutes(3));
+				collectionCerts=certResolverInternetLdap.GetCertificates(mailAddressRecipient);//Can return null.
+				if(collectionCerts!=null) {
+					for(int i=0;i<collectionCerts.Count;i++) {
+						if(DateTime.Now<collectionCerts[i].NotBefore || DateTime.Now>collectionCerts[i].NotAfter) {
+							//If the certificate is not yet valid or is expired, then discard.
+							listCertsDiscoveredInactive.Add(collectionCerts[i]);
+							continue;
+						}
+						listCertsDiscoveredActive.Add(collectionCerts[i]);
+					}
+				}
+			}
+			if(listCertsDiscoveredActive.Count==0) { //A certificate was not discovered via DNS or LDAP.
+				string strErrorMessage=Lans.g("EmailMessages","No active certificates discovered for recipient")+" "+strRecipientAddress;
+				if(listCertsDiscoveredInactive.Count>0) {
+					strErrorMessage+="\r\n"+Lans.g("EmailMessages","Inactive certificates discovered")+": "+listCertsDiscoveredInactive.Count;
+				}
+				throw new ApplicationException(strErrorMessage);
+			}
+			//A certificate was discovered via DNS or LDAP.  Save it locally for later reference.
+			Health.Direct.Common.Certificates.SystemX509Store storePublicCerts=Health.Direct.Common.Certificates.SystemX509Store.OpenExternalEdit();//Open for read and write.
+			storePublicCerts.Add(listCertsDiscoveredActive);//Write the discovered certificate to the Windows certificate store for future reference.
+			string domain=strSenderAddress.Substring(strSenderAddress.IndexOf("@")+1);//For example, if strSenderAddress is ehr@opendental.com, then this will be opendental.com
+			//Refresh the directAgent class using the updated list of public certs while leaving everything else alone. This must be done, or else the certificate will not be found when encrypting the outgoing email.
+			retVal=new Health.Direct.Agent.DirectAgent(domain,retVal.PrivateCertResolver,storePublicCerts.CreateResolver(),retVal.TrustAnchors);
+			retVal.EncryptMessages=true;
+			HashDirectAgents[domain]=retVal;
+			return retVal;
 		}
 
 		/// <summary>Used for sending encrypted Message Disposition Notification (MDN) ack messages for Direct.
 		/// An ack must be sent when a message is received, and other acks must be sent when other events occur (for example, when the user reads a decrypted message we must send an ack with notification type of Displayed).</summary>
-		private static void SendAckDirect(Health.Direct.Agent.IncomingMessage inMsg,EmailAddress emailAddressFrom,long patNum,EmailSentOrReceived emailSentOrReceivedAck) {
+		private static string SendAckDirect(Health.Direct.Agent.IncomingMessage inMsg,EmailAddress emailAddressFrom,long patNum,EmailSentOrReceived emailSentOrReceivedAck) {
 			//The CreateAcks() function handles the case where the incoming message is an MDN, in which case we do not reply with anything.
 			//The CreateAcks() function also takes care of figuring out where to send the MDN, because the rules are complicated.
 			//According to http://wiki.directproject.org/Applicability+Statement+for+Secure+Health+Transport+Working+Version#x3.0%20Message%20Disposition%20Notification,
@@ -264,8 +323,9 @@ namespace OpenDentBusiness{
 			}
 			IEnumerable<Health.Direct.Common.Mail.Notifications.NotificationMessage> notificationMsgs=inMsg.CreateAcks("OpenDental","",notificationType);
 			if(notificationMsgs==null) {
-				return;
+				return "";
 			}
+			string strErrorsAll="";
 			foreach(Health.Direct.Common.Mail.Notifications.NotificationMessage notificationMsg in notificationMsgs) {
 				try {
 					//According to RFC3798, section 3 - Format of a Message Disposition Notification http://tools.ietf.org/html/rfc3798#page-3
@@ -282,16 +342,25 @@ namespace OpenDentBusiness{
 					if(notificationMsg.ToValue.Trim().ToLower()==notificationMsg.FromValue.Trim().ToLower()) {
 						continue;//Do not send an ack to self.
 					}
-					SendEmailDirect(outMsgDirect,emailAddressFrom);//encryption is performed in this step
-					EmailMessage emailMessage=ConvertMessageToEmailMessage(outMsgDirect.Message,false);
-					emailMessage.PatNum=patNum;
-					emailMessage.SentOrReceived=emailSentOrReceivedAck;
-					Insert(emailMessage);
+					string strErrors=SendEmailDirect(outMsgDirect,emailAddressFrom);//encryption is performed in this step
+					if(strErrors=="") {
+						EmailMessage emailMessage=ConvertMessageToEmailMessage(outMsgDirect.Message,false);
+						emailMessage.PatNum=patNum;
+						emailMessage.SentOrReceived=emailSentOrReceivedAck;
+						Insert(emailMessage);
+					}
+					else {
+						if(strErrorsAll!="") {
+							strErrorsAll+="\r\n";
+						}
+						strErrorsAll+=strErrors;
+					}
 				}
 				catch {
 					//Nothing to do. Just an MDN. The sender can resend the email to us if they believe that we did not receive the message (due to lack of MDN response).
 				}
 			}
+			return strErrorsAll;
 		}
 
 		/// <summary>This is used from wherever email needs to be sent throughout the program.  If a message must be encrypted, then encrypt it before calling this function.  nameValueCollectionHeaders can be null.</summary>
@@ -501,7 +570,11 @@ namespace OpenDentBusiness{
 			if(isEncrypted) {
 				//Send a Message Disposition Notification (MDN) message to the sender, as required by the Direct messaging specifications.
 				//The MDN will be attached to the same patient as the incoming message.
-				SendAckDirect(inMsg,emailAddressReceiver,emailMessage.PatNum,EmailSentOrReceived.AckDirectProcessed);
+				string strErrors=SendAckDirect(inMsg,emailAddressReceiver,emailMessage.PatNum,EmailSentOrReceived.AckDirectProcessed);
+				if(strErrors!="") {
+					//This could happen if a message is received from an untrusted source who is not hosting their certificate for discovery (probably a temporary technical issue).
+					//Even if an error happens here, we should either ignore or at best log an error message.  Not worth mentioning to user, since this is just an ack.
+				}
 			}
 			return emailMessage;
 		}
