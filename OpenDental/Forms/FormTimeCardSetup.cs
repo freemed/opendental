@@ -185,6 +185,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
+			this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label2.Location = new System.Drawing.Point(14, 608);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(119, 16);
@@ -194,6 +195,7 @@ namespace OpenDental{
 			// 
 			// textADPCompanyCode
 			// 
+			this.textADPCompanyCode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.textADPCompanyCode.Location = new System.Drawing.Point(133, 606);
 			this.textADPCompanyCode.Name = "textADPCompanyCode";
 			this.textADPCompanyCode.Size = new System.Drawing.Size(97, 20);

@@ -14,7 +14,7 @@ namespace OpenDental{
 	/// Summary description for FormBasicTemplate.
 	/// </summary>
 	public class FormTimeCard:System.Windows.Forms.Form {
-		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Label labelRegularTime;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Label label3;
 		private System.ComponentModel.IContainer components;
@@ -56,7 +56,7 @@ namespace OpenDental{
 		public Employee EmployeeCur;
 		private OpenDental.UI.Button butCalcDaily;
 		private TextBox textRateTwo2;
-		private Label label5;
+		private Label labelRateTwo;
 		private TextBox textRateTwo;
 		private bool cannotEdit;
 
@@ -95,7 +95,7 @@ namespace OpenDental{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormTimeCard));
 			this.textTotal = new System.Windows.Forms.TextBox();
-			this.label1 = new System.Windows.Forms.Label();
+			this.labelRegularTime = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
 			this.timer1 = new System.Windows.Forms.Timer(this.components);
@@ -103,8 +103,6 @@ namespace OpenDental{
 			this.textDatePaycheck = new System.Windows.Forms.TextBox();
 			this.textDateStop = new System.Windows.Forms.TextBox();
 			this.textDateStart = new System.Windows.Forms.TextBox();
-			this.butRight = new OpenDental.UI.Button();
-			this.butLeft = new OpenDental.UI.Button();
 			this.label4 = new System.Windows.Forms.Label();
 			this.labelOvertime = new System.Windows.Forms.Label();
 			this.textOvertime = new System.Windows.Forms.TextBox();
@@ -114,14 +112,16 @@ namespace OpenDental{
 			this.textOvertime2 = new System.Windows.Forms.TextBox();
 			this.textTotal2 = new System.Windows.Forms.TextBox();
 			this.gridMain = new OpenDental.UI.ODGrid();
+			this.textRateTwo2 = new System.Windows.Forms.TextBox();
+			this.labelRateTwo = new System.Windows.Forms.Label();
+			this.textRateTwo = new System.Windows.Forms.TextBox();
 			this.butCalcDaily = new OpenDental.UI.Button();
 			this.butPrint = new OpenDental.UI.Button();
 			this.butCalcWeekOT = new OpenDental.UI.Button();
 			this.butAdj = new OpenDental.UI.Button();
+			this.butRight = new OpenDental.UI.Button();
+			this.butLeft = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
-			this.textRateTwo2 = new System.Windows.Forms.TextBox();
-			this.label5 = new System.Windows.Forms.Label();
-			this.textRateTwo = new System.Windows.Forms.TextBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
@@ -135,16 +135,16 @@ namespace OpenDental{
 			this.textTotal.TabIndex = 3;
 			this.textTotal.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
-			// label1
+			// labelRegularTime
 			// 
-			this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label1.Location = new System.Drawing.Point(385, 644);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(100, 17);
-			this.label1.TabIndex = 4;
-			this.label1.Text = "Regular Time";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.labelRegularTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.labelRegularTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelRegularTime.Location = new System.Drawing.Point(385, 644);
+			this.labelRegularTime.Name = "labelRegularTime";
+			this.labelRegularTime.Size = new System.Drawing.Size(100, 17);
+			this.labelRegularTime.TabIndex = 4;
+			this.labelRegularTime.Text = "Regular Time";
+			this.labelRegularTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label2
 			// 
@@ -211,34 +211,6 @@ namespace OpenDental{
 			this.textDateStart.Size = new System.Drawing.Size(100, 20);
 			this.textDateStart.TabIndex = 12;
 			// 
-			// butRight
-			// 
-			this.butRight.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butRight.Autosize = true;
-			this.butRight.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRight.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butRight.CornerRadius = 4F;
-			this.butRight.Image = global::OpenDental.Properties.Resources.Right;
-			this.butRight.Location = new System.Drawing.Point(63, 18);
-			this.butRight.Name = "butRight";
-			this.butRight.Size = new System.Drawing.Size(39, 24);
-			this.butRight.TabIndex = 11;
-			this.butRight.Click += new System.EventHandler(this.butRight_Click);
-			// 
-			// butLeft
-			// 
-			this.butLeft.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butLeft.Autosize = true;
-			this.butLeft.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butLeft.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butLeft.CornerRadius = 4F;
-			this.butLeft.Image = global::OpenDental.Properties.Resources.Left;
-			this.butLeft.Location = new System.Drawing.Point(13, 18);
-			this.butLeft.Name = "butLeft";
-			this.butLeft.Size = new System.Drawing.Size(39, 24);
-			this.butLeft.TabIndex = 10;
-			this.butLeft.Click += new System.EventHandler(this.butLeft_Click);
-			// 
 			// label4
 			// 
 			this.label4.Location = new System.Drawing.Point(354, 19);
@@ -270,6 +242,7 @@ namespace OpenDental{
 			// 
 			// groupBox2
 			// 
+			this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox2.Controls.Add(this.radioBreaks);
 			this.groupBox2.Controls.Add(this.radioTimeCard);
 			this.groupBox2.Location = new System.Drawing.Point(747, 3);
@@ -320,6 +293,9 @@ namespace OpenDental{
 			// 
 			// gridMain
 			// 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMain.HScrollVisible = false;
 			this.gridMain.Location = new System.Drawing.Point(18, 60);
 			this.gridMain.Name = "gridMain";
@@ -329,6 +305,35 @@ namespace OpenDental{
 			this.gridMain.Title = "Time Card";
 			this.gridMain.TranslationName = "TableTimeCard";
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			// 
+			// textRateTwo2
+			// 
+			this.textRateTwo2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.textRateTwo2.Location = new System.Drawing.Point(563, 683);
+			this.textRateTwo2.Name = "textRateTwo2";
+			this.textRateTwo2.Size = new System.Drawing.Size(66, 20);
+			this.textRateTwo2.TabIndex = 26;
+			this.textRateTwo2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			// 
+			// labelRateTwo
+			// 
+			this.labelRateTwo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.labelRateTwo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelRateTwo.Location = new System.Drawing.Point(385, 684);
+			this.labelRateTwo.Name = "labelRateTwo";
+			this.labelRateTwo.Size = new System.Drawing.Size(100, 17);
+			this.labelRateTwo.TabIndex = 25;
+			this.labelRateTwo.Text = "Rate2";
+			this.labelRateTwo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textRateTwo
+			// 
+			this.textRateTwo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.textRateTwo.Location = new System.Drawing.Point(491, 683);
+			this.textRateTwo.Name = "textRateTwo";
+			this.textRateTwo.Size = new System.Drawing.Size(66, 20);
+			this.textRateTwo.TabIndex = 24;
+			this.textRateTwo.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// butCalcDaily
 			// 
@@ -396,6 +401,34 @@ namespace OpenDental{
 			this.butAdj.Text = "Add Adjustment";
 			this.butAdj.Click += new System.EventHandler(this.butAdj_Click);
 			// 
+			// butRight
+			// 
+			this.butRight.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butRight.Autosize = true;
+			this.butRight.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRight.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRight.CornerRadius = 4F;
+			this.butRight.Image = global::OpenDental.Properties.Resources.Right;
+			this.butRight.Location = new System.Drawing.Point(63, 18);
+			this.butRight.Name = "butRight";
+			this.butRight.Size = new System.Drawing.Size(39, 24);
+			this.butRight.TabIndex = 11;
+			this.butRight.Click += new System.EventHandler(this.butRight_Click);
+			// 
+			// butLeft
+			// 
+			this.butLeft.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butLeft.Autosize = true;
+			this.butLeft.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butLeft.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butLeft.CornerRadius = 4F;
+			this.butLeft.Image = global::OpenDental.Properties.Resources.Left;
+			this.butLeft.Location = new System.Drawing.Point(13, 18);
+			this.butLeft.Name = "butLeft";
+			this.butLeft.Size = new System.Drawing.Size(39, 24);
+			this.butLeft.TabIndex = 10;
+			this.butLeft.Click += new System.EventHandler(this.butLeft_Click);
+			// 
 			// butClose
 			// 
 			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
@@ -411,41 +444,12 @@ namespace OpenDental{
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
-			// textRateTwo2
-			// 
-			this.textRateTwo2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.textRateTwo2.Location = new System.Drawing.Point(563, 683);
-			this.textRateTwo2.Name = "textRateTwo2";
-			this.textRateTwo2.Size = new System.Drawing.Size(66, 20);
-			this.textRateTwo2.TabIndex = 26;
-			this.textRateTwo2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			// 
-			// label5
-			// 
-			this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label5.Location = new System.Drawing.Point(385, 684);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(100, 17);
-			this.label5.TabIndex = 25;
-			this.label5.Text = "Rate2";
-			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textRateTwo
-			// 
-			this.textRateTwo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.textRateTwo.Location = new System.Drawing.Point(491, 683);
-			this.textRateTwo.Name = "textRateTwo";
-			this.textRateTwo.Size = new System.Drawing.Size(66, 20);
-			this.textRateTwo.TabIndex = 24;
-			this.textRateTwo.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			// 
 			// FormTimeCard
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.ClientSize = new System.Drawing.Size(891, 703);
 			this.Controls.Add(this.textRateTwo2);
-			this.Controls.Add(this.label5);
+			this.Controls.Add(this.labelRateTwo);
 			this.Controls.Add(this.textRateTwo);
 			this.Controls.Add(this.butCalcDaily);
 			this.Controls.Add(this.textOvertime2);
@@ -458,7 +462,7 @@ namespace OpenDental{
 			this.Controls.Add(this.butAdj);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.gridMain);
-			this.Controls.Add(this.label1);
+			this.Controls.Add(this.labelRegularTime);
 			this.Controls.Add(this.textTotal);
 			this.Controls.Add(this.butClose);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -503,6 +507,9 @@ namespace OpenDental{
 				labelOvertime.Visible=false;
 				butCalcWeekOT.Visible=false;//butCompute.Visible=false;
 				butAdj.Visible=false;
+				labelRateTwo.Visible=false;
+				textRateTwo.Visible=false;
+				textRateTwo2.Visible=false;
 			}
 			radioTimeCard.Checked=!IsBreaks;
 			radioBreaks.Checked=IsBreaks;
@@ -547,6 +554,9 @@ namespace OpenDental{
 			butCalcDaily.Visible=true;//butDaily.Visible=true;
 			butCalcWeekOT.Visible=true;//butCompute.Visible=true;
 			butAdj.Visible=true;
+			labelRateTwo.Visible=true;
+			textRateTwo.Visible=true;
+			textRateTwo2.Visible=true;
 			FillMain(true);
 		}
 
@@ -557,6 +567,9 @@ namespace OpenDental{
 			butCalcDaily.Visible=false;//butDaily.Visible=false;
 			butCalcWeekOT.Visible=false;//butCompute.Visible=false;
 			butAdj.Visible=false;
+			labelRateTwo.Visible=false;
+			textRateTwo.Visible=false;
+			textRateTwo2.Visible=false;
 			//butDaily.Visible=false;
 			FillMain(true);
 		}
@@ -882,9 +895,26 @@ namespace OpenDental{
 			}
 			gridMain.EndUpdate();
 			if(IsBreaks){
-				textTotal.Text="";
+				labelRegularTime.Visible=false;
+				labelOvertime.Visible=false;
+				labelRateTwo.Visible=false;
+				textTotal.Visible=false;
+				textTotal2.Visible=false;
+				textOvertime.Visible=false;
+				textOvertime2.Visible=false;
+				textRateTwo.Visible=false;
+				textRateTwo2.Visible=false;
 			}
-			else{
+			else {
+				labelRegularTime.Visible=true;
+				labelOvertime.Visible=true;
+				labelRateTwo.Visible=true;
+				textTotal.Visible=true;
+				textTotal2.Visible=true;
+				textOvertime.Visible=true;
+				textOvertime2.Visible=true;
+				textRateTwo.Visible=true;
+				textRateTwo2.Visible=true;
 				textTotal.Text=periodSpan.ToStringHmm();
 				textOvertime.Text=otspan.ToStringHmm();
 				textRateTwo.Text=rate2span.ToStringHmm();
