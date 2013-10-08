@@ -220,6 +220,7 @@ namespace OpenDental {
 			this.butFwd = new OpenDental.UI.Button();
 			this.panelSheet = new System.Windows.Forms.Panel();
 			this.vScrollBar1 = new System.Windows.Forms.VScrollBar();
+			this.ContrApptSheet2 = new OpenDental.ContrApptSheet();
 			this.panelAptInfo = new System.Windows.Forms.Panel();
 			this.listConfirmed = new System.Windows.Forms.ListBox();
 			this.butComplete = new System.Windows.Forms.Button();
@@ -231,6 +232,7 @@ namespace OpenDental {
 			this.radioDay = new System.Windows.Forms.RadioButton();
 			this.butGraph = new OpenDental.UI.Button();
 			this.butMonth = new OpenDental.UI.Button();
+			this.pinBoard = new OpenDental.UI.PinBoard();
 			this.butLab = new OpenDental.UI.Button();
 			this.butSearch = new OpenDental.UI.Button();
 			this.textProduction = new System.Windows.Forms.TextBox();
@@ -283,8 +285,6 @@ namespace OpenDental {
 			this.butMakeRecall = new OpenDental.UI.Button();
 			this.butViewAppts = new OpenDental.UI.Button();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
-			this.pinBoard = new OpenDental.UI.PinBoard();
-			this.ContrApptSheet2 = new OpenDental.ContrApptSheet();
 			this.panelArrows.SuspendLayout();
 			this.panelSheet.SuspendLayout();
 			this.panelAptInfo.SuspendLayout();
@@ -484,6 +484,18 @@ namespace OpenDental {
 			this.vScrollBar1.TabIndex = 23;
 			this.vScrollBar1.Scroll += new System.Windows.Forms.ScrollEventHandler(this.vScrollBar1_Scroll);
 			// 
+			// ContrApptSheet2
+			// 
+			this.ContrApptSheet2.Location = new System.Drawing.Point(2, -550);
+			this.ContrApptSheet2.Name = "ContrApptSheet2";
+			this.ContrApptSheet2.Size = new System.Drawing.Size(60, 1728);
+			this.ContrApptSheet2.TabIndex = 22;
+			this.ContrApptSheet2.DoubleClick += new System.EventHandler(this.ContrApptSheet2_DoubleClick);
+			this.ContrApptSheet2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ContrApptSheet2_MouseDown);
+			this.ContrApptSheet2.MouseLeave += new System.EventHandler(this.ContrApptSheet2_MouseLeave);
+			this.ContrApptSheet2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ContrApptSheet2_MouseMove);
+			this.ContrApptSheet2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ContrApptSheet2_MouseUp);
+			// 
 			// panelAptInfo
 			// 
 			this.panelAptInfo.Controls.Add(this.listConfirmed);
@@ -638,6 +650,19 @@ namespace OpenDental {
 			this.butMonth.Text = "Month";
 			this.butMonth.Visible = false;
 			this.butMonth.Click += new System.EventHandler(this.butMonth_Click);
+			// 
+			// pinBoard
+			// 
+			this.pinBoard.Location = new System.Drawing.Point(119, 213);
+			this.pinBoard.Name = "pinBoard";
+			this.pinBoard.SelectedIndex = -1;
+			this.pinBoard.Size = new System.Drawing.Size(99, 96);
+			this.pinBoard.TabIndex = 78;
+			this.pinBoard.Text = "pinBoard";
+			this.pinBoard.SelectedIndexChanged += new System.EventHandler(this.pinBoard_SelectedIndexChanged);
+			this.pinBoard.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pinBoard_MouseDown);
+			this.pinBoard.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pinBoard_MouseMove);
+			this.pinBoard.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pinBoard_MouseUp);
 			// 
 			// butLab
 			// 
@@ -1076,7 +1101,7 @@ namespace OpenDental {
 			this.gridWaiting.Size = new System.Drawing.Size(211, 161);
 			this.gridWaiting.TabIndex = 78;
 			this.gridWaiting.Title = "Waiting Room";
-			this.gridWaiting.TranslationName = "TableApptEmpSched";
+			this.gridWaiting.TranslationName = "TableApptWaiting";
 			// 
 			// tabSched
 			// 
@@ -1202,31 +1227,6 @@ namespace OpenDental {
 			this.ToolBarMain.Size = new System.Drawing.Size(203, 25);
 			this.ToolBarMain.TabIndex = 73;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
-			// 
-			// pinBoard
-			// 
-			this.pinBoard.Location = new System.Drawing.Point(119, 213);
-			this.pinBoard.Name = "pinBoard";
-			this.pinBoard.SelectedIndex = -1;
-			this.pinBoard.Size = new System.Drawing.Size(99, 96);
-			this.pinBoard.TabIndex = 78;
-			this.pinBoard.Text = "pinBoard";
-			this.pinBoard.SelectedIndexChanged += new System.EventHandler(this.pinBoard_SelectedIndexChanged);
-			this.pinBoard.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pinBoard_MouseDown);
-			this.pinBoard.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pinBoard_MouseMove);
-			this.pinBoard.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pinBoard_MouseUp);
-			// 
-			// ContrApptSheet2
-			// 
-			this.ContrApptSheet2.Location = new System.Drawing.Point(2, -550);
-			this.ContrApptSheet2.Name = "ContrApptSheet2";
-			this.ContrApptSheet2.Size = new System.Drawing.Size(60, 1728);
-			this.ContrApptSheet2.TabIndex = 22;
-			this.ContrApptSheet2.DoubleClick += new System.EventHandler(this.ContrApptSheet2_DoubleClick);
-			this.ContrApptSheet2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ContrApptSheet2_MouseDown);
-			this.ContrApptSheet2.MouseLeave += new System.EventHandler(this.ContrApptSheet2_MouseLeave);
-			this.ContrApptSheet2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ContrApptSheet2_MouseMove);
-			this.ContrApptSheet2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ContrApptSheet2_MouseUp);
 			// 
 			// ContrAppt
 			// 
