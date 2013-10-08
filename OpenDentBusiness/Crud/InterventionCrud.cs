@@ -53,6 +53,7 @@ namespace OpenDentBusiness.Crud{
 				intervention.CodeSystem     = PIn.String(table.Rows[i]["CodeSystem"].ToString());
 				intervention.Note           = PIn.String(table.Rows[i]["Note"].ToString());
 				intervention.DateTimeEntry  = PIn.DateT (table.Rows[i]["DateTimeEntry"].ToString());
+				intervention.CodeSet        = (InterventionCodeSet)PIn.Int(table.Rows[i]["CodeSet"].ToString());
 				retVal.Add(intervention);
 			}
 			return retVal;
@@ -93,7 +94,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="InterventionNum,";
 			}
-			command+="PatNum,ProvNum,CodeValue,CodeSystem,Note,DateTimeEntry) VALUES(";
+			command+="PatNum,ProvNum,CodeValue,CodeSystem,Note,DateTimeEntry,CodeSet) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(intervention.InterventionNum)+",";
 			}
@@ -103,7 +104,8 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(intervention.CodeValue)+"',"
 				+"'"+POut.String(intervention.CodeSystem)+"',"
 				+"'"+POut.String(intervention.Note)+"',"
-				+    DbHelper.Now()+")";
+				+    DbHelper.Now()+","
+				+    POut.Int   ((int)intervention.CodeSet)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -121,7 +123,8 @@ namespace OpenDentBusiness.Crud{
 				+"CodeValue      = '"+POut.String(intervention.CodeValue)+"', "
 				+"CodeSystem     = '"+POut.String(intervention.CodeSystem)+"', "
 				+"Note           = '"+POut.String(intervention.Note)+"', "
-				+"DateTimeEntry  =  "+POut.DateT (intervention.DateTimeEntry)+" "
+				+"DateTimeEntry  =  "+POut.DateT (intervention.DateTimeEntry)+", "
+				+"CodeSet        =  "+POut.Int   ((int)intervention.CodeSet)+" "
 				+"WHERE InterventionNum = "+POut.Long(intervention.InterventionNum);
 			Db.NonQ(command);
 		}
@@ -152,6 +155,10 @@ namespace OpenDentBusiness.Crud{
 			if(intervention.DateTimeEntry != oldIntervention.DateTimeEntry) {
 				if(command!=""){ command+=",";}
 				command+="DateTimeEntry = "+POut.DateT(intervention.DateTimeEntry)+"";
+			}
+			if(intervention.CodeSet != oldIntervention.CodeSet) {
+				if(command!=""){ command+=",";}
+				command+="CodeSet = "+POut.Int   ((int)intervention.CodeSet)+"";
 			}
 			if(command==""){
 				return;

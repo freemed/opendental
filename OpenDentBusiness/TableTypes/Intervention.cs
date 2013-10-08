@@ -20,6 +20,8 @@ namespace OpenDentBusiness {
 		///<summary>The date and time of the intervention.  Automatically set when the intervention is created, but this can be adjusted later.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.DateTEntryEditable)]
 		public DateTime DateTimeEntry;
+		///<summary>Enum:InterventionCodeSet AboveNormalWeight, BelowNormalWeight, TobaccoCessation, Nutrition, PhysicalActivity, Dialysis.</summary>
+		public InterventionCodeSet CodeSet;
 
 		///<summary></summary>
 		public Intervention Copy() {
@@ -27,5 +29,20 @@ namespace OpenDentBusiness {
 		}
 
 	}
-
+	
+	///<summary>Value sets for interventions.  This will limit the codes in FormInterventionEdit to a smaller list of codes and allow us to recommend codes to meet specific CQMs.</summary>
+	public enum InterventionCodeSet {
+		///<summary>0 - Above Normal Weight Follow-up/Referrals where weight assessment may occur</summary>
+		AboveNormalWeight,
+		///<summary>1 - Below Normal Weight Follow-up/Referrals where weight assessment may occur</summary>
+		BelowNormalWeight,
+		///<summary>2 - Tobacco Use Cessation Counseling</summary>
+		TobaccoCessation,
+		///<summary>3 - Counseling for Nutrition</summary>
+		Nutrition,
+		///<summary>4 - Counseling for Physical Activity</summary>
+		PhysicalActivity,
+		///<summary>5 - Dialysis Education/Other Services Related to Dialysis</summary>
+		Dialysis
+	}
 }

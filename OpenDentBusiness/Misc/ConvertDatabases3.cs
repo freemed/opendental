@@ -1567,6 +1567,7 @@ namespace OpenDentBusiness {
 						CodeSystem varchar(30) NOT NULL,
 						Note text NOT NULL,
 						DateTimeEntry datetime NOT NULL DEFAULT '0001-01-01 00:00:00',
+						CodeSet tinyint NOT NULL,
 						INDEX(PatNum),
 						INDEX(ProvNum),
 						INDEX(CodeValue)
@@ -1583,6 +1584,7 @@ namespace OpenDentBusiness {
 						CodeValue varchar2(30),
 						CodeSystem varchar2(30),
 						Note varchar2(4000),
+						CodeSet number(3) NOT NULL,
 						DateTimeEntry date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
 						CONSTRAINT intervention_InterventionNum PRIMARY KEY (InterventionNum)
 						)";
@@ -1923,7 +1925,6 @@ namespace OpenDentBusiness {
 
 	}
 }
-
 
 
 
