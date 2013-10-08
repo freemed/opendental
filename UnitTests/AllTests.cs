@@ -1340,66 +1340,68 @@ namespace UnitTests {
 			return retVal;
 		}
 
-		/////<summary></summary>
-		//public static string TestTwentyTwo(int specificTest) {
-		//	if(specificTest != 0 && specificTest !=22) {
-		//		return "";
-		//	}
-		//	string suffix="22";
-		//	DateTime startDate=DateTime.Parse("2001-01-01");
-		//	Employee emp = EmployeeT.CreateEmployee(suffix);
-		//	PayPeriod payP1 = PayPeriodT.CreateTwoWeekPayPeriodIfNotExists(startDate);
-		//	PayPeriods.RefreshCache();
-		//	Prefs.UpdateInt(PrefName.TimeCardOvertimeFirstDayOfWeek,0);
-		//	Prefs.UpdateBool(PrefName.TimeCardsMakesAdjustmentsForOverBreaks,true);
-		//	Prefs.RefreshCache();
-		//	TimeCardRuleT.CreatePMTimeRule(emp.EmployeeNum,TimeSpan.FromHours(16));
-		//	TimeCardRules.RefreshCache();
-		//	long clockEvent1 = ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddHours(8),startDate.AddHours(16).AddMinutes(40));
-		//	ClockEventT.InsertBreak(emp.EmployeeNum,startDate.AddHours(11),40);
-		//	TimeCardRules.CalculateDailyOvertime(emp,payP1.DateStart,payP1.DateStop);
-		//	//Validate
-		//	string retVal="";
-		//	//Check
-		//	if(ClockEvents.GetOne(clockEvent1).AdjustAuto!=TimeSpan.FromMinutes(-10)) {
-		//		throw new Exception("Clock adjustment should be -10 minutes, instead it is " + ClockEvents.GetOne(clockEvent1).AdjustAuto.TotalMinutes + " minutes.\r\n");
-		//	}
-		//	if(ClockEvents.GetOne(clockEvent1).OTimeAuto!=TimeSpan.FromMinutes(40)) {
-		//		throw new Exception("Clock ovetime should be 40 minutes, instead it is " + ClockEvents.GetOne(clockEvent1).OTimeAuto.TotalMinutes + " minutes.\r\n");
-		//	}
-		//	retVal+="22: Passed. Overtime calculated properly after time of day.\r\n";
-		//	return retVal;
-		//}
+		///<summary></summary>
+		public static string TestTwentyTwo(int specificTest) {
+			if(specificTest != 0 && specificTest !=22) {
+				return "";
+			}
+			return "22: Deprecated";
+			string suffix="22";
+			DateTime startDate=DateTime.Parse("2001-01-01");
+			Employee emp = EmployeeT.CreateEmployee(suffix);
+			PayPeriod payP1 = PayPeriodT.CreateTwoWeekPayPeriodIfNotExists(startDate);
+			PayPeriods.RefreshCache();
+			Prefs.UpdateInt(PrefName.TimeCardOvertimeFirstDayOfWeek,0);
+			Prefs.UpdateBool(PrefName.TimeCardsMakesAdjustmentsForOverBreaks,true);
+			Prefs.RefreshCache();
+			TimeCardRuleT.CreatePMTimeRule(emp.EmployeeNum,TimeSpan.FromHours(16));
+			TimeCardRules.RefreshCache();
+			long clockEvent1 = ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddHours(8),startDate.AddHours(16).AddMinutes(40));
+			ClockEventT.InsertBreak(emp.EmployeeNum,startDate.AddHours(11),40);
+			TimeCardRules.CalculateDailyOvertime(emp,payP1.DateStart,payP1.DateStop);
+			//Validate
+			string retVal="";
+			//Check
+			if(ClockEvents.GetOne(clockEvent1).AdjustAuto!=TimeSpan.FromMinutes(-10)) {
+				throw new Exception("Clock adjustment should be -10 minutes, instead it is " + ClockEvents.GetOne(clockEvent1).AdjustAuto.TotalMinutes + " minutes.\r\n");
+			}
+			if(ClockEvents.GetOne(clockEvent1).OTimeAuto!=TimeSpan.FromMinutes(40)) {
+				throw new Exception("Clock ovetime should be 40 minutes, instead it is " + ClockEvents.GetOne(clockEvent1).OTimeAuto.TotalMinutes + " minutes.\r\n");
+			}
+			retVal+="22: Passed. Overtime calculated properly after time of day.\r\n";
+			return retVal;
+		}
 
-		/////<summary></summary>
-		//public static string TestTwentyThree(int specificTest) {
-		//	if(specificTest != 0 && specificTest !=23) {
-		//		return "";
-		//	}
-		//	string suffix="23";
-		//	DateTime startDate=DateTime.Parse("2001-01-01");
-		//	Employee emp = EmployeeT.CreateEmployee(suffix);
-		//	PayPeriod payP1 = PayPeriodT.CreateTwoWeekPayPeriodIfNotExists(startDate);
-		//	PayPeriods.RefreshCache();
-		//	Prefs.UpdateInt(PrefName.TimeCardOvertimeFirstDayOfWeek,0);
-		//	Prefs.UpdateBool(PrefName.TimeCardsMakesAdjustmentsForOverBreaks,true);
-		//	TimeCardRuleT.CreateAMTimeRule(emp.EmployeeNum,TimeSpan.FromHours(7.5));
-		//	TimeCardRules.RefreshCache();
-		//	long clockEvent1 = ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddHours(6),startDate.AddHours(16));
-		//	ClockEventT.InsertBreak(emp.EmployeeNum,startDate.AddHours(11),40);
-		//	TimeCardRules.CalculateDailyOvertime(emp,payP1.DateStart,payP1.DateStop);
-		//	//Validate
-		//	string retVal="";
-		//	//Check
-		//	if(ClockEvents.GetOne(clockEvent1).AdjustAuto!=TimeSpan.FromMinutes(-10)) {
-		//		throw new Exception("Clock adjustment should be -10 minutes, instead it is " + ClockEvents.GetOne(clockEvent1).AdjustAuto.TotalMinutes + " minutes.\r\n");
-		//	}
-		//	if(ClockEvents.GetOne(clockEvent1).OTimeAuto!=TimeSpan.FromMinutes(90)) {
-		//		throw new Exception("Clock ovetime should be 90 minutes, instead it is " + ClockEvents.GetOne(clockEvent1).OTimeAuto.TotalMinutes + " minutes.\r\n");
-		//	}
-		//	retVal+="23: Passed. Overtime calculated properly before time of day.\r\n";
-		//	return retVal;
-		//}
+		///<summary></summary>
+		public static string TestTwentyThree(int specificTest) {
+			if(specificTest != 0 && specificTest !=23) {
+				return "";
+			}
+			return "23: Deprecated";
+			string suffix="23";
+			DateTime startDate=DateTime.Parse("2001-01-01");
+			Employee emp = EmployeeT.CreateEmployee(suffix);
+			PayPeriod payP1 = PayPeriodT.CreateTwoWeekPayPeriodIfNotExists(startDate);
+			PayPeriods.RefreshCache();
+			Prefs.UpdateInt(PrefName.TimeCardOvertimeFirstDayOfWeek,0);
+			Prefs.UpdateBool(PrefName.TimeCardsMakesAdjustmentsForOverBreaks,true);
+			TimeCardRuleT.CreateAMTimeRule(emp.EmployeeNum,TimeSpan.FromHours(7.5));
+			TimeCardRules.RefreshCache();
+			long clockEvent1 = ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddHours(6),startDate.AddHours(16));
+			ClockEventT.InsertBreak(emp.EmployeeNum,startDate.AddHours(11),40);
+			TimeCardRules.CalculateDailyOvertime(emp,payP1.DateStart,payP1.DateStop);
+			//Validate
+			string retVal="";
+			//Check
+			if(ClockEvents.GetOne(clockEvent1).AdjustAuto!=TimeSpan.FromMinutes(-10)) {
+				throw new Exception("Clock adjustment should be -10 minutes, instead it is " + ClockEvents.GetOne(clockEvent1).AdjustAuto.TotalMinutes + " minutes.\r\n");
+			}
+			if(ClockEvents.GetOne(clockEvent1).OTimeAuto!=TimeSpan.FromMinutes(90)) {
+				throw new Exception("Clock ovetime should be 90 minutes, instead it is " + ClockEvents.GetOne(clockEvent1).OTimeAuto.TotalMinutes + " minutes.\r\n");
+			}
+			retVal+="23: Passed. Overtime calculated properly before time of day.\r\n";
+			return retVal;
+		}
 
 		///<summary></summary>
 		public static string TestTwentyFour(int specificTest) {
@@ -1790,11 +1792,10 @@ namespace UnitTests {
 
 		///<summary></summary>
 		public static string TestThirtyTwo(int specificTest) {
-			if(specificTest != 0 && specificTest !=22) {
+			if(specificTest != 0 && specificTest !=32) {
 				return "";
 			}
-			string suffix="22";
-			return "22: TODO\r\n";
+			string suffix="32";
 			DateTime startDate=DateTime.Parse("2001-01-01");
 			Employee emp = EmployeeT.CreateEmployee(suffix);
 			PayPeriod payP1 = PayPeriodT.CreateTwoWeekPayPeriodIfNotExists(startDate);
@@ -1813,20 +1814,19 @@ namespace UnitTests {
 			if(ClockEvents.GetOne(clockEvent1).AdjustAuto!=TimeSpan.FromMinutes(-10)) {
 				throw new Exception("Clock adjustment should be -10 minutes, instead it is " + ClockEvents.GetOne(clockEvent1).AdjustAuto.TotalMinutes + " minutes.\r\n");
 			}
-			if(ClockEvents.GetOne(clockEvent1).OTimeAuto!=TimeSpan.FromMinutes(40)) {
-				throw new Exception("Clock ovetime should be 40 minutes, instead it is " + ClockEvents.GetOne(clockEvent1).OTimeAuto.TotalMinutes + " minutes.\r\n");
+			if(ClockEvents.GetOne(clockEvent1).Rate2Auto!=TimeSpan.FromMinutes(40)) {
+				throw new Exception("Clock differential should be 40 minutes, instead it is " + ClockEvents.GetOne(clockEvent1).Rate2Auto.TotalMinutes + " minutes.\r\n");
 			}
-			retVal+="22: Passed. Overtime calculated properly after time of day.\r\n";
+			retVal+="32: Passed. Differential calculated properly after time of day.\r\n";
 			return retVal;
-		}//TODO
+		}
 
 		///<summary></summary>
 		public static string TestThirtyThree(int specificTest) {
-			if(specificTest != 0 && specificTest !=23) {
+			if(specificTest != 0 && specificTest !=33) {
 				return "";
 			}
-			string suffix="23";
-			return "23: TODO\r\n";
+			string suffix="33";
 			DateTime startDate=DateTime.Parse("2001-01-01");
 			Employee emp = EmployeeT.CreateEmployee(suffix);
 			PayPeriod payP1 = PayPeriodT.CreateTwoWeekPayPeriodIfNotExists(startDate);
@@ -1844,12 +1844,12 @@ namespace UnitTests {
 			if(ClockEvents.GetOne(clockEvent1).AdjustAuto!=TimeSpan.FromMinutes(-10)) {
 				throw new Exception("Clock adjustment should be -10 minutes, instead it is " + ClockEvents.GetOne(clockEvent1).AdjustAuto.TotalMinutes + " minutes.\r\n");
 			}
-			if(ClockEvents.GetOne(clockEvent1).OTimeAuto!=TimeSpan.FromMinutes(90)) {
-				throw new Exception("Clock ovetime should be 90 minutes, instead it is " + ClockEvents.GetOne(clockEvent1).OTimeAuto.TotalMinutes + " minutes.\r\n");
+			if(ClockEvents.GetOne(clockEvent1).Rate2Auto!=TimeSpan.FromMinutes(90)) {
+				throw new Exception("Clock differential should be 90 minutes, instead it is " + ClockEvents.GetOne(clockEvent1).Rate2Auto.TotalMinutes + " minutes.\r\n");
 			}
-			retVal+="23: Passed. Overtime calculated properly before time of day.\r\n";
+			retVal+="33: Passed. Differential calculated properly before time of day.\r\n";
 			return retVal;
-		}//TODO
+		}
 
 	}
 }

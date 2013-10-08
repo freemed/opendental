@@ -35,10 +35,21 @@ namespace OpenDental{
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butDaily = new OpenDental.UI.Button();
 			this.butCompute = new OpenDental.UI.Button();
-			this.butReport = new OpenDental.UI.Button();
-			this.butPrint = new OpenDental.UI.Button();
-			this.butCancel = new OpenDental.UI.Button();
+			this.butPrintAll = new OpenDental.UI.Button();
+			this.butClose = new OpenDental.UI.Button();
+			this.butPrintGrid = new OpenDental.UI.Button();
+			this.butExportADP = new OpenDental.UI.Button();
+			this.butClearAuto = new OpenDental.UI.Button();
+			this.butClearManual = new OpenDental.UI.Button();
+			this.butPrintSelected = new OpenDental.UI.Button();
+			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.groupBox3 = new System.Windows.Forms.GroupBox();
+			this.groupBox4 = new System.Windows.Forms.GroupBox();
+			this.butExportGrid = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
+			this.groupBox2.SuspendLayout();
+			this.groupBox3.SuspendLayout();
+			this.groupBox4.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// groupBox1
@@ -147,7 +158,7 @@ namespace OpenDental{
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridMain.Size = new System.Drawing.Size(931, 580);
+			this.gridMain.Size = new System.Drawing.Size(931, 562);
 			this.gridMain.TabIndex = 16;
 			this.gridMain.Title = "Employee Time Cards";
 			this.gridMain.TranslationName = "TableTimeCard";
@@ -162,11 +173,11 @@ namespace OpenDental{
 			this.butDaily.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butDaily.CornerRadius = 4F;
 			this.butDaily.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDaily.Location = new System.Drawing.Point(12, 652);
+			this.butDaily.Location = new System.Drawing.Point(6, 18);
 			this.butDaily.Name = "butDaily";
-			this.butDaily.Size = new System.Drawing.Size(78, 24);
+			this.butDaily.Size = new System.Drawing.Size(69, 24);
 			this.butDaily.TabIndex = 119;
-			this.butDaily.Text = "Calc Daily";
+			this.butDaily.Text = "Daily";
 			this.butDaily.Click += new System.EventHandler(this.butDaily_Click);
 			// 
 			// butCompute
@@ -178,85 +189,206 @@ namespace OpenDental{
 			this.butCompute.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCompute.CornerRadius = 4F;
 			this.butCompute.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butCompute.Location = new System.Drawing.Point(96, 652);
+			this.butCompute.Location = new System.Drawing.Point(81, 18);
 			this.butCompute.Name = "butCompute";
-			this.butCompute.Size = new System.Drawing.Size(90, 24);
+			this.butCompute.Size = new System.Drawing.Size(72, 24);
 			this.butCompute.TabIndex = 118;
-			this.butCompute.Text = "Calc Week OT";
+			this.butCompute.Text = "Weekly";
 			this.butCompute.Click += new System.EventHandler(this.butWeekly_Click);
 			// 
-			// butReport
+			// butPrintAll
 			// 
-			this.butReport.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butReport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butReport.Autosize = true;
-			this.butReport.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butReport.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butReport.CornerRadius = 4F;
-			this.butReport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butReport.Location = new System.Drawing.Point(479, 652);
-			this.butReport.Name = "butReport";
-			this.butReport.Size = new System.Drawing.Size(85, 24);
-			this.butReport.TabIndex = 117;
-			this.butReport.Text = "&Report";
-			this.butReport.Click += new System.EventHandler(this.butReport_Click);
+			this.butPrintAll.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butPrintAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butPrintAll.Autosize = true;
+			this.butPrintAll.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPrintAll.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPrintAll.CornerRadius = 4F;
+			this.butPrintAll.Image = global::OpenDental.Properties.Resources.butPrint;
+			this.butPrintAll.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butPrintAll.Location = new System.Drawing.Point(6, 18);
+			this.butPrintAll.Name = "butPrintAll";
+			this.butPrintAll.Size = new System.Drawing.Size(87, 24);
+			this.butPrintAll.TabIndex = 116;
+			this.butPrintAll.Text = "&Print All";
+			this.butPrintAll.Click += new System.EventHandler(this.butPrintAll_Click);
 			// 
-			// butPrint
+			// butClose
 			// 
-			this.butPrint.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butPrint.Autosize = true;
-			this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butPrint.CornerRadius = 4F;
-			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrint;
-			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(384, 652);
-			this.butPrint.Name = "butPrint";
-			this.butPrint.Size = new System.Drawing.Size(89, 24);
-			this.butPrint.TabIndex = 116;
-			this.butPrint.Text = "&Print All";
-			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
+			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butClose.Autosize = true;
+			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClose.CornerRadius = 4F;
+			this.butClose.Location = new System.Drawing.Point(868, 652);
+			this.butClose.Name = "butClose";
+			this.butClose.Size = new System.Drawing.Size(75, 24);
+			this.butClose.TabIndex = 2;
+			this.butClose.Text = "&Close";
+			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
-			// butCancel
+			// butPrintGrid
 			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(868, 652);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75, 24);
-			this.butCancel.TabIndex = 2;
-			this.butCancel.Text = "&Close";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+			this.butPrintGrid.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butPrintGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butPrintGrid.Autosize = true;
+			this.butPrintGrid.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPrintGrid.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPrintGrid.CornerRadius = 4F;
+			this.butPrintGrid.Image = global::OpenDental.Properties.Resources.butPrint;
+			this.butPrintGrid.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butPrintGrid.Location = new System.Drawing.Point(6, 18);
+			this.butPrintGrid.Name = "butPrintGrid";
+			this.butPrintGrid.Size = new System.Drawing.Size(96, 24);
+			this.butPrintGrid.TabIndex = 120;
+			this.butPrintGrid.Text = "Print Grid";
+			this.butPrintGrid.Click += new System.EventHandler(this.butPrintGrid_Click);
+			// 
+			// butExportADP
+			// 
+			this.butExportADP.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butExportADP.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butExportADP.Autosize = true;
+			this.butExportADP.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butExportADP.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butExportADP.CornerRadius = 4F;
+			this.butExportADP.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butExportADP.Location = new System.Drawing.Point(196, 18);
+			this.butExportADP.Name = "butExportADP";
+			this.butExportADP.Size = new System.Drawing.Size(79, 24);
+			this.butExportADP.TabIndex = 121;
+			this.butExportADP.Text = "Export ADP";
+			this.butExportADP.Click += new System.EventHandler(this.butExportADP_Click);
+			// 
+			// butClearAuto
+			// 
+			this.butClearAuto.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butClearAuto.Autosize = true;
+			this.butClearAuto.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClearAuto.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClearAuto.CornerRadius = 4F;
+			this.butClearAuto.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butClearAuto.Location = new System.Drawing.Point(677, 36);
+			this.butClearAuto.Name = "butClearAuto";
+			this.butClearAuto.Size = new System.Drawing.Size(117, 24);
+			this.butClearAuto.TabIndex = 122;
+			this.butClearAuto.Text = "Clear Auto Adjusts";
+			this.butClearAuto.Click += new System.EventHandler(this.butClearAuto_Click);
+			// 
+			// butClearManual
+			// 
+			this.butClearManual.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butClearManual.Autosize = true;
+			this.butClearManual.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClearManual.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClearManual.CornerRadius = 4F;
+			this.butClearManual.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butClearManual.Location = new System.Drawing.Point(677, 9);
+			this.butClearManual.Name = "butClearManual";
+			this.butClearManual.Size = new System.Drawing.Size(117, 24);
+			this.butClearManual.TabIndex = 123;
+			this.butClearManual.Text = "Clear Manual Adjusts";
+			this.butClearManual.Click += new System.EventHandler(this.butClearManual_Click);
+			// 
+			// butPrintSelected
+			// 
+			this.butPrintSelected.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butPrintSelected.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butPrintSelected.Autosize = true;
+			this.butPrintSelected.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPrintSelected.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPrintSelected.CornerRadius = 4F;
+			this.butPrintSelected.Image = global::OpenDental.Properties.Resources.butPrint;
+			this.butPrintSelected.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butPrintSelected.Location = new System.Drawing.Point(99, 18);
+			this.butPrintSelected.Name = "butPrintSelected";
+			this.butPrintSelected.Size = new System.Drawing.Size(109, 24);
+			this.butPrintSelected.TabIndex = 124;
+			this.butPrintSelected.Text = "Print Selected";
+			this.butPrintSelected.Click += new System.EventHandler(this.butPrintSelected_Click);
+			// 
+			// groupBox2
+			// 
+			this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.groupBox2.Controls.Add(this.butDaily);
+			this.groupBox2.Controls.Add(this.butCompute);
+			this.groupBox2.Location = new System.Drawing.Point(12, 634);
+			this.groupBox2.Name = "groupBox2";
+			this.groupBox2.Size = new System.Drawing.Size(160, 48);
+			this.groupBox2.TabIndex = 16;
+			this.groupBox2.TabStop = false;
+			this.groupBox2.Text = "Calculations";
+			// 
+			// groupBox3
+			// 
+			this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.groupBox3.Controls.Add(this.butPrintAll);
+			this.groupBox3.Controls.Add(this.butPrintSelected);
+			this.groupBox3.Location = new System.Drawing.Point(178, 634);
+			this.groupBox3.Name = "groupBox3";
+			this.groupBox3.Size = new System.Drawing.Size(215, 48);
+			this.groupBox3.TabIndex = 125;
+			this.groupBox3.TabStop = false;
+			this.groupBox3.Text = "Time Cards";
+			// 
+			// groupBox4
+			// 
+			this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.groupBox4.Controls.Add(this.butExportGrid);
+			this.groupBox4.Controls.Add(this.butPrintGrid);
+			this.groupBox4.Controls.Add(this.butExportADP);
+			this.groupBox4.Location = new System.Drawing.Point(497, 634);
+			this.groupBox4.Name = "groupBox4";
+			this.groupBox4.Size = new System.Drawing.Size(282, 48);
+			this.groupBox4.TabIndex = 126;
+			this.groupBox4.TabStop = false;
+			this.groupBox4.Text = "Payroll Reports";
+			// 
+			// butExportGrid
+			// 
+			this.butExportGrid.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butExportGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butExportGrid.Autosize = true;
+			this.butExportGrid.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butExportGrid.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butExportGrid.CornerRadius = 4F;
+			this.butExportGrid.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butExportGrid.Location = new System.Drawing.Point(108, 18);
+			this.butExportGrid.Name = "butExportGrid";
+			this.butExportGrid.Size = new System.Drawing.Size(82, 24);
+			this.butExportGrid.TabIndex = 127;
+			this.butExportGrid.Text = "Export Grid";
+			this.butExportGrid.Click += new System.EventHandler(this.butExportGrid_Click);
 			// 
 			// FormTimeCardManage
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(955, 686);
-			this.Controls.Add(this.butDaily);
-			this.Controls.Add(this.butCompute);
-			this.Controls.Add(this.butReport);
-			this.Controls.Add(this.butPrint);
+			this.ClientSize = new System.Drawing.Size(955, 692);
+			this.Controls.Add(this.groupBox4);
+			this.Controls.Add(this.groupBox3);
+			this.Controls.Add(this.groupBox2);
+			this.Controls.Add(this.butClearManual);
+			this.Controls.Add(this.butClearAuto);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.groupBox1);
-			this.Controls.Add(this.butCancel);
+			this.Controls.Add(this.butClose);
 			this.Name = "FormTimeCardManage";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Time Card Manage";
 			this.Load += new System.EventHandler(this.FormTimeCardManage_Load);
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
+			this.groupBox2.ResumeLayout(false);
+			this.groupBox3.ResumeLayout(false);
+			this.groupBox4.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
 
 		#endregion
 
-		private OpenDental.UI.Button butCancel;
+		private OpenDental.UI.Button butClose;
 		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.TextBox textDatePaycheck;
 		private System.Windows.Forms.TextBox textDateStop;
@@ -267,9 +399,17 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Label label3;
 		private UI.ODGrid gridMain;
-		private UI.Button butPrint;
-		private UI.Button butReport;
+		private UI.Button butPrintAll;
 		private UI.Button butDaily;
 		private UI.Button butCompute;
+		private UI.Button butPrintGrid;
+		private UI.Button butExportADP;
+		private UI.Button butClearAuto;
+		private UI.Button butClearManual;
+		private UI.Button butPrintSelected;
+		private System.Windows.Forms.GroupBox groupBox2;
+		private System.Windows.Forms.GroupBox groupBox3;
+		private System.Windows.Forms.GroupBox groupBox4;
+		private UI.Button butExportGrid;
 	}
 }

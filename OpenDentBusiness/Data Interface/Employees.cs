@@ -60,6 +60,15 @@ namespace OpenDentBusiness{
 			listShort=tempList.ToArray();
 		}
 
+		///<summary>Instead of using the cache, which sorts by FName, LName.</summary>
+		public static List<Employee> GetForTimeCard() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Employee>>(MethodBase.GetCurrentMethod());
+			}
+			string command="SELECT * FROM employee WHERE IsHidden=0 ORDER BY LName,Fname";
+			return Crud.EmployeeCrud.SelectMany(command);
+		}
+
 		/*public static Employee[] GetListByExtension(){
 			if(ListShort==null){
 				return new Employee[0];

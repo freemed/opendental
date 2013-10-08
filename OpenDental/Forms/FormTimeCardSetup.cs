@@ -23,6 +23,8 @@ namespace OpenDental{
 		private GroupBox groupBox1;
 		private OpenDental.UI.Button butAddRule;
 		private CheckBox checkAdjOverBreaks;
+		private Label label2;
+		private TextBox textADPCompanyCode;
 		private bool changed;
 
 		///<summary></summary>
@@ -66,6 +68,8 @@ namespace OpenDental{
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butAdd = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
+			this.label2 = new System.Windows.Forms.Label();
+			this.textADPCompanyCode = new System.Windows.Forms.TextBox();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -84,7 +88,7 @@ namespace OpenDental{
 			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.groupBox1.Controls.Add(this.checkAdjOverBreaks);
 			this.groupBox1.Controls.Add(this.checkUseDecimal);
-			this.groupBox1.Location = new System.Drawing.Point(19, 545);
+			this.groupBox1.Location = new System.Drawing.Point(19, 526);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(391, 74);
 			this.groupBox1.TabIndex = 14;
@@ -172,17 +176,35 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(723, 595);
+			this.butClose.Location = new System.Drawing.Point(719, 604);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75, 24);
 			this.butClose.TabIndex = 0;
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(14, 608);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(119, 16);
+			this.label2.TabIndex = 17;
+			this.label2.Text = "ADP Company Code";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textADPCompanyCode
+			// 
+			this.textADPCompanyCode.Location = new System.Drawing.Point(133, 606);
+			this.textADPCompanyCode.Name = "textADPCompanyCode";
+			this.textADPCompanyCode.Size = new System.Drawing.Size(97, 20);
+			this.textADPCompanyCode.TabIndex = 16;
+			// 
 			// FormTimeCardSetup
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.ClientSize = new System.Drawing.Size(822, 636);
+			this.Controls.Add(this.label2);
+			this.Controls.Add(this.textADPCompanyCode);
 			this.Controls.Add(this.butAddRule);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.gridRules);
@@ -200,6 +222,7 @@ namespace OpenDental{
 			this.Load += new System.EventHandler(this.FormPayPeriods_Load);
 			this.groupBox1.ResumeLayout(false);
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 		#endregion
@@ -210,6 +233,7 @@ namespace OpenDental{
 			Employees.RefreshCache();
 			FillGrid();
 			FillRules();
+			textADPCompanyCode.Text=PrefC.GetString(PrefName.ADPCompanyCode);
 		}
 
 		private void FillGrid(){
@@ -327,7 +351,18 @@ namespace OpenDental{
 			changed=true;
 		}
 
-		private void butClose_Click(object sender, System.EventArgs e) {
+		private void butClose_Click(object sender,System.EventArgs e) {
+			//Pref pattern below is followed from FormMisc and allows additional prefs to be updated.
+			bool changed=false;
+			if(Prefs.UpdateString(PrefName.ADPCompanyCode,textADPCompanyCode.Text)
+				//| Prefs.UpdateString(PrefName.ADPCompanyCode,textADPCompanyCode.Text)
+				)
+			{
+				changed=true;
+			}
+			if(changed) {
+				DataValid.SetInvalid(InvalidType.Prefs);
+			}
 			Close();
 		}
 

@@ -21,6 +21,9 @@ namespace OpenDentBusiness{
 		public string ClockStatus;
 		///<summary>The phone extension for the employee.  e.g. 101,102,etc.  This field is only visible for user editing if the pref DockPhonePanelShow is true (1).</summary>
 		public int PhoneExt;
+		///<summary>Used to store the payroll identification number used to generate payroll reports. ADP uses six digit number between 000051 and 999999.</summary>
+		public string PayrollID;
+
 		//public string Abbrev;//Not in use
 		//public bool IsAdmin;//Not in use
 		//public string TimePeriodType;//Not in use

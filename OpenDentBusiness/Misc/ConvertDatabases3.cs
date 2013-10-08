@@ -1296,9 +1296,13 @@ namespace OpenDentBusiness {
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE clockevent ADD Rate2Hours time NOT NULL";
 					Db.NonQ(command);
+					command="UPDATE clockevent SET rate2hours='-01:00:00'";
+					Db.NonQ(command);
 				}
 				else {//oracle
 					command="ALTER TABLE clockevent ADD Rate2Hours varchar2(255)";
+					Db.NonQ(command);
+					command="UPDATE clockevent SET rate2hours='-01:00:00'";
 					Db.NonQ(command);
 				}				
 				if(DataConnection.DBtype==DatabaseType.MySql) {
@@ -1905,6 +1909,34 @@ namespace OpenDentBusiness {
 					}
 				}
 				catch(Exception ex) { }//Only an index. (Exception ex) required to catch thrown exception
+				//Add indexes to speed up payroll------------------------------------------------------------------------------------------------------
+				try {
+					if(DataConnection.DBtype==DatabaseType.MySql) {
+						command="ALTER TABLE clockevent ADD INDEX (TimeDisplayed1)";
+						Db.NonQ(command);
+					}
+					else {//oracle
+						command=@"CREATE INDEX clockevent_TimeDisplayed1 ON clockevent (TimeDisplayed1)";
+						Db.NonQ(command);
+					}
+				}
+				catch(Exception ex) { }//Only an index. (Exception ex) required to catch thrown exception
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName) VALUES('ADPCompanyCode')";//No default value.
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'ADPCompanyCode')";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE employee ADD PayrollID varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE employee ADD PayrollID varchar2(255)";
+					Db.NonQ(command);
+				}
 
 
 

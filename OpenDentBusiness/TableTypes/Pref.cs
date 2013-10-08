@@ -30,6 +30,8 @@ namespace OpenDentBusiness {
 		AccountShowPaymentNums,
 		ADAComplianceDateTime,
 		ADAdescriptionsReset,
+		///<summary>Enum:ADPCompanyCode Used to generate the export file from FormTimeCardManage. Set in FormTimeCardSetup.</summary>
+		ADPCompanyCode,
 		AgingCalculatedMonthlyInsteadOfDaily,
 		///<summary>FK to allergydef.AllergyDefNum</summary>
 		AllergiesIndicateNone,

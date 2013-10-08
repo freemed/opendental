@@ -36,7 +36,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butNow1;
 		private TextBox textOTimeHours;
 		private Label label7;
-		private TextBox textTotalTime;
+		private TextBox textClockedTime;
 		private Label label8;
 		private TextBox textRegTime;
 		private Label label9;
@@ -47,9 +47,16 @@ namespace OpenDental{
 		private Label label11;
 		private Label label10;
 		private TextBox textAdjustAuto;
-		private TextBox textDiffAuto;
+		private TextBox textRate2Auto;
 		private Label label13;
-		private TextBox textDiffHours;
+		private TextBox textRate2Hours;
+		private Label label14;
+		private TextBox textTotalTime;
+		private TextBox textR1;
+		private Label label15;
+		private Label label17;
+		private GroupBox groupRate2;
+		private Label label18;
 		private ClockEvent ClockEventCur;
 
 		///<summary></summary>
@@ -105,7 +112,7 @@ namespace OpenDental{
 			this.textTimeDisplayed2 = new System.Windows.Forms.TextBox();
 			this.textOTimeHours = new System.Windows.Forms.TextBox();
 			this.label7 = new System.Windows.Forms.Label();
-			this.textTotalTime = new System.Windows.Forms.TextBox();
+			this.textClockedTime = new System.Windows.Forms.TextBox();
 			this.label8 = new System.Windows.Forms.Label();
 			this.textRegTime = new System.Windows.Forms.TextBox();
 			this.label9 = new System.Windows.Forms.Label();
@@ -116,15 +123,23 @@ namespace OpenDental{
 			this.label11 = new System.Windows.Forms.Label();
 			this.label10 = new System.Windows.Forms.Label();
 			this.textAdjustAuto = new System.Windows.Forms.TextBox();
+			this.textRate2Auto = new System.Windows.Forms.TextBox();
+			this.label13 = new System.Windows.Forms.Label();
+			this.textRate2Hours = new System.Windows.Forms.TextBox();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.textDiffAuto = new System.Windows.Forms.TextBox();
-			this.label13 = new System.Windows.Forms.Label();
-			this.textDiffHours = new System.Windows.Forms.TextBox();
+			this.label14 = new System.Windows.Forms.Label();
+			this.textTotalTime = new System.Windows.Forms.TextBox();
+			this.textR1 = new System.Windows.Forms.TextBox();
+			this.label15 = new System.Windows.Forms.Label();
+			this.label17 = new System.Windows.Forms.Label();
+			this.groupRate2 = new System.Windows.Forms.GroupBox();
+			this.label18 = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupTimeSpans.SuspendLayout();
+			this.groupRate2.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// textTimeEntered1
@@ -179,8 +194,7 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.label4.Location = new System.Drawing.Point(72, 360);
+			this.label4.Location = new System.Drawing.Point(72, 309);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(105, 16);
 			this.label4.TabIndex = 10;
@@ -189,8 +203,7 @@ namespace OpenDental{
 			// 
 			// textNote
 			// 
-			this.textNote.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.textNote.Location = new System.Drawing.Point(179, 359);
+			this.textNote.Location = new System.Drawing.Point(179, 308);
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
 			this.textNote.Size = new System.Drawing.Size(317, 110);
@@ -306,7 +319,7 @@ namespace OpenDental{
 			// 
 			// textOTimeHours
 			// 
-			this.textOTimeHours.Location = new System.Drawing.Point(176, 108);
+			this.textOTimeHours.Location = new System.Drawing.Point(176, 79);
 			this.textOTimeHours.Name = "textOTimeHours";
 			this.textOTimeHours.Size = new System.Drawing.Size(68, 20);
 			this.textOTimeHours.TabIndex = 7;
@@ -315,21 +328,21 @@ namespace OpenDental{
 			// 
 			// label7
 			// 
-			this.label7.Location = new System.Drawing.Point(8, 108);
+			this.label7.Location = new System.Drawing.Point(8, 79);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(92, 18);
 			this.label7.TabIndex = 10;
 			this.label7.Text = "- Overtime";
 			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textTotalTime
+			// textClockedTime
 			// 
-			this.textTotalTime.Location = new System.Drawing.Point(100, 34);
-			this.textTotalTime.Name = "textTotalTime";
-			this.textTotalTime.ReadOnly = true;
-			this.textTotalTime.Size = new System.Drawing.Size(68, 20);
-			this.textTotalTime.TabIndex = 1;
-			this.textTotalTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.textClockedTime.Location = new System.Drawing.Point(100, 34);
+			this.textClockedTime.Name = "textClockedTime";
+			this.textClockedTime.ReadOnly = true;
+			this.textClockedTime.Size = new System.Drawing.Size(68, 20);
+			this.textClockedTime.TabIndex = 1;
+			this.textClockedTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// label8
 			// 
@@ -337,12 +350,12 @@ namespace OpenDental{
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(92, 18);
 			this.label8.TabIndex = 8;
-			this.label8.Text = "Total Time";
+			this.label8.Text = "Clocked Time";
 			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textRegTime
 			// 
-			this.textRegTime.Location = new System.Drawing.Point(100, 130);
+			this.textRegTime.Location = new System.Drawing.Point(100, 101);
 			this.textRegTime.Name = "textRegTime";
 			this.textRegTime.ReadOnly = true;
 			this.textRegTime.Size = new System.Drawing.Size(68, 20);
@@ -351,7 +364,7 @@ namespace OpenDental{
 			// 
 			// label9
 			// 
-			this.label9.Location = new System.Drawing.Point(8, 130);
+			this.label9.Location = new System.Drawing.Point(8, 101);
 			this.label9.Name = "label9";
 			this.label9.Size = new System.Drawing.Size(92, 18);
 			this.label9.TabIndex = 11;
@@ -360,10 +373,7 @@ namespace OpenDental{
 			// 
 			// groupTimeSpans
 			// 
-			this.groupTimeSpans.Controls.Add(this.textDiffAuto);
-			this.groupTimeSpans.Controls.Add(this.label13);
 			this.groupTimeSpans.Controls.Add(this.textOTimeAuto);
-			this.groupTimeSpans.Controls.Add(this.textDiffHours);
 			this.groupTimeSpans.Controls.Add(this.textAdjust);
 			this.groupTimeSpans.Controls.Add(this.label12);
 			this.groupTimeSpans.Controls.Add(this.label11);
@@ -374,17 +384,17 @@ namespace OpenDental{
 			this.groupTimeSpans.Controls.Add(this.label7);
 			this.groupTimeSpans.Controls.Add(this.label9);
 			this.groupTimeSpans.Controls.Add(this.textOTimeHours);
-			this.groupTimeSpans.Controls.Add(this.textTotalTime);
+			this.groupTimeSpans.Controls.Add(this.textClockedTime);
 			this.groupTimeSpans.Location = new System.Drawing.Point(79, 164);
 			this.groupTimeSpans.Name = "groupTimeSpans";
-			this.groupTimeSpans.Size = new System.Drawing.Size(267, 173);
+			this.groupTimeSpans.Size = new System.Drawing.Size(267, 134);
 			this.groupTimeSpans.TabIndex = 30;
 			this.groupTimeSpans.TabStop = false;
 			this.groupTimeSpans.Text = "Time Spans";
 			// 
 			// textOTimeAuto
 			// 
-			this.textOTimeAuto.Location = new System.Drawing.Point(100, 108);
+			this.textOTimeAuto.Location = new System.Drawing.Point(100, 79);
 			this.textOTimeAuto.Name = "textOTimeAuto";
 			this.textOTimeAuto.ReadOnly = true;
 			this.textOTimeAuto.Size = new System.Drawing.Size(68, 20);
@@ -436,6 +446,32 @@ namespace OpenDental{
 			this.textAdjustAuto.TabIndex = 2;
 			this.textAdjustAuto.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
+			// textRate2Auto
+			// 
+			this.textRate2Auto.Location = new System.Drawing.Point(100, 57);
+			this.textRate2Auto.Name = "textRate2Auto";
+			this.textRate2Auto.ReadOnly = true;
+			this.textRate2Auto.Size = new System.Drawing.Size(68, 20);
+			this.textRate2Auto.TabIndex = 31;
+			this.textRate2Auto.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			// 
+			// label13
+			// 
+			this.label13.Location = new System.Drawing.Point(8, 57);
+			this.label13.Name = "label13";
+			this.label13.Size = new System.Drawing.Size(92, 18);
+			this.label13.TabIndex = 33;
+			this.label13.Text = "- Rate 2 Time";
+			this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textRate2Hours
+			// 
+			this.textRate2Hours.Location = new System.Drawing.Point(176, 57);
+			this.textRate2Hours.Name = "textRate2Hours";
+			this.textRate2Hours.Size = new System.Drawing.Size(68, 20);
+			this.textRate2Hours.TabIndex = 32;
+			this.textRate2Hours.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			// 
 			// butDelete
 			// 
 			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0, 0);
@@ -446,7 +482,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(31, 484);
+			this.butDelete.Location = new System.Drawing.Point(31, 443);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(84, 24);
 			this.butDelete.TabIndex = 12;
@@ -461,7 +497,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(464, 483);
+			this.butOK.Location = new System.Drawing.Point(464, 442);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75, 24);
 			this.butOK.TabIndex = 1;
@@ -477,43 +513,90 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(555, 483);
+			this.butCancel.Location = new System.Drawing.Point(555, 442);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 0;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// textDiffAuto
+			// label14
 			// 
-			this.textDiffAuto.Location = new System.Drawing.Point(100, 82);
-			this.textDiffAuto.Name = "textDiffAuto";
-			this.textDiffAuto.ReadOnly = true;
-			this.textDiffAuto.Size = new System.Drawing.Size(68, 20);
-			this.textDiffAuto.TabIndex = 31;
-			this.textDiffAuto.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.label14.Location = new System.Drawing.Point(8, 24);
+			this.label14.Name = "label14";
+			this.label14.Size = new System.Drawing.Size(92, 36);
+			this.label14.TabIndex = 35;
+			this.label14.Text = "Total Time\r\n(clock+adj)";
+			this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// label13
+			// textTotalTime
 			// 
-			this.label13.Location = new System.Drawing.Point(8, 82);
-			this.label13.Name = "label13";
-			this.label13.Size = new System.Drawing.Size(92, 18);
-			this.label13.TabIndex = 33;
-			this.label13.Text = "- Differential";
-			this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.textTotalTime.Location = new System.Drawing.Point(100, 34);
+			this.textTotalTime.Name = "textTotalTime";
+			this.textTotalTime.ReadOnly = true;
+			this.textTotalTime.Size = new System.Drawing.Size(68, 20);
+			this.textTotalTime.TabIndex = 34;
+			this.textTotalTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
-			// textDiffHours
+			// textR1
 			// 
-			this.textDiffHours.Location = new System.Drawing.Point(176, 82);
-			this.textDiffHours.Name = "textDiffHours";
-			this.textDiffHours.Size = new System.Drawing.Size(68, 20);
-			this.textDiffHours.TabIndex = 32;
-			this.textDiffHours.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.textR1.Location = new System.Drawing.Point(100, 80);
+			this.textR1.Name = "textR1";
+			this.textR1.ReadOnly = true;
+			this.textR1.Size = new System.Drawing.Size(68, 20);
+			this.textR1.TabIndex = 12;
+			this.textR1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			// 
+			// label15
+			// 
+			this.label15.Location = new System.Drawing.Point(8, 80);
+			this.label15.Name = "label15";
+			this.label15.Size = new System.Drawing.Size(92, 18);
+			this.label15.TabIndex = 13;
+			this.label15.Text = "Rate 1 Time";
+			this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label17
+			// 
+			this.label17.Location = new System.Drawing.Point(173, 13);
+			this.label17.Name = "label17";
+			this.label17.Size = new System.Drawing.Size(68, 18);
+			this.label17.TabIndex = 37;
+			this.label17.Text = "Override";
+			this.label17.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+			// 
+			// groupRate2
+			// 
+			this.groupRate2.Controls.Add(this.label18);
+			this.groupRate2.Controls.Add(this.label17);
+			this.groupRate2.Controls.Add(this.textRate2Hours);
+			this.groupRate2.Controls.Add(this.label13);
+			this.groupRate2.Controls.Add(this.textR1);
+			this.groupRate2.Controls.Add(this.textRate2Auto);
+			this.groupRate2.Controls.Add(this.label15);
+			this.groupRate2.Controls.Add(this.textTotalTime);
+			this.groupRate2.Controls.Add(this.label14);
+			this.groupRate2.Location = new System.Drawing.Point(352, 164);
+			this.groupRate2.Name = "groupRate2";
+			this.groupRate2.Size = new System.Drawing.Size(267, 134);
+			this.groupRate2.TabIndex = 31;
+			this.groupRate2.TabStop = false;
+			this.groupRate2.Text = "Rate 2";
+			// 
+			// label18
+			// 
+			this.label18.Location = new System.Drawing.Point(100, 13);
+			this.label18.Name = "label18";
+			this.label18.Size = new System.Drawing.Size(68, 18);
+			this.label18.TabIndex = 38;
+			this.label18.Text = "Calculated";
+			this.label18.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
 			// 
 			// FormClockEventEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(669, 526);
+			this.ClientSize = new System.Drawing.Size(669, 485);
+			this.Controls.Add(this.groupRate2);
 			this.Controls.Add(this.groupTimeSpans);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.groupBox1);
@@ -538,6 +621,8 @@ namespace OpenDental{
 			this.groupBox2.PerformLayout();
 			this.groupTimeSpans.ResumeLayout(false);
 			this.groupTimeSpans.PerformLayout();
+			this.groupRate2.ResumeLayout(false);
+			this.groupRate2.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -555,6 +640,7 @@ namespace OpenDental{
 				groupBox1.Text=Lan.g(this,"Clock Out Date and Time");
 				groupBox2.Text=Lan.g(this,"Clock In Date and Time");
 				groupTimeSpans.Visible=false;
+				groupRate2.Visible=false;
 			}
 			textTimeEntered1.Text=ClockEventCur.TimeEntered1.ToString();
 			textTimeDisplayed1.Text=ClockEventCur.TimeDisplayed1.ToString();
@@ -591,13 +677,47 @@ namespace OpenDental{
 			textNote.Text=ClockEventCur.Note;
 		}
 
+		private void FillRate2() {
+			try {
+				DateTime.Parse(textTimeDisplayed1.Text);//because this must always be valid
+				DateTime.Parse(textTimeDisplayed2.Text);//this must also be filled in order to calculate timespans
+			}
+			catch {//an invalid date/time.
+				//textTotalTime.Text="";
+				//textRegTime.Text="";
+				return;
+			}
+			DateTime dt1=DateTime.Parse(textTimeDisplayed1.Text);
+			DateTime dt2=DateTime.Parse(textTimeDisplayed2.Text);
+			if(dt1 > dt2) {
+				return;
+			}
+			//TODO: finish this... ugh. 
+
+			//TimeSpan totalTime=dt2-dt1+(.AdjustIsOverridden?ClockEventCur.Adjust:ClockEventCur.AdjustAuto);
+			//textTotalTime.Text=ClockEvents.Format(totalTime);
+			//textRate2Auto.Text=ClockEvents.Format(ClockEventCur.Rate2Auto);
+			//if(ClockEventCur.Rate2Hours==TimeSpan.FromHours(-1)) {
+			//	textRate2Hours.Text="";
+			//}
+			//else {
+			//	textRate2Hours.Text=ClockEvents.Format(ClockEventCur.Rate2Hours);
+			//}
+			//if(ClockEventCur.Rate2Hours!=TimeSpan.FromHours(-1)) {
+			//	textR1.Text=ClockEvents.Format(totalTime-ClockEventCur.Rate2Hours);
+			//}
+			//else {
+			//	textR1.Text=ClockEvents.Format(totalTime-ClockEventCur.Rate2Auto);
+			//}
+		}
+
 		///<summary>Does not alter the overrides, but only the auto calc boxes.  Triggered by many things on this form.  It's better to have it be triggered too frequently than to miss something.</summary>
 		private void FillTimeSpans() {
 			if(ClockEventCur.ClockStatus==TimeClockStatus.Break){//TimeSpans not showing
 				return;
 			}
 			if(textTimeEntered2.Text=="" || textTimeDisplayed2.Text=="") {
-				textTotalTime.Text="";
+				textClockedTime.Text="";
 				textRegTime.Text="";
 				return;
 			}
@@ -615,8 +735,8 @@ namespace OpenDental{
 			if(dt1 > dt2){
 				return;
 			}
-			TimeSpan totalTime=dt2-dt1;
-			textTotalTime.Text=ClockEvents.Format(totalTime);
+			TimeSpan clockedTime=dt2-dt1;
+			textClockedTime.Text=ClockEvents.Format(clockedTime);
 			TimeSpan overtime=ClockEventCur.OTimeAuto;
 			if(textOTimeHours.Text!="") {
 				try {
@@ -645,7 +765,7 @@ namespace OpenDental{
 					return;
 				}
 			}
-			TimeSpan regTime=totalTime-overtime+adjust;//adjust is typically a negative value
+			TimeSpan regTime=clockedTime-overtime+adjust;//adjust is typically a negative value
 			if(regTime<TimeSpan.Zero) {
 				textRegTime.Text="";
 				return;

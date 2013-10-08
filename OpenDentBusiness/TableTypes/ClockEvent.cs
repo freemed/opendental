@@ -122,6 +122,7 @@ namespace OpenDentBusiness{
 
 		public ClockEvent() {
 			OTimeHours=TimeSpan.FromHours(-1);
+			Rate2Hours=TimeSpan.FromHours(-1);
 		}
 
 		///<summary></summary>

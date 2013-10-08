@@ -20,8 +20,10 @@ namespace OpenDental {
 		private int pagesPrinted;
 		private string totalTime;
 		private string overTime;
+		private string rate2Time;
 		private string totalTime2;
 		private string overTime2;
+		private string rate2Time2;
 
 		public FormTimeCardManage() {
 			InitializeComponent();
@@ -37,63 +39,80 @@ namespace OpenDental {
 			}
 			FillPayPeriod();
 			FillMain();
-			//butCompute.Visible=false;			//only until unit tests are complete.
+			//butCompute.Visible=false;			//only until unit tests are complete. exceed
 			//butDaily.Visible=false;			//only until unit tests are complete.
 		}
 
 		private void FillMain() {
-			MainTable=ClockEvents.GetTimeCardManage(DateStart,DateStop,false);
+			MainTable=ClockEvents.GetTimeCardManage(DateStart,DateStop);//,false);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g(this,"Employee"),140);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Total Hrs"),64);
+			col=new ODGridColumn(Lan.g(this,"Total Hrs"),75);
 			col.TextAlign=HorizontalAlignment.Right;
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Reg Hrs"),64);
+			col=new ODGridColumn(Lan.g(this,"Rate1"),75);
 			col.TextAlign=HorizontalAlignment.Right;
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"OT Hrs"),64);
+			col=new ODGridColumn(Lan.g(this,"Rate1 OT"),75);
 			col.TextAlign=HorizontalAlignment.Right;
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Auto Adj"),64);
+			col=new ODGridColumn(Lan.g(this,"Rate2"),75);
 			col.TextAlign=HorizontalAlignment.Right;
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Reg Adj"),64);
+			col=new ODGridColumn(Lan.g(this,"Rate2 OT"),75);
 			col.TextAlign=HorizontalAlignment.Right;
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"OT Adj"),64);
-			col.TextAlign=HorizontalAlignment.Right;
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Breaks"),64);
-			col.TextAlign=HorizontalAlignment.Right;
-			gridMain.Columns.Add(col);
-			//col=new ODGridColumn(Lan.g(this,"Notes"),0);
+			//col=new ODGridColumn(Lan.g(this,"Auto Adj"),64);
+			//col.TextAlign=HorizontalAlignment.Right;
 			//gridMain.Columns.Add(col);
+			//col=new ODGridColumn(Lan.g(this,"Reg Adj"),64);
+			//col.TextAlign=HorizontalAlignment.Right;
+			//gridMain.Columns.Add(col);
+			//col=new ODGridColumn(Lan.g(this,"OT Adj"),64);
+			//col.TextAlign=HorizontalAlignment.Right;
+			//gridMain.Columns.Add(col);
+			//col=new ODGridColumn(Lan.g(this,"Diff Adj"),64);
+			//col.TextAlign=HorizontalAlignment.Right;
+			//gridMain.Columns.Add(col);
+			//col=new ODGridColumn(Lan.g(this,"Diff Auto"),64);
+			//col.TextAlign=HorizontalAlignment.Right;
+			//gridMain.Columns.Add(col);
+			//col=new ODGridColumn(Lan.g(this,"Breaks"),64);
+			//col.TextAlign=HorizontalAlignment.Right;
+			//gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"Notes"),0);
+			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			for(int i=0;i<MainTable.Rows.Count;i++) {
 				row=new ODGridRow();
-				row.Cells.Add(Employees.GetNameFL(PIn.Long(MainTable.Rows[i]["EmployeeNum"].ToString())));
+				//row.Cells.Add(Employees.GetNameFL(PIn.Long(MainTable.Rows[i]["EmployeeNum"].ToString())));
+				row.Cells.Add(MainTable.Rows[i]["lastName"]+", "+MainTable.Rows[i]["firstName"]);
 				if(PrefC.GetBool(PrefName.TimeCardsUseDecimalInsteadOfColon)) {
-					row.Cells.Add(PIn.Time(MainTable.Rows[i]["tempTotalTime"].ToString()).TotalHours.ToString("n"));
-					row.Cells.Add(PIn.Time(MainTable.Rows[i]["tempRegHrs"].ToString()).TotalHours.ToString("n"));
-					row.Cells.Add(PIn.Time(MainTable.Rows[i]["tempOverTime"].ToString()).TotalHours.ToString("n"));
-					row.Cells.Add(PIn.Time(MainTable.Rows[i]["AdjEvent"].ToString()).TotalHours.ToString("n"));
-					row.Cells.Add(PIn.Time(MainTable.Rows[i]["AdjReg"].ToString()).TotalHours.ToString("n"));
-					row.Cells.Add(PIn.Time(MainTable.Rows[i]["AdjOTime"].ToString()).TotalHours.ToString("n"));
-					row.Cells.Add(PIn.Time(MainTable.Rows[i]["BreakTime"].ToString()).TotalHours.ToString("n"));
+					row.Cells.Add(PIn.Time(MainTable.Rows[i]["totalHours"].ToString()).TotalHours.ToString("n"));
+					row.Cells.Add(PIn.Time(MainTable.Rows[i]["rate1Hours"].ToString()).TotalHours.ToString("n"));
+					row.Cells.Add(PIn.Time(MainTable.Rows[i]["rate1OTHours"].ToString()).TotalHours.ToString("n"));
+					row.Cells.Add(PIn.Time(MainTable.Rows[i]["rate2Hours"].ToString()).TotalHours.ToString("n"));
+					row.Cells.Add(PIn.Time(MainTable.Rows[i]["rate2OTHours"].ToString()).TotalHours.ToString("n"));
+					//row.Cells.Add(PIn.Time(MainTable.Rows[i]["BreakTime"].ToString()).TotalHours.ToString("n"));
+					//row.Cells.Add(PIn.Time(MainTable.Rows[i]["ClockEventRegAdj"].ToString()).TotalHours.ToString("n"));
+					//row.Cells.Add(PIn.Time(MainTable.Rows[i]["TimeAdjustRegAdj"].ToString()).TotalHours.ToString("n"));
+					//row.Cells.Add(PIn.Time(MainTable.Rows[i]["TimeAdjustOTAdj"].ToString()).TotalHours.ToString("n"));
 				}
 				else {
-					row.Cells.Add(PIn.Time(MainTable.Rows[i]["tempTotalTime"].ToString()).ToStringHmm());
-					row.Cells.Add(PIn.Time(MainTable.Rows[i]["tempRegHrs"].ToString()).ToStringHmm());
-					row.Cells.Add(PIn.Time(MainTable.Rows[i]["tempOverTime"].ToString()).ToStringHmm());
-					row.Cells.Add(PIn.Time(MainTable.Rows[i]["AdjEvent"].ToString()).ToStringHmm());
-					row.Cells.Add(PIn.Time(MainTable.Rows[i]["AdjReg"].ToString()).ToStringHmm());
-					row.Cells.Add(PIn.Time(MainTable.Rows[i]["AdjOTime"].ToString()).ToStringHmm());
-					row.Cells.Add(PIn.Time(MainTable.Rows[i]["BreakTime"].ToString()).ToStringHmm());
+					row.Cells.Add(PIn.Time(MainTable.Rows[i]["totalHours"].ToString()).ToStringHmm());
+					row.Cells.Add(PIn.Time(MainTable.Rows[i]["rate1Hours"].ToString()).ToStringHmm());
+					row.Cells.Add(PIn.Time(MainTable.Rows[i]["rate1OTHours"].ToString()).ToStringHmm());
+					row.Cells.Add(PIn.Time(MainTable.Rows[i]["rate2Hours"].ToString()).ToStringHmm());
+					row.Cells.Add(PIn.Time(MainTable.Rows[i]["rate2OTHours"].ToString()).ToStringHmm());
+					//row.Cells.Add(PIn.Time(MainTable.Rows[i]["BreakTime"].ToString()).ToStringHmm());
+					//row.Cells.Add(PIn.Time(MainTable.Rows[i]["ClockEventRegAdj"].ToString()).ToStringHmm());
+					//row.Cells.Add(PIn.Time(MainTable.Rows[i]["TimeAdjustRegAdj"].ToString()).ToStringHmm());
+					//row.Cells.Add(PIn.Time(MainTable.Rows[i]["TimeAdjustOTAdj"].ToString()).ToStringHmm());
 				}
-				//row.Cells.Add(MainTable.Rows[i]["Note"].ToString());
+				row.Cells.Add(MainTable.Rows[i]["Note"].ToString());
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
@@ -121,13 +140,11 @@ namespace OpenDental {
 			FillMain();
 		}
 
-		///<summary>Only used for printing all employee time cards at once.</summary>
-		private ODGrid GetGridTimeCard(Employee emp) {
+		///<summary>This is a modified version of FormTimeCard.FillMain().  It fills one time card per employee.</summary>
+		private ODGrid GetGridForPrinting(Employee emp) {
 			ODGrid gridTimeCard=new ODGrid();
-			List<ClockEvent> clockEventList=ClockEvents.Refresh(emp.EmployeeNum,PIn.Date(textDateStart.Text),
-				PIn.Date(textDateStop.Text),false);
-			List<TimeAdjust> timeAdjustList=TimeAdjusts.Refresh(emp.EmployeeNum,PIn.Date(textDateStart.Text),
-				PIn.Date(textDateStop.Text));
+			List<ClockEvent> clockEventList=ClockEvents.Refresh(emp.EmployeeNum,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text),false);
+			List<TimeAdjust> timeAdjustList=TimeAdjusts.Refresh(emp.EmployeeNum,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text));
 			ArrayList mergedAL=new ArrayList();
 			for(int i=0;i<clockEventList.Count;i++) {
 				mergedAL.Add(clockEventList[i]);
@@ -143,8 +160,6 @@ namespace OpenDental {
 			gridTimeCard.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Weekday"),70);
 			gridTimeCard.Columns.Add(col);
-			col = new ODGridColumn(Lan.g(this, "Altered"), 50, HorizontalAlignment.Center);
-			gridTimeCard.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"In"),60,HorizontalAlignment.Right);
 			gridTimeCard.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Out"),60,HorizontalAlignment.Right);
@@ -152,6 +167,8 @@ namespace OpenDental {
 			col=new ODGridColumn(Lan.g(this,"Total"),50,HorizontalAlignment.Right);
 			gridTimeCard.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Adjust"),55,HorizontalAlignment.Right);
+			gridTimeCard.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"Rate2"),55,HorizontalAlignment.Right);
 			gridTimeCard.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Overtime"),55,HorizontalAlignment.Right);
 			gridTimeCard.Columns.Add(col);
@@ -175,7 +192,8 @@ namespace OpenDental {
 			}
 			TimeSpan periodSpan=new TimeSpan(0);//used to add up totals for entire page.
 			TimeSpan otspan=new TimeSpan(0);//overtime for the entire period
-      Calendar cal=CultureInfo.CurrentCulture.Calendar;
+			TimeSpan rate2span=new TimeSpan(0);//rate2 hours total
+			Calendar cal=CultureInfo.CurrentCulture.Calendar;
 			CalendarWeekRule rule=CultureInfo.CurrentCulture.DateTimeFormat.CalendarWeekRule;
 			DateTime curDate=DateTime.MinValue;
 			DateTime previousDate=DateTime.MinValue;
@@ -200,17 +218,7 @@ namespace OpenDental {
 						row.Cells.Add(curDate.DayOfWeek.ToString());
 					}
 					//altered--------------------------------------
-					string str="";
-					if(clock.TimeEntered1!=clock.TimeDisplayed1){
-						str=Lan.g(this,"in");
-					}
-					if(clock.TimeEntered2!=clock.TimeDisplayed2){
-						if(str!="") {
-							str+="/";
-						}
-						str+=Lan.g(this,"out");
-					}
-					row.Cells.Add(str);
+					//deprecated
 					//status--------------------------------------
 					//row.Cells.Add(clock.ClockStatus.ToString());
 					//in------------------------------------------
@@ -252,6 +260,19 @@ namespace OpenDental {
 					weekSpan+=oneAdj;
 					periodSpan+=oneAdj;
 					row.Cells.Add(ClockEvents.Format(oneAdj));
+					if(clock.AdjustIsOverridden) {
+						row.Cells[row.Cells.Count-1].ColorText = Color.Red;
+					}
+					//Rate2---------------------------------
+					if(clock.Rate2Hours!=TimeSpan.FromHours(-1)) {
+						rate2span+=clock.Rate2Hours;
+						row.Cells.Add(ClockEvents.Format(clock.Rate2Hours));
+						row.Cells[row.Cells.Count-1].ColorText = Color.Red;
+					}
+					else {
+						rate2span+=clock.Rate2Auto;
+						row.Cells.Add(ClockEvents.Format(clock.Rate2Auto));
+					}
 					//Overtime------------------------------
 					oneOT=TimeSpan.Zero;
 					if(clock.OTimeHours!=TimeSpan.FromHours(-1)) {//overridden
@@ -265,6 +286,9 @@ namespace OpenDental {
 					weekSpan-=oneOT;
 					periodSpan-=oneOT;
 					row.Cells.Add(ClockEvents.Format(oneOT));
+					if(clock.OTimeHours!=TimeSpan.FromHours(-1)) {//overridden
+						row.Cells[row.Cells.Count-1].ColorText = Color.Red;
+					}
 					//Daily-----------------------------------
 					//if this is the last entry for a given date
 					if(i==mergedAL.Count-1//if this is the last row
@@ -280,8 +304,8 @@ namespace OpenDental {
 					weeklyTotals[i]=weekSpan;
 					//if this is the last entry for a given week
 					if(i==mergedAL.Count-1//if this is the last row 
-						|| cal.GetWeekOfYear(GetDateForRow(i+1,mergedAL),rule,DayOfWeek.Sunday)//or the next row has a
-						!= cal.GetWeekOfYear(clock.TimeDisplayed1.Date,rule,DayOfWeek.Sunday))//different week of year
+						|| cal.GetWeekOfYear(GetDateForRow(i+1,mergedAL),rule,(DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek))//or the next row has a
+						!= cal.GetWeekOfYear(clock.TimeDisplayed1.Date,rule,(DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek)))//different week of year
 					{
 						row.Cells.Add(ClockEvents.Format(weekSpan));
 						weekSpan=new TimeSpan(0);
@@ -306,8 +330,7 @@ namespace OpenDental {
 						row.Cells.Add(curDate.DayOfWeek.ToString());
 					}
 					//altered--------------------------------------
-					row.Cells.Add(Lan.g(this,"Adjust"));//2
-					row.ColorText=Color.Red;
+					//Deprecated
 					//status--------------------------------------
 					//row.Cells.Add("");//3
 					//in/out------------------------------------------
@@ -321,6 +344,8 @@ namespace OpenDental {
 					weekSpan+=adjust.RegHours;
 					periodSpan+=adjust.RegHours;
 					row.Cells.Add(ClockEvents.Format(adjust.RegHours));//6
+					//Rate2-------------------------------
+					row.Cells.Add("");//
 					//Overtime------------------------------
 					otspan+=adjust.OTimeHours;
 					row.Cells.Add(ClockEvents.Format(adjust.OTimeHours));//7
@@ -339,8 +364,8 @@ namespace OpenDental {
 					weeklyTotals[i]=weekSpan;
 					//if this is the last entry for a given week
 					if(i==mergedAL.Count-1//if this is the last row 
-						|| cal.GetWeekOfYear(GetDateForRow(i+1,mergedAL),rule,DayOfWeek.Sunday)//or the next row has a
-						!= cal.GetWeekOfYear(adjust.TimeEntry.Date,rule,DayOfWeek.Sunday))//different week of year
+						|| cal.GetWeekOfYear(GetDateForRow(i+1,mergedAL),rule,(DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek))//or the next row has a
+						!= cal.GetWeekOfYear(adjust.TimeEntry.Date,rule,(DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek)))//different week of year
 					{
 						ODGridCell cell=new ODGridCell(ClockEvents.Format(weekSpan));
 						cell.ColorText=Color.Black;
@@ -351,15 +376,18 @@ namespace OpenDental {
 						row.Cells.Add("");
 					}
 					//Note-----------------------------------------
-					row.Cells.Add(adjust.Note);
+					row.Cells.Add("(Adjust)"+adjust.Note);//used to indicate adjust rows.
+					row.Cells[row.Cells.Count-1].ColorText=Color.Red;
 				}
 				gridTimeCard.Rows.Add(row);
 			}
 			gridTimeCard.EndUpdate();
 			totalTime=periodSpan.ToStringHmm();
 			overTime=otspan.ToStringHmm();
+			rate2Time=rate2span.ToStringHmm();
 			totalTime2=periodSpan.TotalHours.ToString("n");
 			overTime2=otspan.TotalHours.ToString("n");
+			rate2Time2=rate2span.TotalHours.ToString("n");
 			return gridTimeCard;
 		}
 
@@ -373,7 +401,8 @@ namespace OpenDental {
 			return DateTime.MinValue;
 		}
 
-		private void butPrint_Click(object sender,EventArgs e) {
+		//Prints one timecard for each employee.
+		private void butPrintAll_Click(object sender,EventArgs e) {
 			pagesPrinted=0;
 			PrintDocument pd=new PrintDocument();
 			pd.PrintPage += new PrintPageEventHandler(this.pd2_PrintPage);
@@ -389,7 +418,7 @@ namespace OpenDental {
 			//A preview of every single emp on their own page will show up. User will print from there.
 			Graphics g=e.Graphics;
 			Employee employeeCur=Employees.GetEmp(PIn.Long(MainTable.Rows[pagesPrinted]["EmployeeNum"].ToString()));
-			ODGrid timeCardGrid=GetGridTimeCard(employeeCur);
+			ODGrid timeCardGrid=GetGridForPrinting(employeeCur);
 			int linesPrinted=0;
 			//Create a timecardgrid for this employee?
 			float yPos=75;
@@ -408,11 +437,12 @@ namespace OpenDental {
 			int[] colW=new int[11];
 			colW[0]=70;//date
 			colW[1]=70;//weekday
-			colW[2]=50;//altered
-			colW[3]=60;//in
-			colW[4]=60;//out
-			colW[5]=50;//total
-			colW[6]=50;//adjust
+			//colW[2]=50;//altered
+			colW[2]=60;//in
+			colW[3]=60;//out
+			colW[4]=50;//total
+			colW[5]=50;//adjust
+			colW[6]=50;//Rate2 //added
 			colW[7]=55;//overtime
 			colW[8]=50;//daily
 			colW[9]=50;//weekly
@@ -425,11 +455,12 @@ namespace OpenDental {
 			string[] ColCaption=new string[11];
 			ColCaption[0]=Lan.g(this,"Date");
 			ColCaption[1]=Lan.g(this,"Weekday");
-			ColCaption[2]=Lan.g(this,"Altered");
-			ColCaption[3]=Lan.g(this,"In");
-			ColCaption[4]=Lan.g(this,"Out");
-			ColCaption[5]=Lan.g(this,"Total");
-			ColCaption[6]=Lan.g(this,"Adjust");
+			//ColCaption[2]=Lan.g(this,"Altered");
+			ColCaption[2]=Lan.g(this,"In");
+			ColCaption[3]=Lan.g(this,"Out");
+			ColCaption[4]=Lan.g(this,"Total");
+			ColCaption[5]=Lan.g(this,"Adjust");
+			ColCaption[6]=Lan.g(this,"Rate 2");
 			ColCaption[7]=Lan.g(this,"Overtime");
 			ColCaption[8]=Lan.g(this,"Daily");
 			ColCaption[9]=Lan.g(this,"Weekly");
@@ -463,8 +494,116 @@ namespace OpenDental {
 			g.DrawString(Lan.g(this,"Regular Time")+": "+totalTime+" ("+totalTime2+")",fontHeader,brush,xPos,yPos);
 			yPos+=16;
 			g.DrawString(Lan.g(this,"Overtime")+": "+overTime+" ("+overTime2+")",fontHeader,brush,xPos,yPos);
+			yPos+=16;
+			g.DrawString(Lan.g(this,"Rate 2 Time")+": "+rate2Time+" ("+rate2Time2+")",fontHeader,brush,xPos,yPos);
 			pagesPrinted++;
 			if(gridMain.Rows.Count==pagesPrinted) {
+				pagesPrinted=0;
+				e.HasMorePages=false;
+			}
+			else {
+				e.HasMorePages=true;
+			}
+		}
+
+		///<summary>Print timecards for selected employees only.</summary>
+		private void butPrintSelected_Click(object sender,EventArgs e) {
+			pagesPrinted=0;
+			PrintDocument pd=new PrintDocument();
+			pd.PrintPage += new PrintPageEventHandler(this.pd2_PrintPageSelective);
+			FormPrintPreview pView=new FormPrintPreview(PrintSituation.Default,pd,gridMain.SelectedIndices.Length,0,"Employee timecards printed");
+			pView.ShowDialog();
+		}
+
+		///<summary>Similar to pd2_PrintPage except it iterates through selected indices instead of all indices.</summary>
+		private void pd2_PrintPageSelective(object sender,System.Drawing.Printing.PrintPageEventArgs e) {
+			PrintEmployeeTimeCard(sender,e);
+		}
+
+		private void PrintEmployeeTimeCard(object sender, System.Drawing.Printing.PrintPageEventArgs e) {
+			//A preview of every single emp on their own page will show up. User will print from there.
+			Graphics g=e.Graphics;
+			Employee employeeCur=Employees.GetEmp(PIn.Long(MainTable.Rows[gridMain.SelectedIndices[pagesPrinted]]["EmployeeNum"].ToString()));
+			ODGrid timeCardGrid=GetGridForPrinting(employeeCur);
+			int linesPrinted=0;
+			//Create a timecardgrid for this employee?
+			float yPos=75;
+			float xPos=55;
+			string str;
+			Font font=new Font(FontFamily.GenericSansSerif,8);
+			Font fontTitle=new Font(FontFamily.GenericSansSerif,11,FontStyle.Bold);
+			Font fontHeader=new Font(FontFamily.GenericSansSerif,8,FontStyle.Bold);
+			SolidBrush brush=new SolidBrush(Color.Black);
+			Pen pen=new Pen(Color.Black);
+			//Title
+			str=employeeCur.FName+" "+employeeCur.LName;
+			g.DrawString(str,fontTitle,brush,xPos,yPos);
+			yPos+=30;
+			//define columns
+			int[] colW=new int[11];
+			colW[0]=70;//date
+			colW[1]=70;//weekday
+			//colW[2]=50;//altered
+			colW[2]=60;//in
+			colW[3]=60;//out
+			colW[4]=50;//total
+			colW[5]=50;//adjust
+			colW[6]=50;//Rate2 //added
+			colW[7]=55;//overtime
+			colW[8]=50;//daily
+			colW[9]=50;//weekly
+			colW[10]=160;//note
+			int[] colPos=new int[colW.Length+1];
+			colPos[0]=45;
+			for(int i=1;i<colPos.Length;i++) {
+				colPos[i]=colPos[i-1]+colW[i-1];
+			}
+			string[] ColCaption=new string[11];
+			ColCaption[0]=Lan.g(this,"Date");
+			ColCaption[1]=Lan.g(this,"Weekday");
+			//ColCaption[2]=Lan.g(this,"Altered");
+			ColCaption[2]=Lan.g(this,"In");
+			ColCaption[3]=Lan.g(this,"Out");
+			ColCaption[4]=Lan.g(this,"Total");
+			ColCaption[5]=Lan.g(this,"Adjust");
+			ColCaption[6]=Lan.g(this,"Rate 2");
+			ColCaption[7]=Lan.g(this,"Overtime");
+			ColCaption[8]=Lan.g(this,"Daily");
+			ColCaption[9]=Lan.g(this,"Weekly");
+			ColCaption[10]=Lan.g(this,"Note");
+			//column headers-----------------------------------------------------------------------------------------
+			e.Graphics.FillRectangle(Brushes.LightGray,colPos[0],yPos,colPos[colPos.Length-1]-colPos[0],18);
+			e.Graphics.DrawRectangle(pen,colPos[0],yPos,colPos[colPos.Length-1]-colPos[0],18);
+			for(int i=1;i<colPos.Length;i++) {
+				e.Graphics.DrawLine(new Pen(Color.Black),colPos[i],yPos,colPos[i],yPos+18);
+			}
+			//Prints the Column Titles
+			for(int i=0;i<ColCaption.Length;i++) {
+				e.Graphics.DrawString(ColCaption[i],fontHeader,brush,colPos[i]+2,yPos+1);
+			}
+			yPos+=18;
+			while(yPos < e.PageBounds.Height-75-50-32-16 && linesPrinted < timeCardGrid.Rows.Count) {
+				for(int i=0;i<colPos.Length-1;i++) {
+					e.Graphics.DrawString(timeCardGrid.Rows[linesPrinted].Cells[i].Text,font,brush
+						,new RectangleF(colPos[i]+2,yPos,colPos[i+1]-colPos[i]-5,font.GetHeight(e.Graphics)));
+				}
+				//Column lines		
+				for(int i=0;i<colPos.Length;i++) {
+					e.Graphics.DrawLine(Pens.Gray,colPos[i],yPos+16,colPos[i],yPos);
+				}
+				linesPrinted++;
+				yPos+=16;
+				e.Graphics.DrawLine(new Pen(Color.Gray),colPos[0],yPos,colPos[colPos.Length-1],yPos);
+			}
+			//totals will print on every page for simplicity
+			yPos+=10;
+			g.DrawString(Lan.g(this,"Regular Time")+": "+totalTime+" ("+totalTime2+")",fontHeader,brush,xPos,yPos);
+			yPos+=16;
+			g.DrawString(Lan.g(this,"Overtime")+": "+overTime+" ("+overTime2+")",fontHeader,brush,xPos,yPos);
+			yPos+=16;
+			g.DrawString(Lan.g(this,"Rate 2 Time")+": "+rate2Time+" ("+rate2Time2+")",fontHeader,brush,xPos,yPos);
+			pagesPrinted++;
+			if(gridMain.SelectedIndices.Length==pagesPrinted) {
 				pagesPrinted=0;
 				e.HasMorePages=false;
 			}
@@ -506,46 +645,41 @@ namespace OpenDental {
 		}
 
 		private void butDaily_Click(object sender,EventArgs e) {
-			//not even visible if viewing breaks.
 			if(!Security.IsAuthorized(Permissions.TimecardsEditAll)) {
 				return;
 			}
+			if(gridMain.SelectedIndices.Length==0) {
+				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"No employees selected. Would you like to run calculations for all employees?")) {
+					return;
+				}
+				gridMain.SetSelected(true);
+			}
 			Cursor=Cursors.WaitCursor;
-			List<Employee> employeesList = new List<Employee>();
-			foreach(int index in gridMain.SelectedIndices) {
-				foreach(Employee emp in Employees.ListLong) {
-					if(emp.EmployeeNum.ToString()==MainTable.Rows[index]["EmployeeNum"].ToString()) {
-						employeesList.Add(emp);
-						break;//no need to check other employees, handle next selected index.
-					}
+			string aggregateErrors="";
+			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
+				try {
+					TimeCardRules.CalculateDailyOvertime(Employees.GetEmp(PIn.Long(MainTable.Rows[gridMain.SelectedIndices[i]]["EmployeeNum"].ToString()))
+						,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text));
 				}
-			}
-			if(employeesList.Count==0) {//nothing in grid was selected so populate list with all non hidden employees.
-				foreach(Employee emp in Employees.ListShort){
-					employeesList.Add(emp);
+				catch(Exception ex) {
+					aggregateErrors+=ex.Message+"\r\n";
 				}
-			}
-			string errors="";
-			foreach(Employee EmployeeCur in employeesList) {
-				errors+=TimeCardRules.ValidatePayPeriod(EmployeeCur,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text));
-			}
-			if(errors != "") {
-				MsgBox.Show(this,errors);
-				Cursor=Cursors.Default;
-				return;
-			}
-			foreach(Employee EmployeeCur in employeesList) {
-				TimeCardRules.CalculateDailyOvertime(EmployeeCur,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text));
 			}
 			Cursor=Cursors.Default;
-			//Cach selected indicies, fill grid, reselect indicies.
+			//Cache selected indicies, fill grid, reselect indicies.
 			List<int> listSelectedIndexCach=new List<int>();
-			foreach(int ind in gridMain.SelectedIndices) {
-				listSelectedIndexCach.Add(ind);
+			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
+				listSelectedIndexCach.Add(gridMain.SelectedIndices[i]);
 			}
 			FillMain();
-			foreach(int ind in listSelectedIndexCach) {
-				gridMain.SetSelected(ind,true);
+			for(int i=0;i<listSelectedIndexCach.Count;i++) {
+				gridMain.SetSelected(listSelectedIndexCach[i],true);
+			}
+			if(aggregateErrors=="") {
+				MsgBox.Show(this,"Done.");
+			}
+			else {
+				MessageBox.Show(this,Lan.g(this,"Timecards were not calculated for some Employees for the following reasons")+":\r\n"+aggregateErrors);
 			}
 		}
 
@@ -553,68 +687,209 @@ namespace OpenDental {
 			if(!Security.IsAuthorized(Permissions.TimecardsEditAll)) {
 				return;
 			}
+			if(gridMain.SelectedIndices.Length==0){
+				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"No employees selected. Would you like to run calculations for all employees?")) {
+					return;
+				}
+				gridMain.SetSelected(true);
+			}
 			Cursor=Cursors.WaitCursor;
-			List<Employee> employeesList = new List<Employee>();
-			foreach(int selectedIndex in gridMain.SelectedIndices) {
-				foreach(Employee emp in Employees.ListLong){
-					if(emp.EmployeeNum.ToString()==MainTable.Rows[selectedIndex]["EmployeeNum"].ToString()) {
-						employeesList.Add(emp);
-						break;//no need to check other employees, handle next selected index.
-					}
+			string aggregateErrors="";
+			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
+				try {
+					TimeCardRules.CalculateWeeklyOvertime(Employees.GetEmp(PIn.Long(MainTable.Rows[gridMain.SelectedIndices[i]]["EmployeeNum"].ToString()))
+						,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text));
 				}
-			}
-			if(employeesList.Count==0) {//nothing in grid was selected so populate list with all non hidden employees.
-				foreach(Employee emp in Employees.ListShort) {
-					employeesList.Add(emp);
+				catch(Exception ex) {
+					aggregateErrors+=ex.Message+"\r\n";
 				}
-			}
-			//if(gridMain.SelectedIndices.Length==0) {//Nothing selected, run on all employees.
-			//  //MsgBox? for a warning?
-			//  foreach(Employee emp in Employees.ListLong) {
-			//    employeesList.Add(emp);
-			//  }
-			//}
-			foreach(Employee EmployeeCur in employeesList) {
-				TimeCardRules.CalculateWeeklyOvertime(EmployeeCur,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text));
 			}
 			Cursor=Cursors.Default;
-			//Cach selected indicies, fill grid, reselect indicies.
+			//Cache selected indices, fill grid, reselect indices.
 			List<int> listSelectedIndexCach=new List<int>();
-			foreach(int ind in gridMain.SelectedIndices) {
-				listSelectedIndexCach.Add(ind);
+			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
+				listSelectedIndexCach.Add(gridMain.SelectedIndices[i]);
 			}
 			FillMain();
-			foreach(int ind in listSelectedIndexCach) {
-				gridMain.SetSelected(ind,true);
+			for(int i=0;i<listSelectedIndexCach.Count;i++) {
+				gridMain.SetSelected(listSelectedIndexCach[i],true);
+			}
+			//Done or Error messages.
+			if(aggregateErrors=="") {
+				MsgBox.Show(this,"Done.");
+			}
+			else {
+				MessageBox.Show(this,Lan.g(this,"Timecards were not calculated for some Employees for the following reasons")+":\r\n"+aggregateErrors);
 			}
 		}
 
-		/*
-		private void butDayAndWeek_Click(object sender,EventArgs e) {
-			//not even visible if viewing breaks.
-			if(!Security.IsAuthorized(Permissions.TimecardsEditAll)) {
+		private void butClearManual_Click(object sender,EventArgs e) {
+			if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"This cannot be undone. Would you like to continue?")) {
 				return;
 			}
-			Cursor=Cursors.WaitCursor;
-			List<Employee> employeesList = new List<Employee>();
-			foreach(int index in gridMain.SelectedIndices) {
-				foreach(Employee emp in Employees.ListLong) {
-					if(emp.EmployeeNum.ToString()==MainTable.Rows[index]["EmployeeNum"].ToString()) {
-						employeesList.Add(emp);
-						break;//no need to check other employees, handle next selected index.
-					}
+			//List<Employee> employeesList = new List<Employee>();
+			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
+				try {
+					TimeCardRules.ClearManual(PIn.Long(MainTable.Rows[gridMain.SelectedIndices[i]]["EmployeeNum"].ToString()),PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text));
+				}
+				catch(Exception ex) {
+					MessageBox.Show(ex.Message);
 				}
 			}
-			foreach(Employee EmployeeCur in employeesList) {
-				TimeCardRules.CalculateDailyOvertime(EmployeeCur,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text));
-				TimeCardRules.CalculateWeeklyOvertime(EmployeeCur,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text));
+			//Cach selected indicies, fill grid, reselect indicies.
+			List<int> listSelectedIndexCach=new List<int>();
+			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
+				listSelectedIndexCach.Add(gridMain.SelectedIndices[i]);
 			}
-			Cursor=Cursors.Default;
 			FillMain();
-		}*/
+			for(int i=0;i<listSelectedIndexCach.Count;i++) {
+				gridMain.SetSelected(listSelectedIndexCach[i],true);
+			}
+		}
 
-		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
+		private void butClearAuto_Click(object sender,EventArgs e) {
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"This cannot be undone, but you can run the Calc buttons again later.  Would you like to continue?")) {
+				return;
+			}
+			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
+				try {
+					TimeCardRules.ClearAuto(PIn.Long(MainTable.Rows[gridMain.SelectedIndices[i]]["EmployeeNum"].ToString()),PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text));
+				}
+				catch(Exception ex) {
+					MessageBox.Show(ex.Message);
+				}
+			}
+			//Cach selected indicies, fill grid, reselect indicies.
+			List<int> listSelectedIndexCach=new List<int>();
+			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
+				listSelectedIndexCach.Add(gridMain.SelectedIndices[i]);
+			}
+			FillMain();
+			for(int i=0;i<listSelectedIndexCach.Count;i++) {
+				gridMain.SetSelected(listSelectedIndexCach[i],true);
+			}
+		}
+
+		///<summary>Print exactly what is showing in gridMain. (Including rows that do not fit in the UI.)</summary>
+		private void butPrintGrid_Click(object sender,EventArgs e) {
+			//TODO:Assign to Allen.
+		}
+
+		///<summary>Exports MainTable (a data table) not the actual OD Grid. This allows for EmployeeNum and ADPNum without having to perform any lookups.</summary>
+		private void butExportGrid_Click(object sender,EventArgs e) {
+			FolderBrowserDialog fbd = new FolderBrowserDialog();
+			if(fbd.ShowDialog()!=DialogResult.OK) {
+				return;
+			}
+			StringBuilder strb = new StringBuilder();
+			string headers="";
+			for(int i=0;i<MainTable.Columns.Count;i++) {
+				headers+=(i>0?"\t":"")+MainTable.Columns[i].ColumnName;
+			}
+			strb.AppendLine(headers);
+			for(int i=0;i<MainTable.Rows.Count;i++) {
+				string row="";
+				for(int c=0;c<MainTable.Columns.Count;c++) {
+					if(c>0) {
+						row+="\t";
+					}
+					switch(MainTable.Columns[c].ColumnName) {
+						case "PayrollID":
+						case "EmployeeNum":
+						case "firstName":
+						case "lastName":
+						case "Note":
+							row+=MainTable.Rows[i][c].ToString().Replace("\t","").Replace("\r\n",";  ");
+							break;
+						case "totalHours":
+						case "rate1Hours":
+						case "rate1OTHours":
+						case "rate2Hours":
+						case "rate2OTHours":
+							//Time must me formatted differently.
+							if(PrefC.GetBool(PrefName.TimeCardsUseDecimalInsteadOfColon)) {
+								row+=PIn.Time(MainTable.Rows[i][c].ToString()).TotalHours.ToString("n");
+							}
+							else {
+								row+=PIn.Time(MainTable.Rows[i][c].ToString()).ToStringHmm();
+							}
+							break;
+						default:
+							//should never happen.
+							throw new Exception("Unexpected column found in payroll table : "+MainTable.Columns[c].ColumnName);
+					}//end switch
+				}//end columns
+				strb.AppendLine(row);
+			}
+			string fileName="ODPayroll"+DateTime.Now.ToString("yyyyMMdd_hhmmss")+".TXT";
+			System.IO.File.WriteAllText(fbd.SelectedPath+"\\"+fileName,strb.ToString());
+			MessageBox.Show(this,Lan.g(this,"File created")+" : "+fbd.SelectedPath+"\\"+fileName);
+		}
+
+		private void butExportADP_Click(object sender,EventArgs e) {
+			StringBuilder strb = new StringBuilder();
+			strb.AppendLine("Co Code,Batch ID,File #,Reg Hours,O/T Hours,Shift");
+			string coCode=PrefC.GetString(PrefName.ADPCompanyCode);
+			string batchID=DateStop.ToString("yyyyMMdd");//max 8 characters
+			if(coCode.Length<2 || coCode.Length>3){
+				MessageBox.Show(this,"Company code must be two to three alpha numeric characters long. File will still be exported but will not be processed properly by ADP. Go to Setup>TimeCards to edit.");
+			}
+			coCode=coCode.PadRight(3,'_');//for two digit company codes.
+			for(int i=0;i<MainTable.Rows.Count;i++) {
+				string fileNum="";
+				fileNum=MainTable.Rows[i]["PayrollID"].ToString();
+				if(PIn.Int(fileNum)<51 || PIn.Int(fileNum)>999999) {
+					MessageBox.Show(this,Employees.GetNameFL(Employees.GetEmp(PIn.Long(MainTable.Rows[i]["EmployeeNum"].ToString())))+" not included. Payroll ID must be a number between 51 and 999999.");
+				}
+				fileNum=fileNum.PadLeft(6,'0');
+				string r1hours	=(PIn.TSpan(MainTable.Rows[i]["rate1Hours"  ].ToString())).TotalHours.ToString("F4").Replace("0.0000","");//adp allows 4 digit precision
+				string r1OThours=(PIn.TSpan(MainTable.Rows[i]["rate1OTHours"].ToString())).TotalHours.ToString("F4").Replace("0.0000","");//adp allows 4 digit precision
+				string r2hours	=(PIn.TSpan(MainTable.Rows[i]["rate2Hours"  ].ToString())).TotalHours.ToString("F4").Replace("0.0000","");//adp allows 4 digit precision
+				string r2OThours=(PIn.TSpan(MainTable.Rows[i]["rate2OTHours"].ToString())).TotalHours.ToString("F4").Replace("0.0000","");//adp allows 4 digit precision
+				if(r1hours!="" || r1OThours!="") {//no entry should be made unless there are actually hours for this employee.
+					strb.AppendLine(coCode+","+batchID+","+fileNum+","+r1hours+","+r1OThours+",2");
+				}
+				if(r2hours!="" || r2OThours!="") {//no entry should be made unless there are actually hours for this employee.
+					strb.AppendLine(coCode+","+batchID+","+fileNum+","+r2hours+","+r2OThours+",3");
+				}
+			}
+			FolderBrowserDialog fbd = new FolderBrowserDialog();
+			if(fbd.ShowDialog()!=DialogResult.OK){
+				return;
+			}
+			//System.IO.File.CreateText(fbd.SelectedPath+"\\EPI"+coCode+"00.CSV").Write(strb.ToString());
+			string fileSuffix="";
+			for(int i=0;i<=1297;i++) {//1296=36*36 to represent all acceptable suffixes for file name consisting of two alphanumeric digits; +1 to catch error. (A-Z, 0-9)
+				fileSuffix="";
+				//generate suffix from i
+				if(i==1297) {
+					//could not find acceptable file name.
+					fileSuffix="NamingError";
+					break;
+				}
+				if(i/36<10) {
+					fileSuffix+=(i/36);//truncated to int on purpose.  (0 to 9)
+				}
+				else {
+					fileSuffix+=(Char)((i/36)-10+65);//65='A' in ASCII.  (A to Z)
+				}
+				if(i%36<10){
+					fileSuffix+=(i%36);//(0 to 9)
+				}
+				else {
+					fileSuffix+=(Char)((i%36)-10+65);//65='A' in ASCII.  (A to Z)
+				}
+				//File suffix is now a a two digit alphanumeric string.
+				if(!System.IO.File.Exists(fbd.SelectedPath+"\\EPI"+coCode+fileSuffix+".CSV")){
+					break;
+				}
+			}
+			System.IO.File.WriteAllText(fbd.SelectedPath+"\\EPI"+coCode+fileSuffix+".CSV",strb.ToString());
+			MessageBox.Show(this,Lan.g(this,"File created")+" : "+fbd.SelectedPath+"\\EPI"+coCode+fileSuffix+".CSV");
+		}
+
+		private void butClose_Click(object sender,EventArgs e) {
+			Close();
 		}
 
 
