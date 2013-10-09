@@ -826,38 +826,80 @@ namespace OpenDental {
 			MessageBox.Show(this,Lan.g(this,"File created")+" : "+fbd.SelectedPath+"\\"+fileName);
 		}
 
+		///<summary>Validates format and values and provides aggregate error and warning messages. Will save malformed files anyways.</summary>
 		private void butExportADP_Click(object sender,EventArgs e) {
 			StringBuilder strb = new StringBuilder();
+			string errors="";
+			string warnings="";
+			string errorIndent="  ";
 			strb.AppendLine("Co Code,Batch ID,File #,Reg Hours,O/T Hours,Shift");
 			string coCode=PrefC.GetString(PrefName.ADPCompanyCode);
 			string batchID=DateStop.ToString("yyyyMMdd");//max 8 characters
 			if(coCode.Length<2 || coCode.Length>3){
-				MessageBox.Show(this,"Company code must be two to three alpha numeric characters long. File will still be exported but will not be processed properly by ADP. Go to Setup>TimeCards to edit.");
+				errors+=errorIndent+"Company code must be two to three alpha numeric characters long.  Go to Setup>TimeCards to edit.\r\n";
 			}
 			coCode=coCode.PadRight(3,'_');//for two digit company codes.
 			for(int i=0;i<MainTable.Rows.Count;i++) {
+				string errorsForEmployee="";
+				string warningsForEmployee="";
 				string fileNum="";
 				fileNum=MainTable.Rows[i]["PayrollID"].ToString();
-				if(PIn.Int(fileNum)<51 || PIn.Int(fileNum)>999999) {
-					MessageBox.Show(this,Employees.GetNameFL(Employees.GetEmp(PIn.Long(MainTable.Rows[i]["EmployeeNum"].ToString())))+" not included. Payroll ID must be a number between 51 and 999999.");
+				try {
+					if(PIn.Int(fileNum)<51 || PIn.Int(fileNum)>999999) {
+						errorsForEmployee+=errorIndent+"Payroll ID not between 51 and 999999.\r\n";
+					}
 				}
-				fileNum=fileNum.PadLeft(6,'0');
+				catch (Exception ex){
+					//same error message as above.
+					errorsForEmployee+=errorIndent+"Payroll ID not between 51 and 999999.\r\n";
+				}
+				if(fileNum.Length>6) {
+					errorsForEmployee+=errorIndent+"Payroll ID must be less than 6 digits long.\r\n";
+				}
+				else {//pad payrollIDs that are too short. No effect if payroll ID is 6 digits long.
+					fileNum=fileNum.PadLeft(6,'0');
+				}
 				string r1hours	=(PIn.TSpan(MainTable.Rows[i]["rate1Hours"  ].ToString())).TotalHours.ToString("F4").Replace("0.0000","");//adp allows 4 digit precision
 				string r1OThours=(PIn.TSpan(MainTable.Rows[i]["rate1OTHours"].ToString())).TotalHours.ToString("F4").Replace("0.0000","");//adp allows 4 digit precision
 				string r2hours	=(PIn.TSpan(MainTable.Rows[i]["rate2Hours"  ].ToString())).TotalHours.ToString("F4").Replace("0.0000","");//adp allows 4 digit precision
 				string r2OThours=(PIn.TSpan(MainTable.Rows[i]["rate2OTHours"].ToString())).TotalHours.ToString("F4").Replace("0.0000","");//adp allows 4 digit precision
+				string textToAdd="";
 				if(r1hours!="" || r1OThours!="") {//no entry should be made unless there are actually hours for this employee.
-					strb.AppendLine(coCode+","+batchID+","+fileNum+","+r1hours+","+r1OThours+",2");
+					textToAdd+=coCode+","+batchID+","+fileNum+","+r1hours+","+r1OThours+",2\r\n";
 				}
 				if(r2hours!="" || r2OThours!="") {//no entry should be made unless there are actually hours for this employee.
-					strb.AppendLine(coCode+","+batchID+","+fileNum+","+r2hours+","+r2OThours+",3");
+					textToAdd+=coCode+","+batchID+","+fileNum+","+r2hours+","+r2OThours+",3\r\n";
+				}
+				if(textToAdd=="") {
+					warningsForEmployee+=errorIndent+"No clocked hours.\r\n";// for "+Employees.GetNameFL(Employees.GetEmp(PIn.Long(MainTable.Rows[i]["EmployeeNum"].ToString())))+"\r\n";
+				}
+				else {
+					strb.Append(textToAdd);
+				}
+				//validate characters in text.  Allowed values are 32 to 91 and 93 to 122----------------------------------------------------------------
+				for(int j=0;j<textToAdd.Length;j++) {
+					int charAsInt=(int)textToAdd[j];
+					//these are the characters explicitly allowed by ADP per thier documentation.
+					if(charAsInt>=32 && charAsInt<=122 && charAsInt!=92) {//
+						continue;//valid character
+					}
+					if(charAsInt==10 || charAsInt==13) {//CR LF, not allowed as values but allowed to deliniate rows.
+						continue;//valid character
+					}
+					errorsForEmployee+="Invalid character found (ASCII="+charAsInt+"): "+textToAdd.Substring(j,1)+".\r\n";
+				}
+				//Aggregate employee errors into aggregate error messages.--------------------------------------------------------------------------------
+				if(errorsForEmployee!="") {
+					errors+=Employees.GetNameFL(Employees.GetEmp(PIn.Long(MainTable.Rows[i]["EmployeeNum"].ToString())))+":\r\n"+errorsForEmployee+"\r\n";
+				}
+				if(warningsForEmployee!="") {
+					warnings+=Employees.GetNameFL(Employees.GetEmp(PIn.Long(MainTable.Rows[i]["EmployeeNum"].ToString())))+":\r\n"+warningsForEmployee+"\r\n";
 				}
 			}
 			FolderBrowserDialog fbd = new FolderBrowserDialog();
 			if(fbd.ShowDialog()!=DialogResult.OK){
 				return;
 			}
-			//System.IO.File.CreateText(fbd.SelectedPath+"\\EPI"+coCode+"00.CSV").Write(strb.ToString());
 			string fileSuffix="";
 			for(int i=0;i<=1297;i++) {//1296=36*36 to represent all acceptable suffixes for file name consisting of two alphanumeric digits; +1 to catch error. (A-Z, 0-9)
 				fileSuffix="";
@@ -885,6 +927,12 @@ namespace OpenDental {
 				}
 			}
 			System.IO.File.WriteAllText(fbd.SelectedPath+"\\EPI"+coCode+fileSuffix+".CSV",strb.ToString());
+			if(errors!="") {
+				MessageBox.Show("The following errors will prevent ADP from properly processing this export:\r\n"+errors);
+			}
+			if(warnings!="") {
+				MessageBox.Show("The following warnings were detected:\r\n"+warnings);
+			}
 			MessageBox.Show(this,Lan.g(this,"File created")+" : "+fbd.SelectedPath+"\\EPI"+coCode+fileSuffix+".CSV");
 		}
 

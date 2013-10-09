@@ -53,6 +53,7 @@ namespace OpenDentBusiness.Crud{
 				employee.IsHidden   = PIn.Bool  (table.Rows[i]["IsHidden"].ToString());
 				employee.ClockStatus= PIn.String(table.Rows[i]["ClockStatus"].ToString());
 				employee.PhoneExt   = PIn.Int   (table.Rows[i]["PhoneExt"].ToString());
+				employee.PayrollID  = PIn.String(table.Rows[i]["PayrollID"].ToString());
 				retVal.Add(employee);
 			}
 			return retVal;
@@ -93,7 +94,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="EmployeeNum,";
 			}
-			command+="LName,FName,MiddleI,IsHidden,ClockStatus,PhoneExt) VALUES(";
+			command+="LName,FName,MiddleI,IsHidden,ClockStatus,PhoneExt,PayrollID) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(employee.EmployeeNum)+",";
 			}
@@ -103,7 +104,8 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(employee.MiddleI)+"',"
 				+    POut.Bool  (employee.IsHidden)+","
 				+"'"+POut.String(employee.ClockStatus)+"',"
-				+    POut.Int   (employee.PhoneExt)+")";
+				+    POut.Int   (employee.PhoneExt)+","
+				+"'"+POut.String(employee.PayrollID)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -121,7 +123,8 @@ namespace OpenDentBusiness.Crud{
 				+"MiddleI    = '"+POut.String(employee.MiddleI)+"', "
 				+"IsHidden   =  "+POut.Bool  (employee.IsHidden)+", "
 				+"ClockStatus= '"+POut.String(employee.ClockStatus)+"', "
-				+"PhoneExt   =  "+POut.Int   (employee.PhoneExt)+" "
+				+"PhoneExt   =  "+POut.Int   (employee.PhoneExt)+", "
+				+"PayrollID  = '"+POut.String(employee.PayrollID)+"' "
 				+"WHERE EmployeeNum = "+POut.Long(employee.EmployeeNum);
 			Db.NonQ(command);
 		}
@@ -152,6 +155,10 @@ namespace OpenDentBusiness.Crud{
 			if(employee.PhoneExt != oldEmployee.PhoneExt) {
 				if(command!=""){ command+=",";}
 				command+="PhoneExt = "+POut.Int(employee.PhoneExt)+"";
+			}
+			if(employee.PayrollID != oldEmployee.PayrollID) {
+				if(command!=""){ command+=",";}
+				command+="PayrollID = '"+POut.String(employee.PayrollID)+"'";
 			}
 			if(command==""){
 				return;
