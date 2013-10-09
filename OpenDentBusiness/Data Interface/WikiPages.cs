@@ -441,6 +441,16 @@ namespace OpenDentBusiness{
 					//this should catch all non-allowed self-terminating tags i.e. <br />, <inherits />, etc...
 					throw new ApplicationException("All elements must have a beginning and ending tag. Unexpected tag: "+s.Substring(iScanInParagraph));//not seen by user
 				}
+				//Nesting of identical tags causes problems: 
+				//<h1><h1>some text</h1></h1>
+				//The first <h1> will match with the first </h1>.
+				//We don't have time to support this outlier, so we will catch it in the validator when they save.
+				//One possible strategy here might be:
+				//idxNestedDuplicate=s.IndexOf("<"+tagName+">");
+				//if(idxNestedDuplicate<s.IndexOf("</"+tagName+">"){
+				//
+				//}
+				//Another possible strategy might be to use regular expressions.
 				tagName=tagCurMatch.Value.Split(new string[] { "<"," ",">" },StringSplitOptions.RemoveEmptyEntries)[0];//works with tags like <i>, <span ...>, and <img .../>
 				if(s.IndexOf("</"+tagName+">")==-1) {//this will happen if no ending tag.
 					throw new ApplicationException("No ending tag: "+s.Substring(iScanInParagraph));
@@ -510,12 +520,14 @@ namespace OpenDentBusiness{
 			//aggregate with master
 			s=MasterPage.PageContent.Replace("@@@body@@@",strbOut.ToString());
 			#endregion aggregation
+			/*
+			//js This code is buggy.  It will need very detailed comments and careful review before/if we ever turn it back on.
 			if(isPreviewOnly) {
 				//do not change cursor from pointer to IBeam to Hand as you move the cursor around the preview page
 				s=s.Replace("*{\r\n\t","*{\r\n\tcursor:default;\r\n\t");
 				//do not underline links if you hover over them in the preview window
 				s=s.Replace("a:hover{\r\n\ttext-decoration:underline;","a:hover{\r\n\t");
-			}
+			}*/
 			return s;
 		}
 
