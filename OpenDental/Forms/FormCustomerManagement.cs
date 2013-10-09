@@ -20,7 +20,8 @@ namespace OpenDental{
 		private System.ComponentModel.Container components = null;
 		///<Summary>This will only contain a value if the user clicked GoTo.</Summary>
 		public long SelectedPatNum;
-		private DataTable table;
+		private Label label1;
+		private DataTable TableRegKeys;
 
 		///<summary></summary>
 		public FormCustomerManagement()
@@ -56,37 +57,12 @@ namespace OpenDental{
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormCustomerManagement));
-			this.gridMain = new OpenDental.UI.ODGrid();
-			this.butClose = new OpenDental.UI.Button();
 			this.contextMain = new System.Windows.Forms.ContextMenu();
 			this.menuItemGoTo = new System.Windows.Forms.MenuItem();
+			this.label1 = new System.Windows.Forms.Label();
+			this.gridMain = new OpenDental.UI.ODGrid();
+			this.butClose = new OpenDental.UI.Button();
 			this.SuspendLayout();
-			// 
-			// gridMain
-			// 
-			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(12,12);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(640,629);
-			this.gridMain.TabIndex = 2;
-			this.gridMain.Title = null;
-			this.gridMain.TranslationName = null;
-			// 
-			// butClose
-			// 
-			this.butClose.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butClose.Autosize = true;
-			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(674,615);
-			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(75,26);
-			this.butClose.TabIndex = 0;
-			this.butClose.Text = "Close";
-			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
 			// contextMain
 			// 
@@ -99,10 +75,46 @@ namespace OpenDental{
 			this.menuItemGoTo.Text = "GoTo";
 			this.menuItemGoTo.Click += new System.EventHandler(this.menuItemGoTo_Click);
 			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(12, 9);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(666, 19);
+			this.label1.TabIndex = 18;
+			this.label1.Text = "Below is a list of customers who have active registration keys where no family me" +
+    "mbers have an active repeating charge. \r\n";
+			// 
+			// gridMain
+			// 
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(12, 31);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.Size = new System.Drawing.Size(666, 623);
+			this.gridMain.TabIndex = 2;
+			this.gridMain.Title = "Customers";
+			this.gridMain.TranslationName = null;
+			// 
+			// butClose
+			// 
+			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butClose.Autosize = true;
+			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClose.CornerRadius = 4F;
+			this.butClose.Location = new System.Drawing.Point(714, 628);
+			this.butClose.Name = "butClose";
+			this.butClose.Size = new System.Drawing.Size(75, 26);
+			this.butClose.TabIndex = 0;
+			this.butClose.Text = "Close";
+			this.butClose.Click += new System.EventHandler(this.butClose_Click);
+			// 
 			// FormCustomerManagement
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(801,666);
+			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+			this.ClientSize = new System.Drawing.Size(801, 666);
+			this.Controls.Add(this.label1);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butClose);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -123,22 +135,27 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(){
-			table=RegistrationKeys.GetAllWithoutCharges();
+			Cursor.Current=Cursors.WaitCursor;
+			TableRegKeys=RegistrationKeys.GetAllWithoutCharges();
+			Cursor.Current=Cursors.Default;
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn("Family",160);
+			ODGridColumn col=new ODGridColumn("PatNum",60);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("RegKey",140);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Repeating Charge",150);
+			col=new ODGridColumn("Family",200);
 			gridMain.Columns.Add(col);
+			//col=new ODGridColumn("Repeating Charge",150);
+			//gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			for(int i=0;i<table.Rows.Count;i++){
+			for(int i=0;i<TableRegKeys.Rows.Count;i++){
 				row=new ODGridRow();
-				row.Cells.Add(table.Rows[i]["family"].ToString());
-				row.Cells.Add(table.Rows[i]["RegKey"].ToString());
-				row.Cells.Add(table.Rows[i]["dateStop"].ToString());
+				row.Cells.Add(TableRegKeys.Rows[i]["PatNum"].ToString());
+				row.Cells.Add(TableRegKeys.Rows[i]["RegKey"].ToString());
+				row.Cells.Add(TableRegKeys.Rows[i]["LName"].ToString()+", "+TableRegKeys.Rows[i]["FName"].ToString());
+				//row.Cells.Add(table.Rows[i]["dateStop"].ToString());
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
@@ -148,7 +165,7 @@ namespace OpenDental{
 			if(gridMain.GetSelectedIndex()==-1){
 				return;
 			}
-			SelectedPatNum=PIn.Long(table.Rows[gridMain.GetSelectedIndex()]["PatNum"].ToString());
+			SelectedPatNum=PIn.Long(TableRegKeys.Rows[gridMain.GetSelectedIndex()]["PatNum"].ToString());
 			Close();
 		}
 

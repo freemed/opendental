@@ -90,11 +90,13 @@ namespace OpenDentBusiness {
 			return (table.Rows.Count>0);
 		}
 
-		///<Summary></Summary>
+		///<Summary>Returns any active registration keys that have no repeating charges on any corresponding family members.  Columns include PatNum, LName, FName, and RegKey.</Summary>
 		public static DataTable GetAllWithoutCharges() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod());
 			}
+			#region Old Code
+			/*
 			DataTable table=new DataTable();
 			table.Columns.Add("dateStop");
 			table.Columns.Add("family");
@@ -110,7 +112,7 @@ namespace OpenDentBusiness {
 					Date_ DATE NOT NULL DEFAULT '0001-01-01',
 					PRIMARY KEY(tempRegKeyId),
 					KEY(PatNum));
-				/*Fill table with patnums for all guarantors of regkeys that are still active.*/
+				-- Fill table with patnums for all guarantors of regkeys that are still active.
 				INSERT INTO tempRegKeys (PatNum,RegKey,Date_) 
 				SELECT patient.Guarantor,RegKey,'0001-01-01'
 				FROM registrationkey
@@ -119,21 +121,21 @@ namespace OpenDentBusiness {
 				AND DateEnded='0001-01-01'
 				AND IsFreeVersion=0 
 				AND IsOnlyForTesting=0;
-				/*Set indicators on keys with missing repeatcharges*/
+				-- Set indicators on keys with missing repeatcharges
 				UPDATE tempRegKeys
 				SET IsMissing=1
 				WHERE NOT EXISTS(SELECT * FROM repeatcharge WHERE repeatcharge.PatNum=tempRegKeys.PatNum);
 
-				/*Now, look for expired repeating charges.  This is done in two steps.*/
-				/*Step 1: Mark all keys that have expired repeating charges.*/
-				/*Step 2: Then, remove those markings for all keys that also have unexpired repeating charges.*/
+				-- Now, look for expired repeating charges.  This is done in two steps.
+				-- Step 1: Mark all keys that have expired repeating charges.
+				-- Step 2: Then, remove those markings for all keys that also have unexpired repeating charges.
 				UPDATE tempRegKeys
 				SET Date_=(
 				SELECT IFNULL(MAX(DateStop),'0001-01-01')
 				FROM repeatcharge
 				WHERE repeatcharge.PatNum=tempRegKeys.PatNum
 				AND DateStop < "+DbHelper.Now()+@" AND DateStop > '0001-01-01');
-				/*Step 2:*/
+				-- Step 2:
 				UPDATE tempRegKeys
 				SET Date_='0001-01-01'
 				WHERE EXISTS(
@@ -172,6 +174,25 @@ namespace OpenDentBusiness {
 				table.Rows.Add(row);
 			}
 			return table;
+			*/
+			#endregion
+			//The detailed queries above were taking far too long and were too complicated.
+			//Instead, we will look for any active registration keys that have no repeating charges on any corresponding family members.
+			string command=@"SELECT registrationkey.PatNum,registrationkey.RegKey,patient.LName,patient.FName
+				FROM registrationkey
+				LEFT JOIN patient ON registrationkey.PatNum=patient.PatNum
+				LEFT JOIN (
+					SELECT family.PatNum
+					FROM patient family
+					INNER JOIN repeatcharge ON repeatcharge.PatNum=family.PatNum OR repeatcharge.PatNum=family.Guarantor
+					WHERE (repeatcharge.DateStop >= NOW() OR repeatcharge.DateStop='0001-01-01')
+					) AS activecharges ON registrationkey.PatNum=activecharges.PatNum 
+				WHERE registrationkey.DateDisabled='0001-01-01'
+				AND registrationkey.DateEnded='0001-01-01'
+				AND registrationkey.IsFreeVersion=0 
+				AND registrationkey.IsOnlyForTesting=0
+				AND ISNULL(activecharges.PatNum)";
+			return Db.GetTable(command);
 		}
 
 	
