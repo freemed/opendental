@@ -575,6 +575,8 @@ namespace OpenDental {
 				MessageBox.Show(ex.Message);
 				return false;
 			}
+			//Do not allow duplicate nested tags
+			//doc. (loop through nodes?)
 			//image validation-----------------------------------------------------------------------------------------------------
 			string wikiImagePath=WikiPages.GetWikiPath();//this also creates folder if it's missing.
 			MatchCollection matches=Regex.Matches(textContent.Text,@"\[\[(img:).*?\]\]");// [[img:myimage.jpg]]
@@ -717,6 +719,7 @@ namespace OpenDental {
 				if(node.NodeType!=XmlNodeType.Element){
 					continue;
 				}
+				//check child nodes for nested duplicate
 				switch(node.Name) {
 					case "i":
 					case "b":
@@ -740,6 +743,20 @@ namespace OpenDental {
 						throw new ApplicationException("<"+node.Name+"> is not one of the allowed tags. To display as plain text, escape the brackets with ampersands. I.e. \"&<"+node.Name+"&>\"");
 				}
 				ValidateNodes(node.ChildNodes);
+				ValidateDuplicateNesting(node.Name,node.ChildNodes);
+			}
+		}
+
+		///<summary>Recursive.</summary>
+		private void ValidateDuplicateNesting(string nodeName,XmlNodeList nodes) {
+			foreach(XmlNode node in nodes) {
+				if(node.NodeType!=XmlNodeType.Element) {
+					continue;
+				}
+				if(nodeName==node.Name) {
+					throw new ApplicationException("There are multiple <"+node.Name+"> tags nested within each other.  Remove the unneeded tags.");
+				}
+				ValidateDuplicateNesting(nodeName,node.ChildNodes);
 			}
 		}
 
