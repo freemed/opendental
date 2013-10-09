@@ -1937,6 +1937,29 @@ namespace OpenDentBusiness {
 					command="ALTER TABLE employee ADD PayrollID varchar2(255)";
 					Db.NonQ(command);
 				}
+				//Add indexes to speed up customer management window------------------------------------------------------------------------------------
+				try {
+					if(DataConnection.DBtype==DatabaseType.MySql) {
+						command="ALTER TABLE registrationkey ADD INDEX (PatNum)";
+						Db.NonQ(command);
+					}
+					else {//oracle
+						command=@"CREATE INDEX registrationkey_PatNum ON clockevent (PatNum)";
+						Db.NonQ(command);
+					}
+				}
+				catch(Exception ex) { }//Only an index. (Exception ex) required to catch thrown exception
+				try {
+					if(DataConnection.DBtype==DatabaseType.MySql) {
+						command="ALTER TABLE repeatcharge ADD INDEX (PatNum)";
+						Db.NonQ(command);
+					}
+					else {//oracle
+						command=@"CREATE INDEX repeatcharge_PatNum ON clockevent (PatNum)";
+						Db.NonQ(command);
+					}
+				}
+				catch(Exception ex) { }//Only an index. (Exception ex) required to catch thrown exception
 
 
 
