@@ -212,6 +212,14 @@ namespace OpenDental.UI {
 			}
 		}
 
+		///<summary>The index of the row that is the first row displayed on the ODGrid. Also sets ScrollValue.</summary>
+		public void ScrollToIndex(int index) {
+			if(index>Rows.Count) {
+				return;
+			}
+			ScrollValue=RowLocs[index];
+		}
+
 		///<summary>Gets or sets the position of the vertical scrollbar.  Does all error checking and invalidates.</summary>
 		[Browsable(false)]
 		public int ScrollValue {
