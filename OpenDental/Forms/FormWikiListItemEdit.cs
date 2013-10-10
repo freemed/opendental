@@ -15,7 +15,7 @@ using System.Text.RegularExpressions;
 namespace OpenDental {
 	public partial class FormWikiListItemEdit:Form {
 		///<summary>Name of the wiki list.</summary>
-		public string WikiListCur;
+		public string WikiListCurName;
 		public long ItemNum;
 		public bool IsNew;
 		///<summary>Creating a data table containing only one item allows us to use column names.</summary>
@@ -27,7 +27,7 @@ namespace OpenDental {
 		}
 
 		private void FormWikiListEdit_Load(object sender,EventArgs e) {
-			TableItem = WikiLists.GetItem(WikiListCur,ItemNum);
+			TableItem = WikiLists.GetItem(WikiListCurName,ItemNum);
 			//Show the PK in the title bar for informational purposes.  We don't put it in the grid because user can't change it.
 			this.Text=this.Text+" - "+TableItem.Columns[0]+" "+TableItem.Rows[0][0].ToString();//OK to use 0 indices here. If this fails something else is wrong.
 			FillGrid();
@@ -81,12 +81,12 @@ namespace OpenDental {
 			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete this list item and all references to it?")) {
 				return;
 			}
-			WikiLists.DeleteItem(WikiListCur,ItemNum);
+			WikiLists.DeleteItem(WikiListCurName,ItemNum);
 			DialogResult=DialogResult.OK;
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			WikiLists.UpdateItem(WikiListCur,TableItem);
+			WikiLists.UpdateItem(WikiListCurName,TableItem);
 			DialogResult=DialogResult.OK;
 		}
 

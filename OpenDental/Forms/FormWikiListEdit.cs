@@ -66,7 +66,7 @@ namespace OpenDental {
 
 		private void gridMain_CellDoubleClick(object sender,OpenDental.UI.ODGridClickEventArgs e) {
 			FormWikiListItemEdit FormWLIE = new FormWikiListItemEdit();
-			FormWLIE.WikiListCur=WikiListCurName;
+			FormWLIE.WikiListCurName=WikiListCurName;
 			FormWLIE.ItemNum=PIn.Long(Table.Rows[e.Row][0].ToString());
 			FormWLIE.ShowDialog();
 			//saving occurs from within the form.
@@ -176,12 +176,26 @@ namespace OpenDental {
 		}
 
 		private void butAddItem_Click(object sender,EventArgs e) {
-			WikiLists.AddItem(WikiListCurName);
+			FormWikiListItemEdit FormWLIE = new FormWikiListItemEdit();
+			FormWLIE.WikiListCurName=WikiListCurName;
+			FormWLIE.ItemNum=WikiLists.AddItem(WikiListCurName);
+			FormWLIE.ShowDialog();
+			if(FormWLIE.DialogResult!=DialogResult.OK) {
+				WikiLists.DeleteItem(FormWLIE.WikiListCurName,FormWLIE.ItemNum);//delete new item because dialog was not OK'ed.
+				return;
+			}
 			Table=WikiLists.GetByName(WikiListCurName);
 			FillGrid();
+			for(int i=0;i<gridMain.Rows.Count;i++) {
+				if(gridMain.Rows[i].Cells[0].Text==FormWLIE.ItemNum.ToString()) {		
+					gridMain.Rows[i].ColorBackG=Color.Green;
+					gridMain.ScrollToIndex(i);
+				}
+			}
 		}
 
 		private void textSearch_TextChanged(object sender,EventArgs e) {
+			bool isScrollSet=false;
 			for(int i=0;i<gridMain.Rows.Count;i++) {
 				gridMain.Rows[i].ColorBackG=Color.White;//set all rows back to white.
 				if(textSearch.Text=="") {
@@ -190,6 +204,10 @@ namespace OpenDental {
 				for(int j=0;j<gridMain.Columns.Count;j++) {
 					if(gridMain.Rows[i].Cells[j].Text.ToUpper().Contains(textSearch.Text.ToUpper())) {
 						gridMain.Rows[i].ColorBackG=Color.FromArgb(255,255,128);
+						if(!isScrollSet) {//scroll to the first match in the list.
+							gridMain.ScrollToIndex(i);
+							isScrollSet=true;
+						}
 						break;//next row
 					}
 				}//end j
