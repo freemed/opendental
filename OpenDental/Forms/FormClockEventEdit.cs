@@ -51,8 +51,8 @@ namespace OpenDental{
 		private Label label13;
 		private TextBox textRate2Hours;
 		private Label label14;
-		private TextBox textTotalTime;
-		private TextBox textR1;
+		private TextBox textTotalHours;
+		private TextBox textRate1Auto;
 		private Label label15;
 		private Label label17;
 		private GroupBox groupRate2;
@@ -130,8 +130,8 @@ namespace OpenDental{
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.label14 = new System.Windows.Forms.Label();
-			this.textTotalTime = new System.Windows.Forms.TextBox();
-			this.textR1 = new System.Windows.Forms.TextBox();
+			this.textTotalHours = new System.Windows.Forms.TextBox();
+			this.textRate1Auto = new System.Windows.Forms.TextBox();
 			this.label15 = new System.Windows.Forms.Label();
 			this.label17 = new System.Windows.Forms.Label();
 			this.groupRate2 = new System.Windows.Forms.GroupBox();
@@ -529,23 +529,23 @@ namespace OpenDental{
 			this.label14.Text = "Total Time\r\n(clock+adj)";
 			this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textTotalTime
+			// textTotalHours
 			// 
-			this.textTotalTime.Location = new System.Drawing.Point(100, 34);
-			this.textTotalTime.Name = "textTotalTime";
-			this.textTotalTime.ReadOnly = true;
-			this.textTotalTime.Size = new System.Drawing.Size(68, 20);
-			this.textTotalTime.TabIndex = 34;
-			this.textTotalTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.textTotalHours.Location = new System.Drawing.Point(100, 34);
+			this.textTotalHours.Name = "textTotalHours";
+			this.textTotalHours.ReadOnly = true;
+			this.textTotalHours.Size = new System.Drawing.Size(68, 20);
+			this.textTotalHours.TabIndex = 34;
+			this.textTotalHours.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
-			// textR1
+			// textRate1Auto
 			// 
-			this.textR1.Location = new System.Drawing.Point(100, 80);
-			this.textR1.Name = "textR1";
-			this.textR1.ReadOnly = true;
-			this.textR1.Size = new System.Drawing.Size(68, 20);
-			this.textR1.TabIndex = 12;
-			this.textR1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.textRate1Auto.Location = new System.Drawing.Point(100, 80);
+			this.textRate1Auto.Name = "textRate1Auto";
+			this.textRate1Auto.ReadOnly = true;
+			this.textRate1Auto.Size = new System.Drawing.Size(68, 20);
+			this.textRate1Auto.TabIndex = 12;
+			this.textRate1Auto.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// label15
 			// 
@@ -571,10 +571,10 @@ namespace OpenDental{
 			this.groupRate2.Controls.Add(this.label17);
 			this.groupRate2.Controls.Add(this.textRate2Hours);
 			this.groupRate2.Controls.Add(this.label13);
-			this.groupRate2.Controls.Add(this.textR1);
+			this.groupRate2.Controls.Add(this.textRate1Auto);
 			this.groupRate2.Controls.Add(this.textRate2Auto);
 			this.groupRate2.Controls.Add(this.label15);
-			this.groupRate2.Controls.Add(this.textTotalTime);
+			this.groupRate2.Controls.Add(this.textTotalHours);
 			this.groupRate2.Controls.Add(this.label14);
 			this.groupRate2.Location = new System.Drawing.Point(352, 164);
 			this.groupRate2.Name = "groupRate2";
@@ -675,40 +675,47 @@ namespace OpenDental{
 				textOTimeHours.Text=ClockEvents.Format(ClockEventCur.OTimeHours);
 			}
 			textNote.Text=ClockEventCur.Note;
+			FillRate2();
 		}
 
 		private void FillRate2() {
-			try {
-				DateTime.Parse(textTimeDisplayed1.Text);//because this must always be valid
-				DateTime.Parse(textTimeDisplayed2.Text);//this must also be filled in order to calculate timespans
+			textRate2Auto.Text=ClockEvents.Format(ClockEventCur.Rate2Auto);//display this even if other values are not able to be calculated.
+			if(ClockEventCur.Rate2Hours==TimeSpan.FromHours(-1)) {
+				textRate2Hours.Text="";
 			}
-			catch {//an invalid date/time.
-				//textTotalTime.Text="";
-				//textRegTime.Text="";
+			else {
+				textRate2Hours.Text=ClockEvents.Format(ClockEventCur.Rate2Hours);//display this even if other values are not able to be calculated.
+			}
+			TimeSpan totalHours=new TimeSpan();
+			//TimeSpan adjust=new TimeSpan();
+			try{
+				totalHours=TimeSpan.FromHours(PIn.Float(textClockedTime.Text));
+			}
+			catch (Exception ex){
 				return;
 			}
-			DateTime dt1=DateTime.Parse(textTimeDisplayed1.Text);
-			DateTime dt2=DateTime.Parse(textTimeDisplayed2.Text);
-			if(dt1 > dt2) {
-				return;
+			if(textAdjust.Text!=""){
+				try{
+					totalHours+=TimeSpan.Parse(textAdjust.Text);
+				}
+				catch(Exception ex){
+					return;
+				}
+			}else{
+				totalHours+=ClockEventCur.AdjustAuto;
 			}
-			//TODO: finish this... ugh. 
-
-			//TimeSpan totalTime=dt2-dt1+(.AdjustIsOverridden?ClockEventCur.Adjust:ClockEventCur.AdjustAuto);
-			//textTotalTime.Text=ClockEvents.Format(totalTime);
-			//textRate2Auto.Text=ClockEvents.Format(ClockEventCur.Rate2Auto);
-			//if(ClockEventCur.Rate2Hours==TimeSpan.FromHours(-1)) {
-			//	textRate2Hours.Text="";
-			//}
-			//else {
-			//	textRate2Hours.Text=ClockEvents.Format(ClockEventCur.Rate2Hours);
-			//}
-			//if(ClockEventCur.Rate2Hours!=TimeSpan.FromHours(-1)) {
-			//	textR1.Text=ClockEvents.Format(totalTime-ClockEventCur.Rate2Hours);
-			//}
-			//else {
-			//	textR1.Text=ClockEvents.Format(totalTime-ClockEventCur.Rate2Auto);
-			//}
+			textTotalHours.Text=ClockEvents.Format(totalHours);
+			if(textRate2Hours.Text!=""){
+				try{
+					textRate1Auto.Text=ClockEvents.Format(totalHours+TimeSpan.Parse(textRate2Hours.Text));
+				}
+				catch(Exception ex){
+					return;
+				}
+			}
+			else{
+				textRate1Auto.Text=ClockEvents.Format(totalHours-ClockEventCur.Rate2Auto);
+			}
 		}
 
 		///<summary>Does not alter the overrides, but only the auto calc boxes.  Triggered by many things on this form.  It's better to have it be triggered too frequently than to miss something.</summary>
@@ -726,7 +733,7 @@ namespace OpenDental{
 				DateTime.Parse(textTimeDisplayed2.Text);//this must also be filled in order to calculate timespans
 			}
 			catch{//an invalid date/time.
-				//textTotalTime.Text="";
+				//textTotalHours.Text="";
 				//textRegTime.Text="";
 				return;
 			}
@@ -787,22 +794,27 @@ namespace OpenDental{
 
 		private void textTimeDisplayed2_TextChanged(object sender,EventArgs e) {
 			FillTimeSpans();
+			FillRate2();
 		}
 
 		private void textTimeDisplayed1_TextChanged(object sender,EventArgs e) {
 			FillTimeSpans();
+			FillRate2();
 		}
 
 		private void textTimeEntered2_TextChanged(object sender,EventArgs e) {
 			FillTimeSpans();
+			FillRate2();
 		}
 
 		private void textAdjust_TextChanged(object sender,EventArgs e) {
 			FillTimeSpans();
+			FillRate2();
 		}
 
 		private void textOvertime_TextChanged(object sender,EventArgs e) {
 			FillTimeSpans();
+			FillRate2();
 		}
 
 		private void butNow1_Click(object sender,EventArgs e) {
@@ -816,6 +828,7 @@ namespace OpenDental{
 				ClockEventCur.TimeEntered2=MiscData.GetNowDateTime();
 			}
 			FillTimeSpans();//not really needed because of the TextChanged event, but might prevent a bug.
+			FillRate2();
 		}
 
 		private void butClear_Click(object sender,EventArgs e) {
@@ -823,6 +836,7 @@ namespace OpenDental{
 			textTimeEntered2.Text="";
 			ClockEventCur.TimeEntered2=DateTime.MinValue;
 			FillTimeSpans();//not really needed because of the TextChanged event, but might prevent a bug.
+			FillRate2();
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {

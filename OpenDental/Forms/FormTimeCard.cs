@@ -845,7 +845,8 @@ namespace OpenDental{
 					//in/out------------------------------------------
 					row.Cells.Add("");//4
 					//time-----------------------------
-					row.Cells.Add(adjust.TimeEntry.ToShortTimeString());//5
+					row.Cells.Add("(Adjust)");//Out column
+					row.Cells[row.Cells.Count-1].ColorText=Color.Red;
 					//total-------------------------------
 					row.Cells.Add("");//
 					//Adjust------------------------------
@@ -888,8 +889,7 @@ namespace OpenDental{
 						row.Cells.Add("");
 					}
 					//Note-----------------------------------------
-					row.Cells.Add("(Adjust)"+adjust.Note);
-					row.Cells[row.Cells.Count-1].ColorText=Color.Red;
+					row.Cells.Add(adjust.Note);
 				}
 				gridMain.Rows.Add(row);
 			}

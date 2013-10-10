@@ -54,8 +54,7 @@ namespace OpenDentBusiness{
 			for(int i=0;i<retVal.Count;i++) {
 				if(retVal[i].TimeDisplayed2.Year<1880) {
 					errors+="  "+retVal[i].TimeDisplayed1.ToShortDateString()+" : the employee did not clock "+(isBreaks?"in from break":"out")+".\r\n";
-				}
-				if(retVal[i].TimeDisplayed1.Date!=retVal[i].TimeDisplayed2.Date) {
+				} else if(retVal[i].TimeDisplayed1.Date!=retVal[i].TimeDisplayed2.Date) {
 					errors+="  "+retVal[i].TimeDisplayed1.ToShortDateString()+" : "+(isBreaks?"break":"entry")+" spans multiple days.\r\n";
 				}
 			}
@@ -88,7 +87,7 @@ namespace OpenDentBusiness{
 				if(retVal[i].TimeDisplayed2.Year<1880) {
 					errors+="  "+retVal[i].TimeDisplayed1.ToShortDateString()+" : the employee did not clock out.\r\n";
 				}
-				if(retVal[i].TimeDisplayed1.Date!=retVal[i].TimeDisplayed2.Date) {
+				else if(retVal[i].TimeDisplayed1.Date!=retVal[i].TimeDisplayed2.Date) {
 					errors+="  "+retVal[i].TimeDisplayed1.ToShortDateString()+" : entry spans multiple days.\r\n";
 				}
 			}

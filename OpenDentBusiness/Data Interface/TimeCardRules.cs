@@ -434,7 +434,15 @@ namespace OpenDentBusiness{
 				bool isValidBreak=false;
 				for(int c=0;c<listClockEvent.Count;c++) {
 					if(timeClockEventsOverlapHelper(listClockEventBreak[b],listClockEvent[c])) {
-						isValidBreak=true;
+						if(listClockEventBreak[b].TimeDisplayed1>listClockEvent[c].TimeDisplayed1//break started after work did
+							&& listClockEventBreak[b].TimeDisplayed2<listClockEvent[c].TimeDisplayed2)//break ended before working hours
+						{
+							//valid break.
+							isValidBreak=true;
+							break;
+						}
+						//invalid break.
+						isValidBreak=false;//redundant, but harmless. Makes code more readable.
 						break;
 					}
 				}
