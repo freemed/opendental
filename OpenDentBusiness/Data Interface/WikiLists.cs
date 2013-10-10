@@ -203,14 +203,13 @@ namespace OpenDentBusiness{
 			//no column found. Should never reach this location.
 		}
 
-		///<summary>Column is automatically named "Column#" where # is the number of columns+1.</summary>
-		public static void AddItem(string listName) {
+		///<summary>Adds one item to wiki list and returns the new PK.</summary>
+		public static long AddItem(string listName) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),listName);
-				return;
+				return Meth.GetLong(MethodBase.GetCurrentMethod(),listName);
 			}
 			string command = "INSERT INTO wikilist_"+POut.String(listName)+" VALUES ()";//inserts empty row with auto generated PK.
-			Db.NonQ(command);
+			return Db.NonQ(command,true);
 		}
 
 		/// <summary></summary>
