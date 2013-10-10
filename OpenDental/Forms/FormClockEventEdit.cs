@@ -471,6 +471,7 @@ namespace OpenDental{
 			this.textRate2Hours.Size = new System.Drawing.Size(68, 20);
 			this.textRate2Hours.TabIndex = 32;
 			this.textRate2Hours.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.textRate2Hours.TextChanged += new System.EventHandler(this.textRate2Hours_TextChanged);
 			// 
 			// butDelete
 			// 
@@ -642,6 +643,13 @@ namespace OpenDental{
 				groupTimeSpans.Visible=false;
 				groupRate2.Visible=false;
 			}
+			//Set Text Fields----------------
+			FillInitialControlsHelper();
+		}
+
+		///<summary>Fills all controls based on the values of ClockEventCur, which is a copy of the object from the DB.</summary>
+		private void FillInitialControlsHelper() {
+			//Clock In/Out fields---------------------------------------------------------------------
 			textTimeEntered1.Text=ClockEventCur.TimeEntered1.ToString();
 			textTimeDisplayed1.Text=ClockEventCur.TimeDisplayed1.ToString();
 			if(ClockEventCur.TimeEntered2.Year>1880){
@@ -650,11 +658,20 @@ namespace OpenDental{
 			if(ClockEventCur.TimeDisplayed2.Year>1880){
 				textTimeDisplayed2.Text=ClockEventCur.TimeDisplayed2.ToString();
 			}
+			//Clock status (i.e. Home, Lunch, Break)--------------------------------------------------
 			listStatus.Items.Clear();
 			for(int i=0;i<Enum.GetNames(typeof(TimeClockStatus)).Length;i++){
 				listStatus.Items.Add(Lan.g("enumTimeClockStatus",Enum.GetNames(typeof(TimeClockStatus))[i]));
 			}
 			listStatus.SelectedIndex=(int)ClockEventCur.ClockStatus;//all clockevents have a status
+			//Time Spans -----------------------------------------------------------------------------
+			//Clocked time------------------------------
+			TimeSpan clockedTime=TimeSpan.Zero;
+			if(ClockEventCur.TimeDisplayed2.Year>1880) {
+				clockedTime=ClockEventCur.TimeDisplayed2-ClockEventCur.TimeDisplayed1;
+				textClockedTime.Text=ClockEvents.Format(clockedTime);
+			}
+			//Adj ------------------------------------
 			textAdjustAuto.Text=ClockEvents.Format(ClockEventCur.AdjustAuto);
 			if(ClockEventCur.AdjustIsOverridden) {
 				if(ClockEventCur.Adjust==TimeSpan.Zero) {
@@ -662,11 +679,13 @@ namespace OpenDental{
 				}
 				else {
 					textAdjust.Text=ClockEvents.Format(ClockEventCur.Adjust);
+
 				}
 			}
 			else {
 				textAdjust.Text="";
 			}
+			//Overtime --------------------------------
 			textOTimeAuto.Text=ClockEvents.Format(ClockEventCur.OTimeAuto);
 			if(ClockEventCur.OTimeHours==TimeSpan.FromHours(-1)) {//no override
 				textOTimeHours.Text="";
@@ -674,147 +693,227 @@ namespace OpenDental{
 			else {
 				textOTimeHours.Text=ClockEvents.Format(ClockEventCur.OTimeHours);
 			}
-			textNote.Text=ClockEventCur.Note;
-			FillRate2();
-		}
-
-		private void FillRate2() {
-			textRate2Auto.Text=ClockEvents.Format(ClockEventCur.Rate2Auto);//display this even if other values are not able to be calculated.
+			//Regular Time -----------------------------
+			if(clockedTime>TimeSpan.Zero) {
+				TimeSpan regularTime=clockedTime
+					+(ClockEventCur.AdjustIsOverridden								?ClockEventCur.Adjust		:ClockEventCur.AdjustAuto)
+					-(ClockEventCur.OTimeHours==TimeSpan.FromHours(-1)?ClockEventCur.OTimeAuto:ClockEventCur.OTimeHours);
+				textRegTime.Text=ClockEvents.Format(regularTime);
+			}
+			//Rate 2 spans -----------------------------------------------------------------------------
+			if(clockedTime>TimeSpan.Zero) {
+				TimeSpan totalTime=clockedTime+(ClockEventCur.AdjustIsOverridden?ClockEventCur.Adjust:ClockEventCur.AdjustAuto);//clockedTime+(Adj or AdjAuto)
+				TimeSpan rate1Hours=totalTime-(ClockEventCur.Rate2Hours==TimeSpan.FromHours(-1)?ClockEventCur.Rate2Auto:ClockEventCur.Rate2Hours);//totalTime-(Rate2 or Rate2Auto)
+				textTotalHours.Text=ClockEvents.Format(totalTime);
+				textRate1Auto.Text=ClockEvents.Format(rate1Hours);
+			}
+			//Rate 2 Time -----------------------------
+			textRate2Auto.Text=ClockEvents.Format(ClockEventCur.Rate2Auto);
 			if(ClockEventCur.Rate2Hours==TimeSpan.FromHours(-1)) {
 				textRate2Hours.Text="";
 			}
 			else {
-				textRate2Hours.Text=ClockEvents.Format(ClockEventCur.Rate2Hours);//display this even if other values are not able to be calculated.
+				textRate2Hours.Text=ClockEvents.Format(ClockEventCur.Rate2Hours);
 			}
-			TimeSpan totalHours=new TimeSpan();
-			//TimeSpan adjust=new TimeSpan();
-			try{
-				totalHours=TimeSpan.FromHours(PIn.Float(textClockedTime.Text));
-			}
-			catch (Exception ex){
-				return;
-			}
-			if(textAdjust.Text!=""){
-				try{
-					totalHours+=TimeSpan.Parse(textAdjust.Text);
-				}
-				catch(Exception ex){
-					return;
-				}
-			}else{
-				totalHours+=ClockEventCur.AdjustAuto;
-			}
-			textTotalHours.Text=ClockEvents.Format(totalHours);
-			if(textRate2Hours.Text!=""){
-				try{
-					textRate1Auto.Text=ClockEvents.Format(totalHours+TimeSpan.Parse(textRate2Hours.Text));
-				}
-				catch(Exception ex){
-					return;
-				}
-			}
-			else{
-				textRate1Auto.Text=ClockEvents.Format(totalHours-ClockEventCur.Rate2Auto);
-			}
+			
+			//notes ------------------------------------------------------------------------------------
+			textNote.Text=ClockEventCur.Note;
 		}
 
-		///<summary>Does not alter the overrides, but only the auto calc boxes.  Triggered by many things on this form.  It's better to have it be triggered too frequently than to miss something.</summary>
-		private void FillTimeSpans() {
-			if(ClockEventCur.ClockStatus==TimeClockStatus.Break){//TimeSpans not showing
-				return;
+		///<summary>Fills all controls based on the values of ClockEventCur, which is a copy of the object from the DB.</summary>
+		private void FillAutoControlsHelper() {
+			//Clock In/Out fields---------------------------------------------------------------------
+			textTimeEntered1.Text=ClockEventCur.TimeEntered1.ToString();
+			if(ClockEventCur.TimeEntered2.Year>1880) {
+				textTimeEntered2.Text=ClockEventCur.TimeEntered2.ToString();
 			}
-			if(textTimeEntered2.Text=="" || textTimeDisplayed2.Text=="") {
-				textClockedTime.Text="";
-				textRegTime.Text="";
-				return;
+			//Clocked time------------------------------
+			TimeSpan clockedTime=TimeSpan.Zero;
+			if(ClockEventCur.TimeDisplayed2.Year>1880) {
+				clockedTime=ClockEventCur.TimeDisplayed2-ClockEventCur.TimeDisplayed1;
+				textClockedTime.Text=ClockEvents.Format(clockedTime);
 			}
-			try{
-				DateTime.Parse(textTimeDisplayed1.Text);//because this must always be valid
-				DateTime.Parse(textTimeDisplayed2.Text);//this must also be filled in order to calculate timespans
+			//Adj ------------------------------------
+			textAdjustAuto.Text=ClockEvents.Format(ClockEventCur.AdjustAuto);
+			//Overtime --------------------------------
+			textOTimeAuto.Text=ClockEvents.Format(ClockEventCur.OTimeAuto);
+			//Regular Time -----------------------------
+			if(clockedTime>TimeSpan.Zero) {
+				TimeSpan regularTime=clockedTime
+					+(ClockEventCur.AdjustIsOverridden								?ClockEventCur.Adjust		:ClockEventCur.AdjustAuto)
+					-(ClockEventCur.OTimeHours==TimeSpan.FromHours(-1)?ClockEventCur.OTimeAuto:ClockEventCur.OTimeHours);
+				textRegTime.Text=ClockEvents.Format(regularTime);
 			}
-			catch{//an invalid date/time.
-				//textTotalHours.Text="";
-				//textRegTime.Text="";
-				return;
+			//Rate 2 spans -----------------------------------------------------------------------------
+			if(clockedTime>TimeSpan.Zero) {
+				TimeSpan totalTime=clockedTime+(ClockEventCur.AdjustIsOverridden?ClockEventCur.Adjust:ClockEventCur.AdjustAuto);//clockedTime+(Adj or AdjAuto)
+				TimeSpan rate1Hours=totalTime-(ClockEventCur.Rate2Hours==TimeSpan.FromHours(-1)?ClockEventCur.Rate2Auto:ClockEventCur.Rate2Hours);//totalTime-(Rate2 or Rate2Auto)
+				textTotalHours.Text=ClockEvents.Format(totalTime);
+				textRate1Auto.Text=ClockEvents.Format(rate1Hours);
 			}
-			DateTime dt1=DateTime.Parse(textTimeDisplayed1.Text);
-			DateTime dt2=DateTime.Parse(textTimeDisplayed2.Text);
-			if(dt1 > dt2){
-				return;
-			}
-			TimeSpan clockedTime=dt2-dt1;
-			textClockedTime.Text=ClockEvents.Format(clockedTime);
-			TimeSpan overtime=ClockEventCur.OTimeAuto;
-			if(textOTimeHours.Text!="") {
-				try {
-					if(textOTimeHours.Text.Contains(":")) {
-						overtime=TimeSpan.Parse(textOTimeHours.Text);
-					}
-					else {
-						overtime=TimeSpan.FromHours(Double.Parse(textOTimeHours.Text));
-					}
-				}
-				catch {
-					return;
-				}
-			}
-			TimeSpan adjust=ClockEventCur.AdjustAuto;
-			if(textAdjust.Text!="") {
-				try {
-					if(textAdjust.Text.Contains(":")) {
-						adjust=TimeSpan.Parse(textAdjust.Text);
-					}
-					else {
-						adjust=TimeSpan.FromHours(Double.Parse(textAdjust.Text));
-					}
-				}
-				catch {
-					return;
-				}
-			}
-			TimeSpan regTime=clockedTime-overtime+adjust;//adjust is typically a negative value
-			if(regTime<TimeSpan.Zero) {
-				textRegTime.Text="";
-				return;
-			}
-			textRegTime.Text=ClockEvents.Format(regTime);
-			//if(ClockEventCur.AmountBonusAuto==-1) {
-			//  textAmountBonusAuto.Text="";
-			//}
-			//else {
-			//  textAmountBonusAuto.Text=ClockEventCur.AmountBonusAuto.ToString("f");
-			//}
-			//if(ClockEventCur.AmountBonus==-1) {
-			//  textAmountBonus.Text="";
-			//}
-			//else {
-			//  textAmountBonus.Text=ClockEventCur.AmountBonus.ToString("f");
-			//}
+			//Rate 2 Time -----------------------------
+			textRate2Auto.Text=ClockEvents.Format(ClockEventCur.Rate2Auto);
+			//notes ------------------------------------------------------------------------------------
+			textNote.Text=ClockEventCur.Note;
 		}
 
+/////<summary>Does not alter the overrides, but only the auto calc boxes.  Triggered by many things on this form.  It's better to have it be triggered too frequently than to miss something.</summary>
+		//private void FillTimeSpans() {
+		//	if(ClockEventCur.ClockStatus==TimeClockStatus.Break){//TimeSpans not showing
+		//		return;
+		//	}
+		//	if(textTimeEntered2.Text=="" || textTimeDisplayed2.Text=="") {
+		//		textClockedTime.Text="";
+		//		textRegTime.Text="";
+		//		return;
+		//	}
+		//	try{
+		//		DateTime.Parse(textTimeDisplayed1.Text);//because this must always be valid
+		//		DateTime.Parse(textTimeDisplayed2.Text);//this must also be filled in order to calculate timespans
+		//	}
+		//	catch{//an invalid date/time.
+		//		//textTotalHours.Text="";
+		//		//textRegTime.Text="";
+		//		return;
+		//	}
+		//	DateTime dt1=DateTime.Parse(textTimeDisplayed1.Text);
+		//	DateTime dt2=DateTime.Parse(textTimeDisplayed2.Text);
+		//	if(dt1 > dt2){
+		//		return;
+		//	}
+		//	TimeSpan clockedTime=dt2-dt1;
+		//	textClockedTime.Text=ClockEvents.Format(clockedTime);
+		//	TimeSpan overtime=ClockEventCur.OTimeAuto;
+		//	if(textOTimeHours.Text!="") {
+		//		try {
+		//			if(textOTimeHours.Text.Contains(":")) {
+		//				overtime=TimeSpan.Parse(textOTimeHours.Text);
+		//			}
+		//			else {
+		//				overtime=TimeSpan.FromHours(Double.Parse(textOTimeHours.Text));
+		//			}
+		//		}
+		//		catch {
+		//			return;
+		//		}
+		//	}
+		//	TimeSpan adjust=ClockEventCur.AdjustAuto;
+		//	if(textAdjust.Text!="") {
+		//		try {
+		//			if(textAdjust.Text.Contains(":")) {
+		//				adjust=TimeSpan.Parse(textAdjust.Text);
+		//			}
+		//			else {
+		//				adjust=TimeSpan.FromHours(Double.Parse(textAdjust.Text));
+		//			}
+		//		}
+		//		catch {
+		//			return;
+		//		}
+		//	}
+		//	TimeSpan regTime=clockedTime-overtime+adjust;//adjust is typically a negative value
+		//	if(regTime<TimeSpan.Zero) {
+		//		textRegTime.Text="";
+		//		return;
+		//	}
+		//	textRegTime.Text=ClockEvents.Format(regTime);
+		//	//if(ClockEventCur.AmountBonusAuto==-1) {
+		//	//  textAmountBonusAuto.Text="";
+		//	//}
+		//	//else {
+		//	//  textAmountBonusAuto.Text=ClockEventCur.AmountBonusAuto.ToString("f");
+		//	//}
+		//	//if(ClockEventCur.AmountBonus==-1) {
+		//	//  textAmountBonus.Text="";
+		//	//}
+		//	//else {
+		//	//  textAmountBonus.Text=ClockEventCur.AmountBonus.ToString("f");
+		//	//}
+		//}
 		private void textTimeDisplayed2_TextChanged(object sender,EventArgs e) {
-			FillTimeSpans();
-			FillRate2();
+			try {
+				ClockEventCur.TimeDisplayed2=DateTime.Parse(textTimeDisplayed2.Text);
+			}
+			catch{
+				clearAutoFieldsHelper();
+				return;
+			}
+			FillAutoControlsHelper();
 		}
 
 		private void textTimeDisplayed1_TextChanged(object sender,EventArgs e) {
-			FillTimeSpans();
-			FillRate2();
+			try {
+				ClockEventCur.TimeDisplayed1=DateTime.Parse(textTimeDisplayed1.Text);
+			}
+			catch {
+				clearAutoFieldsHelper();
+				return;
+			}
+			FillAutoControlsHelper();
 		}
 
 		private void textTimeEntered2_TextChanged(object sender,EventArgs e) {
-			FillTimeSpans();
-			FillRate2();
+			try {
+				if(textTimeEntered2.Text=="") {
+					ClockEventCur.TimeEntered2=DateTime.MinValue;
+				}
+				else {
+					ClockEventCur.TimeEntered2=PIn.Date(textTimeEntered2.Text);
+				}
+			}
+			catch {
+				return;
+			}
+			FillAutoControlsHelper();
 		}
 
 		private void textAdjust_TextChanged(object sender,EventArgs e) {
-			FillTimeSpans();
-			FillRate2();
+			try {
+				if(textAdjust.Text=="") {
+					ClockEventCur.AdjustIsOverridden=false;
+					ClockEventCur.Adjust=TimeSpan.Zero;
+				}
+				else {
+					ClockEventCur.AdjustIsOverridden=true;
+					ClockEventCur.Adjust=TimeSpan.FromHours(Double.Parse(textAdjust.Text));
+				}
+			}
+			catch {
+				return;
+			}
+			FillAutoControlsHelper();
 		}
 
 		private void textOvertime_TextChanged(object sender,EventArgs e) {
-			FillTimeSpans();
-			FillRate2();
+			try {
+				if(textOTimeHours.Text=="") {
+					ClockEventCur.OTimeHours=TimeSpan.FromHours(-1);
+				}
+				else {
+					//ClockEventCur.OTimeHours=PIn.Time(textOTimeHours.Text);
+					ClockEventCur.OTimeHours=TimeSpan.FromHours(Double.Parse(textOTimeHours.Text));
+				}
+			}
+			catch {
+				return;
+			}
+			FillAutoControlsHelper();
+		}
+
+		private void textRate2Hours_TextChanged(object sender,EventArgs e) {
+			try {
+				if(textRate2Hours.Text=="") {
+					ClockEventCur.Rate2Hours=TimeSpan.Zero;
+				}
+				else {
+					//ClockEventCur.Rate2Hours=PIn.Time(textRate2Hours.Text);
+					ClockEventCur.Rate2Hours=TimeSpan.FromHours(Double.Parse(textRate2Hours.Text));
+				}
+			}
+			catch {
+				return;
+			}
+			FillAutoControlsHelper();
 		}
 
 		private void butNow1_Click(object sender,EventArgs e) {
@@ -827,16 +926,24 @@ namespace OpenDental{
 				textTimeEntered2.Text=MiscData.GetNowDateTime().ToString();
 				ClockEventCur.TimeEntered2=MiscData.GetNowDateTime();
 			}
-			FillTimeSpans();//not really needed because of the TextChanged event, but might prevent a bug.
-			FillRate2();
+			//FillTimeSpans();//not really needed because of the TextChanged event, but might prevent a bug.
+			FillAutoControlsHelper();
 		}
 
 		private void butClear_Click(object sender,EventArgs e) {
 			textTimeDisplayed2.Text="";
 			textTimeEntered2.Text="";
 			ClockEventCur.TimeEntered2=DateTime.MinValue;
-			FillTimeSpans();//not really needed because of the TextChanged event, but might prevent a bug.
-			FillRate2();
+			clearAutoFieldsHelper();
+			//FillTimeSpans();//not really needed because of the TextChanged event, but might prevent a bug.
+			FillAutoControlsHelper();
+		}
+
+		private void clearAutoFieldsHelper() {
+			textClockedTime.Text="";
+			textTotalHours.Text="";
+			textRegTime.Text="";
+			textRate1Auto.Text="";
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {
@@ -982,6 +1089,9 @@ namespace OpenDental{
 			}
 			else {
 				ClockEventCur.OTimeHours=overtime;
+			}
+			if(textRate2Hours.Text=="") {
+				ClockEventCur.Rate2Hours=TimeSpan.FromHours(-1);
 			}
 			//if(textAmountBonus.Text=="") {
 			//  ClockEventCur.AmountBonus=-1;
