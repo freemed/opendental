@@ -98,6 +98,7 @@ namespace OpenDental {
 					continue;
 				}
 				try {
+					Thread.Sleep(1000);
 					if(requestCodeSystemDownloadHelper(ListCodeSystems[gridMain.SelectedIndices[i]].CodeSystemName)) {//can throw exceptions
 						CodeSystems.UpdateCurrentVersion(ListCodeSystems[gridMain.SelectedIndices[i]]);//set current version=available version
 					}
@@ -165,7 +166,14 @@ subject to the End User limitations noted in 4.","SNOMED CT sub-license End User
 				codeSystemURL=node.InnerText;
 			}
 			//Download File to local machine
-			string tempFile=downloadFileHelper(codeSystemURL);//shows progress bar."http://localhost/codesystems/SNOMEDCT.zip");//
+			Thread.Sleep(2000);//wait 2 seconds between downloads.
+			string tempFile="";
+			try {
+				tempFile=downloadFileHelper(codeSystemURL,codeSystemName);//shows progress bar."http://localhost/codesystems/SNOMEDCT.zip");//
+			}
+			catch(Exception ex) {
+				throw ex;
+			}
 			try {//moved try/catch outside of switch statement to make code more readable, functions the same.
 				switch(codeSystemName) {
 					case "AdministrativeSex":
@@ -228,7 +236,10 @@ subject to the End User limitations noted in 4.","SNOMED CT sub-license End User
 		}
 
 		///<summary>Returns temp file name used to download file.  Returns null if the file was not downloaded.  Throws errors if problem unzipping.</summary>
-		private static string downloadFileHelper(string codeSystemURL) {
+		/// <param name="codeSystemURL">Passed to download thread to begin downloading target file.</param>
+		/// <param name="codeSystemName">Used for display purposes only.</param>
+		/// <returns></returns>
+		private static string downloadFileHelper(string codeSystemURL,string codeSystemName) {
 			string zipFileDestination=Path.GetTempFileName();//@"c:\users\ryan\desktop\"+codeSystemName+".txt";
 			File.Delete(zipFileDestination);
 			WebRequest wr=WebRequest.Create(codeSystemURL);
@@ -249,6 +260,10 @@ subject to the End User limitations noted in 4.","SNOMED CT sub-license End User
 			FormP.DisplayText="?currentVal MB of ?maxVal MB copied";
 			FormP.NumberFormat="F";
 			FormP.TickMS=10;
+			if(codeSystemName!=""){
+				FormP.Text=codeSystemName;
+			}
+			//FormP.Text=codeSystemURL.
 			//FormP.MaxVal=fileSize;//to keep the form from closing until the real MaxVal is set.
 			//FormP.NumberMultiplication=1;
 			//FormP.DisplayText="Preparing records for upload.";
@@ -377,74 +392,6 @@ subject to the End User limitations noted in 4.","SNOMED CT sub-license End User
 				return "";
 			}
 			return result;
-		}
-
-		private void butHCPCS_Click(object sender,EventArgs e) {
-			return;
-			string command="DROP TABLE IF EXISTS tempLoincImport";
-			DataCore.NonQ(command);
-			command=@"CREATE TABLE tempLoincImport (LoincNum BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-								LOINC_NUMCol VarChar(255) Not Null,
-								COMPONENTCol VarChar(255) Not Null,
-								PROPERTYCol VarChar(255) Not Null,
-								TIME_ASPCTCol VarChar(255) Not Null,
-								SYSTEMCol VarChar(255) Not Null,
-								SCALE_TYPCol VarChar(255) Not Null,
-								METHOD_TYPCol VarChar(255) Not Null,
-								CLASSCol VarChar(255) Not Null,
-								SOURCECol VarChar(255) Not Null,
-								DATE_LAST_CHANGEDCol VarChar(255) Not Null,
-								CHNG_TYPECol VarChar(255) Not Null,
-								COMMENTSCol VarChar(255) Not Null,
-								STATUSCol VarChar(255) Not Null,
-								CONSUMER_NAMECol VarChar(255) Not Null,
-								MOLAR_MASSCol VarChar(255) Not Null,
-								CLASSTYPECol VarChar(255) Not Null,
-								FORMULACol VarChar(255) Not Null,
-								SPECIESCol VarChar(255) Not Null,
-								EXMPL_ANSWERSCol VarChar(255) Not Null,
-								ACSSYMCol VarChar(255) Not Null,
-								BASE_NAMECol VarChar(255) Not Null,
-								NAACCR_IDCol VarChar(255) Not Null,
-								CODE_TABLECol VarChar(255) Not Null,
-								SURVEY_QUEST_TEXTCol VarChar(255) Not Null,
-								SURVEY_QUEST_SRCCol VarChar(255) Not Null,
-								UNITSREQUIREDCol VarChar(255) Not Null,
-								SUBMITTED_UNITSCol VarChar(255) Not Null,
-								RELATEDNAMES2Col VarChar(255) Not Null,
-								SHORTNAMECol VarChar(255) Not Null,
-								ORDER_OBSCol VarChar(255) Not Null,
-								CDISC_COMMON_TESTSCol VarChar(255) Not Null,
-								HL7_FIELD_SUBFIELD_IDCol VarChar(255) Not Null,
-								EXTERNAL_COPYRIGHT_NOTICECol Text Not Null,
-								EXAMPLE_UNITSCol VarChar(255) Not Null,
-								LONG_COMMON_NAMECol VarChar(255) Not Null,
-								HL7_V2_DATATYPECol VarChar(255) Not Null,
-								HL7_V3_DATATYPECol VarChar(255) Not Null,
-								CURATED_RANGE_AND_UNITSCol VarChar(255) Not Null,
-								DOCUMENT_SECTIONCol VarChar(255) Not Null,
-								EXAMPLE_UCUM_UNITSCol VarChar(255) Not Null,
-								EXAMPLE_SI_UCUM_UNITSCol VarChar(255) Not Null,
-								STATUS_REASONCol VarChar(255) Not Null,
-								STATUS_TEXTCol VarChar(255) Not Null,
-								CHANGE_REASON_PUBLICCol VarChar(255) Not Null,
-								COMMON_TEST_RANKCol VarChar(255) Not Null,
-								COMMON_ORDER_RANKCol VarChar(255) Not Null,
-								COMMON_SI_TEST_RANKCol VarChar(255) Not Null,
-								HL7_ATTACHMENT_STRUCTURECol VarChar(255) Not Null
-								) DEFAULT CHARSET=utf8;";
-			DataCore.NonQ(command);
-			string[] lines=File.ReadAllLines(@"C:\Users\Ryan\Desktop\LOINC.txt");
-			string[] arrayLOINC;
-			for(int i=1;i<lines.Length;i++) {//skip first line
-				command="INSERT INTO tempLoincImport VALUES ('"+i+"'";//primary key
-				arrayLOINC=lines[i].Split('\t');
-				for(int j=0;j<arrayLOINC.Length;j++) {
-					command+=",'"+POut.String(arrayLOINC[j].Trim('"'))+"'";
-				}
-				command+=")";
-				DataCore.NonQ(command);
-			}
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {

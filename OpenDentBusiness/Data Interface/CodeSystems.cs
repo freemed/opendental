@@ -16,7 +16,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<CodeSystem>>(MethodBase.GetCurrentMethod());
 			}
-			string command="SELECT * FROM codesystem WHERE CodeSystemName!='AdministrativeSex'";
+			string command="SELECT * FROM codesystem WHERE CodeSystemName!='AdministrativeSex' AND CodeSystemName!='CDT'";
 			return Crud.CodeSystemCrud.SelectMany(command);
 		}
 

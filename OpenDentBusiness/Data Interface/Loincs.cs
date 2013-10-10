@@ -7,6 +7,7 @@ using System.Text;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class Loincs{
+		/*
 		#region CachePattern
 		//This region can be eliminated if this is not a table type with cached data.
 		//If leaving this region in place, be sure to add RefreshCache and FillCache 
@@ -43,7 +44,7 @@ namespace OpenDentBusiness{
 			//No need to check RemotingRole; no call to db.
 			listt=Crud.LoincCrud.TableToList(table);
 		}
-		#endregion
+		#endregion*/
 
 		///<summary></summary>
 		public static long Insert(Loinc lOINC){
@@ -99,8 +100,8 @@ namespace OpenDentBusiness{
 			List<string> retVal=new List<string>();
 			string command="SELECT LoincCode FROM loinc";
 			DataTable table=DataCore.GetTable(command);
-			foreach(DataRow row in table.Rows) {
-				retVal.Add(row.ItemArray[0].ToString());
+			for(int i=0;i<table.Rows.Count;i++) {
+				retVal.Add(table.Rows[i].ItemArray[0].ToString());
 			}
 			return retVal;
 		}

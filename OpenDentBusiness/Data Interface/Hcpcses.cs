@@ -65,8 +65,8 @@ namespace OpenDentBusiness{
 			List<string> retVal=new List<string>();
 			string command="SELECT HcpcsCode FROM hcpcs";
 			DataTable table=DataCore.GetTable(command);
-			foreach(DataRow row in table.Rows) {
-				retVal.Add(row.ItemArray[0].ToString());
+			for(int i=0;i<table.Rows.Count;i++){
+				retVal.Add(table.Rows[i][0].ToString());
 			}
 			return retVal;
 		}

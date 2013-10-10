@@ -191,8 +191,8 @@ namespace OpenDentBusiness{
 			List<string> retVal=new List<string>();
 			string command="SELECT icd9code FROM icd9";
 			DataTable table=DataCore.GetTable(command);
-			foreach(DataRow row in table.Rows) {
-				retVal.Add(row.ItemArray[0].ToString());
+			for(int i=0;i<table.Rows.Count;i++){
+				retVal.Add(table.Rows[i].ItemArray[0].ToString());
 			}
 			return retVal;
 		}

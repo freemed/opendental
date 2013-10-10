@@ -56,7 +56,7 @@ namespace OpenDentBusiness{
 			return false;
 		}
 
-		///<summary>Depricated. Truncates the current rxnorm and refills based on the rxnorm.zip resource.  May take a few seconds.</summary>
+		///<summary>Deprecated. Truncates the current rxnorm and refills based on the rxnorm.zip resource.  May take a few seconds.</summary>
 		public static void CreateFreshRxNormTableFromZip() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod());
@@ -154,7 +154,7 @@ namespace OpenDentBusiness{
 			return Crud.RxNormCrud.Insert(rxNorm);
 		}
 
-		///<summary>Returns a list of just the codes for use in update or insert logic.</summary>
+		///<summary>Returns a list of just the codes for use in the codesystem import tool.</summary>
 		public static List<string> GetAllCodes() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<string>>(MethodBase.GetCurrentMethod());
@@ -162,8 +162,8 @@ namespace OpenDentBusiness{
 			List<string> retVal=new List<string>();
 			string command="SELECT RxCui FROM rxnorm";//will return some duplicates due to the nature of the data in the table. This is acceptable.
 			DataTable table=DataCore.GetTable(command);
-			foreach(DataRow row in table.Rows) {
-				retVal.Add(row.ItemArray[0].ToString());
+			for(int i=0;i<table.Rows.Count;i++) {
+				retVal.Add(table.Rows[i].ItemArray[0].ToString());
 			}
 			return retVal;
 		}
