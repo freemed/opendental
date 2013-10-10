@@ -30,104 +30,126 @@ namespace OpenDental {
 		public PhoneTile() {
 			InitializeComponent();
 		}
-
-		public Phone PhoneCur {
-			get {
-				return phoneCur; 
+		
+		///<summary>Set phone and triage flag to display. Get/Set accessor won't work here because we require 2 seperate fields in order to update the control properly.</summary>
+		public void SetPhone(Phone phone,bool isTriageOperator) {
+			phoneCur=phone;
+			if(phoneCur==null) { //empty out everything and return
+				this.Visible=false;
+				pictureWebCam.Image=null;//or just make it not visible?
+				pictureInUse.Visible=false;
+				labelExtensionName.Text="";
+				labelStatusAndNote.Text="";
+				labelTime.Text="";
+				labelTime.BackColor=this.BackColor;
+				labelCustomer.Text="";
+				return;
 			}
-			set {
-				if(DesignMode) {
-					return;
-				}
-				phoneCur = value;
-				if(phoneCur==null) {
-					pictureScreen.Image=null;
-					pictureWebCam.Image=null;//or just make it not visible?
-					pictureInUse.Visible=false;
-					labelExtensionName.Text="";
-					labelStatusAndNote.Text="";
-					labelTime.Text="";
-					labelTime.BackColor=this.BackColor;
-					labelCustomer.Text="";
-				}
-				else {
-					if(ShowImageForced) {
-						pictureWebCam.Image=PIn.Bitmap(phoneCur.WebCamImage);
-					}
-					else if(phoneCur.ClockStatus==ClockStatusEnum.Home
-						|| phoneCur.ClockStatus==ClockStatusEnum.None
-						|| phoneCur.ClockStatus==ClockStatusEnum.Off)
-					{
-						pictureWebCam.Image=null;
-					}
-					else if(phoneCur.ClockStatus==ClockStatusEnum.Break
-						|| phoneCur.ClockStatus==ClockStatusEnum.Lunch)
-					{
-						Bitmap bmp=new Bitmap(pictureWebCam.Width,pictureWebCam.Height);
-						Graphics g=Graphics.FromImage(bmp);
-						try{
-							g.FillRectangle(SystemBrushes.Control,0,0,bmp.Width,bmp.Height);
-							string strStat=phoneCur.ClockStatus.ToString();
-							SizeF sizef=g.MeasureString(strStat,labelStatusAndNote.Font);
-							g.DrawString(strStat,labelStatusAndNote.Font,SystemBrushes.GrayText,(bmp.Width-sizef.Width)/2,(bmp.Height-sizef.Height)/2);
-							pictureWebCam.Image=(Image)bmp.Clone();
-						}
-						finally{
-							g.Dispose();
-							g=null;
-							bmp.Dispose();
-							bmp=null;
-						}
-					}
-					else{
-						pictureWebCam.Image=PIn.Bitmap(phoneCur.WebCamImage);
-					}
-					if(phoneCur.ClockStatus==ClockStatusEnum.Home
-						|| phoneCur.ClockStatus==ClockStatusEnum.None
-						|| phoneCur.ClockStatus==ClockStatusEnum.Off
-						|| phoneCur.ClockStatus==ClockStatusEnum.Break
+			this.Visible=true;
+			if(ShowImageForced) {
+				pictureWebCam.Image=PIn.Bitmap(phoneCur.WebCamImage);
+				pictureWebCam.Visible=true;
+			}
+			else if(phoneCur.ClockStatus==ClockStatusEnum.Home
+				|| phoneCur.ClockStatus==ClockStatusEnum.None
+				|| phoneCur.ClockStatus==ClockStatusEnum.Off) 
+			{
+				pictureWebCam.Image=null;
+				pictureWebCam.Visible=false;
+			}
+			else if(phoneCur.ClockStatus==ClockStatusEnum.Break
 						|| phoneCur.ClockStatus==ClockStatusEnum.Lunch) {
-						pictureScreen.Image=null;
-					}
-					else {
-						pictureScreen.Image=PIn.Bitmap(phoneCur.ScreenshotImage);
-					}
-					if(phoneCur.Description=="") {
-						pictureInUse.Visible=false;
-					}
-					else {
-						pictureInUse.Visible=true;
-					}
-					labelExtensionName.Text="";
-					string str=phoneCur.ClockStatus.ToString();
-					//Check if the user is logged in.
-					if(phoneCur.ClockStatus==ClockStatusEnum.None
-						|| phoneCur.ClockStatus==ClockStatusEnum.Home) 
-					{
-						if(layoutHorizontal) {//Big phones looks odd without the extensions.
-							labelExtensionName.Text=phoneCur.Extension.ToString();
-						}
-						str="Clock In";
-					}
-					else {//User is clocked in so show their ext and name.
-						labelExtensionName.Text=phoneCur.Extension.ToString()+" - "+phoneCur.EmployeeName;
-					}
-					labelStatusAndNote.Text=str;
-					DateTime dateTimeStart=phoneCur.DateTimeStart;
-					if(dateTimeStart.Date==DateTime.Today) {
-						TimeSpan span=DateTime.Now-dateTimeStart+TimeDelta;
-						DateTime timeOfDay=DateTime.Today+span;
-						labelTime.Text=timeOfDay.ToString("H:mm:ss");
-					}
-					else {
-						labelTime.Text="";
-					}
-					labelTime.BackColor=phoneCur.ColorBar;
-					labelCustomer.Text=phoneCur.CustomerNumber;
+				pictureWebCam.Visible=true;
+				Bitmap bmp=new Bitmap(pictureWebCam.Width,pictureWebCam.Height);
+				Graphics g=Graphics.FromImage(bmp);
+				try {
+					g.FillRectangle(SystemBrushes.Control,0,0,bmp.Width,bmp.Height);
+					string strStat=phoneCur.ClockStatus.ToString();
+					SizeF sizef=g.MeasureString(strStat,labelStatusAndNote.Font);
+					g.DrawString(strStat,labelStatusAndNote.Font,SystemBrushes.GrayText,(bmp.Width-sizef.Width)/2,(bmp.Height-sizef.Height)/2);
+					pictureWebCam.Image=(Image)bmp.Clone();
+				}
+				finally {
+					g.Dispose();
+					g=null;
+					bmp.Dispose();
+					bmp=null;
 				}
 			}
+			else {
+				pictureWebCam.Visible=true;
+				pictureWebCam.Image=PIn.Bitmap(phoneCur.WebCamImage);
+			}
+			if(phoneCur.Description=="") {
+				pictureInUse.Visible=false;
+			}
+			else {
+				pictureInUse.Visible=true;
+			}
+			labelExtensionName.Text="";
+			string str=phoneCur.ClockStatus.ToString();
+			//Check if the user is logged in.
+			if(phoneCur.ClockStatus==ClockStatusEnum.None
+				|| phoneCur.ClockStatus==ClockStatusEnum.Home) 
+			{
+				str="Clock In";
+			}
+			//Always show ext and name, no matter if user is clocked in or not. This keeps phone tiles from appearing blank with no extension and name.
+			string nameStr="Vacant";
+			if(phoneCur.EmployeeName!="") {
+				nameStr=phoneCur.EmployeeName;
+			}
+			labelExtensionName.Text=phoneCur.Extension.ToString()+" - "+nameStr;
+			labelStatusAndNote.Text=str;
+			DateTime dateTimeStart=phoneCur.DateTimeStart;
+			if(dateTimeStart.Date==DateTime.Today) {
+				TimeSpan span=DateTime.Now-dateTimeStart+TimeDelta;
+				DateTime timeOfDay=DateTime.Today+span;
+				labelTime.Text=timeOfDay.ToString("H:mm:ss");
+			}
+			else {
+				labelTime.Text="";
+			}
+			if(phoneCur.ClockStatus==ClockStatusEnum.NeedsHelp) {
+				if(!timerFlash.Enabled) { //Only start the flash timer and color the control once. This prevents over-flashing effect.
+					labelTime.BackColor=Phones.ColorOrchid;
+					labelTime.Tag=new object[2] { false,labelTime.BackColor };
+					timerFlash.Start();
+				}
+			}
+			else if(phoneCur.ClockStatus==ClockStatusEnum.Home
+				|| phoneCur.ClockStatus==ClockStatusEnum.None
+				|| phoneCur.ClockStatus==ClockStatusEnum.Break) 
+			{
+				labelTime.BackColor=this.BackColor;//No color if employee is not currently working.
+			}
+			else if(isTriageOperator) {//Color triage operator specially, don't pay attention to what the phone server is telling us.
+				labelTime.BackColor=Phones.ColorSkyBlue;
+			}			
+			else {//Phone Server is actively setting this value for us when phone status changes.
+				labelTime.BackColor=phoneCur.ColorBar;
+			}
+			if(phoneCur.ClockStatus==ClockStatusEnum.Home
+					|| phoneCur.ClockStatus==ClockStatusEnum.None) 
+			{
+				labelTime.BorderStyle=System.Windows.Forms.BorderStyle.None;//Remove color box if employee is not currently working.
+			}
+			else {
+				labelTime.BorderStyle=System.Windows.Forms.BorderStyle.FixedSingle;
+			}
+			if(phoneCur.ClockStatus!=ClockStatusEnum.NeedsHelp) { //Always assume the flash timer was previously turned on and turn it off here.
+				timerFlash.Stop();
+			}
+			labelCustomer.Text=phoneCur.CustomerNumber;
 		}
 
+		///<summary>use SetPhone function to set phone and triage flag</summary>
+		public Phone PhoneCur {
+			get {
+				return phoneCur;
+			}
+		}
+		
 		[Category("Layout"),Description("Set true for horizontal layout and false for vertical.")]
 		public bool LayoutHorizontal{
 			get{
@@ -150,7 +172,6 @@ namespace OpenDental {
 					labelCustomer.TextAlign=ContentAlignment.MiddleLeft;
 				}
 				else{//vertical
-					pictureScreen.Visible=false;
 					pictureWebCam.Location=new Point(51,3);
 					pictureInUse.Location=new Point(14,43);
 					labelExtensionName.Location=new Point(37,43);
@@ -213,7 +234,61 @@ namespace OpenDental {
 			//  return;
 			//}
 			OnSelectedTileChanged();
+			bool allowStatusEdit=ClockEvents.IsClockedIn(PhoneCur.EmployeeNum);
+			if(PhoneCur.EmployeeNum==Security.CurUser.EmployeeNum) { //Always allow status edit for yourself
+				allowStatusEdit=true;
+			}
+			if(PhoneCur.ClockStatus==ClockStatusEnum.NeedsHelp) { //Always allow any employee to change any other employee from NeedsAssistance to Available
+				allowStatusEdit=true;
+			}
+			string statusOnBehalfOf=PhoneCur.EmployeeName;
+			bool allowSetSelfAvailable=false;
+			if(!ClockEvents.IsClockedIn(PhoneCur.EmployeeNum) //No one is clocked in at this extension.
+				&& !ClockEvents.IsClockedIn(Security.CurUser.EmployeeNum)) //This user is not clocked in either.
+			{ 
+				//Vacant extension and this user is not clocked in so allow this user to clock in at this extension.
+				statusOnBehalfOf=Security.CurUser.UserName;
+				allowSetSelfAvailable=true;
+			}
+			AddToolstripGroup("menuItemStatusOnBehalf","Status for: "+statusOnBehalfOf);
+			AddToolstripGroup("menuItemRingGroupOnBehalf","Ringgroup for ext: "+PhoneCur.Extension.ToString());
+			AddToolstripGroup("menuItemClockOnBehalf","Clock event for: "+PhoneCur.EmployeeName);
+			SetToolstripItemText("menuItemAvailable",allowStatusEdit || allowSetSelfAvailable);
+			SetToolstripItemText("menuItemTraining",allowStatusEdit);
+			SetToolstripItemText("menuItemTeamAssist",allowStatusEdit);
+			SetToolstripItemText("menuItemNeedsHelp",allowStatusEdit);
+			SetToolstripItemText("menuItemWrapUp",allowStatusEdit);
+			SetToolstripItemText("menuItemOfflineAssist",allowStatusEdit);
+			SetToolstripItemText("menuItemUnavailable",allowStatusEdit);
+			SetToolstripItemText("menuItemBackup",allowStatusEdit);
+			SetToolstripItemText("menuItemLunch",allowStatusEdit);
+			SetToolstripItemText("menuItemHome",allowStatusEdit);
+			SetToolstripItemText("menuItemBreak",allowStatusEdit);
 			MenuStatus.Show(labelStatusAndNote,e.Location);		
+		}
+
+		private void AddToolstripGroup(string groupName,string itemText) {
+			ToolStripItem[] tsiFound=MenuStatus.Items.Find(groupName,false);
+			if(tsiFound==null || tsiFound.Length<=0) {
+				return;
+			}
+			tsiFound[0].Text=itemText;
+		}
+
+		private void SetToolstripItemText(string toolStripItemName,bool isClockedIn) {
+			ToolStripItem[] tsiFound=MenuStatus.Items.Find(toolStripItemName,false);
+			if(tsiFound==null || tsiFound.Length<=0) {
+				return;
+			}
+			//set back to default
+			tsiFound[0].Text=tsiFound[0].Text.Replace(" (Not Clocked In)","");
+			if(isClockedIn) {
+				tsiFound[0].Enabled=true;				
+			}
+			else {
+				tsiFound[0].Enabled=false;
+				tsiFound[0].Text=tsiFound[0].Text+" (Not Clocked In)";
+			}			
 		}
 
 		protected void OnSelectedTileChanged() {
@@ -222,11 +297,31 @@ namespace OpenDental {
 			}
 		}
 
-		private void pictureScreen_Click(object sender,EventArgs e) {
+		private void phoneTile_Click(object sender,EventArgs e) {
 			if(ScreenshotClick!=null) {
 				ScreenshotClick(this,new EventArgs());
 			}
 		}
+
+		private void timerFlash_Tick(object sender,EventArgs e) {
+			bool isColored=true;
+			Color flashColor=SystemColors.Control;
+			if(labelTime.Tag!=null 
+				&& labelTime.Tag is object[]
+				&& ((object[])labelTime.Tag).Length>=2) 
+			{
+					if(((object[])labelTime.Tag)[0] is bool) {
+						isColored=(bool)((object[])labelTime.Tag)[0];
+					}
+					if(((object[])labelTime.Tag)[1] is Color) {
+						flashColor=(Color)((object[])labelTime.Tag)[1];
+					}
+			}
+			labelTime.BackColor=isColored?this.BackColor:flashColor;
+			labelTime.Tag=new object[2] { !isColored,flashColor };
+		}
+
+		
 
 		
 

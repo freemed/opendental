@@ -11,6 +11,7 @@ using OpenDentBusiness;
 namespace OpenDental {
 	public partial class UserControlPhoneSmall:UserControl {
 		private List<Phone> phoneList;
+		private List<PhoneEmpDefault> phoneEmpDefaultList;
 		///<summary>When the GoToChanged event fires, this tells us which patnum.</summary>
 		public long GotoPatNum;
 		///<summary></summary>
@@ -18,21 +19,20 @@ namespace OpenDental {
 		public event EventHandler GoToChanged=null;
 		public int Extension;
 
-		public List<Phone> PhoneList {
-			set { 
-				phoneList = value;
-				Invalidate();
-			}
+		///<summary>Set list of phones to display. Get/Set accessor won't work here because we require 2 seperate fields in order to update the control properly.</summary>
+		public void SetPhoneList(List<PhoneEmpDefault> peds,List<Phone> phones) {
+			//create a new list so our sorting doesn't affect this list elsewhere
+			phoneList=new List<Phone>(phones);
+			phoneList.Sort(new Phones.PhoneComparer(Phones.PhoneComparer.SortBy.ext));			
+			phoneEmpDefaultList=peds;
+			Invalidate();
 		}
 
-		///<summary>Set to null to not show an employee.</summary>
-		public Phone PhoneCur {
-			set { 
-				phoneTile.PhoneCur= value;
-				//Invalidate();
-			}
+		///<summary>Set the phone which is linked to the extension at this desk. If phone==null then no phone info shown.</summary>
+		public void SetPhone(Phone phone,bool isTriageOperator) {
+			phoneTile.SetPhone(phone,isTriageOperator);
 		}
-
+		
 		public UserControlPhoneSmall() {
 			InitializeComponent();
 			phoneTile.GoToChanged += new System.EventHandler(this.phoneTile_GoToChanged);
@@ -41,14 +41,14 @@ namespace OpenDental {
 		}
 
 		private void FillTile() {
-			phoneList=Phones.GetPhoneList();
-			Invalidate();//as long as we have a new list anyway.
-			if(phoneList==null) {
-				phoneTile.PhoneCur=null;
+			//Get the new phone list from the database and redraw control.
+			SetPhoneList(PhoneEmpDefaults.Refresh(),Phones.GetPhoneList());
+			//Set the currently selected phone accordingly.
+			if(phoneList==null) {//No phone list. Shouldn't get here.
+				phoneTile.SetPhone(null,false);
 				return;
 			}
-			Phone phone=Phones.GetPhoneForExtension(phoneList,Extension);
-			phoneTile.PhoneCur=phone;//could be null
+			phoneTile.SetPhone(Phones.GetPhoneForExtension(phoneList,Extension),PhoneEmpDefaults.IsTriageOperatorForExtension(Extension,phoneEmpDefaultList));	
 		}
 
 		private void UserControlPhoneSmall_Paint(object sender,PaintEventArgs e) {
@@ -66,15 +66,19 @@ namespace OpenDental {
 			float y=0f;
 			//Create a white "background" rectangle so that any empty squares (no employees) will show as white boxes instead of no color.
 			g.FillRectangle(new SolidBrush(Color.White),x,y,boxWidth*columns,boxHeight*rows);
-			for(int i=0;i<phoneList.Count;i++) {
-				//Colors the box a color based on the corresponding phone's status.
-				using(SolidBrush brush=new SolidBrush(phoneList[i].ColorBar)) {
-					g.FillRectangle(brush,x*boxWidth,y*boxHeight,boxWidth,boxHeight);
-				}
+			for(int i=0;i<phoneList.Count;i++) {				
 				//Draw the extension number if a person is available at that extension.
 				if(phoneList[i].ClockStatus!=ClockStatusEnum.Home
-					&& phoneList[i].ClockStatus!=ClockStatusEnum.None) 
-				{
+					&& phoneList[i].ClockStatus!=ClockStatusEnum.None) {
+					//Colors the box a color based on the corresponding phone's status.
+					//IsTriageOperator flag can fight with phone server so let's be sure to color the box appropriately by getting the current value.
+					Color color=phoneList[i].ColorBar;
+					if(PhoneEmpDefaults.IsTriageOperatorForExtension(phoneList[i].Extension,phoneEmpDefaultList)) {
+						color=Phones.ColorSkyBlue;
+					}
+					using(SolidBrush brush=new SolidBrush(color)) {
+						g.FillRectangle(brush,x*boxWidth,y*boxHeight,boxWidth,boxHeight);
+					}
 					Font baseFont=new Font("Arial",7);
 					SizeF extSize=g.MeasureString(phoneList[i].Extension.ToString(),baseFont);
 					float padX=(boxWidth-extSize.Width)/2;
@@ -162,6 +166,11 @@ namespace OpenDental {
 			FillTile();
 		}
 
+		private void menuItemBackup_Click(object sender,EventArgs e) {
+			PhoneUI.Backup(phoneTile);
+			FillTile();
+		}		
+
 		//RingGroups---------------------------------------------------
 
 		private void menuItemRinggroupAll_Click(object sender,EventArgs e) {
@@ -176,9 +185,8 @@ namespace OpenDental {
 			PhoneUI.RinggroupsDefault(phoneTile);
 		}
 
-		private void menuItemBackup_Click(object sender,EventArgs e) {
-			PhoneUI.Backup(phoneTile);
-			FillTile();
+		private void menuItemRinggroupsBackup_Click(object sender,EventArgs e) {
+			PhoneUI.RinggroupsBackup(phoneTile);
 		}
 
 		//Timecard---------------------------------------------------

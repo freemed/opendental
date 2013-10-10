@@ -113,7 +113,7 @@ namespace OpenDental {
 						continue;
 					}
 					//we are on a future date AND we don't have a PhoneGraph entry explicitly set so use the default for this employee
-					PhoneEmpDefault ped=PhoneEmpDefaults.GetEmpDefault(ListScheds[i].EmployeeNum,ListPED);
+					PhoneEmpDefault ped=PhoneEmpDefaults.GetEmpDefaultFromList(ListScheds[i].EmployeeNum,ListPED);
 					if(ped==null) {//we will default to PhoneEmpDefault.IsGraphed so make sure the deafult exists
 						continue;
 					}

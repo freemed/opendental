@@ -68,7 +68,16 @@ namespace OpenDentBusiness{
 			return isGraphed;
 		}
 
-		public static PhoneEmpDefault GetEmpDefault(long employeeNum,List<PhoneEmpDefault> listPED) {
+		///<summary>Gets one PhoneEmpDefault from the db.  Can return null.</summary>
+		public static PhoneEmpDefault GetOne(long employeeNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<PhoneEmpDefault>(MethodBase.GetCurrentMethod(),employeeNum);
+			}
+			return Crud.PhoneEmpDefaultCrud.SelectOne(employeeNum);
+		}
+
+		///<summary>From local list. Can return null.</summary>
+		public static PhoneEmpDefault GetEmpDefaultFromList(long employeeNum,List<PhoneEmpDefault> listPED) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<listPED.Count;i++) {
 				if(listPED[i].EmployeeNum==employeeNum) {
@@ -98,7 +107,37 @@ namespace OpenDentBusiness{
 			return AsteriskRingGroups.All;
 		}
 
-		///<summary>Was in phoneoverrides.  Sets the user's ext, name and status override.</summary>
+		///<summary>Default to extension explicitly linked to this computer name in FormPhoneEmpDefaultEdit. If none found then uses last 2 digits of ip address.  Returns 0 if none found.</summary>
+		public static int GetPhoneExtension(string ipAddress,string computerName,List<PhoneEmpDefault> listPED) {
+			//No need to check RemotingRole; no call to db.
+			//first find if there is a computername override entered by staff
+			for(int i=0;i<listPED.Count;i++) {
+				if(listPED[i].ComputerName==computerName) {
+					return listPED[i].PhoneExt;
+				}
+			}
+			//there is no computername override entered by staff, so figure out what the extension should be
+			if(ipAddress.Contains("10.10.1.2")) {
+				return PIn.Int(ipAddress.ToString().Substring(8))-100;//eg 205-100=105
+			}
+			return 0;//couldn't find good extension
+		}
+
+		///<summary>Find first employee with this extension and return their IsTriageOperator flag.</summary>
+		public static bool IsTriageOperatorForExtension(int extension,List<PhoneEmpDefault> listPED) {
+			//No need to check RemotingRole; no call to db.
+			if(extension==0) {
+				return false;
+			}
+			for(int i=0;i<listPED.Count;i++) {
+				if(listPED[i].PhoneExt==extension) {
+					return listPED[i].IsTriageOperator;
+				}
+			}
+			return false; //couldn't find extension
+		}
+
+		///<summary>The employee passed in will take over the extension passed in.  Moves any other employee who currently has this extension set (in phoneempdefault) to extension zero.  This prevents duplicate extensions in phoneempdefault.</summary>
 		public static void SetAvailable(int extension,long empNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),extension,empNum);
@@ -151,27 +190,28 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
-		/// <summary>sorting class used to sort PhoneEmpDefaultComparer in various ways</summary>
+		/// <summary>sorting class used to sort PhoneEmpDefault in various ways</summary>
 		public class PhoneEmpDefaultComparer:IComparer<PhoneEmpDefault> {
 			
-			public enum SortBy { ext, empNum, name };
-			
-			private SortBy _sortBy = SortBy.name;
+			private SortBy SortOn = SortBy.name;
 			
 			public PhoneEmpDefaultComparer(SortBy sortBy) {
-				_sortBy=sortBy;
+				SortOn=sortBy;
 			}
 			
 			public int Compare(PhoneEmpDefault x,PhoneEmpDefault y) {
-				int retVal = 0;
-				switch(_sortBy) {
+				int retVal=0;
+				switch(SortOn) {
 					case SortBy.empNum:
-						retVal = x.EmployeeNum.CompareTo(y.EmployeeNum); break;
+						retVal=x.EmployeeNum.CompareTo(y.EmployeeNum); 
+						break;
 					case SortBy.ext:
-						retVal = x.PhoneExt.CompareTo(y.PhoneExt); break;
+						retVal=x.PhoneExt.CompareTo(y.PhoneExt); 
+						break;
 					case SortBy.name:
 					default:
-						retVal = x.EmpName.CompareTo(y.EmpName); break;					
+						retVal=x.EmpName.CompareTo(y.EmpName);
+						break;
 				}
 				if(retVal==0) {//last name is tie breaker
 					return x.EmpName.CompareTo(y.EmpName);
@@ -179,22 +219,16 @@ namespace OpenDentBusiness{
 				//we got here so our sort was successful
 				return retVal;
 			}
+			
+			public enum SortBy {
+				///<summary>0 - By Extension.</summary>
+				ext,
+				///<summary>1 - By EmployeeNum.</summary>
+				empNum,
+				///<summary>2 - By Name.</summary>
+				name
+			};
 		}
-		/*
-		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
-
-		
-
-		///<summary>Gets one PhoneEmpDefault from the db.</summary>
-		public static PhoneEmpDefault GetOne(long employeeNum){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				return Meth.GetObject<PhoneEmpDefault>(MethodBase.GetCurrentMethod(),employeeNum);
-			}
-			return Crud.PhoneEmpDefaultCrud.SelectOne(employeeNum);
-		}
-
-		
-		*/
 
 
 

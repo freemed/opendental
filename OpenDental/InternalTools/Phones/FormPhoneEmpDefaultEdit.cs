@@ -669,23 +669,66 @@ namespace OpenDental{
 						return;
 					}
 					break;
-				case PhoneEmpStatusOverride.Unavailable:
-					//We set ourselves unavailable from this window because we require an explination.
-					//This is the only status that will synch with the phone table, all others should be handled by the small phone panel.
-					Phones.SetPhoneStatus(ClockStatusEnum.Unavailable,PedCur.PhoneExt);
-					break;
 			}
-			if(IsNew){
-				if(textEmployeeNum.Text==""){
+			if(IsNew) {
+				if(textEmployeeNum.Text=="") {
 					MsgBox.Show(this,"Unique EmployeeNum is required.");
 					return;
 				}
-				if(textEmpName.Text==""){
+				if(textEmpName.Text=="") {
 					MsgBox.Show(this,"Employee name is required.");
 					return;
 				}
 				PedCur.EmployeeNum=PIn.Long(textEmployeeNum.Text);
 			}
+			//Get the current database state of the phone emp default (before we change it)
+			PhoneEmpDefault pedFromDatabase=PhoneEmpDefaults.GetOne(PedCur.EmployeeNum);
+			int newExtension=PIn.Int(textPhoneExt.Text);
+			bool extensionChange=pedFromDatabase.PhoneExt!=newExtension;
+			if(extensionChange) { //Only check when extension has changed and clocked in.
+				//We need to prevent changes to phoneempdefault table which involve employees who are currently logged in.
+				//Failing to do so would cause subtle race conditions between the phone table and phoneempdefault.
+				//Net result would be the phone panel looking wrong.			
+				if(ClockEvents.IsClockedIn(PedCur.EmployeeNum)) {//Prevent any change if employee being edited is currently clocked in.
+					MsgBox.Show(this,"You must first clock out before making changes");
+					return;
+				}
+				//Find out if the target extension is already being occuppied by a different employee.
+				Phone phoneOccuppied=Phones.GetPhoneForExtension(Phones.GetPhoneList(),PIn.Int(textPhoneExt.Text));
+				if(phoneOccuppied!=null) {
+					if(ClockEvents.IsClockedIn(phoneOccuppied.EmployeeNum)) { //Prevent change if employee's new extension is occupied by a different employee who is currently clocked in.
+						MessageBox.Show(Lan.g(this,"This extension cannot be inherited because it is currently occuppied by an employee who is currently logged in.\r\n\r\nExisting employee: ")+phoneOccuppied.EmployeeName);
+						return;
+					}
+					if(phoneOccuppied.EmployeeNum!=PedCur.EmployeeNum) {
+						//We are setting to a new employee so let's clean up the old employee.
+						//This will prevent duplicates in the phone table and subsequently prevent duplicates in the phone panel.
+						Phones.UpdatePhoneToEmpty(phoneOccuppied.EmployeeNum,-1);
+						PhoneEmpDefault pedOccuppied=PhoneEmpDefaults.GetOne(phoneOccuppied.EmployeeNum);
+						if(pedOccuppied!=null) {//prevent duplicate in phoneempdefault
+							pedOccuppied.PhoneExt=0;
+							PhoneEmpDefaults.Update(pedOccuppied);
+						}
+					}
+				}
+				//Get the employee that is normally assigned to this extension (assigned ext set in the employee table).
+				long permanentLinkageEmployeeNum=Employees.GetEmpNumAtExtension(pedFromDatabase.PhoneExt);
+				if(permanentLinkageEmployeeNum>=1) { //Extension is nomrally assigned to an employee.
+					if(PedCur.EmployeeNum!=permanentLinkageEmployeeNum) {//This is not the normally linked employee so let's revert back to the proper employee.
+						PhoneEmpDefault pedRevertTo=PhoneEmpDefaults.GetOne(permanentLinkageEmployeeNum);
+						//Make sure the employee we are about to revert is not logged in at yet a different workstation. This would be rare but it's worth checking.
+						if(pedRevertTo!=null && !ClockEvents.IsClockedIn(pedRevertTo.EmployeeNum)) {
+							//Revert to the permanent extension for this PhoneEmpDefault.
+							pedRevertTo.PhoneExt=pedFromDatabase.PhoneExt;
+							PhoneEmpDefaults.Update(pedRevertTo);
+							//Update phone table to match this change.
+							Phones.SetPhoneStatus(ClockStatusEnum.Home,pedRevertTo.PhoneExt,pedRevertTo.EmployeeNum);
+						}
+					}
+				}
+			}
+			//Ordering of these updates is IMPORTANT!!!
+			//Phone Emp Default must be updated first
 			PedCur.EmpName=textEmpName.Text;
 			PedCur.IsGraphed=checkIsGraphed.Checked;
 			PedCur.HasColor=checkHasColor.Checked;
@@ -701,6 +744,23 @@ namespace OpenDental{
 			}
 			else{
 				PhoneEmpDefaults.Update(PedCur);
+			}
+			//It is now safe to update Phone table as it will draw from the newly updated Phone Emp Default row
+			if((PhoneEmpStatusOverride)listStatusOverride.SelectedIndex==PhoneEmpStatusOverride.Unavailable &&
+				ClockEvents.IsClockedIn(PedCur.EmployeeNum)) {
+				//We set ourselves unavailable from this window because we require an explanation.
+				//This is the only status that will synch with the phone table, all others should be handled by the small phone panel.
+				Phones.SetPhoneStatus(ClockStatusEnum.Unavailable,PedCur.PhoneExt,PedCur.EmployeeNum);
+			}
+			if(extensionChange) {
+				//Phone extension has changed so update the phone table as well. 
+				//We have already guaranteed that this employee is Clocked Out (above) so set to home and update phone table.
+				Phones.SetPhoneStatus(ClockStatusEnum.Home,PedCur.PhoneExt,PedCur.EmployeeNum);			
+			}
+			if(pedFromDatabase.IsTriageOperator!=PedCur.IsTriageOperator) {
+				//Triage state flag has changed and we may not have updated the phone table above.
+				//This will leave the Phone.ColorBar in an inconsistent state so let's update it here.
+				Phones.UpdateColorBarForEmployee(PedCur.EmployeeNum,PedCur.PhoneExt,PedCur.IsTriageOperator);
 			}
 			DialogResult=DialogResult.OK;
 		}

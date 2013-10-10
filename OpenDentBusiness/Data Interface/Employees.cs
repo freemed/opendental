@@ -226,27 +226,29 @@ namespace OpenDentBusiness{
 		
 		/// <summary>sorting class used to sort Employee in various ways</summary>
 		public class EmployeeComparer:IComparer<Employee> {
-
-			public enum SortBy { ext, empNum, firstName, lastName };
 		
-			private SortBy _sortBy = SortBy.lastName;
+			private SortBy SortOn=SortBy.lastName;
 			
 			public EmployeeComparer(SortBy sortBy) {
-				_sortBy=sortBy;
+				SortOn=sortBy;
 			}
 			
 			public int Compare(Employee x,Employee y) {
-				int ret = 0;
-				switch(_sortBy) {
+				int ret=0;
+				switch(SortOn) {
 					case SortBy.empNum:
-						ret = x.EmployeeNum.CompareTo(y.EmployeeNum); break;
+						ret=x.EmployeeNum.CompareTo(y.EmployeeNum); 
+						break;
 					case SortBy.ext:
-						ret = x.PhoneExt.CompareTo(y.PhoneExt); break;
+						ret=x.PhoneExt.CompareTo(y.PhoneExt); 
+						break;
 					case SortBy.firstName:
-						ret = x.FName.CompareTo(y.FName); break;
+						ret=x.FName.CompareTo(y.FName); 
+						break;
 					case SortBy.lastName:
 					default:
-						ret = x.LName.CompareTo(y.LName); break;
+						ret=x.LName.CompareTo(y.LName); 
+						break;
 				}
 				if(ret==0) {//last name is tie breaker
 					return x.LName.CompareTo(y.LName);
@@ -254,6 +256,17 @@ namespace OpenDentBusiness{
 				//we got here so our sort was successful
 				return ret;
 			}
+
+			public enum SortBy {
+				///<summary>0 - By Extension.</summary>
+				ext,
+				///<summary>1 - By EmployeeNum.</summary>
+				empNum,
+				///<summary>2 - By FName.</summary>
+				firstName,
+				///<summary>2 - By LName.</summary>
+				lastName
+			};
 		}
 	}
 

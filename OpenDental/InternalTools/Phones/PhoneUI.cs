@@ -58,130 +58,79 @@ namespace OpenDental {
 			DataValid.SetInvalid(InvalidType.PhoneNumbers);
 		}
 
+		///<summary>If this is Security.CurUser's tile then ClockIn. If it is someone else's tile then allow the single case of switching from NeedsHelp to Available.</summary>
 		public static void Available(PhoneTile tile) {
-			int extension=tile.PhoneCur.Extension;
 			long employeeNum=Security.CurUser.EmployeeNum;
-			//The user is already clocked in.  They might be changing their status back to Available.  We only want to stop users from clocking into extensions if another employee is already using the current extension.  This will stop users from clocking into multiple extensions at one time and force them to be physically present at the computer.
-			if(ClockEvents.IsClockedIn(employeeNum) && tile.PhoneCur.EmployeeNum!=employeeNum) {
-				MsgBox.Show(langThis,"You are already clocked in.  You must clock out of the current extension you are logged into before moving to another extension.");
+			if(Security.CurUser.EmployeeNum!=tile.PhoneCur.EmployeeNum) { //We are on someone else's tile. So Let's do some checks before we assume we can take over this extension.				
+				if(tile.PhoneCur.ClockStatus==ClockStatusEnum.NeedsHelp) { 
+					//Allow the specific state where we are changing their status back from NeedsHelp to Available.
+					//This does not require any security permissions as any tech in can perform this action on behalf of any other tech.
+					Phones.SetPhoneStatus(ClockStatusEnum.Available,tile.PhoneCur.Extension,tile.PhoneCur.EmployeeNum);//green
+					return;
+				}
+				//We are on a tile that is not our own
+				//If another employee is occupying this extension then assume we are trying to change that employee's status back to available.
+				if(ClockEvents.IsClockedIn(tile.PhoneCur.EmployeeNum)) { //This tile is taken by an employee who is clocked in.					
+					//Transition the employee back to available.
+					ChangeTileStatus(tile,ClockStatusEnum.Available);
+					return;
+				}
+				if(tile.PhoneCur.ClockStatus!=ClockStatusEnum.None	//The other person is still actively using this extension.
+					&& tile.PhoneCur.ClockStatus!=ClockStatusEnum.Home) {
+					MsgBox.Show(langThis,"Cannot take over this extension as it is currently occuppied by someone who is likely on Break or Lunch.");			
+					return;
+				}			
+				//If another employee is NOT occupying this extension then assume we are trying clock in at this extension.
+				if(ClockEvents.IsClockedIn(employeeNum)) { //We are already clocked in at a different extension.
+					MsgBox.Show(langThis,"You are already clocked in at a different extension.  You must clock out of the current extension you are logged into before moving to another extension.");
+					return;
+				}
+				//We got this far so fall through and allow user to clock in.
+			}
+			//We go here so all of our checks passed and we may login at this extension
+			if(!ClockIn(tile)) { //Clock in on behalf of yourself
 				return;
 			}
-			//We want to be able to log into any computer without switching any big phone settings.  If someone is clocked into this computer/extension, either on this instance of OD or one running in the background, we want to have a warning message notify the user that someone is already clocked into this computer.  Due to this fact, we will no longer be able to clock other people in from different locations using the big phones.
-			if(employeeNum!=tile.PhoneCur.EmployeeNum							//If the employee logged in OD is not the employee last to use this extension
-				&& tile.PhoneCur.ClockStatus!=ClockStatusEnum.None	//and that person is still actively using this extension, show a warning.
-				&& tile.PhoneCur.ClockStatus!=ClockStatusEnum.Home)				
-			{
-				MsgBox.Show(langThis,"Someone else is currently using this extension.  They might still be clocked into another instance of OD on this computer.");
-				return;
-			}
-			//This is the user that is currently using this extension or this is a new user wanting to start use of this extension.
-			if(!ClockIn(tile)) {
-				return;
-			}
-			PhoneEmpDefaults.SetAvailable(extension,employeeNum);
-			PhoneAsterisks.SetToDefaultRingGroups(extension,employeeNum);
-			Phones.SetPhoneStatus(ClockStatusEnum.Available,extension,employeeNum);//green
+			//Update the Phone tables accordingly.
+			PhoneEmpDefaults.SetAvailable(tile.PhoneCur.Extension,employeeNum);
+			PhoneAsterisks.SetToDefaultRingGroups(tile.PhoneCur.Extension,employeeNum);
+			Phones.SetPhoneStatus(ClockStatusEnum.Available,tile.PhoneCur.Extension,employeeNum);//green
 		}
 
 		public static void Training(PhoneTile tile) {
-			if(!ClockIn(tile)) {
-				return;
-			}
-			int extension=tile.PhoneCur.Extension;
-			long employeeNum=tile.PhoneCur.EmployeeNum;
-			if(Security.CurUser.EmployeeNum!=employeeNum) {
-				if(!Security.IsAuthorized(Permissions.TimecardsEditAll,true)) {
-					if(!CheckSelectedUserPassword(employeeNum)) {
-						return;
-					}
-				}
-			}
-			PhoneEmpDefaults.SetAvailable(extension,employeeNum);
-			Phones.SetPhoneStatus(ClockStatusEnum.Training,extension);
-		}
+			ChangeTileStatus(tile,ClockStatusEnum.Training);
+		}		
 
 		public static void TeamAssist(PhoneTile tile) {
-			if(!ClockIn(tile)) {
-				return;
-			}
-			int extension=tile.PhoneCur.Extension;
-			long employeeNum=tile.PhoneCur.EmployeeNum;
-			if(Security.CurUser.EmployeeNum!=employeeNum) {
-				if(!Security.IsAuthorized(Permissions.TimecardsEditAll,true)) {
-					if(!CheckSelectedUserPassword(employeeNum)) {
-						return;
-					}
-				}
-			}
-			PhoneEmpDefaults.SetAvailable(extension,employeeNum);
-			Phones.SetPhoneStatus(ClockStatusEnum.TeamAssist,extension);
+			ChangeTileStatus(tile,ClockStatusEnum.TeamAssist);
 		}
 
 		public static void NeedsHelp(PhoneTile tile) {
-			if(!ClockIn(tile)) {
-				return;
-			}
-			int extension=tile.PhoneCur.Extension;
-			long employeeNum=tile.PhoneCur.EmployeeNum;
-			if(Security.CurUser.EmployeeNum!=employeeNum) {
-				if(!Security.IsAuthorized(Permissions.TimecardsEditAll,true)) {
-					if(!CheckSelectedUserPassword(employeeNum)) {
-						return;
-					}
-				}
-			}
-			PhoneEmpDefaults.SetAvailable(extension,employeeNum);
-			Phones.SetPhoneStatus(ClockStatusEnum.NeedsHelp,extension);
+			ChangeTileStatus(tile,ClockStatusEnum.NeedsHelp);
 		}
 
-		public static void WrapUp(PhoneTile tile) {
-			if(!ClockIn(tile)) {
-				return;
-			}
-			int extension=tile.PhoneCur.Extension;
-			long employeeNum=tile.PhoneCur.EmployeeNum;
-			if(Security.CurUser.EmployeeNum!=employeeNum) {
-				if(!Security.IsAuthorized(Permissions.TimecardsEditAll,true)) {
-					if(!CheckSelectedUserPassword(employeeNum)) {
-						return;
-					}
-				}
-			}
-			PhoneEmpDefaults.SetAvailable(extension,employeeNum);
-			Phones.SetPhoneStatus(ClockStatusEnum.WrapUp,extension);
-			//this is usually an automatic status
+		public static void WrapUp(PhoneTile tile) { //this is usually an automatic status
+			ChangeTileStatus(tile,ClockStatusEnum.WrapUp);			
 		}
 
 		public static void OfflineAssist(PhoneTile tile) {
-			if(!ClockIn(tile)) {
-				return;
-			}
-			int extension=tile.PhoneCur.Extension;
-			long employeeNum=tile.PhoneCur.EmployeeNum;
-			if(Security.CurUser.EmployeeNum!=employeeNum) {
-				if(!Security.IsAuthorized(Permissions.TimecardsEditAll,true)) {
-					if(!CheckSelectedUserPassword(employeeNum)) {
-						return;
-					}
-				}
-			}
-			PhoneEmpDefaults.SetAvailable(extension,employeeNum);
-			Phones.SetPhoneStatus(ClockStatusEnum.OfflineAssist,extension);
+			ChangeTileStatus(tile,ClockStatusEnum.OfflineAssist);
 		}
 
 		public static void Unavailable(PhoneTile tile) {
-			if(!ClockIn(tile)) {
+			if(!ClockEvents.IsClockedIn(Security.CurUser.EmployeeNum)) { //Employee performing the action must be clocked in.
+				MsgBox.Show("PhoneUI","You must clock in before completing this action.");
+				return;
+			}
+			if(!ClockEvents.IsClockedIn(tile.PhoneCur.EmployeeNum)) { //Employee having action performed must be clocked in.
+				MessageBox.Show(Lan.g("PhoneUI","Target employee must be clocked in before setting this status: ")+tile.PhoneCur.EmployeeName);
+				return;
+			}
+			if(!CheckUserCanChangeStatus(tile)) {
 				return;
 			}
 			int extension=tile.PhoneCur.Extension;
-			long employeeNum=tile.PhoneCur.EmployeeNum;
-			if(Security.CurUser.EmployeeNum!=employeeNum) {
-				if(!Security.IsAuthorized(Permissions.TimecardsEditAll,true)) {
-					if(!CheckSelectedUserPassword(employeeNum)) {
-						return;
-					}
-				}
-			}
+			long employeeNum=tile.PhoneCur.EmployeeNum;			
 			PhoneEmpDefault ped=PhoneEmpDefaults.GetByExtAndEmp(extension,employeeNum);
 			if(ped==null) {
 				MessageBox.Show("PhoneEmpDefault (employee setting row) not found for Extension "+extension.ToString()+" and EmployeeNum "+employeeNum.ToString());
@@ -190,68 +139,49 @@ namespace OpenDental {
 			FormPhoneEmpDefaultEdit formPED=new FormPhoneEmpDefaultEdit();
 			formPED.PedCur=ped;
 			formPED.PedCur.StatusOverride=PhoneEmpStatusOverride.Unavailable;
-			formPED.ShowDialog();
+			if(formPED.ShowDialog()==DialogResult.OK && formPED.PedCur.StatusOverride==PhoneEmpStatusOverride.Unavailable) {
+				//This phone status update can get skipped from within the editor if the employee is not clocked in.
+				//This would be the case when you are setting an employee other than yourself to Unavailable.
+				//So we will set it here. This keeps the phone table and phone panel in sync.
+				Phones.SetPhoneStatus(ClockStatusEnum.Unavailable,formPED.PedCur.PhoneExt,formPED.PedCur.EmployeeNum);			
+			}
+		}
+
+		/// <summary>As per Nathan, changing status should set your ring group to None (not Backup as you might think). We are abandoning the Backup ring group for now.</summary>
+		public static void Backup(PhoneTile tile) {
+			ChangeTileStatus(tile,ClockStatusEnum.Backup);
+			PhoneAsterisks.SetRingGroups(tile.PhoneCur.Extension,AsteriskRingGroups.None);
 		}
 
 		//RingGroups---------------------------------------------------
 
 		public static void RinggroupAll(PhoneTile tile) {
-			//This even works if the person is still clocked out.
-			int extension=tile.PhoneCur.Extension;
-			long employeeNum=tile.PhoneCur.EmployeeNum;
-			if(Security.CurUser.EmployeeNum!=employeeNum) {
-				if(!Security.IsAuthorized(Permissions.TimecardsEditAll,true)) {
-					if(!CheckSelectedUserPassword(employeeNum)) {
-						return;
-					}
-				}
+			if(!CheckUserCanChangeStatus(tile)) {
+				return;
 			}
-			PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.All);
+			PhoneAsterisks.SetRingGroups(tile.PhoneCur.Extension,AsteriskRingGroups.All);
 		}
 
 		public static void RinggroupNone(PhoneTile tile) {
-			//This even works if the person is still clocked in.
-			int extension=tile.PhoneCur.Extension;
-			long employeeNum=tile.PhoneCur.EmployeeNum;
-			if(Security.CurUser.EmployeeNum!=employeeNum) {
-				if(!Security.IsAuthorized(Permissions.TimecardsEditAll,true)) {
-					if(!CheckSelectedUserPassword(employeeNum)) {
-						return;
-					}
-				}
+			if(!CheckUserCanChangeStatus(tile)) {
+				return;
 			}
-			PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
+			PhoneAsterisks.SetRingGroups(tile.PhoneCur.Extension,AsteriskRingGroups.None);
 		}
 
 		public static void RinggroupsDefault(PhoneTile tile) {
-			int extension=tile.PhoneCur.Extension;
-			long employeeNum=tile.PhoneCur.EmployeeNum;
-			if(Security.CurUser.EmployeeNum!=employeeNum) {
-				if(!Security.IsAuthorized(Permissions.TimecardsEditAll,true)) {
-					if(!CheckSelectedUserPassword(employeeNum)) {
-						return;
-					}
-				}
-			}
-			PhoneAsterisks.SetToDefaultRingGroups(extension,employeeNum);
-		}
-
-		public static void Backup(PhoneTile tile) {
-			if(!ClockIn(tile)) {
+			if(!CheckUserCanChangeStatus(tile)) {
 				return;
 			}
-			int extension=tile.PhoneCur.Extension;
-			long employeeNum=tile.PhoneCur.EmployeeNum;
-			if(Security.CurUser.EmployeeNum!=employeeNum) {
-				if(!Security.IsAuthorized(Permissions.TimecardsEditAll,true)) {
-					if(!CheckSelectedUserPassword(employeeNum)) {
-						return;
-					}
-				}
+			PhoneAsterisks.SetToDefaultRingGroups(tile.PhoneCur.Extension,tile.PhoneCur.EmployeeNum);
+		}
+
+		///<summary>As of 10/9/13 Nathan wants backup ringgroup to go to 'None'. We may go back to using 'Backup' at some point, but for now it is not necessary so just set them to None.</summary>
+		public static void RinggroupsBackup(PhoneTile tile) {
+			if(!CheckUserCanChangeStatus(tile)) {
+				return;
 			}
-			PhoneEmpDefaults.SetAvailable(extension,employeeNum);
-			PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.Backup);
-			Phones.SetPhoneStatus(ClockStatusEnum.Backup,extension);
+			PhoneAsterisks.SetRingGroups(tile.PhoneCur.Extension,AsteriskRingGroups.Backup);
 		}
 
 		//Timecard---------------------------------------------------
@@ -260,12 +190,8 @@ namespace OpenDental {
 			//verify that employee is logged in as user
 			int extension=tile.PhoneCur.Extension;
 			long employeeNum=tile.PhoneCur.EmployeeNum;
-			if(Security.CurUser.EmployeeNum!=employeeNum) {
-				if(!Security.IsAuthorized(Permissions.TimecardsEditAll,true)) {
-					if(!CheckSelectedUserPassword(employeeNum)) {
-						return;
-					}
-				}
+			if(!CheckUserCanChangeStatus(tile)) {
+				return;
 			}
 			try {
 				ClockEvents.ClockOut(employeeNum,TimeClockStatus.Lunch);
@@ -285,37 +211,27 @@ namespace OpenDental {
 			//verify that employee is logged in as user
 			int extension=tile.PhoneCur.Extension;
 			long employeeNum=tile.PhoneCur.EmployeeNum;
-			if(Security.CurUser.EmployeeNum!=employeeNum) {
-				if(!Security.IsAuthorized(Permissions.TimecardsEditAll,true)) {
-					if(!CheckSelectedUserPassword(employeeNum)) {
-						return;
-					}
-				}
+			if(!CheckUserCanChangeStatus(tile)) {
+				return;
 			}
-			try {
+			try { //Update the clock event, phone (HQ only), and phone emp default (HQ only).
 				ClockEvents.ClockOut(employeeNum,TimeClockStatus.Home);
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);//This message will tell user that they are already clocked out.
 				return;
 			}
-			PhoneEmpDefaults.SetAvailable(extension,employeeNum);
 			Employee EmpCur=Employees.GetEmp(employeeNum);
 			EmpCur.ClockStatus=Lan.g("enumTimeClockStatus",TimeClockStatus.Home.ToString());
 			Employees.Update(EmpCur);
-			Phones.SetPhoneStatus(ClockStatusEnum.Home,extension);
 		}
 
 		public static void Break(PhoneTile tile) {
 			//verify that employee is logged in as user
 			int extension=tile.PhoneCur.Extension;
 			long employeeNum=tile.PhoneCur.EmployeeNum;
-			if(Security.CurUser.EmployeeNum!=employeeNum) {
-				if(!Security.IsAuthorized(Permissions.TimecardsEditAll,true)) {
-					if(!CheckSelectedUserPassword(employeeNum)) {
-						return;
-					}
-				}
+			if(!CheckUserCanChangeStatus(tile)) {
+				return;
 			}
 			try {
 				ClockEvents.ClockOut(employeeNum,TimeClockStatus.Break);
@@ -334,8 +250,8 @@ namespace OpenDental {
 		///<summary>If already clocked in, this does nothing.  Returns false if not able to clock in due to security, or true if successful.</summary>
 		private static bool ClockIn(PhoneTile tile) {
 			long employeeNum=Security.CurUser.EmployeeNum;//tile.PhoneCur.EmployeeNum;
-			if(employeeNum==0) {//Should never happen, this means the employee trying to clock doesn't exist in the employee table.
-				//MsgBox.Show(langThis,"No employee at that extension.");
+			if(employeeNum==0) {//Can happen if logged in as 'admin' user (employeeNum==0). Otherwise should not happen, means the employee trying to clock doesn't exist in the employee table.
+				MsgBox.Show(langThis,"Inavlid OD User: "+Security.CurUser.UserName);
 				return false;
 			}
 			if(ClockEvents.IsClockedIn(employeeNum)) {
@@ -381,8 +297,37 @@ namespace OpenDental {
 			return true;
 		}
 
+		///<summary>Verify... 1) Security.CurUser is clocked in. 2) Target status change employee is clocked in. 3) Secruity.CurUser has TimecardsEditAll permission.</summary>
+		private static bool ChangeTileStatus(PhoneTile tile,ClockStatusEnum newClockStatus) {
+			if(!ClockEvents.IsClockedIn(Security.CurUser.EmployeeNum)) { //Employee performing the action must be clocked in.
+				MsgBox.Show(langThis,"You must clock in before completing this action.");
+				return false;
+			}
+			if(!ClockEvents.IsClockedIn(tile.PhoneCur.EmployeeNum)) { //Employee having action performed must be clocked in.
+				MessageBox.Show(Lan.g(langThis,"Target employee must be clocked in before setting this status: ")+tile.PhoneCur.EmployeeName);
+				return false;
+			}
+			if(!CheckUserCanChangeStatus(tile)) {
+				return false;
+			}
+			PhoneEmpDefaults.SetAvailable(tile.PhoneCur.Extension,tile.PhoneCur.EmployeeNum);
+			PhoneAsterisks.SetToDefaultRingGroups(tile.PhoneCur.Extension,tile.PhoneCur.EmployeeNum);
+			Phones.SetPhoneStatus(newClockStatus,tile.PhoneCur.Extension);
+			return true;
+		}
 
-
+		///<summary>Verify Security.CurUser is allowed to change this tile's status.</summary>
+		private static bool CheckUserCanChangeStatus(PhoneTile tile) {
+			if(Security.CurUser.EmployeeNum==tile.PhoneCur.EmployeeNum) { //User is changing their own tile. This is always allowed.
+				return true;
+			}
+			if(Security.IsAuthorized(Permissions.TimecardsEditAll,true)) { //User has time card edit permission so allow it.
+				return true;
+			}
+			//User must enter target tile's password correctly.
+			return CheckSelectedUserPassword(tile.PhoneCur.EmployeeNum);
+		}
+		
 
 
 

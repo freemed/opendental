@@ -15,7 +15,8 @@ namespace OpenDentBusiness {
 		public static Color ColorGreen=Color.FromArgb(153,220,153);
 		public static Color ColorYellow=Color.FromArgb(255,255,145);
 		public static Color ColorPaleGreen=Color.FromArgb(217,255,217);
-		public static Color ColorPink=Color.HotPink;
+		public static Color ColorSkyBlue=Color.SkyBlue;
+		public static Color ColorOrchid=Color.Orchid;
 
 		public static List<Phone> GetPhoneList() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -59,7 +60,7 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),clockStatus,extens,employeeNum);
 				return;
 			}
-			string command=@"SELECT phoneempdefault.EmployeeNum,Description,phoneempdefault.EmpName,HasColor,phone.ClockStatus "
+			string command=@"SELECT phoneempdefault.EmployeeNum,phoneempdefault.IsTriageOperator,Description,phoneempdefault.EmpName,HasColor,phone.ClockStatus "
 				+"FROM phone "
 				+"LEFT JOIN phoneempdefault ON phone.Extension=phoneempdefault.PhoneExt "
 				+"WHERE phone.Extension="+POut.Long(extens);
@@ -69,6 +70,7 @@ namespace OpenDentBusiness {
 				return;
 			}
 			long empNum=PIn.Long(tablePhone.Rows[0]["EmployeeNum"].ToString());
+			bool isTriageOperator=PIn.Bool(tablePhone.Rows[0]["IsTriageOperator"].ToString());
 			string empName=PIn.String(tablePhone.Rows[0]["EmpName"].ToString());
 			string clockStatusDb=PIn.String(tablePhone.Rows[0]["ClockStatus"].ToString());
 			Employee emp=Employees.GetEmp(employeeNum);
@@ -118,7 +120,7 @@ namespace OpenDentBusiness {
 			}
 			#endregion
 			//Update the phone row to reflect the new clock status of the user.
-			Color colorBarNew=GetColorBar(clockStatus,empNum,isInUse,hasColor);
+			Color colorBarNew=GetColorBar(clockStatus,empNum,isInUse,hasColor,isTriageOperator);
 			string clockStatusNew=clockStatus.ToString();
 			if(clockStatus==ClockStatusEnum.None) {
 				clockStatusNew="";
@@ -130,10 +132,62 @@ namespace OpenDentBusiness {
 				+"EmployeeName='"+POut.String(empName)+"' "
 				+"WHERE Extension="+extens;
 			Db.NonQ(command);
+
+			if(PrefC.GetBool(PrefName.DockPhonePanelShow)){ //hq only
+				//Zero out any duplicate phone table rows for this employee. 
+				//This is possible if a user logged off and another employee logs into their computer. This would cause duplicate entries in the big phones window.
+				UpdatePhoneToEmpty(employeeNum,extens);
+			}
+		}
+
+		///<summary>Zero out any duplicate phone table rows for this employee. This is possible if a user logged off and another employee logs into their computer. This would cause duplicate entries in the big phones window. If ignoreExtension less than 1 (inavlid) then zero out all entries for this employeeNum.</summary>
+		public static void UpdatePhoneToEmpty(long employeeNum,int ignoreExtension) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),employeeNum,ignoreExtension);
+				return;
+			}
+			string command="UPDATE phone SET "
+					+"EmployeeName='', "
+					+"ClockStatus='', "
+					+"Description='', "
+					+"EmployeeNum=0 "
+					+"WHERE EmployeeNum="+POut.Long(employeeNum)+" "
+					+"AND Extension!="+POut.Int(ignoreExtension);
+			Db.NonQ(command);
+		}
+
+		public static void UpdateColorBarForEmployee(long employeeNum,int extension,bool isTriageOperator) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),employeeNum,extension,isTriageOperator);
+				return;
+			}
+			string command=@"SELECT phone.Description,phoneempdefault.HasColor,phone.ClockStatus "
+				+"FROM phone "
+				+"LEFT JOIN phoneempdefault ON phone.Extension=phoneempdefault.PhoneExt AND phone.EmployeeNum=phoneempdefault.EmployeeNum "
+				+"WHERE phone.Extension="+POut.Long(extension);
+			DataTable tablePhone=Db.GetTable(command);
+			if(tablePhone.Rows.Count==0) {
+				return;
+			}
+			bool isColor=PIn.Bool(tablePhone.Rows[0]["HasColor"].ToString());
+			bool isInUse=false;
+			if(tablePhone.Rows[0]["Description"].ToString()=="In use") {
+				isInUse=true;
+			}
+			string clockStatusDb=PIn.String(tablePhone.Rows[0]["ClockStatus"].ToString());
+			ClockStatusEnum clockStatus=ClockStatusEnum.Home;
+			if(!Enum.TryParse<ClockStatusEnum>(clockStatusDb,out clockStatus)) {
+				clockStatus=ClockStatusEnum.Home;
+			}
+			Color colorBarNew=GetColorBar(clockStatus,employeeNum,isInUse,isColor,isTriageOperator);			
+			command="UPDATE phone SET "
+					+"ColorBar="+colorBarNew.ToArgb().ToString()+" "
+					+"WHERE EmployeeNum="+POut.Long(employeeNum);
+			Db.NonQ(command);
 		}
 
 		///<summary></summary>
-		public static Color GetColorBar(ClockStatusEnum clockStatus,long empNum,bool isInUse,bool isColor) {
+		public static Color GetColorBar(ClockStatusEnum clockStatus,long empNum,bool isInUse,bool isColor,bool isTriageOperator) {
 			//No need to check RemotingRole; no call to db.
 			Color colorBar=Color.White;
 			if(empNum==0) {
@@ -142,10 +196,13 @@ namespace OpenDentBusiness {
 			else if(!isColor) {
 				//no colors
 			}
+			else if(isTriageOperator) {
+				colorBar=ColorSkyBlue;
+			}
 			else if(isInUse) {
 				colorBar=ColorRed;
 				if(clockStatus==ClockStatusEnum.NeedsHelp) {
-					colorBar=ColorPink;//Show NeedsHelp even when on a call.
+					colorBar=ColorOrchid;
 				}
 			}
 			//the rest are for idle:
@@ -172,11 +229,11 @@ namespace OpenDentBusiness {
 				colorBar=ColorPaleGreen;
 			}
 			else if(clockStatus==ClockStatusEnum.NeedsHelp) {
-				colorBar=ColorPink;
+				colorBar=ColorOrchid;
 			}
 			return colorBar;
 		}
-
+		
 		public static Phone GetPhoneForExtension(List<Phone> phoneList,int extens) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<phoneList.Count;i++) {
@@ -407,6 +464,47 @@ namespace OpenDentBusiness {
 			return PIn.DateT(Db.GetScalar(command));
 		}
 
+		/// <summary>sorting class used to sort Phone in various ways</summary>
+		public class PhoneComparer:IComparer<Phone> {
+			private SortBy SortOn=SortBy.name;
+
+			public PhoneComparer(SortBy sortBy) {
+				SortOn=sortBy;
+			}
+
+			public int Compare(Phone x,Phone y) {
+				int retVal=0;
+				switch(SortOn) {
+					case SortBy.empNum:
+						retVal=x.EmployeeNum.CompareTo(y.EmployeeNum);
+						break;
+					case SortBy.ext:
+						retVal=x.Extension.CompareTo(y.Extension);
+						break;
+					case SortBy.name:
+					default:
+						retVal=x.EmployeeName.CompareTo(y.EmployeeName);
+						break;
+				}
+				if(retVal==0) {//last name is primary tie breaker
+					retVal=x.EmployeeName.CompareTo(y.EmployeeName);
+					if(retVal==0) {//extension is seconary tie breaker
+						retVal=x.Extension.CompareTo(y.Extension);
+					}
+				}
+				//we got here so our sort was successful
+				return retVal;
+			}
+
+			public enum SortBy {
+				///<summary>0 - By Extension.</summary>
+				ext,
+				///<summary>1 - By EmployeeNum.</summary>
+				empNum,
+				///<summary>2 - By Name.</summary>
+				name
+			}
+		}
 	}
 
 

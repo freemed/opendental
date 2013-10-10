@@ -5153,6 +5153,7 @@ namespace OpenDental{
 
 		private void PhoneWebCamTickWorkerThread() {
 			List<Phone> phoneList=Phones.GetPhoneList();
+			List<PhoneEmpDefault> listPED=PhoneEmpDefaults.Refresh();
 			string ipaddressStr="";
 			IPHostEntry iphostentry=Dns.GetHostEntry(Environment.MachineName);
 			foreach(IPAddress ipaddress in iphostentry.AddressList) {
@@ -5161,46 +5162,47 @@ namespace OpenDental{
 					ipaddressStr=ipaddress.ToString();
 				}
 			}
-			int extension=Phones.GetPhoneExtension(ipaddressStr,Environment.MachineName);
-			//if(extension==0){
-			//	return;
-			//}
+			//Get the extension linked to this machine or ip. Set in FormPhoneEmpDefaultEdit.
+			int extension=PhoneEmpDefaults.GetPhoneExtension(ipaddressStr,Environment.MachineName,listPED);
+			//Now get the Phone object for this extension. Phone table matches PhoneEmpDefault table more or less 1:1. 
+			//Phone fields represent current state of the PhoneEmpDefault table and will be modified by the phone tracking server anytime a phone state changes for a given extension 
+			//(EG... incoming call, outgoing call, hangup, etc).
 			Phone phone=Phones.GetPhoneForExtension(phoneList,extension);
-			/*
-			if(extension>0) {
-				phone=Phones.GetPhoneForExtension(phoneList,extension);
-				if(Security.CurUser!=null && phone!=null && phone.EmployeeNum!=Security.CurUser.EmployeeNum) {
-					phone.EmployeeNum=Security.CurUser.EmployeeNum;
-					phone.EmployeeName=Security.CurUser.UserName;
-					Phones.SetPhoneForEmp(Security.CurUser.EmployeeNum,Security.CurUser.UserName,phone.Extension);
-					//phoneList=Phones.GetPhoneList();
-					//phone=Phones.GetPhoneForExtension(phoneList,extension);
-				}
-			}*/
+			bool isTriageOperator=PhoneEmpDefaults.IsTriageOperatorForExtension(extension,listPED);
 			//send the results back to the UI layer for action.
 			try {
-				Invoke(new PhoneWebCamTickDisplayDelegate(PhoneWebCamTickDisplay),new object[] { phoneList,phone });
+				if(!this.IsDisposed) {
+					Invoke(new PhoneWebCamTickDisplayDelegate(PhoneWebCamTickDisplay),new object[] { listPED,phoneList,phone,isTriageOperator });
+				}
 			}
 			catch { }//prevents crash on closing if FormOpenDental has already been disposed.
 		}
 
 		///<summary></summary>
-		protected delegate void PhoneWebCamTickDisplayDelegate(List<Phone> phoneList,Phone phone);
+		protected delegate void PhoneWebCamTickDisplayDelegate(List<PhoneEmpDefault> phoneEmpDefaultList,List<Phone> phoneList,Phone phone,bool isTriageOperator);
 
 		///<summary>phoneList is the list of all phone rows just pulled from the database.  phone is the one that we should display here, and it can be null.</summary>
-		public void PhoneWebCamTickDisplay(List<Phone> phoneList,Phone phone) {
-			//send the phoneList to the 2 places where it's needed:
-			phoneSmall.PhoneList=phoneList;
-			if(formPhoneTiles!=null && !formPhoneTiles.IsDisposed) {
-				formPhoneTiles.PhoneList=phoneList;
+		public void PhoneWebCamTickDisplay(List<PhoneEmpDefault> phoneEmpDefaultList,List<Phone> phoneList,Phone phone,bool isTriageOperator) {
+			try {
+				//Send the phoneList to the 2 places where it's needed.
+				//1) Send to the small display in the main OD form (quick-glance).
+				phoneSmall.SetPhoneList(phoneEmpDefaultList,phoneList);
+				if(formPhoneTiles!=null && !formPhoneTiles.IsDisposed) { //2) Send to the big phones panel if it is open.
+					formPhoneTiles.SetPhoneList(phoneEmpDefaultList,phoneList);
+				}
+				//Now set the small display's current phone extension info.
+				if(phone==null) {
+					phoneSmall.Extension=0;
+				}
+				else {
+					phoneSmall.Extension=phone.Extension;
+				}
+				phoneSmall.SetPhone(phone,isTriageOperator);
 			}
-			if(phone==null) {
-				phoneSmall.Extension=0;
+			catch {
+				//HQ users are complaining of unhandled exception when they close OD.
+				//Suspect it could be caused here if the thread tries to access a control that has been disposed.
 			}
-			else {
-				phoneSmall.Extension=phone.Extension;
-			}
-			phoneSmall.PhoneCur=phone;
 		}
 
 		/// <summary>This is set to 30 seconds</summary>
