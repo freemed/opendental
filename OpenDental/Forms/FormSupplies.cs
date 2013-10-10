@@ -63,6 +63,7 @@ namespace OpenDental {
 		}
 
 		private void FillGrid(){
+			//We don't refresh ListSupplyAll here because we are frequently using FillGrid with a search filter.
 			filterListSupply();
 			ListSupply.Sort(sortSupplyListByCategoryOrderThenItemOrder);
 			gridMain.BeginUpdate();
@@ -71,9 +72,9 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Catalog #"),80);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Supplier #"),60);
+			col=new ODGridColumn(Lan.g(this,"Supplier"),100);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Description"),260);
+			col=new ODGridColumn(Lan.g(this,"Description"),240);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Price"),60,HorizontalAlignment.Right);
 			gridMain.Columns.Add(col);
@@ -92,7 +93,7 @@ namespace OpenDental {
 					row.Cells.Add("");
 				}
 				row.Cells.Add(ListSupply[i].CatalogNumber);
-				row.Cells.Add(ListSupply[i].SupplierNum.ToString());
+				row.Cells.Add(Suppliers.GetName(ListSupplier,ListSupply[i].SupplierNum));
 				row.Cells.Add(ListSupply[i].Descript);
 				if(ListSupply[i].Price==0) {
 					row.Cells.Add("");
