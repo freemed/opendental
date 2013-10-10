@@ -62,6 +62,7 @@ namespace OpenDental{
 		private Label label5;
 		private WebBrowser webBrowser;
 		private UI.Button butEncryptAndSend;
+		private UI.Button butSummaryOfCare;
 		///<summary>Used when attaching to get AtoZ folder, and when sending to get Clinic.</summary>
 		private Patient PatCur;
 
@@ -108,6 +109,9 @@ namespace OpenDental{
 			this.label4 = new System.Windows.Forms.Label();
 			this.listTemplates = new System.Windows.Forms.ListBox();
 			this.panelTemplates = new System.Windows.Forms.Panel();
+			this.butInsert = new OpenDental.UI.Button();
+			this.butDeleteTemplate = new OpenDental.UI.Button();
+			this.butAdd = new OpenDental.UI.Button();
 			this.listAttachments = new System.Windows.Forms.ListBox();
 			this.contextMenuAttachments = new System.Windows.Forms.ContextMenu();
 			this.menuItemOpen = new System.Windows.Forms.MenuItem();
@@ -124,12 +128,10 @@ namespace OpenDental{
 			this.butAttach = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butSave = new OpenDental.UI.Button();
-			this.butInsert = new OpenDental.UI.Button();
-			this.butDeleteTemplate = new OpenDental.UI.Button();
-			this.butAdd = new OpenDental.UI.Button();
 			this.textBodyText = new OpenDental.ODtextBox();
 			this.butSend = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.butSummaryOfCare = new OpenDental.UI.Button();
 			this.panelTemplates.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -230,6 +232,55 @@ namespace OpenDental{
 			this.panelTemplates.Name = "panelTemplates";
 			this.panelTemplates.Size = new System.Drawing.Size(180, 370);
 			this.panelTemplates.TabIndex = 0;
+			// 
+			// butInsert
+			// 
+			this.butInsert.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butInsert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.butInsert.Autosize = true;
+			this.butInsert.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butInsert.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butInsert.CornerRadius = 4F;
+			this.butInsert.Image = global::OpenDental.Properties.Resources.Right;
+			this.butInsert.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butInsert.Location = new System.Drawing.Point(102, 305);
+			this.butInsert.Name = "butInsert";
+			this.butInsert.Size = new System.Drawing.Size(74, 26);
+			this.butInsert.TabIndex = 2;
+			this.butInsert.Text = "Insert";
+			this.butInsert.Click += new System.EventHandler(this.butInsert_Click);
+			// 
+			// butDeleteTemplate
+			// 
+			this.butDeleteTemplate.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butDeleteTemplate.Autosize = true;
+			this.butDeleteTemplate.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDeleteTemplate.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDeleteTemplate.CornerRadius = 4F;
+			this.butDeleteTemplate.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butDeleteTemplate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDeleteTemplate.Location = new System.Drawing.Point(7, 339);
+			this.butDeleteTemplate.Name = "butDeleteTemplate";
+			this.butDeleteTemplate.Size = new System.Drawing.Size(75, 26);
+			this.butDeleteTemplate.TabIndex = 3;
+			this.butDeleteTemplate.Text = "Delete";
+			this.butDeleteTemplate.Click += new System.EventHandler(this.butDeleteTemplate_Click);
+			// 
+			// butAdd
+			// 
+			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butAdd.Autosize = true;
+			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAdd.CornerRadius = 4F;
+			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAdd.Location = new System.Drawing.Point(7, 305);
+			this.butAdd.Name = "butAdd";
+			this.butAdd.Size = new System.Drawing.Size(75, 26);
+			this.butAdd.TabIndex = 1;
+			this.butAdd.Text = "&Add";
+			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
 			// listAttachments
 			// 
@@ -418,55 +469,6 @@ namespace OpenDental{
 			this.butSave.Text = "Save";
 			this.butSave.Click += new System.EventHandler(this.butSave_Click);
 			// 
-			// butInsert
-			// 
-			this.butInsert.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butInsert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.butInsert.Autosize = true;
-			this.butInsert.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butInsert.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butInsert.CornerRadius = 4F;
-			this.butInsert.Image = global::OpenDental.Properties.Resources.Right;
-			this.butInsert.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butInsert.Location = new System.Drawing.Point(102, 305);
-			this.butInsert.Name = "butInsert";
-			this.butInsert.Size = new System.Drawing.Size(74, 26);
-			this.butInsert.TabIndex = 2;
-			this.butInsert.Text = "Insert";
-			this.butInsert.Click += new System.EventHandler(this.butInsert_Click);
-			// 
-			// butDeleteTemplate
-			// 
-			this.butDeleteTemplate.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butDeleteTemplate.Autosize = true;
-			this.butDeleteTemplate.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDeleteTemplate.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDeleteTemplate.CornerRadius = 4F;
-			this.butDeleteTemplate.Image = global::OpenDental.Properties.Resources.deleteX;
-			this.butDeleteTemplate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDeleteTemplate.Location = new System.Drawing.Point(7, 339);
-			this.butDeleteTemplate.Name = "butDeleteTemplate";
-			this.butDeleteTemplate.Size = new System.Drawing.Size(75, 26);
-			this.butDeleteTemplate.TabIndex = 3;
-			this.butDeleteTemplate.Text = "Delete";
-			this.butDeleteTemplate.Click += new System.EventHandler(this.butDeleteTemplate_Click);
-			// 
-			// butAdd
-			// 
-			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butAdd.Autosize = true;
-			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAdd.CornerRadius = 4F;
-			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
-			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(7, 305);
-			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(75, 26);
-			this.butAdd.TabIndex = 1;
-			this.butAdd.Text = "&Add";
-			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
-			// 
 			// textBodyText
 			// 
 			this.textBodyText.AcceptsTab = true;
@@ -514,10 +516,25 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// butSummaryOfCare
+			// 
+			this.butSummaryOfCare.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butSummaryOfCare.Autosize = true;
+			this.butSummaryOfCare.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSummaryOfCare.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSummaryOfCare.CornerRadius = 4F;
+			this.butSummaryOfCare.Location = new System.Drawing.Point(690, 0);
+			this.butSummaryOfCare.Name = "butSummaryOfCare";
+			this.butSummaryOfCare.Size = new System.Drawing.Size(100, 20);
+			this.butSummaryOfCare.TabIndex = 36;
+			this.butSummaryOfCare.Text = "Summary Of Care";
+			this.butSummaryOfCare.Click += new System.EventHandler(this.butSummaryOfCare_Click);
+			// 
 			// FormEmailMessageEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.ClientSize = new System.Drawing.Size(941, 672);
+			this.Controls.Add(this.butSummaryOfCare);
 			this.Controls.Add(this.butEncryptAndSend);
 			this.Controls.Add(this.webBrowser);
 			this.Controls.Add(this.textSentOrReceived);
@@ -567,11 +584,12 @@ namespace OpenDental{
 		}
 
 		private void RefreshAll() {
-			if(MessageCur.SentOrReceived!=EmailSentOrReceived.Neither) {//sent or received
+			if(MessageCur.SentOrReceived!=EmailSentOrReceived.Neither) {//sent or received (not composing)
 				panelTemplates.Visible=false;
 				textMsgDateTime.Text=MessageCur.MsgDateTime.ToString();
 				textMsgDateTime.ForeColor=Color.Black;
 				butAttach.Enabled=false;
+				butSummaryOfCare.Enabled=false;
 				butEncryptAndSend.Enabled=false;//not allowed to send again.
 				butSend.Enabled=false;//not allowed to send again.
 				butSave.Enabled=false;//not allowed to save changes.
@@ -740,6 +758,36 @@ namespace OpenDental{
 			FillAttachments();
 		}
 
+		private void CreateAttachmentFromText(string strAttachText,string strDisplayFileName) {
+			Random rnd=new Random();
+			EmailAttach emailAttach;
+			try {
+				//create the attachment
+				emailAttach=new EmailAttach();
+				emailAttach.DisplayedFileName=strDisplayFileName;
+				emailAttach.ActualFileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+Path.GetExtension(strDisplayFileName);//To make unique.
+				string strAttachFilePath=ODFileUtils.CombinePaths(EmailMessages.GetEmailAttachPath(),emailAttach.ActualFileName);
+				File.WriteAllText(strAttachFilePath,strAttachText);
+				MessageCur.Attachments.Add(emailAttach);
+			}
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
+			}
+			FillAttachments();
+		}
+
+		private void butSummaryOfCare_Click(object sender,EventArgs e) {
+			Cursor=Cursors.WaitCursor;
+			if(HasCcdAttachment()) {
+				Cursor=Cursors.Default;
+				MsgBox.Show(this,"A summary of care is already attached to this email message.");
+				return;
+			}
+			string strCCD=EhrCCD.GenerateCCD(PatCur);
+			CreateAttachmentFromText(strCCD,"ccd.xml");
+			Cursor=Cursors.Default;
+		}
+
 		private void contextMenuAttachments_Popup(object sender,EventArgs e) {
 			if(listAttachments.SelectedIndex==-1) {
 				menuItemOpen.Enabled=false;
@@ -748,11 +796,11 @@ namespace OpenDental{
 			}
 			else{
 				menuItemOpen.Enabled=true;
-				if(MessageCur.MsgDateTime.Year>1880){//if sent
+				if(MessageCur.MsgDateTime.Year>1880){//if sent or received
 					menuItemRename.Enabled=false;
 					menuItemRemove.Enabled=false;
 				}
-				else{
+				else{//composing
 					menuItemRename.Enabled=true;
 					menuItemRemove.Enabled=true;
 				}
@@ -786,11 +834,33 @@ namespace OpenDental{
 			OpenFile();
 		}
 
+		private bool IsAttachmentCcd(int attachIndex) {
+			string strFilePathAttach=ODFileUtils.CombinePaths(EmailMessages.GetEmailAttachPath(),MessageCur.Attachments[attachIndex].ActualFileName);
+			if(Path.GetExtension(strFilePathAttach).ToLower()!=".xml") {
+				return false;
+			}
+			string strTextXml=File.ReadAllText(strFilePathAttach);
+			if(!EhrCCD.IsCCD(strTextXml)) {
+				return false;
+			}
+			return true;
+		}
+
+		private bool HasCcdAttachment() {
+			if(MessageCur.Attachments!=null) {
+				for(int i=0;i<MessageCur.Attachments.Count;i++) {
+					if(IsAttachmentCcd(i)) {
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+
 		private void OpenFile(){
 			string strFilePathAttach=ODFileUtils.CombinePaths(EmailMessages.GetEmailAttachPath(),MessageCur.Attachments[listAttachments.SelectedIndex].ActualFileName);
 			try{
-				//For Direct messages, the content of the message will be within a .xml attachment.
-				if((MessageCur.SentOrReceived==EmailSentOrReceived.ReceivedDirect || MessageCur.SentOrReceived==EmailSentOrReceived.ReadDirect) && Path.GetExtension(strFilePathAttach).ToLower()==".xml") {
+				if(IsAttachmentCcd(listAttachments.SelectedIndex)) {
 					string strTextXml=File.ReadAllText(strFilePathAttach);
 					if(EhrCCD.IsCCD(strTextXml)) {
 						EHR.FormSummaryOfCare.DisplayCCD(strTextXml,true);
@@ -937,6 +1007,11 @@ namespace OpenDental{
 			{
 				MessageBox.Show("Addresses not allowed to be blank.");
 				return;
+			}
+			if(HasCcdAttachment()) {
+				if(!MsgBox.Show(this,true,"There is a summary of care attachment which may contain sensitive patient data.  If you continue, the sent email will not be secure.  Continue?")) {
+					return;
+				}
 			}
 			EmailAddress emailAddress=GetEmailAddress();
 			if(emailAddress.SMTPserver==""){
