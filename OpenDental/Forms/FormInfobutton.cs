@@ -969,6 +969,7 @@ namespace OpenDental {
 		}
 
 		private void butSend_Click(object sender,EventArgs e) {
+			//http://apps.nlm.nih.gov/medlineplus/services/mpconnect_service.cfm
 			DialogResult=DialogResult.OK;
 		}
 
