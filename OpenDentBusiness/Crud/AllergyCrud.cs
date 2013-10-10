@@ -50,6 +50,7 @@ namespace OpenDentBusiness.Crud{
 				allergy.AllergyDefNum      = PIn.Long  (table.Rows[i]["AllergyDefNum"].ToString());
 				allergy.PatNum             = PIn.Long  (table.Rows[i]["PatNum"].ToString());
 				allergy.Reaction           = PIn.String(table.Rows[i]["Reaction"].ToString());
+				allergy.SnomedReaction     = PIn.String(table.Rows[i]["SnomedReaction"].ToString());
 				allergy.StatusIsActive     = PIn.Bool  (table.Rows[i]["StatusIsActive"].ToString());
 				allergy.DateTStamp         = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
 				allergy.DateAdverseReaction= PIn.Date  (table.Rows[i]["DateAdverseReaction"].ToString());
@@ -93,7 +94,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="AllergyNum,";
 			}
-			command+="AllergyDefNum,PatNum,Reaction,StatusIsActive,DateAdverseReaction) VALUES(";
+			command+="AllergyDefNum,PatNum,Reaction,SnomedReaction,StatusIsActive,DateAdverseReaction) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(allergy.AllergyNum)+",";
 			}
@@ -101,6 +102,7 @@ namespace OpenDentBusiness.Crud{
 				     POut.Long  (allergy.AllergyDefNum)+","
 				+    POut.Long  (allergy.PatNum)+","
 				+"'"+POut.String(allergy.Reaction)+"',"
+				+"'"+POut.String(allergy.SnomedReaction)+"',"
 				+    POut.Bool  (allergy.StatusIsActive)+","
 				//DateTStamp can only be set by MySQL
 				+    POut.Date  (allergy.DateAdverseReaction)+")";
@@ -119,6 +121,7 @@ namespace OpenDentBusiness.Crud{
 				+"AllergyDefNum      =  "+POut.Long  (allergy.AllergyDefNum)+", "
 				+"PatNum             =  "+POut.Long  (allergy.PatNum)+", "
 				+"Reaction           = '"+POut.String(allergy.Reaction)+"', "
+				+"SnomedReaction     = '"+POut.String(allergy.SnomedReaction)+"', "
 				+"StatusIsActive     =  "+POut.Bool  (allergy.StatusIsActive)+", "
 				//DateTStamp can only be set by MySQL
 				+"DateAdverseReaction=  "+POut.Date  (allergy.DateAdverseReaction)+" "
@@ -140,6 +143,10 @@ namespace OpenDentBusiness.Crud{
 			if(allergy.Reaction != oldAllergy.Reaction) {
 				if(command!=""){ command+=",";}
 				command+="Reaction = '"+POut.String(allergy.Reaction)+"'";
+			}
+			if(allergy.SnomedReaction != oldAllergy.SnomedReaction) {
+				if(command!=""){ command+=",";}
+				command+="SnomedReaction = '"+POut.String(allergy.SnomedReaction)+"'";
 			}
 			if(allergy.StatusIsActive != oldAllergy.StatusIsActive) {
 				if(command!=""){ command+=",";}

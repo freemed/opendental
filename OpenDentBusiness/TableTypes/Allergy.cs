@@ -22,6 +22,8 @@ namespace OpenDentBusiness {
 		public DateTime DateTStamp;
 		///<summary>The historical date that the patient had the adverse reaction to this agent.</summary>
 		public DateTime DateAdverseReaction;
+		///<summary>Snomed code for reaction.  Optional and independent of the Reaction text field.  Not needed for reporting.  Only used for CCD export/import.</summary>
+		public string SnomedReaction;
 
 		///<summary></summary>
 		public Allergy Copy() {

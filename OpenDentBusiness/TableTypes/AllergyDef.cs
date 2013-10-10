@@ -17,9 +17,12 @@ namespace OpenDentBusiness {
 		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
 		///<summary>Enum:SnomedAllergy SNOMED Allergy Type Code.  Only used to create CCD in FormSummaryOfCare.</summary>
-		public SnomedAllergy Snomed;
+		public SnomedAllergy SnomedType;
 		///<summary>FK to Medication.MedicationNum.  Optional.  Only used to create CCD in FormSummaryOfCare.</summary>
 		public long MedicationNum;
+		///<summary>The Snomed code for the Allergen.  Optional.  Only used to create CCD in FormSummaryOfCare.</summary>
+		public string SnomedAllergyTo;
+		
 
 		///<summary></summary>
 		public AllergyDef Copy() {

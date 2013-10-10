@@ -11,6 +11,7 @@ namespace OpenDental {
 	public partial class FormAllergyEdit:Form {
 		public Allergy AllergyCur;
 		private List<AllergyDef> allergyDefList;
+		private Snomed snomedReaction;
 
 		public FormAllergyEdit() {
 			InitializeComponent();
@@ -31,6 +32,10 @@ namespace OpenDental {
 					allergyIndex=i;
 				}
 			}
+			snomedReaction=Snomeds.GetByCode(AllergyCur.SnomedReaction);
+			if(snomedReaction!=null) {
+				textSnomedReaction.Text=snomedReaction.Description;
+			}
 			if(!AllergyCur.IsNew) {
 				if(AllergyCur.DateAdverseReaction<DateTime.Parse("01-01-1880")) {
 					textDate.Text="";
@@ -45,6 +50,20 @@ namespace OpenDental {
 			else {
 				comboAllergies.SelectedIndex=0;
 			}
+		}
+
+		private void butSnomedReactionSelect_Click(object sender,EventArgs e) {
+			FormSnomeds formS=new FormSnomeds();
+			formS.IsSelectionMode=true;
+			if(formS.ShowDialog()==DialogResult.OK) {
+				snomedReaction=formS.SelectedSnomed;
+				textSnomedReaction.Text=snomedReaction.Description;
+			}
+		}
+
+		private void butNoneSnomedReaction_Click(object sender,EventArgs e) {
+			snomedReaction=null;
+			textSnomedReaction.Text="";
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
@@ -80,6 +99,10 @@ namespace OpenDental {
 			}
 			AllergyCur.AllergyDefNum=allergyDefList[comboAllergies.SelectedIndex].AllergyDefNum;
 			AllergyCur.Reaction=textReaction.Text;
+			AllergyCur.SnomedReaction="";
+			if(snomedReaction!=null) {
+				AllergyCur.SnomedReaction=snomedReaction.SnomedCode;
+			}
 			AllergyCur.StatusIsActive=checkActive.Checked;
 			if(AllergyCur.IsNew) {
 				Allergies.Insert(AllergyCur);
@@ -95,5 +118,6 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
 	}
 }

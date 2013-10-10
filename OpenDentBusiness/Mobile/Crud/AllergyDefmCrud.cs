@@ -49,7 +49,7 @@ namespace OpenDentBusiness.Mobile.Crud{
 				allergyDefm.CustomerNum  = PIn.Long  (table.Rows[i]["CustomerNum"].ToString());
 				allergyDefm.AllergyDefNum= PIn.Long  (table.Rows[i]["AllergyDefNum"].ToString());
 				allergyDefm.Description  = PIn.String(table.Rows[i]["Description"].ToString());
-				allergyDefm.Snomed       = (SnomedAllergy)PIn.Int(table.Rows[i]["Snomed"].ToString());
+				allergyDefm.Snomed       = (SnomedAllergy)PIn.Int(table.Rows[i]["SnomedType"].ToString());
 				allergyDefm.MedicationNum= PIn.Long  (table.Rows[i]["MedicationNum"].ToString());
 				retVal.Add(allergyDefm);
 			}
@@ -97,7 +97,7 @@ namespace OpenDentBusiness.Mobile.Crud{
 			//CustomerNum cannot be set.  Remains 0.
 			allergyDefm.AllergyDefNum=allergyDef.AllergyDefNum;
 			allergyDefm.Description  =allergyDef.Description;
-			allergyDefm.Snomed       =allergyDef.Snomed;
+			allergyDefm.Snomed       =allergyDef.SnomedType;
 			allergyDefm.MedicationNum=allergyDef.MedicationNum;
 			return allergyDefm;
 		}

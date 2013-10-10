@@ -10,6 +10,7 @@ using OpenDentBusiness;
 namespace OpenDental {
 	public partial class FormAllergyDefEdit:Form {
 		public AllergyDef AllergyDefCur;
+		private Snomed snomedAllergicTo;
 
 		public FormAllergyDefEdit() {
 			InitializeComponent();
@@ -24,8 +25,21 @@ namespace OpenDental {
 			for(int i=0;i<Enum.GetNames(typeof(SnomedAllergy)).Length;i++) {
 				comboSnomedAllergyType.Items.Add(Enum.GetNames(typeof(SnomedAllergy))[i]);
 			}
-			comboSnomedAllergyType.SelectedIndex=(int)AllergyDefCur.Snomed;
+			comboSnomedAllergyType.SelectedIndex=(int)AllergyDefCur.SnomedType;
+			snomedAllergicTo=Snomeds.GetByCode(AllergyDefCur.SnomedAllergyTo);
+			if(snomedAllergicTo!=null) {
+				textSnomedAllergicTo.Text=snomedAllergicTo.Description;
+			}
 			textMedication.Text=Medications.GetDescription(AllergyDefCur.MedicationNum);
+		}
+
+		private void butAllergicToSelect_Click(object sender,EventArgs e) {
+			FormSnomeds formS=new FormSnomeds();
+			formS.IsSelectionMode=true;
+			if(formS.ShowDialog()==DialogResult.OK) {
+				snomedAllergicTo=formS.SelectedSnomed;
+				textSnomedAllergicTo.Text=snomedAllergicTo.Description;
+			}
 		}
 
 		private void butMedicationSelect_Click(object sender,EventArgs e) {
@@ -37,6 +51,11 @@ namespace OpenDental {
 			}
 			AllergyDefCur.MedicationNum=FormM.SelectedMedicationNum;
 			textMedication.Text=Medications.GetDescription(AllergyDefCur.MedicationNum);
+		}
+
+		private void butNoneAllergicTo_Click(object sender,EventArgs e) {
+			snomedAllergicTo=null;
+			textSnomedAllergicTo.Text="";
 		}
 
 		private void butNone_Click(object sender,EventArgs e) {
@@ -51,7 +70,11 @@ namespace OpenDental {
 			}
 			AllergyDefCur.Description=textDescription.Text;
 			AllergyDefCur.IsHidden=checkHidden.Checked;
-			AllergyDefCur.Snomed=(SnomedAllergy)comboSnomedAllergyType.SelectedIndex;
+			AllergyDefCur.SnomedType=(SnomedAllergy)comboSnomedAllergyType.SelectedIndex;
+			AllergyDefCur.SnomedAllergyTo="";
+			if(snomedAllergicTo!=null) {
+				AllergyDefCur.SnomedAllergyTo=snomedAllergicTo.SnomedCode;
+			}
 			if(AllergyDefCur.IsNew) {
 				AllergyDefs.Insert(AllergyDefCur);
 			}
@@ -77,5 +100,6 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
 	}
 }

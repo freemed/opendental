@@ -1960,6 +1960,30 @@ namespace OpenDentBusiness {
 					}
 				}
 				catch(Exception ex) { }//Only an index. (Exception ex) required to catch thrown exception
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE allergydef CHANGE Snomed SnomedType tinyint";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE allergydef CHANGE Snomed SnomedType int";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE allergydef ADD SnomedAllergyTo varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE allergydef ADD SnomedAllergyTo varchar2(255)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE allergy ADD SnomedReaction varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE allergy ADD SnomedReaction varchar2(255)";
+					Db.NonQ(command);
+				}
 
 
 
@@ -1980,6 +2004,9 @@ namespace OpenDentBusiness {
 
 	}
 }
+
+
+
 
 
 

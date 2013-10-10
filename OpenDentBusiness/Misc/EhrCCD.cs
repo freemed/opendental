@@ -366,7 +366,7 @@ Allergies
 					}
 					w.WriteStartElement("tr");
 					w.WriteStartElement("td");
-					w.WriteString(AllergyDefs.GetSnomedAllergyDesc(allergyDef.Snomed));
+					w.WriteString(AllergyDefs.GetSnomedAllergyDesc(allergyDef.SnomedType));
 					w.WriteEndElement();
 					w.WriteStartElement("td");
 					w.WriteString(med.RxCui.ToString()+" - "+med.MedName);
