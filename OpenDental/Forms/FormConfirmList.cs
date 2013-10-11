@@ -1004,7 +1004,7 @@ namespace OpenDental{
 					if(Table.Rows[i]["confirmed"].ToString()==DefC.GetName(DefCat.ApptConfirmed,PrefC.GetLong(PrefName.ConfirmStatusTextMessaged))) {//Already confirmed by text
 						continue;
 					}
-					if(Table.Rows[grid.SelectedIndices[i]]["contactMethod"].ToString().StartsWith("Text:")) {//Check contact method
+					if(!Table.Rows[i]["contactMethod"].ToString().StartsWith("Text:")) {//Check contact method
 						continue;
 					}
 					grid.SetSelected(i,true);
