@@ -82,7 +82,7 @@ namespace OpenDental {
 				listCalls.Add(new PointF(17.5f,226));
 				listCalls.Add(new PointF(17.5f,0));
 			}
-			buckets=new float[28];//every 30 minutes, starting at 5:15
+			buckets=new float[56];//Number of total bucket. 4 buckets per hour * 14 hours = 56 buckets.
 			ListScheds=Schedules.GetDayList(DateShowing);
 			//PhoneGraph exceptions will take precedence over employee default
 			List<PhoneGraph> listPhoneGraphs=PhoneGraphs.GetAllForDate(DateShowing);			
@@ -124,8 +124,9 @@ namespace OpenDental {
 					continue;
 				}				
 				for(int b=0;b<buckets.Length;b++) {
-					time1=new TimeSpan(5,0,0) + new TimeSpan(0,b*30,0);
-					time2=new TimeSpan(5,30,0) + new TimeSpan(0,b*30,0);
+					//minutes field multiplier is a function of buckets per hour. answers the question, "how many minutes long is each bucket?"
+					time1=new TimeSpan(5,0,0) + new TimeSpan(0,b*15,0); 
+					time2=new TimeSpan(5,15,0) + new TimeSpan(0,b*15,0);
 					//situation 1: this bucket is completely within the start and stop times.
 					if(ListScheds[i].StartTime <= time1 && ListScheds[i].StopTime >= time2) {
 						AddEmployeeToBucket(b,employee);
@@ -141,14 +142,15 @@ namespace OpenDental {
 					//situation 4: start time falls within this bucket
 					if(ListScheds[i].StartTime > time1) {
 						delta=ListScheds[i].StartTime - time1;
-						if(delta.TotalMinutes > 15) { //has to work more than 15 minutes to be considered *in* this bucket
+						//7.5 minutes is half of one bucket.
+						if(delta.TotalMinutes > 7.5) { //has to work more than 15 minutes to be considered *in* this bucket
 							AddEmployeeToBucket(b,employee);												
 						}
 					}
 					//situation 5: stop time falls within this bucket
 					if(ListScheds[i].StopTime < time2) {
 						delta= time2 - ListScheds[i].StopTime;
-						if(delta.TotalMinutes > 15) { //has to work more than 15 minutes to be considered *in* this bucket
+						if(delta.TotalMinutes > 7.5) { //has to work more than 15 minutes to be considered *in* this bucket
 							AddEmployeeToBucket(b,employee);
 						}
 					}
@@ -245,9 +247,9 @@ namespace OpenDental {
 			float y;
 			float w;
 			float h;
-			float barspacing=rec.Width / totalhrs / 2f;
+			float barspacing=(rec.Width / totalhrs) / 4f; //4f means number of buckets per hours.  EG... 10 minute granularity = 6f;
 			float firstbar=barspacing / 2f;
-			float barW=barspacing / 2f;
+			float barW=barspacing / 1f;//increase denominator in order to increase spacing between bars. 1f = no space... 2f = full bar space. 1.5f = half bar space.
 			SolidBrush blueBrush=new SolidBrush(Color.FromArgb(162,193,222));
 			for(int i=0;i<buckets.Length;i++) {
 				h=(float)buckets[i]*rec.Height/superPeak;
@@ -267,7 +269,8 @@ namespace OpenDental {
 				}
 				//draw the number of employees in this bucket
 				SizeF sf=e.Graphics.MeasureString(buckets[i].ToString(),SystemFonts.DefaultFont);
-				e.Graphics.DrawString(buckets[i].ToString(),SystemFonts.DefaultFont,Brushes.Blue,x+(barW-sf.Width)/2,y-(sf.Height+1));
+				//removing for now. number of employees now included in hover text.
+				//e.Graphics.DrawString(buckets[i].ToString(),SystemFonts.DefaultFont,Brushes.Blue,x+(barW-sf.Width)/2,y-(sf.Height+1));
 			}
 			//Line graph in red
 			float peakH=rec.Height * peak / superPeak;
@@ -319,6 +322,7 @@ namespace OpenDental {
 				toolTip.ToolTipTitle=tsStart.ToShortTimeString()+" - "+tsStart.Add(TimeSpan.FromMinutes(30)).ToShortTimeString();
 				string employees="";
 				if(DictEmployeesPerBucket.TryGetValue(i,out listEmps)) {
+					toolTip.ToolTipTitle=toolTip.ToolTipTitle+" ("+listEmps.Count.ToString()+" Techs)";
 					listEmps.Sort(new Employees.EmployeeComparer(Employees.EmployeeComparer.SortBy.firstName));
 					for(int p=0;p<listEmps.Count;p++) {
 						List<Schedule> sch=Schedules.GetForEmployee(ListScheds,listEmps[p].EmployeeNum);

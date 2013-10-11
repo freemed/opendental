@@ -45,7 +45,7 @@ namespace OpenDental{
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.panel1.Location = new System.Drawing.Point(34, 53);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(666, 534);
+			this.panel1.Size = new System.Drawing.Size(1167, 534);
 			this.panel1.TabIndex = 5;
 			this.panel1.Visible = false;
 			// 
@@ -97,7 +97,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(625, 637);
+			this.butCancel.Location = new System.Drawing.Point(1126, 637);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 2;
@@ -114,7 +114,7 @@ namespace OpenDental{
 			this.butPrint.CornerRadius = 4F;
 			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrint;
 			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(376, 637);
+			this.butPrint.Location = new System.Drawing.Point(877, 637);
 			this.butPrint.Name = "butPrint";
 			this.butPrint.Size = new System.Drawing.Size(75, 24);
 			this.butPrint.TabIndex = 9;
@@ -179,7 +179,7 @@ namespace OpenDental{
 			// FormGraphEmployeeTime
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(725, 673);
+			this.ClientSize = new System.Drawing.Size(1226, 673);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.butEdit);
