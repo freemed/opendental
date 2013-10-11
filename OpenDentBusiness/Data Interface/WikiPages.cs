@@ -600,10 +600,19 @@ namespace OpenDentBusiness{
 			if(paragraph.StartsWith(" ") && paragraph.TrimStart(' ').StartsWith("<")) {
 				paragraph="{{nbsp}}"+paragraph.Substring(1);//this will later be converted to &nbsp;
 			}
-			paragraph="<p>"+paragraph+"</p>";
+			if(paragraph.Contains("<")) {
+				//Replace all <b ~replace all carriage returns~> so that the end result looks like <b>
+				MatchCollection tagMatches=Regex.Matches(paragraph,"<.*?>",RegexOptions.Singleline);
+				for(int i=0;i<tagMatches.Count;i++) {
+					string oldMatch=tagMatches[i].Value;
+					string newMatch=tagMatches[i].Value.Replace("\r\n","");
+					paragraph=paragraph.Replace(oldMatch,newMatch);
+				}
+			}
 			paragraph=paragraph.Replace("\r\n","</p><p>");
 			//spaces at beginnings of lines
 			paragraph=paragraph.Replace("<p> ","<p>{{nbsp}}");
+			paragraph="<p>"+paragraph+"</p>";//surround paragraph with tags
 			return paragraph;
 		}
 
