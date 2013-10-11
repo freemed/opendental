@@ -45,7 +45,13 @@ namespace OpenDental {
 						continue;
 					}
 					trans.TransType=fields[0];
-					trans.Amount=PIn.Double(fields[1].Substring(1));//remove the dollar sign character "$"
+					fields[1]=fields[1].Replace("$","");
+					if(fields[1].Contains("(")) {
+						fields[1]=fields[1].TrimStart('(');
+						fields[1]=fields[1].TrimEnd(')');
+						fields[1]=fields[1].Insert(0,"-");
+					}
+					trans.Amount=PIn.Double(fields[1]);
 					trans.CCEntry=fields[2];
 					trans.PatNum=PIn.Long(fields[3].Substring(3));//remove "PAT" from the beginning of the string
 					trans.Result=fields[4];
