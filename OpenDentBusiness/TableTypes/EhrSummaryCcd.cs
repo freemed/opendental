@@ -3,7 +3,7 @@ using System.Collections;
 using System.Drawing;
 
 namespace OpenDentBusiness {
-	///<summary>Can also be a CCR.  Sent CCDs are not saved here, only received CCDs/CCRs.  To display a saved Ccd, it is combined with an internal stylesheet.</summary>
+	///<summary>Can also be a CCR.  Received CCDs/CCRs are stored both here and in emailattach.  Sent CCDs are not saved here, but are only stored in emailattach.  To display a saved Ccd, it is combined with an internal stylesheet.</summary>
 	[Serializable]
 	public class EhrSummaryCcd:TableBase {
 		///<summary>Primary key.</summary>
