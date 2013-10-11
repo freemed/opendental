@@ -19,6 +19,12 @@ namespace OpenDentBusiness{
 		public YN InsIsPending;
 		///<summary>A message that will be copied to the NoteBold field of the Statement.</summary>
 		public string MessageBold;
+		///<summary>An override for the default email subject.</summary>
+		public string EmailSubject;
+		///<summary>An override for the default email body.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)] 
+		public string EmailBody;
+
 
 		///<summary>Returns a copy of this Dunning.</summary>
 		public Dunning Copy(){

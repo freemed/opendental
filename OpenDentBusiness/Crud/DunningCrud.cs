@@ -52,6 +52,8 @@ namespace OpenDentBusiness.Crud{
 				dunning.AgeAccount  = PIn.Byte  (table.Rows[i]["AgeAccount"].ToString());
 				dunning.InsIsPending= (YN)PIn.Int(table.Rows[i]["InsIsPending"].ToString());
 				dunning.MessageBold = PIn.String(table.Rows[i]["MessageBold"].ToString());
+				dunning.EmailSubject= PIn.String(table.Rows[i]["EmailSubject"].ToString());
+				dunning.EmailBody   = PIn.String(table.Rows[i]["EmailBody"].ToString());
 				retVal.Add(dunning);
 			}
 			return retVal;
@@ -92,7 +94,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="DunningNum,";
 			}
-			command+="DunMessage,BillingType,AgeAccount,InsIsPending,MessageBold) VALUES(";
+			command+="DunMessage,BillingType,AgeAccount,InsIsPending,MessageBold,EmailSubject,EmailBody) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(dunning.DunningNum)+",";
 			}
@@ -101,12 +103,18 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (dunning.BillingType)+","
 				+    POut.Byte  (dunning.AgeAccount)+","
 				+    POut.Int   ((int)dunning.InsIsPending)+","
-				+"'"+POut.String(dunning.MessageBold)+"')";
+				+"'"+POut.String(dunning.MessageBold)+"',"
+				+"'"+POut.String(dunning.EmailSubject)+"',"
+				+DbHelper.ParamChar+"paramEmailBody)";
+			if(dunning.EmailBody==null) {
+				dunning.EmailBody="";
+			}
+			OdSqlParameter paramEmailBody=new OdSqlParameter("paramEmailBody",OdDbType.Text,dunning.EmailBody);
 			if(useExistingPK || PrefC.RandomKeys) {
-				Db.NonQ(command);
+				Db.NonQ(command,paramEmailBody);
 			}
 			else {
-				dunning.DunningNum=Db.NonQ(command,true);
+				dunning.DunningNum=Db.NonQ(command,true,paramEmailBody);
 			}
 			return dunning.DunningNum;
 		}
@@ -118,9 +126,15 @@ namespace OpenDentBusiness.Crud{
 				+"BillingType =  "+POut.Long  (dunning.BillingType)+", "
 				+"AgeAccount  =  "+POut.Byte  (dunning.AgeAccount)+", "
 				+"InsIsPending=  "+POut.Int   ((int)dunning.InsIsPending)+", "
-				+"MessageBold = '"+POut.String(dunning.MessageBold)+"' "
+				+"MessageBold = '"+POut.String(dunning.MessageBold)+"', "
+				+"EmailSubject= '"+POut.String(dunning.EmailSubject)+"', "
+				+"EmailBody   =  "+DbHelper.ParamChar+"paramEmailBody "
 				+"WHERE DunningNum = "+POut.Long(dunning.DunningNum);
-			Db.NonQ(command);
+			if(dunning.EmailBody==null) {
+				dunning.EmailBody="";
+			}
+			OdSqlParameter paramEmailBody=new OdSqlParameter("paramEmailBody",OdDbType.Text,dunning.EmailBody);
+			Db.NonQ(command,paramEmailBody);
 		}
 
 		///<summary>Updates one Dunning in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
@@ -146,12 +160,24 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="MessageBold = '"+POut.String(dunning.MessageBold)+"'";
 			}
+			if(dunning.EmailSubject != oldDunning.EmailSubject) {
+				if(command!=""){ command+=",";}
+				command+="EmailSubject = '"+POut.String(dunning.EmailSubject)+"'";
+			}
+			if(dunning.EmailBody != oldDunning.EmailBody) {
+				if(command!=""){ command+=",";}
+				command+="EmailBody = "+DbHelper.ParamChar+"paramEmailBody";
+			}
 			if(command==""){
 				return;
 			}
+			if(dunning.EmailBody==null) {
+				dunning.EmailBody="";
+			}
+			OdSqlParameter paramEmailBody=new OdSqlParameter("paramEmailBody",OdDbType.Text,dunning.EmailBody);
 			command="UPDATE dunning SET "+command
 				+" WHERE DunningNum = "+POut.Long(dunning.DunningNum);
-			Db.NonQ(command);
+			Db.NonQ(command,paramEmailBody);
 		}
 
 		///<summary>Deletes one Dunning from the database.</summary>

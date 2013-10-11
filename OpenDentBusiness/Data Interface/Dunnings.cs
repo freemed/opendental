@@ -14,18 +14,18 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT * FROM dunning "
 				+"ORDER BY BillingType,AgeAccount,InsIsPending";
-			DataTable table=Db.GetTable(command);
-			Dunning[] List=new Dunning[table.Rows.Count];
-			for(int i=0;i<table.Rows.Count;i++) {
-				List[i]=new Dunning();
-				List[i].DunningNum     = PIn.Long(table.Rows[i][0].ToString());
-				List[i].DunMessage     = PIn.String(table.Rows[i][1].ToString());
-				List[i].BillingType    = PIn.Long(table.Rows[i][2].ToString());
-				List[i].AgeAccount     = PIn.Byte(table.Rows[i][3].ToString());
-				List[i].InsIsPending   = (YN)PIn.Long(table.Rows[i][4].ToString());
-				List[i].MessageBold    = PIn.String(table.Rows[i][5].ToString());
-			}
-			return List;
+			//DataTable table=Db.GetTable(command);
+			//Dunning[] List=new Dunning[table.Rows.Count];
+			//for(int i=0;i<table.Rows.Count;i++) {
+			//	List[i]=new Dunning();
+			//	List[i].DunningNum     = PIn.Long(table.Rows[i][0].ToString());
+			//	List[i].DunMessage     = PIn.String(table.Rows[i][1].ToString());
+			//	List[i].BillingType    = PIn.Long(table.Rows[i][2].ToString());
+			//	List[i].AgeAccount     = PIn.Byte(table.Rows[i][3].ToString());
+			//	List[i].InsIsPending   = (YN)PIn.Long(table.Rows[i][4].ToString());
+			//	List[i].MessageBold    = PIn.String(table.Rows[i][5].ToString());
+			//}
+			return Crud.DunningCrud.SelectMany(command).ToArray();
 		}
 
 		///<summary></summary>

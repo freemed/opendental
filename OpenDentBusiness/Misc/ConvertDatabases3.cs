@@ -1984,7 +1984,22 @@ namespace OpenDentBusiness {
 					command="ALTER TABLE allergy ADD SnomedReaction varchar2(255)";
 					Db.NonQ(command);
 				}
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE dunning ADD EmailSubject varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE dunning ADD EmailSubject varchar2(255)";
+					Db.NonQ(command);
+				} 
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE dunning ADD EmailBody mediumtext NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE dunning ADD EmailBody clob";
+					Db.NonQ(command);
+				}
 
 
 
@@ -2004,6 +2019,7 @@ namespace OpenDentBusiness {
 
 	}
 }
+
 
 
 
