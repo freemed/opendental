@@ -26,19 +26,20 @@ namespace OpenDental{
 			this.butClose = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butAdd = new OpenDental.UI.Button();
+			this.checkDeleted = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// butClose
 			// 
-			this.butClose.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butClose.Autosize = true;
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(500,354);
+			this.butClose.Location = new System.Drawing.Point(500, 354);
 			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(75,24);
+			this.butClose.Size = new System.Drawing.Size(75, 24);
 			this.butClose.TabIndex = 2;
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
@@ -49,10 +50,10 @@ namespace OpenDental{
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(24,12);
+			this.gridMain.Location = new System.Drawing.Point(24, 12);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(551,325);
+			this.gridMain.Size = new System.Drawing.Size(551, 325);
 			this.gridMain.TabIndex = 4;
 			this.gridMain.Title = "Popups";
 			this.gridMain.TranslationName = null;
@@ -60,7 +61,7 @@ namespace OpenDental{
 			// 
 			// butAdd
 			// 
-			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butAdd.Autosize = true;
 			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
@@ -68,17 +69,30 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(24,354);
+			this.butAdd.Location = new System.Drawing.Point(24, 354);
 			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(75,24);
+			this.butAdd.Size = new System.Drawing.Size(75, 24);
 			this.butAdd.TabIndex = 2;
 			this.butAdd.Text = "Add";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
+			// checkDeleted
+			// 
+			this.checkDeleted.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkDeleted.Location = new System.Drawing.Point(302, 357);
+			this.checkDeleted.Name = "checkDeleted";
+			this.checkDeleted.Size = new System.Drawing.Size(192, 20);
+			this.checkDeleted.TabIndex = 21;
+			this.checkDeleted.Text = "Show Deleted";
+			this.checkDeleted.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkDeleted.UseVisualStyleBackColor = true;
+			this.checkDeleted.CheckedChanged += new System.EventHandler(this.checkDeleted_CheckedChanged);
+			// 
 			// FormPopupsForFam
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(600,391);
+			this.ClientSize = new System.Drawing.Size(600, 391);
+			this.Controls.Add(this.checkDeleted);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.butClose);
@@ -95,5 +109,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button butClose;
 		private UI.ODGrid gridMain;
 		private UI.Button butAdd;
+		private System.Windows.Forms.CheckBox checkDeleted;
 	}
 }

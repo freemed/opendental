@@ -20,6 +20,7 @@ namespace OpenDentBusiness{
 			Patient patCur=Patients.GetPat(patNum);
 			string command="SELECT * FROM popup "
 				+"WHERE IsDisabled=0 "
+				+"AND IsArchived=0 "
 				+"AND (PatNum = "+POut.Long(patNum)+" "
 				//any family level popup for anyone in the family
 				+"OR (PatNum IN (SELECT PatNum FROM patient "
@@ -35,20 +36,70 @@ namespace OpenDentBusiness{
 			return Crud.PopupCrud.SelectMany(command);
 		}
 
-		///<summary>Gets all Popups for a single family.  If patient is part of a superfamily, it will get all popups for the entire superfamily.</summary>
+		///<summary>Gets all Popups for a single family.  If patient is part of a superfamily, it will get all popups for the entire superfamily. It will not get any deleted or archived popups.</summary>
 		public static List<Popup> GetForFamily(Patient pat) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Popup>>(MethodBase.GetCurrentMethod(),pat);
 			}
 			string command="SELECT * FROM popup "
 				+"WHERE PatNum IN (SELECT PatNum FROM patient "
-				+"WHERE Guarantor = "+POut.Long(pat.Guarantor)+") ";
+				+"WHERE (Guarantor = "+POut.Long(pat.Guarantor)+") ";
 			if(pat.SuperFamily!=0) {//They are part of a super family
 				command+="OR PatNum IN (SELECT PatNum FROM patient "
 					+"WHERE SuperFamily = "+POut.Long(pat.SuperFamily)+") ";
 			}
+			command+=") ";
+			command+="AND IsArchived = 0 ";
 			command+="ORDER BY PatNum";
 			return Crud.PopupCrud.SelectMany(command);
+		}
+
+		///<summary>Gets all deleted Popups for a single family.  If patient is part of a superfamily, it will get all popups for the entire superfamily. </summary>
+		public static List<Popup> GetForFamilyDeleted(Patient pat) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Popup>>(MethodBase.GetCurrentMethod(),pat);
+			}
+			string command="SELECT * FROM popup "
+				+"WHERE PatNum IN (SELECT PatNum FROM patient "
+				+"WHERE (Guarantor = "+POut.Long(pat.Guarantor)+") ";
+			if(pat.SuperFamily!=0) {//They are part of a super family
+				command+="OR PatNum IN (SELECT PatNum FROM patient "
+					+"WHERE SuperFamily = "+POut.Long(pat.SuperFamily)+") ";
+			}
+			command+=") ";
+			command+="AND IsArchived = 1 "
+				+"AND PopupNumArchive = 0 ";
+			command+="ORDER BY PatNum";
+			return Crud.PopupCrud.SelectMany(command);
+		}
+
+		///<summary>Gets all archived Popups for a single family.  If patient is part of a superfamily, it will get all archived popups for the entire superfamily.</summary>
+		public static List<Popup> GetArchivedPopups(long popupNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Popup>>(MethodBase.GetCurrentMethod(),popupNum);
+			}
+			string command="SELECT * FROM popup"
+				+" WHERE PopupNumArchive = "+POut.Long(popupNum)
+				+" ORDER BY DateTimeEntry";
+			return Crud.PopupCrud.SelectMany(command);
+		}
+
+		///<summary>Gets date the popup was last edited. </summary>
+		public static string GetLastEditDate(long popupNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),popupNum);
+			}
+			string command="SELECT * FROM popup"
+				+" WHERE PopupNumArchive = "+POut.Long(popupNum)
+				+" ORDER BY DateTimeEntry DESC"
+				+" LIMIT 1";
+			Popup popupReturn=Crud.PopupCrud.SelectOne(command);
+			if(popupReturn==null) {
+				return "";
+			}
+			else {
+				return popupReturn.DateTimeEntry.ToString();
+			}
 		}
 
 		/// <summary>Copies all family level popups when a family member leaves a family. Copies from other family members to patient, and from patient to guarantor.</summary>
@@ -85,6 +136,7 @@ namespace OpenDentBusiness{
 			string command="SELECT * FROM popup "
 				+"WHERE PopupLevel = "+POut.Int((int)EnumPopupLevel.SuperFamily)+" "
 				+"AND PatNum IN (SELECT PatNum FROM patient WHERE SuperFamily = "+POut.Long(pat.SuperFamily)+")";
+			//This includes all the archived ones as well
 			List<Popup> SuperFamilyPopups=Crud.PopupCrud.SelectMany(command);
 			Popup popup;
 			for(int i=0;i<SuperFamilyPopups.Count;i++) {
@@ -147,7 +199,7 @@ namespace OpenDentBusiness{
 			return Crud.PopupCrud.Insert(popup);
 		}
 
-		///<summary></summary>
+		///<summary>Warning!  The calling code is reponsible for creating an archive first.</summary>
 		public static void Update(Popup popup) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),popup);
@@ -156,7 +208,7 @@ namespace OpenDentBusiness{
 			Crud.PopupCrud.Update(popup);
 		}
 
-		///<summary></summary>
+		///<summary>Warning!  This is not used when user clicks Delete.  Instead, the existing popup is set to archive.</summary>
 		public static void DeleteObject(Popup popup){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),popup);

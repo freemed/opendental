@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 
 namespace OpenDentBusiness{
-	///<summary>If an existing popup message gets changed, then the db row does not get updated.  Instead, the current one gets archived, and a new one gets added so that we can track historical changes.  When a new one gets created, all the archived popups will get automatically repointed to the new one.</summary>
+	///<summary>If an existing popup message gets changed, then an archive first gets created that's a copy of the original.  This is so that we can track historical changes.  When a new one gets created, all the archived popups will get automatically repointed to the new one.  If you "delete" a popup, it actually archives that popup.  All the other archives of that popup still point to the newly archived popup, but now there is no popup in that group with the IsArchived flag not set.</summary>
 	[Serializable]
 	public class Popup:TableBase {
 		/// <summary>Primary key.</summary>
@@ -12,18 +12,18 @@ namespace OpenDentBusiness{
 		public long PatNum;
 		/// <summary>The text of the popup.</summary>
 		public string Description;
-		/// <summary>If true, then the popup won't ever automatically show.</summary>
+		///<summary>If true, then the popup won't automatically show when a patient is selected.  Kind of useless except for offices that want to preserve their history.</summary>
 		public bool IsDisabled;
 		/// <summary>Enum:EnumPopupFamily 0=Patient, 1=Family, 2=Superfamily. If Family, then this Popup will apply to the entire family and PatNum will the Guarantor PatNum.  If Superfamily, then this popup will apply to the entire superfamily and PatNum will be the head of the superfamily. This column will need to be synched for all family actions where the guarantor changes.  </summary>
 		public EnumPopupLevel PopupLevel;//rename to PopupLevel
 		///<summary>FK to userod.UserNum.</summary>
 		public long UserNum;
-		///<summary>The server time that this note was entered.  Cannot be changed by user.  Does not get changed automatically when level or isDisabled gets changed.  If note itself changes, then a new popup is created along with a new DateTimeEntry.</summary>
+		///<summary>The server time that this note was entered.  Cannot be changed by user.  Does not get changed automatically when level or isDisabled gets changed.  If note itself changes, then a new popup is created along with a new DateTimeEntry. Current popup's edit date gets set to the previous entry's DateTimeEntry</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.DateTEntry)]
 		public DateTime DateTimeEntry;
-		///<summary>True for any historical popup.</summary>
+		///<summary>Indicates that this is not the most current popup and that it is an archive.  True for any archived or "deleted" popups.</summary>
 		public bool IsArchived;
-		///<summary>This will be zero for current popups.  Archived popups which hold historical edit info will have this field filled with the FK to the current Popup.  This will also be zero for a deleted popup because it will have no current popup to point to.</summary>
+		///<summary>This will be zero for current popups that show when a patient is selected.  Archived popups will have a value which is the FK to its parent Popup.  The parent popup could be the most recent popup or another archived popup.  Will be zero for current and "deleted" popups.</summary>
 		public long PopupNumArchive;
 		//We will consider later adding Guarantor and SuperFamily FK's to speed up queries.  The disadvantage is that popups would then have to be synched every time guarantors or sf heads changed.
 

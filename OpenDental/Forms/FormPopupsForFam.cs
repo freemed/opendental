@@ -19,11 +19,17 @@ namespace OpenDental {
 		}
 
 		private void FormPopupsForFam_Load(object sender,EventArgs e) {
+			gridMain.AllowSortingByColumn=true;
 			FillGrid();
 		}
 
 		private void FillGrid() {
-			PopupList=Popups.GetForFamily(PatCur);
+			if(checkDeleted.Checked) {
+				PopupList=Popups.GetForFamilyDeleted(PatCur);
+			}
+			else {
+				PopupList=Popups.GetForFamily(PatCur);
+			}
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TablePopupsForFamily","Patient"),120);
@@ -32,6 +38,10 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TablePopupsForFamily","Disabled"),60,HorizontalAlignment.Center);
 			gridMain.Columns.Add(col);
+			if(checkDeleted.Checked) {
+				col=new ODGridColumn(Lan.g("TablePopupsForFamily","Deleted"),60,HorizontalAlignment.Center);
+				gridMain.Columns.Add(col);
+			}
 			col=new ODGridColumn(Lan.g("TablePopupsForFamily","Popup Message"),120);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
@@ -41,6 +51,9 @@ namespace OpenDental {
 				row.Cells.Add(Patients.GetPat(PopupList[i].PatNum).GetNameLF());
 				row.Cells.Add(Lan.g("enumEnumPopupLevel",PopupList[i].PopupLevel.ToString()));
 				row.Cells.Add(PopupList[i].IsDisabled?"X":"");
+				if(checkDeleted.Checked) {
+					row.Cells.Add(PopupList[i].IsArchived?"X":"");
+				}
 				row.Cells.Add(PopupList[i].Description);
 				gridMain.Rows.Add(row);
 			}
@@ -51,6 +64,12 @@ namespace OpenDental {
 			FormPopupEdit FormPE=new FormPopupEdit();
 			FormPE.PopupCur=PopupList[e.Row];
 			FormPE.ShowDialog();
+			if(FormPE.DialogResult==DialogResult.OK) {
+				FillGrid();
+			}
+		}
+		
+		private void checkDeleted_CheckedChanged(object sender,EventArgs e) {
 			FillGrid();
 		}
 
@@ -62,7 +81,9 @@ namespace OpenDental {
 			popup.IsNew=true;
 			FormPE.PopupCur=popup;
 			FormPE.ShowDialog();
-			FillGrid();
+			if(FormPE.DialogResult==DialogResult.OK) {
+				FillGrid();
+			}
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {

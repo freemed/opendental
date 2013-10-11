@@ -373,6 +373,12 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormPopupAudit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormPopupAudit.designer.cs">
+      <DependentUpon>FormPopupAudit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormEhrNotPerformedEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2933,6 +2939,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormPopupAudit.resx">
+      <DependentUpon>FormPopupAudit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormEhrNotPerformedEdit.resx">
       <DependentUpon>FormEhrNotPerformedEdit.cs</DependentUpon>
