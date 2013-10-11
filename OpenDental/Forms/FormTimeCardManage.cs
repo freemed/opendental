@@ -24,6 +24,8 @@ namespace OpenDental {
 		private string totalTime2;
 		private string overTime2;
 		private string rate2Time2;
+		private int PagesPrinted;
+		private bool HeadingPrinted;
 
 		public FormTimeCardManage() {
 			InitializeComponent();
@@ -772,7 +774,59 @@ namespace OpenDental {
 
 		///<summary>Print exactly what is showing in gridMain. (Including rows that do not fit in the UI.)</summary>
 		private void butPrintGrid_Click(object sender,EventArgs e) {
-			//TODO:Assign to Allen.
+			PagesPrinted=0;
+			HeadingPrinted=false;
+			PrintDocument pd=new PrintDocument();
+			pd.PrintPage += new PrintPageEventHandler(this.pd_PrintPage);
+			pd.DefaultPageSettings.Margins=new Margins(25,25,40,40);
+			//pd.OriginAtMargins=true;
+			if(pd.DefaultPageSettings.PrintableArea.Height==0) {
+				pd.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
+			}
+			#if DEBUG
+				FormRpPrintPreview pView = new FormRpPrintPreview();
+				pView.printPreviewControl2.Document=pd;
+				pView.ShowDialog();
+			#else
+				if(!PrinterL.SetPrinter(pd,PrintSituation.Default)) {
+					return;
+				}
+				try{
+					pd.Print();
+				}
+				catch(Exception ex){
+					MessageBox.Show(ex.Message);
+				}
+			#endif	
+		}
+
+		private void pd_PrintPage(object sender,PrintPageEventArgs e) {
+			Rectangle bounds=e.MarginBounds;
+			Graphics g=e.Graphics;
+			string text;
+			Font headingFont=new Font("Arial",13,FontStyle.Bold);
+			int y=bounds.Top;
+			int center=bounds.X+bounds.Width/2;
+			#region printHeading
+			int headingPrintH=0;
+			if(!HeadingPrinted) {
+				text=Lan.g(this,"Heading Text");
+				g.DrawString(text,headingFont,Brushes.Black,center-g.MeasureString(text,headingFont).Width/2,y);
+				y+=25;
+				HeadingPrinted=true;
+				headingPrintH=y;
+			}
+			#endregion
+			y=gridMain.PrintPage(g,pagesPrinted,bounds,headingPrintH);
+			//instead of printing a grid, something else could have been printed instead.
+			PagesPrinted++;
+			if(y==-1) {
+				e.HasMorePages=true;
+			}
+			else {
+				e.HasMorePages=false;
+			}
+			g.Dispose();
 		}
 
 		///<summary>Exports MainTable (a data table) not the actual OD Grid. This allows for EmployeeNum and ADPNum without having to perform any lookups.</summary>
