@@ -783,12 +783,12 @@ namespace OpenDental {
 			if(pd.DefaultPageSettings.PrintableArea.Height==0) {
 				pd.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
 			}
-			#if DEBUG
+			#if !DEBUG
 				FormRpPrintPreview pView = new FormRpPrintPreview();
 				pView.printPreviewControl2.Document=pd;
 				pView.ShowDialog();
 			#else
-				if(!PrinterL.SetPrinter(pd,PrintSituation.Default)) {
+				if(!PrinterL.SetPrinter(pd,PrintSituation.Default,0,"Printed employee time card grid.")) {
 					return;
 				}
 				try{
@@ -797,7 +797,7 @@ namespace OpenDental {
 				catch(Exception ex){
 					MessageBox.Show(ex.Message);
 				}
-			#endif	
+#endif
 		}
 
 		private void pd_PrintPage(object sender,PrintPageEventArgs e) {
