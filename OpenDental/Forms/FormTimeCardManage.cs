@@ -783,7 +783,7 @@ namespace OpenDental {
 			if(pd.DefaultPageSettings.PrintableArea.Height==0) {
 				pd.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
 			}
-			#if !DEBUG
+			#if DEBUG
 				FormRpPrintPreview pView = new FormRpPrintPreview();
 				pView.printPreviewControl2.Document=pd;
 				pView.ShowDialog();
