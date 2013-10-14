@@ -109,6 +109,7 @@ namespace OpenDental{
 			this.labelDatabaseSynch.Size = new System.Drawing.Size(142, 19);
 			this.labelDatabaseSynch.TabIndex = 88;
 			this.labelDatabaseSynch.Text = "Database time out of synch";
+			this.labelDatabaseSynch.Visible = false;
 			// 
 			// labelLocalSynch
 			// 
@@ -118,6 +119,7 @@ namespace OpenDental{
 			this.labelLocalSynch.Size = new System.Drawing.Size(142, 19);
 			this.labelLocalSynch.TabIndex = 89;
 			this.labelLocalSynch.Text = "Local time out of synch";
+			this.labelLocalSynch.Visible = false;
 			// 
 			// labelAllSynched
 			// 
@@ -127,6 +129,7 @@ namespace OpenDental{
 			this.labelAllSynched.Size = new System.Drawing.Size(200, 19);
 			this.labelAllSynched.TabIndex = 90;
 			this.labelAllSynched.Text = "All times synchronized within one second";
+			this.labelAllSynched.Visible = false;
 			// 
 			// butSynchTime
 			// 

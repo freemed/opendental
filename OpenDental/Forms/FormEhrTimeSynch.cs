@@ -13,6 +13,7 @@ namespace OpenDental {
 		private DateTime timeNist;
 		private DateTime timeServer;
 		private DateTime timeLocal;
+		public bool AutomaticLaunch;
 
 		public FormEhrTimeSynch() {
 			InitializeComponent();
@@ -25,6 +26,11 @@ namespace OpenDental {
 				return;
 			}
 			RefreshTimes();
+			if(AutomaticLaunch) {//Not launched manually from Setup>EHR
+				if(labelAllSynched.Visible) {//All synched correctly, and no timeouts
+					DialogResult=DialogResult.OK;
+				}
+			}
 		}
 
 		///<summary>Get the offset from the nist server and DateTime.Now().  Returns double.MinValue if invalid NIST Server URL.  Returns double.MaxValue if request timed out.</summary>
@@ -94,7 +100,7 @@ namespace OpenDental {
 
 		///<summary>Returns true if server time is in synch with Nist server.</summary>
 		private bool ServerOurOfSynch() {
-			double difference=Math.Abs(timeServer.Subtract(timeNist).TotalSeconds);
+			double difference=Math.Abs(timeServer.Subtract(timeLocal).TotalSeconds);
 			if(difference>.99) {
 				return true;
 			}
@@ -103,7 +109,7 @@ namespace OpenDental {
 
 		///<summary>Returns true if local time is in synch with server.</summary>
 		private bool LocalOutOfSynch() {
-			double difference=Math.Abs(timeLocal.Subtract(timeServer).TotalSeconds);
+			double difference=Math.Abs(timeLocal.Subtract(timeNist).TotalSeconds);
 			if(difference>.99) {
 				return true;
 			}
