@@ -2000,6 +2000,22 @@ namespace OpenDentBusiness {
 					command="ALTER TABLE dunning ADD EmailBody clob";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE statement ADD EmailSubject varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE statement ADD EmailSubject varchar2(255)";
+					Db.NonQ(command);
+				} 
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE statement ADD EmailBody mediumtext NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE statement ADD EmailBody clob";
+					Db.NonQ(command);
+				}
 
 
 

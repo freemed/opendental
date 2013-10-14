@@ -42,6 +42,11 @@ namespace OpenDentBusiness{
 		public bool IsInvoice;
 		///<summary>Only used if IsInvoice=true.  The first printout will not be a copy.  Subsequent printouts will show "copy" on them.</summary>
 		public bool IsInvoiceCopy;
+		///<summary>Empty string by default.  Overrides BillingEmailSubject pref when emailing the statement.  Only set when statements are created from the Billing Options window.  Gets set to the EmailSubject of the corresponding dunning entry.  No UI for editing.</summary>
+		public string EmailSubject;
+		///<summary>Empty string by default.  Overrides BillingEmailBodyText pref when emailing the statement.  Only set when statements are created from the Billing Options window.  Gets set to the EmailSubject of the corresponding dunning entry.  No UI for editing.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		public string EmailBody;
 
 		public Statement Copy(){
 			return (Statement)this.MemberwiseClone();

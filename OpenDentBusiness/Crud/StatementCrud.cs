@@ -63,6 +63,8 @@ namespace OpenDentBusiness.Crud{
 				statement.IsReceipt    = PIn.Bool  (table.Rows[i]["IsReceipt"].ToString());
 				statement.IsInvoice    = PIn.Bool  (table.Rows[i]["IsInvoice"].ToString());
 				statement.IsInvoiceCopy= PIn.Bool  (table.Rows[i]["IsInvoiceCopy"].ToString());
+				statement.EmailSubject = PIn.String(table.Rows[i]["EmailSubject"].ToString());
+				statement.EmailBody    = PIn.String(table.Rows[i]["EmailBody"].ToString());
 				retVal.Add(statement);
 			}
 			return retVal;
@@ -103,7 +105,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="StatementNum,";
 			}
-			command+="PatNum,DateSent,DateRangeFrom,DateRangeTo,Note,NoteBold,Mode_,HidePayment,SinglePatient,Intermingled,IsSent,DocNum,IsReceipt,IsInvoice,IsInvoiceCopy) VALUES(";
+			command+="PatNum,DateSent,DateRangeFrom,DateRangeTo,Note,NoteBold,Mode_,HidePayment,SinglePatient,Intermingled,IsSent,DocNum,IsReceipt,IsInvoice,IsInvoiceCopy,EmailSubject,EmailBody) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(statement.StatementNum)+",";
 			}
@@ -123,12 +125,18 @@ namespace OpenDentBusiness.Crud{
 				//DateTStamp can only be set by MySQL
 				+    POut.Bool  (statement.IsReceipt)+","
 				+    POut.Bool  (statement.IsInvoice)+","
-				+    POut.Bool  (statement.IsInvoiceCopy)+")";
+				+    POut.Bool  (statement.IsInvoiceCopy)+","
+				+"'"+POut.String(statement.EmailSubject)+"',"
+				+DbHelper.ParamChar+"paramEmailBody)";
+			if(statement.EmailBody==null) {
+				statement.EmailBody="";
+			}
+			OdSqlParameter paramEmailBody=new OdSqlParameter("paramEmailBody",OdDbType.Text,statement.EmailBody);
 			if(useExistingPK || PrefC.RandomKeys) {
-				Db.NonQ(command);
+				Db.NonQ(command,paramEmailBody);
 			}
 			else {
-				statement.StatementNum=Db.NonQ(command,true);
+				statement.StatementNum=Db.NonQ(command,true,paramEmailBody);
 			}
 			return statement.StatementNum;
 		}
@@ -151,9 +159,15 @@ namespace OpenDentBusiness.Crud{
 				//DateTStamp can only be set by MySQL
 				+"IsReceipt    =  "+POut.Bool  (statement.IsReceipt)+", "
 				+"IsInvoice    =  "+POut.Bool  (statement.IsInvoice)+", "
-				+"IsInvoiceCopy=  "+POut.Bool  (statement.IsInvoiceCopy)+" "
+				+"IsInvoiceCopy=  "+POut.Bool  (statement.IsInvoiceCopy)+", "
+				+"EmailSubject = '"+POut.String(statement.EmailSubject)+"', "
+				+"EmailBody    =  "+DbHelper.ParamChar+"paramEmailBody "
 				+"WHERE StatementNum = "+POut.Long(statement.StatementNum);
-			Db.NonQ(command);
+			if(statement.EmailBody==null) {
+				statement.EmailBody="";
+			}
+			OdSqlParameter paramEmailBody=new OdSqlParameter("paramEmailBody",OdDbType.Text,statement.EmailBody);
+			Db.NonQ(command,paramEmailBody);
 		}
 
 		///<summary>Updates one Statement in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
@@ -220,12 +234,24 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="IsInvoiceCopy = "+POut.Bool(statement.IsInvoiceCopy)+"";
 			}
+			if(statement.EmailSubject != oldStatement.EmailSubject) {
+				if(command!=""){ command+=",";}
+				command+="EmailSubject = '"+POut.String(statement.EmailSubject)+"'";
+			}
+			if(statement.EmailBody != oldStatement.EmailBody) {
+				if(command!=""){ command+=",";}
+				command+="EmailBody = "+DbHelper.ParamChar+"paramEmailBody";
+			}
 			if(command==""){
 				return;
 			}
+			if(statement.EmailBody==null) {
+				statement.EmailBody="";
+			}
+			OdSqlParameter paramEmailBody=new OdSqlParameter("paramEmailBody",OdDbType.Text,statement.EmailBody);
 			command="UPDATE statement SET "+command
 				+" WHERE StatementNum = "+POut.Long(statement.StatementNum);
-			Db.NonQ(command);
+			Db.NonQ(command,paramEmailBody);
 		}
 
 		///<summary>Deletes one Statement from the database.</summary>
