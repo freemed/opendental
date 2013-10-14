@@ -60,9 +60,17 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),trans);
 				return;
 			}
-			string command="DELETE FROM journalentry WHERE TransactionNum="+POut.Long(trans.TransactionNum);
+			string command="SELECT IsLocked FROM journalentry j, reconcile r WHERE j.TransactionNum="+POut.Long(trans.TransactionNum)
+				+" AND j.ReconcileNum = r.ReconcileNum";
+			DataTable table=Db.GetTable(command);
+			if(table.Rows.Count>0) {
+				if(PIn.Int(table.Rows[0][0].ToString())==1) {
+					throw new ApplicationException(Lans.g("Transactions","Not allowed to delete transactions because it is attached to a reconcile that is locked."));
+				}
+			}
+			command="DELETE FROM journalentry WHERE TransactionNum="+POut.Long(trans.TransactionNum);
 			Db.NonQ(command);
-			command= "DELETE FROM transaction WHERE TransactionNum = "+POut.Long(trans.TransactionNum);
+			command= "DELETE FROM transaction WHERE TransactionNum="+POut.Long(trans.TransactionNum);
 			Db.NonQ(command);
 		}
 

@@ -80,6 +80,12 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),je);
 				return;
 			}
+			//This method is only used once in synch below.  Validation needs to be done, but doing it inside the loop would be dangerous.
+			//So validation is done in the UI as follows:
+			//1. Deleting an entire transaction is validated in business layer.
+			//2. When editing a transaction attached to reconcile, simple view is blocked.
+			//3. Double clicking on grid lets you change JEs not attached to reconcile.
+			//4. Double clicking on grid lets you change notes even if attached to reconcile.
 			string command= "DELETE FROM journalentry WHERE JournalEntryNum = "+POut.Long(je.JournalEntryNum);
 			Db.NonQ(command);
 		}

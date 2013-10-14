@@ -543,7 +543,7 @@ namespace OpenDental{
 			}
 			else {
 				//for an existing transaction, there will always be at least 2 entries.
-				//We enforce security here based on date displayed, not date entered
+				//We enforce security here based on date displayed, not date entered	
 				if(!Security.IsAuthorized(Permissions.AccountingEdit,((JournalEntry)JournalList[0]).DateDisplayed)) {
 					butOK.Enabled=false;
 					butDelete.Enabled=false;
@@ -1011,6 +1011,7 @@ namespace OpenDental{
 				Transactions.Delete(TransCur);
 			}
 			catch(ApplicationException ex) {
+				JournalList=JournalEntries.GetForTrans(TransCur.TransactionNum);//Refreshes list so that the journal entries are not deleted by the update later.
 				MessageBox.Show(ex.Message);
 				return;
 			}
@@ -1098,7 +1099,7 @@ namespace OpenDental{
 			//catch{
 
 			//}
-			Transactions.Update(TransCur);//this catches DepostitNum, the only user-editable field.
+			Transactions.Update(TransCur);//this catches DepositNum, the only user-editable field.
 			double tot=0;
 			for(int i=0;i<JournalList.Count;i++){
 				tot+=((JournalEntry)JournalList[i]).DebitAmt;
