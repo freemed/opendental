@@ -13,7 +13,8 @@ namespace OpenDental {
 		private DateTime timeNist;
 		private DateTime timeServer;
 		private DateTime timeLocal;
-		public bool AutomaticLaunch;
+		///<summary>Set true when launched while OpenDental starts.  Will automatically check times and close form silently if times are all in synch.</summary>
+		public bool IsAutoLaunch;
 
 		public FormEhrTimeSynch() {
 			InitializeComponent();
@@ -26,7 +27,7 @@ namespace OpenDental {
 				return;
 			}
 			RefreshTimes();
-			if(AutomaticLaunch) {//Not launched manually from Setup>EHR
+			if(IsAutoLaunch) {
 				if(labelAllSynched.Visible) {//All synched correctly, and no timeouts
 					DialogResult=DialogResult.OK;
 				}
@@ -59,7 +60,8 @@ namespace OpenDental {
 				this.Cursor=Cursors.Default;
 				return;
 			}
-			else if(ntpOffset==double.MinValue) { //Invalid Nist Server Address
+			if(ntpOffset==double.MinValue) { //Invalid Nist Server Address
+				this.Cursor=Cursors.Default;
 				return;
 			}
 			//Get ServerTime Offset
@@ -77,29 +79,18 @@ namespace OpenDental {
 			Prefs.UpdateString(PrefName.NistTimeServerUrl,textNistUrl.Text);
 			this.Cursor=Cursors.Default;
 			//Display labels if out of synch.
-			if(ServerOurOfSynch()) {
-				labelDatabaseSynch.Visible=true;
-			}
-			else {
-				labelDatabaseSynch.Visible=false;
-			}
-			if(LocalOutOfSynch()) {
-				labelLocalSynch.Visible=true;
-			}
-			else {
-				labelLocalSynch.Visible=false;
-			}
-			if(!ServerOurOfSynch()&&!LocalOutOfSynch()) { //If both in synch
-				labelAllSynched.Visible=true;
-			}
-			else {
+			labelDatabaseSynch.Visible=ServerOutOfSynch();
+			labelLocalSynch.Visible=LocalOutOfSynch();
+			if(ServerOutOfSynch() && LocalOutOfSynch()) {
 				labelAllSynched.Visible=false;
 			}
-
+			else {
+				labelAllSynched.Visible=true; //All times in synch
+			}
 		}
 
-		///<summary>Returns true if server time is in synch with Nist server.</summary>
-		private bool ServerOurOfSynch() {
+		///<summary>Returns true if server time is out of synch with local machine.</summary>
+		private bool ServerOutOfSynch() {
 			double difference=Math.Abs(timeServer.Subtract(timeLocal).TotalSeconds);
 			if(difference>.99) {
 				return true;
@@ -107,7 +98,7 @@ namespace OpenDental {
 			return false;
 		}
 
-		///<summary>Returns true if local time is in synch with server.</summary>
+		///<summary>Returns true if local time is out of synch with NIST server.</summary>
 		private bool LocalOutOfSynch() {
 			double difference=Math.Abs(timeLocal.Subtract(timeNist).TotalSeconds);
 			if(difference>.99) {
