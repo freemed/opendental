@@ -42,8 +42,10 @@ namespace OpenDentBusiness {
 					case EhrRestrictionType.Medication://--------------------------------------------------------------------------------------------------------------------------
 						select+=",medicationpat"+i+".DateStart";//Name of medication will be in column title.
 						from+=",medication AS medication"+i+", medicationpat AS medicationpat"+i;
-						where+="AND medication"+i+".MedicationNum=MedicationPat"+i+".MedicationNum AND medicationpat"+i+".PatNum=patient.PatNum ";//join
-						where+="AND medication"+i+".MedName LIKE '%"+PIn.String(elementList[i].CompareString)+"%' ";//filter
+						where+="AND medicationpat"+i+".PatNum=patient.PatNum ";//join
+						//This is unusual.  Part of the join logic is in the code below because medicationPat.MedicationNum might be 0 if it came from newcrop.
+						where+="AND ((medication"+i+".MedicationNum=MedicationPat"+i+".MedicationNum AND medication"+i+".MedName LIKE '%"+PIn.String(elementList[i].CompareString)+"%') "
+						      +"  OR (medication.MedicationNum=0 AND medicationpat.MedDescript LIKE '%"+PIn.String(elementList[i].CompareString)+"%')) ";
 						if(elementList[i].StartDate!=null && elementList[i].StartDate.Year>1880) {
 							where+="AND medicationpat"+i+".DateStart>"+POut.Date(elementList[i].StartDate)+" ";//after this date
 						}
