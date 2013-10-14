@@ -876,8 +876,13 @@ namespace OpenDental {
 				strb.AppendLine(row);
 			}
 			string fileName="ODPayroll"+DateTime.Now.ToString("yyyyMMdd_hhmmss")+".TXT";
-			System.IO.File.WriteAllText(fbd.SelectedPath+"\\"+fileName,strb.ToString());
-			MessageBox.Show(this,Lan.g(this,"File created")+" : "+fbd.SelectedPath+"\\"+fileName);
+			try {
+				System.IO.File.WriteAllText(fbd.SelectedPath+"\\"+fileName,strb.ToString());
+				MessageBox.Show(this,Lan.g(this,"File created")+" : "+fbd.SelectedPath+"\\"+fileName);
+			}
+			catch(Exception ex) {
+				MessageBox.Show(this,"File not created:\r\n"+ex.Message);
+			}
 		}
 
 		///<summary>Validates format and values and provides aggregate error and warning messages. Will save malformed files anyways.</summary>
@@ -980,14 +985,19 @@ namespace OpenDental {
 					break;
 				}
 			}
-			System.IO.File.WriteAllText(fbd.SelectedPath+"\\EPI"+coCode+fileSuffix+".CSV",strb.ToString());
-			if(errors!="") {
-				MessageBox.Show("The following errors will prevent ADP from properly processing this export:\r\n"+errors);
+			try {
+				System.IO.File.WriteAllText(fbd.SelectedPath+"\\EPI"+coCode+fileSuffix+".CSV",strb.ToString());
+				if(errors!="") {
+					MessageBox.Show("The following errors will prevent ADP from properly processing this export:\r\n"+errors);
+				}
+				if(warnings!="") {
+					MessageBox.Show("The following warnings were detected:\r\n"+warnings);
+				}
+				MessageBox.Show(this,Lan.g(this,"File created")+" : "+fbd.SelectedPath+"\\EPI"+coCode+fileSuffix+".CSV");
 			}
-			if(warnings!="") {
-				MessageBox.Show("The following warnings were detected:\r\n"+warnings);
+			catch(Exception ex) {
+				MessageBox.Show(this,"File not created:\r\n"+ex.Message);
 			}
-			MessageBox.Show(this,Lan.g(this,"File created")+" : "+fbd.SelectedPath+"\\EPI"+coCode+fileSuffix+".CSV");
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {
