@@ -187,8 +187,8 @@ namespace OpenDental {
 			Table=WikiLists.GetByName(WikiListCurName);
 			FillGrid();
 			for(int i=0;i<gridMain.Rows.Count;i++) {
-				if(gridMain.Rows[i].Cells[0].Text==FormWLIE.ItemNum.ToString()) {		
-					gridMain.Rows[i].ColorBackG=Color.Green;
+				if(gridMain.Rows[i].Cells[0].Text==FormWLIE.ItemNum.ToString()) {
+					gridMain.Rows[i].ColorBackG=Color.FromArgb(255,255,128);
 					gridMain.ScrollToIndex(i);
 				}
 			}
