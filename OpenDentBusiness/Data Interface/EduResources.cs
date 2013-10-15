@@ -33,8 +33,9 @@ namespace OpenDentBusiness{
 					}
 				}
 				else if(eduResourceListAll[i].MedicationNum!=0) {
+					Medication med=Medications.GetMedication(eduResourceListAll[i].MedicationNum);
 					for(int j=0;j<medicationPatList.Count;j++) {
-						if(eduResourceListAll[i].MedicationNum==medicationPatList[j].MedicationNum) {
+						if(eduResourceListAll[i].MedicationNum==medicationPatList[j].MedicationNum || (medicationPatList[j].MedicationNum==0 && medicationPatList[j].RxCui==med.RxCui)) {
 							retVal.Add(eduResourceListAll[i]);
 						}
 					}
