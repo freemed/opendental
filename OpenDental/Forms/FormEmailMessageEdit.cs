@@ -863,7 +863,11 @@ namespace OpenDental{
 				if(IsAttachmentCcd(listAttachments.SelectedIndex)) {
 					string strTextXml=File.ReadAllText(strFilePathAttach);
 					if(EhrCCD.IsCCD(strTextXml)) {
-						EHR.FormSummaryOfCare.DisplayCCD(strTextXml,true);
+						bool isReconcile=false;
+						if(MessageCur.SentOrReceived==EmailSentOrReceived.ReadDirect || MessageCur.SentOrReceived==EmailSentOrReceived.ReceivedDirect) {
+							isReconcile=true;//Do not show reconcile options when user is composing message or when viewing message that was sent. Only allow reconcile if received via Direct.
+						}
+						EHR.FormSummaryOfCare.DisplayCCD(strTextXml,isReconcile);
 						return;
 					}	
 				}

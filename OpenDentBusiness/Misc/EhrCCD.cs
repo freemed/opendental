@@ -15,6 +15,7 @@ namespace OpenDentBusiness {
 	public class EhrCCD {
 
 		public static string GenerateCCD(Patient pat) {
+			Medications.Refresh();
 			XmlWriterSettings xmlSettings=new XmlWriterSettings();
 			xmlSettings.Encoding=Encoding.UTF8;
 			xmlSettings.OmitXmlDeclaration=true;
@@ -766,7 +767,7 @@ Laboratory Test Results
 			catch {
 				return false;
 			}
-			if(doc.DocumentElement.Name.ToLower()=="clinicaldocument") {//CCD and CCDA. TODO: Use a different style sheet for CCDA?
+			if(doc.DocumentElement.Name.ToLower()=="clinicaldocument") {//CCD and CCDA
 				return true;
 			}
 			else if(doc.DocumentElement.Name.ToLower()=="continuityofcarerecord" || doc.DocumentElement.Name.ToLower()=="ccr:continuityofcarerecord") {//CCR
