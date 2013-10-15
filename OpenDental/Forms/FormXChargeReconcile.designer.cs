@@ -57,7 +57,7 @@ namespace OpenDental{
 			// 
 			// date1
 			// 
-			this.date1.Location = new System.Drawing.Point(34, 89);
+			this.date1.Location = new System.Drawing.Point(34, 94);
 			this.date1.Name = "date1";
 			this.date1.TabIndex = 23;
 			// 
