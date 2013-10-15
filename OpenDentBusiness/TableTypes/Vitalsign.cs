@@ -41,14 +41,6 @@ namespace OpenDentBusiness {
 		public long EhrNotPerformedNum;
 		///<summary>FK to disease.DiseaseNum.  This will link this vitalsign object to a pregnancy diagnosis for this patient.  It will be 0 for non pregnant patients.  The disease it is linked to will be inserted automatically based on the default value set.  In order to change this code for this specific exam it will have to be changed in the problems list.</summary>
 		public long PregDiseaseNum;
-		///<summary>FK to intervention.InterventionNum.  This will link a vitalsign to the intervention object for nutrition counseling.  This may be 0 and if they delete the Intervention object we will have to clear this field.</summary>
-		public long NutrInterventionNum;
-		///<summary>FK to intervention.InterventionNum.  This will link a vitalsign to the intervention object for physical activity counseling.  This may be 0 and if they delete the Intervention object we will have to clear this field.</summary>
-		public long PhyActInterventionNum;
-		///<summary>FK to intervention.InterventionNum.  This will link a vitalsign to the intervention object for above or below normal BMI counseling.  This may be 0 and if they delete the Intervention object we will have to clear this field.</summary>
-		public long OverUnderInterventionNum;
-		///<summary>FK to medicationpat.MedicationPatNum.  This will link a vitalsign to the medicationpat object for above or below normal BMI medications ordered.  This may be 0 and if they delete the medicationpat object we will have to clear this field.</summary>
-		public long MedicationPatNum;
 
 		///<summary></summary>
 		public Vitalsign Copy() {

@@ -50,10 +50,10 @@ namespace OpenDentBusiness.Crud{
 				allergy.AllergyDefNum      = PIn.Long  (table.Rows[i]["AllergyDefNum"].ToString());
 				allergy.PatNum             = PIn.Long  (table.Rows[i]["PatNum"].ToString());
 				allergy.Reaction           = PIn.String(table.Rows[i]["Reaction"].ToString());
-				allergy.SnomedReaction     = PIn.String(table.Rows[i]["SnomedReaction"].ToString());
 				allergy.StatusIsActive     = PIn.Bool  (table.Rows[i]["StatusIsActive"].ToString());
 				allergy.DateTStamp         = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
 				allergy.DateAdverseReaction= PIn.Date  (table.Rows[i]["DateAdverseReaction"].ToString());
+				allergy.SnomedReaction     = PIn.String(table.Rows[i]["SnomedReaction"].ToString());
 				retVal.Add(allergy);
 			}
 			return retVal;
@@ -94,7 +94,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="AllergyNum,";
 			}
-			command+="AllergyDefNum,PatNum,Reaction,SnomedReaction,StatusIsActive,DateAdverseReaction) VALUES(";
+			command+="AllergyDefNum,PatNum,Reaction,StatusIsActive,DateAdverseReaction,SnomedReaction) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(allergy.AllergyNum)+",";
 			}
@@ -102,10 +102,10 @@ namespace OpenDentBusiness.Crud{
 				     POut.Long  (allergy.AllergyDefNum)+","
 				+    POut.Long  (allergy.PatNum)+","
 				+"'"+POut.String(allergy.Reaction)+"',"
-				+"'"+POut.String(allergy.SnomedReaction)+"',"
 				+    POut.Bool  (allergy.StatusIsActive)+","
 				//DateTStamp can only be set by MySQL
-				+    POut.Date  (allergy.DateAdverseReaction)+")";
+				+    POut.Date  (allergy.DateAdverseReaction)+","
+				+"'"+POut.String(allergy.SnomedReaction)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -121,10 +121,10 @@ namespace OpenDentBusiness.Crud{
 				+"AllergyDefNum      =  "+POut.Long  (allergy.AllergyDefNum)+", "
 				+"PatNum             =  "+POut.Long  (allergy.PatNum)+", "
 				+"Reaction           = '"+POut.String(allergy.Reaction)+"', "
-				+"SnomedReaction     = '"+POut.String(allergy.SnomedReaction)+"', "
 				+"StatusIsActive     =  "+POut.Bool  (allergy.StatusIsActive)+", "
 				//DateTStamp can only be set by MySQL
-				+"DateAdverseReaction=  "+POut.Date  (allergy.DateAdverseReaction)+" "
+				+"DateAdverseReaction=  "+POut.Date  (allergy.DateAdverseReaction)+", "
+				+"SnomedReaction     = '"+POut.String(allergy.SnomedReaction)+"' "
 				+"WHERE AllergyNum = "+POut.Long(allergy.AllergyNum);
 			Db.NonQ(command);
 		}
@@ -144,10 +144,6 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="Reaction = '"+POut.String(allergy.Reaction)+"'";
 			}
-			if(allergy.SnomedReaction != oldAllergy.SnomedReaction) {
-				if(command!=""){ command+=",";}
-				command+="SnomedReaction = '"+POut.String(allergy.SnomedReaction)+"'";
-			}
 			if(allergy.StatusIsActive != oldAllergy.StatusIsActive) {
 				if(command!=""){ command+=",";}
 				command+="StatusIsActive = "+POut.Bool(allergy.StatusIsActive)+"";
@@ -156,6 +152,10 @@ namespace OpenDentBusiness.Crud{
 			if(allergy.DateAdverseReaction != oldAllergy.DateAdverseReaction) {
 				if(command!=""){ command+=",";}
 				command+="DateAdverseReaction = "+POut.Date(allergy.DateAdverseReaction)+"";
+			}
+			if(allergy.SnomedReaction != oldAllergy.SnomedReaction) {
+				if(command!=""){ command+=",";}
+				command+="SnomedReaction = '"+POut.String(allergy.SnomedReaction)+"'";
 			}
 			if(command==""){
 				return;
