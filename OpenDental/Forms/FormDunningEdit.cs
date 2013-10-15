@@ -34,6 +34,13 @@ namespace OpenDental{
 		private System.Windows.Forms.RadioButton radioU;
 		private TextBox textMessageBold;
 		private Label label2;
+		private GroupBox groupBox3;
+		private GroupBox groupBox4;
+		private Label label3;
+		private TextBox textEmailBody;
+		private TextBox textEmailSubject;
+		private Label label4;
+		private Label label10;
 		private Dunning DunningCur;
 
 		///<summary></summary>
@@ -85,18 +92,27 @@ namespace OpenDental{
 			this.radioU = new System.Windows.Forms.RadioButton();
 			this.textMessageBold = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
+			this.groupBox3 = new System.Windows.Forms.GroupBox();
+			this.groupBox4 = new System.Windows.Forms.GroupBox();
+			this.label10 = new System.Windows.Forms.Label();
+			this.label3 = new System.Windows.Forms.Label();
+			this.textEmailBody = new System.Windows.Forms.TextBox();
+			this.textEmailSubject = new System.Windows.Forms.TextBox();
+			this.label4 = new System.Windows.Forms.Label();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
+			this.groupBox3.SuspendLayout();
+			this.groupBox4.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(27,244);
+			this.label1.Location = new System.Drawing.Point(6, 16);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(148,17);
+			this.label1.Size = new System.Drawing.Size(148, 17);
 			this.label1.TabIndex = 2;
 			this.label1.Text = "Message";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -105,24 +121,24 @@ namespace OpenDental{
 			// 
 			this.textDunMessage.AcceptsReturn = true;
 			this.textDunMessage.AcceptsTab = true;
-			this.textDunMessage.Location = new System.Drawing.Point(28,265);
+			this.textDunMessage.Location = new System.Drawing.Point(7, 37);
 			this.textDunMessage.Multiline = true;
 			this.textDunMessage.Name = "textDunMessage";
-			this.textDunMessage.Size = new System.Drawing.Size(412,89);
+			this.textDunMessage.Size = new System.Drawing.Size(412, 89);
 			this.textDunMessage.TabIndex = 0;
 			// 
 			// listBillType
 			// 
-			this.listBillType.Location = new System.Drawing.Point(28,35);
+			this.listBillType.Location = new System.Drawing.Point(28, 35);
 			this.listBillType.Name = "listBillType";
-			this.listBillType.Size = new System.Drawing.Size(158,199);
+			this.listBillType.Size = new System.Drawing.Size(158, 199);
 			this.listBillType.TabIndex = 113;
 			// 
 			// label8
 			// 
-			this.label8.Location = new System.Drawing.Point(27,17);
+			this.label8.Location = new System.Drawing.Point(27, 17);
 			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(147,16);
+			this.label8.Size = new System.Drawing.Size(147, 16);
 			this.label8.TabIndex = 114;
 			this.label8.Text = "Billing Type:";
 			// 
@@ -133,9 +149,9 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.radio60);
 			this.groupBox1.Controls.Add(this.radioAny);
 			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox1.Location = new System.Drawing.Point(240,29);
+			this.groupBox1.Location = new System.Drawing.Point(240, 29);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(198,110);
+			this.groupBox1.Size = new System.Drawing.Size(198, 110);
 			this.groupBox1.TabIndex = 115;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Age of Account";
@@ -143,27 +159,27 @@ namespace OpenDental{
 			// radio30
 			// 
 			this.radio30.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radio30.Location = new System.Drawing.Point(12,41);
+			this.radio30.Location = new System.Drawing.Point(12, 41);
 			this.radio30.Name = "radio30";
-			this.radio30.Size = new System.Drawing.Size(120,16);
+			this.radio30.Size = new System.Drawing.Size(120, 16);
 			this.radio30.TabIndex = 1;
 			this.radio30.Text = "Over 30 Days";
 			// 
 			// radio90
 			// 
 			this.radio90.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radio90.Location = new System.Drawing.Point(12,85);
+			this.radio90.Location = new System.Drawing.Point(12, 85);
 			this.radio90.Name = "radio90";
-			this.radio90.Size = new System.Drawing.Size(120,18);
+			this.radio90.Size = new System.Drawing.Size(120, 18);
 			this.radio90.TabIndex = 3;
 			this.radio90.Text = "Over 90 Days";
 			// 
 			// radio60
 			// 
 			this.radio60.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radio60.Location = new System.Drawing.Point(12,62);
+			this.radio60.Location = new System.Drawing.Point(12, 62);
 			this.radio60.Name = "radio60";
-			this.radio60.Size = new System.Drawing.Size(117,18);
+			this.radio60.Size = new System.Drawing.Size(117, 18);
 			this.radio60.TabIndex = 2;
 			this.radio60.Text = "Over 60 Days";
 			// 
@@ -171,9 +187,9 @@ namespace OpenDental{
 			// 
 			this.radioAny.Checked = true;
 			this.radioAny.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radioAny.Location = new System.Drawing.Point(12,18);
+			this.radioAny.Location = new System.Drawing.Point(12, 18);
 			this.radioAny.Name = "radioAny";
-			this.radioAny.Size = new System.Drawing.Size(117,18);
+			this.radioAny.Size = new System.Drawing.Size(117, 18);
 			this.radioAny.TabIndex = 0;
 			this.radioAny.TabStop = true;
 			this.radioAny.Text = "Any Balance";
@@ -184,9 +200,9 @@ namespace OpenDental{
 			this.groupBox2.Controls.Add(this.radioN);
 			this.groupBox2.Controls.Add(this.radioU);
 			this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox2.Location = new System.Drawing.Point(240,147);
+			this.groupBox2.Location = new System.Drawing.Point(240, 147);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(198,87);
+			this.groupBox2.Size = new System.Drawing.Size(198, 87);
 			this.groupBox2.TabIndex = 117;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Insurance Payment Pending";
@@ -194,18 +210,18 @@ namespace OpenDental{
 			// radioY
 			// 
 			this.radioY.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radioY.Location = new System.Drawing.Point(12,40);
+			this.radioY.Location = new System.Drawing.Point(12, 40);
 			this.radioY.Name = "radioY";
-			this.radioY.Size = new System.Drawing.Size(120,16);
+			this.radioY.Size = new System.Drawing.Size(120, 16);
 			this.radioY.TabIndex = 1;
 			this.radioY.Text = "Yes";
 			// 
 			// radioN
 			// 
 			this.radioN.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radioN.Location = new System.Drawing.Point(12,61);
+			this.radioN.Location = new System.Drawing.Point(12, 61);
 			this.radioN.Name = "radioN";
-			this.radioN.Size = new System.Drawing.Size(117,18);
+			this.radioN.Size = new System.Drawing.Size(117, 18);
 			this.radioN.TabIndex = 2;
 			this.radioN.Text = "No";
 			// 
@@ -213,9 +229,9 @@ namespace OpenDental{
 			// 
 			this.radioU.Checked = true;
 			this.radioU.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radioU.Location = new System.Drawing.Point(12,17);
+			this.radioU.Location = new System.Drawing.Point(12, 17);
 			this.radioU.Name = "radioU";
-			this.radioU.Size = new System.Drawing.Size(117,18);
+			this.radioU.Size = new System.Drawing.Size(117, 18);
 			this.radioU.TabIndex = 0;
 			this.radioU.TabStop = true;
 			this.radioU.Text = "Doesn\'t Matter";
@@ -224,26 +240,104 @@ namespace OpenDental{
 			// 
 			this.textMessageBold.AcceptsReturn = true;
 			this.textMessageBold.AcceptsTab = true;
-			this.textMessageBold.Font = new System.Drawing.Font("Microsoft Sans Serif",10F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.textMessageBold.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.textMessageBold.ForeColor = System.Drawing.Color.DarkRed;
-			this.textMessageBold.Location = new System.Drawing.Point(28,377);
+			this.textMessageBold.Location = new System.Drawing.Point(7, 149);
 			this.textMessageBold.Multiline = true;
 			this.textMessageBold.Name = "textMessageBold";
-			this.textMessageBold.Size = new System.Drawing.Size(412,89);
+			this.textMessageBold.Size = new System.Drawing.Size(412, 89);
 			this.textMessageBold.TabIndex = 118;
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(27,356);
+			this.label2.Location = new System.Drawing.Point(6, 128);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(148,17);
+			this.label2.Size = new System.Drawing.Size(148, 17);
 			this.label2.TabIndex = 119;
 			this.label2.Text = "Bold Message";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
+			// groupBox3
+			// 
+			this.groupBox3.Controls.Add(this.label1);
+			this.groupBox3.Controls.Add(this.textMessageBold);
+			this.groupBox3.Controls.Add(this.textDunMessage);
+			this.groupBox3.Controls.Add(this.label2);
+			this.groupBox3.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.groupBox3.Location = new System.Drawing.Point(28, 240);
+			this.groupBox3.Name = "groupBox3";
+			this.groupBox3.Size = new System.Drawing.Size(425, 250);
+			this.groupBox3.TabIndex = 118;
+			this.groupBox3.TabStop = false;
+			this.groupBox3.Text = "Statement Notes";
+			// 
+			// groupBox4
+			// 
+			this.groupBox4.Controls.Add(this.label10);
+			this.groupBox4.Controls.Add(this.label3);
+			this.groupBox4.Controls.Add(this.textEmailBody);
+			this.groupBox4.Controls.Add(this.textEmailSubject);
+			this.groupBox4.Controls.Add(this.label4);
+			this.groupBox4.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.groupBox4.Location = new System.Drawing.Point(459, 29);
+			this.groupBox4.Name = "groupBox4";
+			this.groupBox4.Size = new System.Drawing.Size(425, 461);
+			this.groupBox4.TabIndex = 119;
+			this.groupBox4.TabStop = false;
+			this.groupBox4.Text = "Email Statement Override";
+			// 
+			// label10
+			// 
+			this.label10.Location = new System.Drawing.Point(6, 18);
+			this.label10.Name = "label10";
+			this.label10.Size = new System.Drawing.Size(413, 49);
+			this.label10.TabIndex = 250;
+			this.label10.Text = resources.GetString("label10.Text");
+			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(6, 67);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(404, 17);
+			this.label3.TabIndex = 2;
+			this.label3.Text = "Subject";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// textEmailBody
+			// 
+			this.textEmailBody.AcceptsReturn = true;
+			this.textEmailBody.AcceptsTab = true;
+			this.textEmailBody.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+			this.textEmailBody.ForeColor = System.Drawing.Color.Black;
+			this.textEmailBody.Location = new System.Drawing.Point(6, 132);
+			this.textEmailBody.Multiline = true;
+			this.textEmailBody.Name = "textEmailBody";
+			this.textEmailBody.Size = new System.Drawing.Size(412, 317);
+			this.textEmailBody.TabIndex = 118;
+			// 
+			// textEmailSubject
+			// 
+			this.textEmailSubject.AcceptsReturn = true;
+			this.textEmailSubject.AcceptsTab = true;
+			this.textEmailSubject.Location = new System.Drawing.Point(6, 87);
+			this.textEmailSubject.MaxLength = 255;
+			this.textEmailSubject.Multiline = true;
+			this.textEmailSubject.Name = "textEmailSubject";
+			this.textEmailSubject.Size = new System.Drawing.Size(412, 22);
+			this.textEmailSubject.TabIndex = 0;
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(6, 112);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(413, 17);
+			this.label4.TabIndex = 119;
+			this.label4.Text = "Body";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
 			// butDelete
 			// 
-			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butDelete.Autosize = true;
 			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
@@ -251,58 +345,56 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(27,483);
+			this.butDelete.Location = new System.Drawing.Point(27, 503);
 			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(81,24);
+			this.butDelete.Size = new System.Drawing.Size(81, 24);
 			this.butDelete.TabIndex = 4;
 			this.butDelete.Text = "Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
 			// butOK
 			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butOK.Autosize = true;
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(279,483);
+			this.butOK.Location = new System.Drawing.Point(723, 503);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(76,24);
+			this.butOK.Size = new System.Drawing.Size(76, 24);
 			this.butOK.TabIndex = 8;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// butCancel
 			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCancel.Autosize = true;
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(364,483);
+			this.butCancel.Location = new System.Drawing.Point(808, 503);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(76,24);
+			this.butCancel.Size = new System.Drawing.Size(76, 24);
 			this.butCancel.TabIndex = 9;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// FormDunningEdit
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(464,525);
-			this.Controls.Add(this.textMessageBold);
-			this.Controls.Add(this.label2);
+			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+			this.ClientSize = new System.Drawing.Size(908, 545);
+			this.Controls.Add(this.groupBox4);
+			this.Controls.Add(this.groupBox3);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.listBillType);
 			this.Controls.Add(this.label8);
 			this.Controls.Add(this.butDelete);
-			this.Controls.Add(this.textDunMessage);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
-			this.Controls.Add(this.label1);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
@@ -313,8 +405,11 @@ namespace OpenDental{
 			this.Load += new System.EventHandler(this.FormDunningEdit_Load);
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox2.ResumeLayout(false);
+			this.groupBox3.ResumeLayout(false);
+			this.groupBox3.PerformLayout();
+			this.groupBox4.ResumeLayout(false);
+			this.groupBox4.PerformLayout();
 			this.ResumeLayout(false);
-			this.PerformLayout();
 
 		}
 		#endregion
@@ -355,6 +450,8 @@ namespace OpenDental{
 			}
 			textDunMessage.Text=DunningCur.DunMessage;
 			textMessageBold.Text=DunningCur.MessageBold;
+			textEmailBody.Text=DunningCur.EmailBody;
+			textEmailSubject.Text=DunningCur.EmailSubject;
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {
@@ -368,8 +465,10 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			if(textDunMessage.Text=="" && textMessageBold.Text==""){
-				MsgBox.Show(this,"Message cannot be blank.");
+			if(textDunMessage.Text=="" && textMessageBold.Text==""
+				&& textEmailSubject.Text=="" && textEmailBody.Text=="") 
+			{
+				MsgBox.Show(this,"All messages cannot be blank.");
 				return;
 			}
 			if(listBillType.SelectedIndex==0){
@@ -401,6 +500,8 @@ namespace OpenDental{
 			}
 			DunningCur.DunMessage=textDunMessage.Text;
 			DunningCur.MessageBold=textMessageBold.Text;
+			DunningCur.EmailBody=textEmailBody.Text;
+			DunningCur.EmailSubject=textEmailSubject.Text;
 			if(IsNew){
 				Dunnings.Insert(DunningCur);
 			}

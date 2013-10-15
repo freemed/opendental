@@ -1004,25 +1004,7 @@ namespace OpenDental{
 			string oldPath=ODFileUtils.CombinePaths(ImageStore.GetPatientFolder(pat,ImageStore.GetPreferredAtoZpath()),Documents.GetByNum(StmtCur.DocNum).FileName);
 			File.Copy(oldPath,filePathAndName);//
 			//Process.Start(filePathAndName);
-			EmailMessage message=new EmailMessage();
-			message.PatNum=pat.PatNum;
-			message.ToAddress=pat.Email;
-			message.FromAddress=EmailAddresses.GetByClinic(pat.ClinicNum).SenderAddress;
-			string str;
-			str=PrefC.GetString(PrefName.BillingEmailSubject);
-			str=str.Replace("[monthlyCardsOnFile]",CreditCards.GetMonthlyCardsOnFile(pat.PatNum));
-			str=str.Replace("[nameF]",pat.GetNameFirst());
-			str=str.Replace("[nameFL]",pat.GetNameFL());
-			str=str.Replace("[namePref]",pat.Preferred);
-			str=str.Replace("[PatNum]",pat.PatNum.ToString());
-			message.Subject=str;
-			str=PrefC.GetString(PrefName.BillingEmailBodyText);
-			str=str.Replace("[monthlyCardsOnFile]",CreditCards.GetMonthlyCardsOnFile(pat.PatNum));
-			str=str.Replace("[nameF]",pat.GetNameFirst());
-			str=str.Replace("[nameFL]",pat.GetNameFL());
-			str=str.Replace("[namePref]",pat.Preferred);
-			str=str.Replace("[PatNum]",pat.PatNum.ToString());
-			message.BodyText=str;
+			EmailMessage message=Statements.GetEmailMessageForStatement(StmtCur,pat);
 			EmailAttach attach=new EmailAttach();
 			attach.DisplayedFileName="Statement.pdf";
 			attach.ActualFileName=fileName;

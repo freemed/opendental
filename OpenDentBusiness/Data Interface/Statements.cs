@@ -300,6 +300,42 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
+		///<summary>Returns an email message for the patient based on the statement passed in.</summary>
+		public static EmailMessage GetEmailMessageForStatement(Statement stmt,Patient pat) {
+			//No need to check RemotingRole; no call to db.
+			EmailMessage message=new EmailMessage();
+			message.PatNum=pat.PatNum;
+			message.ToAddress=pat.Email;
+			message.FromAddress=EmailAddresses.GetByClinic(pat.ClinicNum).SenderAddress;
+			string str;
+			if(stmt.EmailSubject=="") {
+				str=PrefC.GetString(PrefName.BillingEmailSubject);
+			}
+			else {
+				str=stmt.EmailSubject;
+			}
+			message.Subject=Statements.ReplaceVarsForEmail(str,pat);
+			if(stmt.EmailBody=="") {
+				str=PrefC.GetString(PrefName.BillingEmailBodyText);
+			}
+			else {
+				str=stmt.EmailBody;
+			}
+			message.BodyText=Statements.ReplaceVarsForEmail(str,pat);
+			return message;
+		}
+
+		///<summary>Email statements allow variables to be present in the message body and subject, this method replaces those variables with the information from the patient passed in.  Simply pass in the string for the subject or body and the corresponding patient.</summary>
+		private static string ReplaceVarsForEmail(string str,Patient pat) {
+			//No need to check RemotingRole; no call to db.
+			str=str.Replace("[monthlyCardsOnFile]",CreditCards.GetMonthlyCardsOnFile(pat.PatNum));
+			str=str.Replace("[nameF]",pat.GetNameFirst());
+			str=str.Replace("[nameFL]",pat.GetNameFL());
+			str=str.Replace("[namePref]",pat.Preferred);
+			str=str.Replace("[PatNum]",pat.PatNum.ToString());
+			return str;
+		}
+
 
 
 

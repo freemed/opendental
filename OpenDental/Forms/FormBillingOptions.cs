@@ -746,15 +746,17 @@ namespace OpenDental{
 			dunningList=Dunnings.Refresh();
 			gridDun.BeginUpdate();
 			gridDun.Columns.Clear();
-			ODGridColumn col=new ODGridColumn("Billing Type",100);
+			ODGridColumn col=new ODGridColumn("Billing Type",80);
 			gridDun.Columns.Add(col);
 			col=new ODGridColumn("Aging",70);
 			gridDun.Columns.Add(col);
 			col=new ODGridColumn("Ins",40);
 			gridDun.Columns.Add(col);
-			col=new ODGridColumn("Message",190);
+			col=new ODGridColumn("Message",150);
 			gridDun.Columns.Add(col);
-			col=new ODGridColumn("Bold Message",190);
+			col=new ODGridColumn("Bold Message",150);
+			gridDun.Columns.Add(col);
+			col=new ODGridColumn("Email",30, HorizontalAlignment.Center);
 			gridDun.Columns.Add(col);
 			gridDun.Rows.Clear();
 			OpenDental.UI.ODGridRow row;
@@ -788,6 +790,12 @@ namespace OpenDental{
 				cell.Bold=YN.Yes;
 				cell.ColorText=Color.DarkRed;
 				row.Cells.Add(cell);
+				if(dunningList[i].EmailBody!="" || dunningList[i].EmailSubject!="") {
+					row.Cells.Add("X");
+				}
+				else {
+					row.Cells.Add("");
+				}
 				gridDun.Rows.Add(row);
 			}
 			gridDun.EndUpdate();
@@ -974,6 +982,8 @@ namespace OpenDental{
 					//	stmt.Note+="\r\n\r\n";//leave one empty line
 					//}
 					stmt.NoteBold+=dunning.MessageBold;
+					stmt.EmailSubject=dunning.EmailSubject;					
+					stmt.EmailBody=dunning.EmailBody;
 				}
 				stmt.PatNum=agingList[i].PatNum;
 				stmt.SinglePatient=false;
