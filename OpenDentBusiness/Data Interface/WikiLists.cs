@@ -273,5 +273,54 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
+		///<summary><para>Surround with try catch.  Safely renames list by creating new list, selecting existing list into new list, then deleting existing list.</para>
+		///<para>This code could be used to either copy or backup lists in the future. (With minor modifications).</para></summary>
+		public static void Rename(string nameOriginal,string nameNew) {
+			//Name should already have been validated and available.
+			string command="CREATE TABLE wikilist_"+POut.String(nameNew)+" AS SELECT * FROM wikilist_"+POut.String(nameOriginal);
+			Db.NonQ(command);
+			//Validate content before altering and deleting things
+			DataTable tableNew=GetByName(nameNew);
+			DataTable tableOld=GetByName(nameOriginal);
+			if(tableNew.Rows.Count!=tableOld.Rows.Count) {
+				command="DROP TABLE wikilist_"+POut.String(nameNew);
+				Db.NonQ(command);
+				throw new Exception("Error occured renaming list.  Mismatch found in row count. No changes made.");
+			}
+			if(tableNew.Columns.Count!=tableOld.Columns.Count) {
+				command="DROP TABLE wikilist_"+POut.String(nameNew);
+				Db.NonQ(command);
+				throw new Exception("Error occured renaming list.  Mismatch found in column count. No changes made.");
+			}
+			for(int r1=0;r1<tableNew.Rows.Count;r1++) {
+				for(int r2=0;r2<tableOld.Rows.Count;r2++) {
+					if(tableNew.Rows[r1][0]!=tableOld.Rows[r2][0]) {
+						continue;//pk does not match
+					}
+					for(int c=0;c<tableNew.Columns.Count;c++) {//both lists have same number of columns
+						if(tableNew.Rows[r1][c]==tableOld.Rows[r2][c]) {
+							continue;//contents match
+						}
+						throw new Exception("Error occured renaming list.  Mismatch Error found in row data. No changes made.");
+					}//end columns
+				}//end tableOld
+			}//end tableNew
+			//Alter table names----------------------------------------------------------------------------
+			if(DataConnection.DBtype==DatabaseType.MySql) {
+				command="ALTER TABLE wikilist_"+POut.String(nameNew)+" CHANGE "+POut.String(nameOriginal)+"Num "+POut.String(nameNew)+"Num bigint NOT NULL auto_increment PRIMARY KEY";
+			}
+			else {
+				command="RENAME COLUMN wikilist_"+POut.String(nameNew)+"."+POut.String(nameOriginal)+"Num TO "+POut.String(nameNew)+"Num"; 
+			}
+			Db.NonQ(command);
+			command="UPDATE wikilistheaderwidth SET ListName='"+POut.String(nameNew)+"' WHERE ListName='"+POut.String(nameOriginal)+"'";
+			Db.NonQ(command);
+			command="UPDATE wikilistheaderwidth SET ColName='"+POut.String(nameNew)+"Num' WHERE ListName='"+POut.String(nameNew)+"' AND ColName='"+POut.String(nameOriginal)+"Num'";
+			Db.NonQ(command);
+			//drop old table---------------------
+			command="DROP TABLE wikilist_"+POut.String(nameOriginal);
+			Db.NonQ(command);
+		}
+
 	}
 }

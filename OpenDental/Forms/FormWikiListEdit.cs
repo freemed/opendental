@@ -210,13 +210,51 @@ namespace OpenDental {
 						}
 						break;//next row
 					}
-				}//end j
+				}//end i
 			}//end i
 			gridMain.Invalidate();
 		}
 
+		private void butRenameList_Click(object sender,EventArgs e) {
+			//Logic copied from FormWikiLists.butAdd_Click()---------------------
+			InputBox inputListName = new InputBox("New List Name");
+			inputListName.ShowDialog();
+			if(inputListName.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			//Format input as it would be saved in the database--------------------------------------------
+			inputListName.textResult.Text=inputListName.textResult.Text.ToLower().Replace(" ","");
+			//Validate list name---------------------------------------------------------------------------
+			if(DbHelper.isMySQLReservedWord(inputListName.textResult.Text)) {
+				//Can become an issue when retrieving column header names.
+				MsgBox.Show(this,"List name is a reserved word in MySQL.");
+				return;
+			}
+			if(inputListName.textResult.Text=="") {
+				MsgBox.Show(this,"List name cannot be blank.");
+				return;
+			}
+			if(WikiLists.CheckExists(inputListName.textResult.Text)) {
+				MsgBox.Show(this,"List name already exists.");
+				return;
+			}
+			try {
+				WikiLists.Rename(WikiListCurName,inputListName.textResult.Text);
+				WikiListCurName=inputListName.textResult.Text;
+				Table=WikiLists.GetByName(WikiListCurName);
+				FillGrid();
+			}
+			catch(Exception ex) {
+				MessageBox.Show(this,ex.Message);
+			}
+		}
+
 		private void butDelete_Click(object sender,EventArgs e) {
 			if(!Security.IsAuthorized(Permissions.WikiListSetup)) {//gives a message box if no permission
+				return;
+			}
+			if(gridMain.Rows.Count>0) {
+				MsgBox.Show(this,"Cannot delete a non-empty list.  Remove all items first and try again.");
 				return;
 			}
 			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete this entire list and all references to it?")) {
