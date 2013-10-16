@@ -100,11 +100,14 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),cp);
 				return;
 			}
-			//Validate: make sure this is not the last claimproc on the claim
-			string command="SELECT COUNT(*) FROM claimproc WHERE ClaimNum= "+POut.Long(cp.ClaimNum)+" AND ClaimProcNum!= "+POut.Long(cp.ClaimProcNum);
-			long remainingCP=PIn.Long(Db.GetCount(command));
-			if(remainingCP==0) {
-				throw new ApplicationException(Lans.g("ClaimProcs","Not allowed to delete the last procedure from a claim.  The entire claim would have to be deleted."));
+			string command;
+			//Validate: make sure this is not the last claimproc on the claim.  If cp is not attached to a claim no need to validate.
+			if(cp.ClaimNum!=0) {
+				command="SELECT COUNT(*) FROM claimproc WHERE ClaimNum= "+POut.Long(cp.ClaimNum)+" AND ClaimProcNum!= "+POut.Long(cp.ClaimProcNum);
+				long remainingCP=PIn.Long(Db.GetCount(command));
+				if(remainingCP==0) {
+					throw new ApplicationException(Lans.g("ClaimProcs","Not allowed to delete the last procedure from a claim.  The entire claim would have to be deleted."));
+				}
 			}
 			//end of validation
 			command= "DELETE FROM claimproc WHERE ClaimProcNum = "+POut.Long(cp.ClaimProcNum);
