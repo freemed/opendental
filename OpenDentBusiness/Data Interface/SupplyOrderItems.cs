@@ -10,6 +10,7 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class SupplyOrderItems {
 
+		///<summary>Items in the table are not ItemOrderObjects</summary>
 		public static DataTable GetItemsForOrder(long orderNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),orderNum);

@@ -24,8 +24,11 @@ namespace OpenDentBusiness{
 		public bool IsHidden;
 		/// <summary>The price per unit that the supplier charges for this supply.  If this is 0.00, then no price will be displayed.</summary>
 		public double Price;
-		
 
+		///<summary></summary>
+		public Supply Copy() {
+			return (Supply)this.MemberwiseClone();
+		}
 			
 	}
 
