@@ -1836,6 +1836,13 @@ namespace OpenDental{
 						return;
 					}
 				}
+				if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
+					FormEhrTimeSynch FormEhrTS = new FormEhrTimeSynch();
+					FormEhrTS.IsAutoLaunch=true;
+					if(!FormEhrTS.TimesInSynchFast()) {
+						FormEhrTS.ShowDialog();
+					}
+				}
 			#endif
 			FillPatientButton(null);
 			ThreadCommandLine=new Thread(new ThreadStart(Listen));

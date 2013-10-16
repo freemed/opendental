@@ -10,9 +10,9 @@ using OpenDentBusiness;
 namespace OpenDental {
 	///<summary>Only shows for EHR users.</summary>
 	public partial class FormEhrTimeSynch:Form {
-		private DateTime timeNist;
-		private DateTime timeServer;
-		private DateTime timeLocal;
+		private DateTime _timeNist;
+		private DateTime _timeServer;
+		private DateTime _timeLocal;
 		///<summary>Set true when launched while OpenDental starts.  Will automatically check times and close form silently if times are all in synch.</summary>
 		public bool IsAutoLaunch;
 
@@ -22,16 +22,50 @@ namespace OpenDental {
 		}
 
 		private void FormEhrTime_Load(object sender,EventArgs e) {
-			textNistUrl.Text=PrefC.GetString(PrefName.NistTimeServerUrl);
-			if(textNistUrl.Text=="") {
+			if(IsAutoLaunch) { //Already updated time fields. Dont need to check again, just open.
 				return;
 			}
-			RefreshTimes();
-			if(IsAutoLaunch) {
-				if(labelAllSynched.Visible) {//All synched correctly, and no timeouts
-					DialogResult=DialogResult.OK;
-				}
+			textNistUrl.Text=PrefC.GetString(PrefName.NistTimeServerUrl);
+			RefreshTimes();			
+		}
+
+		///<summary>Called from FormOpenDental.Load.  Checks to see if all times are in synch, with a fast db call (only acurate to seconds, not miliseconds).</summary>
+		public bool TimesInSynchFast() {
+			textNistUrl.Text=PrefC.GetString(PrefName.NistTimeServerUrl);
+			//Get NistTime Offset
+			double ntpOffset=GetNistOffset();
+			if(ntpOffset==double.MaxValue) { //Timed out
+				MsgBox.Show(this,"Nist request timed out.  Try again in four seconds.");
+				this.Cursor=Cursors.Default;
+				return false;
 			}
+			if(ntpOffset==double.MinValue) { //Invalid Nist Server Address
+				this.Cursor=Cursors.Default;
+				return false;
+			}
+			//Get current times from offsets
+			_timeLocal=DateTime.Now;
+			_timeNist=_timeLocal.AddMilliseconds(ntpOffset);
+			//Cannot get milliseconds from Now() in Mysql Pre-5.6.4, Only gets whole seconds.
+			double serverOffset=(MiscData.GetNowDateTime()-_timeLocal).TotalSeconds;
+			_timeServer=_timeLocal.AddSeconds(serverOffset);
+			if((ServerInSynchFast() && LocalInSynch())) { //All times in synch
+				return true;
+			}
+			//Some times out of synch, so form will open, but we don't want to make another call to NIST server
+			//_timeServer needs to be more accurate before displaying
+			serverOffset=(MiscData.GetNowDateTimeWithMilli()-DateTime.Now).TotalSeconds;
+			//Update current times from offsets to match new server offset
+			_timeLocal=DateTime.Now;
+			_timeNist=_timeLocal.AddMilliseconds(ntpOffset);
+			_timeServer=_timeLocal.AddSeconds(serverOffset);
+			//Updates displays to show when form is open
+			labelDatabaseOutOfSynch.Visible=!ServerInSynchFast();
+			labelLocalOutOfSynch.Visible=!LocalInSynch();
+			textNistTime.Text=_timeNist.ToString("hh:mm:ss.fff tt");
+			textServerTime.Text=_timeServer.ToString("hh:mm:ss.fff tt");
+			textLocalTime.Text=_timeLocal.ToString("hh:mm:ss.fff tt");
+			return false;
 		}
 
 		///<summary>Get the offset from the nist server and DateTime.Now().  Returns double.MinValue if invalid NIST Server URL.  Returns double.MaxValue if request timed out.</summary>
@@ -64,25 +98,24 @@ namespace OpenDental {
 				this.Cursor=Cursors.Default;
 				return;
 			}
-			//Get ServerTime Offset
 			//Cannot get milliseconds from Now() in Mysql Pre-5.6.4, uses a workaround by continuously querying server until second ticks over (milliseconds will be close to 0).
 			double serverOffset=(MiscData.GetNowDateTimeWithMilli()-DateTime.Now).TotalMilliseconds;
 			//Get current times from offsets
-			timeLocal=DateTime.Now;
-			timeNist=timeLocal.AddMilliseconds(ntpOffset);
-			timeServer=timeLocal.AddMilliseconds(serverOffset);
+			_timeLocal=DateTime.Now;
+			_timeNist=_timeLocal.AddMilliseconds(ntpOffset);
+			_timeServer=_timeLocal.AddMilliseconds(serverOffset);
 			//Update textboxes
-			textNistTime.Text=timeNist.ToString("hh:mm:ss.fff tt");
-			textServerTime.Text=timeServer.ToString("hh:mm:ss.fff tt");
-			textLocalTime.Text=timeLocal.ToString("hh:mm:ss.fff tt");
+			textNistTime.Text=_timeNist.ToString("hh:mm:ss.fff tt");
+			textServerTime.Text=_timeServer.ToString("hh:mm:ss.fff tt");
+			textLocalTime.Text=_timeLocal.ToString("hh:mm:ss.fff tt");
 			//Update NistURL preference
 			Prefs.UpdateString(PrefName.NistTimeServerUrl,textNistUrl.Text);
 			this.Cursor=Cursors.Default;
 			//Display labels if out of synch.
-			labelDatabaseSynch.Visible=ServerOutOfSynch();
-			labelLocalSynch.Visible=LocalOutOfSynch();
-			if(ServerOutOfSynch() && LocalOutOfSynch()) {
-				labelAllSynched.Visible=false;
+			labelDatabaseOutOfSynch.Visible=!ServerInSynch();
+			labelLocalOutOfSynch.Visible=!LocalInSynch();
+			if(labelDatabaseOutOfSynch.Visible || labelLocalOutOfSynch.Visible) {
+				labelAllSynched.Visible=false; 
 			}
 			else {
 				labelAllSynched.Visible=true; //All times in synch
@@ -90,21 +123,31 @@ namespace OpenDental {
 		}
 
 		///<summary>Returns true if server time is out of synch with local machine.</summary>
-		private bool ServerOutOfSynch() {
-			double difference=Math.Abs(timeServer.Subtract(timeLocal).TotalSeconds);
+		private bool ServerInSynch() {
+			//Would be better to check against NIST time, but doing it this way to match 2014 EHR Proctor Sheet conditions.
+			double difference=Math.Abs(_timeServer.Subtract(_timeLocal).TotalSeconds);
 			if(difference>.99) {
-				return true;
+				return false;
 			}
-			return false;
+			return true;
+		}
+
+		///<summary>Used when launching check automatically on startup.  Rounds to whole seconds.  Returns true if server time is out of synch with local machine.</summary>
+		private bool ServerInSynchFast() {
+			double difference=Math.Abs(_timeServer.Subtract(_timeLocal).TotalSeconds);
+			if(Math.Floor(difference)>1) {
+				return false;
+			}
+			return true;
 		}
 
 		///<summary>Returns true if local time is out of synch with NIST server.</summary>
-		private bool LocalOutOfSynch() {
-			double difference=Math.Abs(timeLocal.Subtract(timeNist).TotalSeconds);
+		private bool LocalInSynch() {
+			double difference=Math.Abs(_timeLocal.Subtract(_timeNist).TotalSeconds);
 			if(difference>.99) {
-				return true;
+				return false;
 			}
-			return false;
+			return true;
 		}
 
 		///<summary>Refresh the time textboxes.  Stops users from sending requests to NIST server more than once every 4 seconds.</summary>

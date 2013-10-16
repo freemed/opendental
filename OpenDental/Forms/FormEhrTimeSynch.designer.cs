@@ -32,8 +32,8 @@ namespace OpenDental{
 			this.label5 = new System.Windows.Forms.Label();
 			this.timer1 = new System.Windows.Forms.Timer(this.components);
 			this.label6 = new System.Windows.Forms.Label();
-			this.labelDatabaseSynch = new System.Windows.Forms.Label();
-			this.labelLocalSynch = new System.Windows.Forms.Label();
+			this.labelDatabaseOutOfSynch = new System.Windows.Forms.Label();
+			this.labelLocalOutOfSynch = new System.Windows.Forms.Label();
 			this.labelAllSynched = new System.Windows.Forms.Label();
 			this.butSynchTime = new OpenDental.UI.Button();
 			this.textLocalTime = new OpenDental.ODtextBox();
@@ -103,28 +103,28 @@ namespace OpenDental{
 			// 
 			// labelDatabaseSynch
 			// 
-			this.labelDatabaseSynch.ForeColor = System.Drawing.Color.DarkRed;
-			this.labelDatabaseSynch.Location = new System.Drawing.Point(326, 134);
-			this.labelDatabaseSynch.Name = "labelDatabaseSynch";
-			this.labelDatabaseSynch.Size = new System.Drawing.Size(142, 19);
-			this.labelDatabaseSynch.TabIndex = 88;
-			this.labelDatabaseSynch.Text = "Database time out of synch";
-			this.labelDatabaseSynch.Visible = false;
+			this.labelDatabaseOutOfSynch.ForeColor = System.Drawing.Color.DarkRed;
+			this.labelDatabaseOutOfSynch.Location = new System.Drawing.Point(309, 134);
+			this.labelDatabaseOutOfSynch.Name = "labelDatabaseSynch";
+			this.labelDatabaseOutOfSynch.Size = new System.Drawing.Size(187, 19);
+			this.labelDatabaseOutOfSynch.TabIndex = 88;
+			this.labelDatabaseOutOfSynch.Text = "Database time out of synch with local";
+			this.labelDatabaseOutOfSynch.Visible = false;
 			// 
 			// labelLocalSynch
 			// 
-			this.labelLocalSynch.ForeColor = System.Drawing.Color.DarkRed;
-			this.labelLocalSynch.Location = new System.Drawing.Point(326, 160);
-			this.labelLocalSynch.Name = "labelLocalSynch";
-			this.labelLocalSynch.Size = new System.Drawing.Size(142, 19);
-			this.labelLocalSynch.TabIndex = 89;
-			this.labelLocalSynch.Text = "Local time out of synch";
-			this.labelLocalSynch.Visible = false;
+			this.labelLocalOutOfSynch.ForeColor = System.Drawing.Color.DarkRed;
+			this.labelLocalOutOfSynch.Location = new System.Drawing.Point(326, 160);
+			this.labelLocalOutOfSynch.Name = "labelLocalSynch";
+			this.labelLocalOutOfSynch.Size = new System.Drawing.Size(187, 19);
+			this.labelLocalOutOfSynch.TabIndex = 89;
+			this.labelLocalOutOfSynch.Text = "Local time out of synch with NIST";
+			this.labelLocalOutOfSynch.Visible = false;
 			// 
 			// labelAllSynched
 			// 
 			this.labelAllSynched.ForeColor = System.Drawing.Color.DarkRed;
-			this.labelAllSynched.Location = new System.Drawing.Point(281, 108);
+			this.labelAllSynched.Location = new System.Drawing.Point(294, 108);
 			this.labelAllSynched.Name = "labelAllSynched";
 			this.labelAllSynched.Size = new System.Drawing.Size(200, 19);
 			this.labelAllSynched.TabIndex = 90;
@@ -234,8 +234,8 @@ namespace OpenDental{
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(538, 326);
 			this.Controls.Add(this.labelAllSynched);
-			this.Controls.Add(this.labelLocalSynch);
-			this.Controls.Add(this.labelDatabaseSynch);
+			this.Controls.Add(this.labelLocalOutOfSynch);
+			this.Controls.Add(this.labelDatabaseOutOfSynch);
 			this.Controls.Add(this.label6);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.label3);
@@ -273,8 +273,8 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.Timer timer1;
 		private System.Windows.Forms.Label label6;
-		private System.Windows.Forms.Label labelDatabaseSynch;
-		private System.Windows.Forms.Label labelLocalSynch;
+		private System.Windows.Forms.Label labelDatabaseOutOfSynch;
+		private System.Windows.Forms.Label labelLocalOutOfSynch;
 		private System.Windows.Forms.Label labelAllSynched;
 	}
 }
