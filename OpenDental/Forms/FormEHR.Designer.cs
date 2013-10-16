@@ -44,6 +44,7 @@
 			this.butAmendments = new System.Windows.Forms.Button();
 			this.gridMu = new OpenDental.UI.ODGrid();
 			this.butEncounters = new System.Windows.Forms.Button();
+			this.butInterventions = new System.Windows.Forms.Button();
 			this.groupBox4.SuspendLayout();
 			this.groupBox5.SuspendLayout();
 			this.SuspendLayout();
@@ -255,11 +256,22 @@
 			this.butEncounters.UseVisualStyleBackColor = true;
 			this.butEncounters.Click += new System.EventHandler(this.butEncounters_Click);
 			// 
+			// butInterventions
+			// 
+			this.butInterventions.Location = new System.Drawing.Point(712, 463);
+			this.butInterventions.Name = "butInterventions";
+			this.butInterventions.Size = new System.Drawing.Size(84, 23);
+			this.butInterventions.TabIndex = 40;
+			this.butInterventions.Text = "Interventions";
+			this.butInterventions.UseVisualStyleBackColor = true;
+			this.butInterventions.Click += new System.EventHandler(this.butInterventions_Click);
+			// 
 			// FormEHR
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(817, 674);
+			this.Controls.Add(this.butInterventions);
 			this.Controls.Add(this.butEncounters);
 			this.Controls.Add(this.butEhrNotPerformed);
 			this.Controls.Add(this.butAmendments);
@@ -309,5 +321,6 @@
 		private System.Windows.Forms.Button butEhrNotPerformed;
 		private System.Windows.Forms.Button but2014CQM;
 		private System.Windows.Forms.Button butEncounters;
+		private System.Windows.Forms.Button butInterventions;
 	}
 }
