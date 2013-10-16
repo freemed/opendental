@@ -797,7 +797,7 @@ namespace OpenDental {
 				catch(Exception ex){
 					MessageBox.Show(ex.Message);
 				}
-#endif
+			#endif
 		}
 
 		private void pd_PrintPage(object sender,PrintPageEventArgs e) {
@@ -818,7 +818,6 @@ namespace OpenDental {
 			}
 			#endregion
 			y=gridMain.PrintPage(g,pagesPrinted,bounds,headingPrintH);
-			//instead of printing a grid, something else could have been printed instead.
 			PagesPrinted++;
 			if(y==-1) {
 				e.HasMorePages=true;
