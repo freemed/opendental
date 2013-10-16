@@ -72,6 +72,10 @@ namespace OpenDental {
 					if(transCheck==null) {
 						XChargeTransactions.Insert(trans);
 					}
+					else {
+						XChargeTransactions.Delete(transCheck.XChargeTransactionNum);
+						XChargeTransactions.Insert(trans);
+					}
 					line=sr.ReadLine();
 				}
 			}

@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 
 namespace OpenDentBusiness {
 
-	///<summary>XCharge transactions that have been imported into OD.</summary>
+	///<summary>XCharge transactions that have been imported into OD.  Used by reconcile tool.  Keeps a history, but no references to these rows from other tables.</summary>
 	[Serializable()]
 	public class XChargeTransaction:TableBase {
 		///<summary>Primary key.</summary>

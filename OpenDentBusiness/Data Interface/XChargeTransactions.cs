@@ -46,7 +46,7 @@ namespace OpenDentBusiness{
 			}
 			Crud.XChargeTransactionCrud.Update(xChargeTransaction);
 		}
-
+	*/
 		///<summary></summary>
 		public static void Delete(long xChargeTransactionNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -56,7 +56,7 @@ namespace OpenDentBusiness{
 			string command= "DELETE FROM xchargetransaction WHERE XChargeTransactionNum = "+POut.Long(xChargeTransactionNum);
 			Db.NonQ(command);
 		}
-		*/
+	
 
 
 
