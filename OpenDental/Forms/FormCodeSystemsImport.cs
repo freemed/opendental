@@ -327,9 +327,9 @@ subject to the End User limitations noted in 4.","SNOMED CT sub-license End User
 		private static string RequestCodeSystemsXml() {
 			//No xml needed...? ----------------------------------------------------------------------------------------------------
 #if DEBUG
-			//OpenDental.localhost.Service1 updateService=new OpenDental.localhost.Service1();
-			OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
-			updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress);
+			OpenDental.localhost.Service1 updateService=new OpenDental.localhost.Service1();
+			//OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
+			//updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress);
 #else
 			OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
 			updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress);
