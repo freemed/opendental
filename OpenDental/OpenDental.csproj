@@ -379,6 +379,18 @@
     <Compile Include="Forms\FormPopupAudit.designer.cs">
       <DependentUpon>FormPopupAudit.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormInterventions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormInterventions.designer.cs">
+      <DependentUpon>FormInterventions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormInterventionEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormInterventionEdit.designer.cs">
+      <DependentUpon>FormInterventionEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormEhrNotPerformedEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2942,6 +2954,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormPopupAudit.resx">
       <DependentUpon>FormPopupAudit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormInterventions.resx">
+      <DependentUpon>FormInterventions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormInterventionEdit.resx">
+      <DependentUpon>FormInterventionEdit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormEhrNotPerformedEdit.resx">
       <DependentUpon>FormEhrNotPerformedEdit.cs</DependentUpon>
