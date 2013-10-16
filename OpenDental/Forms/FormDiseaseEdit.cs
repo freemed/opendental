@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -356,8 +357,22 @@ namespace OpenDental{
 				DialogResult=DialogResult.Cancel;
 				return;
 			}
-			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete?")) {
+			List<Vitalsign> listVitals=Vitalsigns.GetListFromPregDiseaseNum(DiseaseCur.DiseaseNum);
+			if(listVitals.Count>0) {//if attached to vital sign exam, block delete
+				string dates="";
+				for(int i=0;i<listVitals.Count;i++) {
+					if(i>5) {
+						break;
+					}
+					dates+="\r\n"+listVitals[i].DateTaken.ToShortDateString();
+				}
+				MsgBox.Show(this,"Not allowed to delete this problem.  It is attached to "+listVitals.Count.ToString()+"vital sign exams with dates including:"+dates+".");
 				return;
+			}
+			else {
+				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete?")) {
+					return;
+				}
 			}
 			SecurityLogs.MakeLogEntry(Permissions.PatProblemListEdit,DiseaseCur.PatNum,DiseaseDefs.GetName(DiseaseCur.DiseaseDefNum)+" deleted");
 			Diseases.Delete(DiseaseCur);
@@ -382,6 +397,30 @@ namespace OpenDental{
 				SecurityLogs.MakeLogEntry(Permissions.PatProblemListEdit,DiseaseCur.PatNum,DiseaseDefs.GetName(DiseaseCur.DiseaseDefNum)+" added");
 			}
 			else{
+				//See if this problem is the pregnancy linked to a vitalsign exam
+				List<Vitalsign> listVitalsAttached=Vitalsigns.GetListFromPregDiseaseNum(DiseaseCur.DiseaseNum);
+				if(listVitalsAttached.Count>0) {
+					//See if the vitalsign exam date is now outside of the active dates of the disease (pregnancy)
+					string dates="";
+					for(int i=0;i<listVitalsAttached.Count;i++) {
+						if(listVitalsAttached[i].DateTaken<DiseaseCur.DateStart || (DiseaseCur.DateStop.Year>1880 && listVitalsAttached[i].DateTaken>DiseaseCur.DateStop)) {
+							dates="\r\n"+listVitalsAttached[i].DateTaken.ToShortDateString();
+						}
+						else {
+							listVitalsAttached.Remove(listVitalsAttached[i]);
+						}
+					}
+					//If vitalsign exams still in the list, ask if they want to remove this problem from the exam pregnancy dx
+					if(listVitalsAttached.Count>0) {
+						if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"This problem is attached to 1 or more vital sign exams as a pregnancy diagnosis with dates:"+dates+"\r\nThe date of the exams is now outside the active dates of this problem.  Do you want to remove this problem from those vital sign exams?")) {
+							return;
+						}
+						for(int j=0;j<listVitalsAttached.Count;j++) {
+							listVitalsAttached[j].PregDiseaseNum=0;
+							Vitalsigns.Update(listVitalsAttached[j]);
+						}
+					}
+				}
 				Diseases.Update(DiseaseCur);
 				SecurityLogs.MakeLogEntry(Permissions.PatProblemListEdit,DiseaseCur.PatNum,DiseaseDefs.GetName(DiseaseCur.DiseaseDefNum)+" edited");
 			}
