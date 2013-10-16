@@ -1951,10 +1951,38 @@ namespace OpenDentBusiness {
 				else {//oracle
 					command="ALTER TABLE statement ADD EmailBody clob";
 					Db.NonQ(command);
+				}				
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS maparea";
+					Db.NonQ(command);
+					command=@"CREATE TABLE maparea (
+						MapAreaNum bigint NOT NULL auto_increment PRIMARY KEY,
+						Extension int NOT NULL,
+						XPos double NOT NULL,
+						YPos double NOT NULL,
+						Width double NOT NULL,
+						Height double NOT NULL,
+						Description varchar(255) NOT NULL,
+						ItemType tinyint NOT NULL
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
 				}
-
-
-
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE maparea'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE maparea (
+						MapAreaNum number(20) NOT NULL,
+						Extension number(11) NOT NULL,
+						XPos number(38,8) NOT NULL,
+						YPos number(38,8) NOT NULL,
+						Width number(38,8) NOT NULL,
+						Height number(38,8) NOT NULL,
+						Description varchar2(255),
+						ItemType number(3) NOT NULL,
+						CONSTRAINT maparea_MapAreaNum PRIMARY KEY (MapAreaNum)
+						)";
+					Db.NonQ(command);
+				}
 
 
 				command="UPDATE preference SET ValueString = '13.3.0.0' WHERE PrefName = 'DataBaseVersion'";
@@ -1971,8 +1999,6 @@ namespace OpenDentBusiness {
 
 	}
 }
-
-
 
 
 

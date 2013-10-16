@@ -267,6 +267,7 @@
     <Compile Include="Crud\LetterMergeCrud.cs" />
     <Compile Include="Crud\LetterMergeFieldCrud.cs" />
     <Compile Include="Crud\LoincCrud.cs" />
+    <Compile Include="Crud\MapAreaCrud.cs" />
     <Compile Include="Crud\MedicalOrderCrud.cs" />
     <Compile Include="Crud\MedicationCrud.cs" />
     <Compile Include="Crud\MedicationPatCrud.cs" />
@@ -412,6 +413,7 @@
     <Compile Include="Data Interface\Icd10s.cs" />
     <Compile Include="Data Interface\Interventions.cs" />
     <Compile Include="Data Interface\Loincs.cs" />
+    <Compile Include="Data Interface\MapAreas.cs" />
     <Compile Include="Data Interface\PatientRaces.cs" />
     <Compile Include="Data Interface\PayorTypes.cs" />
     <Compile Include="Data Interface\Resellers.cs" />
@@ -806,6 +808,7 @@
     <Compile Include="Plugins\PluginBase.cs" />
     <Compile Include="Plugins\PluginContainer.cs" />
     <Compile Include="Plugins\Plugins.cs" />
+    <Compile Include="TableTypes\MapArea.cs" />
     <Compile Include="TableTypes\EhrAmendment.cs" />
     <Compile Include="TableTypes\Automation.cs" />
     <Compile Include="TableTypes\ApptFieldDef.cs" />
