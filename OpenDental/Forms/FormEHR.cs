@@ -171,43 +171,43 @@ namespace OpenDental {
 					case EhrMeasureType.VitalSigns:
 					case EhrMeasureType.VitalSignsBMIOnly:
 					case EhrMeasureType.VitalSignsBPOnly:
-						FormVitalsigns formVital=new FormVitalsigns();
-						formVital.PatNum=PatNum;
-						formVital.ShowDialog();
+						FormVitalsigns FormVital=new FormVitalsigns();
+						FormVital.PatNum=PatNum;
+						FormVital.ShowDialog();
 						FillGridMu();
 						break;
 					//This code will not be used until we certify for EHR 2014. For 2011 certification, vital sign form will look exactly the same as it did at certification time.
 					//case EhrMeasureType.VitalSignsBMIOnly:
-					//	formVital=new FormVitalsigns();
-					//	formVital.PatNum=PatNum;
-					//	formVital.IsBMIOnly=true;
-					//	formVital.ShowDialog();
+					//	FormVital=new FormVitalsigns();
+					//	FormVital.PatNum=PatNum;
+					//	FormVital.IsBMIOnly=true;
+					//	FormVital.ShowDialog();
 					//	FillGridMu();
 					//	break;
 					//case EhrMeasureType.VitalSignsBPOnly:
-					//	formVital=new FormVitalsigns();
-					//	formVital.PatNum=PatNum;
-					//	formVital.IsBPOnly=true;
-					//	formVital.ShowDialog();
+					//	FormVital=new FormVitalsigns();
+					//	FormVital.PatNum=PatNum;
+					//	FormVital.IsBPOnly=true;
+					//	FormVital.ShowDialog();
 					//	FillGridMu();
 					//	break;
 					case EhrMeasureType.Smoking:
-						FormPatientSmoking formPS=new FormPatientSmoking();
-						formPS.PatCur=PatCur;
-						formPS.ShowDialog();
+						FormPatientSmoking FormPS=new FormPatientSmoking();
+						FormPS.PatCur=PatCur;
+						FormPS.ShowDialog();
 						PatCur=Patients.GetPat(PatNum);
 						FillGridMu();
 						break;
 					case EhrMeasureType.Lab:
-						FormLabPanels formLP=new FormLabPanels();
-						formLP.PatCur=PatCur;
-						formLP.ShowDialog();
+						FormLabPanels FormLP=new FormLabPanels();
+						FormLP.PatCur=PatCur;
+						FormLP.ShowDialog();
 						FillGridMu();
 						break;
 					case EhrMeasureType.ElectronicCopy:
-						FormElectronicCopy formE=new FormElectronicCopy();
-						formE.PatCur=PatCur;
-						formE.ShowDialog();
+						FormElectronicCopy FormE=new FormElectronicCopy();
+						FormE.PatCur=PatCur;
+						FormE.ShowDialog();
 						FillGridMu();
 						break;
 					case EhrMeasureType.ClinicalSummaries:
@@ -255,8 +255,8 @@ namespace OpenDental {
 						//Close();
 						break;
 					case EhrMeasureType.Lab:
-						FormLabPanelImport formLPI=new FormLabPanelImport();
-						formLPI.ShowDialog();
+						FormLabPanelImport FormLPI=new FormLabPanelImport();
+						FormLPI.ShowDialog();
 						FillGridMu();
 						break;
 				}
@@ -288,9 +288,9 @@ namespace OpenDental {
 				//	ResultOnClosing=EhrFormResult.MedicationPatNew;//This cannot happen unless a provider is logged in with a valid ehr key
 				//}
 				//else {
-				FormMedPat formMP=new FormMedPat();
-				formMP.MedicationPatCur=MedicationPats.GetOne(FormOrd.LaunchMedicationPatNum);
-				formMP.ShowDialog();
+				FormMedPat FormMP=new FormMedPat();
+				FormMP.MedicationPatCur=MedicationPats.GetOne(FormOrd.LaunchMedicationPatNum);
+				FormMP.ShowDialog();
 					//ResultOnClosing=EhrFormResult.MedicationPatEdit;
 					//LaunchMedicationPatNum=FormOrd.LaunchMedicationPatNum;
 				//}
@@ -302,14 +302,14 @@ namespace OpenDental {
 		}
 
 		private void butMeasures_Click(object sender,EventArgs e) {
-			FormEhrMeasures formMeasures=new FormEhrMeasures();
-			formMeasures.ShowDialog();
+			FormEhrMeasures FormMeasures=new FormEhrMeasures();
+			FormMeasures.ShowDialog();
 			FillGridMu();
 		}
 
 		private void butHash_Click(object sender,EventArgs e) {
-			FormHash formH=new FormHash();
-			formH.ShowDialog();
+			FormHash FormH=new FormHash();
+			FormH.ShowDialog();
 		}
 
 		private void butEncryption_Click(object sender,EventArgs e) {
@@ -318,14 +318,14 @@ namespace OpenDental {
 		}
 
 		private void butQuality_Click(object sender,EventArgs e) {
-			FormQualityMeasures formQ=new FormQualityMeasures();
-			formQ.ShowDialog();
+			FormQualityMeasures FormQ=new FormQualityMeasures();
+			FormQ.ShowDialog();
 			FillGridMu();
 		}
 
 		private void but2014CQM_Click(object sender,EventArgs e) {
-			FormQualityMeasures2014 formQ=new FormQualityMeasures2014();
-			formQ.ShowDialog();
+			FormQualityMeasures2014 FormQ=new FormQualityMeasures2014();
+			FormQ.ShowDialog();
 			FillGridMu();
 		}
 
@@ -359,15 +359,21 @@ namespace OpenDental {
 		}
 
 		private void butEhrNotPerformed_Click(object sender,EventArgs e) {
-			FormEhrNotPerformed formNp=new FormEhrNotPerformed();
-			formNp.PatCur=PatCur;
-			formNp.ShowDialog();
+			FormEhrNotPerformed FormNP=new FormEhrNotPerformed();
+			FormNP.PatCur=PatCur;
+			FormNP.ShowDialog();
 		}
 
 		private void butEncounters_Click(object sender,EventArgs e) {
-			FormEncounters formEnc=new FormEncounters();
-			formEnc.PatCur=PatCur;
-			formEnc.ShowDialog();
+			FormEncounters FormEnc=new FormEncounters();
+			FormEnc.PatCur=PatCur;
+			FormEnc.ShowDialog();
+		}
+
+		private void butInterventions_Click(object sender,EventArgs e) {
+			FormInterventions FormInt=new FormInterventions();
+			FormInt.PatCur=PatCur;
+			FormInt.ShowDialog();
 		}
 
 		public bool ProvKeyIsValid(string lName,string fName,bool hasReportAccess,string provKey) {
