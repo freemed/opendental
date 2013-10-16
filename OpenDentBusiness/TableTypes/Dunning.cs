@@ -21,7 +21,7 @@ namespace OpenDentBusiness{
 		public string MessageBold;
 		///<summary>An override for the default email subject.</summary>
 		public string EmailSubject;
-		///<summary>An override for the default email body.</summary>
+		///<summary>An override for the default email body. Limit in db: 16M char.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)] 
 		public string EmailBody;
 
