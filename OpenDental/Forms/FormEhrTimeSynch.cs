@@ -35,7 +35,7 @@ namespace OpenDental {
 			//Get NistTime Offset
 			double ntpOffset=GetNistOffset();
 			if(ntpOffset==double.MaxValue) { //Timed out
-				MsgBox.Show(this,"Nist request timed out.  Try again in four seconds.");
+				MsgBox.Show(this,"Request to NIST time server timed out.  Try again in four seconds.");
 				this.Cursor=Cursors.Default;
 				return false;
 			}
