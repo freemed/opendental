@@ -74,6 +74,17 @@ namespace OpenDentBusiness{
 			return retval;
 		}
 
+		///<summary></summary>
+		public static List<string> GetValueSetFromCodeAndCategory(string codeValue,string codeSystem,string category) {
+			List<string> retval=new List<string>();
+			for(int i=0;i<Listt.Count;i++) {
+				if(Listt[i].CodeValue==codeValue && Listt[i].CodeSystem==codeSystem && Listt[i].QDMCategory==category) {
+					retval.Add(Listt[i].ValueSetName);
+				}
+			}
+			return retval;
+		}
+
 
 
 		/*

@@ -17,6 +17,14 @@ namespace OpenDentBusiness {
 			return Crud.DiseaseCrud.SelectOne(command);
 		}
 
+		///<summary>Gets one disease by DiseaseNum from the db.</summary>
+		public static Disease GetOne(long diseaseNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Disease>(MethodBase.GetCurrentMethod(),diseaseNum);
+			}
+			return Crud.DiseaseCrud.SelectOne(diseaseNum);
+		}
+
 		///<summary>Gets a list of all Diseases for a given patient.  Includes hidden. Sorted by diseasedef.ItemOrder.</summary>
 		public static List<Disease> Refresh(long patNum) {
 			//No need to check RemotingRole; no call to db.

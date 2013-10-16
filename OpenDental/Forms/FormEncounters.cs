@@ -66,19 +66,19 @@ namespace OpenDental {
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			FormEncounterEdit formEE=new FormEncounterEdit();
-			formEE.EncCur=listEncs[e.Row];
-			formEE.ShowDialog();
+			FormEncounterEdit FormEE=new FormEncounterEdit();
+			FormEE.EncCur=listEncs[e.Row];
+			FormEE.ShowDialog();
 			FillGrid();
 		}
 
 		private void butAdd_Click(object sender,EventArgs e) {
-			FormEncounterEdit formEE=new FormEncounterEdit();
-			formEE.EncCur=new Encounter();
-			formEE.EncCur.PatNum=PatCur.PatNum;
-			formEE.EncCur.ProvNum=PatCur.PriProv;
-			formEE.EncCur.DateEncounter=DateTime.Today;
-			formEE.ShowDialog();
+			FormEncounterEdit FormEE=new FormEncounterEdit();
+			FormEE.EncCur=new Encounter();
+			FormEE.EncCur.PatNum=PatCur.PatNum;
+			FormEE.EncCur.ProvNum=PatCur.PriProv;
+			FormEE.EncCur.DateEncounter=DateTime.Today;
+			FormEE.ShowDialog();
 			FillGrid();
 		}
 

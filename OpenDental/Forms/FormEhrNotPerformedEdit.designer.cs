@@ -160,13 +160,11 @@ namespace OpenDental{
 			// 
 			// radioMedReason
 			// 
-			this.radioMedReason.Checked = true;
 			this.radioMedReason.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.radioMedReason.Location = new System.Drawing.Point(19, 16);
 			this.radioMedReason.Name = "radioMedReason";
 			this.radioMedReason.Size = new System.Drawing.Size(100, 16);
 			this.radioMedReason.TabIndex = 156;
-			this.radioMedReason.TabStop = true;
 			this.radioMedReason.Text = "Medical Reason";
 			this.radioMedReason.Visible = false;
 			this.radioMedReason.Click += new System.EventHandler(this.radioReasonMed_Click);
@@ -229,7 +227,9 @@ namespace OpenDental{
 			this.comboCodeReason.Name = "comboCodeReason";
 			this.comboCodeReason.Size = new System.Drawing.Size(100, 21);
 			this.comboCodeReason.TabIndex = 148;
+			this.comboCodeReason.DropDown += new System.EventHandler(this.comboCodeReason_DropDown);
 			this.comboCodeReason.SelectionChangeCommitted += new System.EventHandler(this.comboReasonCode_SelectionChangeCommitted);
+			this.comboCodeReason.DropDownClosed += new System.EventHandler(this.comboCodeReason_DropDownClosed);
 			// 
 			// textDescriptionReason
 			// 

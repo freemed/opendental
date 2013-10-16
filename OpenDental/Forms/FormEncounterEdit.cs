@@ -32,28 +32,28 @@ namespace OpenDental {
 		}
 
 		private void butPickProv_Click(object sender,EventArgs e) {
-			FormProviderPick formp=new FormProviderPick();
+			FormProviderPick FormP=new FormProviderPick();
 			if(comboProv.SelectedIndex>-1) {
-				formp.SelectedProvNum=ProviderC.ListShort[comboProv.SelectedIndex].ProvNum;
+				FormP.SelectedProvNum=ProviderC.ListShort[comboProv.SelectedIndex].ProvNum;
 			}
-			formp.ShowDialog();
-			if(formp.DialogResult!=DialogResult.OK) {
+			FormP.ShowDialog();
+			if(FormP.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			comboProv.SelectedIndex=Providers.GetIndex(formp.SelectedProvNum);
+			comboProv.SelectedIndex=Providers.GetIndex(FormP.SelectedProvNum);
 		}
 
 		//Not sure where to go from here yet, maybe just shortcut to procedurecode window.
 		private void butCodePicker_Click(object sender,EventArgs e) {
-			//FormCodePicker formcp=new FormCodePicker();
-			//formcp.CodePickerContext=CodePickerContextCur;
-			//formcp.ShowDialog();
-			//if(formcp.DialogResult!=DialogResult.OK) {
+			//FormCodePicker FormCP=new FormCodePicker();
+			//FormCP.CodePickerContext=CodePickerContextCur;
+			//FormCP.ShowDialog();
+			//if(FormCP.DialogResult!=DialogResult.OK) {
 			//	return;
 			//}
-			//textCodeValue.Text=formcp.CodeValue;
-			//textCodeDescript.Text=formcp.CodeDescript;
-			//EncCur.CodeSystemName=formcp.CodeSystemName;
+			//textCodeValue.Text=FormCP.CodeValue;
+			//textCodeDescript.Text=FormCP.CodeDescript;
+			//EncCur.CodeSystemName=FormCP.CodeSystemName;
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {

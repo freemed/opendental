@@ -57,39 +57,23 @@
 			this.label6 = new System.Windows.Forms.Label();
 			this.groupExclusion = new System.Windows.Forms.GroupBox();
 			this.butChangeDefault = new System.Windows.Forms.Button();
+			this.textReasonDescript = new OpenDental.ODtextBox();
 			this.label4 = new System.Windows.Forms.Label();
 			this.labelNotPerf = new System.Windows.Forms.Label();
 			this.textReasonCode = new System.Windows.Forms.TextBox();
+			this.textPregCodeDescript = new OpenDental.ODtextBox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.checkNotPerf = new System.Windows.Forms.CheckBox();
 			this.labelPregNotice = new System.Windows.Forms.Label();
-			this.tabControl1 = new System.Windows.Forms.TabControl();
-			this.tabPage1 = new System.Windows.Forms.TabPage();
-			this.label8 = new System.Windows.Forms.Label();
-			this.label9 = new System.Windows.Forms.Label();
-			this.textPhysActCode = new System.Windows.Forms.TextBox();
-			this.butPhysActivity = new System.Windows.Forms.Button();
-			this.label10 = new System.Windows.Forms.Label();
-			this.label11 = new System.Windows.Forms.Label();
-			this.textNutritionCode = new System.Windows.Forms.TextBox();
-			this.butNutrition = new System.Windows.Forms.Button();
-			this.tabPage2 = new System.Windows.Forms.TabPage();
-			this.label7 = new System.Windows.Forms.Label();
-			this.label5 = new System.Windows.Forms.Label();
-			this.butMedication = new System.Windows.Forms.Button();
-			this.labelIntervenDescript = new System.Windows.Forms.Label();
-			this.labelIntervenMedCode = new System.Windows.Forms.Label();
-			this.textIntervenCode = new System.Windows.Forms.TextBox();
+			this.groupInterventions = new System.Windows.Forms.GroupBox();
+			this.gridInterventions = new OpenDental.UI.ODGrid();
+			this.label2 = new System.Windows.Forms.Label();
 			this.butIntervention = new System.Windows.Forms.Button();
-			this.textPhysActDescript = new OpenDental.ODtextBox();
-			this.textNutritionDescript = new OpenDental.ODtextBox();
-			this.textIntervenDescript = new OpenDental.ODtextBox();
-			this.textReasonDescript = new OpenDental.ODtextBox();
-			this.textPregCodeDescript = new OpenDental.ODtextBox();
+			this.butMedication = new System.Windows.Forms.Button();
+			this.butPhysActivity = new System.Windows.Forms.Button();
+			this.butNutrition = new System.Windows.Forms.Button();
 			this.groupExclusion.SuspendLayout();
-			this.tabControl1.SuspendLayout();
-			this.tabPage1.SuspendLayout();
-			this.tabPage2.SuspendLayout();
+			this.groupInterventions.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -144,11 +128,12 @@
 			this.textDateTaken.Size = new System.Drawing.Size(100, 20);
 			this.textDateTaken.TabIndex = 0;
 			this.textDateTaken.TextChanged += new System.EventHandler(this.textDateTaken_TextChanged);
+			this.textDateTaken.Leave += new System.EventHandler(this.textDateTaken_Leave);
 			// 
 			// butCancel
 			// 
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Location = new System.Drawing.Point(513, 531);
+			this.butCancel.Location = new System.Drawing.Point(513, 575);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 23);
 			this.butCancel.TabIndex = 6;
@@ -159,7 +144,7 @@
 			// butOK
 			// 
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Location = new System.Drawing.Point(432, 531);
+			this.butOK.Location = new System.Drawing.Point(432, 575);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75, 23);
 			this.butOK.TabIndex = 5;
@@ -170,7 +155,7 @@
 			// butDelete
 			// 
 			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butDelete.Location = new System.Drawing.Point(10, 531);
+			this.butDelete.Location = new System.Drawing.Point(10, 575);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(75, 23);
 			this.butDelete.TabIndex = 10;
@@ -406,6 +391,20 @@
 			this.butChangeDefault.UseVisualStyleBackColor = true;
 			this.butChangeDefault.Click += new System.EventHandler(this.butChangeDefault_Click);
 			// 
+			// textReasonDescript
+			// 
+			this.textReasonDescript.AcceptsTab = true;
+			this.textReasonDescript.BackColor = System.Drawing.SystemColors.ControlLightLight;
+			this.textReasonDescript.DetectUrls = false;
+			this.textReasonDescript.Location = new System.Drawing.Point(377, 133);
+			this.textReasonDescript.Name = "textReasonDescript";
+			this.textReasonDescript.QuickPasteType = OpenDentBusiness.QuickPasteType.None;
+			this.textReasonDescript.ReadOnly = true;
+			this.textReasonDescript.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+			this.textReasonDescript.Size = new System.Drawing.Size(195, 40);
+			this.textReasonDescript.TabIndex = 141;
+			this.textReasonDescript.Text = "";
+			// 
 			// label4
 			// 
 			this.label4.Location = new System.Drawing.Point(273, 134);
@@ -433,6 +432,20 @@
 			this.textReasonCode.Size = new System.Drawing.Size(100, 20);
 			this.textReasonCode.TabIndex = 139;
 			// 
+			// textPregCodeDescript
+			// 
+			this.textPregCodeDescript.AcceptsTab = true;
+			this.textPregCodeDescript.BackColor = System.Drawing.SystemColors.ControlLightLight;
+			this.textPregCodeDescript.DetectUrls = false;
+			this.textPregCodeDescript.Location = new System.Drawing.Point(377, 40);
+			this.textPregCodeDescript.Name = "textPregCodeDescript";
+			this.textPregCodeDescript.QuickPasteType = OpenDentBusiness.QuickPasteType.None;
+			this.textPregCodeDescript.ReadOnly = true;
+			this.textPregCodeDescript.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+			this.textPregCodeDescript.Size = new System.Drawing.Size(195, 40);
+			this.textPregCodeDescript.TabIndex = 132;
+			this.textPregCodeDescript.Text = "";
+			// 
 			// label3
 			// 
 			this.label3.Location = new System.Drawing.Point(273, 41);
@@ -457,196 +470,52 @@
 			// labelPregNotice
 			// 
 			this.labelPregNotice.ForeColor = System.Drawing.Color.Red;
-			this.labelPregNotice.Location = new System.Drawing.Point(20, 63);
+			this.labelPregNotice.Location = new System.Drawing.Point(24, 61);
 			this.labelPregNotice.Name = "labelPregNotice";
-			this.labelPregNotice.Size = new System.Drawing.Size(247, 39);
+			this.labelPregNotice.Size = new System.Drawing.Size(243, 39);
 			this.labelPregNotice.TabIndex = 130;
 			this.labelPregNotice.Text = "A diagnosis of pregnancy with this code will be added to the patient\'s medical hi" +
     "story with a start date equal to the date of this exam.";
 			this.labelPregNotice.Visible = false;
 			// 
-			// tabControl1
+			// groupInterventions
 			// 
-			this.tabControl1.Controls.Add(this.tabPage1);
-			this.tabControl1.Controls.Add(this.tabPage2);
-			this.tabControl1.Location = new System.Drawing.Point(10, 348);
-			this.tabControl1.Name = "tabControl1";
-			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.Size = new System.Drawing.Size(578, 168);
-			this.tabControl1.TabIndex = 154;
+			this.groupInterventions.Controls.Add(this.label2);
+			this.groupInterventions.Controls.Add(this.gridInterventions);
+			this.groupInterventions.Controls.Add(this.butNutrition);
+			this.groupInterventions.Controls.Add(this.butMedication);
+			this.groupInterventions.Controls.Add(this.butIntervention);
+			this.groupInterventions.Controls.Add(this.butPhysActivity);
+			this.groupInterventions.Location = new System.Drawing.Point(10, 348);
+			this.groupInterventions.Name = "groupInterventions";
+			this.groupInterventions.Size = new System.Drawing.Size(578, 214);
+			this.groupInterventions.TabIndex = 161;
+			this.groupInterventions.TabStop = false;
+			this.groupInterventions.Text = "Interventions";
 			// 
-			// tabPage1
+			// gridInterventions
 			// 
-			this.tabPage1.Controls.Add(this.textPhysActDescript);
-			this.tabPage1.Controls.Add(this.label8);
-			this.tabPage1.Controls.Add(this.label9);
-			this.tabPage1.Controls.Add(this.textPhysActCode);
-			this.tabPage1.Controls.Add(this.butPhysActivity);
-			this.tabPage1.Controls.Add(this.textNutritionDescript);
-			this.tabPage1.Controls.Add(this.label10);
-			this.tabPage1.Controls.Add(this.label11);
-			this.tabPage1.Controls.Add(this.textNutritionCode);
-			this.tabPage1.Controls.Add(this.butNutrition);
-			this.tabPage1.Location = new System.Drawing.Point(4, 22);
-			this.tabPage1.Name = "tabPage1";
-			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage1.Size = new System.Drawing.Size(570, 142);
-			this.tabPage1.TabIndex = 0;
-			this.tabPage1.Text = "Child/Adolescent Counseling for Nutrition and Physical Activity";
-			this.tabPage1.UseVisualStyleBackColor = true;
+			this.gridInterventions.HScrollVisible = false;
+			this.gridInterventions.Location = new System.Drawing.Point(112, 19);
+			this.gridInterventions.Name = "gridInterventions";
+			this.gridInterventions.ScrollValue = 0;
+			this.gridInterventions.Size = new System.Drawing.Size(460, 189);
+			this.gridInterventions.TabIndex = 161;
+			this.gridInterventions.Title = "Interventions";
+			this.gridInterventions.TranslationName = null;
 			// 
-			// label8
+			// label2
 			// 
-			this.label8.Location = new System.Drawing.Point(141, 103);
-			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(130, 17);
-			this.label8.TabIndex = 164;
-			this.label8.Text = "Phys Activity Descript";
-			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label9
-			// 
-			this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label9.Location = new System.Drawing.Point(141, 78);
-			this.label9.Name = "label9";
-			this.label9.Size = new System.Drawing.Size(130, 17);
-			this.label9.TabIndex = 162;
-			this.label9.Text = "Phys Activity Code";
-			this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textPhysActCode
-			// 
-			this.textPhysActCode.Location = new System.Drawing.Point(274, 77);
-			this.textPhysActCode.Name = "textPhysActCode";
-			this.textPhysActCode.ReadOnly = true;
-			this.textPhysActCode.Size = new System.Drawing.Size(100, 20);
-			this.textPhysActCode.TabIndex = 161;
-			// 
-			// butPhysActivity
-			// 
-			this.butPhysActivity.Location = new System.Drawing.Point(15, 83);
-			this.butPhysActivity.Name = "butPhysActivity";
-			this.butPhysActivity.Size = new System.Drawing.Size(75, 23);
-			this.butPhysActivity.TabIndex = 160;
-			this.butPhysActivity.Text = "Phys Activity";
-			this.butPhysActivity.UseVisualStyleBackColor = true;
-			this.butPhysActivity.Click += new System.EventHandler(this.butPhysActivity_Click);
-			// 
-			// label10
-			// 
-			this.label10.Location = new System.Drawing.Point(141, 37);
-			this.label10.Name = "label10";
-			this.label10.Size = new System.Drawing.Size(130, 17);
-			this.label10.TabIndex = 159;
-			this.label10.Text = "Nutrition Descript";
-			this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label11
-			// 
-			this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label11.Location = new System.Drawing.Point(141, 12);
-			this.label11.Name = "label11";
-			this.label11.Size = new System.Drawing.Size(130, 17);
-			this.label11.TabIndex = 157;
-			this.label11.Text = "Nutrition Code";
-			this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textNutritionCode
-			// 
-			this.textNutritionCode.Location = new System.Drawing.Point(274, 11);
-			this.textNutritionCode.Name = "textNutritionCode";
-			this.textNutritionCode.ReadOnly = true;
-			this.textNutritionCode.Size = new System.Drawing.Size(100, 20);
-			this.textNutritionCode.TabIndex = 156;
-			// 
-			// butNutrition
-			// 
-			this.butNutrition.Location = new System.Drawing.Point(15, 17);
-			this.butNutrition.Name = "butNutrition";
-			this.butNutrition.Size = new System.Drawing.Size(75, 23);
-			this.butNutrition.TabIndex = 155;
-			this.butNutrition.Text = "Nutrition";
-			this.butNutrition.UseVisualStyleBackColor = true;
-			this.butNutrition.Click += new System.EventHandler(this.butNutrition_Click);
-			// 
-			// tabPage2
-			// 
-			this.tabPage2.Controls.Add(this.label7);
-			this.tabPage2.Controls.Add(this.label5);
-			this.tabPage2.Controls.Add(this.butMedication);
-			this.tabPage2.Controls.Add(this.labelIntervenDescript);
-			this.tabPage2.Controls.Add(this.labelIntervenMedCode);
-			this.tabPage2.Controls.Add(this.textIntervenCode);
-			this.tabPage2.Controls.Add(this.butIntervention);
-			this.tabPage2.Controls.Add(this.textIntervenDescript);
-			this.tabPage2.Location = new System.Drawing.Point(4, 22);
-			this.tabPage2.Name = "tabPage2";
-			this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage2.Size = new System.Drawing.Size(570, 142);
-			this.tabPage2.TabIndex = 1;
-			this.tabPage2.Text = "BMI Above or Below Normal Intervention";
-			this.tabPage2.UseVisualStyleBackColor = true;
-			// 
-			// label7
-			// 
-			this.label7.ForeColor = System.Drawing.SystemColors.ControlText;
-			this.label7.Location = new System.Drawing.Point(87, 38);
-			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(110, 58);
-			this.label7.TabIndex = 160;
-			this.label7.Text = "Can be either a follow-up intervention, a referral intervention, or a medication " +
-    "order.";
-			// 
-			// label5
-			// 
-			this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label5.Location = new System.Drawing.Point(6, 59);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(75, 17);
-			this.label5.TabIndex = 159;
-			this.label5.Text = "or";
-			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			// 
-			// butMedication
-			// 
-			this.butMedication.Location = new System.Drawing.Point(6, 78);
-			this.butMedication.Name = "butMedication";
-			this.butMedication.Size = new System.Drawing.Size(75, 23);
-			this.butMedication.TabIndex = 158;
-			this.butMedication.Text = "Medication";
-			this.butMedication.UseVisualStyleBackColor = true;
-			this.butMedication.Click += new System.EventHandler(this.butMedication_Click_1);
-			// 
-			// labelIntervenDescript
-			// 
-			this.labelIntervenDescript.Location = new System.Drawing.Point(200, 37);
-			this.labelIntervenDescript.Name = "labelIntervenDescript";
-			this.labelIntervenDescript.Size = new System.Drawing.Size(71, 17);
-			this.labelIntervenDescript.TabIndex = 157;
-			this.labelIntervenDescript.Text = "Description";
-			this.labelIntervenDescript.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// labelIntervenMedCode
-			// 
-			this.labelIntervenMedCode.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelIntervenMedCode.Location = new System.Drawing.Point(170, 12);
-			this.labelIntervenMedCode.Name = "labelIntervenMedCode";
-			this.labelIntervenMedCode.Size = new System.Drawing.Size(101, 17);
-			this.labelIntervenMedCode.TabIndex = 155;
-			this.labelIntervenMedCode.Text = "Intervention Code";
-			this.labelIntervenMedCode.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textIntervenCode
-			// 
-			this.textIntervenCode.Location = new System.Drawing.Point(274, 11);
-			this.textIntervenCode.Name = "textIntervenCode";
-			this.textIntervenCode.ReadOnly = true;
-			this.textIntervenCode.Size = new System.Drawing.Size(100, 20);
-			this.textIntervenCode.TabIndex = 154;
+			this.label2.Location = new System.Drawing.Point(13, 101);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(87, 31);
+			this.label2.TabIndex = 163;
+			this.label2.Text = "Add Item to Intervention List";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// butIntervention
 			// 
-			this.butIntervention.Location = new System.Drawing.Point(6, 33);
+			this.butIntervention.Location = new System.Drawing.Point(19, 37);
 			this.butIntervention.Name = "butIntervention";
 			this.butIntervention.Size = new System.Drawing.Size(75, 23);
 			this.butIntervention.TabIndex = 153;
@@ -654,82 +523,42 @@
 			this.butIntervention.UseVisualStyleBackColor = true;
 			this.butIntervention.Click += new System.EventHandler(this.butIntervention_Click);
 			// 
-			// textPhysActDescript
+			// butMedication
 			// 
-			this.textPhysActDescript.AcceptsTab = true;
-			this.textPhysActDescript.BackColor = System.Drawing.SystemColors.ControlLightLight;
-			this.textPhysActDescript.DetectUrls = false;
-			this.textPhysActDescript.Location = new System.Drawing.Point(274, 102);
-			this.textPhysActDescript.Name = "textPhysActDescript";
-			this.textPhysActDescript.QuickPasteType = OpenDentBusiness.QuickPasteType.None;
-			this.textPhysActDescript.ReadOnly = true;
-			this.textPhysActDescript.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-			this.textPhysActDescript.Size = new System.Drawing.Size(290, 35);
-			this.textPhysActDescript.TabIndex = 163;
-			this.textPhysActDescript.Text = "";
+			this.butMedication.Location = new System.Drawing.Point(19, 66);
+			this.butMedication.Name = "butMedication";
+			this.butMedication.Size = new System.Drawing.Size(75, 23);
+			this.butMedication.TabIndex = 158;
+			this.butMedication.Text = "Medication";
+			this.butMedication.UseVisualStyleBackColor = true;
+			this.butMedication.Click += new System.EventHandler(this.butMedication_Click_1);
 			// 
-			// textNutritionDescript
+			// butPhysActivity
 			// 
-			this.textNutritionDescript.AcceptsTab = true;
-			this.textNutritionDescript.BackColor = System.Drawing.SystemColors.ControlLightLight;
-			this.textNutritionDescript.DetectUrls = false;
-			this.textNutritionDescript.Location = new System.Drawing.Point(274, 36);
-			this.textNutritionDescript.Name = "textNutritionDescript";
-			this.textNutritionDescript.QuickPasteType = OpenDentBusiness.QuickPasteType.None;
-			this.textNutritionDescript.ReadOnly = true;
-			this.textNutritionDescript.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-			this.textNutritionDescript.Size = new System.Drawing.Size(290, 35);
-			this.textNutritionDescript.TabIndex = 158;
-			this.textNutritionDescript.Text = "";
+			this.butPhysActivity.Location = new System.Drawing.Point(19, 173);
+			this.butPhysActivity.Name = "butPhysActivity";
+			this.butPhysActivity.Size = new System.Drawing.Size(75, 23);
+			this.butPhysActivity.TabIndex = 160;
+			this.butPhysActivity.Text = "Phys Activity";
+			this.butPhysActivity.UseVisualStyleBackColor = true;
+			this.butPhysActivity.Click += new System.EventHandler(this.butPhysActivity_Click);
 			// 
-			// textIntervenDescript
+			// butNutrition
 			// 
-			this.textIntervenDescript.AcceptsTab = true;
-			this.textIntervenDescript.BackColor = System.Drawing.SystemColors.ControlLightLight;
-			this.textIntervenDescript.DetectUrls = false;
-			this.textIntervenDescript.Location = new System.Drawing.Point(274, 36);
-			this.textIntervenDescript.Name = "textIntervenDescript";
-			this.textIntervenDescript.QuickPasteType = OpenDentBusiness.QuickPasteType.None;
-			this.textIntervenDescript.ReadOnly = true;
-			this.textIntervenDescript.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-			this.textIntervenDescript.Size = new System.Drawing.Size(290, 100);
-			this.textIntervenDescript.TabIndex = 156;
-			this.textIntervenDescript.Text = "";
-			// 
-			// textReasonDescript
-			// 
-			this.textReasonDescript.AcceptsTab = true;
-			this.textReasonDescript.BackColor = System.Drawing.SystemColors.ControlLightLight;
-			this.textReasonDescript.DetectUrls = false;
-			this.textReasonDescript.Location = new System.Drawing.Point(377, 133);
-			this.textReasonDescript.Name = "textReasonDescript";
-			this.textReasonDescript.QuickPasteType = OpenDentBusiness.QuickPasteType.None;
-			this.textReasonDescript.ReadOnly = true;
-			this.textReasonDescript.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-			this.textReasonDescript.Size = new System.Drawing.Size(195, 40);
-			this.textReasonDescript.TabIndex = 141;
-			this.textReasonDescript.Text = "";
-			// 
-			// textPregCodeDescript
-			// 
-			this.textPregCodeDescript.AcceptsTab = true;
-			this.textPregCodeDescript.BackColor = System.Drawing.SystemColors.ControlLightLight;
-			this.textPregCodeDescript.DetectUrls = false;
-			this.textPregCodeDescript.Location = new System.Drawing.Point(377, 40);
-			this.textPregCodeDescript.Name = "textPregCodeDescript";
-			this.textPregCodeDescript.QuickPasteType = OpenDentBusiness.QuickPasteType.None;
-			this.textPregCodeDescript.ReadOnly = true;
-			this.textPregCodeDescript.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-			this.textPregCodeDescript.Size = new System.Drawing.Size(195, 40);
-			this.textPregCodeDescript.TabIndex = 132;
-			this.textPregCodeDescript.Text = "";
+			this.butNutrition.Location = new System.Drawing.Point(19, 144);
+			this.butNutrition.Name = "butNutrition";
+			this.butNutrition.Size = new System.Drawing.Size(75, 23);
+			this.butNutrition.TabIndex = 155;
+			this.butNutrition.Text = "Nutrition";
+			this.butNutrition.UseVisualStyleBackColor = true;
+			this.butNutrition.Click += new System.EventHandler(this.butNutrition_Click);
 			// 
 			// FormVitalsignEdit2014
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(602, 566);
-			this.Controls.Add(this.tabControl1);
+			this.ClientSize = new System.Drawing.Size(602, 610);
+			this.Controls.Add(this.groupInterventions);
 			this.Controls.Add(this.labelBPsExamCode);
 			this.Controls.Add(this.textBPsExamCode);
 			this.Controls.Add(this.labelBPdExamCode);
@@ -766,11 +595,7 @@
 			this.Load += new System.EventHandler(this.FormVitalsignEdit2014_Load);
 			this.groupExclusion.ResumeLayout(false);
 			this.groupExclusion.PerformLayout();
-			this.tabControl1.ResumeLayout(false);
-			this.tabPage1.ResumeLayout(false);
-			this.tabPage1.PerformLayout();
-			this.tabPage2.ResumeLayout(false);
-			this.tabPage2.PerformLayout();
+			this.groupInterventions.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -819,26 +644,12 @@
 		private System.Windows.Forms.Label labelNotPerf;
 		private System.Windows.Forms.TextBox textReasonCode;
 		private System.Windows.Forms.Button butChangeDefault;
-		private System.Windows.Forms.TabControl tabControl1;
-		private System.Windows.Forms.TabPage tabPage1;
-		private System.Windows.Forms.TabPage tabPage2;
-		private OpenDental.ODtextBox textPhysActDescript;
-		private System.Windows.Forms.Label label8;
-		private System.Windows.Forms.Label label9;
-		private System.Windows.Forms.TextBox textPhysActCode;
-		private System.Windows.Forms.Button butPhysActivity;
-		private OpenDental.ODtextBox textNutritionDescript;
-		private System.Windows.Forms.Label label10;
-		private System.Windows.Forms.Label label11;
-		private System.Windows.Forms.TextBox textNutritionCode;
-		private System.Windows.Forms.Button butNutrition;
-		private System.Windows.Forms.Label label7;
-		private System.Windows.Forms.Label label5;
+		private System.Windows.Forms.GroupBox groupInterventions;
+		private System.Windows.Forms.Label label2;
+		private OpenDental.UI.ODGrid gridInterventions;
 		private System.Windows.Forms.Button butMedication;
-		private OpenDental.ODtextBox textIntervenDescript;
-		private System.Windows.Forms.Label labelIntervenDescript;
-		private System.Windows.Forms.Label labelIntervenMedCode;
-		private System.Windows.Forms.TextBox textIntervenCode;
 		private System.Windows.Forms.Button butIntervention;
+		private System.Windows.Forms.Button butNutrition;
+		private System.Windows.Forms.Button butPhysActivity;
 	}
 }

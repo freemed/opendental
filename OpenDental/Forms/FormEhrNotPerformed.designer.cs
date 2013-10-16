@@ -32,7 +32,7 @@ namespace OpenDental{
 			// butAdd
 			// 
 			this.butAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butAdd.Location = new System.Drawing.Point(30, 383);
+			this.butAdd.Location = new System.Drawing.Point(12, 388);
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(75, 23);
 			this.butAdd.TabIndex = 32;
@@ -43,7 +43,7 @@ namespace OpenDental{
 			// butClose
 			// 
 			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butClose.Location = new System.Drawing.Point(625, 383);
+			this.butClose.Location = new System.Drawing.Point(830, 388);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75, 23);
 			this.butClose.TabIndex = 31;
@@ -57,10 +57,10 @@ namespace OpenDental{
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(28, 25);
+			this.gridMain.Location = new System.Drawing.Point(12, 12);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(672, 330);
+			this.gridMain.Size = new System.Drawing.Size(893, 361);
 			this.gridMain.TabIndex = 30;
 			this.gridMain.Title = "Clinical Quality Measure Items Not Performed";
 			this.gridMain.TranslationName = null;
@@ -69,7 +69,7 @@ namespace OpenDental{
 			// FormEhrNotPerformed
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(727, 418);
+			this.ClientSize = new System.Drawing.Size(917, 423);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.butClose);
 			this.Controls.Add(this.gridMain);

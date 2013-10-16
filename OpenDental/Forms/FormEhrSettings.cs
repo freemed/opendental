@@ -210,64 +210,64 @@ namespace OpenDental {
 		}
 
 		private void butEncSnomed_Click(object sender,EventArgs e) {
-			FormSnomeds formS=new FormSnomeds();
+			FormSnomeds FormS=new FormSnomeds();
 			if(!Security.IsAuthorized(Permissions.SecurityAdmin,false)) {
-				formS.IsSelectionMode=false;
+				FormS.IsSelectionMode=false;
 			}
 			else {
-				formS.IsSelectionMode=true;
+				FormS.IsSelectionMode=true;
 			}
-			formS.ShowDialog();
-			if(formS.DialogResult==DialogResult.OK) {
+			FormS.ShowDialog();
+			if(FormS.DialogResult==DialogResult.OK) {
 				NewEncCodeSystem="SNOMEDCT";
 				for(int i=1;i<comboEncCodes.Items.Count;i++) {
-					if(formS.SelectedSnomed.SnomedCode==comboEncCodes.Items[i].ToString()) {//if they go to snomed list and select one of the recommended codes, select in list
+					if(FormS.SelectedSnomed.SnomedCode==comboEncCodes.Items[i].ToString()) {//if they go to snomed list and select one of the recommended codes, select in list
 						comboEncCodes.SelectedIndex=i;
 						textEncCodeValue.Clear();
-						textEncCodeDescript.Text=formS.SelectedSnomed.Description;
+						textEncCodeDescript.Text=FormS.SelectedSnomed.Description;
 						labelEncWarning.Visible=false;
 						return;
 					}
 				}
 				comboEncCodes.SelectedIndex=-1;
-				textEncCodeValue.Text=formS.SelectedSnomed.SnomedCode;
-				textEncCodeDescript.Text=formS.SelectedSnomed.Description;
+				textEncCodeValue.Text=FormS.SelectedSnomed.SnomedCode;
+				textEncCodeDescript.Text=FormS.SelectedSnomed.Description;
 				labelEncWarning.Visible=true;
 			}
 		}
 
 		///<summary>The HCPCS code picker form has not been implemented, when it has this code may need massaged.</summary>
 		private void butEncHcpcs_Click(object sender,EventArgs e) {
-			//FormHcpcs formH=new FormHcpcs();
+			//FormHcpcs FormH=new FormHcpcs();
 			//if(!Security.IsAuthorized(Permissions.SecurityAdmin,false)) {
-			//	formH.IsSelectionMode=false;
+			//	FormH.IsSelectionMode=false;
 			//}
 			//else {
-			//	formH.IsSelectionMode=true;
+			//	FormH.IsSelectionMode=true;
 			//}
-			//formH.ShowDialog();
-			//if(formH.DialogResult==DialogResult.OK) {
+			//FormH.ShowDialog();
+			//if(FormH.DialogResult==DialogResult.OK) {
 			//	NewEncCodeSystem="HCPCS";
 			//	comboEncCodes.SelectedIndex=-1;
-			//	textEncCodeValue.Text=formH.SelectedHcpcs.HcpcsCode;
-			//	textEncCodeDescript.Text=formH.SelectedHcpcs.Description;
+			//	textEncCodeValue.Text=FormH.SelectedHcpcs.HcpcsCode;
+			//	textEncCodeDescript.Text=FormH.SelectedHcpcs.Description;
 			//	labelEncounterWarning.Visible=true;
 			//}
 		}
 
 		private void butEncCdtCpt_Click(object sender,EventArgs e) {
-			FormProcCodes formP=new FormProcCodes();
+			FormProcCodes FormP=new FormProcCodes();
 			if(!Security.IsAuthorized(Permissions.SecurityAdmin,false)) {
-				formP.IsSelectionMode=false;
+				FormP.IsSelectionMode=false;
 			}
 			else {
-				formP.IsSelectionMode=true;
+				FormP.IsSelectionMode=true;
 			}
-			formP.ShowDialog();
-			if(formP.DialogResult==DialogResult.OK) {
+			FormP.ShowDialog();
+			if(FormP.DialogResult==DialogResult.OK) {
 				NewEncCodeSystem="CDTCPT";
 				comboEncCodes.SelectedIndex=-1;
-				ProcedureCode procCur=ProcedureCodes.GetProcCode(formP.SelectedCodeNum);
+				ProcedureCode procCur=ProcedureCodes.GetProcCode(FormP.SelectedCodeNum);
 				textEncCodeValue.Text=procCur.ProcCode;
 				textEncCodeDescript.Text=procCur.Descript;
 				//We might implement a CodeSystem column on the ProcCode table since it may have ICD9 and ICD10 codes in it.  If so, we can set the NewEncCodeSystem to the value in that new column.
@@ -277,65 +277,65 @@ namespace OpenDental {
 		}
 
 		private void butPregSnomed_Click(object sender,EventArgs e) {
-			FormSnomeds formS=new FormSnomeds();
+			FormSnomeds FormS=new FormSnomeds();
 			if(!Security.IsAuthorized(Permissions.SecurityAdmin,false)) {
-				formS.IsSelectionMode=false;
+				FormS.IsSelectionMode=false;
 			}
 			else {
-				formS.IsSelectionMode=true;
+				FormS.IsSelectionMode=true;
 			}
-			formS.ShowDialog();
-			if(formS.DialogResult==DialogResult.OK) {
+			FormS.ShowDialog();
+			if(FormS.DialogResult==DialogResult.OK) {
 				NewPregCodeSystem="SNOMEDCT";
 				for(int i=1;i<comboPregCodes.Items.Count;i++) {
-					if(formS.SelectedSnomed.SnomedCode==comboPregCodes.Items[i].ToString()) {//if they go to snomed list and select one of the recommended codes, select in list
+					if(FormS.SelectedSnomed.SnomedCode==comboPregCodes.Items[i].ToString()) {//if they go to snomed list and select one of the recommended codes, select in list
 						comboPregCodes.SelectedIndex=i;
 						textPregCodeValue.Clear();
-						textPregCodeDescript.Text=formS.SelectedSnomed.Description;
+						textPregCodeDescript.Text=FormS.SelectedSnomed.Description;
 						labelPregWarning.Visible=false;
 						return;
 					}
 				}
 				comboPregCodes.SelectedIndex=-1;
-				textPregCodeValue.Text=formS.SelectedSnomed.SnomedCode;
-				textPregCodeDescript.Text=formS.SelectedSnomed.Description;
+				textPregCodeValue.Text=FormS.SelectedSnomed.SnomedCode;
+				textPregCodeDescript.Text=FormS.SelectedSnomed.Description;
 				labelPregWarning.Visible=true;
 			}
 		}
 
 		private void butPregIcd9_Click(object sender,EventArgs e) {
-			FormIcd9s formI9=new FormIcd9s();
+			FormIcd9s FormI9=new FormIcd9s();
 			if(!Security.IsAuthorized(Permissions.SecurityAdmin,false)) {
-				formI9.IsSelectionMode=false;
+				FormI9.IsSelectionMode=false;
 			}
 			else {
-				formI9.IsSelectionMode=true;
+				FormI9.IsSelectionMode=true;
 			}
-			formI9.ShowDialog();
-			if(formI9.DialogResult==DialogResult.OK) {
+			FormI9.ShowDialog();
+			if(FormI9.DialogResult==DialogResult.OK) {
 				NewPregCodeSystem="ICD9CM";
 				comboPregCodes.SelectedIndex=-1;
-				textPregCodeValue.Text=formI9.SelectedIcd9.ICD9Code;
-				textPregCodeDescript.Text=formI9.SelectedIcd9.Description;
+				textPregCodeValue.Text=FormI9.SelectedIcd9.ICD9Code;
+				textPregCodeDescript.Text=FormI9.SelectedIcd9.Description;
 				labelPregWarning.Visible=true;
 			}
 		}
 
 		///<summary>The ICD10 code picker form has not been implemented, when it has this code may need massaged.</summary>
 		private void butPregIcd10_Click(object sender,EventArgs e) {
-			//FormIcd10s formI10=new FormIcd10s();
+			//FormIcd10s FormI10=new FormIcd10s();
 			//if(!Security.IsAuthorized(Permissions.SecurityAdmin,false)) {
-			//	formI10.IsSelectionMode=false;
+			//	FormI10.IsSelectionMode=false;
 			//}
 			//else {
-			//	formI10.IsSelectionMode=true;
+			//	FormI10.IsSelectionMode=true;
 			//}
-			//formI10.ShowDialog();
-			//if(formI10.DialogResult==DialogResult.OK) {
+			//FormI10.ShowDialog();
+			//if(FormI10.DialogResult==DialogResult.OK) {
 			//	NewPregCodeSystem="ICD10CM";
 			//	comboPregCodes.SelectedIndex=-1;
-			//	textPregCodeValue.Text=formI10.SelectedIcd10.ICD9Code;
-			//	textPregCodeDescript.Text=formI10.SelectedIcd10.Description;
+			//	textPregCodeValue.Text=FormI10.SelectedIcd10.ICD9Code;
+			//	textPregCodeDescript.Text=FormI10.SelectedIcd10.Description;
 			//	labelPregWarning.Visible=true;
 			//}
 		}

@@ -53,7 +53,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<EhrNotPerformed>>(MethodBase.GetCurrentMethod(),patNum);
 			}
-			string command="SELECT * FROM ehrnotperformed WHERE PatNum = "+POut.Long(patNum);
+			string command="SELECT * FROM ehrnotperformed WHERE PatNum = "+POut.Long(patNum)+" ORDER BY DateEntry";
 			return Crud.EhrNotPerformedCrud.SelectMany(command);
 		}
 
@@ -85,20 +85,13 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
-
-
-		/*
-		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
-
-
 		///<summary>Gets one EhrNotPerformed from the db.</summary>
-		public static EhrNotPerformed GetOne(long ehrNotPerformedNum){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+		public static EhrNotPerformed GetOne(long ehrNotPerformedNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<EhrNotPerformed>(MethodBase.GetCurrentMethod(),ehrNotPerformedNum);
 			}
 			return Crud.EhrNotPerformedCrud.SelectOne(ehrNotPerformedNum);
 		}
-		*/
 
 
 

@@ -12,6 +12,8 @@ namespace OpenDental {
 		public EhrNotPerformed EhrNotPerfCur;
 		public int SelectedItemIndex;
 		private List<EhrCode> listEhrCodesReason;
+		private List<string> listCodeAndDescriptReason;
+		private List<string> listCodeReason;
 
 		public FormEhrNotPerformedEdit() {
 			InitializeComponent();
@@ -46,35 +48,45 @@ namespace OpenDental {
 				MsgBox.Show(this,"There are no codes in the database for the selected value set.");
 				return;
 			}
-			if(listEhrCodes.Count==1) {//only one code in the selected value set, use it
-				EhrNotPerfCur.CodeValue=listEhrCodes[0].CodeValue;
-				EhrNotPerfCur.CodeSystem=listEhrCodes[0].CodeSystem;
-				textDescription.Text=listEhrCodes[0].Description;
+			if(EhrNotPerfCur.IsNew) {//if new, CodeValue and CodeSystem are not set, might have to select one
+				if(listEhrCodes.Count==1) {//only one code in the selected value set, use it
+					EhrNotPerfCur.CodeValue=listEhrCodes[0].CodeValue;
+					EhrNotPerfCur.CodeSystem=listEhrCodes[0].CodeSystem;
+				}
+				else {
+					List<string> listCodeDescripts=new List<string>();
+					for(int i=0;i<listEhrCodes.Count;i++) {
+						listCodeDescripts.Add(listEhrCodes[i].CodeValue+" - "+listEhrCodes[i].Description);
+					}
+					InputBox chooseItem=new InputBox(Lan.g(this,"Select the "+Enum.GetNames(typeof(EhrNotPerformedItem))[SelectedItemIndex]+" not being performed from the list below."),listCodeDescripts);
+					if(SelectedItemIndex==(int)EhrNotPerformedItem.InfluenzaVaccination) {
+						chooseItem.comboSelection.DropDownWidth=700;
+					}
+					if(chooseItem.ShowDialog()!=DialogResult.OK) {
+						return;
+					}
+					if(chooseItem.comboSelection.SelectedIndex==-1) {
+						MsgBox.Show(this,"You must select the "+Enum.GetNames(typeof(EhrNotPerformedItem))[SelectedItemIndex]+" not being performed.");
+						return;
+					}
+					EhrNotPerfCur.CodeValue=listEhrCodes[chooseItem.comboSelection.SelectedIndex].CodeValue;
+					EhrNotPerfCur.CodeSystem=listEhrCodes[chooseItem.comboSelection.SelectedIndex].CodeSystem;
+				}
 			}
-			else {
-				List<string> listCodeDescripts=new List<string>();
-				for(int i=0;i<listEhrCodes.Count;i++) {
-					listCodeDescripts.Add(listEhrCodes[i].Description);
+			for(int i=0;i<listEhrCodes.Count;i++) {
+				if(listEhrCodes[i].CodeValue==EhrNotPerfCur.CodeValue && listEhrCodes[i].CodeSystem==EhrNotPerfCur.CodeSystem) {
+					textDescription.Text=listEhrCodes[i].Description;
 				}
-				InputBox chooseItem=new InputBox(Lan.g(this,"Select the "+Enum.GetNames(typeof(EhrNotPerformedItem))[SelectedItemIndex]+" not being performed from the list below."),listCodeDescripts);
-				if(SelectedItemIndex==(int)EhrNotPerformedItem.InfluenzaVaccination) {
-					chooseItem.comboSelection.DropDownWidth=690;
-				}
-				if(chooseItem.ShowDialog()!=DialogResult.OK) {
-					DialogResult=DialogResult.Cancel;
-				}
-				if(chooseItem.comboSelection.SelectedIndex==-1) {
-					MsgBox.Show(this,"You must select the "+Enum.GetNames(typeof(EhrNotPerformedItem))[SelectedItemIndex]+" not being performed.");
-					DialogResult=DialogResult.Cancel;
-				}
-				EhrNotPerfCur.CodeValue=listEhrCodes[chooseItem.comboSelection.SelectedIndex].CodeValue;
-				EhrNotPerfCur.CodeSystem=listEhrCodes[chooseItem.comboSelection.SelectedIndex].CodeSystem;
-				textDescription.Text=listEhrCodes[chooseItem.comboSelection.SelectedIndex].Description;
 			}
 			textCode.Text=EhrNotPerfCur.CodeValue;
 			textCodeSystem.Text=EhrNotPerfCur.CodeSystem;
 			textDate.Text=EhrNotPerfCur.DateEntry.ToShortDateString();
+			textNote.Text=EhrNotPerfCur.Note;
 			FillReasonList();
+			if(comboCodeReason.SelectedIndex>0) {
+				textCodeSystemReason.Text=listEhrCodesReason[comboCodeReason.SelectedIndex-1].CodeSystem;
+				textDescriptionReason.Text=listEhrCodesReason[comboCodeReason.SelectedIndex-1].Description;
+			}
 		}
 
 		private void FillReasonList() {
@@ -95,8 +107,40 @@ namespace OpenDental {
 					else if(radioSysReason.Checked) {
 						listValueSetOIDsReason=new List<string> { systemReason };
 					}
-					else {
-						listValueSetOIDsReason=new List<string> { medicalReason };//Default to the 'Medical Reason' value set, that radio button is checked by default
+					else if(radioMedReason.Checked) {
+						listValueSetOIDsReason=new List<string> { medicalReason };
+					}
+					else {//if new or loading a previously saved item not performed, no radio is selected, set the appropriate radio and fill the list
+						if(EhrNotPerfCur.IsNew) {
+							radioMedReason.Checked=true;
+							listValueSetOIDsReason=new List<string> { medicalReason };//default to medical reason list if new and no radio selected yet
+						}
+						else {//if previously saved, find the sub list this reason belongs to
+							List<List<string>> listSublists=new List<List<string>> { new List<string> { medicalReason },new List<string> { patientReason },new List<string> { systemReason } };
+							bool found=false;
+							for(int i=0;i<listSublists.Count;i++) {
+								listEhrCodesReason=EhrCodes.GetForValueSetOIDs(listSublists[i]);
+								for(int j=0;j<listEhrCodesReason.Count;j++) {
+									if(listEhrCodesReason[j].CodeValue==EhrNotPerfCur.CodeValueReason && listEhrCodesReason[j].CodeSystem==EhrNotPerfCur.CodeSystemReason) {
+										found=true;
+										break;
+									}
+								}
+								if(found) {
+									if(i==0) {
+										radioMedReason.Checked=true;
+									}
+									else if(i==1) {
+										radioPatReason.Checked=true;
+									}
+									else {
+										radioSysReason.Checked=true;
+									}
+									listValueSetOIDsReason=listSublists[i];
+									break;
+								}
+							}
+						}
 					}
 					break;
 				case 2://TobaccoScreening
@@ -108,37 +152,47 @@ namespace OpenDental {
 				default://should never happen
 					break;
 			}
-			listEhrCodesReason=EhrCodes.GetForValueSetOIDs(listValueSetOIDsReason);
-			if(listEhrCodesReason.Count==0) {//this should never happen, just in case
-				MsgBox.Show(this,"There are no codes in the database for the selected value set.");
-				return;
-			}
+			listEhrCodesReason=new List<EhrCode>();
+			listEhrCodesReason.AddRange(EhrCodes.GetForValueSetOIDs(listValueSetOIDsReason));
+			listCodeAndDescriptReason=new List<string>();
+			listCodeReason=new List<string>();
 			comboCodeReason.Items.Clear();
-			comboCodeReason.Items.Add(Lan.g(this,"none"));
+			comboCodeReason.Items.Add("none");
 			comboCodeReason.SelectedIndex=0;//default to 'none' if no reason set for the not performed item
 			for(int i=0;i<listEhrCodesReason.Count;i++) {
-				comboCodeReason.Items.Add(listEhrCodesReason[i].Description);
-				if(EhrNotPerfCur.CodeValueReason==listEhrCodesReason[i].CodeValue && EhrNotPerfCur.CodeSystemReason==listEhrCodesReason[i].CodeSystem) {//check system, although right now all SNOMEDCT
+				listCodeAndDescriptReason.Add(listEhrCodesReason[i].CodeValue+" - "+listEhrCodesReason[i].Description);
+				listCodeReason.Add(listEhrCodesReason[i].CodeValue);
+			}
+			for(int i=0;i<listCodeAndDescriptReason.Count;i++) {
+				comboCodeReason.Items.Add(listCodeReason[i]);
+				if(EhrNotPerfCur.CodeValueReason==listEhrCodesReason[i].CodeValue && EhrNotPerfCur.CodeSystemReason==listEhrCodesReason[i].CodeSystem) {
 					comboCodeReason.SelectedIndex=i+1;//+1 for 'none'
+					textCodeSystemReason.Text=listEhrCodesReason[i].CodeSystem;
+					textDescriptionReason.Text=listEhrCodesReason[i].Description;
 				}
 			}
 		}
 
 		private void radioReasonMed_Click(object sender,EventArgs e) {
+			textCodeSystemReason.Clear();
+			textDescriptionReason.Clear();
 			FillReasonList();
 		}
 
 		private void radioReasonPat_Click(object sender,EventArgs e) {
+			textCodeSystemReason.Clear();
+			textDescriptionReason.Clear();
 			FillReasonList();
 		}
 
 		private void radioReasonSys_Click(object sender,EventArgs e) {
+			textCodeSystemReason.Clear();
+			textDescriptionReason.Clear();
 			FillReasonList();
 		}
 
 		private void comboReasonCode_SelectionChangeCommitted(object sender,EventArgs e) {
-			//listReasonEhrCodes will have the SNOMEDCT values allowed for the selected item not being performed in the same order as comboReasonCode, selected index-1 to account for 'none'
-			if(comboCodeReason.SelectedIndex==0) {//selected 'none'
+			if(comboCodeReason.SelectedIndex==0) {
 				textCodeSystemReason.Clear();
 				textDescriptionReason.Clear();
 			}
@@ -146,6 +200,26 @@ namespace OpenDental {
 				textCodeSystemReason.Text=listEhrCodesReason[comboCodeReason.SelectedIndex-1].CodeSystem;
 				textDescriptionReason.Text=listEhrCodesReason[comboCodeReason.SelectedIndex-1].Description;
 			}
+		}
+
+		private void comboCodeReason_DropDown(object sender,EventArgs e) {
+			int selectedIndex=comboCodeReason.SelectedIndex;
+			comboCodeReason.Items.Clear();
+			comboCodeReason.Items.Add("none");
+			for(int i=0;i<listCodeAndDescriptReason.Count;i++) {
+				comboCodeReason.Items.Add(listCodeAndDescriptReason[i]);
+			}
+			comboCodeReason.SelectedIndex=selectedIndex;
+		}
+
+		private void comboCodeReason_DropDownClosed(object sender,EventArgs e) {
+			int selectedIndex=comboCodeReason.SelectedIndex;
+			comboCodeReason.Items.Clear();
+			comboCodeReason.Items.Add("none");
+			for(int i=0;i<listEhrCodesReason.Count;i++) {
+				comboCodeReason.Items.Add(listCodeReason[i]);
+			}
+			comboCodeReason.SelectedIndex=selectedIndex;
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
@@ -161,7 +235,7 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			//validate
+			//validate--------------------------------------
 			DateTime date;
 			if(textDate.Text=="") {
 				MsgBox.Show(this,"Please enter a date.");
@@ -174,19 +248,30 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please fix date first.");
 				return;
 			}
-			//save
+			string codeValReas="";
+			string codeSysReas="";
 			if(comboCodeReason.SelectedIndex<1) {//selected 'none' or possibly still -1 (although -1 should never happen)
 				if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"If you do not select one of the reasons provided it may be harder to meet your Clinical Quality Measures.  Are you sure you want to continue without selecting a valid reason for not performing the "+Enum.GetNames(typeof(EhrNotPerformedItem))[SelectedItemIndex]+"?")) {
 					return;
 				}
-				EhrNotPerfCur.CodeValueReason="";
-				EhrNotPerfCur.CodeSystemReason="";
+				codeValReas="";
+				codeSysReas="";
 			}
 			else {
-				EhrNotPerfCur.CodeValueReason=listEhrCodesReason[comboCodeReason.SelectedIndex-1].CodeValue;//-1 to account for 'none'
-				EhrNotPerfCur.CodeSystemReason=listEhrCodesReason[comboCodeReason.SelectedIndex-1].CodeSystem;
+				codeValReas=listEhrCodesReason[comboCodeReason.SelectedIndex-1].CodeValue;//SelectedIndex-1 to account for 'none'
+				codeSysReas=listEhrCodesReason[comboCodeReason.SelectedIndex-1].CodeSystem;
 			}
-			//EhrNotPerfCur.DateTimeEntry=date.ToLongDateString();
+			//save--------------------------------------
+			EhrNotPerfCur.DateEntry=date;
+			EhrNotPerfCur.CodeValueReason=codeValReas;
+			EhrNotPerfCur.CodeSystemReason=codeSysReas;
+			EhrNotPerfCur.Note=textNote.Text;
+			if(EhrNotPerfCur.IsNew) {
+				EhrNotPerformeds.Insert(EhrNotPerfCur);
+			}
+			else {
+				EhrNotPerformeds.Update(EhrNotPerfCur);
+			}
 			DialogResult=DialogResult.OK;
 		}
 

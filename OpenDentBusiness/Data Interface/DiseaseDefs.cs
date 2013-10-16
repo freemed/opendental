@@ -234,16 +234,15 @@ namespace OpenDentBusiness {
 					return ListLong[i].DiseaseDefNum;
 				}
 			}
-//TODO add ICD10Code column to diseasedef table
-			//for(int i=0;i<ListLong.Length;i++) {
-			//	if(ListLong[i].ICD10Code==CodeValue) {
-			//		return ListLong[i].DiseaseDefNum;
-			//	}
-			//}
+			for(int i=0;i<ListLong.Length;i++) {
+				if(ListLong[i].Icd10Code==CodeValue) {
+					return ListLong[i].DiseaseDefNum;
+				}
+			}
 			return 0;
 		}
 
-		///<summary>Returns the diseaseDef with the specified num.</summary>
+		///<summary>Returns the diseaseDef with the specified num.  Will match hidden diseasedefs.</summary>
 		public static DiseaseDef GetItem(long diseaseDefNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<ListLong.Length;i++) {
@@ -257,9 +256,24 @@ namespace OpenDentBusiness {
 		///<summary>Returns the diseaseDefNum that exactly matches the specified string.  Used in import functions when you only have the name to work with.  Can return 0 if no match.  Does not match hidden diseases.</summary>
 		public static long GetNumFromName(string diseaseName){
 			//No need to check RemotingRole; no call to db.
-			for(int i=0;i<List.Length;i++){
-				if(diseaseName==List[i].DiseaseName){
-					return List[i].DiseaseDefNum;
+			return GetNumFromName(diseaseName,false);
+		}
+
+		///<summary>Returns the diseaseDefNum that exactly matches the specified string.  Will return 0 if no match.  Set matchHidden to true to match hidden diseasedefs as well.</summary>
+		public static long GetNumFromName(string diseaseName,bool matchHidden) {
+			//No need to check RemotingRole; no call to db.
+			if(matchHidden) {
+				for(int i=0;i<ListLong.Length;i++) {
+					if(diseaseName==ListLong[i].DiseaseName) {
+						return ListLong[i].DiseaseDefNum;
+					}
+				}
+			}
+			else {
+				for(int i=0;i<List.Length;i++) {
+					if(diseaseName==List[i].DiseaseName) {
+						return List[i].DiseaseDefNum;
+					}
 				}
 			}
 			return 0;
@@ -332,6 +346,50 @@ namespace OpenDentBusiness {
 				}
 			}
 			return false;
+		}
+
+		public static bool ContainsICD10(string icd10Code,long excludeDefNum) {
+			//No need to check RemotingRole; no call to db.
+			for(int i=0;i<ListLong.Length;i++) {
+				if(ListLong[i].Icd10Code==icd10Code && ListLong[i].DiseaseDefNum!=excludeDefNum) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		///<summary>Get all diseasedefs that have a pregnancy code that applies to the three CQM measures with pregnancy as an exclusion condition.</summary>
+		public static List<DiseaseDef> GetAllPregDiseaseDefs() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<DiseaseDef>>(MethodBase.GetCurrentMethod());
+			}
+			string command="SELECT CodeValue,CodeSystem FROM (SELECT CodeValue,CodeSystem,GROUP_CONCAT(DISTINCT MeasureIds) AS Measures "
+				+"FROM ehrcode WHERE ValueSetOID IN('2.16.840.1.113883.3.600.1.1623', "//measure 69, smaller list
+				+"'2.16.840.1.113883.3.526.3.378') "//measures 155,165, bigger list
+				+"GROUP BY CodeValue) A "
+				+"WHERE A.Measures LIKE '%69%' AND A.Measures LIKE '%155%' AND A.Measures LIKE '%165%'";
+			DataTable tableAllPregCodesForCQMs=Db.GetTable(command);
+			List<DiseaseDef> retval=new List<DiseaseDef>();
+			for(int i=0;i<ListLong.Length;i++) {
+				for(int j=0;j<tableAllPregCodesForCQMs.Rows.Count;j++) {
+					if(tableAllPregCodesForCQMs.Rows[j]["CodeSystem"].ToString()=="ICD9CM") {//if preg code is an ICD9CM code, compare against diseasedef.ICD9Code column
+						if(ListLong[i].ICD9Code==tableAllPregCodesForCQMs.Rows[j]["CodeValue"].ToString()) {
+							retval.Add(ListLong[i]);
+						}
+					}
+					else if(tableAllPregCodesForCQMs.Rows[j]["CodeSystem"].ToString()=="ICD10CM") {
+						if(ListLong[i].Icd10Code==tableAllPregCodesForCQMs.Rows[j]["CodeValue"].ToString()) {
+							retval.Add(ListLong[i]);
+						}
+					}
+					else if(tableAllPregCodesForCQMs.Rows[j]["CodeSystem"].ToString()=="SNOMEDCT") {
+						if(ListLong[i].SnomedCode==tableAllPregCodesForCQMs.Rows[j]["CodeValue"].ToString()) {
+							retval.Add(ListLong[i]);
+						}
+					}
+				}
+			}
+			return retval;
 		}
 
 		/*public static DiseaseDef GetByICD9Code(string ICD9Code) {///<summary>Returns the diseasedef that has a name exactly matching the specified string. Returns null if no match.  Does not match hidden diseases.</summary>

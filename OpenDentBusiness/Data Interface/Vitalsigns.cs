@@ -24,6 +24,15 @@ namespace OpenDentBusiness{
 			return Crud.VitalsignCrud.SelectOne(vitalsignNum);
 		}
 
+		///<summary>Gets one Vitalsign with the given DiseaseNum as the PregDiseaseNum.</summary>
+		public static List<Vitalsign> GetListFromPregDiseaseNum(long pregDiseaseNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Vitalsign>>(MethodBase.GetCurrentMethod(),pregDiseaseNum);				
+			}
+			string command="SELECT * FROM vitalsign WHERE vitalsign.PregDiseaseNum="+POut.Long(pregDiseaseNum);
+			return Crud.VitalsignCrud.SelectMany(command);
+		}
+
 		///<summary></summary>
 		public static long Insert(Vitalsign vitalsign){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){

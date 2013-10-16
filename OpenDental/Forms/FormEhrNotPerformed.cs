@@ -25,21 +25,21 @@ namespace OpenDental {
 		private void FillGrid() {
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn("Date",80);
+			ODGridColumn col=new ODGridColumn("Date",70);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Prov",70);
+			col=new ODGridColumn("Prov",50);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Not Performed Item",100);
+			col=new ODGridColumn("Item Not Performed",130);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Code",100);
+			col=new ODGridColumn("Code",102);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Description",150);
+			col=new ODGridColumn("Code Description",150);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Reason Code",100);
+			col=new ODGridColumn("Reason Code",80);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Reason Description",100);
+			col=new ODGridColumn("Reason Description",150);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Note",100);
+			col=new ODGridColumn("Note",150);
 			gridMain.Columns.Add(col);
 			listNotPerf=EhrNotPerformeds.Refresh(PatCur.PatNum);
 			gridMain.Rows.Clear();
@@ -48,6 +48,7 @@ namespace OpenDental {
 				row=new ODGridRow();
 				row.Cells.Add(listNotPerf[i].DateEntry.ToShortDateString());
 				row.Cells.Add(Providers.GetAbbr(listNotPerf[i].ProvNum));
+				//Item not performed------------------------------------------------------------
 				switch(listNotPerf[i].CodeValue) {
 					case "39156-5"://BMI exam
 						row.Cells.Add(EhrNotPerformedItem.BMIExam.ToString());
@@ -64,24 +65,49 @@ namespace OpenDental {
 						row.Cells.Add(EhrNotPerformedItem.InfluenzaVaccination.ToString());
 						break;
 				}
+				//Code not performed------------------------------------------------------------
 				row.Cells.Add(listNotPerf[i].CodeValue);
+				//Description of code not performed---------------------------------------------
 				string descript="";
 				//to get description, first determine which table the code is from.  EhrNotPerformed is allowed to be CPT, CVX, LOINC, SNOMEDCT.
 				switch(listNotPerf[i].CodeSystem) {
 					case "CPT":
+						//no need to check for null, return new ProcedureCode object if not found, Descript will be blank
 						descript=ProcedureCodes.GetProcCode(listNotPerf[i].CodeValue).Descript;
 						break;
 					case "CVX":
-						//descript=Cvxs.(listNotPerf[i].CodeValue).Descript;//this may need to get code from cdt table instead, if Ryan creates a one
+						Cvx cCur=Cvxs.GetOneFromDb(listNotPerf[i].CodeValue);
+						if(cCur!=null) {
+							descript=cCur.Description;
+						}
 						break;
-					case "HCPCS":
-						descript=Hcpcses.GetByCode(listNotPerf[i].CodeValue).DescriptionShort;
+					case "LOINC":
+						Loinc lCur=Loincs.GetByCode(listNotPerf[i].CodeValue);
+						if(lCur!=null) {
+							descript=lCur.NameLongCommon;
+						}
 						break;
 					case "SNOMEDCT":
-						descript=Snomeds.GetByCode(listNotPerf[i].CodeValue).Description;
+						Snomed sCur=Snomeds.GetByCode(listNotPerf[i].CodeValue);
+						if(sCur!=null) {
+							descript=sCur.Description;
+						}
 						break;
 				}
 				row.Cells.Add(descript);
+				//Reason Code-------------------------------------------------------------------
+				row.Cells.Add(listNotPerf[i].CodeValueReason);
+				//Reason Description------------------------------------------------------------
+				descript="";
+				if(listNotPerf[i].CodeValueReason!="") {
+					//reason codes are only allowed to be SNOMEDCT codes
+					Snomed sCur=Snomeds.GetByCode(listNotPerf[i].CodeValueReason);
+					if(sCur!=null) {
+						descript=sCur.Description;
+					}
+				}
+				row.Cells.Add(descript);
+				//Note--------------------------------------------------------------------------
 				row.Cells.Add(listNotPerf[i].Note);
 				gridMain.Rows.Add(row);
 			}
@@ -89,10 +115,10 @@ namespace OpenDental {
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			FormEhrNotPerformedEdit formEE=new FormEhrNotPerformedEdit();
-			formEE.EhrNotPerfCur=listNotPerf[e.Row];
-			formEE.SelectedItemIndex=(int)Enum.Parse(typeof(EhrNotPerformedItem),gridMain.Rows[e.Row].Cells[2].Text,true);//Parse the text displayed from the enum and convert to int
-			formEE.ShowDialog();
+			FormEhrNotPerformedEdit FormEE=new FormEhrNotPerformedEdit();
+			FormEE.EhrNotPerfCur=listNotPerf[e.Row];
+			FormEE.SelectedItemIndex=(int)Enum.Parse(typeof(EhrNotPerformedItem),gridMain.Rows[e.Row].Cells[2].Text,true);//Parse the text displayed from the enum and convert to int
+			FormEE.ShowDialog();
 			FillGrid();
 		}
 
@@ -109,13 +135,14 @@ namespace OpenDental {
 				MsgBox.Show(this,"You must select an item that is not being performed from the list of available items.");
 				return;
 			}
-			FormEhrNotPerformedEdit formEE=new FormEhrNotPerformedEdit();
-			formEE.EhrNotPerfCur=new EhrNotPerformed();
-			formEE.EhrNotPerfCur.PatNum=PatCur.PatNum;
-			formEE.EhrNotPerfCur.ProvNum=PatCur.PriProv;
-			formEE.EhrNotPerfCur.DateEntry=DateTime.Now;
-			formEE.SelectedItemIndex=chooseItem.comboSelection.SelectedIndex;//Send in the int of index of selected item
-			formEE.ShowDialog();
+			FormEhrNotPerformedEdit FormEE=new FormEhrNotPerformedEdit();
+			FormEE.EhrNotPerfCur=new EhrNotPerformed();
+			FormEE.EhrNotPerfCur.IsNew=true;
+			FormEE.EhrNotPerfCur.PatNum=PatCur.PatNum;
+			FormEE.EhrNotPerfCur.ProvNum=PatCur.PriProv;
+			FormEE.EhrNotPerfCur.DateEntry=DateTime.Now;
+			FormEE.SelectedItemIndex=chooseItem.comboSelection.SelectedIndex;//Send in the int of index of selected item
+			FormEE.ShowDialog();
 			FillGrid();
 		}
 
