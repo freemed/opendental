@@ -373,6 +373,18 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormMapAreaEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormMapAreaEdit.Designer.cs">
+      <DependentUpon>FormMapAreaEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormMapSetup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormMapSetup.Designer.cs">
+      <DependentUpon>FormMapSetup.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormPopupAudit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2720,6 +2732,12 @@
     <Compile Include="Forms\FormTPsign.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="InternalTools\Phones\FormMapHQ.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="InternalTools\Phones\FormMapHQ.Designer.cs">
+      <DependentUpon>FormMapHQ.cs</DependentUpon>
+    </Compile>
     <Compile Include="InternalTools\Phones\FormPhoneGraphDateEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2892,6 +2910,30 @@
     </Compile>
     <Compile Include="User Controls\ContrFamilyEcw.Designer.cs">
       <DependentUpon>ContrFamilyEcw.cs</DependentUpon>
+    </Compile>
+    <Compile Include="User Controls\DraggableControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="User Controls\DraggableControl.Designer.cs">
+      <DependentUpon>DraggableControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="User Controls\MapAreaDisplayLabelControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="User Controls\MapAreaDisplayLabelControl.Designer.cs">
+      <DependentUpon>MapAreaDisplayLabelControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="User Controls\MapAreaPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="User Controls\MapAreaPanel.Designer.cs">
+      <DependentUpon>MapAreaPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="User Controls\MapAreaRoomControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="User Controls\MapAreaRoomControl.Designer.cs">
+      <DependentUpon>MapAreaRoomControl.cs</DependentUpon>
     </Compile>
     <Compile Include="User Controls\TextBoxWiki.cs">
       <SubType>UserControl</SubType>
@@ -4690,6 +4732,9 @@
       <DependentUpon>FormTPsign.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="InternalTools\Phones\FormMapHQ.resx">
+      <DependentUpon>FormMapHQ.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="InternalTools\Phones\FormPhoneGraphDateEdit.resx">
       <DependentUpon>FormPhoneGraphDateEdit.cs</DependentUpon>
     </EmbeddedResource>
@@ -5370,6 +5415,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\phoneInUse.png" />
     <None Include="Resources\splashCanada.jpg" />
     <None Include="Web References\NewCrop\Update1.disco" />
     <None Include="Resources\TxtMsg5.gif" />

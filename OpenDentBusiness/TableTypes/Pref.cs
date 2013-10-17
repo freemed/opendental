@@ -203,6 +203,8 @@ namespace OpenDentBusiness {
 		GenericEClaimsForm,
 		HL7FolderOut,
 		HL7FolderIn,
+		///<summary>Used by HQ. Projected onto wall displayed on top of FormMapHQ</summary>
+		HQTriageCoordinator,
 		///<summary>procedurelog.DiagnosticCode will be set to this for new procedures and complete procedures if this field was blank when set complete.</summary>
 		ICD9DefaultForNewProcs,
 		ImagesModuleTreeIsCollapsed,
