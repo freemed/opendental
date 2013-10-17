@@ -1290,7 +1290,7 @@ namespace OpenDentBusiness {
 				}
 				//oracle compatible
 				command="UPDATE medicationpat SET IsCpoe=1 "
-						+"WHERE PatNote!='' AND DateStart > "+POut.Date((new DateTime(1880,1,1)))+" AND ProvNum!=0";
+						+"WHERE PatNote!='' AND DateStart > "+POut.Date((new DateTime(1880,1,1)));
 				Db.NonQ(command);
 				//Add additional EHR Measures to DB
 				if(DataConnection.DBtype==DatabaseType.MySql) {
