@@ -758,33 +758,21 @@ namespace OpenDental{
 			FillAttachments();
 		}
 
-		private void CreateAttachmentFromText(string strAttachText,string strDisplayFileName) {
-			Random rnd=new Random();
-			EmailAttach emailAttach;
-			try {
-				//create the attachment
-				emailAttach=new EmailAttach();
-				emailAttach.DisplayedFileName=strDisplayFileName;
-				emailAttach.ActualFileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+Path.GetExtension(strDisplayFileName);//To make unique.
-				string strAttachFilePath=ODFileUtils.CombinePaths(EmailMessages.GetEmailAttachPath(),emailAttach.ActualFileName);
-				File.WriteAllText(strAttachFilePath,strAttachText);
-				MessageCur.Attachments.Add(emailAttach);
-			}
-			catch(Exception ex) {
-				MessageBox.Show(ex.Message);
-			}
-			FillAttachments();
-		}
-
 		private void butSummaryOfCare_Click(object sender,EventArgs e) {
 			Cursor=Cursors.WaitCursor;
-			if(HasCcdAttachment()) {
+			if(EhrCCD.HasCcdEmailAttachment(MessageCur)) {
 				Cursor=Cursors.Default;
 				MsgBox.Show(this,"A summary of care is already attached to this email message.");
 				return;
 			}
 			string strCCD=EhrCCD.GenerateCCD(PatCur);
-			CreateAttachmentFromText(strCCD,"ccd.xml");
+			try {
+				EmailMessages.CreateAttachmentFromText(MessageCur,strCCD,"ccd.xml");
+			}
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
+			}
+			FillAttachments();
 			Cursor=Cursors.Default;
 		}
 
@@ -834,33 +822,10 @@ namespace OpenDental{
 			OpenFile();
 		}
 
-		private bool IsAttachmentCcd(int attachIndex) {
-			string strFilePathAttach=ODFileUtils.CombinePaths(EmailMessages.GetEmailAttachPath(),MessageCur.Attachments[attachIndex].ActualFileName);
-			if(Path.GetExtension(strFilePathAttach).ToLower()!=".xml") {
-				return false;
-			}
-			string strTextXml=File.ReadAllText(strFilePathAttach);
-			if(!EhrCCD.IsCCD(strTextXml)) {
-				return false;
-			}
-			return true;
-		}
-
-		private bool HasCcdAttachment() {
-			if(MessageCur.Attachments!=null) {
-				for(int i=0;i<MessageCur.Attachments.Count;i++) {
-					if(IsAttachmentCcd(i)) {
-						return true;
-					}
-				}
-			}
-			return false;
-		}
-
 		private void OpenFile(){
 			string strFilePathAttach=ODFileUtils.CombinePaths(EmailMessages.GetEmailAttachPath(),MessageCur.Attachments[listAttachments.SelectedIndex].ActualFileName);
 			try{
-				if(IsAttachmentCcd(listAttachments.SelectedIndex)) {
+				if(EhrCCD.IsCcdEmailAttachment(MessageCur.Attachments[listAttachments.SelectedIndex])) {
 					string strTextXml=File.ReadAllText(strFilePathAttach);
 					if(EhrCCD.IsCCD(strTextXml)) {
 						bool isReconcile=false;
@@ -988,7 +953,9 @@ namespace OpenDental{
 			try {
 				string strErrors=EmailMessages.SendEmailDirect(MessageCur,emailAddressFrom);
 				if(strErrors!="") {
+					Cursor=Cursors.Default;
 					MessageBox.Show(strErrors);
+					return;
 				}
 				else {
 					MsgBox.Show(this,"Sent");
@@ -1012,7 +979,7 @@ namespace OpenDental{
 				MessageBox.Show("Addresses not allowed to be blank.");
 				return;
 			}
-			if(HasCcdAttachment()) {
+			if(EhrCCD.HasCcdEmailAttachment(MessageCur)) {
 				if(!MsgBox.Show(this,true,"There is a summary of care attachment which may contain sensitive patient data.  If you continue, the sent email will not be secure.  Continue?")) {
 					return;
 				}

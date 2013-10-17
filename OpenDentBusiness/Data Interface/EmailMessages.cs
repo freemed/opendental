@@ -180,14 +180,8 @@ namespace OpenDentBusiness{
 			Health.Direct.Agent.MessageEnvelope msgEnvelopeUnencrypted=new Health.Direct.Agent.MessageEnvelope(msgUnencrypted);
 			Health.Direct.Agent.OutgoingMessage outMsgUnencrypted=new Health.Direct.Agent.OutgoingMessage(msgEnvelopeUnencrypted);
 			string strErrors=SendEmailDirect(outMsgUnencrypted,emailAddressFrom);
-			EhrMeasureEvent newMeasureEvent=new EhrMeasureEvent();
-			newMeasureEvent.DateTEvent=DateTime.Now;
-			newMeasureEvent.EventType=EhrMeasureEventType.SummaryOfCareProvidedToDr;
-			newMeasureEvent.PatNum=emailMessage.PatNum;
-			EhrMeasureEvents.Insert(newMeasureEvent);
 			return strErrors;
 		}
-
 		///<summary>outMsgDirect must be unencrypted, because this function will encrypt.  Encrypts the message, verifies trust, locates the public encryption key for the To address (if already stored locally), etc.
 		///patNum can be zero.  emailSentOrReceived must be either SentDirect or a Direct Ack type such as AckDirectProcessed.
 		///Returns an empty string upon success, or an error string if there were errors.  It is possible that the email was sent to some trusted recipients and not sent to untrusted recipients (in which case there would be errors but some recipients would receive successfully).</summary>
@@ -779,6 +773,19 @@ namespace OpenDentBusiness{
 				attachPath=Path.GetTempPath();
 			}
 			return attachPath;
+		}
+
+		///<summary>Can throw an exception if there is a permission issue saving the file.</summary>
+		public static void CreateAttachmentFromText(EmailMessage emailMessage,string strAttachText,string strDisplayFileName) {
+			Random rnd=new Random();
+			EmailAttach emailAttach;
+			//create the attachment
+			emailAttach=new EmailAttach();
+			emailAttach.DisplayedFileName=strDisplayFileName;
+			emailAttach.ActualFileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+Path.GetExtension(strDisplayFileName);//To make unique.
+			string strAttachFilePath=ODFileUtils.CombinePaths(EmailMessages.GetEmailAttachPath(),emailAttach.ActualFileName);
+			File.WriteAllText(strAttachFilePath,strAttachText);
+			emailMessage.Attachments.Add(emailAttach);
 		}
 
 		#endregion Helpers

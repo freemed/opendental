@@ -139,24 +139,37 @@ namespace OpenDental {
 		}
 
 		private void butSendEmail_Click(object sender,EventArgs e) {
-			EhrMeasureEvent newMeasureEvent = new EhrMeasureEvent();
-			newMeasureEvent.DateTEvent = DateTime.Now;
-			newMeasureEvent.EventType = EhrMeasureEventType.SummaryOfCareProvidedToDr;
-			newMeasureEvent.PatNum = PatCur.PatNum;
-			EhrMeasureEvents.Insert(newMeasureEvent);
-			FillGridSent();
 			Cursor=Cursors.WaitCursor;
-			string ccd=EhrCCD.GenerateCCD(PatCur);
+			EmailAddress emailAddressFrom=EmailAddresses.GetByClinic(0);//Default for clinic/practice.
+			EmailMessage emailMessage=new EmailMessage();
+			emailMessage.PatNum=PatCur.PatNum;
+			emailMessage.MsgDateTime=DateTime.Now;
+			emailMessage.SentOrReceived=EmailSentOrReceived.Neither;//To force FormEmailMessageEdit into "compose" mode.
+			emailMessage.FromAddress=emailAddressFrom.EmailUsername;//Cannot be emailAddressFrom.SenderAddress, because it would cause encryption to fail.
+			emailMessage.ToAddress="";//User must set inside of FormEmailMessageEdit
+			emailMessage.Subject="Summary of Care";
+			emailMessage.BodyText="Summary of Care";
+			string strCCD=EhrCCD.GenerateCCD(PatCur);
 			try {
-				EmailMessages.SendTestUnsecure("Summary of Care","ccd.xml",ccd,"ccd.xsl",EHR.Properties.Resources.CCD);
+				EmailMessages.CreateAttachmentFromText(emailMessage,strCCD,"ccd.xml");
+				EmailMessages.CreateAttachmentFromText(emailMessage,EHR.Properties.Resources.CCD,"ccd.xsl");
 			}
 			catch(Exception ex) {
 				Cursor=Cursors.Default;
 				MessageBox.Show(ex.Message);
 				return;
 			}
+			EmailMessages.Insert(emailMessage);
+			FormEmailMessageEdit formE=new FormEmailMessageEdit(emailMessage);
+			if(formE.ShowDialog()==DialogResult.OK) {
+				EhrMeasureEvent newMeasureEvent=new EhrMeasureEvent();
+				newMeasureEvent.DateTEvent=DateTime.Now;
+				newMeasureEvent.EventType=EhrMeasureEventType.SummaryOfCareProvidedToDr;
+				newMeasureEvent.PatNum=PatCur.PatNum;
+				EhrMeasureEvents.Insert(newMeasureEvent);
+				FillGridSent();
+			}
 			Cursor=Cursors.Default;
-			MessageBox.Show("Sent");
 		}
 
 		private void butShowXhtml_Click(object sender,EventArgs e) {
@@ -180,14 +193,8 @@ namespace OpenDental {
 		}
 
 		private void butRecEmail_Click(object sender,EventArgs e) {
-			string text=EmailMessages.ReceiveOneForEhrTest();
-			EhrSummaryCcd ehrSummaryCcd=new EhrSummaryCcd();
-			ehrSummaryCcd.ContentSummary=text;
-			ehrSummaryCcd.DateSummary=DateTime.Today;
-			ehrSummaryCcd.PatNum=PatCur.PatNum;
-			EhrSummaryCcds.Insert(ehrSummaryCcd);
-			FillGridRec();
-			DisplayCCD(text,true);
+			FormEmailInbox form=new FormEmailInbox();
+			form.ShowDialog();
 		}
 
 		private void butRecFile_Click(object sender,EventArgs e) {

@@ -36,7 +36,7 @@ namespace OpenDentBusiness {
 				w.WriteEndElement();//realmCode
 				w.WriteStartElement("typeId");
 				w.WriteAttributeString("extension","POCD_HD000040");
-				w.WriteAttributeString("root","2.16.840.1.113883.1.3");
+				w.WriteAttributeString("root","2.16.840.1.113883.1.3");//template id to assert use of the CCD standard
 				w.WriteEndElement();//typeId
 				w.WriteStartElement("templateId");
 				w.WriteAttributeString("root","2.16.840.1.113883.3.27.1776");
@@ -202,7 +202,7 @@ Problems
 				w.WriteStartElement("section");
 				TemplateId(w,"2.16.840.1.113883.3.88.11.83.103","HITSP/C83");
 				TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.3.6","IHE PCC");
-				TemplateId(w,"2.16.840.1.113883.10.20.1.11","HL7 CCD");
+				TemplateId(w,"2.16.840.1.113883.10.20.1.11","HL7 CCD");//problem section template id, according to pages 103-104 of CCD-final.pdf
 				w.WriteComment("Problems section template");
 				StartAndEnd(w,"code","code","11450-4","codeSystem","2.16.840.1.113883.6.1","codeSystemName","LOINC","displayName","Problem list");
 				w.WriteElementString("title","Problems");
@@ -266,7 +266,7 @@ Problems
 					Start(w,"entry","typeCode","DRIV");
 					Start(w,"act","classCode","ACT","moodCode","EVN");
 					TemplateId(w,"2.16.840.1.113883.3.88.11.83.7","HITSP C83");
-					TemplateId(w,"2.16.840.1.113883.10.20.1.27","CCD");
+					TemplateId(w,"2.16.840.1.113883.10.20.1.27","CCD");//problem act template id, according to pages 103-104 of CCD-final.pdf
 					TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.4.5.1","IHE PCC");
 					TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.4.5.2","IHE PCC");
 					w.WriteComment("Problem act template");
@@ -279,7 +279,7 @@ Problems
 					End(w,"effectiveTime");
 					Start(w,"entryRelationship","typeCode","SUBJ","inversionInd","false");
 					Start(w,"observation","classCode","OBS","moodCode","EVN");
-					TemplateId(w,"2.16.840.1.113883.10.20.1.28","CCD");
+					TemplateId(w,"2.16.840.1.113883.10.20.1.28","CCD");//problem observation template id, according to pages 103-104 of CCD-final.pdf
 					TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.4.5","IHE PCC");
 					w.WriteComment("Problem observation template - NOT episode template");
 					StartAndEnd(w,"id","root","d11275e7-67ae-11db-bd13-0800200c9a66");
@@ -329,7 +329,7 @@ Allergies
 				w.WriteStartElement("section");
 				TemplateId(w,"2.16.840.1.113883.3.88.11.83.102","HITSP/C83");
 				TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.3.13","IHE PCC");
-				TemplateId(w,"2.16.840.1.113883.10.20.1.2","HL7 CCD");//Alerts section
+				TemplateId(w,"2.16.840.1.113883.10.20.1.2","HL7 CCD");//alerts section template id, according to pages 103-104 of CCD-final.pdf
 				w.WriteComment("Allergies/Reactions section template");
 				StartAndEnd(w,"code","code","48765-2","codeSystem","2.16.840.1.113883.6.1","codeSystemName","LOINC","displayName","Allergies");
 				w.WriteStartElement("title");
@@ -395,35 +395,34 @@ Allergies
 					Start(w,"entry","typeCode","DRIV");
 					Start(w,"act","classCode","ACT","moodCode","EVN");
 					TemplateId(w,"2.16.840.1.113883.3.88.11.83.6","HITSP C83");
-					TemplateId(w,"2.16.840.1.113883.10.20.1.27","CCD");
+					TemplateId(w,"2.16.840.1.113883.10.20.1.27","CCD");//problem act template id, according to pages 103-104 of CCD-final.pdf
 					TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.4.5.1","IHE PCC");
 					TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.4.5.3","IHE PCC");
-					StartAndEnd(w,"id","root","36e3e930-7b14-11db-9fe1-0800200c9a66");
-					StartAndEnd(w,"code","nullFlavor","NA");
-					StartAndEnd(w,"statusCode","code","completed");
-					Start(w,"effectiveTime");
+					StartAndEnd(w,"id","root","36e3e930-7b14-11db-9fe1-0800200c9a66");//line 368 in POCD_HD000040.xls
+					StartAndEnd(w,"code","nullFlavor","NA");//line 369 in POCD_HD000040.xls
+					StartAndEnd(w,"statusCode","code","completed");//line 372 in POCD_HD000040.xls
+					Start(w,"effectiveTime");//line 373 in POCD_HD000040.xls
 					StartAndEnd(w,"low","nullFlavor","UNK");
 					StartAndEnd(w,"high","nullFlavor","UNK");
 					End(w,"effectiveTime");
-					Start(w,"entryRelationship","typeCode","SUBJ","inversionInd","false");
-					Start(w,"observation","classCode","OBS","moodCode","EVN");
-					TemplateId(w,"2.16.840.1.113883.10.20.1.18","CCD");
-					TemplateId(w,"2.16.840.1.113883.10.20.1.28","CCD");
+					Start(w,"entryRelationship","typeCode","SUBJ","inversionInd","false");//line 319 in POCD_HD000040.xls
+					Start(w,"observation","classCode","OBS","moodCode","EVN");//line 385 in POCD_HD000040.xls
+					TemplateId(w,"2.16.840.1.113883.10.20.1.18","CCD");//alert observation template id, according to pages 103-104 of CCD-final.pdf
+					TemplateId(w,"2.16.840.1.113883.10.20.1.28","CCD");//problem observation template id, according to pages 103-104 of CCD-final.pdf
 					TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.4.5","IHE PCC");
 					TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.4.6","IHE PCC");
-					StartAndEnd(w,"id","root","4adc1020-7b14-11db-9fe1-0800200c9a66");
-					StartAndEnd(w,"code","code","416098002","codeSystem","2.16.840.1.113883.6.96",
-						"displayName","drug allergy","codeSystemName","SNOMED CT");
-					Start(w,"text");
+					StartAndEnd(w,"id","root","4adc1020-7b14-11db-9fe1-0800200c9a66");//line 388 in POCD_HD000040.xls
+					StartAndEnd(w,"code","code","416098002","codeSystem","2.16.840.1.113883.6.96","displayName","drug allergy","codeSystemName","SNOMED CT");//line 389 in POCD_HD000040.xls
+					Start(w,"text");//line 392 in POCD_HD000040.xls
 					StartAndEnd(w,"reference","value","#ALGSUMMARY_1");
 					End(w,"text");
-					StartAndEnd(w,"statusCode","code","completed");
-					Start(w,"effectiveTime");
+					StartAndEnd(w,"statusCode","code","completed");//line 393 in POCD_HD000040.xls
+					Start(w,"effectiveTime");//line 394 in POCD_HD000040.xls
 					StartAndEnd(w,"low","nullFlavor","UNK");
 					End(w,"effectiveTime");
 					//Note that IHE/PCC and HITSP/C32 differ in how to represent the drug, substance, or food that one is allergic to.
 					//IHE/PCC expects to see that information in <value> and HITSP/C32 expects to see it in <participant>.
-					Start(w,"value");
+					Start(w,"value");//line 398 in POCD_HD000040.xls
 					w.WriteAttributeString("xsi","type",null,"CD");
 					Attribs(w,"code",med.RxCui.ToString(),"codeSystem","2.16.840.1.113883.6.88");
 					Attribs(w,"displayName",med.MedName,"codeSystemName","RxNorm");
@@ -431,11 +430,12 @@ Allergies
 					StartAndEnd(w,"reference","value","#ALGSUB_1");
 					End(w,"originalText");
 					End(w,"value");
-					Start(w,"participant","typeCode","CSM");
-					Start(w,"participantRole","classCode","MANU");
-					StartAndEnd(w,"addr");
-					StartAndEnd(w,"telecom");
-					Start(w,"playingEntity","classCode","MMAT");
+					Start(w,"participant","typeCode","CSM");//line 294 in POCD_HD000040.xls? Isn't the observation supposed to end before this element?
+					Start(w,"participantRole","classCode","MANU");//line 299 in POCD_HD000040.xls?
+					StartAndEnd(w,"addr");//line 303 in POCD_HD000040.xls?
+					StartAndEnd(w,"telecom");//line 304 in POCD_HD000040.xls?
+					//TODO: Missing playingentitychoice element?
+					Start(w,"playingEntity","classCode","MMAT");//line 312 in POCD_HD000040.xls?
 					Start(w,"code","code","70618","codeSystem","2.16.840.1.113883.6.88");
 					Attribs(w,"displayName",med.MedName,"codeSystemName","RxNorm");
 					Start(w,"originalText");
@@ -463,7 +463,7 @@ Medications
 				w.WriteStartElement("section");
 				TemplateId(w,"2.16.840.1.113883.3.88.11.83.112","HITSP/C83");
 				TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.3.19","IHE PCC");
-				TemplateId(w,"2.16.840.1.113883.10.20.1.8","HL7 CCD");
+				TemplateId(w,"2.16.840.1.113883.10.20.1.8","HL7 CCD");//medications section template id, according to pages 103-104 of CCD-final.pdf
 				w.WriteComment("Medications section template");
 				StartAndEnd(w,"code","code","10160-0","codeSystem","2.16.840.1.113883.6.1","codeSystemName","LOINC",
 					"displayName","History of medication use");
@@ -556,7 +556,7 @@ Medications
 					Start(w,"entry","typeCode","DRIV");
 					Start(w,"substanceAdministration","classCode","SBADM","moodCode","EVN");
 					TemplateId(w,"2.16.840.1.113883.3.88.11.83.8","HITSP C83");
-					TemplateId(w,"2.16.840.1.113883.10.20.1.24","CCD");
+					TemplateId(w,"2.16.840.1.113883.10.20.1.24","CCD");//medication activity template id, according to pages 103-104 of CCD-final.pdf
 					TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.4.7","IHE PCC");
 					TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.4.7.1","IHE PCC");
 					w.WriteComment("Medication activity template");
@@ -577,7 +577,7 @@ Medications
 					Start(w,"consumable");
 					Start(w,"manufacturedProduct");
 					TemplateId(w,"2.16.840.1.113883.3.88.11.83.8.2","HITSP C83");
-					TemplateId(w,"2.16.840.1.113883.10.20.1.53","CCD");
+					TemplateId(w,"2.16.840.1.113883.10.20.1.53","CCD");//product template id, according to pages 103-104 of CCD-final.pdf
 					TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.4.7.2","IHE PCC");
 					w.WriteComment("Product template");
 					Start(w,"manufacturedMaterial");
@@ -670,7 +670,7 @@ Laboratory Test Results
 					Start(w,"component");
 					Start(w,"procedure","classCode","PROC","moodCode","EVN");
 					TemplateId(w,"2.16.840.1.113883.3.88.11.83.17","HITSP C83");
-					TemplateId(w,"2.16.840.1.113883.10.20.1.29","CCD");
+					TemplateId(w,"2.16.840.1.113883.10.20.1.29","CCD");//procedure activity template id, according to pages 103-104 of CCD-final.pdf
 					TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.4.19","IHE PCC");
 					StartAndEnd(w,"id");
 					Start(w,"code","code",labPanel.ServiceId,
@@ -691,7 +691,7 @@ Laboratory Test Results
 					Start(w,"component");
 					Start(w,"observation","classCode","OBS","moodCode","EVN");
 					TemplateId(w,"2.16.840.1.113883.3.88.11.83.15.1","HITSP C83");
-					TemplateId(w,"2.16.840.1.113883.10.20.1.31","CCD");
+					TemplateId(w,"2.16.840.1.113883.10.20.1.31","CCD");//result observation template id, according to pages 103-104 of CCD-final.pdf
 					TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.4.13","IHE PCC");
 					w.WriteComment("Result observation template");
 					StartAndEnd(w,"id","root","107c2dc0-67a5-11db-bd13-0800200c9a66");
@@ -836,6 +836,30 @@ Laboratory Test Results
 				return 0;
 			}
 			return Patients.GetPatNumByNameAndBirthday(lName,fName,birthDate);
+		}
+
+		public static bool IsCcdEmailAttachment(EmailAttach emailAttach) {
+			string strFilePathAttach=ODFileUtils.CombinePaths(EmailMessages.GetEmailAttachPath(),emailAttach.ActualFileName);
+			if(Path.GetExtension(strFilePathAttach).ToLower()!=".xml") {
+				return false;
+			}
+			string strTextXml=File.ReadAllText(strFilePathAttach);
+			if(!EhrCCD.IsCCD(strTextXml)) {
+				return false;
+			}
+			return true;
+		}
+
+		public static bool HasCcdEmailAttachment(EmailMessage emailMessage) {
+			if(emailMessage.Attachments==null) {
+				return false;
+			}
+			for(int i=0;i<emailMessage.Attachments.Count;i++) {
+				if(EhrCCD.IsCcdEmailAttachment(emailMessage.Attachments[i])) {
+					return true;
+				}
+			}
+			return false;
 		}
 
 	}

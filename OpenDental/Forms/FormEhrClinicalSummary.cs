@@ -67,24 +67,37 @@ namespace OpenDental {
 		}
 
 		private void butSendEmail_Click(object sender,EventArgs e) {
-			EhrMeasureEvent newMeasureEvent = new EhrMeasureEvent();
-			newMeasureEvent.DateTEvent = DateTime.Now;
-			newMeasureEvent.EventType = EhrMeasureEventType.ClinicalSummaryProvidedToPt;
-			newMeasureEvent.PatNum = PatCur.PatNum;
-			EhrMeasureEvents.Insert(newMeasureEvent);
-			FillGridEHRMeasureEvents();
 			Cursor=Cursors.WaitCursor;
-			string ccd=EhrCCD.GenerateCCD(PatCur);
+			EmailAddress emailAddressFrom=EmailAddresses.GetByClinic(0);//Default for clinic/practice.
+			EmailMessage emailMessage=new EmailMessage();
+			emailMessage.PatNum=PatCur.PatNum;
+			emailMessage.MsgDateTime=DateTime.Now;
+			emailMessage.SentOrReceived=EmailSentOrReceived.Neither;//To force FormEmailMessageEdit into "compose" mode.
+			emailMessage.FromAddress=emailAddressFrom.EmailUsername;//Cannot be emailAddressFrom.SenderAddress, because it would cause encryption to fail.
+			emailMessage.ToAddress=PatCur.Email;
+			emailMessage.Subject="Clinical Summary";
+			emailMessage.BodyText="Clinical Summary";
+			string strCCD=EhrCCD.GenerateCCD(PatCur);
 			try {
-				EmailMessages.SendTestUnsecure("Clinical Summary","ccd.xml",ccd,"ccd.xsl",EHR.Properties.Resources.CCD);
+				EmailMessages.CreateAttachmentFromText(emailMessage,strCCD,"ccd.xml");
+				EmailMessages.CreateAttachmentFromText(emailMessage,EHR.Properties.Resources.CCD,"ccd.xsl");
 			}
 			catch(Exception ex) {
 				Cursor=Cursors.Default;
 				MessageBox.Show(ex.Message);
 				return;
 			}
+			EmailMessages.Insert(emailMessage);
+			FormEmailMessageEdit formE=new FormEmailMessageEdit(emailMessage);
+			if(formE.ShowDialog()==DialogResult.OK) {
+				EhrMeasureEvent newMeasureEvent=new EhrMeasureEvent();
+				newMeasureEvent.DateTEvent=DateTime.Now;
+				newMeasureEvent.EventType=EhrMeasureEventType.ClinicalSummaryProvidedToPt;
+				newMeasureEvent.PatNum=PatCur.PatNum;
+				EhrMeasureEvents.Insert(newMeasureEvent);
+				FillGridEHRMeasureEvents();
+			}
 			Cursor=Cursors.Default;
-			MessageBox.Show("Sent");			
 		}
 
 		private void butShowXhtml_Click(object sender,EventArgs e) {
