@@ -548,9 +548,11 @@ namespace OpenDental{
 			if(FormME.DialogResult!=DialogResult.OK){
 				return;
 			}
+			MedicationPatCur.RxCui=FormME.MedicationCur.RxCui;
 			textMedName.Text=Medications.GetMedication(MedicationPatCur.MedicationNum).MedName;//The edit button is not visible if MedicationNum=0.
 			textGenericName.Text=Medications.GetGeneric(MedicationPatCur.MedicationNum).MedName;//The edit button is not visible if MedicationNum=0.
 			textMedNote.Text=Medications.GetGeneric(MedicationPatCur.MedicationNum).Notes;//The edit button is not visible if MedicationNum=0.
+			textRxNormDesc.Text=RxNorms.GetDescByRxCui(MedicationPatCur.RxCui.ToString());
 		}
 
 		private void butRemove_Click(object sender, System.EventArgs e) {
