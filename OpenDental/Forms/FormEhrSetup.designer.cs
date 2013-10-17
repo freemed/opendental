@@ -61,14 +61,11 @@ namespace OpenDental{
 			// 
 			// groupCodeSystems
 			// 
-			this.groupCodeSystems.Controls.Add(this.button1);
-			this.groupCodeSystems.Controls.Add(this.butLoincs);
 			this.groupCodeSystems.Controls.Add(this.butRxNorm);
-			this.groupCodeSystems.Controls.Add(this.butSnomeds);
 			this.groupCodeSystems.Controls.Add(this.butICD9s);
 			this.groupCodeSystems.Location = new System.Drawing.Point(202, 0);
 			this.groupCodeSystems.Name = "groupCodeSystems";
-			this.groupCodeSystems.Size = new System.Drawing.Size(152, 207);
+			this.groupCodeSystems.Size = new System.Drawing.Size(152, 94);
 			this.groupCodeSystems.TabIndex = 136;
 			this.groupCodeSystems.TabStop = false;
 			this.groupCodeSystems.Text = "Code Systems";
@@ -80,11 +77,12 @@ namespace OpenDental{
 			this.button1.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.button1.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.button1.CornerRadius = 4F;
-			this.button1.Location = new System.Drawing.Point(12, 174);
+			this.button1.Location = new System.Drawing.Point(214, 174);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(128, 24);
 			this.button1.TabIndex = 14;
 			this.button1.Text = "Code System Importer";
+			this.button1.Visible = false;
 			this.button1.Click += new System.EventHandler(this.button1_Click);
 			// 
 			// butLoincs
@@ -94,11 +92,12 @@ namespace OpenDental{
 			this.butLoincs.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butLoincs.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butLoincs.CornerRadius = 4F;
-			this.butLoincs.Location = new System.Drawing.Point(12, 98);
+			this.butLoincs.Location = new System.Drawing.Point(214, 98);
 			this.butLoincs.Name = "butLoincs";
 			this.butLoincs.Size = new System.Drawing.Size(128, 24);
 			this.butLoincs.TabIndex = 11;
 			this.butLoincs.Text = "Loincs";
+			this.butLoincs.Visible = false;
 			this.butLoincs.Click += new System.EventHandler(this.butLoincs_Click);
 			// 
 			// butRxNorm
@@ -122,11 +121,12 @@ namespace OpenDental{
 			this.butSnomeds.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butSnomeds.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSnomeds.CornerRadius = 4F;
-			this.butSnomeds.Location = new System.Drawing.Point(12, 136);
+			this.butSnomeds.Location = new System.Drawing.Point(214, 136);
 			this.butSnomeds.Name = "butSnomeds";
 			this.butSnomeds.Size = new System.Drawing.Size(128, 24);
 			this.butSnomeds.TabIndex = 12;
 			this.butSnomeds.Text = "SNOMED CTs";
+			this.butSnomeds.Visible = false;
 			this.butSnomeds.Click += new System.EventHandler(this.butSnomeds_Click);
 			// 
 			// butICD9s
@@ -311,8 +311,11 @@ namespace OpenDental{
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(561, 339);
+			this.Controls.Add(this.button1);
 			this.Controls.Add(this.butTimeSynch);
+			this.Controls.Add(this.butLoincs);
 			this.Controls.Add(this.groupCodeSystems);
+			this.Controls.Add(this.butSnomeds);
 			this.Controls.Add(this.butKeys);
 			this.Controls.Add(this.butEducationalResources);
 			this.Controls.Add(this.butInboundEmail);
