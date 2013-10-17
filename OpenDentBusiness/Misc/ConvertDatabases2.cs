@@ -12084,6 +12084,23 @@ a.PageNotExists:hover {
 				command="UPDATE preference SET ValueString = '13.1.33.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To13_1_38();
+		}
+
+		private static void To13_1_38() {
+			if(FromVersion<new Version("13.1.38.0")) {
+				string command;
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('BillingElectSaveHistory','0')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'BillingElectSaveHistory','0')";
+					Db.NonQ(command);
+				}
+				command="UPDATE preference SET ValueString = '13.1.38.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To13_1_53();
 		}
 
