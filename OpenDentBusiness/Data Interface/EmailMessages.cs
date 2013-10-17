@@ -179,7 +179,13 @@ namespace OpenDentBusiness{
 			Health.Direct.Common.Mail.Message msgUnencrypted=ConvertEmailMessageToMessage(emailMessage,true);
 			Health.Direct.Agent.MessageEnvelope msgEnvelopeUnencrypted=new Health.Direct.Agent.MessageEnvelope(msgUnencrypted);
 			Health.Direct.Agent.OutgoingMessage outMsgUnencrypted=new Health.Direct.Agent.OutgoingMessage(msgEnvelopeUnencrypted);
-			return SendEmailDirect(outMsgUnencrypted,emailAddressFrom);
+			string strErrors=SendEmailDirect(outMsgUnencrypted,emailAddressFrom);
+			EhrMeasureEvent newMeasureEvent=new EhrMeasureEvent();
+			newMeasureEvent.DateTEvent=DateTime.Now;
+			newMeasureEvent.EventType=EhrMeasureEventType.SummaryOfCareProvidedToDr;
+			newMeasureEvent.PatNum=emailMessage.PatNum;
+			EhrMeasureEvents.Insert(newMeasureEvent);
+			return strErrors;
 		}
 
 		///<summary>outMsgDirect must be unencrypted, because this function will encrypt.  Encrypts the message, verifies trust, locates the public encryption key for the To address (if already stored locally), etc.

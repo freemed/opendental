@@ -867,7 +867,7 @@ namespace OpenDental{
 						if(MessageCur.SentOrReceived==EmailSentOrReceived.ReadDirect || MessageCur.SentOrReceived==EmailSentOrReceived.ReceivedDirect) {
 							isReconcile=true;//Do not show reconcile options when user is composing message or when viewing message that was sent. Only allow reconcile if received via Direct.
 						}
-						EHR.FormSummaryOfCare.DisplayCCD(strTextXml,isReconcile);
+						FormEhrSummaryOfCare.DisplayCCD(strTextXml,isReconcile);
 						return;
 					}	
 				}

@@ -385,6 +385,18 @@
     <Compile Include="Forms\FormMapSetup.Designer.cs">
       <DependentUpon>FormMapSetup.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormEhrClinicalSummary.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormEhrClinicalSummary.Designer.cs">
+      <DependentUpon>FormEhrClinicalSummary.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormEhrElectronicCopy.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormEhrElectronicCopy.Designer.cs">
+      <DependentUpon>FormEhrElectronicCopy.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormPopupAudit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -522,6 +534,12 @@
     </Compile>
     <Compile Include="Forms\FormPatListResultsEHR2014.Designer.cs">
       <DependentUpon>FormPatListResultsEHR2014.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormEhrSummaryOfCare.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormEhrSummaryOfCare.Designer.cs">
+      <DependentUpon>FormEhrSummaryOfCare.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormVitalsignEdit2014.cs">
       <SubType>Form</SubType>
@@ -2994,6 +3012,12 @@
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormEhrClinicalSummary.resx">
+      <DependentUpon>FormEhrClinicalSummary.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormEhrElectronicCopy.resx">
+      <DependentUpon>FormEhrElectronicCopy.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormPopupAudit.resx">
       <DependentUpon>FormPopupAudit.cs</DependentUpon>
     </EmbeddedResource>
@@ -3062,6 +3086,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormPatListResultsEHR2014.resx">
       <DependentUpon>FormPatListResultsEHR2014.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormEhrSummaryOfCare.resx">
+      <DependentUpon>FormEhrSummaryOfCare.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormVitalsignEdit2014.resx">
       <DependentUpon>FormVitalsignEdit2014.cs</DependentUpon>

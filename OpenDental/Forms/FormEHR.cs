@@ -205,13 +205,13 @@ namespace OpenDental {
 						FillGridMu();
 						break;
 					case EhrMeasureType.ElectronicCopy:
-						FormElectronicCopy FormE=new FormElectronicCopy();
+						FormEhrElectronicCopy FormE=new FormEhrElectronicCopy();
 						FormE.PatCur=PatCur;
 						FormE.ShowDialog();
 						FillGridMu();
 						break;
 					case EhrMeasureType.ClinicalSummaries:
-						FormClinicalSummary FormCS=new FormClinicalSummary();
+						FormEhrClinicalSummary FormCS=new FormEhrClinicalSummary();
 						FormCS.PatCur=PatCur;
 						FormCS.ShowDialog();
 						FillGridMu();
@@ -231,7 +231,7 @@ namespace OpenDental {
 						//Close();
 						break;
 					case EhrMeasureType.SummaryOfCare:
-						FormSummaryOfCare FormSoC=new FormSummaryOfCare();
+						FormEhrSummaryOfCare FormSoC=new FormEhrSummaryOfCare();
 						FormSoC.PatCur=PatCur;
 						FormSoC.ShowDialog();
 						FillGridMu();
