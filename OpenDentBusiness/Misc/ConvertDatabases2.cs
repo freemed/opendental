@@ -12101,35 +12101,6 @@ a.PageNotExists:hover {
 				command="UPDATE preference SET ValueString = '13.1.38.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
-			To13_1_53();
-		}
-
-		private static void To13_1_53() {
-			if(FromVersion<new Version("13.1.53.0")) {
-				string command;
-				//Get the 1500 claim form primary key. The unique ID is OD9.
-				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="SELECT ClaimFormNum FROM claimform WHERE UniqueID='OD9' LIMIT 1";
-				}
-				else {//oracle doesn't have LIMIT
-					command="SELECT * FROM (SELECT ClaimFormNum FROM claimform WHERE UniqueID='OD9') WHERE RowNum<=1";
-				}
-				DataTable tableClaimFormNum=Db.GetTable(command);
-				if(tableClaimFormNum.Rows.Count>0) {//The claim form should exist, but might not if foreign.
-					long claimFormNum=PIn.Long(Db.GetScalar(command));
-					//Change the form facility address from the pay to address to the treating address.  The pay to address still shows under the billing section of the 1500 claim form.
-					command="UPDATE claimformitem SET FieldName='TreatingDentistAddress' WHERE claimformnum="+POut.Long(claimFormNum)+" AND FieldName='PayToDentistAddress' AND XPos<400";
-					Db.NonQ(command);
-					command="UPDATE claimformitem SET FieldName='TreatingDentistCity' WHERE claimformnum="+POut.Long(claimFormNum)+" AND FieldName='PayToDentistCity' AND XPos<470";
-					Db.NonQ(command);
-					command="UPDATE claimformitem SET FieldName='TreatingDentistST' WHERE claimformnum="+POut.Long(claimFormNum)+" AND FieldName='PayToDentistST' AND XPos<500";
-					Db.NonQ(command);
-					command="UPDATE claimformitem SET FieldName='TreatingDentistZip' WHERE claimformnum="+POut.Long(claimFormNum)+" AND FieldName='PayToDentistZip' AND XPos<520";
-					Db.NonQ(command);
-				}
-				command="UPDATE preference SET ValueString = '13.1.53.0' WHERE PrefName = 'DataBaseVersion'";
-				Db.NonQ(command);
-			}
 			To13_2_1();
 		}
 
