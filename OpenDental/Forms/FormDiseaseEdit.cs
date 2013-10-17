@@ -402,7 +402,7 @@ namespace OpenDental{
 				if(listVitalsAttached.Count>0) {
 					//See if the vitalsign exam date is now outside of the active dates of the disease (pregnancy)
 					string dates="";
-					for(int i=0;i<listVitalsAttached.Count;i++) {
+					for(int i=listVitalsAttached.Count-1;i>-1;i--) {
 						if(listVitalsAttached[i].DateTaken<DiseaseCur.DateStart || (DiseaseCur.DateStop.Year>1880 && listVitalsAttached[i].DateTaken>DiseaseCur.DateStop)) {
 							dates="\r\n"+listVitalsAttached[i].DateTaken.ToShortDateString();
 						}
