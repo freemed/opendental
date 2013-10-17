@@ -221,7 +221,6 @@
 			this.labelTriageCoordinator.Name = "labelTriageCoordinator";
 			this.labelTriageCoordinator.Size = new System.Drawing.Size(617, 41);
 			this.labelTriageCoordinator.TabIndex = 22;
-			this.labelTriageCoordinator.DoubleClick += new System.EventHandler(this.labelTriageCoordinator_DoubleClick);
 			// 
 			// butFullScreen
 			// 
