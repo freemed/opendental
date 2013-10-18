@@ -587,7 +587,7 @@ namespace OpenDentBusiness{
 
 		///<summary>This will wrap the text in p tags as well as handle internal carriage returns.  startsWithCR is only used on the first paragraph for the unusual case where the entire content starts with a CR.  This prevents stripping it off.</summary>
 		private static string ProcessParagraph(string paragraph,bool startsWithCR) {
-			if(paragraph.StartsWith("\r\n") && !startsWithCR){
+			if(paragraph.StartsWith("\r\n") && !startsWithCR) {
 				paragraph=paragraph.Substring(2);
 			}
 			if(paragraph=="") {//this must come after the first CR is stripped off, but before the ending CR is stripped off.
@@ -600,19 +600,11 @@ namespace OpenDentBusiness{
 			if(paragraph.StartsWith(" ") && paragraph.TrimStart(' ').StartsWith("<")) {
 				paragraph="{{nbsp}}"+paragraph.Substring(1);//this will later be converted to &nbsp;
 			}
-			if(paragraph.Contains("<")) {
-				//Replace all <b ~replace all carriage returns~> so that the end result looks like <b>
-				MatchCollection tagMatches=Regex.Matches(paragraph,"<.*?>",RegexOptions.Singleline);
-				for(int i=0;i<tagMatches.Count;i++) {
-					string oldMatch=tagMatches[i].Value;
-					string newMatch=tagMatches[i].Value.Replace("\r\n","");
-					paragraph=paragraph.Replace(oldMatch,newMatch);
-				}
-			}
-			paragraph=paragraph.Replace("\r\n","</p><p>");
-			//spaces at beginnings of lines
-			paragraph=paragraph.Replace("<p> ","<p>{{nbsp}}");
+			paragraph=paragraph.Replace("\r\n","<br/>");//We tried </p><p>, but that didn't allow bold, italic, or color to span lines.
 			paragraph="<p>"+paragraph+"</p>";//surround paragraph with tags
+			paragraph=paragraph.Replace("<p> ","<p>{{nbsp}}");//spaces at the beginnings of paragraphs
+			paragraph=paragraph.Replace("<br/> ","<br/>{{nbsp}}");//spaces at beginnings of lines
+			paragraph=paragraph.Replace("<br/></p>","<br/>{{nbsp}}</p>");//have a cr show if it's at the end of a paragraph
 			return paragraph;
 		}
 
