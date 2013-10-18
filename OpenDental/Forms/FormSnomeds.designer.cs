@@ -28,9 +28,7 @@ namespace OpenDental{
 			this.textCode = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.butSearch = new OpenDental.UI.Button();
-			this.butImport = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
-			this.butCrossMap = new OpenDental.UI.Button();
 			this.butMapICD9 = new OpenDental.UI.Button();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.groupBox1.SuspendLayout();
@@ -99,23 +97,6 @@ namespace OpenDental{
 			this.butSearch.Text = "Search";
 			this.butSearch.Click += new System.EventHandler(this.butSearch_Click);
 			// 
-			// butImport
-			// 
-			this.butImport.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butImport.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.butImport.Autosize = true;
-			this.butImport.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butImport.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butImport.CornerRadius = 4F;
-			this.butImport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butImport.Location = new System.Drawing.Point(6, 19);
-			this.butImport.Name = "butImport";
-			this.butImport.Size = new System.Drawing.Size(103, 24);
-			this.butImport.TabIndex = 16;
-			this.butImport.Text = "&Import";
-			this.butImport.Click += new System.EventHandler(this.butImport_Click);
-			// 
 			// gridMain
 			// 
 			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -132,22 +113,6 @@ namespace OpenDental{
 			this.gridMain.WrapText = false;
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
-			// butCrossMap
-			// 
-			this.butCrossMap.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butCrossMap.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCrossMap.Autosize = true;
-			this.butCrossMap.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCrossMap.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCrossMap.CornerRadius = 4F;
-			this.butCrossMap.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butCrossMap.Location = new System.Drawing.Point(849, 273);
-			this.butCrossMap.Name = "butCrossMap";
-			this.butCrossMap.Size = new System.Drawing.Size(103, 24);
-			this.butCrossMap.TabIndex = 21;
-			this.butCrossMap.Text = "Crossmap";
-			this.butCrossMap.Click += new System.EventHandler(this.butCrossMap_Click);
-			// 
 			// butMapICD9
 			// 
 			this.butMapICD9.AdjustImageLocation = new System.Drawing.Point(0, 0);
@@ -158,7 +123,7 @@ namespace OpenDental{
 			this.butMapICD9.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butMapICD9.CornerRadius = 4F;
 			this.butMapICD9.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butMapICD9.Location = new System.Drawing.Point(6, 49);
+			this.butMapICD9.Location = new System.Drawing.Point(6, 19);
 			this.butMapICD9.Name = "butMapICD9";
 			this.butMapICD9.Size = new System.Drawing.Size(103, 24);
 			this.butMapICD9.TabIndex = 24;
@@ -168,11 +133,10 @@ namespace OpenDental{
 			// groupBox1
 			// 
 			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox1.Controls.Add(this.butImport);
 			this.groupBox1.Controls.Add(this.butMapICD9);
-			this.groupBox1.Location = new System.Drawing.Point(843, 13);
+			this.groupBox1.Location = new System.Drawing.Point(843, 33);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(115, 82);
+			this.groupBox1.Size = new System.Drawing.Size(115, 50);
 			this.groupBox1.TabIndex = 25;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "One-Time Tools";
@@ -183,7 +147,6 @@ namespace OpenDental{
 			this.ClientSize = new System.Drawing.Size(961, 691);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.gridMain);
-			this.Controls.Add(this.butCrossMap);
 			this.Controls.Add(this.butSearch);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.textCode);
@@ -206,9 +169,7 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textCode;
 		private System.Windows.Forms.Label label1;
 		private UI.Button butSearch;
-		private UI.Button butImport;
 		private UI.ODGrid gridMain;
-		private UI.Button butCrossMap;
 		private UI.Button butMapICD9;
 		private System.Windows.Forms.GroupBox groupBox1;
 	}

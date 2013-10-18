@@ -28,7 +28,6 @@ namespace OpenDental{
 			this.checkShowHidden = new System.Windows.Forms.CheckBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.textFind = new System.Windows.Forms.TextBox();
-			this.checkReorderMode = new System.Windows.Forms.CheckBox();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butUp = new OpenDental.UI.Button();
 			this.butDown = new OpenDental.UI.Button();
@@ -85,17 +84,6 @@ namespace OpenDental{
 			this.textFind.TabIndex = 19;
 			this.textFind.TextChanged += new System.EventHandler(this.textFind_TextChanged);
 			// 
-			// checkReorderMode
-			// 
-			this.checkReorderMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.checkReorderMode.Location = new System.Drawing.Point(79, 664);
-			this.checkReorderMode.Name = "checkReorderMode";
-			this.checkReorderMode.Size = new System.Drawing.Size(311, 21);
-			this.checkReorderMode.TabIndex = 30;
-			this.checkReorderMode.Text = "Check this box to begin moving items up and down";
-			this.checkReorderMode.UseVisualStyleBackColor = true;
-			this.checkReorderMode.CheckedChanged += new System.EventHandler(this.checkReorderMode_CheckedChanged);
-			// 
 			// gridMain
 			// 
 			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -125,7 +113,6 @@ namespace OpenDental{
 			this.butUp.Name = "butUp";
 			this.butUp.Size = new System.Drawing.Size(24, 24);
 			this.butUp.TabIndex = 28;
-			this.butUp.Visible = false;
 			this.butUp.Click += new System.EventHandler(this.butUp_Click);
 			// 
 			// butDown
@@ -141,7 +128,6 @@ namespace OpenDental{
 			this.butDown.Name = "butDown";
 			this.butDown.Size = new System.Drawing.Size(24, 24);
 			this.butDown.TabIndex = 29;
-			this.butDown.Visible = false;
 			this.butDown.Click += new System.EventHandler(this.butDown_Click);
 			// 
 			// butOK
@@ -186,7 +172,7 @@ namespace OpenDental{
 			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butPrint.Location = new System.Drawing.Point(452, 661);
 			this.butPrint.Name = "butPrint";
-			this.butPrint.Size = new System.Drawing.Size(80, 26);
+			this.butPrint.Size = new System.Drawing.Size(80, 24);
 			this.butPrint.TabIndex = 25;
 			this.butPrint.Text = "Print";
 			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
@@ -212,7 +198,6 @@ namespace OpenDental{
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(771, 696);
 			this.Controls.Add(this.textFind);
-			this.Controls.Add(this.checkReorderMode);
 			this.Controls.Add(this.butUp);
 			this.Controls.Add(this.butDown);
 			this.Controls.Add(this.butOK);
@@ -247,6 +232,5 @@ namespace OpenDental{
 		private UI.Button butCancel;
 		private UI.Button butUp;
 		private UI.Button butDown;
-		private System.Windows.Forms.CheckBox checkReorderMode;
 	}
 }

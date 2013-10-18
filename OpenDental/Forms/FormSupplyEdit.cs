@@ -13,6 +13,7 @@ namespace OpenDental {
 		public List<Supplier> ListSupplier;
 		private bool isHiddenInitialVal;
 		private long categoryInitialVal;
+		private Supply SuppOriginal;
 
 		public FormSupplyEdit() {
 			InitializeComponent();
@@ -21,6 +22,7 @@ namespace OpenDental {
 
 		private void FormSupplyEdit_Load(object sender,EventArgs e) {
 			textSupplier.Text=Suppliers.GetName(ListSupplier,Supp.SupplierNum);
+			SuppOriginal=Supp.Copy();
 			for(int i=0;i<DefC.Short[(int)DefCat.SupplyCats].Length;i++){
 				comboCategory.Items.Add(DefC.Short[(int)DefCat.SupplyCats][i].ItemName);
 				if(Supp.Category==DefC.Short[(int)DefCat.SupplyCats][i].DefNum){
@@ -57,6 +59,7 @@ namespace OpenDental {
 				MessageBox.Show(ex.Message);
 				return;
 			}
+			Supp=null;
 			DialogResult=DialogResult.OK;
 		}
 
@@ -77,23 +80,14 @@ namespace OpenDental {
 			Supp.LevelDesired=PIn.Float(textLevelDesired.Text);
 			Supp.Price=PIn.Double(textPrice.Text);
 			Supp.IsHidden=checkIsHidden.Checked;
-			if(Supp.IsHidden!=isHiddenInitialVal) {
-				if(Supp.IsHidden) {
-					Supp.ItemOrder=0;
-				}
-				else {
-					Supp.ItemOrder=Supplies.GetLastItemOrder(Supp.SupplierNum,Supp.Category)+1;
-				}
+			if(Supp.Category!=categoryInitialVal) {
+				Supp.ItemOrder=int.MaxValue;//changed categories, new or existing, move to bottom of new category.
 			}
 			if(Supp.IsNew) {
-				Supplies.Insert(Supp);
+				Supp=Supplies.GetSupply(Supplies.Insert(Supp,Supp.ItemOrder));//insert Supp and update with PK and item order from DB.
 			}
 			else {
-				Supplies.Update(Supp);
-			}
-			if(Supp.IsHidden != isHiddenInitialVal || Supp.Category != categoryInitialVal){
-				List<Supply> listSupply=Supplies.CreateObjects(false,Supp.SupplierNum,"");
-				Supplies.CleanupItemOrders(listSupply);
+				Supplies.Update(SuppOriginal,Supp);
 			}
 			DialogResult=DialogResult.OK;
 		}

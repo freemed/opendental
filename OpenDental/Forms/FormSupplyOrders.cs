@@ -27,11 +27,13 @@ namespace OpenDental {
 		}
 
 		private void FormSupplyOrders_Load(object sender,EventArgs e) {
+			Height=SystemInformation.WorkingArea.Height;//max height
+			Location=new Point(Location.X,0);//move to top of screen
 			ListSuppliers = Suppliers.CreateObjects();
 			ListOrdersAll = SupplyOrders.GetAll();
 			ListOrders = new List<SupplyOrder>();
 			FillComboSupplier();
-			FillGridOrder();
+			FillGridOrders();
 		}
 
 		private void FillComboSupplier() {
@@ -45,7 +47,7 @@ namespace OpenDental {
 		}
 
 		private void comboSupplier_SelectedIndexChanged(object sender,EventArgs e) {
-			FillGridOrder();
+			FillGridOrders();
 			FillGridOrderItem();
 		}
 
@@ -62,7 +64,7 @@ namespace OpenDental {
 				return;
 			}
 			ListOrdersAll = SupplyOrders.GetAll();
-			FillGridOrder();
+			FillGridOrders();
 			FillGridOrderItem();
 		}
 
@@ -78,29 +80,43 @@ namespace OpenDental {
 			if(FormSup.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			for(int i=0;i<tableOrderItems.Rows.Count;i++) {
-				if((long)tableOrderItems.Rows[i]["SupplyNum"]==FormSup.SelectedSupply.SupplyNum) {
-					MsgBox.Show(this,"Selected item already exists in currently selected order. Please edit quantity instead.");
-					return;
+			
+			for(int i=0;i<FormSup.ListSelectedSupplies.Count;i++) {
+				//check for existing----			
+				if(itemExistsHelper(FormSup.ListSelectedSupplies[i])) {
+					//MsgBox.Show(this,"Selected item already exists in currently selected order. Please edit quantity instead.");
+					continue;
 				}
+				SupplyOrderItem orderitem = new SupplyOrderItem();
+				orderitem.SupplyNum = FormSup.ListSelectedSupplies[i].SupplyNum;
+				orderitem.Qty=1;
+				orderitem.Price = FormSup.ListSelectedSupplies[i].Price;
+				orderitem.SupplyOrderNum = ListOrders[gridOrders.GetSelectedIndex()].SupplyOrderNum;
+				//soi.SupplyOrderItemNum
+				SupplyOrderItems.Insert(orderitem);
 			}
-			SupplyOrderItem orderitem = new SupplyOrderItem();
-			orderitem.SupplyNum = FormSup.SelectedSupply.SupplyNum;
-			orderitem.Qty=0;
-			orderitem.Price = FormSup.SelectedSupply.Price;
-			orderitem.SupplyOrderNum = ListOrders[gridOrders.GetSelectedIndex()].SupplyOrderNum;
-			//soi.SupplyOrderItemNum
-			SupplyOrderItems.Insert(orderitem);
 			FillGridOrderItem();
 		}
 
-		private void FillGridOrder() {
+		///<summary>Returns true if item exists in supply order.</summary>
+		private bool itemExistsHelper(Supply supply) {
+			for(int i=0;i<tableOrderItems.Rows.Count;i++) {
+				if((long)tableOrderItems.Rows[i]["SupplyNum"]==supply.SupplyNum) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		private void FillGridOrders() {
 			FilterListOrder();
 			gridOrders.BeginUpdate();
 			gridOrders.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g(this,"Date Placed"),80);
 			gridOrders.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Amount"),70,HorizontalAlignment.Right);
+			gridOrders.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"Supplier"),120);
 			gridOrders.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Note"),200);
 			gridOrders.Columns.Add(col);
@@ -115,6 +131,7 @@ namespace OpenDental {
 					row.Cells.Add(ListOrders[i].DatePlaced.ToShortDateString());
 				}
 				row.Cells.Add(ListOrders[i].AmountTotal.ToString("c"));
+				row.Cells.Add(Suppliers.GetName(ListSuppliers,ListOrders[i].SupplierNum));
 				row.Cells.Add(ListOrders[i].Note);
 				gridOrders.Rows.Add(row);
 			}
@@ -149,15 +166,19 @@ namespace OpenDental {
 			tableOrderItems=SupplyOrderItems.GetItemsForOrder(orderNum);
 			gridItems.BeginUpdate();
 			gridItems.Columns.Clear();
+			//ODGridColumn col=new ODGridColumn(Lan.g(this,"Supplier"),120);
+			//gridItems.Columns.Add(col);
 			ODGridColumn col=new ODGridColumn(Lan.g(this,"Catalog #"),80);
 			gridItems.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Description"),320);
 			gridItems.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Qty"),60,HorizontalAlignment.Center);
+			col.IsEditable=true;
 			gridItems.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Price/Unit"),70,HorizontalAlignment.Right);
+			col.IsEditable=true;
 			gridItems.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Subtotal"),70,HorizontalAlignment.Center);
+			col=new ODGridColumn(Lan.g(this,"Subtotal"),70,HorizontalAlignment.Right);
 			gridItems.Columns.Add(col);
 			gridItems.Rows.Clear();
 			ODGridRow row;
@@ -168,6 +189,12 @@ namespace OpenDental {
 			bool autocalcTotal=true;
 			for(int i=0;i<tableOrderItems.Rows.Count;i++) {
 				row=new ODGridRow();
+				//if(gridOrders.GetSelectedIndex()==-1){
+				//	row.Cells.Add("");
+				//}
+				//else{
+				//	row.Cells.Add(Suppliers.GetName(ListSuppliers,ListOrders[gridOrders.GetSelectedIndex()].SupplierNum));
+				//}
 				row.Cells.Add(tableOrderItems.Rows[i]["CatalogNumber"].ToString());
 				row.Cells.Add(tableOrderItems.Rows[i]["Descript"].ToString());
 				qty=PIn.Int(tableOrderItems.Rows[i]["Qty"].ToString());
@@ -190,7 +217,7 @@ namespace OpenDental {
 				SupplyOrder order=ListOrders[gridOrders.GetSelectedIndex()].Copy();
 				order.AmountTotal=total;
 				SupplyOrders.Update(order);
-				FillGridOrder();
+				FillGridOrders();
 				for(int i=0;i<ListOrders.Count;i++) {
 					if(ListOrders[i].SupplyOrderNum==order.SupplyOrderNum) {
 						gridOrders.SetSelected(i,true);
@@ -210,9 +237,31 @@ namespace OpenDental {
 			SupplyOrderItems.Update(FormSOIE.ItemCur);
 			ListOrdersAll = SupplyOrders.GetAll();//force refresh because total might have changed.
 			int gridSelect = gridOrders.SelectedIndices[0];
-			FillGridOrder();
+			FillGridOrders();
 			gridOrders.SetSelected(gridSelect,true);
 			FillGridOrderItem();
+		}
+
+		///<summary>Used to update subtotal when qty or price are edited.</summary>
+		private void calculateSubtotalHelper() {
+			try {
+				gridItems.Rows[gridItems.SelectedCell.Y].ColorBackG=Color.White;
+				if(gridItems.SelectedCell.X==2) {//Qty
+					int qty=Int32.Parse(gridItems.Rows[gridItems.SelectedCell.Y].Cells[gridItems.SelectedCell.X].Text);
+					gridItems.Rows[gridItems.SelectedCell.Y].Cells[4].Text=(qty*PIn.Double(gridItems.Rows[gridItems.SelectedCell.Y].Cells[3].Text)).ToString("n");
+				}
+				if(gridItems.SelectedCell.X==3) {//Price
+					double price=Double.Parse(gridItems.Rows[gridItems.SelectedCell.Y].Cells[gridItems.SelectedCell.X].Text);
+					gridItems.Rows[gridItems.SelectedCell.Y].Cells[4].Text=(price*PIn.Int(gridItems.Rows[gridItems.SelectedCell.Y].Cells[2].Text)).ToString("n");
+				}
+				Application.DoEvents();
+				//save changes to order item on cell leave
+			}
+			catch(Exception ex) {
+				//problem calculating or parsing amount.
+				gridItems.Rows[gridItems.SelectedCell.Y].ColorBackG=Color.LightPink;
+				gridItems.Rows[gridItems.SelectedCell.Y].Cells[4].Text=0.ToString("n");
+			}
 		}
 
 		private void butNewOrder_Click(object sender,EventArgs e) {
@@ -238,7 +287,7 @@ namespace OpenDental {
 			order.Note="";
 			SupplyOrders.Insert(order);
 			ListOrdersAll=SupplyOrders.GetAll();//Refresh the list all.
-			FillGridOrder();
+			FillGridOrders();
 			gridOrders.SetSelected(ListOrders.Count-1,true);
 		}
 
@@ -317,13 +366,90 @@ namespace OpenDental {
 			g.Dispose();
 		}
 
+		///<summary>Save changes to orderItems based on input in grid.</summary>
+		//private bool saveChangesHelper() {
+		//	if(gridItems.Rows.Count==0) {
+		//		return true;
+		//	}
+		//	//validate ------------------------------------------------------------------------
+		//	for(int i=0;i<gridItems.Rows.Count;i++) {
+		//		int qtyThisRow=0;
+		//		double priceThisRow=0;
+		//		if(gridItems.Rows[i].Cells[2].Text!=""){
+		//			try{
+		//					qtyThisRow=Int32.Parse(gridItems.Rows[i].Cells[2].Text);
+		//			}
+		//			catch{
+		//				MsgBox.Show(this,"Please fix errors in Qty column first.");
+		//				return false;
+		//			}
+		//		}
+		//		if(gridItems.Rows[i].Cells[3].Text!=""){
+		//			try{
+		//					priceThisRow=double.Parse(gridItems.Rows[i].Cells[3].Text);
+		//			}
+		//			catch{
+		//				MsgBox.Show(this,"Please fix errors in Price column first.");
+		//				return false;
+		//			}
+		//		}
+		//	}
+		//	//Save changes---------------------------------------------------------------------------
+		//	//List<SupplyOrderItem> listOrderItems=OpenDentBusiness.Crud.SupplyOrderItemCrud.TableToList(tableOrderItems);//turn table into list of supplyOrderItem objects
+		//	for(int i=0;i<gridItems.Rows.Count;i++) {
+		//		int qtyThisRow=PIn.Int(gridItems.Rows[i].Cells[2].Text);//already validated
+		//		double priceThisRow=PIn.Double(gridItems.Rows[i].Cells[3].Text);//already validated
+		//		if(qtyThisRow==PIn.Int(tableOrderItems.Rows[i]["Qty"].ToString())
+		//			&& priceThisRow==PIn.Double(tableOrderItems.Rows[i]["Price"].ToString()))
+		//		{
+		//			continue;//no changes to order item.
+		//		}
+		//		SupplyOrderItem soi=new SupplyOrderItem();
+		//		soi.SupplyNum=PIn.Long(tableOrderItems.Rows[i]["SupplyNum"].ToString());
+		//		soi.SupplyOrderItemNum=PIn.Long(tableOrderItems.Rows[i]["SupplyOrderItemNum"].ToString());
+		//		soi.SupplyOrderNum=ListOrders[gridOrders.GetSelectedIndex()].SupplyOrderNum;
+		//		soi.Qty=qtyThisRow;
+		//		soi.Price=priceThisRow;
+		//		SupplyOrderItems.Update(soi);
+		//	}//end gridItems
+		//	SupplyOrders.UpdateOrderPrice(ListOrders[gridOrders.GetSelectedIndex()].SupplyOrderNum);
+		//	int selectedIndex=gridOrders.GetSelectedIndex();
+		//	ListOrdersAll = SupplyOrders.GetAll();//update new totals
+		//	FillGridOrders();
+		//	if(selectedIndex!=-1) {
+		//		gridOrders.SetSelected(selectedIndex,true);
+		//	}
+		//	return true;
+		//}
+
+		private void gridItems_CellLeave(object sender,ODGridClickEventArgs e) {
+			//no need to check which cell was edited, just reprocess both cells
+			int qtyNew=PIn.Int(gridItems.Rows[e.Row].Cells[2].Text);//0 if not valid input
+			double priceNew=PIn.Double(gridItems.Rows[e.Row].Cells[3].Text);//0 if not valid input
+			SupplyOrderItem suppOI=SupplyOrderItems.CreateObject(PIn.Long(tableOrderItems.Rows[e.Row]["SupplyOrderItemNum"].ToString()));
+			suppOI.Qty=qtyNew;
+			suppOI.Price=priceNew;
+			SupplyOrderItems.Update(suppOI);
+			SupplyOrders.UpdateOrderPrice(suppOI.SupplyOrderNum);
+			gridItems.Rows[e.Row].Cells[2].Text=qtyNew.ToString();//to standardize formatting.  They probably didn't type .00
+			gridItems.Rows[e.Row].Cells[3].Text=priceNew.ToString("n");//to standardize formatting.  They probably didn't type .00
+			gridItems.Rows[e.Row].Cells[4].Text=(qtyNew*priceNew).ToString("n");//to standardize formatting.  They probably didn't type .00
+			gridItems.Invalidate();
+			int si=gridOrders.GetSelectedIndex();
+			ListOrdersAll=SupplyOrders.GetAll();
+			FillGridOrders();
+			gridOrders.SetSelected(si,true);
+		}
+
 		private void butOK_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.OK;
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {
+			//maybe rename to close, since most saving happens automatically.
 			DialogResult=DialogResult.Cancel;
 		}
+
 
 	}
 }

@@ -12,18 +12,22 @@ using System.Drawing.Printing;
 
 namespace OpenDental {
 	public partial class FormSupplies:Form {
+		/////<summary>Used to cache all supply items from DB, this list is compaired to ListSupplyAll to determine which elements have changed and need to be updated.</summary>
+		//private List<Supply> ListSupplyAllCache = new List<Supply>();
+		///<summary>Used to cache all supply items from DB and then altered.</summary>
+		private List<Supply> ListSupplyAll = new List<Supply>();
 		///<summary>Used to populate the grid. Filtered version of ListSupplyAll.</summary>
 		private List<Supply> ListSupply = new List<Supply>();
-		///<summary>Used to cache all supply items, to reduce load on server.</summary>
-		private List<Supply> ListSupplyAll = new List<Supply>();
 		///<summary>Used to cach list of all suppliers.</summary>
 		public List<Supplier> ListSupplier;
 		///<Summary>Sets the supplier that will first show when opening this window.</Summary>
 		public long SelectedSupplierNum;
 		///<summary>Used for selecting supply items to add to orders.</summary>
 		public bool IsSelectMode;
-		///<summary>Selected supply item. Intended to be used to add to an order.</summary>
+		///<summary>Possible deprecated with the addition of ListSelectedSupplies.  Selected supply item. Intended to be used to add to an order.</summary>
 		public Supply SelectedSupply;
+		///<summary>Selected supply items. Intended to be used to add to an order.</summary>
+		public List<Supply> ListSelectedSupplies = new List<Supply>();
 		///<summary>Used to cache the selected SupplyNums of the items in the main grid, to reselect them after a refresh.</summary>
 		private List<long> SelectedGridItems=new List<long>();
 		//Variables used for printing are copied and pasted here
@@ -38,15 +42,15 @@ namespace OpenDental {
 		}
 
 		private void FormSupplies_Load(object sender,EventArgs e) {
+			Height=SystemInformation.WorkingArea.Height;//max height
+			Location=new Point(Location.X,0);//move to top of screen
 			ListSupplier=Suppliers.CreateObjects();
-			ListSupplyAll=Supplies.GetAll();
+			ListSupplyAll=Supplies.GetAll();//Seperate GetAll() function call so that we do not copy by reference.
 			fillComboSupplier();
 			FillGrid();
 			if(IsSelectMode) {
 				comboSupplier.Enabled=false;
-				checkReorderMode.Enabled=false;
-				checkReorderMode.Visible=false;
-				gridMain.SelectionMode=GridSelectionMode.One;
+				//gridMain.SelectionMode=GridSelectionMode.One;//we now support multi select to add
 			}
 		}
 
@@ -137,20 +141,24 @@ namespace OpenDental {
 			Supply supp=new Supply();
 			supp.IsNew=true;
 			supp.SupplierNum=ListSupplier[comboSupplier.SelectedIndex-1].SupplierNum;//Selected index -1 to account for ALL being at the top of the list.
+			if(gridMain.GetSelectedIndex()>-1){
+				supp.Category=ListSupply[gridMain.GetSelectedIndex()].Category;
+				supp.ItemOrder=ListSupply[gridMain.GetSelectedIndex()].ItemOrder;
+			}
 			FormSupplyEdit FormS=new FormSupplyEdit();
 			FormS.Supp=supp;
 			FormS.ListSupplier=ListSupplier;
-			FormS.ShowDialog();
+			FormS.ShowDialog();//inserts supply in DB if needed.  Item order will be at selected index or end of category.
 			if(FormS.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			ListSupplyAll=Supplies.GetAll();//refresh supply list because something changed.
-			long selected=FormS.Supp.SupplyNum;
-			int scroll=gridMain.ScrollValue;
+			//update listSupplyAll to reflect changes made to DB.
+			ListSupplyAll=Supplies.GetAll();
+			//int scroll=gridMain.ScrollValue;
 			SelectedGridItems.Clear();
 			SelectedGridItems.Add(FormS.Supp.SupplyNum);
 			FillGrid();
-			gridMain.ScrollValue=scroll;
+			//gridMain.ScrollValue=scroll;
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
@@ -163,6 +171,7 @@ namespace OpenDental {
 				DialogResult = DialogResult.OK;
 				return;
 			}
+			//Supply supplyCached=Supplies.GetSupply((long)gridMain.Rows[e.Row].Tag);
 			FormSupplyEdit FormS=new FormSupplyEdit();
 			FormS.Supp=Supplies.GetSupply((long)gridMain.Rows[e.Row].Tag);//works with sorting
 			FormS.ListSupplier=ListSupplier;
@@ -170,27 +179,13 @@ namespace OpenDental {
 			if(FormS.DialogResult!=DialogResult.OK) {
 				return;	
 			}
-			ListSupplyAll=Supplies.GetAll();//refresh the master list because the supplies changed.
-			long selected=(long)gridMain.Rows[e.Row].Tag;
+			ListSupplyAll=Supplies.GetAll();
 			int scroll=gridMain.ScrollValue;
 			FillGrid();
 			gridMain.ScrollValue=scroll;
-			for(int i=0;i<ListSupply.Count;i++){
-				if(ListSupply[i].SupplyNum==selected){
-					gridMain.SetSelected(i,true);
-				}
-			}
 		}
 
 		private void comboSupplier_SelectionChangeCommitted(object sender,EventArgs e) {
-			if(comboSupplier.SelectedIndex>0) {//supplier selected
-				butUp.Enabled=false;
-				butDown.Enabled=false;
-			}
-			else {//either no supplier or "All" supplier selected
-				butUp.Enabled=true;
-				butDown.Enabled=true;
-			}
 			SelectedGridItems.Clear();
 			foreach(int index in gridMain.SelectedIndices) {
 				SelectedGridItems.Add(ListSupply[index].SupplyNum);
@@ -207,13 +202,6 @@ namespace OpenDental {
 		}
 
 		private void butUp_Click(object sender,EventArgs e) {
-			//Selected items are in different categories
-			foreach(int i in gridMain.SelectedIndices) {
-				if(ListSupply[i].Category!=ListSupply[gridMain.SelectedIndices[0]].Category) {
-					MsgBox.Show(this,"You may only move items that are in the same category.");
-					return;
-				}
-			}
 			//Nothing Selected
 			if(gridMain.SelectedIndices.Length==0) {
 				return;
@@ -223,49 +211,45 @@ namespace OpenDental {
 			foreach(int index in gridMain.SelectedIndices) {
 				SelectedGridItems.Add(ListSupply[index].SupplyNum);
 			}
-			if(Supplies.CleanupItemOrders(ListSupply)) {
+			if(Supplies.CleanupItemOrders(ListSupplyAll)) {//should only have to run once more... after code updates to supply window.
 				MsgBox.Show(this,"There was a problem with sorting, but it has been fixed.  You may now try again.");
 				FillGrid();
 				return;
 			}
-			//Selected items already at top of list or category
-			foreach(int i in gridMain.SelectedIndices) {
-				if(i==0) {
-					//MsgBox.Show(this,"Selection is already at the top of the list.");
-					return;
-				}
-				if(ListSupply[i].ItemOrder==0) {//last element in category
-					//MsgBox.Show(this,"Selection is already at the top of the category.");
-					return;
-				}
-			}
-			//Begin shifting elements
-			int scrollVal=gridMain.ScrollValue;
-			//change all the appropriate itemorders from the top down.
+			//loop through selected indicies, moving each one as needed, no saves to the database until after all items are moved.
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
-				ListSupply[gridMain.SelectedIndices[i]].ItemOrder--;
-				ListSupply[gridMain.SelectedIndices[i]-1].ItemOrder++;
-				Supplies.Update(ListSupply[gridMain.SelectedIndices[i]]);
-				Supplies.Update(ListSupply[gridMain.SelectedIndices[i]-1]);
-				ListSupply.Sort(sortSupplyListByCategoryOrderThenItemOrder);//keep working supply list order matching correct order.
+				int index=gridMain.SelectedIndices[i];//to reduce confusion
+				int itemOrder=ListSupply[index].ItemOrder;//to reduce confusion
+				//Top of category---------------------------------------------------------------------------------------
+				if(itemOrder==0) {
+					continue;//already top of category
+				}
+				//Top of visible category but not actually top of category----------------------------------------------
+				if(index==0 //topmost item in visible list
+					|| ListSupply[index].Category!=ListSupply[index-1].Category) //topmost item in category in visible list
+				{
+					moveItemOrderHelper(ListSupply[index],0);//move item to top of respective category.
+					continue;
+				}
+				//Item is directly below a selected item in same category-----------------------------------------------
+				if(indexIsSelectedHelper(index-1)) {//check for same category is performed above
+					moveItemOrderHelper(ListSupply[index],ListSupply[index-1].ItemOrder+1);//move this item after the item above it, because both are selected.
+					continue;
+				}
+				//Item is directly below a non-selected item in same category-------------------------------------------
+				//check for same category is performed above.
+				moveItemOrderHelper(ListSupply[index],ListSupply[index-1].ItemOrder);
 			}
-			//keep the master supply list up to date
-			ListSupplyAll=Supplies.GetAll();
+			saveChangesToDBHelper();
+			ListSupplyAll.Sort(sortSupplyListByCategoryOrderThenItemOrder);
+			int scrollVal=gridMain.ScrollValue;
 			FillGrid();
 			gridMain.ScrollValue=scrollVal;
 		}
 
 		private void butDown_Click(object sender,EventArgs e) {
-			//Selected items are in different categories
-			foreach(int i in gridMain.SelectedIndices) {
-				if(ListSupply[i].Category!=ListSupply[gridMain.SelectedIndices[0]].Category) {
-					MsgBox.Show(this,"You may only move items that are in the same category.");
-					return;
-				}
-			}
 			//Nothing Selected
 			if(gridMain.SelectedIndices.Length==0) {
-				MsgBox.Show(this,"Please select an item first.");
 				return;
 			}
 			//remember selected SupplyNums for later
@@ -273,37 +257,106 @@ namespace OpenDental {
 			foreach(int index in gridMain.SelectedIndices) {
 				SelectedGridItems.Add(ListSupply[index].SupplyNum);
 			}
-			if(Supplies.CleanupItemOrders(ListSupply)) {
+			if(Supplies.CleanupItemOrders(ListSupplyAll)) {//should only have to run once more... after code updates to supply window.
 				MsgBox.Show(this,"There was a problem with sorting, but it has been fixed.  You may now try again.");
 				FillGrid();
 				return;
 			}
-			//Selected items already at bottom of list or category
-			foreach(int i in gridMain.SelectedIndices) {
-				if(i==ListSupply.Count-1) {
-					//MsgBox.Show(this,"Selection is already at the bottom of the list.");
-					return;
+			for(int i=gridMain.SelectedIndices.Length-1;i>=0;i--) {
+				int index=gridMain.SelectedIndices[i];//to reduce confusion
+				int itemOrder=ListSupply[index].ItemOrder;//to reduce confusion
+				//Bottom----------------------------------------------
+				if(index==ListSupply.Count-1 //bottommost item in visible list
+					|| ListSupply[index].Category!=ListSupply[index+1].Category) //bottommost item in category in visible list
+				{
+					//end of list or category already.
+					continue;
 				}
-				if(ListSupply[i+1].Category!=ListSupply[i].Category) {//last element in category
-					//MsgBox.Show(this,"Selection is already at the bottom of the category.");
-					return;
+				//Item is directly above a selected item in same category-----------------------------------------------
+				if(indexIsSelectedHelper(index+1)) {//check for same category is performed above
+					moveItemOrderHelper(ListSupply[index],ListSupply[index+1].ItemOrder-1);//move this item after the item above it, because both are selected.
+					continue;
 				}
+				//Item is directly below a non-selected item in same category-------------------------------------------
+				//check for same category is performed above.
+				moveItemOrderHelper(ListSupply[index],ListSupply[index+1].ItemOrder);
 			}
-			//Begin shifting elements
+			saveChangesToDBHelper();
+			ListSupplyAll.Sort(sortSupplyListByCategoryOrderThenItemOrder);
 			int scrollVal=gridMain.ScrollValue;
-			//change all the appropriate itemorders from the bottom up
-			for(int i=gridMain.SelectedIndices.Length;i>0;i--) {//backwards to go from the bottum up.
-				ListSupply[gridMain.SelectedIndices[i-1]].ItemOrder++;
-				ListSupply[gridMain.SelectedIndices[i-1]+1].ItemOrder--;
-				Supplies.Update(ListSupply[gridMain.SelectedIndices[i-1]]);
-				Supplies.Update(ListSupply[gridMain.SelectedIndices[i-1]+1]);
-				ListSupply.Sort(sortSupplyListByCategoryOrderThenItemOrder);//keep working supply list order matching correct order.
-			}
-			//keep the master supply list up to date
-			ListSupplyAll=Supplies.GetAll();
 			FillGrid();
 			gridMain.ScrollValue=scrollVal;
+		}
 
+		///<summary>Updates database based on the values in ListSupplyAll.</summary>
+		private void saveChangesToDBHelper() {
+			//Get all supplies from DB to check for changes.-----------------------------------------------------------------
+			List<Supply> ListSupplyAllDB=Supplies.GetAll();
+			//Itterate through current supply list in memory-----------------------------------------------------------------
+			for(int i=0;i<ListSupplyAll.Count;i++) {
+				//find DB version of supply to pass to UpdateOrInsertIfNeeded
+				Supply supplyOriginal=null;
+				for(int j=0;j<ListSupplyAllDB.Count;j++) {
+					if(ListSupplyAll[i].SupplyNum!=ListSupplyAllDB[j].SupplyNum) {
+						continue;//not the correct supply
+					}
+					supplyOriginal=ListSupplyAllDB[j];
+					break;//found match
+				}
+				Supplies.UpdateOrInsertIfNeeded(supplyOriginal,ListSupplyAll[i]);//accepts null for original.
+			}
+			//Update inmemory list to reflect changes.
+			ListSupplyAll=Supplies.GetAll();
+		}
+
+		private bool indexIsSelectedHelper(int index) {
+			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
+				if(gridMain.SelectedIndices[i]==index) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		///<summary>Sets item orders appropriately. Does not reorder list, and does not repaint/refill grid.</summary>
+		private void moveItemOrderHelper(Supply supply,int newItemOrder) {
+			if(supply.ItemOrder>newItemOrder) {//moving item up, itterate down through list
+				for(int i=0;i<ListSupplyAll.Count;i++) {
+					if(ListSupplyAll[i].Category!=supply.Category) {
+						continue;//wrong category
+					}
+					if(ListSupplyAll[i].SupplyNum==supply.SupplyNum) {
+						ListSupplyAll[i].ItemOrder=newItemOrder;//set item order of this supply.
+						continue;
+					}
+					if(ListSupplyAll[i].ItemOrder>=newItemOrder && ListSupplyAll[i].ItemOrder<supply.ItemOrder) {//all items between newItemOrder and oldItemOrder
+						ListSupplyAll[i].ItemOrder++;
+					}
+				}
+			}
+			else {//moving item down, itterate up through list
+				for(int i=ListSupplyAll.Count-1;i>=0;i--) {
+					if(ListSupplyAll[i].Category!=supply.Category) {
+						continue;//wrong category
+					}
+					if(ListSupplyAll[i].SupplyNum==supply.SupplyNum) {
+						ListSupplyAll[i].ItemOrder=newItemOrder;//set item order of this supply.
+						continue;
+					}
+					if(ListSupplyAll[i].ItemOrder<=newItemOrder && ListSupplyAll[i].ItemOrder>supply.ItemOrder) {//all items between newItemOrder and oldItemOrder
+						ListSupplyAll[i].ItemOrder--;
+					}
+				}
+			}
+			//ListSupplyAll has correct itemOrder values, which we need to copy to listSupply without changing the actual order of ListSupply.
+			for(int i=0;i<ListSupply.Count;i++){
+				for(int j=0;j<ListSupplyAll.Count;j++) {
+					if(ListSupply[i].SupplyNum!=ListSupplyAll[j].SupplyNum) {
+						continue;
+					}
+					ListSupply[i]=ListSupplyAll[j];//update order and category.
+				}
+			}
 		}
 		
 		private void textFind_TextChanged(object sender,EventArgs e) {
@@ -313,14 +366,14 @@ namespace OpenDental {
 				return;
 			}
 			textFind.BackColor=SystemColors.Window;
-			if(textFind.Text!="" || IsSelectMode) {
-				butUp.Enabled=false;
-				butDown.Enabled=false;
-			}
-			else {
-				butUp.Enabled=true;
-				butDown.Enabled=true;
-			}
+			//if(textFind.Text!="" || IsSelectMode) {
+			//	butUp.Enabled=false;
+			//	butDown.Enabled=false;
+			//}
+			//else {
+			//	butUp.Enabled=true;
+			//	butDown.Enabled=true;
+			//}
 			SelectedGridItems.Clear();
 			foreach(int index in gridMain.SelectedIndices) {
 				SelectedGridItems.Add(ListSupply[index].SupplyNum);
@@ -333,7 +386,7 @@ namespace OpenDental {
 			ListSupply.Clear();
 			ListSupplyAll.Sort(sortSupplyListByCategoryOrderThenItemOrder);
 			long supplier=0;
-			if(SelectedSupplierNum!=0) {//Use supplier nume if it is provided, usually when IsSelectMode is also true
+			if(SelectedSupplierNum!=0) {//Use supplier num if it is provided, usually when IsSelectMode is also true
 				supplier = SelectedSupplierNum;
 			}
 			else if(comboSupplier.SelectedIndex < 1) {//this includes selecting All or not having anything selected.
@@ -343,15 +396,11 @@ namespace OpenDental {
 				supplier=ListSupplier[comboSupplier.SelectedIndex-1].SupplierNum;//SelectedIndex-1 because All is added before all the other items in the list.
 			}
 			foreach(Supply supply in ListSupplyAll) {
-				if(checkReorderMode.Checked) {//all items are added in sort mode
-					ListSupply.Add(supply);
-					continue;
+				if(!checkShowHidden.Checked && supply.IsHidden) {
+					continue;//skip hidden supplies if show hidden is not checked
 				}
-				if(!checkShowHidden.Checked && supply.IsHidden) {//skip hidden supplies if show hidden is not checked
-					continue;
-				}
-				if(supplier!=0 && supply.SupplierNum!=supplier) {//skip supplies that do not match selected supplier
-					continue;
+				if(supplier!=0 && supply.SupplierNum!=supplier) {
+					continue;//skip supplies that do not match selected supplier
 				}
 				if(textFind.Text=="") {//Start filtering based on findText
 					ListSupply.Add(supply);
@@ -392,40 +441,6 @@ namespace OpenDental {
 				//end of filter, item not added, move to next supply item.
 			}
 			return;
-		}
-
-		private void checkReorderMode_CheckedChanged(object sender,EventArgs e) {
-			SelectedGridItems.Clear();
-			foreach(int index in gridMain.SelectedIndices) {
-				SelectedGridItems.Add(ListSupply[index].SupplyNum);
-			}
-			if(checkReorderMode.Checked) {//Sort Mode
-				butAdd.Enabled=false;
-				butAdd.Visible=false;
-				butUp.Enabled=true;
-				butUp.Visible=true;
-				butDown.Enabled=true;
-				butDown.Visible=true;
-				checkShowHidden.Enabled=false;
-				textFind.Enabled=false;
-				comboSupplier.Enabled=false;
-				butOK.Enabled=false;
-				butPrint.Enabled=false;
-			}
-			else {//Normal Mode
-				butAdd.Enabled=true;
-				butAdd.Visible=true;
-				butUp.Enabled=false;
-				butUp.Visible=false;
-				butDown.Enabled=false;
-				butDown.Visible=false;
-				checkShowHidden.Enabled=true;
-				textFind.Enabled=true;
-				comboSupplier.Enabled=true;
-				butOK.Enabled=true;
-				butPrint.Enabled=true;
-			}
-			FillGrid();
 		}
 
 		///<summary>Used to sort supply list. Returns -1 if sup1 should come before sup2, 0 is they are the same, and 1 is sup2 should come before sup1.</summary>
@@ -556,8 +571,14 @@ namespace OpenDental {
 					MsgBox.Show(this,"Please select a supply from the list first.");
 					return;
 				}
+				ListSelectedSupplies.Clear();//just in case
+				for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
+					ListSelectedSupplies.Add(ListSupply[gridMain.SelectedIndices[i]]);
+				}
 				SelectedSupply = Supplies.GetSupply((long)gridMain.Rows[gridMain.SelectedIndices[0]].Tag);
+				DialogResult=DialogResult.OK;
 			}
+			//saveChangesToDBHelper();//All changes should already be saved to the database
 			DialogResult=DialogResult.OK;
 		}
 
