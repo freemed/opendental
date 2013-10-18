@@ -785,11 +785,12 @@ namespace OpenDental{
 			gridDiseases.BeginUpdate();
 			gridDiseases.Columns.Clear();
 			ODGridColumn col;
-			if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
-				col=new ODGridColumn("",18);//infoButton
-				col.ImageList=imageListInfoButton;
-				gridDiseases.Columns.Add(col);
-			}
+			//hiding for 13.3 release
+			//if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
+			//	col=new ODGridColumn("",18);//infoButton
+			//	col.ImageList=imageListInfoButton;
+			//	gridDiseases.Columns.Add(col);
+			//}
 			col=new ODGridColumn(Lan.g("TableDiseases","Name"),140);//total is about 325
 			gridDiseases.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableDiseases","Patient Note"),145);
@@ -800,9 +801,9 @@ namespace OpenDental{
 			ODGridRow row;
 			for(int i=0;i<DiseaseList.Count;i++){
 				row=new ODGridRow();
-				if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
-					row.Cells.Add("0");//index of infobutton
-				}
+				//if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
+				//	row.Cells.Add("0");//index of infobutton
+				//}
 				if(DiseaseList[i].DiseaseDefNum!=0) {
 					row.Cells.Add(DiseaseDefs.GetName(DiseaseList[i].DiseaseDefNum));
 				}
@@ -821,11 +822,12 @@ namespace OpenDental{
 			gridAllergies.BeginUpdate();
 			gridAllergies.Columns.Clear();
 			ODGridColumn col;
-			if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
-				col=new ODGridColumn("",18);//infoButton
-				col.ImageList=imageListInfoButton;
-				gridAllergies.Columns.Add(col);
-			}
+			//hiding for 13.3 release
+			//if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
+			//	col=new ODGridColumn("",18);//infoButton
+			//	col.ImageList=imageListInfoButton;
+			//	gridAllergies.Columns.Add(col);
+			//}
 			col=new ODGridColumn(Lan.g("TableAllergies","Allergy"),100);
 			gridAllergies.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableAllergies","Reaction"),180);
@@ -836,9 +838,9 @@ namespace OpenDental{
 			ODGridRow row;
 			for(int i=0;i<allergyList.Count;i++){
 				row=new ODGridRow();
-				if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
-					row.Cells.Add("0");//index of infobutton
-				}
+				//if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
+				//	row.Cells.Add("0");//index of infobutton
+				//}
 				AllergyDef allergyDef=AllergyDefs.GetOne(allergyList[i].AllergyDefNum);
 				row.Cells.Add(allergyDef.Description);
 				if(allergyList[i].DateAdverseReaction<DateTime.Parse("1-1-1800")) {
