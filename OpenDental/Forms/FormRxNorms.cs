@@ -15,6 +15,7 @@ namespace OpenDental {
 		private List<RxNorm> rxList;
 		///<summary>When this window is used for selecting an RxNorm (medication.RxCui), then use must click OK, None, or double click in grid.  In those cases, this field will have a value.  If None was clicked, it will be a new RxNorm with an RxCui of zero.</summary>
 		public RxNorm SelectedRxNorm;
+		public bool IsSelectionMode;
 
 		public FormRxNorms() {
 			InitializeComponent();
@@ -22,6 +23,11 @@ namespace OpenDental {
 		}
 
 		private void FormRxNorms_Load(object sender,EventArgs e) {
+			if(!IsSelectionMode) {
+				butNone.Visible=false;
+				butOK.Visible=false;
+				butCancel.Text="Close";
+			}
 			checkIgnore.Checked=true;
 		}
 
@@ -62,6 +68,9 @@ namespace OpenDental {
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			if(!IsSelectionMode) {
+				return;
+			}
 			SelectedRxNorm=rxList[e.Row];
 			DialogResult=DialogResult.OK;
 		}

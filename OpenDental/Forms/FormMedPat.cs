@@ -529,6 +529,7 @@ namespace OpenDental{
 
 		private void butRxNormSelect_Click(object sender,EventArgs e) {
 			FormRxNorms FormRN=new FormRxNorms();
+			FormRN.IsSelectionMode=true;
 			FormRN.ShowDialog();
 			if(FormRN.DialogResult!=DialogResult.OK) {
 				return;
