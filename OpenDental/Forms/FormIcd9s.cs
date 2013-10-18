@@ -63,8 +63,8 @@ namespace OpenDental {
 			if(FormI.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			*/
 			FillGrid();
+			*/
 		}
 
 		/* Deprecated. This is populated from a list and follows a standard so we do not allow custom ICD-9 Codes.

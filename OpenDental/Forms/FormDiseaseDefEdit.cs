@@ -296,6 +296,14 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
+			if(textName.Text=="" && textICD9.Text=="" && textSnomed.Text=="") {
+				MsgBox.Show(this,"Not allowed to create a Disease Definition without a code or description.");
+				textName.Text=DiseaseDefCur.DiseaseName;
+				textICD9.Text=DiseaseDefCur.ICD9Code;
+				textSnomed.Text=DiseaseDefCur.SnomedCode;
+				checkIsHidden.Checked=DiseaseDefCur.IsHidden;
+				return;
+			}
 			DiseaseDefCur.DiseaseName=textName.Text;
 			DiseaseDefCur.ICD9Code=textICD9.Text;
 			DiseaseDefCur.SnomedCode=textSnomed.Text;
