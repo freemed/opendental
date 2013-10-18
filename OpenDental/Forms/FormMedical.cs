@@ -506,11 +506,12 @@ namespace OpenDental{
 			gridMeds.BeginUpdate();
 			gridMeds.Columns.Clear();
 			ODGridColumn col;
-			if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
-				col=new ODGridColumn("",18);//infoButton
-				col.ImageList=imageListInfoButton;
-				gridMeds.Columns.Add(col);
-			}
+			//hiding for 13.3 release
+			//if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
+			//	col=new ODGridColumn("",18);//infoButton
+			//	col.ImageList=imageListInfoButton;
+			//	gridMeds.Columns.Add(col);
+			//}
 			col=new ODGridColumn(Lan.g("TableMedications","Medication"),120);
 			gridMeds.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableMedications","Notes"),190);
@@ -523,9 +524,10 @@ namespace OpenDental{
 			ODGridRow row;
 			for(int i=0;i<medList.Count;i++) {
 				row=new ODGridRow();
-				if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
-					row.Cells.Add("0");//index of infobutton
-				}
+				//hiding for 13.3 release
+				//if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
+				//	row.Cells.Add("0");//index of infobutton
+				//}
 				if(medList[i].MedicationNum==0) {
 					row.Cells.Add(medList[i].MedDescript);
 					row.Cells.Add("");//generic notes
@@ -552,6 +554,7 @@ namespace OpenDental{
 		}
 
 		private void gridMeds_CellClick(object sender,ODGridClickEventArgs e) {
+			return;//hiding for 13.3 release
 			if(!PrefC.GetBool(PrefName.ShowFeatureEhr)) {
 				return;
 			}
@@ -886,6 +889,7 @@ namespace OpenDental{
 		}*/
 
 		private void gridDiseases_CellClick(object sender,ODGridClickEventArgs e) {
+			return;//hiding for 13.3 release
 			if(!PrefC.GetBool(PrefName.ShowFeatureEhr)) {
 				return;
 			}
@@ -930,6 +934,7 @@ namespace OpenDental{
 		}
 
 		private void gridAllergies_CellClick(object sender,ODGridClickEventArgs e) {
+			return;//hiding for 13.3 release
 			if(!PrefC.GetBool(PrefName.ShowFeatureEhr)) {
 				return;
 			}

@@ -351,6 +351,7 @@ namespace OpenDental {
 			this.butPatList.Size = new System.Drawing.Size(92, 24);
 			this.butPatList.TabIndex = 23;
 			this.butPatList.Text = "EHR Patient List";
+			this.butPatList.Visible = false;
 			this.butPatList.Click += new System.EventHandler(this.butPatList_Click);
 			// 
 			// FormReportsMore
