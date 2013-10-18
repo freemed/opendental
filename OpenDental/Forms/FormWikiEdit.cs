@@ -575,8 +575,14 @@ namespace OpenDental {
 				MessageBox.Show(ex.Message);
 				return false;
 			}
-			//Do not allow duplicate nested tags
-			//doc. (loop through nodes?)
+			//Cannot have CR within tag definition---------------------------------------------------------------------------------
+			MatchCollection tagMatches=Regex.Matches(textContent.Text,"<.*?>",RegexOptions.Singleline);//<.*?> means anything as short as possible
+			for(int i=0;i<tagMatches.Count;i++) {
+				if(tagMatches[i].ToString().Contains("\r\n")) {
+					MessageBox.Show(Lan.g(this,"Tag definitions cannot contain a return line: ")+tagMatches[i].Value.Replace("\r\n",""));
+					return false;
+				}
+			}
 			//image validation-----------------------------------------------------------------------------------------------------
 			string wikiImagePath=WikiPages.GetWikiPath();//this also creates folder if it's missing.
 			MatchCollection matches=Regex.Matches(textContent.Text,@"\[\[(img:).*?\]\]");// [[img:myimage.jpg]]
