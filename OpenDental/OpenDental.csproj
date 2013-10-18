@@ -373,6 +373,12 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormEhrSummaryCcdEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormEhrSummaryCcdEdit.Designer.cs">
+      <DependentUpon>FormEhrSummaryCcdEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormMapAreaEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3017,6 +3023,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormEhrElectronicCopy.resx">
       <DependentUpon>FormEhrElectronicCopy.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormEhrSummaryCcdEdit.resx">
+      <DependentUpon>FormEhrSummaryCcdEdit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormPopupAudit.resx">
       <DependentUpon>FormPopupAudit.cs</DependentUpon>

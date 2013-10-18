@@ -110,7 +110,7 @@ namespace OpenDental {
 			}
 			File.WriteAllText(Path.Combine(Path.GetTempPath(),xmlFileName),doc.InnerXml.ToString());
 			File.WriteAllText(Path.Combine(Path.GetTempPath(),xslFileName),xslContents);
-			EHR.FormEhrSummaryCcdEdit formESCD=new EHR.FormEhrSummaryCcdEdit(Path.Combine(Path.GetTempPath(),xmlFileName),isReconcile);
+			FormEhrSummaryCcdEdit formESCD=new FormEhrSummaryCcdEdit(Path.Combine(Path.GetTempPath(),xmlFileName),isReconcile);
 			formESCD.ShowDialog();
 			return formESCD.DidPrint;
 		}
