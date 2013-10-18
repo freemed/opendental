@@ -1797,6 +1797,58 @@ namespace OpenDentBusiness {
 			}
 			return log;
 		}
+
+		public static string GroupNoteWithInvalidAptNum(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			if(isCheck) {
+				command="SELECT COUNT(*) FROM procedurelog "
+					+"INNER JOIN procedurecode ON procedurelog.CodeNum=procedurecode.CodeNum "
+					+"WHERE procedurelog.AptNum!=0 AND procedurecode.ProcCode='~GRP~'";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Group notes attached to appointments: ")+numFound.ToString()+"\r\n";
+				}
+			}
+			else {
+				command="UPDATE procedurelog SET AptNum=0 "
+					+"WHERE AptNum!=0 AND CodeNum IN(SELECT CodeNum FROM procedurecode WHERE procedurecode.ProcCode='~GRP~')";
+				long numfixed=Db.NonQ(command);
+				if(numfixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Group notes attached to appointments fixed: ")+numfixed.ToString()+"\r\n";
+				}
+			}
+			return log;
+		}
+
+		public static string GroupNoteWithInvalidProcStatus(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			if(isCheck) {
+				command="SELECT COUNT(*) FROM procedurelog "
+					+"INNER JOIN procedurecode ON procedurelog.CodeNum=procedurecode.CodeNum "
+					+"WHERE procedurelog.ProcStatus NOT IN("+POut.Int((int)ProcStat.D)+","+POut.Int((int)ProcStat.EC)+") "
+					+"AND procedurecode.ProcCode='~GRP~'";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Group notes with invalid status: ")+numFound.ToString()+"\r\n";
+				}
+			}
+			else {
+				command="UPDATE procedurelog SET ProcStatus="+POut.Long((int)ProcStat.EC)+" "
+					+"WHERE ProcStatus NOT IN("+POut.Int((int)ProcStat.D)+","+POut.Int((int)ProcStat.EC)+") "
+					+"AND CodeNum IN(SELECT CodeNum FROM procedurecode WHERE procedurecode.ProcCode='~GRP~')";
+				long numfixed=Db.NonQ(command);
+				if(numfixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Group notes statuses fixed: ")+numfixed.ToString()+"\r\n";
+				}
+			}
+			return log;
+		}
 		
 		public static string InsPlanInvalidCarrier(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

@@ -9095,7 +9095,7 @@ namespace OpenDental{
 			//check to make sure we don't have non-procedures
 			for(int i=0;i<gridProg.SelectedIndices.Length;i++) {
 				row=(DataRow)gridProg.Rows[gridProg.SelectedIndices[i]].Tag;
-				if(row["ProcNum"].ToString()=="0") {
+				if(row["ProcNum"].ToString()=="0" || row["ProcCode"].ToString()=="~GRP~") {
 					MsgBox.Show(this,"Only procedures or single appointments may be set complete.");
 					return;
 				}
