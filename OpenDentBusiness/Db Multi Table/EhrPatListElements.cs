@@ -196,7 +196,11 @@ namespace OpenDentBusiness {
 						command+=",patient.Birthdate ";
 						break;
 					case EhrRestrictionType.Problem:
-						command+=",(SELECT disease.ICD9Num FROM disease WHERE disease.PatNum=patient.PatNum AND disease.ICD9Num IN (SELECT ICD9Num FROM icd9 WHERE ICD9Code LIKE '"+compStr+"%') "
+						command+=",(SELECT icd9.ICD9Num FROM disease,diseasedef,icd9 "
+							+"WHERE disease.PatNum=patient.PatNum "
+							+"AND disease.DiseaseDefNum=diseasedef.DiseaseDefNum "
+							+"AND diseasedef.ICD9Code=icd9.ICD9Code "
+							+"AND icd9.ICD9Num IN (SELECT ICD9Num FROM icd9 WHERE ICD9Code LIKE '"+compStr+"%') "
 							+DbHelper.LimitAnd(1)+") `"+compStr+"` ";
 						break;
 					case EhrRestrictionType.LabResult:
