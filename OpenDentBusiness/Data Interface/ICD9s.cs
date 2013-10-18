@@ -100,9 +100,11 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),icd9Num);
 				return;
 			}
-			string command="SELECT LName,FName,patient.PatNum FROM patient,disease WHERE "
+			string command="SELECT LName,FName,patient.PatNum FROM patient,disease,diseasedef,icd9 WHERE "
 				+"patient.PatNum=disease.PatNum "
-				+"AND disease.ICD9Num='"+POut.Long(icd9Num)+"' "
+				+"AND disease.DiseaseDefNum=diseasedef.DiseaseDefNum "
+				+"AND diseasedef.ICD9Code=icd9.ICD9Code "
+				+"AND icd9.ICD9Num='"+POut.Long(icd9Num)+"' "
 				+"GROUP BY patient.PatNum";
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count>0) {
