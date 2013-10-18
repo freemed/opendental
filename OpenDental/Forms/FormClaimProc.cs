@@ -1603,6 +1603,10 @@ namespace OpenDental
 				MsgBox.Show(this,"Allowed fee schedule is hidden, so no changes can be made.");
 				return;
 			}
+			//The only other way to manually edit allowed fee schedule amounts is through Setup.  This check stops users from manually changing allowed amounts without having permission to.
+			if(!Security.IsAuthorized(Permissions.Setup)) {
+				return;
+			}
 			Fee FeeCur=Fees.GetFee(proc.CodeNum,feeSched);
 			FormFeeEdit FormFE=new FormFeeEdit();
 			if(FeeCur==null){
