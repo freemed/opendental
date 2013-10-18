@@ -88,7 +88,9 @@ namespace EHR {
 
 		private void gridMain_CellDoubleClick(object sender,OpenDental.UI.ODGridClickEventArgs e) {
 			long vitalNum=listVs[e.Row].VitalsignNum;
-			FormVitalsignEdit2014 FormVSE=new FormVitalsignEdit2014();
+			//change for EHR 2014
+			//FormVitalsignEdit2014 FormVSE=new FormVitalsignEdit2014();
+			FormVitalsignEdit FormVSE=new FormVitalsignEdit();
 			FormVSE.VitalsignCur=Vitalsigns.GetOne(vitalNum);
 			FormVSE.IsBMIOnly=IsBMIOnly;
 			FormVSE.IsBPOnly=IsBPOnly;
@@ -97,7 +99,9 @@ namespace EHR {
 		}
 
 		private void butAdd_Click(object sender,EventArgs e) {
-			FormVitalsignEdit2014 FormVSE=new FormVitalsignEdit2014();
+			//change for EHR 2014
+			//FormVitalsignEdit2014 FormVSE=new FormVitalsignEdit2014();
+			FormVitalsignEdit FormVSE=new FormVitalsignEdit();
 			FormVSE.VitalsignCur=new Vitalsign();
 			FormVSE.VitalsignCur.PatNum=PatNum;
 			FormVSE.VitalsignCur.DateTaken=DateTime.Today;
