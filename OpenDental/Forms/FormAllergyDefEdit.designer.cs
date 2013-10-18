@@ -31,16 +31,16 @@ namespace OpenDental{
 			this.label3 = new System.Windows.Forms.Label();
 			this.textMedication = new System.Windows.Forms.TextBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.textSnomedAllergicTo = new System.Windows.Forms.TextBox();
 			this.butNoneAllergicTo = new OpenDental.UI.Button();
+			this.butNone = new OpenDental.UI.Button();
 			this.butAllergicToSelect = new OpenDental.UI.Button();
 			this.label1 = new System.Windows.Forms.Label();
-			this.textSnomedAllergicTo = new System.Windows.Forms.TextBox();
 			this.butMedicationSelect = new OpenDental.UI.Button();
-			this.butNone = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
-			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
@@ -118,6 +118,32 @@ namespace OpenDental{
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Only used in EHR when creating CCDs.  Most offices can ignore this section";
 			// 
+			// groupBox2
+			// 
+			this.groupBox2.Controls.Add(this.textSnomedAllergicTo);
+			this.groupBox2.Controls.Add(this.butNoneAllergicTo);
+			this.groupBox2.Controls.Add(this.butNone);
+			this.groupBox2.Controls.Add(this.butAllergicToSelect);
+			this.groupBox2.Controls.Add(this.textMedication);
+			this.groupBox2.Controls.Add(this.label1);
+			this.groupBox2.Controls.Add(this.butMedicationSelect);
+			this.groupBox2.Controls.Add(this.label2);
+			this.groupBox2.Location = new System.Drawing.Point(15, 55);
+			this.groupBox2.Name = "groupBox2";
+			this.groupBox2.Size = new System.Drawing.Size(493, 83);
+			this.groupBox2.TabIndex = 26;
+			this.groupBox2.TabStop = false;
+			this.groupBox2.Text = "Allergen (only one of these is needed)";
+			// 
+			// textSnomedAllergicTo
+			// 
+			this.textSnomedAllergicTo.Enabled = false;
+			this.textSnomedAllergicTo.Location = new System.Drawing.Point(118, 24);
+			this.textSnomedAllergicTo.Name = "textSnomedAllergicTo";
+			this.textSnomedAllergicTo.ReadOnly = true;
+			this.textSnomedAllergicTo.Size = new System.Drawing.Size(276, 20);
+			this.textSnomedAllergicTo.TabIndex = 21;
+			// 
 			// butNoneAllergicTo
 			// 
 			this.butNoneAllergicTo.AdjustImageLocation = new System.Drawing.Point(0, 0);
@@ -125,57 +151,13 @@ namespace OpenDental{
 			this.butNoneAllergicTo.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butNoneAllergicTo.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butNoneAllergicTo.CornerRadius = 4F;
+			this.butNoneAllergicTo.Enabled = false;
 			this.butNoneAllergicTo.Location = new System.Drawing.Point(427, 24);
 			this.butNoneAllergicTo.Name = "butNoneAllergicTo";
 			this.butNoneAllergicTo.Size = new System.Drawing.Size(51, 22);
 			this.butNoneAllergicTo.TabIndex = 24;
 			this.butNoneAllergicTo.Text = "None";
 			this.butNoneAllergicTo.Click += new System.EventHandler(this.butNoneAllergicTo_Click);
-			// 
-			// butAllergicToSelect
-			// 
-			this.butAllergicToSelect.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butAllergicToSelect.Autosize = true;
-			this.butAllergicToSelect.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAllergicToSelect.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAllergicToSelect.CornerRadius = 4F;
-			this.butAllergicToSelect.Location = new System.Drawing.Point(399, 24);
-			this.butAllergicToSelect.Name = "butAllergicToSelect";
-			this.butAllergicToSelect.Size = new System.Drawing.Size(22, 22);
-			this.butAllergicToSelect.TabIndex = 23;
-			this.butAllergicToSelect.Text = "...";
-			this.butAllergicToSelect.Click += new System.EventHandler(this.butAllergicToSelect_Click);
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(6, 24);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(109, 20);
-			this.label1.TabIndex = 22;
-			this.label1.Text = "SNOMED";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textSnomedAllergicTo
-			// 
-			this.textSnomedAllergicTo.Location = new System.Drawing.Point(118, 24);
-			this.textSnomedAllergicTo.Name = "textSnomedAllergicTo";
-			this.textSnomedAllergicTo.ReadOnly = true;
-			this.textSnomedAllergicTo.Size = new System.Drawing.Size(276, 20);
-			this.textSnomedAllergicTo.TabIndex = 21;
-			// 
-			// butMedicationSelect
-			// 
-			this.butMedicationSelect.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butMedicationSelect.Autosize = true;
-			this.butMedicationSelect.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butMedicationSelect.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butMedicationSelect.CornerRadius = 4F;
-			this.butMedicationSelect.Location = new System.Drawing.Point(399, 48);
-			this.butMedicationSelect.Name = "butMedicationSelect";
-			this.butMedicationSelect.Size = new System.Drawing.Size(22, 22);
-			this.butMedicationSelect.TabIndex = 3;
-			this.butMedicationSelect.Text = "...";
-			this.butMedicationSelect.Click += new System.EventHandler(this.butMedicationSelect_Click);
 			// 
 			// butNone
 			// 
@@ -190,6 +172,45 @@ namespace OpenDental{
 			this.butNone.TabIndex = 9;
 			this.butNone.Text = "None";
 			this.butNone.Click += new System.EventHandler(this.butNone_Click);
+			// 
+			// butAllergicToSelect
+			// 
+			this.butAllergicToSelect.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butAllergicToSelect.Autosize = true;
+			this.butAllergicToSelect.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAllergicToSelect.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAllergicToSelect.CornerRadius = 4F;
+			this.butAllergicToSelect.Enabled = false;
+			this.butAllergicToSelect.Location = new System.Drawing.Point(399, 24);
+			this.butAllergicToSelect.Name = "butAllergicToSelect";
+			this.butAllergicToSelect.Size = new System.Drawing.Size(22, 22);
+			this.butAllergicToSelect.TabIndex = 23;
+			this.butAllergicToSelect.Text = "...";
+			this.butAllergicToSelect.Click += new System.EventHandler(this.butAllergicToSelect_Click);
+			// 
+			// label1
+			// 
+			this.label1.Enabled = false;
+			this.label1.Location = new System.Drawing.Point(6, 24);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(109, 20);
+			this.label1.TabIndex = 22;
+			this.label1.Text = "SNOMED (not yet)";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// butMedicationSelect
+			// 
+			this.butMedicationSelect.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butMedicationSelect.Autosize = true;
+			this.butMedicationSelect.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butMedicationSelect.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butMedicationSelect.CornerRadius = 4F;
+			this.butMedicationSelect.Location = new System.Drawing.Point(399, 48);
+			this.butMedicationSelect.Name = "butMedicationSelect";
+			this.butMedicationSelect.Size = new System.Drawing.Size(22, 22);
+			this.butMedicationSelect.TabIndex = 3;
+			this.butMedicationSelect.Text = "...";
+			this.butMedicationSelect.Click += new System.EventHandler(this.butMedicationSelect_Click);
 			// 
 			// butCancel
 			// 
@@ -237,23 +258,6 @@ namespace OpenDental{
 			this.butDelete.TabIndex = 2;
 			this.butDelete.Text = "&Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
-			// 
-			// groupBox2
-			// 
-			this.groupBox2.Controls.Add(this.textSnomedAllergicTo);
-			this.groupBox2.Controls.Add(this.butNoneAllergicTo);
-			this.groupBox2.Controls.Add(this.butNone);
-			this.groupBox2.Controls.Add(this.butAllergicToSelect);
-			this.groupBox2.Controls.Add(this.textMedication);
-			this.groupBox2.Controls.Add(this.label1);
-			this.groupBox2.Controls.Add(this.butMedicationSelect);
-			this.groupBox2.Controls.Add(this.label2);
-			this.groupBox2.Location = new System.Drawing.Point(15, 55);
-			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(493, 83);
-			this.groupBox2.TabIndex = 26;
-			this.groupBox2.TabStop = false;
-			this.groupBox2.Text = "Allergen (only one of these is needed)";
 			// 
 			// FormAllergyDefEdit
 			// 
