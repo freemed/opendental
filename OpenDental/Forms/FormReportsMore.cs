@@ -399,7 +399,8 @@ namespace OpenDental {
 		private void FormReportsMore_Load(object sender,EventArgs e) {
 			Plugins.HookAddCode(this,"FormReportsMore.FormReportsMore_Load_beginning");
 			butPW.Visible=Programs.IsEnabled(ProgramName.PracticeWebReports);
-			butPatList.Visible=PrefC.GetBool(PrefName.ShowFeatureEhr);
+			//hiding fefature for 13.3
+			//butPatList.Visible=PrefC.GetBool(PrefName.ShowFeatureEhr);
 			listProdInc.Items.AddRange(new string[] {
 				Lan.g(this,"Today"),
 				Lan.g(this,"Yesterday"),
