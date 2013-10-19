@@ -1,6 +1,6 @@
 /*=============================================================================================================
 Open Dental is a dental practice management program.
-Copyright (C) 2003,2004,2005,2006,2007  Jordan Sparks, DMD.  http://www.open-dent.com,  http://www.docsparks.com
+Copyright (C) 2003-2013  Jordan Sparks, DMD.  http://www.opendental.com
 
 This program is free software; you can redistribute it and/or modify it under the terms of the
 GNU Db Public License as published by the Free Software Foundation; either version 2 of the License,

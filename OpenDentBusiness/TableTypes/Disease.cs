@@ -11,13 +11,14 @@ namespace OpenDentBusiness {
 		public long DiseaseNum;
 		///<summary>FK to patient.PatNum</summary>
 		public long PatNum;
-		///<summary>FK to diseasedef.DiseaseDefNum.  The disease description is in that table.  Will be zero if ICD9Num has a value.</summary>
+		///<summary>FK to diseasedef.DiseaseDefNum.  The disease description is in that table.</summary>
 		public long DiseaseDefNum;
 		///<summary>Any note about this disease that is specific to this patient.</summary>
 		public string PatNote;
 		///<summary>The last date and time this row was altered.  Not user editable.  Will be set to NOW by OD if this patient gets an OnlinePassword assigned.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
+		//This column was removed 
 		/////<summary>FK to icd9.ICD9Num.  Will be zero if DiseaseDefNum has a value.</summary>
 		//public long ICD9Num;
 		///<summary>Enum:ProblemStatus Active=0, Resolved=1, Inactive=2.</summary>
