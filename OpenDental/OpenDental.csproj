@@ -451,6 +451,12 @@
     <Compile Include="Forms\FormEhrNotPerformed.designer.cs">
       <DependentUpon>FormEhrNotPerformed.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormPaymentPlanOptions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormPaymentPlanOptions.designer.cs">
+      <DependentUpon>FormPaymentPlanOptions.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormCodeSystemsImport.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3051,6 +3057,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormEhrNotPerformed.resx">
       <DependentUpon>FormEhrNotPerformed.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormPaymentPlanOptions.resx">
+      <DependentUpon>FormPaymentPlanOptions.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormCodeSystemsImport.resx">
       <DependentUpon>FormCodeSystemsImport.cs</DependentUpon>
