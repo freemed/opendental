@@ -12,28 +12,17 @@ namespace EHR {
 	public partial class FormVitalsigns:Form {
 		private List<Vitalsign> listVs;
 		public long PatNum;
-		public bool IsBPOnly;
-		public bool IsBMIOnly;
 
 		public FormVitalsigns() {
 			InitializeComponent();
 		}
 
 		private void FormVitalsigns_Load(object sender,EventArgs e) {
-			if(IsBPOnly) {
-				butGrowthChart.Visible=false;
-			}
 			FillGrid();
 		}
 
 		private void FillGrid() {
 			gridMain.BeginUpdate();
-			if(IsBMIOnly) {
-				gridMain.Title="Vital Signs Height and Weight Only";
-			}
-			if(IsBPOnly) {
-				gridMain.Title="Vital Signs Blood Pressure Only";
-			}
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn("Date",80);
 			gridMain.Columns.Add(col);
@@ -53,32 +42,16 @@ namespace EHR {
 			for(int i=0;i<listVs.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(listVs[i].DateTaken.ToShortDateString());
-				if(IsBPOnly) {
-					row.Cells.Add("N/A");
-					row.Cells.Add("N/A");
+				row.Cells.Add(listVs[i].Height.ToString()+" in.");
+				row.Cells.Add(listVs[i].Weight.ToString()+" lbs.");
+				row.Cells.Add(listVs[i].BpSystolic.ToString()+"/"+listVs[i].BpDiastolic.ToString());
+				//BMI = (lbs*703)/(in^2)
+				float bmi=Vitalsigns.CalcBMI(listVs[i].Weight,listVs[i].Height);
+				if(bmi!=0) {
+					row.Cells.Add(bmi.ToString("n1"));
 				}
-				else {
-					row.Cells.Add(listVs[i].Height.ToString()+" in.");
-					row.Cells.Add(listVs[i].Weight.ToString()+" lbs.");
-				}
-				if(IsBMIOnly) {
-					row.Cells.Add("N/A");
-				}
-				else {
-					row.Cells.Add(listVs[i].BpSystolic.ToString()+"/"+listVs[i].BpDiastolic.ToString());
-				}
-				if(IsBPOnly) {
-					row.Cells.Add("N/A");
-				}
-				else {
-					//BMI = (lbs*703)/(in^2)
-					float bmi=Vitalsigns.CalcBMI(listVs[i].Weight,listVs[i].Height);
-					if(bmi!=0) {
-						row.Cells.Add(bmi.ToString("n1"));
-					}
-					else {//leave cell blank because there is not a valid bmi
-						row.Cells.Add("");
-					}
+				else {//leave cell blank because there is not a valid bmi
+					row.Cells.Add("");
 				}
 				row.Cells.Add(listVs[i].Documentation);
 				gridMain.Rows.Add(row);
@@ -92,8 +65,6 @@ namespace EHR {
 			//FormVitalsignEdit2014 FormVSE=new FormVitalsignEdit2014();
 			FormVitalsignEdit FormVSE=new FormVitalsignEdit();
 			FormVSE.VitalsignCur=Vitalsigns.GetOne(vitalNum);
-			FormVSE.IsBMIOnly=IsBMIOnly;
-			FormVSE.IsBPOnly=IsBPOnly;
 			FormVSE.ShowDialog();
 			FillGrid();
 		}
@@ -106,8 +77,6 @@ namespace EHR {
 			FormVSE.VitalsignCur.PatNum=PatNum;
 			FormVSE.VitalsignCur.DateTaken=DateTime.Today;
 			FormVSE.VitalsignCur.IsNew=true;
-			FormVSE.IsBMIOnly=IsBMIOnly;
-			FormVSE.IsBPOnly=IsBPOnly;
 			FormVSE.ShowDialog();
 			FillGrid();
 		}

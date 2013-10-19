@@ -67,11 +67,7 @@
 			this.labelPregNotice = new System.Windows.Forms.Label();
 			this.groupInterventions = new System.Windows.Forms.GroupBox();
 			this.gridInterventions = new OpenDental.UI.ODGrid();
-			this.label2 = new System.Windows.Forms.Label();
-			this.butIntervention = new System.Windows.Forms.Button();
-			this.butMedication = new System.Windows.Forms.Button();
-			this.butPhysActivity = new System.Windows.Forms.Button();
-			this.butNutrition = new System.Windows.Forms.Button();
+			this.butAdd = new System.Windows.Forms.Button();
 			this.groupExclusion.SuspendLayout();
 			this.groupInterventions.SuspendLayout();
 			this.SuspendLayout();
@@ -133,7 +129,7 @@
 			// butCancel
 			// 
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Location = new System.Drawing.Point(513, 575);
+			this.butCancel.Location = new System.Drawing.Point(513, 559);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 23);
 			this.butCancel.TabIndex = 6;
@@ -144,7 +140,7 @@
 			// butOK
 			// 
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Location = new System.Drawing.Point(432, 575);
+			this.butOK.Location = new System.Drawing.Point(432, 559);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75, 23);
 			this.butOK.TabIndex = 5;
@@ -155,7 +151,7 @@
 			// butDelete
 			// 
 			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butDelete.Location = new System.Drawing.Point(10, 575);
+			this.butDelete.Location = new System.Drawing.Point(10, 559);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(75, 23);
 			this.butDelete.TabIndex = 10;
@@ -480,15 +476,11 @@
 			// 
 			// groupInterventions
 			// 
-			this.groupInterventions.Controls.Add(this.label2);
 			this.groupInterventions.Controls.Add(this.gridInterventions);
-			this.groupInterventions.Controls.Add(this.butNutrition);
-			this.groupInterventions.Controls.Add(this.butMedication);
-			this.groupInterventions.Controls.Add(this.butIntervention);
-			this.groupInterventions.Controls.Add(this.butPhysActivity);
+			this.groupInterventions.Controls.Add(this.butAdd);
 			this.groupInterventions.Location = new System.Drawing.Point(10, 348);
 			this.groupInterventions.Name = "groupInterventions";
-			this.groupInterventions.Size = new System.Drawing.Size(578, 214);
+			this.groupInterventions.Size = new System.Drawing.Size(578, 198);
 			this.groupInterventions.TabIndex = 161;
 			this.groupInterventions.TabStop = false;
 			this.groupInterventions.Text = "Interventions";
@@ -496,68 +488,29 @@
 			// gridInterventions
 			// 
 			this.gridInterventions.HScrollVisible = false;
-			this.gridInterventions.Location = new System.Drawing.Point(112, 19);
+			this.gridInterventions.Location = new System.Drawing.Point(6, 19);
 			this.gridInterventions.Name = "gridInterventions";
 			this.gridInterventions.ScrollValue = 0;
-			this.gridInterventions.Size = new System.Drawing.Size(460, 189);
+			this.gridInterventions.Size = new System.Drawing.Size(485, 169);
 			this.gridInterventions.TabIndex = 161;
-			this.gridInterventions.Title = "Interventions";
+			this.gridInterventions.Title = "Interventions and/or Medications";
 			this.gridInterventions.TranslationName = null;
 			// 
-			// label2
+			// butAdd
 			// 
-			this.label2.Location = new System.Drawing.Point(13, 101);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(87, 31);
-			this.label2.TabIndex = 163;
-			this.label2.Text = "Add Item to Intervention List";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			// 
-			// butIntervention
-			// 
-			this.butIntervention.Location = new System.Drawing.Point(19, 37);
-			this.butIntervention.Name = "butIntervention";
-			this.butIntervention.Size = new System.Drawing.Size(75, 23);
-			this.butIntervention.TabIndex = 153;
-			this.butIntervention.Text = "Intervention";
-			this.butIntervention.UseVisualStyleBackColor = true;
-			this.butIntervention.Click += new System.EventHandler(this.butIntervention_Click);
-			// 
-			// butMedication
-			// 
-			this.butMedication.Location = new System.Drawing.Point(19, 66);
-			this.butMedication.Name = "butMedication";
-			this.butMedication.Size = new System.Drawing.Size(75, 23);
-			this.butMedication.TabIndex = 158;
-			this.butMedication.Text = "Medication";
-			this.butMedication.UseVisualStyleBackColor = true;
-			this.butMedication.Click += new System.EventHandler(this.butMedication_Click_1);
-			// 
-			// butPhysActivity
-			// 
-			this.butPhysActivity.Location = new System.Drawing.Point(19, 173);
-			this.butPhysActivity.Name = "butPhysActivity";
-			this.butPhysActivity.Size = new System.Drawing.Size(75, 23);
-			this.butPhysActivity.TabIndex = 160;
-			this.butPhysActivity.Text = "Phys Activity";
-			this.butPhysActivity.UseVisualStyleBackColor = true;
-			this.butPhysActivity.Click += new System.EventHandler(this.butPhysActivity_Click);
-			// 
-			// butNutrition
-			// 
-			this.butNutrition.Location = new System.Drawing.Point(19, 144);
-			this.butNutrition.Name = "butNutrition";
-			this.butNutrition.Size = new System.Drawing.Size(75, 23);
-			this.butNutrition.TabIndex = 155;
-			this.butNutrition.Text = "Nutrition";
-			this.butNutrition.UseVisualStyleBackColor = true;
-			this.butNutrition.Click += new System.EventHandler(this.butNutrition_Click);
+			this.butAdd.Location = new System.Drawing.Point(497, 19);
+			this.butAdd.Name = "butAdd";
+			this.butAdd.Size = new System.Drawing.Size(75, 23);
+			this.butAdd.TabIndex = 153;
+			this.butAdd.Text = "Add";
+			this.butAdd.UseVisualStyleBackColor = true;
+			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
 			// FormVitalsignEdit2014
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(602, 610);
+			this.ClientSize = new System.Drawing.Size(602, 594);
 			this.Controls.Add(this.groupInterventions);
 			this.Controls.Add(this.labelBPsExamCode);
 			this.Controls.Add(this.textBPsExamCode);
@@ -645,11 +598,7 @@
 		private System.Windows.Forms.TextBox textReasonCode;
 		private System.Windows.Forms.Button butChangeDefault;
 		private System.Windows.Forms.GroupBox groupInterventions;
-		private System.Windows.Forms.Label label2;
 		private OpenDental.UI.ODGrid gridInterventions;
-		private System.Windows.Forms.Button butMedication;
-		private System.Windows.Forms.Button butIntervention;
-		private System.Windows.Forms.Button butNutrition;
-		private System.Windows.Forms.Button butPhysActivity;
+		private System.Windows.Forms.Button butAdd;
 	}
 }

@@ -176,21 +176,6 @@ namespace OpenDental {
 						FormVital.ShowDialog();
 						FillGridMu();
 						break;
-					//This code will not be used until we certify for EHR 2014. For 2011 certification, vital sign form will look exactly the same as it did at certification time.
-					//case EhrMeasureType.VitalSignsBMIOnly:
-					//	FormVital=new FormVitalsigns();
-					//	FormVital.PatNum=PatNum;
-					//	FormVital.IsBMIOnly=true;
-					//	FormVital.ShowDialog();
-					//	FillGridMu();
-					//	break;
-					//case EhrMeasureType.VitalSignsBPOnly:
-					//	FormVital=new FormVitalsigns();
-					//	FormVital.PatNum=PatNum;
-					//	FormVital.IsBPOnly=true;
-					//	FormVital.ShowDialog();
-					//	FillGridMu();
-					//	break;
 					case EhrMeasureType.Smoking:
 						FormPatientSmoking FormPS=new FormPatientSmoking();
 						FormPS.PatCur=PatCur;
