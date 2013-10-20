@@ -858,8 +858,12 @@ namespace OpenDental{
 			}
 			else {
 				comboClinic.Items.Add("none");
-				//we don't want to do this.  The -1 indicates to pull clinic from charges on first loop
-				//comboClinic.SelectedIndex=0;//if not new, then clinic can be changed in the FillCharges()
+				if(IsNew) {
+					comboClinic.SelectedIndex=0;//this is for patients with no clinic assigned, an unusual situation.
+				}
+				else {
+					//we don't want to do this.  The -1 indicates to pull clinic from charges on first loop in FillCharges().
+				}
 				for(int i=0;i<Clinics.List.Length;i++) {
 					comboClinic.Items.Add(Clinics.List[i].Description);
 					if(IsNew && Clinics.List[i].ClinicNum==PatCur.ClinicNum) {//new payment plans default to pat clinic
