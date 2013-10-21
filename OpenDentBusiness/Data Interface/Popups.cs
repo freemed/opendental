@@ -9,7 +9,7 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class Popups {
 
-		///<summary>Gets all Popups that should be displayed for a single patient.</summary>
+		///<summary>Gets all active popups that should be displayed for a single patient.</summary>
 		public static List<Popup> GetForPatient(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Popup>>(MethodBase.GetCurrentMethod(),patNum);
@@ -36,45 +36,43 @@ namespace OpenDentBusiness{
 			return Crud.PopupCrud.SelectMany(command);
 		}
 
-		///<summary>Gets all Popups for a single family.  If patient is part of a superfamily, it will get all popups for the entire superfamily. It will not get any deleted or archived popups.</summary>
+		///<summary>Gets current and disabled popups for a single family.  If patient is part of a superfamily, it will get all popups for the entire superfamily.</summary>
 		public static List<Popup> GetForFamily(Patient pat) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Popup>>(MethodBase.GetCurrentMethod(),pat);
 			}
 			string command="SELECT * FROM popup "
-				+"WHERE PatNum IN (SELECT PatNum FROM patient "
-				+"WHERE (Guarantor = "+POut.Long(pat.Guarantor)+") ";
+				+"WHERE (PatNum IN (SELECT PatNum FROM patient "
+				+"WHERE Guarantor = "+POut.Long(pat.Guarantor)+") ";
 			if(pat.SuperFamily!=0) {//They are part of a super family
 				command+="OR PatNum IN (SELECT PatNum FROM patient "
 					+"WHERE SuperFamily = "+POut.Long(pat.SuperFamily)+") ";
 			}
-			command+=") ";
-			command+="AND IsArchived = 0 ";
-			command+="ORDER BY PatNum";
+			command+=") "
+				+"AND IsArchived = 0 "
+				+"ORDER BY PatNum";
 			return Crud.PopupCrud.SelectMany(command);
 		}
 
-		///<summary>Gets all deleted Popups for a single family.  If patient is part of a superfamily, it will get all popups for the entire superfamily. </summary>
-		public static List<Popup> GetForFamilyDeleted(Patient pat) {
+		///<summary>Gets the most recent deleted popups for a single family.  If patient is part of a superfamily, it will get all popups for the entire superfamily. </summary>
+		public static List<Popup> GetDeletedForFamily(Patient pat) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Popup>>(MethodBase.GetCurrentMethod(),pat);
 			}
 			string command="SELECT * FROM popup "
 				+"WHERE PatNum IN (SELECT PatNum FROM patient "
-				+"WHERE (Guarantor = "+POut.Long(pat.Guarantor)+") ";
+				+"WHERE Guarantor = "+POut.Long(pat.Guarantor)+") ";
 			if(pat.SuperFamily!=0) {//They are part of a super family
 				command+="OR PatNum IN (SELECT PatNum FROM patient "
 					+"WHERE SuperFamily = "+POut.Long(pat.SuperFamily)+") ";
 			}
-			command+=") ";
-			command+="AND IsArchived = 1 "
-				+"AND PopupNumArchive = 0 ";
-			command+="ORDER BY PatNum";
+			command+="AND PopupNumArchive = 0 "//The most recent pop up in the archives.
+				+"ORDER BY PatNum";
 			return Crud.PopupCrud.SelectMany(command);
 		}
 
-		///<summary>Gets all archived Popups for a single family.  If patient is part of a superfamily, it will get all archived popups for the entire superfamily.</summary>
-		public static List<Popup> GetArchivedPopups(long popupNum) {
+		///<summary>Gets all archived popups for a single popup.</summary>
+		public static List<Popup> GetArchivesForPopup(long popupNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Popup>>(MethodBase.GetCurrentMethod(),popupNum);
 			}
@@ -84,22 +82,20 @@ namespace OpenDentBusiness{
 			return Crud.PopupCrud.SelectMany(command);
 		}
 
-		///<summary>Gets date the popup was last edited. </summary>
-		public static string GetLastEditDate(long popupNum) {
+		///<summary>Gets the most recent date and time that the popup was last edited.  Returns min value if no archive was found.</summary>
+		public static DateTime GetLastEditDateTimeForPopup(long popupNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),popupNum);
+				return Meth.GetObject<DateTime>(MethodBase.GetCurrentMethod(),popupNum);
 			}
-			string command="SELECT * FROM popup"
+			string command="SELECT DateTimeEntry FROM popup"
 				+" WHERE PopupNumArchive = "+POut.Long(popupNum)
 				+" ORDER BY DateTimeEntry DESC"
 				+" LIMIT 1";
-			Popup popupReturn=Crud.PopupCrud.SelectOne(command);
-			if(popupReturn==null) {
-				return "";
+			DataTable rawTable=Db.GetTable(command);
+			if(rawTable.Rows.Count==0) {
+				return DateTime.MinValue;
 			}
-			else {
-				return popupReturn.DateTimeEntry.ToString();
-			}
+			return PIn.DateT(rawTable.Rows[0]["DateTimeEntry"].ToString());
 		}
 
 		/// <summary>Copies all family level popups when a family member leaves a family. Copies from other family members to patient, and from patient to guarantor.</summary>
@@ -111,48 +107,84 @@ namespace OpenDentBusiness{
 			//Get a list of all popups for the family
 			string command="SELECT * FROM popup "
 				+"WHERE PopupLevel = "+POut.Int((int)EnumPopupLevel.Family)+" "
-				+"AND PatNum IN (SELECT PatNum FROM patient WHERE Guarantor = "+POut.Long(pat.Guarantor)+")";
+				+"AND PatNum IN (SELECT PatNum FROM patient WHERE Guarantor = "+POut.Long(pat.Guarantor)+")"
+				+"AND PopupNumArchive = 0 ";
 			List<Popup> FamilyPopups=Crud.PopupCrud.SelectMany(command);
-			Popup popup;
+			Popup popupCur;
 			for(int i=0;i<FamilyPopups.Count;i++) {
-				popup=FamilyPopups[i].Copy();
-				if(popup.PatNum==pat.PatNum) {//if popup is on the patient who's leaving, copy to guarantor of old family.
-					popup.PatNum=pat.Guarantor;
+				popupCur=FamilyPopups[i].Copy();
+				if(popupCur.PatNum==pat.PatNum) {//if popup is on the patient who's leaving, copy to guarantor of old family.
+					popupCur.PatNum=pat.Guarantor;
 				}
 				else {//if popup is on some other family member, then copy to this patient.
-					popup.PatNum=pat.PatNum;
+					popupCur.PatNum=pat.PatNum;
 				}
-				Popups.Insert(popup);//changes the PK
+				DateTime oldDate=popupCur.DateTimeEntry;
+				long newPk=Popups.Insert(popupCur);//changes the PK
+				EditPopupDate(oldDate,newPk);
+				List<Popup> archivePopups=GetArchivesForPopup(FamilyPopups[i].PopupNum);
+				Popup popupArchive;
+				for(int j=0;j<archivePopups.Count;j++) {
+					popupArchive=archivePopups[i].Copy();
+					if(popupArchive.PatNum==pat.PatNum) {//if popup is on the patient who's leaving, copy to guarantor of old family.
+						popupArchive.PatNum=pat.Guarantor;
+					}
+					else {//if popup is on some other family member, then copy to this patient.
+						popupArchive.PatNum=pat.PatNum;
+					}
+					popupArchive.PopupNumArchive=newPk;
+					DateTime oldArchiveDate=popupArchive.DateTimeEntry;
+					long newArchivePk=Popups.Insert(popupArchive);//changes the PK
+					EditPopupDate(oldArchiveDate,newArchivePk);
+				}
 			}
 		}
 		
 		/// <summary>When a patient leaves a superfamily, this copies the superfamily level popups to be in both places. Takes pat leaving, and new superfamily. If newSuperFamily is 0, superfamily popups will not be copied from the old superfamily.</summary>
 		public static void CopyForMovingSuperFamily(Patient pat,long newSuperFamily) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),pat);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),pat,newSuperFamily);
 				return;
 			}
 			//Get a list of all popups for the super family
 			string command="SELECT * FROM popup "
 				+"WHERE PopupLevel = "+POut.Int((int)EnumPopupLevel.SuperFamily)+" "
-				+"AND PatNum IN (SELECT PatNum FROM patient WHERE SuperFamily = "+POut.Long(pat.SuperFamily)+")";
+				+"AND PatNum IN (SELECT PatNum FROM patient WHERE SuperFamily = "+POut.Long(pat.SuperFamily)+")"
+				+"AND PopupNumArchive = 0 ";
 			//This includes all the archived ones as well
 			List<Popup> SuperFamilyPopups=Crud.PopupCrud.SelectMany(command);
-			Popup popup;
+			Popup popupCur;
 			for(int i=0;i<SuperFamilyPopups.Count;i++) {
-				popup=SuperFamilyPopups[i].Copy();
-				if(popup.PatNum==pat.PatNum) {//if popup is on the patient who's leaving, copy to superfamily head of old superfamily.
-					popup.PatNum=pat.SuperFamily;
-					if(newSuperFamily==0) {//If they are not going to a superfamily, delete the popup
-						Popups.DeleteObject(SuperFamilyPopups[i]);
+				popupCur=SuperFamilyPopups[i].Copy();
+				if(popupCur.PatNum==pat.PatNum) {//if popup is on the patient who's leaving, copy to superfamily head of old superfamily.
+					popupCur.PatNum=pat.SuperFamily;
+					if(newSuperFamily==0) {//If they are not going to a superfamily, set popup to family level
+						string commandUpdateFam="UPDATE popup "
+								+"SET PopupLevel = "+POut.Int((int)EnumPopupLevel.Family)+" "
+								+"WHERE PopupNum = "+POut.Long(popupCur.PopupNum);
+						Db.NonQ(commandUpdateFam);
 					}
 				}
 				else {//if popup is on some other super family member, then copy to this patient.
-					if(newSuperFamily!=0) {//Only if they are moving to a superfamily.
-						popup.PatNum=pat.PatNum;
+					popupCur.PatNum=pat.PatNum;
+					if(newSuperFamily==0) {//If they are not going to a superfamily, set popup to family level
+						popupCur.PopupLevel=EnumPopupLevel.Family;
 					}
 				}
-				Popups.Insert(popup);//changes the PK
+				DateTime oldDate=popupCur.DateTimeEntry;
+				long newPk=Popups.Insert(popupCur);//changes the PK
+				//Update the DateTimeEntry on the copy to correctly reflect when the original popup was created.
+				EditPopupDate(oldDate,newPk);
+				//Now we need to copy all of the archives of the original popup to point to the copy.
+				List<Popup> archivePopups=GetArchivesForPopup(SuperFamilyPopups[i].PopupNum);
+				Popup popupArchive;
+				for(int j=0;j<archivePopups.Count;j++) {
+					popupArchive=archivePopups[j].Copy();
+					popupArchive.PopupNumArchive=newPk;
+					DateTime oldArchiveDate=popupArchive.DateTimeEntry;
+					long newArchivePk=Popups.Insert(popupArchive);//changes the PK
+					EditPopupDate(oldArchiveDate,newArchivePk);
+				}
 			}
 		}
 
@@ -177,16 +209,29 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
-		/// <summary>Deletes all superfamily level popups for a superfamily being disbanded.</summary>
+		/// <summary>Popup dates are not normally changed.  This only occurs when creating exact copies of popups and their archives when moving a patient from a family or superfamily.</summary>
+		private static void EditPopupDate(DateTime oldDate,long newPk) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),oldDate,newPk);
+				return;
+			}
+			string commandUpdate="UPDATE popup "
+					+"SET DateTimeEntry = "+POut.DateT(oldDate)+" "
+					+"WHERE PopupNum = "+POut.Long(newPk);
+			Db.NonQ(commandUpdate);
+		}
+
+		/// <summary>Brings all superfamily level popups for a superfamily being disbanded to the family level.</summary>
 		public static void RemoveForDisbandingSuperFamily(Patient pat) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),pat);
 				return;
 			}
-			//Get a list of family and superfamily popups for this individual
-			string command="DELETE FROM popup "
-				+"WHERE PopupLevel = "+POut.Int((int)EnumPopupLevel.SuperFamily)+" "
-				+"AND PatNum IN (SELECT PatNum FROM Patient WHERE SuperFamily="+POut.Long(pat.SuperFamily)+")";
+			string command="UPDATE popup "
+					+"SET PopupLevel = "+POut.Int((int)EnumPopupLevel.Family)+" "
+					+"WHERE PopupLevel = "+POut.Int((int)EnumPopupLevel.SuperFamily)+" "
+					+"AND PatNum IN (SELECT PatNum FROM Patient WHERE SuperFamily="+POut.Long(pat.SuperFamily)+") "
+					+"AND PopupNumArchive = 0";
 			Db.NonQ(command);
 		}
 
@@ -199,7 +244,7 @@ namespace OpenDentBusiness{
 			return Crud.PopupCrud.Insert(popup);
 		}
 
-		///<summary>Warning!  The calling code is reponsible for creating an archive first.</summary>
+		///<summary>Create an archive of the pop up before updating.</summary>
 		public static void Update(Popup popup) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),popup);
@@ -208,7 +253,7 @@ namespace OpenDentBusiness{
 			Crud.PopupCrud.Update(popup);
 		}
 
-		///<summary>Warning!  This is not used when user clicks Delete.  Instead, the existing popup is set to archive.</summary>
+		///<summary>Only called when moving popups for a patient that is leaving a superfamily but not going to another superfamily.</summary>
 		public static void DeleteObject(Popup popup){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),popup);

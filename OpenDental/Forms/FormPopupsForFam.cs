@@ -25,7 +25,7 @@ namespace OpenDental {
 
 		private void FillGrid() {
 			if(checkDeleted.Checked) {
-				PopupList=Popups.GetForFamilyDeleted(PatCur);
+				PopupList=Popups.GetDeletedForFamily(PatCur);
 			}
 			else {
 				PopupList=Popups.GetForFamily(PatCur);

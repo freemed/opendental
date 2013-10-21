@@ -299,8 +299,15 @@ namespace OpenDental{
 			if(PopupCur.UserNum!=0) {
 				textUser.Text=Userods.GetUser(PopupCur.UserNum).UserName;
 			}
-			textCreateDate.Text=PopupCur.DateTimeEntry.ToString();
-			textEditDate.Text=Popups.GetLastEditDate(PopupCur.PopupNum).ToString();
+			textCreateDate.Text="";
+			if(PopupCur.DateTimeEntry.Year>1880) {
+				textCreateDate.Text=PopupCur.DateTimeEntry.ToShortDateString()+" "+PopupCur.DateTimeEntry.ToShortTimeString();
+			}
+			DateTime dateT=Popups.GetLastEditDateTimeForPopup(PopupCur.PopupNum);
+			textEditDate.Text="";
+			if(dateT.Year>1880) {
+				textEditDate.Text=dateT.ToShortDateString()+" "+dateT.ToShortTimeString();//Sets the Edit date to the entry date of the last popup change that was archived for this popup.
+			}
 			for(int i=1;i<=4;i++) {
 				comboMinutes.Items.Add(i.ToString());
 			}

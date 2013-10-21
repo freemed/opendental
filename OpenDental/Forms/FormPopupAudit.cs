@@ -25,7 +25,7 @@ namespace OpenDental {
 		}
 
 		private void FillGrid() {//The grid cannot be changed to be sortable. This audit relies on the oldest popup changes being located at the top
-			ListPopupAud=Popups.GetArchivedPopups(PopupCur.PopupNum);
+			ListPopupAud=Popups.GetArchivesForPopup(PopupCur.PopupNum);
 			gridPopupAudit.BeginUpdate();
 			gridPopupAudit.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TablePopupsForFamily","Create Date"),140);
@@ -42,12 +42,17 @@ namespace OpenDental {
 			ODGridRow row;
 			for(int i=0;i<ListPopupAud.Count;i++) {
 				row=new ODGridRow();
-				row.Cells.Add(PopupCur.DateTimeEntry.ToString());
+				if(PopupCur.DateTimeEntry.Year<1880) {
+					row.Cells.Add("");
+				}
+				else {
+					row.Cells.Add(PopupCur.DateTimeEntry.ToString());
+				}
 				if(i==0) {
 					row.Cells.Add("");//Very first pop up entry.  No edit date.
 				}
 				else {
-					row.Cells.Add(ListPopupAud[i-1].DateTimeEntry.ToString());
+					row.Cells.Add(ListPopupAud[i-1].DateTimeEntry.ToString());//Gets the previous DateTimeEntry to show as the last edit date.
 				}
 				row.Cells.Add(Lan.g("enumEnumPopupLevel",ListPopupAud[i].PopupLevel.ToString()));
 				row.Cells.Add(ListPopupAud[i].IsDisabled?"X":"");
@@ -60,11 +65,9 @@ namespace OpenDental {
 		private void gridPopupAudit_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			FormPopupEdit FormPE=new FormPopupEdit();
 			FormPE.PopupAudit=PopupCur;
-			if(e.Row==0) {
-				FormPE.AuditEditDate="";//Since this is the original entry, the edit date will be blank
-			}
-			else {
-				FormPE.AuditEditDate=ListPopupAud[e.Row-1].DateTimeEntry.ToString();//Will have the edit date set as the entry date of the row before itself.
+			DateTime dateLastEdit=DateTime.MinValue;
+			if(e.Row > 0 && ListPopupAud[e.Row-1].DateTimeEntry.Year > 1880) {
+				FormPE.DateLastEdit=ListPopupAud[e.Row-1].DateTimeEntry;
 			}
 			FormPE.PopupCur=ListPopupAud[e.Row];
 			FormPE.ShowDialog();

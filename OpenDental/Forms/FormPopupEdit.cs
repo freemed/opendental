@@ -19,7 +19,8 @@ namespace OpenDental{
 		private OpenDental.UI.Button butDelete;
 		public Popup PopupCur;
 		public Popup PopupAudit;
-		public string AuditEditDate;
+		///<summary>The last edit date of the current popup.  Should be set before this form loads.</summary>
+		public DateTime DateLastEdit;
 		private ComboBox comboPopupLevel;
 		private Label label2;
 		private Label label3;
@@ -312,18 +313,30 @@ namespace OpenDental{
 				textCreateDate.Text=DateTime.Now.ToShortDateString()+" "+DateTime.Now.ToShortTimeString();
 			}
 			else {
-				if(PopupCur.UserNum!=0) {//This check is so that any old popups without a user yet will still display correctly.
+				if(PopupCur.UserNum!=0) {//This check is so that any old popups without a user will still display correctly.
 					textUser.Text=Userods.GetUser(PopupCur.UserNum).UserName;
 				}
 				if(PopupAudit!=null) {//This checks if this window opened from FormPopupAudit
-					textCreateDate.Text=PopupAudit.DateTimeEntry.ToString();//Sets the original creation date.
-					textEditDate.Text=AuditEditDate;//Sets the Edit date to the entry date of the last popup change that was archived for this popup. Passed in from the PopupAudit form.
+					textCreateDate.Text="";
+					if(PopupAudit.DateTimeEntry.Year > 1880) {
+						textCreateDate.Text=PopupAudit.DateTimeEntry.ToShortDateString()+" "+PopupAudit.DateTimeEntry.ToShortTimeString();//Sets the original creation date.
+					}
+					textEditDate.Text="";
+					if(DateLastEdit.Year > 1880) {
+						textEditDate.Text=DateLastEdit.ToShortDateString()+" "+DateLastEdit.ToShortTimeString();
+					}
 				}
 				else {
-					textCreateDate.Text=PopupCur.DateTimeEntry.ToString();//Sets the original creation date.
-					textEditDate.Text=Popups.GetLastEditDate(PopupCur.PopupNum);//Sets the Edit date to the entry date of the last popup change that was archived for this popup.
+					textCreateDate.Text="";
+					if(PopupCur.DateTimeEntry.Year > 1880) {
+						textCreateDate.Text=PopupCur.DateTimeEntry.ToShortDateString()+" "+PopupCur.DateTimeEntry.ToShortTimeString();//Sets the original creation date.
+					}
+					DateTime dateT=Popups.GetLastEditDateTimeForPopup(PopupCur.PopupNum);
+					textEditDate.Text="";
+					if(dateT.Year > 1880) {
+						textEditDate.Text=dateT.ToShortDateString()+" "+dateT.ToShortTimeString();//Sets the Edit date to the entry date of the last popup change that was archived for this popup.
+					}
 				}
-				
 			}
 			comboPopupLevel.Items.Add(Lan.g("enumEnumPopupFamily",Enum.GetNames(typeof(EnumPopupLevel))[0]));//Patient
 			comboPopupLevel.Items.Add(Lan.g("enumEnumPopupFamily",Enum.GetNames(typeof(EnumPopupLevel))[1]));//Family
