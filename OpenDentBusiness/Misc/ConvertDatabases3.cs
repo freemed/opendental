@@ -1234,8 +1234,15 @@ namespace OpenDentBusiness {
 					Db.NonQ(command);
 				}
 #endregion
-				command="ALTER TABLE emailaddress CHANGE SMTPserverIncoming Pop3ServerIncoming varchar(255) NOT NULL";//Oracle compatible too.
-				Db.NonQ(command);
+				//Rename emailaddress.SMTPserverIncoming to emailaddress.Pop3ServerIncoming, but leave data type alone. CRUD generator cannot write this query. See pattern for convert database.
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE emailaddress CHANGE SMTPserverIncoming Pop3ServerIncoming varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE emailaddress RENAME SMTPserverIncoming TO Pop3ServerIncoming";
+					Db.NonQ(command);
+				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE medicationpat ADD MedDescript varchar(255) NOT NULL";
 					Db.NonQ(command);
