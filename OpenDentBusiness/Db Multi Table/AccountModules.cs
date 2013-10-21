@@ -669,7 +669,27 @@ namespace OpenDentBusiness {
 				if(isNoBill){
 					row["description"]+=" "+Lans.g("ContrAccount","(NoBillIns)");
 				}
-				if(rawProc.Rows[i]["unsent_"].ToString()=="0" && !isNoBill){//no claim attached
+				bool isShowUnsent=false;
+				if(rawProc.Rows[i]["unsent_"].ToString()=="0" && !isNoBill){//no claim attached and marked to bill insurance
+					isShowUnsent=true;
+				}
+				string strProcNumLab=rawProc.Rows[i]["ProcNumLab"].ToString();
+				if(CultureInfo.CurrentCulture.Name.EndsWith("CA") && strProcNumLab!="0") {//Canadian. en-CA or fr-CA, lab fee.
+					long procNumLab=PIn.Long(strProcNumLab);
+					//Locate the parent proc. Since the lab is attached to a proc, the parent proc should be in the raw proc list.
+					isShowUnsent=false;
+					for(int j=0;j<rawProc.Rows.Count;j++) {
+						long procNumParent=PIn.Long(rawProc.Rows[j]["ProcNum"].ToString());
+						if(procNumParent!=procNumLab) {
+							continue;//skip
+						}
+						if(rawProc.Rows[j]["unsent_"].ToString()=="0" && !isNoBill) {//parent proc, no claim attached and marked to bill insurance (unsent)
+							isShowUnsent=true;//Since the attached parent procedure is unsent, then the lab fee is also unsent.
+							break;
+						}
+					}
+				}
+				if(isShowUnsent) {
 					row["description"]+=" "+Lans.g("ContrAccount","(unsent)");
 				}
 				insPayAmt=PIn.Decimal(rawProc.Rows[i]["insPayAmt_"].ToString());
@@ -1004,6 +1024,23 @@ namespace OpenDentBusiness {
 				} 
 				else if(claimStatus=="S"){
 					row["description"]+="\r\n"+Lans.g("ContrAccount","Sent");
+				}
+				decimal claimLabFeeTotalAmt=0;
+				//For Canada, add lab fee amounts into total claim amount.
+				if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {
+					string[] arrayProcNumsForClaim=PIn.ByteArray(rawClaim.Rows[i]["ProcNums_"]).Split(',');
+					for(int j=0;j<arrayProcNumsForClaim.Length;j++) {
+						long procNum=PIn.Long(arrayProcNumsForClaim[j]);
+						for(int k=0;k<rawProc.Rows.Count;k++) {//For each procedure attached to the claim, add the lab fees into the total amount. The lab fees show in the account because they are complete.
+							long procNumLab=PIn.Long(rawProc.Rows[k]["ProcNumLab"].ToString());
+							if(procNumLab==procNum) {
+								claimLabFeeTotalAmt+=PIn.Decimal(rawProc.Rows[k]["ProcFee"].ToString());
+							}
+						}
+					}
+				}
+				if(claimLabFeeTotalAmt>0) {
+					row["description"]+="\r\n"+Lans.g("ContrAccount","Lab Fees")+" "+claimLabFeeTotalAmt.ToString("c");
 				}
 				procAmt=PIn.Decimal(rawClaim.Rows[i]["procAmt_"].ToString());
 				insest=PIn.Decimal(rawClaim.Rows[i]["InsPayEst"].ToString());

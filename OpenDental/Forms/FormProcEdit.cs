@@ -2594,13 +2594,13 @@ namespace OpenDental{
 					if(canadaLabFees.Count>0) {
 						textCanadaLabFee1.Text=canadaLabFees[0].ProcFee.ToString("n");
 						if(canadaLabFees[0].ProcStatus==ProcStat.C) {
-							textCanadaLabFee1.Enabled=false;
+							textCanadaLabFee1.ReadOnly=true;
 						}
 					}
 					if(canadaLabFees.Count>1) {
 						textCanadaLabFee2.Text=canadaLabFees[1].ProcFee.ToString("n");
 						if(canadaLabFees[1].ProcStatus==ProcStat.C) {
-							textCanadaLabFee2.Enabled=false;
+							textCanadaLabFee2.ReadOnly=true;
 						}
 					}
 				}
