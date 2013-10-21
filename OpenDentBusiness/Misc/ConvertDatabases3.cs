@@ -1240,7 +1240,7 @@ namespace OpenDentBusiness {
 					Db.NonQ(command);
 				}
 				else {//oracle
-					command="ALTER TABLE emailaddress RENAME SMTPserverIncoming TO Pop3ServerIncoming";
+					command="ALTER TABLE emailaddress RENAME COLUMN SMTPserverIncoming TO Pop3ServerIncoming";
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
