@@ -325,7 +325,6 @@
 			this.Name = "FormPhoneTiles";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Phones";
-			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormPhoneTiles_FormClosing);
 			this.Load += new System.EventHandler(this.FormPhoneTiles_Load);
 			this.Shown += new System.EventHandler(this.FormPhoneTiles_Shown);
 			this.menuNumbers.ResumeLayout(false);

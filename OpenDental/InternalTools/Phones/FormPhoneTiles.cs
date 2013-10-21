@@ -23,7 +23,6 @@ namespace OpenDental {
 		private int msgCount;
 		private PhoneTile selectedTile;
 		///<summary>This thread fills labelMsg</summary>
-		private Thread workerThread;
 		private List<Phone> PhoneList;
 		private List<PhoneEmpDefault> PhoneEmpDefaultList;
 		///<summary>Max number of tiles that can be shown. Columns and tiles which are not needed will be hidden and the window will be sized accordingly.</summary>
@@ -40,6 +39,18 @@ namespace OpenDental {
 			FillTiles(false);
 		}
 
+		public void SetVoicemailCount(int voiceMailCount) {
+			if(voiceMailCount==0) {
+				labelMsg.Font=new Font(FontFamily.GenericSansSerif,8.5f,FontStyle.Regular);
+				labelMsg.ForeColor=Color.Black;
+			}
+			else {
+				labelMsg.Font=new Font(FontFamily.GenericSansSerif,10f,FontStyle.Bold);
+				labelMsg.ForeColor=Color.Firebrick;
+			}
+			labelMsg.Text="Voice Mails: "+voiceMailCount.ToString();
+		}
+
 		public FormPhoneTiles() {
 			InitializeComponent();
 		}
@@ -52,8 +63,6 @@ namespace OpenDental {
 					checkBoxAll.Visible=false;//so this will also be visible in debug
 				}
 #endif
-			workerThread=new Thread(new ThreadStart(this.WorkerThread_SetLabelMsg));
-			workerThread.Start();//It's done this way because the file activity tends to lock the UI on slow connections.
 			timeDelta=MiscData.GetNowDateTime()-DateTime.Now;
 			PhoneTile tile;
 			int x=0;
@@ -175,65 +184,6 @@ namespace OpenDental {
 			formPED.ShowDialog();
 		}
 
-		private delegate void DelegateSetString(String str,bool isBold,Color color);//typically at namespace level rather than class level
-
-		///<summary>Always called using worker thread.</summary>
-		private void WorkerThread_SetLabelMsg() {
-#if DEBUG
-			//Because path is not valid when Jordan is debugging from home.
-#else
-			while(true) {
-				string s;
-				bool isBold;
-				Color color;
-				try {
-					if(!Directory.Exists(PhoneUI.PathPhoneMsg)) {
-						s="msg path not found";
-						isBold=false;
-						color=Color.Black;
-						this.Invoke(new DelegateSetString(SetString),new Object[] { s,isBold,color });
-						return;
-					}
-					msgCount=Directory.GetFiles(PhoneUI.PathPhoneMsg,"*.txt").Length;
-					if(msgCount==0) {
-						s="Voice Mails: 0";
-						isBold=false;
-						color=Color.Black;
-						this.Invoke(new DelegateSetString(SetString),new Object[] { s,isBold,color });
-					}
-					else {
-						s="Voice Mails: "+msgCount.ToString();
-						isBold=true;
-						color=Color.Firebrick;
-						this.Invoke(new DelegateSetString(SetString),new Object[] { s,isBold,color });
-					}
-				}
-				catch(ThreadAbortException) {//OnClosing will abort the thread.
-					return;//Exits the loop.
-				}
-				catch(TargetInvocationException) {
-					//because this.Invoke will fail sometimes if the form is quickly closed and reopened because form handle has not yet been created.
-				}
-				catch(Exception ex){
-					throw ex;
-				}
-				Thread.Sleep(3000);
-			}
-#endif
-		}
-
-		///<summary>Called from worker thread using delegate and Control.Invoke</summary>
-		private void SetString(String str,bool isBold,Color color) {
-			labelMsg.Text=str;
-			if(isBold) {
-				labelMsg.Font=new Font(FontFamily.GenericSansSerif,10f,FontStyle.Bold);
-			}
-			else {
-				labelMsg.Font=new Font(FontFamily.GenericSansSerif,8.5f,FontStyle.Regular);
-			}
-			labelMsg.ForeColor=color;
-		}
-
 		private void checkBoxAll_Click(object sender,EventArgs e) {
 			Phones.ClearImages();
 			FillTiles(false);
@@ -340,14 +290,6 @@ namespace OpenDental {
 			PhoneUI.Break(selectedTile);
 			FillTiles(true);
 		}
-
-		private void FormPhoneTiles_FormClosing(object sender,FormClosingEventArgs e) {
-			if(workerThread!=null) {
-				workerThread.Abort();
-				workerThread.Join();
-				workerThread=null;
-			}
-		}
-
+		
 	}
 }
