@@ -3033,6 +3033,12 @@
     <EmbeddedResource Include="Forms\FormEhrSummaryCcdEdit.resx">
       <DependentUpon>FormEhrSummaryCcdEdit.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormMapAreaEdit.resx">
+      <DependentUpon>FormMapAreaEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormMapSetup.resx">
+      <DependentUpon>FormMapSetup.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormPopupAudit.resx">
       <DependentUpon>FormPopupAudit.cs</DependentUpon>
     </EmbeddedResource>

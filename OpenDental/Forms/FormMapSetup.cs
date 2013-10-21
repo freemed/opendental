@@ -201,36 +201,13 @@ namespace OpenDental {
 
 		#endregion
 
-		#region Grid
-
-		private void gridEmployees_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			//edit this entry
-			if(gridEmployees.Rows[e.Row].Tag==null || !(gridEmployees.Rows[e.Row].Tag is Employee)) {
-				return;
-			}
-			Employee employee=(Employee)gridEmployees.Rows[e.Row].Tag;
-			FormMapAreaEdit FormEP=new FormMapAreaEdit();
-			FormEP.MapItem=new MapArea();
-			FormEP.MapItem.IsNew=true;
-			FormEP.MapItem.Width=6;
-			FormEP.MapItem.Height=6;
-			FormEP.MapItem.ItemType=MapItemType.Room;
-			FormEP.MapItem.Extension=employee.PhoneExt;
-			if(FormEP.ShowDialog(this)!=DialogResult.OK) {
-				return;
-			}
-			mapAreaPanel_MapAreaChanged(this,new EventArgs());
-		}
-	
-		#endregion
-
 		#region Buttons
 
 		private void butBuildFromPhoneTable_Click(object sender,EventArgs e) {
 			if(MessageBox.Show("This action will clear all information from clinicmapitem table and recreated it from current phone table rows. Would you like to continue?","",MessageBoxButtons.YesNo)!=System.Windows.Forms.DialogResult.Yes) {
 				return;
 			}
-			butClear_Click(this,new EventArgs());
+			mapAreaPanel.Clear(true);
 			List<Phone> phones=Phones.GetPhoneList();
 			int defaultSizeFeet=6;
 			int row=1;
@@ -265,17 +242,28 @@ namespace OpenDental {
 				MapAreas.Insert(clinicMapItem);
 			}
 		}
-
-		private void butClear_Click(object sender,EventArgs e) {
-			if(MessageBox.Show("This will delete all items from database permanently. Are you sure you want to continue?","",MessageBoxButtons.YesNo)!=DialogResult.Yes) {
+		
+		private void butAddMapArea_Click(object sender,EventArgs e) {
+			//edit this entry
+			if(gridEmployees.SelectedIndices==null
+				|| gridEmployees.SelectedIndices.Length<=0
+				|| gridEmployees.Rows[gridEmployees.SelectedIndices[0]].Tag==null 
+				|| !(gridEmployees.Rows[gridEmployees.SelectedIndices[0]].Tag is Employee)) {
+				MsgBox.Show(this,"Select an employee");
 				return;
 			}
-			mapAreaPanel.Clear(true);
-		}
-
-		private void butAddRandomCubicle_Click(object sender,EventArgs e) {
-			MapArea clinicMapItem=mapAreaPanel.AddRandomCubicle();
-			MapAreas.Insert(clinicMapItem);
+			Employee employee=(Employee)gridEmployees.Rows[gridEmployees.SelectedIndices[0]].Tag;
+			FormMapAreaEdit FormEP=new FormMapAreaEdit();
+			FormEP.MapItem=new MapArea();
+			FormEP.MapItem.IsNew=true;
+			FormEP.MapItem.Width=6;
+			FormEP.MapItem.Height=6;
+			FormEP.MapItem.ItemType=MapItemType.Room;
+			FormEP.MapItem.Extension=employee.PhoneExt;
+			if(FormEP.ShowDialog(this)!=DialogResult.OK) {
+				return;
+			}
+			mapAreaPanel_MapAreaChanged(this,new EventArgs());
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {

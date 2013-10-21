@@ -38,8 +38,9 @@
 			this.newLabelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.label1 = new System.Windows.Forms.Label();
 			this.gridEmployees = new OpenDental.UI.ODGrid();
-			this.butClose = new System.Windows.Forms.Button();
 			this.mapAreaPanel = new OpenDental.MapAreaPanel();
+			this.butCancel = new OpenDental.UI.Button();
+			this.butAddMapArea = new OpenDental.UI.Button();
 			((System.ComponentModel.ISupportInitialize)(this.numFloorWidthFeet)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numFloorHeightFeet)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numPixelsPerFoot)).BeginInit();
@@ -50,9 +51,9 @@
 			// checkShowGrid
 			// 
 			this.checkShowGrid.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkShowGrid.Location = new System.Drawing.Point(15, 149);
+			this.checkShowGrid.Location = new System.Drawing.Point(15, 93);
 			this.checkShowGrid.Name = "checkShowGrid";
-			this.checkShowGrid.Size = new System.Drawing.Size(225, 28);
+			this.checkShowGrid.Size = new System.Drawing.Size(225, 16);
 			this.checkShowGrid.TabIndex = 3;
 			this.checkShowGrid.Text = "Show Grid";
 			this.checkShowGrid.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -61,16 +62,16 @@
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(11, 38);
+			this.label2.Location = new System.Drawing.Point(11, 22);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(209, 24);
+			this.label2.Size = new System.Drawing.Size(209, 16);
 			this.label2.TabIndex = 15;
 			this.label2.Text = "Floor Width (in feet)";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// numFloorWidthFeet
 			// 
-			this.numFloorWidthFeet.Location = new System.Drawing.Point(226, 34);
+			this.numFloorWidthFeet.Location = new System.Drawing.Point(226, 20);
 			this.numFloorWidthFeet.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -94,16 +95,16 @@
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(11, 76);
+			this.label3.Location = new System.Drawing.Point(11, 47);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(209, 24);
+			this.label3.Size = new System.Drawing.Size(209, 16);
 			this.label3.TabIndex = 17;
 			this.label3.Text = "Floor Height (in feet)";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// numFloorHeightFeet
 			// 
-			this.numFloorHeightFeet.Location = new System.Drawing.Point(226, 72);
+			this.numFloorHeightFeet.Location = new System.Drawing.Point(226, 45);
 			this.numFloorHeightFeet.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -127,16 +128,16 @@
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(11, 115);
+			this.label4.Location = new System.Drawing.Point(11, 72);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(209, 24);
+			this.label4.Size = new System.Drawing.Size(209, 16);
 			this.label4.TabIndex = 18;
 			this.label4.Text = "Pixels Per Foot";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// numPixelsPerFoot
 			// 
-			this.numPixelsPerFoot.Location = new System.Drawing.Point(226, 110);
+			this.numPixelsPerFoot.Location = new System.Drawing.Point(226, 70);
 			this.numPixelsPerFoot.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -163,9 +164,9 @@
 			this.checkShowOutline.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkShowOutline.Checked = true;
 			this.checkShowOutline.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkShowOutline.Location = new System.Drawing.Point(15, 183);
+			this.checkShowOutline.Location = new System.Drawing.Point(14, 113);
 			this.checkShowOutline.Name = "checkShowOutline";
-			this.checkShowOutline.Size = new System.Drawing.Size(225, 28);
+			this.checkShowOutline.Size = new System.Drawing.Size(225, 16);
 			this.checkShowOutline.TabIndex = 21;
 			this.checkShowOutline.Text = "Show Outline";
 			this.checkShowOutline.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -184,7 +185,7 @@
 			this.groupBox1.Controls.Add(this.label4);
 			this.groupBox1.Location = new System.Drawing.Point(1230, 34);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(334, 224);
+			this.groupBox1.Size = new System.Drawing.Size(334, 138);
 			this.groupBox1.TabIndex = 23;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Preview Different Options (will not persist after you close this form)";
@@ -224,25 +225,13 @@
 			// 
 			this.gridEmployees.Font = new System.Drawing.Font("Calibri", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.gridEmployees.HScrollVisible = false;
-			this.gridEmployees.Location = new System.Drawing.Point(1230, 271);
+			this.gridEmployees.Location = new System.Drawing.Point(1230, 178);
 			this.gridEmployees.Name = "gridEmployees";
 			this.gridEmployees.ScrollValue = 0;
 			this.gridEmployees.Size = new System.Drawing.Size(334, 729);
 			this.gridEmployees.TabIndex = 25;
-			this.gridEmployees.Title = "Employees (double-click to add a cubicle)";
+			this.gridEmployees.Title = "Employees";
 			this.gridEmployees.TranslationName = "TableEmployees";
-			this.gridEmployees.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridEmployees_CellDoubleClick);
-			// 
-			// butClose
-			// 
-			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butClose.Location = new System.Drawing.Point(1423, 1006);
-			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(142, 36);
-			this.butClose.TabIndex = 27;
-			this.butClose.Text = "Close";
-			this.butClose.UseVisualStyleBackColor = true;
-			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
 			// mapAreaPanel
 			// 
@@ -266,12 +255,45 @@
 			this.mapAreaPanel.MapAreaChanged += new System.EventHandler(this.mapAreaPanel_MapAreaChanged);
 			this.mapAreaPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mapAreaPanel_MouseUp);
 			// 
+			// butCancel
+			// 
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butCancel.Autosize = true;
+			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius = 4F;
+			this.butCancel.Location = new System.Drawing.Point(1489, 1016);
+			this.butCancel.Name = "butCancel";
+			this.butCancel.Size = new System.Drawing.Size(75, 24);
+			this.butCancel.TabIndex = 28;
+			this.butCancel.Text = "&Close";
+			this.butCancel.Click += new System.EventHandler(this.butClose_Click);
+			// 
+			// butAddMapArea
+			// 
+			this.butAddMapArea.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butAddMapArea.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butAddMapArea.Autosize = true;
+			this.butAddMapArea.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddMapArea.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddMapArea.CornerRadius = 4F;
+			this.butAddMapArea.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAddMapArea.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAddMapArea.Location = new System.Drawing.Point(1490, 913);
+			this.butAddMapArea.Name = "butAddMapArea";
+			this.butAddMapArea.Size = new System.Drawing.Size(75, 24);
+			this.butAddMapArea.TabIndex = 49;
+			this.butAddMapArea.Text = "Add";
+			this.butAddMapArea.Click += new System.EventHandler(this.butAddMapArea_Click);
+			// 
 			// FormMapSetup
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.AutoScroll = true;
 			this.ClientSize = new System.Drawing.Size(1577, 1042);
-			this.Controls.Add(this.butClose);
+			this.Controls.Add(this.butAddMapArea);
+			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.gridEmployees);
 			this.Controls.Add(this.groupBox1);
@@ -308,6 +330,7 @@
 		private System.Windows.Forms.ToolStripMenuItem newLabelToolStripMenuItem;
 		private UI.ODGrid gridEmployees;
 		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.Button butClose;
+		private UI.Button butCancel;
+		private UI.Button butAddMapArea;
 	}
 }

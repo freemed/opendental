@@ -14,11 +14,20 @@ namespace OpenDental {
 
 		private void FormMapAreaEdit_Load(object sender,EventArgs e) {
 			//show/hide fields according to MaptItemType
-			textBoxExtension.Visible=MapItem.ItemType==MapItemType.Room;
-			labelExtension.Visible=MapItem.ItemType==MapItemType.Room;
-			textBoxHeightFeet.Visible=MapItem.ItemType==MapItemType.Room;
-			labelHeight.Visible=MapItem.ItemType==MapItemType.Room;
-			labelDescription.Text=MapItem.ItemType==MapItemType.Room?"Description (shown when extension is 0)":"Text";
+			if(MapItem.ItemType==MapItemType.Room) {
+				textBoxExtension.Visible=true;
+				labelExtension.Visible=true;
+				textBoxHeightFeet.Visible=true;
+				labelHeight.Visible=true;
+				labelDescription.Text="Description (shown when extension is 0)";			
+			}
+			else {
+				textBoxExtension.Visible=false;
+				labelExtension.Visible=false;
+				textBoxHeightFeet.Visible=false;
+				labelHeight.Visible=false;
+				labelDescription.Text="Text";			
+			}
 			//populate the fields
 			textBoxXPos.Text=MapItem.XPos.ToString();
 			textBoxYPos.Text=MapItem.YPos.ToString();
@@ -29,30 +38,35 @@ namespace OpenDental {
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=System.Windows.Forms.DialogResult.Cancel;
+			DialogResult=DialogResult.Cancel;
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
 			try {
 				if(PIn.Double(textBoxXPos.Text)<0) {
 					textBoxXPos.Focus();
-					throw new Exception("Invalid XPos");
+					MessageBox.Show(Lan.g(this,"Invalid XPos"));
+					return;
 				}
 				if(PIn.Double(textBoxYPos.Text)<0) {
 					textBoxYPos.Focus();
-					throw new Exception("Invalid YPos");
+					MessageBox.Show(Lan.g(this,"Invalid YPos"));
+					return;
 				}
 				if(PIn.Double(textBoxWidthFeet.Text)<=0) {
 					textBoxWidthFeet.Focus();
-					throw new Exception("Invalid Width");
+					MessageBox.Show(Lan.g(this,"Invalid Width"));
+					return;
 				} 
 				if(PIn.Double(textBoxHeightFeet.Text)<=0) {
 					textBoxHeightFeet.Focus();
-					throw new Exception("Invalid Height");
+					MessageBox.Show(Lan.g(this,"Invalid Height"));
+					return;
 				}
 				if(PIn.Int(textBoxExtension.Text)<0) {
 					textBoxExtension.Focus();
-					throw new Exception("Invalid Extension");
+					MessageBox.Show(Lan.g(this,"Invalid Extension"));
+					return;
 				}
 				MapItem.Extension=PIn.Int(textBoxExtension.Text);
 				MapItem.XPos=PIn.Double(textBoxXPos.Text);
@@ -66,7 +80,7 @@ namespace OpenDental {
 				else {
 					MapAreas.Update(MapItem);
 				}
-				DialogResult=System.Windows.Forms.DialogResult.OK;
+				DialogResult=DialogResult.OK;
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
@@ -75,9 +89,10 @@ namespace OpenDental {
 
 		private void butDelete_Click(object sender,EventArgs e) {
 			if(MapItem.IsNew) {
+				DialogResult=System.Windows.Forms.DialogResult.Cancel;
 				return;
 			}
-			if(MessageBox.Show("Remove cubicle?","",MessageBoxButtons.YesNo)!=DialogResult.Yes) {
+			if(!MsgBox.Show(this,true,"Remove Map Area?")) {
 				return;
 			}
 			MapAreas.Delete(MapItem.MapAreaNum);

@@ -16,11 +16,12 @@ namespace OpenDental {
 		///<summary>The current location of the mouse when control is being dragged</summary>
 		private Point MouseLocationOnMouseDownStart;
 
+		///<summary>Event thrown when a drag event is complete. User was dragging but then picked the left mouse up or mouse left the control.</summary>
+		public event EventHandler DragDone;
+
 		public DraggableControl() {
 			InitializeComponent();
 		}
-
-		public event EventHandler DragDone;
 
 		private void UserControlDraggable_MouseDown(object sender,MouseEventArgs e) {
 			if(!AllowDragging) {
@@ -41,12 +42,12 @@ namespace OpenDental {
 			if(sender==null) {
 				return;
 			}
-			Control cubicle=(Control)sender;
+			Control control=(Control)sender;
 			if(IsMouseDown) { //move the control as far as we have moved the mouse
 				IsDragging=true; //indicate that we are now dragging
 				//move this control the same distance as we just moved the mouse
-				cubicle.Left+=(e.X - MouseLocationOnMouseDownStart.X);
-				cubicle.Top+=(e.Y - MouseLocationOnMouseDownStart.Y);
+				control.Left+=(e.X - MouseLocationOnMouseDownStart.X);
+				control.Top+=(e.Y - MouseLocationOnMouseDownStart.Y);
 			}
 		}
 
