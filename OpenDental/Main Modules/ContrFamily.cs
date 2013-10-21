@@ -1285,9 +1285,12 @@ namespace OpenDental{
 						FormPS.ShowDialog();
 						if(FormPS.DialogResult!=DialogResult.OK){
 							return;
+						}						
+						Patient patInNewFam=Patients.GetPat(FormPS.SelectedPatNum);
+						if(patInNewFam.Guarantor==PatCur.Guarantor) {
+							return;// Patient is already a part of the family.
 						}
 						Popups.CopyForMovingFamilyMember(PatCur);//Copy Family Level Popups to new Family. 
-						Patient patInNewFam=Patients.GetPat(FormPS.SelectedPatNum);
 						if(PatCur.SuperFamily!=patInNewFam.SuperFamily){//If they are moving into or out of a superfamily
 							if(PatCur.SuperFamily!=0) {//If they are currently in a SuperFamily.  Otherwise, no superfamily popups to worry about.
 								Popups.CopyForMovingSuperFamily(PatCur,patInNewFam.SuperFamily);
