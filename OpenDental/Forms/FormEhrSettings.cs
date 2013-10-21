@@ -130,6 +130,7 @@ namespace OpenDental {
 		}
 
 		private void FillRecEncCodesList() {
+			//All of the recommended codes are SNOMEDCT codes
 			ListRecEncCodes=new List<string>();
 			ListRecEncCodes.Add("none");
 			ListRecEncCodes.Add("90526000");//Initial evaluation and management of healthy individual (procedure)
@@ -144,6 +145,7 @@ namespace OpenDental {
 		}
 
 		private void FillRecPregCodesList() {
+			//All of the recommended codes are SNOMEDCT codes
 			ListRecPregCodes=new List<string>();
 			ListRecPregCodes.Add("none");
 			ListRecPregCodes.Add("72892002");//Normal pregnancy (finding)

@@ -52,7 +52,7 @@ namespace OpenDentBusiness.Crud{
 				intervention.CodeValue      = PIn.String(table.Rows[i]["CodeValue"].ToString());
 				intervention.CodeSystem     = PIn.String(table.Rows[i]["CodeSystem"].ToString());
 				intervention.Note           = PIn.String(table.Rows[i]["Note"].ToString());
-				intervention.DateTimeEntry  = PIn.DateT (table.Rows[i]["DateTimeEntry"].ToString());
+				intervention.DateTimeEntry  = PIn.Date  (table.Rows[i]["DateTimeEntry"].ToString());
 				intervention.CodeSet        = (InterventionCodeSet)PIn.Int(table.Rows[i]["CodeSet"].ToString());
 				retVal.Add(intervention);
 			}
@@ -104,7 +104,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(intervention.CodeValue)+"',"
 				+"'"+POut.String(intervention.CodeSystem)+"',"
 				+"'"+POut.String(intervention.Note)+"',"
-				+    DbHelper.Now()+","
+				+    POut.Date  (intervention.DateTimeEntry)+","
 				+    POut.Int   ((int)intervention.CodeSet)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -123,7 +123,7 @@ namespace OpenDentBusiness.Crud{
 				+"CodeValue      = '"+POut.String(intervention.CodeValue)+"', "
 				+"CodeSystem     = '"+POut.String(intervention.CodeSystem)+"', "
 				+"Note           = '"+POut.String(intervention.Note)+"', "
-				+"DateTimeEntry  =  "+POut.DateT (intervention.DateTimeEntry)+", "
+				+"DateTimeEntry  =  "+POut.Date  (intervention.DateTimeEntry)+", "
 				+"CodeSet        =  "+POut.Int   ((int)intervention.CodeSet)+" "
 				+"WHERE InterventionNum = "+POut.Long(intervention.InterventionNum);
 			Db.NonQ(command);
@@ -154,7 +154,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(intervention.DateTimeEntry != oldIntervention.DateTimeEntry) {
 				if(command!=""){ command+=",";}
-				command+="DateTimeEntry = "+POut.DateT(intervention.DateTimeEntry)+"";
+				command+="DateTimeEntry = "+POut.Date(intervention.DateTimeEntry)+"";
 			}
 			if(intervention.CodeSet != oldIntervention.CodeSet) {
 				if(command!=""){ command+=",";}

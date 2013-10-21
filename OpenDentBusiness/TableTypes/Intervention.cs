@@ -17,8 +17,7 @@ namespace OpenDentBusiness {
 		public string CodeSystem;
 		///<summary>User-entered details about the intervention for this patient.  Max length 4000.</summary>
 		public string Note;
-		///<summary>The date and time of the intervention.  Automatically set when the intervention is created, but this can be adjusted later.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateTEntryEditable)]
+		///<summary>The date and time of the intervention.</summary>
 		public DateTime DateTimeEntry;
 		///<summary>Enum:InterventionCodeSet AboveNormalWeight, BelowNormalWeight, TobaccoCessation, Nutrition, PhysicalActivity, Dialysis.</summary>
 		public InterventionCodeSet CodeSet;

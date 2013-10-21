@@ -1606,7 +1606,7 @@ namespace OpenDentBusiness {
 						CodeValue varchar(30) NOT NULL,
 						CodeSystem varchar(30) NOT NULL,
 						Note text NOT NULL,
-						DateTimeEntry datetime NOT NULL DEFAULT '0001-01-01 00:00:00',
+						DateTimeEntry date NOT NULL DEFAULT '0001-01-01',
 						CodeSet tinyint NOT NULL,
 						INDEX(PatNum),
 						INDEX(ProvNum),
