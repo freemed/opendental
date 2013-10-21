@@ -36,12 +36,12 @@ namespace OpenDentBusiness {
 		AboveNormalWeight,
 		///<summary>1 - Below Normal Weight Follow-up/Referrals where weight assessment may occur</summary>
 		BelowNormalWeight,
-		///<summary>2 - Tobacco Use Cessation Counseling</summary>
-		TobaccoCessation,
-		///<summary>3 - Counseling for Nutrition</summary>
+		///<summary>2 - Counseling for Nutrition</summary>
 		Nutrition,
-		///<summary>4 - Counseling for Physical Activity</summary>
+		///<summary>3 - Counseling for Physical Activity</summary>
 		PhysicalActivity,
+		///<summary>4 - Tobacco Use Cessation Counseling</summary>
+		TobaccoCessation,
 		///<summary>5 - Dialysis Education/Other Services Related to Dialysis</summary>
 		Dialysis
 	}

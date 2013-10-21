@@ -30,15 +30,15 @@ namespace OpenDental{
 			this.butOK = new System.Windows.Forms.Button();
 			this.butCancel = new System.Windows.Forms.Button();
 			this.butDelete = new System.Windows.Forms.Button();
-			this.textNote = new OpenDental.ODtextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.comboCodeSet = new System.Windows.Forms.ComboBox();
 			this.gridMain = new OpenDental.UI.ODGrid();
+			this.textNote = new OpenDental.ODtextBox();
 			this.SuspendLayout();
 			// 
 			// textDate
 			// 
-			this.textDate.Location = new System.Drawing.Point(107, 12);
+			this.textDate.Location = new System.Drawing.Point(90, 12);
 			this.textDate.Name = "textDate";
 			this.textDate.Size = new System.Drawing.Size(125, 20);
 			this.textDate.TabIndex = 143;
@@ -47,7 +47,7 @@ namespace OpenDental{
 			// 
 			this.label5.Location = new System.Drawing.Point(9, 14);
 			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(95, 17);
+			this.label5.Size = new System.Drawing.Size(78, 17);
 			this.label5.TabIndex = 144;
 			this.label5.Text = "Date";
 			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -95,21 +95,9 @@ namespace OpenDental{
 			this.butDelete.UseVisualStyleBackColor = true;
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
-			// textNote
-			// 
-			this.textNote.AcceptsTab = true;
-			this.textNote.DetectUrls = false;
-			this.textNote.Location = new System.Drawing.Point(110, 439);
-			this.textNote.Name = "textNote";
-			this.textNote.QuickPasteType = OpenDentBusiness.QuickPasteType.None;
-			this.textNote.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-			this.textNote.Size = new System.Drawing.Size(530, 60);
-			this.textNote.TabIndex = 147;
-			this.textNote.Text = "";
-			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(429, 14);
+			this.label1.Location = new System.Drawing.Point(229, 12);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(83, 17);
 			this.label1.TabIndex = 157;
@@ -120,7 +108,7 @@ namespace OpenDental{
 			// 
 			this.comboCodeSet.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboCodeSet.DropDownWidth = 125;
-			this.comboCodeSet.Location = new System.Drawing.Point(515, 12);
+			this.comboCodeSet.Location = new System.Drawing.Point(315, 10);
 			this.comboCodeSet.MaxDropDownItems = 30;
 			this.comboCodeSet.Name = "comboCodeSet";
 			this.comboCodeSet.Size = new System.Drawing.Size(125, 21);
@@ -133,10 +121,23 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(12, 39);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
 			this.gridMain.Size = new System.Drawing.Size(628, 394);
 			this.gridMain.TabIndex = 158;
 			this.gridMain.Title = "Intervention Codes";
 			this.gridMain.TranslationName = null;
+			// 
+			// textNote
+			// 
+			this.textNote.AcceptsTab = true;
+			this.textNote.DetectUrls = false;
+			this.textNote.Location = new System.Drawing.Point(110, 439);
+			this.textNote.Name = "textNote";
+			this.textNote.QuickPasteType = OpenDentBusiness.QuickPasteType.None;
+			this.textNote.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+			this.textNote.Size = new System.Drawing.Size(530, 60);
+			this.textNote.TabIndex = 147;
+			this.textNote.Text = "";
 			// 
 			// FormInterventionEdit
 			// 

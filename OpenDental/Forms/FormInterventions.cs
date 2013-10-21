@@ -93,7 +93,7 @@ namespace OpenDental {
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			FormInterventionEdit FormInt=new FormInterventionEdit();
 			FormInt.InterventionCur=listIntervention[e.Row];
-			FormInt.IsCodeSetLocked=true;
+			FormInt.IsAllTypes=true;
 			FormInt.ShowDialog();
 			FillGrid();
 		}
@@ -105,7 +105,7 @@ namespace OpenDental {
 			FormInt.InterventionCur.PatNum=PatCur.PatNum;
 			FormInt.InterventionCur.ProvNum=PatCur.PriProv;
 			FormInt.InterventionCur.DateTimeEntry=DateTime.Now;
-			FormInt.IsCodeSetLocked=false;
+			FormInt.IsAllTypes=false;
 			FormInt.ShowDialog();
 			FillGrid();
 		}
