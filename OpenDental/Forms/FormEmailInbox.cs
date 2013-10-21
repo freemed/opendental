@@ -56,10 +56,21 @@ namespace OpenDental {
 				return 0;
 			}
 			Cursor=Cursors.WaitCursor;
-			int emailMessageCount=0;
+			int emailMessagesTotalCount=0;
 			Text="Email Inbox for "+AddressInbox.EmailUsername+" - Fetching new email...";
 			try {
-				emailMessageCount=EmailMessages.ReceiveFromInbox(0,AddressInbox).Count;
+				bool hasMoreEmail=true;
+				while(hasMoreEmail) {
+					List<EmailMessage> emailMessages=EmailMessages.ReceiveFromInbox(1,AddressInbox);
+					emailMessagesTotalCount+=emailMessages.Count;
+					if(emailMessages.Count==0) {
+						hasMoreEmail=false;
+					}
+					else { //Show messages as they are downloaded, to indicate to the user that the program is still processing.
+						FillGridEmailMessages();
+						Application.DoEvents();
+					}
+				}
 			}
 			catch(Exception ex) {
 				MessageBox.Show(Lan.g(this,"Error retreiving email messages")+": "+ex.Message);
@@ -67,9 +78,8 @@ namespace OpenDental {
 			finally {
 				Text="Email Inbox for "+AddressInbox.EmailUsername;
 			}
-			FillGridEmailMessages();
 			Cursor=Cursors.Default;
-			return emailMessageCount;
+			return emailMessagesTotalCount;
 		}
 
 		///<summary>Gets new emails and also shows older emails from the database.</summary>
