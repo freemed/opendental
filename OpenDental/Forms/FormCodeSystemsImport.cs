@@ -97,6 +97,17 @@ namespace OpenDental {
 				if(!PreDownloadHelper(ListCodeSystems[gridMain.SelectedIndices[i]].CodeSystemName)){
 					continue;
 				}
+				if(ListCodeSystems[gridMain.SelectedIndices[i]].CodeSystemName=="CPT") {
+					try {
+						importCPTHelper();
+						CodeSystems.UpdateCurrentVersion(ListCodeSystems[gridMain.SelectedIndices[i]]);//set current version=available version
+						MsgBox.Show(this,"Cpt codes imported successfully.");
+					}
+					catch (Exception ex){
+						MessageBox.Show(this,"CPT codes have not been imported:\r\n"+ex.Message);
+					}
+					continue;
+				}
 				try {
 					Thread.Sleep(1000);
 					if(requestCodeSystemDownloadHelper(ListCodeSystems[gridMain.SelectedIndices[i]].CodeSystemName)) {//can throw exceptions
@@ -109,6 +120,34 @@ namespace OpenDental {
 				}
 			}
 			FillGrid();
+			Cursor=Cursors.Default;
+		}
+
+		///<summary>Surround with try/catch.  Launches all neccesary dialogs and throws exceptions.</summary>
+		private void importCPTHelper() {
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"CPT 2014 codes must be purchased from the American Medical Association seperately in the data file format and must be "
+				+"named \"cpt-2014-data-files-download.zip\". More information can be found in the online manual. If you have already purchased the code file select continue "
+				+"to browse to the downloaded file.")) {
+					throw new Exception("To purchase CPT 2014 codes go to https://commerce.ama-assn.org/store/");
+			}
+			FolderBrowserDialog fbd = new FolderBrowserDialog();
+			if(fbd.ShowDialog()!=DialogResult.OK) {
+				return;
+			}
+			if(!File.Exists(fbd.SelectedPath+"\\cpt-2014-data-files-download.zip")) {
+				throw new Exception("Could not locate cpt-2014-data-files-download.zip in specified folder.");
+			}
+			Cursor=Cursors.WaitCursor;
+			//Unzip the compressed file-----------------------------------------------------------------------------------------------------
+			MemoryStream ms=new MemoryStream();
+			using(ZipFile unzipped=ZipFile.Read(fbd.SelectedPath+"\\cpt-2014-data-files-download.zip")) {
+				for(int i=0;i<unzipped.Count;i++) {//unzip/write all files to the temp directory
+					ZipEntry ze=unzipped[i];
+					ze.Extract(Path.GetTempPath()+"CPT\\",ExtractExistingFileAction.OverwriteSilently);
+				}
+				//return Path.GetTempPath()+"CPT\\MEDU.txt.txt";
+			}
+			CodeSystems.ImportCpt(Path.GetTempPath()+"CPT\\MEDU.txt.txt");//MEDU.txt.txt is not a typo. That is litterally how the resource file is realeased to the public!
 			Cursor=Cursors.Default;
 		}
 
@@ -184,7 +223,7 @@ subject to the End User limitations noted in 4.","SNOMED CT sub-license End User
 						MsgBox.Show(this,"CDCREC codes imported successfully.");
 						break;
 					case "CDT":
-						//should never happen
+						//should never happen, Handled in the code above.
 						return false;
 					case "CPT":
 						//Handled slightly differenly before getting here. User must provide resource file using file picker, which will be pre-processed elsewhere.

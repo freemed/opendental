@@ -61,11 +61,13 @@ namespace OpenDental{
 			// 
 			// groupCodeSystems
 			// 
+			this.groupCodeSystems.Controls.Add(this.button1);
 			this.groupCodeSystems.Controls.Add(this.butRxNorm);
 			this.groupCodeSystems.Controls.Add(this.butICD9s);
+			this.groupCodeSystems.Controls.Add(this.butSnomeds);
 			this.groupCodeSystems.Location = new System.Drawing.Point(202, 0);
 			this.groupCodeSystems.Name = "groupCodeSystems";
-			this.groupCodeSystems.Size = new System.Drawing.Size(152, 94);
+			this.groupCodeSystems.Size = new System.Drawing.Size(152, 171);
 			this.groupCodeSystems.TabIndex = 136;
 			this.groupCodeSystems.TabStop = false;
 			this.groupCodeSystems.Text = "Code Systems";
@@ -77,7 +79,7 @@ namespace OpenDental{
 			this.butRxNorm.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRxNorm.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRxNorm.CornerRadius = 4F;
-			this.butRxNorm.Location = new System.Drawing.Point(12, 60);
+			this.butRxNorm.Location = new System.Drawing.Point(12, 98);
 			this.butRxNorm.Name = "butRxNorm";
 			this.butRxNorm.Size = new System.Drawing.Size(128, 24);
 			this.butRxNorm.TabIndex = 10;
@@ -91,7 +93,7 @@ namespace OpenDental{
 			this.butICD9s.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butICD9s.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butICD9s.CornerRadius = 4F;
-			this.butICD9s.Location = new System.Drawing.Point(12, 22);
+			this.butICD9s.Location = new System.Drawing.Point(12, 60);
 			this.butICD9s.Name = "butICD9s";
 			this.butICD9s.Size = new System.Drawing.Size(128, 24);
 			this.butICD9s.TabIndex = 9;
@@ -105,12 +107,12 @@ namespace OpenDental{
 			this.button1.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.button1.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.button1.CornerRadius = 4F;
-			this.button1.Location = new System.Drawing.Point(214, 174);
+			this.button1.Location = new System.Drawing.Point(12, 19);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(128, 24);
 			this.button1.TabIndex = 14;
 			this.button1.Text = "Code System Importer";
-			this.button1.Visible = false;
+			this.button1.UseVisualStyleBackColor = false;
 			this.button1.Click += new System.EventHandler(this.button1_Click);
 			// 
 			// butLoincs
@@ -120,7 +122,7 @@ namespace OpenDental{
 			this.butLoincs.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butLoincs.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butLoincs.CornerRadius = 4F;
-			this.butLoincs.Location = new System.Drawing.Point(214, 98);
+			this.butLoincs.Location = new System.Drawing.Point(214, 174);
 			this.butLoincs.Name = "butLoincs";
 			this.butLoincs.Size = new System.Drawing.Size(128, 24);
 			this.butLoincs.TabIndex = 11;
@@ -135,7 +137,7 @@ namespace OpenDental{
 			this.butSnomeds.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butSnomeds.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSnomeds.CornerRadius = 4F;
-			this.butSnomeds.Location = new System.Drawing.Point(214, 136);
+			this.butSnomeds.Location = new System.Drawing.Point(12, 136);
 			this.butSnomeds.Name = "butSnomeds";
 			this.butSnomeds.Size = new System.Drawing.Size(128, 24);
 			this.butSnomeds.TabIndex = 12;
@@ -311,11 +313,9 @@ namespace OpenDental{
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(561, 339);
-			this.Controls.Add(this.button1);
 			this.Controls.Add(this.butTimeSynch);
 			this.Controls.Add(this.butLoincs);
 			this.Controls.Add(this.groupCodeSystems);
-			this.Controls.Add(this.butSnomeds);
 			this.Controls.Add(this.butKeys);
 			this.Controls.Add(this.butEducationalResources);
 			this.Controls.Add(this.butInboundEmail);

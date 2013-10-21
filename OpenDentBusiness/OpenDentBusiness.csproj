@@ -194,6 +194,7 @@
     <Compile Include="Crud\CountyCrud.cs" />
     <Compile Include="Crud\CovCatCrud.cs" />
     <Compile Include="Crud\CovSpanCrud.cs" />
+    <Compile Include="Crud\CptCrud.cs" />
     <Compile Include="Crud\CreditCardCrud.cs" />
     <Compile Include="Crud\CustRefEntryCrud.cs" />
     <Compile Include="Crud\CustReferenceCrud.cs" />
@@ -401,6 +402,7 @@
     <Compile Include="Data Interface\CentralConnections.cs" />
     <Compile Include="Data Interface\ChartViews.cs" />
     <Compile Include="Data Interface\CodeSystems.cs" />
+    <Compile Include="Data Interface\Cpts.cs" />
     <Compile Include="Data Interface\Cvxs.cs" />
     <Compile Include="Data Interface\EhrAmendments.cs" />
     <Compile Include="Data Interface\EhrCodes.cs" />

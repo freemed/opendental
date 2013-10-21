@@ -16,7 +16,8 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<CodeSystem>>(MethodBase.GetCurrentMethod());
 			}
-			string command="SELECT * FROM codesystem WHERE CodeSystemName!='AdministrativeSex' AND CodeSystemName!='CDT'";
+			//string command="SELECT * FROM codesystem WHERE CodeSystemName!='AdministrativeSex' AND CodeSystemName!='CDT'";
+			string command="SELECT * FROM codesystem WHERE CodeSystemName IN ('ICD9CM','RXNORM','SNOMEDCT')";//,'CPT')";
 			return Crud.CodeSystemCrud.SelectMany(command);
 		}
 
@@ -66,9 +67,27 @@ namespace OpenDentBusiness{
 
 		///<summary>Called after user provides resource file.  Throws exceptions.</summary>
 		public static void ImportCpt(string tempFileName) {
-			//need to provide users a file picker interface to provide the raw files and then process them.
-			throw new Exception("Not Implemented.");
-			//handled differently because users must download and provide resource files independantly
+			HashSet<string> codeHash=new HashSet<string>(Cpts.GetAllCodes());
+			string[] lines=File.ReadAllLines(tempFileName);
+			string[] arrayCpt;
+			bool isHeader=true;
+			Cpt cpt=new Cpt();
+			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
+				if(isHeader) {
+					if(!lines[i].Contains("\t")) {
+						continue;//Copyright info is present at the head of the file.
+					}
+					isHeader=false;
+				}
+				arrayCpt=lines[i].Split('\t');
+				if(codeHash.Contains(arrayCpt[0])) {//code already exists
+					continue;
+				}
+				cpt.CptCode			=arrayCpt[0];
+				cpt.Description	=arrayCpt[1];
+				Cpts.Insert(cpt);
+			}
+			//File.Delete(tempFileName);
 		}
 
 		///<summary>Called after file is downloaded.  Throws exceptions.</summary>

@@ -7,46 +7,40 @@ using System.Text;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class Cpts{
-		//If this table type will exist as cached data, uncomment the CachePattern region below.
-		/*
-		#region CachePattern
-		//This region can be eliminated if this is not a table type with cached data.
-		//If leaving this region in place, be sure to add RefreshCache and FillCache 
-		//to the Cache.cs file with all the other Cache types.
 
-		///<summary>A list of all Cpts.</summary>
-		private static List<Cpt> listt;
-
-		///<summary>A list of all Cpts.</summary>
-		public static List<Cpt> Listt{
-			get {
-				if(listt==null) {
-					RefreshCache();
-				}
-				return listt;
+		public static List<Cpt> GetBySearchText(string searchText) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Cpt>>(MethodBase.GetCurrentMethod(),searchText);
 			}
-			set {
-				listt=value;
+			string[] searchTokens=searchText.Split(' ');
+			string command=@"SELECT * FROM cpt ";
+			for(int i=0;i<searchTokens.Length;i++) {
+				command+=(i==0?"WHERE ":"AND ")+"(CptCode LIKE '%"+POut.String(searchTokens[i])+"%' OR Description LIKE '%"+POut.String(searchTokens[i])+"%') ";
 			}
+			return Crud.CptCrud.SelectMany(command);
 		}
 
 		///<summary></summary>
-		public static DataTable RefreshCache(){
-			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
-			string command="SELECT * FROM cpt ORDER BY ItemOrder";//stub query probably needs to be changed
-			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
-			table.TableName="Cpt";
-			FillCache(table);
-			return table;
+		public static long Insert(Cpt cpt) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				cpt.CptNum=Meth.GetLong(MethodBase.GetCurrentMethod(),cpt);
+				return cpt.CptNum;
+			}
+			return Crud.CptCrud.Insert(cpt);
 		}
 
-		///<summary></summary>
-		public static void FillCache(DataTable table){
-			//No need to check RemotingRole; no call to db.
-			listt=Crud.CptCrud.TableToList(table);
+		internal static List<string> GetAllCodes() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<string>>(MethodBase.GetCurrentMethod());
+			}
+			List<string> retVal=new List<string>();
+			string command="SELECT CptCode FROM cpt";
+			DataTable table=DataCore.GetTable(command);
+			for(int i=0;i<table.Rows.Count;i++) {
+				retVal.Add(table.Rows[i][0].ToString());
+			}
+			return retVal;
 		}
-		#endregion
-		*/
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 
@@ -65,15 +59,6 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<Cpt>(MethodBase.GetCurrentMethod(),cptNum);
 			}
 			return Crud.CptCrud.SelectOne(cptNum);
-		}
-
-		///<summary></summary>
-		public static long Insert(Cpt cpt){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				cpt.CptNum=Meth.GetLong(MethodBase.GetCurrentMethod(),cpt);
-				return cpt.CptNum;
-			}
-			return Crud.CptCrud.Insert(cpt);
 		}
 
 		///<summary></summary>

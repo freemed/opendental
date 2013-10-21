@@ -94,65 +94,65 @@ namespace OpenDental {
 			}
 		}
 
-		private void butImport_Click(object sender,EventArgs e) {
-			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Snomed Codes will be cleared and and completely replaced with the codes in the file you are importing.  This will not damage patient records, but will reset any Snomed descriptions that had been changed.  Continue anyway?")) {
-				return;
-			}
-			Cursor=Cursors.WaitCursor;
-			OpenFileDialog Dlg=new OpenFileDialog();
-			if(Directory.Exists(PrefC.GetString(PrefName.ExportPath))) {
-				Dlg.InitialDirectory=PrefC.GetString(PrefName.ExportPath);
-			}
-			else if(Directory.Exists("C:\\")) {
-				Dlg.InitialDirectory="C:\\";
-			}
-			if(Dlg.ShowDialog()!=DialogResult.OK) {
-				Cursor=Cursors.Default;
-				return;
-			}
-			if(!File.Exists(Dlg.FileName)) {
-				Cursor=Cursors.Default;
-				MsgBox.Show(this,"File not found");
-				return;
-			}
-			string[] fields;
-			Snomed snomed;
-			using(StreamReader sr=new StreamReader(Dlg.FileName)) {
-				//string line=sr.ReadLine();
-				//Fields are: 0-id, 1-effectiveTime, 2-active, 3-moduleId, 4-conceptId, 5-languageCode, 6-typeId, 7-term, 8-caseSignificanceId
-				fields=sr.ReadLine().Split(new string[] { "\t" },StringSplitOptions.None);
-				if(fields.Length<8) {//We will attempt to access fields 4 - conceptId (SnomedCode) and 7 - term (Description). 0 indexed so field 7 is the 8th field.
-					MsgBox.Show(this,"You have selected the wrong file. There should be 9 columns in this file.");
-					return;
-				}
-				if(fields[4]!="conceptId" || fields[7]!="term") {//Headers in first line have the wrong names.
-					MsgBox.Show(this,"You have selected the wrong file: \"conceptId\" and \"term\" are not columns 5 and 8.");
-					return;//Headers are not right. Wrong file.
-				}
-				Cursor=Cursors.WaitCursor;
-				Cursor=Cursors.WaitCursor;
-				Snomeds.DeleteAll();//Last thing we do before looping through and adding new snomeds is to delete all the old snomeds.
-				while(!sr.EndOfStream) {					//line=sr.ReadLine();
-					//Fields are: 0-id, 1-effectiveTime, 2-active, 3-moduleId, 4-conceptId, 5-languageCode, 6-typeId, 7-term, 8-caseSignificanceId
-					fields=sr.ReadLine().Split(new string[1] { "\t" },StringSplitOptions.None);
-					if(fields.Length<8) {//We will attempt to access fieds 4 - conceptId (SnomedCode) and 7 - term (Description).
-						sr.ReadLine();
-						continue;
-					}
-					if(fields[6]!="900000000000003001") {//full qualified name(FQN), alternative is "900000000000013009", "Synonym"
-						continue;//skip anything that is not an FQN
-					}
-					snomed=new Snomed();
-					snomed.SnomedCode=fields[4];
-					snomed.Description=fields[7];
-					//snomed.DateOfStandard=DateTime.MinValue();//=PIn.Date(""+fields[1].Substring(4,2)+"/"+fields[1].Substring(6,2)+"/"+fields[1].Substring(0,4));//format from yyyyMMdd to MM/dd/yyyy
-					//snomed.IsActive=(fields[2]=="1");//true if column equals 1, false if column equals 0 or anything else.
-					Snomeds.Insert(snomed);
-				}
-			}
-			Cursor=Cursors.Default;
-			MsgBox.Show(this,"Import successful.");
-		}
+		//private void butImport_Click(object sender,EventArgs e) {
+		//	if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Snomed Codes will be cleared and and completely replaced with the codes in the file you are importing.  This will not damage patient records, but will reset any Snomed descriptions that had been changed.  Continue anyway?")) {
+		//		return;
+		//	}
+		//	Cursor=Cursors.WaitCursor;
+		//	OpenFileDialog Dlg=new OpenFileDialog();
+		//	if(Directory.Exists(PrefC.GetString(PrefName.ExportPath))) {
+		//		Dlg.InitialDirectory=PrefC.GetString(PrefName.ExportPath);
+		//	}
+		//	else if(Directory.Exists("C:\\")) {
+		//		Dlg.InitialDirectory="C:\\";
+		//	}
+		//	if(Dlg.ShowDialog()!=DialogResult.OK) {
+		//		Cursor=Cursors.Default;
+		//		return;
+		//	}
+		//	if(!File.Exists(Dlg.FileName)) {
+		//		Cursor=Cursors.Default;
+		//		MsgBox.Show(this,"File not found");
+		//		return;
+		//	}
+		//	string[] fields;
+		//	Snomed snomed;
+		//	using(StreamReader sr=new StreamReader(Dlg.FileName)) {
+		//		//string line=sr.ReadLine();
+		//		//Fields are: 0-id, 1-effectiveTime, 2-active, 3-moduleId, 4-conceptId, 5-languageCode, 6-typeId, 7-term, 8-caseSignificanceId
+		//		fields=sr.ReadLine().Split(new string[] { "\t" },StringSplitOptions.None);
+		//		if(fields.Length<8) {//We will attempt to access fields 4 - conceptId (SnomedCode) and 7 - term (Description). 0 indexed so field 7 is the 8th field.
+		//			MsgBox.Show(this,"You have selected the wrong file. There should be 9 columns in this file.");
+		//			return;
+		//		}
+		//		if(fields[4]!="conceptId" || fields[7]!="term") {//Headers in first line have the wrong names.
+		//			MsgBox.Show(this,"You have selected the wrong file: \"conceptId\" and \"term\" are not columns 5 and 8.");
+		//			return;//Headers are not right. Wrong file.
+		//		}
+		//		Cursor=Cursors.WaitCursor;
+		//		Cursor=Cursors.WaitCursor;
+		//		Snomeds.DeleteAll();//Last thing we do before looping through and adding new snomeds is to delete all the old snomeds.
+		//		while(!sr.EndOfStream) {					//line=sr.ReadLine();
+		//			//Fields are: 0-id, 1-effectiveTime, 2-active, 3-moduleId, 4-conceptId, 5-languageCode, 6-typeId, 7-term, 8-caseSignificanceId
+		//			fields=sr.ReadLine().Split(new string[1] { "\t" },StringSplitOptions.None);
+		//			if(fields.Length<8) {//We will attempt to access fieds 4 - conceptId (SnomedCode) and 7 - term (Description).
+		//				sr.ReadLine();
+		//				continue;
+		//			}
+		//			if(fields[6]!="900000000000003001") {//full qualified name(FQN), alternative is "900000000000013009", "Synonym"
+		//				continue;//skip anything that is not an FQN
+		//			}
+		//			snomed=new Snomed();
+		//			snomed.SnomedCode=fields[4];
+		//			snomed.Description=fields[7];
+		//			//snomed.DateOfStandard=DateTime.MinValue();//=PIn.Date(""+fields[1].Substring(4,2)+"/"+fields[1].Substring(6,2)+"/"+fields[1].Substring(0,4));//format from yyyyMMdd to MM/dd/yyyy
+		//			//snomed.IsActive=(fields[2]=="1");//true if column equals 1, false if column equals 0 or anything else.
+		//			Snomeds.Insert(snomed);
+		//		}
+		//	}
+		//	Cursor=Cursors.Default;
+		//	MsgBox.Show(this,"Import successful.");
+		//}
 
 		//private void listMain_DoubleClick(object sender,System.EventArgs e) {
 		//  if(listMain.SelectedIndex==-1) {
@@ -271,6 +271,79 @@ namespace OpenDental {
 			}
 			MessageBox.Show(Lan.g(this,"SNOMED codes added: ")+changeCount);
 		}
+
+//		private void butRSIT_Click(object sender,EventArgs e) {
+//			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"This tool is being used by Ryan to process the raw SNOMED data. Push Cancel if you do not know what this tool is doing.")) {
+//				return;
+//			}
+//			Cursor=Cursors.WaitCursor;
+//			string command="DROP TABLE IF EXISTS rxnormonly.rxnconso";
+//			DataCore.NonQ(command);
+//			command=@"CREATE TABLE rxnormonly.rxnconso ("
+//							+"RXCUI VarChar(255) NOT NULL, " //RxNorm Unique identifier for concept (concept ID)
+//							+"LAT VarChar(255) NOT NULL, " //Language of Term
+//							+"TS VarChar(255) NOT NULL, " //Term status (no value provided)
+//							+"LUI VarChar(255) NOT NULL, " //Unique identifier for term (no value provided)
+//							+"STT VarChar(255) NOT NULL, " //String type (no value provided)
+//							+"SUI VarChar(255) NOT NULL, " //Unique identifier for string (no value provided)
+//							+"ISPREF VarChar(255) NOT NULL, " //Atom status - preferred (Y) or not (N) for this string within this concept (no value provided)
+//							+"RXAUI VarChar(255) NOT NULL, " //Unique identifier for atom (RxNorm Atom ID)
+//							+"SAUI VarChar(255) NOT NULL, " //Source asserted atom identifier [optional]
+//							+"SCUI VarChar(255) NOT NULL, " //Source asserted concept identifier [optional]
+//							+"SDUI VarChar(255) NOT NULL, " //Source asserted descriptor identifier [optional] (no value provided)
+//							+"SAB VarChar(255) NOT NULL, " //Source abbreviation
+//							+"TTY VarChar(255) NOT NULL, " //Term type in source
+//							+"CODE VarChar(255) NOT NULL, " //"Most useful" source asserted identifier (if the source vocabulary has more than one identifier), or a RxNorm-generated source entry identifier (if the source vocabulary has none.)
+//							+"STR TEXT NOT NULL, " //String
+//							+"SRL VarChar(255) NOT NULL, " //Source Restriction Level (no value provided)
+//							+"SUPPRESS VarChar(255) NOT NULL, " //Suppressible flag. Values = N, O, Y, or E. N - not suppressible. O - Specific individual names (atoms) set as Obsolete because the name is no longer provided by the original source. Y - Suppressed by RxNorm editor. E - unquantified, non-prescribable drug with related quantified, prescribable drugs. NLM strongly recommends that users not alter editor-assigned suppressibility.
+//							+"CVF VarChar(255) NOT NULL, " //Content view flag. RxNorm includes one value, '4096', to denote inclusion in the Current Prescribable Content subset. All rows with CVF='4096' can be found in the subset.
+//							+"INDEX(RXCUI)"
+//						+") DEFAULT CHARSET=utf8";
+//			DataCore.NonQ(command);
+//			//Load raw data into DB
+//			string[] lines=File.ReadAllLines(@"C:\Docs\rxnconso.rrf");
+//			for(int i=1;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
+//				//foreach(string line in lines){
+//				string[] arraysnomed=lines[i].Split(new string[] { "|" },StringSplitOptions.None);//trailing vertical pipe implies there is a 19th cell, but instead deliniates.
+//				command=@"INSERT INTO rxnormonly.rxnconso VALUES (";
+//				for(int j=0;j<18;j++) {//18 columns instead of arraysnomed.length
+//					command+="'"+POut.String(arraysnomed[j])+"'"+",";
+//				}
+//				command=command.Trim(',')+")";
+//				DataCore.NonQ(command);
+//			}
+//			//Manipulate here.------------------------------------------------------------------------------------------------------
+////			string command="DROP TABLE IF EXISTS snomedonly.snomed";
+////			DataCore.NonQ(command);	
+////			command=@"CREATE TABLE snomedonly.snomed (
+////						SnomedNum bigint NOT NULL auto_increment PRIMARY KEY,
+////						SnomedCode VarChar(255) NOT NULL,
+////						Description VarChar(255) NOT NULL,
+////						INDEX(SnomedCode)
+////						) DEFAULT CHARSET=utf8";
+////			DataCore.NonQ(command);
+////			//Load raw data into DB
+////			command="INSERT INTO snomedonly.snomed (SnomedCode,Description) SELECT t.* FROM (SELECT conceptID, term FROM snomedonly.snomedusraw GROUP BY conceptid) t;";
+////			DataCore.NonQ(command);
+////						//HashSet<string> hss=new HashSet<string>();
+////						//string[] lines=File.ReadAllLines(@"C:\Docs\SNOMEDUS.TXT");
+////						//for(int i=1;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
+////						////foreach(string line in lines){
+////						//	string[] arraysnomed=lines[i].Split(new string[] { "\t" },StringSplitOptions.None);
+////						//	if(arraysnomed[6]=="900000000000013009") {
+////						//		continue;//synonym
+////						//	}
+////						//	if(hss.Contains(arraysnomed[4])){
+////						//		continue;//snomedcode already added.
+////						//	}
+////						//	hss.Add(arraysnomed[4]);
+////						//	command=@"INSERT INTO snomedonly.snomed VALUES ("+i+",'"+POut.String(arraysnomed[4])+"','"+POut.String(arraysnomed[7])+"')";
+////						//	DataCore.NonQ(command);
+////						//}
+//			Cursor=Cursors.Default;
+//			MsgBox.Show(this,"Done.");
+//		}
 
 		private void butOK_Click(object sender,EventArgs e) {
 			//not even visible unless IsSelectionMode
