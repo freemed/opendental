@@ -5420,6 +5420,28 @@ namespace OpenDental{
 		}
 
 		private void LogOffNow() {
+			for(int f=Application.OpenForms.Count-1;f>=0;f--) {//Loop backwards so we don't get an array out of bounds error
+				if(Application.OpenForms[f]==this) {// main form
+					continue;
+				}
+				Form openForm=Application.OpenForms[f];//Copy so we have a reference to it after we close it.
+				openForm.Hide();
+				//Currently there is no way to tell if LogOffNow got called from a user initiating the log off, or if this is the auto log off feature.
+				//Therefore, when the auto log off feature is enabled, we will forcefully close all forms because some forms might have pop ups within FormClosing prevent the form from closing.
+				//That introduces the possibility of sensitive information staying visible in the background while the program waits for user input.
+				if(PrefC.GetLong(PrefName.SecurityLogOffAfterMinutes)>0) {//If the auto-log off feature is enabled, force close all forms.
+					openForm.Dispose();
+				}
+				else {
+					//Gracefully close each window.  If a window requesting attention causes the form to stay open.  Stop the log off event because the user chose to.
+					openForm.Close();//Attempt to close the form
+					if(openForm.IsDisposed==false) {//If the form was not closed.  
+						//E.g. The wiki edit window will ask users if they want to lose their work or continue working.  This will get hit if they chose to continue working.
+						openForm.Show();//Show that form again
+						return;//Stop logging off
+					}
+				}
+			}
 			LastModule=myOutlookBar.SelectedIndex;
 			myOutlookBar.SelectedIndex=-1;
 			myOutlookBar.Invalidate();
@@ -5431,26 +5453,6 @@ namespace OpenDental{
 			Userod oldUser=Security.CurUser;
 			Security.CurUser=null;
 			Text=PatientL.GetMainTitle(null);
-			////Iterating through OpenForms with foreach did not work, probably because we were altering the collection when closing forms.
-			////So we make a copy of the collection before iterating through to close each form.
-			//List<Form> listForms=new List<Form>();
-			//for(int f=0;f<Application.OpenForms.Count;f++) {
-			//  listForms.Add(Application.OpenForms[f]);
-			//}
-			//for(int f=0;f<listForms.Count;f++) {
-			//  if(listForms[f]!=this) {//don't close the main form
-			//    listForms[f].Close();
-			//    listForms[f].Dispose();
-			//  }
-			//}
-			//Application.DoEvents();//so that the window background will refresh.
-			for(int f=Application.OpenForms.Count-1;f>=0;f--) {
-				if(Application.OpenForms[f]==this) {// main form
-					continue;
-				}
-				Application.OpenForms[f].Hide();
-				Application.OpenForms[f].Close();
-			}
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Security.CurUser=oldUser;//so that the queries in FormLogOn() will work for the web service, since the web service requires a valid user to run queries.
 			}
