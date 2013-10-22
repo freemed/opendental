@@ -702,70 +702,104 @@ namespace OpenDentBusiness{
 				#endregion
 				#region MedReconcile
 				case EhrMeasureType.MedReconcile:
-					command="DROP TABLE IF EXISTS tempehrmeasure"+rndStr;
-					Db.NonQ(command);
-					command="CREATE TABLE tempehrmeasure"+rndStr+@" (
-						PatNum bigint NOT NULL PRIMARY KEY,
-						LName varchar(255) NOT NULL,
-						FName varchar(255) NOT NULL,
-						RefCount int NOT NULL,
-						ReconcileCount int NOT NULL
-						) DEFAULT CHARSET=utf8";
-					Db.NonQ(command);
-					command="INSERT INTO tempehrmeasure"+rndStr+" (PatNum,LName,FName,RefCount) SELECT patient.PatNum,LName,FName,COUNT(*) "
-						+"FROM refattach,patient "
-						+"WHERE patient.PatNum=refattach.PatNum "
-						//+"AND patient.PriProv="+POut.Long(provNum)+" "
-						+"AND patient.PriProv IN("+POut.String(provs)+") "
-						+"AND RefDate >= "+POut.Date(dateStart)+" "
-						+"AND RefDate <= "+POut.Date(dateEnd)+" "
-						+"AND IsFrom=1 AND IsTransitionOfCare=1 "
-						+"GROUP BY refattach.PatNum";
-					Db.NonQ(command);
-					command="UPDATE tempehrmeasure"+rndStr+" "
-						+"SET ReconcileCount = (SELECT COUNT(*) FROM ehrmeasureevent "
-						+"WHERE ehrmeasureevent.PatNum=tempehrmeasure"+rndStr+".PatNum AND EventType="+POut.Int((int)EhrMeasureEventType.MedicationReconcile)+" "
-						+"AND DATE(ehrmeasureevent.DateTEvent) >= "+POut.Date(dateStart)+" "
-						+"AND DATE(ehrmeasureevent.DateTEvent) <= "+POut.Date(dateEnd)+")";
-					Db.NonQ(command);
-					command="SELECT * FROM tempehrmeasure"+rndStr;
+					//command="DROP TABLE IF EXISTS tempehrmeasure"+rndStr;
+					//Db.NonQ(command);
+					//command="CREATE TABLE tempehrmeasure"+rndStr+@" (
+					//	PatNum bigint NOT NULL PRIMARY KEY,
+					//	LName varchar(255) NOT NULL,
+					//	FName varchar(255) NOT NULL,
+					//	RefCount int NOT NULL,
+					//	ReconcileCount int NOT NULL
+					//	) DEFAULT CHARSET=utf8";
+					//Db.NonQ(command);
+					//command="INSERT INTO tempehrmeasure"+rndStr+" (PatNum,LName,FName,RefCount) SELECT patient.PatNum,LName,FName,COUNT(*) "
+					//	+"FROM refattach,patient "
+					//	+"WHERE patient.PatNum=refattach.PatNum "
+					//	//+"AND patient.PriProv="+POut.Long(provNum)+" "
+					//	+"AND patient.PriProv IN("+POut.String(provs)+") "
+					//	+"AND RefDate >= "+POut.Date(dateStart)+" "
+					//	+"AND RefDate <= "+POut.Date(dateEnd)+" "
+					//	+"AND IsFrom=1 AND IsTransitionOfCare=1 "
+					//	+"GROUP BY refattach.PatNum";
+					//Db.NonQ(command);
+					//command="UPDATE tempehrmeasure"+rndStr+" "
+					//	+"SET ReconcileCount = (SELECT COUNT(*) FROM ehrmeasureevent "
+					//	+"WHERE ehrmeasureevent.PatNum=tempehrmeasure"+rndStr+".PatNum AND EventType="+POut.Int((int)EhrMeasureEventType.MedicationReconcile)+" "
+					//	+"AND DATE(ehrmeasureevent.DateTEvent) >= "+POut.Date(dateStart)+" "
+					//	+"AND DATE(ehrmeasureevent.DateTEvent) <= "+POut.Date(dateEnd)+")";
+					//Db.NonQ(command);
+					//command="SELECT * FROM tempehrmeasure"+rndStr;
+					//tableRaw=Db.GetTable(command);
+					//command="DROP TABLE IF EXISTS tempehrmeasure"+rndStr;
+					//Db.NonQ(command);
+					//Reworked to only count patients seen by this provider in the date range
+					command="SELECT ptsRefCnt.*,COALESCE(RecCount,0) AS ReconcileCount "
+						+"FROM (SELECT ptsSeen.*,COUNT(DISTINCT refattach.RefAttachNum) AS RefCount "
+							+"FROM (SELECT patient.PatNum,LName,FName FROM patient "
+								+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum "
+								+"AND ProcStatus=2 AND ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+								+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
+								+"GROUP BY patient.PatNum) ptsSeen "
+							+"INNER JOIN refattach ON ptsSeen.PatNum=refattach.PatNum "
+							+"AND RefDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+							+"AND IsFrom=1 AND IsTransitionOfCare=1 "
+							+"GROUP BY ptsSeen.PatNum) ptsRefCnt "
+						+"LEFT JOIN (SELECT ehrmeasureevent.PatNum,COUNT(*) AS RecCount FROM ehrmeasureevent "
+							+"WHERE EventType="+POut.Int((int)EhrMeasureEventType.MedicationReconcile)+" "
+							+"AND DATE(ehrmeasureevent.DateTEvent) BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+							+"GROUP BY ehrmeasureevent.PatNum) ptsRecCount ON ptsRefCnt.PatNum=ptsRecCount.PatNum";
 					tableRaw=Db.GetTable(command);
-					command="DROP TABLE IF EXISTS tempehrmeasure"+rndStr;
-					Db.NonQ(command);
 					break;
 				#endregion
 				#region SummaryOfCare
 				case EhrMeasureType.SummaryOfCare:
-					command="DROP TABLE IF EXISTS tempehrmeasure"+rndStr;
-					Db.NonQ(command);
-					command="CREATE TABLE tempehrmeasure"+rndStr+@" (
-						PatNum bigint NOT NULL PRIMARY KEY,
-						LName varchar(255) NOT NULL,
-						FName varchar(255) NOT NULL,
-						RefCount int NOT NULL,
-						CcdCount int NOT NULL
-						) DEFAULT CHARSET=utf8";
-					Db.NonQ(command);
-					command="INSERT INTO tempehrmeasure"+rndStr+" (PatNum,LName,FName,RefCount) SELECT patient.PatNum,LName,FName,COUNT(*) "
-						+"FROM refattach,patient "
-						+"WHERE patient.PatNum=refattach.PatNum "
-						//+"AND patient.PriProv="+POut.Long(provNum)+" "
-						+"AND patient.PriProv IN("+POut.String(provs)+") "
-						+"AND RefDate >= "+POut.Date(dateStart)+" "
-						+"AND RefDate <= "+POut.Date(dateEnd)+" "
-						+"AND IsFrom=0 AND IsTransitionOfCare=1 "
-						+"GROUP BY refattach.PatNum";
-					Db.NonQ(command);
-					command="UPDATE tempehrmeasure"+rndStr+" "
-						+"SET CcdCount = (SELECT COUNT(*) FROM ehrmeasureevent "
-						+"WHERE ehrmeasureevent.PatNum=tempehrmeasure"+rndStr+".PatNum AND EventType="+POut.Int((int)EhrMeasureEventType.SummaryOfCareProvidedToDr)+" "
-						+"AND DATE(ehrmeasureevent.DateTEvent) >= "+POut.Date(dateStart)+" "
-						+"AND DATE(ehrmeasureevent.DateTEvent) <= "+POut.Date(dateEnd)+")";
-					Db.NonQ(command);
-					command="SELECT * FROM tempehrmeasure"+rndStr;
+					//command="DROP TABLE IF EXISTS tempehrmeasure"+rndStr;
+					//Db.NonQ(command);
+					//command="CREATE TABLE tempehrmeasure"+rndStr+@" (
+					//	PatNum bigint NOT NULL PRIMARY KEY,
+					//	LName varchar(255) NOT NULL,
+					//	FName varchar(255) NOT NULL,
+					//	RefCount int NOT NULL,
+					//	CcdCount int NOT NULL
+					//	) DEFAULT CHARSET=utf8";
+					//Db.NonQ(command);
+					//command="INSERT INTO tempehrmeasure"+rndStr+" (PatNum,LName,FName,RefCount) SELECT patient.PatNum,LName,FName,COUNT(*) "
+					//	+"FROM refattach,patient "
+					//	+"WHERE patient.PatNum=refattach.PatNum "
+					//	//+"AND patient.PriProv="+POut.Long(provNum)+" "
+					//	+"AND patient.PriProv IN("+POut.String(provs)+") "
+					//	+"AND RefDate >= "+POut.Date(dateStart)+" "
+					//	+"AND RefDate <= "+POut.Date(dateEnd)+" "
+					//	+"AND IsFrom=0 AND IsTransitionOfCare=1 "
+					//	+"GROUP BY refattach.PatNum";
+					//Db.NonQ(command);
+					//command="UPDATE tempehrmeasure"+rndStr+" "
+					//	+"SET CcdCount = (SELECT COUNT(*) FROM ehrmeasureevent "
+					//	+"WHERE ehrmeasureevent.PatNum=tempehrmeasure"+rndStr+".PatNum AND EventType="+POut.Int((int)EhrMeasureEventType.SummaryOfCareProvidedToDr)+" "
+					//	+"AND DATE(ehrmeasureevent.DateTEvent) >= "+POut.Date(dateStart)+" "
+					//	+"AND DATE(ehrmeasureevent.DateTEvent) <= "+POut.Date(dateEnd)+")";
+					//Db.NonQ(command);
+					//command="SELECT * FROM tempehrmeasure"+rndStr;
+					//tableRaw=Db.GetTable(command);
+					//command="DROP TABLE IF EXISTS tempehrmeasure"+rndStr;
+					//Db.NonQ(command);
+					//Reworked to only count patients seen by this provider in the date range
+					command="SELECT ptsRefCnt.*,COALESCE(CcdCount,0) AS CcdCount "
+						+"FROM (SELECT ptsSeen.*,COUNT(DISTINCT refattach.RefAttachNum) AS RefCount "
+							+"FROM (SELECT patient.PatNum,LName,FName FROM patient "
+								+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum "
+								+"AND ProcStatus=2 AND ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+								+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
+								+"GROUP BY patient.PatNum) ptsSeen "
+							+"INNER JOIN refattach ON ptsSeen.PatNum=refattach.PatNum "
+							+"AND RefDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+							+"AND IsFrom=0 AND IsTransitionOfCare=1 "
+							+"GROUP BY ptsSeen.PatNum) ptsRefCnt "
+						+"LEFT JOIN (SELECT ehrmeasureevent.PatNum,COUNT(*) AS CcdCount FROM ehrmeasureevent "
+							+"WHERE EventType="+POut.Int((int)EhrMeasureEventType.SummaryOfCareProvidedToDr)+" "
+							+"AND DATE(ehrmeasureevent.DateTEvent) BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+							+"GROUP BY ehrmeasureevent.PatNum) ptsCcdCount ON ptsRefCnt.PatNum=ptsCcdCount.PatNum";
 					tableRaw=Db.GetTable(command);
-					command="DROP TABLE IF EXISTS tempehrmeasure"+rndStr;
-					Db.NonQ(command);
 					break;
 				#endregion
 				default:
