@@ -1597,14 +1597,15 @@ namespace OpenDental
 				feeSched=plan.AllowedFeeSched;
 			}
 			else if(plan.PlanType=="p") {
+				//The only other way to manually edit allowed fee schedule amounts is blocked via the Setup permission.
+				//We only want to block PPO patients so that we don't partially break Blue Book users.
+				if(!Security.IsAuthorized(Permissions.Setup)) {
+					return;
+				}
 				feeSched=plan.FeeSched;
 			}
 			if(FeeScheds.GetIsHidden(feeSched)){
 				MsgBox.Show(this,"Allowed fee schedule is hidden, so no changes can be made.");
-				return;
-			}
-			//The only other way to manually edit allowed fee schedule amounts is through Setup.  This check stops users from manually changing allowed amounts without having permission to.
-			if(!Security.IsAuthorized(Permissions.Setup)) {
 				return;
 			}
 			Fee FeeCur=Fees.GetFee(proc.CodeNum,feeSched);
@@ -1617,6 +1618,10 @@ namespace OpenDental
 				//SecurityLog is updated in FormFeeEdit.
 				FormFE.IsNew=true;
 			}
+			//Make an audit entry that the user manually launched the Fee Edit window from this location.
+			SecurityLogs.MakeLogEntry(Permissions.ProcFeeEdit,0,Lan.g(this,"Procedure")+": "+ProcedureCodes.GetStringProcCode(FeeCur.CodeNum)
+				+", "+Lan.g(this,"Fee: ")+""+FeeCur.Amount.ToString("c")+", "+Lan.g(this,"Fee Schedule")+": "+FeeScheds.GetDescription(FeeCur.FeeSched)
+				+". "+Lan.g(this,"Manually launched Edit Fee window via Edit Claim Procedure window."),FeeCur.CodeNum);
 			FormFE.FeeCur=FeeCur;
 			FormFE.ShowDialog();
 			if(FormFE.DialogResult==DialogResult.OK){
