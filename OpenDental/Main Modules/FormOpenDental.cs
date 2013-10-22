@@ -248,8 +248,6 @@ namespace OpenDental{
 		private Label labelMsg;
 		///<summary>This thread fills labelMsg</summary>
 		private Thread ThreadVM;
-		///<summary>Holds the time for the oldest triage task.</summary>
-		private DateTime triageTime;
 		private MenuItem menuItemWiki;
 		private MenuItem menuItemProcLockTool;
 		private MenuItem menuItemHL7;
@@ -261,6 +259,8 @@ namespace OpenDental{
 		private System.Windows.Forms.Timer timerEmailInboxCheck;
 		private FormCreditRecurringCharges FormCRC;
 		private UI.Button butMapPhones;
+		private ComboBox comboTriageCoordinator;
+		private Label labelFieldType;
 		private DateTime TimeLastEmailInboxCheck;
 
 		///<summary></summary>
@@ -505,14 +505,16 @@ namespace OpenDental{
 			this.timerLogoff = new System.Windows.Forms.Timer(this.components);
 			this.timerReplicationMonitor = new System.Windows.Forms.Timer(this.components);
 			this.panelPhoneSmall = new System.Windows.Forms.Panel();
+			this.labelFieldType = new System.Windows.Forms.Label();
+			this.comboTriageCoordinator = new System.Windows.Forms.ComboBox();
+			this.labelMsg = new System.Windows.Forms.Label();
+			this.butMapPhones = new OpenDental.UI.Button();
 			this.butTriage = new OpenDental.UI.Button();
 			this.butBigPhones = new OpenDental.UI.Button();
 			this.labelWaitTime = new System.Windows.Forms.Label();
 			this.labelTriage = new System.Windows.Forms.Label();
-			this.labelMsg = new System.Windows.Forms.Label();
-			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
 			this.timerEmailInboxCheck = new System.Windows.Forms.Timer(this.components);
-			this.butMapPhones = new OpenDental.UI.Button();
+			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
 			this.panelPhoneSmall.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -1428,91 +1430,49 @@ namespace OpenDental{
 			// 
 			// panelPhoneSmall
 			// 
+			this.panelPhoneSmall.Controls.Add(this.labelFieldType);
+			this.panelPhoneSmall.Controls.Add(this.comboTriageCoordinator);
+			this.panelPhoneSmall.Controls.Add(this.labelMsg);
 			this.panelPhoneSmall.Controls.Add(this.butMapPhones);
 			this.panelPhoneSmall.Controls.Add(this.butTriage);
 			this.panelPhoneSmall.Controls.Add(this.butBigPhones);
 			this.panelPhoneSmall.Controls.Add(this.labelWaitTime);
 			this.panelPhoneSmall.Controls.Add(this.labelTriage);
-			this.panelPhoneSmall.Controls.Add(this.labelMsg);
 			this.panelPhoneSmall.Location = new System.Drawing.Point(71, 333);
 			this.panelPhoneSmall.Name = "panelPhoneSmall";
-			this.panelPhoneSmall.Size = new System.Drawing.Size(150, 265);
+			this.panelPhoneSmall.Size = new System.Drawing.Size(150, 321);
 			this.panelPhoneSmall.TabIndex = 56;
 			// 
-			// butTriage
+			// labelFieldType
 			// 
-			this.butTriage.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butTriage.Autosize = true;
-			this.butTriage.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butTriage.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butTriage.CornerRadius = 4F;
-			this.butTriage.Location = new System.Drawing.Point(92, 0);
-			this.butTriage.Name = "butTriage";
-			this.butTriage.Size = new System.Drawing.Size(18, 24);
-			this.butTriage.TabIndex = 52;
-			this.butTriage.Text = "T";
-			this.butTriage.Click += new System.EventHandler(this.butTriage_Click);
+			this.labelFieldType.Location = new System.Drawing.Point(4, 25);
+			this.labelFieldType.Name = "labelFieldType";
+			this.labelFieldType.Size = new System.Drawing.Size(143, 15);
+			this.labelFieldType.TabIndex = 88;
+			this.labelFieldType.Text = "Triage Coordinator";
+			this.labelFieldType.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
-			// butBigPhones
+			// comboTriageCoordinator
 			// 
-			this.butBigPhones.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butBigPhones.Autosize = true;
-			this.butBigPhones.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butBigPhones.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butBigPhones.CornerRadius = 4F;
-			this.butBigPhones.Location = new System.Drawing.Point(112, 0);
-			this.butBigPhones.Name = "butBigPhones";
-			this.butBigPhones.Size = new System.Drawing.Size(18, 24);
-			this.butBigPhones.TabIndex = 52;
-			this.butBigPhones.Text = "B";
-			this.butBigPhones.Click += new System.EventHandler(this.butBigPhones_Click);
-			// 
-			// labelWaitTime
-			// 
-			this.labelWaitTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelWaitTime.ForeColor = System.Drawing.Color.Black;
-			this.labelWaitTime.Location = new System.Drawing.Point(60, 2);
-			this.labelWaitTime.Name = "labelWaitTime";
-			this.labelWaitTime.Size = new System.Drawing.Size(33, 20);
-			this.labelWaitTime.TabIndex = 53;
-			this.labelWaitTime.Text = "00m";
-			this.labelWaitTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// labelTriage
-			// 
-			this.labelTriage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelTriage.ForeColor = System.Drawing.Color.Black;
-			this.labelTriage.Location = new System.Drawing.Point(31, 2);
-			this.labelTriage.Name = "labelTriage";
-			this.labelTriage.Size = new System.Drawing.Size(36, 20);
-			this.labelTriage.TabIndex = 53;
-			this.labelTriage.Text = "T:00";
-			this.labelTriage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.comboTriageCoordinator.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboTriageCoordinator.FormattingEnabled = true;
+			this.comboTriageCoordinator.Location = new System.Drawing.Point(0, 42);
+			this.comboTriageCoordinator.MaxDropDownItems = 10;
+			this.comboTriageCoordinator.Name = "comboTriageCoordinator";
+			this.comboTriageCoordinator.Size = new System.Drawing.Size(150, 21);
+			this.comboTriageCoordinator.TabIndex = 87;
+			this.comboTriageCoordinator.SelectionChangeCommitted += new System.EventHandler(this.comboTriageCoordinator_SelectionChangeCommitted);
 			// 
 			// labelMsg
 			// 
-			this.labelMsg.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelMsg.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.labelMsg.ForeColor = System.Drawing.Color.Firebrick;
 			this.labelMsg.Location = new System.Drawing.Point(-1, 2);
 			this.labelMsg.Name = "labelMsg";
-			this.labelMsg.Size = new System.Drawing.Size(44, 20);
+			this.labelMsg.Size = new System.Drawing.Size(35, 20);
 			this.labelMsg.TabIndex = 53;
 			this.labelMsg.Text = "V:00";
 			this.labelMsg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// lightSignalGrid1
-			// 
-			this.lightSignalGrid1.Location = new System.Drawing.Point(0, 463);
-			this.lightSignalGrid1.Name = "lightSignalGrid1";
-			this.lightSignalGrid1.Size = new System.Drawing.Size(50, 206);
-			this.lightSignalGrid1.TabIndex = 20;
-			this.lightSignalGrid1.Text = "lightSignalGrid1";
-			this.lightSignalGrid1.ButtonClick += new OpenDental.UI.ODLightSignalGridClickEventHandler(this.lightSignalGrid1_ButtonClick);
-			// 
-			// timerEmailInboxCheck
-			// 
-			this.timerEmailInboxCheck.Interval = 30000;
-			this.timerEmailInboxCheck.Tick += new System.EventHandler(this.timerEmailInboxCheck_Tick);
 			// 
 			// butMapPhones
 			// 
@@ -1528,9 +1488,73 @@ namespace OpenDental{
 			this.butMapPhones.Text = "P";
 			this.butMapPhones.Click += new System.EventHandler(this.butMapPhones_Click);
 			// 
+			// butTriage
+			// 
+			this.butTriage.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butTriage.Autosize = true;
+			this.butTriage.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butTriage.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butTriage.CornerRadius = 4F;
+			this.butTriage.Location = new System.Drawing.Point(94, 0);
+			this.butTriage.Name = "butTriage";
+			this.butTriage.Size = new System.Drawing.Size(18, 24);
+			this.butTriage.TabIndex = 52;
+			this.butTriage.Text = "T";
+			this.butTriage.Click += new System.EventHandler(this.butTriage_Click);
+			// 
+			// butBigPhones
+			// 
+			this.butBigPhones.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butBigPhones.Autosize = true;
+			this.butBigPhones.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butBigPhones.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butBigPhones.CornerRadius = 4F;
+			this.butBigPhones.Location = new System.Drawing.Point(113, 0);
+			this.butBigPhones.Name = "butBigPhones";
+			this.butBigPhones.Size = new System.Drawing.Size(18, 24);
+			this.butBigPhones.TabIndex = 52;
+			this.butBigPhones.Text = "B";
+			this.butBigPhones.Click += new System.EventHandler(this.butBigPhones_Click);
+			// 
+			// labelWaitTime
+			// 
+			this.labelWaitTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelWaitTime.ForeColor = System.Drawing.Color.Black;
+			this.labelWaitTime.Location = new System.Drawing.Point(67, 2);
+			this.labelWaitTime.Name = "labelWaitTime";
+			this.labelWaitTime.Size = new System.Drawing.Size(30, 20);
+			this.labelWaitTime.TabIndex = 53;
+			this.labelWaitTime.Text = "00m";
+			this.labelWaitTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// labelTriage
+			// 
+			this.labelTriage.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelTriage.ForeColor = System.Drawing.Color.Black;
+			this.labelTriage.Location = new System.Drawing.Point(30, 2);
+			this.labelTriage.Name = "labelTriage";
+			this.labelTriage.Size = new System.Drawing.Size(41, 20);
+			this.labelTriage.TabIndex = 53;
+			this.labelTriage.Text = "T:000";
+			this.labelTriage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// timerEmailInboxCheck
+			// 
+			this.timerEmailInboxCheck.Interval = 30000;
+			this.timerEmailInboxCheck.Tick += new System.EventHandler(this.timerEmailInboxCheck_Tick);
+			// 
+			// lightSignalGrid1
+			// 
+			this.lightSignalGrid1.Location = new System.Drawing.Point(0, 463);
+			this.lightSignalGrid1.Name = "lightSignalGrid1";
+			this.lightSignalGrid1.Size = new System.Drawing.Size(50, 206);
+			this.lightSignalGrid1.TabIndex = 20;
+			this.lightSignalGrid1.Text = "lightSignalGrid1";
+			this.lightSignalGrid1.ButtonClick += new OpenDental.UI.ODLightSignalGridClickEventHandler(this.lightSignalGrid1_ButtonClick);
+			// 
 			// FormOpenDental
 			// 
-			this.ClientSize = new System.Drawing.Size(982, 564);
+			this.ClientSize = new System.Drawing.Size(982, 570);
 			this.Controls.Add(this.panelPhoneSmall);
 			this.Controls.Add(this.panelSplitter);
 			this.Controls.Add(this.lightSignalGrid1);
@@ -1888,6 +1912,19 @@ namespace OpenDental{
 			Plugins.HookAddCode(this,"FormOpenDental.Load_end");
 		}
 
+		private void comboTriageCoordinator_SelectionChangeCommitted(object sender,EventArgs e) {
+			if(comboTriageCoordinator.SelectedIndex<0) {
+				return;
+			}
+			Employee employee=Employees.GetEmp((string)comboTriageCoordinator.Items[comboTriageCoordinator.SelectedIndex],new List<Employee>(Employees.ListShort));
+			if(employee==null) {
+				return;
+			}
+			if(Prefs.UpdateLong(PrefName.HQTriageCoordinator,employee.EmployeeNum)) {
+				DataValid.SetInvalid(InvalidType.Prefs);
+			}
+		}
+
 		///<summary>Returns false if it can't complete a conversion, find datapath, or validate registration key.</summary>
 		private bool PrefsStartup(){
 			Cache.Refresh(InvalidType.Prefs);
@@ -2149,6 +2186,24 @@ namespace OpenDental{
 			#region InvalidType.Views
 			if(itypeList.Contains((int)InvalidType.Views) || isAll) {
 				ContrAppt2.FillViews();
+			}
+			#endregion
+			#region HQ Only
+			if(PrefC.GetBool(PrefName.DockPhonePanelShow)) {
+				if(itypeList.Contains((int)InvalidType.Employees) || itypeList.Contains((int)InvalidType.Prefs) || isAll) { //refill the triage coordinator combo box
+					comboTriageCoordinator.Items.Clear();
+					Employee currentTriageEmployee=Employees.GetEmp(PrefC.GetLong(PrefName.HQTriageCoordinator));
+					int iSelItem=-1;
+					for(int i=0;i<Employees.ListShort.Length;i++) {
+						int iNewItem=comboTriageCoordinator.Items.Add(Employees.GetNameFL(Employees.ListShort[i]));
+						if(currentTriageEmployee!=null && currentTriageEmployee.EmployeeNum==Employees.ListShort[i].EmployeeNum) {
+							iSelItem=iNewItem;
+						}
+					}
+					if(iSelItem>=0) {
+						comboTriageCoordinator.SelectedIndex=iSelItem;
+					}
+				}
 			}
 			#endregion
 			ContrTreat2.InitializeLocalData();//easier to leave this here for now than to split it.
@@ -2779,7 +2834,7 @@ namespace OpenDental{
 						timerPhoneWebCam.Enabled=true;//the only place this happens
 						//phoneSmall.Visible=true;
 						//phoneSmall.Location=new Point(position.X,panelSplitter.Bottom+butBigPhones.Height);
-						phoneSmall.Location=new Point(0,24);
+						phoneSmall.Location=new Point(0,comboTriageCoordinator.Bottom);
 						userControlTasks1.Location=new Point(position.X+phoneSmall.Width,panelSplitter.Bottom);
 						userControlTasks1.Width=width-phoneSmall.Width;
 						//butBigPhones.Visible=true;
@@ -2979,52 +3034,38 @@ namespace OpenDental{
 			Signalods.Insert(sig);
 		}
 
-		///<summary>Update labels for the triage list.  Also updates the variable triageTime which is used to calculate mins behind.</summary>
 		private void FillTriageLabels() {
-			triageTime=Phones.GetTriageTime();//Update last triage time.
-			FillTriageMinutes();//Updates labelWaitTime.
-			int count=0;//Contains a count of tasks that do not have task notes attached.
-			int countExcluded=0;//Contains count of tasks with notes attached.  Only used for display purposes when count is 0.
-			List<long> taskNums=Phones.GetTriageTaskNums();
-			List<TaskNote> taskNotes=TaskNotes.RefreshForTasks(taskNums);
-			List<long> taskNumsNote=new List<long>();
-			for(int i=0;i<taskNotes.Count;i++) {//Make a list of all the TaskNums in the note list.
-				if(taskNumsNote.Contains(taskNotes[i].TaskNum)) {
-					continue;
-				}
-				taskNumsNote.Add(taskNotes[i].TaskNum);
-			}
-			for(int i=0;i<taskNums.Count;i++) {//Increase the corresponding counts.
-				if(taskNumsNote.Contains(taskNums[i])) {
-					countExcluded++;
-				}
-				else {
-					count++;
-				}
+			DataTable phoneMetrics=Phones.GetTriageMetrics();
+			int countTasksWithoutNotes=PIn.Int(phoneMetrics.Rows[0]["CountTasksWithoutNotes"].ToString());
+			int countTasksWithNotes=PIn.Int(phoneMetrics.Rows[0]["CountTasksWithNotes"].ToString());
+			int countUrgentTasks=PIn.Int(phoneMetrics.Rows[0]["CountUrgentTasks"].ToString());
+			DateTime timeOfOldestTaskWithoutNotes=PIn.Date(phoneMetrics.Rows[0]["TimeOfOldestTaskWithoutNotes"].ToString());
+			DateTime timeOfOldestUrgentTask=PIn.Date(phoneMetrics.Rows[0]["TimeOfOldestUrgentTask"].ToString());
+			TimeSpan triageBehind=new TimeSpan(0);
+			if(timeOfOldestTaskWithoutNotes.Year>1880) {
+				triageBehind=DateTime.Now-timeOfOldestTaskWithoutNotes;
 			}
 			string countStr="0";
-			if(count>0) {//Triage show red so users notice more.
-				countStr=count.ToString();
+			if(countTasksWithoutNotes>0) {//Triage show red so users notice more.
+				countStr=countTasksWithoutNotes.ToString();
 				labelTriage.ForeColor=Color.Firebrick;
 			}
 			else {
-				if(countExcluded>0) {
-					countStr="("+countExcluded.ToString()+")";
+				if(countTasksWithNotes>0) {
+					countStr="("+countTasksWithNotes.ToString()+")";
 				}
 				labelTriage.ForeColor=Color.Black;
 			}
 			labelTriage.Text="T:"+countStr;
-		}
-
-		///<summary>Update labelWaitTime for the triage list.  Gets called frequently, does not make a call to db.</summary>
-		private void FillTriageMinutes() {
-			if(triageTime.Year<1880) {
-				labelWaitTime.Text="0m";
+			labelWaitTime.Text=((int)triageBehind.TotalMinutes).ToString()+"m";
+			if(formMapHQ!=null && !formMapHQ.IsDisposed) {
+				formMapHQ.SetTriageNormal(countTasksWithNotes,countTasksWithoutNotes,triageBehind);				
+				TimeSpan urgentTriageBehind=new TimeSpan(0);
+				if(timeOfOldestUrgentTask.Year>1880) {
+					urgentTriageBehind=DateTime.Now-timeOfOldestUrgentTask;
+				}
+				formMapHQ.SetTriageUrgent(countUrgentTasks,urgentTriageBehind);
 			}
-			else {
-				double mins=(DateTime.Now-triageTime).TotalMinutes;
-				labelWaitTime.Text=((int)mins).ToString()+"m";
-			}			
 		}
 
 		private void GotoModule_ModuleSelected(ModuleEventArgs e){
@@ -3219,7 +3260,7 @@ namespace OpenDental{
 			try {
 				List<Signalod> sigList=Signalods.RefreshTimed(signalLastRefreshed);//this also attaches all elements to their sigs
 				if(PrefC.GetBool(PrefName.DockPhonePanelShow)) {
-					FillTriageMinutes();
+					FillTriageLabels();
 				}
 				if(sigList.Count==0) {
 					return;
@@ -3307,9 +3348,6 @@ namespace OpenDental{
 					if(ContrManage2!=null && ContrManage2.FormT!=null && !ContrManage2.FormT.IsDisposed) {
 						ContrManage2.FormT.RefreshUserControlTasks();
 					}
-				}
-				if(PrefC.GetBool(PrefName.DockPhonePanelShow) && areAnySignalsTasks) {
-					FillTriageLabels();
 				}
 				List<int> itypes=Signalods.GetInvalidTypes(sigList);
 				InvalidType[] itypeArray=new InvalidType[itypes.Count];
@@ -3848,7 +3886,7 @@ namespace OpenDental{
 			}
 		}
 
-		private delegate void DelegateSetString(String str,bool isBold,Color color);//typically at namespace level rather than class level
+		private delegate void DelegateSetString(bool hasError,int voiceMailCount,TimeSpan ageOfOldestVoicemail);//typically at namespace level rather than class level
 
 		///<summary>Always called using ThreadVM.</summary>
 		private void ThreadVM_SetLabelMsg() {
@@ -3856,33 +3894,25 @@ namespace OpenDental{
       //Because path is not valid when Jordan is debugging from home.
 #else
 			while(true) {
-				string msg;
-				int msgCount;
-				bool isBold;
-				Color color;
 				try {
-					if(!Directory.Exists(PhoneUI.PathPhoneMsg)) {
-						msg="error";
-						isBold=false;
-						color=Color.Black;
-						this.Invoke(new DelegateSetString(SetString),new Object[] { msg,isBold,color });
-						//return;
+					DirectoryInfo di=new DirectoryInfo(PhoneUI.PathPhoneMsg); //use this directory if you want to test with real files ===> @"\\10.10.1.197\Voicemail\default\998\Deleted"
+					if(!di.Exists) {
+						this.Invoke(new DelegateSetString(SetVoicemailMetrics),new Object[] { true,0,new TimeSpan(0) });
 						Thread.Sleep(240000);//4 minutes
 						continue;
 					}
-					msgCount=Directory.GetFiles(PhoneUI.PathPhoneMsg,"*.txt").Length;
-					if(msgCount==0) {
-						msg="V:0";
-						isBold=false;
-						color=Color.Black;
-						this.Invoke(new DelegateSetString(SetString),new Object[] { msg,isBold,color });
+					DateTime oldestVoicemail=DateTime.MaxValue;
+					FileInfo[] fileInfos=di.GetFiles("*.txt");
+					for(int i=0;i<fileInfos.Length;i++) {
+						if(fileInfos[i].CreationTime<oldestVoicemail) {
+							oldestVoicemail=fileInfos[i].CreationTime;
+						}
 					}
-					else {
-						msg="V:"+msgCount.ToString();
-						isBold=true;
-						color=Color.Firebrick;
-						this.Invoke(new DelegateSetString(SetString),new Object[] { msg,isBold,color });
+					TimeSpan ageOfOldestVoicemail=new TimeSpan(0);
+					if(oldestVoicemail!=DateTime.MaxValue) {
+						ageOfOldestVoicemail=DateTime.Now-oldestVoicemail;
 					}
+					this.Invoke(new DelegateSetString(SetVoicemailMetrics),new Object[] { false,fileInfos.Length,ageOfOldestVoicemail });					
 				}
 				catch(ThreadAbortException) {//OnClosing will abort the thread.
 					return;//Exits the loop.
@@ -3896,15 +3926,28 @@ namespace OpenDental{
 		}
 
 		///<summary>Called from worker thread using delegate and Control.Invoke</summary>
-		private void SetString(String str,bool isBold,Color color) {
-			labelMsg.Text=str;
-			if(isBold) {
+		private void SetVoicemailMetrics(bool hasError,int voiceMailCount,TimeSpan ageOfOldestVoicemail) {
+			if(hasError) {
 				labelMsg.Font=new Font(FontFamily.GenericSansSerif,8.25f,FontStyle.Bold);
+				labelMsg.Text="error";
+				labelMsg.ForeColor=Color.Firebrick;
+				return;
+			}
+			labelMsg.Text="V:"+voiceMailCount.ToString();
+			if(voiceMailCount==0) {
+				labelMsg.Font=new Font(FontFamily.GenericSansSerif,7.75f,FontStyle.Regular);
+				labelMsg.ForeColor=Color.Black;
 			}
 			else {
-				labelMsg.Font=new Font(FontFamily.GenericSansSerif,8.25f,FontStyle.Regular);
+				labelMsg.Font=new Font(FontFamily.GenericSansSerif,7.75f,FontStyle.Bold);
+				labelMsg.ForeColor=Color.Firebrick;
 			}
-			labelMsg.ForeColor=color;
+			if(formMapHQ!=null && !formMapHQ.IsDisposed) {				
+				formMapHQ.SetVoicemailRed(voiceMailCount,ageOfOldestVoicemail);
+			}
+			if(formPhoneTiles!=null && !formPhoneTiles.IsDisposed) {
+				formPhoneTiles.SetVoicemailCount(voiceMailCount);
+			}
 		}
 
 		/*private void moduleStaffBilling_GoToChanged(object sender,GoToEventArgs e) {
@@ -5237,7 +5280,7 @@ namespace OpenDental{
 				else {
 					phoneSmall.Extension=phone.Extension;
 				}
-				phoneSmall.SetPhone(phone,isTriageOperator);
+				phoneSmall.SetPhone(phone,PhoneEmpDefaults.GetEmpDefaultFromList(phone.EmployeeNum,phoneEmpDefaultList),isTriageOperator);
 			}
 			catch {
 				//HQ users are complaining of unhandled exception when they close OD.
@@ -5586,6 +5629,8 @@ namespace OpenDental{
 			//This step is necessary so that graphics memory does not fill up.
 			Dispose();
 		}
+
+
 
 	
 

@@ -39,6 +39,8 @@ namespace OpenDental {
 		[Description("Image Indicating Employee's Current Phone Status")]		
 		public Image PhoneImage { get; set; }
 
+		///<summary>Set when flashing starts so we know what inner color to go back to.</summary>
+		private Color _innerColorRestore=Color.FromArgb(128,Color.Red);
 		private Color DefaultOuterColor=Color.Red;
 		[Category("Appearance")]
 		[Description("Exterior Border Color")]
@@ -48,10 +50,13 @@ namespace OpenDental {
 				return DefaultOuterColor; 
 			} 
 			set { 
-				DefaultOuterColor=value; Invalidate(); 
+				DefaultOuterColor=value; 
+				Invalidate(); 
 			} 
 		}
-		
+
+		///<summary>Set when flashing starts so we know what outer color to go back to.</summary>
+		private Color _outerColorRestore=Color.Red;
 		private Color DefaultInnerColor=Color.FromArgb(128,Color.Red);
 		[Category("Appearance")]
 		[Description("Interior Fill Color")]
@@ -77,7 +82,13 @@ namespace OpenDental {
 				Invalidate();
 			}
 		}
-		
+
+		public bool IsFlashing {
+			get {
+				return timerFlash.Enabled;
+			}
+		}
+
 		#endregion
 
 		#region Events
@@ -116,6 +127,37 @@ namespace OpenDental {
 		#endregion
 
 		#region Drawing
+
+		public void StartFlashing() {
+			if(IsFlashing) { //already on
+				return;
+			}
+			//save the colors
+			_outerColorRestore=OuterColor;
+			_innerColorRestore=InnerColor;
+			timerFlash.Start();
+		}
+
+		public void StopFlashing() {
+			if(!IsFlashing) { //already off
+				return;
+			}
+			timerFlash.Stop();
+			OuterColor=_outerColorRestore;
+			InnerColor=_innerColorRestore;
+		}
+
+		private void timerFlash_Tick(object sender,EventArgs e) {
+			//flip inner and outer colors
+			if(OuterColor==_outerColorRestore) {
+				OuterColor=_innerColorRestore;
+				InnerColor=_outerColorRestore;
+			}
+			else {
+				OuterColor=_outerColorRestore;
+				InnerColor=_innerColorRestore;
+			}
+		}
 
 		private void MapAreaRoomControl_Paint(object sender,PaintEventArgs e) {
 			Brush brushInner=new SolidBrush(Empty?Color.FromArgb(20,Color.Gray):InnerColor);

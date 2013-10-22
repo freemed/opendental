@@ -10,13 +10,29 @@ using System.Threading;
 
 namespace OpenDentBusiness {
 	///<summary></summary>
-	public class Phones {
-		public static Color ColorRed=Color.Salmon;
-		public static Color ColorGreen=Color.FromArgb(153,220,153);
-		public static Color ColorYellow=Color.FromArgb(255,255,145);
-		public static Color ColorPaleGreen=Color.FromArgb(217,255,217);
-		public static Color ColorSkyBlue=Color.SkyBlue;
-		public static Color ColorOrchid=Color.Orchid;
+	public class Phones {		
+		public static Color ColorFontHere=Color.Black;
+		public static Color ColorFontAway=Color.FromArgb(186,186,186);
+		public static Color ColorInnerHome=Color.FromArgb(245,245,245);
+		public static Color ColorOuterHome=Color.FromArgb(191,191,191);
+		public static Color ColorInnerNeedsHelp=Color.FromArgb(249,233,249);
+		public static Color ColorOuterNeedsHelp=Color.Orchid;
+		public static Color ColorInnerNoColor=Color.FromArgb(245,245,245);
+		public static Color ColorOuterNoColor=Color.FromArgb(191,191,191);
+		public static Color ColorInnerTriageAway=Color.White;
+		public static Color ColorInnerTriageHere=Color.FromArgb(236,247,252);
+		public static Color ColorOuterTriage=Color.SkyBlue;
+		public static Color ColorInnerOnPhone=Color.FromArgb(254,235,233);
+		public static Color ColorOuterOnPhone=Color.Salmon;
+		public static Color ColorInnerLunchBreak=Color.White;
+		public static Color ColorOuterLunchBreak=Color.FromArgb(153,220,153);
+		public static Color ColorInnerAvailable=Color.FromArgb(217,255,217);
+		public static Color ColorOuterAvailable=Color.FromArgb(153,220,153);
+		public static Color ColorInnerTrainingAssistWrap=Color.FromArgb(255,255,145);
+		public static Color ColorOuterTrainingAssistWrap=Color.FromArgb(153,220,153);
+		public static Color ColorInnerBackupForWall=Color.FromArgb(236,255,236);
+		public static Color ColorInnerBackupNotForWall=Color.FromArgb(217,255,217);
+		public static Color ColorOuterBackup=Color.FromArgb(191,191,191);
 
 		public static List<Phone> GetPhoneList() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -85,10 +101,6 @@ namespace OpenDentBusiness {
 			//if these values are null because of missing phoneempdefault row, they will default to false
 			//PhoneEmpStatusOverride statusOverride=(PhoneEmpStatusOverride)PIn.Int(tablePhone.Rows[0]["StatusOverride"].ToString());
 			bool hasColor=PIn.Bool(tablePhone.Rows[0]["HasColor"].ToString());
-			bool isInUse=false;
-			if(tablePhone.Rows[0]["Description"].ToString()=="In use") {
-				isInUse=true;
-			}
 			#region DateTimeStart
 			//When a user shows up as a color on the phone panel, we want a timer to be constantly going to show how long they've been off the phone.
 			string dateTimeStart="";
@@ -120,14 +132,13 @@ namespace OpenDentBusiness {
 			}
 			#endregion
 			//Update the phone row to reflect the new clock status of the user.
-			Color colorBarNew=GetColorBar(clockStatus,empNum,isInUse,hasColor,isTriageOperator);
 			string clockStatusNew=clockStatus.ToString();
 			if(clockStatus==ClockStatusEnum.None) {
 				clockStatusNew="";
 			}
 			command="UPDATE phone SET ClockStatus='"+POut.String(clockStatusNew)+"', "
 				+dateTimeStart
-				+"ColorBar="+colorBarNew.ToArgb().ToString()+", "
+				//+"ColorBar=-1, " //ColorBar is now determined at runtime by OD using Phones.GetPhoneColor.
 				+"EmployeeNum="+POut.Long(empNum)+", "
 				+"EmployeeName='"+POut.String(empName)+"' "
 				+"WHERE Extension="+extens;
@@ -156,84 +167,110 @@ namespace OpenDentBusiness {
 			Db.NonQ(command);
 		}
 
-		public static void UpdateColorBarForEmployee(long employeeNum,int extension,bool isTriageOperator) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),employeeNum,extension,isTriageOperator);
+		///<summary>Consider all scenarios for a employee/phone/cubicle and return color and triage information</summary>
+		public static void GetPhoneColor(Phone phone,PhoneEmpDefault phoneEmpDefault,bool forWallProjection,out Color outerColor,out Color innerColor,out Color fontColor,out bool isTriageOperatorOnTheClock) {
+			isTriageOperatorOnTheClock=false;
+			//first set the font color
+			if(phone==null
+				|| phoneEmpDefault==null
+				|| phone.ClockStatus==ClockStatusEnum.Home
+				|| phone.ClockStatus==ClockStatusEnum.None
+				|| phone.ClockStatus==ClockStatusEnum.Off) {
+				fontColor=Phones.ColorFontAway;
+			}
+			else {
+				fontColor=Phones.ColorFontHere;
+			}
+			if(!forWallProjection && !phoneEmpDefault.HasColor) { //smaller color boxes need special colors
+				innerColor=Color.Black;
+				outerColor=Color.White;
 				return;
 			}
-			string command=@"SELECT phone.Description,phoneempdefault.HasColor,phone.ClockStatus "
-				+"FROM phone "
-				+"LEFT JOIN phoneempdefault ON phone.Extension=phoneempdefault.PhoneExt AND phone.EmployeeNum=phoneempdefault.EmployeeNum "
-				+"WHERE phone.Extension="+POut.Long(extension);
-			DataTable tablePhone=Db.GetTable(command);
-			if(tablePhone.Rows.Count==0) {
+			//now cover all scenarios and set the inner and out color
+			if(phone.ClockStatus==ClockStatusEnum.Home
+				|| phone.ClockStatus==ClockStatusEnum.None
+				|| phone.ClockStatus==ClockStatusEnum.Off) {
+				//No color if employee is not currently working. Trumps all.
+				outerColor=Phones.ColorOuterHome;
+				innerColor=Phones.ColorInnerHome;
 				return;
 			}
-			bool isColor=PIn.Bool(tablePhone.Rows[0]["HasColor"].ToString());
-			bool isInUse=false;
-			if(tablePhone.Rows[0]["Description"].ToString()=="In use") {
-				isInUse=true;
+			if(phone.ClockStatus==ClockStatusEnum.NeedsHelp) { //get this person help now!
+				outerColor=Phones.ColorOuterNeedsHelp;
+				innerColor=Phones.ColorInnerNeedsHelp;
+				return;
 			}
-			string clockStatusDb=PIn.String(tablePhone.Rows[0]["ClockStatus"].ToString());
-			ClockStatusEnum clockStatus=ClockStatusEnum.Home;
-			if(!Enum.TryParse<ClockStatusEnum>(clockStatusDb,out clockStatus)) {
-				clockStatus=ClockStatusEnum.Home;
+			if(phone.ClockStatus==ClockStatusEnum.Unavailable //Unavailable is very rare and must be approved by management. Make them look like admin/engineer.
+				|| !phoneEmpDefault.HasColor) //not colored (generally an engineer or admin)
+			{
+				outerColor=Phones.ColorOuterNoColor;
+				innerColor=Phones.ColorInnerNoColor;
+				return;
 			}
-			Color colorBarNew=GetColorBar(clockStatus,employeeNum,isInUse,isColor,isTriageOperator);			
-			command="UPDATE phone SET "
-					+"ColorBar="+colorBarNew.ToArgb().ToString()+" "
-					+"WHERE EmployeeNum="+POut.Long(employeeNum);
-			Db.NonQ(command);
+			//If we get this far then the person is a tech who is working today.
+			if(phoneEmpDefault.IsTriageOperator) {
+				outerColor=Phones.ColorOuterTriage;
+				if(phone.ClockStatus==ClockStatusEnum.Break 
+					|| phone.ClockStatus==ClockStatusEnum.Lunch) {
+					//triage op is working today but currently on break/lunch
+					innerColor=Phones.ColorInnerTriageAway;
+					if(!forWallProjection) { //smaller color boxes need special colors
+						outerColor=Phones.ColorInnerTriageAway;
+					}
+				}
+				else {
+					//this is a triage operator who is currently here and on the clock
+					isTriageOperatorOnTheClock=true;
+					innerColor=Phones.ColorInnerTriageHere;
+				}
+				return;
+			}
+			if(phone.Description!="") { //Description field only has 'in use' when person is on the phone. That is the only time the field is not empty.
+				outerColor=Phones.ColorOuterOnPhone;
+				innerColor=Phones.ColorInnerOnPhone;
+				return;
+			}
+			//We get this far so we are dealing with a tech who is not on a phone call. Handle each state.
+			switch(phone.ClockStatus) {
+				case ClockStatusEnum.Lunch:
+				case ClockStatusEnum.Break:
+					outerColor=Phones.ColorOuterLunchBreak;
+					innerColor=Phones.ColorInnerLunchBreak;
+					if(!forWallProjection) { //smaller color boxes need special colors
+						outerColor=Color.White;
+					}
+					return;
+				case ClockStatusEnum.Available:
+					outerColor=Phones.ColorOuterAvailable;
+					innerColor=Phones.ColorInnerAvailable;
+					return;
+				case ClockStatusEnum.WrapUp:
+				case ClockStatusEnum.Training:
+				case ClockStatusEnum.TeamAssist:
+				case ClockStatusEnum.OfflineAssist:
+					//these all look the same. they mean the tech is here and available but they are currently on a different assigment.
+					outerColor=Phones.ColorOuterTrainingAssistWrap;
+					innerColor=Phones.ColorInnerTrainingAssistWrap;
+					if(!forWallProjection) { //smaller color boxes need special colors
+						outerColor=Phones.ColorInnerTrainingAssistWrap;
+					}
+					return;
+				case ClockStatusEnum.Backup:
+					if(forWallProjection) {
+						outerColor=Phones.ColorOuterBackup;
+						innerColor=Phones.ColorInnerBackupForWall;
+					}
+					else { //smaller color boxes need special colors
+						outerColor=Phones.ColorInnerBackupNotForWall;
+						innerColor=Phones.ColorInnerBackupNotForWall;
+					}
+					return;
+				default:
+					break;
+			}
+			throw new Exception("FormMapHQ.GetPhoneColor has a state that is currently unsupported!");
 		}
 
-		///<summary></summary>
-		public static Color GetColorBar(ClockStatusEnum clockStatus,long empNum,bool isInUse,bool isColor,bool isTriageOperator) {
-			//No need to check RemotingRole; no call to db.
-			Color colorBar=Color.White;
-			if(empNum==0) {
-				//no colors
-			}
-			else if(!isColor) {
-				//no colors
-			}
-			else if(isTriageOperator) {
-				colorBar=ColorSkyBlue;
-			}
-			else if(isInUse) {
-				colorBar=ColorRed;
-				if(clockStatus==ClockStatusEnum.NeedsHelp) {
-					colorBar=ColorOrchid;
-				}
-			}
-			//the rest are for idle:
-			else if(clockStatus==ClockStatusEnum.Available) {
-				colorBar=ColorGreen;
-			}
-			else if(clockStatus==ClockStatusEnum.Unavailable) {
-				//no color
-			}
-			else if(clockStatus==ClockStatusEnum.Off) {
-				//colorText=Color.Gray;
-				//no colorBar
-			}
-			else if(clockStatus==ClockStatusEnum.Break) {
-				//no color
-			}
-			else if(clockStatus==ClockStatusEnum.Training
-				|| clockStatus==ClockStatusEnum.TeamAssist
-				|| clockStatus==ClockStatusEnum.WrapUp
-				|| clockStatus==ClockStatusEnum.OfflineAssist) {
-				colorBar=ColorYellow;
-			}
-			else if(clockStatus==ClockStatusEnum.Backup) {
-				colorBar=ColorPaleGreen;
-			}
-			else if(clockStatus==ClockStatusEnum.NeedsHelp) {
-				colorBar=ColorOrchid;
-			}
-			return colorBar;
-		}
-		
 		public static Phone GetPhoneForExtension(List<Phone> phoneList,int extens) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<phoneList.Count;i++) {
@@ -463,6 +500,72 @@ namespace OpenDentBusiness {
 				+"LIMIT 1";
 			return PIn.DateT(Db.GetScalar(command));
 		}
+
+		///<summary>Get triage metrics to be displayed in phone panels</summary>
+		public static DataTable GetTriageMetrics() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<DataTable>(MethodBase.GetCurrentMethod());
+			}
+			//-- get all phone metrics as a collection of sub-selects
+			string command=@"SELECT 
+				-- count triage tasks with no notes				
+				(SELECT COUNT(TaskNum) 
+					FROM task  
+					WHERE  
+						TaskListNum=1697   -- Triage task list.
+						AND TaskStatus<>2   -- Not done (new or viewed).
+						AND TaskNum NOT IN (SELECT tn.TaskNum FROM tasknote tn WHERE tn.TaskNum = task.TaskNum)  -- no notes yet
+					) AS CountTasksWithoutNotes 
+				-- count triage tasks with notes
+				,(SELECT COUNT(TaskNum)  
+					FROM task 
+					WHERE  
+						TaskListNum=1697  -- Triage task list.
+						AND TaskStatus<>2  -- Not done (new or viewed).
+						AND TaskNum IN (SELECT tn.TaskNum FROM tasknote tn WHERE tn.TaskNum = task.TaskNum)  -- no notes yet
+					) AS CountTasksWithNotes 
+				-- count urgent triage tasks (does not matter if it has notes or not)
+				,(SELECT COUNT(TaskNum)  
+					FROM task 
+					WHERE  
+						TaskListNum=1697  -- Triage task list.
+						AND TaskStatus<>2  -- Not done (new or viewed).
+						AND  
+						(  -- COLLATE utf8_bin means case-sesitive search
+							Descript COLLATE utf8_bin LIKE '%CUSTOMER%' 
+							OR Descript COLLATE utf8_bin LIKE '%DOWN%' 
+							OR Descript COLLATE utf8_bin LIKE '%URGENT%' 
+							OR Descript COLLATE utf8_bin LIKE '%CONFERENCE%' 
+							OR Descript COLLATE utf8_bin LIKE '%!!%' 
+						) 
+					) AS CountUrgentTasks	 
+				-- time of oldest triage task which does not already have notes 
+				,(SELECT IFNULL(MIN(DateTimeEntry),'0001-01-01') 
+					FROM task 
+					WHERE TaskListNum=1697  -- Triage task list.
+						AND TaskStatus<>2  -- Not done (new or viewed).
+						AND TaskNum NOT IN (SELECT tn.TaskNum FROM tasknote tn)  -- no notes yet 
+					LIMIT 1 
+					) AS TimeOfOldestTaskWithoutNotes 
+				-- time of oldest urgent task (does not matter if it has notes or not)				
+				,(SELECT IFNULL(MIN(DateTimeEntry),'0001-01-01') 
+					FROM task 
+					WHERE  
+						TaskListNum=1697  -- Triage task list. 
+						AND TaskStatus<>2  -- Not done (new or viewed).
+						AND  
+						(  -- COLLATE utf8_bin means case-sesitive search
+							Descript COLLATE utf8_bin LIKE '%CUSTOMER%' 
+							OR Descript COLLATE utf8_bin LIKE '%DOWN%' 
+							OR Descript COLLATE utf8_bin LIKE '%URGENT%' 
+							OR Descript COLLATE utf8_bin LIKE '%CONFERENCE%' 
+							OR Descript COLLATE utf8_bin LIKE '%!!%' 
+						) 
+					LIMIT 1 
+					) AS TimeOfOldestUrgentTask;";
+			return Db.GetTable(command);
+		}
+
 
 		/// <summary>sorting class used to sort Phone in various ways</summary>
 		public class PhoneComparer:IComparer<Phone> {

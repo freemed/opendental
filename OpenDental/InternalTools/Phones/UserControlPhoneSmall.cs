@@ -29,8 +29,8 @@ namespace OpenDental {
 		}
 
 		///<summary>Set the phone which is linked to the extension at this desk. If phone==null then no phone info shown.</summary>
-		public void SetPhone(Phone phone,bool isTriageOperator) {
-			phoneTile.SetPhone(phone,isTriageOperator);
+		public void SetPhone(Phone phone,PhoneEmpDefault phoneEmpDefault,bool isTriageOperator) {
+			phoneTile.SetPhone(phone,phoneEmpDefault,isTriageOperator);
 		}
 		
 		public UserControlPhoneSmall() {
@@ -45,10 +45,15 @@ namespace OpenDental {
 			SetPhoneList(PhoneEmpDefaults.Refresh(),Phones.GetPhoneList());
 			//Set the currently selected phone accordingly.
 			if(phoneList==null) {//No phone list. Shouldn't get here.
-				phoneTile.SetPhone(null,false);
+				phoneTile.SetPhone(null,null,false);
 				return;
 			}
-			phoneTile.SetPhone(Phones.GetPhoneForExtension(phoneList,Extension),PhoneEmpDefaults.IsTriageOperatorForExtension(Extension,phoneEmpDefaultList));	
+			Phone phone=Phones.GetPhoneForExtension(phoneList,Extension);
+			PhoneEmpDefault phoneEmpDefault=null;
+			if(phone!=null) {
+				phoneEmpDefault=PhoneEmpDefaults.GetEmpDefaultFromList(phone.EmployeeNum,phoneEmpDefaultList);
+			}
+			phoneTile.SetPhone(phone,phoneEmpDefault,PhoneEmpDefaults.IsTriageOperatorForExtension(Extension,phoneEmpDefaultList));	
 		}
 
 		private void UserControlPhoneSmall_Paint(object sender,PaintEventArgs e) {
@@ -71,19 +76,23 @@ namespace OpenDental {
 				if(phoneList[i].ClockStatus!=ClockStatusEnum.Home
 					&& phoneList[i].ClockStatus!=ClockStatusEnum.None) {
 					//Colors the box a color based on the corresponding phone's status.
-					//IsTriageOperator flag can fight with phone server so let's be sure to color the box appropriately by getting the current value.
-					Color color=phoneList[i].ColorBar;
-					if(PhoneEmpDefaults.IsTriageOperatorForExtension(phoneList[i].Extension,phoneEmpDefaultList)) {
-						color=Phones.ColorSkyBlue;
-					}
-					using(SolidBrush brush=new SolidBrush(color)) {
+					Color outerColor;
+					Color innerColor;
+					Color fontColor;
+					bool isTriageOperatorOnTheClock=false;					
+					//get the cubicle color and triage status
+					PhoneEmpDefault ped=PhoneEmpDefaults.GetEmpDefaultFromList(phoneList[i].EmployeeNum,phoneEmpDefaultList);
+					Phones.GetPhoneColor(phoneList[i],ped,false,out outerColor,out innerColor,out fontColor,out isTriageOperatorOnTheClock);
+					using(Brush brush=new SolidBrush(outerColor)) {
 						g.FillRectangle(brush,x*boxWidth,y*boxHeight,boxWidth,boxHeight);
 					}
 					Font baseFont=new Font("Arial",7);
 					SizeF extSize=g.MeasureString(phoneList[i].Extension.ToString(),baseFont);
 					float padX=(boxWidth-extSize.Width)/2;
 					float padY=(boxHeight-extSize.Height)/2;
-					g.DrawString(phoneList[i].Extension.ToString(),baseFont,new SolidBrush(Color.Black),(x*boxWidth)+(padX),(y*boxHeight)+(padY));
+					using(Brush brush=new SolidBrush(Color.Black)) {
+						g.DrawString(phoneList[i].Extension.ToString(),baseFont,brush,(x*boxWidth)+(padX),(y*boxHeight)+(padY));
+					}
 				}
 				x++;
 				if(x>=columns) {

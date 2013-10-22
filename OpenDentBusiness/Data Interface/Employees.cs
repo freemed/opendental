@@ -198,6 +198,17 @@ namespace OpenDentBusiness{
 			return null;
 		}
 
+		///<summary>Find formatted name in list</summary>
+		public static Employee GetEmp(string nameFL,List<Employee> employees) {
+			//No need to check RemotingRole; no call to db.
+			for(int i=0;i<employees.Count;i++) {
+				if(GetNameFL(employees[i])==nameFL) {
+					return employees[i];
+				}
+			}
+			return null;
+		}
+
 		/// <summary> Returns -1 if employeeNum is not found.  0 if not hidden and 1 if hidden </summary>		
 		public static int IsHidden(long employeeNum) {
 			//No need to check RemotingRole; no call to db.

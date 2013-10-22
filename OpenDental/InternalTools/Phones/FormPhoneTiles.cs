@@ -122,10 +122,10 @@ namespace OpenDental {
 				tile.TimeDelta=timeDelta;
 				tile.ShowImageForced=checkBoxAll.Checked;
 				if(PhoneList.Count>i) {
-					tile.SetPhone(PhoneList[i],PhoneEmpDefaults.IsTriageOperatorForExtension(PhoneList[i].Extension,PhoneEmpDefaultList));
+					tile.SetPhone(PhoneList[i],PhoneEmpDefaults.GetEmpDefaultFromList(PhoneList[i].EmployeeNum,PhoneEmpDefaultList),PhoneEmpDefaults.IsTriageOperatorForExtension(PhoneList[i].Extension,PhoneEmpDefaultList));
 				}
 				else {
-					tile.SetPhone(null,false);
+					tile.SetPhone(null,null,false);
 				}
 			}
 		}

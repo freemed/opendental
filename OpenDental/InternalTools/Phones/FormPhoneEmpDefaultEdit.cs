@@ -757,11 +757,6 @@ namespace OpenDental{
 				//We have already guaranteed that this employee is Clocked Out (above) so set to home and update phone table.
 				Phones.SetPhoneStatus(ClockStatusEnum.Home,PedCur.PhoneExt,PedCur.EmployeeNum);			
 			}
-			if(pedFromDatabase.IsTriageOperator!=PedCur.IsTriageOperator) {
-				//Triage state flag has changed and we may not have updated the phone table above.
-				//This will leave the Phone.ColorBar in an inconsistent state so let's update it here.
-				Phones.UpdateColorBarForEmployee(PedCur.EmployeeNum,PedCur.PhoneExt,PedCur.IsTriageOperator);
-			}
 			DialogResult=DialogResult.OK;
 		}
 

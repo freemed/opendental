@@ -32,7 +32,7 @@ namespace OpenDental {
 		}
 		
 		///<summary>Set phone and triage flag to display. Get/Set accessor won't work here because we require 2 seperate fields in order to update the control properly.</summary>
-		public void SetPhone(Phone phone,bool isTriageOperator) {
+		public void SetPhone(Phone phone,PhoneEmpDefault phoneEmpDefault,bool isTriageOperator) {
 			phoneCur=phone;
 			if(phoneCur==null) { //empty out everything and return
 				this.Visible=false;
@@ -109,35 +109,38 @@ namespace OpenDental {
 			}
 			else {
 				labelTime.Text="";
-			}
-			if(phoneCur.ClockStatus==ClockStatusEnum.NeedsHelp) {
-				if(!timerFlash.Enabled) { //Only start the flash timer and color the control once. This prevents over-flashing effect.
-					labelTime.BackColor=Phones.ColorOrchid;
-					labelTime.Tag=new object[2] { false,labelTime.BackColor };
-					timerFlash.Start();
-				}
-			}
-			else if(phoneCur.ClockStatus==ClockStatusEnum.Home
+			}						
+			if(phoneCur.ClockStatus==ClockStatusEnum.Home
 				|| phoneCur.ClockStatus==ClockStatusEnum.None
-				|| phoneCur.ClockStatus==ClockStatusEnum.Break) 
-			{
+				|| phoneCur.ClockStatus==ClockStatusEnum.Break) {
 				labelTime.BackColor=this.BackColor;//No color if employee is not currently working.
 			}
-			else if(isTriageOperator) {//Color triage operator specially, don't pay attention to what the phone server is telling us.
-				labelTime.BackColor=Phones.ColorSkyBlue;
-			}			
-			else {//Phone Server is actively setting this value for us when phone status changes.
-				labelTime.BackColor=phoneCur.ColorBar;
+			else {
+				Color outerColor;
+				Color innerColor;
+				Color fontColor;
+				bool isTriageOperatorOnTheClock=false;
+				//get the cubicle color and triage status
+				Phones.GetPhoneColor(phone,phoneEmpDefault,false,out outerColor,out innerColor,out fontColor,out isTriageOperatorOnTheClock);
+				if(!timerFlash.Enabled) { //if the control is already flashing then don't overwrite the colors. this would cause a "spastic" flash effect.
+					labelTime.BackColor=outerColor;
+				}				
+				if(phoneCur.ClockStatus==ClockStatusEnum.NeedsHelp) {
+					if(!timerFlash.Enabled) { //Only start the flash timer and color the control once. This prevents over-flashing effect.
+						labelTime.Tag=new object[2] { false,labelTime.BackColor };
+						timerFlash.Start();
+					}
+				}
 			}
 			if(phoneCur.ClockStatus==ClockStatusEnum.Home
-					|| phoneCur.ClockStatus==ClockStatusEnum.None) 
+				|| phoneCur.ClockStatus==ClockStatusEnum.None) 
 			{
 				labelTime.BorderStyle=System.Windows.Forms.BorderStyle.None;//Remove color box if employee is not currently working.
 			}
 			else {
 				labelTime.BorderStyle=System.Windows.Forms.BorderStyle.FixedSingle;
 			}
-			if(phoneCur.ClockStatus!=ClockStatusEnum.NeedsHelp) { //Always assume the flash timer was previously turned on and turn it off here.
+			if(phoneCur.ClockStatus!=ClockStatusEnum.NeedsHelp) { //Always assume the flash timer was previously turned on and turn it off here. No harm if it' already off.
 				timerFlash.Stop();
 			}
 			labelCustomer.Text=phoneCur.CustomerNumber;

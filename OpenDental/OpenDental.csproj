@@ -5025,6 +5025,9 @@
       <DependentUpon>ContrTeeth.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="User Controls\MapAreaRoomControl.resx">
+      <DependentUpon>MapAreaRoomControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="User Controls\ODtextBox.resx">
       <DependentUpon>ODtextBox.cs</DependentUpon>
       <SubType>Designer</SubType>

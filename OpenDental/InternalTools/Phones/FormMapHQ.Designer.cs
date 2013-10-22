@@ -23,7 +23,6 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.components = new System.ComponentModel.Container();
 			this.label1 = new System.Windows.Forms.Label();
 			this.labelTriageRedTimeSpan = new System.Windows.Forms.Label();
 			this.labelVoicemailTimeSpan = new System.Windows.Forms.Label();
@@ -41,11 +40,10 @@
 			this.label16 = new System.Windows.Forms.Label();
 			this.labelTriageCoordinator = new System.Windows.Forms.Label();
 			this.butFullScreen = new System.Windows.Forms.Button();
-			this.timerRefresh = new System.Windows.Forms.Timer(this.components);
 			this.menuStrip = new System.Windows.Forms.MenuStrip();
 			this.setupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.mapAreaPanelHQ = new OpenDental.MapAreaPanel();
 			this.groupPhoneMetrics = new System.Windows.Forms.GroupBox();
+			this.mapAreaPanelHQ = new OpenDental.MapAreaPanel();
 			this.menuStrip.SuspendLayout();
 			this.groupPhoneMetrics.SuspendLayout();
 			this.SuspendLayout();
@@ -187,7 +185,7 @@
 			this.labelTriageOpsStaff.BackColor = System.Drawing.Color.White;
 			this.labelTriageOpsStaff.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.labelTriageOpsStaff.Font = new System.Drawing.Font("Calibri", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelTriageOpsStaff.Location = new System.Drawing.Point(180, 367);
+			this.labelTriageOpsStaff.Location = new System.Drawing.Point(178, 367);
 			this.labelTriageOpsStaff.Name = "labelTriageOpsStaff";
 			this.labelTriageOpsStaff.Size = new System.Drawing.Size(73, 42);
 			this.labelTriageOpsStaff.TabIndex = 18;
@@ -232,11 +230,6 @@
 			this.butFullScreen.UseVisualStyleBackColor = true;
 			this.butFullScreen.Click += new System.EventHandler(this.butFullScreen_Click);
 			// 
-			// timerRefresh
-			// 
-			this.timerRefresh.Interval = 5000;
-			this.timerRefresh.Tick += new System.EventHandler(this.timerRefresh_Tick);
-			// 
 			// menuStrip
 			// 
 			this.menuStrip.Dock = System.Windows.Forms.DockStyle.None;
@@ -254,6 +247,25 @@
 			this.setupToolStripMenuItem.Size = new System.Drawing.Size(49, 20);
 			this.setupToolStripMenuItem.Text = "Setup";
 			this.setupToolStripMenuItem.Click += new System.EventHandler(this.setupToolStripMenuItem_Click);
+			// 
+			// groupPhoneMetrics
+			// 
+			this.groupPhoneMetrics.Controls.Add(this.labelTriageRedCalls);
+			this.groupPhoneMetrics.Controls.Add(this.label1);
+			this.groupPhoneMetrics.Controls.Add(this.labelTriageRedTimeSpan);
+			this.groupPhoneMetrics.Controls.Add(this.label4);
+			this.groupPhoneMetrics.Controls.Add(this.labelVoicemailTimeSpan);
+			this.groupPhoneMetrics.Controls.Add(this.label11);
+			this.groupPhoneMetrics.Controls.Add(this.label6);
+			this.groupPhoneMetrics.Controls.Add(this.label10);
+			this.groupPhoneMetrics.Controls.Add(this.labelTriageTimeSpan);
+			this.groupPhoneMetrics.Controls.Add(this.labelTriageCalls);
+			this.groupPhoneMetrics.Controls.Add(this.labelVoicemailCalls);
+			this.groupPhoneMetrics.Location = new System.Drawing.Point(2, 37);
+			this.groupPhoneMetrics.Name = "groupPhoneMetrics";
+			this.groupPhoneMetrics.Size = new System.Drawing.Size(386, 218);
+			this.groupPhoneMetrics.TabIndex = 25;
+			this.groupPhoneMetrics.TabStop = false;
 			// 
 			// mapAreaPanelHQ
 			// 
@@ -275,34 +287,14 @@
 			this.mapAreaPanelHQ.Size = new System.Drawing.Size(1212, 1008);
 			this.mapAreaPanelHQ.TabIndex = 5;
 			// 
-			// groupPhoneMetrics
-			// 
-			this.groupPhoneMetrics.Controls.Add(this.labelTriageRedCalls);
-			this.groupPhoneMetrics.Controls.Add(this.label1);
-			this.groupPhoneMetrics.Controls.Add(this.labelTriageRedTimeSpan);
-			this.groupPhoneMetrics.Controls.Add(this.label4);
-			this.groupPhoneMetrics.Controls.Add(this.labelVoicemailTimeSpan);
-			this.groupPhoneMetrics.Controls.Add(this.label11);
-			this.groupPhoneMetrics.Controls.Add(this.label6);
-			this.groupPhoneMetrics.Controls.Add(this.label10);
-			this.groupPhoneMetrics.Controls.Add(this.labelTriageTimeSpan);
-			this.groupPhoneMetrics.Controls.Add(this.labelTriageCalls);
-			this.groupPhoneMetrics.Controls.Add(this.labelVoicemailCalls);
-			this.groupPhoneMetrics.Location = new System.Drawing.Point(2, 37);
-			this.groupPhoneMetrics.Name = "groupPhoneMetrics";
-			this.groupPhoneMetrics.Size = new System.Drawing.Size(386, 218);
-			this.groupPhoneMetrics.TabIndex = 25;
-			this.groupPhoneMetrics.TabStop = false;
-			this.groupPhoneMetrics.Visible = false;
-			// 
 			// FormMapHQ
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(1634, 1042);
+			this.Controls.Add(this.labelTriageOpsStaff);
 			this.Controls.Add(this.groupPhoneMetrics);
 			this.Controls.Add(this.butFullScreen);
 			this.Controls.Add(this.label12);
-			this.Controls.Add(this.labelTriageOpsStaff);
 			this.Controls.Add(this.label14);
 			this.Controls.Add(this.mapAreaPanelHQ);
 			this.Controls.Add(this.labelTriageCoordinator);
@@ -342,7 +334,6 @@
 		private System.Windows.Forms.Label label16;
 		private System.Windows.Forms.Label labelTriageCoordinator;
 		private System.Windows.Forms.Button butFullScreen;
-		private System.Windows.Forms.Timer timerRefresh;
 		private System.Windows.Forms.MenuStrip menuStrip;
 		private System.Windows.Forms.ToolStripMenuItem setupToolStripMenuItem;
 		private System.Windows.Forms.GroupBox groupPhoneMetrics;
