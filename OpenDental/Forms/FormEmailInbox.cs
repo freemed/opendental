@@ -145,7 +145,10 @@ namespace OpenDental {
 			EmailMessage emailMessage=ListEmailMessages[e.Row];
 			FormEmailMessageEdit formEME=new FormEmailMessageEdit(emailMessage);
 			formEME.ShowDialog();
-			EmailMessages.UpdateSentOrReceivedRead(emailMessage);
+			emailMessage=EmailMessages.GetOne(emailMessage.EmailMessageNum);//Fetch from DB, in case changed to to decrypt.
+			if(emailMessage.SentOrReceived!=EmailSentOrReceived.ReceivedEncrypted) {
+				EmailMessages.UpdateSentOrReceivedRead(emailMessage);
+			}
 			FillGridEmailMessages();//To show the email is read.
 		}
 

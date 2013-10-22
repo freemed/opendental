@@ -196,7 +196,7 @@ namespace OpenDentBusiness{
 				}
 				try {
 					int certNewCount=FindPublicCertForAddress(outMsgUnencrypted.Recipients[i].Address);
-					if(certNewCount>0) {
+					if(certNewCount!=0) {//If the certificate is already in the local public store or if one was discovered over the internet.
 						string strSenderDomain=strSenderAddress.Substring(strSenderAddress.IndexOf("@")+1);//For example, if strSenderAddress is ehr@opendental.com, then this will be opendental.com
 						//Refresh the directAgent class using the updated list of public certs while leaving everything else alone. This must be done, or else the certificate will not be found when encrypting the outgoing email.
 						directAgent=new Health.Direct.Agent.DirectAgent(strSenderDomain,directAgent.PrivateCertResolver,Health.Direct.Common.Certificates.SystemX509Store.OpenExternal().CreateResolver(),directAgent.TrustAnchors);
@@ -236,80 +236,6 @@ namespace OpenDentBusiness{
 			SendEmailUnsecure(emailMessageEncrypted,emailAddressFrom,nameValueCollectionHeaders,alternateView);//Not really unsecure in this spot, because the message is already encrypted.
 			ms.Dispose();
 			return strErrors;
-		}
-
-		///<summary>First attemtps to find the public certificate for the provided address in the public certificate store and returns the located certificate if found.
-		///If the public certificate could not be found from the public certificate store, then this function will search the internet for the hosted public certificate.
-		///If a public certificate is discovered from the Internet, then it will be added to the public certificate store, but the trust for any certificate must be added separately.
-		///Returns the number of new public certificates discovered (could be 2 certs if one for the address and domain separately).  Throws exceptions when no certificates were found or if there was a network failure.</summary>
-		private static int FindPublicCertForAddress(string strAddressQuery) {
-			Health.Direct.Common.Certificates.SystemX509Store storePublicCerts=Health.Direct.Common.Certificates.SystemX509Store.OpenExternalEdit();//Open for read and write.  Corresponds to NHINDExternal/Certificates.
-			X509Certificate2Collection collectionCerts=null;
-			MailAddress mailAddressQuery=new MailAddress(strAddressQuery);
-			Health.Direct.Common.Certificates.ICertificateResolver certResolverLocalCache=storePublicCerts.CreateResolver();
-			if(certResolverLocalCache!=null) {
-				collectionCerts=certResolverLocalCache.GetCertificates(mailAddressQuery);
-				if(collectionCerts!=null) {
-					for(int i=0;i<collectionCerts.Count;i++) {
-						if(DateTime.Now<collectionCerts[i].NotBefore || DateTime.Now>collectionCerts[i].NotAfter) {
-							//If the certificate is not yet valid or is expired, then discard so we can possibly discover a better certificate below.
-							continue;
-						}
-						string strCertSubjectName=collectionCerts[i].Subject.Trim().ToLower();
-						if(strCertSubjectName.Contains("e="+strAddressQuery.ToLower())) {
-							return 0;//The certificate was found in the local certificate store within Windows and is already loaded into memory for the specific recipient address given.  No need to query the Internet.
-						}
-					}
-					//A certificate was found in the local store, but it was a domain level certificate and was not for the specific address provided.
-					//Attempt to discover the certificate for the exact recipient address provided (below) before using the domain level certificate.					
-				}
-			}
-			//An address specific certificate was not found in the local certificate store.  Attempt to discover an address specific certificate by querying the Internet.
-			//It may be useful in the future to attempt communicating with a secondary DNS server if the primary DNS is not available.
-			//const string strDnsServer = "184.73.237.102";//Amazon - This is the DNS server used within the Direct resolverPlugins test project. Appears to have worked the best for them, compared to the others listed below, but was not accessible.
-			//const string strDnsServer = "10.110.22.16";//This address was tried in the Direct resolverPlugins test project and is commented out, implying that it might not be the best DNS server to use.
-			//const string strDnsServer = "207.170.210.162";//This address was tried in the Direct resolverPlugins test project and is commented out, implying that it might not be the best DNS server to use.
-			const string strGlobalDnsServer = "8.8.8.8";//Google - This address was tried in the Direct resolverPlugins test project and is commented out, implying that it might not be the best DNS server to use.
-			IPAddress ipAddressGlobalDnsServer=IPAddress.Parse(strGlobalDnsServer);
-			//Attempt to discover the certificate via DNS.
-			Health.Direct.Common.Certificates.ICertificateResolver certResolverInternetDns=new Health.Direct.Common.Certificates.DnsCertResolver(ipAddressGlobalDnsServer);
-			collectionCerts=certResolverInternetDns.GetCertificates(mailAddressQuery);//Can return null.
-			List<X509Certificate2> listCertsDiscoveredActive=new List<X509Certificate2>();
-			List<X509Certificate2> listCertsDiscoveredInactive=new List<X509Certificate2>();
-			if(collectionCerts!=null) {//Certificates found via DNS. Remove any invalid or expired certificates.
-				for(int i=0;i<collectionCerts.Count;i++) {
-					if(DateTime.Now<collectionCerts[i].NotBefore || DateTime.Now>collectionCerts[i].NotAfter) {
-						//If the certificate is not yet valid or is expired, then discard so we can possibly discover a better certificate below.
-						listCertsDiscoveredInactive.Add(collectionCerts[i]);
-						continue;
-					}
-					listCertsDiscoveredActive.Add(collectionCerts[i]);
-				}
-			}
-			if(listCertsDiscoveredActive.Count==0) {//A valid certificate was not found via DNS.  Attempt to locate via LDAP.
-				Health.Direct.Common.Certificates.ICertificateResolver certResolverInternetLdap=new Health.Direct.ResolverPlugins.LdapCertResolver(ipAddressGlobalDnsServer,TimeSpan.FromMinutes(3));
-				collectionCerts=certResolverInternetLdap.GetCertificates(mailAddressQuery);//Can return null.
-				if(collectionCerts!=null) {
-					for(int i=0;i<collectionCerts.Count;i++) {
-						if(DateTime.Now<collectionCerts[i].NotBefore || DateTime.Now>collectionCerts[i].NotAfter) {
-							//If the certificate is not yet valid or is expired, then discard.
-							listCertsDiscoveredInactive.Add(collectionCerts[i]);
-							continue;
-						}
-						listCertsDiscoveredActive.Add(collectionCerts[i]);
-					}
-				}
-			}
-			if(listCertsDiscoveredActive.Count==0) { //A certificate was not discovered via DNS or LDAP.
-				string strErrorMessage=Lans.g("EmailMessages","No active certificates discovered for recipient")+" "+strAddressQuery;
-				if(listCertsDiscoveredInactive.Count>0) {
-					strErrorMessage+="\r\n"+Lans.g("EmailMessages","Inactive certificates discovered")+": "+listCertsDiscoveredInactive.Count;
-				}
-				throw new ApplicationException(strErrorMessage);
-			}
-			//A certificate was discovered via DNS or LDAP.  Save it locally for later reference.
-			storePublicCerts.Add(listCertsDiscoveredActive);//Write the discovered certificate to the Windows certificate store for future reference.
-			return listCertsDiscoveredActive.Count;
 		}
 
 		/// <summary>Used for sending encrypted Message Disposition Notification (MDN) ack messages for Direct.
@@ -492,6 +418,134 @@ namespace OpenDentBusiness{
 			return directAgent;
 		}
 
+		public static bool IsDirectAddressTrusted(string strAddressTest) {
+			Health.Direct.Common.Certificates.SystemX509Store storeAnchors=Health.Direct.Common.Certificates.SystemX509Store.OpenAnchorEdit();//Open for read and write.  Corresponds to NHINDAnchors/Certificates.
+			if(GetValidCertForAddressFromStore(storeAnchors,strAddressTest,false)==null) {//Look for domain level and address level trust certificates (anchors).
+				return false;//None found.
+			}
+			return true;
+		}
+
+		public static void TryAddTrustDirect(string strAddressTest) {
+			if(IsDirectAddressTrusted(strAddressTest)) {
+				return;//Already trusted.
+			}
+			try {
+				if(FindPublicCertForAddress(strAddressTest)==0) {//Could not find certificate.
+					return;//Cannot trust because we need the certificate to trust.
+				}
+			}
+			catch {
+				return;//Possibly a network failure.
+			}
+			Health.Direct.Common.Certificates.SystemX509Store storePublicCerts=Health.Direct.Common.Certificates.SystemX509Store.OpenExternalEdit();//Open for read and write.  Corresponds to NHINDExternal/Certificates.
+			X509Certificate2 cert=GetValidCertForAddressFromStore(storePublicCerts,strAddressTest,false);
+			if(cert==null) {
+				return;//Should never happen, but just in case.
+			}
+			Health.Direct.Common.Certificates.SystemX509Store storeAnchors=Health.Direct.Common.Certificates.SystemX509Store.OpenAnchorEdit();//Open for read and write.  Corresponds to NHINDAnchors/Certificates.
+			storeAnchors.Add(cert);//Adds to NHINDAnchors/Certificates within the windows certificate store manager (mmc).
+			//Clear all cached DirectAgent instances to force trust anchors to reload.
+			HashDirectAgents.Clear();
+		}
+
+		///<summary>Set isAddressSpecific if you need to allow/prefer domain certificates over email address specific certificates.</summary>
+		private static X509Certificate2 GetValidCertForAddressFromStore(Health.Direct.Common.Certificates.SystemX509Store store,string strAddressTest,bool isAddressSpecific) {
+			X509Certificate2Collection collectionCerts=null;
+			MailAddress mailAddressQuery=new MailAddress(strAddressTest);
+			Health.Direct.Common.Certificates.ICertificateResolver certResolverLocalCache=store.CreateResolver();
+			if(certResolverLocalCache==null) {
+				return null;
+			}
+			collectionCerts=certResolverLocalCache.GetCertificates(mailAddressQuery);
+			if(collectionCerts==null) {
+				return null;
+			}
+			List<X509Certificate2> listDomainCerts=new List<X509Certificate2>();
+			List<X509Certificate2> listAddressCerts=new List<X509Certificate2>();
+			for(int i=0;i<collectionCerts.Count;i++) {
+				if(DateTime.Now<collectionCerts[i].NotBefore || DateTime.Now>collectionCerts[i].NotAfter) {
+					//If the certificate is not yet valid or is expired, then ignore.
+					continue;
+				}
+				string strCertSubjectName=collectionCerts[i].Subject.Trim().ToLower();
+				if(strCertSubjectName.Contains("e="+strAddressTest.ToLower())) {//Address specific
+					listAddressCerts.Add(collectionCerts[i]);
+				}
+				else {
+					listDomainCerts.Add(collectionCerts[i]);
+				}
+			}
+			if(!isAddressSpecific && listDomainCerts.Count>0) {//Domain certificates allowed/preferred and there is one.
+				return listDomainCerts[0];
+			}
+			if(listAddressCerts.Count>0) {
+				return listAddressCerts[0];
+			}
+			//A certificate was found in the local store, but it was a domain level certificate and was not for the specific address provided.
+			return null;
+		}
+
+		///<summary>First attemtps to find the public certificate for the provided address in the public certificate store and returns the located certificate if found.
+		///If the public certificate could not be found from the public certificate store, then this function will search the internet for the hosted public certificate.
+		///If a public certificate is discovered from the Internet, then it will be added to the public certificate store, but the trust for any certificate must be added separately.
+		///Returns the number of new public certificates discovered (0,1,or 2 (if one for the address and domain separately)), or -1 if the certificate is already in the local store of public certificates.
+		///Throws exceptions when no certificates were found or if there was a network failure.</summary>
+		private static int FindPublicCertForAddress(string strAddressTest) {
+			Health.Direct.Common.Certificates.SystemX509Store storePublicCerts=Health.Direct.Common.Certificates.SystemX509Store.OpenExternalEdit();//Open for read and write.  Corresponds to NHINDExternal/Certificates.
+			if(GetValidCertForAddressFromStore(storePublicCerts,strAddressTest,true)!=null) {//Address specific (excludes domain level certificates).
+				return -1;//The certificate was found in the local certificate store within Windows and is already loaded into memory for the specific recipient address given.  No need to query the Internet.
+			}
+			//Cert not found locally.  Attempt to discover the certificate for the exact recipient address provided (below) before using a domain level certificate.
+			//An address specific certificate was not found in the local certificate store.  Attempt to discover an address specific certificate by querying the Internet.
+			//It may be useful in the future to attempt communicating with a secondary DNS server if the primary DNS is not available.
+			//const string strDnsServer = "184.73.237.102";//Amazon - This is the DNS server used within the Direct resolverPlugins test project. Appears to have worked the best for them, compared to the others listed below, but was not accessible.
+			//const string strDnsServer = "10.110.22.16";//This address was tried in the Direct resolverPlugins test project and is commented out, implying that it might not be the best DNS server to use.
+			//const string strDnsServer = "207.170.210.162";//This address was tried in the Direct resolverPlugins test project and is commented out, implying that it might not be the best DNS server to use.
+			const string strGlobalDnsServer = "8.8.8.8";//Google - This address was tried in the Direct resolverPlugins test project and is commented out, implying that it might not be the best DNS server to use.
+			IPAddress ipAddressGlobalDnsServer=IPAddress.Parse(strGlobalDnsServer);
+			MailAddress mailAddressQuery=new MailAddress(strAddressTest);
+			//Attempt to discover the certificate via DNS.
+			Health.Direct.Common.Certificates.ICertificateResolver certResolverInternetDns=new Health.Direct.Common.Certificates.DnsCertResolver(ipAddressGlobalDnsServer);
+			X509Certificate2Collection collectionCerts=certResolverInternetDns.GetCertificates(mailAddressQuery);//Can return null.
+			List<X509Certificate2> listCertsDiscoveredActive=new List<X509Certificate2>();
+			List<X509Certificate2> listCertsDiscoveredInactive=new List<X509Certificate2>();
+			if(collectionCerts!=null) {//Certificates found via DNS. Remove any invalid or expired certificates.
+				for(int i=0;i<collectionCerts.Count;i++) {
+					if(DateTime.Now<collectionCerts[i].NotBefore || DateTime.Now>collectionCerts[i].NotAfter) {
+						//If the certificate is not yet valid or is expired, then discard so we can possibly discover a better certificate below.
+						listCertsDiscoveredInactive.Add(collectionCerts[i]);
+						continue;
+					}
+					listCertsDiscoveredActive.Add(collectionCerts[i]);
+				}
+			}
+			if(listCertsDiscoveredActive.Count==0) {//A valid certificate was not found via DNS.  Attempt to locate via LDAP.
+				Health.Direct.Common.Certificates.ICertificateResolver certResolverInternetLdap=new Health.Direct.ResolverPlugins.LdapCertResolver(ipAddressGlobalDnsServer,TimeSpan.FromMinutes(3));
+				collectionCerts=certResolverInternetLdap.GetCertificates(mailAddressQuery);//Can return null.
+				if(collectionCerts!=null) {
+					for(int i=0;i<collectionCerts.Count;i++) {
+						if(DateTime.Now<collectionCerts[i].NotBefore || DateTime.Now>collectionCerts[i].NotAfter) {
+							//If the certificate is not yet valid or is expired, then discard.
+							listCertsDiscoveredInactive.Add(collectionCerts[i]);
+							continue;
+						}
+						listCertsDiscoveredActive.Add(collectionCerts[i]);
+					}
+				}
+			}
+			if(listCertsDiscoveredActive.Count==0) { //A certificate was not discovered via DNS or LDAP.
+				string strErrorMessage=Lans.g("EmailMessages","No active certificates discovered for recipient")+" "+strAddressTest;
+				if(listCertsDiscoveredInactive.Count>0) {
+					strErrorMessage+="\r\n"+Lans.g("EmailMessages","Inactive certificates discovered")+": "+listCertsDiscoveredInactive.Count;
+				}
+				throw new ApplicationException(strErrorMessage);
+			}
+			//A certificate was discovered via DNS or LDAP.  Save it locally for later reference.
+			storePublicCerts.Add(listCertsDiscoveredActive);//Write the discovered certificate to the Windows certificate store for future reference.
+			return listCertsDiscoveredActive.Count;
+		}
+
 		///<summary>Converts any raw email message (encrypted or not) into an EmailMessage object, and saves any email attachments to the emailattach table in the db.
 		///The emailMessageNum will be used to set EmailMessage.EmailMessageNum.  If emailMessageNum is 0, then the EmailMessage will be inserted into the db, otherwise the EmailMessage will be updated in the db.
 		///If the raw message is encrypted, then will attempt to decrypt.  If decryption fails, then the EmailMessage SentOrReceived will be ReceivedEncrypted and the EmailMessage body will be set to the entire contents of the raw email.  If decryption succeeds, then EmailMessage SentOrReceived will be set to ReceivedDirect, the EmailMessage body will contain the decrypted body text, and a Direct Ack "processed" message will be sent back to the sender using the email settings from emailAddressReceiver.</summary>
@@ -522,14 +576,14 @@ namespace OpenDentBusiness{
 					emailMessage.EmailMessageNum=emailMessageNum;
 					emailMessage.SentOrReceived=EmailSentOrReceived.ReceivedDirect;
 				}
-				catch(Exception) {
+				catch(Exception ex) {
+					//SentOrReceived will be ReceivedEncrypted, indicating to the calling code that decryption failed.
 					if(emailMessageNum==0) {
 						EmailMessages.Insert(emailMessage);
+						return emailMessage;//If the message was just downloaded, then this function was called from the inbox, simply return the inserted email without an exception (it can be decypted later manually by the user).
 					}
-					else {
-						EmailMessages.Update(emailMessage);
-					}
-					return emailMessage;//SentOrReceived will be ReceivedEncrypted, indicating to the calling code that decryption failed.
+					//Do not update if emailMessageNum<>0, because nothing changed (was encrypted and still is).
+					throw ex;//Throw an exception if trying to decrypt an email that was already in the database, so the user can see the error message in the UI.
 				}
 			}
 			else {//Unencrypted

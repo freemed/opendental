@@ -888,20 +888,31 @@ namespace OpenDental{
 		}
 
 		private void butDecrypt_Click(object sender,EventArgs e) {
+			if(!EmailMessages.IsDirectAddressTrusted(MessageCur.FromAddress)) {//Not trusted yet.
+				string strTrustMessage=Lan.g(this,"The sender address must be added to your trusted addresses before you can decrypt the email")
+					+". "+Lan.g(this,"Add")+" "+MessageCur.FromAddress+" "+Lan.g(this,"to trusted addresses")+"?";
+				if(MessageBox.Show(strTrustMessage,"",MessageBoxButtons.OKCancel)==DialogResult.OK) {
+					Cursor=Cursors.WaitCursor;
+					EmailMessages.TryAddTrustDirect(MessageCur.FromAddress);
+					Cursor=Cursors.Default;
+					if(!EmailMessages.IsDirectAddressTrusted(MessageCur.FromAddress)) {
+						MsgBox.Show(this,"Failed to trust sender because a valid certificate could not be located.");
+						return;
+					}
+				}
+			}
 			Cursor=Cursors.WaitCursor;
 			EmailAddress emailAddress=GetEmailAddress();
 			try {
 				MessageCur=EmailMessages.ProcessRawEmailMessage(MessageCur.BodyText,MessageCur.EmailMessageNum,emailAddress);//If decryption is successful, sets status to ReceivedDirect.
-				if(MessageCur.SentOrReceived==EmailSentOrReceived.ReceivedDirect) {//The Direct message was decrypted.
-					EmailMessages.UpdateSentOrReceivedRead(MessageCur);//Mark read, because we are already viewing the message within the current window.					
-					RefreshAll();
-				}
-				else {
-					MsgBox.Show(this,"Decryption was unsuccessful.");
-				}
+				//The Direct message was decrypted.
+				EmailMessages.UpdateSentOrReceivedRead(MessageCur);//Mark read, because we are already viewing the message within the current window.					
+				RefreshAll();
 			}
 			catch(Exception ex) {
-				MessageBox.Show(ex.Message);
+				MessageBox.Show(Lan.g(this,"Decryption failed.")+"\r\n"+ex.Message);
+				//Error=InvalidEncryption: means that someone used the wrong certificate when sending the email to this inbox, and we tried to decrypt with a different certificate.
+				//Error=NoTrustedRecipients: means the sender is not added to the trust anchors in mmc.
 			}
 			Cursor=Cursors.Default;
 		}
