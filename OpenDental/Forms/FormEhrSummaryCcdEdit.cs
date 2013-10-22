@@ -38,17 +38,17 @@ namespace OpenDental {
 
 		///<summary>Can only be called if IsReconcile is true.</summary>
 		private void butReconcileMedications_Click(object sender,EventArgs e) {
-			//TODO: This function is for EHR module b.4.  Create and call the new medications reconcile window using the medication information contained within the CCD XML text located in the file StrXmlFilePath.  A public static function must be created in EhrCCD to parse the medications out of the CCD XML, similar to EhrCCD.GetCCDpat().
+			//TODO: This function is for EHR module b.4.  Create and call the new medications reconcile window (FormReconcileMedication) using the medication information contained within the CCD XML text located in the file StrXmlFilePath.  A public static function must be created in EhrCCD to parse the medications out of the CCD XML, similar to EhrCCD.GetCCDpat().
 		}
 
 		///<summary>Can only be called if IsReconcile is true.</summary>
 		private void butReconcileProblems_Click(object sender,EventArgs e) {
-			//TODO: This function is for EHR module b.4.  Create and call the new problems reconcile window using the problem information contained within the CCD XML text located in the file StrXmlFilePath.  A public static function must be created in EhrCCD to parse the problems out of the CCD XML, similar to EhrCCD.GetCCDpat().
+			//TODO: This function is for EHR module b.4.  Create and call the new problems reconcile window (FormReconcileProblem) using the problem information contained within the CCD XML text located in the file StrXmlFilePath.  A public static function must be created in EhrCCD to parse the problems out of the CCD XML, similar to EhrCCD.GetCCDpat().
 		}
 
 		///<summary>Can only be called if IsReconcile is true.</summary>
 		private void butReconcileAllergies_Click(object sender,EventArgs e) {
-			//TODO: This function is for EHR module b.4.  Create and call the new allergies reconcile window using the allergy information contained within the CCD XML text located in the file StrXmlFilePath.  A public static function must be created in EhrCCD to parse the allergies out of the CCD XML, similar to EhrCCD.GetCCDpat().
+			//TODO: This function is for EHR module b.4.  Create and call the new allergies reconcile window (FormReconcileAllergy) using the allergy information contained within the CCD XML text located in the file StrXmlFilePath.  A public static function must be created in EhrCCD to parse the allergies out of the CCD XML, similar to EhrCCD.GetCCDpat().
 		}
 
 		private void butShowXml_Click(object sender,EventArgs e) {
