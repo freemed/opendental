@@ -1830,35 +1830,35 @@ namespace OpenDentBusiness {
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="INSERT INTO preference(PrefName,ValueString) VALUES('CQMDefaultEncounterCodeValue','308335008')";//SNOMED CT code for "Patient encounter procedure (procedure)"
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('CQMDefaultEncounterCodeValue','none')";//we cannot preset this to a SNOMEDCT code since the customer may not be US
 					Db.NonQ(command);
 				}
 				else {//oracle
-					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'CQMDefaultEncounterCodeValue','308335008')";
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'CQMDefaultEncounterCodeValue','none')";
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="INSERT INTO preference(PrefName,ValueString) VALUES('CQMDefaultEncounterCodeSystem','SNOMEDCT')";
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('CQMDefaultEncounterCodeSystem','')";
 					Db.NonQ(command);
 				}
 				else {//oracle
-					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'CQMDefaultEncounterCodeSystem','SNOMEDCT')";
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'CQMDefaultEncounterCodeSystem','')";
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="INSERT INTO preference(PrefName,ValueString) VALUES('PregnancyDefaultCodeValue','77386006')";//SNOMED CT code for "Patient currently pregnant (finding)"
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('PregnancyDefaultCodeValue','none')";//we cannot preset this to a SNOMEDCT code since the customer may not be US
 					Db.NonQ(command);
 				}
 				else {//oracle
-					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'PregnancyDefaultCodeValue','77386006')";
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'PregnancyDefaultCodeValue','none')";
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="INSERT INTO preference(PrefName,ValueString) VALUES('PregnancyDefaultCodeSystem','SNOMEDCT')";
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('PregnancyDefaultCodeSystem','')";
 					Db.NonQ(command);
 				}
 				else {//oracle
-					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'PregnancyDefaultCodeSystem','SNOMEDCT')";
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'PregnancyDefaultCodeSystem','')";
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
