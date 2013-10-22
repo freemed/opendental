@@ -333,6 +333,7 @@ namespace OpenDentBusiness{
 			str=str.Replace("[nameFL]",pat.GetNameFL());
 			str=str.Replace("[namePref]",pat.Preferred);
 			str=str.Replace("[PatNum]",pat.PatNum.ToString());
+			str=str.Replace("[currentMonth]",DateTime.Now.ToString("MMMM"));
 			return str;
 		}
 
