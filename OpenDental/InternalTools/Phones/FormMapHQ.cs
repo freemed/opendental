@@ -233,9 +233,14 @@ namespace OpenDental {
 		}
 
 		private void setupToolStripMenuItem_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.Setup)) {
+				return;
+			}
+			
 			FormMapSetup FormMS=new FormMapSetup();
 			FormMS.ShowDialog();
 			FillMapAreaPanel();
+			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"MapHQ layout changed");
 		}
 	}
 }

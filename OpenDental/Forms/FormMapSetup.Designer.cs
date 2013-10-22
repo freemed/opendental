@@ -236,6 +236,7 @@
 			// mapAreaPanel
 			// 
 			this.mapAreaPanel.AllowDragging = true;
+			this.mapAreaPanel.AllowEditing = true;
 			this.mapAreaPanel.AutoScroll = true;
 			this.mapAreaPanel.AutoScrollMinSize = new System.Drawing.Size(1207, 1003);
 			this.mapAreaPanel.FloorColor = System.Drawing.Color.White;

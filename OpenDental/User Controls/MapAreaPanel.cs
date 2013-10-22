@@ -12,7 +12,11 @@ namespace OpenDental {
 		[Category("Cubicle Farm")]
 		[Description("Turn dragging on or off")]
 		public bool AllowDragging { get; set; }
-		
+
+		[Category("Cubicle Farm")]
+		[Description("Turn editing on or off")]
+		public bool AllowEditing { get; set; }
+
 		private Font fontLabel=SystemFonts.DefaultFont;
 		[Category("Cubicle Farm")]
 		[Description("Font sized used for labels")]
@@ -219,7 +223,8 @@ namespace OpenDental {
 				GetScreenLocation(cubicle.XPos,cubicle.YPos,this.PixelsPerFoot),
 				GetScreenSize(cubicle.Width,cubicle.Height,this.PixelsPerFoot),
 				Properties.Resources.phoneInUse,
-				this.AllowDragging);
+				this.AllowDragging,
+				this.AllowEditing);
 			phone.DragDone+=mapAreaControl_DragDone;
 			phone.MapAreaRoomChanged+=mapAreaControl_Changed;
 			this.Controls.Add(phone);
@@ -234,7 +239,8 @@ namespace OpenDental {
 				this.FloorColor, //This is effective the BackColor of this panel so set DisplayLabel controls BackColor to match.				
 				GetScreenLocation(displayLabel.XPos,displayLabel.YPos,this.PixelsPerFoot),
 				this.PixelsPerFoot,
-				this.AllowDragging);
+				this.AllowDragging,
+				this.AllowEditing);
 			label.DragDone+=mapAreaControl_DragDone;
 			label.MapAreaDisplayLabelChanged+=mapAreaControl_Changed;
 			this.Controls.Add(label);
@@ -260,7 +266,7 @@ namespace OpenDental {
 			}
 			else if(sender is MapAreaDisplayLabelControl) {
 				asControl=(Control)sender;
-				clinicMapItem=((MapAreaDisplayLabelControl)sender).ClinicMapItem;
+				clinicMapItem=((MapAreaDisplayLabelControl)sender).MapAreaItem;
 			}
 			else {
 				return;
@@ -300,7 +306,7 @@ namespace OpenDental {
 				}
 				else if(this.Controls[i] is MapAreaDisplayLabelControl) {
 					MapAreaDisplayLabelControl displayLabel=(MapAreaDisplayLabelControl)this.Controls[i];
-					displayLabel.Location=GetScreenLocation(displayLabel.ClinicMapItem.XPos,displayLabel.ClinicMapItem.YPos,this.PixelsPerFoot);
+					displayLabel.Location=GetScreenLocation(displayLabel.MapAreaItem.XPos,displayLabel.MapAreaItem.YPos,this.PixelsPerFoot);
 					displayLabel.Size=MapAreaDisplayLabelControl.GetDrawingSize(displayLabel,this.PixelsPerFoot);
 					//draw labels on top of all other controls
 					displayLabel.BringToFront();

@@ -39,10 +39,10 @@
 			this.label14 = new System.Windows.Forms.Label();
 			this.label16 = new System.Windows.Forms.Label();
 			this.labelTriageCoordinator = new System.Windows.Forms.Label();
-			this.butFullScreen = new System.Windows.Forms.Button();
 			this.menuStrip = new System.Windows.Forms.MenuStrip();
 			this.setupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.groupPhoneMetrics = new System.Windows.Forms.GroupBox();
+			this.butFullScreen = new OpenDental.UI.Button();
 			this.mapAreaPanelHQ = new OpenDental.MapAreaPanel();
 			this.menuStrip.SuspendLayout();
 			this.groupPhoneMetrics.SuspendLayout();
@@ -220,16 +220,6 @@
 			this.labelTriageCoordinator.Size = new System.Drawing.Size(617, 41);
 			this.labelTriageCoordinator.TabIndex = 22;
 			// 
-			// butFullScreen
-			// 
-			this.butFullScreen.Location = new System.Drawing.Point(330, 1007);
-			this.butFullScreen.Name = "butFullScreen";
-			this.butFullScreen.Size = new System.Drawing.Size(56, 35);
-			this.butFullScreen.TabIndex = 23;
-			this.butFullScreen.Text = "Full Screen";
-			this.butFullScreen.UseVisualStyleBackColor = true;
-			this.butFullScreen.Click += new System.EventHandler(this.butFullScreen_Click);
-			// 
 			// menuStrip
 			// 
 			this.menuStrip.Dock = System.Windows.Forms.DockStyle.None;
@@ -267,9 +257,24 @@
 			this.groupPhoneMetrics.TabIndex = 25;
 			this.groupPhoneMetrics.TabStop = false;
 			// 
+			// butFullScreen
+			// 
+			this.butFullScreen.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butFullScreen.Autosize = true;
+			this.butFullScreen.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butFullScreen.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butFullScreen.CornerRadius = 4F;
+			this.butFullScreen.Location = new System.Drawing.Point(313, 1017);
+			this.butFullScreen.Name = "butFullScreen";
+			this.butFullScreen.Size = new System.Drawing.Size(75, 24);
+			this.butFullScreen.TabIndex = 29;
+			this.butFullScreen.Text = "Full Screen";
+			this.butFullScreen.Click += new System.EventHandler(this.butFullScreen_Click);
+			// 
 			// mapAreaPanelHQ
 			// 
 			this.mapAreaPanelHQ.AllowDragging = false;
+			this.mapAreaPanelHQ.AllowEditing = false;
 			this.mapAreaPanelHQ.AutoScroll = true;
 			this.mapAreaPanelHQ.AutoScrollMinSize = new System.Drawing.Size(1207, 1003);
 			this.mapAreaPanelHQ.FloorColor = System.Drawing.Color.White;
@@ -291,9 +296,9 @@
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(1634, 1042);
+			this.Controls.Add(this.butFullScreen);
 			this.Controls.Add(this.labelTriageOpsStaff);
 			this.Controls.Add(this.groupPhoneMetrics);
-			this.Controls.Add(this.butFullScreen);
 			this.Controls.Add(this.label12);
 			this.Controls.Add(this.label14);
 			this.Controls.Add(this.mapAreaPanelHQ);
@@ -333,9 +338,9 @@
 		private System.Windows.Forms.Label label14;
 		private System.Windows.Forms.Label label16;
 		private System.Windows.Forms.Label labelTriageCoordinator;
-		private System.Windows.Forms.Button butFullScreen;
 		private System.Windows.Forms.MenuStrip menuStrip;
 		private System.Windows.Forms.ToolStripMenuItem setupToolStripMenuItem;
 		private System.Windows.Forms.GroupBox groupPhoneMetrics;
+		private UI.Button butFullScreen;
 	}
 }

@@ -198,7 +198,7 @@ namespace OpenDentBusiness{
 			return null;
 		}
 
-		///<summary>Find formatted name in list</summary>
+		///<summary>Find formatted name in list.  Takes in a name that was previously formatted by Employees.GetNameFL and finds a match in the list.  If no match is found then returns null.</summary>
 		public static Employee GetEmp(string nameFL,List<Employee> employees) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<employees.Count;i++) {

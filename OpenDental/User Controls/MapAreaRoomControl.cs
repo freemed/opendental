@@ -82,6 +82,18 @@ namespace OpenDental {
 				Invalidate();
 			}
 		}
+		
+		private bool _allowEdit=false;
+		[Category("Behavior")]
+		[Description("Double-click will open editor")]
+		public bool AllowEdit {
+			get {
+				return _allowEdit;
+			}
+			set {
+				_allowEdit=value;
+			}
+		}
 
 		public bool IsFlashing {
 			get {
@@ -105,7 +117,7 @@ namespace OpenDental {
 		}
 
 		///<summary>Takes all required fields as input. Suggest using this version when adding a cubicle to a ClinicMapPanel.</summary>
-		public MapAreaRoomControl(MapArea cubicle,string elapsed,string employeeName,long employeeNum,string extension,string status,Font font,Color innerColor,Color outerColor,Color backColor,Point location,Size size,Image phoneImage,bool allowDragging) :this() {
+		public MapAreaRoomControl(MapArea cubicle,string elapsed,string employeeName,long employeeNum,string extension,string status,Font font,Color innerColor,Color outerColor,Color backColor,Point location,Size size,Image phoneImage,bool allowDragging,bool allowEdit) :this() {
 			cubicle.ItemType=MapItemType.Room;
 			MapAreaItem=cubicle;
 			Elapsed = elapsed;
@@ -121,6 +133,7 @@ namespace OpenDental {
 			BackColor=backColor;
 			PhoneImage = phoneImage;
 			AllowDragging=allowDragging;
+			AllowEdit=allowEdit;
 			Name=MapAreaItem.MapAreaNum.ToString();
 		}
 
@@ -235,7 +248,10 @@ namespace OpenDental {
 		#region Mouse events
 
 		private void MapAreaRoomControl_DoubleClick(object sender,EventArgs e) {
-			//edit this cubicle item
+			if(!AllowEdit) {
+				return;
+			}
+			//edit this room
 			FormMapAreaEdit FormEP=new FormMapAreaEdit();
 			FormEP.MapItem=this.MapAreaItem;
 			if(FormEP.ShowDialog(this)!=DialogResult.OK) {

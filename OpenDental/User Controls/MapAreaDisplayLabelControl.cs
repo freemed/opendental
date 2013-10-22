@@ -9,10 +9,26 @@ namespace OpenDental {
 
 		#region Member not available in designer.
 
-		public MapArea ClinicMapItem=new MapArea();
+		public MapArea MapAreaItem=new MapArea();
 
 		#endregion Member not available in designer.
 
+		#region Properties
+
+		private bool _allowEdit=false;
+		[Category("Behavior")]
+		[Description("Double-click will open editor")]
+		public bool AllowEdit {
+			get {
+				return _allowEdit;
+			}
+			set {
+				_allowEdit=value;
+			}
+		}
+
+		#endregion
+		
 		#region Events
 
 		public event EventHandler MapAreaDisplayLabelChanged;
@@ -23,22 +39,23 @@ namespace OpenDental {
 			InitializeComponent();
 		}
 
-		public MapAreaDisplayLabelControl(MapArea displayLabel,Font font,Color foreColor,Color backColor,Point location,int pixelsPerFoot,bool allowDragging) :this() {
+		public MapAreaDisplayLabelControl(MapArea displayLabel,Font font,Color foreColor,Color backColor,Point location,int pixelsPerFoot,bool allowDragging,bool allowEdit) :this() {
 			displayLabel.ItemType=MapItemType.DisplayLabel;
-			ClinicMapItem=displayLabel;
+			MapAreaItem=displayLabel;
 			Font=font;
 			ForeColor=foreColor;
 			BackColor=backColor;
 			Location=location;
 			Size=GetDrawingSize(this,pixelsPerFoot);
-			AllowDragging=allowDragging;			
-			Name=ClinicMapItem.MapAreaNum.ToString();
+			AllowDragging=allowDragging;
+			AllowEdit=allowEdit;
+			Name=MapAreaItem.MapAreaNum.ToString();
 		}
 
 		///<summary>Make the control just tall enough to fit the font and the lesser of the user defined width vs the actual width.</summary>
 		public static Size GetDrawingSize(MapAreaDisplayLabelControl displayLabel,int pixelsPerFoot) {
-			Size controlSize=MapAreaPanel.GetScreenSize(displayLabel.ClinicMapItem.Width,displayLabel.ClinicMapItem.Height,pixelsPerFoot);
-			Size textSize=TextRenderer.MeasureText(displayLabel.ClinicMapItem.Description,displayLabel.Font);
+			Size controlSize=MapAreaPanel.GetScreenSize(displayLabel.MapAreaItem.Width,displayLabel.MapAreaItem.Height,pixelsPerFoot);
+			Size textSize=TextRenderer.MeasureText(displayLabel.MapAreaItem.Description,displayLabel.Font);
 			return new Size(Math.Min(controlSize.Width,textSize.Width),textSize.Height);
 		}
 
@@ -51,7 +68,7 @@ namespace OpenDental {
 				stringFormat.Alignment=StringAlignment.Near;
 				stringFormat.LineAlignment=StringAlignment.Center;
 				Rectangle rcOuter=this.ClientRectangle;
-				e.Graphics.DrawString(ClinicMapItem.Description,Font,brushFore,rcOuter,stringFormat);
+				e.Graphics.DrawString(MapAreaItem.Description,Font,brushFore,rcOuter,stringFormat);
 			}
 			catch { }
 			finally {
@@ -61,9 +78,12 @@ namespace OpenDental {
 		}
 
 		private void MapAreaDisplayLabelControl_DoubleClick(object sender,System.EventArgs e) {
-			//edit this display label item
+			if(!AllowEdit) {
+				return;
+			}
+			//edit this display label
 			FormMapAreaEdit FormEP=new FormMapAreaEdit();
-			FormEP.MapItem=this.ClinicMapItem;
+			FormEP.MapItem=this.MapAreaItem;
 			if(FormEP.ShowDialog(this)!=DialogResult.OK) {
 				return;
 			}

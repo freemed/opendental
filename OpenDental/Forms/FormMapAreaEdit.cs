@@ -68,6 +68,11 @@ namespace OpenDental {
 					MessageBox.Show(Lan.g(this,"Invalid Extension"));
 					return;
 				}
+				if(MapItem.ItemType==MapItemType.DisplayLabel && PIn.String(textBoxDescription.Text)=="") {
+					textBoxDescription.Focus();
+					MessageBox.Show(Lan.g(this,"Invalid Text"));
+					return;
+				}
 				MapItem.Extension=PIn.Int(textBoxExtension.Text);
 				MapItem.XPos=PIn.Double(textBoxXPos.Text);
 				MapItem.YPos=PIn.Double(textBoxYPos.Text);
