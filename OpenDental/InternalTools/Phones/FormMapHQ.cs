@@ -78,7 +78,7 @@ namespace OpenDental {
 					//we got this far so we found a corresponding cubicle for this phone entry
 					room.EmployeeNum=phone.EmployeeNum;
 					room.EmployeeName=phone.EmployeeName;
-					if(phone.DateTimeStart==DateTime.Today) {
+					if(phone.DateTimeStart.Date==DateTime.Today) {
 						TimeSpan span=DateTime.Now-phone.DateTimeStart+_timeDelta;
 						DateTime timeOfDay=DateTime.Today+span;
 						room.Elapsed=timeOfDay.ToString("H:mm:ss");
