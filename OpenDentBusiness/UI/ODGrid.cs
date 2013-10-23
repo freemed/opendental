@@ -514,6 +514,12 @@ namespace OpenDental.UI {
 									RowHeights[i]=cellH;
 								}
 							}
+							//Cameron 10/23/2013: Rows used to look like thick lines when the row height was 1.  When the height is less than 4, the row is not visible enough to select or edit.
+							//We will use the height of the string "Any" to determine a better row height so the user can see that it is an empty row.
+							//If, for whatever reason, their font really does return a row height less than 4, the following code will return that value anyway thus this change should be harmless.
+							if(RowHeights[i]<4) {
+								RowHeights[i]=(int)g.MeasureString("Any",cellFont,100).Height+1;
+							}
 						}
 						else {//text not wrapping
 							if(HasEditableColumn) {
