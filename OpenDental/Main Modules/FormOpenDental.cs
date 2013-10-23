@@ -2192,7 +2192,13 @@ namespace OpenDental{
 			if(PrefC.GetBool(PrefName.DockPhonePanelShow)) {
 				if(itypeList.Contains((int)InvalidType.Employees) || itypeList.Contains((int)InvalidType.Prefs) || isAll) { //refill the triage coordinator combo box
 					comboTriageCoordinator.Items.Clear();
-					Employee currentTriageEmployee=Employees.GetEmp(PrefC.GetLong(PrefName.HQTriageCoordinator));
+					Employee currentTriageEmployee=null;
+					try {
+						currentTriageEmployee=Employees.GetEmp(PrefC.GetLong(PrefName.HQTriageCoordinator));
+					}
+					catch{
+						//swallow the case where PrefName.HQTriageCoordinator not found
+					}
 					int iSelItem=-1;
 					for(int i=0;i<Employees.ListShort.Length;i++) {
 						int iNewItem=comboTriageCoordinator.Items.Add(Employees.GetNameFL(Employees.ListShort[i]));
