@@ -1299,7 +1299,8 @@ namespace OpenDentBusiness{
 				+"LName='"+POut.String(lName)+"' "
 				+"AND FName='"+POut.String(fName)+"' "
 				+"AND Birthdate="+POut.Date(birthdate)+" "
-				+"AND PatStatus!=4";//not deleted
+				+"AND PatStatus!="+POut.Int((int)PatientStatus.Archived)+" "//Not Archived
+				+"AND PatStatus!="+POut.Int((int)PatientStatus.Deleted);//Not Deleted
 			return PIn.Long(Db.GetScalar(command));
 		}
 
@@ -1333,8 +1334,9 @@ namespace OpenDentBusiness{
 				+"LName LIKE '"+POut.String(lName.Substring(0,subStrIndexlName))+"%' "
 				+"AND FName LIKE '"+POut.String(fName.Substring(0,subStrIndexfName))+"%' "
 				+"AND (Birthdate="+POut.Date(birthdate)+" "//either a matching bd
-				+"OR Birthdate < "+POut.Date(new DateTime(1880,1,1))+")"//or no bd
-				+"AND PatStatus!=4";//not deleted
+				+"OR Birthdate < "+POut.Date(new DateTime(1880,1,1))+") "//or no bd
+				+"AND PatStatus!="+POut.Int((int)PatientStatus.Archived)+" "//Not Archived
+				+"AND PatStatus!="+POut.Int((int)PatientStatus.Deleted);//Not Deleted
 			return Crud.PatientCrud.SelectMany(command);
 		}
 
