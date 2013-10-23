@@ -865,52 +865,6 @@ namespace OpenDentBusiness {
 					command=@"CREATE INDEX securityloghash_SecurityLogNum ON securityloghash (SecurityLogNum)";
 					Db.NonQ(command);
 				}
-				//ehrcode
-				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="DROP TABLE IF EXISTS ehrcode";
-					Db.NonQ(command);
-					command=@"CREATE TABLE ehrcode (
-						EhrCodeNum bigint NOT NULL auto_increment PRIMARY KEY,
-						MeasureIds varchar(60) NOT NULL,
-						ValueSetName varchar(70) NOT NULL,
-						ValueSetOID varchar(50) NOT NULL,
-						QDMCategory varchar(30) NOT NULL,
-						CodeValue varchar(20) NOT NULL,
-						Description text NOT NULL,
-						CodeSystem varchar(20) NOT NULL,
-						CodeSystemOID varchar(30) NOT NULL,
-						INDEX(ValueSetOID),
-						INDEX(CodeValue),
-						INDEX(CodeSystem),
-						INDEX(CodeSystemOID)
-						) DEFAULT CHARSET=utf8";
-					Db.NonQ(command);
-				}
-				else {//oracle
-					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE ehrcode'; EXCEPTION WHEN OTHERS THEN NULL; END;";
-					Db.NonQ(command);
-					command=@"CREATE TABLE ehrcode (
-						EhrCodeNum number(20) NOT NULL,
-						MeasureIds varchar2(60),
-						ValueSetName varchar2(70),
-						ValueSetOID varchar2(50),
-						QDMCategory varchar2(30),
-						CodeValue varchar2(20),
-						Description varchar2(800),
-						CodeSystem varchar2(20),
-						CodeSystemOID varchar2(30),
-						CONSTRAINT ehrcode_EhrCodeNum PRIMARY KEY (EhrCodeNum)
-						)";
-					Db.NonQ(command);
-					command=@"CREATE INDEX ehrcode_ValueSetOID ON ehrcode (ValueSetOID)";
-					Db.NonQ(command);
-					command=@"CREATE INDEX ehrcode_CodeValue ON ehrcode (CodeValue)";
-					Db.NonQ(command);
-					command=@"CREATE INDEX ehrcode_CodeSystem ON ehrcode (CodeSystem)";
-					Db.NonQ(command);
-					command=@"CREATE INDEX ehrcode_CodeSystemOID ON ehrcode (CodeSystemOID)";
-					Db.NonQ(command);
-				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE emailmessage CHANGE BodyText BodyText LONGTEXT NOT NULL";
 					Db.NonQ(command);
