@@ -184,8 +184,10 @@ namespace OpenDentBusiness {
 				LEFT JOIN (
 					SELECT family.PatNum
 					FROM patient family
-					INNER JOIN repeatcharge ON repeatcharge.PatNum=family.PatNum OR repeatcharge.PatNum=family.Guarantor
-					WHERE (repeatcharge.DateStop >= NOW() OR repeatcharge.DateStop='0001-01-01')
+					WHERE family.PatNum IN (SELECT repeatcharge.PatNum FROM repeatcharge 
+						WHERE repeatcharge.DateStop >= NOW() OR repeatcharge.DateStop='0001-01-01')
+					OR family.Guarantor IN (SELECT repeatcharge.PatNum FROM repeatcharge
+						WHERE repeatcharge.DateStop >= NOW() OR repeatcharge.DateStop='0001-01-01')
 					) AS activecharges ON registrationkey.PatNum=activecharges.PatNum 
 				WHERE registrationkey.DateDisabled='0001-01-01'
 				AND registrationkey.DateEnded='0001-01-01'
