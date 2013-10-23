@@ -263,7 +263,14 @@ namespace OpenDental{
 				MsgBox.Show(this,"Snomed code already exists in the problems list.");
 				return;
 			}
-			textSnomed.Text=FormS.SelectedSnomed.SnomedCode;
+			DiseaseDefCur.SnomedCode=FormS.SelectedSnomed.SnomedCode;
+			string sdescript=Snomeds.GetCodeAndDescription(FormS.SelectedSnomed.SnomedCode);
+			if(sdescript=="") {
+				textSnomed.Text=FormS.SelectedSnomed.SnomedCode;
+			}
+			else {
+				textSnomed.Text=sdescript;
+			}
 		}
 
 		private void butIcd9_Click(object sender,EventArgs e) {
@@ -277,7 +284,14 @@ namespace OpenDental{
 				MsgBox.Show(this,"ICD-9 code already exists in the problems list.");
 				return;
 			}
-			textICD9.Text=FormI.SelectedIcd9.ICD9Code;
+			DiseaseDefCur.ICD9Code=FormI.SelectedIcd9.ICD9Code;
+			string i9descript=ICD9s.GetCodeAndDescription(FormI.SelectedIcd9.ICD9Code);
+			if(i9descript=="") {
+				textICD9.Text=FormI.SelectedIcd9.ICD9Code;
+			}
+			else {
+				textICD9.Text=i9descript;
+			}
 		}
 
 		private void buttonDelete_Click(object sender,EventArgs e) {
@@ -296,17 +310,12 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			if(textName.Text=="" && textICD9.Text=="" && textSnomed.Text=="") {
-				MsgBox.Show(this,"Not allowed to create a Disease Definition without a code or description.");
-				textName.Text=DiseaseDefCur.DiseaseName;
-				textICD9.Text=DiseaseDefCur.ICD9Code;
-				textSnomed.Text=DiseaseDefCur.SnomedCode;
-				checkIsHidden.Checked=DiseaseDefCur.IsHidden;
+			if(textName.Text=="") {
+				MsgBox.Show(this,"Not allowed to create a Disease Definition without a description.");
 				return;
 			}
+			//Icd9Code and SnomedCode set on load or on return from code picker forms
 			DiseaseDefCur.DiseaseName=textName.Text;
-			DiseaseDefCur.ICD9Code=textICD9.Text;
-			DiseaseDefCur.SnomedCode=textSnomed.Text;
 			DiseaseDefCur.IsHidden=checkIsHidden.Checked;
 			if(IsNew){
 				DiseaseDefs.Insert(DiseaseDefCur);

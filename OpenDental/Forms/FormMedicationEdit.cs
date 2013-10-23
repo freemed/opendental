@@ -402,6 +402,10 @@ namespace OpenDental{
 		private void butOK_Click(object sender, System.EventArgs e) {
 			//generic num already handled
 			MedicationCur.MedName=textMedName.Text;
+			if(MedicationCur.MedName=="") {
+				MsgBox.Show(this,"Not allowed to save a medication without a Drug Name.");
+				return;
+			}
 			if(MedicationCur.MedicationNum==MedicationCur.GenericNum){
 				MedicationCur.Notes=textNotes.Text;
 			}

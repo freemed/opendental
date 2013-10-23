@@ -325,8 +325,20 @@ namespace OpenDental{
 		private void FormDiseaseEdit_Load(object sender,EventArgs e) {
 			DiseaseDef diseasedef=DiseaseDefs.GetItem(DiseaseCur.DiseaseDefNum);//guaranteed to have one
 			textProblem.Text=diseasedef.DiseaseName;
-			textIcd9.Text=ICD9s.GetCodeAndDescription(diseasedef.ICD9Code);
-			textSnomed.Text=Snomeds.GetCodeAndDescription(diseasedef.SnomedCode);
+			string i9descript=ICD9s.GetCodeAndDescription(diseasedef.ICD9Code);
+			if(i9descript=="") {
+				textIcd9.Text=diseasedef.ICD9Code;
+			}
+			else {
+				textIcd9.Text=i9descript;
+			}
+			string sdescript=Snomeds.GetCodeAndDescription(diseasedef.SnomedCode);
+			if(sdescript=="") {
+				textSnomed.Text=diseasedef.SnomedCode;
+			}
+			else {
+				textSnomed.Text=sdescript;
+			}
 			comboStatus.Items.Clear();
 			for(int i=0;i<Enum.GetNames(typeof(ProblemStatus)).Length;i++) {
 				comboStatus.Items.Add(Enum.GetNames(typeof(ProblemStatus))[i]);
