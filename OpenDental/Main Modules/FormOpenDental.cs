@@ -225,7 +225,7 @@ namespace OpenDental{
 		private MenuItem menuItemCCRecurring;
 		private UserControlPhoneSmall phoneSmall;
 		///<summary>This will be null if EHR didn't load up.  EHRTEST conditional compilation constant is used because the EHR project is only part of the solution here at HQ.  We need to use late binding in a few places so that it will still compile for people who download our sourcecode.  But late binding prevents us from stepping through for debugging, so the EHRTEST lets us switch to early binding.</summary>
-		public static object ObjQuarterlyKey;
+		public static object ObjSomeEhrSuperClass;
 		private MenuItem menuItemEHR;
 		private System.Windows.Forms.Timer timerLogoff;
 		//<summary>This will be null if EHR didn't load up.</summary>
@@ -1906,12 +1906,12 @@ namespace OpenDental{
 					FormEHR=new FormEHR();
 					ContrChart2.InitializeLocalData();//because toolbar is now missing the EHR button.  Only a problem if a db conversion is done when opening the program.
 				#else
-					ObjQuarterlyKey=null;
+					ObjSomeEhrSuperClass=null;
 					AssemblyEHR=null;
 					if(File.Exists(dllPathEHR)) {//EHR.dll is available, so load it up
 						AssemblyEHR=Assembly.LoadFile(dllPathEHR);
 						Type type=AssemblyEHR.GetType("EHR.FormEHR");//namespace.class
-						ObjQuarterlyKey=Activator.CreateInstance(type);
+						ObjSomeEhrSuperClass=Activator.CreateInstance(type);
 					}
 				#endif
 			}

@@ -11,7 +11,9 @@ using OpenDental.UI;
 using System.Xml;
 using System.Xml.XPath;
 using CodeBase;
+#if EHRTEST
 using EHR;
+#endif
 
 namespace OpenDental {
 	public partial class FormEhrQualityMeasures:Form {
@@ -26,9 +28,10 @@ namespace OpenDental {
 			Cursor=Cursors.WaitCursor;
 			listProvsKeyed=new List<Provider>();
 			for(int i=0;i<ProviderC.ListShort.Count;i++) {
-				if(ProvKey.ProvKeyIsValid(ProviderC.ListShort[i].LName,ProviderC.ListShort[i].FName,true,ProviderC.ListShort[i].EhrKey)) {
-					listProvsKeyed.Add(ProviderC.ListShort[i]);
-				}
+				//TODO: use late binding...
+				//if(ProvKey.ProvKeyIsValid(ProviderC.ListShort[i].LName,ProviderC.ListShort[i].FName,true,ProviderC.ListShort[i].EhrKey)) {
+				//	listProvsKeyed.Add(ProviderC.ListShort[i]);
+				//}
 			}
 			if(listProvsKeyed.Count==0) {
 				Cursor=Cursors.Default;

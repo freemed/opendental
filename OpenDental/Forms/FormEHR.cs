@@ -16,7 +16,9 @@ using OpenDentBusiness;
 using OpenDental;
 using OpenDental.UI;
 using CodeBase;
+#if EHRTEST
 using EHR;
+#endif
 
 namespace OpenDental {
 	public partial class FormEHR:Form {
@@ -287,8 +289,9 @@ namespace OpenDental {
 		}
 
 		private void butMeasures_Click(object sender,EventArgs e) {
-			FormEhrMeasures FormMeasures=new FormEhrMeasures();
-			FormMeasures.ShowDialog();
+			//Todo: FormEhrMeasures was left in the EHR namespace and should be late bound.
+			//FormEhrMeasures FormMeasures=new FormEhrMeasures();
+			//FormMeasures.ShowDialog();
 			FillGridMu();
 		}
 
@@ -362,17 +365,23 @@ namespace OpenDental {
 		}
 
 		public bool ProvKeyIsValid(string lName,string fName,bool hasReportAccess,string provKey) {
-			return ProvKey.ProvKeyIsValid(lName,fName,hasReportAccess,provKey);
+			//return ProvKey.ProvKeyIsValid(lName,fName,hasReportAccess,provKey);
+			#if EHRTEST //This pattern allows the code to compile without having the EHR code available.
+				return ProvKey.ProvKeyIsValid(lName,fName,hasReportAccess,provKey);
+			#else
+				Type type=FormOpenDental.AssemblyEHR.GetType("Ehr.FormEhrMeasures");//namespace.class
+				object[] args=new object[] { lName,fName,hasReportAccess,provKey };
+				return (bool)type.InvokeMember("QuarterlyKeyIsValid",System.Reflection.BindingFlags.InvokeMethod,null,FormOpenDental.ObjSomeEhrSuperClass,args);
+			#endif
 		}
 
 		public bool QuarterlyKeyIsValid(string year,string quarter,string practiceTitle,string qkey) {
-			//return QuarterlyKey.QuarterlyKeyIsValid(year,quarter,practiceTitle,qkey);
 			#if EHRTEST //This pattern allows the code to compile without having the EHR code available.
 				return QuarterlyKey.QuarterlyKeyIsValid(year,quarter,practiceTitle,qkey);
 			#else
 				Type type=FormOpenDental.AssemblyEHR.GetType("EHR.QuarterlyKey");//namespace.class
 				object[] args=new object[] { year,quarter,practiceTitle,qkey };
-				return (bool)type.InvokeMember("QuarterlyKeyIsValid",System.Reflection.BindingFlags.InvokeMethod,null,FormOpenDental.ObjQuarterlyKey,args);
+				return (bool)type.InvokeMember("QuarterlyKeyIsValid",System.Reflection.BindingFlags.InvokeMethod,null,FormOpenDental.ObjSomeEhrSuperClass,args);
 			#endif
 		}
 

@@ -93,9 +93,9 @@ namespace OpenDental {
 				#if EHRTEST
 					provKeyIsValid=((FormEHR)FormOpenDental.FormEHR).ProvKeyIsValid(textLName.Text,textFName.Text,checkHasReportAccess.Checked,textEhrKey.Text);
 				#else
-					Type type=FormOpenDental.AssemblyEHR.GetType("EHR.ObjQuarterlyKey");//namespace.class
+					Type type=FormOpenDental.AssemblyEHR.GetType("EHR.ObjSomeEhrSuperClass");//namespace.class
 					object[] args=new object[] { textLName.Text,textFName.Text,checkHasReportAccess.Checked,textEhrKey.Text };
-					provKeyIsValid=(bool)type.InvokeMember("ProvKeyIsValid",System.Reflection.BindingFlags.InvokeMethod,null,FormOpenDental.ObjQuarterlyKey,args);
+					provKeyIsValid=(bool)type.InvokeMember("ProvKeyIsValid",System.Reflection.BindingFlags.InvokeMethod,null,FormOpenDental.ObjSomeEhrSuperClass,args);
 				#endif
 				if(!provKeyIsValid) {
 					MessageBox.Show("Invalid provider key");
