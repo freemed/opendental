@@ -121,7 +121,7 @@
     <value>The default encounter code for use in calculating the initial patient population for 2014 Clinical Quality Measures.  Certain actions in Open Dental, like completing a procedure, will automatically generate an encounter with this code.  Patients with this encounter may be included in the 9 CQM's recorded by Open Dental if other measure specific criteria are met.</value>
   </data>
   <data name="label11.Text" xml:space="preserve">
-    <value>The default pregnancy diagnosis code used by some 2014 Clinical Quality Measures.  If a patient is marked as pregnant in the Edit Vitalsign window, a diagnosis of pregnancy is automatically entered in the patient's medical information with this code and a start date equal to the exam date.  Patients with this diagnosis can be excluded from certain measures.</value>
+    <value>The default pregnancy diagnosis code used by some 2014 Clinical Quality Measures.  If a patient is marked as pregnant in the Edit Vitalsign window, a diagnosis of pregnancy will be automatically entered in the patient's medical information if one does not already exist.  Patients with this diagnosis can be excluded from certain measures.</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

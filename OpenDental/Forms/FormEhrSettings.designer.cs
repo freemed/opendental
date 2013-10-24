@@ -26,6 +26,7 @@ namespace OpenDental{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormEhrSettings));
 			this.checkMU2 = new System.Windows.Forms.CheckBox();
 			this.groupEncounter = new System.Windows.Forms.GroupBox();
+			this.butEncCpt = new OpenDental.UI.Button();
 			this.comboEncCodes = new System.Windows.Forms.ComboBox();
 			this.label5 = new System.Windows.Forms.Label();
 			this.labelEncWarning = new System.Windows.Forms.Label();
@@ -38,7 +39,7 @@ namespace OpenDental{
 			this.butEncHcpcs = new OpenDental.UI.Button();
 			this.label3 = new System.Windows.Forms.Label();
 			this.butEncSnomed = new OpenDental.UI.Button();
-			this.butEncCdtCpt = new OpenDental.UI.Button();
+			this.butEncCdt = new OpenDental.UI.Button();
 			this.groupPregnancy = new System.Windows.Forms.GroupBox();
 			this.comboPregCodes = new System.Windows.Forms.ComboBox();
 			this.labelPregWarning = new System.Windows.Forms.Label();
@@ -76,6 +77,7 @@ namespace OpenDental{
 			// 
 			// groupEncounter
 			// 
+			this.groupEncounter.Controls.Add(this.butEncCpt);
 			this.groupEncounter.Controls.Add(this.comboEncCodes);
 			this.groupEncounter.Controls.Add(this.label5);
 			this.groupEncounter.Controls.Add(this.labelEncWarning);
@@ -88,13 +90,27 @@ namespace OpenDental{
 			this.groupEncounter.Controls.Add(this.butEncHcpcs);
 			this.groupEncounter.Controls.Add(this.label3);
 			this.groupEncounter.Controls.Add(this.butEncSnomed);
-			this.groupEncounter.Controls.Add(this.butEncCdtCpt);
+			this.groupEncounter.Controls.Add(this.butEncCdt);
 			this.groupEncounter.Location = new System.Drawing.Point(12, 70);
 			this.groupEncounter.Name = "groupEncounter";
 			this.groupEncounter.Size = new System.Drawing.Size(453, 265);
 			this.groupEncounter.TabIndex = 119;
 			this.groupEncounter.TabStop = false;
 			this.groupEncounter.Text = "Default Encounter Code";
+			// 
+			// butEncCpt
+			// 
+			this.butEncCpt.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butEncCpt.Autosize = true;
+			this.butEncCpt.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butEncCpt.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butEncCpt.CornerRadius = 4F;
+			this.butEncCpt.Location = new System.Drawing.Point(288, 181);
+			this.butEncCpt.Name = "butEncCpt";
+			this.butEncCpt.Size = new System.Drawing.Size(75, 24);
+			this.butEncCpt.TabIndex = 130;
+			this.butEncCpt.Text = "CPT";
+			this.butEncCpt.Click += new System.EventHandler(this.butEncCpt_Click);
 			// 
 			// comboEncCodes
 			// 
@@ -192,7 +208,7 @@ namespace OpenDental{
 			this.butEncHcpcs.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butEncHcpcs.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butEncHcpcs.CornerRadius = 4F;
-			this.butEncHcpcs.Location = new System.Drawing.Point(288, 181);
+			this.butEncHcpcs.Location = new System.Drawing.Point(369, 181);
 			this.butEncHcpcs.Name = "butEncHcpcs";
 			this.butEncHcpcs.Size = new System.Drawing.Size(75, 24);
 			this.butEncHcpcs.TabIndex = 124;
@@ -222,19 +238,19 @@ namespace OpenDental{
 			this.butEncSnomed.Text = "SNOMED CT";
 			this.butEncSnomed.Click += new System.EventHandler(this.butEncSnomed_Click);
 			// 
-			// butEncCdtCpt
+			// butEncCdt
 			// 
-			this.butEncCdtCpt.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butEncCdtCpt.Autosize = true;
-			this.butEncCdtCpt.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butEncCdtCpt.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butEncCdtCpt.CornerRadius = 4F;
-			this.butEncCdtCpt.Location = new System.Drawing.Point(207, 181);
-			this.butEncCdtCpt.Name = "butEncCdtCpt";
-			this.butEncCdtCpt.Size = new System.Drawing.Size(75, 24);
-			this.butEncCdtCpt.TabIndex = 123;
-			this.butEncCdtCpt.Text = "CDT/CPT";
-			this.butEncCdtCpt.Click += new System.EventHandler(this.butEncCdtCpt_Click);
+			this.butEncCdt.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butEncCdt.Autosize = true;
+			this.butEncCdt.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butEncCdt.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butEncCdt.CornerRadius = 4F;
+			this.butEncCdt.Location = new System.Drawing.Point(207, 181);
+			this.butEncCdt.Name = "butEncCdt";
+			this.butEncCdt.Size = new System.Drawing.Size(75, 24);
+			this.butEncCdt.TabIndex = 123;
+			this.butEncCdt.Text = "CDT";
+			this.butEncCdt.Click += new System.EventHandler(this.butEncCdt_Click);
 			// 
 			// groupPregnancy
 			// 
@@ -474,7 +490,7 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label2;
 		private UI.Button butEncHcpcs;
 		private UI.Button butEncSnomed;
-		private UI.Button butEncCdtCpt;
+		private UI.Button butEncCdt;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.Label label3;
@@ -494,5 +510,6 @@ namespace OpenDental{
 		private System.Windows.Forms.GroupBox groupGlobalSettings;
 		private System.Windows.Forms.ComboBox comboEncCodes;
 		private System.Windows.Forms.ComboBox comboPregCodes;
+		private UI.Button butEncCpt;
 	}
 }
