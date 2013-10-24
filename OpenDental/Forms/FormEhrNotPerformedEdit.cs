@@ -43,9 +43,10 @@ namespace OpenDental {
 				default://should never happen
 					break;
 			}
-			List<EhrCode> listEhrCodes=EhrCodes.GetForValueSetOIDs(listValueSetOIDs);
-			if(listEhrCodes.Count==0) {//this should never happen, just in case
-				MsgBox.Show(this,"There are no codes in the database for the selected value set.");
+			List<EhrCode> listEhrCodes=EhrCodes.GetForValueSetOIDs(listValueSetOIDs,true);
+			if(listEhrCodes.Count==0) {//This should only happen if the EHR.dll does not exist or if the codes in the ehrcode list do not exist in the corresponding table
+				MsgBox.Show(this,"The codes used for Not Performed items do not exist in the table in your database.  You should run the Code System Importer tool in Setup | EHR.");
+				DialogResult=DialogResult.Cancel;
 				return;
 			}
 			if(EhrNotPerfCur.IsNew) {//if new, CodeValue and CodeSystem are not set, might have to select one
@@ -119,7 +120,7 @@ namespace OpenDental {
 							List<List<string>> listSublists=new List<List<string>> { new List<string> { medicalReason },new List<string> { patientReason },new List<string> { systemReason } };
 							bool found=false;
 							for(int i=0;i<listSublists.Count;i++) {
-								listEhrCodesReason=EhrCodes.GetForValueSetOIDs(listSublists[i]);
+								listEhrCodesReason=EhrCodes.GetForValueSetOIDs(listSublists[i],true);
 								for(int j=0;j<listEhrCodesReason.Count;j++) {
 									if(listEhrCodesReason[j].CodeValue==EhrNotPerfCur.CodeValueReason && listEhrCodesReason[j].CodeSystem==EhrNotPerfCur.CodeSystemReason) {
 										found=true;
@@ -152,8 +153,12 @@ namespace OpenDental {
 				default://should never happen
 					break;
 			}
+			List<EhrCode> listReasonCodes=EhrCodes.GetForValueSetOIDs(listValueSetOIDsReason,true);//these are all SNOMEDCT codes and will only show if they exist in the snomed table.
+			if(listReasonCodes.Count==0) {
+				MsgBox.Show(this,"There are no codes in the database for reasons not performed.  You must run the Code System Importer tool in Setup | EHR to import the SNOMEDCT table in order to enter a valid reason.");
+			}
 			listEhrCodesReason=new List<EhrCode>();
-			listEhrCodesReason.AddRange(EhrCodes.GetForValueSetOIDs(listValueSetOIDsReason));
+			listEhrCodesReason.AddRange(listReasonCodes);
 			listCodeAndDescriptReason=new List<string>();
 			listCodeReason=new List<string>();
 			comboCodeReason.Items.Clear();

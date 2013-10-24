@@ -19,7 +19,7 @@ namespace EHR {
 		private List<Loinc> listHeightCodes;
 		private List<Loinc> listWeightCodes;
 		private List<Loinc> listBMICodes;
-		private long disdefNumCur;//used to keep track of the def we will update VitalsignCur.PregDiseaseNum with
+		private long pregDisDefNumCur;//used to keep track of the def we will update VitalsignCur.PregDiseaseNum with
 		private string pregDefaultText;
 		private string pregManualText;
 		private InterventionCodeSet intervCodeSet;
@@ -33,7 +33,7 @@ namespace EHR {
 			pregManualText="Selecting a code that is not in the recommended list of pregnancy codes may not exclude this patient from certain CQM calculations.";
 			labelPregNotice.Text=pregDefaultText;
 			#region SetHWBPAndVisibility
-			disdefNumCur=0;
+			pregDisDefNumCur=0;
 			groupInterventions.Visible=false;
 			patCur=Patients.GetPat(VitalsignCur.PatNum);
 			textDateTaken.Text=VitalsignCur.DateTaken.ToShortDateString();
@@ -49,6 +49,7 @@ namespace EHR {
 			listWeightCodes=new List<Loinc>();
 			listBMICodes=new List<Loinc>();
 			FillBMICodeLists();
+			comboBMIPercentileCode.Items.Add("none");
 			for(int i=0;i<listBMICodes.Count;i++) {
 				if(listBMICodes[i].NameShort=="" || listBMICodes[i].NameLongCommon.Length<30) {//30 is roughly the number of characters that will fit in the combo box
 					comboBMIPercentileCode.Items.Add(listBMICodes[i].NameLongCommon);
@@ -57,9 +58,10 @@ namespace EHR {
 					comboBMIPercentileCode.Items.Add(listBMICodes[i].NameShort);
 				}
 				if(VitalsignCur.BMIExamCode==listBMICodes[i].LoincCode) {
-					comboBMIPercentileCode.SelectedIndex=i;
+					comboBMIPercentileCode.SelectedIndex=i+1;
 				}
 			}
+			comboHeightExamCode.Items.Add("none");
 			for(int i=0;i<listHeightCodes.Count;i++) {
 				if(listHeightCodes[i].NameShort=="" || listHeightCodes[i].NameLongCommon.Length<30) {//30 is roughly the number of characters that will fit in the combo box
 					comboHeightExamCode.Items.Add(listHeightCodes[i].NameLongCommon);
@@ -68,9 +70,10 @@ namespace EHR {
 					comboHeightExamCode.Items.Add(listHeightCodes[i].NameShort);
 				}
 				if(VitalsignCur.HeightExamCode==listHeightCodes[i].LoincCode) {
-					comboHeightExamCode.SelectedIndex=i;
+					comboHeightExamCode.SelectedIndex=i+1;
 				}
 			}
+			comboWeightExamCode.Items.Add("none");
 			for(int i=0;i<listWeightCodes.Count;i++) {
 				if(listWeightCodes[i].NameShort=="" || listWeightCodes[i].NameLongCommon.Length<30) {//30 is roughly the number of characters that will fit in the combo box
 					comboWeightExamCode.Items.Add(listWeightCodes[i].NameLongCommon);
@@ -79,7 +82,7 @@ namespace EHR {
 					comboWeightExamCode.Items.Add(listWeightCodes[i].NameShort);
 				}
 				if(VitalsignCur.WeightExamCode==listWeightCodes[i].LoincCode) {
-					comboWeightExamCode.SelectedIndex=i;
+					comboWeightExamCode.SelectedIndex=i+1;
 				}
 			}
 			if(comboBMIPercentileCode.SelectedIndex==-1) {
@@ -96,82 +99,39 @@ namespace EHR {
 			if(VitalsignCur.PregDiseaseNum>0) {
 				checkPregnant.Checked=true;
 				SetPregCodeAndDescript();//if after this function disdefNumCur=0, the PregDiseaseNum is pointing to an invalid disease or diseasedef, or the default is set to 'none'
-				if(disdefNumCur>0) {
+				if(pregDisDefNumCur>0) {
 					labelPregNotice.Visible=true;
 					butChangeDefault.Text="Go to Problem";
 				}
 			}
 			else {
-				disdefNumCur=0;
+				pregDisDefNumCur=0;
 			}
 			#endregion
 			#region SetEhrNotPerformedReasonCodeAndDescript
 			if(VitalsignCur.EhrNotPerformedNum>0) {
 				checkNotPerf.Checked=true;
-				EhrNotPerformed enpCur=EhrNotPerformeds.GetOne(VitalsignCur.EhrNotPerformedNum);
-				if(enpCur==null) {
+				EhrNotPerformed notPerfCur=EhrNotPerformeds.GetOne(VitalsignCur.EhrNotPerformedNum);
+				if(notPerfCur==null) {
 					VitalsignCur.EhrNotPerformedNum=0;//if this vital sign is pointing to an EhrNotPerformed item that no longer exists, we will just remove the pointer
 					checkNotPerf.Checked=false;
 				}
 				else {
-					textReasonCode.Text=enpCur.CodeValueReason;
+					textReasonCode.Text=notPerfCur.CodeValueReason;
 					//all reasons not performed are snomed codes
-					Snomed sCur=Snomeds.GetByCode(enpCur.CodeValueReason);
+					Snomed sCur=Snomeds.GetByCode(notPerfCur.CodeValueReason);
 					if(sCur!=null) {
 						textReasonDescript.Text=sCur.Description;
 					}
 				}
 			}
 			#endregion
-			#region SetInterventionCodeAndDescript
-			//if(VitalsignCur.OverUnderInterventionNum>0) {
-			//	Intervention iCur=Interventions.GetOne(VitalsignCur.OverUnderInterventionNum);
-			//	if(iCur==null) {
-			//		VitalsignCur.OverUnderInterventionNum=0;
-			//	}
-			//	else {
-			//		textIntervenCode.Text=iCur.CodeValue;
-			//		string descript="";
-			//		switch(iCur.CodeSystem) {//interventions can be SNOMEDCT, ICD9CM, ICD10CM, HCPCS, or CPT codes
-			//			case "SNOMEDCT":
-			//				Snomed sCur=Snomeds.GetByCode(iCur.CodeValue);
-			//				if(sCur!=null) {
-			//					descript=sCur.Description;
-			//				}
-			//				break;
-			//			case "ICD9CM":
-			//				ICD9 i9Cur=ICD9s.GetByCode(iCur.CodeValue);
-			//				if(i9Cur!=null) {
-			//					descript=i9Cur.Description;
-			//				}
-			//				break;
-			//			case "ICD10CM":
-			//				Icd10 i10Cur=Icd10s.GetByCode(iCur.CodeValue);
-			//				if(i10Cur!=null) {
-			//					descript=i10Cur.Description;
-			//				}
-			//				break;
-			//			case "HCPCS":
-			//				Hcpcs hCur=Hcpcses.GetByCode(iCur.CodeValue);
-			//				if(hCur!=null) {
-			//					descript=hCur.DescriptionShort;
-			//				}
-			//				break;
-			//			case "CPT":
-			//				//no need to check for null, return new ProcedureCode object if not found, Descript will be blank
-			//				descript=ProcedureCodes.GetProcCode(iCur.CodeValue).Descript;
-			//				break;
-			//		}
-			//		textIntervenDescript.Text=descript;
-			//	}
-			//}
-			#endregion
 		}
 
 		///<summary>Sets the pregnancy code and description text box with either the attached pregnancy dx if exists or the default preg dx set in FormEhrSettings or a manually selected def.  If the pregnancy diseasedef with the default pregnancy code and code system does not exist, it will be inserted.  The pregnancy problem will be inserted when closing if necessary.</summary>
 		private void SetPregCodeAndDescript() {
 			labelPregNotice.Text=pregDefaultText;
-			disdefNumCur=0;//this will be set to the correct problem def at the end of this function and will be the def of the problem we will insert/attach this exam to
+			pregDisDefNumCur=0;//this will be set to the correct problem def at the end of this function and will be the def of the problem we will insert/attach this exam to
 			string pregCode="";
 			string descript="";
 			Disease disCur=null;
@@ -195,7 +155,7 @@ namespace EHR {
 							disCur=null;
 						}
 						else {//disease points to valid def
-							disdefNumCur=disdefCur.DiseaseDefNum;
+							pregDisDefNumCur=disdefCur.DiseaseDefNum;
 						}
 					}
 				}
@@ -224,7 +184,7 @@ namespace EHR {
 					}
 				}
 				if(disCur!=null) {
-					disdefNumCur=disCur.DiseaseDefNum;
+					pregDisDefNumCur=disCur.DiseaseDefNum;
 					VitalsignCur.PregDiseaseNum=disCur.DiseaseNum;
 				}
 				#endregion
@@ -234,8 +194,8 @@ namespace EHR {
 					pregCode=PrefC.GetString(PrefName.PregnancyDefaultCodeValue);//could be 'none' which disables the automatic dx insertion
 					string pregCodeSys=PrefC.GetString(PrefName.PregnancyDefaultCodeSystem);//if 'none' for code, code system will default to 'SNOMEDCT', display will be ""
 					if(pregCode!="" && pregCode!="none") {//default pregnancy code set to a code other than 'none', should never be blank, we set in ConvertDB and don't allow blank
-						disdefNumCur=DiseaseDefs.GetNumFromCode(pregCode);//see if the code is attached to a valid diseasedef
-						if(disdefNumCur==0) {//no diseasedef in db for the default code, create and insert def
+						pregDisDefNumCur=DiseaseDefs.GetNumFromCode(pregCode);//see if the code is attached to a valid diseasedef
+						if(pregDisDefNumCur==0) {//no diseasedef in db for the default code, create and insert def
 							disdefCur=new DiseaseDef();
 							disdefCur.DiseaseName="Pregnant";
 							switch(pregCodeSys) {
@@ -249,7 +209,7 @@ namespace EHR {
 									disdefCur.SnomedCode=pregCode;
 									break;
 							}
-							disdefNumCur=DiseaseDefs.Insert(disdefCur);
+							pregDisDefNumCur=DiseaseDefs.Insert(disdefCur);
 							DiseaseDefs.RefreshCache();
 							DataValid.SetInvalid(InvalidType.Diseases);
 							SecurityLogs.MakeLogEntry(Permissions.ProblemEdit,0,disdefCur.DiseaseName+" added.");
@@ -271,19 +231,19 @@ namespace EHR {
 							return;
 						}
 						labelPregNotice.Text=pregManualText;
-						disdefNumCur=FormDD.SelectedDiseaseDefNum;
+						pregDisDefNumCur=FormDD.SelectedDiseaseDefNum;
 					}
 					#endregion
 				}
 			}
 			#region Set description and code from DiseaseDefNum
-			if(disdefNumCur==0) {
+			if(pregDisDefNumCur==0) {
 				textPregCode.Clear();
 				textPregCodeDescript.Clear();
 				labelPregNotice.Visible=false;
 				return;
 			}
-			disdefCur=DiseaseDefs.GetItem(disdefNumCur);
+			disdefCur=DiseaseDefs.GetItem(pregDisDefNumCur);
 			if(disdefCur.ICD9Code!="") {
 				ICD9 i9Preg=ICD9s.GetByCode(disdefCur.ICD9Code);
 				if(i9Preg!=null) {
@@ -314,21 +274,26 @@ namespace EHR {
 		}
 
 		private void FillBMICodeLists() {
-			listBMICodes.Add(Loincs.GetByCode("59574-4"));//Body mass index (BMI) [Percentile]
-			listBMICodes.Add(Loincs.GetByCode("59575-1"));//Body mass index (BMI) [Percentile] Per age
-			listBMICodes.Add(Loincs.GetByCode("59576-9"));//Body mass index (BMI) [Percentile] Per age and gender
-			listHeightCodes.Add(Loincs.GetByCode("8302-2"));//Body height
-			listHeightCodes.Add(Loincs.GetByCode("3137-7"));//Body height Measured
-			listHeightCodes.Add(Loincs.GetByCode("3138-5"));//Body height Stated
-			listHeightCodes.Add(Loincs.GetByCode("8306-3"));//Body height --lying
-			listHeightCodes.Add(Loincs.GetByCode("8307-1"));//Body height --pre surgery
-			listHeightCodes.Add(Loincs.GetByCode("8308-9"));//Body height --standing
-			listWeightCodes.Add(Loincs.GetByCode("29463-7"));//Body weight
-			listWeightCodes.Add(Loincs.GetByCode("18833-4"));//First Body weight
-			listWeightCodes.Add(Loincs.GetByCode("3141-9"));//Body weight Measured
-			listWeightCodes.Add(Loincs.GetByCode("3142-7"));//Body weight Stated
-			listWeightCodes.Add(Loincs.GetByCode("8350-1"));//Body weight Measured --with clothes
-			listWeightCodes.Add(Loincs.GetByCode("8351-9"));//Body weight Measured --without clothes
+			bool isNotInLoincTable=false;
+			//The list returned will only contain the Loincs that are actually in the loinc table.
+			List<Loinc> listLoincs=Loincs.GetForCodeList("59574-4,59575-1,59576-9");//Body mass index (BMI) [Percentile],Body mass index (BMI) [Percentile] Per age,Body mass index (BMI) [Percentile] Per age and gender
+			if(listLoincs.Count<3) {
+				isNotInLoincTable=true;
+			}
+			listBMICodes.AddRange(listLoincs);
+			listLoincs=Loincs.GetForCodeList("8302-2,3137-7,3138-5,8306-3,8307-1,8308-9");//Body height,Body height Measured,Body height Stated,Body height --lying,Body height --pre surgery,Body height --standing
+			if(listLoincs.Count<6) {
+				isNotInLoincTable=true;
+			}
+			listHeightCodes.AddRange(listLoincs);
+			listLoincs=Loincs.GetForCodeList("29463-7,18833-4,3141-9,3142-7,8350-1,8351-9");//Body weight,First Body weight,Body weight Measured,Body weight Stated,Body weight Measured --with clothes,Body weight Measured --without clothes
+			if(listLoincs.Count<6) {
+				isNotInLoincTable=true;
+			}
+			listWeightCodes.AddRange(listLoincs);
+			if(isNotInLoincTable) {
+				MsgBox.Show(this,"The LOINC table does not contain one or more codes used to report vitalsign exam statistics.  The LOINC table should be updated by running the Code System Importer tool found in Setup | EHR.");
+			}
 		}
 
 		private void CalcBMI() {
@@ -361,15 +326,49 @@ namespace EHR {
 				groupInterventions.Text="Child Counseling for Nutrition and Physical Activity";
 				FillGridInterventions(true);
 			}
-			else if(ageBeforeJanFirst>=18) {
-				if(labelWeightCode.Text!="") {//if over 18 and given an over/underweight code due to BMI
-					groupInterventions.Visible=true;
-					groupInterventions.Text="Intervention for BMI Above or Below Normal";
-					FillGridInterventions(false);
+			else if(ageBeforeJanFirst>=18 && labelWeightCode.Text!="") {//if over 18 and given an over/underweight code due to BMI
+				groupInterventions.Visible=true;
+				groupInterventions.Text="Intervention for BMI Above or Below Normal";
+				FillGridInterventions(false);
+			}
+			if(Loincs.GetByCode("39156-5")!=null) {
+				textBMIExamCode.Text="LOINC 39156-5";//This is the only code allowed for the BMI procedure.  It is not stored with this vitalsign object, we will display it if they have the code in the loinc table and will calculate CQM's with the assumption that all vitalsign objects with valid height and weight are this code if they have it in the LOINC table.
+			}
+			return;
+		}
+
+		private string calcOverUnderBMIHelper(float bmi) {
+			if(ageBeforeJanFirst<18) {//Do not clasify children as over/underweight
+				intervCodeSet=InterventionCodeSet.Nutrition;
+				return "";
+			}
+			else if(ageBeforeJanFirst<65) {
+				if(bmi<18.5) {
+					intervCodeSet=InterventionCodeSet.BelowNormalWeight;
+					return "Underweight";
+				}
+				else if(bmi<25) {
+					return "";
+				}
+				else {
+					intervCodeSet=InterventionCodeSet.AboveNormalWeight;
+					return "Overweight";
 				}
 			}
-			textBMIExamCode.Text="LOINC 39156-5";//This is the only code allowed for the BMI procedure
-			return;
+			else {
+				if(bmi<23) {
+					intervCodeSet=InterventionCodeSet.BelowNormalWeight;
+					return "Underweight";
+				}
+				else if(bmi<30) {
+					return "";
+				}
+				else {
+					intervCodeSet=InterventionCodeSet.AboveNormalWeight;
+					return "Overweight";
+				}
+			}
+			//do not save to DB until butOK_Click
 		}
 
 		private void FillGridInterventions(bool isChild) {
@@ -386,7 +385,7 @@ namespace EHR {
 				}
 				for(int i=listIntervention.Count-1;i>-1;i--) {
 					if(listCodeSets.Contains(listIntervention[i].CodeSet)) {
-						if(listIntervention[i].DateTimeEntry.Date>examDate.AddMonths(-6).Date && listIntervention[i].DateTimeEntry.Date<=examDate.Date) {
+						if(listIntervention[i].DateTimeEntry.Date<=examDate.Date && listIntervention[i].DateTimeEntry.Date>examDate.AddMonths(-6).Date) {
 							continue;
 						}
 					}
@@ -399,15 +398,14 @@ namespace EHR {
 			if(!isChild) {
 				listMedPats=MedicationPats.Refresh(VitalsignCur.PatNum,true);
 				for(int i=listMedPats.Count-1;i>-1;i--) {
-					if(listMedPats[i].DateStart.Date>examDate.AddMonths(-6).Date && listMedPats[i].DateStart.Date<=examDate.Date) {
-						continue;
-					}
-					listMedPats.RemoveAt(i);
+					if(listMedPats[i].DateStart.Date<examDate.AddMonths(-6).Date || listMedPats[i].DateStart.Date>examDate.Date) {
+						listMedPats.RemoveAt(i);
+					}					
 				}
 				//if still meds that have start date within exam date and exam date -6 months, check the rxnorm against valid ehr meds
 				if(listMedPats.Count>0) {
-					List<string> listOIDs=new List<string> { "2.16.840.1.113883.3.600.1.1498","2.16.840.1.113883.3.600.1.1499" };//Above Normal Medications RxNorm Value Set, Below Normal Medications RxNorm Value Set
-					List<EhrCode> listEhrMeds=EhrCodes.GetForValueSetOIDs(listOIDs);//currently only 7 medications for above/below normal weight
+					List<EhrCode> listEhrMeds=EhrCodes.GetForValueSetOIDs(new List<string> { "2.16.840.1.113883.3.600.1.1498","2.16.840.1.113883.3.600.1.1499" },true);//Above Normal Medications RxNorm Value Set, Below Normal Medications RxNorm Value Set
+					//listEhrMeds will only contain 7 medications for above/below normal weight and only if those exist in the rxnorm table
 					for(int i=listMedPats.Count-1;i>-1;i--) {
 						bool found=false;
 						for(int j=0;j<listEhrMeds.Count;j++) {
@@ -416,10 +414,9 @@ namespace EHR {
 								break;
 							}
 						}
-						if(found) {
-							continue;
-						}
-						listMedPats.RemoveAt(i);
+						if(!found) {
+							listMedPats.RemoveAt(i);
+						}						
 					}
 				}
 			}
@@ -434,7 +431,7 @@ namespace EHR {
 			gridInterventions.Columns.Add(col);
 			gridInterventions.Rows.Clear();
 			ODGridRow row;
-#region AddInterventionRows
+			#region AddInterventionRows
 			for(int i=0;i<listIntervention.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(listIntervention[i].DateTimeEntry.ToShortDateString());
@@ -475,8 +472,8 @@ namespace EHR {
 				row.Cells.Add(descript);
 				gridInterventions.Rows.Add(row);
 			}
-#endregion
-#region AddMedicationRows
+			#endregion
+			#region AddMedicationRows
 			for(int i=0;i<listMedPats.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(listMedPats[i].DateStart.ToShortDateString());
@@ -492,42 +489,8 @@ namespace EHR {
 				row.Cells.Add(descript);
 				gridInterventions.Rows.Add(row);
 			}
-#endregion
+			#endregion
 			gridInterventions.EndUpdate();
-		}
-
-		private string calcOverUnderBMIHelper(float bmi) {
-			if(ageBeforeJanFirst<18) {//Do not clasify children as over/underweight
-				intervCodeSet=InterventionCodeSet.Nutrition;
-				return "";
-			}
-			else if(ageBeforeJanFirst<65) {
-				if(bmi<18.5) {
-					intervCodeSet=InterventionCodeSet.BelowNormalWeight;
-					return "Underweight";
-				}
-				else if(bmi<25) {
-					return "";
-				}
-				else {
-					intervCodeSet=InterventionCodeSet.AboveNormalWeight;
-					return "Overweight";
-				}
-			}
-			else {
-				if(bmi<23) {
-					intervCodeSet=InterventionCodeSet.BelowNormalWeight;
-					return "Underweight";
-				}
-				else if(bmi<30) {
-					return "";
-				}
-				else {
-					intervCodeSet=InterventionCodeSet.AboveNormalWeight;
-					return "Overweight";
-				}
-			}
-			//do not save to DB until butOK_Click
 		}
 
 		private void textWeight_TextChanged(object sender,EventArgs e) {
@@ -550,7 +513,9 @@ namespace EHR {
 				textBPsExamCode.Text="";
 				return;
 			}
-			textBPsExamCode.Text="LOINC 8480-6";
+			if(Loincs.GetByCode("8480-6")!=null) {
+				textBPsExamCode.Text="LOINC 8480-6";//This is the only code allowed for the BP Systolic exam.  It is not stored with this vitalsign object, we will display it if they have the code in the loinc table and will calculate CQM's with the assumption that all vitalsign objects with valid Systolic BP are this code if they have it in the LOINC table.
+			}
 		}
 
 		private void textBPd_TextChanged(object sender,EventArgs e) {
@@ -565,11 +530,9 @@ namespace EHR {
 				textBPdExamCode.Text="";
 				return;
 			}
-			textBPdExamCode.Text="LOINC 8462-4";
-		}
-
-		private void textDateTaken_TextChanged(object sender,EventArgs e) {
-			
+			if(Loincs.GetByCode("8462-4")!=null) {
+				textBPdExamCode.Text="LOINC 8462-4";//This is the only code allowed for the BP Diastolic exam.  It is not stored with this vitalsign object, we will display it if they have the code in the loinc table and will calculate CQM's with the assumption that all vitalsign objects with valid Diastolic BP are this code if they have it in the LOINC table.
+			}
 		}
 
 		///<summary>If they change the date of the exam and it is attached to a pregnancy problem and the date is now outside the active dates of the problem, tell them you are removing the problem and unchecking the pregnancy box.</summary>
@@ -614,7 +577,7 @@ Do you want to remove the pregnancy diagnosis?"))
 				return;
 			}
 			SetPregCodeAndDescript();
-			if(disdefNumCur==0) {
+			if(pregDisDefNumCur==0) {
 				checkPregnant.Checked=false;
 				return;
 			}
@@ -652,7 +615,7 @@ Do you want to remove the pregnancy diagnosis?"))
 						return;
 					}
 					SetPregCodeAndDescript();
-					if(disdefNumCur==0) {
+					if(pregDisDefNumCur==0) {
 						labelPregNotice.Visible=false;
 						butChangeDefault.Text="Change Default";
 					}
@@ -669,7 +632,7 @@ Do you want to remove the pregnancy diagnosis?"))
 				}
 				labelPregNotice.Visible=false;
 				SetPregCodeAndDescript();
-				if(disdefNumCur>0) {
+				if(pregDisDefNumCur>0) {
 					labelPregNotice.Visible=true;
 				}
 			}
@@ -718,55 +681,14 @@ Do you want to remove the pregnancy diagnosis?"))
 			FormInt.InterventionCur.IsNew=true;
 			FormInt.InterventionCur.PatNum=patCur.PatNum;
 			FormInt.InterventionCur.ProvNum=patCur.PriProv;
-			FormInt.InterventionCur.DateTimeEntry=VitalsignCur.DateTaken;
+			FormInt.InterventionCur.DateTimeEntry=PIn.Date(textDateTaken.Text);
 			FormInt.InterventionCur.CodeSet=intervCodeSet;
-			FormInt.IsAllTypes=true;
+			FormInt.IsAllTypes=false;
 			FormInt.ShowDialog();
 			if(FormInt.DialogResult==DialogResult.OK) {
 				bool child=ageBeforeJanFirst<17;
 				FillGridInterventions(child);
 			}
-		}
-
-		private void butIntervention_Click(object sender,EventArgs e) {
-			//FormInterventionEdit FormInt=new FormInterventionEdit();
-			//FormInt.InterventionCur=new Intervention();
-			//FormInt.InterventionCur.IsNew=true;
-			//FormInt.InterventionCur.PatNum=patCur.PatNum;
-			//FormInt.InterventionCur.ProvNum=patCur.PriProv;
-			//FormInt.InterventionCur.DateTimeEntry=VitalsignCur.DateTaken;
-			//if(labelWeightCode.Text=="Overweight") {
-			//	FormInt.InterventionCur.CodeSet=InterventionCodeSet.AboveNormalWeight;
-			//}
-			//else {
-			//	FormInt.InterventionCur.CodeSet=InterventionCodeSet.BelowNormalWeight;
-			//}
-			//FormInt.IsCodeSetLocked=true;
-			//FormInt.ShowDialog();
-		}
-
-		private void butMedication_Click(object sender,EventArgs e) {
-			////select medication from list.  Additional meds can be added to the list from within that dlg
-			//FormMedications FormM=new FormMedications();
-			//FormM.IsSelectionMode=true;
-			//FormM.ShowDialog();
-			//if(FormM.DialogResult!=DialogResult.OK) {
-			//	return;
-			//}
-			//MedicationPat MedicationPatCur=new MedicationPat();
-			//MedicationPatCur.PatNum=patCur.PatNum;
-			//MedicationPatCur.MedicationNum=FormM.SelectedMedicationNum;
-			//MedicationPatCur.RxCui=Medications.GetMedication(FormM.SelectedMedicationNum).RxCui;
-			//MedicationPatCur.ProvNum=patCur.PriProv;
-			//FormMedPat FormMP=new FormMedPat();
-			//FormMP.MedicationPatCur=MedicationPatCur;
-			//FormMP.IsNew=true;
-			//FormMP.ShowDialog();
-			//if(FormMP.DialogResult!=DialogResult.OK) {
-			//	return;
-			//}
-			////if medication button visible, not child
-			//FillGridInterventions(false);
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
@@ -842,15 +764,25 @@ Do you want to remove the pregnancy diagnosis?"))
 			VitalsignCur.Weight=weight;
 			VitalsignCur.BpDiastolic=BPdia;
 			VitalsignCur.BpSystolic=BPsys;
-			VitalsignCur.BMIExamCode=listBMICodes[comboBMIPercentileCode.SelectedIndex].LoincCode;
-			VitalsignCur.HeightExamCode=listHeightCodes[comboHeightExamCode.SelectedIndex].LoincCode;
-			VitalsignCur.WeightExamCode=listWeightCodes[comboWeightExamCode.SelectedIndex].LoincCode;
+			if(comboBMIPercentileCode.SelectedIndex>0) {
+				VitalsignCur.BMIExamCode=listBMICodes[comboBMIPercentileCode.SelectedIndex-1].LoincCode;
+			}
+			if(comboHeightExamCode.SelectedIndex>0) {
+				VitalsignCur.HeightExamCode=listHeightCodes[comboHeightExamCode.SelectedIndex-1].LoincCode;
+			}
+			if(comboWeightExamCode.SelectedIndex>0) {
+				VitalsignCur.WeightExamCode=listWeightCodes[comboWeightExamCode.SelectedIndex-1].LoincCode;
+			}
 			switch(labelWeightCode.Text) {
 				case "Overweight":
-					VitalsignCur.WeightCode="238131007";
+					if(Snomeds.GetByCode("238131007")!=null) {
+						VitalsignCur.WeightCode="238131007";
+					}
 					break;
 				case "Underweight":
-					VitalsignCur.WeightCode="248342006";
+					if(Snomeds.GetByCode("248342006")!=null) {
+						VitalsignCur.WeightCode="248342006";
+					}
 					break;
 				case "":
 				default:
@@ -859,7 +791,7 @@ Do you want to remove the pregnancy diagnosis?"))
 			}
 			#region PregnancyDx
 			if(checkPregnant.Checked) {//pregnant, add pregnant dx if necessary
-				if(disdefNumCur==0) {
+				if(pregDisDefNumCur==0) {
 					//shouldn't happen, if checked this must be set to either an existing problem def or a new problem that requires inserting, return to form with checkPregnant unchecked
 					MsgBox.Show(this,"This exam must point to a valid pregnancy diagnosis.");
 					checkPregnant.Checked=false;
@@ -869,7 +801,7 @@ Do you want to remove the pregnancy diagnosis?"))
 				if(VitalsignCur.PregDiseaseNum==0) {//insert new preg disease and update vitalsign to point to it
 					Disease pregDisNew=new Disease();
 					pregDisNew.PatNum=VitalsignCur.PatNum;
-					pregDisNew.DiseaseDefNum=disdefNumCur;
+					pregDisNew.DiseaseDefNum=pregDisDefNumCur;
 					pregDisNew.DateStart=VitalsignCur.DateTaken;
 					pregDisNew.ProbStatus=ProblemStatus.Active;
 					VitalsignCur.PregDiseaseNum=Diseases.Insert(pregDisNew);
@@ -879,7 +811,7 @@ Do you want to remove the pregnancy diagnosis?"))
 					if(VitalsignCur.DateTaken<disCur.DateStart
 						|| (disCur.DateStop.Year>1880 && VitalsignCur.DateTaken>disCur.DateStop))
 					{//the current exam is no longer within dates of preg problem, uncheck the pregnancy box and remove the pointer to the disease
-						MsgBox.Show(this,"This exam is not within the active dates of the attached pregnancy problem.  To exclude this patient from BMI measurement due to pregnancy, reselect the pregnant check box.");
+						MsgBox.Show(this,"This exam is not within the active dates of the attached pregnancy problem.");
 						checkPregnant.Checked=false;
 						textPregCode.Clear();
 						textPregCodeDescript.Clear();

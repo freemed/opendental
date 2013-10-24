@@ -123,7 +123,6 @@
 			this.textDateTaken.Name = "textDateTaken";
 			this.textDateTaken.Size = new System.Drawing.Size(100, 20);
 			this.textDateTaken.TabIndex = 0;
-			this.textDateTaken.TextChanged += new System.EventHandler(this.textDateTaken_TextChanged);
 			this.textDateTaken.Leave += new System.EventHandler(this.textDateTaken_Leave);
 			// 
 			// butCancel

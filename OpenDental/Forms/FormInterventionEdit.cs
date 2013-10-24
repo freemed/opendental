@@ -24,70 +24,43 @@ namespace OpenDental {
 
 		///<summary>If launched from a EHR CQM form we will set the IntervCodeSetIndex based on the situation.  For example, if launched from FormVitalsignEdit2014 due to overweight, we will set IntervCodeSetIndex=InterventionCodeSet.AboveNormalWeight and set IsRecommend=true.  If the user changes the code list to one of the other sub-sets, with IsRecommend=true, we will warn the user that the code will no longer apply to the measure.  If they add an intervention by opening FormInterventions and pressing Add, set IsRecommend=false and IntervCodeSetIndex will default to 0.  We will not warn the user for changing the code set and allow them to enter any of the available intervention codes.</summary>
 		private void FormInterventionEdit_Load(object sender,EventArgs e) {
-			//Dictionary<string,string> OIDSetOID = new Dictionary<string,string>();
-			//OIDSetOID.Add("Above Normal Weight Follow Up","2.16.840.1.113883.3.600.1.1525");
-			//string aaa=OIDSetOID[4];
-			string OIDAboveFollowUp="2.16.840.1.113883.3.600.1.1525";
-			string OIDAboveMed="2.16.840.1.113883.3.600.1.1498";
-			string OIDBelowFollowUp="2.16.840.1.113883.3.600.1.1528";
-			string OIDBelowMed="2.16.840.1.113883.3.600.1.1499";
-			string OIDReferral="2.16.840.1.113883.3.600.1.1527";
-			string OIDNutritionCounsel="2.16.840.1.113883.3.464.1003.195.12.1003";
-			string OIDPhysActCounsel="2.16.840.1.113883.3.464.1003.118.12.1035";
-			string OIDTobaccoCounsel="2.16.840.1.113883.3.526.3.509";
-			string OIDTobaccoMed="2.16.840.1.113883.3.526.3.1190";
-			string OIDDialysisEdu="2.16.840.1.113883.3.464.1003.109.12.1016";
-			string OIDDialysisOther="2.16.840.1.113883.3.464.1003.109.12.1015";
 			listValueSetOIDs=new List<string>();
 			comboCodeSet.Items.Add("All");
-			switch(InterventionCur.CodeSet) {
-				case InterventionCodeSet.AboveNormalWeight:
-				case InterventionCodeSet.BelowNormalWeight:
-				case InterventionCodeSet.Dialysis:
-				case InterventionCodeSet.Nutrition:
-				case InterventionCodeSet.PhysicalActivity:
-				case InterventionCodeSet.TobaccoCessation:
-				default:
-					//should never happen
-					break;
-			}
 			if(IsAllTypes || InterventionCur.CodeSet==InterventionCodeSet.AboveNormalWeight) {
 				comboCodeSet.Items.Add(InterventionCodeSet.AboveNormalWeight.ToString()+" Follow-up");
-				listValueSetOIDs.Add(OIDAboveFollowUp);
+				listValueSetOIDs.Add("2.16.840.1.113883.3.600.1.1525");
 				comboCodeSet.Items.Add(InterventionCodeSet.AboveNormalWeight.ToString()+" Referral");
-				listValueSetOIDs.Add(OIDReferral);
+				listValueSetOIDs.Add("2.16.840.1.113883.3.600.1.1527");
 				comboCodeSet.Items.Add(InterventionCodeSet.AboveNormalWeight.ToString()+" Medication");
-				listValueSetOIDs.Add(OIDAboveMed);
+				listValueSetOIDs.Add("2.16.840.1.113883.3.600.1.1498");
 			}
-			else if(IsAllTypes || InterventionCur.CodeSet==InterventionCodeSet.BelowNormalWeight) {
+			if(IsAllTypes || InterventionCur.CodeSet==InterventionCodeSet.BelowNormalWeight) {
 				comboCodeSet.Items.Add(InterventionCodeSet.BelowNormalWeight.ToString()+" Follow-up");
-				listValueSetOIDs.Add(OIDBelowFollowUp);
+				listValueSetOIDs.Add("2.16.840.1.113883.3.600.1.1528");
 				comboCodeSet.Items.Add(InterventionCodeSet.BelowNormalWeight.ToString()+" Referral");
-				if(!listValueSetOIDs.Contains(OIDReferral)) {
-					listValueSetOIDs.Add(OIDReferral);
+				if(!listValueSetOIDs.Contains("2.16.840.1.113883.3.600.1.1527")) {
+					listValueSetOIDs.Add("2.16.840.1.113883.3.600.1.1527");
 				}
 				comboCodeSet.Items.Add(InterventionCodeSet.BelowNormalWeight.ToString()+" Medication");
-				listValueSetOIDs.Add(OIDBelowMed);
+				listValueSetOIDs.Add("2.16.840.1.113883.3.600.1.1499");
 			}
-			else if(IsAllTypes || InterventionCur.CodeSet==InterventionCodeSet.PhysicalActivity){
-				comboCodeSet.Items.Add(InterventionCodeSet.PhysicalActivity.ToString()+" Counseling");
-				listValueSetOIDs.Add(OIDPhysActCounsel);
-			}
-			else if(IsAllTypes || InterventionCur.CodeSet==InterventionCodeSet.Nutrition) {
+			if(IsAllTypes || InterventionCur.CodeSet==InterventionCodeSet.Nutrition || InterventionCur.CodeSet==InterventionCodeSet.PhysicalActivity) {
 				comboCodeSet.Items.Add(InterventionCodeSet.Nutrition.ToString()+" Counseling");
-				listValueSetOIDs.Add(OIDNutritionCounsel);
+				listValueSetOIDs.Add("2.16.840.1.113883.3.464.1003.195.12.1003");
+				comboCodeSet.Items.Add(InterventionCodeSet.PhysicalActivity.ToString()+" Counseling");
+				listValueSetOIDs.Add("2.16.840.1.113883.3.464.1003.118.12.1035");
 			}
-			else if(IsAllTypes || InterventionCur.CodeSet==InterventionCodeSet.TobaccoCessation) {
+			if(IsAllTypes || InterventionCur.CodeSet==InterventionCodeSet.TobaccoCessation) {
 				comboCodeSet.Items.Add(InterventionCur.CodeSet.ToString()+" Counseling");
-				listValueSetOIDs.Add(OIDTobaccoCounsel);
+				listValueSetOIDs.Add("2.16.840.1.113883.3.526.3.509");
 				comboCodeSet.Items.Add(InterventionCur.CodeSet.ToString()+" Medication");
-				listValueSetOIDs.Add(OIDTobaccoMed);
+				listValueSetOIDs.Add("2.16.840.1.113883.3.526.3.1190");
 			}
-			else if(IsAllTypes || InterventionCur.CodeSet==InterventionCodeSet.Dialysis) {
+			if(IsAllTypes || InterventionCur.CodeSet==InterventionCodeSet.Dialysis) {
 				comboCodeSet.Items.Add(InterventionCur.CodeSet.ToString()+" Education");
-				listValueSetOIDs.Add(OIDDialysisEdu);
+				listValueSetOIDs.Add("2.16.840.1.113883.3.464.1003.109.12.1016");
 				comboCodeSet.Items.Add(InterventionCur.CodeSet.ToString()+" Related Services");
-				listValueSetOIDs.Add(OIDDialysisOther);
+				listValueSetOIDs.Add("2.16.840.1.113883.3.464.1003.109.12.1015");
 			}
 			comboCodeSet.SelectedIndex=0;
 			textDate.Text=InterventionCur.DateTimeEntry.ToShortDateString();
@@ -106,15 +79,16 @@ namespace OpenDental {
 			col=new ODGridColumn("Description",200);
 			gridMain.Columns.Add(col);
 			if(comboCodeSet.SelectedIndex==0) {
-				listCode=EhrCodes.GetForValueSetOIDs(listValueSetOIDs);//this is all codes in the available set of codes (e.g. all AboveNormalWeight Interventions, Referrals, and Medications)
+				listCode=EhrCodes.GetForValueSetOIDs(listValueSetOIDs,true);//this is all codes in the available set of codes (e.g. all AboveNormalWeight Interventions, Referrals, and Medications)
 			}
 			else {
-				listCode=EhrCodes.GetForValueSetOIDs(new List<string> { listValueSetOIDs[comboCodeSet.SelectedIndex-1] });//they only want one subset (e.g. only the AboveNormalWeight Medications) 
+				listCode=EhrCodes.GetForValueSetOIDs(new List<string> { listValueSetOIDs[comboCodeSet.SelectedIndex-1] },true);//they only want one subset (e.g. only the AboveNormalWeight Medications) 
 			}
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			int selectedIdx=-1;
 			for(int i=0;i<listCode.Count;i++) {
+				//We might not be able to display and let the user select codes from systems that require purchasing the code system, like CPT codes.  Might have to hide unless they exist in the CPT (or other code system) table.
 				row=new ODGridRow();
 				row.Cells.Add(listCode[i].CodeValue);
 				row.Cells.Add(listCode[i].CodeSystem);
