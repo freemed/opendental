@@ -29,6 +29,13 @@ namespace OpenDental {
 				butOK.Visible=false;
 			}
 			ActiveControl=textCode;
+			if(!EHR.QuarterlyKey.QuarterlyKeyIsValid(DateTime.Now.Year.ToString()//year
+				,Math.Ceiling(DateTime.Now.Month/3f).ToString()//quarter
+				,PrefC.GetString(PrefName.PracticeTitle)//practice title
+				,EhrQuarterlyKeys.GetKeyThisQuarter().KeyValue))//key
+			{
+				groupBox1.Visible=false;
+			}
 		}
 		
 		private void butSearch_Click(object sender,EventArgs e) {
@@ -277,70 +284,74 @@ namespace OpenDental {
 //				return;
 //			}
 //			Cursor=Cursors.WaitCursor;
-//			string command="DROP TABLE IF EXISTS rxnormonly.rxnconso";
+//						string command="DROP TABLE IF EXISTS snomedonly.snomedusraw";
+//						DataCore.NonQ(command);	
+//						command=@"CREATE TABLE snomedonly.snomedusraw ("
+//									//snomedrawNum bigint NOT NULL auto_increment PRIMARY KEY,
+//								+@"id VarChar(20) NOT NULL,
+//									effectiveTime VarChar(8) NOT NULL,
+//									active VarChar(1) NOT NULL,
+//									moduleId VarChar(20) NOT NULL,
+//									conceptId VarChar(20) NOT NULL,
+//									languageCode VarChar(2) NOT NULL,
+//									typeId VarChar(20) NOT NULL,
+//									term text NOT NULL,
+//									caseSignificanceId VarChar(20) NOT NULL,"
+//								//INDEX(snomedrawNum),
+//								+@"INDEX(id),
+//									INDEX(active),
+//									INDEX(moduleId),
+//									INDEX(conceptId),
+//									INDEX(languageCode),
+//									INDEX(typeId),
+//									INDEX(caseSignificanceId)
+//									) DEFAULT CHARSET=utf8";
+//						DataCore.NonQ(command);
+//						//Load raw data into DB
+//						string[] lines=File.ReadAllLines(@"C:\Docs\SNOMEDUS.TXT");
+//						for(int i=1;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
+//						//foreach(string line in lines){
+//							string[] arraysnomed=lines[i].Split(new string[] { "\t" },StringSplitOptions.None);
+//							command=@"INSERT INTO snomedonly.snomedusraw VALUES (";
+//								for(int j=0;j<arraysnomed.Length;j++){
+//									command+="'"+POut.String(arraysnomed[j])+"'"+",";
+//								}
+//							command=command.Trim(',')+")";
+//							DataCore.NonQ(command);
+//						}
+//			//Manipulate here.
+//			//900000000000013009 is synonym
+//			//900000000000003001 is Fully specified name
+//			command="DROP TABLE IF EXISTS snomedonly.snomed";
 //			DataCore.NonQ(command);
-//			command=@"CREATE TABLE rxnormonly.rxnconso ("
-//							+"RXCUI VarChar(255) NOT NULL, " //RxNorm Unique identifier for concept (concept ID)
-//							+"LAT VarChar(255) NOT NULL, " //Language of Term
-//							+"TS VarChar(255) NOT NULL, " //Term status (no value provided)
-//							+"LUI VarChar(255) NOT NULL, " //Unique identifier for term (no value provided)
-//							+"STT VarChar(255) NOT NULL, " //String type (no value provided)
-//							+"SUI VarChar(255) NOT NULL, " //Unique identifier for string (no value provided)
-//							+"ISPREF VarChar(255) NOT NULL, " //Atom status - preferred (Y) or not (N) for this string within this concept (no value provided)
-//							+"RXAUI VarChar(255) NOT NULL, " //Unique identifier for atom (RxNorm Atom ID)
-//							+"SAUI VarChar(255) NOT NULL, " //Source asserted atom identifier [optional]
-//							+"SCUI VarChar(255) NOT NULL, " //Source asserted concept identifier [optional]
-//							+"SDUI VarChar(255) NOT NULL, " //Source asserted descriptor identifier [optional] (no value provided)
-//							+"SAB VarChar(255) NOT NULL, " //Source abbreviation
-//							+"TTY VarChar(255) NOT NULL, " //Term type in source
-//							+"CODE VarChar(255) NOT NULL, " //"Most useful" source asserted identifier (if the source vocabulary has more than one identifier), or a RxNorm-generated source entry identifier (if the source vocabulary has none.)
-//							+"STR TEXT NOT NULL, " //String
-//							+"SRL VarChar(255) NOT NULL, " //Source Restriction Level (no value provided)
-//							+"SUPPRESS VarChar(255) NOT NULL, " //Suppressible flag. Values = N, O, Y, or E. N - not suppressible. O - Specific individual names (atoms) set as Obsolete because the name is no longer provided by the original source. Y - Suppressed by RxNorm editor. E - unquantified, non-prescribable drug with related quantified, prescribable drugs. NLM strongly recommends that users not alter editor-assigned suppressibility.
-//							+"CVF VarChar(255) NOT NULL, " //Content view flag. RxNorm includes one value, '4096', to denote inclusion in the Current Prescribable Content subset. All rows with CVF='4096' can be found in the subset.
-//							+"INDEX(RXCUI)"
-//						+") DEFAULT CHARSET=utf8";
+//			command=@"CREATE TABLE snomedonly.snomed (
+//						SnomedNum bigint NOT NULL auto_increment PRIMARY KEY,
+//						SnomedCode VarChar(255) NOT NULL,
+//						Description VarChar(255) NOT NULL,
+//						INDEX(SnomedCode)
+//						) DEFAULT CHARSET=utf8";
 //			DataCore.NonQ(command);
 //			//Load raw data into DB
-//			string[] lines=File.ReadAllLines(@"C:\Docs\rxnconso.rrf");
+//			//command="INSERT INTO snomedonly.snomed (SnomedCode,Description) SELECT t.* FROM (SELECT conceptID, term FROM snomedonly.snomedusraw WHERE GROUP BY conceptid) t";
+//			command="SELECT t.* FROM (SELECT conceptID, term FROM snomedonly.snomedusraw WHERE typeid='900000000000003001' ORDER BY Cast(conceptid as unsigned) asc) t";
+//			//DataCore.NonQ(command);
+//			DataTable Table=DataCore.GetTable(command);
+//			HashSet<string> hss=new HashSet<string>();
+//			//string[] 
+//			lines=File.ReadAllLines(@"C:\Docs\SNOMEDUS.TXT");
 //			for(int i=1;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
 //				//foreach(string line in lines){
-//				string[] arraysnomed=lines[i].Split(new string[] { "|" },StringSplitOptions.None);//trailing vertical pipe implies there is a 19th cell, but instead deliniates.
-//				command=@"INSERT INTO rxnormonly.rxnconso VALUES (";
-//				for(int j=0;j<18;j++) {//18 columns instead of arraysnomed.length
-//					command+="'"+POut.String(arraysnomed[j])+"'"+",";
+//				string[] arraysnomed=lines[i].Split(new string[] { "\t" },StringSplitOptions.None);
+//				//if(arraysnomed[6]!="900000000000003001") {
+//				//	continue;//not equal to a fully specified name.
+//				//}
+//				if(hss.Contains(arraysnomed[4])) {
+//					continue;//snomedcode already added.
 //				}
-//				command=command.Trim(',')+")";
+//				hss.Add(arraysnomed[4]);
+//				command=@"INSERT INTO snomedonly.snomed VALUES ("+i+",'"+POut.String(arraysnomed[4])+"','"+POut.String(arraysnomed[7])+"')";
 //				DataCore.NonQ(command);
 //			}
-//			//Manipulate here.------------------------------------------------------------------------------------------------------
-////			string command="DROP TABLE IF EXISTS snomedonly.snomed";
-////			DataCore.NonQ(command);	
-////			command=@"CREATE TABLE snomedonly.snomed (
-////						SnomedNum bigint NOT NULL auto_increment PRIMARY KEY,
-////						SnomedCode VarChar(255) NOT NULL,
-////						Description VarChar(255) NOT NULL,
-////						INDEX(SnomedCode)
-////						) DEFAULT CHARSET=utf8";
-////			DataCore.NonQ(command);
-////			//Load raw data into DB
-////			command="INSERT INTO snomedonly.snomed (SnomedCode,Description) SELECT t.* FROM (SELECT conceptID, term FROM snomedonly.snomedusraw GROUP BY conceptid) t;";
-////			DataCore.NonQ(command);
-////						//HashSet<string> hss=new HashSet<string>();
-////						//string[] lines=File.ReadAllLines(@"C:\Docs\SNOMEDUS.TXT");
-////						//for(int i=1;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
-////						////foreach(string line in lines){
-////						//	string[] arraysnomed=lines[i].Split(new string[] { "\t" },StringSplitOptions.None);
-////						//	if(arraysnomed[6]=="900000000000013009") {
-////						//		continue;//synonym
-////						//	}
-////						//	if(hss.Contains(arraysnomed[4])){
-////						//		continue;//snomedcode already added.
-////						//	}
-////						//	hss.Add(arraysnomed[4]);
-////						//	command=@"INSERT INTO snomedonly.snomed VALUES ("+i+",'"+POut.String(arraysnomed[4])+"','"+POut.String(arraysnomed[7])+"')";
-////						//	DataCore.NonQ(command);
-////						//}
 //			Cursor=Cursors.Default;
 //			MsgBox.Show(this,"Done.");
 //		}

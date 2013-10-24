@@ -11,13 +11,23 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class CodeSystems{
 
-		///<summary>Returns a list of code all systems In the code system table.</summary>
+		///<summary>Returns a list of code systems in the code system table.  This query will change from version to version depending on what code systems we have available.</summary>
 		public static List<CodeSystem> GetForCurrentVersion() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<CodeSystem>>(MethodBase.GetCurrentMethod());
 			}
 			//string command="SELECT * FROM codesystem WHERE CodeSystemName!='AdministrativeSex' AND CodeSystemName!='CDT'";
-			string command="SELECT * FROM codesystem WHERE CodeSystemName IN ('ICD9CM','RXNORM','SNOMEDCT')";//,'CPT')";
+			string command="SELECT * FROM codesystem WHERE CodeSystemName IN ('ICD9CM','RXNORM','SNOMEDCT','CPT')";
+			return Crud.CodeSystemCrud.SelectMany(command);
+		}
+
+		///<summary>Returns a list of code systems in the code system table.  This query will change from version to version depending on what code systems we have available.</summary>
+		public static List<CodeSystem> GetForCurrentVersionNoSnomed() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<CodeSystem>>(MethodBase.GetCurrentMethod());
+			}
+			//string command="SELECT * FROM codesystem WHERE CodeSystemName!='AdministrativeSex' AND CodeSystemName!='CDT'";
+			string command="SELECT * FROM codesystem WHERE CodeSystemName IN ('ICD9CM','RXNORM','CPT')";
 			return Crud.CodeSystemCrud.SelectMany(command);
 		}
 
@@ -251,6 +261,74 @@ namespace OpenDentBusiness{
 			}
 			File.Delete(tempFileName);
 		}
+
+		///<summary>Returns number of codes imported.</summary>
+		/// <param name="tempFile"></param>
+		/// <param name="codeCount">Returns number of new codes inserted.</param>
+		/// <param name="totalCodes">Returns number of total codes found.</param>
+		/// <returns></returns>
+//		public static void ImportEhrCodes(string tempFile,out int newCodeCount,out int totalCodeCount,out int availableCodeCount){
+//			newCodeCount=0;
+//			totalCodeCount=0;
+//			availableCodeCount=0;
+//			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+//				Meth.GetVoid(MethodBase.GetCurrentMethod(),tempFile,newCodeCount,totalCodeCount,availableCodeCount);
+//				return;
+//			}
+//			//UNION ALL to speed up query.  Used to determine what codes to add to DB.
+//			string command=@"SELECT CdcrecCode FROM cdcrec
+//											UNION ALL
+//											SELECT ProcCode FROM procedurecode
+//											UNION ALL
+//											SELECT CptCode FROM cpt
+//											UNION ALL
+//											SELECT CvxCode FROM cvx
+//											UNION ALL
+//											SELECT HcpcsCode FROM hcpcs
+//											UNION ALL
+//											SELECT Icd10Code FROM icd10
+//											UNION ALL
+//											SELECT ICD9Code FROM icd9
+//											UNION ALL
+//											SELECT LoincCode FROM loinc
+//											UNION ALL
+//											SELECT RxCui FROM rxnorm
+//											UNION ALL
+//											SELECT SnomedCode FROM snomed
+//											UNION ALL
+//											SELECT SopCode FROM sop";
+//			DataTable T = DataCore.GetTable(command);
+//			HashSet<string> allCodeHash=new HashSet<string>();
+//			for(int i=0;i<T.Rows.Count;i++) {
+//				allCodeHash.Add(T.Rows[i][0].ToString());
+//			}
+//			HashSet<string> ehrCodeHash=EhrCodes.GetAllCodesHashSet();
+//			string[] lines=File.ReadAllLines(tempFile);
+//			string[] arrayEHRCode;
+//			EhrCode ehrc=new EhrCode();
+//			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
+//				arrayEHRCode=lines[i].Split('\t');
+//				if(!allCodeHash.Contains(arrayEHRCode[0]) && arrayEHRCode[6]!="AdministrativeSex") {//exception for AdministrativeSex because it is not stored in the DB.
+//					continue;//code does not exist in the database in one of the standard code system tables.
+//				}
+//				if(ehrCodeHash.Contains(arrayEHRCode[4]+arrayEHRCode[2])) {
+//					continue;//Code already inserted in ehrCodes table
+//				}
+//				ehrc.MeasureIds		=arrayEHRCode[0];
+//				ehrc.ValueSetName	=arrayEHRCode[1];
+//				ehrc.ValueSetOID	=arrayEHRCode[2];
+//				ehrc.QDMCategory	=arrayEHRCode[3];
+//				ehrc.CodeValue		=arrayEHRCode[4];
+//				ehrc.Description	=arrayEHRCode[5];
+//				ehrc.CodeSystem		=arrayEHRCode[6];
+//				ehrc.CodeSystemOID=arrayEHRCode[7];
+//				EhrCodes.Insert(ehrc);
+//				newCodeCount++;//return value
+//			}
+//			File.Delete(tempFile);
+//			totalCodeCount=ehrCodeHash.Count+newCodeCount;//return value
+//			availableCodeCount=lines.Length;//return value
+//		}
 
 
 		/*

@@ -98,9 +98,9 @@ namespace OpenDental {
 			#if EHRTEST
 				quarterlyKeyIsValid=((EHR.FormEHR)FormOpenDental.FormEHR).QuarterlyKeyIsValid(textYear.Text,textQuarter.Text,textPracticeTitle.Text,textEhrKey.Text);
 			#else
-				Type type=FormOpenDental.AssemblyEHR.GetType("EHR.FormEHR");//namespace.class
+				Type type=FormOpenDental.AssemblyEHR.GetType("EHR.ObjQuarterlyKey");//namespace.class
 				object[] args=new object[] { textYear.Text,textQuarter.Text,textPracticeTitle.Text,textEhrKey.Text };
-				quarterlyKeyIsValid=(bool)type.InvokeMember("QuarterlyKeyIsValid",System.Reflection.BindingFlags.InvokeMethod,null,FormOpenDental.FormEHR,args);
+				quarterlyKeyIsValid=(bool)type.InvokeMember("QuarterlyKeyIsValid",System.Reflection.BindingFlags.InvokeMethod,null,FormOpenDental.ObjQuarterlyKey,args);
 			#endif
 			if(!quarterlyKeyIsValid) {
 				MsgBox.Show(this,"Invalid quarterly key");

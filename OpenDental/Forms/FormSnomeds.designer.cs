@@ -140,6 +140,7 @@ namespace OpenDental{
 			this.groupBox1.TabIndex = 25;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "One-Time Tools";
+			this.groupBox1.Visible = false;
 			// 
 			// FormSnomeds
 			// 

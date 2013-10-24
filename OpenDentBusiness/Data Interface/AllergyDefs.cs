@@ -129,10 +129,10 @@ namespace OpenDentBusiness{
 			return allergyDefList;
 		}
 
-		///<summary>Returns the text for a SnomedAllergy Enum as it should appear in human readable form for a CCD.</summary>
+		///<summary>Do not call from outside of ehr.  Returns the text for a SnomedAllergy Enum as it should appear in human readable form for a CCD.</summary>
 		public static string GetSnomedAllergyDesc(SnomedAllergy snomed) {
 			string result;
-			switch(snomed){
+			switch(snomed){//TODO: hide snomed code from foreign users
 				case SnomedAllergy.AdverseReactions:
 					result="420134006 - Propensity to adverse reactions (disorder)";
 					break;

@@ -85,7 +85,23 @@ namespace OpenDentBusiness{
 			return retval;
 		}
 
+		///<summary></summary>
+		public static long Insert(EhrCode ehrCode) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				ehrCode.EhrCodeNum=Meth.GetLong(MethodBase.GetCurrentMethod(),ehrCode);
+				return ehrCode.EhrCodeNum;
+			}
+			return Crud.EhrCodeCrud.Insert(ehrCode);
+		}
 
+		///<summary>Used for adding codes, returns a hashset of codevalue+valuesetoid.</summary>
+		public static HashSet<string> GetAllCodesHashSet() {
+			HashSet<string> retVal=new HashSet<string>();
+			for(int i=0;i<Listt.Count;i++) {
+				retVal.Add(Listt[i].CodeValue+Listt[i].ValueSetOID);
+			}
+			return retVal;
+		}
 
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
@@ -108,15 +124,6 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static long Insert(EhrCode ehrCode){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				ehrCode.EhrCodeNum=Meth.GetLong(MethodBase.GetCurrentMethod(),ehrCode);
-				return ehrCode.EhrCodeNum;
-			}
-			return Crud.EhrCodeCrud.Insert(ehrCode);
-		}
-
-		///<summary></summary>
 		public static void Update(EhrCode ehrCode){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),ehrCode);
@@ -135,6 +142,7 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 		*/
+
 
 
 

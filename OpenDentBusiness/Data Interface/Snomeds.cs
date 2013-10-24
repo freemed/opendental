@@ -192,7 +192,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Returns dictionary&lt;ICD9Code,SNOMEDCode&gt; for crossmapping exact matches between ICD9 and SNOMED.</summary>
-		public static Dictionary<string,string> GetICD9toSNOMEDDictionary() {
+		public static Dictionary<string,string> GetICD9toSNOMEDDictionary() {	
 			//No need to check RemotingRole; no call to db.
 			return new Dictionary<string,string>{
 				{"001.1","81020007"},

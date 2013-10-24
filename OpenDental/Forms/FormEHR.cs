@@ -366,7 +366,14 @@ namespace OpenDental {
 		}
 
 		public bool QuarterlyKeyIsValid(string year,string quarter,string practiceTitle,string qkey) {
-			return QuarterlyKey.QuarterlyKeyIsValid(year,quarter,practiceTitle,qkey);
+			//return QuarterlyKey.QuarterlyKeyIsValid(year,quarter,practiceTitle,qkey);
+			#if EHRTEST //This pattern allows the code to compile without having the EHR code available.
+				return QuarterlyKey.QuarterlyKeyIsValid(year,quarter,practiceTitle,qkey);
+			#else
+				Type type=FormOpenDental.AssemblyEHR.GetType("EHR.QuarterlyKey");//namespace.class
+				object[] args=new object[] { year,quarter,practiceTitle,qkey };
+				return (bool)type.InvokeMember("QuarterlyKeyIsValid",System.Reflection.BindingFlags.InvokeMethod,null,FormOpenDental.ObjQuarterlyKey,args);
+			#endif
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {
