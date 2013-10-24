@@ -11,7 +11,7 @@ using OpenDental;
 using OpenDental.UI;
 using System.Diagnostics;
 
-namespace EHR {
+namespace OpenDental {
 	public partial class FormVitalsignEdit2014:Form {
 		public Vitalsign VitalsignCur;
 		private Patient patCur;

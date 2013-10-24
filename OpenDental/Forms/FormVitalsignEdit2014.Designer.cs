@@ -1,4 +1,4 @@
-﻿namespace EHR {
+﻿namespace OpenDental {
 	partial class FormVitalsignEdit2014 {
 		/// <summary>
 		/// Required designer variable.
