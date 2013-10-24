@@ -46,15 +46,16 @@ namespace OpenDentBusiness.Crud{
 			EhrCode ehrCode;
 			for(int i=0;i<table.Rows.Count;i++) {
 				ehrCode=new EhrCode();
-				ehrCode.EhrCodeNum   = PIn.Long  (table.Rows[i]["EhrCodeNum"].ToString());
-				ehrCode.MeasureIds   = PIn.String(table.Rows[i]["MeasureIds"].ToString());
-				ehrCode.ValueSetName = PIn.String(table.Rows[i]["ValueSetName"].ToString());
-				ehrCode.ValueSetOID  = PIn.String(table.Rows[i]["ValueSetOID"].ToString());
-				ehrCode.QDMCategory  = PIn.String(table.Rows[i]["QDMCategory"].ToString());
-				ehrCode.CodeValue    = PIn.String(table.Rows[i]["CodeValue"].ToString());
-				ehrCode.Description  = PIn.String(table.Rows[i]["Description"].ToString());
-				ehrCode.CodeSystem   = PIn.String(table.Rows[i]["CodeSystem"].ToString());
-				ehrCode.CodeSystemOID= PIn.String(table.Rows[i]["CodeSystemOID"].ToString());
+				ehrCode.EhrCodeNum     = PIn.Long  (table.Rows[i]["EhrCodeNum"].ToString());
+				ehrCode.MeasureIds     = PIn.String(table.Rows[i]["MeasureIds"].ToString());
+				ehrCode.ValueSetName   = PIn.String(table.Rows[i]["ValueSetName"].ToString());
+				ehrCode.ValueSetOID    = PIn.String(table.Rows[i]["ValueSetOID"].ToString());
+				ehrCode.QDMCategory    = PIn.String(table.Rows[i]["QDMCategory"].ToString());
+				ehrCode.CodeValue      = PIn.String(table.Rows[i]["CodeValue"].ToString());
+				ehrCode.Description    = PIn.String(table.Rows[i]["Description"].ToString());
+				ehrCode.CodeSystem     = PIn.String(table.Rows[i]["CodeSystem"].ToString());
+				ehrCode.CodeSystemOID  = PIn.String(table.Rows[i]["CodeSystemOID"].ToString());
+				ehrCode.ExistsInDbTable= PIn.Bool  (table.Rows[i]["ExistsInDbTable"].ToString());
 				retVal.Add(ehrCode);
 			}
 			return retVal;
@@ -95,7 +96,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="EhrCodeNum,";
 			}
-			command+="MeasureIds,ValueSetName,ValueSetOID,QDMCategory,CodeValue,Description,CodeSystem,CodeSystemOID) VALUES(";
+			command+="MeasureIds,ValueSetName,ValueSetOID,QDMCategory,CodeValue,Description,CodeSystem,CodeSystemOID,ExistsInDbTable) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(ehrCode.EhrCodeNum)+",";
 			}
@@ -107,7 +108,8 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(ehrCode.CodeValue)+"',"
 				+"'"+POut.String(ehrCode.Description)+"',"
 				+"'"+POut.String(ehrCode.CodeSystem)+"',"
-				+"'"+POut.String(ehrCode.CodeSystemOID)+"')";
+				+"'"+POut.String(ehrCode.CodeSystemOID)+"',"
+				+    POut.Bool  (ehrCode.ExistsInDbTable)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -120,14 +122,15 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one EhrCode in the database.</summary>
 		public static void Update(EhrCode ehrCode){
 			string command="UPDATE ehrcode SET "
-				+"MeasureIds   = '"+POut.String(ehrCode.MeasureIds)+"', "
-				+"ValueSetName = '"+POut.String(ehrCode.ValueSetName)+"', "
-				+"ValueSetOID  = '"+POut.String(ehrCode.ValueSetOID)+"', "
-				+"QDMCategory  = '"+POut.String(ehrCode.QDMCategory)+"', "
-				+"CodeValue    = '"+POut.String(ehrCode.CodeValue)+"', "
-				+"Description  = '"+POut.String(ehrCode.Description)+"', "
-				+"CodeSystem   = '"+POut.String(ehrCode.CodeSystem)+"', "
-				+"CodeSystemOID= '"+POut.String(ehrCode.CodeSystemOID)+"' "
+				+"MeasureIds     = '"+POut.String(ehrCode.MeasureIds)+"', "
+				+"ValueSetName   = '"+POut.String(ehrCode.ValueSetName)+"', "
+				+"ValueSetOID    = '"+POut.String(ehrCode.ValueSetOID)+"', "
+				+"QDMCategory    = '"+POut.String(ehrCode.QDMCategory)+"', "
+				+"CodeValue      = '"+POut.String(ehrCode.CodeValue)+"', "
+				+"Description    = '"+POut.String(ehrCode.Description)+"', "
+				+"CodeSystem     = '"+POut.String(ehrCode.CodeSystem)+"', "
+				+"CodeSystemOID  = '"+POut.String(ehrCode.CodeSystemOID)+"', "
+				+"ExistsInDbTable=  "+POut.Bool  (ehrCode.ExistsInDbTable)+" "
 				+"WHERE EhrCodeNum = "+POut.Long(ehrCode.EhrCodeNum);
 			Db.NonQ(command);
 		}
@@ -166,6 +169,10 @@ namespace OpenDentBusiness.Crud{
 			if(ehrCode.CodeSystemOID != oldEhrCode.CodeSystemOID) {
 				if(command!=""){ command+=",";}
 				command+="CodeSystemOID = '"+POut.String(ehrCode.CodeSystemOID)+"'";
+			}
+			if(ehrCode.ExistsInDbTable != oldEhrCode.ExistsInDbTable) {
+				if(command!=""){ command+=",";}
+				command+="ExistsInDbTable = "+POut.Bool(ehrCode.ExistsInDbTable)+"";
 			}
 			if(command==""){
 				return;
