@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using OpenDentBusiness;
 using OpenDental.UI;
 
-namespace EHR {
+namespace OpenDental {
 	public partial class FormVitalsigns:Form {
 		private List<Vitalsign> listVs;
 		public long PatNum;
@@ -63,7 +63,7 @@ namespace EHR {
 			long vitalNum=listVs[e.Row].VitalsignNum;
 			//change for EHR 2014
 			//FormVitalsignEdit2014 FormVSE=new FormVitalsignEdit2014();
-			FormVitalsignEdit FormVSE=new FormVitalsignEdit();
+			FormEhrVitalsignEdit FormVSE=new FormEhrVitalsignEdit();
 			FormVSE.VitalsignCur=Vitalsigns.GetOne(vitalNum);
 			FormVSE.ShowDialog();
 			FillGrid();
@@ -72,7 +72,7 @@ namespace EHR {
 		private void butAdd_Click(object sender,EventArgs e) {
 			//change for EHR 2014
 			//FormVitalsignEdit2014 FormVSE=new FormVitalsignEdit2014();
-			FormVitalsignEdit FormVSE=new FormVitalsignEdit();
+			FormEhrVitalsignEdit FormVSE=new FormEhrVitalsignEdit();
 			FormVSE.VitalsignCur=new Vitalsign();
 			FormVSE.VitalsignCur.PatNum=PatNum;
 			FormVSE.VitalsignCur.DateTaken=DateTime.Today;
@@ -87,7 +87,7 @@ namespace EHR {
 
 		///<summary>Hidden if BPOnly vital sign measure.</summary>
 		private void butGrowthChart_Click(object sender,EventArgs e) {
-			FormGrowthCharts FormGC=new FormGrowthCharts();
+			FormEhrGrowthCharts FormGC=new FormEhrGrowthCharts();
 			FormGC.PatNum=PatNum;
 			FormGC.ShowDialog();
 		}

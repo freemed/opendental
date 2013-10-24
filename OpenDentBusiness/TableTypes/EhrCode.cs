@@ -26,6 +26,7 @@ namespace OpenDentBusiness {
 		///<summary>This is true if the code is in the corresponding table identified by CodeSystem.</summary>
 		public bool ExistsInDbTable;
 
+
 		///<summary></summary>
 		public EhrCode Copy() {
 			return (EhrCode)MemberwiseClone();

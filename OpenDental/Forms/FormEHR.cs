@@ -148,7 +148,7 @@ namespace OpenDental {
 						//Close();
 						break;
 					case EhrMeasureType.Education:
-						FormEduResourcesPat FormEDUPat = new FormEduResourcesPat();
+						FormEhrEduResourcesPat FormEDUPat = new FormEhrEduResourcesPat();
 						FormEDUPat.patCur=PatCur;
 						FormEDUPat.ShowDialog();
 						FillGridMu();
@@ -177,14 +177,14 @@ namespace OpenDental {
 						FillGridMu();
 						break;
 					case EhrMeasureType.Smoking:
-						FormPatientSmoking FormPS=new FormPatientSmoking();
+						FormEhrPatientSmoking FormPS=new FormEhrPatientSmoking();
 						FormPS.PatCur=PatCur;
 						FormPS.ShowDialog();
 						PatCur=Patients.GetPat(PatNum);
 						FillGridMu();
 						break;
 					case EhrMeasureType.Lab:
-						FormLabPanels FormLP=new FormLabPanels();
+						FormEhrLabPanels FormLP=new FormEhrLabPanels();
 						FormLP.PatCur=PatCur;
 						FormLP.ShowDialog();
 						FillGridMu();
@@ -202,7 +202,7 @@ namespace OpenDental {
 						FillGridMu();
 						break;
 					case EhrMeasureType.Reminders:
-						FormReminders FormRem = new FormReminders();
+						FormEhrReminders FormRem = new FormEhrReminders();
 						FormRem.PatCur=PatCur;
 						FormRem.ShowDialog();
 						FillGridMu();
@@ -240,7 +240,7 @@ namespace OpenDental {
 						//Close();
 						break;
 					case EhrMeasureType.Lab:
-						FormLabPanelImport FormLPI=new FormLabPanelImport();
+						FormEhrLabPanelImport FormLPI=new FormEhrLabPanelImport();
 						FormLPI.ShowDialog();
 						FillGridMu();
 						break;
@@ -250,7 +250,7 @@ namespace OpenDental {
 
 		///<summary>This can happen when clicking in the grid, or when the form is Shown.  The latter would happen after user unknowingly exited ehr in order to use FormMedPat.  Popping back to the Orders window makes the experience seamless.  This can be recursive if the user edits a series of medicationpats.</summary>
 		private void LaunchOrdersWindow() {
-			FormMedicalOrders FormOrd = new FormMedicalOrders();
+			FormEhrMedicalOrders FormOrd = new FormEhrMedicalOrders();
 			FormOrd.PatCur=PatCur;
 			FormOrd.ShowDialog();
 			//if(FormOrd.DialogResult!=DialogResult.OK) {//There is no ok button
@@ -293,35 +293,35 @@ namespace OpenDental {
 		}
 
 		private void butHash_Click(object sender,EventArgs e) {
-			FormHash FormH=new FormHash();
+			FormEhrHash FormH=new FormEhrHash();
 			FormH.ShowDialog();
 		}
 
 		private void butEncryption_Click(object sender,EventArgs e) {
-			FormEncryption FormE=new FormEncryption();
+			FormEhrEncryption FormE=new FormEhrEncryption();
 			FormE.ShowDialog();
 		}
 
 		private void butQuality_Click(object sender,EventArgs e) {
-			FormQualityMeasures FormQ=new FormQualityMeasures();
+			FormEhrQualityMeasures FormQ=new FormEhrQualityMeasures();
 			FormQ.ShowDialog();
 			FillGridMu();
 		}
 
 		private void but2014CQM_Click(object sender,EventArgs e) {
-			FormQualityMeasures2014 FormQ=new FormQualityMeasures2014();
+			FormEhrQualityMeasures2014 FormQ=new FormEhrQualityMeasures2014();
 			FormQ.ShowDialog();
 			FillGridMu();
 		}
 
 		private void butVaccines_Click(object sender,EventArgs e) {
-			FormVaccines FormVac = new FormVaccines();
+			FormEhrVaccines FormVac = new FormEhrVaccines();
 			FormVac.PatCur=PatCur;
 			FormVac.ShowDialog();
 		}
 
 		private void butPatList_Click(object sender,EventArgs e) {
-			FormPatList FormPL=new FormPatList();
+			FormEhrPatList FormPL=new FormEhrPatList();
 			FormPL.ElementList=new List<EhrPatListElement>();
 			FormPL.ShowDialog();
 		}
