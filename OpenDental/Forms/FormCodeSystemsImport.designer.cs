@@ -75,7 +75,6 @@ namespace OpenDental{
 			this.gridMain.TabIndex = 27;
 			this.gridMain.Title = "Code Systems Available";
 			this.gridMain.TranslationName = "";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
 			// butCheckUpdates
 			// 

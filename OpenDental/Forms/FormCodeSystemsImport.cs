@@ -12,8 +12,9 @@ using System.Xml;
 using System.Net;
 using System.IO;
 using System.Threading;
-using Ionic.Zip;
+//using Ionic.Zip;
 using System.Diagnostics;
+using Ionic.Zip;
 
 namespace OpenDental {
 	public partial class FormCodeSystemsImport:Form {
@@ -26,7 +27,16 @@ namespace OpenDental {
 		}
 
 		private void FormCodeSystemsImport_Load(object sender,EventArgs e) {
-			ListCodeSystems=CodeSystems.GetForCurrentVersion();
+			if(EHR.QuarterlyKey.QuarterlyKeyIsValid(DateTime.Now.Year.ToString()//year
+				,Math.Ceiling(DateTime.Now.Month/3f).ToString()//quarter
+				,PrefC.GetString(PrefName.PracticeTitle)//practice title
+				,EhrQuarterlyKeys.GetKeyThisQuarter().KeyValue))//key
+			{
+				ListCodeSystems=CodeSystems.GetForCurrentVersion();
+			}
+			else {
+				ListCodeSystems=CodeSystems.GetForCurrentVersionNoSnomed();
+			}
 		}
 
 		/// <summary></summary>
@@ -91,9 +101,8 @@ namespace OpenDental {
 				MsgBox.Show(this,"No code systems selected.");
 				return;
 			}
-			Cursor=Cursors.WaitCursor;
-			Application.DoEvents();
-			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
+			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
+				Cursor=Cursors.WaitCursor;//Within loop because requestCodeSystemDownloadHelper() causes the Cursor to go back to Default sometimes.
 				if(!PreDownloadHelper(ListCodeSystems[gridMain.SelectedIndices[i]].CodeSystemName)){
 					continue;
 				}
@@ -104,6 +113,7 @@ namespace OpenDental {
 						MsgBox.Show(this,"Cpt codes imported successfully.");
 					}
 					catch (Exception ex){
+						Cursor=Cursors.Default;
 						MessageBox.Show(this,"CPT codes have not been imported:\r\n"+ex.Message);
 					}
 					continue;
@@ -115,6 +125,7 @@ namespace OpenDental {
 					}
 				}
 				catch(Exception ex) {
+					Cursor=Cursors.Default;//Just in case.
 					MessageBox.Show(Lan.g(this,"Error encounter while importing code system")+":"+ListCodeSystems[gridMain.SelectedIndices[i]].CodeSystemName+"\r\n"+ex.Message);
 					continue;
 				}
@@ -127,10 +138,11 @@ namespace OpenDental {
 		private void importCPTHelper() {
 			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"CPT 2014 codes must be purchased from the American Medical Association seperately in the data file format and must be "
 				+"named \"cpt-2014-data-files-download.zip\". More information can be found in the online manual. If you have already purchased the code file select continue "
-				+"to browse to the downloaded file.")) {
+				+"to browse to the downloaded file.")) 
+			{
 					throw new Exception("To purchase CPT 2014 codes go to https://commerce.ama-assn.org/store/");
 			}
-			FolderBrowserDialog fbd = new FolderBrowserDialog();
+			FolderBrowserDialog fbd=new FolderBrowserDialog();
 			if(fbd.ShowDialog()!=DialogResult.OK) {
 				return;
 			}
@@ -172,7 +184,8 @@ namespace OpenDental {
 							+@"a) The IHTSDO Affiliate, using Open Dental "+PrefC.GetString(PrefName.ProgramVersion)+@" must accept full responsibility for any reporting and fees due for use or deployment of such a system in a Non-Member Territory.\r\n"
 							+@"b) The IHTSDO Affiliate must not use Open Dental "+PrefC.GetString(PrefName.ProgramVersion)+@" to access or interact with SNOMED CT in any way that is not permitted by the Affiliate License Agreement.\r\n"
 							+@"c) In the event of termination of the Affiliate License Agreement, the use of Open Dental "+PrefC.GetString(PrefName.ProgramVersion)+@" will be 
-subject to the End User limitations noted in 4.","SNOMED CT sub-license End User Licence Agreement",MessageBoxButtons.OKCancel)!=DialogResult.OK) {
+subject to the End User limitations noted in 4.","SNOMED CT sub-license End User Licence Agreement",MessageBoxButtons.OKCancel)!=DialogResult.OK) 
+					{
 						MsgBox.Show(this,"SNOMED CT codes will not be imported.");
 					#endregion
 						return false;//next selected index
@@ -208,12 +221,14 @@ subject to the End User limitations noted in 4.","SNOMED CT sub-license End User
 			Thread.Sleep(2000);//wait 2 seconds between downloads.
 			string tempFile="";
 			try {
-				tempFile=downloadFileHelper(codeSystemURL,codeSystemName);//shows progress bar."http://localhost/codesystems/SNOMEDCT.zip");//
+				tempFile=downloadFileHelper(codeSystemURL,codeSystemName);//shows progress bar.
 			}
 			catch(Exception ex) {
 				throw ex;
 			}
 			try {//moved try/catch outside of switch statement to make code more readable, functions the same.
+				//The cursor gets set back to default within downloadFileHelper().  Put it back to waiting cursor when importing the codes.  They could take a while.
+				Cursor=Cursors.WaitCursor;
 				switch(codeSystemName) {
 					case "AdministrativeSex":
 						//should never happen
@@ -268,6 +283,7 @@ subject to the End User limitations noted in 4.","SNOMED CT sub-license End User
 				}
 			}
 			catch(Exception ex) {
+				Cursor=Cursors.Default;
 				MessageBox.Show(this,ex.Message);
 				return false;
 			}
@@ -362,7 +378,7 @@ subject to the End User limitations noted in 4.","SNOMED CT sub-license End User
 			//myWebClient.DownloadFile(downloadUri,ODFileUtils.CombinePaths(FormPath.GetPreferredImagePath(),"Setup.exe"));
 		}
 
-		///<summary>Throws exceptions, put in try catch block.</summary>
+		///<summary>Returns a list of available code systems.  Throws exceptions, put in try catch block.</summary>
 		private static string RequestCodeSystemsXml() {
 			//No xml needed...? ----------------------------------------------------------------------------------------------------
 #if DEBUG
@@ -374,7 +390,7 @@ subject to the End User limitations noted in 4.","SNOMED CT sub-license End User
 			updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress);
 #endif
 			if(PrefC.GetString(PrefName.UpdateWebProxyAddress) !="") {
-				IWebProxy proxy = new WebProxy(PrefC.GetString(PrefName.UpdateWebProxyAddress));
+				IWebProxy proxy=new WebProxy(PrefC.GetString(PrefName.UpdateWebProxyAddress));
 				ICredentials cred=new NetworkCredential(PrefC.GetString(PrefName.UpdateWebProxyUserName),PrefC.GetString(PrefName.UpdateWebProxyPassword));
 				proxy.Credentials=cred;
 				updateService.Proxy=proxy;
@@ -433,13 +449,6 @@ subject to the End User limitations noted in 4.","SNOMED CT sub-license End User
 				return "";
 			}
 			return result;
-		}
-
-		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			//if(MessageBox.Show("Would you like to update the selected code system :","",MessageBoxButtons.OKCancel)!=DialogResult.OK) {
-			//	return;
-			//}
-			//Import selected code system
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {
