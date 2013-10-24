@@ -732,7 +732,9 @@
     <Compile Include="Forms\FormVitalsigns.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FormVitalsigns.Designer.cs" />
+    <Compile Include="Forms\FormVitalsigns.Designer.cs">
+      <DependentUpon>FormVitalsigns.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormWebMailMessageEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3370,7 +3372,9 @@
     <EmbeddedResource Include="Forms\FormVitalsignEdit2014.resx">
       <DependentUpon>FormVitalsignEdit2014.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormVitalsigns.resx" />
+    <EmbeddedResource Include="Forms\FormVitalsigns.resx">
+      <DependentUpon>FormVitalsigns.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormWebMailMessageEdit.resx">
       <DependentUpon>FormWebMailMessageEdit.cs</DependentUpon>
     </EmbeddedResource>
