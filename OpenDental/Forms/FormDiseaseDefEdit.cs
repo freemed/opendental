@@ -247,8 +247,20 @@ namespace OpenDental{
 
 		private void FormDiseaseDefEdit_Load(object sender, System.EventArgs e) {
 			textName.Text=DiseaseDefCur.DiseaseName;
-			textICD9.Text=DiseaseDefCur.ICD9Code;
-			textSnomed.Text=DiseaseDefCur.SnomedCode;
+			string i9descript=ICD9s.GetCodeAndDescription(DiseaseDefCur.ICD9Code);
+			if(i9descript=="") {
+				textICD9.Text=DiseaseDefCur.ICD9Code;
+			}
+			else {
+				textICD9.Text=i9descript;
+			}
+			string sdescript=Snomeds.GetCodeAndDescription(DiseaseDefCur.SnomedCode);
+			if(sdescript=="") {
+				textSnomed.Text=DiseaseDefCur.SnomedCode;
+			}
+			else {
+				textSnomed.Text=sdescript;
+			}
 			checkIsHidden.Checked=DiseaseDefCur.IsHidden;
 		}
 
