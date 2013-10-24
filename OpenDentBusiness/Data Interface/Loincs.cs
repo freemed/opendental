@@ -77,6 +77,23 @@ namespace OpenDentBusiness{
 			return null;
 		}
 
+		///<summary>Gets a list of Loinc objects from the db based on codeList.  codeList is a comma-delimited list of LoincCodes in the format "code,code,code,code".  Returns an empty list if none in the loinc table.</summary>
+		public static List<Loinc> GetForCodeList(string codeList) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Loinc>>(MethodBase.GetCurrentMethod(),codeList);
+			}
+			string[] codes=codeList.Split(',');
+			string command="SELECT * FROM loinc WHERE LoincCode IN(";
+			for(int i=0;i<codes.Length;i++) {
+				if(i>0) {
+					command+=",";
+				}
+				command+="'"+POut.String(codes[i])+"'";
+			}
+			command+=") ";
+			return Crud.LoincCrud.SelectMany(command);
+		}
+
 		///<summary>CAUTION, this empties the entire loinc table. "DELETE FROM loinc"</summary>
 		public static void DeleteAll() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -104,6 +121,19 @@ namespace OpenDentBusiness{
 				retVal.Add(table.Rows[i].ItemArray[0].ToString());
 			}
 			return retVal;
+		}
+
+		///<summary>Directly from db.</summary>
+		public static bool CodeExists(string LoincCode) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),LoincCode);
+			}
+			string command="SELECT COUNT(*) FROM loinc WHERE LoincCode='"+POut.String(LoincCode)+"'";
+			string count=Db.GetCount(command);
+			if(count=="0") {
+				return false;
+			}
+			return true;
 		}
 
 		/*

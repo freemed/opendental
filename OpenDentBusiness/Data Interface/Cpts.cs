@@ -41,6 +41,30 @@ namespace OpenDentBusiness{
 			}
 			return retVal;
 		}
+
+		///<summary>Gets one Cpt object directly from the database by CptCode.  If code does not exist, returns null.</summary>
+		public static Cpt GetByCode(string cptCode) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Cpt>(MethodBase.GetCurrentMethod(),cptCode);
+			}
+			string command="SELECT * FROM cpt WHERE CptCode='"+POut.String(cptCode)+"'";
+			return Crud.CptCrud.SelectOne(command);
+		}
+
+		///<summary>Directly from db.</summary>
+		public static bool CodeExists(string cptCode) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),cptCode);
+			}
+			string command="SELECT COUNT(*) FROM cpt WHERE CptCode = '"+POut.String(cptCode)+"'";
+			string count=Db.GetCount(command);
+			if(count=="0") {
+				return false;
+			}
+			return true;
+		}
+
+
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 

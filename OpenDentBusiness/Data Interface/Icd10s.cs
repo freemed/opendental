@@ -80,6 +80,19 @@ namespace OpenDentBusiness{
 			return Crud.Icd10Crud.SelectOne(command);
 		}
 
+		///<summary>Directly from db.</summary>
+		public static bool CodeExists(string Icd10Code) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),Icd10Code);
+			}
+			string command="SELECT COUNT(*) FROM icd10 WHERE Icd10Code='"+POut.String(Icd10Code)+"'";
+			string count=Db.GetCount(command);
+			if(count=="0") {
+				return false;
+			}
+			return true;
+		}
+
 
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.

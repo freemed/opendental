@@ -80,6 +80,19 @@ namespace OpenDentBusiness{
 			return Crud.CvxCrud.SelectOne(command);
 		}
 
+		///<summary>Directly from db.</summary>
+		public static bool CodeExists(string cvxCode) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),cvxCode);
+			}
+			string command="SELECT COUNT(*) FROM cvx WHERE CvxCode='"+POut.String(cvxCode)+"'";
+			string count=Db.GetCount(command);
+			if(count=="0") {
+				return false;
+			}
+			return true;
+		}
+
 
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.

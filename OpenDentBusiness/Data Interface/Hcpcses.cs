@@ -80,6 +80,19 @@ namespace OpenDentBusiness{
 			return Crud.HcpcsCrud.SelectOne(command);
 		}
 
+		///<summary>Directly from db.</summary>
+		public static bool CodeExists(string hcpcsCode) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),hcpcsCode);
+			}
+			string command="SELECT COUNT(*) FROM hcpcs WHERE HcpcsCode='"+POut.String(hcpcsCode)+"'";
+			string count=Db.GetCount(command);
+			if(count=="0") {
+				return false;
+			}
+			return true;
+		}
+
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 

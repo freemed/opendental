@@ -30,9 +30,11 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static DataTable RefreshCache(){
+			//==Ryan--In the future, this will not be an actual DB table and will fill this list based on an obfuscated method in the ehr.dll library.
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
 			string command="SELECT * FROM ehrcode ORDER BY EhrCodeNum";//Order by is important, since combo boxes will have codes in them in the same order as this table
-			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
+			DataTable table=new DataTable("EhrCode");
+			Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="EhrCode";
 			FillCache(table);
 			return table;
@@ -65,9 +67,17 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns a list of EhrCode objects that belong to one of the value sets identified by the ValueSetOIDs supplied.</summary>
 		public static List<EhrCode> GetForValueSetOIDs(List<string> listValueSetOIDs) {
+			return GetForValueSetOIDs(listValueSetOIDs,false);
+		}
+
+		///<summary>Returns a list of EhrCode objects that belong to one of the value sets identified by the ValueSetOIDs supplied AND only those codes that exist in the corresponding table in the database.</summary>
+		public static List<EhrCode> GetForValueSetOIDs(List<string> listValueSetOIDs,bool ifExistsInDb) {
 			List<EhrCode> retval=new List<EhrCode>();
 			for(int i=0;i<Listt.Count;i++) {
-				if(listValueSetOIDs.Contains(Listt[i].ValueSetOID)) {
+				if(ifExistsInDb && !Listt[i].ExistsInDbTable) {
+					continue;
+				}
+				if(listValueSetOIDs.Contains(Listt[i].ValueSetOID)) {					
 					retval.Add(Listt[i]);
 				}
 			}
