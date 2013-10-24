@@ -7,11 +7,11 @@ using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
 using OpenDental.Forms;
-//using System.Xml;
-//using System.Threading;
-//using System.Net;
-//using System.IO;
-//using Ionic.Zip;
+using System.Xml;
+using System.Threading;
+using System.Net;
+using System.IO;
+using Ionic.Zip;
 
 namespace OpenDental {
 	public partial class FormEhrSetup:Form {
