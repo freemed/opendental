@@ -25,6 +25,9 @@ namespace OpenDental {
 			if(PrefC.GetString(PrefName.BillingUseElectronic)=="2") {
 				listElectBilling.SelectedIndex=2;
 			}
+			if(PrefC.GetString(PrefName.BillingUseElectronic)=="3") {
+				listElectBilling.SelectedIndex=3;
+			}
 			textVendorId.Text=PrefC.GetString(PrefName.BillingElectVendorId);
 			textVendorPMScode.Text=PrefC.GetString(PrefName.BillingElectVendorPMSCode);
 			string cc=PrefC.GetString(PrefName.BillingElectCreditCardChoices);

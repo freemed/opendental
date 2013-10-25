@@ -47,15 +47,15 @@ namespace OpenDental{
 			this.textBillingEmailSubject = new System.Windows.Forms.TextBox();
 			this.label9 = new System.Windows.Forms.Label();
 			this.label8 = new System.Windows.Forms.Label();
-			this.textDays = new OpenDental.ValidNum();
-			this.butOK = new OpenDental.UI.Button();
-			this.butCancel = new OpenDental.UI.Button();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
 			this.label10 = new System.Windows.Forms.Label();
 			this.textInvoiceNote = new System.Windows.Forms.TextBox();
 			this.label11 = new System.Windows.Forms.Label();
 			this.textBillingEmailBody = new OpenDental.ODtextBox();
+			this.textDays = new OpenDental.ValidNum();
 			this.textNote = new OpenDental.ODtextBox();
+			this.butOK = new OpenDental.UI.Button();
+			this.butCancel = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
@@ -126,10 +126,11 @@ namespace OpenDental{
 			this.listElectBilling.Items.AddRange(new object[] {
             "No electronic billing",
             "Dental X Change",
-            "Output to file"});
+            "Output to file",
+            "ClaimX / ExtraDent"});
 			this.listElectBilling.Location = new System.Drawing.Point(12, 19);
 			this.listElectBilling.Name = "listElectBilling";
-			this.listElectBilling.Size = new System.Drawing.Size(120, 43);
+			this.listElectBilling.Size = new System.Drawing.Size(120, 56);
 			this.listElectBilling.TabIndex = 0;
 			// 
 			// textPassword
@@ -286,45 +287,6 @@ namespace OpenDental{
 			this.label8.Text = "Body";
 			this.label8.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
-			// textDays
-			// 
-			this.textDays.Location = new System.Drawing.Point(165, 7);
-			this.textDays.MaxVal = 255;
-			this.textDays.MinVal = 0;
-			this.textDays.Name = "textDays";
-			this.textDays.Size = new System.Drawing.Size(44, 20);
-			this.textDays.TabIndex = 0;
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(482, 630);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75, 24);
-			this.butOK.TabIndex = 3;
-			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(563, 630);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75, 24);
-			this.butCancel.TabIndex = 4;
-			this.butCancel.Text = "&Cancel";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
 			// groupBox3
 			// 
 			this.groupBox3.Controls.Add(this.textBillingEmailBody);
@@ -377,6 +339,15 @@ namespace OpenDental{
 			this.textBillingEmailBody.TabIndex = 1;
 			this.textBillingEmailBody.Text = "";
 			// 
+			// textDays
+			// 
+			this.textDays.Location = new System.Drawing.Point(165, 7);
+			this.textDays.MaxVal = 255;
+			this.textDays.MinVal = 0;
+			this.textDays.Name = "textDays";
+			this.textDays.Size = new System.Drawing.Size(44, 20);
+			this.textDays.TabIndex = 0;
+			// 
 			// textNote
 			// 
 			this.textNote.AcceptsTab = true;
@@ -388,6 +359,36 @@ namespace OpenDental{
 			this.textNote.Size = new System.Drawing.Size(616, 102);
 			this.textNote.TabIndex = 2;
 			this.textNote.Text = "";
+			// 
+			// butOK
+			// 
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butOK.Autosize = true;
+			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.CornerRadius = 4F;
+			this.butOK.Location = new System.Drawing.Point(482, 630);
+			this.butOK.Name = "butOK";
+			this.butOK.Size = new System.Drawing.Size(75, 24);
+			this.butOK.TabIndex = 3;
+			this.butOK.Text = "&OK";
+			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			// 
+			// butCancel
+			// 
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butCancel.Autosize = true;
+			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius = 4F;
+			this.butCancel.Location = new System.Drawing.Point(563, 630);
+			this.butCancel.Name = "butCancel";
+			this.butCancel.Size = new System.Drawing.Size(75, 24);
+			this.butCancel.TabIndex = 4;
+			this.butCancel.Text = "&Cancel";
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// FormBillingDefaults
 			// 

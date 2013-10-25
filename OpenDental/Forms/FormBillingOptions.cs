@@ -928,7 +928,8 @@ namespace OpenDental{
 				stmt.Intermingled=checkIntermingled.Checked;
 				stmt.IsSent=false;
 				if(PrefC.GetString(PrefName.BillingUseElectronic)=="1"
-					|| PrefC.GetString(PrefName.BillingUseElectronic)=="2") 
+					|| PrefC.GetString(PrefName.BillingUseElectronic)=="2"
+ 					|| PrefC.GetString(PrefName.BillingUseElectronic)=="3")
 				{
 					stmt.Mode_=StatementMode.Electronic;
 					stmt.Intermingled=true;

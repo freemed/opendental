@@ -807,6 +807,9 @@ namespace OpenDental{
 			else if(PrefC.GetString(PrefName.BillingUseElectronic)=="2") {
 				OpenDental.Bridges.POS_statements.GeneratePracticeInfo(writerElect);
 			}
+			else if(PrefC.GetString(PrefName.BillingUseElectronic)=="3") {
+				OpenDental.Bridges.ClaimX_Statements.GeneratePracticeInfo(writerElect);
+			}
 			DataSet dataSet;
 			List<long> stateNumsElect=new List<long>();
 			for(int i=0;i<gridBill.SelectedIndices.Length;i++){
@@ -903,6 +906,9 @@ namespace OpenDental{
 					else if(PrefC.GetString(PrefName.BillingUseElectronic)=="2") {
 						OpenDental.Bridges.POS_statements.GenerateOneStatement(writerElect,stmt,pat,fam,dataSet);
 					}
+					else if(PrefC.GetString(PrefName.BillingUseElectronic)=="3") {
+						OpenDental.Bridges.ClaimX_Statements.GenerateOneStatement(writerElect,stmt,pat,fam,dataSet);
+					}
 					if(statementWritten) {
 						stateNumsElect.Add(stmt.StatementNum);
 						sentelect++;
@@ -952,6 +958,27 @@ namespace OpenDental{
 					OpenDental.Bridges.POS_statements.GenerateWrapUp(writerElect);
 					writerElect.Close();
 					SaveFileDialog dlg=new SaveFileDialog();
+					dlg.FileName="Statements.xml";
+					if(dlg.ShowDialog()!=DialogResult.OK) {
+						sentelect=0;
+						labelSentElect.Text=Lan.g(this,"SentElect=")+sentelect.ToString();
+					}
+					File.WriteAllText(dlg.FileName,strBuildElect.ToString());
+					for(int i=0;i<stateNumsElect.Count;i++) {
+						Statements.MarkSent(stateNumsElect[i],DateTimeOD.Today);
+					}
+				}
+				if(PrefC.GetString(PrefName.BillingUseElectronic)=="3") {
+					OpenDental.Bridges.ClaimX_Statements.GenerateWrapUp(writerElect);
+					writerElect.Close();
+					SaveFileDialog dlg=new SaveFileDialog();
+					dlg.InitialDirectory=@"C:\StatementX\";//Clint from ExtraDent requested this default path.
+					if(!Directory.Exists(dlg.InitialDirectory)) {
+						try {
+							Directory.CreateDirectory(dlg.InitialDirectory);
+						}
+						catch {}
+					}
 					dlg.FileName="Statements.xml";
 					if(dlg.ShowDialog()!=DialogResult.OK) {
 						sentelect=0;
