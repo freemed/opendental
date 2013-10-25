@@ -29,7 +29,7 @@ namespace OpenDental {
 				butOK.Visible=false;
 			}
 			ActiveControl=textCode;
-			if(!EHR.QuarterlyKey.QuarterlyKeyIsValid(DateTime.Now.Year.ToString()//year
+			if(!FormEHR.QuarterlyKeyIsValid(DateTime.Now.ToString("yy")//year
 				,Math.Ceiling(DateTime.Now.Month/3f).ToString()//quarter
 				,PrefC.GetString(PrefName.PracticeTitle)//practice title
 				,EhrQuarterlyKeys.GetKeyThisQuarter().KeyValue))//key

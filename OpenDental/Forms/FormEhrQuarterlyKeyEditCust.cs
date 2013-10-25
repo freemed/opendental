@@ -94,15 +94,7 @@ namespace OpenDental {
 				MessageBox.Show("Quarterly keys cannot be released more than one month in advance.");
 				return;
 			}
-			bool quarterlyKeyIsValid=false;
-			#if EHRTEST
-				quarterlyKeyIsValid=((EHR.FormEHR)FormOpenDental.FormEHR).QuarterlyKeyIsValid(textYear.Text,textQuarter.Text,textPracticeTitle.Text,textEhrKey.Text);
-			#else
-				Type type=FormOpenDental.AssemblyEHR.GetType("EHR.ObjSomeEhrSuperClass");//namespace.class
-				object[] args=new object[] { textYear.Text,textQuarter.Text,textPracticeTitle.Text,textEhrKey.Text };
-				quarterlyKeyIsValid=(bool)type.InvokeMember("QuarterlyKeyIsValid",System.Reflection.BindingFlags.InvokeMethod,null,FormOpenDental.ObjSomeEhrSuperClass,args);
-			#endif
-			if(!quarterlyKeyIsValid) {
+			if(!FormEHR.QuarterlyKeyIsValid(textYear.Text,textQuarter.Text,textPracticeTitle.Text,textEhrKey.Text)) {
 				MsgBox.Show(this,"Invalid quarterly key");
 				return;
 			}

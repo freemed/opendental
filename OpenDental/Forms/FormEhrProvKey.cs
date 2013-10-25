@@ -36,15 +36,7 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			bool provKeyIsValid=false;
-			#if EHRTEST
-				provKeyIsValid=((EHR.FormEHR)FormOpenDental.FormEHR).ProvKeyIsValid(ProvCur.LName,ProvCur.FName,checkHasReportAccess.Checked,textEhrKey.Text);
-			#else
-				Type type=FormOpenDental.AssemblyEHR.GetType("EHR.ObjSomeEhrSuperClass");//namespace.class
-				object[] args=new object[] { ProvCur.LName,ProvCur.FName,checkHasReportAccess.Checked,textEhrKey.Text };
-				provKeyIsValid=(bool)type.InvokeMember("ProvKeyIsValid",System.Reflection.BindingFlags.InvokeMethod,null,FormOpenDental.ObjSomeEhrSuperClass,args);
-			#endif
-			if(!provKeyIsValid) {
+			if(!FormEHR.ProvKeyIsValid(ProvCur.LName,ProvCur.FName,checkHasReportAccess.Checked,textEhrKey.Text)){
 				MsgBox.Show(this,"Invalid provider key.  Check capitalization, exact spelling, and report access status.");
 				return;
 			}

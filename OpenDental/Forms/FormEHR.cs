@@ -16,6 +16,7 @@ using OpenDentBusiness;
 using OpenDental;
 using OpenDental.UI;
 using CodeBase;
+using System.Reflection;
 #if EHRTEST
 using EHR;
 #endif
@@ -37,9 +38,27 @@ namespace OpenDental {
 		public bool OnShowLaunchOrders;
 		///<summary>This is set every time the form is shown.  It is used to determine if there is an Ehr key for the patient's primary provider.  If not, then The main grid will show empty.</summary>
 		private Provider ProvPat;
+		///<summary>This will be null if EHR didn't load up.  EHRTEST conditional compilation constant is used because the EHR project is only part of the solution here at HQ.  We need to use late binding in a few places so that it will still compile for people who download our sourcecode.  But late binding prevents us from stepping through for debugging, so the EHRTEST lets us switch to early binding.</summary>
+		public static object ObjFormEhrMeasures;
+		///<summary>This will be null if EHR didn't load up.</summary>
+		public static Assembly AssemblyEHR;
 
 		public FormEHR() {
 			InitializeComponent();
+			if(PrefC.GetBoolSilent(PrefName.ShowFeatureEhr,false)) {
+				string dllPathEHR=ODFileUtils.CombinePaths(Application.StartupPath,"EHR.dll");
+				#if EHRTEST
+					ObjFormEhrMeasures=new FormEhrMeasures();
+				#else
+					ObjFormEhrMeasures=null;
+					AssemblyEHR=null;
+					if(File.Exists(dllPathEHR)) {//EHR.dll is available, so load it up
+						AssemblyEHR=Assembly.LoadFile(dllPathEHR);
+						Type type=AssemblyEHR.GetType("EHR.FormEhrMeasures");//namespace.class
+						ObjFormEhrMeasures=Activator.CreateInstance(type);
+					}
+				#endif
+			}
 		}
 
 		private void FormEHR_Load(object sender,EventArgs e) {
@@ -289,9 +308,26 @@ namespace OpenDental {
 		}
 
 		private void butMeasures_Click(object sender,EventArgs e) {
-			//Todo: FormEhrMeasures was left in the EHR namespace and should be late bound.
-			//FormEhrMeasures FormMeasures=new FormEhrMeasures();
-			//FormMeasures.ShowDialog();
+			#if EHRTEST
+				ObjFormEhrMeasures=new EHR.FormEhrMeasures();
+				((EHR.FormEhrMeasures)ObjFormEhrMeasures).ShowDialog();
+			#else
+				if(ObjFormEhrMeasures==null) {
+					return;
+				}
+				Type type=AssemblyEHR.GetType("EHR.FormEhrMeasures");//namespace.class
+				//object[] args;
+				EhrQuarterlyKey keyThisQ=EhrQuarterlyKeys.GetKeyThisQuarter();
+				if(keyThisQ==null) {
+					MessageBox.Show("No quarterly key entered for this quarter.");
+					return;
+				}
+				if(!QuarterlyKeyIsValid(DateTime.Today.ToString("yy"),Math.Ceiling(DateTime.Today.Month/3f).ToString(),PrefC.GetString(PrefName.PracticeTitle),keyThisQ.KeyValue)){
+					MessageBox.Show("Invalid quarterly key.");
+					return;
+				}
+				type.InvokeMember("ShowDialog",System.Reflection.BindingFlags.InvokeMethod,null,ObjFormEhrMeasures,null);
+			#endif
 			FillGridMu();
 		}
 
@@ -364,25 +400,34 @@ namespace OpenDental {
 			FormInt.ShowDialog();
 		}
 
-		public bool ProvKeyIsValid(string lName,string fName,bool hasReportAccess,string provKey) {
-			//return ProvKey.ProvKeyIsValid(lName,fName,hasReportAccess,provKey);
-			#if EHRTEST //This pattern allows the code to compile without having the EHR code available.
-				return ProvKey.ProvKeyIsValid(lName,fName,hasReportAccess,provKey);
-			#else
-				Type type=FormOpenDental.AssemblyEHR.GetType("Ehr.FormEhrMeasures");//namespace.class
-				object[] args=new object[] { lName,fName,hasReportAccess,provKey };
-				return (bool)type.InvokeMember("QuarterlyKeyIsValid",System.Reflection.BindingFlags.InvokeMethod,null,FormOpenDental.ObjSomeEhrSuperClass,args);
-			#endif
+		public static bool ProvKeyIsValid(string lName,string fName,bool hasReportAccess,string provKey) {
+			try{
+				#if EHRTEST //This pattern allows the code to compile without having the EHR code available.
+					return FormEhrMeasures.ProvKeyIsValid(lName,fName,hasReportAccess,provKey);
+				#else
+					Type type=AssemblyEHR.GetType("Ehr.FormEhrMeasures");//namespace.class
+					object[] args=new object[] { lName,fName,hasReportAccess,provKey };
+					return (bool)type.InvokeMember("ProvKeyIsValid",System.Reflection.BindingFlags.InvokeMethod,null,ObjFormEhrMeasures,args);
+				#endif
+			}
+			catch{
+				return false;
+			}
 		}
 
-		public bool QuarterlyKeyIsValid(string year,string quarter,string practiceTitle,string qkey) {
-			#if EHRTEST //This pattern allows the code to compile without having the EHR code available.
-				return QuarterlyKey.QuarterlyKeyIsValid(year,quarter,practiceTitle,qkey);
-			#else
-				Type type=FormOpenDental.AssemblyEHR.GetType("EHR.QuarterlyKey");//namespace.class
-				object[] args=new object[] { year,quarter,practiceTitle,qkey };
-				return (bool)type.InvokeMember("QuarterlyKeyIsValid",System.Reflection.BindingFlags.InvokeMethod,null,FormOpenDental.ObjSomeEhrSuperClass,args);
-			#endif
+		public static bool QuarterlyKeyIsValid(string year,string quarter,string practiceTitle,string qkey) {
+			try{
+				#if EHRTEST //This pattern allows the code to compile without having the EHR code available.
+					return FormEhrMeasures.QuarterlyKeyIsValid(year,quarter,practiceTitle,qkey);
+				#else
+					Type type=AssemblyEHR.GetType("EHR.FormEhrMeasures");//namespace.class
+					object[] args=new object[] { year,quarter,practiceTitle,qkey };
+					return (bool)type.InvokeMember("QuarterlyKeyIsValid",System.Reflection.BindingFlags.InvokeMethod,null,ObjFormEhrMeasures,args);
+				#endif
+			}
+			catch{
+				return false;
+			}
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {

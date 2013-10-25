@@ -26,14 +26,14 @@ namespace OpenDental {
 		}
 
 		private void FormCodeSystemsImport_Load(object sender,EventArgs e) {
-			if(EHR.QuarterlyKey.QuarterlyKeyIsValid(DateTime.Now.Year.ToString()//year
+			if(FormEHR.QuarterlyKeyIsValid(DateTime.Now.ToString("yy")//year
 				,Math.Ceiling(DateTime.Now.Month/3f).ToString()//quarter
 				,PrefC.GetString(PrefName.PracticeTitle)//practice title
 				,EhrQuarterlyKeys.GetKeyThisQuarter().KeyValue))//key
 			{
-				ListCodeSystems=CodeSystems.GetForCurrentVersion();
+				ListCodeSystems=CodeSystems.GetForCurrentVersion();//EHR enabled and valid.
 			}
-			else {
+			else {//No EHR
 				ListCodeSystems=CodeSystems.GetForCurrentVersionNoSnomed();
 			}
 		}
@@ -169,7 +169,7 @@ namespace OpenDental {
 				case "SNOMEDCT":
 					#region SNOMEDCT EULA
 					//TODO: make better UI.
-					if(MessageBox.Show(@"//TODO: make better UI. Open Dental "+PrefC.GetString(PrefName.ProgramVersion)+@" includes SNOMED Clinical Terms® (SNOMED CT®) which is used by permission of the International Health Terminology Standards Development Organization (IHTSDO). All rights reserved. SNOMED CT® was originally created by the College of American Pathologists. “SNOMED”, “SNOMED CT” and “SNOMED Clinical Terms” are registered trademarks of the IHTSDO (www.ihtsdo.org).\r\n"
+					if(MessageBox.Show(@"Open Dental "+PrefC.GetString(PrefName.ProgramVersion)+@" includes SNOMED Clinical Terms® (SNOMED CT®) which is used by permission of the International Health Terminology Standards Development Organization (IHTSDO). All rights reserved. SNOMED CT® was originally created by the College of American Pathologists. “SNOMED”, “SNOMED CT” and “SNOMED Clinical Terms” are registered trademarks of the IHTSDO (www.ihtsdo.org).\r\n"
 							+@"Use of SNOMED CT in Open Dental "+PrefC.GetString(PrefName.ProgramVersion)+@" is governed by the conditions of the following SNOMED CT Sub-license issued by Open Dental Software Inc.\r\n"
 							+@"1. The meaning of the terms “Affiliate”, or “Data Analysis System”, “Data Creation System”, “Derivative”, “End User”, “Extension”, “Member”, “Non-Member Territory”, “SNOMED CT” and “SNOMED CT Content” are as defined in the IHTSDO Affiliate License Agreement (see www.ihtsdo.org/license.pdf).\r\n"
 							+@"2. Information about Affiliate Licensing is available at www.ihtsdo.org/license. Individuals or organizations wishing to register as IHTSDO Affiliates can register at www.ihtsdo.org/salsa, subject to acceptance of the Affiliate License Agreement (see www.ihtsdo.org/license.pdf).\r\n"

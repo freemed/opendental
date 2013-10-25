@@ -27,7 +27,6 @@
 			this.label1 = new System.Windows.Forms.Label();
 			this.textCode = new System.Windows.Forms.TextBox();
 			this.butSearch = new OpenDental.UI.Button();
-			this.butImport = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.SuspendLayout();
@@ -79,21 +78,6 @@
 			this.butSearch.Text = "Search";
 			this.butSearch.Click += new System.EventHandler(this.butSearch_Click);
 			// 
-			// butImport
-			// 
-			this.butImport.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butImport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.butImport.Autosize = true;
-			this.butImport.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butImport.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butImport.CornerRadius = 4F;
-			this.butImport.Location = new System.Drawing.Point(919, 41);
-			this.butImport.Name = "butImport";
-			this.butImport.Size = new System.Drawing.Size(75, 24);
-			this.butImport.TabIndex = 24;
-			this.butImport.Text = "Import";
-			this.butImport.Click += new System.EventHandler(this.butLoincFill_Click);
-			// 
 			// butOK
 			// 
 			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
@@ -131,7 +115,6 @@
 			this.ClientSize = new System.Drawing.Size(1006, 665);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.butOK);
-			this.Controls.Add(this.butImport);
 			this.Controls.Add(this.butSearch);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.textCode);
@@ -151,7 +134,6 @@
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.TextBox textCode;
 		private OpenDental.UI.Button butSearch;
-		private OpenDental.UI.Button butImport;
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butCancel;
 	}
