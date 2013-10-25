@@ -3117,6 +3117,12 @@
     <Compile Include="User Controls\DraggableControl.Designer.cs">
       <DependentUpon>DraggableControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="User Controls\GraphScheduleDay.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="User Controls\GraphScheduleDay.Designer.cs">
+      <DependentUpon>GraphScheduleDay.cs</DependentUpon>
+    </Compile>
     <Compile Include="User Controls\MapAreaDisplayLabelControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -3134,6 +3140,12 @@
     </Compile>
     <Compile Include="User Controls\MapAreaRoomControl.Designer.cs">
       <DependentUpon>MapAreaRoomControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="User Controls\SplitContainerNoFlicker.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="User Controls\SplitContainerNoFlicker.Designer.cs">
+      <DependentUpon>SplitContainerNoFlicker.cs</DependentUpon>
     </Compile>
     <Compile Include="User Controls\TextBoxWiki.cs">
       <SubType>UserControl</SubType>
