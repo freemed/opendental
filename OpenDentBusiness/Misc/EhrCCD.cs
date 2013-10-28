@@ -832,11 +832,72 @@ Laboratory Test Results
 			return Patients.GetPatNumByNameAndBirthday(lName,fName,birthDate);
 		}
 
+		private static List<XmlNode> GetListBodyComponents(XmlDocument xmlDocCcd) {
+			XmlNode xmlNodeStructuredBody=null;
+			for(int i=0;i<xmlDocCcd.FirstChild.ChildNodes.Count;i++) {
+				if(xmlDocCcd.FirstChild.ChildNodes[i].Name.Trim().ToLower()!="structuredbody") {//POCD_HD00040.xls line 236
+					continue;
+				}
+				xmlNodeStructuredBody=xmlDocCcd.FirstChild.ChildNodes[i];
+			}
+			if(xmlNodeStructuredBody==null) {
+				return new List<XmlNode>();//There must be exactly one according to the specification.
+			}
+			List<XmlNode> retVal=new List<XmlNode>();
+			for(int i=0;i<xmlNodeStructuredBody.ChildNodes.Count;i++) {
+				if(xmlNodeStructuredBody.ChildNodes[i].Name.Trim().ToLower()!="component") {//POCD_HD00040.xls line 241
+					continue;
+				}
+				retVal.Add(xmlNodeStructuredBody.ChildNodes[i]);
+			}
+			return retVal;
+		}
+
+		private static XmlNode GetSectionByTemplateId(XmlDocument xmlDocCcd,string strTemplateId) {
+			List<XmlNode> listXmlNodeBodyComponents=GetListBodyComponents(xmlDocCcd);
+			for(int i=0;i<listXmlNodeBodyComponents.Count;i++) {//Locate the medication history section
+				XmlNode xmlNodeComponent=listXmlNodeBodyComponents[i];
+				for(int j=0;j<xmlNodeComponent.ChildNodes.Count;j++) {
+					if(listXmlNodeBodyComponents[i].Name.Trim().ToLower()!="section") {//POCD_HD00040.xls line 244
+						continue;
+					}
+					XmlNode xmlNodeSection=listXmlNodeBodyComponents[i];
+					for(int k=0;k<xmlNodeSection.ChildNodes.Count;k++) {
+						if(xmlNodeSection.ChildNodes[k].Name.Trim().ToLower()!="templateid") {
+							continue;
+						}
+						XmlNode xmlNodeTemplateId=xmlNodeSection.ChildNodes[k];
+						if(xmlNodeTemplateId.Attributes["root"].ToString()==strTemplateId) {
+							return xmlNodeSection;
+						}
+					}
+				}
+			}
+			return null;
+		}
+
 		///<summary>Returns the list of medications found within the CCD document xmlDocCcd.  Does NOT insert the medications into the db.</summary>
-		public static List<Medication> GetListMedications(XmlDocument xmlDocCcd) {
-			List<Medication> listMedications=new List<Medication>();
-			//TODO:
-			return listMedications;
+		public static List<MedicationPat> GetListMedicationPats(XmlDocument xmlDocCcd) {
+			XmlNode xmlNodeSection=GetSectionByTemplateId(xmlDocCcd,"2.16.840.1.113883.10.20.22.2.1.1");
+			//entry //POCD_HD00040.xls line 270
+			
+			//| substanceAdministration //POCD_HD00040.xls line 450
+			
+			
+			//| entryRelationship //POCD_HD00040.xls line 319
+
+
+
+			//| supply | templateId root="2.16.840.1.113883.10.20.22.4.18" //Medication dispense template. POCD_HD00040.xls line 273 (ClinicalStatement)
+
+			//effectiveTime value="yyyymmdd"
+
+			//| product | manufacturedProduct | templateId root="2.16.840.1.113883.10.20.22.4.23" //Medication information template.
+			//| manufacturedMaterial | code codeSystem="2.16.840.1.113883.6.88"
+
+			List<MedicationPat> listMedicationPats=new List<MedicationPat>();
+
+			return listMedicationPats;
 		}
 
 		///<summary>Returns the list of diseases/problems found within the CCD document xmlDocCcd.  Does NOT insert the diseases into the db.</summary>
