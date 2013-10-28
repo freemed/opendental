@@ -147,7 +147,12 @@ namespace OpenDental.Bridges {
 				procCode=tableAccount.Rows[i]["ProcCode"].ToString();
 				tth=tableAccount.Rows[i]["tth"].ToString();
 				descript=tableAccount.Rows[i]["description"].ToString();
-				fulldesc=procCode+" "+tth+" "+descript;
+				if(tth=="") {
+					fulldesc=descript;
+				}
+				else {
+					fulldesc=tth+" "+descript;
+				}
 				lineArray=fulldesc.Split(new string[] { "\r\n" },StringSplitOptions.RemoveEmptyEntries);
 				lines=new List<string>(lineArray);
 				//The specs say that the line limit is 30 char.  But in testing, it will take 50 char.
@@ -160,6 +165,7 @@ namespace OpenDental.Bridges {
 				for(int li=0;li<lines.Count;li++) {
 					writer.WriteStartElement("DetailItem");//has a child item. We won't add optional child note
 					writer.WriteAttributeString("sequence",seq.ToString());
+					writer.WriteElementString("ProcCode",procCode);
 					writer.WriteStartElement("Item");
 					if(li==0) {
 						date=(DateTime)tableAccount.Rows[i]["DateTime"];
