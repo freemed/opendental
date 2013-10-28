@@ -383,6 +383,19 @@ namespace OpenDentBusiness{
 			//don't forget to refresh procedurecodes.
 		}
 
+		public static List<string> GetAllCodes() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<string>>(MethodBase.GetCurrentMethod());
+			}
+			List<string> retVal=new List<string>();
+			string command="SELECT ProcCode FROM procedurecode";
+			DataTable Table=Db.GetTable(command);
+			for(int i=0;i<Table.Rows.Count;i++) {
+				retVal.Add(Table.Rows[i][0].ToString());
+			}
+			return retVal;
+		}
+
 
 		/* js These are not currently in use.  This probably needs to be consolidated with code from other places.  ProcsColored and InsSpans comes to mind.
 		///<summary>Returns true if any of the codes in the list fall within the code range.</summary>

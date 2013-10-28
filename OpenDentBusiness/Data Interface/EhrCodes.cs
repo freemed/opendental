@@ -8,9 +8,7 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class EhrCodes{
 		#region CachePattern
-		//This region can be eliminated if this is not a table type with cached data.
-		//If leaving this region in place, be sure to add RefreshCache and FillCache 
-		//to the Cache.cs file with all the other Cache types.
+		//Atypical cache pattern. Cache is only filled when we have access to the EHR.dll file, otherwise listt will be an empty list of EHR codes (not null, just empty as if the table were there but with no codes in it.)
 
 		///<summary>A list of all EhrCodes.</summary>
 		private static List<EhrCode> listt;
@@ -18,8 +16,28 @@ namespace OpenDentBusiness{
 		///<summary>A list of all EhrCodes.</summary>
 		public static List<EhrCode> Listt{
 			get {
-				if(listt==null) {
-					RefreshCache();
+				if(listt==null) {//instead of refreshing the cache using the normal pattern we must retrieve the cache from the EHR.dll. No call to DB.
+					object ObjEhrCodeList;
+					Assembly AssemblyEHR;
+					string dllPathEHR=CodeBase.ODFileUtils.CombinePaths(System.Windows.Forms.Application.StartupPath,"EHR.dll");
+					#if EHRTEST
+						ObjFormEhrMeasures=new FormEhrMeasures();
+						listt=Crud.EhrCodeCrud.TableToList(EHR.EhrCodeList.GetListt());
+					#else
+						ObjEhrCodeList=null;
+						AssemblyEHR=null;
+						if(System.IO.File.Exists(dllPathEHR)) {//EHR.dll is available, so load it up
+							AssemblyEHR=Assembly.LoadFile(dllPathEHR);
+							Type type=AssemblyEHR.GetType("EHR.EhrCodeList");//namespace.class
+							ObjEhrCodeList=Activator.CreateInstance(type);
+							object[] args=null;
+							listt=Crud.EhrCodeCrud.TableToList((DataTable)type.InvokeMember("GetListt",System.Reflection.BindingFlags.InvokeMethod,null,ObjEhrCodeList,args));
+						}
+						else {//no EHR.dll. "Return" empty list.
+							listt=new List<EhrCode>();
+						}
+					#endif
+					updateCodeExistsHelper();
 				}
 				return listt;
 			}
@@ -28,8 +46,70 @@ namespace OpenDentBusiness{
 			}
 		}
 
+		/// <summary>If the CodeValue of the EhrCode exists in its respective code table (I.e. Snomed, Loinc, Cpt, etc.) this will set ExistsInDbTable=true otherwise false.</summary>
+		private static void updateCodeExistsHelper() {
+			if(listt.Count==0){
+				return;//
+			}
+			//Cache lists of codes.
+			//HashSet<string> cdcrecHS	= new HashSet<string>(Cdcrecs.GetAllCodes());//all CDCREC codes should always be inserted into DB via ConvertDB3
+			HashSet<string> cdtHS			= new HashSet<string>(ProcedureCodes.GetAllCodes());
+			HashSet<string> cptHS			= new HashSet<string>(Cpts					.GetAllCodes());
+			HashSet<string> cvxHS			= new HashSet<string>(Cvxs					.GetAllCodes());
+			HashSet<string> hcpcsHS		= new HashSet<string>(Hcpcses				.GetAllCodes());
+			HashSet<string> icd10HS		= new HashSet<string>(Icd10s				.GetAllCodes());
+			HashSet<string> icd9HS		= new HashSet<string>(ICD9s					.GetAllCodes());
+			HashSet<string> loincHS		= new HashSet<string>(Loincs				.GetAllCodes());
+			HashSet<string> rxnormHS	= new HashSet<string>(RxNorms				.GetAllCodes());
+			HashSet<string> snomedHS	= new HashSet<string>(Snomeds				.GetAllCodes());
+			HashSet<string> sopHS			= new HashSet<string>(Sops					.GetAllCodes());
+			for(int i=0;i<listt.Count;i++) {
+				switch(listt[i].CodeSystem) {
+					case "AdministrativeSex"://always "in DB", even though there is no DB table 
+						listt[i].ExistsInDbTable=true;
+						break;
+					case "CDCREC"://always in DB
+						listt[i].ExistsInDbTable=true;
+						break;
+					case "CDT":
+						listt[i].ExistsInDbTable=cdtHS.Contains(listt[i].CodeValue);
+						break;
+					case "CPT":
+						listt[i].ExistsInDbTable=cptHS.Contains(listt[i].CodeValue);
+						break;
+					case "CVX":
+						listt[i].ExistsInDbTable=cvxHS.Contains(listt[i].CodeValue);
+						break;
+					case "HCPCS":
+						listt[i].ExistsInDbTable=hcpcsHS.Contains(listt[i].CodeValue);
+						break;
+					case "ICD9CM":
+						listt[i].ExistsInDbTable=icd9HS.Contains(listt[i].CodeValue);
+						break;
+					case "ICD10CM":
+						listt[i].ExistsInDbTable=icd10HS.Contains(listt[i].CodeValue);
+						break;
+					case "LOINC":
+						listt[i].ExistsInDbTable=loincHS.Contains(listt[i].CodeValue);
+						break;
+					case "RXNORM":
+						listt[i].ExistsInDbTable=rxnormHS.Contains(listt[i].CodeValue);
+						break;
+					case "SNOMEDCT":
+						listt[i].ExistsInDbTable=snomedHS.Contains(listt[i].CodeValue);
+						break;
+					case "SOP":
+						listt[i].ExistsInDbTable=sopHS.Contains(listt[i].CodeValue);
+						break;
+				}
+			}
+
+			//This updates the last column "ExistsInDatabse" based on weather or not the code is found in another table in the database.
+
+		}
+
 		///<summary></summary>
-		public static DataTable RefreshCache(){
+		public static DataTable RefreshCache() {
 			//==Ryan--In the future, this will not be an actual DB table and will fill this list based on an obfuscated method in the ehr.dll library.
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
 			string command="SELECT * FROM ehrcode ORDER BY EhrCodeNum";//Order by is important, since combo boxes will have codes in them in the same order as this table
