@@ -25,11 +25,9 @@ namespace OpenDental{
 		private void InitializeComponent() {
 			this.labelCodeOrDesc = new System.Windows.Forms.Label();
 			this.textCode = new System.Windows.Forms.TextBox();
-			this.label1 = new System.Windows.Forms.Label();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butExact = new OpenDental.UI.Button();
 			this.butSearch = new OpenDental.UI.Button();
-			this.butRxNorm = new OpenDental.UI.Button();
 			this.butNone = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
@@ -51,14 +49,6 @@ namespace OpenDental{
 			this.textCode.Name = "textCode";
 			this.textCode.Size = new System.Drawing.Size(100, 20);
 			this.textCode.TabIndex = 20;
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(243, 666);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(215, 23);
-			this.label1.TabIndex = 23;
-			this.label1.Text = "Creates new RxNorm table in database.";
 			// 
 			// gridMain
 			// 
@@ -102,21 +92,6 @@ namespace OpenDental{
 			this.butSearch.TabIndex = 22;
 			this.butSearch.Text = "Similar";
 			this.butSearch.Click += new System.EventHandler(this.butSearch_Click);
-			// 
-			// butRxNorm
-			// 
-			this.butRxNorm.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butRxNorm.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butRxNorm.Autosize = true;
-			this.butRxNorm.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRxNorm.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butRxNorm.CornerRadius = 4F;
-			this.butRxNorm.Location = new System.Drawing.Point(139, 660);
-			this.butRxNorm.Name = "butRxNorm";
-			this.butRxNorm.Size = new System.Drawing.Size(98, 24);
-			this.butRxNorm.TabIndex = 5;
-			this.butRxNorm.Text = "Create rxnorm";
-			this.butRxNorm.Click += new System.EventHandler(this.butRxNorm_Click);
 			// 
 			// butNone
 			// 
@@ -179,11 +154,9 @@ namespace OpenDental{
 			this.ClientSize = new System.Drawing.Size(693, 702);
 			this.Controls.Add(this.checkIgnore);
 			this.Controls.Add(this.butExact);
-			this.Controls.Add(this.label1);
 			this.Controls.Add(this.butSearch);
 			this.Controls.Add(this.labelCodeOrDesc);
 			this.Controls.Add(this.textCode);
-			this.Controls.Add(this.butRxNorm);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butNone);
 			this.Controls.Add(this.butOK);
@@ -204,11 +177,9 @@ namespace OpenDental{
 		private OpenDental.UI.Button butCancel;
 		private UI.Button butNone;
 		private UI.ODGrid gridMain;
-		private UI.Button butRxNorm;
 		private UI.Button butSearch;
 		private System.Windows.Forms.Label labelCodeOrDesc;
 		private System.Windows.Forms.TextBox textCode;
-		private System.Windows.Forms.Label label1;
 		private UI.Button butExact;
 		private System.Windows.Forms.CheckBox checkIgnore;
 	}

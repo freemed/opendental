@@ -33,7 +33,7 @@ namespace OpenDental {
 
 		private void FormRxNorms_Shown(object sender,EventArgs e) {
 			if(RxNorms.IsRxNormTableEmpty()) {
-				MessageBox.Show("The RxNorm table in the database is empty.  If you intend to use RxNorm codes, use the button at the bottom of this window to load the RxNorm table with codes.  It will add about 10 MB to your database size.");
+				MessageBox.Show("The RxNorm table in the database is empty.  If you intend to use RxNorm codes, use the code system importer tool in the Setup>EHR menu.  It will add about 10 MB to your database size.");
 			}
 		}
 		
@@ -75,21 +75,21 @@ namespace OpenDental {
 			DialogResult=DialogResult.OK;
 		}
 
-		private void butRxNorm_Click(object sender,EventArgs e) {
-			//if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"This will ")) {
-			//	return;
-			//}
-			Cursor=Cursors.WaitCursor;
-			RxNorms.CreateFreshRxNormTableFromZip();
-			Cursor=Cursors.Default;
-			MsgBox.Show(this,"done");
-			//just making sure it worked:
-			/*
-			RxNorm rxNorm=RxNorms.GetOne(1);
-			MsgBox.Show(this,rxNorm.RxNormNum+" "+rxNorm.RxCui+" "+rxNorm.MmslCode+" "+rxNorm.Description);
-			MsgBox.Show(this,RxNorms.GetMmslCodeByRxCui("1000005")+" <-- should be 26420");
-			MsgBox.Show(this,RxNorms.GetMmslCodeByRxCui("1000002")+" <-- should be blank");*/
-		}
+		//private void butRxNorm_Click(object sender,EventArgs e) {
+		//	//if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"This will ")) {
+		//	//	return;
+		//	//}
+		//	Cursor=Cursors.WaitCursor;
+		//	RxNorms.CreateFreshRxNormTableFromZip();
+		//	Cursor=Cursors.Default;
+		//	MsgBox.Show(this,"done");
+		//	//just making sure it worked:
+		//	/*
+		//	RxNorm rxNorm=RxNorms.GetOne(1);
+		//	MsgBox.Show(this,rxNorm.RxNormNum+" "+rxNorm.RxCui+" "+rxNorm.MmslCode+" "+rxNorm.Description);
+		//	MsgBox.Show(this,RxNorms.GetMmslCodeByRxCui("1000005")+" <-- should be 26420");
+		//	MsgBox.Show(this,RxNorms.GetMmslCodeByRxCui("1000002")+" <-- should be blank");*/
+		//}
 
 		private void butNone_Click(object sender,EventArgs e) {
 			SelectedRxNorm=new RxNorm();

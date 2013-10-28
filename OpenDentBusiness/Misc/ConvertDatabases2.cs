@@ -3999,17 +3999,18 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						)";
 					Db.NonQ(command);
 				}
-				try {
-					using(StringReader reader=new StringReader(Properties.Resources.icd9)) {
-						//loop:
-						command=reader.ReadLine();
-						while(command!=null) {
-							Db.NonQ(command);
-							command=reader.ReadLine();
-						}
-					}
-				}
-				catch(Exception) { }//do nothing
+				//Removed for 13.3 release, will be using code system importer tool instead.
+				//try {
+				//	using(StringReader reader=new StringReader(Properties.Resources.icd9)) {
+				//		//loop:
+				//		command=reader.ReadLine();
+				//		while(command!=null) {
+				//			Db.NonQ(command);
+				//			command=reader.ReadLine();
+				//		}
+				//	}
+				//}
+				//catch(Exception) { }//do nothing
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS medicalorder";
 					Db.NonQ(command);

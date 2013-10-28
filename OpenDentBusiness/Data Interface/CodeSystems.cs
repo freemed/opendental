@@ -17,7 +17,11 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<CodeSystem>>(MethodBase.GetCurrentMethod());
 			}
 			//string command="SELECT * FROM codesystem WHERE CodeSystemName!='AdministrativeSex' AND CodeSystemName!='CDT'";
+#if DEBUG
+			string command="SELECT * FROM codesystem";// WHERE CodeSystemName IN ('ICD9CM','RXNORM','SNOMEDCT','CPT')";
+#else
 			string command="SELECT * FROM codesystem WHERE CodeSystemName IN ('ICD9CM','RXNORM','SNOMEDCT','CPT')";
+#endif
 			return Crud.CodeSystemCrud.SelectMany(command);
 		}
 
@@ -157,6 +161,8 @@ namespace OpenDentBusiness{
 
 		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
 		public static void ImportIcd9(string tempFileName) {
+			//Customers may have an old codeset that has a truncated uppercase description, if so we want to update with new descriptions.
+			bool IsOldDescriptions=ICD9s.IsOldDescriptions();
 			HashSet<string> codeHash=new HashSet<string>(ICD9s.GetAllCodes());
 			string[] lines=File.ReadAllLines(tempFileName);
 			string[] arrayICD9;
@@ -164,7 +170,12 @@ namespace OpenDentBusiness{
 			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
 				arrayICD9=lines[i].Split('\t');
 				if(codeHash.Contains(arrayICD9[0])) {//code already exists
-					continue;
+					if(!IsOldDescriptions) {
+						continue;//code exists and has updated description
+					}
+					string command="UPDATE icd9 SET description='"+POut.String(arrayICD9[1])+"' WHERE ICD9Code='"+POut.String(arrayICD9[0])+"'";
+					Db.NonQ(command);
+					continue;//we have updated the description of an existing code.
 				}
 				icd9.ICD9Code		=arrayICD9[0];
 				icd9.Description=arrayICD9[1];

@@ -56,47 +56,47 @@ namespace OpenDentBusiness{
 			return false;
 		}
 
-		///<summary>Deprecated. Truncates the current rxnorm and refills based on the rxnorm.zip resource.  May take a few seconds.</summary>
-		public static void CreateFreshRxNormTableFromZip() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod());
-				return;
-			}
-			MemoryStream ms=new MemoryStream();
-			using(ZipFile unzipped=ZipFile.Read(Properties.Resources.rxnorm)) {
-			  ZipEntry ze=unzipped["rxnorm.txt"];
-			  ze.Extract(ms);
-			}
-			StreamReader reader=new StreamReader(ms);
-			ms.Position=0;
-			StringBuilder command=new StringBuilder();
-			command.AppendLine("TRUNCATE TABLE rxnorm;");
-			string line;
-			if(DataConnection.DBtype==DatabaseType.MySql) {
-				while((line=reader.ReadLine())!=null) {
-					string[] lineSplit=line.Split('\t');
-					command.AppendLine("INSERT INTO rxnorm(RxCui,MmslCode,Description) VALUES('"+lineSplit[0]+"','"+lineSplit[1]+"','"+lineSplit[2]+"');");
-				}
-			}
-			else {//oracle
-				long count=0;
-				while((line=reader.ReadLine())!=null) {
-					string[] lineSplit=line.Split('\t');
-					if(count<1) {//Hardcode first insert for oracle.
-						command.AppendLine("INSERT INTO rxnorm(RxNormNum,RxCui,MmslCode,Description) "
-						+"VALUES(1,'"+lineSplit[0]+"','"+lineSplit[1]+"','"+lineSplit[2]+"');");
-					}
-					else {
-						command.AppendLine("INSERT INTO rxnorm(RxNormNum,RxCui,MmslCode,Description) "
-						+"VALUES((SELECT MAX(RxNormNum)+1 FROM rxnorm),'"+lineSplit[0]+"','"+lineSplit[1]+"','"+lineSplit[2]+"');");
-					}
-					count++;
-				}
-			}
-			Db.NonQ(command.ToString());
-			ms.Close();
-			reader.Close();
-		}
+		/////<summary>Deprecated. Truncates the current rxnorm and refills based on the rxnorm.zip resource.  May take a few seconds.</summary>
+		//public static void CreateFreshRxNormTableFromZip() {
+		//	if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+		//		Meth.GetVoid(MethodBase.GetCurrentMethod());
+		//		return;
+		//	}
+		//	MemoryStream ms=new MemoryStream();
+		//	using(ZipFile unzipped=ZipFile.Read(Properties.Resources.rxnorm)) {
+		//		ZipEntry ze=unzipped["rxnorm.txt"];
+		//		ze.Extract(ms);
+		//	}
+		//	StreamReader reader=new StreamReader(ms);
+		//	ms.Position=0;
+		//	StringBuilder command=new StringBuilder();
+		//	command.AppendLine("TRUNCATE TABLE rxnorm;");
+		//	string line;
+		//	if(DataConnection.DBtype==DatabaseType.MySql) {
+		//		while((line=reader.ReadLine())!=null) {
+		//			string[] lineSplit=line.Split('\t');
+		//			command.AppendLine("INSERT INTO rxnorm(RxCui,MmslCode,Description) VALUES('"+lineSplit[0]+"','"+lineSplit[1]+"','"+lineSplit[2]+"');");
+		//		}
+		//	}
+		//	else {//oracle
+		//		long count=0;
+		//		while((line=reader.ReadLine())!=null) {
+		//			string[] lineSplit=line.Split('\t');
+		//			if(count<1) {//Hardcode first insert for oracle.
+		//				command.AppendLine("INSERT INTO rxnorm(RxNormNum,RxCui,MmslCode,Description) "
+		//				+"VALUES(1,'"+lineSplit[0]+"','"+lineSplit[1]+"','"+lineSplit[2]+"');");
+		//			}
+		//			else {
+		//				command.AppendLine("INSERT INTO rxnorm(RxNormNum,RxCui,MmslCode,Description) "
+		//				+"VALUES((SELECT MAX(RxNormNum)+1 FROM rxnorm),'"+lineSplit[0]+"','"+lineSplit[1]+"','"+lineSplit[2]+"');");
+		//			}
+		//			count++;
+		//		}
+		//	}
+		//	Db.NonQ(command.ToString());
+		//	ms.Close();
+		//	reader.Close();
+		//}
 
 		///<summary>Never returns multums, only used for displaying after a search.</summary>
 		public static List<RxNorm> GetListByCodeOrDesc(string codeOrDesc,bool isExact,bool ignoreNumbers) {

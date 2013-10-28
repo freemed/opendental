@@ -110,8 +110,7 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static DataTable RefreshCache() {
-			//==Ryan--In the future, this will not be an actual DB table and will fill this list based on an obfuscated method in the ehr.dll library.
-			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
+			//No need to check RemotingRole, never calls db.
 			string command="SELECT * FROM ehrcode ORDER BY EhrCodeNum";//Order by is important, since combo boxes will have codes in them in the same order as this table
 			DataTable table=new DataTable("EhrCode");
 			Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
