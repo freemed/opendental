@@ -25,30 +25,63 @@ namespace OpenDental {
 		}
 
 		private void FormEhrSummaryCcdEdit_Load(object sender,EventArgs e) {
-			if(IsReconcile) {
-				labelReconcile.Visible=true;
-				butReconcileMedications.Visible=true;
-				butReconcileProblems.Visible=true;
-				butReconcileAllergies.Visible=true;
-			}
+			//if(IsReconcile) { //Cannot reconcile until version 14.1.
+			//	labelReconcile.Visible=true;
+			//	butReconcileMedications.Visible=true;
+			//	butReconcileProblems.Visible=true;
+			//	butReconcileAllergies.Visible=true;
+			//}
 			Cursor=Cursors.WaitCursor;
 			webBrowser1.Url=new Uri(StrXmlFilePath);
 			Cursor=Cursors.Default;
 		}
 
-		///<summary>Can only be called if IsReconcile is true.</summary>
+		///<summary>Can only be called if IsReconcile is true.  This function is for EHR module b.4.</summary>
 		private void butReconcileMedications_Click(object sender,EventArgs e) {
-			//TODO: This function is for EHR module b.4.  Create and call the new medications reconcile window (FormReconcileMedication) using the medication information contained within the CCD XML text located in the file StrXmlFilePath.  A public static function must be created in EhrCCD to parse the medications out of the CCD XML, similar to EhrCCD.GetCCDpat().
+			XmlDocument xmlDocCcd=new XmlDocument();
+			try {
+				string strXmlText=File.ReadAllText(StrXmlFilePath);
+				xmlDocCcd.LoadXml(strXmlText);				
+			}
+			catch(Exception ex) {
+				MessageBox.Show(Lan.g(this,"Error reading file")+": "+ex.Message);
+				return;
+			}
+			FormReconcileMedication formRM=new FormReconcileMedication();
+			formRM.ListMedicationNew=EhrCCD.GetListMedications(xmlDocCcd);
+			formRM.ShowDialog();
 		}
 
-		///<summary>Can only be called if IsReconcile is true.</summary>
+		///<summary>Can only be called if IsReconcile is true.  This function is for EHR module b.4.</summary>
 		private void butReconcileProblems_Click(object sender,EventArgs e) {
-			//TODO: This function is for EHR module b.4.  Create and call the new problems reconcile window (FormReconcileProblem) using the problem information contained within the CCD XML text located in the file StrXmlFilePath.  A public static function must be created in EhrCCD to parse the problems out of the CCD XML, similar to EhrCCD.GetCCDpat().
+			XmlDocument xmlDocCcd=new XmlDocument();
+			try {
+				string strXmlText=File.ReadAllText(StrXmlFilePath);
+				xmlDocCcd.LoadXml(strXmlText);
+			}
+			catch(Exception ex) {
+				MessageBox.Show(Lan.g(this,"Error reading file")+": "+ex.Message);
+				return;
+			}
+			FormReconcileProblem formRP=new FormReconcileProblem();
+			formRP.ListProblemNew=EhrCCD.GetListDiseases(xmlDocCcd);
+			formRP.ShowDialog();
 		}
 
-		///<summary>Can only be called if IsReconcile is true.</summary>
+		///<summary>Can only be called if IsReconcile is true.  This function is for EHR module b.4.</summary>
 		private void butReconcileAllergies_Click(object sender,EventArgs e) {
-			//TODO: This function is for EHR module b.4.  Create and call the new allergies reconcile window (FormReconcileAllergy) using the allergy information contained within the CCD XML text located in the file StrXmlFilePath.  A public static function must be created in EhrCCD to parse the allergies out of the CCD XML, similar to EhrCCD.GetCCDpat().
+			XmlDocument xmlDocCcd=new XmlDocument();
+			try {
+				string strXmlText=File.ReadAllText(StrXmlFilePath);
+				xmlDocCcd.LoadXml(strXmlText);
+			}
+			catch(Exception ex) {
+				MessageBox.Show(Lan.g(this,"Error reading file")+": "+ex.Message);
+				return;
+			}
+			FormReconcileAllergy formRA=new FormReconcileAllergy();
+			formRA.ListAllergyNew=EhrCCD.GetListAllergies(xmlDocCcd);
+			formRA.ShowDialog();
 		}
 
 		private void butShowXml_Click(object sender,EventArgs e) {

@@ -14,6 +14,13 @@ using System.Xml.XPath;
 namespace OpenDentBusiness {
 	public class EhrCCD {
 
+		private const string strCodeSystemSnomed="2.16.840.1.113883.6.96";
+		private const string strCodeSystemNameSnomed="SNOMED CT";
+		private const string strCodeSystemRxNorm="2.16.840.1.113883.6.88";
+		private const string strCodeSystemNameRxNorm="RxNorm";
+		private const string strCodeSystemLoinc="2.16.840.1.113883.6.1";
+		private const string strCodeSystemNameLoinc="LOINC";
+
 		public static string GenerateCCD(Patient pat) {
 			Medications.Refresh();
 			XmlWriterSettings xmlSettings=new XmlWriterSettings();
@@ -59,8 +66,8 @@ namespace OpenDentBusiness {
 				w.WriteEndElement();
 				w.WriteStartElement("code");
 				w.WriteAttributeString("code","34133-9");
-				w.WriteAttributeString("codeSystemName","LOINC");
-				w.WriteAttributeString("codeSystem","2.16.840.1.113883.6.1");
+				w.WriteAttributeString("codeSystemName",strCodeSystemNameLoinc);
+				w.WriteAttributeString("codeSystem",strCodeSystemLoinc);
 				w.WriteAttributeString("displayName","Summary of episode note");
 				w.WriteEndElement();
 				w.WriteElementString("title","Continuity of Care Document");
@@ -204,7 +211,7 @@ Problems
 				TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.3.6","IHE PCC");
 				TemplateId(w,"2.16.840.1.113883.10.20.1.11","HL7 CCD");//problem section template id, according to pages 103-104 of CCD-final.pdf
 				w.WriteComment("Problems section template");
-				StartAndEnd(w,"code","code","11450-4","codeSystem","2.16.840.1.113883.6.1","codeSystemName","LOINC","displayName","Problem list");
+				StartAndEnd(w,"code","code","11450-4","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Problem list");
 				w.WriteElementString("title","Problems");
 				w.WriteStartElement("text");//The following text will be parsed as html with a style sheet to be human readable.
 				w.WriteStartElement("table");
@@ -331,7 +338,7 @@ Allergies
 				TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.3.13","IHE PCC");
 				TemplateId(w,"2.16.840.1.113883.10.20.1.2","HL7 CCD");//alerts section template id, according to pages 103-104 of CCD-final.pdf
 				w.WriteComment("Allergies/Reactions section template");
-				StartAndEnd(w,"code","code","48765-2","codeSystem","2.16.840.1.113883.6.1","codeSystemName","LOINC","displayName","Allergies");
+				StartAndEnd(w,"code","code","48765-2","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Allergies");
 				w.WriteStartElement("title");
 				w.WriteString("Allergies and Adverse Reactions");
 				w.WriteEndElement();
@@ -412,7 +419,7 @@ Allergies
 					TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.4.5","IHE PCC");
 					TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.4.6","IHE PCC");
 					StartAndEnd(w,"id","root","4adc1020-7b14-11db-9fe1-0800200c9a66");//line 388 in POCD_HD000040.xls
-					StartAndEnd(w,"code","code","416098002","codeSystem","2.16.840.1.113883.6.96","displayName","drug allergy","codeSystemName","SNOMED CT");//line 389 in POCD_HD000040.xls
+					StartAndEnd(w,"code","code","416098002","codeSystem",strCodeSystemSnomed,"displayName","drug allergy","codeSystemName",strCodeSystemNameSnomed);//line 389 in POCD_HD000040.xls
 					Start(w,"text");//line 392 in POCD_HD000040.xls
 					StartAndEnd(w,"reference","value","#ALGSUMMARY_1");
 					End(w,"text");
@@ -424,8 +431,8 @@ Allergies
 					//IHE/PCC expects to see that information in <value> and HITSP/C32 expects to see it in <participant>.
 					Start(w,"value");//line 398 in POCD_HD000040.xls
 					w.WriteAttributeString("xsi","type",null,"CD");
-					Attribs(w,"code",med.RxCui.ToString(),"codeSystem","2.16.840.1.113883.6.88");
-					Attribs(w,"displayName",med.MedName,"codeSystemName","RxNorm");
+					Attribs(w,"code",med.RxCui.ToString(),"codeSystem",strCodeSystemRxNorm);
+					Attribs(w,"displayName",med.MedName,"codeSystemName",strCodeSystemNameRxNorm);
 					Start(w,"originalText");
 					StartAndEnd(w,"reference","value","#ALGSUB_1");
 					End(w,"originalText");
@@ -436,8 +443,8 @@ Allergies
 					StartAndEnd(w,"telecom");//line 304 in POCD_HD000040.xls?
 					//TODO: Missing playingentitychoice element?
 					Start(w,"playingEntity","classCode","MMAT");//line 312 in POCD_HD000040.xls?
-					Start(w,"code","code","70618","codeSystem","2.16.840.1.113883.6.88");
-					Attribs(w,"displayName",med.MedName,"codeSystemName","RxNorm");
+					Start(w,"code","code","70618","codeSystem",strCodeSystemRxNorm);
+					Attribs(w,"displayName",med.MedName,"codeSystemName",strCodeSystemNameRxNorm);
 					Start(w,"originalText");
 					StartAndEnd(w,"reference","value","#ALGSUB_1");
 					End(w,"originalText");
@@ -465,8 +472,7 @@ Medications
 				TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.3.19","IHE PCC");
 				TemplateId(w,"2.16.840.1.113883.10.20.1.8","HL7 CCD");//medications section template id, according to pages 103-104 of CCD-final.pdf
 				w.WriteComment("Medications section template");
-				StartAndEnd(w,"code","code","10160-0","codeSystem","2.16.840.1.113883.6.1","codeSystemName","LOINC",
-					"displayName","History of medication use");
+				StartAndEnd(w,"code","code","10160-0","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","History of medication use");
 				w.WriteElementString("title","Medications");
 				w.WriteStartElement("text");//The following text will be parsed as html with a style sheet to be human readable.
 				w.WriteStartElement("table");
@@ -581,8 +587,7 @@ Medications
 					TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.4.7.2","IHE PCC");
 					w.WriteComment("Product template");
 					Start(w,"manufacturedMaterial");
-					Start(w,"code","code",rxCui.ToString(),"codeSystem","2.16.840.1.113883.6.88",
-						"displayName",strMedName,"codeSystemName","RxNorm");
+					Start(w,"code","code",rxCui.ToString(),"codeSystem",strCodeSystemRxNorm,"displayName",strMedName,"codeSystemName",strCodeSystemNameRxNorm);
 					Start(w,"originalText");
 					w.WriteString(strMedName);
 					StartAndEnd(w,"reference");
@@ -607,8 +612,7 @@ Laboratory Test Results
 				TemplateId(w,"2.16.840.1.113883.3.88.11.83.122","HITSP/C83");
 				TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.3.28","IHE PCC");
 				w.WriteComment("Diagnostic Results section template");
-				StartAndEnd(w,"code","code","30954-2","codeSystem","2.16.840.1.113883.6.1","codeSystemName","LOINC",
-					"displayName","Results");
+				StartAndEnd(w,"code","code","30954-2","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Results");
 				w.WriteElementString("title","Diagnostic Results");
 				w.WriteStartElement("text");//The following text will be parsed as html with a style sheet to be human readable.
 				w.WriteStartElement("table");
@@ -663,8 +667,7 @@ Laboratory Test Results
 					StartAndEnd(w,"templateId","root","2.16.840.1.113883.10.20.1.32");//no authority name
 					w.WriteComment("Result organizer template");
 					StartAndEnd(w,"id","root","7d5a02b0-67a4-11db-bd13-0800200c9a66");
-					StartAndEnd(w,"code","code",labPanel.ServiceId,
-						"codeSystem","2.16.840.1.113883.6.96","displayName",labPanel.ServiceName);
+					StartAndEnd(w,"code","code",labPanel.ServiceId,"codeSystem",strCodeSystemSnomed,"displayName",labPanel.ServiceName);
 					StartAndEnd(w,"statusCode","code","completed");
 					StartAndEnd(w,"effectiveTime","value",listLabResult[i].DateTimeTest.ToString("yyyyMMddHHmm"));
 					Start(w,"component");
@@ -673,8 +676,7 @@ Laboratory Test Results
 					TemplateId(w,"2.16.840.1.113883.10.20.1.29","CCD");//procedure activity template id, according to pages 103-104 of CCD-final.pdf
 					TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.4.19","IHE PCC");
 					StartAndEnd(w,"id");
-					Start(w,"code","code",labPanel.ServiceId,
-						"codeSystem","2.16.840.1.113883.6.96","displayName",labPanel.ServiceName);
+					Start(w,"code","code",labPanel.ServiceId,"codeSystem",strCodeSystemSnomed,"displayName",labPanel.ServiceName);
 					Start(w,"originalText");
 					w.WriteString(labPanel.ServiceName);
 					StartAndEnd(w,"reference","value","Ptr to text  in parent Section");
@@ -695,8 +697,7 @@ Laboratory Test Results
 					TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.4.13","IHE PCC");
 					w.WriteComment("Result observation template");
 					StartAndEnd(w,"id","root","107c2dc0-67a5-11db-bd13-0800200c9a66");
-					StartAndEnd(w,"code","code",listLabResult[i].TestID,
-						"codeSystem","2.16.840.1.113883.6.1","displayName",listLabResult[i].TestName);
+					StartAndEnd(w,"code","code",listLabResult[i].TestID,"codeSystem",strCodeSystemLoinc,"displayName",listLabResult[i].TestName);
 					Start(w,"text");
 					StartAndEnd(w,"reference","value","PtrToValueInsectionText");
 					End(w,"text");
@@ -776,17 +777,10 @@ Laboratory Test Results
 			return false;
 		}
 
-		///<summary>Returns the PatNum for the unique patient who matches the patient name and birthdate within the CCD message strXmlCCD.
+		///<summary>Returns the PatNum for the unique patient who matches the patient name and birthdate within the CCD document xmlDocCcd.
 		///Returns 0 if there are no patient matches.  Returns the first match if there are multiple matches (unlikely).</summary>
-		public static long GetCCDpat(string strXmlCCD) {
-			XmlDocument doc=new XmlDocument();
-			try {
-				doc.LoadXml(strXmlCCD);
-			}
-			catch {
-				throw new XmlException("Invalid XML");
-			}
-			XmlNodeList xmlNodeList=doc.GetElementsByTagName("patient");//According to the CCD documentation, there should be one patient node, or no patient node.
+		public static long GetCCDpat(XmlDocument xmlDocCcd) {
+			XmlNodeList xmlNodeList=xmlDocCcd.GetElementsByTagName("patient");//According to the CCD documentation, there should be one patient node, or no patient node.
 			if(xmlNodeList.Count==0) {
 				return 0;//No patient node, therefore no patient to match.
 			}
@@ -836,6 +830,27 @@ Laboratory Test Results
 				return 0;
 			}
 			return Patients.GetPatNumByNameAndBirthday(lName,fName,birthDate);
+		}
+
+		///<summary>Returns the list of medications found within the CCD document xmlDocCcd.  Does NOT insert the medications into the db.</summary>
+		public static List<Medication> GetListMedications(XmlDocument xmlDocCcd) {
+			List<Medication> listMedications=new List<Medication>();
+			//TODO:
+			return listMedications;
+		}
+
+		///<summary>Returns the list of diseases/problems found within the CCD document xmlDocCcd.  Does NOT insert the diseases into the db.</summary>
+		public static List<Disease> GetListDiseases(XmlDocument xmlDocCcd) {
+			List<Disease> listDiseases=new List<Disease>();
+			//TODO:
+			return listDiseases;
+		}
+
+		///<summary>Returns the list of allergies found within the CCD document xmlDocCcd.  Does NOT insert the allergies into the db.</summary>
+		public static List<Allergy> GetListAllergies(XmlDocument xmlDocCcd) {
+			List<Allergy> listAllergies=new List<Allergy>();
+			//TODO:
+			return listAllergies;
 		}
 
 		public static bool IsCcdEmailAttachment(EmailAttach emailAttach) {

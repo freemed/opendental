@@ -13,6 +13,7 @@ using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml;
 using OpenDentBusiness;
 using CodeBase;
 
@@ -602,7 +603,14 @@ namespace OpenDentBusiness{
 					string strAttachText=File.ReadAllText(strAttachFile);
 					if(EhrCCD.IsCCD(strAttachText)) {
 						if(emailMessage.PatNum==0) {
-							emailMessage.PatNum=EhrCCD.GetCCDpat(strAttachText);// A match is not guaranteed, which is why we have a button to allow the user to change the patient.
+							try {
+								XmlDocument xmlDocCcd=new XmlDocument();
+								xmlDocCcd.LoadXml(strAttachText);
+								emailMessage.PatNum=EhrCCD.GetCCDpat(xmlDocCcd);// A match is not guaranteed, which is why we have a button to allow the user to change the patient.
+							}
+							catch {
+								//Invalid XML.  Cannot match patient.
+							}
 						}
 						ehrSummaryCcd=new EhrSummaryCcd();
 						ehrSummaryCcd.ContentSummary=strAttachText;
