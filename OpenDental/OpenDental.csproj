@@ -376,6 +376,18 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormReconcileAllergies.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormReconcileAllergies.designer.cs">
+      <DependentUpon>FormReconcileAllergies.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormReconcileProblems.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormReconcileProblems.designer.cs">
+      <DependentUpon>FormReconcileProblems.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormEhrEduBrowser.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3206,6 +3218,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormReconcileAllergies.resx">
+      <DependentUpon>FormReconcileAllergies.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormReconcileProblems.resx">
+      <DependentUpon>FormReconcileProblems.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormCpts.resx">
       <DependentUpon>FormCpts.cs</DependentUpon>
