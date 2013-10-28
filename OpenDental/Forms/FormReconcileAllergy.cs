@@ -8,9 +8,9 @@ using System.Windows.Forms;
 using OpenDentBusiness;
 
 namespace OpenDental {
-	public partial class FormReconcileProblems:Form {
-		public List<DiseaseDef> AllergyListNew;
-		public FormReconcileProblems() {
+	public partial class FormReconcileAllergy:Form {
+		public List<Allergy> ListAllergyNew;
+		public FormReconcileAllergy() {
 			InitializeComponent();
 			Lan.F(this);
 		}

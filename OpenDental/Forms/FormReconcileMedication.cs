@@ -10,7 +10,7 @@ using OpenDental.UI;
 
 namespace OpenDental {
 	public partial class FormReconcileMedication:Form {
-		public List<Medication> MedicationListNew;
+		public List<Medication> ListMedicationNew;
 		public Patient PatCur;
 		private Bitmap BitmapOriginal;
 		private List<EhrMeasureEvent> ehrMeasureEventsList;

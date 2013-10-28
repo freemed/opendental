@@ -121,11 +121,14 @@ namespace OpenDental{
 			this.button1.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.button1.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.button1.CornerRadius = 4F;
-			this.button1.Image = global::OpenDental.Properties.Resources.Add;
-			this.button1.Location = new System.Drawing.Point(649, 379);
+			this.button1.Image = global::OpenDental.Properties.Resources.down;
+			this.button1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.button1.Location = new System.Drawing.Point(636, 379);
 			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(38, 24);
+			this.button1.Size = new System.Drawing.Size(51, 24);
 			this.button1.TabIndex = 79;
+			this.button1.Text = "Add";
+			this.button1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// button2
 			// 
@@ -135,11 +138,14 @@ namespace OpenDental{
 			this.button2.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.button2.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.button2.CornerRadius = 4F;
-			this.button2.Image = global::OpenDental.Properties.Resources.Add;
-			this.button2.Location = new System.Drawing.Point(193, 379);
+			this.button2.Image = global::OpenDental.Properties.Resources.down;
+			this.button2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.button2.Location = new System.Drawing.Point(180, 379);
 			this.button2.Name = "button2";
-			this.button2.Size = new System.Drawing.Size(38, 24);
+			this.button2.Size = new System.Drawing.Size(51, 24);
 			this.button2.TabIndex = 80;
+			this.button2.Text = "Add";
+			this.button2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// button3
 			// 

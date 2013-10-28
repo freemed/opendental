@@ -1,5 +1,5 @@
 namespace OpenDental{
-	partial class FormReconcileProblems {
+	partial class FormReconcileProblem {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -29,7 +29,7 @@ namespace OpenDental{
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(725, 534);
-			this.Name = "FormReconcileProblems";
+			this.Name = "FormReconcileProblem";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.ResumeLayout(false);
 
