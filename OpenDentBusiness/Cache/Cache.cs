@@ -112,9 +112,6 @@ namespace OpenDentBusiness {
 			if(itypes.Contains((int)InvalidType.DisplayFields) || isAll) {
 				ds.Tables.Add(DisplayFields.RefreshCache());
 			}
-			if(itypes.Contains((int)InvalidType.EhrCodes) || isAll) {
-				ds.Tables.Add(EhrCodes.RefreshCache());
-			}
 			if(itypes.Contains((int)InvalidType.ElectIDs) || isAll) {
 				ds.Tables.Add(ElectIDs.RefreshCache());
 			}
@@ -305,9 +302,6 @@ namespace OpenDentBusiness {
 			}
 			if(itypes.Contains((int)InvalidType.DisplayFields) || isAll) {
 				DisplayFields.FillCache(ds.Tables["DisplayField"]);
-			}
-			if(itypes.Contains((int)InvalidType.EhrCodes) || isAll) {
-				EhrCodes.FillCache(ds.Tables["EhrCode"]);
 			}
 			if(itypes.Contains((int)InvalidType.ElectIDs) || isAll) {
 				ElectIDs.FillCache(ds.Tables["ElectID"]);

@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 
 namespace OpenDentBusiness{
-	///<summary></summary>
+	///<summary>Never insert or update, use cache pattern only.  This is not referencing a real table in the database, it is a static object filled by the contents of the EHR.dll.</summary>
 	public class EhrCodes{
 		#region CachePattern
 		//Atypical cache pattern. Cache is only filled when we have access to the EHR.dll file, otherwise listt will be an empty list of EHR codes (not null, just empty as if the table were there but with no codes in it.)
@@ -109,17 +109,6 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static DataTable RefreshCache() {
-			//No need to check RemotingRole, never calls db.
-			string command="SELECT * FROM ehrcode ORDER BY EhrCodeNum";//Order by is important, since combo boxes will have codes in them in the same order as this table
-			DataTable table=new DataTable("EhrCode");
-			Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
-			table.TableName="EhrCode";
-			FillCache(table);
-			return table;
-		}
-
-		///<summary></summary>
 		public static void FillCache(DataTable table){
 			//No need to check RemotingRole; no call to db.
 			listt=Crud.EhrCodeCrud.TableToList(table);
@@ -163,6 +152,10 @@ namespace OpenDentBusiness{
 			return retval;
 		}
 
+
+		/*
+		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
+
 		///<summary></summary>
 		public static List<string> GetValueSetFromCodeAndCategory(string codeValue,string codeSystem,string category) {
 			List<string> retval=new List<string>();
@@ -174,15 +167,6 @@ namespace OpenDentBusiness{
 			return retval;
 		}
 
-		///<summary></summary>
-		public static long Insert(EhrCode ehrCode) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				ehrCode.EhrCodeNum=Meth.GetLong(MethodBase.GetCurrentMethod(),ehrCode);
-				return ehrCode.EhrCodeNum;
-			}
-			return Crud.EhrCodeCrud.Insert(ehrCode);
-		}
-
 		///<summary>Used for adding codes, returns a hashset of codevalue+valuesetoid.</summary>
 		public static HashSet<string> GetAllCodesHashSet() {
 			HashSet<string> retVal=new HashSet<string>();
@@ -191,10 +175,7 @@ namespace OpenDentBusiness{
 			}
 			return retVal;
 		}
-
-		/*
-		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
-
+		 * 
 		///<summary></summary>
 		public static List<EhrCode> Refresh(long patNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -202,6 +183,15 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT * FROM ehrcode WHERE PatNum = "+POut.Long(patNum);
 			return Crud.EhrCodeCrud.SelectMany(command);
+		}
+
+		///<summary></summary>
+		public static long Insert(EhrCode ehrCode) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				ehrCode.EhrCodeNum=Meth.GetLong(MethodBase.GetCurrentMethod(),ehrCode);
+				return ehrCode.EhrCodeNum;
+			}
+			return Crud.EhrCodeCrud.Insert(ehrCode);
 		}
 
 		///<summary>Gets one EhrCode from the db.</summary>

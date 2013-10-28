@@ -287,9 +287,7 @@ namespace OpenDentBusiness{
 		DictCustoms,
 		///<summary>55. Caches the wiki master page and the wikiListHeaderWidths</summary>
 		Wiki,
-		///<summary>56</summary>
-		EhrCodes,
-		///<summary>57. SourceOfPayment</summary>
+		///<summary>56. SourceOfPayment</summary>
 		Sops
 	}
 	//<summary></summary>

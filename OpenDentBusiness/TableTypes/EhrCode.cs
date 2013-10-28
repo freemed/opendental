@@ -1,8 +1,9 @@
 ﻿using System;
 
 namespace OpenDentBusiness {
-	///<summary>For EHR module, these are all the codes from various code sets that will affect reporting clinical quality measures.  Users cannot edit.</summary>
+	///<summary>For EHR module, these are all the codes from various code sets that will affect reporting clinical quality measures.  Users cannot edit.  This is not an actual table in the database.  The codes are loaded from the EHR.dll, so it is a static object, no inserts/updates.  Selecting from this 'table' will always use the cache pattern.</summary>
 	[Serializable]
+	[CrudTable(IsMissingInGeneral=true)]
 	public class EhrCode:TableBase {
 		///<summary>Primary key.</summary>
 		[CrudColumn(IsPriKey=true)]
