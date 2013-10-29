@@ -412,7 +412,17 @@ namespace OpenDentBusiness{
 			string domain=strEmailAddress.Substring(strEmailAddress.IndexOf("@")+1);//For example, if ToAddress is ehr@opendental.com, then this will be opendental.com
 			Health.Direct.Agent.DirectAgent directAgent=(Health.Direct.Agent.DirectAgent)HashDirectAgents[domain];
 			if(directAgent==null) {
-				directAgent=new Health.Direct.Agent.DirectAgent(domain);
+				try {
+					directAgent=new Health.Direct.Agent.DirectAgent(domain);
+				}
+				catch(Exception ex) {
+					if(ex.Message.Contains("cannot find the file specified")) {//A typical exception when the 3 required certificate stores needed for Direct have not been created on one particular client machine.
+						Health.Direct.Common.Certificates.SystemX509Store.OpenAnchorEdit().Dispose();//Create the NHINDAnchor certificate store if it does not already exist on the local machine.
+						Health.Direct.Common.Certificates.SystemX509Store.OpenExternalEdit().Dispose();//Create the NHINDExternal certificate store if it does not already exist on the local machine.
+						Health.Direct.Common.Certificates.SystemX509Store.OpenPrivateEdit().Dispose();//Create the NHINDPrivate certificate store if it does not already exist on the local machine.
+						directAgent=new Health.Direct.Agent.DirectAgent(domain);
+					}
+				}
 				directAgent.EncryptMessages=true;
 				HashDirectAgents[domain]=directAgent;
 			}
