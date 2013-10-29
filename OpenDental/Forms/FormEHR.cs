@@ -411,7 +411,7 @@ namespace OpenDental {
 					return FormEhrMeasures.ProvKeyIsValid(lName,fName,hasReportAccess,provKey);
 				#else
 					contructObjFormEhrMeasuresHelper();
-					Type type=AssemblyEHR.GetType("Ehr.FormEhrMeasures");//namespace.class
+					Type type=AssemblyEHR.GetType("EHR.FormEhrMeasures");//namespace.class
 					object[] args=new object[] { lName,fName,hasReportAccess,provKey };
 					return (bool)type.InvokeMember("ProvKeyIsValid",System.Reflection.BindingFlags.InvokeMethod,null,ObjFormEhrMeasures,args);
 				#endif
