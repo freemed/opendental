@@ -91,6 +91,7 @@ namespace OpenDental{
 			this.label2.TabIndex = 40;
 			this.label2.Text = "Open Dental URL";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.label2.Visible = false;
 			// 
 			// buttonGetURL
 			// 
@@ -101,6 +102,7 @@ namespace OpenDental{
 			this.buttonGetURL.TabIndex = 41;
 			this.buttonGetURL.Text = "Get URL";
 			this.buttonGetURL.UseVisualStyleBackColor = true;
+			this.buttonGetURL.Visible = false;
 			this.buttonGetURL.Click += new System.EventHandler(this.buttonGetURL_Click);
 			// 
 			// label3
@@ -112,6 +114,7 @@ namespace OpenDental{
 			this.label3.Text = "Only used when Open Dental is hosting your patient portal.  \r\nThis is the URL tha" +
     "t patients need to use to access their portal OR this is the URL to which any re" +
     "directs need to point.";
+			this.label3.Visible = false;
 			// 
 			// textOpenDentalURl
 			// 
@@ -121,6 +124,7 @@ namespace OpenDental{
 			this.textOpenDentalURl.Name = "textOpenDentalURl";
 			this.textOpenDentalURl.Size = new System.Drawing.Size(480, 20);
 			this.textOpenDentalURl.TabIndex = 43;
+			this.textOpenDentalURl.Visible = false;
 			// 
 			// FormPatientPortalSetup
 			// 
