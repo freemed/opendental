@@ -722,8 +722,10 @@ namespace OpenDentBusiness{
 		private static Health.Direct.Common.Mail.Message ConvertEmailMessageToMessage(EmailMessage emailMessage,bool hasAttachments) {
 			//We need to use emailAddressFrom.Username instead of emailAddressFrom.SenderAddress, because of how strict encryption is for matching the name to the certificate.
 			Health.Direct.Common.Mail.Message message=new Health.Direct.Common.Mail.Message(emailMessage.ToAddress,emailMessage.FromAddress);
-			Health.Direct.Common.Mime.Header headerSubject=new Health.Direct.Common.Mime.Header("Subject",emailMessage.Subject);
-			message.Headers.Add(headerSubject);
+			if(emailMessage.Subject!="") {
+				Health.Direct.Common.Mime.Header headerSubject=new Health.Direct.Common.Mime.Header("Subject",emailMessage.Subject);
+				message.Headers.Add(headerSubject);
+			}
 			string strBoundry="";
 			List<Health.Direct.Common.Mime.MimeEntity> listMimeParts=new List<Health.Direct.Common.Mime.MimeEntity>();
 			if(emailMessage.BodyText.Trim().Length>4 && emailMessage.BodyText.Trim().StartsWith("--") && emailMessage.BodyText.Trim().EndsWith("--")) {//The body text is multi-part.
