@@ -111,33 +111,19 @@ namespace OpenDental {
 		}
 
 		private void butSendEmail_Click(object sender,EventArgs e) {
+			RecordRequestAndProvide();
 			Cursor=Cursors.WaitCursor;
-			EmailAddress emailAddressFrom=EmailAddresses.GetByClinic(0);//Default for clinic/practice.
-			EmailMessage emailMessage=new EmailMessage();
-			emailMessage.PatNum=PatCur.PatNum;
-			emailMessage.MsgDateTime=DateTime.Now;
-			emailMessage.SentOrReceived=EmailSentOrReceived.Neither;//To force FormEmailMessageEdit into "compose" mode.
-			emailMessage.FromAddress=emailAddressFrom.EmailUsername;//Cannot be emailAddressFrom.SenderAddress, because it would cause encryption to fail.
-			emailMessage.ToAddress=PatCur.Email;
-			emailMessage.Subject="Electronic Copy of Health Information";
-			emailMessage.BodyText="Electronic Copy of Health Information";
-			string strCCD=EhrCCD.GenerateCCD(PatCur);
+			string ccd=EhrCCD.GenerateCCD(PatCur);
 			try {
-				EmailMessages.CreateAttachmentFromText(emailMessage,strCCD,"ccd.xml");
-				EmailMessages.CreateAttachmentFromText(emailMessage,EHR.Properties.Resources.CCD,"ccd.xsl");
+				EmailMessages.SendTestUnsecure("Electronic Copy of Health Information","ccd.xml",ccd,"ccd.xsl",EHR.Properties.Resources.CCD);
 			}
 			catch(Exception ex) {
 				Cursor=Cursors.Default;
 				MessageBox.Show(ex.Message);
 				return;
 			}
-			EmailMessages.Insert(emailMessage);
-			FormEmailMessageEdit formE=new FormEmailMessageEdit(emailMessage);
-			if(formE.ShowDialog()==DialogResult.OK) {
-				RecordRequestAndProvide();
-				FillGrid();
-			}
 			Cursor=Cursors.Default;
+			MessageBox.Show("Sent");
 		}
 
 		private void butShowXhtml_Click(object sender,EventArgs e) {

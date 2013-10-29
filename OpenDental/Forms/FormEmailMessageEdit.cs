@@ -62,7 +62,6 @@ namespace OpenDental{
 		private Label label5;
 		private WebBrowser webBrowser;
 		private UI.Button butEncryptAndSend;
-		private UI.Button butSummaryOfCare;
 		///<summary>Used when attaching to get AtoZ folder, and when sending to get Clinic.</summary>
 		private Patient PatCur;
 
@@ -131,7 +130,6 @@ namespace OpenDental{
 			this.textBodyText = new OpenDental.ODtextBox();
 			this.butSend = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.butSummaryOfCare = new OpenDental.UI.Button();
 			this.panelTemplates.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -516,25 +514,10 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// butSummaryOfCare
-			// 
-			this.butSummaryOfCare.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butSummaryOfCare.Autosize = true;
-			this.butSummaryOfCare.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSummaryOfCare.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butSummaryOfCare.CornerRadius = 4F;
-			this.butSummaryOfCare.Location = new System.Drawing.Point(690, 0);
-			this.butSummaryOfCare.Name = "butSummaryOfCare";
-			this.butSummaryOfCare.Size = new System.Drawing.Size(100, 20);
-			this.butSummaryOfCare.TabIndex = 36;
-			this.butSummaryOfCare.Text = "Summary Of Care";
-			this.butSummaryOfCare.Click += new System.EventHandler(this.butSummaryOfCare_Click);
-			// 
 			// FormEmailMessageEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.ClientSize = new System.Drawing.Size(941, 672);
-			this.Controls.Add(this.butSummaryOfCare);
 			this.Controls.Add(this.butEncryptAndSend);
 			this.Controls.Add(this.webBrowser);
 			this.Controls.Add(this.textSentOrReceived);
@@ -589,7 +572,6 @@ namespace OpenDental{
 				textMsgDateTime.Text=MessageCur.MsgDateTime.ToString();
 				textMsgDateTime.ForeColor=Color.Black;
 				butAttach.Enabled=false;
-				butSummaryOfCare.Enabled=false;
 				butEncryptAndSend.Enabled=false;//not allowed to send again.
 				butSend.Enabled=false;//not allowed to send again.
 				butSave.Enabled=false;//not allowed to save changes.
@@ -756,24 +738,6 @@ namespace OpenDental{
 				MessageBox.Show(ex.Message);
 			}
 			FillAttachments();
-		}
-
-		private void butSummaryOfCare_Click(object sender,EventArgs e) {
-			Cursor=Cursors.WaitCursor;
-			if(EhrCCD.HasCcdEmailAttachment(MessageCur)) {
-				Cursor=Cursors.Default;
-				MsgBox.Show(this,"A summary of care is already attached to this email message.");
-				return;
-			}
-			string strCCD=EhrCCD.GenerateCCD(PatCur);
-			try {
-				EmailMessages.CreateAttachmentFromText(MessageCur,strCCD,"ccd.xml");
-			}
-			catch(Exception ex) {
-				MessageBox.Show(ex.Message);
-			}
-			FillAttachments();
-			Cursor=Cursors.Default;
 		}
 
 		private void contextMenuAttachments_Popup(object sender,EventArgs e) {
@@ -991,9 +955,8 @@ namespace OpenDental{
 				return;
 			}
 			if(EhrCCD.HasCcdEmailAttachment(MessageCur)) {
-				if(!MsgBox.Show(this,true,"There is a summary of care attachment which may contain sensitive patient data.  If you continue, the sent email will not be secure.  Continue?")) {
-					return;
-				}
+				MsgBox.Show(this,"The email has a summary of care attachment which may contain sensitive patient data.  Use the Encrypt and Send button instead.");
+				return;
 			}
 			EmailAddress emailAddress=GetEmailAddress();
 			if(emailAddress.SMTPserver==""){
