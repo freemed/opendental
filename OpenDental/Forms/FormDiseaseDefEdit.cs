@@ -237,7 +237,7 @@ namespace OpenDental{
 			this.Name = "FormDiseaseDefEdit";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Edit Disease";
+			this.Text = "Problem Def Edit";
 			this.Load += new System.EventHandler(this.FormDiseaseDefEdit_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
