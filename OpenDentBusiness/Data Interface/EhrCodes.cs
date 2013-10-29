@@ -49,10 +49,10 @@ namespace OpenDentBusiness{
 		/// <summary>If the CodeValue of the EhrCode exists in its respective code table (I.e. Snomed, Loinc, Cpt, etc.) this will set ExistsInDbTable=true otherwise false.</summary>
 		private static void updateCodeExistsHelper() {
 			if(listt.Count==0){
-				return;//
+				return;
 			}
 			//Cache lists of codes.
-			//HashSet<string> cdcrecHS	= new HashSet<string>(Cdcrecs.GetAllCodes());//all CDCREC codes should always be inserted into DB via ConvertDB3
+			HashSet<string> cdcrecHS	= new HashSet<string>(Cdcrecs				.GetAllCodes());
 			HashSet<string> cdtHS			= new HashSet<string>(ProcedureCodes.GetAllCodes());
 			HashSet<string> cptHS			= new HashSet<string>(Cpts					.GetAllCodes());
 			HashSet<string> cvxHS			= new HashSet<string>(Cvxs					.GetAllCodes());
@@ -68,8 +68,8 @@ namespace OpenDentBusiness{
 					case "AdministrativeSex"://always "in DB", even though there is no DB table 
 						listt[i].ExistsInDbTable=true;
 						break;
-					case "CDCREC"://always in DB
-						listt[i].ExistsInDbTable=true;
+					case "CDCREC":
+						listt[i].ExistsInDbTable=cdcrecHS.Contains(listt[i].CodeValue);
 						break;
 					case "CDT":
 						listt[i].ExistsInDbTable=cdtHS.Contains(listt[i].CodeValue);

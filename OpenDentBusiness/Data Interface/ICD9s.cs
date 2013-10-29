@@ -199,10 +199,10 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetBool(MethodBase.GetCurrentMethod());
 			}
-			if(DataConnection.DBtype==DatabaseType.MySql) {
+			if(DataConnection.DBtype!=DatabaseType.MySql) {
 				return false;
 			}
-			string command=@"SELECT COUNT(*) FROM icd9 WHERE (description COLLATE utf8_bin) LIKE (UPPER(description) COLLATE utf8_bin);";//count rows that are all caps
+			string command=@"SELECT COUNT(*) FROM icd9 WHERE BINARY description = UPPER(description)";//count rows that are all caps
 			if(PIn.Int(Db.GetScalar(command))>10000) {//"Normal" DB should have 4, might be more if hand entered, over 10k means it is the old import.
 				return true;
 			}

@@ -105,6 +105,7 @@ namespace OpenDental {
 				if(!PreDownloadHelper(ListCodeSystems[gridMain.SelectedIndices[i]].CodeSystemName)){
 					continue;
 				}
+				#region import CPT codes
 				if(ListCodeSystems[gridMain.SelectedIndices[i]].CodeSystemName=="CPT") {
 					try {
 						importCPTHelper();
@@ -117,6 +118,7 @@ namespace OpenDental {
 					}
 					continue;
 				}
+				#endregion
 				try {
 					Thread.Sleep(1000);
 					if(requestCodeSystemDownloadHelper(ListCodeSystems[gridMain.SelectedIndices[i]].CodeSystemName)) {//can throw exceptions
