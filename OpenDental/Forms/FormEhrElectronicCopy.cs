@@ -94,6 +94,7 @@ namespace OpenDental {
 
 		private void butExport_Click(object sender,EventArgs e) {
 			FolderBrowserDialog dlg=new FolderBrowserDialog();
+			dlg.SelectedPath=ImageStore.GetPatientFolder(PatCur,ImageStore.GetPreferredAtoZpath());//Default to patient image folder.
 			DialogResult result=dlg.ShowDialog();
 			if(result!=DialogResult.OK) {
 				return;
