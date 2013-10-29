@@ -46,19 +46,24 @@ namespace OpenDental {
 		public FormEHR() {
 			InitializeComponent();
 			if(PrefC.GetBoolSilent(PrefName.ShowFeatureEhr,false)) {
-				string dllPathEHR=ODFileUtils.CombinePaths(Application.StartupPath,"EHR.dll");
-				#if EHRTEST
-					ObjFormEhrMeasures=new FormEhrMeasures();
-				#else
-					ObjFormEhrMeasures=null;
-					AssemblyEHR=null;
-					if(File.Exists(dllPathEHR)) {//EHR.dll is available, so load it up
-						AssemblyEHR=Assembly.LoadFile(dllPathEHR);
-						Type type=AssemblyEHR.GetType("EHR.FormEhrMeasures");//namespace.class
-						ObjFormEhrMeasures=Activator.CreateInstance(type);
-					}
-				#endif
+				contructObjFormEhrMeasuresHelper();
 			}
+		}
+
+		///<summary>Constructs the ObjFormEhrMeasures fro use with late binding.</summary>
+		private static void contructObjFormEhrMeasuresHelper() {
+			#if EHRTEST
+				ObjFormEhrMeasures=new FormEhrMeasures();
+			#else
+				string dllPathEHR=ODFileUtils.CombinePaths(Application.StartupPath,"EHR.dll");
+				ObjFormEhrMeasures=null;
+				AssemblyEHR=null;
+				if(File.Exists(dllPathEHR)) {//EHR.dll is available, so load it up
+					AssemblyEHR=Assembly.LoadFile(dllPathEHR);
+					Type type=AssemblyEHR.GetType("EHR.FormEhrMeasures");//namespace.class
+					ObjFormEhrMeasures=Activator.CreateInstance(type);
+				}
+			#endif
 		}
 
 		private void FormEHR_Load(object sender,EventArgs e) {
@@ -405,6 +410,7 @@ namespace OpenDental {
 				#if EHRTEST //This pattern allows the code to compile without having the EHR code available.
 					return FormEhrMeasures.ProvKeyIsValid(lName,fName,hasReportAccess,provKey);
 				#else
+					contructObjFormEhrMeasuresHelper();
 					Type type=AssemblyEHR.GetType("Ehr.FormEhrMeasures");//namespace.class
 					object[] args=new object[] { lName,fName,hasReportAccess,provKey };
 					return (bool)type.InvokeMember("ProvKeyIsValid",System.Reflection.BindingFlags.InvokeMethod,null,ObjFormEhrMeasures,args);
@@ -420,6 +426,7 @@ namespace OpenDental {
 				#if EHRTEST //This pattern allows the code to compile without having the EHR code available.
 					return FormEhrMeasures.QuarterlyKeyIsValid(year,quarter,practiceTitle,qkey);
 				#else
+					contructObjFormEhrMeasuresHelper();
 					Type type=AssemblyEHR.GetType("EHR.FormEhrMeasures");//namespace.class
 					object[] args=new object[] { year,quarter,practiceTitle,qkey };
 					return (bool)type.InvokeMember("QuarterlyKeyIsValid",System.Reflection.BindingFlags.InvokeMethod,null,ObjFormEhrMeasures,args);
