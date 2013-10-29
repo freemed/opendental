@@ -55,7 +55,7 @@ namespace OpenDentBusiness.Crud{
 				ehrCode.Description    = PIn.String(table.Rows[i]["Description"].ToString());
 				ehrCode.CodeSystem     = PIn.String(table.Rows[i]["CodeSystem"].ToString());
 				ehrCode.CodeSystemOID  = PIn.String(table.Rows[i]["CodeSystemOID"].ToString());
-				ehrCode.ExistsInDbTable= PIn.Bool  (table.Rows[i]["ExistsInDbTable"].ToString());
+				ehrCode.IsInDb= PIn.Bool  (table.Rows[i]["IsInDb"].ToString());
 				retVal.Add(ehrCode);
 			}
 			return retVal;
@@ -96,7 +96,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="EhrCodeNum,";
 			}
-			command+="MeasureIds,ValueSetName,ValueSetOID,QDMCategory,CodeValue,Description,CodeSystem,CodeSystemOID,ExistsInDbTable) VALUES(";
+			command+="MeasureIds,ValueSetName,ValueSetOID,QDMCategory,CodeValue,Description,CodeSystem,CodeSystemOID,IsInDb) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(ehrCode.EhrCodeNum)+",";
 			}
@@ -109,7 +109,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(ehrCode.Description)+"',"
 				+"'"+POut.String(ehrCode.CodeSystem)+"',"
 				+"'"+POut.String(ehrCode.CodeSystemOID)+"',"
-				+    POut.Bool  (ehrCode.ExistsInDbTable)+")";
+				+    POut.Bool  (ehrCode.IsInDb)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -130,7 +130,7 @@ namespace OpenDentBusiness.Crud{
 				+"Description    = '"+POut.String(ehrCode.Description)+"', "
 				+"CodeSystem     = '"+POut.String(ehrCode.CodeSystem)+"', "
 				+"CodeSystemOID  = '"+POut.String(ehrCode.CodeSystemOID)+"', "
-				+"ExistsInDbTable=  "+POut.Bool  (ehrCode.ExistsInDbTable)+" "
+				+"IsInDb=  "+POut.Bool  (ehrCode.IsInDb)+" "
 				+"WHERE EhrCodeNum = "+POut.Long(ehrCode.EhrCodeNum);
 			Db.NonQ(command);
 		}
@@ -170,9 +170,9 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="CodeSystemOID = '"+POut.String(ehrCode.CodeSystemOID)+"'";
 			}
-			if(ehrCode.ExistsInDbTable != oldEhrCode.ExistsInDbTable) {
+			if(ehrCode.IsInDb != oldEhrCode.IsInDb) {
 				if(command!=""){ command+=",";}
-				command+="ExistsInDbTable = "+POut.Bool(ehrCode.ExistsInDbTable)+"";
+				command+="IsInDb = "+POut.Bool(ehrCode.IsInDb)+"";
 			}
 			if(command==""){
 				return;

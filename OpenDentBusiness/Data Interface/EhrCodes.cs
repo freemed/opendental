@@ -46,7 +46,7 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		/// <summary>If the CodeValue of the EhrCode exists in its respective code table (I.e. Snomed, Loinc, Cpt, etc.) this will set ExistsInDbTable=true otherwise false.</summary>
+		/// <summary>If the CodeValue of the EhrCode exists in its respective code table (I.e. Snomed, Loinc, Cpt, etc.) this will set IsInDb=true otherwise false.</summary>
 		private static void updateCodeExistsHelper() {
 			if(listt.Count==0){
 				return;
@@ -66,40 +66,40 @@ namespace OpenDentBusiness{
 			for(int i=0;i<listt.Count;i++) {
 				switch(listt[i].CodeSystem) {
 					case "AdministrativeSex"://always "in DB", even though there is no DB table 
-						listt[i].ExistsInDbTable=true;
+						listt[i].IsInDb=true;
 						break;
 					case "CDCREC":
-						listt[i].ExistsInDbTable=cdcrecHS.Contains(listt[i].CodeValue);
+						listt[i].IsInDb=cdcrecHS.Contains(listt[i].CodeValue);
 						break;
 					case "CDT":
-						listt[i].ExistsInDbTable=cdtHS.Contains(listt[i].CodeValue);
+						listt[i].IsInDb=cdtHS.Contains(listt[i].CodeValue);
 						break;
 					case "CPT":
-						listt[i].ExistsInDbTable=cptHS.Contains(listt[i].CodeValue);
+						listt[i].IsInDb=cptHS.Contains(listt[i].CodeValue);
 						break;
 					case "CVX":
-						listt[i].ExistsInDbTable=cvxHS.Contains(listt[i].CodeValue);
+						listt[i].IsInDb=cvxHS.Contains(listt[i].CodeValue);
 						break;
 					case "HCPCS":
-						listt[i].ExistsInDbTable=hcpcsHS.Contains(listt[i].CodeValue);
+						listt[i].IsInDb=hcpcsHS.Contains(listt[i].CodeValue);
 						break;
 					case "ICD9CM":
-						listt[i].ExistsInDbTable=icd9HS.Contains(listt[i].CodeValue);
+						listt[i].IsInDb=icd9HS.Contains(listt[i].CodeValue);
 						break;
 					case "ICD10CM":
-						listt[i].ExistsInDbTable=icd10HS.Contains(listt[i].CodeValue);
+						listt[i].IsInDb=icd10HS.Contains(listt[i].CodeValue);
 						break;
 					case "LOINC":
-						listt[i].ExistsInDbTable=loincHS.Contains(listt[i].CodeValue);
+						listt[i].IsInDb=loincHS.Contains(listt[i].CodeValue);
 						break;
 					case "RXNORM":
-						listt[i].ExistsInDbTable=rxnormHS.Contains(listt[i].CodeValue);
+						listt[i].IsInDb=rxnormHS.Contains(listt[i].CodeValue);
 						break;
 					case "SNOMEDCT":
-						listt[i].ExistsInDbTable=snomedHS.Contains(listt[i].CodeValue);
+						listt[i].IsInDb=snomedHS.Contains(listt[i].CodeValue);
 						break;
 					case "SOP":
-						listt[i].ExistsInDbTable=sopHS.Contains(listt[i].CodeValue);
+						listt[i].IsInDb=sopHS.Contains(listt[i].CodeValue);
 						break;
 				}
 			}
@@ -139,10 +139,10 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Returns a list of EhrCode objects that belong to one of the value sets identified by the ValueSetOIDs supplied AND only those codes that exist in the corresponding table in the database.</summary>
-		public static List<EhrCode> GetForValueSetOIDs(List<string> listValueSetOIDs,bool ifExistsInDb) {
+		public static List<EhrCode> GetForValueSetOIDs(List<string> listValueSetOIDs,bool usingIsInDb) {
 			List<EhrCode> retval=new List<EhrCode>();
 			for(int i=0;i<Listt.Count;i++) {
-				if(ifExistsInDb && !Listt[i].ExistsInDbTable) {
+				if(usingIsInDb && !Listt[i].IsInDb) {
 					continue;
 				}
 				if(listValueSetOIDs.Contains(Listt[i].ValueSetOID)) {					

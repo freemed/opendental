@@ -25,7 +25,7 @@ namespace OpenDentBusiness {
 		///<summary>The code system object identifier for reporting CQM.  Example: 2.16.840.1.113883.6.103.</summary>
 		public string CodeSystemOID;
 		///<summary>This is true if the code is in the corresponding table identified by CodeSystem.</summary>
-		public bool ExistsInDbTable;
+		public bool IsInDb;
 
 
 		///<summary></summary>
