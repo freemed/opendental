@@ -420,7 +420,10 @@ namespace OpenDentBusiness{
 						Health.Direct.Common.Certificates.SystemX509Store.OpenAnchorEdit().Dispose();//Create the NHINDAnchor certificate store if it does not already exist on the local machine.
 						Health.Direct.Common.Certificates.SystemX509Store.OpenExternalEdit().Dispose();//Create the NHINDExternal certificate store if it does not already exist on the local machine.
 						Health.Direct.Common.Certificates.SystemX509Store.OpenPrivateEdit().Dispose();//Create the NHINDPrivate certificate store if it does not already exist on the local machine.
-						directAgent=new Health.Direct.Agent.DirectAgent(domain);
+						directAgent=new Health.Direct.Agent.DirectAgent(domain);//Try again.
+					}
+					else {
+						throw ex;
 					}
 				}
 				directAgent.EncryptMessages=true;
