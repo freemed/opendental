@@ -146,6 +146,7 @@ namespace OpenDentBusiness{
 					PatientRace pr=new PatientRace();
 					pr.PatNum=patNum;
 					pr.Race=listPatRaces[i];
+					pr.CdcrecCode=Cdcrecs.GetByPatRace(listPatRaces[i]);
 					Crud.PatientRaceCrud.Insert(pr);
 				}
 				//next PatRace

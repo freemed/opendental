@@ -90,6 +90,37 @@ namespace OpenDentBusiness{
 			DataCore.NonQ(command);
 		}
 
+		public static string GetByPatRace(PatRace patRace) {
+			string retval="";
+			switch(patRace) {
+				case PatRace.AfricanAmerican:
+					retval="2054-5";//R3 BLACK OR AFRICAN AMERICAN
+					break;
+				case PatRace.AmericanIndian:
+					retval="1002-5";//R1 AMERICAN INDIAN OR ALASKA NATIVE
+					break;
+				case PatRace.Asian:
+					retval="2028-9";//R2 ASIAN
+					break;
+				case PatRace.HawaiiOrPacIsland:
+					retval="2076-8";//R4 NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER
+					break;
+				case PatRace.Hispanic:
+					retval="2135-2";//E1 HISPANIC OR LATINO
+					break;
+				case PatRace.NotHispanic:
+					retval="2186-5";//E2 NOT HISPANIC OR LATINO
+					break;
+				case PatRace.Other:
+					retval="2131-1";//R9 OTHER RACE
+					break;
+				case PatRace.White:
+					retval="2106-3";//R5 WHITE
+					break;
+			}
+			return retval;
+		}
+
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 
@@ -120,6 +151,7 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 		*/
+
 
 
 
