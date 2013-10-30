@@ -23,6 +23,17 @@ namespace OpenDentBusiness{
 			return Crud.MedicationPatCrud.SelectMany(command);
 		}
 
+		///<summary>This is only used in FormReconcileMedication.  Gets all active medpats except those with a DateStop of todays date.</summary>
+		public static List<MedicationPat> GetMedPatsForReconcile(long patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<MedicationPat>>(MethodBase.GetCurrentMethod(),patNum);
+			}
+			string command ="SELECT * FROM medicationpat WHERE PatNum = "+POut.Long(patNum)
+					+" AND (DateStop < "+POut.Date(new DateTime(1880,1,1))//include all the meds that are not discontinued.
+					+" OR DateStop > CURDATE())";//Show medications that are a future stopdate.
+			return Crud.MedicationPatCrud.SelectMany(command);
+		}
+
 		///<summary></summary>
 		public static MedicationPat GetOne(long medicationPatNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

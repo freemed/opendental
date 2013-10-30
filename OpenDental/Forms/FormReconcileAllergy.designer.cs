@@ -25,7 +25,7 @@ namespace OpenDental{
 		private void InitializeComponent() {
 			this.SuspendLayout();
 			// 
-			// ReconcileAllergies
+			// FormReconcileAllergy
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(725, 534);
