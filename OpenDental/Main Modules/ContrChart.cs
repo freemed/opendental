@@ -9009,7 +9009,7 @@ namespace OpenDental{
 			//Fill progress notes with only desired rows to be printed, then print.
 			FillProgNotes();
 			if(gridProg.Rows.Count==0) {
-				MessageBox.Show(this,Lan.g(this,"No completed procedures or notes on")+" "+showDateStart.ToShortDateString()+Lan.g(this," to print")+".");
+				MsgBox.Show(this,"No completed procedures or notes to print");
 			}
 			else{
 				try {
