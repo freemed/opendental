@@ -9008,17 +9008,22 @@ namespace OpenDental{
 			chartCustViewChanged=true;//custom view will not reset the check boxes so we force it true.
 			//Fill progress notes with only desired rows to be printed, then print.
 			FillProgNotes();
-			try {
-				pagesPrinted=0;
-				headingPrinted=false;
-				#if DEBUG
-					PrintDay(true);
-				#else
-					PrintDay(false);
-				#endif
+			if(gridProg.Rows.Count==0) {
+				MessageBox.Show(this,Lan.g(this,"No completed procedures or notes on")+" "+showDateStart.ToShortDateString()+Lan.g(this," to print")+".");
 			}
-			catch {
+			else{
+				try {
+					pagesPrinted=0;
+					headingPrinted=false;
+					#if DEBUG
+						PrintDay(true);
+					#else
+						PrintDay(false);
+					#endif
+				}
+				catch {
 
+				}
 			}
 			//Set Date values and checkboxes back to original values, then refill progress notes.
 			//hospitalDate=DateTime.MinValue;
