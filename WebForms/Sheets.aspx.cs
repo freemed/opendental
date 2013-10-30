@@ -4,16 +4,18 @@
 /// The integration with Visual Studio can be flakey. So a few cycles of install/uninstall/restart may be needed. I've also tried the non-install options of adding dlls but they don't seem to work in the few attempts that I made.
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Drawing.Text;
+using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.Collections;
-using System.Drawing.Text;
-using System.Globalization;
+using System.Xml;
 using OpenDentBusiness;
 
 namespace WebForms {
@@ -511,7 +513,15 @@ namespace WebForms {
 					TextBox tbox=((TextBox)c);
 					if(tbox.Text.Trim()!="") {
 						string FieldName=tbox.ID;
-						FormValuesHashTable.Add(FieldName,tbox.Text.Trim());
+						char[] charArr=tbox.Text.Trim().ToCharArray();
+						StringBuilder sb=new StringBuilder();
+						for(int i=0;i<charArr.Length;i++) {
+							if(XmlConvert.IsXmlChar(charArr[i])) {
+								sb.Append(charArr[i]);
+							}
+						}
+						FormValuesHashTable.Add(FieldName,sb.ToString());
+						//FormValuesHashTable.Add(FieldName,tbox.Text.Trim());
 					}
 				}
 				if(c.GetType()==typeof(RadioButtonList)) {
