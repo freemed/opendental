@@ -2494,6 +2494,9 @@ namespace OpenDental{
 
 		private void menuEmail_Popup(object sender,EventArgs e) {
 			menuEmail.MenuItems.Clear();
+			//todo: permissions required here? what about verifying the provider who is clicking this button?
+			//removing the webmail button for 13.3 build. will implement correctly for 13.4
+			//menuEmail.MenuItems.Add(new MenuItem(Lan.g(this,"Secure WebMail to Patient"),menuWebMail_Click));
 			MenuItem menuItem;
 			menuItem=new MenuItem(Lan.g(this,"Referrals:"));
 			menuItem.Tag=null;
@@ -2521,6 +2524,12 @@ namespace OpenDental{
 				menuItem.Tag=refer;
 				menuEmail.MenuItems.Add(menuItem);
 			}
+		}
+
+		private void menuWebMail_Click(object sender,System.EventArgs e) {
+			FormWebMailMessageEdit FormWMME=new FormWebMailMessageEdit();
+			FormWMME.PatCur=Patients.GetPat(CurPatNum);
+			FormWMME.ShowDialog();
 		}
 
 		private void menuEmail_Click(object sender,System.EventArgs e) {

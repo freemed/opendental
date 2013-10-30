@@ -9,27 +9,25 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class FormWebMailMessageEdit:Form {
-		public EmailMessage EmailMessageCur;
-		public bool IsNew;
-
+		public Patient PatCur;
+		
 		public FormWebMailMessageEdit() {
 			InitializeComponent();
 			Lan.F(this);
 		}
 
 		private void FormWebMailMessageEdit_Load(object sender,EventArgs e) {
-			textToAddress.Text=EmailMessageCur.ToAddress;
-			textFromAddress.Text=EmailMessageCur.FromAddress;
-			textBodyText.Text=EmailMessageCur.BodyText;
-			if(IsNew) {
-				butOK.Text="Send";
+			if(PatCur==null) {
+				MsgBox.Show(this,"Select a valid patient");
+				DialogResult=DialogResult.Cancel;
+				return;
 			}
-			else {
-				butTo.Visible=false;
-				butFrom.Visible=false;
-				textFromAddress.ReadOnly=true;
-				textFromAddress.BackColor=SystemColors.Control;
-				textBodyText.ReadOnly=true;
+			textToAddress.Text=PatCur.GetNameFL();
+			textFromAddress.Text=Providers.GetFormalName(PatCur.PriProv);
+			if(textFromAddress.Text=="") {
+				MsgBox.Show(this,"Invalid primary provider for this patient");
+				DialogResult=DialogResult.Cancel;
+				return;
 			}
 		}
 
@@ -39,9 +37,8 @@ namespace OpenDental {
 			if(FormP.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			Patient pat=Patients.GetPat(FormP.SelectedPatNum);
-			EmailMessageCur.ToAddress=pat.GetNameLF();
-			textToAddress.Text=EmailMessageCur.ToAddress;
+			PatCur=Patients.GetPat(FormP.SelectedPatNum);
+			textToAddress.Text=PatCur.GetNameLF();
 		}
 
 		private void butFrom_Click(object sender,EventArgs e) {
@@ -50,14 +47,28 @@ namespace OpenDental {
 			if(FormP.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			EmailMessageCur.FromAddress=Providers.GetFormalName(FormP.SelectedProvNum);
-			textFromAddress.Text=EmailMessageCur.FromAddress;
+			textFromAddress.Text=Providers.GetFormalName(FormP.SelectedProvNum);
 		}
 
-		private void butOK_Click(object sender,EventArgs e) {
-			EmailMessageCur.BodyText=textBodyText.Text;
-			EmailMessageCur.SentOrReceived=EmailSentOrReceived.WebMailSent;
-			EmailMessages.Insert(EmailMessageCur);
+		private void butSend_Click(object sender,EventArgs e) {
+			if(textBodyText.Text=="") {
+				MsgBox.Show(this,"Email body is empty");
+				return;
+			}
+			if(textSubject.Text=="") {
+				MsgBox.Show(this,"Enter a subject");
+				textSubject.Focus();
+				return;
+			}
+			EmailMessage emailMessage=new EmailMessage();
+			emailMessage.FromAddress=textFromAddress.Text;
+			emailMessage.ToAddress=textToAddress.Text;
+			emailMessage.PatNum=PatCur.PatNum;
+			emailMessage.Subject=textSubject.Text;
+			emailMessage.BodyText=textBodyText.Text;
+			emailMessage.MsgDateTime=DateTime.Now;
+			emailMessage.SentOrReceived=EmailSentOrReceived.WebMailSent;
+			EmailMessages.Insert(emailMessage);
 			DialogResult=DialogResult.OK;
 		}
 

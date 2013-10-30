@@ -29,10 +29,10 @@ namespace OpenDental{
 			this.label3 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.textBodyText = new OpenDental.ODtextBox();
-			this.butFrom = new OpenDental.UI.Button();
-			this.butTo = new OpenDental.UI.Button();
-			this.butOK = new OpenDental.UI.Button();
+			this.butSend = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.textSubject = new System.Windows.Forms.TextBox();
+			this.label4 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// textToAddress
@@ -56,6 +56,7 @@ namespace OpenDental{
 			// 
 			this.textFromAddress.Location = new System.Drawing.Point(96, 51);
 			this.textFromAddress.Name = "textFromAddress";
+			this.textFromAddress.ReadOnly = true;
 			this.textFromAddress.Size = new System.Drawing.Size(328, 20);
 			this.textFromAddress.TabIndex = 12;
 			// 
@@ -70,7 +71,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(3, 95);
+			this.label2.Location = new System.Drawing.Point(3, 112);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(92, 14);
 			this.label2.TabIndex = 13;
@@ -84,56 +85,28 @@ namespace OpenDental{
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.textBodyText.DetectUrls = false;
-			this.textBodyText.Location = new System.Drawing.Point(96, 90);
+			this.textBodyText.Location = new System.Drawing.Point(96, 112);
 			this.textBodyText.Name = "textBodyText";
 			this.textBodyText.QuickPasteType = OpenDentBusiness.QuickPasteType.Email;
 			this.textBodyText.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-			this.textBodyText.Size = new System.Drawing.Size(647, 537);
+			this.textBodyText.Size = new System.Drawing.Size(657, 372);
 			this.textBodyText.TabIndex = 14;
 			this.textBodyText.Text = "";
 			// 
-			// butFrom
+			// butSend
 			// 
-			this.butFrom.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butFrom.Autosize = true;
-			this.butFrom.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butFrom.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butFrom.CornerRadius = 4F;
-			this.butFrom.Location = new System.Drawing.Point(430, 48);
-			this.butFrom.Name = "butFrom";
-			this.butFrom.Size = new System.Drawing.Size(20, 24);
-			this.butFrom.TabIndex = 3;
-			this.butFrom.Text = "...";
-			this.butFrom.Click += new System.EventHandler(this.butFrom_Click);
-			// 
-			// butTo
-			// 
-			this.butTo.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butTo.Autosize = true;
-			this.butTo.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butTo.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butTo.CornerRadius = 4F;
-			this.butTo.Location = new System.Drawing.Point(430, 22);
-			this.butTo.Name = "butTo";
-			this.butTo.Size = new System.Drawing.Size(20, 24);
-			this.butTo.TabIndex = 3;
-			this.butTo.Text = "...";
-			this.butTo.Click += new System.EventHandler(this.butTo_Click);
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(700, 687);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75, 24);
-			this.butOK.TabIndex = 3;
-			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			this.butSend.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butSend.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butSend.Autosize = true;
+			this.butSend.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSend.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSend.CornerRadius = 4F;
+			this.butSend.Location = new System.Drawing.Point(597, 496);
+			this.butSend.Name = "butSend";
+			this.butSend.Size = new System.Drawing.Size(75, 24);
+			this.butSend.TabIndex = 3;
+			this.butSend.Text = "&Send";
+			this.butSend.Click += new System.EventHandler(this.butSend_Click);
 			// 
 			// butCancel
 			// 
@@ -143,26 +116,44 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(700, 728);
+			this.butCancel.Location = new System.Drawing.Point(678, 496);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// textSubject
+			// 
+			this.textSubject.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.textSubject.Location = new System.Drawing.Point(96, 84);
+			this.textSubject.Name = "textSubject";
+			this.textSubject.Size = new System.Drawing.Size(657, 20);
+			this.textSubject.TabIndex = 15;
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(3, 88);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(92, 14);
+			this.label4.TabIndex = 16;
+			this.label4.Text = "Subject:";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormWebMailMessageEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(800, 779);
+			this.ClientSize = new System.Drawing.Size(778, 529);
+			this.Controls.Add(this.textSubject);
+			this.Controls.Add(this.label4);
 			this.Controls.Add(this.textBodyText);
 			this.Controls.Add(this.textFromAddress);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.textToAddress);
 			this.Controls.Add(this.label1);
-			this.Controls.Add(this.butFrom);
-			this.Controls.Add(this.butTo);
-			this.Controls.Add(this.butOK);
+			this.Controls.Add(this.butSend);
 			this.Controls.Add(this.butCancel);
 			this.Name = "FormWebMailMessageEdit";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -175,15 +166,15 @@ namespace OpenDental{
 
 		#endregion
 
-		private OpenDental.UI.Button butOK;
+		private OpenDental.UI.Button butSend;
 		private OpenDental.UI.Button butCancel;
 		private System.Windows.Forms.TextBox textToAddress;
 		private System.Windows.Forms.Label label1;
-		private UI.Button butTo;
 		private System.Windows.Forms.TextBox textFromAddress;
 		private System.Windows.Forms.Label label3;
-		private UI.Button butFrom;
 		private ODtextBox textBodyText;
 		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.TextBox textSubject;
+		private System.Windows.Forms.Label label4;
 	}
 }
