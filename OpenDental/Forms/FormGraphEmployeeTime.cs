@@ -318,8 +318,8 @@ namespace OpenDental {
 				}
 				//build the display string for this hover bucket
 				List<Employee> listEmps=null;
-				TimeSpan tsStart=new TimeSpan(5,(i*30),0);
-				toolTip.ToolTipTitle=tsStart.ToShortTimeString()+" - "+tsStart.Add(TimeSpan.FromMinutes(30)).ToShortTimeString();
+				TimeSpan tsStart=new TimeSpan(5,(i*15),0);
+				toolTip.ToolTipTitle=tsStart.ToShortTimeString()+" - "+tsStart.Add(TimeSpan.FromMinutes(15)).ToShortTimeString();
 				string employees="";
 				if(DictEmployeesPerBucket.TryGetValue(i,out listEmps)) {
 					toolTip.ToolTipTitle=toolTip.ToolTipTitle+" ("+listEmps.Count.ToString()+" Techs)";
