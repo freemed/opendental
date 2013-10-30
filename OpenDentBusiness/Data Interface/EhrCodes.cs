@@ -145,11 +145,54 @@ namespace OpenDentBusiness{
 				if(usingIsInDb && !Listt[i].IsInDb) {
 					continue;
 				}
-				if(listValueSetOIDs.Contains(Listt[i].ValueSetOID)) {					
+				if(listValueSetOIDs.Contains(Listt[i].ValueSetOID)) {
 					retval.Add(Listt[i]);
 				}
 			}
 			return retval;
+		}
+
+		///<summary>Returns a dictionary of CodeValue,CodeSystem pairs of all codes that belong to every ValueSetOID sent in the incoming list as long as the code exists in the corresponding table in the database.</summary>
+		public static Dictionary<string,string> GetCodesExistingInAllSets(List<string> listValueSetOIDs) {
+			Dictionary<string,string> retval=new Dictionary<string,string>();
+			Dictionary<string,int> codecount=new Dictionary<string,int>();
+			for(int i=0;i<Listt.Count;i++) {
+				if(!Listt[i].IsInDb) {
+					continue;
+				}
+				for(int j=0;j<listValueSetOIDs.Count;j++) {
+					if(Listt[i].ValueSetOID!=listValueSetOIDs[j]) {
+						continue;
+					}
+					string keyCur=Listt[i].CodeValue+","+Listt[i].CodeSystem;
+					if(codecount.ContainsKey(keyCur)) {
+						codecount[keyCur]++;//code already in list, increase find count
+					}
+					else {
+						codecount.Add(keyCur,1);//new find
+					}
+				}
+			}
+			foreach(KeyValuePair<string,int> kpairCur in codecount) {
+				string[] codeValueSystem=kpairCur.Key.Split(new string[] { "," },StringSplitOptions.RemoveEmptyEntries);
+				if(retval.ContainsKey(codeValueSystem[0])) {
+					continue;
+				}
+				if(kpairCur.Value==listValueSetOIDs.Count) {
+					retval.Add(codeValueSystem[0],codeValueSystem[1]);
+				}
+			}
+			return retval;
+		}
+
+		public static List<string> GetValueSetOIDsForCode(string codeValue,string codeSystem) {
+			string retval="";
+			for(int i=0;i<Listt.Count;i++) {
+				if(Listt[i].CodeValue==codeValue && Listt[i].CodeSystem==codeSystem) {
+					//if(retval.Contains(Listt[i].Me
+				}
+			}
+			return null;
 		}
 
 

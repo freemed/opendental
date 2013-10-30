@@ -11,7 +11,7 @@ namespace OpenDentBusiness {
 		private static DiseaseDef[] listLong;
 		private static DiseaseDef[] list;
 
-		///<summary>A list of all Diseases.</summary>
+		///<summary>A list of all DiseaseDefs.</summary>
 		public static DiseaseDef[] ListLong{
 			//No need to check RemotingRole; no call to db.
 			get {
@@ -363,30 +363,20 @@ namespace OpenDentBusiness {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<DiseaseDef>>(MethodBase.GetCurrentMethod());
 			}
-			string command="SELECT CodeValue,CodeSystem FROM (SELECT CodeValue,CodeSystem,GROUP_CONCAT(DISTINCT MeasureIds) AS Measures "
-				+"FROM ehrcode WHERE ValueSetOID IN('2.16.840.1.113883.3.600.1.1623', "//measure 69, smaller list
-				+"'2.16.840.1.113883.3.526.3.378') "//measures 155,165, bigger list
-				+"GROUP BY CodeValue) A "
-				+"WHERE A.Measures LIKE '%69%' AND A.Measures LIKE '%155%' AND A.Measures LIKE '%165%'";
-			DataTable tableAllPregCodesForCQMs=Db.GetTable(command);
+			Dictionary<string,string> listAllPregCodesForCQMs=EhrCodes.GetCodesExistingInAllSets(new List<string> { "2.16.840.1.113883.3.600.1.1623","2.16.840.1.113883.3.526.3.378" });
 			List<DiseaseDef> retval=new List<DiseaseDef>();
 			for(int i=0;i<ListLong.Length;i++) {
-				for(int j=0;j<tableAllPregCodesForCQMs.Rows.Count;j++) {
-					if(tableAllPregCodesForCQMs.Rows[j]["CodeSystem"].ToString()=="ICD9CM") {//if preg code is an ICD9CM code, compare against diseasedef.ICD9Code column
-						if(ListLong[i].ICD9Code==tableAllPregCodesForCQMs.Rows[j]["CodeValue"].ToString()) {
-							retval.Add(ListLong[i]);
-						}
-					}
-					else if(tableAllPregCodesForCQMs.Rows[j]["CodeSystem"].ToString()=="ICD10CM") {
-						if(ListLong[i].Icd10Code==tableAllPregCodesForCQMs.Rows[j]["CodeValue"].ToString()) {
-							retval.Add(ListLong[i]);
-						}
-					}
-					else if(tableAllPregCodesForCQMs.Rows[j]["CodeSystem"].ToString()=="SNOMEDCT") {
-						if(ListLong[i].SnomedCode==tableAllPregCodesForCQMs.Rows[j]["CodeValue"].ToString()) {
-							retval.Add(ListLong[i]);
-						}
-					}
+				if(listAllPregCodesForCQMs.ContainsKey(ListLong[i].ICD9Code) && listAllPregCodesForCQMs[ListLong[i].ICD9Code]=="ICD9CM") {
+					retval.Add(ListLong[i]);
+					continue;
+				}
+				if(listAllPregCodesForCQMs.ContainsKey(ListLong[i].Icd10Code) && listAllPregCodesForCQMs[ListLong[i].Icd10Code]=="ICD10CM") {
+					retval.Add(ListLong[i]);
+					continue;
+				}
+				if(listAllPregCodesForCQMs.ContainsKey(ListLong[i].SnomedCode) && listAllPregCodesForCQMs[ListLong[i].SnomedCode]=="SNOMEDCT") {
+					retval.Add(ListLong[i]);
+					continue;
 				}
 			}
 			return retval;

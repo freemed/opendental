@@ -241,6 +241,14 @@ namespace OpenDentBusiness{
 			return Crud.MedicationCrud.SelectMany(command);
 		}
 
+		public static Medication GetMedicationFromDbByRxCui(long rxcui) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Medication>(MethodBase.GetCurrentMethod(),rxcui);
+			}
+			string command="SELECT * FROM medication WHERE RxCui="+POut.Long(rxcui);
+			return Crud.MedicationCrud.SelectOne(command);
+		}
+
 
 	}
 

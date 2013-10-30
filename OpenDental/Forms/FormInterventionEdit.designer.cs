@@ -38,14 +38,14 @@ namespace OpenDental{
 			// 
 			// textDate
 			// 
-			this.textDate.Location = new System.Drawing.Point(90, 12);
+			this.textDate.Location = new System.Drawing.Point(90, 14);
 			this.textDate.Name = "textDate";
 			this.textDate.Size = new System.Drawing.Size(125, 20);
 			this.textDate.TabIndex = 143;
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(9, 14);
+			this.label5.Location = new System.Drawing.Point(9, 16);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(78, 17);
 			this.label5.TabIndex = 144;
@@ -56,7 +56,7 @@ namespace OpenDental{
 			// 
 			this.label6.Location = new System.Drawing.Point(12, 441);
 			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(95, 17);
+			this.label6.Size = new System.Drawing.Size(78, 17);
 			this.label6.TabIndex = 152;
 			this.label6.Text = "Note";
 			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -97,9 +97,9 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(229, 12);
+			this.label1.Location = new System.Drawing.Point(229, 14);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(83, 17);
+			this.label1.Size = new System.Drawing.Size(78, 17);
 			this.label1.TabIndex = 157;
 			this.label1.Text = "Code Set";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -108,10 +108,10 @@ namespace OpenDental{
 			// 
 			this.comboCodeSet.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboCodeSet.DropDownWidth = 125;
-			this.comboCodeSet.Location = new System.Drawing.Point(315, 10);
+			this.comboCodeSet.Location = new System.Drawing.Point(310, 12);
 			this.comboCodeSet.MaxDropDownItems = 30;
 			this.comboCodeSet.Name = "comboCodeSet";
-			this.comboCodeSet.Size = new System.Drawing.Size(125, 21);
+			this.comboCodeSet.Size = new System.Drawing.Size(180, 21);
 			this.comboCodeSet.TabIndex = 156;
 			this.comboCodeSet.SelectionChangeCommitted += new System.EventHandler(this.comboCodeSet_SelectionChangeCommitted);
 			// 
@@ -131,11 +131,11 @@ namespace OpenDental{
 			// 
 			this.textNote.AcceptsTab = true;
 			this.textNote.DetectUrls = false;
-			this.textNote.Location = new System.Drawing.Point(110, 439);
+			this.textNote.Location = new System.Drawing.Point(90, 439);
 			this.textNote.Name = "textNote";
 			this.textNote.QuickPasteType = OpenDentBusiness.QuickPasteType.None;
 			this.textNote.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-			this.textNote.Size = new System.Drawing.Size(530, 60);
+			this.textNote.Size = new System.Drawing.Size(550, 60);
 			this.textNote.TabIndex = 147;
 			this.textNote.Text = "";
 			// 
