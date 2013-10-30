@@ -1018,7 +1018,7 @@ namespace OpenDentBusiness{
 					#region Smoking
 					case EhrMeasureType.Smoking:
 						string smokeSnoMed=tableRaw.Rows[i]["SmokingSnoMed"].ToString();
-						if(smokeSnoMed=="" || smokeSnoMed==SmokingSnoMed._266927001.ToString().Substring(1)) {//SmokingSnoMed for UnknownIfEver
+						if(smokeSnoMed=="") {//None
 							explanation+="Smoking status not entered.";
 						}
 						else{
@@ -1813,7 +1813,7 @@ namespace OpenDentBusiness{
 					#endregion
 					#region Smoking
 					case EhrMeasureType.Smoking:
-						if(pat.SmokingSnoMed=="" || pat.SmokingSnoMed==SmokingSnoMed._266927001.ToString().Substring(1)) {//SnoMed code for Unknown if ever smoked or no status entered
+						if(pat.SmokingSnoMed=="") {//None
 							mu.Details="Smoking status not entered";
 						}
 						else {

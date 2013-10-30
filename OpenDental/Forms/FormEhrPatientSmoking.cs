@@ -20,7 +20,8 @@ namespace OpenDental {
 		}
 
 		private void FormPatientSmoking_Load(object sender,EventArgs e) {
-			//Smoking statuses add in the same order as they appear in the SmokingSnoMed enum. Changes to the enum order will change the order added so they will always match
+			comboSmokeStatus.Items.Add("None");//First and default index
+			//Smoking statuses add in the same order as they appear in the SmokingSnoMed enum (Starting at comboSmokeStatus index 1). Changes to the enum order will change the order added so they will always match
 			for(int i=0;i<Enum.GetNames(typeof(SmokingSnoMed)).Length;i++) {
 				switch((SmokingSnoMed)i) {
 					case SmokingSnoMed._266927001:
@@ -50,11 +51,14 @@ namespace OpenDental {
 				}
 			}
 			PatOld=PatCur.Copy();
-			if(PatCur.SmokingSnoMed=="") {
-				comboSmokeStatus.SelectedIndex=0;//UnknownIfEver
-			}
-			else {
-				comboSmokeStatus.SelectedIndex=(int)Enum.Parse(typeof(SmokingSnoMed),"_"+PatCur.SmokingSnoMed,true);
+			comboSmokeStatus.SelectedIndex=0;//None
+			if(PatCur.SmokingSnoMed!="") {
+				try {
+					comboSmokeStatus.SelectedIndex=(int)Enum.Parse(typeof(SmokingSnoMed),"_"+PatCur.SmokingSnoMed,true)+1;
+				}
+				catch {
+					//stays as None
+				}
 			}
 			FillGrid();
 		}
@@ -93,6 +97,9 @@ namespace OpenDental {
 		}
 
 		private void comboSmokeStatus_SelectionChangeCommitted(object sender,EventArgs e) {
+			if(comboSmokeStatus.SelectedIndex==0) {//If None, do not create an event
+				return;
+			}
 			//Automatically make an entry
 			for(int i=0;i<listEvents.Count;i++) {
 				if(listEvents[i].DateTEvent.Date==DateTime.Today) {
@@ -110,6 +117,10 @@ namespace OpenDental {
 		}
 
 		private void butAssessed_Click(object sender,EventArgs e) {
+			if(comboSmokeStatus.SelectedIndex==0) {//None
+				MessageBox.Show("You must select a smoking status.");
+				return;
+			}
 			for(int i=0;i<listEvents.Count;i++) {
 				if(listEvents[i].DateTEvent.Date==DateTime.Today) {
 					MessageBox.Show("A Tobacco Assessment entry already exists with today's date.");
@@ -126,6 +137,10 @@ namespace OpenDental {
 		}
 
 		private void butCessation_Click(object sender,EventArgs e) {
+			if(comboSmokeStatus.SelectedIndex==0) {//None
+				MessageBox.Show("You must select a smoking status.");
+				return;
+			}
 			EhrMeasureEvent meas = new EhrMeasureEvent();
 			meas.DateTEvent=DateTime.Now;
 			meas.EventType=EhrMeasureEventType.TobaccoCessation;
@@ -152,7 +167,14 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			PatCur.SmokingSnoMed=((SmokingSnoMed)comboSmokeStatus.SelectedIndex).ToString().Substring(1);
+			if(comboSmokeStatus.SelectedIndex==0//None
+				|| comboSmokeStatus.SelectedIndex==-1)//should never happen
+			{
+				PatCur.SmokingSnoMed="";
+			}
+			else {
+				PatCur.SmokingSnoMed=((SmokingSnoMed)comboSmokeStatus.SelectedIndex-1).ToString().Substring(1);
+			}
 			Patients.Update(PatCur,PatOld);
 			DialogResult=DialogResult.OK;
 		}

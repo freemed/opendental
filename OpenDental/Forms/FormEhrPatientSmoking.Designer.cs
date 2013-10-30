@@ -32,14 +32,16 @@
 			this.butDelete = new System.Windows.Forms.Button();
 			this.label3 = new System.Windows.Forms.Label();
 			this.gridMain = new OpenDental.UI.ODGrid();
+			this.label1 = new System.Windows.Forms.Label();
+			this.label4 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// butCancel
 			// 
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Location = new System.Drawing.Point(615,374);
+			this.butCancel.Location = new System.Drawing.Point(615, 374);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,23);
+			this.butCancel.Size = new System.Drawing.Size(75, 23);
 			this.butCancel.TabIndex = 8;
 			this.butCancel.Text = "Cancel";
 			this.butCancel.UseVisualStyleBackColor = true;
@@ -48,9 +50,9 @@
 			// butOK
 			// 
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Location = new System.Drawing.Point(534,374);
+			this.butOK.Location = new System.Drawing.Point(534, 374);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,23);
+			this.butOK.Size = new System.Drawing.Size(75, 23);
 			this.butOK.TabIndex = 9;
 			this.butOK.Text = "OK";
 			this.butOK.UseVisualStyleBackColor = true;
@@ -58,9 +60,9 @@
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(20,25);
+			this.label2.Location = new System.Drawing.Point(20, 25);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(93,17);
+			this.label2.Size = new System.Drawing.Size(93, 17);
 			this.label2.TabIndex = 11;
 			this.label2.Text = "Smoking Status";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -69,17 +71,17 @@
 			// 
 			this.comboSmokeStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboSmokeStatus.FormattingEnabled = true;
-			this.comboSmokeStatus.Location = new System.Drawing.Point(117,25);
+			this.comboSmokeStatus.Location = new System.Drawing.Point(117, 25);
 			this.comboSmokeStatus.Name = "comboSmokeStatus";
-			this.comboSmokeStatus.Size = new System.Drawing.Size(213,21);
+			this.comboSmokeStatus.Size = new System.Drawing.Size(213, 21);
 			this.comboSmokeStatus.TabIndex = 12;
 			this.comboSmokeStatus.SelectionChangeCommitted += new System.EventHandler(this.comboSmokeStatus_SelectionChangeCommitted);
 			// 
 			// butAssessed
 			// 
-			this.butAssessed.Location = new System.Drawing.Point(117,65);
+			this.butAssessed.Location = new System.Drawing.Point(117, 65);
 			this.butAssessed.Name = "butAssessed";
-			this.butAssessed.Size = new System.Drawing.Size(85,23);
+			this.butAssessed.Size = new System.Drawing.Size(85, 23);
 			this.butAssessed.TabIndex = 17;
 			this.butAssessed.Text = "Assessed";
 			this.butAssessed.UseVisualStyleBackColor = true;
@@ -87,9 +89,9 @@
 			// 
 			// butCessation
 			// 
-			this.butCessation.Location = new System.Drawing.Point(211,65);
+			this.butCessation.Location = new System.Drawing.Point(211, 65);
 			this.butCessation.Name = "butCessation";
-			this.butCessation.Size = new System.Drawing.Size(85,23);
+			this.butCessation.Size = new System.Drawing.Size(85, 23);
 			this.butCessation.TabIndex = 20;
 			this.butCessation.Text = "Cessation";
 			this.butCessation.UseVisualStyleBackColor = true;
@@ -98,9 +100,9 @@
 			// butDelete
 			// 
 			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butDelete.Location = new System.Drawing.Point(117,328);
+			this.butDelete.Location = new System.Drawing.Point(117, 328);
 			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(85,23);
+			this.butDelete.Size = new System.Drawing.Size(85, 23);
 			this.butDelete.TabIndex = 22;
 			this.butDelete.Text = "Delete";
 			this.butDelete.UseVisualStyleBackColor = true;
@@ -109,9 +111,9 @@
 			// label3
 			// 
 			this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.label3.Location = new System.Drawing.Point(208,328);
+			this.label3.Location = new System.Drawing.Point(208, 328);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(263,31);
+			this.label3.Size = new System.Drawing.Size(263, 31);
 			this.label3.TabIndex = 23;
 			this.label3.Text = "Delete any historical entries from the list above which are not accurate.";
 			// 
@@ -121,21 +123,41 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(117,93);
+			this.gridMain.Location = new System.Drawing.Point(117, 93);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridMain.Size = new System.Drawing.Size(533,229);
+			this.gridMain.Size = new System.Drawing.Size(533, 229);
 			this.gridMain.TabIndex = 19;
 			this.gridMain.Title = "History";
 			this.gridMain.TranslationName = null;
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
-			// FormPatientSmoking
+			// label1
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
+			this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.label1.Location = new System.Drawing.Point(335, 28);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(263, 18);
+			this.label1.TabIndex = 24;
+			this.label1.Text = "This is used for calculating MU measures";
+			// 
+			// label4
+			// 
+			this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.label4.Location = new System.Drawing.Point(302, 72);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(388, 18);
+			this.label4.TabIndex = 25;
+			this.label4.Text = "This is used for calculating Tabacco Assessment and Cessation CQMs";
+			// 
+			// FormEhrPatientSmoking
+			// 
+			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(702,405);
+			this.ClientSize = new System.Drawing.Size(702, 405);
+			this.Controls.Add(this.label4);
+			this.Controls.Add(this.label1);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.butCessation);
@@ -145,7 +167,7 @@
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
-			this.Name = "FormPatientSmoking";
+			this.Name = "FormEhrPatientSmoking";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Patient Smoking";
 			this.Load += new System.EventHandler(this.FormPatientSmoking_Load);
@@ -164,5 +186,7 @@
 		private System.Windows.Forms.Button butCessation;
 		private System.Windows.Forms.Button butDelete;
 		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Label label4;
 	}
 }
