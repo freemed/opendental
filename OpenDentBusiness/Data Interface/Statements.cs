@@ -308,18 +308,18 @@ namespace OpenDentBusiness{
 			message.ToAddress=pat.Email;
 			message.FromAddress=EmailAddresses.GetByClinic(pat.ClinicNum).SenderAddress;
 			string str;
-			if(stmt.EmailSubject=="") {
+			if(stmt.EmailSubject!=null && stmt.EmailSubject!="") {
+				str=stmt.EmailSubject;//Set str to the email subject if one was already set.
+			}
+			else {//Subject was not set.  Set str to the default billing email subject.
 				str=PrefC.GetString(PrefName.BillingEmailSubject);
 			}
-			else {
-				str=stmt.EmailSubject;
-			}
 			message.Subject=Statements.ReplaceVarsForEmail(str,pat);
-			if(stmt.EmailBody=="") {
-				str=PrefC.GetString(PrefName.BillingEmailBodyText);
+			if(stmt.EmailBody!=null && stmt.EmailBody!="") {
+				str=stmt.EmailBody;//Set str to the email body if one was already set.
 			}
-			else {
-				str=stmt.EmailBody;
+			else {//Body was not set.  Set str to the default billing email body text.
+				str=PrefC.GetString(PrefName.BillingEmailBodyText);
 			}
 			message.BodyText=Statements.ReplaceVarsForEmail(str,pat);
 			return message;
