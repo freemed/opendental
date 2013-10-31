@@ -256,12 +256,15 @@ namespace OpenDental{
 		private FormWiki FormMyWiki;
 		private MenuItem menuItemResellers;
 		private MenuItem menuItemXChargeReconcile;
-		private System.Windows.Forms.Timer timerEmailInboxCheck;
 		private FormCreditRecurringCharges FormCRC;
 		private UI.Button butMapPhones;
 		private ComboBox comboTriageCoordinator;
 		private Label labelFieldType;
-		private DateTime TimeLastEmailInboxCheck;
+		///<summary>If the local computer is the computer where incoming email is fetched, then this thread runs in the background and checks for new messages 
+		///every x number of minutes (1 to 60) based on preference value.</summary>
+		private Thread ThreadEmailInbox;
+		private bool _isEmailThreadRunning=false;
+		private AutoResetEvent _emailSleep=new AutoResetEvent(false);
 
 		///<summary></summary>
 		public FormOpenDental(string[] cla){
@@ -508,12 +511,11 @@ namespace OpenDental{
 			this.labelFieldType = new System.Windows.Forms.Label();
 			this.comboTriageCoordinator = new System.Windows.Forms.ComboBox();
 			this.labelMsg = new System.Windows.Forms.Label();
+			this.labelWaitTime = new System.Windows.Forms.Label();
+			this.labelTriage = new System.Windows.Forms.Label();
 			this.butMapPhones = new OpenDental.UI.Button();
 			this.butTriage = new OpenDental.UI.Button();
 			this.butBigPhones = new OpenDental.UI.Button();
-			this.labelWaitTime = new System.Windows.Forms.Label();
-			this.labelTriage = new System.Windows.Forms.Label();
-			this.timerEmailInboxCheck = new System.Windows.Forms.Timer(this.components);
 			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
 			this.panelPhoneSmall.SuspendLayout();
 			this.SuspendLayout();
@@ -1474,6 +1476,28 @@ namespace OpenDental{
 			this.labelMsg.Text = "V:00";
 			this.labelMsg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
+			// labelWaitTime
+			// 
+			this.labelWaitTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelWaitTime.ForeColor = System.Drawing.Color.Black;
+			this.labelWaitTime.Location = new System.Drawing.Point(67, 2);
+			this.labelWaitTime.Name = "labelWaitTime";
+			this.labelWaitTime.Size = new System.Drawing.Size(30, 20);
+			this.labelWaitTime.TabIndex = 53;
+			this.labelWaitTime.Text = "00m";
+			this.labelWaitTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// labelTriage
+			// 
+			this.labelTriage.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelTriage.ForeColor = System.Drawing.Color.Black;
+			this.labelTriage.Location = new System.Drawing.Point(30, 2);
+			this.labelTriage.Name = "labelTriage";
+			this.labelTriage.Size = new System.Drawing.Size(41, 20);
+			this.labelTriage.TabIndex = 53;
+			this.labelTriage.Text = "T:000";
+			this.labelTriage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// butMapPhones
 			// 
 			this.butMapPhones.AdjustImageLocation = new System.Drawing.Point(0, 0);
@@ -1516,33 +1540,6 @@ namespace OpenDental{
 			this.butBigPhones.Text = "B";
 			this.butBigPhones.Click += new System.EventHandler(this.butBigPhones_Click);
 			// 
-			// labelWaitTime
-			// 
-			this.labelWaitTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelWaitTime.ForeColor = System.Drawing.Color.Black;
-			this.labelWaitTime.Location = new System.Drawing.Point(67, 2);
-			this.labelWaitTime.Name = "labelWaitTime";
-			this.labelWaitTime.Size = new System.Drawing.Size(30, 20);
-			this.labelWaitTime.TabIndex = 53;
-			this.labelWaitTime.Text = "00m";
-			this.labelWaitTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// labelTriage
-			// 
-			this.labelTriage.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelTriage.ForeColor = System.Drawing.Color.Black;
-			this.labelTriage.Location = new System.Drawing.Point(30, 2);
-			this.labelTriage.Name = "labelTriage";
-			this.labelTriage.Size = new System.Drawing.Size(41, 20);
-			this.labelTriage.TabIndex = 53;
-			this.labelTriage.Text = "T:000";
-			this.labelTriage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// timerEmailInboxCheck
-			// 
-			this.timerEmailInboxCheck.Interval = 30000;
-			this.timerEmailInboxCheck.Tick += new System.EventHandler(this.timerEmailInboxCheck_Tick);
-			// 
 			// lightSignalGrid1
 			// 
 			this.lightSignalGrid1.Location = new System.Drawing.Point(0, 463);
@@ -1554,7 +1551,7 @@ namespace OpenDental{
 			// 
 			// FormOpenDental
 			// 
-			this.ClientSize = new System.Drawing.Size(982, 570);
+			this.ClientSize = new System.Drawing.Size(982, 550);
 			this.Controls.Add(this.panelPhoneSmall);
 			this.Controls.Add(this.panelSplitter);
 			this.Controls.Add(this.lightSignalGrid1);
@@ -1918,7 +1915,8 @@ namespace OpenDental{
 			dateTimeLastActivity=DateTime.Now;
 			timerLogoff.Enabled=true;
 			timerReplicationMonitor.Enabled=true;
-			timerEmailInboxCheck.Enabled=true;
+			ThreadEmailInbox=new Thread(new ThreadStart(ThreadEmailInbox_Receive));
+			ThreadEmailInbox.Start();
 			Plugins.HookAddCode(this,"FormOpenDental.Load_end");
 		}
 
@@ -3715,25 +3713,29 @@ namespace OpenDental{
 			catch { }
 		}
 
-		///<summary>Runs every 30 seconds. Checks for new email and stores in db.</summary>
-		private void timerEmailInboxCheck_Tick(object sender,EventArgs e) {
-			EmailAddress Address=EmailAddresses.GetByClinic(0);//Default for clinic/practice.
-			if(Address.Pop3ServerIncoming=="") {//Email address not setup.
-				return;
-			}
-			if(!ODEnvironment.IdIsThisComputer(PrefC.GetString(PrefName.EmailInboxComputerName))) {
-				return;//If the email inbox computer name is not setup, or if the name does not match this computer, then do not get email from this computer.
-			}
-			if((DateTime.Now-TimeLastEmailInboxCheck).TotalMinutes<PrefC.GetInt(PrefName.EmailInboxCheckInterval)) {
-				return;
-			}
-			TimeLastEmailInboxCheck=DateTime.Now;
-			try {
-				EmailMessages.ReceiveFromInbox(0,Address);
-			}
-			catch {
-				//Do not tell the user, because it would be annoying to see an error every 30 seconds (if the server was down for instance).
-				//Maybe we could log to the system EventViewer Application log someday if users complain.
+		private void ThreadEmailInbox_Receive() {
+			//The EmailInboxCheckInterval preference defines the number of minutes between automatic inbox receiving.
+			//Do not perform the first email inbox receive within the first EmailInboxCheckInterval minutes of program startup (thread startup).
+			_isEmailThreadRunning=true;
+			while(_isEmailThreadRunning) {
+				_emailSleep.WaitOne(TimeSpan.FromMinutes(PrefC.GetInt(PrefName.EmailInboxCheckInterval)));
+				if(!_isEmailThreadRunning) {
+					break;
+				}
+				EmailAddress Address=EmailAddresses.GetByClinic(0);//Default for clinic/practice.
+				if(Address.Pop3ServerIncoming=="") {
+					continue;//Email address not setup.
+				}
+				if(!ODEnvironment.IdIsThisComputer(PrefC.GetString(PrefName.EmailInboxComputerName))) {
+					continue;//If the email inbox computer name is not setup, or if the name does not match this computer, then do not get email from this computer.
+				}
+				try {
+					EmailMessages.ReceiveFromInbox(0,Address);
+				}
+				catch(Exception ex) {
+					//Do not tell the user, because it would be annoying to see an error every 30 seconds (if the server was down for instance).
+					//Maybe we could log to the system EventViewer Application log someday if users complain. Keep in mind that the user can always manually go to Manage | Email Inbox to see the error message.
+				}
 			}
 		}
 
@@ -5639,6 +5641,13 @@ namespace OpenDental{
 				ThreadVM.Abort();
 				ThreadVM.Join();
 				ThreadVM=null;
+			}
+			if(_isEmailThreadRunning) {
+				_isEmailThreadRunning=false;
+				_emailSleep.Set();
+				FormAlertSimple formAS=new FormAlertSimple(Lan.g(this,"Shutting down.\r\nPlease wait while email finishes downloading.\r\nMay take up to 3 minutes to complete."));
+				formAS.Show();//Non-modal, so the program will not wait for user input before closing.
+				ThreadEmailInbox.Join();//We must wait for the thread to die, so that the .exe is freed up if the user is trying to update OD.
 			}
 			//if(PrefC.GetBool(PrefName.DistributorKey)) {//for OD HQ
 			//  for(int f=Application.OpenForms.Count-1;f>=0;f--) {

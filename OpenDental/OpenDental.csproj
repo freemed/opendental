@@ -376,6 +376,12 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormAlertSimple.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormAlertSimple.designer.cs">
+      <DependentUpon>FormAlertSimple.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormReconcileAllergy.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3218,6 +3224,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormAlertSimple.resx">
+      <DependentUpon>FormAlertSimple.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormReconcileAllergy.resx">
       <DependentUpon>FormReconcileAllergy.cs</DependentUpon>
