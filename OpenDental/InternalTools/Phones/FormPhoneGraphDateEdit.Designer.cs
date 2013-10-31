@@ -38,7 +38,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(747, 556);
+			this.butCancel.Location = new System.Drawing.Point(483, 556);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 2;
@@ -54,7 +54,7 @@ namespace OpenDental{
 			this.gridGraph.Location = new System.Drawing.Point(12, 31);
 			this.gridGraph.Name = "gridGraph";
 			this.gridGraph.ScrollValue = 0;
-			this.gridGraph.Size = new System.Drawing.Size(810, 519);
+			this.gridGraph.Size = new System.Drawing.Size(546, 519);
 			this.gridGraph.TabIndex = 48;
 			this.gridGraph.Title = "";
 			this.gridGraph.TranslationName = "TablePhoneGraphDate";
@@ -64,7 +64,7 @@ namespace OpenDental{
 			// 
 			this.label11.Location = new System.Drawing.Point(12, 9);
 			this.label11.Name = "label11";
-			this.label11.Size = new System.Drawing.Size(810, 19);
+			this.label11.Size = new System.Drawing.Size(546, 19);
 			this.label11.TabIndex = 49;
 			this.label11.Text = "Click \'Set Graph Status\' column for a given employee to create an override for th" +
     "is date.";
@@ -88,7 +88,7 @@ namespace OpenDental{
 			// FormPhoneGraphDateEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(834, 592);
+			this.ClientSize = new System.Drawing.Size(570, 592);
 			this.Controls.Add(this.butEditSchedule);
 			this.Controls.Add(this.label11);
 			this.Controls.Add(this.gridGraph);

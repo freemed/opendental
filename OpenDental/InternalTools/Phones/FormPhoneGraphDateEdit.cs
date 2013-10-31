@@ -14,6 +14,7 @@ namespace OpenDental {
 		private List<PhoneGraph> ListPhoneGraphsForDate;
 		private List<PhoneEmpDefault> ListPhoneEmpDefaults;
 		private List<Schedule> ListSchedulesForDate;
+
 		public FormPhoneGraphDateEdit(DateTime dateEdit) {
 			InitializeComponent();
 			Lan.F(this);
@@ -43,19 +44,18 @@ namespace OpenDental {
 			}
 			gridGraph.BeginUpdate();
 			gridGraph.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TablePhoneGraphDate","Employee"),150);
-			col.TextAlign=HorizontalAlignment.Center;
+			ODGridColumn col=new ODGridColumn(Lan.g("TablePhoneGraphDate","Employee"),80);
 			gridGraph.Columns.Add(col); //column 0 (name - not clickable)
-			col=new ODGridColumn(Lan.g("TablePhoneGraphDate","Schedule"),150);
+			col=new ODGridColumn(Lan.g("TablePhoneGraphDate","Schedule"),130);
 			col.TextAlign=HorizontalAlignment.Center;
 			gridGraph.Columns.Add(col); //column 1 (schedule - clickable)
-			col=new ODGridColumn(Lan.g("TablePhoneGraphDate","Graph Default"),150);
+			col=new ODGridColumn(Lan.g("TablePhoneGraphDate","Graph Default"),90);
 			col.TextAlign=HorizontalAlignment.Center;
 			gridGraph.Columns.Add(col); //column 2 (default - not clickable)
-			col=new ODGridColumn(Lan.g("TablePhoneGraphDate","Set Graph Status"),150);
+			col=new ODGridColumn(Lan.g("TablePhoneGraphDate","Set Graph Status"),110);
 			col.TextAlign=HorizontalAlignment.Center;
 			gridGraph.Columns.Add(col); //column 3 (set graph status - clickable)
-			col=new ODGridColumn(Lan.g("TablePhoneGraphDate","Is Overridden?"),150);
+			col=new ODGridColumn(Lan.g("TablePhoneGraphDate","Is Overridden?"),80);
 			col.TextAlign=HorizontalAlignment.Center;
 			gridGraph.Columns.Add(col); //column 4 (is value an overridde of default? - not clickable)
 			gridGraph.Rows.Clear();

@@ -52,7 +52,7 @@ namespace OpenDental{
 			// labelDate
 			// 
 			this.labelDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelDate.Location = new System.Drawing.Point(261, 21);
+			this.labelDate.Location = new System.Drawing.Point(512, 21);
 			this.labelDate.Name = "labelDate";
 			this.labelDate.Size = new System.Drawing.Size(203, 23);
 			this.labelDate.TabIndex = 6;
@@ -67,7 +67,7 @@ namespace OpenDental{
 			this.buttonLeft.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.buttonLeft.CornerRadius = 4F;
 			this.buttonLeft.Image = global::OpenDental.Properties.Resources.Left;
-			this.buttonLeft.Location = new System.Drawing.Point(235, 22);
+			this.buttonLeft.Location = new System.Drawing.Point(484, 22);
 			this.buttonLeft.Name = "buttonLeft";
 			this.buttonLeft.Size = new System.Drawing.Size(22, 22);
 			this.buttonLeft.TabIndex = 8;
@@ -82,7 +82,7 @@ namespace OpenDental{
 			this.buttonRight.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.buttonRight.CornerRadius = 4F;
 			this.buttonRight.Image = global::OpenDental.Properties.Resources.Right;
-			this.buttonRight.Location = new System.Drawing.Point(467, 22);
+			this.buttonRight.Location = new System.Drawing.Point(721, 21);
 			this.buttonRight.Name = "buttonRight";
 			this.buttonRight.Size = new System.Drawing.Size(22, 22);
 			this.buttonRight.TabIndex = 7;
