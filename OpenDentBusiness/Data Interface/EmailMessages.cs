@@ -31,10 +31,12 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<EmailMessage>(MethodBase.GetCurrentMethod(),msgNum);
 			}
 			string command="SELECT * FROM emailmessage WHERE EmailMessageNum = "+POut.Long(msgNum);
-			EmailMessage message=Crud.EmailMessageCrud.SelectOne(msgNum);
-			command="SELECT * FROM emailattach WHERE EmailMessageNum = "+POut.Long(msgNum);
-			message.Attachments=Crud.EmailAttachCrud.SelectMany(command);
-			return message;
+			EmailMessage emailMessage=Crud.EmailMessageCrud.SelectOne(msgNum);
+			if(emailMessage!=null) {
+				command="SELECT * FROM emailattach WHERE EmailMessageNum = "+POut.Long(msgNum);
+				emailMessage.Attachments=Crud.EmailAttachCrud.SelectMany(command);
+			}
+			return emailMessage;
 		}
 
 		public static List<EmailMessage> GetInboxForAddress(string emailAddressInbox) {
