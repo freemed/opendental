@@ -1296,8 +1296,9 @@ namespace OpenDentBusiness {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
-			//Get all the claimproc estimates that already have a claimproc marked as received from the same InsPlan.
-			command="SELECT cp.ClaimProcNum FROM claimproc cp "
+			if(DataConnection.DBtype==DatabaseType.MySql) {
+				//Get all the claimproc estimates that already have a claimproc marked as received from the same InsPlan.
+				command="SELECT cp.ClaimProcNum FROM claimproc cp USE KEY(PRIMARY)"
 				+" INNER JOIN claimproc cp2 ON cp2.PatNum=cp.PatNum"
 				+" AND cp2.PlanNum=cp.PlanNum"    //The same insurance plan
 				+" AND cp2.InsSubNum=cp.InsSubNum"//for the same subscriber
@@ -1305,6 +1306,18 @@ namespace OpenDentBusiness {
 				+" AND cp2.Status="+POut.Int((int)ClaimProcStatus.Received)
 				+" WHERE cp.Status="+POut.Int((int)ClaimProcStatus.Estimate)
 				+" AND cp.ClaimNum=0";//Make sure the estimate is not already attached to a claim somehow.
+			}
+			else {//oracle
+				//Get all the claimproc estimates that already have a claimproc marked as received from the same InsPlan.
+				command="SELECT cp.ClaimProcNum FROM claimproc cp"
+				+" INNER JOIN claimproc cp2 ON cp2.PatNum=cp.PatNum"
+				+" AND cp2.PlanNum=cp.PlanNum"    //The same insurance plan
+				+" AND cp2.InsSubNum=cp.InsSubNum"//for the same subscriber
+				+" AND cp2.ProcNum=cp.ProcNum"    //for the same procedure.
+				+" AND cp2.Status="+POut.Int((int)ClaimProcStatus.Received)
+				+" WHERE cp.Status="+POut.Int((int)ClaimProcStatus.Estimate)
+				+" AND cp.ClaimNum=0";//Make sure the estimate is not already attached to a claim somehow.
+			}
 			table=Db.GetTable(command);
 			if(isCheck) {
 				if(table.Rows.Count>0 || verbose) {
