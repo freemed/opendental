@@ -145,7 +145,7 @@ namespace OpenDentBusiness{
 		public double PayPlanDue;
 		///<summary>FK to site.SiteNum. Can be zero. Replaces the old GradeSchool field with a proper foreign key.</summary>
 		public long SiteNum;
-		///<summary>The last date and time this row was altered.  Not user editable.</summary>
+		///<summary>Automatically updated by MySQL every time a row is added or changed. Could be changed due to user editing, custom queries or program updates.  Not user editable.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
 		///<summary>FK to patient.PatNum. Can be zero.  Person responsible for medical decisions rather than finances.  Guarantor is still responsible for finances.  This is useful for nursing home residents.  Part of public health.</summary>

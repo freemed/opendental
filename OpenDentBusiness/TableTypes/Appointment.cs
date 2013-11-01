@@ -46,7 +46,7 @@ namespace OpenDentBusiness{
 		public long ClinicNum;
 		///<summary>Set true if this is a hygiene appt.  The only purpose of this flag is to cause the hygiene provider's color to show.  This flag is frequently not set even when it is a hygiene appointment because some offices want the dentist color on the appointments.</summary>
 		public bool IsHygiene;
-		///<summary>Automatically updated by MySQL every time a row is added or changed.</summary>
+		///<summary>Automatically updated by MySQL every time a row is added or changed. Could be changed due to user editing, custom queries or program updates.  Not user editable.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
 		///<summary>The date and time that the patient checked in.  Date is largely ignored since it should be the same as the appt.</summary>

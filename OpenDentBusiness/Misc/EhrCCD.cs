@@ -550,8 +550,8 @@ Medications
 				w.WriteEndElement();//End text
 				for(int i=0;i<listMedPat.Count;i++) {
 					long rxCui=listMedPat[i].RxCui;
-					string strMedName=listMedPat[i].MedDescript;
-					if(listMedPat[i].MedicationNum!=0) {
+					string strMedName=listMedPat[i].MedDescript;//This might be blank, for example not from NewCrop.  
+					if(listMedPat[i].MedicationNum!=0) {//If NewCrop, this will be 0.  Also might be zero in the future when we start allowing freeform medications.
 						med=Medications.GetMedication(listMedPat[i].MedicationNum);
 						rxCui=med.RxCui;
 						strMedName=med.MedName;

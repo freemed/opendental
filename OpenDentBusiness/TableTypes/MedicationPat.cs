@@ -25,7 +25,7 @@ namespace OpenDentBusiness{
 		public long ProvNum;
 		///<summary>Only use when MedicationNum=0.  For medication orders pulled back from NewCrop during synch.</summary>
 		public string MedDescript;
-		///<summary>For NewCrop medical orders, corresponds to the RxCui of the prescription (NewCrop only returns a value sometimes).  Otherwise, this field is synched with the medication.RxCui field based on medication.MedicationNum.  We should have used a string type.</summary>
+		///<summary>For NewCrop medical orders, corresponds to the RxCui of the prescription (NewCrop only returns a value sometimes).  Otherwise, this field is synched with the medication.RxCui field based on medication.MedicationNum.  We should have used a string type.  The only purpose of this field is so that when CCDs are created, we have structured data to put in the XML, not just plain text.  Allergies exported in CCD do not look at this table, but only at the medication table.  Medications require MedicationPat.RxCui or Medication.RxCui to be exported on CCD.</summary>
 		public long RxCui;
 		///<summary>Only use when MedicationNum=0.  For medication orders pulled back from NewCrop during synch.  The NewCrop GUID which uniquely identifies the prescription corresponding to the medical order. Allows us to update existing NewCrop medical orders when refreshing prescriptions in the Chart (similar to how prescriptions are updated).</summary>
 		public string NewCropGuid;
