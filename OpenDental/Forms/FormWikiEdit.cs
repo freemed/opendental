@@ -576,7 +576,7 @@ namespace OpenDental {
 				return false;
 			}
 			//Cannot have CR within tag definition---------------------------------------------------------------------------------
-			MatchCollection tagMatches=Regex.Matches(textContent.Text,"<.*?>",RegexOptions.Singleline);//<.*?> means anything as short as possible
+			MatchCollection tagMatches=Regex.Matches(textContent.Text,"(?<!&)<.*?>",RegexOptions.Singleline);//<.*?> means anything as short as possible
 			for(int i=0;i<tagMatches.Count;i++) {
 				if(tagMatches[i].ToString().Contains("\r\n")) {
 					MessageBox.Show(Lan.g(this,"Tag definitions cannot contain a return line: ")+tagMatches[i].Value.Replace("\r\n",""));
