@@ -102,42 +102,41 @@
 			// 
 			// groupBox4
 			// 
+			this.groupBox4.Controls.Add(this.but2014CQM);
 			this.groupBox4.Controls.Add(this.butMeasures);
 			this.groupBox4.Controls.Add(this.butQuality);
 			this.groupBox4.Location = new System.Drawing.Point(702, 81);
 			this.groupBox4.Name = "groupBox4";
-			this.groupBox4.Size = new System.Drawing.Size(104, 83);
+			this.groupBox4.Size = new System.Drawing.Size(104, 112);
 			this.groupBox4.TabIndex = 25;
 			this.groupBox4.TabStop = false;
 			this.groupBox4.Text = "For All Patients";
 			// 
 			// but2014CQM
 			// 
-			this.but2014CQM.Location = new System.Drawing.Point(712, 492);
+			this.but2014CQM.Location = new System.Drawing.Point(10, 77);
 			this.but2014CQM.Name = "but2014CQM";
 			this.but2014CQM.Size = new System.Drawing.Size(84, 23);
 			this.but2014CQM.TabIndex = 21;
 			this.but2014CQM.Text = "2014 CQM";
 			this.but2014CQM.UseVisualStyleBackColor = true;
-			this.but2014CQM.Visible = false;
 			this.but2014CQM.Click += new System.EventHandler(this.but2014CQM_Click);
 			// 
 			// butEhrNotPerformed
 			// 
-			this.butEhrNotPerformed.Location = new System.Drawing.Point(712, 405);
+			this.butEhrNotPerformed.Location = new System.Drawing.Point(712, 416);
 			this.butEhrNotPerformed.Name = "butEhrNotPerformed";
 			this.butEhrNotPerformed.Size = new System.Drawing.Size(84, 23);
 			this.butEhrNotPerformed.TabIndex = 38;
 			this.butEhrNotPerformed.Text = "Not Performed";
 			this.butEhrNotPerformed.UseVisualStyleBackColor = true;
-			this.butEhrNotPerformed.Visible = false;
 			this.butEhrNotPerformed.Click += new System.EventHandler(this.butEhrNotPerformed_Click);
 			// 
 			// groupBox5
 			// 
 			this.groupBox5.Controls.Add(this.butHash);
 			this.groupBox5.Controls.Add(this.butEncryption);
-			this.groupBox5.Location = new System.Drawing.Point(702, 170);
+			this.groupBox5.Location = new System.Drawing.Point(702, 208);
 			this.groupBox5.Name = "groupBox5";
 			this.groupBox5.Size = new System.Drawing.Size(104, 83);
 			this.groupBox5.TabIndex = 26;
@@ -146,7 +145,7 @@
 			// 
 			// butVaccines
 			// 
-			this.butVaccines.Location = new System.Drawing.Point(712, 262);
+			this.butVaccines.Location = new System.Drawing.Point(712, 300);
 			this.butVaccines.Name = "butVaccines";
 			this.butVaccines.Size = new System.Drawing.Size(84, 23);
 			this.butVaccines.TabIndex = 27;
@@ -196,7 +195,7 @@
 			// 
 			// butPatList
 			// 
-			this.butPatList.Location = new System.Drawing.Point(712, 291);
+			this.butPatList.Location = new System.Drawing.Point(712, 329);
 			this.butPatList.Name = "butPatList";
 			this.butPatList.Size = new System.Drawing.Size(84, 23);
 			this.butPatList.TabIndex = 32;
@@ -214,46 +213,42 @@
 			// 
 			// butLabPanelLOINC
 			// 
-			this.butLabPanelLOINC.Location = new System.Drawing.Point(712, 347);
+			this.butLabPanelLOINC.Location = new System.Drawing.Point(712, 358);
 			this.butLabPanelLOINC.Name = "butLabPanelLOINC";
 			this.butLabPanelLOINC.Size = new System.Drawing.Size(84, 23);
 			this.butLabPanelLOINC.TabIndex = 35;
 			this.butLabPanelLOINC.Text = "LOINC Lab";
 			this.butLabPanelLOINC.UseVisualStyleBackColor = true;
-			this.butLabPanelLOINC.Visible = false;
 			this.butLabPanelLOINC.Click += new System.EventHandler(this.butLabPanelLOINC_Click);
 			// 
 			// butAmendments
 			// 
-			this.butAmendments.Location = new System.Drawing.Point(712, 376);
+			this.butAmendments.Location = new System.Drawing.Point(712, 387);
 			this.butAmendments.Name = "butAmendments";
 			this.butAmendments.Size = new System.Drawing.Size(84, 23);
 			this.butAmendments.TabIndex = 36;
 			this.butAmendments.Text = "Amendments";
 			this.butAmendments.UseVisualStyleBackColor = true;
-			this.butAmendments.Visible = false;
 			this.butAmendments.Click += new System.EventHandler(this.butAmendments_Click);
 			// 
 			// butEncounters
 			// 
-			this.butEncounters.Location = new System.Drawing.Point(712, 434);
+			this.butEncounters.Location = new System.Drawing.Point(712, 445);
 			this.butEncounters.Name = "butEncounters";
 			this.butEncounters.Size = new System.Drawing.Size(84, 23);
 			this.butEncounters.TabIndex = 39;
 			this.butEncounters.Text = "Encounters";
 			this.butEncounters.UseVisualStyleBackColor = true;
-			this.butEncounters.Visible = false;
 			this.butEncounters.Click += new System.EventHandler(this.butEncounters_Click);
 			// 
 			// butInterventions
 			// 
-			this.butInterventions.Location = new System.Drawing.Point(712, 463);
+			this.butInterventions.Location = new System.Drawing.Point(712, 474);
 			this.butInterventions.Name = "butInterventions";
 			this.butInterventions.Size = new System.Drawing.Size(84, 23);
 			this.butInterventions.TabIndex = 40;
 			this.butInterventions.Text = "Interventions";
 			this.butInterventions.UseVisualStyleBackColor = true;
-			this.butInterventions.Visible = false;
 			this.butInterventions.Click += new System.EventHandler(this.butInterventions_Click);
 			// 
 			// gridMu
@@ -271,12 +266,11 @@
 			this.gridMu.TranslationName = null;
 			this.gridMu.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMu_CellClick);
 			// 
-			// FormEhr
+			// FormEHR
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(817, 674);
-			this.Controls.Add(this.but2014CQM);
 			this.Controls.Add(this.butInterventions);
 			this.Controls.Add(this.butEncounters);
 			this.Controls.Add(this.butEhrNotPerformed);
@@ -294,7 +288,7 @@
 			this.Controls.Add(this.gridMu);
 			this.Controls.Add(this.butClose);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.Name = "FormEhr";
+			this.Name = "FormEHR";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "EHR";
 			this.Load += new System.EventHandler(this.FormEHR_Load);

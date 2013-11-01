@@ -101,7 +101,7 @@ namespace OpenDental {
 		private void FillGridMu() {
 			gridMu.BeginUpdate();
 			gridMu.Columns.Clear();
-			ODGridColumn col=new ODGridColumn("MeasureType",137);
+			ODGridColumn col=new ODGridColumn("MeasureType",145);
 			gridMu.Columns.Add(col);
 			col=new ODGridColumn("Met",35,HorizontalAlignment.Center);
 			gridMu.Columns.Add(col);
