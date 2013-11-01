@@ -365,10 +365,7 @@ namespace OpenDental {
 					float xPos=rcBounds.Left+(hour*hourWidth);
 					//draw 15 minute dashed lines
 					for(int quarter=0;quarter<=3;quarter++) {
-						using(Pen penDash=new Pen(Color.Black,quarter==0?LineWidthPixels:1)) {
-							if(quarter!=0) {
-								penDash.DashStyle=DashStyle.Dash;
-							}
+						using(Pen penDash=new Pen(quarter==0?Color.Black:Color.LightGray,LineWidthPixels)) {							
 							e.Graphics.DrawLine(penDash,xPos,rcBounds.Bottom,xPos,rcBounds.Top);
 							xPos+=(hourWidth/4);
 						}
@@ -477,7 +474,7 @@ namespace OpenDental {
 				float hourWidth=rcBounds.Width/(float)TotalTime.TotalHours;
 				for(int hour=0;hour<=(int)TotalTime.TotalHours;hour++) {
 					DateTime dt=DateTime.Today.AddHours(StartHour+hour);
-					string stringHour=dt.ToString("ht");
+					string stringHour=dt.ToString("htt").ToLower();
 					SizeF szHour=e.Graphics.MeasureString(stringHour,font);
 					float xPos=rcBounds.Left+(hour*hourWidth);
 					float yPos=rcBounds.Top;

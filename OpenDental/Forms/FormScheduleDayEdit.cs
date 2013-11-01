@@ -81,10 +81,10 @@ namespace OpenDental{
 			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.tabPage1 = new System.Windows.Forms.TabPage();
 			this.tabPage2 = new System.Windows.Forms.TabPage();
+			this.graphScheduleDay = new OpenDental.GraphScheduleDay();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCloseOffice = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.graphScheduleDay = new OpenDental.GraphScheduleDay();
 			this.groupBox3.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.tabControl1.SuspendLayout();
@@ -280,6 +280,29 @@ namespace OpenDental{
 			this.tabPage2.Text = "Graph";
 			this.tabPage2.UseVisualStyleBackColor = true;
 			// 
+			// graphScheduleDay
+			// 
+			this.graphScheduleDay.BarHeightPixels = 17;
+			this.graphScheduleDay.BarSpacingPixels = 3;
+			this.graphScheduleDay.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.graphScheduleDay.EmployeeBarColor = System.Drawing.Color.LightSkyBlue;
+			this.graphScheduleDay.EmployeeTextColor = System.Drawing.Color.Black;
+			this.graphScheduleDay.EndHour = 19;
+			this.graphScheduleDay.ExteriorPaddingPixels = 11;
+			this.graphScheduleDay.GraphBackColor = System.Drawing.Color.White;
+			this.graphScheduleDay.LineWidthPixels = 1;
+			this.graphScheduleDay.Location = new System.Drawing.Point(3, 3);
+			this.graphScheduleDay.Name = "graphScheduleDay";
+			this.graphScheduleDay.PracticeBarColor = System.Drawing.Color.Salmon;
+			this.graphScheduleDay.PracticeTextColor = System.Drawing.Color.Black;
+			this.graphScheduleDay.ProviderBarColor = System.Drawing.Color.LightGreen;
+			this.graphScheduleDay.ProviderTextColor = System.Drawing.Color.Black;
+			this.graphScheduleDay.Size = new System.Drawing.Size(787, 575);
+			this.graphScheduleDay.StartHour = 4;
+			this.graphScheduleDay.TabIndex = 0;
+			this.graphScheduleDay.TickHeightPixels = 5;
+			this.graphScheduleDay.XAxisBackColor = System.Drawing.Color.White;
+			// 
 			// butOK
 			// 
 			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
@@ -326,29 +349,6 @@ namespace OpenDental{
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// graphScheduleDay
-			// 
-			this.graphScheduleDay.BarHeightPixels = 17;
-			this.graphScheduleDay.BarSpacingPixels = 3;
-			this.graphScheduleDay.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.graphScheduleDay.EmployeeBarColor = System.Drawing.Color.LightSkyBlue;
-			this.graphScheduleDay.EmployeeTextColor = System.Drawing.Color.Black;
-			this.graphScheduleDay.EndHour = 19;
-			this.graphScheduleDay.ExteriorPaddingPixels = 10;
-			this.graphScheduleDay.GraphBackColor = System.Drawing.Color.White;
-			this.graphScheduleDay.LineWidthPixels = 2;
-			this.graphScheduleDay.Location = new System.Drawing.Point(3, 3);
-			this.graphScheduleDay.Name = "graphScheduleDay";
-			this.graphScheduleDay.PracticeBarColor = System.Drawing.Color.Salmon;
-			this.graphScheduleDay.PracticeTextColor = System.Drawing.Color.Black;
-			this.graphScheduleDay.ProviderBarColor = System.Drawing.Color.LightGreen;
-			this.graphScheduleDay.ProviderTextColor = System.Drawing.Color.Black;
-			this.graphScheduleDay.Size = new System.Drawing.Size(787, 575);
-			this.graphScheduleDay.StartHour = 4;
-			this.graphScheduleDay.TabIndex = 0;
-			this.graphScheduleDay.TickHeightPixels = 5;
-			this.graphScheduleDay.XAxisBackColor = System.Drawing.Color.White;
 			// 
 			// FormScheduleDayEdit
 			// 

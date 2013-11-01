@@ -249,7 +249,7 @@ namespace OpenDental {
 			float h;
 			float barspacing=(rec.Width / totalhrs) / 4f; //4f means number of buckets per hours.  EG... 10 minute granularity = 6f;
 			float firstbar=barspacing / 2f;
-			float barW=barspacing / 1f;//increase denominator in order to increase spacing between bars. 1f = no space... 2f = full bar space. 1.5f = half bar space.
+			float barW=barspacing / 1.5f;//increase denominator in order to increase spacing between bars. 1f = no space... 2f = full bar space. 1.5f = half bar space.
 			SolidBrush blueBrush=new SolidBrush(Color.FromArgb(162,193,222));
 			for(int i=0;i<buckets.Length;i++) {
 				h=(float)buckets[i]*rec.Height/superPeak;
