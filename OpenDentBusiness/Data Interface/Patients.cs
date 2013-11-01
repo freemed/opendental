@@ -1933,7 +1933,7 @@ FROM insplan";
 			return retVal;
 		}
 
-		///<summary></summary>
+		///<summary>Returns preferred name if one exists.</summary>
 		public static string GetNameFirstOrPreferred(string FName,string Preferred) {
 			//No need to check RemotingRole; no call to db.
 			if(Preferred!="") {
