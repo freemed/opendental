@@ -21,15 +21,15 @@ namespace OpenDentBusiness {
 		public static Color ColorOuterNoColor=Color.FromArgb(191,191,191);
 		public static Color ColorInnerTriageAway=Color.White;
 		public static Color ColorInnerTriageHere=Color.FromArgb(236,247,252);
-		public static Color ColorOuterTriage=Color.SkyBlue;
+		public static Color ColorOuterTriage=Color.DeepSkyBlue;
 		public static Color ColorInnerOnPhone=Color.FromArgb(254,235,233);
-		public static Color ColorOuterOnPhone=Color.Salmon;
+		public static Color ColorOuterOnPhone=Color.OrangeRed;
 		public static Color ColorInnerLunchBreak=Color.White;
-		public static Color ColorOuterLunchBreak=Color.FromArgb(153,220,153);
+		public static Color ColorOuterLunchBreak=Color.LimeGreen;
 		public static Color ColorInnerAvailable=Color.FromArgb(217,255,217);
-		public static Color ColorOuterAvailable=Color.FromArgb(153,220,153);
+		public static Color ColorOuterAvailable=Color.LimeGreen;
 		public static Color ColorInnerTrainingAssistWrap=Color.FromArgb(255,255,145);
-		public static Color ColorOuterTrainingAssistWrap=Color.FromArgb(153,220,153);
+		public static Color ColorOuterTrainingAssistWrap=Color.LimeGreen;
 		public static Color ColorInnerBackupForWall=Color.FromArgb(236,255,236);
 		public static Color ColorInnerBackupNotForWall=Color.FromArgb(217,255,217);
 		public static Color ColorOuterBackup=Color.FromArgb(191,191,191);
@@ -209,7 +209,7 @@ namespace OpenDentBusiness {
 			}
 			//If we get this far then the person is a tech who is working today.
 			if(phoneEmpDefault.IsTriageOperator) {
-				outerColor=Phones.ColorOuterTriage;
+				outerColor=Phones.ColorOuterTriage;				
 				if(phone.ClockStatus==ClockStatusEnum.Break 
 					|| phone.ClockStatus==ClockStatusEnum.Lunch) {
 					//triage op is working today but currently on break/lunch
