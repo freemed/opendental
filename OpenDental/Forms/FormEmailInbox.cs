@@ -73,7 +73,7 @@ namespace OpenDental {
 				}
 			}
 			catch(Exception ex) {
-				MessageBox.Show(Lan.g(this,"Error retreiving email messages")+": "+ex.Message);
+				MessageBox.Show(Lan.g(this,"Error retrieving email messages")+": "+ex.Message);
 			}
 			finally {
 				Text="Email Inbox for "+AddressInbox.EmailUsername;
