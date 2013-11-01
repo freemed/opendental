@@ -6817,7 +6817,7 @@ namespace OpenDental{
 			long provPri=PatCur.PriProv;
 			long provSec=PatCur.SecProv;
 			for(int i=0;i<ApptList.Length;i++) {
-				if(ApptList[i].AptDateTime.Date==DateTime.Today) {
+				if(ApptList[i].AptDateTime.Date==DateTime.Today && ApptList[i].AptStatus!=ApptStatus.Planned) {
 					provPri=ApptList[i].ProvNum;
 					provSec=ApptList[i].ProvHyg;
 					break;
@@ -6964,7 +6964,7 @@ namespace OpenDental{
 			long provPri=PatCur.PriProv;
 			long provSec=PatCur.SecProv;
 			for(int i=0;i<ApptList.Length;i++) {
-				if(ApptList[i].AptDateTime.Date==DateTime.Today) {
+				if(ApptList[i].AptDateTime.Date==DateTime.Today && ApptList[i].AptStatus!=ApptStatus.Planned) {
 					provPri=ApptList[i].ProvNum;
 					provSec=ApptList[i].ProvHyg;
 					break;
