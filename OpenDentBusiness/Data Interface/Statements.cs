@@ -331,6 +331,7 @@ namespace OpenDentBusiness{
 			str=str.Replace("[monthlyCardsOnFile]",CreditCards.GetMonthlyCardsOnFile(pat.PatNum));
 			str=str.Replace("[nameF]",pat.GetNameFirst());
 			str=str.Replace("[nameFL]",pat.GetNameFL());
+			str=str.Replace("[nameFLnoPref]",pat.GetNameFLnoPref());
 			str=str.Replace("[namePref]",pat.Preferred);
 			str=str.Replace("[PatNum]",pat.PatNum.ToString());
 			str=str.Replace("[currentMonth]",DateTime.Now.ToString("MMMM"));

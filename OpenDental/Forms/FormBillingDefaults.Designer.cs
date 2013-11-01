@@ -48,10 +48,10 @@ namespace OpenDental{
 			this.label9 = new System.Windows.Forms.Label();
 			this.label8 = new System.Windows.Forms.Label();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
+			this.textBillingEmailBody = new OpenDental.ODtextBox();
 			this.label10 = new System.Windows.Forms.Label();
 			this.textInvoiceNote = new System.Windows.Forms.TextBox();
 			this.label11 = new System.Windows.Forms.Label();
-			this.textBillingEmailBody = new OpenDental.ODtextBox();
 			this.textDays = new OpenDental.ValidNum();
 			this.textNote = new OpenDental.ODtextBox();
 			this.butOK = new OpenDental.UI.Button();
@@ -301,14 +301,26 @@ namespace OpenDental{
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "Email Statements";
 			// 
+			// textBillingEmailBody
+			// 
+			this.textBillingEmailBody.AcceptsTab = true;
+			this.textBillingEmailBody.DetectUrls = false;
+			this.textBillingEmailBody.Location = new System.Drawing.Point(12, 109);
+			this.textBillingEmailBody.Name = "textBillingEmailBody";
+			this.textBillingEmailBody.QuickPasteType = OpenDentBusiness.QuickPasteType.Statement;
+			this.textBillingEmailBody.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+			this.textBillingEmailBody.Size = new System.Drawing.Size(616, 102);
+			this.textBillingEmailBody.TabIndex = 1;
+			this.textBillingEmailBody.Text = "";
+			// 
 			// label10
 			// 
 			this.label10.Location = new System.Drawing.Point(11, 23);
 			this.label10.Name = "label10";
-			this.label10.Size = new System.Drawing.Size(612, 22);
+			this.label10.Size = new System.Drawing.Size(612, 29);
 			this.label10.TabIndex = 249;
 			this.label10.Text = "These variables may be used in either box: [monthlyCardsOnFile], [nameF], [nameFL" +
-    "], [namePref], [PatNum], and [currentMonth].";
+    "], [nameFLnoPref], [namePref], [PatNum], and [currentMonth].";
 			this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// textInvoiceNote
@@ -326,18 +338,6 @@ namespace OpenDental{
 			this.label11.TabIndex = 250;
 			this.label11.Text = "Invoice Note";
 			this.label11.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// textBillingEmailBody
-			// 
-			this.textBillingEmailBody.AcceptsTab = true;
-			this.textBillingEmailBody.DetectUrls = false;
-			this.textBillingEmailBody.Location = new System.Drawing.Point(12, 109);
-			this.textBillingEmailBody.Name = "textBillingEmailBody";
-			this.textBillingEmailBody.QuickPasteType = OpenDentBusiness.QuickPasteType.Statement;
-			this.textBillingEmailBody.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-			this.textBillingEmailBody.Size = new System.Drawing.Size(616, 102);
-			this.textBillingEmailBody.TabIndex = 1;
-			this.textBillingEmailBody.Text = "";
 			// 
 			// textDays
 			// 
