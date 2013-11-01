@@ -615,7 +615,6 @@ namespace OpenDental{
 					webBrowser.Visible=true;
 				}
 			}
-			MessageCur.Attachments=EmailAttaches.GetForEmail(MessageCur.EmailMessageNum);
 			FillAttachments();
 			textBodyText.Select();
 		}
