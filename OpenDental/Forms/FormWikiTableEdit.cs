@@ -460,7 +460,11 @@ namespace OpenDental {
 		private void butOK_Click(object sender,EventArgs e) {
 			//PumpGridIntoTable();
 			for(int h=0;h<gridMain.Columns.Count;h++) {//loops through every header in the main grid
-				string s="<body>"+gridMain.Columns[h].Heading.ToString()+"</body>";//Surround with body tags to make it valid xml
+				string s=gridMain.Columns[h].Heading.ToString();
+				s=s.Replace("&","&amp;");
+				s=s.Replace("&amp;<","&lt;");//because "&" was changed to "&amp;" in the line above.
+				s=s.Replace("&amp;>","&gt;");//because "&" was changed to "&amp;" in the line above.
+				s="<body>"+s+"</body>";//Surround with body tags to make it valid xml
 				XmlDocument doc=new XmlDocument();
 				using(StringReader reader=new StringReader(s)) {
 					try {
@@ -475,7 +479,11 @@ namespace OpenDental {
 			for(int i=0;i<Table.Rows.Count;i++) {//loops through each row in the table
 				for(int j=0;j<Table.Columns.Count;j++) {//loops through each column in the row
 					XmlDocument doc=new XmlDocument();
-					string s="<body>"+Table.Rows[i][j].ToString()+"</body>";
+					string s=Table.Rows[i][j].ToString();
+					s=s.Replace("&","&amp;");
+					s=s.Replace("&amp;<","&lt;");//because "&" was changed to "&amp;" in the line above.
+					s=s.Replace("&amp;>","&gt;");//because "&" was changed to "&amp;" in the line above.
+					s="<body>"+s+"</body>";
 					using(StringReader reader=new StringReader(s))
 					{
 						try {
