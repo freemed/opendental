@@ -11,28 +11,139 @@ using System.Threading;
 namespace OpenDentBusiness {
 	///<summary></summary>
 	public class Phones {		
-		public static Color ColorFontHere=Color.Black;
-		public static Color ColorFontAway=Color.FromArgb(186,186,186);
-		public static Color ColorInnerHome=Color.FromArgb(245,245,245);
-		public static Color ColorOuterHome=Color.FromArgb(191,191,191);
-		public static Color ColorInnerNeedsHelp=Color.FromArgb(249,233,249);
-		public static Color ColorOuterNeedsHelp=Color.Orchid;
-		public static Color ColorInnerNoColor=Color.FromArgb(245,245,245);
-		public static Color ColorOuterNoColor=Color.FromArgb(191,191,191);
-		public static Color ColorInnerTriageAway=Color.White;
-		public static Color ColorInnerTriageHere=Color.FromArgb(236,247,252);
-		public static Color ColorOuterTriage=Color.DeepSkyBlue;
-		public static Color ColorInnerOnPhone=Color.FromArgb(254,235,233);
-		public static Color ColorOuterOnPhone=Color.OrangeRed;
-		public static Color ColorInnerLunchBreak=Color.White;
-		public static Color ColorOuterLunchBreak=Color.LimeGreen;
-		public static Color ColorInnerAvailable=Color.FromArgb(217,255,217);
-		public static Color ColorOuterAvailable=Color.LimeGreen;
-		public static Color ColorInnerTrainingAssistWrap=Color.FromArgb(255,255,145);
-		public static Color ColorOuterTrainingAssistWrap=Color.LimeGreen;
-		public static Color ColorInnerBackupForWall=Color.FromArgb(236,255,236);
-		public static Color ColorInnerBackupNotForWall=Color.FromArgb(217,255,217);
-		public static Color ColorOuterBackup=Color.FromArgb(191,191,191);
+		///<summary>Define a color scheme for a phone. FormMapHQ uses DUAL while PhoneTile uses SINGLE.</summary>
+		public class PhoneColorScheme {
+			#region Pre-Defined Dual Color Scheme
+			
+			private static Color COLOR_DUAL_FontHere=Color.Black;
+			private static Color COLOR_DUAL_FontAway=Color.FromArgb(186,186,186);
+			private static Color COLOR_DUAL_InnerHome=Color.FromArgb(245,245,245);
+			private static Color COLOR_DUAL_OuterHome=Color.FromArgb(191,191,191);
+			private static Color COLOR_DUAL_InnerNeedsHelp=Color.FromArgb(249,233,249);
+			private static Color COLOR_DUAL_OuterNeedsHelp=Color.Orchid;
+			private static Color COLOR_DUAL_InnerNoColor=Color.FromArgb(245,245,245);
+			private static Color COLOR_DUAL_OuterNoColor=Color.FromArgb(100,100,100);
+			private static Color COLOR_DUAL_InnerUnavailable=Color.FromArgb(245,245,245);
+			private static Color COLOR_DUAL_OuterUnavailable=Color.FromArgb(100,100,100);
+			private static Color COLOR_DUAL_InnerTriageAway=Color.White;
+			public static Color COLOR_DUAL_InnerTriageHere=Color.LightCyan;
+			private static Color COLOR_DUAL_OuterTriage=Color.Blue;
+			private static Color COLOR_DUAL_InnerOnPhone=Color.FromArgb(254,235,233);
+			private static Color COLOR_DUAL_OuterOnPhone=Color.Red;
+			private static Color COLOR_DUAL_InnerLunchBreak=Color.White;
+			private static Color COLOR_DUAL_OuterLunchBreak=Color.LimeGreen;
+			private static Color COLOR_DUAL_InnerAvailable=Color.FromArgb(217,255,217);
+			private static Color COLOR_DUAL_OuterAvailable=Color.LimeGreen;
+			private static Color COLOR_DUAL_InnerTrainingAssistWrap=Color.FromArgb(255,255,145);
+			private static Color COLOR_DUAL_OuterTrainingAssistWrap=Color.LimeGreen;
+			private static Color COLOR_DUAL_InnerBackup=Color.FromArgb(236,255,236);
+			private static Color COLOR_DUAL_OuterBackup=Color.FromArgb(100,100,100);
+
+			#endregion
+
+			#region Pre-Defined Single Color Scheme
+
+			private static Color COLOR_SINGLE_Unavailable=Color.FromArgb(191,191,191);
+			private static Color COLOR_SINGLE_TriageAway=Color.White;
+			private static Color COLOR_SINGLE_TriageHere=Color.SkyBlue;
+			private static Color COLOR_SINGLE_OnPhone=Color.Salmon;
+			private static Color COLOR_SINGLE_LunchBreak=Color.White;			
+			private static Color COLOR_SINGLE_Available=Color.FromArgb(153,220,153);
+			private static Color COLOR_SINGLE_TrainingAssistWrap=Color.FromArgb(255,255,145);			
+			private static Color COLOR_SINGLE_Backup=Color.FromArgb(217,255,217);			
+
+			#endregion
+
+			#region Public Data
+			
+			private bool _forDualColor;
+			public bool ForDualColor {
+				get {
+					return _forDualColor;
+				}
+				set {
+					_forDualColor=value;
+					SetColorScheme(_forDualColor);
+				}
+			}
+			public Color ColorFontHere;
+			public Color ColorFontAway;
+			public Color ColorInnerUnavailable;
+			public Color ColorOuterUnavailable;
+			public Color ColorInnerHome;
+			public Color ColorOuterHome;
+			public Color ColorInnerNeedsHelp;
+			public Color ColorOuterNeedsHelp;
+			public Color ColorInnerNoColor;
+			public Color ColorOuterNoColor;
+			public Color ColorInnerTriageAway;
+			public Color ColorInnerTriageHere;
+			public Color ColorOuterTriage;
+			public Color ColorInnerOnPhone;
+			public Color ColorOuterOnPhone;
+			public Color ColorInnerLunchBreak;
+			public Color ColorOuterLunchBreak;
+			public Color ColorInnerAvailable;
+			public Color ColorOuterAvailable;
+			public Color ColorInnerTrainingAssistWrap;
+			public Color ColorOuterTrainingAssistWrap;
+			public Color ColorInnerBackup;
+			public Color ColorOuterBackup;
+
+			#endregion
+
+			///<summary>Switch between single and dual color schemes</summary>
+			public PhoneColorScheme(bool forDualColor) {
+				ForDualColor=forDualColor;
+			}
+
+			///<summary>Set public available colors according to user preference</summary>
+			private void SetColorScheme(bool forDualColor) {
+				//default is dual color scheme	
+				ColorFontHere=COLOR_DUAL_FontHere;
+				ColorFontAway=COLOR_DUAL_FontAway;
+				ColorInnerUnavailable=COLOR_DUAL_InnerUnavailable;
+				ColorOuterUnavailable=COLOR_DUAL_OuterUnavailable;
+				ColorInnerHome=COLOR_DUAL_InnerHome;
+				ColorOuterHome=COLOR_DUAL_OuterHome;
+				ColorInnerNeedsHelp=COLOR_DUAL_InnerNeedsHelp;
+				ColorOuterNeedsHelp=COLOR_DUAL_OuterNeedsHelp;
+				ColorInnerNoColor=COLOR_DUAL_InnerNoColor;
+				ColorOuterNoColor=COLOR_DUAL_OuterNoColor;
+				ColorInnerTriageAway=COLOR_DUAL_InnerTriageAway;
+				ColorInnerTriageHere=COLOR_DUAL_InnerTriageHere;
+				ColorOuterTriage=COLOR_DUAL_OuterTriage;
+				ColorInnerOnPhone=COLOR_DUAL_InnerOnPhone;
+				ColorOuterOnPhone=COLOR_DUAL_OuterOnPhone;
+				ColorInnerLunchBreak=COLOR_DUAL_InnerLunchBreak;
+				ColorOuterLunchBreak=COLOR_DUAL_OuterLunchBreak;
+				ColorInnerAvailable=COLOR_DUAL_InnerAvailable;
+				ColorOuterAvailable=COLOR_DUAL_OuterAvailable;
+				ColorInnerTrainingAssistWrap=COLOR_DUAL_InnerTrainingAssistWrap;
+				ColorOuterTrainingAssistWrap=COLOR_DUAL_OuterTrainingAssistWrap;
+				ColorInnerBackup=COLOR_DUAL_InnerBackup;
+				ColorOuterBackup=COLOR_DUAL_OuterBackup;
+
+				//make any changes necessary for single color scheme
+				if(!forDualColor) {
+					ColorInnerUnavailable=COLOR_SINGLE_Unavailable;
+					ColorOuterUnavailable=COLOR_SINGLE_Unavailable;
+					ColorInnerTriageAway=COLOR_SINGLE_TriageAway;
+					ColorInnerTriageHere=COLOR_SINGLE_TriageHere;
+					ColorOuterTriage=COLOR_SINGLE_TriageHere;
+					ColorInnerOnPhone=COLOR_SINGLE_OnPhone;
+					ColorOuterOnPhone=COLOR_SINGLE_OnPhone;
+					ColorInnerLunchBreak=COLOR_SINGLE_LunchBreak;
+					ColorOuterLunchBreak=COLOR_SINGLE_LunchBreak;
+					ColorInnerAvailable=COLOR_SINGLE_Available;
+					ColorOuterAvailable=COLOR_SINGLE_Available;
+					ColorInnerTrainingAssistWrap=COLOR_SINGLE_TrainingAssistWrap;
+					ColorOuterTrainingAssistWrap=COLOR_SINGLE_TrainingAssistWrap;
+					ColorInnerBackup=COLOR_SINGLE_Backup;
+					ColorOuterBackup=COLOR_SINGLE_Backup;
+				}
+			}
+		}
 
 		public static List<Phone> GetPhoneList() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -168,7 +279,8 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Consider all scenarios for a employee/phone/cubicle and return color and triage information</summary>
-		public static void GetPhoneColor(Phone phone,PhoneEmpDefault phoneEmpDefault,bool forWallProjection,out Color outerColor,out Color innerColor,out Color fontColor,out bool isTriageOperatorOnTheClock) {
+		public static void GetPhoneColor(Phone phone,PhoneEmpDefault phoneEmpDefault,bool forDualColorScheme,out Color outerColor,out Color innerColor,out Color fontColor,out bool isTriageOperatorOnTheClock) {
+			PhoneColorScheme colorScheme=new PhoneColorScheme(forDualColorScheme);
 			isTriageOperatorOnTheClock=false;
 			//first set the font color
 			if(phone==null
@@ -176,12 +288,12 @@ namespace OpenDentBusiness {
 				|| phone.ClockStatus==ClockStatusEnum.Home
 				|| phone.ClockStatus==ClockStatusEnum.None
 				|| phone.ClockStatus==ClockStatusEnum.Off) {
-				fontColor=Phones.ColorFontAway;
+					fontColor=colorScheme.ColorFontAway;
 			}
 			else {
-				fontColor=Phones.ColorFontHere;
+				fontColor=colorScheme.ColorFontHere;
 			}
-			if(!forWallProjection && !phoneEmpDefault.HasColor) { //smaller color boxes need special colors
+			if(!forDualColorScheme && !phoneEmpDefault.HasColor) { //smaller color boxes need special colors
 				innerColor=Color.Black;
 				outerColor=Color.White;
 				return;
@@ -191,79 +303,70 @@ namespace OpenDentBusiness {
 				|| phone.ClockStatus==ClockStatusEnum.None
 				|| phone.ClockStatus==ClockStatusEnum.Off) {
 				//No color if employee is not currently working. Trumps all.
-				outerColor=Phones.ColorOuterHome;
-				innerColor=Phones.ColorInnerHome;
+				outerColor=colorScheme.ColorOuterHome;
+				innerColor=colorScheme.ColorInnerHome;
 				return;
 			}
 			if(phone.ClockStatus==ClockStatusEnum.NeedsHelp) { //get this person help now!
-				outerColor=Phones.ColorOuterNeedsHelp;
-				innerColor=Phones.ColorInnerNeedsHelp;
+				outerColor=colorScheme.ColorOuterNeedsHelp;
+				innerColor=colorScheme.ColorInnerNeedsHelp;
 				return;
 			}
-			if(phone.ClockStatus==ClockStatusEnum.Unavailable //Unavailable is very rare and must be approved by management. Make them look like admin/engineer.
-				|| !phoneEmpDefault.HasColor) //not colored (generally an engineer or admin)
-			{
-				outerColor=Phones.ColorOuterNoColor;
-				innerColor=Phones.ColorInnerNoColor;
+			if(!phoneEmpDefault.HasColor) { //not colored (generally an engineer or admin)
+				outerColor=colorScheme.ColorOuterNoColor;
+				innerColor=colorScheme.ColorInnerNoColor;
+				return;
+			}
+			if(phone.ClockStatus==ClockStatusEnum.Unavailable) { //Unavailable is very rare and must be approved by management. Make them look like admin/engineer.
+				outerColor=colorScheme.ColorOuterUnavailable;
+				innerColor=colorScheme.ColorInnerUnavailable;
 				return;
 			}
 			//If we get this far then the person is a tech who is working today.
 			if(phoneEmpDefault.IsTriageOperator) {
-				outerColor=Phones.ColorOuterTriage;				
+				outerColor=colorScheme.ColorOuterTriage;
 				if(phone.ClockStatus==ClockStatusEnum.Break 
 					|| phone.ClockStatus==ClockStatusEnum.Lunch) {
 					//triage op is working today but currently on break/lunch
-					innerColor=Phones.ColorInnerTriageAway;
-					if(!forWallProjection) { //smaller color boxes need special colors
-						outerColor=Phones.ColorInnerTriageAway;
+					innerColor=colorScheme.ColorInnerTriageAway;
+					if(!forDualColorScheme) { //smaller color boxes need special colors
+						outerColor=colorScheme.ColorInnerTriageAway;
 					}
 				}
 				else {
 					//this is a triage operator who is currently here and on the clock
 					isTriageOperatorOnTheClock=true;
-					innerColor=Phones.ColorInnerTriageHere;
+					innerColor=colorScheme.ColorInnerTriageHere;
 				}
 				return;
 			}
 			if(phone.Description!="") { //Description field only has 'in use' when person is on the phone. That is the only time the field is not empty.
-				outerColor=Phones.ColorOuterOnPhone;
-				innerColor=Phones.ColorInnerOnPhone;
+				outerColor=colorScheme.ColorOuterOnPhone;
+				innerColor=colorScheme.ColorInnerOnPhone;
 				return;
 			}
 			//We get this far so we are dealing with a tech who is not on a phone call. Handle each state.
 			switch(phone.ClockStatus) {
 				case ClockStatusEnum.Lunch:
 				case ClockStatusEnum.Break:
-					outerColor=Phones.ColorOuterLunchBreak;
-					innerColor=Phones.ColorInnerLunchBreak;
-					if(!forWallProjection) { //smaller color boxes need special colors
-						outerColor=Color.White;
-					}
+					outerColor=colorScheme.ColorOuterLunchBreak;
+					innerColor=colorScheme.ColorInnerLunchBreak;
 					return;
 				case ClockStatusEnum.Available:
-					outerColor=Phones.ColorOuterAvailable;
-					innerColor=Phones.ColorInnerAvailable;
+					outerColor=colorScheme.ColorOuterAvailable;
+					innerColor=colorScheme.ColorInnerAvailable;
 					return;
 				case ClockStatusEnum.WrapUp:
 				case ClockStatusEnum.Training:
 				case ClockStatusEnum.TeamAssist:
 				case ClockStatusEnum.OfflineAssist:
 					//these all look the same. they mean the tech is here and available but they are currently on a different assigment.
-					outerColor=Phones.ColorOuterTrainingAssistWrap;
-					innerColor=Phones.ColorInnerTrainingAssistWrap;
-					if(!forWallProjection) { //smaller color boxes need special colors
-						outerColor=Phones.ColorInnerTrainingAssistWrap;
-					}
+					outerColor=colorScheme.ColorOuterTrainingAssistWrap;
+					innerColor=colorScheme.ColorInnerTrainingAssistWrap;
 					return;
 				case ClockStatusEnum.Backup:
-					if(forWallProjection) {
-						outerColor=Phones.ColorOuterBackup;
-						innerColor=Phones.ColorInnerBackupForWall;
-					}
-					else { //smaller color boxes need special colors
-						outerColor=Phones.ColorInnerBackupNotForWall;
-						innerColor=Phones.ColorInnerBackupNotForWall;
-					}
+					outerColor=colorScheme.ColorOuterBackup;
+					innerColor=colorScheme.ColorInnerBackup;
 					return;
 				default:
 					break;

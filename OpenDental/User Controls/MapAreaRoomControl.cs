@@ -95,6 +95,19 @@ namespace OpenDental {
 			}
 		}
 
+		private Font _fontHeader=SystemFonts.DefaultFont;
+		[Category("Behavior")]
+		[Description("Font used for the top row. Generally reserved for the name of the MapAreaRoom.")]
+		public Font FontHeader {
+			get {
+				return _fontHeader;
+			}
+			set {
+				_fontHeader=value;
+				Invalidate();
+			}
+		}
+
 		public bool IsFlashing {
 			get {
 				return timerFlash.Enabled;
@@ -117,7 +130,7 @@ namespace OpenDental {
 		}
 
 		///<summary>Takes all required fields as input. Suggest using this version when adding a cubicle to a ClinicMapPanel.</summary>
-		public MapAreaRoomControl(MapArea cubicle,string elapsed,string employeeName,long employeeNum,string extension,string status,Font font,Color innerColor,Color outerColor,Color backColor,Point location,Size size,Image phoneImage,bool allowDragging,bool allowEdit) :this() {
+		public MapAreaRoomControl(MapArea cubicle,string elapsed,string employeeName,long employeeNum,string extension,string status,Font font,Font fontHeader,Color innerColor,Color outerColor,Color backColor,Point location,Size size,Image phoneImage,bool allowDragging,bool allowEdit) :this() {
 			cubicle.ItemType=MapItemType.Room;
 			MapAreaItem=cubicle;
 			Elapsed = elapsed;
@@ -126,6 +139,7 @@ namespace OpenDental {
 			Extension = extension;
 			Status = status; 
 			Font = font;
+			FontHeader=fontHeader;
 			Location = location;
 			Size=size;
 			InnerColor = innerColor;
@@ -194,28 +208,33 @@ namespace OpenDental {
 					return;
 				}
 				//4 rows of data
-				int rowHeight=rcOuter.Height/4;
+				int rowsLowestCommonDenominator=9;
+				float typicalRowHeight=rcOuter.Height/(float)rowsLowestCommonDenominator;
 				//row 1 - employee name
-				FitText(EmployeeName,Font,brushText,new RectangleF(rcOuter.X,rcOuter.Y,rcOuter.Width,rowHeight),stringFormat,e.Graphics);
+				FitText(EmployeeName,FontHeader,brushText,new RectangleF(rcOuter.X,rcOuter.Y,rcOuter.Width,typicalRowHeight*3),stringFormat,e.Graphics);
+				float yPosBottom=typicalRowHeight*3; //row 1 is 3/9 tall
 				//row 2 (left) - employee extension
-				FitText(Extension,Font,brushText,new RectangleF(rcOuter.X,rcOuter.Y+rowHeight,rcOuter.Width/2,rowHeight),stringFormat,e.Graphics);
+				FitText(Extension,Font,brushText,new RectangleF(rcOuter.X,rcOuter.Y+yPosBottom,rcOuter.Width/2,typicalRowHeight*2),stringFormat,e.Graphics);
 				//row 2 (right) - phone icon
 				if(PhoneImage!=null) {
 					using(Bitmap bitmap=new Bitmap(PhoneImage)) {//center the image on the right-hand side of row 2
-						Rectangle rectImage=new Rectangle(rcOuter.X+(rcOuter.Width/2),rcOuter.Y+rowHeight,rcOuter.Width/2,rowHeight);
+						RectangleF rectImage=new RectangleF(rcOuter.X+(rcOuter.Width/2),rcOuter.Y+yPosBottom,rcOuter.Width/2,typicalRowHeight*2);
 						if(bitmap.Height<rectImage.Height) {
 							rectImage.Y-=(bitmap.Height-rectImage.Height)/2;
 						}
 						if(bitmap.Width<rectImage.Width) {
 							rectImage.X-=(bitmap.Width-rectImage.Width)/2;
 						}
-						e.Graphics.DrawImageUnscaled(PhoneImage,rectImage);
+						e.Graphics.DrawImageUnscaled(PhoneImage,Rectangle.Round(rectImage));
 					}					
 				}
+				yPosBottom+=typicalRowHeight*2; //row 2 is 2/9 tall				
 				//row 3 - elapsed time
-				FitText(Elapsed,Font,brushText,new RectangleF(rcOuter.X,rcOuter.Y+(rowHeight*2),rcOuter.Width,rowHeight),stringFormat,e.Graphics);
+				FitText(Elapsed,Font,brushText,new RectangleF(rcOuter.X,rcOuter.Y+yPosBottom,rcOuter.Width,typicalRowHeight*2),stringFormat,e.Graphics);
+				yPosBottom+=typicalRowHeight*2; //row 3 is 2/9 tall				
 				//row 4 - employee status
-				FitText(Status,Font,brushText,new RectangleF(rcOuter.X,rcOuter.Y+(rowHeight*3),rcOuter.Width,rowHeight),stringFormat,e.Graphics);
+				FitText(Status,Font,brushText,new RectangleF(rcOuter.X,rcOuter.Y+yPosBottom,rcOuter.Width,typicalRowHeight*2),stringFormat,e.Graphics);
+				yPosBottom+=typicalRowHeight*2; //row 4 is 2/9 tall				
 			}
 			catch { }
 			finally {

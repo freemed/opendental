@@ -51,10 +51,10 @@
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Font = new System.Drawing.Font("Calibri", 25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label1.Location = new System.Drawing.Point(8, 48);
+			this.label1.Font = new System.Drawing.Font("Calibri", 28F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label1.Location = new System.Drawing.Point(4, 76);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(162, 41);
+			this.label1.Size = new System.Drawing.Size(182, 46);
 			this.label1.TabIndex = 6;
 			this.label1.Text = "Triage Red";
 			// 
@@ -62,55 +62,54 @@
 			// 
 			this.labelTriageRedTimeSpan.BackColor = System.Drawing.Color.White;
 			this.labelTriageRedTimeSpan.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.labelTriageRedTimeSpan.Font = new System.Drawing.Font("Calibri", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelTriageRedTimeSpan.Location = new System.Drawing.Point(255, 48);
+			this.labelTriageRedTimeSpan.Font = new System.Drawing.Font("Calibri", 40F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelTriageRedTimeSpan.Location = new System.Drawing.Point(304, 64);
 			this.labelTriageRedTimeSpan.Name = "labelTriageRedTimeSpan";
-			this.labelTriageRedTimeSpan.Size = new System.Drawing.Size(127, 42);
+			this.labelTriageRedTimeSpan.Size = new System.Drawing.Size(203, 70);
 			this.labelTriageRedTimeSpan.TabIndex = 7;
-			this.labelTriageRedTimeSpan.Text = "0:00:00";
+			this.labelTriageRedTimeSpan.Text = "00:00";
 			this.labelTriageRedTimeSpan.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// labelVoicemailTimeSpan
 			// 
 			this.labelVoicemailTimeSpan.BackColor = System.Drawing.Color.White;
 			this.labelVoicemailTimeSpan.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.labelVoicemailTimeSpan.Font = new System.Drawing.Font("Calibri", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelVoicemailTimeSpan.Location = new System.Drawing.Point(255, 110);
+			this.labelVoicemailTimeSpan.Font = new System.Drawing.Font("Calibri", 40F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelVoicemailTimeSpan.Location = new System.Drawing.Point(304, 163);
 			this.labelVoicemailTimeSpan.Name = "labelVoicemailTimeSpan";
-			this.labelVoicemailTimeSpan.Size = new System.Drawing.Size(127, 42);
+			this.labelVoicemailTimeSpan.Size = new System.Drawing.Size(203, 70);
 			this.labelVoicemailTimeSpan.TabIndex = 9;
-			this.labelVoicemailTimeSpan.Text = "0:00:00";
+			this.labelVoicemailTimeSpan.Text = "00:00";
 			this.labelVoicemailTimeSpan.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// label4
 			// 
 			this.label4.AutoSize = true;
-			this.label4.Font = new System.Drawing.Font("Calibri", 25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label4.Location = new System.Drawing.Point(8, 110);
+			this.label4.Font = new System.Drawing.Font("Calibri", 28F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label4.Location = new System.Drawing.Point(4, 175);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(152, 41);
+			this.label4.Size = new System.Drawing.Size(170, 46);
 			this.label4.TabIndex = 8;
 			this.label4.Text = "Voicemail";
 			// 
 			// labelTriageTimeSpan
 			// 
-			this.labelTriageTimeSpan.BackColor = System.Drawing.Color.White;
-			this.labelTriageTimeSpan.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.labelTriageTimeSpan.Font = new System.Drawing.Font("Calibri", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelTriageTimeSpan.Location = new System.Drawing.Point(255, 169);
+			this.labelTriageTimeSpan.BackColor = System.Drawing.SystemColors.Control;
+			this.labelTriageTimeSpan.Font = new System.Drawing.Font("Calibri", 70F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelTriageTimeSpan.Location = new System.Drawing.Point(304, 234);
 			this.labelTriageTimeSpan.Name = "labelTriageTimeSpan";
-			this.labelTriageTimeSpan.Size = new System.Drawing.Size(127, 42);
+			this.labelTriageTimeSpan.Size = new System.Drawing.Size(203, 105);
 			this.labelTriageTimeSpan.TabIndex = 11;
-			this.labelTriageTimeSpan.Text = "0:00:00";
+			this.labelTriageTimeSpan.Text = "0";
 			this.labelTriageTimeSpan.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// label6
 			// 
 			this.label6.AutoSize = true;
-			this.label6.Font = new System.Drawing.Font("Calibri", 25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label6.Location = new System.Drawing.Point(8, 169);
+			this.label6.Font = new System.Drawing.Font("Calibri", 28F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label6.Location = new System.Drawing.Point(4, 274);
 			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(102, 41);
+			this.label6.Size = new System.Drawing.Size(114, 46);
 			this.label6.TabIndex = 10;
 			this.label6.Text = "Triage";
 			// 
@@ -118,10 +117,10 @@
 			// 
 			this.labelTriageCalls.BackColor = System.Drawing.Color.White;
 			this.labelTriageCalls.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.labelTriageCalls.Font = new System.Drawing.Font("Calibri", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelTriageCalls.Location = new System.Drawing.Point(176, 169);
+			this.labelTriageCalls.Font = new System.Drawing.Font("Calibri", 40F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelTriageCalls.Location = new System.Drawing.Point(185, 262);
 			this.labelTriageCalls.Name = "labelTriageCalls";
-			this.labelTriageCalls.Size = new System.Drawing.Size(73, 42);
+			this.labelTriageCalls.Size = new System.Drawing.Size(107, 70);
 			this.labelTriageCalls.TabIndex = 14;
 			this.labelTriageCalls.Text = "0";
 			this.labelTriageCalls.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -130,10 +129,10 @@
 			// 
 			this.labelVoicemailCalls.BackColor = System.Drawing.Color.White;
 			this.labelVoicemailCalls.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.labelVoicemailCalls.Font = new System.Drawing.Font("Calibri", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelVoicemailCalls.Location = new System.Drawing.Point(176, 110);
+			this.labelVoicemailCalls.Font = new System.Drawing.Font("Calibri", 40F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelVoicemailCalls.Location = new System.Drawing.Point(187, 163);
 			this.labelVoicemailCalls.Name = "labelVoicemailCalls";
-			this.labelVoicemailCalls.Size = new System.Drawing.Size(73, 42);
+			this.labelVoicemailCalls.Size = new System.Drawing.Size(107, 70);
 			this.labelVoicemailCalls.TabIndex = 13;
 			this.labelVoicemailCalls.Text = "0";
 			this.labelVoicemailCalls.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -142,10 +141,10 @@
 			// 
 			this.labelTriageRedCalls.BackColor = System.Drawing.Color.White;
 			this.labelTriageRedCalls.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.labelTriageRedCalls.Font = new System.Drawing.Font("Calibri", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelTriageRedCalls.Location = new System.Drawing.Point(176, 48);
+			this.labelTriageRedCalls.Font = new System.Drawing.Font("Calibri", 40F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelTriageRedCalls.Location = new System.Drawing.Point(185, 64);
 			this.labelTriageRedCalls.Name = "labelTriageRedCalls";
-			this.labelTriageRedCalls.Size = new System.Drawing.Size(73, 42);
+			this.labelTriageRedCalls.Size = new System.Drawing.Size(107, 70);
 			this.labelTriageRedCalls.TabIndex = 12;
 			this.labelTriageRedCalls.Text = "0";
 			this.labelTriageRedCalls.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -153,30 +152,30 @@
 			// label10
 			// 
 			this.label10.AutoSize = true;
-			this.label10.Font = new System.Drawing.Font("Calibri", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label10.Location = new System.Drawing.Point(170, 15);
+			this.label10.Font = new System.Drawing.Font("Calibri", 28F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label10.Location = new System.Drawing.Point(179, 16);
 			this.label10.Name = "label10";
-			this.label10.Size = new System.Drawing.Size(84, 33);
+			this.label10.Size = new System.Drawing.Size(119, 46);
 			this.label10.TabIndex = 15;
 			this.label10.Text = "# Calls";
 			// 
 			// label11
 			// 
 			this.label11.AutoSize = true;
-			this.label11.Font = new System.Drawing.Font("Calibri", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label11.Location = new System.Drawing.Point(284, 15);
+			this.label11.Font = new System.Drawing.Font("Calibri", 28F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label11.Location = new System.Drawing.Point(357, 15);
 			this.label11.Name = "label11";
-			this.label11.Size = new System.Drawing.Size(69, 33);
+			this.label11.Size = new System.Drawing.Size(97, 46);
 			this.label11.TabIndex = 16;
 			this.label11.Text = "Time";
 			// 
 			// label12
 			// 
 			this.label12.AutoSize = true;
-			this.label12.Font = new System.Drawing.Font("Calibri", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label12.Location = new System.Drawing.Point(184, 334);
+			this.label12.Font = new System.Drawing.Font("Calibri", 28F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label12.Location = new System.Drawing.Point(193, 438);
 			this.label12.Name = "label12";
-			this.label12.Size = new System.Drawing.Size(65, 33);
+			this.label12.Size = new System.Drawing.Size(90, 46);
 			this.label12.TabIndex = 19;
 			this.label12.Text = "Staff";
 			// 
@@ -184,10 +183,10 @@
 			// 
 			this.labelTriageOpsStaff.BackColor = System.Drawing.Color.White;
 			this.labelTriageOpsStaff.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.labelTriageOpsStaff.Font = new System.Drawing.Font("Calibri", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelTriageOpsStaff.Location = new System.Drawing.Point(178, 367);
+			this.labelTriageOpsStaff.Font = new System.Drawing.Font("Calibri", 40F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelTriageOpsStaff.Location = new System.Drawing.Point(185, 486);
 			this.labelTriageOpsStaff.Name = "labelTriageOpsStaff";
-			this.labelTriageOpsStaff.Size = new System.Drawing.Size(73, 42);
+			this.labelTriageOpsStaff.Size = new System.Drawing.Size(107, 70);
 			this.labelTriageOpsStaff.TabIndex = 18;
 			this.labelTriageOpsStaff.Text = "0";
 			this.labelTriageOpsStaff.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -195,10 +194,10 @@
 			// label14
 			// 
 			this.label14.AutoSize = true;
-			this.label14.Font = new System.Drawing.Font("Calibri", 25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label14.Location = new System.Drawing.Point(12, 367);
+			this.label14.Font = new System.Drawing.Font("Calibri", 28F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label14.Location = new System.Drawing.Point(-2, 498);
 			this.label14.Name = "label14";
-			this.label14.Size = new System.Drawing.Size(164, 41);
+			this.label14.Size = new System.Drawing.Size(183, 46);
 			this.label14.TabIndex = 17;
 			this.label14.Text = "Triage Ops";
 			// 
@@ -206,7 +205,7 @@
 			// 
 			this.label16.AutoSize = true;
 			this.label16.Font = new System.Drawing.Font("Calibri", 25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label16.Location = new System.Drawing.Point(703, -2);
+			this.label16.Location = new System.Drawing.Point(832, -2);
 			this.label16.Name = "label16";
 			this.label16.Size = new System.Drawing.Size(286, 41);
 			this.label16.TabIndex = 21;
@@ -215,9 +214,9 @@
 			// labelTriageCoordinator
 			// 
 			this.labelTriageCoordinator.Font = new System.Drawing.Font("Calibri", 25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelTriageCoordinator.Location = new System.Drawing.Point(984, -2);
+			this.labelTriageCoordinator.Location = new System.Drawing.Point(1124, -2);
 			this.labelTriageCoordinator.Name = "labelTriageCoordinator";
-			this.labelTriageCoordinator.Size = new System.Drawing.Size(617, 41);
+			this.labelTriageCoordinator.Size = new System.Drawing.Size(606, 41);
 			this.labelTriageCoordinator.TabIndex = 22;
 			// 
 			// menuStrip
@@ -251,9 +250,9 @@
 			this.groupPhoneMetrics.Controls.Add(this.labelTriageTimeSpan);
 			this.groupPhoneMetrics.Controls.Add(this.labelTriageCalls);
 			this.groupPhoneMetrics.Controls.Add(this.labelVoicemailCalls);
-			this.groupPhoneMetrics.Location = new System.Drawing.Point(2, 37);
+			this.groupPhoneMetrics.Location = new System.Drawing.Point(4, 37);
 			this.groupPhoneMetrics.Name = "groupPhoneMetrics";
-			this.groupPhoneMetrics.Size = new System.Drawing.Size(386, 218);
+			this.groupPhoneMetrics.Size = new System.Drawing.Size(514, 353);
 			this.groupPhoneMetrics.TabIndex = 25;
 			this.groupPhoneMetrics.TabStop = false;
 			// 
@@ -264,7 +263,7 @@
 			this.butFullScreen.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butFullScreen.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butFullScreen.CornerRadius = 4F;
-			this.butFullScreen.Location = new System.Drawing.Point(313, 1017);
+			this.butFullScreen.Location = new System.Drawing.Point(440, 1015);
 			this.butFullScreen.Name = "butFullScreen";
 			this.butFullScreen.Size = new System.Drawing.Size(75, 24);
 			this.butFullScreen.TabIndex = 29;
@@ -282,9 +281,10 @@
 			this.mapAreaPanelHQ.FloorWidthFeet = 71;
 			this.mapAreaPanelHQ.Font = new System.Drawing.Font("Calibri", 25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.mapAreaPanelHQ.FontCubicle = new System.Drawing.Font("Calibri", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.mapAreaPanelHQ.FontCubicleHeader = new System.Drawing.Font("Calibri", 19F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.mapAreaPanelHQ.FontLabel = new System.Drawing.Font("Calibri", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.mapAreaPanelHQ.GridColor = System.Drawing.Color.LightGray;
-			this.mapAreaPanelHQ.Location = new System.Drawing.Point(392, 37);
+			this.mapAreaPanelHQ.Location = new System.Drawing.Point(521, 37);
 			this.mapAreaPanelHQ.Name = "mapAreaPanelHQ";
 			this.mapAreaPanelHQ.PixelsPerFoot = 17;
 			this.mapAreaPanelHQ.ShowGrid = false;
@@ -295,7 +295,7 @@
 			// FormMapHQ
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(1634, 1042);
+			this.ClientSize = new System.Drawing.Size(1735, 1042);
 			this.Controls.Add(this.butFullScreen);
 			this.Controls.Add(this.labelTriageOpsStaff);
 			this.Controls.Add(this.groupPhoneMetrics);

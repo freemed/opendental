@@ -24,7 +24,7 @@ namespace OpenDental {
 
 		private void FormMapHQ_Load(object sender,EventArgs e) {
 			FillMapAreaPanel();
-			labelTriageOpsStaff.BackColor=Phones.ColorInnerTriageHere;
+			labelTriageOpsStaff.BackColor=Phones.PhoneColorScheme.COLOR_DUAL_InnerTriageHere;
 		}
 
 		///<summary>Setup the map panel with the cubicles and labels before filling with real-time data. Call this on load or anytime the cubicle layout has changed.</summary>
@@ -131,10 +131,10 @@ namespace OpenDental {
 		public void SetTriageUrgent(int calls,TimeSpan timeBehind) {
 			this.labelTriageRedCalls.Text=calls.ToString();
 			if(timeBehind==TimeSpan.Zero) { //format the string special for this case
-				this.labelTriageRedTimeSpan.Text="0:00:00";
+				this.labelTriageRedTimeSpan.Text="00:00";
 			}
 			else {
-				this.labelTriageRedTimeSpan.Text=timeBehind.ToStringHmmss();
+				this.labelTriageRedTimeSpan.Text=timeBehind.ToStringmmss();
 			}
 			if(calls>1) { //we are behind
 				labelTriageRedCalls.BackColor=Color.Red;
@@ -157,10 +157,10 @@ namespace OpenDental {
 		public void SetVoicemailRed(int calls,TimeSpan timeBehind) {
 			this.labelVoicemailCalls.Text=calls.ToString();
 			if(timeBehind==TimeSpan.Zero) { //format the string special for this case
-				this.labelVoicemailTimeSpan.Text="0:00:00";
+				this.labelVoicemailTimeSpan.Text="00:00";
 			}
 			else {
-				this.labelVoicemailTimeSpan.Text=timeBehind.ToStringHmmss();
+				this.labelVoicemailTimeSpan.Text=timeBehind.ToStringmmss();
 			}
 			if(calls>5) { //we are behind
 				labelVoicemailCalls.BackColor=Color.Red;
@@ -182,10 +182,10 @@ namespace OpenDental {
 		
 		public void SetTriageNormal(int callsWithNotes,int callsWithNoNotes,TimeSpan timeBehind) {
 			if(timeBehind==TimeSpan.Zero) { //format the string special for this case
-				this.labelTriageTimeSpan.Text="0:00:00";
+				this.labelTriageTimeSpan.Text="0";
 			}
 			else {
-				this.labelTriageTimeSpan.Text=timeBehind.ToStringHmmss();			
+				this.labelTriageTimeSpan.Text=((int)timeBehind.TotalMinutes).ToString();			
 			}
 			if(callsWithNoNotes>0) { //we have calls which don't have notes so display that number
 				this.labelTriageCalls.Text=callsWithNoNotes.ToString();
@@ -202,11 +202,9 @@ namespace OpenDental {
 				labelTriageCalls.ForeColor=Color.Black;
 			}
 			if(timeBehind>TimeSpan.FromMinutes(19)) { //we are behind
-				labelTriageTimeSpan.BackColor=Color.Red;
-				labelTriageTimeSpan.ForeColor=Color.White;
+				labelTriageTimeSpan.ForeColor=Color.Red;
 			}
 			else { //we are ok
-				labelTriageTimeSpan.BackColor=Color.White;
 				labelTriageTimeSpan.ForeColor=Color.Black;
 			}
 		}

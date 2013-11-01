@@ -45,6 +45,20 @@ namespace OpenDental {
 			}
 		}
 
+		private Font fontCubicleHeader=SystemFonts.DefaultFont;
+		[Category("Cubicle Farm")]
+		[Description("Font sized used for first row header in the cubicle")]
+		public Font FontCubicleHeader {
+			get {
+				return fontCubicleHeader;
+			}
+			set {
+				fontCubicleHeader=value;
+				ResizeScrollbarsToFitContents();
+				Invalidate(true);
+			}
+		}
+
 		private int floorWidthFeet=80;
 		[Category("Cubicle Farm")]
 		[Description("Number of feet left to right")]
@@ -217,6 +231,7 @@ namespace OpenDental {
 				cubicle.Extension.ToString(),
 				"Status",
 				this.FontCubicle,
+				this.FontCubicleHeader,
 				Color.FromArgb(40,Color.Red),
 				Color.Red,
 				this.FloorColor,

@@ -39,6 +39,21 @@ namespace OpenDentBusiness {
 			return retVal;
 		}
 
+		///<summary>-mm:ss.  If zero, then returns empty string.</summary>
+		public static string ToStringmmss(this TimeSpan tspan) {
+			//No need to check RemotingRole; no call to db.
+			if(tspan==TimeSpan.Zero) {
+				return "";
+			}
+			string retVal="";
+			if(tspan < TimeSpan.Zero) {
+				retVal+="-";
+				tspan=tspan.Duration();
+			}
+			retVal+=((int)tspan.TotalMinutes).ToString().PadLeft(2,'0')+":"+tspan.Seconds.ToString().PadLeft(2,'0');
+			return retVal;
+		}
+
 		///<summary>Does not work well with negative values.</summary>
 		public static string ToString(this TimeSpan tspan,string format) {
 			//No need to check RemotingRole; no call to db.
