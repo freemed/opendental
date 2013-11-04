@@ -309,6 +309,7 @@ namespace OpenDental{
 			Pat=Patients.GetPat(PopupCur.PatNum);
 			textPatient.Text=Pat.GetNameLF();
 			if(PopupCur.IsNew) {//If popup is new User is the logged-in user and create date is now.
+				butAudit.Visible=false;
 				textUser.Text=Security.CurUser.UserName;
 				textCreateDate.Text=DateTime.Now.ToShortDateString()+" "+DateTime.Now.ToShortTimeString();
 			}
