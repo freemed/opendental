@@ -92,7 +92,6 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(18, 35);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
 			this.gridMain.Size = new System.Drawing.Size(467, 628);
 			this.gridMain.TabIndex = 16;
 			this.gridMain.Title = null;
@@ -208,6 +207,9 @@ namespace OpenDental{
 		private void FormDiseaseDefs_Load(object sender, System.EventArgs e) {
 			if(IsSelectionMode){
 				butClose.Text=Lan.g(this,"Cancel");
+				if(IsMultiSelect) {
+					gridMain.SelectionMode=GridSelectionMode.MultiExtended;
+				}
 			}
 			else{
 				butOK.Visible=false;
