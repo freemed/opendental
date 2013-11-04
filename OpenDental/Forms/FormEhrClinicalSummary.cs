@@ -57,7 +57,7 @@ namespace OpenDental {
 			}
 			string ccd=EhrCCD.GenerateCCD(PatCur);
 			File.WriteAllText(Path.Combine(dlg.SelectedPath,"ccd.xml"),ccd);
-			File.WriteAllText(Path.Combine(dlg.SelectedPath,"ccd.xsl"),EHR.Properties.Resources.CCD);
+			File.WriteAllText(Path.Combine(dlg.SelectedPath,"ccd.xsl"),FormEHR.GetEhrResource("CCD"));
 			EhrMeasureEvent newMeasureEvent = new EhrMeasureEvent();
 			newMeasureEvent.DateTEvent = DateTime.Now;
 			newMeasureEvent.EventType = EhrMeasureEventType.ClinicalSummaryProvidedToPt;
@@ -77,7 +77,7 @@ namespace OpenDental {
 			Cursor=Cursors.WaitCursor;
 			string ccd=EhrCCD.GenerateCCD(PatCur);
 			try {
-				EmailMessages.SendTestUnsecure("Clinical Summary","ccd.xml",ccd,"ccd.xsl",EHR.Properties.Resources.CCD);
+				EmailMessages.SendTestUnsecure("Clinical Summary","ccd.xml",ccd,"ccd.xsl",FormEHR.GetEhrResource("CCD"));
 			}
 			catch(Exception ex) {
 				Cursor=Cursors.Default;

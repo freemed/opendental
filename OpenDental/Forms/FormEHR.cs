@@ -66,6 +66,27 @@ namespace OpenDental {
 			#endif
 		}
 
+		///<summary>Loads a resource file from the EHR assembly and returns the file text as a string.
+		///Returns "" is the EHR assembly did not load. strResourceName can be either "CCD" or "CCR".</summary>
+		public static string GetEhrResource(string strResourceName) {
+			if(AssemblyEHR==null) {
+				return "";
+			}
+			Stream stream=AssemblyEHR.GetManifestResourceStream("EHR.Properties.Resources.resources");
+			System.Resources.ResourceReader resourceReader=new System.Resources.ResourceReader(stream);
+			string strResourceType="";
+			byte[] arrayResourceBytes=null;
+			resourceReader.GetResourceData(strResourceName,out strResourceType,out arrayResourceBytes);
+			resourceReader.Dispose();
+			stream.Dispose();
+			MemoryStream ms=new MemoryStream(arrayResourceBytes);
+			BinaryReader br=new BinaryReader(ms);
+			string retVal=br.ReadString();//Removes the leading binary characters from the string.
+			ms.Dispose();
+			br.Dispose();
+			return retVal;
+		}
+
 		private void FormEHR_Load(object sender,EventArgs e) {
 			//Can't really use this, because it's only loaded once at the very beginning of OD starting up.
 		}

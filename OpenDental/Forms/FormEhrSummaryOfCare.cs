@@ -87,12 +87,12 @@ namespace OpenDental {
 			if(doc.DocumentElement.Name.ToLower()=="clinicaldocument") {//CCD, CCDA, and C32.
 				xmlFileName="ccd.xml";
 				xslFileName="ccd.xsl";
-				xslContents=EHR.Properties.Resources.CCD;
+				xslContents=FormEHR.GetEhrResource("CCD");
 			}
 			else if(doc.DocumentElement.Name.ToLower()=="continuityofcarerecord" || doc.DocumentElement.Name.ToLower()=="ccr:continuityofcarerecord") {//CCR
 				xmlFileName="ccr.xml";
 				xslFileName="ccr.xsl";
-				xslContents=EHR.Properties.Resources.CCR;
+				xslContents=FormEHR.GetEhrResource("CCR");
 			}
 			else {
 				MessageBox.Show("This is not a valid CCD, CCDA, CCR, or C32 message.  Only the raw text will be shown");
@@ -129,7 +129,7 @@ namespace OpenDental {
 			}
 			string ccd=EhrCCD.GenerateCCD(PatCur);
 			File.WriteAllText(Path.Combine(dlg.SelectedPath,"ccd.xml"),ccd);
-			File.WriteAllText(Path.Combine(dlg.SelectedPath,"ccd.xsl"),EHR.Properties.Resources.CCD);
+			File.WriteAllText(Path.Combine(dlg.SelectedPath,"ccd.xsl"),FormEHR.GetEhrResource("CCD"));
 			EhrMeasureEvent newMeasureEvent = new EhrMeasureEvent();
 			newMeasureEvent.DateTEvent = DateTime.Now;
 			newMeasureEvent.EventType = EhrMeasureEventType.SummaryOfCareProvidedToDr;
@@ -153,7 +153,7 @@ namespace OpenDental {
 			string strCCD=EhrCCD.GenerateCCD(PatCur);
 			try {
 				EmailMessages.CreateAttachmentFromText(emailMessage,strCCD,"ccd.xml");
-				EmailMessages.CreateAttachmentFromText(emailMessage,EHR.Properties.Resources.CCD,"ccd.xsl");
+				EmailMessages.CreateAttachmentFromText(emailMessage,FormEHR.GetEhrResource("CCD"),"ccd.xsl");
 			}
 			catch(Exception ex) {
 				Cursor=Cursors.Default;

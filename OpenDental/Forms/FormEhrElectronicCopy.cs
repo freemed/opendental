@@ -106,7 +106,7 @@ namespace OpenDental {
 			}
 			string ccd=EhrCCD.GenerateCCD(PatCur);
 			File.WriteAllText(Path.Combine(dlg.SelectedPath,"ccd.xml"),ccd);
-			File.WriteAllText(Path.Combine(dlg.SelectedPath,"ccd.xsl"),EHR.Properties.Resources.CCD);
+			File.WriteAllText(Path.Combine(dlg.SelectedPath,"ccd.xsl"),FormEHR.GetEhrResource("CCD"));
 			RecordRequestAndProvide();
 			MessageBox.Show("Exported");
 		}
@@ -116,7 +116,7 @@ namespace OpenDental {
 			Cursor=Cursors.WaitCursor;
 			string ccd=EhrCCD.GenerateCCD(PatCur);
 			try {
-				EmailMessages.SendTestUnsecure("Electronic Copy of Health Information","ccd.xml",ccd,"ccd.xsl",EHR.Properties.Resources.CCD);
+				EmailMessages.SendTestUnsecure("Electronic Copy of Health Information","ccd.xml",ccd,"ccd.xsl",FormEHR.GetEhrResource("CCD"));
 			}
 			catch(Exception ex) {
 				Cursor=Cursors.Default;
