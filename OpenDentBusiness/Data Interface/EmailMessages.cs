@@ -672,7 +672,7 @@ namespace OpenDentBusiness{
 				mimeEntity=message.ExtractMimeEntity();
 			}
 			catch {
-				emailMessage.BodyText=message.Body.Text;
+				emailMessage.BodyText=ProcessMimeTextPart(message.Body.Text);
 				return emailMessage;
 			}
 			if(message.IsMultiPart) {
@@ -705,7 +705,7 @@ namespace OpenDentBusiness{
 					sbBodyText.Append(listMimeBodyTextParts[i].ToString());//Includes not only the body text, but also content type and content disposition.
 				}
 				else {
-					sbBodyText.Append(listMimeBodyTextParts[i].Body.Text);
+					sbBodyText.Append(ProcessMimeTextPart(listMimeBodyTextParts[i].Body.Text));
 				}
 			}
 			if(strTextPartBoundary!="") {
