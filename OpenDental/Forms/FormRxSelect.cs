@@ -196,13 +196,13 @@ namespace OpenDental{
 				return;
 			}
 			RxDef RxDefCur=RxDefList[gridMain.GetSelectedIndex()];
-			while(RxDefCur.RxCui==0) {
-				string strMsgText=Lan.g(this,"The selected prescription is missing an RxNorm and will not be added")+".\r\n"+Lan.g(this,"Edit Rx Template?");
-				if(!MsgBox.Show(this,true,strMsgText)) {
-					return;
-				}
-				FormRxDefEdit form=new FormRxDefEdit(RxDefCur);
-				if(form.ShowDialog()==DialogResult.OK) {
+			if(PrefC.GetBool(PrefName.ShowFeatureEhr) && RxDefCur.RxCui==0) {
+				string strMsgText=Lan.g(this,"The selected prescription is missing an RxNorm")+".\r\n"
+					+Lan.g(this,"Prescriptions without RxNorms cannot be exported in EHR documents")+".\r\n"
+					+Lan.g(this,"Edit RxNorm in Rx Template?");
+				if(MsgBox.Show(this,true,strMsgText)) {
+					FormRxDefEdit form=new FormRxDefEdit(RxDefCur);
+					form.ShowDialog();
 					RxDefCur=RxDefs.GetOne(RxDefCur.RxDefNum);//FormRxDefEdit does not modify the RxDefCur object, so we must get the updated RxCui from the db.
 				}
 			}
@@ -236,7 +236,7 @@ namespace OpenDental{
 			if(Security.CurUser.ProvNum!=0) {//The user who is currently logged in is a provider.
 				isProvOrder=true;
 			}
-			MedicationPats.InsertOrUpdateMedOrderForRx(RxPatCur,RxDefCur.RxCui,isProvOrder);
+			MedicationPats.InsertOrUpdateMedOrderForRx(RxPatCur,RxDefCur.RxCui,isProvOrder);//RxDefCur.RxCui can be 0.
 			DialogResult=DialogResult.OK;
 		}
 
