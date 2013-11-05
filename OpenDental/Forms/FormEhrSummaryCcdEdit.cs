@@ -48,7 +48,9 @@ namespace OpenDental {
 				return;
 			}
 			FormReconcileMedication formRM=new FormReconcileMedication();
-			formRM.ListMedicationPatNew=EhrCCD.GetListMedicationPats(xmlDocCcd);
+			formRM.ListMedicationPatNew=new List<MedicationPat>();
+			List<Medication> listMedications=new List<Medication>();//TODO: Set formRM.ListMedicationsNew.
+			EhrCCD.GetListMedicationPats(xmlDocCcd,formRM.ListMedicationPatNew,listMedications);
 			formRM.ShowDialog();
 		}
 
@@ -64,7 +66,9 @@ namespace OpenDental {
 				return;
 			}
 			FormReconcileProblem formRP=new FormReconcileProblem();
-			formRP.ListProblemNew=EhrCCD.GetListDiseases(xmlDocCcd);
+			formRP.ListProblemNew=new List<Disease>();
+			List<DiseaseDef> listDiseaseDef=new List<DiseaseDef>();//TODO: Set formRP.ListProblemDefNew
+			EhrCCD.GetListDiseases(xmlDocCcd,formRP.ListProblemNew,listDiseaseDef);
 			formRP.ShowDialog();
 		}
 
@@ -80,7 +84,9 @@ namespace OpenDental {
 				return;
 			}
 			FormReconcileAllergy formRA=new FormReconcileAllergy();
-			formRA.ListAllergyNew=EhrCCD.GetListAllergies(xmlDocCcd);
+			formRA.ListAllergyNew=new List<Allergy>();
+			List<AllergyDef> listAllergyDef=new List<AllergyDef>();//TODO: Set formRA ListAllergyDefNew
+			EhrCCD.GetListAllergies(xmlDocCcd,formRA.ListAllergyNew,listAllergyDef);
 			formRA.ShowDialog();
 		}
 

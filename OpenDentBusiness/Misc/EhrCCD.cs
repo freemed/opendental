@@ -876,42 +876,33 @@ Laboratory Test Results
 			return null;
 		}
 
-		///<summary>Returns the list of medications found within the CCD document xmlDocCcd.  Does NOT insert the medications into the db.</summary>
-		public static List<MedicationPat> GetListMedicationPats(XmlDocument xmlDocCcd) {
+		///<summary>Fills listMedicationPats and listMedications using the information found in the CCD document xmlDocCcd.  Does NOT insert any records into the db.</summary>
+		public static void GetListMedicationPats(XmlDocument xmlDocCcd,List<MedicationPat> listMedicationPats,List<Medication> listMedications) {
+			//TODO: Fill listMedicationPats and listMedications with the information from xmlDocCcd.
+			//The length of listMedicationPats and listMedications will be the same. The information in listMedications might have duplicates.
+			//Neither list of objects will be inserted into the db, so there will be no primary or foreign keys.
 			XmlNode xmlNodeSection=GetSectionByTemplateId(xmlDocCcd,"2.16.840.1.113883.10.20.22.2.1.1");
 			//entry //POCD_HD00040.xls line 270
-			
 			//| substanceAdministration //POCD_HD00040.xls line 450
-			
-			
 			//| entryRelationship //POCD_HD00040.xls line 319
-
-
-
 			//| supply | templateId root="2.16.840.1.113883.10.20.22.4.18" //Medication dispense template. POCD_HD00040.xls line 273 (ClinicalStatement)
-
 			//effectiveTime value="yyyymmdd"
-
 			//| product | manufacturedProduct | templateId root="2.16.840.1.113883.10.20.22.4.23" //Medication information template.
 			//| manufacturedMaterial | code codeSystem="2.16.840.1.113883.6.88"
-
-			List<MedicationPat> listMedicationPats=new List<MedicationPat>();
-
-			return listMedicationPats;
 		}
 
-		///<summary>Returns the list of diseases/problems found within the CCD document xmlDocCcd.  Does NOT insert the diseases into the db.</summary>
-		public static List<Disease> GetListDiseases(XmlDocument xmlDocCcd) {
-			List<Disease> listDiseases=new List<Disease>();
-			//TODO:
-			return listDiseases;
+		///<summary>Fills listDiseases and listDiseaseDef using the information found in the CCD document xmlDocCcd.  Does NOT insert any records into the db.</summary>
+		public static void GetListDiseases(XmlDocument xmlDocCcd,List<Disease> listDiseases,List<DiseaseDef> listDiseaseDef) {
+			//TODO: Fill listDiseases and listDiseaseDef with the information from xmlDocCcd.
+			//The length of listDiseases and listDiseaseDef will be the same. The information in listDiseaseDef might have duplicates.
+			//Neither list of objects will be inserted into the db, so there will be no primary or foreign keys.
 		}
 
-		///<summary>Returns the list of allergies found within the CCD document xmlDocCcd.  Does NOT insert the allergies into the db.</summary>
-		public static List<Allergy> GetListAllergies(XmlDocument xmlDocCcd) {
-			List<Allergy> listAllergies=new List<Allergy>();
-			//TODO:
-			return listAllergies;
+		///<summary>Fills listAllergies and listAllergyDefs using the information found in the CCD document xmlDocCcd.  Does NOT insert any records into the db.</summary>
+		public static void GetListAllergies(XmlDocument xmlDocCcd,List<Allergy> listAllergies,List<AllergyDef> listAllergyDefs) {
+			//TODO: Fill listAllergies and listAllergyDefs with the information from xmlDocCcd.
+			//The length of listAllergies and listAllergyDefs will be the same. The information in listAllergyDefs might have duplicates.
+			//Neither list of objects will be inserted into the db, so there will be no primary or foreign keys.
 		}
 
 		public static bool IsCcdEmailAttachment(EmailAttach emailAttach) {
