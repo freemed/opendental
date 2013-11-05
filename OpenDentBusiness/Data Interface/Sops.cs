@@ -64,7 +64,7 @@ namespace OpenDentBusiness{
 		public static List<string> GetAllCodes() {
 			List<string> retVal=new List<string>();
 			for(int i=0;i<Listt.Count;i++) {
-				retVal[i]=Listt[i].SopCode;
+				retVal.Add(Listt[i].SopCode);
 			}
 			return retVal;
 		}

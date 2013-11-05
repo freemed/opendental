@@ -20,23 +20,18 @@ namespace OpenDentBusiness{
 					object ObjEhrCodeList;
 					Assembly AssemblyEHR;
 					string dllPathEHR=CodeBase.ODFileUtils.CombinePaths(System.Windows.Forms.Application.StartupPath,"EHR.dll");
-					#if EHRTEST
-						ObjFormEhrMeasures=new FormEhrMeasures();
-						listt=Crud.EhrCodeCrud.TableToList(EHR.EhrCodeList.GetListt());
-					#else
-						ObjEhrCodeList=null;
-						AssemblyEHR=null;
-						if(System.IO.File.Exists(dllPathEHR)) {//EHR.dll is available, so load it up
-							AssemblyEHR=Assembly.LoadFile(dllPathEHR);
-							Type type=AssemblyEHR.GetType("EHR.EhrCodeList");//namespace.class
-							ObjEhrCodeList=Activator.CreateInstance(type);
-							object[] args=null;
-							listt=Crud.EhrCodeCrud.TableToList((DataTable)type.InvokeMember("GetListt",System.Reflection.BindingFlags.InvokeMethod,null,ObjEhrCodeList,args));
-						}
-						else {//no EHR.dll. "Return" empty list.
-							listt=new List<EhrCode>();
-						}
-					#endif
+					ObjEhrCodeList=null;
+					AssemblyEHR=null;
+					if(System.IO.File.Exists(dllPathEHR)) {//EHR.dll is available, so load it up
+						AssemblyEHR=Assembly.LoadFile(dllPathEHR);
+						Type type=AssemblyEHR.GetType("EHR.EhrCodeList");//namespace.class
+						ObjEhrCodeList=Activator.CreateInstance(type);
+						object[] args=null;
+						listt=Crud.EhrCodeCrud.TableToList((DataTable)type.InvokeMember("GetListt",System.Reflection.BindingFlags.InvokeMethod,null,ObjEhrCodeList,args));
+					}
+					else {//no EHR.dll. "Return" empty list.
+						listt=new List<EhrCode>();
+					}
 					updateCodeExistsHelper();
 				}
 				return listt;
