@@ -124,7 +124,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
 				return Meth.GetString(MethodBase.GetCurrentMethod(),rxCui);
 			}
-			string command="SELECT MmslCode FROM rxnorm WHERE MmslCode!='' AND RxCui="+rxCui;
+			string command="SELECT MmslCode FROM rxnorm WHERE MmslCode!='' AND RxCui='"+rxCui+"'";
 			return Db.GetScalar(command);
 		}
 
@@ -133,7 +133,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
 				return Meth.GetString(MethodBase.GetCurrentMethod(),rxCui);
 			}
-			string command="SELECT Description FROM rxnorm WHERE MmslCode='' AND RxCui="+rxCui;
+			string command="SELECT Description FROM rxnorm WHERE MmslCode='' AND RxCui='"+rxCui+"'";
 			return Db.GetScalar(command);
 		}
 
