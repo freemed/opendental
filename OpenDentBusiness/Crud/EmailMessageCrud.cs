@@ -46,14 +46,15 @@ namespace OpenDentBusiness.Crud{
 			EmailMessage emailMessage;
 			for(int i=0;i<table.Rows.Count;i++) {
 				emailMessage=new EmailMessage();
-				emailMessage.EmailMessageNum= PIn.Long  (table.Rows[i]["EmailMessageNum"].ToString());
-				emailMessage.PatNum         = PIn.Long  (table.Rows[i]["PatNum"].ToString());
-				emailMessage.ToAddress      = PIn.String(table.Rows[i]["ToAddress"].ToString());
-				emailMessage.FromAddress    = PIn.String(table.Rows[i]["FromAddress"].ToString());
-				emailMessage.Subject        = PIn.String(table.Rows[i]["Subject"].ToString());
-				emailMessage.BodyText       = PIn.String(table.Rows[i]["BodyText"].ToString());
-				emailMessage.MsgDateTime    = PIn.DateT (table.Rows[i]["MsgDateTime"].ToString());
-				emailMessage.SentOrReceived = (EmailSentOrReceived)PIn.Int(table.Rows[i]["SentOrReceived"].ToString());
+				emailMessage.EmailMessageNum = PIn.Long  (table.Rows[i]["EmailMessageNum"].ToString());
+				emailMessage.PatNum          = PIn.Long  (table.Rows[i]["PatNum"].ToString());
+				emailMessage.ToAddress       = PIn.String(table.Rows[i]["ToAddress"].ToString());
+				emailMessage.FromAddress     = PIn.String(table.Rows[i]["FromAddress"].ToString());
+				emailMessage.Subject         = PIn.String(table.Rows[i]["Subject"].ToString());
+				emailMessage.BodyText        = PIn.String(table.Rows[i]["BodyText"].ToString());
+				emailMessage.MsgDateTime     = PIn.DateT (table.Rows[i]["MsgDateTime"].ToString());
+				emailMessage.SentOrReceived  = (EmailSentOrReceived)PIn.Int(table.Rows[i]["SentOrReceived"].ToString());
+				emailMessage.RecipientAddress= PIn.String(table.Rows[i]["RecipientAddress"].ToString());
 				retVal.Add(emailMessage);
 			}
 			return retVal;
@@ -94,7 +95,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="EmailMessageNum,";
 			}
-			command+="PatNum,ToAddress,FromAddress,Subject,BodyText,MsgDateTime,SentOrReceived) VALUES(";
+			command+="PatNum,ToAddress,FromAddress,Subject,BodyText,MsgDateTime,SentOrReceived,RecipientAddress) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(emailMessage.EmailMessageNum)+",";
 			}
@@ -105,7 +106,8 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(emailMessage.Subject)+"',"
 				+DbHelper.ParamChar+"paramBodyText,"
 				+    POut.DateT (emailMessage.MsgDateTime)+","
-				+    POut.Int   ((int)emailMessage.SentOrReceived)+")";
+				+    POut.Int   ((int)emailMessage.SentOrReceived)+","
+				+"'"+POut.String(emailMessage.RecipientAddress)+"')";
 			if(emailMessage.BodyText==null) {
 				emailMessage.BodyText="";
 			}
@@ -122,13 +124,14 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one EmailMessage in the database.</summary>
 		public static void Update(EmailMessage emailMessage){
 			string command="UPDATE emailmessage SET "
-				+"PatNum         =  "+POut.Long  (emailMessage.PatNum)+", "
-				+"ToAddress      = '"+POut.String(emailMessage.ToAddress)+"', "
-				+"FromAddress    = '"+POut.String(emailMessage.FromAddress)+"', "
-				+"Subject        = '"+POut.String(emailMessage.Subject)+"', "
-				+"BodyText       =  "+DbHelper.ParamChar+"paramBodyText, "
-				+"MsgDateTime    =  "+POut.DateT (emailMessage.MsgDateTime)+", "
-				+"SentOrReceived =  "+POut.Int   ((int)emailMessage.SentOrReceived)+" "
+				+"PatNum          =  "+POut.Long  (emailMessage.PatNum)+", "
+				+"ToAddress       = '"+POut.String(emailMessage.ToAddress)+"', "
+				+"FromAddress     = '"+POut.String(emailMessage.FromAddress)+"', "
+				+"Subject         = '"+POut.String(emailMessage.Subject)+"', "
+				+"BodyText        =  "+DbHelper.ParamChar+"paramBodyText, "
+				+"MsgDateTime     =  "+POut.DateT (emailMessage.MsgDateTime)+", "
+				+"SentOrReceived  =  "+POut.Int   ((int)emailMessage.SentOrReceived)+", "
+				+"RecipientAddress= '"+POut.String(emailMessage.RecipientAddress)+"' "
 				+"WHERE EmailMessageNum = "+POut.Long(emailMessage.EmailMessageNum);
 			if(emailMessage.BodyText==null) {
 				emailMessage.BodyText="";
@@ -167,6 +170,10 @@ namespace OpenDentBusiness.Crud{
 			if(emailMessage.SentOrReceived != oldEmailMessage.SentOrReceived) {
 				if(command!=""){ command+=",";}
 				command+="SentOrReceived = "+POut.Int   ((int)emailMessage.SentOrReceived)+"";
+			}
+			if(emailMessage.RecipientAddress != oldEmailMessage.RecipientAddress) {
+				if(command!=""){ command+=",";}
+				command+="RecipientAddress = '"+POut.String(emailMessage.RecipientAddress)+"'";
 			}
 			if(command==""){
 				return;

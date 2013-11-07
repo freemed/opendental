@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace OpenDentBusiness {
-	///<summary>An outgoing email message is stored here.</summary>
+	///<summary>Stores both sent and received emails, as well as saved emails which are still in composition.</summary>
 	[Serializable]
 	public class EmailMessage:TableBase {
 		///<summary>Primary key.</summary>
@@ -25,6 +25,10 @@ namespace OpenDentBusiness {
 		public DateTime MsgDateTime;
 		///<summary>0=neither, 1=sent, 2=received.</summary>
 		public EmailSentOrReceived SentOrReceived;
+		///<summary>Copied from the EmailAddress.EmailUsername field when a message is received into the inbox.
+		///Similar to the ToAddress, except the ToAddress could contain multiple recipient addresses
+		///or group email address instead. The recipient address helps match the an email to a particular EmailAddress.</summary>
+		public string RecipientAddress;
 		///<summary>Not a database column.</summary>
 		[CrudColumn(IsNotDbColumn=true)]
 		public List<EmailAttach> Attachments;

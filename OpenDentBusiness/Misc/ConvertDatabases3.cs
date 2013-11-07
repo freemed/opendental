@@ -1976,6 +1976,44 @@ namespace OpenDentBusiness {
 				command="UPDATE preference SET ValueString = '13.3.1.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To13_3_4();
+		}
+
+		private static void To13_3_4() {
+			if(FromVersion<new Version("13.3.4.0")) {
+				string command;
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE emailmessage ADD RecipientAddress varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE emailmessage ADD RecipientAddress varchar2(255)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS emailmessageuid";
+					Db.NonQ(command);
+					command=@"CREATE TABLE emailmessageuid (
+						EmailMessageUidNum bigint NOT NULL auto_increment PRIMARY KEY,
+						Uid text NOT NULL,
+						RecipientAddress varchar(255) NOT NULL
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE emailmessageuid'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE emailmessageuid (
+						EmailMessageUidNum number(20) NOT NULL,
+						Uid varchar2(4000),
+						RecipientAddress varchar2(255),
+						CONSTRAINT emailmessageuid_EmailMessageUi PRIMARY KEY (EmailMessageUidNum)
+						)";
+					Db.NonQ(command);
+				}
+				command="UPDATE preference SET ValueString = '13.3.4.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To14_1_0();
 		}
 

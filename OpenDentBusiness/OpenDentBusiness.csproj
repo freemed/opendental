@@ -227,6 +227,7 @@
     <Compile Include="Crud\EmailAddressCrud.cs" />
     <Compile Include="Crud\EmailAttachCrud.cs" />
     <Compile Include="Crud\EmailMessageCrud.cs" />
+    <Compile Include="Crud\EmailMessageUidCrud.cs" />
     <Compile Include="Crud\EmailTemplateCrud.cs" />
     <Compile Include="Crud\EmployeeCrud.cs" />
     <Compile Include="Crud\EmployerCrud.cs" />
@@ -409,6 +410,7 @@
     <Compile Include="Data Interface\EhrNotPerformeds.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Data Interface\EmailMessageUids.cs" />
     <Compile Include="Data Interface\Encounters.cs" />
     <Compile Include="Data Interface\FamilyHealths.cs" />
     <Compile Include="Data Interface\Hcpcses.cs" />
@@ -810,6 +812,7 @@
     <Compile Include="Plugins\PluginBase.cs" />
     <Compile Include="Plugins\PluginContainer.cs" />
     <Compile Include="Plugins\Plugins.cs" />
+    <Compile Include="TableTypes\EmailMessageUid.cs" />
     <Compile Include="TableTypes\MapArea.cs" />
     <Compile Include="TableTypes\EhrAmendment.cs" />
     <Compile Include="TableTypes\Automation.cs" />
