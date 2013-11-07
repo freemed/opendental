@@ -26,7 +26,6 @@ namespace OpenDental{
 			this.label5 = new System.Windows.Forms.Label();
 			this.date2 = new System.Windows.Forms.MonthCalendar();
 			this.date1 = new System.Windows.Forms.MonthCalendar();
-			this.labelTO = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
@@ -60,15 +59,6 @@ namespace OpenDental{
 			this.date1.Location = new System.Drawing.Point(34, 94);
 			this.date1.Name = "date1";
 			this.date1.TabIndex = 23;
-			// 
-			// labelTO
-			// 
-			this.labelTO.Location = new System.Drawing.Point(234, 113);
-			this.labelTO.Name = "labelTO";
-			this.labelTO.Size = new System.Drawing.Size(55, 23);
-			this.labelTO.TabIndex = 25;
-			this.labelTO.Text = "TO";
-			this.labelTO.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
 			// label2
 			// 
@@ -201,7 +191,6 @@ namespace OpenDental{
 			this.ClientSize = new System.Drawing.Size(527, 511);
 			this.Controls.Add(this.date2);
 			this.Controls.Add(this.date1);
-			this.Controls.Add(this.labelTO);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label7);
@@ -228,7 +217,6 @@ namespace OpenDental{
 		private UI.Button butViewImported;
 		private System.Windows.Forms.MonthCalendar date2;
 		private System.Windows.Forms.MonthCalendar date1;
-		private System.Windows.Forms.Label labelTO;
 		private UI.Button butMissing;
 		private UI.Button butExtra;
 		private System.Windows.Forms.Label label2;
