@@ -516,17 +516,14 @@ namespace OpenDentBusiness{
 				#endregion
 				#region VitalSignsBPOnly
 				case EhrMeasureType.VitalSignsBPOnly:
-					command="SELECT A.*,"
-						+"(CASE WHEN A.Birthdate <= (A.LastVisitInDateRange-INTERVAL 3 YEAR) ";//BP count only if 3 and older at time of last visit in date range
-					command+="THEN COALESCE(bpCount.Count,0) ELSE 1 END) AS bpCount, "
-						+"A.Birthdate>A.LastVisitInDateRange-INTERVAL 3 YEAR AS IsUnder3 ";//Use this bool to indicate the patient was under three at the time of their last visit in date range
-					command+="FROM (SELECT patient.PatNum,LName,FName,Birthdate,MAX(procedurelog.ProcDate) AS LastVisitInDateRange "
+					command="SELECT patient.PatNum,LName,FName,Birthdate,COUNT(DISTINCT VitalsignNum) AS bpcount "
 						+"FROM patient "
-						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
-						+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
+						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum "
+						+"AND procedurelog.ProcStatus=2	AND procedurelog.ProvNum IN("+POut.String(provs)+") "
 						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
-						+"GROUP BY patient.PatNum) A "
-						+"LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM vitalsign WHERE BpSystolic>0 AND BpDiastolic>0 GROUP BY PatNum) bpCount ON bpCount.PatNum=A.PatNum";
+						+"LEFT JOIN vitalsign ON vitalsign.PatNum=patient.PatNum AND BpSystolic!=0 AND BpDiastolic!=0 "
+						+"GROUP BY patient.PatNum "
+						+"HAVING Birthdate<=MAX(ProcDate)-INTERVAL 3 YEAR ";//only include in results if over 3 yrs old at date of last visit
 					tableRaw=Db.GetTable(command);
 					break;
 				#endregion
@@ -999,19 +996,11 @@ namespace OpenDentBusiness{
 					#region VitalSignsBPOnly
 					case EhrMeasureType.VitalSignsBPOnly:
 						if(tableRaw.Rows[i]["bpCount"].ToString()=="0") {
-							explanation+="blood pressure";
-						}
-						if(explanation=="") {
-							if(tableRaw.Rows[i]["IsUnder3"].ToString()=="1") {
-								explanation="Under 3, BP not required";
-							}
-							else {
-								explanation="Vital signs entered";
-							}
-							row["met"]="X";
+							explanation="Missing: blood pressure";
 						}
 						else {
-							explanation="Missing: "+explanation;
+							explanation="Vital signs entered";
+							row["met"]="X";
 						}
 						break;
 					#endregion
