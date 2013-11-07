@@ -143,8 +143,8 @@ namespace OpenDental {
 				}
 				if(procCodeInUse) {
 					attempts++;//Should start at 2. The Codes will be "NewCrop", "NewCrop02", "NewCrop03", etc...
-					if(attempts>3) {
-						throw new Exception("Cannot add more than 3 NewCrop repeating charges yet. Ask programmer to increase.");
+					if(attempts>99) {
+						throw new Exception("Cannot add more than 99 NewCrop repeating charges yet. Ask programmer to increase.");
 					}
 					procCode="NewCrop"+(attempts.ToString().PadLeft(2,'0'));
 				}
