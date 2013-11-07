@@ -432,6 +432,7 @@ namespace OpenDental{
 				butText.Enabled=false;
 			}
 			FillMain();
+			Plugins.HookAddCode(this,"FormConfirmList.Load_End",butText);
 		}
 
 		///<summary>Adds the specified number of work days, skipping saturday and sunday.</summary>
@@ -984,10 +985,6 @@ namespace OpenDental{
 			YN txtMsgOk;
 			if(grid.Rows.Count==0) {
 				MsgBox.Show(this,"There are no Patients in the table.  Must have at least one.");
-				return;
-			}
-			if(!Programs.IsEnabled(ProgramName.CallFire)) {
-				MsgBox.Show(this,"CallFire must be enabled to send text messages. Go to Setup | Program Links | CallFire, and enable CallFire.");
 				return;
 			}
 			if(PrefC.GetLong(PrefName.ConfirmStatusTextMessaged)==0) {

@@ -26,6 +26,9 @@ namespace OpenDental {
 
 		/// <summary>May be called from other parts of the program without showing this form. You must still create an instance of this form though. Checks CallFire bridge, if it is OK to send a text, etc. (Buttons to load this form are usually  disabled if it is not OK, but this is needed for Confirmations, Recalls, etc.) </summary>
 		public void SendText(long patNum,string wirelessPhone,string message,YN txtMsgOk) {
+			if(Plugins.HookMethod(this,"FormTxtMsgEdit.SendText_Start",patNum,wirelessPhone,message,txtMsgOk)) {
+				return;
+			}
 			if(wirelessPhone=="") {
 				MsgBox.Show(this,"Please enter a phone number.");
 				return;
