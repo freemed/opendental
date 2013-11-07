@@ -52,7 +52,7 @@ namespace OpenDentBusiness{
 					+POut.Int((int)EmailSentOrReceived.ReadDirect)+","
 					+POut.Int((int)EmailSentOrReceived.WebMailRecdRead)+","
 					+POut.Int((int)EmailSentOrReceived.WebMailReceived)
-				+") AND ToAddress='"+POut.String(emailAddressInbox)+"' "
+				+") AND RecipientAddress='"+POut.String(emailAddressInbox)+"' "
 				+"ORDER BY MsgDateTime";
 			List<EmailMessage> retVal=Crud.EmailMessageCrud.SelectMany(command);
 			for(int i=0;i<retVal.Count;i++) {
@@ -178,6 +178,7 @@ namespace OpenDentBusiness{
 		///Use this polymorphism when the attachments have already been saved to the email attachments folder in file form.  patNum can be 0.
 		///Returns an empty string upon success, or an error string if there were errors.  It is possible that the email was sent to some trusted recipients and not sent to untrusted recipients (in which case there would be errors but some recipients would receive successfully).</summary>
 		public static string SendEmailDirect(EmailMessage emailMessage,EmailAddress emailAddressFrom) {
+			//No need to check RemotingRole; no call to db.
 			emailMessage.FromAddress=emailAddressFrom.EmailUsername;//Cannot be emailAddressFrom.SenderAddress, or else will not find the correct encryption certificate.  Used in ConvertEmailMessageToMessage().
 			//Start by converting the emailMessage to an unencrypted message using the Direct libraries. The email must be in this form to carry out encryption.
 			Health.Direct.Common.Mail.Message msgUnencrypted=ConvertEmailMessageToMessage(emailMessage,true);
@@ -190,6 +191,7 @@ namespace OpenDentBusiness{
 		///patNum can be zero.  emailSentOrReceived must be either SentDirect or a Direct Ack type such as AckDirectProcessed.
 		///Returns an empty string upon success, or an error string if there were errors.  It is possible that the email was sent to some trusted recipients and not sent to untrusted recipients (in which case there would be errors but some recipients would receive successfully).</summary>
 		private static string SendEmailDirect(Health.Direct.Agent.OutgoingMessage outMsgUnencrypted,EmailAddress emailAddressFrom) {
+			//No need to check RemotingRole; no call to db.
 			string strErrors="";
 			string strSenderAddress=emailAddressFrom.EmailUsername;//Cannot be emailAddressFrom.SenderAddress, or else will not find the right encryption certificate.
 			Health.Direct.Agent.DirectAgent directAgent=GetDirectAgentForEmailAddress(strSenderAddress);
@@ -245,6 +247,7 @@ namespace OpenDentBusiness{
 		/// <summary>Used for sending encrypted Message Disposition Notification (MDN) ack messages for Direct.
 		/// An ack must be sent when a message is received, and other acks must be sent when other events occur (for example, when the user reads a decrypted message we must send an ack with notification type of Displayed).</summary>
 		private static string SendAckDirect(Health.Direct.Agent.IncomingMessage inMsg,EmailAddress emailAddressFrom,long patNum,EmailSentOrReceived emailSentOrReceivedAck) {
+			//No need to check RemotingRole; no call to db.
 			//The CreateAcks() function handles the case where the incoming message is an MDN, in which case we do not reply with anything.
 			//The CreateAcks() function also takes care of figuring out where to send the MDN, because the rules are complicated.
 			//According to http://wiki.directproject.org/Applicability+Statement+for+Secure+Health+Transport+Working+Version#x3.0%20Message%20Disposition%20Notification,
@@ -297,6 +300,7 @@ namespace OpenDentBusiness{
 
 		/// <summary>This is used from wherever email needs to be sent throughout the program.  If a message must be encrypted, then encrypt it before calling this function.  nameValueCollectionHeaders can be null.</summary>
 		private static void SendEmailUnsecure(EmailMessage emailMessage,EmailAddress emailAddress,NameValueCollection nameValueCollectionHeaders,params AlternateView[] arrayAlternateViews) {
+			//No need to check RemotingRole; no call to db.
 			if(emailAddress.ServerPort==465) {//implicit
 				//uses System.Web.Mail, which is marked as deprecated, but still supports implicit
 				System.Web.Mail.MailMessage message = new System.Web.Mail.MailMessage();
@@ -370,6 +374,7 @@ namespace OpenDentBusiness{
 
 		/// <summary>This is used from wherever unencrypted email needs to be sent throughout the program.  If a message must be encrypted, then encrypt it before calling this function.</summary>
 		public static void SendEmailUnsecure(EmailMessage emailMessage,EmailAddress emailAddress) {
+			//No need to check RemotingRole; no call to db.
 			SendEmailUnsecure(emailMessage,emailAddress,null);
 		}
 
@@ -380,21 +385,52 @@ namespace OpenDentBusiness{
 		///<summary>Fetches up to fetchCount number of messages from a POP3 server.  Set fetchCount=0 for all messages.  Typically, fetchCount is 0 or 1.
 		///Example host name, pop3.live.com. Port is Normally 110 for plain POP3, 995 for SSL POP3.</summary>
 		public static List<EmailMessage> ReceiveFromInbox(int receiveCount,EmailAddress emailAddressInbox) {
+			//No need to check RemotingRole; no call to db.
 			List<EmailMessage> retVal=new List<EmailMessage>();
 			//This code is modified from the example at: http://hpop.sourceforge.net/exampleFetchAllMessages.php
 			using(OpenPop.Pop3.Pop3Client client=new OpenPop.Pop3.Pop3Client()) {//The client disconnects from the server when being disposed.
-				client.Connect(emailAddressInbox.Pop3ServerIncoming,emailAddressInbox.ServerPortIncoming,emailAddressInbox.UseSSL,180000,180000,null);//3 minute timeout, just like for sending emails.
+				client.Connect(emailAddressInbox.Pop3ServerIncoming,emailAddressInbox.ServerPortIncoming,emailAddressInbox.UseSSL,180000,180000,null);//3 minute timeout, just as for sending emails.
 				client.Authenticate(emailAddressInbox.EmailUsername,emailAddressInbox.EmailPassword,OpenPop.Pop3.AuthenticationMethod.UsernameAndPassword);
-				int messageCount=client.GetMessageCount();//Get the number of messages in the inbox.
+				List <string> listMsgUids=client.GetMessageUids();//Get all unique identifiers for each email in the inbox.
+				List<EmailMessageUid> listDownloadedMsgUids=EmailMessageUids.GetForRecipientAddress(emailAddressInbox.EmailUsername);
 				int msgDownloadedCount=0;
-				for(int i=messageCount;i>0;i--) {//Message numbers are 1-based. Most servers give the newest message the highest number.
+				for(int i=0;i<listMsgUids.Count;i++) {
+					int msgIndex=i+1;//The message indicies are 1-based.
+					string strMsgUid=listMsgUids[i];
+					if(strMsgUid.Length==0) {
+						//Message Uids are commonly used, but are optional according to the RFC822 email standard.
+						//Uids are assgined by the sending client application, so they could be anything, but are supposed to be unique.
+						//Additionally, most email servers are probably smart enough to create a Uid for any message where the Uid is missing.
+						//In the worst case scenario, we create a Uid for the message based off of the message header information, which takes a little extra time, 
+						//but is better than downloading old messages again, especially if some of those messages contain large attachments.
+						OpenPop.Mime.Header.MessageHeader messageHeader=client.GetMessageHeaders(msgIndex);//Takes 1-2 seconds to get this information from the server.  The message, minus body and minus attachments.
+						strMsgUid=messageHeader.DateSent.ToString("yyyyMMddHHmmss")+emailAddressInbox.EmailUsername+messageHeader.From.Address+messageHeader.Subject;
+					}
+					else if(strMsgUid.Length>4000) {//The EmailMessageUid.Uid field is only 4000 characters in size.
+						strMsgUid=strMsgUid.Substring(0,4000);
+					}
+					//Skip any email messages matching Uids which have been previously downloaded.
+					bool isDownloaded=false;
+					for(int j=0;j<listDownloadedMsgUids.Count;j++) {
+						if(listDownloadedMsgUids[j].Uid==strMsgUid) {
+							isDownloaded=true;
+							break;
+						}
+					}
+					if(isDownloaded) {
+						continue;
+					}
+					//At this point, we know that the email is one which we have not downloaded yet.
 					try {
-						OpenPop.Mime.Message openPopMsg=client.GetMessage(i);
+						OpenPop.Mime.Message openPopMsg=client.GetMessage(msgIndex);//This is where the entire raw email is downloaded.
 						string strRawEmail=openPopMsg.MessagePart.BodyEncoding.GetString(openPopMsg.RawMessage);
-						EmailMessage emailMessage=ProcessRawEmailMessage(strRawEmail,0,emailAddressInbox);
+						EmailMessage emailMessage=ProcessRawEmailMessage(strRawEmail,0,emailAddressInbox);//Inserts to db.
+						EmailMessageUid emailMessageUid=new EmailMessageUid();
+						emailMessageUid.RecipientAddress=emailMessage.RecipientAddress;
+						emailMessageUid.Uid=strMsgUid;
+						EmailMessageUids.Insert(emailMessageUid);//Remember Uid was downloaded, to avoid email duplication the next time the inbox is refreshed.
 						retVal.Add(emailMessage);
 						msgDownloadedCount++;
-						client.DeleteMessage(i);//Only delete from server after successfully downloaded and stored into db.
 					}
 					catch {
 						//If one particular email fails to download, then skip it for now and move on to the next email.
@@ -412,6 +448,7 @@ namespace OpenDentBusiness{
 		#region Helpers
 
 		private static Health.Direct.Agent.DirectAgent GetDirectAgentForEmailAddress(string strEmailAddress) {
+			//No need to check RemotingRole; no call to db.
 			string domain=strEmailAddress.Substring(strEmailAddress.IndexOf("@")+1);//For example, if ToAddress is ehr@opendental.com, then this will be opendental.com
 			Health.Direct.Agent.DirectAgent directAgent=(Health.Direct.Agent.DirectAgent)HashDirectAgents[domain];
 			if(directAgent==null) {
@@ -436,6 +473,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static bool IsDirectAddressTrusted(string strAddressTest) {
+			//No need to check RemotingRole; no call to db.
 			Health.Direct.Common.Certificates.SystemX509Store storeAnchors=Health.Direct.Common.Certificates.SystemX509Store.OpenAnchorEdit();//Open for read and write.  Corresponds to NHINDAnchors/Certificates.
 			if(GetValidCertForAddressFromStore(storeAnchors,strAddressTest,false)==null) {//Look for domain level and address level trust certificates (anchors).
 				return false;//None found.
@@ -444,6 +482,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static void TryAddTrustDirect(string strAddressTest) {
+			//No need to check RemotingRole; no call to db.
 			if(IsDirectAddressTrusted(strAddressTest)) {
 				return;//Already trusted.
 			}
@@ -468,6 +507,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Set isAddressSpecific if you need to allow/prefer domain certificates over email address specific certificates.</summary>
 		private static X509Certificate2 GetValidCertForAddressFromStore(Health.Direct.Common.Certificates.SystemX509Store store,string strAddressTest,bool isAddressSpecific) {
+			//No need to check RemotingRole; no call to db.
 			X509Certificate2Collection collectionCerts=null;
 			MailAddress mailAddressQuery=new MailAddress(strAddressTest);
 			Health.Direct.Common.Certificates.ICertificateResolver certResolverLocalCache=store.CreateResolver();
@@ -509,6 +549,7 @@ namespace OpenDentBusiness{
 		///Returns the number of new public certificates discovered (0,1,or 2 (if one for the address and domain separately)), or -1 if the certificate is already in the local store of public certificates.
 		///Throws exceptions when no certificates were found or if there was a network failure.</summary>
 		private static int FindPublicCertForAddress(string strAddressTest) {
+			//No need to check RemotingRole; no call to db.
 			Health.Direct.Common.Certificates.SystemX509Store storePublicCerts=Health.Direct.Common.Certificates.SystemX509Store.OpenExternalEdit();//Open for read and write.  Corresponds to NHINDExternal/Certificates.
 			if(GetValidCertForAddressFromStore(storePublicCerts,strAddressTest,true)!=null) {//Address specific (excludes domain level certificates).
 				return -1;//The certificate was found in the local certificate store within Windows and is already loaded into memory for the specific recipient address given.  No need to query the Internet.
@@ -567,6 +608,7 @@ namespace OpenDentBusiness{
 		///The emailMessageNum will be used to set EmailMessage.EmailMessageNum.  If emailMessageNum is 0, then the EmailMessage will be inserted into the db, otherwise the EmailMessage will be updated in the db.
 		///If the raw message is encrypted, then will attempt to decrypt.  If decryption fails, then the EmailMessage SentOrReceived will be ReceivedEncrypted and the EmailMessage body will be set to the entire contents of the raw email.  If decryption succeeds, then EmailMessage SentOrReceived will be set to ReceivedDirect, the EmailMessage body will contain the decrypted body text, and a Direct Ack "processed" message will be sent back to the sender using the email settings from emailAddressReceiver.</summary>
 		public static EmailMessage ProcessRawEmailMessage(string strRawEmail,long emailMessageNum,EmailAddress emailAddressReceiver) {
+			//No need to check RemotingRole; no call to db.
 			Health.Direct.Agent.IncomingMessage inMsg=null;
 			try {
 				inMsg=new Health.Direct.Agent.IncomingMessage(strRawEmail);//Used to parse all email (encrypted or not).
@@ -585,6 +627,7 @@ namespace OpenDentBusiness{
 				emailMessage.SentOrReceived=EmailSentOrReceived.ReceivedEncrypted;
 				//The entire contents of the email are saved in the emailMessage.BodyText field, so that if decryption fails, the email will still be saved to the db for decryption later if possible.
 				emailMessage.BodyText=strRawEmail;
+				emailMessage.RecipientAddress=emailAddressReceiver.EmailUsername;
 				try {
 					Health.Direct.Agent.DirectAgent directAgent=GetDirectAgentForEmailAddress(inMsg.Message.ToValue);
 					//throw new ApplicationException("test decryption failure");
@@ -607,6 +650,7 @@ namespace OpenDentBusiness{
 				emailMessage=ConvertMessageToEmailMessage(inMsg.Message,true);
 				emailMessage.EmailMessageNum=emailMessageNum;
 				emailMessage.SentOrReceived=EmailSentOrReceived.Received;
+				emailMessage.RecipientAddress=emailAddressReceiver.EmailUsername;
 			}
 			EhrSummaryCcd ehrSummaryCcd=null;
 			if(isEncrypted) {
@@ -661,9 +705,12 @@ namespace OpenDentBusiness{
 
 		///<summary>Converts the Health.Direct.Common.Mail.Message into an OD EmailMessage.  The Direct library is used for both encrypted and unencrypted email.  Set hasAttachments to false to exclude attachments.</summary>
 		private static EmailMessage ConvertMessageToEmailMessage(Health.Direct.Common.Mail.Message message,bool hasAttachments) {
+			//No need to check RemotingRole; no call to db.
 			EmailMessage emailMessage=new EmailMessage();
 			emailMessage.FromAddress=message.FromValue;
-			emailMessage.MsgDateTime=DateTime.Now;
+			//The email message date must be in a very specific format and must match the RFC822 standard.  Is a required field for RFC822.  http://tools.ietf.org/html/rfc822
+			//We need the time from the server, so we can quickly identify messages which have already been downloaded and to avoid downloading duplicates.
+			emailMessage.MsgDateTime=DateTime.ParseExact(message.DateValue,"ddd, dd MMM yyyy HH:mm:ss zzz",System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat);
 			emailMessage.Subject=message.SubjectValue;
 			emailMessage.ToAddress=message.ToValue;
 			List<Health.Direct.Common.Mime.MimeEntity> listMimeParts=new List<Health.Direct.Common.Mime.MimeEntity>();//We want to treat one part and multiple part emails the same way below, so we make our own list.  If GetParts() is called when IsMultiPart is false, then an exception will be thrown by the Direct library.
@@ -736,6 +783,7 @@ namespace OpenDentBusiness{
 		}
 
 		private static Health.Direct.Common.Mail.Message ConvertEmailMessageToMessage(EmailMessage emailMessage,bool hasAttachments) {
+			//No need to check RemotingRole; no call to db.
 			//We need to use emailAddressFrom.Username instead of emailAddressFrom.SenderAddress, because of how strict encryption is for matching the name to the certificate.
 			Health.Direct.Common.Mail.Message message=new Health.Direct.Common.Mail.Message(emailMessage.ToAddress,emailMessage.FromAddress);
 			if(emailMessage.Subject!="") {
@@ -785,6 +833,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Creates a new file inside of the email attachment path (inside OpenDentImages) and returns an EmailAttach object referencing the new file, but with EmailMessageNum set to zero so it can be set later.</summary>
 		private static EmailAttach CreateAttachInAttachPath(string strAttachFileName,string strAttachText) {
+			//No need to check RemotingRole; no call to db.
 			string strAttachFileNameAdjusted=strAttachFileName;
 			if(String.IsNullOrEmpty(strAttachFileName)) {
 				strAttachFileNameAdjusted=MiscUtils.CreateRandomAlphaNumericString(8)+".txt";//just in case
@@ -802,6 +851,7 @@ namespace OpenDentBusiness{
 		}
 
 		private static string ProcessMimeTextPart(string strBody) {
+			//No need to check RemotingRole; no call to db.
 			//For unencrypted emails from GoDaddy, the body text is html, but each line is wrapped at 75 characters and an extra '=' is appended.
 			//Our algorithm to handle the extra equal signs is more generic, in case GoDaddy every changes their wrap character count, or in case other email providers manimulate the email body in a similar manner.
 			bool isWrappedEmail=true;
@@ -839,6 +889,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static string GetEmailAttachPath() {
+			//No need to check RemotingRole; no call to db.
 			string attachPath;
 			if(PrefC.AtoZfolderUsed) {
 				attachPath=ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),"EmailAttachments");
@@ -857,6 +908,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Can throw an exception if there is a permission issue saving the file.</summary>
 		public static void CreateAttachmentFromText(EmailMessage emailMessage,string strAttachText,string strDisplayFileName) {
+			//No need to check RemotingRole; no call to db.
 			Random rnd=new Random();
 			EmailAttach emailAttach;
 			//create the attachment
@@ -874,11 +926,13 @@ namespace OpenDentBusiness{
 
 		///<summary>This method is only for ehr testing purposes, and it always uses the hidden pref EHREmailToAddress to send to.  For privacy reasons, this cannot be used with production patient info.  AttachName should include extension.</summary>
 		public static void SendTestUnsecure(string subjectAndBody,string attachName,string attachContents) {
+			//No need to check RemotingRole; no call to db.
 			SendTestUnsecure(subjectAndBody,attachName,attachContents,"","");
 		}
 
 		///<summary>This method is only for ehr testing purposes, and it always uses the hidden pref EHREmailToAddress to send to.  For privacy reasons, this cannot be used with production patient info.  AttachName should include extension.</summary>
 		public static void SendTestUnsecure(string subjectAndBody,string attachName1,string attachContents1,string attachName2,string attachContents2) {
+			//No need to check RemotingRole; no call to db.
 			string strTo=PrefC.GetString(PrefName.EHREmailToAddress);
 			if(strTo=="") {
 				throw new ApplicationException("This feature cannot be used except in a test environment because email is not secure.");
@@ -903,6 +957,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Receives one email from the inbox, and returns the contents of the attachment as a string.  Will throw an exception if anything goes wrong, so surround with a try-catch.</summary>
 		public static string ReceiveOneForEhrTest() {
+			//No need to check RemotingRole; no call to db.
 			if(PrefC.GetString(PrefName.EHREmailToAddress)=="") {//this pref is hidden, so no practical way for user to turn this on.
 				throw new ApplicationException("This feature cannot be used except in a test environment because email is not secure.");
 			}
@@ -927,6 +982,7 @@ namespace OpenDentBusiness{
 		}
 
 		private static string GetTestEmail1() {
+			//No need to check RemotingRole; no call to db.
 			return @"This is a multipart message in MIME format.
 
 ------=_NextPart_000_0074_01CC35A4.193BF450
@@ -1263,6 +1319,7 @@ reactions, alerts"" />
 		}
 
 		private static string GetTestEmail2() {
+			//No need to check RemotingRole; no call to db.
 			return @"This is a multi-part message in MIME format.
 --------------070304090505090508040909
 Content-Type: text/plain; charset=ISO-8859-1; format=flowed
