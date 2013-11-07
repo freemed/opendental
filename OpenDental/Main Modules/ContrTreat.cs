@@ -1709,25 +1709,26 @@ namespace OpenDental{
 			FillMain();
 		}
 
-		private void listSetPr_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e){
+		private void listSetPr_MouseDown(object sender,System.Windows.Forms.MouseEventArgs e) {
 			int clickedRow=listSetPr.IndexFromPoint(e.X,e.Y);
-			if(clickedRow==-1)
+			if(clickedRow==-1) {
 				return;
-			if(gridPlans.SelectedIndices[0]==0){//current TP
+			}
+			if(gridPlans.SelectedIndices[0]==0) {//current TP
 				//Procedure ProcCur;
 				//Procedure ProcOld;
-				for(int i=0;i<gridMain.SelectedIndices.Length;i++){//loop through the main list of selected procs
-					if(gridMain.Rows[gridMain.SelectedIndices[i]].Tag==null){
+				for(int i=0;i<gridMain.SelectedIndices.Length;i++) {//loop through the main list of selected procs
+					if(gridMain.Rows[gridMain.SelectedIndices[i]].Tag==null) {
 						//user must have highlighted a subtotal row, so ignore
 						continue;
 					}
 					//ProcCur=(Procedure)gridMain.Rows[gridMain.SelectedIndices[i]].Tag;
 					//ProcOld=ProcCur.Clone();
-					if(clickedRow==0){//set priority to "no priority"
+					if(clickedRow==0) {//set priority to "no priority"
 						//ProcCur.Priority=0;
 						Procedures.UpdatePriority(((Procedure)gridMain.Rows[gridMain.SelectedIndices[i]].Tag).ProcNum,0);
 					}
-					else{
+					else {
 						//ProcCur.Priority=DefC.Short[(int)DefCat.TxPriorities][clickedRow-1].DefNum;
 						Procedures.UpdatePriority(((Procedure)gridMain.Rows[gridMain.SelectedIndices[i]].Tag).ProcNum,
 							DefC.Short[(int)DefCat.TxPriorities][clickedRow-1].DefNum);
@@ -1736,19 +1737,25 @@ namespace OpenDental{
 				}
 				ModuleSelected(PatCur.PatNum);
 			}
-			else{//any other TP
+			else {//any other TP
+				DateTime dateTP=PlanList[gridPlans.SelectedIndices[0]-1].DateTP;
+				if(!Security.IsAuthorized(Permissions.TreatPlanEdit,dateTP)) {
+					return;
+				}
 				int selectedTP=gridPlans.SelectedIndices[0];
 				ProcTP proc;
-				for(int i=0;i<gridMain.SelectedIndices.Length;i++){//loop through the main list of selected procTPs
+				for(int i=0;i<gridMain.SelectedIndices.Length;i++) {//loop through the main list of selected procTPs
 					if(gridMain.Rows[gridMain.SelectedIndices[i]].Tag==null) {
 						//user must have highlighted a subtotal row, so ignore
 						continue;
 					}
 					proc=(ProcTP)gridMain.Rows[gridMain.SelectedIndices[i]].Tag;
-					if(clickedRow==0)//set priority to "no priority"
+					if(clickedRow==0) {//set priority to "no priority"
 						proc.Priority=0;
-					else
+					}
+					else {
 						proc.Priority=DefC.Short[(int)DefCat.TxPriorities][clickedRow-1].DefNum;
+					}
 					ProcTPs.InsertOrUpdate(proc,false);
 				}
 				ModuleSelected(PatCur.PatNum);
