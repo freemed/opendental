@@ -28,6 +28,9 @@ namespace OpenDental {
 		}
 
 		private void menuItemSetup_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.Setup)) {
+				return;
+			}
 			FormEmailAddresses formEA=new FormEmailAddresses();
 			formEA.ShowDialog();
 			labelInboxComputerName.Text="Computer Name Where New Email Is Fetched: "+PrefC.GetString(PrefName.EmailInboxComputerName);
