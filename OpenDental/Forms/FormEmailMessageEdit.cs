@@ -561,6 +561,10 @@ namespace OpenDental{
 		#endregion
 
 		private void FormEmailMessageEdit_Load(object sender, System.EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.Setup,true)) {
+				butAdd.Enabled=false;
+				butDeleteTemplate.Enabled=false;
+			}
 			Cursor=Cursors.WaitCursor;
 			RefreshAll();
 			Cursor=Cursors.Default;
@@ -638,6 +642,9 @@ namespace OpenDental{
 
 		private void listTemplates_DoubleClick(object sender, System.EventArgs e) {
 			if(listTemplates.SelectedIndex==-1){
+				return;
+			}
+			if(!Security.IsAuthorized(Permissions.Setup)) {
 				return;
 			}
 			FormEmailTemplateEdit FormE=new FormEmailTemplateEdit();
