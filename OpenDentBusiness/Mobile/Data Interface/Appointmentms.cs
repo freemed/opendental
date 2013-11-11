@@ -15,17 +15,19 @@ namespace OpenDentBusiness.Mobile {
 				return Crud.AppointmentmCrud.SelectOne(customerNum,aptNum);
 			}
 
-			///<summary>Gets Appointmentm from the db as specified by the date range.</summary>
+			///<summary>Gets Appointmentm from the db as specified by the date range and provider.</summary>
 			public static List<Appointmentm> GetAppointmentms(long customerNum,long provNum,DateTime startDate,DateTime endDate) {
 				string command=
 					"SELECT * from appointmentm "
 					+"WHERE AptDateTime BETWEEN '"+POut.Date(startDate,false)+"' AND '"+POut.Date(endDate.AddDays(1),false)+"' "
-					+"AND CustomerNum = "+POut.Long(customerNum)+" AND ProvNum = "+POut.Long(provNum)+" "
+					+"AND CustomerNum = "+POut.Long(customerNum)+" "
+					+"AND (ProvNum = "+POut.Long(provNum)+" "
+					+"OR (IsHygiene = 1 AND ProvHyg = "+POut.Long(provNum)+")) " 
 					+"ORDER BY AptDateTime";
 				return Crud.AppointmentmCrud.SelectMany(command);
 			}
 
-			///<summary>Gets Appointmentm from the db as specified by the date range and provider</summary>
+			///<summary>Gets Appointmentm from the db as specified by the date range.</summary>
 			public static List<Appointmentm> GetAppointmentms(long customerNum,DateTime startDate,DateTime endDate) {
 				string command=
 					"SELECT * from appointmentm "
