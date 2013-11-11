@@ -29,25 +29,6 @@ namespace OpenDental.Bridges {
 					}
 					string lname=pat.LName.Replace("\"","").Replace(",","");
 					string fname=pat.FName.Replace("\"","").Replace(",","");
-					Process[] progenyInstances=Process.GetProcessesByName("ProgenyImaging");
-					if(progenyInstances.Length==0){
-						pibridge=new Process();
-						pibridge.StartInfo.CreateNoWindow=false;
-						pibridge.StartInfo.UseShellExecute=true;
-						pibridge.StartInfo.FileName=path;
-						pibridge.StartInfo.Arguments="cmd=start";
-						pibridge.Start();
-						//We must now wait until progeny is completely initialized, or else the following commands will have no effect.
-						Thread.Sleep(TimeSpan.FromSeconds(10));
-					}
-					else{
-						pibridge=new Process();
-						pibridge.StartInfo.CreateNoWindow=false;
-						pibridge.StartInfo.UseShellExecute=true;
-						pibridge.StartInfo.FileName=path;
-						pibridge.StartInfo.Arguments="cmd=show";
-						pibridge.Start();
-					}
 					pibridge=new Process();
 					pibridge.StartInfo.CreateNoWindow=false;
 					pibridge.StartInfo.UseShellExecute=true;
