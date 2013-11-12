@@ -70,7 +70,10 @@ namespace OpenDental {
 		///Returns "" is the EHR assembly did not load. strResourceName can be either "CCD" or "CCR".</summary>
 		public static string GetEhrResource(string strResourceName) {
 			if(AssemblyEHR==null) {
-				return "";
+				contructObjFormEhrMeasuresHelper();
+				if(AssemblyEHR==null) {
+					return "";
+				}
 			}
 			Stream stream=AssemblyEHR.GetManifestResourceStream("EHR.Properties.Resources.resources");
 			System.Resources.ResourceReader resourceReader=new System.Resources.ResourceReader(stream);
