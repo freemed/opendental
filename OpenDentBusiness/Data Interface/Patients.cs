@@ -1657,7 +1657,7 @@ FROM insplan";
 				return true;
 			}
 			string[] patNumForeignKeys=new string[]{
-				//This list is up to date as of 11/11/2011 up to version v11.2
+				//This list is up to date as of 11/11/2013 up to version v13.3
 				"adjustment.PatNum",
 				"allergy.PatNum",
 				"anestheticrecord.PatNum",
@@ -1666,28 +1666,40 @@ FROM insplan";
 				"claim.PatNum",
 				"claimproc.PatNum",
 				"commlog.PatNum",
+				"creditcard.PatNum",
+				"custreference.PatNum",
 				"disease.PatNum",
 				"document.PatNum",
 				"ehrmeasureevent.PatNum",
+				"ehrnotperformed.PatNum",
 				"ehrprovkey.PatNum",
 				"ehrquarterlykey.PatNum",
 				"ehrsummaryccd.PatNum",
 				"emailmessage.PatNum",
+				"erxlog.PatNum",
 				"etrans.PatNum",
+				"familyhealth.PatNum",
 				"formpat.PatNum",
+				"hl7msg.PatNum",
+				"installmentplan.PatNum",
+				"intervention.PatNum",
 				"inssub.Subscriber",
 				"labcase.PatNum",
 				"labpanel.PatNum",
 				"medicalorder.PatNum",
 				"medicationpat.PatNum",
 				"mount.PatNum",
-				"patfield.PatNum",				
+				"orthochart.PatNum",
+				//Taken care of below
+				//"patfield.PatNum",
 				"patient.ResponsParty",
 				//The patientnote table is ignored because only one record can exist for each patient. 
 				//The record in 'patFrom' remains so it can be accessed again if needed.
-				//"patientnote.PatNum"				
+				//"patientnote.PatNum"	
+				"patientrace.PatNum",
 				"patplan.PatNum",
 				"payment.PatNum",
+				"payortype.PatNum",
 				"payplan.Guarantor",//Treated as a patnum, because it is actually a guarantor for the payment plan, and not a patient guarantor.
 				"payplan.PatNum",				
 				"payplancharge.Guarantor",//Treated as a patnum, because it is actually a guarantor for the payment plan, and not a patient guarantor.
@@ -1703,11 +1715,14 @@ FROM insplan";
 				"question.PatNum",
 				"recall.PatNum",
 				"refattach.PatNum",
-				"referral.PatNum",
+				//This is synched with the new information below.
+				//"referral.PatNum",
 				"registrationkey.PatNum",
 				"repeatcharge.PatNum",
 				"reqstudent.PatNum",
+				"reseller.PatNum",
 				"rxpat.PatNum",
+				"screenpat.PatNum",
 				"securitylog.PatNum",
 				"sheet.PatNum",
 				"statement.PatNum",
@@ -1717,7 +1732,8 @@ FROM insplan";
 				"treatplan.PatNum",
 				"treatplan.ResponsParty",
 				"vaccinepat.PatNum",
-				"vitalsign.PatNum"
+				"vitalsign.PatNum",
+				"xchargetransaction.PatNum"
 			};
 			string command="";
 			Patient patientFrom=Patients.GetPat(patFrom);
@@ -1804,9 +1820,6 @@ FROM insplan";
 			//merge of the records between the two accounts.			
 			for(int i=0;i<patNumForeignKeys.Length;i++) {
 				string[] tableAndKeyName=patNumForeignKeys[i].Split(new char[] {'.'});
-				if(tableAndKeyName[0]=="patfield") {//Patfield taken care of above.
-					continue;
-				}
 				command="UPDATE "+tableAndKeyName[0]
 					+" SET "+tableAndKeyName[1]+"="+POut.Long(patTo)
 					+" WHERE "+tableAndKeyName[1]+"="+POut.Long(patFrom);
@@ -1830,6 +1843,27 @@ FROM insplan";
 				+"AND PatStatus<>"+((int)PatientStatus.Deceased)+" "
 				+DbHelper.LimitAnd(1);
 			Db.NonQ(command);
+			//This updates the referrals with the new patient information from the merge.
+			for(int i=0;i<Referrals.List.Length;i++){
+				if(Referrals.List[i].PatNum==patFrom){
+					//Referrals.Cur=Referrals.List[i];
+					Referrals.List[i].PatNum=patientTo.PatNum;
+					Referrals.List[i].LName=patientTo.LName;
+					Referrals.List[i].FName=patientTo.FName;
+					Referrals.List[i].MName=patientTo.MiddleI;
+					Referrals.List[i].Address=patientTo.Address;
+					Referrals.List[i].Address2=patientTo.Address2;
+					Referrals.List[i].City=patientTo.City;
+					Referrals.List[i].ST=patientTo.State;
+					Referrals.List[i].SSN=patientTo.SSN;
+					Referrals.List[i].Zip=patientTo.Zip;
+					Referrals.List[i].Telephone=TelephoneNumbers.FormatNumbersExactTen(patientTo.HmPhone);
+					Referrals.List[i].EMail=patientTo.Email;
+					Referrals.Update(Referrals.List[i]);
+					Referrals.RefreshCache();
+					break;
+				}
+			}
 			return true;
 		}
 
