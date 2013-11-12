@@ -862,6 +862,14 @@ Laboratory Test Results
 			return retVal;
 		}
 
+		private static List<XmlNode> GetParentNodes(List<XmlNode> listXmlNodes) {
+			List<XmlNode> retVal=new List<XmlNode>();
+			for(int i=0;i<listXmlNodes.Count;i++) {
+				retVal.Add(listXmlNodes[i].ParentNode);
+			}
+			return retVal;
+		}
+
 		///<summary>Calls GetNodesByTagNameAndAttributes() for each item in listXmlNode.</summary>
 		private static List<XmlNode> GetNodesByTagNameAndAttributesFromList(List <XmlNode> listXmlNode,string strTagName,params string[] arrayAttributes) {
 			List<XmlNode> retVal=new List<XmlNode>();
@@ -927,22 +935,21 @@ Laboratory Test Results
 		public static void GetListMedicationPats(XmlDocument xmlDocCcd,List<MedicationPat> listMedicationPats) {
 			//The length of listMedicationPats and listMedications will be the same. The information in listMedications might have duplicates.
 			//Neither list of objects will be inserted into the db, so there will be no primary or foreign keys.
-			List<XmlNode> listMedicationDispenseTemplate=GetNodesByTagNameAndAttributes(xmlDocCcd,"templateId","root","2.16.840.1.113883.10.20.22.4.18");//Medication Dispense template.
-			for(int i=0;i<listMedicationDispenseTemplate.Count;i++) {
+			List<XmlNode> listMedicationDispenseTemplates=GetNodesByTagNameAndAttributes(xmlDocCcd,"templateId","root","2.16.840.1.113883.10.20.22.4.18");//Medication Dispense template.
+			List<XmlNode> listSupply=GetParentNodes(listMedicationDispenseTemplates);//POCD_HD00040.xls line 485
+			for(int i=0;i<listSupply.Count;i++) {
 				//We have to start fairly high in the tree so that we can get the effective time if it is available.
-				XmlNode xmlNodeSupply=listMedicationDispenseTemplate[i].ParentNode;//Supply node. POCD_HD00040.xls line 485
-				List<XmlNode> xmlNodeEffectiveTimes=GetNodesByTagNameAndAttributes(xmlNodeSupply,"effectiveTime");//POCD_HD00040.xls line 492. Not required.
-				DateTime dateTimeEffectiveLow=DateTime.Now;
-				DateTime dateTimeEffectiveHigh=DateTime.Now;
+				List<XmlNode> xmlNodeEffectiveTimes=GetNodesByTagNameAndAttributes(listSupply[i],"effectiveTime");//POCD_HD00040.xls line 492. Not required.
+				DateTime dateTimeEffectiveLow=DateTime.MinValue;
+				DateTime dateTimeEffectiveHigh=DateTime.MinValue;
 				if(xmlNodeEffectiveTimes.Count>0) {
 					XmlNode xmlNodeEffectiveTime=xmlNodeEffectiveTimes[0];
 					dateTimeEffectiveLow=GetEffectiveTimeLow(xmlNodeEffectiveTime);
 					dateTimeEffectiveHigh=GetEffectiveTimeHigh(xmlNodeEffectiveTime);
 				}
-				List<XmlNode> listProducts=GetNodesByTagNameAndAttributes(xmlNodeSupply,"product");
-				List<XmlNode> listManufacturedProducts=GetNodesByTagNameAndAttributesFromList(listProducts,"manufacturedProduct");
-				List<XmlNode> listManufacturedMaterial=GetNodesByTagNameAndAttributesFromList(listManufacturedProducts,"manufacturedMaterial");
-				List<XmlNode> listCodes=GetNodesByTagNameAndAttributesFromList(listManufacturedMaterial,"code");
+				List<XmlNode> listMedicationActivityTemplates=GetNodesByTagNameAndAttributes(listSupply[i],"templateId","root","2.16.840.1.113883.10.20.22.4.23");//Medication Activity template.
+				List<XmlNode> listProducts=GetParentNodes(listMedicationActivityTemplates);//List of manufaturedProduct and/or manufacturedLabeledDrug. POCD_HD00040.xls line 472.
+				List<XmlNode> listCodes=GetNodesByTagNameAndAttributesFromList(listProducts,"code");
 				for(int j=0;j<listCodes.Count;j++) {
 					XmlNode xmlNodeCode=listCodes[j];
 					string strCode=xmlNodeCode.Attributes["code"].Value;
@@ -965,15 +972,28 @@ Laboratory Test Results
 		public static void GetListDiseases(XmlDocument xmlDocCcd,List<Disease> listDiseases,List<DiseaseDef> listDiseaseDef) {
 			//The length of listDiseases and listDiseaseDef will be the same. The information in listDiseaseDef might have duplicates.
 			//Neither list of objects will be inserted into the db, so there will be no primary or foreign keys.
-			List<XmlNode> listAllergyProblemActTemplate=GetNodesByTagNameAndAttributes(xmlDocCcd,"templateId","root","2.16.840.1.113883.10.20.22.4.30");//Allergy problem act template.
-
+			
 		}
 
 		///<summary>Fills listAllergies and listAllergyDefs using the information found in the CCD document xmlDocCcd.  Does NOT insert any records into the db.</summary>
 		public static void GetListAllergies(XmlDocument xmlDocCcd,List<Allergy> listAllergies,List<AllergyDef> listAllergyDefs) {
-			//TODO: Fill listAllergies and listAllergyDefs with the information from xmlDocCcd.
 			//The length of listAllergies and listAllergyDefs will be the same. The information in listAllergyDefs might have duplicates.
 			//Neither list of objects will be inserted into the db, so there will be no primary or foreign keys.
+			List<XmlNode> listAllergyProblemActTemplate=GetNodesByTagNameAndAttributes(xmlDocCcd,"templateId","root","2.16.840.1.113883.10.20.22.4.30");//Allergy problem act template.
+			List<XmlNode> listActs=GetParentNodes(listAllergyProblemActTemplate);
+			for(int i=0;i<listActs.Count;i++) {
+				//We have to start fairly high in the tree so that we can get the effective time if it is available.
+				List<XmlNode> xmlNodeEffectiveTimes=GetNodesByTagNameAndAttributes(listActs[i],"effectiveTime");//POCD_HD00040.xls line 492. Not required.
+				DateTime dateTimeEffectiveLow=DateTime.MinValue;
+				DateTime dateTimeEffectiveHigh=DateTime.MinValue;
+				if(xmlNodeEffectiveTimes.Count>0) {
+					XmlNode xmlNodeEffectiveTime=xmlNodeEffectiveTimes[0];
+					dateTimeEffectiveLow=GetEffectiveTimeLow(xmlNodeEffectiveTime);
+					dateTimeEffectiveHigh=GetEffectiveTimeHigh(xmlNodeEffectiveTime);
+				}
+
+
+			}
 		}
 
 		public static bool IsCcdEmailAttachment(EmailAttach emailAttach) {
