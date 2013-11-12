@@ -49,8 +49,7 @@ namespace OpenDental {
 			}
 			FormReconcileMedication formRM=new FormReconcileMedication();
 			formRM.ListMedicationPatNew=new List<MedicationPat>();
-			List<Medication> listMedications=new List<Medication>();//TODO: Set formRM.ListMedicationsNew.
-			EhrCCD.GetListMedicationPats(xmlDocCcd,formRM.ListMedicationPatNew,listMedications);
+			EhrCCD.GetListMedicationPats(xmlDocCcd,formRM.ListMedicationPatNew);
 			formRM.ShowDialog();
 		}
 

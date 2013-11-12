@@ -76,7 +76,6 @@
 			this.butReconcileMedications.TabIndex = 3;
 			this.butReconcileMedications.Text = "Medications";
 			this.butReconcileMedications.UseVisualStyleBackColor = true;
-			this.butReconcileMedications.Visible = false;
 			this.butReconcileMedications.Click += new System.EventHandler(this.butReconcileMedications_Click);
 			// 
 			// labelReconcile
@@ -99,7 +98,6 @@
 			this.butReconcileProblems.TabIndex = 5;
 			this.butReconcileProblems.Text = "Problems";
 			this.butReconcileProblems.UseVisualStyleBackColor = true;
-			this.butReconcileProblems.Visible = false;
 			this.butReconcileProblems.Click += new System.EventHandler(this.butReconcileProblems_Click);
 			// 
 			// butReconcileAllergies
@@ -111,7 +109,6 @@
 			this.butReconcileAllergies.TabIndex = 6;
 			this.butReconcileAllergies.Text = "Allergies";
 			this.butReconcileAllergies.UseVisualStyleBackColor = true;
-			this.butReconcileAllergies.Visible = false;
 			this.butReconcileAllergies.Click += new System.EventHandler(this.butReconcileAllergies_Click);
 			// 
 			// butShowXml

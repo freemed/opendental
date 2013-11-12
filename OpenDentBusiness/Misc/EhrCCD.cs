@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -14,10 +15,13 @@ using System.Xml.XPath;
 namespace OpenDentBusiness {
 	public class EhrCCD {
 
+		///<summary>2.16.840.1.113883.6.96</summary>
 		private const string strCodeSystemSnomed="2.16.840.1.113883.6.96";
 		private const string strCodeSystemNameSnomed="SNOMED CT";
+		///<summary>2.16.840.1.113883.6.88</summary>
 		private const string strCodeSystemRxNorm="2.16.840.1.113883.6.88";
 		private const string strCodeSystemNameRxNorm="RxNorm";
+		///<summary>2.16.840.1.113883.6.1</summary>
 		private const string strCodeSystemLoinc="2.16.840.1.113883.6.1";
 		private const string strCodeSystemNameLoinc="LOINC";
 
@@ -832,70 +836,137 @@ Laboratory Test Results
 			return Patients.GetPatNumByNameAndBirthday(lName,fName,birthDate);
 		}
 
-		private static List<XmlNode> GetListBodyComponents(XmlDocument xmlDocCcd) {
-			XmlNode xmlNodeStructuredBody=null;
-			for(int i=0;i<xmlDocCcd.FirstChild.ChildNodes.Count;i++) {
-				if(xmlDocCcd.FirstChild.ChildNodes[i].Name.Trim().ToLower()!="structuredbody") {//POCD_HD00040.xls line 236
-					continue;
-				}
-				xmlNodeStructuredBody=xmlDocCcd.FirstChild.ChildNodes[i];
-			}
-			if(xmlNodeStructuredBody==null) {
-				return new List<XmlNode>();//There must be exactly one according to the specification.
-			}
+		///<summary>Recursive. Returns all nodes matching the specified tag name (case insensitive) which also have all of the specified attributes (case sensitive names).
+		///Attributes must be listed in pairs by attribute name then attribute value.</summary>
+		private static List<XmlNode> GetNodesByTagNameAndAttributes(XmlNode xmlNode,string strTagName,params string[] arrayAttributes) {
+			//Test the current node for tag name and attributes.
 			List<XmlNode> retVal=new List<XmlNode>();
-			for(int i=0;i<xmlNodeStructuredBody.ChildNodes.Count;i++) {
-				if(xmlNodeStructuredBody.ChildNodes[i].Name.Trim().ToLower()!="component") {//POCD_HD00040.xls line 241
-					continue;
+			if(xmlNode.Name.Trim().ToLower()==strTagName.Trim().ToLower()) {//Tag name match.
+				bool isAttributeMatch=true;
+				for(int i=0;i<arrayAttributes.Length;i+=2) {
+					string strAttributeName=arrayAttributes[i];
+					string strAttributeValue=arrayAttributes[i+1];
+					if(xmlNode.Attributes[strAttributeName].Value.Trim().ToLower()!=strAttributeValue.Trim().ToLower()) {
+						isAttributeMatch=false;
+						break;
+					}
 				}
-				retVal.Add(xmlNodeStructuredBody.ChildNodes[i]);
+				if(isAttributeMatch) {
+					retVal.Add(xmlNode);
+				}
+			}
+			//Test child nodes.
+			for(int i=0;i<xmlNode.ChildNodes.Count;i++) {
+				retVal.AddRange(GetNodesByTagNameAndAttributes(xmlNode.ChildNodes[i],strTagName,arrayAttributes));
 			}
 			return retVal;
 		}
 
-		private static XmlNode GetSectionByTemplateId(XmlDocument xmlDocCcd,string strTemplateId) {
-			List<XmlNode> listXmlNodeBodyComponents=GetListBodyComponents(xmlDocCcd);
-			for(int i=0;i<listXmlNodeBodyComponents.Count;i++) {//Locate the medication history section
-				XmlNode xmlNodeComponent=listXmlNodeBodyComponents[i];
-				for(int j=0;j<xmlNodeComponent.ChildNodes.Count;j++) {
-					if(listXmlNodeBodyComponents[i].Name.Trim().ToLower()!="section") {//POCD_HD00040.xls line 244
-						continue;
-					}
-					XmlNode xmlNodeSection=listXmlNodeBodyComponents[i];
-					for(int k=0;k<xmlNodeSection.ChildNodes.Count;k++) {
-						if(xmlNodeSection.ChildNodes[k].Name.Trim().ToLower()!="templateid") {
-							continue;
-						}
-						XmlNode xmlNodeTemplateId=xmlNodeSection.ChildNodes[k];
-						if(xmlNodeTemplateId.Attributes["root"].ToString()==strTemplateId) {
-							return xmlNodeSection;
-						}
-					}
-				}
+		///<summary>Calls GetNodesByTagNameAndAttributes() for each item in listXmlNode.</summary>
+		private static List<XmlNode> GetNodesByTagNameAndAttributesFromList(List <XmlNode> listXmlNode,string strTagName,params string[] arrayAttributes) {
+			List<XmlNode> retVal=new List<XmlNode>();
+			for(int i=0;i<listXmlNode.Count;i++) {
+				retVal.AddRange(GetNodesByTagNameAndAttributes(listXmlNode[i],strTagName,arrayAttributes));
 			}
-			return null;
+			return retVal;
+		}
+
+		private static DateTime DateTimeFromString(string strDateTime) {
+			string strDateTimeFormat="";
+			if(strDateTime.Length==19) {
+				strDateTimeFormat="yyyyMMddHHmmsszzz";
+			}
+			else if(strDateTime.Length==17) {
+				strDateTimeFormat="yyyyMMddHHmmzzz";
+			}
+			else if(strDateTime.Length==8) {
+				strDateTimeFormat="yyyyMMdd";
+			}
+			else if(strDateTime.Length==6) {
+				strDateTimeFormat="yyyyMM";
+			}
+			else if(strDateTime.Length==4) {
+				strDateTimeFormat="yyyy";
+			}
+			try {
+				return DateTime.ParseExact(strDateTime,strDateTimeFormat,CultureInfo.CurrentCulture.DateTimeFormat);
+			}
+			catch {
+			}
+			return DateTime.MinValue;
+		}
+
+		private static DateTime GetEffectiveTimeLow(XmlNode xmlNodeEffectiveTime) {
+			DateTime dateTimeMin=DateTime.MinValue;
+			string strEffectiveTimeValue="";
+			List<XmlNode> listLowVals=GetNodesByTagNameAndAttributes(xmlNodeEffectiveTime,"low");
+			if(listLowVals.Count>0 && listLowVals[0].Attributes["value"]!=null) {
+				strEffectiveTimeValue=listLowVals[0].Attributes["value"].Value;
+			}
+			else if(xmlNodeEffectiveTime.Attributes["value"]!=null) {
+				strEffectiveTimeValue=xmlNodeEffectiveTime.Attributes["value"].Value;
+			}
+			return DateTimeFromString(strEffectiveTimeValue);
+		}
+
+		private static DateTime GetEffectiveTimeHigh(XmlNode xmlNodeEffectiveTime) {
+			DateTime dateTimeMin=DateTime.MinValue;
+			string strEffectiveTimeValue="";
+			List<XmlNode> listLowVals=GetNodesByTagNameAndAttributes(xmlNodeEffectiveTime,"high");
+			if(listLowVals.Count>0 && listLowVals[0].Attributes["value"]!=null) {
+				strEffectiveTimeValue=listLowVals[0].Attributes["value"].Value;
+			}
+			else {
+				//We do not take the string from the xmlNodeEffectiveTime value attribute, because we need to be careful importing high/stop dates.
+				//The examples suggest that th xmlNodeEffectiveTime value attribute will contain the minimum datetime.
+			}
+			return DateTimeFromString(strEffectiveTimeValue);
 		}
 
 		///<summary>Fills listMedicationPats and listMedications using the information found in the CCD document xmlDocCcd.  Does NOT insert any records into the db.</summary>
-		public static void GetListMedicationPats(XmlDocument xmlDocCcd,List<MedicationPat> listMedicationPats,List<Medication> listMedications) {
-			//TODO: Fill listMedicationPats and listMedications with the information from xmlDocCcd.
+		public static void GetListMedicationPats(XmlDocument xmlDocCcd,List<MedicationPat> listMedicationPats) {
 			//The length of listMedicationPats and listMedications will be the same. The information in listMedications might have duplicates.
 			//Neither list of objects will be inserted into the db, so there will be no primary or foreign keys.
-			XmlNode xmlNodeSection=GetSectionByTemplateId(xmlDocCcd,"2.16.840.1.113883.10.20.22.2.1.1");
-			//entry //POCD_HD00040.xls line 270
-			//| substanceAdministration //POCD_HD00040.xls line 450
-			//| entryRelationship //POCD_HD00040.xls line 319
-			//| supply | templateId root="2.16.840.1.113883.10.20.22.4.18" //Medication dispense template. POCD_HD00040.xls line 273 (ClinicalStatement)
-			//effectiveTime value="yyyymmdd"
-			//| product | manufacturedProduct | templateId root="2.16.840.1.113883.10.20.22.4.23" //Medication information template.
-			//| manufacturedMaterial | code codeSystem="2.16.840.1.113883.6.88"
+			List<XmlNode> listMedicationDispenseTemplate=GetNodesByTagNameAndAttributes(xmlDocCcd,"templateId","root","2.16.840.1.113883.10.20.22.4.18");//Medication Dispense template.
+			for(int i=0;i<listMedicationDispenseTemplate.Count;i++) {
+				//We have to start fairly high in the tree so that we can get the effective time if it is available.
+				XmlNode xmlNodeSupply=listMedicationDispenseTemplate[i].ParentNode;//Supply node. POCD_HD00040.xls line 485
+				List<XmlNode> xmlNodeEffectiveTimes=GetNodesByTagNameAndAttributes(xmlNodeSupply,"effectiveTime");//POCD_HD00040.xls line 492. Not required.
+				DateTime dateTimeEffectiveLow=DateTime.Now;
+				DateTime dateTimeEffectiveHigh=DateTime.Now;
+				if(xmlNodeEffectiveTimes.Count>0) {
+					XmlNode xmlNodeEffectiveTime=xmlNodeEffectiveTimes[0];
+					dateTimeEffectiveLow=GetEffectiveTimeLow(xmlNodeEffectiveTime);
+					dateTimeEffectiveHigh=GetEffectiveTimeHigh(xmlNodeEffectiveTime);
+				}
+				List<XmlNode> listProducts=GetNodesByTagNameAndAttributes(xmlNodeSupply,"product");
+				List<XmlNode> listManufacturedProducts=GetNodesByTagNameAndAttributesFromList(listProducts,"manufacturedProduct");
+				List<XmlNode> listManufacturedMaterial=GetNodesByTagNameAndAttributesFromList(listManufacturedProducts,"manufacturedMaterial");
+				List<XmlNode> listCodes=GetNodesByTagNameAndAttributesFromList(listManufacturedMaterial,"code");
+				for(int j=0;j<listCodes.Count;j++) {
+					XmlNode xmlNodeCode=listCodes[j];
+					string strCode=xmlNodeCode.Attributes["code"].Value;
+					string strMedDescript=xmlNodeCode.Attributes["displayName"].Value;
+					if(xmlNodeCode.Attributes["codeSystem"].Value!=strCodeSystemRxNorm) {
+						continue;//We can only import RxNorms, because we have nowhere to pull in any other codes at this time (for example, SNOMED).
+					}
+					MedicationPat medicationPat=new MedicationPat();
+					medicationPat.IsNew=true;//Needed for reconcile window to know this record is not in the db yet.
+					medicationPat.RxCui=PIn.Long(strCode);
+					medicationPat.MedDescript=strMedDescript;
+					medicationPat.DateStart=dateTimeEffectiveLow;
+					medicationPat.DateStop=dateTimeEffectiveHigh;
+					listMedicationPats.Add(medicationPat);
+				}
+			}
 		}
 
 		///<summary>Fills listDiseases and listDiseaseDef using the information found in the CCD document xmlDocCcd.  Does NOT insert any records into the db.</summary>
 		public static void GetListDiseases(XmlDocument xmlDocCcd,List<Disease> listDiseases,List<DiseaseDef> listDiseaseDef) {
-			//TODO: Fill listDiseases and listDiseaseDef with the information from xmlDocCcd.
 			//The length of listDiseases and listDiseaseDef will be the same. The information in listDiseaseDef might have duplicates.
 			//Neither list of objects will be inserted into the db, so there will be no primary or foreign keys.
+			List<XmlNode> listAllergyProblemActTemplate=GetNodesByTagNameAndAttributes(xmlDocCcd,"templateId","root","2.16.840.1.113883.10.20.22.4.30");//Allergy problem act template.
+
 		}
 
 		///<summary>Fills listAllergies and listAllergyDefs using the information found in the CCD document xmlDocCcd.  Does NOT insert any records into the db.</summary>
