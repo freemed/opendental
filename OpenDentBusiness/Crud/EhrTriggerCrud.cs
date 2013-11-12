@@ -7,7 +7,7 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	public class AutoTriggerCrud {
+	public class EhrTriggerCrud {
 		///<summary>Gets one AutoTrigger object from the database using the primary key.  Returns null if not found.</summary>
 		public static EhrTrigger SelectOne(long automationTriggerNum){
 			string command="SELECT * FROM autotrigger "
@@ -43,22 +43,22 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Converts a DataTable to a list of objects.</summary>
 		public static List<EhrTrigger> TableToList(DataTable table){
 			List<EhrTrigger> retVal=new List<EhrTrigger>();
-			EhrTrigger autoTrigger;
+			EhrTrigger ehrTrigger;
 			for(int i=0;i<table.Rows.Count;i++) {
-				autoTrigger=new EhrTrigger();
-				autoTrigger.AutomationTriggerNum     = PIn.Long  (table.Rows[i]["AutomationTriggerNum"].ToString());
-				autoTrigger.Description              = PIn.String(table.Rows[i]["Description"].ToString());
-				autoTrigger.SnomedList               = PIn.String(table.Rows[i]["SnomedList"].ToString());
-				autoTrigger.Icd9List                 = PIn.String(table.Rows[i]["Icd9List"].ToString());
-				autoTrigger.Icd10List                = PIn.String(table.Rows[i]["Icd10List"].ToString());
-				autoTrigger.CvxList                  = PIn.String(table.Rows[i]["CvxList"].ToString());
-				autoTrigger.RxCuiList                = PIn.String(table.Rows[i]["RxCuiList"].ToString());
-				autoTrigger.LoincList                = PIn.String(table.Rows[i]["LoincList"].ToString());
-				autoTrigger.DemographicAgeLessThan   = PIn.Int   (table.Rows[i]["DemographicAgeLessThan"].ToString());
-				autoTrigger.DemographicAgeGreaterThan= PIn.Int   (table.Rows[i]["DemographicAgeGreaterThan"].ToString());
-				autoTrigger.DemographicGender        = PIn.String(table.Rows[i]["DemographicGender"].ToString());
-				autoTrigger.Cardinality              = (MatchCardinality)PIn.Int(table.Rows[i]["Cardinality"].ToString());
-				retVal.Add(autoTrigger);
+				ehrTrigger=new EhrTrigger();
+				ehrTrigger.AutomationTriggerNum     = PIn.Long  (table.Rows[i]["EhrTriggerNum"].ToString());
+				ehrTrigger.Description              = PIn.String(table.Rows[i]["Description"].ToString());
+				ehrTrigger.SnomedList               = PIn.String(table.Rows[i]["SnomedList"].ToString());
+				ehrTrigger.Icd9List                 = PIn.String(table.Rows[i]["Icd9List"].ToString());
+				ehrTrigger.Icd10List                = PIn.String(table.Rows[i]["Icd10List"].ToString());
+				ehrTrigger.CvxList                  = PIn.String(table.Rows[i]["CvxList"].ToString());
+				ehrTrigger.RxCuiList                = PIn.String(table.Rows[i]["RxCuiList"].ToString());
+				ehrTrigger.LoincList                = PIn.String(table.Rows[i]["LoincList"].ToString());
+				ehrTrigger.DemographicAgeLessThan   = PIn.Int   (table.Rows[i]["DemographicAgeLessThan"].ToString());
+				ehrTrigger.DemographicAgeGreaterThan= PIn.Int   (table.Rows[i]["DemographicAgeGreaterThan"].ToString());
+				ehrTrigger.DemographicGender        = PIn.String(table.Rows[i]["DemographicGender"].ToString());
+				ehrTrigger.Cardinality              = (MatchCardinality)PIn.Int(table.Rows[i]["Cardinality"].ToString());
+				retVal.Add(ehrTrigger);
 			}
 			return retVal;
 		}

@@ -52,18 +52,22 @@ namespace OpenDentBusiness{
 		/// <param name="triggerObject">Can be DiseaseDef, Disease, RxPat, Medication, Allergy, AllergyDef, Snomed, Icd9, Icd10, RxNorm, Cvx, Patient, or null. If patient, will check demographics. if null, will check all existing triggers.</param>
 		/// <param name="PatCur">Triggers and intervention are currently always dependant on current patient. </param>
 		/// <returns>Returns a dictionary keyed on triggers and a list of all the objects that the trigger matched on. Should be used to generate CDS intervention message and later be passed to FormInfobutton for knowledge request.</returns>
-		public static Dictionary<EhrTrigger,List<object>> TriggerMatch(object triggerObject,Patient PatCur) {
-			Dictionary<EhrTrigger,List<object>> retVal=new Dictionary<EhrTrigger,List<object>>();
+		public static SortedDictionary<string,List<object>> TriggerMatch(object triggerObject,Patient PatCur) {
+			SortedDictionary<string,List<object>> retVal=new SortedDictionary<string,List<object>>();
 			string command="";
 			switch(triggerObject.GetType().Name) {
 				case "DiseaseDef":
 					DiseaseDef diseaseDef=(DiseaseDef)triggerObject;
-					command="SELECT * FROM autotrigger"
-					+" WHERE Icd9List LIKE '%"+POut.String(diseaseDef.ICD9Code)+"%'"
-					+" OR Icd10List LIKE ' "+POut.String(diseaseDef.Icd10Code)+" '"
-					+" OR SnomedList LIKE '%"+POut.String(diseaseDef.SnomedCode)+"%'";
+					command="SELECT * FROM ehrtrigger"
+					+" WHERE Icd9List LIKE '%"+POut.String(diseaseDef.ICD9Code)+"%'"//TODO
+					+" OR Icd10List LIKE ' "+POut.String(diseaseDef.Icd10Code)+" '"//TODO
+					+" OR SnomedList LIKE '%"+POut.String(diseaseDef.SnomedCode)+"%'";//TODO
 					break;
 				case "Disease":
+					break;
+				case "ICD9":
+					break;
+				case "Snomed":
 					break;
 				case "RxPat":
 				default:
@@ -72,8 +76,14 @@ namespace OpenDentBusiness{
 					#endif
 					break;
 			}
-			List<EhrTrigger> listAutoTriggers=Crud.AutoTriggerCrud.SelectMany(command);
-			if(listAutoTriggers.Count==0){
+			List<EhrTrigger> listListTriggers;
+			if(command=="") {
+				listListTriggers=new List<EhrTrigger>();
+			}
+			else {
+				listListTriggers=Crud.EhrTriggerCrud.SelectMany(command);
+			}
+			if(listListTriggers.Count==0){
 				return null;//no triggers matched.
 			}
 			//Fill object lists to be checked-------------------------------------------------------------------------------------------------
@@ -83,7 +93,7 @@ namespace OpenDentBusiness{
 			for(int i=0;i<ListAllergy.Count;i++){
 				//ListAllergyDef
 			}
-			for(int i=0;i<listAutoTriggers.Count;i++) {
+			for(int i=0;i<listListTriggers.Count;i++) {
 				List<object> ListObjectMatches=new List<object>();
 				//Allergy-----------------------------------------------------------------------------------------------------------------------
 				//allergy.snomedreaction
@@ -116,7 +126,7 @@ namespace OpenDentBusiness{
 				//VitalSign.BpDiastolic (Loinc)
 				//VitalSign.WeightCode (Snomed)
 				//VitalSign.PregDiseaseNum (Loinc)
-				retVal.Add(listAutoTriggers[i],ListObjectMatches);
+				retVal.Add("TODO:Description and matchconditions",ListObjectMatches);
 			}
 			return retVal;
 		}

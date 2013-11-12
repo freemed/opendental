@@ -169,7 +169,7 @@
     <Compile Include="Crud\AutomationCrud.cs" />
     <Compile Include="Crud\AutoNoteControlCrud.cs" />
     <Compile Include="Crud\AutoNoteCrud.cs" />
-    <Compile Include="Crud\AutoTriggerCrud.cs" />
+    <Compile Include="Crud\EhrTriggerCrud.cs" />
     <Compile Include="Crud\BenefitCrud.cs" />
     <Compile Include="Crud\CanadianNetworkCrud.cs" />
     <Compile Include="Crud\CarrierCrud.cs" />

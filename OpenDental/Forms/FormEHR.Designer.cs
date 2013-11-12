@@ -45,6 +45,7 @@
 			this.butEncounters = new System.Windows.Forms.Button();
 			this.butInterventions = new System.Windows.Forms.Button();
 			this.gridMu = new OpenDental.UI.ODGrid();
+			this.button1 = new System.Windows.Forms.Button();
 			this.groupBox4.SuspendLayout();
 			this.groupBox5.SuspendLayout();
 			this.SuspendLayout();
@@ -266,11 +267,21 @@
 			this.gridMu.TranslationName = null;
 			this.gridMu.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMu_CellClick);
 			// 
+			// button1
+			// 
+			this.button1.Location = new System.Drawing.Point(715, 570);
+			this.button1.Name = "button1";
+			this.button1.Size = new System.Drawing.Size(84, 23);
+			this.button1.TabIndex = 41;
+			this.button1.Text = "CDSTest";
+			this.button1.UseVisualStyleBackColor = true;
+			// 
 			// FormEHR
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(817, 674);
+			this.Controls.Add(this.button1);
 			this.Controls.Add(this.butInterventions);
 			this.Controls.Add(this.butEncounters);
 			this.Controls.Add(this.butEhrNotPerformed);
@@ -322,5 +333,6 @@
 		private System.Windows.Forms.Button but2014CQM;
 		private System.Windows.Forms.Button butEncounters;
 		private System.Windows.Forms.Button butInterventions;
+		private System.Windows.Forms.Button button1;
 	}
 }
