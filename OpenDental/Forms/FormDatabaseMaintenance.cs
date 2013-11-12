@@ -620,7 +620,15 @@ namespace OpenDental {
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.PerioMeasureWithInvalidIntTooth(verbose,isCheck);
 			Application.DoEvents();
+			textLog.Text+=DatabaseMaintenance.PreferenceAllergiesIndicateNone(verbose,isCheck);
+			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.PreferenceDateDepositsStarted(verbose,isCheck);
+			Application.DoEvents();
+			textLog.Text+=DatabaseMaintenance.PreferenceMedicationsIndicateNone(verbose,isCheck);
+			Application.DoEvents();
+			textLog.Text+=DatabaseMaintenance.PreferenceProblemsIndicateNone(verbose,isCheck);
+			Application.DoEvents();
+			textLog.Text+=DatabaseMaintenance.PreferenceTimeCardOvertimeFirstDayOfWeek(verbose,isCheck);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.PreferencePracticeProv(verbose,isCheck);
 			Application.DoEvents();

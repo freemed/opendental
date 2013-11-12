@@ -1405,6 +1405,18 @@ namespace OpenDental{
 		#endregion
 
 		private void FormModuleSetup_Load(object sender, System.EventArgs e) {
+			try {//try/catch used to prevent setup form from partially loading and filling controls.  Causes UEs, Example: TimeCardOvertimeFirstDayOfWeek set to -1 because UI control not filled properly.
+				FillControllsHelper();
+			}
+			catch(Exception ex) {
+				MessageBox.Show(Lan.g(this,"An error has occured while attempting to load preferences.  Run database maintenance and try again."));
+				DialogResult=DialogResult.Abort;
+				return;
+			}
+			Plugins.HookAddCode(this,"FormModuleSetup.FormModuleSetup_Load_end");
+		}
+
+		private void FillControllsHelper() {
 			changed=false;
 			IsLoading=true;
 			//Appointment module---------------------------------------------------------------
@@ -1413,9 +1425,9 @@ namespace OpenDental{
 			checkApptBubbleDelay.Checked = PrefC.GetBool(PrefName.ApptBubbleDelay);
 			checkAppointmentBubblesDisabled.Checked=PrefC.GetBool(PrefName.AppointmentBubblesDisabled);
 			posAdjTypes=DefC.GetPositiveAdjTypes();
-			for(int i=0;i<posAdjTypes.Count;i++){
+			for(int i=0;i<posAdjTypes.Count;i++) {
 				comboFinanceChargeAdjType.Items.Add(posAdjTypes[i].ItemName);
-				if(PrefC.GetLong(PrefName.FinanceChargeAdjustmentType)==posAdjTypes[i].DefNum){
+				if(PrefC.GetLong(PrefName.FinanceChargeAdjustmentType)==posAdjTypes[i].DefNum) {
 					comboFinanceChargeAdjType.SelectedIndex=i;
 				}
 				comboBillingChargeAdjType.Items.Add(posAdjTypes[i].ItemName);
@@ -1430,25 +1442,25 @@ namespace OpenDental{
 			checkApptExclamation.Checked=PrefC.GetBool(PrefName.ApptExclamationShowForUnsentIns);
 			comboTimeArrived.Items.Add(Lan.g(this,"none"));
 			comboTimeArrived.SelectedIndex=0;
-			for(int i=0;i<DefC.Short[(int)DefCat.ApptConfirmed].Length;i++){
+			for(int i=0;i<DefC.Short[(int)DefCat.ApptConfirmed].Length;i++) {
 				comboTimeArrived.Items.Add(DefC.Short[(int)DefCat.ApptConfirmed][i].ItemName);
-				if(DefC.Short[(int)DefCat.ApptConfirmed][i].DefNum==PrefC.GetLong(PrefName.AppointmentTimeArrivedTrigger)){
+				if(DefC.Short[(int)DefCat.ApptConfirmed][i].DefNum==PrefC.GetLong(PrefName.AppointmentTimeArrivedTrigger)) {
 					comboTimeArrived.SelectedIndex=i+1;
 				}
 			}
 			comboTimeSeated.Items.Add(Lan.g(this,"none"));
 			comboTimeSeated.SelectedIndex=0;
-			for(int i=0;i<DefC.Short[(int)DefCat.ApptConfirmed].Length;i++){
+			for(int i=0;i<DefC.Short[(int)DefCat.ApptConfirmed].Length;i++) {
 				comboTimeSeated.Items.Add(DefC.Short[(int)DefCat.ApptConfirmed][i].ItemName);
-				if(DefC.Short[(int)DefCat.ApptConfirmed][i].DefNum==PrefC.GetLong(PrefName.AppointmentTimeSeatedTrigger)){
+				if(DefC.Short[(int)DefCat.ApptConfirmed][i].DefNum==PrefC.GetLong(PrefName.AppointmentTimeSeatedTrigger)) {
 					comboTimeSeated.SelectedIndex=i+1;
 				}
 			}
 			comboTimeDismissed.Items.Add(Lan.g(this,"none"));
 			comboTimeDismissed.SelectedIndex=0;
-			for(int i=0;i<DefC.Short[(int)DefCat.ApptConfirmed].Length;i++){
+			for(int i=0;i<DefC.Short[(int)DefCat.ApptConfirmed].Length;i++) {
 				comboTimeDismissed.Items.Add(DefC.Short[(int)DefCat.ApptConfirmed][i].ItemName);
-				if(DefC.Short[(int)DefCat.ApptConfirmed][i].DefNum==PrefC.GetLong(PrefName.AppointmentTimeDismissedTrigger)){
+				if(DefC.Short[(int)DefCat.ApptConfirmed][i].DefNum==PrefC.GetLong(PrefName.AppointmentTimeDismissedTrigger)) {
 					comboTimeDismissed.SelectedIndex=i+1;
 				}
 			}
@@ -1497,9 +1509,9 @@ namespace OpenDental{
 			checkAllowSettingProcsComplete.Checked=PrefC.GetBool(PrefName.AllowSettingProcsComplete);
 			checkChartQuickAddHideAmalgam.Checked=PrefC.GetBool(PrefName.ChartQuickAddHideAmalgam);
 			//checkToothChartMoveMenuToRight.Checked=PrefC.GetBool(PrefName.ToothChartMoveMenuToRight);
-			textProblemsIndicateNone.Text=DiseaseDefs.GetName(PrefC.GetLong(PrefName.ProblemsIndicateNone));
-			textMedicationsIndicateNone.Text=Medications.GetDescription(PrefC.GetLong(PrefName.MedicationsIndicateNone));
-			textAllergiesIndicateNone.Text=AllergyDefs.GetDescription(PrefC.GetLong(PrefName.AllergiesIndicateNone));
+			textProblemsIndicateNone.Text		=DiseaseDefs.GetName(PrefC.GetLong(PrefName.ProblemsIndicateNone)); //DB maint to fix corruption
+			textMedicationsIndicateNone.Text=Medications.GetDescription(PrefC.GetLong(PrefName.MedicationsIndicateNone)); //DB maint to fix corruption
+			textAllergiesIndicateNone.Text	=AllergyDefs.GetDescription(PrefC.GetLong(PrefName.AllergiesIndicateNone)); //DB maint to fix corruption
 			checkProcGroupNoteDoesAggregate.Checked=PrefC.GetBool(PrefName.ProcGroupNoteDoesAggregate);
 			checkMedicalFeeUsedForNewProcs.Checked=PrefC.GetBool(PrefName.MedicalFeeUsedForNewProcs);
 			textICD9DefaultForNewProcs.Text=PrefC.GetString(PrefName.ICD9DefaultForNewProcs);
@@ -1533,7 +1545,6 @@ namespace OpenDental{
 			checkStatementSummaryShowInsInfo.Checked=PrefC.GetBool(PrefName.StatementSummaryShowInsInfo);
 			checkIntermingleDefault.Checked=PrefC.GetBool(PrefName.IntermingleFamilyDefault);
 			IsLoading=false; 
-			Plugins.HookAddCode(this,"FormModuleSetup.FormModuleSetup_Load_end");
 		}
 
 		private void checkAllowedFeeSchedsAutomate_Click(object sender,EventArgs e) {

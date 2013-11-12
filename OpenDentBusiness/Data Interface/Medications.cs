@@ -79,6 +79,29 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
+		///<summary>Returns true if medication is in use in medicationpat, allergydef, eduresources, or preference.MedicationsIndicateNone.</summary>
+		public static bool IsInUse(long medicationNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),medicationNum);
+			}
+			string command="SELECT COUNT(*) FROM medicationpat WHERE MedicationNum="+POut.Long(medicationNum);
+			if(PIn.Int(Db.GetCount(command))!=0) {
+				return true;
+			}
+			command="SELECT COUNT(*) FROM allergydef WHERE MedicationNum="+POut.Long(medicationNum);
+			if(PIn.Int(Db.GetCount(command))!=0) {
+				return true;
+			}
+			command="SELECT COUNT(*) FROM eduresources WHERE MedicationNum="+POut.Long(medicationNum);
+			if(PIn.Int(Db.GetCount(command))!=0) {
+				return true;
+			}
+			if(PrefC.GetLong(PrefName.MedicationsIndicateNone)==medicationNum) {
+				return true;
+			}
+			return false;
+		}
+
 		///<summary>Returns a list of all patients using this medication.</summary>
 		public static string[] GetPats(long medicationNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

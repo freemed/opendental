@@ -389,13 +389,17 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"You can not delete a medication that has brand names attached."));
 				return;
 			}
+			if(Medications.IsInUse(MedicationCur.MedicationNum)) {
+				MessageBox.Show(Lan.g(this,"This medication cannot be deleted because it is in use."));
+				return;
+			}
 			if(Brands.Length>0){
 				if(MessageBox.Show(Lan.g(this,"Delete this medication?"),"",MessageBoxButtons.OKCancel)
 					!=DialogResult.OK){
 					return;
 				}
 			}
-			Medications.Delete(MedicationCur);
+			Medications.Delete(MedicationCur);//TODO: follow the "Deleting Dependent Objects" pattern from the Programming Pattern - Data Interface (S classes) wiki page.
 			DialogResult=DialogResult.OK;
 		}
 
@@ -426,7 +430,9 @@ namespace OpenDental{
 			if(DialogResult==DialogResult.OK)
 				return;
 			if(IsNew){
-				Medications.Delete(MedicationCur);
+				if(!Medications.IsInUse(MedicationCur.MedicationNum)){//just in case
+					Medications.Delete(MedicationCur);
+				}
 			}
 		}
 

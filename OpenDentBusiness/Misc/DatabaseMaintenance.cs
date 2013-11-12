@@ -2984,6 +2984,34 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
+		public static string PreferenceAllergiesIndicateNone(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			if(isCheck) {
+				command="SELECT COUNT(*) FROM allergydef where AllergyDefNum="+POut.Long(PrefC.GetLong(PrefName.AllergiesIndicateNone));
+				if(PIn.Int(Db.GetCount(command))==0 && PrefC.GetString(PrefName.AllergiesIndicateNone)!="") {
+					log+=Lans.g("FormDatabaseMaintenance","Preference \"AllergyIndicatesNone\" is an invalid value.")+"\r\n";
+				}
+				else if(verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Preference \"AllergyIndicatesNone\" checked.")+"\r\n";
+				}
+			}
+			else {
+				command="SELECT COUNT(*) FROM allergydef where AllergyDefNum="+POut.Long(PrefC.GetLong(PrefName.AllergiesIndicateNone));
+				if(PIn.Int(Db.GetCount(command))==0 && PrefC.GetString(PrefName.AllergiesIndicateNone)!="") {
+					Prefs.UpdateString(PrefName.AllergiesIndicateNone,"");
+					Signalods.SetInvalid(InvalidType.Prefs);
+					log+=Lans.g("FormDatabaseMaintenance","Preference \"AllergyIndicatesNone\" set to blank due to an invalid value.")+"\r\n";
+				}
+				else if(verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Preference \"AllergyIndicatesNone\" checked.")+"\r\n";
+				}
+			}
+			return log;
+		}
+
 		public static string PreferenceDateDepositsStarted(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
@@ -3010,6 +3038,88 @@ namespace OpenDentBusiness {
 				}
 				else if(verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Deposit start date checked.")+"\r\n";
+				}
+			}
+			return log;
+		}
+
+		public static string PreferenceMedicationsIndicateNone(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			if(isCheck) {
+				command="SELECT COUNT(*) FROM medication where MedicationNum="+POut.Long(PrefC.GetLong(PrefName.MedicationsIndicateNone));
+				if(PIn.Int(Db.GetCount(command))==0 && PrefC.GetString(PrefName.MedicationsIndicateNone)!="") {
+					log+=Lans.g("FormDatabaseMaintenance","Preference \"MedicationsIndicateNone\" is an invalid value.")+"\r\n";
+				}
+				else if(verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Preference \"MedicationsIndicateNone\" checked.")+"\r\n";
+				}
+			}
+			else {
+				command="SELECT COUNT(*) FROM medication where MedicationNum="+POut.Long(PrefC.GetLong(PrefName.MedicationsIndicateNone));
+				if(PIn.Int(Db.GetCount(command))==0 && PrefC.GetString(PrefName.MedicationsIndicateNone)!="") {
+					Prefs.UpdateString(PrefName.MedicationsIndicateNone,"");
+					Signalods.SetInvalid(InvalidType.Prefs);
+					log+=Lans.g("FormDatabaseMaintenance","Preference \"MedicationsIndicateNone\" set to blank due to an invalid value.")+"\r\n";
+				}
+				else if(verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Preference \"MedicationsIndicateNone\" checked.")+"\r\n";
+				}
+			}
+			return log;
+		}
+
+		public static string PreferenceProblemsIndicateNone(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			if(isCheck) {
+				command="SELECT COUNT(*) FROM diseasedef where DiseaseDefNum="+POut.Long(PrefC.GetLong(PrefName.ProblemsIndicateNone));
+				if(PIn.Int(Db.GetCount(command))==0 && PrefC.GetString(PrefName.ProblemsIndicateNone)!="") {
+					log+=Lans.g("FormDatabaseMaintenance","Preference \"ProblemsIndicateNone\" is an invalid value.")+"\r\n";
+				}
+				else if(verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Preference \"ProblemsIndicateNone\" checked.")+"\r\n";
+				}
+			}
+			else {
+				command="SELECT COUNT(*) FROM diseasedef where DiseaseDefNum="+POut.Long(PrefC.GetLong(PrefName.ProblemsIndicateNone));
+				if(PIn.Int(Db.GetCount(command))==0 && PrefC.GetString(PrefName.ProblemsIndicateNone)!="") {
+					Prefs.UpdateString(PrefName.ProblemsIndicateNone,"");
+					Signalods.SetInvalid(InvalidType.Prefs);
+					log+=Lans.g("FormDatabaseMaintenance","Preference \"ProblemsIndicateNone\" set to blank due to an invalid value.")+"\r\n";
+				}
+				else if(verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Preference \"ProblemsIndicateNone\" checked.")+"\r\n";
+				}
+			}
+			return log;
+		}
+
+		public static string PreferenceTimeCardOvertimeFirstDayOfWeek(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			if(isCheck) {
+				if(PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek)<0 || PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek)>6) {
+					log+=Lans.g("FormDatabaseMaintenance","Preference \"TimeCardOvertimeFirstDayOfWeek\" is an invalid value.")+"\r\n";
+				}
+				else if(verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Preference \"TimeCardOvertimeFirstDayOfWeek\" checked.")+"\r\n";
+				}
+			}
+			else {
+				if(PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek)<0 || PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek)>6) {
+					Prefs.UpdateInt(PrefName.TimeCardOvertimeFirstDayOfWeek,0);//0==Sunday
+					Signalods.SetInvalid(InvalidType.Prefs);
+					log+=Lans.g("FormDatabaseMaintenance","Preference \"TimeCardOvertimeFirstDayOfWeek\" set to Sunday due to an invalid value.")+"\r\n";
+				}
+				else if(verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Preference \"TimeCardOvertimeFirstDayOfWeek\" checked.")+"\r\n";
 				}
 			}
 			return log;

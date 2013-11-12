@@ -85,6 +85,9 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
 				return;
 			}
+			if(PrefC.GetLong(PrefName.ProblemsIndicateNone)==def.DiseaseDefNum) {
+				throw new ApplicationException(Lans.g("DiseaseDef","Not allowed to delete. In use as preference \"ProblemsIndicateNone\" in Setup>>Modules."));
+			}
 			//Validate patient attached
 			string command="SELECT LName,FName,patient.PatNum FROM patient,disease WHERE "
 				+"patient.PatNum=disease.PatNum "

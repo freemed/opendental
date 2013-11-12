@@ -88,6 +88,9 @@ namespace OpenDentBusiness{
 			if(Db.GetCount(command)!="0") {
 				return true;
 			}
+			if(allergyDefNum==PrefC.GetLong(PrefName.AllergiesIndicateNone)) {
+				return true;
+			}
 			return false;
 		}
 
