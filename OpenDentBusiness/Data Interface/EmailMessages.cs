@@ -635,6 +635,7 @@ namespace OpenDentBusiness{
 					emailMessage=ConvertMessageToEmailMessage(inMsg.Message,true);//If the message was wrapped, then the To, From, Subject and Date can change after decyption. We also need to create the attachments for the decrypted message.
 					emailMessage.EmailMessageNum=emailMessageNum;
 					emailMessage.SentOrReceived=EmailSentOrReceived.ReceivedDirect;
+					emailMessage.RecipientAddress=emailAddressReceiver.EmailUsername;
 				}
 				catch(Exception ex) {
 					//SentOrReceived will be ReceivedEncrypted, indicating to the calling code that decryption failed.
@@ -710,7 +711,8 @@ namespace OpenDentBusiness{
 			emailMessage.FromAddress=message.FromValue;
 			//The email message date must be in a very specific format and must match the RFC822 standard.  Is a required field for RFC822.  http://tools.ietf.org/html/rfc822
 			//We need the time from the server, so we can quickly identify messages which have already been downloaded and to avoid downloading duplicates.
-			emailMessage.MsgDateTime=DateTime.ParseExact(message.DateValue,"ddd, dd MMM yyyy HH:mm:ss zzz",System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat);
+			string strDateVal=message.DateValue.Substring(0,31);//Example: "Tue, 12 Nov 2013 17:10:37 +0000 (UTC)"
+			emailMessage.MsgDateTime=DateTime.ParseExact(strDateVal,"ddd, dd MMM yyyy HH:mm:ss zzz",System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat);
 			emailMessage.Subject=message.SubjectValue;
 			emailMessage.ToAddress=message.ToValue;
 			List<Health.Direct.Common.Mime.MimeEntity> listMimeParts=new List<Health.Direct.Common.Mime.MimeEntity>();//We want to treat one part and multiple part emails the same way below, so we make our own list.  If GetParts() is called when IsMultiPart is false, then an exception will be thrown by the Direct library.
