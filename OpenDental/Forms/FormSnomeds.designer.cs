@@ -23,6 +23,8 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormSnomeds));
 			this.butOK = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
 			this.textCode = new System.Windows.Forms.TextBox();
@@ -31,6 +33,7 @@ namespace OpenDental{
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butMapICD9 = new OpenDental.UI.Button();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.imageListInfoButton = new System.Windows.Forms.ImageList(this.components);
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -112,6 +115,7 @@ namespace OpenDental{
 			this.gridMain.TranslationName = "FormCPTCodes";
 			this.gridMain.WrapText = false;
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
 			// 
 			// butMapICD9
 			// 
@@ -141,6 +145,12 @@ namespace OpenDental{
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "One-Time Tools";
 			this.groupBox1.Visible = false;
+			// 
+			// imageListInfoButton
+			// 
+			this.imageListInfoButton.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListInfoButton.ImageStream")));
+			this.imageListInfoButton.TransparentColor = System.Drawing.Color.Transparent;
+			this.imageListInfoButton.Images.SetKeyName(0, "iButton_16px.png");
 			// 
 			// FormSnomeds
 			// 
@@ -173,5 +183,6 @@ namespace OpenDental{
 		private UI.ODGrid gridMain;
 		private UI.Button butMapICD9;
 		private System.Windows.Forms.GroupBox groupBox1;
+		private System.Windows.Forms.ImageList imageListInfoButton;
 	}
 }

@@ -46,6 +46,11 @@ namespace OpenDental {
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col;
+			if(Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
+				col=new ODGridColumn("",18);//infoButton
+				col.ImageList=imageListInfoButton;
+				gridMain.Columns.Add(col);
+			}
 			col=new ODGridColumn("SNOMED Code",100);
 			gridMain.Columns.Add(col);
 			//col=new ODGridColumn("Deprecated",75,HorizontalAlignment.Center);
@@ -70,6 +75,9 @@ namespace OpenDental {
 			List<ODGridRow> listAll=new List<ODGridRow>();
 			for(int i=0;i<SnomedList.Count;i++) {
 				row=new ODGridRow();
+				if(Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
+					row.Cells.Add("0");//index of infobutton
+				}
 				row.Cells.Add(SnomedList[i].SnomedCode);
 				//row.Cells.Add("");//IsActive==NotDeprecated
 				row.Cells.Add(SnomedList[i].Description);
@@ -85,16 +93,29 @@ namespace OpenDental {
 			gridMain.EndUpdate();
 		}
 
+		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
+			if(!Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
+				return;
+			}
+			if(e.Col!=0) {
+				return;
+			}
+			FormInfobutton FormIB = new FormInfobutton();
+			FormIB.ListObjects.Add(Snomeds.GetByCode(gridMain.Rows[e.Row].Cells[1].Text));
+			FormIB.ShowDialog();
+		}
+
 		///<summary>Sort function to put the codes that apply to the most number of CQM's at the top so the user can see which codes they should select.</summary>
 		private int SortMeasuresMet(ODGridRow row1,ODGridRow row2) {
+			int i=(Security.IsAuthorized(Permissions.EhrInfoButton,true)?1:0);//used to accomodate infobutton column.
 			//First sort by the number of measures the codes apply to in a comma delimited list
-			int diff=row2.Cells[2].Text.Split(new string[] { "," },StringSplitOptions.RemoveEmptyEntries).Length-row1.Cells[2].Text.Split(new string[] { "," },StringSplitOptions.RemoveEmptyEntries).Length;
+			int diff=row2.Cells[2+i].Text.Split(new string[] { "," },StringSplitOptions.RemoveEmptyEntries).Length-row1.Cells[2+i].Text.Split(new string[] { "," },StringSplitOptions.RemoveEmptyEntries).Length;
 			if(diff!=0) {
 				return diff;
 			}
 			try {
 				//if the codes apply to the same number of CQMs, order by the code values
-				return PIn.Long(row1.Cells[0].Text).CompareTo(PIn.Long(row2.Cells[0].Text));
+				return PIn.Long(row1.Cells[2+i].Text).CompareTo(PIn.Long(row2.Cells[2+i].Text));
 			}
 			catch(Exception ex) {
 				return 0;

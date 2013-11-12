@@ -56,6 +56,11 @@ namespace OpenDentBusiness{
 			return false;
 		}
 
+		public static RxNorm GetByRxCUI(string rxCui) {
+			string command="SELECT * FROM rxnorm WHERE RxCui='"+POut.String(rxCui)+"'";
+			return Crud.RxNormCrud.SelectOne(command);
+		}
+
 		/////<summary>Deprecated. Truncates the current rxnorm and refills based on the rxnorm.zip resource.  May take a few seconds.</summary>
 		//public static void CreateFreshRxNormTableFromZip() {
 		//	if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

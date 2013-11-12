@@ -46,16 +46,16 @@ namespace OpenDentBusiness.Crud{
 			EhrCode ehrCode;
 			for(int i=0;i<table.Rows.Count;i++) {
 				ehrCode=new EhrCode();
-				ehrCode.EhrCodeNum     = PIn.Long  (table.Rows[i]["EhrCodeNum"].ToString());
-				ehrCode.MeasureIds     = PIn.String(table.Rows[i]["MeasureIds"].ToString());
-				ehrCode.ValueSetName   = PIn.String(table.Rows[i]["ValueSetName"].ToString());
-				ehrCode.ValueSetOID    = PIn.String(table.Rows[i]["ValueSetOID"].ToString());
-				ehrCode.QDMCategory    = PIn.String(table.Rows[i]["QDMCategory"].ToString());
-				ehrCode.CodeValue      = PIn.String(table.Rows[i]["CodeValue"].ToString());
-				ehrCode.Description    = PIn.String(table.Rows[i]["Description"].ToString());
-				ehrCode.CodeSystem     = PIn.String(table.Rows[i]["CodeSystem"].ToString());
-				ehrCode.CodeSystemOID  = PIn.String(table.Rows[i]["CodeSystemOID"].ToString());
-				ehrCode.IsInDb= PIn.Bool  (table.Rows[i]["IsInDb"].ToString());
+				ehrCode.EhrCodeNum   = PIn.Long  (table.Rows[i]["EhrCodeNum"].ToString());
+				ehrCode.MeasureIds   = PIn.String(table.Rows[i]["MeasureIds"].ToString());
+				ehrCode.ValueSetName = PIn.String(table.Rows[i]["ValueSetName"].ToString());
+				ehrCode.ValueSetOID  = PIn.String(table.Rows[i]["ValueSetOID"].ToString());
+				ehrCode.QDMCategory  = PIn.String(table.Rows[i]["QDMCategory"].ToString());
+				ehrCode.CodeValue    = PIn.String(table.Rows[i]["CodeValue"].ToString());
+				ehrCode.Description  = PIn.String(table.Rows[i]["Description"].ToString());
+				ehrCode.CodeSystem   = PIn.String(table.Rows[i]["CodeSystem"].ToString());
+				ehrCode.CodeSystemOID= PIn.String(table.Rows[i]["CodeSystemOID"].ToString());
+				ehrCode.IsInDb       = PIn.Bool  (table.Rows[i]["IsInDb"].ToString());
 				retVal.Add(ehrCode);
 			}
 			return retVal;
@@ -122,15 +122,15 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one EhrCode in the database.</summary>
 		public static void Update(EhrCode ehrCode){
 			string command="UPDATE ehrcode SET "
-				+"MeasureIds     = '"+POut.String(ehrCode.MeasureIds)+"', "
-				+"ValueSetName   = '"+POut.String(ehrCode.ValueSetName)+"', "
-				+"ValueSetOID    = '"+POut.String(ehrCode.ValueSetOID)+"', "
-				+"QDMCategory    = '"+POut.String(ehrCode.QDMCategory)+"', "
-				+"CodeValue      = '"+POut.String(ehrCode.CodeValue)+"', "
-				+"Description    = '"+POut.String(ehrCode.Description)+"', "
-				+"CodeSystem     = '"+POut.String(ehrCode.CodeSystem)+"', "
-				+"CodeSystemOID  = '"+POut.String(ehrCode.CodeSystemOID)+"', "
-				+"IsInDb=  "+POut.Bool  (ehrCode.IsInDb)+" "
+				+"MeasureIds   = '"+POut.String(ehrCode.MeasureIds)+"', "
+				+"ValueSetName = '"+POut.String(ehrCode.ValueSetName)+"', "
+				+"ValueSetOID  = '"+POut.String(ehrCode.ValueSetOID)+"', "
+				+"QDMCategory  = '"+POut.String(ehrCode.QDMCategory)+"', "
+				+"CodeValue    = '"+POut.String(ehrCode.CodeValue)+"', "
+				+"Description  = '"+POut.String(ehrCode.Description)+"', "
+				+"CodeSystem   = '"+POut.String(ehrCode.CodeSystem)+"', "
+				+"CodeSystemOID= '"+POut.String(ehrCode.CodeSystemOID)+"', "
+				+"IsInDb       =  "+POut.Bool  (ehrCode.IsInDb)+" "
 				+"WHERE EhrCodeNum = "+POut.Long(ehrCode.EhrCodeNum);
 			Db.NonQ(command);
 		}

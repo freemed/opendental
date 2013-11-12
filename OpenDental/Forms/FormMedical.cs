@@ -508,12 +508,11 @@ namespace OpenDental{
 			gridMeds.BeginUpdate();
 			gridMeds.Columns.Clear();
 			ODGridColumn col;
-			//hiding for 13.3 release
-			//if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
-			//	col=new ODGridColumn("",18);//infoButton
-			//	col.ImageList=imageListInfoButton;
-			//	gridMeds.Columns.Add(col);
-			//}
+			if(Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
+				col=new ODGridColumn("",18);//infoButton
+				col.ImageList=imageListInfoButton;
+				gridMeds.Columns.Add(col);
+			}
 			col=new ODGridColumn(Lan.g("TableMedications","Medication"),120);
 			gridMeds.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableMedications","Notes"),190);
@@ -526,10 +525,9 @@ namespace OpenDental{
 			ODGridRow row;
 			for(int i=0;i<medList.Count;i++) {
 				row=new ODGridRow();
-				//hiding for 13.3 release
-				//if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
-				//	row.Cells.Add("0");//index of infobutton
-				//}
+				if(Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
+					row.Cells.Add("0");//index of infobutton
+				}
 				if(medList[i].MedicationNum==0) {
 					row.Cells.Add(medList[i].MedDescript);
 					row.Cells.Add("");//generic notes
@@ -556,8 +554,7 @@ namespace OpenDental{
 		}
 
 		private void gridMeds_CellClick(object sender,ODGridClickEventArgs e) {
-			return;//hiding for 13.3 release
-			if(!PrefC.GetBool(PrefName.ShowFeatureEhr)) {
+			if(!Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
 				return;
 			}
 			if(e.Col!=0) {
@@ -566,7 +563,7 @@ namespace OpenDental{
 			FormInfobutton FormIB = new FormInfobutton();
 			FormIB.PatCur=PatCur;
 			//FormInfoButton allows MedicationCur to be null, so this will still work for medication orders returned from NewCrop (because MedicationNum will be 0).
-			FormIB.MedicationCur = Medications.GetMedicationFromDb(medList[e.Row].MedicationNum);//TODO: verify that this is what we need to get.
+			FormIB.ListObjects.Add(Medications.GetMedicationFromDb(medList[e.Row].MedicationNum));//TODO: verify that this is what we need to get.
 			FormIB.ShowDialog();
 			//Nothing to do with Dialog Result yet.
 		}
@@ -785,12 +782,11 @@ namespace OpenDental{
 			gridDiseases.BeginUpdate();
 			gridDiseases.Columns.Clear();
 			ODGridColumn col;
-			//hiding for 13.3 release
-			//if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
-			//	col=new ODGridColumn("",18);//infoButton
-			//	col.ImageList=imageListInfoButton;
-			//	gridDiseases.Columns.Add(col);
-			//}
+			if(Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
+				col=new ODGridColumn("",18);//infoButton
+				col.ImageList=imageListInfoButton;
+				gridDiseases.Columns.Add(col);
+			}
 			col=new ODGridColumn(Lan.g("TableDiseases","Name"),140);//total is about 325
 			gridDiseases.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableDiseases","Patient Note"),145);
@@ -801,9 +797,9 @@ namespace OpenDental{
 			ODGridRow row;
 			for(int i=0;i<DiseaseList.Count;i++){
 				row=new ODGridRow();
-				//if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
-				//	row.Cells.Add("0");//index of infobutton
-				//}
+				if(Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
+					row.Cells.Add("0");//index of infobutton
+				}
 				if(DiseaseList[i].DiseaseDefNum!=0) {
 					row.Cells.Add(DiseaseDefs.GetName(DiseaseList[i].DiseaseDefNum));
 				}
@@ -822,12 +818,11 @@ namespace OpenDental{
 			gridAllergies.BeginUpdate();
 			gridAllergies.Columns.Clear();
 			ODGridColumn col;
-			//hiding for 13.3 release
-			//if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
-			//	col=new ODGridColumn("",18);//infoButton
-			//	col.ImageList=imageListInfoButton;
-			//	gridAllergies.Columns.Add(col);
-			//}
+			if(Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
+				col=new ODGridColumn("",18);//infoButton
+				col.ImageList=imageListInfoButton;
+				gridAllergies.Columns.Add(col);
+			}
 			col=new ODGridColumn(Lan.g("TableAllergies","Allergy"),100);
 			gridAllergies.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableAllergies","Reaction"),180);
@@ -838,9 +833,9 @@ namespace OpenDental{
 			ODGridRow row;
 			for(int i=0;i<allergyList.Count;i++){
 				row=new ODGridRow();
-				//if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
-				//	row.Cells.Add("0");//index of infobutton
-				//}
+				if(Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
+					row.Cells.Add("0");//index of infobutton
+				}
 				AllergyDef allergyDef=AllergyDefs.GetOne(allergyList[i].AllergyDefNum);
 				row.Cells.Add(allergyDef.Description);
 				if(allergyList[i].DateAdverseReaction<DateTime.Parse("1-1-1800")) {
@@ -893,16 +888,15 @@ namespace OpenDental{
 		}*/
 
 		private void gridDiseases_CellClick(object sender,ODGridClickEventArgs e) {
-			return;//hiding for 13.3 release
-			if(!PrefC.GetBool(PrefName.ShowFeatureEhr)) {
+			if(!Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
 				return;
 			}
 			if(e.Col!=0) {
 				return;
 			}
-			FormInfobutton FormIB = new FormInfobutton();
+			FormInfobutton FormIB=new FormInfobutton();
 			FormIB.PatCur=PatCur;
-			FormIB.ProblemCur = DiseaseDefs.GetItem(DiseaseList[e.Row].DiseaseDefNum);//TODO: verify that this is what we need to get.
+			FormIB.ListObjects.Add(DiseaseDefs.GetItem(DiseaseList[e.Row].DiseaseDefNum));//TODO: verify that this is what we need to get.
 			FormIB.ShowDialog();
 			//Nothing to do with Dialog Result yet.
 		}
@@ -938,17 +932,16 @@ namespace OpenDental{
 		}
 
 		private void gridAllergies_CellClick(object sender,ODGridClickEventArgs e) {
-			return;//hiding for 13.3 release
-			if(!PrefC.GetBool(PrefName.ShowFeatureEhr)) {
+			if(!Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
 				return;
 			}
 			if(e.Col!=0) {
 				return;
 			}
-			FormInfobutton FormIB = new FormInfobutton();
+			FormInfobutton FormIB=new FormInfobutton();
 			FormIB.PatCur=PatCur;
 			//TODO: get right object and pass it in.
-			//FormIB = Medications.GetMedicationFromDb(medList[e.Row].MedicationNum);//TODO: verify that this is what we need to get.
+			//FormIB. = Medications.GetMedicationFromDb(medList[e.Row].MedicationNum);//TODO: verify that this is what we need to get.
 			FormIB.ShowDialog();
 			//Nothing to do with Dialog Result yet.
 		}

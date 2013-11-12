@@ -9,15 +9,22 @@ using System.Xml;
 using OpenDentBusiness;
 using CodeBase;
 using System.Globalization;
+using System.Xml.XPath;
+using System.IO;
+using OpenDental.UI;
 
 namespace OpenDental {
 	public partial class FormInfobutton:Form {
 		public Patient PatCur;
 		///<summary>Usually filled from within the form by using Patcur.PriProv</summary>
 		public Provider ProvCur;
-		public DiseaseDef ProblemCur;//should this be named disease or problem? Also snomed/medication
-		public Medication MedicationCur;
-		public LabResult LabCur;
+		///<summary>Knowledge request objects, possible object types are: DiseaseDef, Medication, LabResult, ICD9, Icd10, Snomed, RxNorm, Loinc, or LabResult.  Should not break if unsupported objects are in list.</summary>
+		public List<object> ListObjects;
+		//public List<DiseaseDef> ListProblems;//should this be named disease or problem? Also snomed/medication
+		//public List<Medication> ListMedications;
+		//public List<LabResult> ListLabResults;
+		/////<summary>Used to add various codes that are not explicitly related to a problem, medication, or allergy.</summary>
+		//public List<Snomed> ListSnomed;
 		private ActTaskCode ActTC;//may need to make this public later.
 		public ObservationInterpretationNormality ObsInterpretation;
 		public ActEncounterCode ActEC;
@@ -28,6 +35,7 @@ namespace OpenDental {
 		private CultureInfo[] arrayCultures;
 
 		public FormInfobutton() {
+			ListObjects=new List<object>();
 			InitializeComponent();
 			Lan.F(this);
 		}
@@ -37,22 +45,7 @@ namespace OpenDental {
 			fillEncounterCombo();
 			fillTaskCombo();
 			fillContext();
-			//Fill context with provider and/or patient information.
-			if(ProblemCur!=null) {
-				tabControl1.SelectTab(0);
-				fillProblem();
-			}
-			else if(MedicationCur!=null) {
-				tabControl1.SelectTab(1);
-				fillMedication();
-			}
-			else if(LabCur!=null) {
-				tabControl1.SelectTab(2);
-				fillLabResult();
-			}
-			else {
-				
-			}
+			fillKnowledgeRequestitems();
 		}
 
 		private void fillLanguageCombos() {
@@ -84,25 +77,27 @@ namespace OpenDental {
 
 		private void fillContext() {
 			//Fill Patient-------------------------------------------------------------------------------------------------------------------
-			textPatName.Text=PatCur.GetNameFL();
-			if(PatCur.Birthdate!=DateTime.MinValue) {
-				textPatBirth.Text=PatCur.Birthdate.ToShortDateString();
-			}
-			comboPatLang.SelectedIndex=comboPatLang.Items.IndexOf(System.Globalization.CultureInfo.CurrentCulture.DisplayName);
-			switch(PatCur.Gender) {
-				case PatientGender.Female:
-					radioPatGenFem.Checked=true;
-					break;
-				case PatientGender.Male:
-					radioPatGenMale.Checked=true;
-					break;
-				case PatientGender.Unknown:
-				default:
-					radioPatGenUn.Checked=true;
-					break;
+			if(PatCur!=null) {
+				textPatName.Text=PatCur.GetNameFL();
+				if(PatCur.Birthdate!=DateTime.MinValue) {
+					textPatBirth.Text=PatCur.Birthdate.ToShortDateString();
+				}
+				comboPatLang.SelectedIndex=comboPatLang.Items.IndexOf(System.Globalization.CultureInfo.CurrentCulture.DisplayName);
+				switch(PatCur.Gender) {
+					case PatientGender.Female:
+						radioPatGenFem.Checked=true;
+						break;
+					case PatientGender.Male:
+						radioPatGenMale.Checked=true;
+						break;
+					case PatientGender.Unknown:
+					default:
+						radioPatGenUn.Checked=true;
+						break;
+				}
 			}
 			//Fill Provider------------------------------------------------------------------------------------------------------------------
-			if(ProvCur==null) {
+			if(ProvCur==null && PatCur!=null) {
 				ProvCur=Providers.GetProv(PatCur.PriProv);
 			}
 			if(ProvCur==null) {
@@ -118,7 +113,9 @@ namespace OpenDental {
 			//Fill Encounter-----------------------------------------------------------------------------------------------------------------
 			ActEC=ActEncounterCode.AMB;
 			comboEncType.SelectedIndex=(int)ActEC;//ambulatory
-			textEncLocID.Text=PatCur.ClinicNum.ToString();//do not use to generate message if this value is zero.
+			if(PatCur!=null) {
+				textEncLocID.Text=PatCur.ClinicNum.ToString();//do not use to generate message if this value is zero.
+			}
 			//Fill Requestor/Recievor--------------------------------------------------------------------------------------------------------
 			radioReqProv.Checked=PerformerIsProvider;
 			radioReqPat.Checked=!PerformerIsProvider;
@@ -129,22 +126,104 @@ namespace OpenDental {
 			comboTask.SelectedIndex=(int)ActTC;
 		}
 
-		private void fillProblem() {
-			if(Snomeds.GetByCode(ProblemCur.SnomedCode)==null) {
-				MsgBox.Show(this,"Selected problem does not have a valid SNOMED CT Code. Please select a SNOMED Code from the list provided.");
+		private void fillKnowledgeRequestitems() {
+			gridMain.BeginUpdate();
+			gridMain.Columns.Clear();
+			ODGridColumn col;
+			col=new ODGridColumn("Type",80);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn("Code",80);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn("CodeSystem",80);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn("Description",80);
+			gridMain.Columns.Add(col);
+			gridMain.Rows.Clear();
+			ODGridRow row;
+			for(int i=0;i<ListObjects.Count;i++) {
+				row=new ODGridRow();
+				switch(ListObjects[i].GetType().ToString().Split(new string[]{"."},StringSplitOptions.None)[1]) {
+					case "DiseaseDef":
+						row.Cells.Add("Problem");
+						if(((DiseaseDef)ListObjects[i]).ICD9Code!="") {
+							ICD9 icd9=ICD9s.GetByCode(((DiseaseDef)ListObjects[i]).ICD9Code);
+							row.Cells.Add(icd9.ICD9Code);
+							row.Cells.Add("ICD9-CM");
+							row.Cells.Add(icd9.Description);
+							row.Tag=icd9;
+						}
+						else if(((DiseaseDef)ListObjects[i]).SnomedCode!="") {
+							Snomed snomed=Snomeds.GetByCode(((DiseaseDef)ListObjects[i]).SnomedCode);
+							row.Cells.Add(snomed.SnomedCode);
+							row.Cells.Add("SNOMED CT");
+							row.Cells.Add(snomed.Description);
+							row.Tag=snomed;
+						}
+						else if(((DiseaseDef)ListObjects[i]).Icd10Code!="") {
+							Icd10 icd10=Icd10s.GetByCode(((DiseaseDef)ListObjects[i]).Icd10Code);
+							row.Cells.Add(icd10.Icd10Code);
+							row.Cells.Add("SNOMED CT");
+							row.Cells.Add(icd10.Description);
+							row.Tag=icd10;
+						}
+						else {
+							row.Cells.Add("none");
+							row.Cells.Add("none");
+							row.Cells.Add(((DiseaseDef)ListObjects[i]).DiseaseName);
+							row.Tag=null;
+						}
+						break;
+					case "Medication":
+						row.Cells.Add("Medication");
+						row.Cells.Add("TODO");
+						row.Cells.Add("TODO");
+						row.Cells.Add("TODO");
+						row.Tag=null;
+						break;
+					case "ICD9":
+						ICD9 icd9Obj=(ICD9)ListObjects[i];
+						row.Cells.Add("Code");
+						row.Cells.Add(icd9Obj.ICD9Code);
+						row.Cells.Add("ICD9 CM");
+						row.Cells.Add(icd9Obj.Description);
+						row.Tag=icd9Obj;
+						break;
+					case "Snomed":
+						Snomed snomedObj=(Snomed)ListObjects[i];
+						row.Cells.Add("Code");
+						row.Cells.Add(snomedObj.SnomedCode);
+						row.Cells.Add("SNOMED CT");
+						row.Cells.Add(snomedObj.Description);
+						row.Tag=snomedObj;
+						break;
+					case "Icd10":
+						Icd10 icd10Obj=(Icd10)ListObjects[i];
+						row.Cells.Add("Code");
+						row.Cells.Add(icd10Obj.Icd10Code);
+						row.Cells.Add("ICD10 CM");
+						row.Cells.Add(icd10Obj.Description);
+						row.Tag=icd10Obj;
+						break;
+					case "RxNorm":
+						RxNorm rxNormObj=(RxNorm)ListObjects[i];
+						row.Cells.Add("Code");
+						row.Cells.Add(rxNormObj.RxCui);
+						row.Cells.Add("RxNorm");
+						row.Cells.Add(rxNormObj.Description);
+						row.Tag=rxNormObj;
+						break;
+					case "Loinc":
+						Loinc loincObj=(Loinc)ListObjects[i];
+						row.Cells.Add("Code");
+						row.Cells.Add(loincObj.LoincCode);
+						row.Cells.Add("LOINC");
+						row.Cells.Add(loincObj.NameShort);
+						row.Tag=loincObj;
+						break;
+				}
+				gridMain.Rows.Add(row);
 			}
-			textProbName.Text=ProblemCur.DiseaseName;
-			textProbSnomedCode.Text=ProblemCur.SnomedCode;
-			//ProblemCur.DiseaseDefNum
-		}
-
-		private void fillMedication() {
-			textMedName.Text=MedicationCur.MedName;
-			textProbSnomedCode.Text="TODO";
-		}
-
-		private void fillLabResult() {
-			//throw new NotImplementedException();
+			gridMain.EndUpdate();
 		}
 
 		private void butPreview_Click(object sender,EventArgs e) {
@@ -203,54 +282,54 @@ namespace OpenDental {
 			}
 			//Recipient information-----------------------------------------------------------------------------------------------
 			//Problem, Medication, Lab Result information-------------------------------------------------------------------------
-			switch(tabControl1.SelectedTab.Name) {
-				case "tabProblem"://------------------------------------------------------------------------------------------------
-					if(ProblemCur==null) {
-						errors+=bullet+Lan.g(this,"No problem is selected.")+"\r\n";
-					}
-					else {
-						if(textProbSnomedCode.Text=="") {
-							errors+=bullet+Lan.g(this,"No SNOMED CT problem code.")+"\r\n";
-							break;
-						}
-						if(textProbSnomedCode.Text!=ProblemCur.SnomedCode) {
-							warnings+=bullet+Lan.g(this,"SNOMED CT problem code has been manualy altered.")+"\r\n";
-						}
-						if(Snomeds.GetByCode(textProbSnomedCode.Text)==null) {
-							errors+=bullet+Lan.g(this,"SNOMED CT problem code does not exist in database.")+"\r\n";
-						}
-					}
-					break;
-				case "tabMedication"://---------------------------------------------------------------------------------------------
-					if(MedicationCur==null) {
-						errors+=bullet+Lan.g(this,"No medication is selected.")+"\r\n";
-					}
-					else {
-						if(textMedSnomedCode.Text=="") {
-							errors+=bullet+Lan.g(this,"No SNOMED CT medication code.")+"\r\n";
-						}
-						//if(textProbSnomedCode.Text!=MedicationCur.SnomedCode) {
-						//  warnings+=bullet+Lan.g(this,"SNOMED CT medication code has been manualy altered.")+"\r\n";
-						//}
-					}
-					break;
-				case "tabLabResult"://----------------------------------------------------------------------------------------------
-					if(LabCur==null) {
-						errors+=bullet+Lan.g(this,"No lab result is selected.")+"\r\n";
-					}
-					else {
-						if(textMedSnomedCode.Text=="") {
-							errors+=bullet+Lan.g(this,"No SNOMED CT lab result code.")+"\r\n";
-						}
-						//if(textProbSnomedCode.Text!=LabCur.SnomedCode) {
-						//  warnings+=bullet+Lan.g(this,"SNOMED CT lab result code has been manualy altered.")+"\r\n";
-						//}
-					}
-					break;
-				default://----------------------------------------------------------------------------------------------------------
-					errors+=bullet+Lan.g(this,"Problem, medication, or lab result not selected.")+"\r\n";
-					break;
-			}
+			//switch(""){//tabControl1.SelectedTab.Name) {
+			//	case "tabProblem"://------------------------------------------------------------------------------------------------
+			//		if(ProblemCur==null) {
+			//			errors+=bullet+Lan.g(this,"No problem is selected.")+"\r\n";
+			//		}
+			//		else {
+			//			if(textProbSnomedCode.Text=="") {
+			//				errors+=bullet+Lan.g(this,"No SNOMED CT problem code.")+"\r\n";
+			//				break;
+			//			}
+			//			if(textProbSnomedCode.Text!=ProblemCur.SnomedCode) {
+			//				warnings+=bullet+Lan.g(this,"SNOMED CT problem code has been manualy altered.")+"\r\n";
+			//			}
+			//			if(Snomeds.GetByCode(textProbSnomedCode.Text)==null) {
+			//				errors+=bullet+Lan.g(this,"SNOMED CT problem code does not exist in database.")+"\r\n";
+			//			}
+			//		}
+			//		break;
+			//	case "tabMedication"://---------------------------------------------------------------------------------------------
+			//		if(MedicationCur==null) {
+			//			errors+=bullet+Lan.g(this,"No medication is selected.")+"\r\n";
+			//		}
+			//		else {
+			//			if(textMedSnomedCode.Text=="") {
+			//				errors+=bullet+Lan.g(this,"No SNOMED CT medication code.")+"\r\n";
+			//			}
+			//			//if(textProbSnomedCode.Text!=MedicationCur.SnomedCode) {
+			//			//  warnings+=bullet+Lan.g(this,"SNOMED CT medication code has been manualy altered.")+"\r\n";
+			//			//}
+			//		}
+			//		break;
+			//	case "tabLabResult"://----------------------------------------------------------------------------------------------
+			//		if(LabCur==null) {
+			//			errors+=bullet+Lan.g(this,"No lab result is selected.")+"\r\n";
+			//		}
+			//		else {
+			//			if(textMedSnomedCode.Text=="") {
+			//				errors+=bullet+Lan.g(this,"No SNOMED CT lab result code.")+"\r\n";
+			//			}
+			//			//if(textProbSnomedCode.Text!=LabCur.SnomedCode) {
+			//			//  warnings+=bullet+Lan.g(this,"SNOMED CT lab result code has been manualy altered.")+"\r\n";
+			//			//}
+			//		}
+			//		break;
+			//	default://----------------------------------------------------------------------------------------------------------
+			//		errors+=bullet+Lan.g(this,"Problem, medication, or lab result not selected.")+"\r\n";
+			//		break;
+			//}
 			//Generate messagebox-------------------------------------------------------------------------------------------------
 			if(errors!="") {
 				message+=Lan.g(this,"The following errors must be corrected in order to comply with HL7 standard:")+"\r\n";
@@ -272,6 +351,16 @@ namespace OpenDental {
 		}
 
 		private string GenerateKnowledgeRequestNotification() {
+//			KnowledgeRequestNotification.KnowledgeRequestNotification krn = new KnowledgeRequestNotification.KnowledgeRequestNotification();
+//#if DEBUG
+//			krn.subject4List.Add(
+//				new KnowledgeRequestNotification.Subject3(
+//					new KnowledgeRequestNotification.Value("191166001","2.16.840.1.113883.6.96","SNOMEDCT","[X]Megaloblastic anemia NOS (disorder)"
+//			)));
+//			krn.subject4List[0].mainSearchCriteria.originalText="Anemia";
+//			return krn.ToXml();
+//#endif
+			//old code below this line.
 			XmlWriterSettings xmlSettings=new XmlWriterSettings();
 			xmlSettings.Encoding=Encoding.UTF8;
 			xmlSettings.OmitXmlDeclaration=true;
@@ -522,55 +611,55 @@ namespace OpenDental {
 								w.WriteAttributeString("displayName","knowledge subject");
 							w.WriteEndElement();//code
 							w.WriteStartElement("value");
-						switch(tabControl1.SelectedTab.Name) {
-							case "tabProblem"://------------------------------------------------------------------------------------------------
-								w.WriteAttributeString("code","TODO:SNOMED CT Problem Code.");
-								w.WriteAttributeString("codeSytem","2.16.840.1.113883.6.96");//HL7 OID for SNOMED Clinical Terms
-								w.WriteAttributeString("codeSystemName","snomed-CT");//HL7 name for SNOMED Clinical Terms
-								w.WriteAttributeString("displayName","TODO:SNOMED CT Problem Name");
-								break;
-							case "tabMedication"://---------------------------------------------------------------------------------------------
-								w.WriteAttributeString("code","TODO:SNOMED CT Medication Code.");
-								w.WriteAttributeString("codeSytem","2.16.840.1.113883.6.96");//HL7 OID for SNOMED Clinical Terms
-								w.WriteAttributeString("codeSystemName","snomed-CT");//HL7 name for SNOMED Clinical Terms
-								w.WriteAttributeString("displayName","TODO: SNOMED CT Medication Name.");
-								break;
-							case "tabLabResult"://----------------------------------------------------------------------------------------------
-								w.WriteAttributeString("code","TODO: SNOMED CT Lab Results Code??");
-								w.WriteAttributeString("codeSytem","2.16.840.1.113883.6.96");//HL7 OID for SNOMED Clinical Terms
-								w.WriteAttributeString("codeSystemName","snomed-CT");//HL7 name for SNOMED Clinical Terms
-								w.WriteAttributeString("displayName","TODO: SNOMED CT Lab Results Name??");
-								break;
-							default://----------------------------------------------------------------------------------------------------------
-								//either no tab is selected or the tab names above are misspelled.
-								//w.WriteAttributeString("code","TODO: ");
-								//w.WriteAttributeString("codeSytem","2.16.840.1.113883.6.96");//HL7 OID for SNOMED Clinical Terms
-								//w.WriteAttributeString("codeSystemName","snomed-CT");//HL7 name for SNOMED Clinical Terms
-								//w.WriteAttributeString("displayName","TODO: ");
-								break;
-						}
+						//switch(tabControl1.SelectedTab.Name) {
+						//	case "tabProblem"://------------------------------------------------------------------------------------------------
+						//		w.WriteAttributeString("code","TODO:SNOMED CT Problem Code.");
+						//		w.WriteAttributeString("codeSytem","2.16.840.1.113883.6.96");//HL7 OID for SNOMED Clinical Terms
+						//		w.WriteAttributeString("codeSystemName","snomed-CT");//HL7 name for SNOMED Clinical Terms
+						//		w.WriteAttributeString("displayName","TODO:SNOMED CT Problem Name");
+						//		break;
+						//	case "tabMedication"://---------------------------------------------------------------------------------------------
+						//		w.WriteAttributeString("code","TODO:SNOMED CT Medication Code.");
+						//		w.WriteAttributeString("codeSytem","2.16.840.1.113883.6.96");//HL7 OID for SNOMED Clinical Terms
+						//		w.WriteAttributeString("codeSystemName","snomed-CT");//HL7 name for SNOMED Clinical Terms
+						//		w.WriteAttributeString("displayName","TODO: SNOMED CT Medication Name.");
+						//		break;
+						//	case "tabLabResult"://----------------------------------------------------------------------------------------------
+						//		w.WriteAttributeString("code","TODO: SNOMED CT Lab Results Code??");
+						//		w.WriteAttributeString("codeSytem","2.16.840.1.113883.6.96");//HL7 OID for SNOMED Clinical Terms
+						//		w.WriteAttributeString("codeSystemName","snomed-CT");//HL7 name for SNOMED Clinical Terms
+						//		w.WriteAttributeString("displayName","TODO: SNOMED CT Lab Results Name??");
+						//		break;
+						//	default://----------------------------------------------------------------------------------------------------------
+						//		//either no tab is selected or the tab names above are misspelled.
+						//		//w.WriteAttributeString("code","TODO: ");
+						//		//w.WriteAttributeString("codeSytem","2.16.840.1.113883.6.96");//HL7 OID for SNOMED Clinical Terms
+						//		//w.WriteAttributeString("codeSystemName","snomed-CT");//HL7 name for SNOMED Clinical Terms
+						//		//w.WriteAttributeString("displayName","TODO: ");
+						//		break;
+						//}
 							w.WriteEndElement();//value
-						if(tabControl1.SelectedTab.Name=="tabLabResult"){
-							w.WriteStartElement("subject");
-								w.WriteAttributeString("typeCode","SUBJ");
-								w.WriteStartElement("severityObservation");
-									w.WriteAttributeString("classCode","OBS");
-									w.WriteAttributeString("moodCode","DEF");
-									w.WriteStartElement("code");
-										w.WriteAttributeString("code","SEV");
-										w.WriteAttributeString("codeSytem","2.16.840.1.113883.5.4");
-										w.WriteAttributeString("codeSystemName","ActCode");
-										w.WriteAttributeString("displayName","Severity Observation");
-									w.WriteEndElement();//code
-									w.WriteStartElement("interpretationCode");
-										w.WriteAttributeString("code",ObservationInterpretationCodeHelper(ObsInterpretation));
-										w.WriteAttributeString("codeSytem","");
-										w.WriteAttributeString("codeSystemName","");
-										w.WriteAttributeString("displayName",ObservationInterpretationNameHelper(ObsInterpretation));
-									w.WriteEndElement();//value
-								w.WriteEndElement();//severityObservation
-							w.WriteEndElement();//subject
-						}
+						//if(tabControl1.SelectedTab.Name=="tabLabResult"){
+						//	w.WriteStartElement("subject");
+						//		w.WriteAttributeString("typeCode","SUBJ");
+						//		w.WriteStartElement("severityObservation");
+						//			w.WriteAttributeString("classCode","OBS");
+						//			w.WriteAttributeString("moodCode","DEF");
+						//			w.WriteStartElement("code");
+						//				w.WriteAttributeString("code","SEV");
+						//				w.WriteAttributeString("codeSytem","2.16.840.1.113883.5.4");
+						//				w.WriteAttributeString("codeSystemName","ActCode");
+						//				w.WriteAttributeString("displayName","Severity Observation");
+						//			w.WriteEndElement();//code
+						//			w.WriteStartElement("interpretationCode");
+						//				w.WriteAttributeString("code",ObservationInterpretationCodeHelper(ObsInterpretation));
+						//				w.WriteAttributeString("codeSytem","");
+						//				w.WriteAttributeString("codeSystemName","");
+						//				w.WriteAttributeString("displayName",ObservationInterpretationNameHelper(ObsInterpretation));
+						//			w.WriteEndElement();//value
+						//		w.WriteEndElement();//severityObservation
+						//	w.WriteEndElement();//subject
+						//}
 						w.WriteEndElement();//mainSearchCriteria
 					w.WriteEndElement();//subject4
 					w.WriteStartElement("componentOf");
@@ -964,17 +1053,51 @@ namespace OpenDental {
 			if(FormDD.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			ProblemCur=DiseaseDefs.GetItem(FormDD.SelectedDiseaseDefNum);
-			fillProblem();
+			//ProblemCur=DiseaseDefs.GetItem(FormDD.SelectedDiseaseDefNum);
+			//fillProblem();
+		}
+
+		private void butPreviewRequest_Click(object sender,EventArgs e) {
+			KnowledgeRequestNotification.KnowledgeRequestNotification krn;
+			for(int i=0;i<gridMain.Rows.Count;i++){
+				if(gridMain.Rows[i].Tag==null){
+					MsgBox.Show(this,"Cannot search without a valid code.");
+					continue;
+				}
+				krn = new KnowledgeRequestNotification.KnowledgeRequestNotification();
+				krn.AddObject(gridMain.Rows[i].Tag);
+				MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste("http://apps.nlm.nih.gov/medlineplus/services/mpconnect.cfm?"+krn.ToUrl());
+				msgbox.ShowDialog();
+				msgbox=new MsgBoxCopyPaste("http://apps2.nlm.nih.gov/medlineplus/services/servicedemo.cfm?"+krn.ToUrl());
+				msgbox.ShowDialog();
+			}//end gridMain.Rows
+
 		}
 
 		private void butSend_Click(object sender,EventArgs e) {
-			//http://apps.nlm.nih.gov/medlineplus/services/mpconnect_service.cfm
-			DialogResult=DialogResult.OK;
+			KnowledgeRequestNotification.KnowledgeRequestNotification krn;
+			for(int i=0;i<gridMain.Rows.Count;i++) {
+				if(gridMain.Rows[i].Tag==null) {
+					MsgBox.Show(this,"Cannot search without a valid code.");
+					continue;
+				}
+				krn = new KnowledgeRequestNotification.KnowledgeRequestNotification();
+				krn.AddObject(gridMain.Rows[i].Tag);
+				try {
+					System.Diagnostics.Process.Start("http://apps.nlm.nih.gov/medlineplus/services/mpconnect.cfm?"+krn.ToUrl());
+					System.Diagnostics.Process.Start("http://apps2.nlm.nih.gov/medlineplus/services/servicedemo.cfm?"+krn.ToUrl());
+				}
+				catch(Exception ex) { }
+			}//end gridMain.Rows
+
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
+		}
+
+		private void groupBoxContext_Enter(object sender,EventArgs e) {
+
 		}
 
 	}
@@ -1087,5 +1210,461 @@ namespace OpenDental {
 		N 
 	}
 
+}
+
+namespace KnowledgeRequestNotification {
+
+	///<summary>This class represents the root of the KnowledgeRequestNotificatio.</summary>
+	public class KnowledgeRequestNotification {
+		///<summary>Classification code.  Static field "ACT".  A record of something that is being done, has been done, can be done, or is intended or requested to be done.  Cardinality [1..1]</summary>
+		public static string classCode="ACT";		//1..1
+		///<summary>Static field "DEF".  A definition of a service (master).  Cardinality [1..1]</summary>
+		public static string moodCode="DEF";						//1..1
+		///<summary>List of globally unique identifiers of this knowledge request.  Cardinality [0..*]</summary>
+		public List<Id> IdList=new List<Id>();	//0..*
+		///<summary>Creation time of the knowledge request.  Must be formatted "yyyyMMddhhmmss" when used.  Cardinality [0..1]</summary>
+		public DateTime effectiveTime;					//0..1 "yyyyMMddhhmmss"
+		///<summary>Patient context information. Cardinality [0..1]</summary>
+		public Subject subject1;								//0..1
+		///<summary>Task context information. Cardinality [0..1]</summary>
+		public Subject1 subject2;								//0..1
+		///<summary>Sub-topic information. Cardinality [0..1]</summary>
+		public Subject2 subject3;								//0..1
+		///<summary>Conatins a list of MainSearchCriteria: represents the main subject of interest in a knowledge request (e.g., a medication, a lab test result, a disease in the patient's problem list). When multiple multiple search criteria are present, knowledge resources MAY determine whether to join the multiple instances using the AND vs. OR Boolean operator. Cardinality[1..*]</summary>
+		public List<Subject3> subject4List;			//1..*
+		///<summary>Contains encounter information, type and location.  Cardinality[0..1]</summary>
+		public Component1 componentOf;					//0..1
+
+		public KnowledgeRequestNotification() {
+			classCode="ACT";
+			moodCode="DEF";
+			IdList=new List<Id>();
+			effectiveTime=DateTime.Now;
+			subject1=new Subject();
+			subject2=new Subject1();
+			subject3=new Subject2();
+			subject4List=new List<Subject3>();
+			componentOf=new Component1();
+		}
+
+		public void AddObject(object obj) {
+			switch(obj.GetType().Name) {
+				case "Snomed":
+					AddCode((Snomed)obj);
+					break;
+				case "ICD9":
+					AddCode((ICD9)obj);
+					break;
+				case "Icd10":
+					AddCode((Icd10)obj);
+					break;
+				case "RxNorm":
+					AddCode((RxNorm)obj);
+					break;
+				case "Loinc":
+					AddCode((Loinc)obj);
+					break;
+				case "LabResult":
+					AddLabResult((LabResult)obj);
+					break;
+			}
+		}
+
+		public void AddCode(Snomed snomed) {
+			subject4List.Add(new Subject3(new Value(snomed.SnomedCode,"2.16.840.1.113883.6.96","SNOMEDCT",snomed.Description)));
+			subject4List[subject4List.Count-1].mainSearchCriteria.originalText=snomed.Description;
+		}
+
+		public void AddCode(ICD9 icd9) {
+			subject4List.Add(new Subject3(new Value(icd9.ICD9Code,"2.16.840.1.113883.6.103","ICD9CM",icd9.Description)));
+			subject4List[subject4List.Count-1].mainSearchCriteria.originalText=icd9.Description;
+		}
+
+		public void AddCode(Icd10 icd10) {
+			subject4List.Add(new Subject3(new Value(icd10.Icd10Code,"2.16.840.1.113883.6.90","ICD10CM",icd10.Description)));
+			subject4List[subject4List.Count-1].mainSearchCriteria.originalText=icd10.Description;
+		}
+
+		public void AddCode(RxNorm rxNorm) {
+			subject4List.Add(new Subject3(new Value(rxNorm.RxCui,"2.16.840.1.113883.6.88","RxNorm",rxNorm.Description)));
+			subject4List[subject4List.Count-1].mainSearchCriteria.originalText=rxNorm.Description;
+		}
+
+		public void AddCode(Loinc loinc) {
+			//TODO: lab values? no, add LabResult Instead
+			subject4List.Add(new Subject3(new Value(loinc.LoincCode,"2.16.840.1.113883.6.1","LOINC",loinc.NameShort)));
+			subject4List[subject4List.Count-1].mainSearchCriteria.originalText=loinc.NameShort;
+		}
+
+		public void AddLabResult(LabResult labResult) {
+			if(labResult.TestID==null || labResult.TestID=="") {
+				return;
+			}
+			Loinc loinc=Loincs.GetByCode(labResult.TestID);
+			subject4List.Add(new Subject3(new Value(loinc.LoincCode,"2.16.840.1.113883.6.1","LOINC",loinc.NameShort)));
+			subject4List[subject4List.Count-1].mainSearchCriteria.originalText=loinc.NameShort;
+			subject4List[subject4List.Count-1].mainSearchCriteria.subject.severityObservation.observationInterpretationNormality.SetInterpretation(labResult.AbnormalFlag);
+		}
+
+		public string ToXml() {
+			XmlWriterSettings xmlSettings=new XmlWriterSettings();
+			xmlSettings.Encoding=Encoding.UTF8;
+			xmlSettings.OmitXmlDeclaration=true;
+			xmlSettings.Indent=true;
+			xmlSettings.IndentChars="  ";
+			StringBuilder strBuilder=new StringBuilder();
+			using(XmlWriter w=XmlWriter.Create(strBuilder,xmlSettings)) {
+				w.WriteRaw("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n");
+				w.WriteWhitespace("\r\n");
+				//TODO:Implement more fields, this is just
+				w.WriteStartElement("knowledgeRequestNotification");
+					w.WriteAttributeString("classCode","ACT");
+					w.WriteAttributeString("moodCode","DEF");
+					//id
+					//effectiveTime
+					//subject1
+					//holder
+					//performer
+					//informationRecipient
+					//subject2
+					//subject3
+					w.WriteRaw(Subject3.ToXml(subject4List));
+					//componentOf
+				w.WriteEndElement();//knowledgeRequestNotification
+			}
+			return strBuilder.ToString();
+		}
+
+		public string ToUrl() {
+			StringBuilder strB=new StringBuilder();
+			strB.Append((effectiveTime.Year>1880?"knowledgeRequestNotification.effectiveTime.v="+effectiveTime.ToString("yyyyMMddhhmmss")+"&":""));
+			//holder
+			//assignedEntity
+			//patientPerson
+			//age
+			//ageGroup
+			//taskContext
+			//subTopic
+			for(int i=0;i<subject4List.Count;i++) {
+				strB.Append("mainSearchCriteria.v.c"+(i==0?"":""+i)+"="+subject4List[i].mainSearchCriteria.value.code+"&");
+				strB.Append("mainSearchCriteria.v.cs"+(i==0?"":""+i)+"="+subject4List[i].mainSearchCriteria.value.codeSystem+"&");
+				strB.Append("mainSearchCriteria.v.dn"+(i==0?"":""+i)+"="+subject4List[i].mainSearchCriteria.value.displayName+"&");
+				if(subject4List[i].mainSearchCriteria.originalText!=subject4List[i].mainSearchCriteria.value.displayName) {//original text only if different than display name.
+					strB.Append("mainSearchCriteria.v.ot"+(i==0?"":""+i)+"="+subject4List[i].mainSearchCriteria.originalText+"&");
+				}
+				//severityObservation
+			}
+			//informationRecipient
+			//performer
+			//informationRecipient
+			//performer
+			//encounter
+			//serviceDeliveryLocation
+			return strB.ToString().Replace(" ","%20");
+		}
+
+		public string ToUrl(string xml) {
+			StringBuilder strBuilder=new StringBuilder();
+			//TODO later, maybe
+			//XmlDocument doc=new XmlDocument();
+			//doc.LoadXml(xml);
+			//XmlNode node=doc.SelectSingleNode("//Error");
+			//if(node!=null) {
+			//	throw new Exception(node.InnerText);
+			//}
+			return strBuilder.ToString();
+		}
+
+	}
+
+	///<summary>Represents the globally unique instance identifier of a knowledge request.  0..*</summary>
+	public class Id {
+
+	}
+
+	///<summary>Patient context information. Cardinality [0..1]</summary>
+	public class Subject {
+
+	}
+
+	///<summary>Task context information. Cardinality [0..1]</summary>
+	public class Subject1 {
+
+	}
+
+	///<summary>Sub-topic information. Cardinality [0..1]</summary>
+	public class Subject2 {
+
+	}
+
+	///<summary>Mostly just a main search criteria.</summary>
+	public class Subject3 {
+		public string typeCode;
+		public MainSearchCriteria mainSearchCriteria;
+
+		public Subject3() {
+			typeCode="SUBJ";
+			mainSearchCriteria=new MainSearchCriteria();
+		}
+
+		public Subject3(Value value) {
+			typeCode="SUBJ";
+			mainSearchCriteria=new MainSearchCriteria(value);
+		}
+
+		public static string ToXml(List<Subject3> subject4List) {
+			XmlWriterSettings xmlSettings=new XmlWriterSettings();
+			xmlSettings.Encoding=Encoding.UTF8;
+			xmlSettings.OmitXmlDeclaration=true;
+			xmlSettings.Indent=true;
+			xmlSettings.IndentChars="  ";
+			StringBuilder strBuilder=new StringBuilder();
+			using(XmlWriter w=XmlWriter.Create(strBuilder,xmlSettings)) {
+				for(int i=0;i<subject4List.Count;i++){
+					w.WriteStartElement("subject4");
+						w.WriteAttributeString("typeCode",subject4List[i].typeCode);
+						w.WriteRaw(subject4List[i].mainSearchCriteria.ToXml());
+					w.WriteEndElement();
+				}//end subject4List
+			}//end using
+			return strBuilder.ToString();
+		}
+	}
+
+	public class MainSearchCriteria {
+		///<summary>Static field "OBS".  Observation.  Cardinality [1..1]</summary>
+		public static string classCode;
+		///<summary>Static field "DEF".  A definition of a service (master).  Cardinality [1..1]</summary>
+		public static string moodCode;
+		///<summary>Static field.  This defines the value as being a knowledge subject.  Cardinality [1..1]</summary>
+		public Code code;
+		///<summary>Contains information on the snomed in question, icd9, icd10 ... etc code.  The "value" of the "code".  Cardinality [1..1]</summary>
+		public Value value;
+		///<summary>Represents the human readable representation of the code as displayed to the user in the CIS and SHOULD be used only if different than the displayName</summary>
+		public string originalText;
+		///<summary>Contains SeverityObservation:specifies the interpretation of a laboratory test result (e.g., 'high', 'low', 'abnormal', 'normal'). This class MAY be used to support implementations where the MainSearchCriteria consists of a laboratory test result. Supports questions such as "what are the causes of high serum potassium?</summary>
+		public Subject4 subject;
+
+		public MainSearchCriteria() {
+			classCode="OBS";
+			moodCode="DEF";
+			code=new Code("KSUBJ","2.16.840.1.113883.6.96","SNOMEDCT","knowledge subject");
+			value=new Value();
+			subject = new Subject4();
+		}
+
+		public MainSearchCriteria(Value val) {
+			classCode="OBS";
+			moodCode="DEF";
+			code=new Code("KSUBJ","2.16.840.1.113883.6.96","SNOMEDCT","knowledge subject");
+			value=val;
+			subject = new Subject4();
+		}
+
+		public string ToXml() {
+			XmlWriterSettings xmlSettings=new XmlWriterSettings();
+			xmlSettings.Encoding=Encoding.UTF8;
+			xmlSettings.OmitXmlDeclaration=true;
+			xmlSettings.Indent=true;
+			xmlSettings.IndentChars="  ";
+			StringBuilder strBuilder=new StringBuilder();
+			using(XmlWriter w=XmlWriter.Create(strBuilder,xmlSettings)) {
+				w.WriteStartElement("mainSearchCriteria");
+					w.WriteAttributeString("classCode",classCode);
+					w.WriteAttributeString("moodCode",moodCode);
+					w.WriteRaw(code.ToXml());
+					w.WriteRaw(value.ToXml());
+					if(originalText!="" && originalText!=null && originalText!=value.displayName){
+						w.WriteStartElement("originalText");
+							w.WriteString(originalText);
+						w.WriteEndElement();//originalText
+					}
+				w.WriteEndElement();//mainSearchCriteria
+			}
+			return strBuilder.ToString();
+		}
+
+	}//MainSearchCriteria class
+
+	public class Subject4 {
+		public static string typeCode;
+		public SeverityObservation severityObservation;
+
+		public Subject4(){
+			typeCode="SUBJ";
+			severityObservation=new SeverityObservation();
+		}
+	}
+
+	public class SeverityObservation {
+		public static string classCode;
+		public static string moodCode;
+		public Code code;
+		public ObservationInterpretationNormality observationInterpretationNormality;
+
+		public SeverityObservation() {
+			classCode="OBS";
+			moodCode="DEF";
+			code=new Code("SeverityObservationType","2.16.840.1.113883.5.6","ActClass","SeverityObservationType");
+			observationInterpretationNormality=null;
+		}
+	}
+
+	///<summary>Normality, Abnormality, Alert. Concepts in this category are mutually exclusive, i.e., at most one is allowed. Enum generated from HL7 _ObservationInterpretationNormality [2.16.840.1.113883.1.11.10206] which is a subset of ObservationInterpretation [OID=2.16.840.1.113883.5.83] documentation published 20120831 10:21 AM.</summary>
+	public class ObservationInterpretationNormality {
+		public string code;
+		public static string codeSystem;
+		public static string codeSystemName;
+		public string displayName;
+
+		public ObservationInterpretationNormality(){
+			code="";
+			codeSystem="2.16.840.1.113883.5.83";
+			codeSystemName="ObservationInterpretation";
+			displayName="";
+		}
+
+		public void SetInterpretation(LabAbnormalFlag laf) {
+			switch(laf) {
+				case LabAbnormalFlag.Above:
+					SetInterpretation("H");
+					return;
+				case LabAbnormalFlag.Below:
+					SetInterpretation("L");
+					return;
+				case LabAbnormalFlag.Normal:
+					SetInterpretation("N");
+					return;
+				case LabAbnormalFlag.None:
+				default:
+					SetInterpretation("");
+					return;
+			}
+		}
+
+		///<summary>Set InterpretaionCodes Normal, Abnormal, High, Low, Alert.</summary>
+		/// <param name="code">Allowed values: A, AA, HH, LL, H, L, N.</param>
+		public void SetInterpretation(string interpretationCode){
+			if(interpretationCode==null){
+				code="";
+				displayName="";
+				return;
+			}
+			switch(interpretationCode){
+				case "A":	///<summary>0 - Abnormal - Abnormal (for nominal observations, all service types) </summary>
+					displayName="Abnormal";
+					break;
+				case "AA":///<summary>1 - Abnormal alert - Abnormal alert (for nominal observations and all service types) </summary>
+					displayName="Abnormal alert";
+					break;
+				case "HH":///<summary>2 - High alert - Above upper alert threshold (for quantitative observations) </summary>
+					displayName="High alert";
+					break;
+				case "LL":///<summary>3 - Low alert - Below lower alert threshold (for quantitative observations) </summary>
+					displayName="Low alert";
+					break;
+				case "H":	///<summary>4 - High - Above high normal (for quantitative observations) </summary>
+					displayName="High";
+					break;
+				case "L":	///<summary>5 - Low - Below low normal (for quantitative observations) </summary>
+					displayName="Low";
+					break;
+				case "N":	///<summary>6 - Normal - Normal (for all service types) </summary>
+					displayName="Normal";
+					break;
+				default:
+					code="";
+					displayName="";
+					return;
+			}
+			code=interpretationCode;
+		}
+			
+	}
+	
+
+	public class Code {
+		///<summary>The actual code snomed, icd-9, or incd10, etc code. Example: 95521008</summary>
+		public string code;
+		///<summary>The HL7-OID of the code system used. Example: 2.16.840.1.113883.6.96 if using SNOMEDCT</summary>
+		public string codeSystem;
+		///<summary>The human readable name of the code system used. Example: SNOMEDCT</summary>
+		public string codeSystemName;
+		///<summary>The human readable name of the code.  Example: "Abnormal jaw movement (disorder)"</summary>
+		public string displayName;
+
+		public Code(string c,string cs,string csn,string dn) {
+			code=c;
+			codeSystem=cs;
+			codeSystemName=csn;
+			displayName=dn;
+		}
+
+		public string ToXml() {
+			XmlWriterSettings xmlSettings=new XmlWriterSettings();
+			xmlSettings.Encoding=Encoding.UTF8;
+			xmlSettings.OmitXmlDeclaration=true;
+			xmlSettings.Indent=true;
+			xmlSettings.IndentChars="  ";
+			StringBuilder strBuilder=new StringBuilder();
+			using(XmlWriter w=XmlWriter.Create(strBuilder,xmlSettings)) {
+				w.WriteStartElement("code");
+					w.WriteAttributeString("code",code);
+					w.WriteAttributeString("codeSystem",codeSystem);
+					w.WriteAttributeString("codeSystemName",codeSystemName);
+					w.WriteAttributeString("displayName",displayName);
+				w.WriteEndElement();//code
+			}
+			return strBuilder.ToString(); ;
+		}
+
+	}
+
+	public class Value {
+		///<summary>The actual code snomed, icd-9, or incd10, etc code. Example: 95521008</summary>
+		public string code;
+		///<summary>The HL7-OID of the code system used. Example: 2.16.840.1.113883.6.96 if using SNOMEDCT</summary>
+		public string codeSystem;
+		///<summary>The human readable name of the code system used. Example: SNOMEDCT</summary>
+		public string codeSystemName;
+		///<summary>The human readable name of the code.  Example: "Abnormal jaw movement (disorder)"</summary>
+		public string displayName;
+
+		public Value(string c,string cs,string csn,string dn) {
+			code=c;
+			codeSystem=cs;
+			codeSystemName=csn;
+			displayName=dn;
+		}
+
+		public Value() {
+
+		}
+
+		public string ToXml() {
+			XmlWriterSettings xmlSettings=new XmlWriterSettings();
+			xmlSettings.Encoding=Encoding.UTF8;
+			xmlSettings.OmitXmlDeclaration=true;
+			xmlSettings.Indent=true;
+			xmlSettings.IndentChars="  ";
+			StringBuilder strBuilder=new StringBuilder();
+			using(XmlWriter w=XmlWriter.Create(strBuilder,xmlSettings)) {
+				w.WriteStartElement("value");
+					w.WriteAttributeString("code",code);
+					w.WriteAttributeString("codeSystem",codeSystem);
+					w.WriteAttributeString("codeSystemName",codeSystemName);
+					w.WriteAttributeString("displayName",displayName);
+				w.WriteEndElement();//code
+				
+			}
+			return strBuilder.ToString();
+		}
+
+	}//value class
+
+	///<summary>Encounter location and type.</summary>
+	public class Component1 {
+
+	}
 
 }

@@ -2020,7 +2020,47 @@ namespace OpenDentBusiness {
 		private static void To14_1_0() {
 			if(FromVersion<new Version("14.1.0.0")) {
 				string command;
-
+				//Added permission EhrShowCDS.     No one has this permission by default.  This is more like a user level preference than a permission.
+				//Added permission EhrInfoButton.  No one has this permission by default.  This is more like a user level preference than a permission.
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS ehrtrigger";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehrtrigger (
+						EhrTriggerNum bigint NOT NULL auto_increment PRIMARY KEY,
+						Description varchar(255) NOT NULL,
+						SnomedList varchar(255) NOT NULL,
+						Icd9List varchar(255) NOT NULL,
+						Icd10List varchar(255) NOT NULL,
+						CvxList varchar(255) NOT NULL,
+						RxCuiList varchar(255) NOT NULL,
+						LoincList varchar(255) NOT NULL,
+						DemographicAgeLessThan int NOT NULL,
+						DemographicAgeGreaterThan int NOT NULL,
+						DemographicGender varchar(255) NOT NULL,
+						Cardinality tinyint NOT NULL
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE ehrtrigger'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehrtrigger (
+						EhrTriggerNum number(20) NOT NULL,
+						Description varchar2(255),
+						SnomedList varchar2(255),
+						Icd9List varchar2(255),
+						Icd10List varchar2(255),
+						CvxList varchar2(255),
+						RxCuiList varchar2(255),
+						LoincList varchar2(255),
+						DemographicAgeLessThan number(11) NOT NULL,
+						DemographicAgeGreaterThan number(11) NOT NULL,
+						DemographicGender varchar2(255),
+						Cardinality number(3) NOT NULL,
+						CONSTRAINT ehrtrigger_EhrTriggerNum PRIMARY KEY (EhrTriggerNum)
+						)";
+					Db.NonQ(command);
+				}
 
 
 
@@ -2037,6 +2077,7 @@ namespace OpenDentBusiness {
 
 	}
 }
+
 
 
 

@@ -225,6 +225,7 @@ namespace OpenDental{
 			this.gridEmp.TabIndex = 21;
 			this.gridEmp.Title = "Employee";
 			this.gridEmp.TranslationName = "TableEmpClock";
+			this.gridEmp.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridEmp_CellDoubleClick);
 			this.gridEmp.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridEmp_CellClick);
 			// 
 			// label2
@@ -1130,6 +1131,20 @@ namespace OpenDental{
 		private void butManage_Click(object sender,EventArgs e) {
 			FormTimeCardManage FormTCM=new FormTimeCardManage();
 			FormTCM.ShowDialog();
+		}
+
+		private void gridEmp_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			if(PayPeriods.List.Length==0) {
+				MsgBox.Show(this,"The adminstrator needs to setup pay periods first.");
+				return;
+			}
+			if(!butTimeCard.Enabled) {
+				return;
+			}
+			FormTimeCard FormTC=new FormTimeCard();
+			FormTC.EmployeeCur=Employees.ListShort[e.Row];
+			FormTC.ShowDialog();
+			ModuleSelected(PatCurNum);
 		}
 
 		private void butTimeCard_Click(object sender, System.EventArgs e) {

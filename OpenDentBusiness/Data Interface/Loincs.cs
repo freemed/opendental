@@ -65,11 +65,11 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets one Loinc from the db based on LoincCode, returns null if not found.</summary>
-		public static Loinc GetByCode(string lOINCCode) {
+		public static Loinc GetByCode(string loincCode) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<Loinc>(MethodBase.GetCurrentMethod(),lOINCCode);
+				return Meth.GetObject<Loinc>(MethodBase.GetCurrentMethod(),loincCode);
 			}
-			string command="SELECT * FROM loinc WHERE LoincCode='"+POut.String(lOINCCode)+"'";
+			string command="SELECT * FROM loinc WHERE LoincCode='"+POut.String(loincCode)+"'";
 			List<Loinc> retVal=Crud.LoincCrud.SelectMany(command);
 			if(retVal.Count>0) {
 				return retVal[0];
