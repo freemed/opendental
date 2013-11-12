@@ -176,7 +176,11 @@ namespace OpenDentBusiness{
 		///<summary>73- There is no user interface in the security window for this permission.  It is only used for tracking.  Tracks creation and editing of patient allergies.</summary>
 		PatAllergyListEdit,
 		///<summary>74- There is no user interface in the security window for this permission.  It is only used for tracking.  Tracks creation and editing of patient family health history.</summary>
-		PatFamilyHealthEdit
+		PatFamilyHealthEdit,
+		///<summary>75- TODO description and verify name.  This is more like a user level preference than a permission.</summary>
+		EhrShowCDS,
+		///<summary>76- TODO description and verify name.  This is more like a user level preference than a permission.</summary>
+		EhrInfoButton
 	}
 
 	

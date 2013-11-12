@@ -104,16 +104,18 @@ namespace OpenDental{
 			// 
 			// treePermissions
 			// 
+			this.treePermissions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.treePermissions.HideSelection = false;
 			this.treePermissions.ImageIndex = 0;
 			this.treePermissions.ImageList = this.imageListPerm;
 			this.treePermissions.ItemHeight = 15;
-			this.treePermissions.Location = new System.Drawing.Point(525,29);
+			this.treePermissions.Location = new System.Drawing.Point(525, 29);
 			this.treePermissions.Name = "treePermissions";
 			this.treePermissions.SelectedImageIndex = 0;
 			this.treePermissions.ShowPlusMinus = false;
 			this.treePermissions.ShowRootLines = false;
-			this.treePermissions.Size = new System.Drawing.Size(362,637);
+			this.treePermissions.Size = new System.Drawing.Size(362, 637);
 			this.treePermissions.TabIndex = 6;
 			this.treePermissions.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treePermissions_AfterSelect);
 			this.treePermissions.DoubleClick += new System.EventHandler(this.treePermissions_DoubleClick);
@@ -123,15 +125,15 @@ namespace OpenDental{
 			// 
 			this.imageListPerm.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListPerm.ImageStream")));
 			this.imageListPerm.TransparentColor = System.Drawing.Color.Transparent;
-			this.imageListPerm.Images.SetKeyName(0,"grayBox.gif");
-			this.imageListPerm.Images.SetKeyName(1,"checkBoxUnchecked.gif");
-			this.imageListPerm.Images.SetKeyName(2,"checkBoxChecked.gif");
+			this.imageListPerm.Images.SetKeyName(0, "grayBox.gif");
+			this.imageListPerm.Images.SetKeyName(1, "checkBoxUnchecked.gif");
+			this.imageListPerm.Images.SetKeyName(2, "checkBoxChecked.gif");
 			// 
 			// labelPerm
 			// 
-			this.labelPerm.Location = new System.Drawing.Point(522,7);
+			this.labelPerm.Location = new System.Drawing.Point(522, 7);
 			this.labelPerm.Name = "labelPerm";
-			this.labelPerm.Size = new System.Drawing.Size(285,19);
+			this.labelPerm.Size = new System.Drawing.Size(285, 19);
 			this.labelPerm.TabIndex = 5;
 			this.labelPerm.Text = "Permissions for group:";
 			this.labelPerm.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -141,9 +143,9 @@ namespace OpenDental{
 			this.checkTimecardSecurityEnabled.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.checkTimecardSecurityEnabled.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkTimecardSecurityEnabled.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkTimecardSecurityEnabled.Location = new System.Drawing.Point(8,606);
+			this.checkTimecardSecurityEnabled.Location = new System.Drawing.Point(8, 606);
 			this.checkTimecardSecurityEnabled.Name = "checkTimecardSecurityEnabled";
-			this.checkTimecardSecurityEnabled.Size = new System.Drawing.Size(224,16);
+			this.checkTimecardSecurityEnabled.Size = new System.Drawing.Size(224, 16);
 			this.checkTimecardSecurityEnabled.TabIndex = 57;
 			this.checkTimecardSecurityEnabled.Text = "TimecardSecurityEnabled";
 			this.checkTimecardSecurityEnabled.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -153,27 +155,27 @@ namespace OpenDental{
 			// 
 			this.comboUsers.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboUsers.FormattingEnabled = true;
-			this.comboUsers.Location = new System.Drawing.Point(8,5);
+			this.comboUsers.Location = new System.Drawing.Point(8, 5);
 			this.comboUsers.Name = "comboUsers";
-			this.comboUsers.Size = new System.Drawing.Size(182,21);
+			this.comboUsers.Size = new System.Drawing.Size(182, 21);
 			this.comboUsers.TabIndex = 60;
 			this.comboUsers.SelectionChangeCommitted += new System.EventHandler(this.comboUsers_SelectionChangeCommitted);
 			// 
 			// comboSchoolClass
 			// 
 			this.comboSchoolClass.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboSchoolClass.Location = new System.Drawing.Point(276,5);
+			this.comboSchoolClass.Location = new System.Drawing.Point(276, 5);
 			this.comboSchoolClass.MaxDropDownItems = 30;
 			this.comboSchoolClass.Name = "comboSchoolClass";
-			this.comboSchoolClass.Size = new System.Drawing.Size(168,21);
+			this.comboSchoolClass.Size = new System.Drawing.Size(168, 21);
 			this.comboSchoolClass.TabIndex = 90;
 			this.comboSchoolClass.SelectionChangeCommitted += new System.EventHandler(this.comboSchoolClass_SelectionChangeCommitted);
 			// 
 			// labelSchoolClass
 			// 
-			this.labelSchoolClass.Location = new System.Drawing.Point(203,8);
+			this.labelSchoolClass.Location = new System.Drawing.Point(203, 8);
 			this.labelSchoolClass.Name = "labelSchoolClass";
-			this.labelSchoolClass.Size = new System.Drawing.Size(72,16);
+			this.labelSchoolClass.Size = new System.Drawing.Size(72, 16);
 			this.labelSchoolClass.TabIndex = 91;
 			this.labelSchoolClass.Text = "Class";
 			this.labelSchoolClass.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -183,9 +185,9 @@ namespace OpenDental{
 			this.checkCannotEditOwn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.checkCannotEditOwn.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkCannotEditOwn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkCannotEditOwn.Location = new System.Drawing.Point(8,624);
+			this.checkCannotEditOwn.Location = new System.Drawing.Point(8, 624);
 			this.checkCannotEditOwn.Name = "checkCannotEditOwn";
-			this.checkCannotEditOwn.Size = new System.Drawing.Size(224,16);
+			this.checkCannotEditOwn.Size = new System.Drawing.Size(224, 16);
 			this.checkCannotEditOwn.TabIndex = 92;
 			this.checkCannotEditOwn.Text = "Users cannot edit their own timecard";
 			this.checkCannotEditOwn.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -193,9 +195,9 @@ namespace OpenDental{
 			// label1
 			// 
 			this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.label1.Location = new System.Drawing.Point(95,656);
+			this.label1.Location = new System.Drawing.Point(95, 656);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(123,18);
+			this.label1.Size = new System.Drawing.Size(123, 18);
 			this.label1.TabIndex = 93;
 			this.label1.Text = "Lock Date";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -203,10 +205,10 @@ namespace OpenDental{
 			// textDateLock
 			// 
 			this.textDateLock.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.textDateLock.Location = new System.Drawing.Point(219,656);
+			this.textDateLock.Location = new System.Drawing.Point(219, 656);
 			this.textDateLock.Name = "textDateLock";
 			this.textDateLock.ReadOnly = true;
-			this.textDateLock.Size = new System.Drawing.Size(82,20);
+			this.textDateLock.Size = new System.Drawing.Size(82, 20);
 			this.textDateLock.TabIndex = 94;
 			// 
 			// checkPasswordsMustBeStrong
@@ -214,9 +216,9 @@ namespace OpenDental{
 			this.checkPasswordsMustBeStrong.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.checkPasswordsMustBeStrong.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkPasswordsMustBeStrong.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkPasswordsMustBeStrong.Location = new System.Drawing.Point(238,624);
+			this.checkPasswordsMustBeStrong.Location = new System.Drawing.Point(238, 624);
 			this.checkPasswordsMustBeStrong.Name = "checkPasswordsMustBeStrong";
-			this.checkPasswordsMustBeStrong.Size = new System.Drawing.Size(224,16);
+			this.checkPasswordsMustBeStrong.Size = new System.Drawing.Size(224, 16);
 			this.checkPasswordsMustBeStrong.TabIndex = 96;
 			this.checkPasswordsMustBeStrong.Text = "Passwords must be strong";
 			this.checkPasswordsMustBeStrong.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -224,13 +226,14 @@ namespace OpenDental{
 			// 
 			// gridMain
 			// 
-			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMain.HScrollVisible = true;
-			this.gridMain.Location = new System.Drawing.Point(8,29);
+			this.gridMain.Location = new System.Drawing.Point(8, 29);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(511,528);
+			this.gridMain.Size = new System.Drawing.Size(511, 528);
 			this.gridMain.TabIndex = 59;
 			this.gridMain.Title = "Users";
 			this.gridMain.TranslationName = "TableSecurity";
@@ -240,18 +243,18 @@ namespace OpenDental{
 			// textDaysLock
 			// 
 			this.textDaysLock.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.textDaysLock.Location = new System.Drawing.Point(219,677);
+			this.textDaysLock.Location = new System.Drawing.Point(219, 677);
 			this.textDaysLock.Name = "textDaysLock";
 			this.textDaysLock.ReadOnly = true;
-			this.textDaysLock.Size = new System.Drawing.Size(82,20);
+			this.textDaysLock.Size = new System.Drawing.Size(82, 20);
 			this.textDaysLock.TabIndex = 98;
 			// 
 			// label2
 			// 
 			this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.label2.Location = new System.Drawing.Point(95,677);
+			this.label2.Location = new System.Drawing.Point(95, 677);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(123,18);
+			this.label2.Size = new System.Drawing.Size(123, 18);
 			this.label2.TabIndex = 97;
 			this.label2.Text = "Lock Days";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -261,27 +264,28 @@ namespace OpenDental{
 			this.checkLogOffWindows.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.checkLogOffWindows.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkLogOffWindows.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkLogOffWindows.Location = new System.Drawing.Point(238,606);
+			this.checkLogOffWindows.Location = new System.Drawing.Point(238, 606);
 			this.checkLogOffWindows.Name = "checkLogOffWindows";
-			this.checkLogOffWindows.Size = new System.Drawing.Size(224,16);
+			this.checkLogOffWindows.Size = new System.Drawing.Size(224, 16);
 			this.checkLogOffWindows.TabIndex = 99;
 			this.checkLogOffWindows.Text = "Log off when Windows logs off";
 			this.checkLogOffWindows.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textLogOffAfterMinutes
 			// 
-			this.textLogOffAfterMinutes.Location = new System.Drawing.Point(325,581);
+			this.textLogOffAfterMinutes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.textLogOffAfterMinutes.Location = new System.Drawing.Point(325, 581);
 			this.textLogOffAfterMinutes.Name = "textLogOffAfterMinutes";
-			this.textLogOffAfterMinutes.Size = new System.Drawing.Size(29,20);
+			this.textLogOffAfterMinutes.Size = new System.Drawing.Size(29, 20);
 			this.textLogOffAfterMinutes.TabIndex = 100;
 			this.textLogOffAfterMinutes.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			// 
 			// label3
 			// 
 			this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.label3.Location = new System.Drawing.Point(235,581);
+			this.label3.Location = new System.Drawing.Point(235, 581);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(90,18);
+			this.label3.Size = new System.Drawing.Size(90, 18);
 			this.label3.TabIndex = 101;
 			this.label3.Text = "Log off after ";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -289,92 +293,92 @@ namespace OpenDental{
 			// label4
 			// 
 			this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.label4.Location = new System.Drawing.Point(358,581);
+			this.label4.Location = new System.Drawing.Point(358, 581);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(130,18);
+			this.label4.Size = new System.Drawing.Size(130, 18);
 			this.label4.TabIndex = 102;
 			this.label4.Text = "minutes.  0 to disable.";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// butChange
 			// 
-			this.butChange.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butChange.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butChange.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butChange.Autosize = true;
 			this.butChange.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butChange.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butChange.CornerRadius = 4F;
-			this.butChange.Location = new System.Drawing.Point(304,664);
+			this.butChange.Location = new System.Drawing.Point(304, 664);
 			this.butChange.Name = "butChange";
-			this.butChange.Size = new System.Drawing.Size(70,24);
+			this.butChange.Size = new System.Drawing.Size(70, 24);
 			this.butChange.TabIndex = 95;
 			this.butChange.Text = "Change";
 			this.butChange.Click += new System.EventHandler(this.butChange_Click);
 			// 
 			// butSetAll
 			// 
-			this.butSetAll.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butSetAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butSetAll.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butSetAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butSetAll.Autosize = true;
 			this.butSetAll.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butSetAll.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSetAll.CornerRadius = 4F;
-			this.butSetAll.Location = new System.Drawing.Point(525,672);
+			this.butSetAll.Location = new System.Drawing.Point(525, 672);
 			this.butSetAll.Name = "butSetAll";
-			this.butSetAll.Size = new System.Drawing.Size(79,24);
+			this.butSetAll.Size = new System.Drawing.Size(79, 24);
 			this.butSetAll.TabIndex = 58;
 			this.butSetAll.Text = "Set All";
 			this.butSetAll.Click += new System.EventHandler(this.butSetAll_Click);
 			// 
 			// butAddUser
 			// 
-			this.butAddUser.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAddUser.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butAddUser.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butAddUser.Autosize = true;
 			this.butAddUser.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAddUser.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAddUser.CornerRadius = 4F;
-			this.butAddUser.Location = new System.Drawing.Point(118,565);
+			this.butAddUser.Location = new System.Drawing.Point(118, 565);
 			this.butAddUser.Name = "butAddUser";
-			this.butAddUser.Size = new System.Drawing.Size(75,24);
+			this.butAddUser.Size = new System.Drawing.Size(75, 24);
 			this.butAddUser.TabIndex = 0;
 			this.butAddUser.Text = "Add User";
 			this.butAddUser.Click += new System.EventHandler(this.butAddUser_Click);
 			// 
 			// butAddGroup
 			// 
-			this.butAddGroup.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAddGroup.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butAddGroup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butAddGroup.Autosize = true;
 			this.butAddGroup.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAddGroup.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAddGroup.CornerRadius = 4F;
-			this.butAddGroup.Location = new System.Drawing.Point(8,565);
+			this.butAddGroup.Location = new System.Drawing.Point(8, 565);
 			this.butAddGroup.Name = "butAddGroup";
-			this.butAddGroup.Size = new System.Drawing.Size(75,24);
+			this.butAddGroup.Size = new System.Drawing.Size(75, 24);
 			this.butAddGroup.TabIndex = 1;
 			this.butAddGroup.Text = "Edit Groups";
 			this.butAddGroup.Click += new System.EventHandler(this.butEditGroups_Click);
 			// 
 			// butClose
 			// 
-			this.butClose.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butClose.Autosize = true;
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(812,672);
+			this.butClose.Location = new System.Drawing.Point(812, 672);
 			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(75,24);
+			this.butClose.Size = new System.Drawing.Size(75, 24);
 			this.butClose.TabIndex = 0;
 			this.butClose.Text = "Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
 			// FormSecurity
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(894,700);
+			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+			this.ClientSize = new System.Drawing.Size(894, 700);
 			this.Controls.Add(this.textLogOffAfterMinutes);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.label3);
@@ -472,8 +476,6 @@ namespace OpenDental{
 						node2.Nodes.Add(node3);
 					node3=SetNode(Permissions.ReportProdInc);
 						node2.Nodes.Add(node3);
-					node.Nodes.Add(node2);
-				node2=SetNode(Permissions.EhrEmergencyAccess);
 					node.Nodes.Add(node2);
 				node2=SetNode(Permissions.RefAttachAdd);
 					node.Nodes.Add(node2);
@@ -590,6 +592,14 @@ namespace OpenDental{
 						node2.Nodes.Add(node3);
 					node3=SetNode(Permissions.EquipmentDelete);
 						node2.Nodes.Add(node3);
+					node.Nodes.Add(node2);
+				treePermissions.Nodes.Add(node);
+			node=SetNode("EHR");
+				node2=SetNode(Permissions.EhrEmergencyAccess);
+					node.Nodes.Add(node2);
+				node2=SetNode(Permissions.EhrInfoButton);
+					node.Nodes.Add(node2);
+				node2=SetNode(Permissions.EhrShowCDS);
 					node.Nodes.Add(node2);
 				treePermissions.Nodes.Add(node);
 			treePermissions.ExpandAll();
