@@ -67,7 +67,7 @@ namespace OpenDentBusiness{
 			return Crud.ClaimPaymentCrud.SelectMany(command);
 		}
 
-		///<summary>Gets all unattached claimpayments for display in a new deposit.  Excludes payments before dateStart.</summary>
+		///<summary>Gets all unattached claimpayments for display in a new deposit.  Excludes payments before dateStart and partials.</summary>
 		public static ClaimPayment[] GetForDeposit(DateTime dateStart,long clinicNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<ClaimPayment[]>(MethodBase.GetCurrentMethod(),dateStart,clinicNum);
@@ -79,7 +79,8 @@ namespace OpenDentBusiness{
 			if(clinicNum!=0){
 				command+=" AND ClinicNum="+POut.Long(clinicNum);
 			}
-			command+=" ORDER BY CheckDate";
+			command+=" AND IsPartial=0"//Don't let users attach partial insurance payments to deposits.
+				+" ORDER BY CheckDate";
 			return Crud.ClaimPaymentCrud.SelectMany(command).ToArray();
 		}
 
