@@ -120,7 +120,7 @@
 			this.numFloorHeightFeet.TabIndex = 16;
 			this.numFloorHeightFeet.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			this.numFloorHeightFeet.Value = new decimal(new int[] {
-            59,
+            57,
             0,
             0,
             0});
@@ -238,9 +238,9 @@
 			this.mapAreaPanel.AllowDragging = true;
 			this.mapAreaPanel.AllowEditing = true;
 			this.mapAreaPanel.AutoScroll = true;
-			this.mapAreaPanel.AutoScrollMinSize = new System.Drawing.Size(1207, 1003);
+			this.mapAreaPanel.AutoScrollMinSize = new System.Drawing.Size(1207, 969);
 			this.mapAreaPanel.FloorColor = System.Drawing.Color.White;
-			this.mapAreaPanel.FloorHeightFeet = 59;
+			this.mapAreaPanel.FloorHeightFeet = 57;
 			this.mapAreaPanel.FloorWidthFeet = 71;
 			this.mapAreaPanel.Font = new System.Drawing.Font("Calibri", 25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.mapAreaPanel.FontCubicle = new System.Drawing.Font("Calibri", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -252,7 +252,7 @@
 			this.mapAreaPanel.PixelsPerFoot = 17;
 			this.mapAreaPanel.ShowGrid = false;
 			this.mapAreaPanel.ShowOutline = true;
-			this.mapAreaPanel.Size = new System.Drawing.Size(1212, 1008);
+			this.mapAreaPanel.Size = new System.Drawing.Size(1212, 970);
 			this.mapAreaPanel.TabIndex = 4;
 			this.mapAreaPanel.MapAreaChanged += new System.EventHandler(this.mapAreaPanel_MapAreaChanged);
 			this.mapAreaPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mapAreaPanel_MouseUp);

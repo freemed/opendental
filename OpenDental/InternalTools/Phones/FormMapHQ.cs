@@ -49,12 +49,15 @@ namespace OpenDental {
 		///<summary>Refresh the phone panel every X seconds after it has already been setup.  Make sure to call FillMapAreaPanel before calling this the first time.</summary>
 		public void SetPhoneList(List<PhoneEmpDefault> peds,List<Phone> phones) {
 			try {
+				string title="Call Center Status Map - Triage Coordinator - ";
 				try { //get the triage coord label but don't fail just because we can't find it
-					labelTriageCoordinator.Text=Employees.GetNameFL(PrefC.GetLong(PrefName.HQTriageCoordinator));
+					title+=Employees.GetNameFL(PrefC.GetLong(PrefName.HQTriageCoordinator));
 				}
 				catch {
-					labelTriageCoordinator.Text="Not Set";
+					title+="Not Set";
 				}
+				labelTriageCoordinator.Text=title;
+				labelCurrentTime.Text=DateTime.Now.ToShortTimeString();
 				int triageStaffCount=0;
 				for(int i=0;i<this.mapAreaPanelHQ.Controls.Count;i++) { //loop through all of our cubicles and labels and find the matches
 					if(!(this.mapAreaPanelHQ.Controls[i] is MapAreaRoomControl)) {
@@ -211,22 +214,22 @@ namespace OpenDental {
 
 		#endregion Set label text and colors
 
-		private void butFullScreen_Click(object sender,EventArgs e) {
+		private void fullScreenToolStripMenuItem_Click(object sender,EventArgs e) {
 			_isFullScreen=!_isFullScreen;
 			if(_isFullScreen) { //switch to full screen
-				this.butFullScreen.Text="Restore";
-				this.menuStrip.Visible=false;
+				this.fullScreenToolStripMenuItem.Text="Restore";
+				this.setupToolStripMenuItem.Visible=false;
 				this.WindowState=FormWindowState.Normal;
 				this.FormBorderStyle=System.Windows.Forms.FormBorderStyle.None;
 				this.Bounds=System.Windows.Forms.Screen.FromControl(this).Bounds;
 			}
 			else { //set back to defaults
-				this.butFullScreen.Text="Full Screen";
+				this.fullScreenToolStripMenuItem.Text="Full Screen";
 				FormMapHQ FormCMS=new FormMapHQ();
 				this.FormBorderStyle=FormCMS.FormBorderStyle;
 				this.Size=FormCMS.Size;
 				this.CenterToScreen();
-				this.menuStrip.Visible=true;				
+				this.setupToolStripMenuItem.Visible=true;				
 			}
 		}
 
@@ -239,6 +242,6 @@ namespace OpenDental {
 			FormMS.ShowDialog();
 			FillMapAreaPanel();
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"MapHQ layout changed");
-		}
+		}		
 	}
 }
