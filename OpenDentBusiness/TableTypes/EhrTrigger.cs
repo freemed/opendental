@@ -29,7 +29,7 @@ namespace OpenDentBusiness {
 		public int DemographicAgeGreaterThan;
 		///<summary>M, F, U.  Comma delimited list. </summary>
 		public string DemographicGender;
-		///<summary>Requires one, one-of-each, two+, all.  </summary>
+		///<summary>Requires One, OneOfEachCategory, TwoOrMore, or All for trigger to match.  </summary>
 		public MatchCardinality Cardinality;
 
 
@@ -42,13 +42,13 @@ namespace OpenDentBusiness {
 
 	/// <summary></summary>
 	public enum MatchCardinality {
-		///<summary>0</summary>
+		///<summary>0 - If any one of the conditions are met from any of the categories.</summary>
 		One,
-		///<summary>1</summary>
-		OneOfEach,
-		///<summary>2</summary>
+		///<summary>1 - Must have one match from each of the categories with set values. Categories are :Medication, Allergy, Problem, Vitals, Age, Gender, and Lab Results.</summary>
+		OneOfEachCategory,
+		///<summary>2 - Must match any two conditions, may be from same category.</summary>
 		TwoOrMore,
-		///<summary>3</summary>
+		///<summary>3 - Must match every code defined in the EhrTrigger.</summary>
 		All
 	}
 }

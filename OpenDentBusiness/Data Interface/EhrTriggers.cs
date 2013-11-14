@@ -54,47 +54,108 @@ namespace OpenDentBusiness{
 		/// <returns>Returns a dictionary keyed on triggers and a list of all the objects that the trigger matched on. Should be used to generate CDS intervention message and later be passed to FormInfobutton for knowledge request.</returns>
 		public static SortedDictionary<string,List<object>> TriggerMatch(object triggerObject,Patient PatCur) {
 			SortedDictionary<string,List<object>> retVal=new SortedDictionary<string,List<object>>();
+			//Define objects to be used in matching triggers.
+			DiseaseDef diseaseDef;
+			Disease disease;
+			ICD9 icd9;
+			Icd10 icd10;
+			Snomed snomed;
+			RxDef rxdef;
+			string triggerObjectMessage="";
 			string command="";
 			switch(triggerObject.GetType().Name) {
 				case "DiseaseDef":
-					DiseaseDef diseaseDef=(DiseaseDef)triggerObject;
+					diseaseDef=(DiseaseDef)triggerObject;
+					if(diseaseDef.ICD9Code!=""){
+						triggerObjectMessage+="  -"+diseaseDef.ICD9Code+"(Icd9)  "+ICD9s.GetByCode(diseaseDef.ICD9Code).Description+"\r\n";
+					}
+					if(diseaseDef.Icd10Code!=""){
+						triggerObjectMessage+="  -"+diseaseDef.Icd10Code+"(Icd10)  "+Icd10s.GetByCode(diseaseDef.Icd10Code).Description+"\r\n";
+					}
+					if(diseaseDef.SnomedCode!=""){
+						triggerObjectMessage+="  -"+diseaseDef.SnomedCode+"(Snomed)  "+Snomeds.GetByCode(diseaseDef.SnomedCode).Description+"\r\n";
+					}
 					command="SELECT * FROM ehrtrigger"
-					+" WHERE Icd9List LIKE '%"+POut.String(diseaseDef.ICD9Code)+"%'"//TODO
-					+" OR Icd10List LIKE ' "+POut.String(diseaseDef.Icd10Code)+" '"//TODO
-					+" OR SnomedList LIKE '%"+POut.String(diseaseDef.SnomedCode)+"%'";//TODO
+					+" WHERE Icd9List LIKE '% "+POut.String(diseaseDef.ICD9Code)+" %'"// '% <code> %' so that we can get exact matches.
+					+" OR Icd10List LIKE '% "+POut.String(diseaseDef.Icd10Code)+" %'"
+					+" OR SnomedList LIKE '% "+POut.String(diseaseDef.SnomedCode)+" %'";
 					break;
 				case "Disease":
+					disease=(Disease)triggerObject;
+					//TODO: TriggerObjectMessage
+					diseaseDef=DiseaseDefs.GetItem(disease.DiseaseDefNum);
+					command="SELECT * FROM ehrtrigger"
+					+" WHERE Icd9List LIKE '% "+POut.String(diseaseDef.ICD9Code)+" %'"// '% <code> %' so that we can get exact matches.
+					+" OR Icd10List LIKE '% "+POut.String(diseaseDef.Icd10Code)+" %'"
+					+" OR SnomedList LIKE '% "+POut.String(diseaseDef.SnomedCode)+" %'";
 					break;
 				case "ICD9":
+					icd9=(ICD9)triggerObject;
+					//TODO: TriggerObjectMessage
+					command="SELECT * FROM ehrtrigger"
+					+" WHERE Icd9List LIKE '% "+POut.String(icd9.ICD9Code)+" %'";// '% <code> %' so that we can get exact matches.
+					break;
+				case "Icd10":
+					icd10=(Icd10)triggerObject;
+					//TODO: TriggerObjectMessage
+					command="SELECT * FROM ehrtrigger"
+					+" WHERE Icd10List LIKE '% "+POut.String(icd10.Icd10Code)+" %'";// '% <code> %' so that we can get exact matches.
 					break;
 				case "Snomed":
+					snomed=(Snomed)triggerObject;
+					//TODO: TriggerObjectMessage
+					command="SELECT * FROM ehrtrigger"
+					+" WHERE SnomedList LIKE '% "+POut.String(snomed.SnomedCode)+" %'";// '% <code> %' so that we can get exact matches.
+					break;
+				case "RxDef":
+					rxdef=(RxDef)triggerObject;
+					//TODO: TriggerObjectMessage
+					command="SELECT * FROM ehrtrigger"
+					+" WHERE RxCuiList LIKE '% "+POut.String(rxdef.RxCui.ToString())+" %'";// '% <code> %' so that we can get exact matches.
 					break;
 				case "RxPat":
+					throw new Exception("RxPat should not be used here. Did you mean to send in RxDef?"); 
+					break;
 				default:
+					command="SELECT * FROM ehrtrigger WHERE false";//should not return any results.
 					#if DEBUG
 						throw new Exception(triggerObject.GetType().ToString()+" object not implemented as intervention trigger yet. Add to the list above to handle.");
 					#endif
 					break;
 			}
-			List<EhrTrigger> listListTriggers;
-			if(command=="") {
-				listListTriggers=new List<EhrTrigger>();
-			}
-			else {
-				listListTriggers=Crud.EhrTriggerCrud.SelectMany(command);
-			}
-			if(listListTriggers.Count==0){
+			List<EhrTrigger> listEhrTriggers=Crud.EhrTriggerCrud.SelectMany(command);
+			if(listEhrTriggers.Count==0){
 				return null;//no triggers matched.
 			}
+			//Check for MatchCardinality.One type triggers.----------------------------------------------------------------------------
+			for(int i=0;i<listEhrTriggers.Count;i++) {
+				if(listEhrTriggers[i].Cardinality!=MatchCardinality.One) {
+					continue;
+				}
+				string triggerMessage=listEhrTriggers[i].Description+":\r\n";//Example:"Patient over 55:\r\n"
+				triggerMessage+=triggerObjectMessage;//Example:"  -Patient Age 67\r\n"
+				List<object> ListObjectMatches=new List<object>();
+				ListObjectMatches.Add(triggerObject);
+				retVal.Add(triggerMessage,ListObjectMatches);
+			}
 			//Fill object lists to be checked-------------------------------------------------------------------------------------------------
-			command="SELECT * FROM Allergy WHERE PatNum="+PatCur.PatNum;
-			List<Allergy> ListAllergy=Crud.AllergyCrud.SelectMany(command);
+			List<Allergy> ListAllergy=Allergies.GetAll(PatCur.PatNum,false);
+			List<Disease> ListDisease=Diseases.Refresh(PatCur.PatNum,true);
+			List<LabPanel> ListLabPanel=LabPanels.Refresh(PatCur.PatNum);
+			List<MedicationPat> ListMedicationPat=MedicationPats.Refresh(PatCur.PatNum,false);
 			List<AllergyDef> ListAllergyDef=new List<AllergyDef>();
 			for(int i=0;i<ListAllergy.Count;i++){
-				//ListAllergyDef
+				ListAllergyDef.Add(AllergyDefs.GetOne(ListAllergy[i].AllergyDefNum));
 			}
-			for(int i=0;i<listListTriggers.Count;i++) {
-				List<object> ListObjectMatches=new List<object>();
+			for(int i=0;i<listEhrTriggers.Count;i++) {
+				if(listEhrTriggers[i].Cardinality==MatchCardinality.One) {
+					continue;//we handled these above.
+				}
+				string triggerMessage=listEhrTriggers[i].Description+":\r\n";
+				triggerMessage+=triggerObjectMessage;
+				List<object> ListObjectMatches=new List<object>();//Allergy, Disease, LabPanels, MedicationPat, Patient, VaccinePat
+				List<string> MatchedCodes=new List<string>();
+				ListObjectMatches.Add(triggerObject);
 				//Allergy-----------------------------------------------------------------------------------------------------------------------
 				//allergy.snomedreaction
 				//allergy.AllergyDefNum>>AllergyDef.SnomedType
@@ -116,7 +177,7 @@ namespace OpenDentBusiness{
 				//Patient.Birthdate (Loinc age?)
 				//Patient.SmokingSnoMed
 				//RxPat-------------------------------------------------------------------------------------------------------------------------
-				//RxPat.RxCui
+				//Do not check RxPat. It is useless.
 				//VaccinePat--------------------------------------------------------------------------------------------------------------------
 				//VaccinePat.VaccineDefNum>>VaccineDef.CVXCode
 				//VitalSign---------------------------------------------------------------------------------------------------------------------
@@ -126,7 +187,103 @@ namespace OpenDentBusiness{
 				//VitalSign.BpDiastolic (Loinc)
 				//VitalSign.WeightCode (Snomed)
 				//VitalSign.PregDiseaseNum (Loinc)
-				retVal.Add("TODO:Description and matchconditions",ListObjectMatches);
+				//Use object matches to check if required conditions are met-------------------------------------------------------------------------------
+				switch(listEhrTriggers[i].Cardinality) {
+					case MatchCardinality.One:
+						//should never get here, handled above.
+						continue;
+					case MatchCardinality.OneOfEachCategory:
+						//Medication
+						//Allergy
+						//Problem
+						//Vital
+						//Age
+						//Gender
+						//Lab Result
+						break;
+					case MatchCardinality.TwoOrMore:
+						if(ListObjectMatches.Count<2) {
+							continue;//Must match at least two objects for this category.
+						}
+						break;
+					case MatchCardinality.All:
+						//Match all Icd9Codes-------------------------------------------------------------------------------------------------------------------------------------------------
+						string[] arrayIcd9Codes=listEhrTriggers[i].Icd9List.Split(new string[] {" "},StringSplitOptions.RemoveEmptyEntries);
+						bool allConditionsMet=true;
+						for(int c=0;c<arrayIcd9Codes.Length;c++) {
+							if(MatchedCodes.Contains(arrayIcd9Codes[i])){
+								continue;//found required code
+							}
+							//required code not found, set allConditionsMet to false and continue to next trigger
+							allConditionsMet=false;
+							break;
+						}
+						if(!allConditionsMet) {
+							continue;//next trigger
+						}
+						//Match all Icd10Codes------------------------------------------------------------------------------------------------------------------------------------------------
+						string[] arrayIcd10Codes=listEhrTriggers[i].Icd10List.Split(new string[] { " " },StringSplitOptions.RemoveEmptyEntries);
+						for(int c=0;c<arrayIcd10Codes.Length;c++) {
+							if(MatchedCodes.Contains(arrayIcd10Codes[i])) {
+								continue;//found required code
+							}
+							//required code not found, set allConditionsMet to false and continue to next trigger
+							allConditionsMet=false;
+							break;
+						}
+						if(!allConditionsMet) {
+							continue;//next trigger
+						}
+						//Match all SnomedCodes-----------------------------------------------------------------------------------------------------------------------------------------------
+						string[] arraySnomedCodes=listEhrTriggers[i].SnomedList.Split(new string[] { " " },StringSplitOptions.RemoveEmptyEntries);
+						for(int c=0;c<arraySnomedCodes.Length;c++) {
+							if(MatchedCodes.Contains(arraySnomedCodes[i])) {
+								continue;//found required code
+							}
+							//required code not found, set allConditionsMet to false and continue to next trigger
+							allConditionsMet=false;
+							break;
+						}
+						if(!allConditionsMet) {
+							continue;//next trigger
+						}
+						//Match all CvxCodes--------------------------------------------------------------------------------------------------------------------------------------------------
+						string[] arrayCvxCodes=listEhrTriggers[i].CvxList.Split(new string[] { " " },StringSplitOptions.RemoveEmptyEntries);
+						for(int c=0;c<arrayCvxCodes.Length;c++) {
+							if(MatchedCodes.Contains(arrayCvxCodes[i])) {
+								continue;//found required code
+							}
+							//required code not found, set allConditionsMet to false and continue to next trigger
+							allConditionsMet=false;
+							break;
+						}
+						if(!allConditionsMet) {
+							continue;//next trigger
+						}
+						//Match all LoincCodes------------------------------------------------------------------------------------------------------------------------------------------------
+						//TODO:with values
+						//Match all Vitals----------------------------------------------------------------------------------------------------------------------------------------------------
+						//TODO:with values
+						//Match all Demographics---------------------------------------------------------------------------------------------------------------------------------------------
+						if(listEhrTriggers[i].DemographicAgeGreaterThan!=0){
+							if(PatCur.Birthdate.Year>1880 && PatCur.Birthdate.AddYears(listEhrTriggers[i].DemographicAgeGreaterThan)>DateTime.Now){//patient too young
+								continue;//next trigger
+							}
+						}
+						if(listEhrTriggers[i].DemographicAgeLessThan!=0){
+							if(PatCur.Birthdate.Year>1880 && PatCur.Birthdate.AddYears(listEhrTriggers[i].DemographicAgeGreaterThan)<DateTime.Now){//patient too old
+								continue;//next trigger
+							}
+						}
+						if(listEhrTriggers[i].DemographicGender!=""){
+							if(!listEhrTriggers[i].DemographicGender.Contains(PatCur.Gender.ToString())){//Patient Gender not in gender list of trigger
+								continue;//next trigger
+							}
+						}
+						//TODO: construct trigger message using all the codes in the trigger.
+						break;
+				}//end switch trigger cardinality
+				retVal.Add(triggerMessage,ListObjectMatches);
 			}
 			return retVal;
 		}
