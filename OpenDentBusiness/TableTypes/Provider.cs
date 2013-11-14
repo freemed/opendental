@@ -78,6 +78,8 @@ namespace OpenDentBusiness{
 		public bool IsNotPerson;
 		///<summary>The state abbreviation where the state license number in the StateLicense field is legally registered.</summary>
 		public string StateWhereLicensed;
+		///<summary>FK to EmailAddress.EmailAddressNum.  Optional, can be 0.</summary>
+		public long EmailAddressNum;
 
 		///<summary>Used only for serialization purposes</summary>
 		[XmlElement("ProvColor",typeof(int))]

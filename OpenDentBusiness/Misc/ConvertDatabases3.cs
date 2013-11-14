@@ -2061,6 +2061,22 @@ namespace OpenDentBusiness {
 						)";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE provider ADD EmailAddressNum bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE provider ADD INDEX (EmailAddressNum)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE provider ADD EmailAddressNum number(20)";
+					Db.NonQ(command);
+					command="UPDATE provider SET EmailAddressNum = 0 WHERE EmailAddressNum IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE provider MODIFY EmailAddressNum NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX provider_EmailAddressNum ON provider (EmailAddressNum)";
+					Db.NonQ(command);
+				}
 
 
 
@@ -2077,7 +2093,6 @@ namespace OpenDentBusiness {
 
 	}
 }
-
 
 
 
