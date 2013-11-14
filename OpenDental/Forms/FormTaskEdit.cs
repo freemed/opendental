@@ -77,7 +77,8 @@ namespace OpenDental {
 		private bool MightNeedSetRead;
 		private UI.Button butCopy;
 		private TextBox textBox1;
-		private UI.Button butColor;
+		private UI.Button butRed;
+		private UI.Button butBlue;
 		///<summary>When this window is first opened, if this task is in someone else's inbox, then the "new" status is meaningless and will not show.  In that case, this variable is set to true.  Only used when tracking new status by user.</summary>
 		private bool StartedInOthersInbox;
 
@@ -141,7 +142,7 @@ namespace OpenDental {
 			this.labelDoneAffectsAll = new System.Windows.Forms.Label();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.textBox1 = new System.Windows.Forms.TextBox();
-			this.butColor = new OpenDental.UI.Button();
+			this.butRed = new OpenDental.UI.Button();
 			this.butChangeUser = new OpenDental.UI.Button();
 			this.butAddNote = new OpenDental.UI.Button();
 			this.butSend = new OpenDental.UI.Button();
@@ -154,6 +155,7 @@ namespace OpenDental {
 			this.textDescript = new OpenDental.ODtextBox();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.butBlue = new OpenDental.UI.Button();
 			this.panelObject.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -446,19 +448,19 @@ namespace OpenDental {
 			this.textBox1.TabIndex = 134;
 			this.textBox1.Visible = false;
 			// 
-			// butColor
+			// butRed
 			// 
-			this.butColor.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butColor.Autosize = true;
-			this.butColor.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butColor.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butColor.CornerRadius = 4F;
-			this.butColor.Location = new System.Drawing.Point(82, 169);
-			this.butColor.Name = "butColor";
-			this.butColor.Size = new System.Drawing.Size(43, 24);
-			this.butColor.TabIndex = 155;
-			this.butColor.Text = "Color";
-			this.butColor.Click += new System.EventHandler(this.butColor_Click);
+			this.butRed.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butRed.Autosize = true;
+			this.butRed.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRed.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRed.CornerRadius = 4F;
+			this.butRed.Location = new System.Drawing.Point(82, 169);
+			this.butRed.Name = "butRed";
+			this.butRed.Size = new System.Drawing.Size(43, 24);
+			this.butRed.TabIndex = 155;
+			this.butRed.Text = "Red";
+			this.butRed.Click += new System.EventHandler(this.butRed_Click);
 			// 
 			// butChangeUser
 			// 
@@ -636,11 +638,26 @@ namespace OpenDental {
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// butBlue
+			// 
+			this.butBlue.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butBlue.Autosize = true;
+			this.butBlue.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butBlue.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butBlue.CornerRadius = 4F;
+			this.butBlue.Location = new System.Drawing.Point(82, 139);
+			this.butBlue.Name = "butBlue";
+			this.butBlue.Size = new System.Drawing.Size(43, 24);
+			this.butBlue.TabIndex = 156;
+			this.butBlue.Text = "Blue";
+			this.butBlue.Click += new System.EventHandler(this.butBlue_Click);
+			// 
 			// FormTaskEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.ClientSize = new System.Drawing.Size(836, 676);
-			this.Controls.Add(this.butColor);
+			this.Controls.Add(this.butBlue);
+			this.Controls.Add(this.butRed);
 			this.Controls.Add(this.textBox1);
 			this.Controls.Add(this.textTaskNum);
 			this.Controls.Add(this.labelTaskNum);
@@ -840,8 +857,9 @@ namespace OpenDental {
 				}
 				labelReply.Text=Lan.g(this,"(Send to ")+Userods.GetName(ReplyToUserNum)+")";
 			}
-			if(!PrefC.GetBool(PrefName.DockPhonePanelShow)) {
-				butColor.Visible=false;
+			if(IsNew || !PrefC.GetBool(PrefName.DockPhonePanelShow)) {
+				butRed.Visible=false;
+				butBlue.Visible=false;
 			}
 		}
 
@@ -970,19 +988,37 @@ namespace OpenDental {
 			textDateTimeFinished.Text=MiscData.GetNowDateTime().ToString();
 		}
 
-		private void butColor_Click(object sender,EventArgs e) {
+		private void butBlue_Click(object sender,EventArgs e) {
+			textDescriptColor(butBlue.Name);
+		}
+
+		private void butRed_Click(object sender,EventArgs e) {
+			textDescriptColor(butRed.Name);
+		}
+
+		///<summary>Handles changing a triage task from red or blue depending on which color button was pushed.</summary>
+		private void textDescriptColor(string color) {
+			//Handles the blue color
+			if(textDescript.Text.Contains("@@")) {
+				textDescript.Text=textDescript.Text.Replace("@@","@");
+			}
+			else if(color==butBlue.Name) {
+				textDescript.Text+=" @@";
+			}
+			//Handles the red color
 			if(textDescript.Text.Contains("CUSTOMER")
 				||textDescript.Text.Contains("DOWN")
 				||textDescript.Text.Contains("URGENT")
 				||textDescript.Text.Contains("CONFERENCE")
-				||textDescript.Text.Contains("!!")) {
+				||textDescript.Text.Contains("!!")) 
+			{
 				textDescript.Text=textDescript.Text.Replace("!!","!");
 				textDescript.Text=textDescript.Text.Replace("CUSTOMER","customer");
 				textDescript.Text=textDescript.Text.Replace("DOWN","down");
 				textDescript.Text=textDescript.Text.Replace("URGENT","urgent");
 				textDescript.Text=textDescript.Text.Replace("CONFERENCE","conference");
 			}
-			else {
+			else if(color==butRed.Name) {
 				textDescript.Text+=" !!";
 			}
 		}

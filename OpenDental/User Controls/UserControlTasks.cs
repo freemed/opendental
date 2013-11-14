@@ -493,7 +493,7 @@ namespace OpenDental {
 				}
 				row.Cells.Add(dateStr+objDesc+TasksList[i].Descript+notes);
 				if(TasksList[i].TaskListNum==_TriageListNum) {
-					if(!hasNotes) {
+					if(!hasNotes || TasksList[i].Descript.Contains("@@")) {
 						row.ColorBackG=Color.LightBlue;
 					}
 					if(TasksList[i].Descript.Contains("CUSTOMER")
