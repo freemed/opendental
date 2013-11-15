@@ -4039,6 +4039,7 @@ namespace OpenDental{
 				long rxCui=0;
 				string strDrugName="";
 				string strGenericName="";
+				string strNpi="";
 				foreach(XmlNode nodeRxFieldParent in nodeTable.ChildNodes) {
 					XmlNode nodeRxField=nodeRxFieldParent.FirstChild;
 					if(nodeRxField==null) {
@@ -4057,8 +4058,8 @@ namespace OpenDental{
 						case "externalpatientid"://patnum passed back from the compose request that initiated this prescription
 							rx.PatNum=PIn.Long(nodeRxField.Value);
 							break;
-						case "externalphysicianid"://provnum passed back from the compose request that initiated this prescription
-							rx.ProvNum=PIn.Long(nodeRxField.Value);
+						case "externalphysicianid"://NPI passed back from the compose request that initiated this prescription
+							strNpi=nodeRxField.Value;
 							break;
 						case "externaluserid"://The person who ordered the prescription. Is a ProvNum when provider, or an EmployeeNum when an employee. If EmployeeNum, then is prepended with "emp" because of how we sent it to NewCrop in the first place.
 							if(nodeRxField.Value.StartsWith("emp")) {
@@ -4102,6 +4103,49 @@ namespace OpenDental{
 						rx.Sig+=" ";
 					}
 					rx.Sig+=additionalSig;
+				}
+				//Determine the provider. This is a mess, because we used to send ProvNum in the outgoing XML LicensedPrescriber.ID,
+				//but now we send NPI to avoid multiple billing charges for two provider records with the same NPI
+				//(the same doctor entered multiple times, for example, one provider for each clinic).
+				ErxLog erxLog=ErxLogs.GetLatestForPat(rx.PatNum,rx.RxDate);//Locate the original request corresponding to this prescription.
+				if((erxLog==null || erxLog.ProvNum==0)) {//Not found or the provnum is unknown.
+					//The erxLog.ProvNum will be 0 for prescriptions fetched from NewCrop before version 13.3. Could also happen if
+					//prescriptions were created when NewCrop was brand new (right before ErxLog was created),
+					//or if someone lost a database and they are downloading all the prescriptions from scratch again.
+					if(rxOld==null) {//The prescription is being dowloaded for the first time, or is being downloaded again after it was deleted manually by the user.
+						for(int j=0;j<ProviderC.ListShort.Count;j++) {//Try to locate a visible provider matching the NPI on the prescription.
+							if(ProviderC.ListShort[j].NationalProvID==strNpi) {
+								rx.ProvNum=ProviderC.ListShort[j].ProvNum;
+								break;
+							}
+						}
+						if(rx.ProvNum==0) {//No visible provider found matching the NPI on the prescription.
+							for(int j=0;j<ProviderC.ListLong.Count;j++) {//Try finding a hidden provider matching the NPI on the prescription.
+								if(ProviderC.ListLong[j].NationalProvID==strNpi) {
+									rx.ProvNum=ProviderC.ListLong[j].ProvNum;
+									break;
+								}
+							}
+						}
+						//If rx.ProvNum is still zero, then that means the provider NPI has been modified or somehow deleted (for example, database was lost) for the provider record originally used.
+						if(rx.ProvNum==0) {//Catch all
+							//At this point, we just need to pull the data in and prevent a crash. Should rarely happen, but is possible. We must preserve NPI, and therefore must create a provider record.
+							Provider provUnknown=new Provider();
+							provUnknown.NationalProvID=strNpi;//Preserve the NPI that was on the prescription.
+							provUnknown.LName="NewCrop";//So we know where/when/why the provider was created if the customer calls in to ask about this provider.
+							provUnknown.FName="NewCrop";//So we know where/when/why the provider was created if the customer calls in to ask about this provider.
+							provUnknown.Abbr="NPI:"+strNpi;//Probably too long, but ensures that the name is unique and the customer knows who the provider actually is.
+							Providers.Insert(provUnknown);//Create ProvNum.
+							Providers.RefreshCache();
+							rx.ProvNum=provUnknown.ProvNum;
+						}
+					}
+					else {//The prescription has already been downloaded in the past.
+						rx.ProvNum=rxOld.ProvNum;//Preserve the provnum if already in the database, because it may have already been corrected by the user after the previous download.
+					}
+				}
+				else {
+					rx.ProvNum=erxLog.ProvNum;
 				}
 				if(rxOld==null) {
 					rx.IsNew=true;//Might not be necessary, but does not hurt.
@@ -4417,6 +4461,7 @@ namespace OpenDental{
 			ErxLog erxLog=new ErxLog();
 			erxLog.PatNum=PatCur.PatNum;
 			erxLog.MsgText=clickThroughXml;
+			erxLog.ProvNum=prov.ProvNum;
 			ErxLogs.Insert(erxLog);
 		}
 

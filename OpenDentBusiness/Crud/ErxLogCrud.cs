@@ -50,6 +50,7 @@ namespace OpenDentBusiness.Crud{
 				erxLog.PatNum    = PIn.Long  (table.Rows[i]["PatNum"].ToString());
 				erxLog.MsgText   = PIn.String(table.Rows[i]["MsgText"].ToString());
 				erxLog.DateTStamp= PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
+				erxLog.ProvNum   = PIn.Long  (table.Rows[i]["ProvNum"].ToString());
 				retVal.Add(erxLog);
 			}
 			return retVal;
@@ -90,14 +91,15 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="ErxLogNum,";
 			}
-			command+="PatNum,MsgText) VALUES(";
+			command+="PatNum,MsgText,ProvNum) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(erxLog.ErxLogNum)+",";
 			}
 			command+=
 				     POut.Long  (erxLog.PatNum)+","
-				+DbHelper.ParamChar+"paramMsgText)";
+				+DbHelper.ParamChar+"paramMsgText,"
 				//DateTStamp can only be set by MySQL
+				+    POut.Long  (erxLog.ProvNum)+")";
 			if(erxLog.MsgText==null) {
 				erxLog.MsgText="";
 			}
@@ -115,8 +117,9 @@ namespace OpenDentBusiness.Crud{
 		public static void Update(ErxLog erxLog){
 			string command="UPDATE erxlog SET "
 				+"PatNum    =  "+POut.Long  (erxLog.PatNum)+", "
-				+"MsgText   =  "+DbHelper.ParamChar+"paramMsgText "
+				+"MsgText   =  "+DbHelper.ParamChar+"paramMsgText, "
 				//DateTStamp can only be set by MySQL
+				+"ProvNum   =  "+POut.Long  (erxLog.ProvNum)+" "
 				+"WHERE ErxLogNum = "+POut.Long(erxLog.ErxLogNum);
 			if(erxLog.MsgText==null) {
 				erxLog.MsgText="";
@@ -137,6 +140,10 @@ namespace OpenDentBusiness.Crud{
 				command+="MsgText = "+DbHelper.ParamChar+"paramMsgText";
 			}
 			//DateTStamp can only be set by MySQL
+			if(erxLog.ProvNum != oldErxLog.ProvNum) {
+				if(command!=""){ command+=",";}
+				command+="ProvNum = "+POut.Long(erxLog.ProvNum)+"";
+			}
 			if(command==""){
 				return;
 			}

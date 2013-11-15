@@ -18,6 +18,8 @@ namespace OpenDentBusiness {
 		///<summary>Automatically updated by MySQL every time a row is added or changed.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
+		///<summary>FK to provider.ProvNum. The provider that the prescription request was sent by or on behalf of.</summary>
+		public long ProvNum;
 
 		///<summary></summary>
 		public ErxLog Clone() {

@@ -57,6 +57,7 @@ namespace OpenDentBusiness {
 			get { return Assembly.GetAssembly(typeof(Db)).GetName().Version.ToString(); }
 		}
 
+		///<summary>Only called from Chart for now.  No validation is performed here.  Validate before calling.  There are many validtion checks, including the NPI must be exactly 10 digits.</summary>
 		public static string BuildClickThroughXml(Provider prov,Employee emp,Patient pat) {
 			NCScript ncScript=new NCScript();
 			ncScript.Credentials=new CredentialsType();
@@ -141,18 +142,15 @@ namespace OpenDentBusiness {
 				ncScript.Location.pharmacyContactNumber=clinic.Phone;//Validated to be 10 digits within the chart.
 			}
 			ncScript.LicensedPrescriber=new LicensedPrescriberType();
-			//Each unique provider ID sent to NewCrop will cause a billing charge. Some offices have duplicate providers that they use for different purposes, but all such providers have the same NPI.
-			//In this loop, we pick the lowest ProvNum for any provider (even hidden providers) which have an NPI that matches the provider we are sending to NewCrop.
-			long provID=prov.ProvNum;
-			for(int i=0;i<ProviderC.ListLong.Count;i++) {
-				if(ProviderC.ListLong[i].NationalProvID!=prov.NationalProvID) {
-					continue;
-				}
-				if(ProviderC.ListLong[i].ProvNum<provID) {
-					provID=ProviderC.ListLong[i].ProvNum;
-				}
-			}
-			ncScript.LicensedPrescriber.ID=provID.ToString();
+			//Each unique provider ID sent to NewCrop will cause a billing charge.
+			//Some customer databases have provider duplicates, because they have one provider record per clinic with matching NPIs.
+			//We send NPI as the ID to prevent extra NewCrop charges.
+			//Conversation with NewCrop:
+			//Question: If one of our customers clicks through to NewCrop with 2 different LicensedPrescriber.ID values, 
+			//          but with the same provider name and NPI, will Open Dental be billed twice or just one time for the NPI used?
+			//Answer:   "They would be billed twice. The IDs you send us should always be maintained and unique. 
+			//          Users are always identified by LicensedPrescriber ID, since their name or credentials could potentially change."
+			ncScript.LicensedPrescriber.ID=prov.NationalProvID;
 			//UPIN is obsolete
 			ncScript.LicensedPrescriber.LicensedPrescriberName=new PersonNameType();
 			ncScript.LicensedPrescriber.LicensedPrescriberName.last=prov.LName.Trim();//Cannot be blank.
@@ -230,7 +228,14 @@ namespace OpenDentBusiness {
 				ncScript.Patient.PatientCharacteristics.gender=GenderType.U;
 			}
 			ncScript.Patient.PatientCharacteristics.genderSpecified=true;
-			//ncScript.NewPrescription.ID=;
+			//NewCrop programmer's comments regarding other fields we are not currently using (these fields are sent back when fetching prescriptions in the Chart):
+			//ExternalPrescriptionId = your unique identifier for the prescription, only to be used if you are generating the prescription on your own UI.
+			//	This is referenced by NewCrop, and cannot be populated with any other value. 
+			//EncounterIdentifier = unique ID for the patient visit (e.g. John Doe, 11/11/2013).
+			//	This is used by NewCrop for reporting events against a visit, but otherwise does not impact the session. 
+			//EpisodeIdentifier = unique ID for the patient’s issue (e.g. John Doe’s broken leg) which may include multiple visits.
+			//	Currently not used by NewCrop except for being echoed back; it is possible this functionality would be expanded in the future based on its intent as noted. 
+			//ExternalSource = a codified field noting the origin of the prescription. This may not be used.
 			//Serialize
 			MemoryStream memoryStream=new MemoryStream();
 			XmlSerializer xmlSerializer=new XmlSerializer(typeof(NCScript));

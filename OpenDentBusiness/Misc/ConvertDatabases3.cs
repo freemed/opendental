@@ -2014,6 +2014,31 @@ namespace OpenDentBusiness {
 				command="UPDATE preference SET ValueString = '13.3.4.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To13_3_5();
+		}
+
+		private static void To13_3_5() {
+			if(FromVersion<new Version("13.3.5.0")) {
+				string command;
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE erxlog ADD ProvNum bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE erxlog ADD INDEX (ProvNum)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE erxlog ADD ProvNum number(20)";
+					Db.NonQ(command);
+					command="UPDATE erxlog SET ProvNum = 0 WHERE ProvNum IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE erxlog MODIFY ProvNum NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX erxlog_ProvNum ON erxlog (ProvNum)";
+					Db.NonQ(command);
+				}
+				command="UPDATE preference SET ValueString = '13.3.5.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To14_1_0();
 		}
 
