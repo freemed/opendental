@@ -76,8 +76,6 @@ namespace OpenDentBusiness{
 			medOrder.PatNum=rxPat.PatNum;
 			if(isProvOrder) {
 				medOrder.ProvNum=rxPat.ProvNum;
-			}
-			if(isProvOrder && !String.IsNullOrEmpty(rxPat.NewCropGuid)) {//CPOE if ordered by a provider through directly through NewCrop only.
 				medOrder.IsCpoe=true;
 			}
 			MedicationPat medOrderOld=null;
