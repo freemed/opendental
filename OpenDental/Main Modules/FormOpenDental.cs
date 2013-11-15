@@ -2493,8 +2493,10 @@ namespace OpenDental{
 		private void menuEmail_Popup(object sender,EventArgs e) {
 			menuEmail.MenuItems.Clear();
 			//todo: permissions required here? what about verifying the provider who is clicking this button?
-			//removing the webmail button for 13.3 build. will implement correctly for 13.4
-			//menuEmail.MenuItems.Add(new MenuItem(Lan.g(this,"Secure WebMail to Patient"),menuWebMail_Click));
+			//removing the webmail button for 14.1 build. will implement correctly for 14.2
+#if DEBUG
+			menuEmail.MenuItems.Add(new MenuItem(Lan.g(this,"Secure WebMail to Patient"),menuWebMail_Click));			
+#endif
 			MenuItem menuItem;
 			menuItem=new MenuItem(Lan.g(this,"Referrals:"));
 			menuItem.Tag=null;
@@ -3828,7 +3830,7 @@ namespace OpenDental{
 				formPhoneTiles=new FormPhoneTiles();
 				formPhoneTiles.GoToChanged += new System.EventHandler(this.phonePanel_GoToChanged);
 				formPhoneTiles.Show();
-				Rectangle rect=System.Windows.Forms.Screen.PrimaryScreen.WorkingArea;
+				Rectangle rect=System.Windows.Forms.Screen.FromControl(this).Bounds;
 				formPhoneTiles.Location=new Point((rect.Width-formPhoneTiles.Width)/2+rect.X,10);
 				formPhoneTiles.BringToFront();
 			}
