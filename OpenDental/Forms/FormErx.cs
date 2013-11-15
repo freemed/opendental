@@ -44,7 +44,7 @@ namespace OpenDental {
 
 		///<summary>Uses the public prov, emp and pat variables to build a new prescription and load it within browser control. Loads the compose tab in NewCrop's web interface.</summary>
 		private void ComposeNewRx() {
-			string clickThroughXml=ErxXml.BuildClickThroughXml(prov,emp,pat);
+			string clickThroughXml="";// ErxXml.BuildClickThroughXml(prov,emp,pat);
 #if DEBUG //To make capturing the XML easier.
 			string tempFile=Path.GetTempFileName()+".txt";
 			File.WriteAllText(tempFile,clickThroughXml);
