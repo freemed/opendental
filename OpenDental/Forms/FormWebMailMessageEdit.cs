@@ -61,6 +61,18 @@ namespace OpenDental {
 				return;
 			}
 			EmailMessage emailMessage=new EmailMessage();
+//#if DEBUG
+//			for(int i=0;i<25;i++) { //make a bunch of fake messsages for testing the patient portal
+//				emailMessage.FromAddress=textFromAddress.Text;
+//				emailMessage.ToAddress=textToAddress.Text;
+//				emailMessage.PatNum=PatCur.PatNum;
+//				emailMessage.Subject="Subject: "+i.ToString();
+//				emailMessage.BodyText="Body: "+i.ToString();
+//				emailMessage.MsgDateTime=DateTime.Now.AddMinutes(i);
+//				emailMessage.SentOrReceived=EmailSentOrReceived.WebMailSent;
+//				//EmailMessages.Insert(emailMessage);
+//			}
+//#endif
 			emailMessage.FromAddress=textFromAddress.Text;
 			emailMessage.ToAddress=textToAddress.Text;
 			emailMessage.PatNum=PatCur.PatNum;
