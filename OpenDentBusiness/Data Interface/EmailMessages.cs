@@ -300,6 +300,10 @@ namespace OpenDentBusiness{
 
 		/// <summary>This is used from wherever email needs to be sent throughout the program.  If a message must be encrypted, then encrypt it before calling this function.  nameValueCollectionHeaders can be null.</summary>
 		private static void SendEmailUnsecure(EmailMessage emailMessage,EmailAddress emailAddress,NameValueCollection nameValueCollectionHeaders,params AlternateView[] arrayAlternateViews) {
+			//In the message body, we must remove bare line feeds (\r or \n by themselves) from the message body.
+			//Newlines must be specified with \r\n as required by the 822 SMTP protocol, and some email providers
+			//will reject messages if each and every newline in the entire raw email is not exactly "\r\n". For example, Prosites.
+			string strMsgBodyText=emailMessage.BodyText.Replace("\r\n","\n").Replace("\r","\n").Replace("\n","\r\n");
 			//No need to check RemotingRole; no call to db.
 			if(emailAddress.ServerPort==465) {//implicit
 				//uses System.Web.Mail, which is marked as deprecated, but still supports implicit
@@ -315,7 +319,7 @@ namespace OpenDentBusiness{
 				message.From=emailMessage.FromAddress;
 				message.To=emailMessage.ToAddress;
 				message.Subject=emailMessage.Subject;
-				message.Body=emailMessage.BodyText;
+				message.Body=strMsgBodyText;
 				//message.Cc=;
 				//message.Bcc=;
 				//message.UrlContentBase=;
@@ -352,7 +356,7 @@ namespace OpenDentBusiness{
 				message.From=new MailAddress(emailMessage.FromAddress);
 				message.To.Add(emailMessage.ToAddress);
 				message.Subject=emailMessage.Subject;
-				message.Body=emailMessage.BodyText;
+				message.Body=strMsgBodyText;
 				message.IsBodyHtml=false;
 				if(nameValueCollectionHeaders!=null) {
 					message.Headers.Add(nameValueCollectionHeaders);//Needed for Direct Acks to work.
