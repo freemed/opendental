@@ -709,7 +709,7 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		///<summary>For each of the documents in the list, deletes row from db and image from AtoZ folder if needed.</summary>
+		///<summary>For each of the documents in the list, deletes row from db and image from AtoZ folder if needed.  Throws exception if the file cannot be deleted.  Surround in try/catch.</summary>
 		public static void DeleteDocuments(IList<Document> documents,string patFolder) {
 			for(int i=0;i<documents.Count;i++) {
 				if(documents[i]==null) {
@@ -723,9 +723,7 @@ namespace OpenDentBusiness {
 						}
 					}
 					catch {
-						//if(verbose) {
-						//	Debug.WriteLine(Lans.g("ContrDocs", "Could not delete file. It may be in use elsewhere, or may have already been deleted."));
-						//}
+						throw new Exception(Lans.g("ContrImages","Could not delete file, it may be in use."));
 					}
 				}
 				//Row from db.  This deletes the "image file" also if it's stored in db.

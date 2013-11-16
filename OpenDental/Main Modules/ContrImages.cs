@@ -1437,7 +1437,12 @@ namespace OpenDental {
 			if(nodeId.NodeType==ImageNodeType.Doc || nodeId.NodeType==ImageNodeType.Mount) {
 				//Delete all documents involved in deleting this object.
 				//ImageStoreBase.verbose=verbose;
-				ImageStore.DeleteDocuments(docs,PatFolder);
+				try {
+					ImageStore.DeleteDocuments(docs,PatFolder);
+				}
+				catch(Exception ex) {  //Image could not be deleted, in use.
+					MessageBox.Show(this,ex.Message);
+				}
 			}
 			if(refreshTree) {
 				FillDocList(false);

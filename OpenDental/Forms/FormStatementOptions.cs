@@ -887,7 +887,13 @@ namespace OpenDental{
 					string patFolder=ImageStore.GetPatientFolder(pat,ImageStore.GetPreferredAtoZpath());
 					List<Document> listdocs=new List<Document>();
 					listdocs.Add(Documents.GetByNum(StmtCur.DocNum));
-					ImageStore.DeleteDocuments(listdocs,patFolder);
+					try {
+						ImageStore.DeleteDocuments(listdocs,patFolder);
+					}
+					catch(Exception ex) {  //Image could not be deleted, in use.
+						MessageBox.Show(this,ex.Message);
+						return;
+					}
 				}
 			}
 			else if(StmtList==null && StmtCur.IsInvoice && checkIsSent.Checked) {
@@ -1347,7 +1353,13 @@ namespace OpenDental{
 					patFolder=ImageStore.GetPatientFolder(pat,ImageStore.GetPreferredAtoZpath());
 					List<Document> listdocs=new List<Document>();
 					listdocs.Add(Documents.GetByNum(StmtCur.DocNum));
-					ImageStore.DeleteDocuments(listdocs,patFolder);
+					try {
+						ImageStore.DeleteDocuments(listdocs,patFolder);
+					}
+					catch(Exception ex) {  //Image could not be deleted, in use.
+						MessageBox.Show(this,ex.Message);
+						return;
+					}
 				}
 				Procedures.DetachFromInvoice(StmtCur.StatementNum);
 				Adjustments.DetachFromInvoice(StmtCur.StatementNum);
@@ -1361,7 +1373,13 @@ namespace OpenDental{
 						patFolder=ImageStore.GetPatientFolder(pat,ImageStore.GetPreferredAtoZpath());
 						List<Document> listdocs=new List<Document>();
 						listdocs.Add(Documents.GetByNum(StmtList[i].DocNum));
-						ImageStore.DeleteDocuments(listdocs,patFolder);
+						try {
+							ImageStore.DeleteDocuments(listdocs,patFolder);
+						}
+						catch(Exception ex) {  //Image could not be deleted, in use.
+							MessageBox.Show(this,ex.Message);
+							return;
+						}
 					}
 					Statements.DeleteObject(StmtList[i]);
 				}

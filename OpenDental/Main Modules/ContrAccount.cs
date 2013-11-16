@@ -3738,7 +3738,13 @@ namespace OpenDental {
 						patFolder=ImageStore.GetPatientFolder(pat,ImageStore.GetPreferredAtoZpath());
 						List<Document> listdocs=new List<Document>();
 						listdocs.Add(Documents.GetByNum(stmt.DocNum));
-						ImageStore.DeleteDocuments(listdocs,patFolder);
+						try {  
+							ImageStore.DeleteDocuments(listdocs,patFolder);
+						}
+						catch {  //Image could not be deleted, in use.
+							//This should never get hit because the file was created by this user within this method.  
+							//If the doc cannot be deleted, then we will not stop them, they will have to manually delete it from the images module.
+						}
 					}
 					//delete statement
 					Procedures.DetachFromInvoice(stmt.StatementNum);
