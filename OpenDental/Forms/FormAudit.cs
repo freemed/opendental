@@ -405,6 +405,18 @@ namespace OpenDental{
 				if(logList[i].PermType==Permissions.ChartModule) {
 					row.Cells.Add("ChartModuleViewed");
 				}
+				else if(logList[i].PermType==Permissions.FamilyModule) {
+					row.Cells.Add("FamilyModuleViewed");
+				}
+				else if(logList[i].PermType==Permissions.AccountModule) {
+					row.Cells.Add("AccountModuleViewed");
+				}
+				else if(logList[i].PermType==Permissions.ImagesModule) {
+					row.Cells.Add("ImagesModuleViewed");
+				}
+				else if(logList[i].PermType==Permissions.TPModule) {
+					row.Cells.Add("TreatmentPlanModuleViewed");
+				}
 				else {
 					row.Cells.Add(logList[i].PermType.ToString());
 				}
