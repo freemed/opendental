@@ -207,7 +207,7 @@
 			this.labelTriageCoordinator.Font = new System.Drawing.Font("Calibri", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.labelTriageCoordinator.Location = new System.Drawing.Point(160, -3);
 			this.labelTriageCoordinator.Name = "labelTriageCoordinator";
-			this.labelTriageCoordinator.Size = new System.Drawing.Size(1401, 79);
+			this.labelTriageCoordinator.Size = new System.Drawing.Size(1354, 79);
 			this.labelTriageCoordinator.TabIndex = 22;
 			this.labelTriageCoordinator.Text = "Call Center Status Map - Triage Coordinator - Jim Smith";
 			this.labelTriageCoordinator.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -259,17 +259,17 @@
 			// 
 			// labelCurrentTime
 			// 
-			this.labelCurrentTime.BackColor = System.Drawing.Color.Black;
+			this.labelCurrentTime.BackColor = System.Drawing.SystemColors.Control;
 			this.labelCurrentTime.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.labelCurrentTime.Font = new System.Drawing.Font("Agency FB", 39.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelCurrentTime.ForeColor = System.Drawing.Color.Lime;
-			this.labelCurrentTime.Location = new System.Drawing.Point(1546, 2);
+			this.labelCurrentTime.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.labelCurrentTime.Location = new System.Drawing.Point(1517, 2);
 			this.labelCurrentTime.Margin = new System.Windows.Forms.Padding(0);
 			this.labelCurrentTime.Name = "labelCurrentTime";
-			this.labelCurrentTime.Size = new System.Drawing.Size(180, 63);
+			this.labelCurrentTime.Size = new System.Drawing.Size(209, 63);
 			this.labelCurrentTime.TabIndex = 30;
 			this.labelCurrentTime.Text = "12:00 AM";
-			this.labelCurrentTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.labelCurrentTime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// mapAreaPanelHQ
 			// 
