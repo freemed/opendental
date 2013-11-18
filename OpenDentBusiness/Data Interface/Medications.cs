@@ -24,6 +24,19 @@ namespace OpenDentBusiness{
 			Listt=list.ToArray();
 		}
 
+		///<summary>Checks to see if the medication exists in the current cache.  If not, the local cache will get refreshed and then searched again.  If med is still not found, false is returned because the med does not exist.</summary>
+		private static bool HasMedicationInCache(long medicationNum) {
+			//Check if the medication exists in the cache.
+			if(!HList.ContainsKey(medicationNum)) {
+				//Medication not found.  Refresh the cache and check again.
+				Refresh();
+				if(!HList.ContainsKey(medicationNum)) {
+					return false;//Medication does not exist in db.
+				}
+			}
+			return true;
+		}
+
 		///<summary>Only public so that the remoting works.  Do not call this from anywhere except in this class.</summary>
 		public static List<Medication> GetListFromDb() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -136,14 +149,16 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
-		///<summary></summary>
+		///<summary>Returns null if not found.</summary>
 		public static Medication GetMedication(long medNum) {
 			//No need to check RemotingRole; no call to db.
-			//If this ever fails some place, it's probably an indicator that we should consider using GetMedicationFromDb instead.
+			if(!HasMedicationInCache(medNum)) {
+				return null;//Should never happen.
+			}
 			return (Medication)HList[medNum];
 		}
 
-		///<summary></summary>
+		///<summary>Deprecated.  Use GetMedication instead.</summary>
 		public static Medication GetMedicationFromDb(long medicationNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Medication>(MethodBase.GetCurrentMethod(),medicationNum);
@@ -165,19 +180,22 @@ namespace OpenDentBusiness{
 			return null;
 		}
 
-		///<summary>Gets the generic medication for the specified medication Num.</summary>
+		///<summary>Gets the generic medication for the specified medication Num. Returns null if not found.</summary>
 		public static Medication GetGeneric(long medNum) {
 			//No need to check RemotingRole; no call to db.
+			if(!HasMedicationInCache(medNum)) {
+				return null;
+			}
 			return (Medication)HList[((Medication)HList[medNum]).GenericNum];
 		}
 
-		///<summary>Gets the medication name.  Also, generic in () if applicable.</summary>
+		///<summary>Gets the medication name.  Also, generic in () if applicable.  Returns empty string if not found.</summary>
 		public static string GetDescription(long medNum) {
 			//No need to check RemotingRole; no call to db.
 			if(HList==null) {
 				Refresh();
 			}
-			if(!HList.ContainsKey(medNum)) {
+			if(!HasMedicationInCache(medNum)) {
 				return "";
 			}
 			Medication med=(Medication)HList[medNum];
@@ -198,20 +216,19 @@ namespace OpenDentBusiness{
 			if(HList==null) {
 				Refresh();
 			}
-			if(!HList.ContainsKey(medNum)) {
+			if(!HasMedicationInCache(medNum)) {
 				return "";
 			}
-			Medication med=(Medication)HList[medNum];
-			return med.MedName;
+			return ((Medication)HList[medNum]).MedName;
 		}
 
 		///<summary>Gets the generic medication name, given it's generic Num.</summary>
 		public static string GetGenericName(long genericNum) {
 			//No need to check RemotingRole; no call to db.
-			if(HList.ContainsKey(genericNum)){
-				return ((Medication)HList[genericNum]).MedName;
+			if(!HasMedicationInCache(genericNum)) {
+				return "";
 			}
-			return "";
+			return ((Medication)HList[genericNum]).MedName;
 		}
 
 		public static List<long> GetChangedSinceMedicationNums(DateTime changedSince) {
