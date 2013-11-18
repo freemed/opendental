@@ -34,6 +34,8 @@ namespace OpenDental{
 		private Label labelRxNorm;
 		private UI.Button butRxNormSelect;
 		private TextBox textRxCui;
+		private UI.Button butAddProblem;
+		private UI.Button butAddMedication;
 		private List<RxAlert> RxAlertList;
 
 		///<summary>Must have already saved it to db so that we have a RxDefNum to work with.</summary>
@@ -78,6 +80,8 @@ namespace OpenDental{
 			this.labelRxNorm = new System.Windows.Forms.Label();
 			this.butRxNormSelect = new OpenDental.UI.Button();
 			this.textRxCui = new System.Windows.Forms.TextBox();
+			this.butAddProblem = new OpenDental.UI.Button();
+			this.butAddMedication = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -254,17 +258,17 @@ namespace OpenDental{
 			// 
 			this.butAddAllergy.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butAddAllergy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butAddAllergy.Autosize = true;
+			this.butAddAllergy.Autosize = false;
 			this.butAddAllergy.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAddAllergy.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAddAllergy.CornerRadius = 4F;
 			this.butAddAllergy.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAddAllergy.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAddAllergy.Location = new System.Drawing.Point(260, 304);
+			this.butAddAllergy.Location = new System.Drawing.Point(260, 375);
 			this.butAddAllergy.Name = "butAddAllergy";
-			this.butAddAllergy.Size = new System.Drawing.Size(78, 24);
+			this.butAddAllergy.Size = new System.Drawing.Size(117, 24);
 			this.butAddAllergy.TabIndex = 20;
-			this.butAddAllergy.Text = "Add";
+			this.butAddAllergy.Text = "Add Allergy";
 			this.butAddAllergy.Click += new System.EventHandler(this.butAddAllergy_Click);
 			// 
 			// labelRxNorm
@@ -298,12 +302,48 @@ namespace OpenDental{
 			this.textRxCui.Size = new System.Drawing.Size(358, 20);
 			this.textRxCui.TabIndex = 261;
 			// 
+			// butAddProblem
+			// 
+			this.butAddProblem.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butAddProblem.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butAddProblem.Autosize = false;
+			this.butAddProblem.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddProblem.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddProblem.CornerRadius = 4F;
+			this.butAddProblem.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAddProblem.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAddProblem.Location = new System.Drawing.Point(260, 304);
+			this.butAddProblem.Name = "butAddProblem";
+			this.butAddProblem.Size = new System.Drawing.Size(117, 24);
+			this.butAddProblem.TabIndex = 9;
+			this.butAddProblem.Text = "Add Problem";
+			this.butAddProblem.Click += new System.EventHandler(this.butAddProblem_Click);
+			// 
+			// butAddMedication
+			// 
+			this.butAddMedication.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butAddMedication.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butAddMedication.Autosize = false;
+			this.butAddMedication.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddMedication.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddMedication.CornerRadius = 4F;
+			this.butAddMedication.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAddMedication.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAddMedication.Location = new System.Drawing.Point(260, 339);
+			this.butAddMedication.Name = "butAddMedication";
+			this.butAddMedication.Size = new System.Drawing.Size(117, 24);
+			this.butAddMedication.TabIndex = 18;
+			this.butAddMedication.Text = "Add Medication";
+			this.butAddMedication.Click += new System.EventHandler(this.butAddMedication_Click);
+			// 
 			// FormRxDefEdit
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(634, 496);
+			this.Controls.Add(this.butAddMedication);
+			this.Controls.Add(this.butAddProblem);
 			this.Controls.Add(this.textRxCui);
 			this.Controls.Add(this.butRxNormSelect);
 			this.Controls.Add(this.labelRxNorm);
@@ -364,7 +404,16 @@ namespace OpenDental{
 			RxAlertList=RxAlerts.Refresh(RxDefCur.RxDefNum);
 			listAlerts.Items.Clear();
 			for(int i=0;i<RxAlertList.Count;i++) {
-				listAlerts.Items.Add(AllergyDefs.GetOne(RxAlertList[i].AllergyDefNum).Description);
+				if(RxAlertList[i].DiseaseDefNum>0) {
+					listAlerts.Items.Add(DiseaseDefs.GetName(RxAlertList[i].DiseaseDefNum));
+				}
+				if(RxAlertList[i].AllergyDefNum>0) {
+					listAlerts.Items.Add(AllergyDefs.GetOne(RxAlertList[i].AllergyDefNum).Description);
+				}
+				if(RxAlertList[i].MedicationNum>0) {
+					Medications.Refresh();
+					listAlerts.Items.Add(Medications.GetMedication(RxAlertList[i].MedicationNum).MedName);
+				}
 			}
 		}
 
@@ -375,6 +424,37 @@ namespace OpenDental{
 			}
 			FormRxAlertEdit FormRAE=new FormRxAlertEdit(RxAlertList[listAlerts.SelectedIndex],RxDefCur);
 			FormRAE.ShowDialog();
+			FillAlerts();
+		}
+
+		private void butAddProblem_Click(object sender,EventArgs e) {
+			FormDiseaseDefs FormD=new FormDiseaseDefs();
+			FormD.IsSelectionMode=true;
+			FormD.IsMultiSelect=true;
+			FormD.ShowDialog();
+			if(FormD.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			for(int i=0;i<FormD.SelectedDiseaseDefNums.Count;i++) {
+				RxAlert alert=new RxAlert();
+				alert.DiseaseDefNum=FormD.SelectedDiseaseDefNums[i];
+				alert.RxDefNum=RxDefCur.RxDefNum;
+				RxAlerts.Insert(alert);
+			}
+			FillAlerts();
+		}
+
+		private void butAddMedication_Click(object sender,EventArgs e) {
+			FormMedications FormMED=new FormMedications();
+			FormMED.IsSelectionMode=true;
+			FormMED.ShowDialog();
+			if(FormMED.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			RxAlert alert=new RxAlert();
+			alert.MedicationNum=FormMED.SelectedMedicationNum;
+			alert.RxDefNum=RxDefCur.RxDefNum;
+			RxAlerts.Insert(alert);
 			FillAlerts();
 		}
 

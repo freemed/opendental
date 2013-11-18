@@ -57,6 +57,7 @@ namespace OpenDental{
 			this.groupGlobalSettings = new System.Windows.Forms.GroupBox();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.checkAlertHighSeverity = new System.Windows.Forms.CheckBox();
 			this.groupEncounter.SuspendLayout();
 			this.groupPregnancy.SuspendLayout();
 			this.groupGlobalSettings.SuspendLayout();
@@ -415,6 +416,7 @@ namespace OpenDental{
 			// 
 			// groupGlobalSettings
 			// 
+			this.groupGlobalSettings.Controls.Add(this.checkAlertHighSeverity);
 			this.groupGlobalSettings.Controls.Add(this.checkMU2);
 			this.groupGlobalSettings.Location = new System.Drawing.Point(12, 12);
 			this.groupGlobalSettings.Name = "groupGlobalSettings";
@@ -452,6 +454,19 @@ namespace OpenDental{
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+			// 
+			// checkAlertHighSeverity
+			// 
+			this.checkAlertHighSeverity.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkAlertHighSeverity.Location = new System.Drawing.Point(174, 19);
+			this.checkAlertHighSeverity.Name = "checkAlertHighSeverity";
+			this.checkAlertHighSeverity.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+			this.checkAlertHighSeverity.Size = new System.Drawing.Size(270, 20);
+			this.checkAlertHighSeverity.TabIndex = 6;
+			this.checkAlertHighSeverity.Text = "Only show high significance Rx alerts";
+			this.checkAlertHighSeverity.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkAlertHighSeverity.UseVisualStyleBackColor = true;
+			this.checkAlertHighSeverity.Click += new System.EventHandler(this.checkAlertHighSeverity_Click);
 			// 
 			// FormEhrSettings
 			// 
@@ -511,5 +526,6 @@ namespace OpenDental{
 		private System.Windows.Forms.ComboBox comboEncCodes;
 		private System.Windows.Forms.ComboBox comboPregCodes;
 		private UI.Button butEncCpt;
+		private System.Windows.Forms.CheckBox checkAlertHighSeverity;
 	}
 }

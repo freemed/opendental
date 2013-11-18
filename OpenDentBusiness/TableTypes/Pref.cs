@@ -165,7 +165,6 @@ namespace OpenDentBusiness {
 		EHREmailPassword,
 		EHREmailPOPserver,
 		EHREmailPort,
-		///<summary>Deprecated.  High vs low severity alerts are handled by NewCrop.</summary>
 		EhrRxAlertHighSeverity,
 		///<summary>This pref is hidden, so no practical way for user to turn this on.  Only used for ehr testing.</summary>
 		EHREmailToAddress,

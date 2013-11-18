@@ -34,16 +34,17 @@ namespace OpenDental{
 			this.labelRx = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
 			this.groupBox = new System.Windows.Forms.GroupBox();
+			this.checkIsHighSignificance = new System.Windows.Forms.CheckBox();
 			this.groupBox.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// labelName
 			// 
-			this.labelName.Location = new System.Drawing.Point(67, 18);
+			this.labelName.Location = new System.Drawing.Point(9, 18);
 			this.labelName.Name = "labelName";
-			this.labelName.Size = new System.Drawing.Size(241, 20);
+			this.labelName.Size = new System.Drawing.Size(299, 20);
 			this.labelName.TabIndex = 7;
-			this.labelName.Text = "If the patient already has this Allergy";
+			this.labelName.Text = "If the patient is already taking this medication";
 			this.labelName.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textMessage
@@ -73,7 +74,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(12, 292);
+			this.butDelete.Location = new System.Drawing.Point(12, 310);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(85, 24);
 			this.butDelete.TabIndex = 4;
@@ -88,7 +89,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(529, 292);
+			this.butOK.Location = new System.Drawing.Point(529, 310);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75, 24);
 			this.butOK.TabIndex = 3;
@@ -103,7 +104,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(610, 292);
+			this.butCancel.Location = new System.Drawing.Point(610, 310);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 2;
@@ -155,10 +156,22 @@ namespace OpenDental{
 			this.groupBox.TabStop = false;
 			this.groupBox.Text = "And then,";
 			// 
+			// checkIsHighSignificance
+			// 
+			this.checkIsHighSignificance.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkIsHighSignificance.Location = new System.Drawing.Point(144, 258);
+			this.checkIsHighSignificance.Name = "checkIsHighSignificance";
+			this.checkIsHighSignificance.Size = new System.Drawing.Size(181, 18);
+			this.checkIsHighSignificance.TabIndex = 18;
+			this.checkIsHighSignificance.Text = "Is High Significance";
+			this.checkIsHighSignificance.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkIsHighSignificance.UseVisualStyleBackColor = true;
+			// 
 			// FormRxAlertEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(697, 328);
+			this.ClientSize = new System.Drawing.Size(697, 346);
+			this.Controls.Add(this.checkIsHighSignificance);
 			this.Controls.Add(this.groupBox);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.textName);
@@ -192,5 +205,6 @@ namespace OpenDental{
 		private System.Windows.Forms.Label labelRx;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.GroupBox groupBox;
+		private System.Windows.Forms.CheckBox checkIsHighSignificance;
 	}
 }
