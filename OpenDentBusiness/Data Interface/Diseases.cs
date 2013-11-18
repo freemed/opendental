@@ -155,6 +155,17 @@ namespace OpenDentBusiness {
 			string command="UPDATE disease SET DateTStamp = CURRENT_TIMESTAMP WHERE PatNum ="+POut.Long(patNum);
 			Db.NonQ(command);
 		}
+
+		///<summary>Changes the value of the DateTStamp column to the current time stamp for all diseases of a patient that are the status specified.</summary>
+		public static void ResetTimeStamps(long patNum,ProblemStatus status) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum,status);
+				return;
+			}
+			string command="UPDATE disease SET DateTStamp = CURRENT_TIMESTAMP WHERE PatNum ="+POut.Long(patNum);
+				command+=" AND ProbStatus = "+POut.Int((int)status);
+			Db.NonQ(command);
+		}
 		
 		
 	}

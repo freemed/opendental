@@ -111,6 +111,19 @@ namespace OpenDentBusiness{
 			string command="UPDATE allergy SET DateTStamp = CURRENT_TIMESTAMP WHERE PatNum ="+POut.Long(patNum);
 			Db.NonQ(command);
 		}
+
+		///<summary>Changes the value of the DateTStamp column to the current time stamp for all allergies of a patient that are the status specified</summary>
+		public static void ResetTimeStamps(long patNum, bool onlyActive) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum,onlyActive);
+				return;
+			}
+			string command="UPDATE allergy SET DateTStamp = CURRENT_TIMESTAMP WHERE PatNum ="+POut.Long(patNum);
+			if(onlyActive) {
+				command+=" AND StatusIsActive = "+POut.Bool(onlyActive);
+			}
+			Db.NonQ(command);
+		}
 		
 
 	}

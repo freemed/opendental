@@ -11,8 +11,9 @@ using OpenDental.UI;
 namespace OpenDental {
 	public partial class FormReconcileMedication:Form {
 		public List<MedicationPat> ListMedicationPatNew;
-		private List<MedicationPat> ListMedicationReconcile;
-		private List<MedicationPat> ListMedicationPatCur;
+		private List<MedicationPat> _listMedicationPatReconcile;
+		private List<MedicationPat> _listMedicationPatCur;
+		private List<Medication> _listMedicationCur;
 		public Patient PatCur;
 
 		public FormReconcileMedication() {
@@ -22,95 +23,125 @@ namespace OpenDental {
 
 		private void FormReconcileMedication_Load(object sender,EventArgs e) {
 			PatCur=Patients.GetPat(FormOpenDental.CurPatNum);
-			//-------------------------------Delete after testing
-			ListMedicationPatNew=new List<MedicationPat>();
-			ListMedicationReconcile=MedicationPats.GetMedPatsForReconcile(PatCur.PatNum);
-			MedicationPat medP=new MedicationPat();
-			medP.DateStart=DateTime.Now.Subtract(TimeSpan.FromDays(5));
-			medP.MedDescript="Valpax";
-			medP.PatNote="Two a day";
-			medP.RxCui=542687;
-			ListMedicationPatNew.Add(medP);
-			medP=new MedicationPat();
-			medP.DateStart=DateTime.Now.Subtract(TimeSpan.FromDays(2));
-			medP.MedDescript="Usept";
-			medP.PatNote="Three a day";
-			medP.RxCui=405384;
-			ListMedicationPatNew.Add(medP);
-			medP=new MedicationPat();
-			medP.DateStart=DateTime.Now.Subtract(TimeSpan.FromDays(1));
-			medP.MedDescript="SmileGuard";
-			medP.PatNote="Two a day";
-			medP.RxCui=1038751;
-			ListMedicationPatNew.Add(medP);
-			medP=new MedicationPat();
-			medP.DateStart=DateTime.Now.Subtract(TimeSpan.FromDays(4));
-			medP.MedDescript="Slozem";
-			medP.PatNote="One a day";
-			medP.RxCui=151154;
-			ListMedicationPatNew.Add(medP);
-			medP=new MedicationPat();
-			medP.DateStart=DateTime.Now.Subtract(TimeSpan.FromDays(6));
-			medP.MedDescript="Prax";
-			medP.PatNote="Four a day";
-			medP.RxCui=219336;
-			ListMedicationPatNew.Add(medP);
-			medP=new MedicationPat();
-			medP.DateStart=DateTime.Now.Subtract(TimeSpan.FromDays(5));
-			medP.MedDescript="PrameGel";
-			medP.PatNote="Two a day";
-			medP.RxCui=93822;
-			ListMedicationPatNew.Add(medP);
-			medP=new MedicationPat();
-			medP.DateStart=DateTime.Now.Subtract(TimeSpan.FromDays(7));
-			medP.MedDescript="Pramotic";
-			medP.PatNote="Five a day";
-			medP.RxCui=405268;
-			ListMedicationPatNew.Add(medP);
-			medP=new MedicationPat();
-			medP.DateStart=DateTime.Now.Subtract(TimeSpan.FromDays(3));
-			medP.MedDescript="Medetomidine";
-			medP.PatNote="Three a day";
-			medP.RxCui=52016;
-			ListMedicationPatNew.Add(medP);
-			medP=new MedicationPat();
-			medP.DateStart=DateTime.Now.Subtract(TimeSpan.FromDays(4));
-			medP.MedDescript="Medcodin";
-			medP.PatNote="One a day";
-			medP.RxCui=218274;
-			ListMedicationPatNew.Add(medP);
-			//-------------------------------
+			for(int index=0;index<ListMedicationPatNew.Count;index++) {
+				ListMedicationPatNew[index].PatNum=PatCur.PatNum;
+			}
+			FillExistingGrid();
+			_listMedicationPatReconcile=new List<MedicationPat>(_listMedicationPatCur);
+			#region Delete after testing
+			//ListMedicationPatNew=new List<MedicationPat>();
+			//MedicationPat medP=new MedicationPat();
+			//medP.DateStart=DateTime.Now.Subtract(TimeSpan.FromDays(5));
+			//medP.MedDescript="Valpax";
+			//medP.PatNote="Two a day";
+			//medP.RxCui=542687;
+			//medP.IsNew=true;
+			//medP.PatNum=PatCur.PatNum;
+			//ListMedicationPatNew.Add(medP);
+			//medP=new MedicationPat();
+			//medP.DateStart=DateTime.Now.Subtract(TimeSpan.FromDays(2));
+			//medP.MedDescript="Usept";
+			//medP.PatNote="Three a day";
+			//medP.RxCui=405384;
+			//medP.IsNew=true;
+			//medP.PatNum=PatCur.PatNum;
+			//ListMedicationPatNew.Add(medP);
+			//medP=new MedicationPat();
+			//medP.DateStart=DateTime.Now.Subtract(TimeSpan.FromDays(1));
+			//medP.MedDescript="SmileGuard";
+			//medP.PatNote="Two a day";
+			//medP.RxCui=1038751;
+			//medP.IsNew=true;
+			//medP.PatNum=PatCur.PatNum;
+			//ListMedicationPatNew.Add(medP);
+			//medP=new MedicationPat();
+			//medP.DateStart=DateTime.Now.Subtract(TimeSpan.FromDays(4));
+			//medP.MedDescript="Slozem";
+			//medP.PatNote="One a day";
+			//medP.RxCui=151154;
+			//medP.IsNew=true;
+			//medP.PatNum=PatCur.PatNum;
+			//ListMedicationPatNew.Add(medP);
+			//medP=new MedicationPat();
+			//medP.DateStart=DateTime.Now.Subtract(TimeSpan.FromDays(6));
+			//medP.MedDescript="Prax";
+			//medP.PatNote="Four a day";
+			//medP.RxCui=219336;
+			//medP.IsNew=true;
+			//medP.PatNum=PatCur.PatNum;
+			//ListMedicationPatNew.Add(medP);
+			//medP=new MedicationPat();
+			//medP.DateStart=DateTime.Now.Subtract(TimeSpan.FromDays(5));
+			//medP.MedDescript="PrameGel";
+			//medP.PatNote="Two a day";
+			//medP.RxCui=93822;
+			//medP.IsNew=true;
+			//medP.PatNum=PatCur.PatNum;
+			//ListMedicationPatNew.Add(medP);
+			//medP=new MedicationPat();
+			//medP.DateStart=DateTime.Now.Subtract(TimeSpan.FromDays(7));
+			//medP.MedDescript="Pramotic";
+			//medP.PatNote="Five a day";
+			//medP.RxCui=405268;
+			//medP.IsNew=true;
+			//medP.PatNum=PatCur.PatNum;
+			//ListMedicationPatNew.Add(medP);
+			//medP=new MedicationPat();
+			//medP.DateStart=DateTime.Now.Subtract(TimeSpan.FromDays(3));
+			//medP.MedDescript="Medetomidine";
+			//medP.PatNote="Three a day";
+			//medP.RxCui=52016;
+			//medP.IsNew=true;
+			//medP.PatNum=PatCur.PatNum;
+			//ListMedicationPatNew.Add(medP);
+			//medP=new MedicationPat();
+			//medP.DateStart=DateTime.Now.Subtract(TimeSpan.FromDays(4));
+			//medP.MedDescript="Medcodin";
+			//medP.PatNote="One a day";
+			//medP.RxCui=218274;
+			//medP.IsNew=true;
+			//medP.PatNum=PatCur.PatNum;
+			//ListMedicationPatNew.Add(medP);
+			#endregion
+			//Automation to initially fill reconcile grid with "recommended" rows.
 			bool isValid;
 			for(int i=0;i<ListMedicationPatNew.Count;i++) {
 				isValid=true;
-				for(int j=0;j<ListMedicationReconcile.Count;j++) {
-					if(ListMedicationReconcile[j].RxCui==ListMedicationPatNew[i].RxCui) {
+				for(int j=0;j<_listMedicationPatReconcile.Count;j++) {
+					if(_listMedicationPatReconcile[j].RxCui==ListMedicationPatNew[i].RxCui) {
 						isValid=false;
 						break;
 					}
 				}
 				if(isValid) {
-					ListMedicationReconcile.Add(ListMedicationPatNew[i]);
+					_listMedicationPatReconcile.Add(ListMedicationPatNew[i]);
 				}
 			}
-			FillNewGrid();
-			FillExistingGrid();
+			FillImportGrid();
 			FillReconcileGrid();
 		}
 
-		private void FillNewGrid() {
+		private void FillImportGrid() {
 			gridMedImport.BeginUpdate();
 			gridMedImport.Columns.Clear();
-			ODGridColumn col=new ODGridColumn("DateTime",130);
+			ODGridColumn col=new ODGridColumn("Last Modified",100,HorizontalAlignment.Center);
 			gridMedImport.Columns.Add(col);
-			col=new ODGridColumn("Details",600);
+			col=new ODGridColumn("Date Start",100,HorizontalAlignment.Center);
+			gridMedImport.Columns.Add(col);
+			col=new ODGridColumn("Description",320);
 			gridMedImport.Columns.Add(col);
 			gridMedImport.Rows.Clear();
 			ODGridRow row;
 			for(int i=0;i<ListMedicationPatNew.Count;i++) {
 				row=new ODGridRow();
+				row.Cells.Add(DateTime.Now.ToShortDateString());
 				row.Cells.Add(ListMedicationPatNew[i].DateStart.ToShortDateString());
-				row.Cells.Add(ListMedicationPatNew[i].RxCui.ToString());
+				if(ListMedicationPatNew[i].MedDescript==null) {
+					row.Cells.Add("");
+				}
+				else {
+					row.Cells.Add(ListMedicationPatNew[i].MedDescript);
+				}
 				gridMedImport.Rows.Add(row);
 			}
 			gridMedImport.EndUpdate();
@@ -119,38 +150,79 @@ namespace OpenDental {
 		private void FillExistingGrid() {
 			gridMedExisting.BeginUpdate();
 			gridMedExisting.Columns.Clear();
-			ODGridColumn col=new ODGridColumn("DateTime",130);
+			ODGridColumn col=new ODGridColumn("Last Modified",100,HorizontalAlignment.Center);
 			gridMedExisting.Columns.Add(col);
-			col=new ODGridColumn("Details",600);
+			col=new ODGridColumn("Date Start",100,HorizontalAlignment.Center);
+			gridMedExisting.Columns.Add(col);
+			col=new ODGridColumn("Description",320);
 			gridMedExisting.Columns.Add(col);
 			gridMedExisting.Rows.Clear();
-			ListMedicationPatCur=MedicationPats.GetMedPatsForReconcile(PatCur.PatNum);
+			_listMedicationPatCur=MedicationPats.GetMedPatsForReconcile(PatCur.PatNum);
+			List<long> medicationNums=new List<long>();
+			for(int h=0;h<_listMedicationPatCur.Count;h++) {
+				if(_listMedicationPatCur[h].MedicationNum > 0) {
+					medicationNums.Add(_listMedicationPatCur[h].MedicationNum);
+				}
+			}
+			_listMedicationCur=Medications.GetMultMedications(medicationNums);
 			ODGridRow row;
-			for(int i=0;i<ListMedicationPatCur.Count;i++) {
+			Medication med;
+			for(int i=0;i<_listMedicationPatCur.Count;i++) {
 				row=new ODGridRow();
-				row.Cells.Add(ListMedicationPatCur[i].DateStart.ToShortDateString());
-				row.Cells.Add(ListMedicationPatCur[i].RxCui.ToString());
+				med=Medications.GetMedication(_listMedicationPatCur[i].MedicationNum);//Possibly change if we decided to postpone caching medications
+				row.Cells.Add(_listMedicationPatCur[i].DateTStamp.ToShortDateString());
+				row.Cells.Add(_listMedicationPatCur[i].DateStart.ToShortDateString());
+				if(med.MedName==null) {
+					row.Cells.Add("");
+				}
+				else {
+					row.Cells.Add(med.MedName);
+				}
 				gridMedExisting.Rows.Add(row);
 			}
 			gridMedExisting.EndUpdate();
 		}
 
 		private void FillReconcileGrid() {
-			gridReconcile.BeginUpdate();
-			gridReconcile.Columns.Clear();
-			ODGridColumn col=new ODGridColumn("DateTime",130);
-			gridReconcile.Columns.Add(col);
-			col=new ODGridColumn("Details",600);
-			gridReconcile.Columns.Add(col);
-			gridReconcile.Rows.Clear();
+			gridMedReconcile.BeginUpdate();
+			gridMedReconcile.Columns.Clear();
+			ODGridColumn col=new ODGridColumn("Last Modified",130,HorizontalAlignment.Center);
+			gridMedReconcile.Columns.Add(col);
+			col=new ODGridColumn("Date Start",100,HorizontalAlignment.Center);
+			gridMedReconcile.Columns.Add(col);
+			col=new ODGridColumn("Description",350);
+			gridMedReconcile.Columns.Add(col);
+			col=new ODGridColumn("Notes",250);
+			gridMedReconcile.Columns.Add(col);
+			col=new ODGridColumn("Is Incoming",50,HorizontalAlignment.Center);
+			gridMedReconcile.Columns.Add(col);
+			gridMedReconcile.Rows.Clear();
 			ODGridRow row;
-			for(int i=0;i<ListMedicationReconcile.Count;i++) {
+			for(int i=0;i<_listMedicationPatReconcile.Count;i++) {
 				row=new ODGridRow();
-				row.Cells.Add(ListMedicationReconcile[i].DateTStamp.ToString());
-				row.Cells.Add(ListMedicationReconcile[i].RxCui.ToString());
-				gridReconcile.Rows.Add(row);
+				row.Cells.Add(DateTime.Now.ToShortDateString());
+				row.Cells.Add(_listMedicationPatReconcile[i].DateStart.ToShortDateString());
+				if(_listMedicationPatReconcile[i].IsNew) {
+					if(_listMedicationPatReconcile[i].MedDescript==null) {
+						row.Cells.Add("");
+					}
+					else {
+						row.Cells.Add(_listMedicationPatReconcile[i].MedDescript);
+					}
+				}
+				else {
+					//Use Medication Name instead
+				}
+				if(_listMedicationPatReconcile[i].PatNote==null) {
+					row.Cells.Add("");
+				}
+				else {
+					row.Cells.Add(_listMedicationPatReconcile[i].PatNote);
+				}
+				row.Cells.Add(_listMedicationPatReconcile[i].IsNew?"X":"");
+				gridMedReconcile.Rows.Add(row);
 			}
-			gridReconcile.EndUpdate();
+			gridMedReconcile.EndUpdate();
 		}
 
 		private void butAddNew_Click(object sender,EventArgs e) {
@@ -165,19 +237,19 @@ namespace OpenDental {
 				isValid=true;
 				//Since gridMedImport and ListMedicationPatNew are a 1:1 list we can use the selected index position to get our medP
 				medP=ListMedicationPatNew[gridMedImport.SelectedIndices[i]];
-				for(int j=0;j<gridReconcile.Rows.Count;j++) {
-					if(medP.RxCui==ListMedicationReconcile[j].RxCui) {
+				for(int j=0;j<gridMedReconcile.Rows.Count;j++) {
+					if(medP.RxCui > 0 && medP.RxCui==_listMedicationPatReconcile[j].RxCui) {
 						isValid=false;
 						skipCount++;
 						break;
 					}
 				}
 				if(isValid) {
-					ListMedicationReconcile.Add(medP);
+					_listMedicationPatReconcile.Add(medP);
 				}
 			}
 			if(skipCount>0) {
-				MessageBox.Show(Lan.g(this,""+skipCount+" row(s) were skipped because the row already exists in the reconciled list."));
+				MessageBox.Show(Lan.g(this," Row(s) skipped because medication already present in the reconcile list")+": "+skipCount);
 			}
 			FillReconcileGrid();
 		}
@@ -193,77 +265,101 @@ namespace OpenDental {
 			for(int i=0;i<gridMedExisting.SelectedIndices.Length;i++) {
 				isValid=true;
 				//Since gridMedImport and ListMedicationPatNew are a 1:1 list we can use the selected index position to get our medP
-				medP=ListMedicationPatCur[gridMedExisting.SelectedIndices[i]];
-				for(int j=0;j<gridReconcile.Rows.Count;j++) {
-					if(medP.RxCui!=0 && medP.RxCui==ListMedicationReconcile[j].RxCui) {
+				medP=_listMedicationPatCur[gridMedExisting.SelectedIndices[i]];
+				for(int j=0;j<gridMedReconcile.Rows.Count;j++) {
+					if(medP.RxCui > 0 && medP.RxCui==_listMedicationPatReconcile[j].RxCui) {
 						isValid=false;
 						skipCount++;
 						break;
 					}
-					if(medP.MedicationPatNum==ListMedicationReconcile[j].MedicationPatNum) {
+					if(medP.MedicationNum==_listMedicationPatReconcile[j].MedicationNum) {
 						isValid=false;
 						skipCount++;
 						break;
 					}
 				}
 				if(isValid) {
-					ListMedicationReconcile.Add(medP);
+					_listMedicationPatReconcile.Add(medP);
 				}
 			}
 			if(skipCount>0) {
-					MessageBox.Show(Lan.g(this,""+skipCount+" row(s) were skipped because the row already exists in the reconciled list."));
+				MessageBox.Show(Lan.g(this," Row(s) skipped because medication already present in the reconcile list")+": "+skipCount);
 			}
 			FillReconcileGrid();
 		}
 
 		private void butRemoveRec_Click(object sender,EventArgs e) {
-			if(gridReconcile.SelectedIndices.Length==0) {
+			if(gridMedReconcile.SelectedIndices.Length==0) {
 				MsgBox.Show(this,"A row must be selected to remove");
 				return;
 			}
 			MedicationPat medP;
-			for(int i=gridReconcile.SelectedIndices.Length-1;i>-1;i--) {//Loop backwards so that we can remove from the list as we go
-				medP=ListMedicationReconcile[gridReconcile.SelectedIndices[i]];
-				ListMedicationReconcile.Remove(medP);
+			for(int i=gridMedReconcile.SelectedIndices.Length-1;i>-1;i--) {//Loop backwards so that we can remove from the list as we go
+				medP=_listMedicationPatReconcile[gridMedReconcile.SelectedIndices[i]];
+				_listMedicationPatReconcile.Remove(medP);
 			}
 			FillReconcileGrid();
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			if(ListMedicationReconcile.Count==0) {
-				if(!MsgBox.Show(this,true,"The reconcile list is empty. Clicking ok will cause the existing medications to be removed. Continue?")) {
+			if(_listMedicationPatReconcile.Count==0) {
+				if(!MsgBox.Show(this,true,"The reconcile list is empty which will cause all existing medications to be removed.  Continue?")) {
 					return;
 				}
 			}
-			List<MedicationPat> listMedicationUpdate=ListMedicationReconcile;//Copy the reconciled list
-			bool toUpdate;
-			for(int i=0;i<ListMedicationPatCur.Count;i++) {//Start looping through all current medications
-				toUpdate=true;
-				for(int j=0;j<ListMedicationReconcile.Count;j++) {//Compare each reconcile medication to the current medication
-					if(ListMedicationReconcile[j].RxCui!=0 && ListMedicationReconcile[j].RxCui==ListMedicationPatCur[i].RxCui) {//Has an RxNorm code and they are equal
-						toUpdate=false;//Don't update the current version
-						listMedicationUpdate.Remove(ListMedicationReconcile[j]);//Remove the row from the copied reconcile list
+			MedicationPat medP;
+			bool isActive;
+			//Discontinue any current medications that are not present in the reconcile list.
+			for(int i=0;i<_listMedicationPatCur.Count;i++) {//Start looping through all current medications
+				isActive=false;
+				medP=_listMedicationPatCur[i];
+				for(int j=0;j<_listMedicationPatReconcile.Count;j++) {//Compare each reconcile medication to the current medication
+					if(medP.RxCui > 0 && medP.RxCui==_listMedicationPatReconcile[j].RxCui) {//Has an RxNorm code and they are equal
+						isActive=true;
+						break;
 					}
-					else if(ListMedicationReconcile[j].MedicationPatNum==ListMedicationPatCur[i].MedicationPatNum) {//Has identical MedicationPatNums
-						toUpdate=false;//Don't update the current version
-						listMedicationUpdate.Remove(ListMedicationReconcile[j]);//Remove the row from the copied reconcile list
-					}
-					if(ListMedicationReconcile[j].MedicationNum==0) {//Check if the database has a Medication for the current MedicationPat
-						Medication med=new Medication();
-						med.MedName=ListMedicationReconcile[j].MedDescript;
-						med.RxCui=ListMedicationReconcile[j].RxCui;
-						Medications.Insert(med);//Insert new Medication into the database.
+					else if(_listMedicationPatReconcile[j].MedicationNum==_listMedicationPatCur[i].MedicationNum) {//Has identical MedicationNums
+						isActive=true;
+						break;
 					}
 				}
-				if(toUpdate) {//If toUpdate has not been set to false above
-					ListMedicationPatCur[i].DateStop=DateTime.Now;//Set the current DateStop to today (to set the medication as discontinued)
-					MedicationPats.Update(ListMedicationPatCur[i]);
+				if(!isActive) {//Update current medications.
+					_listMedicationPatCur[i].DateStop=DateTime.Now;//Set the current DateStop to today (to set the medication as discontinued)
+					MedicationPats.Update(_listMedicationPatCur[i]);
 				}
 			}
-			for(int z=0;z<listMedicationUpdate.Count;z++) {//Loop through the copied reconcile list
-				listMedicationUpdate[z].PatNum=PatCur.PatNum;//TODO: Remove after testing
-				MedicationPats.Insert(listMedicationUpdate[z]);//Insert all remaining rows from the list
+			//Always update every current medication for the patient so that DateTStamp reflects the last reconcile date.
+			MedicationPats.ResetTimeStamps(PatCur.PatNum,true);
+			Medication med;
+			int index;
+			for(int j=0;j<_listMedicationPatReconcile.Count;j++) {
+				index=ListMedicationPatNew.IndexOf(_listMedicationPatReconcile[j]);
+				if(index<0) {
+					continue;
+				}
+				if(_listMedicationPatReconcile[j]==ListMedicationPatNew[index]) {
+					med=Medications.GetMedicationFromDbByRxCui(_listMedicationPatReconcile[j].RxCui);
+					if(med==null) {
+						med=new Medication();
+						med.MedName=ListMedicationPatNew[index].MedDescript;
+						med.RxCui=ListMedicationPatNew[index].RxCui;
+						ListMedicationPatNew[index].MedicationNum=Medications.Insert(med);
+						med.GenericNum=med.MedicationNum;
+						Medications.Update(med);
+					}
+					else {
+						ListMedicationPatNew[index].MedicationNum=med.MedicationNum;
+					}
+					ListMedicationPatNew[index].ProvNum=0;//Since imported, set provnum to 0 so it does not affect CPOE.
+					MedicationPats.Insert(ListMedicationPatNew[index]);
+				}
 			}
+			EhrMeasureEvent newMeasureEvent=new EhrMeasureEvent();
+			newMeasureEvent.DateTEvent=DateTime.Now;
+			newMeasureEvent.EventType=EhrMeasureEventType.MedicationReconcile;
+			newMeasureEvent.PatNum=PatCur.PatNum;
+			newMeasureEvent.MoreInfo="";
+			EhrMeasureEvents.Insert(newMeasureEvent);
 			DialogResult=DialogResult.OK;
 		}
 

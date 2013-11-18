@@ -23,7 +23,7 @@ namespace OpenDentBusiness{
 			return Crud.MedicationPatCrud.SelectMany(command);
 		}
 
-		///<summary>This is only used in FormReconcileMedication.  Gets all active medpats except those with a DateStop of todays date.</summary>
+		///<summary>Gets all active medications for the patient.  Exactly like Refresh() except this does not return medications when DateStop has today's date.  Currently only called from FormReconcileMedication.</summary>
 		public static List<MedicationPat> GetMedPatsForReconcile(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<MedicationPat>>(MethodBase.GetCurrentMethod(),patNum);
@@ -171,6 +171,19 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="UPDATE medicationpat SET DateTStamp = CURRENT_TIMESTAMP WHERE PatNum ="+POut.Long(patNum);
+			Db.NonQ(command);
+		}
+
+		///<summary>Changes the value of the DateTStamp column to the current time stamp for all medicationpats of a patient that are the status specified.</summary>
+		public static void ResetTimeStamps(long patNum,bool onlyActive) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum,onlyActive);
+				return;
+			}
+			string command="UPDATE disease SET DateTStamp = CURRENT_TIMESTAMP WHERE PatNum ="+POut.Long(patNum);
+				if(onlyActive) {
+					command+=" AND DateStop > 1880 OR DateStop <= CURDATE())";
+			}
 			Db.NonQ(command);
 		}
 

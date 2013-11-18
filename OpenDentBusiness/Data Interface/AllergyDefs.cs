@@ -16,6 +16,17 @@ namespace OpenDentBusiness{
 			return Crud.AllergyDefCrud.SelectOne(allergyDefNum);
 		}
 
+		///<summary>Gets one AllergyDef matching the specified allergyDefNum from the list passed in. If none found will search the db for a matching allergydef. Returns null if not found in the db.</summary>
+		public static AllergyDef GetOne(long allergyDefNum, List<AllergyDef> listAllergyDef) {
+			//No need to check RemotingRole; no call to db.
+			for(int i=0;i<listAllergyDef.Count;i++) {
+				if(allergyDefNum==listAllergyDef[i].AllergyDefNum) {
+					return listAllergyDef[i];//Gets the allergydef matching the allergy so we can use it to populate the grid
+				}
+			}
+			return GetOne(allergyDefNum);
+		}
+
 		///<summary>Gets one AllergyDef from the db with matching description, returns null if not found.</summary>
 		public static AllergyDef GetByDescription(string allergyDescription) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -182,6 +193,18 @@ namespace OpenDentBusiness{
 				return "";
 			}
 			return Crud.AllergyDefCrud.SelectOne(allergyDefNum).Description;
+		}
+
+		///<summary>Returns the AllergyDef with the corresponding SNOMED allergyTo code. Returns null if codeValue is empty string.</summary>
+		public static AllergyDef GetAllergyDefFromCode(string codeValue) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<AllergyDef>(MethodBase.GetCurrentMethod(),codeValue);
+			}
+			if(codeValue=="") {
+				return null;
+			}
+			string command="SELECT * FROM allergyDef WHERE SnomedAllergyTo="+POut.String(codeValue);
+			return Crud.AllergyDefCrud.SelectOne(command);
 		}
 
 	}

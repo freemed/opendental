@@ -23,77 +23,70 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.labelBatch = new System.Windows.Forms.Label();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormReconcileMedication));
 			this.gridMedExisting = new OpenDental.UI.ODGrid();
 			this.gridMedImport = new OpenDental.UI.ODGrid();
-			this.gridReconcile = new OpenDental.UI.ODGrid();
+			this.gridMedReconcile = new OpenDental.UI.ODGrid();
 			this.butRemoveRec = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butAddNew = new OpenDental.UI.Button();
 			this.butAddExist = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
+			this.labelBatch = new System.Windows.Forms.Label();
 			this.SuspendLayout();
-			// 
-			// labelBatch
-			// 
-			this.labelBatch.Location = new System.Drawing.Point(593, 614);
-			this.labelBatch.Name = "labelBatch";
-			this.labelBatch.Size = new System.Drawing.Size(158, 53);
-			this.labelBatch.TabIndex = 152;
-			this.labelBatch.Text = "Clicking OK will replace all existing medications with the reconciled medications" +
-    " list.";
 			// 
 			// gridMedExisting
 			// 
-			this.gridMedExisting.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.gridMedExisting.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMedExisting.HScrollVisible = false;
 			this.gridMedExisting.Location = new System.Drawing.Point(4, 12);
 			this.gridMedExisting.Name = "gridMedExisting";
 			this.gridMedExisting.ScrollValue = 0;
 			this.gridMedExisting.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridMedExisting.Size = new System.Drawing.Size(430, 245);
+			this.gridMedExisting.Size = new System.Drawing.Size(480, 245);
 			this.gridMedExisting.TabIndex = 65;
-			this.gridMedExisting.Title = "Existing Medications";
+			this.gridMedExisting.Title = "Current Medications";
 			this.gridMedExisting.TranslationName = "GridMedExisting";
 			// 
 			// gridMedImport
 			// 
-			this.gridMedImport.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.gridMedImport.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMedImport.HScrollVisible = false;
-			this.gridMedImport.Location = new System.Drawing.Point(470, 12);
+			this.gridMedImport.Location = new System.Drawing.Point(497, 12);
 			this.gridMedImport.Name = "gridMedImport";
 			this.gridMedImport.ScrollValue = 0;
 			this.gridMedImport.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridMedImport.Size = new System.Drawing.Size(443, 245);
+			this.gridMedImport.Size = new System.Drawing.Size(480, 245);
 			this.gridMedImport.TabIndex = 77;
-			this.gridMedImport.Title = "Incoming Medications";
+			this.gridMedImport.Title = "Transition of Care/Referral Summary";
 			this.gridMedImport.TranslationName = "GridMedImport";
 			// 
-			// gridReconcile
+			// gridMedReconcile
 			// 
-			this.gridReconcile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.gridMedReconcile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.gridReconcile.HScrollVisible = false;
-			this.gridReconcile.Location = new System.Drawing.Point(4, 293);
-			this.gridReconcile.Name = "gridReconcile";
-			this.gridReconcile.ScrollValue = 0;
-			this.gridReconcile.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridReconcile.Size = new System.Drawing.Size(909, 300);
-			this.gridReconcile.TabIndex = 67;
-			this.gridReconcile.Title = "Reconciled Medications";
-			this.gridReconcile.TranslationName = "gridReconcile";
+			this.gridMedReconcile.HScrollVisible = false;
+			this.gridMedReconcile.Location = new System.Drawing.Point(4, 293);
+			this.gridMedReconcile.Name = "gridMedReconcile";
+			this.gridMedReconcile.ScrollValue = 0;
+			this.gridMedReconcile.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridMedReconcile.Size = new System.Drawing.Size(973, 300);
+			this.gridMedReconcile.TabIndex = 67;
+			this.gridMedReconcile.Title = "Reconciled Medications";
+			this.gridMedReconcile.TranslationName = "gridMedReconcile";
 			// 
 			// butRemoveRec
 			// 
 			this.butRemoveRec.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butRemoveRec.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butRemoveRec.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
 			this.butRemoveRec.Autosize = true;
 			this.butRemoveRec.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRemoveRec.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRemoveRec.CornerRadius = 4F;
-			this.butRemoveRec.Location = new System.Drawing.Point(415, 599);
+			this.butRemoveRec.Location = new System.Drawing.Point(437, 599);
 			this.butRemoveRec.Name = "butRemoveRec";
 			this.butRemoveRec.Size = new System.Drawing.Size(99, 24);
 			this.butRemoveRec.TabIndex = 82;
@@ -108,7 +101,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(757, 640);
+			this.butOK.Location = new System.Drawing.Point(821, 640);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75, 24);
 			this.butOK.TabIndex = 81;
@@ -125,7 +118,7 @@ namespace OpenDental{
 			this.butAddNew.CornerRadius = 4F;
 			this.butAddNew.Image = global::OpenDental.Properties.Resources.down;
 			this.butAddNew.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAddNew.Location = new System.Drawing.Point(667, 263);
+			this.butAddNew.Location = new System.Drawing.Point(712, 263);
 			this.butAddNew.Name = "butAddNew";
 			this.butAddNew.Size = new System.Drawing.Size(51, 24);
 			this.butAddNew.TabIndex = 80;
@@ -136,14 +129,14 @@ namespace OpenDental{
 			// butAddExist
 			// 
 			this.butAddExist.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butAddExist.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butAddExist.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
 			this.butAddExist.Autosize = true;
 			this.butAddExist.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAddExist.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAddExist.CornerRadius = 4F;
 			this.butAddExist.Image = global::OpenDental.Properties.Resources.down;
 			this.butAddExist.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAddExist.Location = new System.Drawing.Point(186, 263);
+			this.butAddExist.Location = new System.Drawing.Point(218, 263);
 			this.butAddExist.Name = "butAddExist";
 			this.butAddExist.Size = new System.Drawing.Size(51, 24);
 			this.butAddExist.TabIndex = 79;
@@ -159,17 +152,27 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(838, 640);
+			this.butClose.Location = new System.Drawing.Point(902, 640);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75, 24);
 			this.butClose.TabIndex = 2;
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// labelBatch
+			// 
+			this.labelBatch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.labelBatch.Location = new System.Drawing.Point(76, 640);
+			this.labelBatch.Name = "labelBatch";
+			this.labelBatch.Size = new System.Drawing.Size(739, 24);
+			this.labelBatch.TabIndex = 153;
+			this.labelBatch.Text = "Clicking OK updates the patient\'s medications to match the reconciled list.";
+			this.labelBatch.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormReconcileMedication
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(918, 676);
+			this.ClientSize = new System.Drawing.Size(982, 676);
 			this.Controls.Add(this.labelBatch);
 			this.Controls.Add(this.gridMedExisting);
 			this.Controls.Add(this.gridMedImport);
@@ -177,8 +180,10 @@ namespace OpenDental{
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butAddNew);
 			this.Controls.Add(this.butAddExist);
-			this.Controls.Add(this.gridReconcile);
+			this.Controls.Add(this.gridMedReconcile);
 			this.Controls.Add(this.butClose);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.MinimumSize = new System.Drawing.Size(530, 518);
 			this.Name = "FormReconcileMedication";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Reconcile Medication";
@@ -190,7 +195,7 @@ namespace OpenDental{
 		#endregion
 
 		private OpenDental.UI.Button butClose;
-		private UI.ODGrid gridReconcile;
+		private UI.ODGrid gridMedReconcile;
 		private UI.ODGrid gridMedImport;
 		private UI.ODGrid gridMedExisting;
 		private UI.Button butAddExist;
