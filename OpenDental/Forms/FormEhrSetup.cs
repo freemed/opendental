@@ -402,6 +402,11 @@ namespace OpenDental {
 			return result;
 		}
 
+		private void butEhrTriggers_Click(object sender,EventArgs e) {
+			FormEhrTriggers FormET=new FormEhrTriggers();
+			FormET.ShowDialog();
+		}
+
 
 		private void butClose_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;

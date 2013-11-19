@@ -46,6 +46,7 @@ namespace OpenDental{
 			this.butAllergies = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
 			this.button1 = new OpenDental.UI.Button();
+			this.butEhrTriggers = new OpenDental.UI.Button();
 			this.groupCodeSystems.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -323,10 +324,25 @@ namespace OpenDental{
 			this.button1.Text = "Cds Intervention Test";
 			this.button1.Click += new System.EventHandler(this.button1_Click);
 			// 
+			// butEhrTriggers
+			// 
+			this.butEhrTriggers.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butEhrTriggers.Autosize = true;
+			this.butEhrTriggers.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butEhrTriggers.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butEhrTriggers.CornerRadius = 4F;
+			this.butEhrTriggers.Location = new System.Drawing.Point(400, 136);
+			this.butEhrTriggers.Name = "butEhrTriggers";
+			this.butEhrTriggers.Size = new System.Drawing.Size(128, 24);
+			this.butEhrTriggers.TabIndex = 138;
+			this.butEhrTriggers.Text = "EHR Triggers";
+			this.butEhrTriggers.Click += new System.EventHandler(this.butEhrTriggers_Click);
+			// 
 			// FormEhrSetup
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(561, 343);
+			this.Controls.Add(this.butEhrTriggers);
 			this.Controls.Add(this.button1);
 			this.Controls.Add(this.butTimeSynch);
 			this.Controls.Add(this.butLoincs);
@@ -376,5 +392,6 @@ namespace OpenDental{
 		private System.Windows.Forms.GroupBox groupCodeSystems;
 		private UI.Button butTimeSynch;
 		private UI.Button button1;
+		private UI.Button butEhrTriggers;
 	}
 }
