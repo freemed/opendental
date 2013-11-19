@@ -11,7 +11,7 @@ namespace OpenDental {
 	public partial class FormCDSIntervention:Form {
 		///<summary>This should be set to the result from EhrTriggers.TriggerMatch.  Key is a string that contains the message to be displayed.  
 		///The value is a list of objects to be passed to form infobutton.</summary>
-		public SortedDictionary<string,List<object>> DictEhrTriggerResults;
+		public Dictionary<string,List<object>> DictEhrTriggerResults;
 		///<summary>Used for assembling the Interventions, values set using ShowIfRequired().</summary>
 		private DataTable _table;
 
