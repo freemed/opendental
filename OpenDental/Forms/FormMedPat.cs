@@ -484,6 +484,10 @@ namespace OpenDental{
 				}
 				//if a provider was subsequently hidden, then the combobox may now be -1.
 			}
+			if(MedicationPatCur.IsCpoe) {
+				//We cannot allow the user to change the provider, because our EHR reports use the provider in combination with the IsCpoe flag to report CPOE.
+				comboProv.Enabled=false;
+			}
 			textPatNote.Text=MedicationPatCur.PatNote;
 			if(MedicationPatCur.DateStart.Year>1880) {
 				textDateStart.Text=MedicationPatCur.DateStart.ToShortDateString();
