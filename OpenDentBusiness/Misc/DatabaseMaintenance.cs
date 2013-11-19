@@ -3191,17 +3191,25 @@ namespace OpenDentBusiness {
 				command="SELECT COUNT(*) FROM procedurecode WHERE procedurecode.ProcCat=0";
 				int numFound=PIn.Int(Db.GetCount(command));
 				if(numFound>0 || verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","Procedure codes with no category found: "+numFound+"\r\n");
+					if(DefC.Short[(int)DefCat.ProcCodeCats].Length==0) {
+						log+=Lans.g("FormDatabaseMaintenance","Procedure codes with no categories found but cannot be fixed because there are no visible proc code categories.")+"\r\n";
+						return log;
+					}
+					log+=Lans.g("FormDatabaseMaintenance","Procedure codes with no category found")+": "+numFound+"\r\n";
 				}
 			}
 			else {//fix
+				if(DefC.Short[(int)DefCat.ProcCodeCats].Length==0) {
+					log+=Lans.g("FormDatabaseMaintenance","Procedure codes with no categories cannot be fixed because there are no visible proc code categories.")+"\r\n";
+					return log;
+				}
 				command="UPDATE procedurecode SET procedurecode.ProcCat="+POut.Long(DefC.Short[(int)DefCat.ProcCodeCats][0].DefNum)+" WHERE procedurecode.ProcCat=0";
 				long numberfixed=Db.NonQ(command);
 				if(numberfixed>0) {
 					Signalods.SetInvalid(InvalidType.ProcCodes);
 				}
 				if(numberfixed>0 || verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","Procedure codes with no category fixed: "+numberfixed.ToString()+"\r\n");
+					log+=Lans.g("FormDatabaseMaintenance","Procedure codes with no category fixed")+": "+numberfixed.ToString()+"\r\n";
 				}
 			}
 			return log;
