@@ -4039,7 +4039,7 @@ namespace OpenDental{
 				long rxCui=0;
 				string strDrugName="";
 				string strGenericName="";
-				string strNpi="";
+				string strProvNumOrNpi="";//We used to send ProvNum in LicensedPrescriber.ID to NewCrop, but now we send NPI. We will receive ProvNum for older prescriptions.
 				foreach(XmlNode nodeRxFieldParent in nodeTable.ChildNodes) {
 					XmlNode nodeRxField=nodeRxFieldParent.FirstChild;
 					if(nodeRxField==null) {
@@ -4058,8 +4058,8 @@ namespace OpenDental{
 						case "externalpatientid"://patnum passed back from the compose request that initiated this prescription
 							rx.PatNum=PIn.Long(nodeRxField.Value);
 							break;
-						case "externalphysicianid"://NPI passed back from the compose request that initiated this prescription
-							strNpi=nodeRxField.Value;
+						case "externalphysicianid"://NPI passed back from the compose request that initiated this prescription.  For older prescriptions, this will be ProvNum.
+							strProvNumOrNpi=nodeRxField.Value;
 							break;
 						case "externaluserid"://The person who ordered the prescription. Is a ProvNum when provider, or an EmployeeNum when an employee. If EmployeeNum, then is prepended with "emp" because of how we sent it to NewCrop in the first place.
 							if(nodeRxField.Value.StartsWith("emp")) {
@@ -4114,30 +4114,31 @@ namespace OpenDental{
 					//or if someone lost a database and they are downloading all the prescriptions from scratch again.
 					if(rxOld==null) {//The prescription is being dowloaded for the first time, or is being downloaded again after it was deleted manually by the user.
 						for(int j=0;j<ProviderC.ListShort.Count;j++) {//Try to locate a visible provider matching the NPI on the prescription.
-							if(ProviderC.ListShort[j].NationalProvID==strNpi) {
+							if(strProvNumOrNpi.Length==10 && ProviderC.ListShort[j].NationalProvID==strProvNumOrNpi) {
 								rx.ProvNum=ProviderC.ListShort[j].ProvNum;
 								break;
 							}
 						}
 						if(rx.ProvNum==0) {//No visible provider found matching the NPI on the prescription.
-							for(int j=0;j<ProviderC.ListLong.Count;j++) {//Try finding a hidden provider matching the NPI on the prescription.
-								if(ProviderC.ListLong[j].NationalProvID==strNpi) {
+							for(int j=0;j<ProviderC.ListLong.Count;j++) {//Try finding a hidden provider matching the NPI on the prescription, or a matching provnum.
+								if(strProvNumOrNpi.Length==10 && ProviderC.ListLong[j].NationalProvID==strProvNumOrNpi) {
+									rx.ProvNum=ProviderC.ListLong[j].ProvNum;
+									break;
+								}
+								if(ProviderC.ListLong[j].ProvNum.ToString()==strProvNumOrNpi) {
 									rx.ProvNum=ProviderC.ListLong[j].ProvNum;
 									break;
 								}
 							}
 						}
-						//If rx.ProvNum is still zero, then that means the provider NPI has been modified or somehow deleted (for example, database was lost) for the provider record originally used.
+						//If rx.ProvNum is still zero, then that means the provider NPI/ProvNum has been modified or somehow deleted (for example, database was lost) for the provider record originally used.
 						if(rx.ProvNum==0) {//Catch all
-							//At this point, we just need to pull the data in and prevent a crash. Should rarely happen, but is possible. We must preserve NPI, and therefore must create a provider record.
-							Provider provUnknown=new Provider();
-							provUnknown.NationalProvID=strNpi;//Preserve the NPI that was on the prescription.
-							provUnknown.LName="NewCrop";//So we know where/when/why the provider was created if the customer calls in to ask about this provider.
-							provUnknown.FName="NewCrop";//So we know where/when/why the provider was created if the customer calls in to ask about this provider.
-							provUnknown.Abbr="NPI:"+strNpi;//Probably too long, but ensures that the name is unique and the customer knows who the provider actually is.
-							Providers.Insert(provUnknown);//Create ProvNum.
-							Providers.RefreshCache();
-							rx.ProvNum=provUnknown.ProvNum;
+							if(PatCur.PriProv!=0) {
+								rx.ProvNum=PatCur.PriProv;
+							}
+							else {
+								rx.ProvNum=PrefC.GetLong(PrefName.PracticeDefaultProv);
+							}
 						}
 					}
 					else {//The prescription has already been downloaded in the past.
