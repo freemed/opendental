@@ -18,9 +18,9 @@ namespace OpenDentBusiness {
 		public DateTime DateTStamp;
 		///<summary>Enum:SnomedAllergy SNOMED Allergy Type Code.  Only used to create CCD in FormSummaryOfCare.</summary>
 		public SnomedAllergy SnomedType;
-		///<summary>FK to Medication.MedicationNum.  Optional.  Only used to create CCD in FormSummaryOfCare.</summary>
+		///<summary>FK to Medication.MedicationNum.  Optional, but there must be either a MedicationNum or a SnomedAllergyTo.  Only used to create CCD in FormSummaryOfCare.</summary>
 		public long MedicationNum;
-		///<summary>The Snomed code for the Allergen.  Optional.  Only used to create CCD in FormSummaryOfCare.</summary>
+		///<summary>The Snomed code for the Allergen.  Optional, but there must be either a MedicationNum or a SnomedAllergyTo.  Used to create CCD in FormSummaryOfCare, or set during CCD allergy reconcile.</summary>
 		public string SnomedAllergyTo;
 		
 

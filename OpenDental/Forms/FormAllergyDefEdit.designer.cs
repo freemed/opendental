@@ -116,7 +116,7 @@ namespace OpenDental{
 			this.groupBox1.Size = new System.Drawing.Size(518, 150);
 			this.groupBox1.TabIndex = 21;
 			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Only used in EHR when creating CCDs.  Most offices can ignore this section";
+			this.groupBox1.Text = "Only used in EHR for CCDs.  Most offices can ignore this section";
 			// 
 			// groupBox2
 			// 
