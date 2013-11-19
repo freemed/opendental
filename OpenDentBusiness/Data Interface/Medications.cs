@@ -269,7 +269,7 @@ namespace OpenDentBusiness{
 			return MedicationList;
 		}
 		
-		///<summary>Returns medication list for a specific patient.</summary>
+		///<summary>Deprecated.  Use MedicationPat.Refresh() instead.  Returns medication list for a specific patient.</summary>
 		public static List<Medication> GetMedicationsByPat(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Medication>>(MethodBase.GetCurrentMethod(),patNum);

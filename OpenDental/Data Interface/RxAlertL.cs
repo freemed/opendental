@@ -17,7 +17,7 @@ namespace OpenDental {
 			//}
 			List<Disease> diseases=Diseases.Refresh(patNum);
 			List<Allergy> allergies=Allergies.Refresh(patNum);
-			List<Medication> medications=Medications.GetMedicationsByPat(patNum);
+			List<MedicationPat> medicationPats=MedicationPats.Refresh(patNum,false);//Exclude discontinued, only active meds.
 			List<string> diseaseMatches=new List<string>();
 			List<string> allergiesMatches=new List<string>();
 			List<string> medicationsMatches=new List<string>();
@@ -45,18 +45,28 @@ namespace OpenDental {
 						}
 					}
 				}
-				for(int j=0;j<medications.Count;j++) {
-					if(alertList[i].MedicationNum==medications[j].MedicationNum) {
-						if(showHighSigOnly && !alertList[i].IsHighSignificance) {//if set to only show high significance alerts and this is not a high significance interaction, do not show alert
-							continue;
-						}
-						if(alertList[i].NotificationMsg=="") {
-							Medications.Refresh();
-							medicationsMatches.Add(Medications.GetMedication(alertList[i].MedicationNum).MedName);
-						}
-						else {
-							customMessages.Add(alertList[i].NotificationMsg);
-						}
+				for(int j=0;j<medicationPats.Count;j++) {
+					bool isMedInteraction=false;
+					Medication medForAlert=Medications.GetMedication(alertList[i].MedicationNum);
+					if(medicationPats[j].MedicationNum!=0 && alertList[i].MedicationNum==medicationPats[j].MedicationNum) {//Medication from medication list.
+						isMedInteraction=true;
+					}
+					else if(medicationPats[j].MedicationNum==0 && medForAlert.RxCui!=0 && medicationPats[j].RxCui==medForAlert.RxCui) {//Medication from NewCrop. Unfortunately, neither of these RxCuis are required.
+						isMedInteraction=true;
+					}
+					if(!isMedInteraction) {
+						continue;//No known interaction.
+					}
+					//Medication interaction.
+					if(showHighSigOnly && !alertList[i].IsHighSignificance) {//if set to only show high significance alerts and this is not a high significance interaction, do not show alert
+						continue;//Low significance alert.
+					}
+					if(alertList[i].NotificationMsg=="") {
+						Medications.Refresh();
+						medicationsMatches.Add(Medications.GetMedication(alertList[i].MedicationNum).MedName);
+					}
+					else {
+						customMessages.Add(alertList[i].NotificationMsg);
 					}
 				}
 			}
