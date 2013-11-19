@@ -5634,6 +5634,12 @@ namespace OpenDental{
 
 		private void FormOpenDental_FormClosing(object sender,FormClosingEventArgs e) {
 			try {
+				Programs.ScrubExportedPatientData();//Required for EHR module d.7.
+			}
+			catch {
+				//Can happen if cancel is clicked in Choose Database window.
+			}
+			try {
 				Computers.ClearHeartBeat(Environment.MachineName);
 			}
 			catch { }
