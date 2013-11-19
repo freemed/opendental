@@ -2106,6 +2106,31 @@ namespace OpenDentBusiness {
 					command=@"CREATE INDEX provider_EmailAddressNum ON provider (EmailAddressNum)";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE ehrmeasureevent ADD CodeValue varchar(30) NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE ehrmeasureevent ADD INDEX (CodeValue)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE ehrmeasureevent ADD CodeValue varchar2(30)";
+					Db.NonQ(command);
+					command="CREATE INDEX ehrmeasureevent_CodeValue ON ehrmeasureevent (CodeValue)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE ehrmeasureevent ADD CodeSystem varchar(30) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE ehrmeasureevent ADD CodeSystem varchar2(30)";
+					Db.NonQ(command);
+				}
+				//oracle compatible
+				command="UPDATE ehrmeasureevent SET CodeValue='11366-2' WHERE EventType=8";//Set all TobaccoUseAssessed ehrmeasureevents to code for 'History of tobacco use Narrative'
+				Db.NonQ(command);
+				command="UPDATE ehrmeasureevent SET CodeSystem='LOINC' WHERE EventType=8";//All TobaccoUseAssessed codes are LOINC codes
+				Db.NonQ(command);
 
 
 

@@ -51,6 +51,8 @@ namespace OpenDentBusiness.Crud{
 				ehrMeasureEvent.EventType         = (EhrMeasureEventType)PIn.Int(table.Rows[i]["EventType"].ToString());
 				ehrMeasureEvent.PatNum            = PIn.Long  (table.Rows[i]["PatNum"].ToString());
 				ehrMeasureEvent.MoreInfo          = PIn.String(table.Rows[i]["MoreInfo"].ToString());
+				ehrMeasureEvent.CodeValue         = PIn.String(table.Rows[i]["CodeValue"].ToString());
+				ehrMeasureEvent.CodeSystem        = PIn.String(table.Rows[i]["CodeSystem"].ToString());
 				retVal.Add(ehrMeasureEvent);
 			}
 			return retVal;
@@ -91,7 +93,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="EhrMeasureEventNum,";
 			}
-			command+="DateTEvent,EventType,PatNum,MoreInfo) VALUES(";
+			command+="DateTEvent,EventType,PatNum,MoreInfo,CodeValue,CodeSystem) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(ehrMeasureEvent.EhrMeasureEventNum)+",";
 			}
@@ -99,7 +101,9 @@ namespace OpenDentBusiness.Crud{
 				     POut.DateT (ehrMeasureEvent.DateTEvent)+","
 				+    POut.Int   ((int)ehrMeasureEvent.EventType)+","
 				+    POut.Long  (ehrMeasureEvent.PatNum)+","
-				+"'"+POut.String(ehrMeasureEvent.MoreInfo)+"')";
+				+"'"+POut.String(ehrMeasureEvent.MoreInfo)+"',"
+				+"'"+POut.String(ehrMeasureEvent.CodeValue)+"',"
+				+"'"+POut.String(ehrMeasureEvent.CodeSystem)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -115,7 +119,9 @@ namespace OpenDentBusiness.Crud{
 				+"DateTEvent        =  "+POut.DateT (ehrMeasureEvent.DateTEvent)+", "
 				+"EventType         =  "+POut.Int   ((int)ehrMeasureEvent.EventType)+", "
 				+"PatNum            =  "+POut.Long  (ehrMeasureEvent.PatNum)+", "
-				+"MoreInfo          = '"+POut.String(ehrMeasureEvent.MoreInfo)+"' "
+				+"MoreInfo          = '"+POut.String(ehrMeasureEvent.MoreInfo)+"', "
+				+"CodeValue         = '"+POut.String(ehrMeasureEvent.CodeValue)+"', "
+				+"CodeSystem        = '"+POut.String(ehrMeasureEvent.CodeSystem)+"' "
 				+"WHERE EhrMeasureEventNum = "+POut.Long(ehrMeasureEvent.EhrMeasureEventNum);
 			Db.NonQ(command);
 		}
@@ -138,6 +144,14 @@ namespace OpenDentBusiness.Crud{
 			if(ehrMeasureEvent.MoreInfo != oldEhrMeasureEvent.MoreInfo) {
 				if(command!=""){ command+=",";}
 				command+="MoreInfo = '"+POut.String(ehrMeasureEvent.MoreInfo)+"'";
+			}
+			if(ehrMeasureEvent.CodeValue != oldEhrMeasureEvent.CodeValue) {
+				if(command!=""){ command+=",";}
+				command+="CodeValue = '"+POut.String(ehrMeasureEvent.CodeValue)+"'";
+			}
+			if(ehrMeasureEvent.CodeSystem != oldEhrMeasureEvent.CodeSystem) {
+				if(command!=""){ command+=",";}
+				command+="CodeSystem = '"+POut.String(ehrMeasureEvent.CodeSystem)+"'";
 			}
 			if(command==""){
 				return;

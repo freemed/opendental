@@ -18,6 +18,10 @@ namespace OpenDentBusiness {
 		public long PatNum;
 		///<summary>Only used for some types: EducationProvided, TobaccoCessation, TobaccoUseAssessed.</summary>
 		public string MoreInfo;
+		///<summary>The code for this event.  Example: TobaccoUseAssessed can be one of three LOINC codes: 11366-2 History of tobacco use Narrative, 68535-4 Have you used tobacco in the last 30 days SAMHSA, and 68536-2 Have you used smokeless tobacco product in the last 30 days SAMHSA.</summary>
+		public string CodeValue;
+		///<summary>The code system name for this code.  Examples: LOINC, SNOMEDCT.</summary>
+		public string CodeSystem;
 
 		///<summary></summary>
 		public EhrMeasureEvent Copy() {
