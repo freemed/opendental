@@ -93,29 +93,32 @@ namespace OpenDental {
 			else {
 				ListEmailMessages=EmailMessages.GetInboxForAddress(AddressInbox.EmailUsername);
 			}
-			gridEmailMessages.BeginUpdate();
-			gridEmailMessages.Columns.Clear();
-			int colReceivedDatePixCount=140;
-			int colStatusPixCount=120;
-			int colFromPixCount=200;
-			int colSubjectPixCount=200;
-			int colPatientPixCount=140;
-			int colVariablePixCount=gridEmailMessages.Width-22-colReceivedDatePixCount-colStatusPixCount-colFromPixCount-colSubjectPixCount-colPatientPixCount;
-			gridEmailMessages.Columns.Add(new UI.ODGridColumn(Lan.g(this,"ReceivedDate"),colReceivedDatePixCount,HorizontalAlignment.Center));
-			gridEmailMessages.Columns[gridEmailMessages.Columns.Count-1].SortingStrategy=UI.GridSortingStrategy.DateParse;
-			gridEmailMessages.Columns.Add(new UI.ODGridColumn(Lan.g(this,"Sent/Received"),colStatusPixCount,HorizontalAlignment.Center));
-			gridEmailMessages.Columns[gridEmailMessages.Columns.Count-1].SortingStrategy=UI.GridSortingStrategy.StringCompare;
-			gridEmailMessages.Columns.Add(new UI.ODGridColumn(Lan.g(this,"Subject"),colSubjectPixCount,HorizontalAlignment.Left));
-			gridEmailMessages.Columns[gridEmailMessages.Columns.Count-1].SortingStrategy=UI.GridSortingStrategy.StringCompare;
-			gridEmailMessages.Columns.Add(new UI.ODGridColumn(Lan.g(this,"From"),colFromPixCount,HorizontalAlignment.Left));
-			gridEmailMessages.Columns[gridEmailMessages.Columns.Count-1].SortingStrategy=UI.GridSortingStrategy.StringCompare;
-			gridEmailMessages.Columns.Add(new UI.ODGridColumn(Lan.g(this,"Patient"),colPatientPixCount,HorizontalAlignment.Left));
-			gridEmailMessages.Columns[gridEmailMessages.Columns.Count-1].SortingStrategy=UI.GridSortingStrategy.StringCompare;
-			gridEmailMessages.Columns.Add(new UI.ODGridColumn(Lan.g(this,"Preview"),colVariablePixCount,HorizontalAlignment.Left));
-			gridEmailMessages.Columns[gridEmailMessages.Columns.Count-1].SortingStrategy=UI.GridSortingStrategy.StringCompare;
+			if(gridEmailMessages.Columns.Count==0) {//Columns do not change.  We only need to set them once.
+				gridEmailMessages.BeginUpdate();
+				gridEmailMessages.Columns.Clear();
+				int colReceivedDatePixCount=140;
+				int colStatusPixCount=120;
+				int colFromPixCount=200;
+				int colSubjectPixCount=200;
+				int colPatientPixCount=140;
+				int colVariablePixCount=gridEmailMessages.Width-22-colReceivedDatePixCount-colStatusPixCount-colFromPixCount-colSubjectPixCount-colPatientPixCount;
+				gridEmailMessages.Columns.Add(new UI.ODGridColumn(Lan.g(this,"ReceivedDate"),colReceivedDatePixCount,HorizontalAlignment.Center));
+				gridEmailMessages.Columns[gridEmailMessages.Columns.Count-1].SortingStrategy=UI.GridSortingStrategy.DateParse;
+				gridEmailMessages.Columns.Add(new UI.ODGridColumn(Lan.g(this,"Sent/Received"),colStatusPixCount,HorizontalAlignment.Center));
+				gridEmailMessages.Columns[gridEmailMessages.Columns.Count-1].SortingStrategy=UI.GridSortingStrategy.StringCompare;
+				gridEmailMessages.Columns.Add(new UI.ODGridColumn(Lan.g(this,"Subject"),colSubjectPixCount,HorizontalAlignment.Left));
+				gridEmailMessages.Columns[gridEmailMessages.Columns.Count-1].SortingStrategy=UI.GridSortingStrategy.StringCompare;
+				gridEmailMessages.Columns.Add(new UI.ODGridColumn(Lan.g(this,"From"),colFromPixCount,HorizontalAlignment.Left));
+				gridEmailMessages.Columns[gridEmailMessages.Columns.Count-1].SortingStrategy=UI.GridSortingStrategy.StringCompare;
+				gridEmailMessages.Columns.Add(new UI.ODGridColumn(Lan.g(this,"Patient"),colPatientPixCount,HorizontalAlignment.Left));
+				gridEmailMessages.Columns[gridEmailMessages.Columns.Count-1].SortingStrategy=UI.GridSortingStrategy.StringCompare;
+				gridEmailMessages.Columns.Add(new UI.ODGridColumn(Lan.g(this,"Preview"),colVariablePixCount,HorizontalAlignment.Left));
+				gridEmailMessages.Columns[gridEmailMessages.Columns.Count-1].SortingStrategy=UI.GridSortingStrategy.StringCompare;
+			}
 			gridEmailMessages.Rows.Clear();
 			for(int i=0;i<ListEmailMessages.Count;i++) {
 				UI.ODGridRow row=new UI.ODGridRow();
+				row.Tag=ListEmailMessages[i];//Used to locate the correct email message if the user decides to sort the grid.
 				if(ListEmailMessages[i].SentOrReceived==EmailSentOrReceived.Received || ListEmailMessages[i].SentOrReceived==EmailSentOrReceived.WebMailReceived
 					|| ListEmailMessages[i].SentOrReceived==EmailSentOrReceived.ReceivedEncrypted || ListEmailMessages[i].SentOrReceived==EmailSentOrReceived.ReceivedDirect) {
 					row.Bold=true;//unread
@@ -145,7 +148,7 @@ namespace OpenDental {
 			if(e.Row==-1) {
 				return;
 			}
-			EmailMessage emailMessage=ListEmailMessages[e.Row];
+			EmailMessage emailMessage=(EmailMessage)gridEmailMessages.Rows[e.Row].Tag;
 			FormEmailMessageEdit formEME=new FormEmailMessageEdit(emailMessage);
 			formEME.ShowDialog();
 			emailMessage=EmailMessages.GetOne(emailMessage.EmailMessageNum);//Fetch from DB, in case changed to to decrypt.
@@ -165,7 +168,7 @@ namespace OpenDental {
 				return;
 			}
 			for(int i=0;i<gridEmailMessages.SelectedIndices.Length;i++) {
-				EmailMessage emailMessage=ListEmailMessages[gridEmailMessages.SelectedIndices[i]];
+				EmailMessage emailMessage=(EmailMessage)gridEmailMessages.Rows[gridEmailMessages.SelectedIndices[i]].Tag;
 				emailMessage.PatNum=form.SelectedPatNum;
 				EmailMessages.UpdatePatNum(emailMessage);
 			}
@@ -176,7 +179,7 @@ namespace OpenDental {
 		private void butMarkUnread_Click(object sender,EventArgs e) {
 			Cursor=Cursors.WaitCursor;
 			for(int i=0;i<gridEmailMessages.SelectedIndices.Length;i++) {
-				EmailMessage emailMessage=ListEmailMessages[gridEmailMessages.SelectedIndices[i]];
+				EmailMessage emailMessage=(EmailMessage)gridEmailMessages.Rows[gridEmailMessages.SelectedIndices[i]].Tag;
 				EmailMessages.UpdateSentOrReceivedUnread(emailMessage);
 			}
 			FillGridEmailMessages();
@@ -186,7 +189,7 @@ namespace OpenDental {
 		private void butMarkRead_Click(object sender,EventArgs e) {
 			Cursor=Cursors.WaitCursor;
 			for(int i=0;i<gridEmailMessages.SelectedIndices.Length;i++) {
-				EmailMessage emailMessage=ListEmailMessages[gridEmailMessages.SelectedIndices[i]];
+				EmailMessage emailMessage=(EmailMessage)gridEmailMessages.Rows[gridEmailMessages.SelectedIndices[i]].Tag;
 				EmailMessages.UpdateSentOrReceivedRead(emailMessage);
 			}
 			FillGridEmailMessages();
