@@ -8,10 +8,10 @@ using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
 	public class EhrTriggerCrud {
-		///<summary>Gets one AutoTrigger object from the database using the primary key.  Returns null if not found.</summary>
-		public static EhrTrigger SelectOne(long automationTriggerNum){
-			string command="SELECT * FROM autotrigger "
-				+"WHERE AutomationTriggerNum = "+POut.Long(automationTriggerNum);
+		///<summary>Gets one EhrTrigger object from the database using the primary key.  Returns null if not found.</summary>
+		public static EhrTrigger SelectOne(long ehrTriggerNum){
+			string command="SELECT * FROM ehrtrigger "
+				+"WHERE EhrTriggerNum = "+POut.Long(ehrTriggerNum);
 			List<EhrTrigger> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -19,7 +19,7 @@ namespace OpenDentBusiness.Crud{
 			return list[0];
 		}
 
-		///<summary>Gets one AutoTrigger object from the database using a query.</summary>
+		///<summary>Gets one EhrTrigger object from the database using a query.</summary>
 		public static EhrTrigger SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
@@ -31,7 +31,7 @@ namespace OpenDentBusiness.Crud{
 			return list[0];
 		}
 
-		///<summary>Gets a list of AutoTrigger objects from the database using a query.</summary>
+		///<summary>Gets a list of EhrTrigger objects from the database using a query.</summary>
 		public static List<EhrTrigger> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
@@ -46,35 +46,37 @@ namespace OpenDentBusiness.Crud{
 			EhrTrigger ehrTrigger;
 			for(int i=0;i<table.Rows.Count;i++) {
 				ehrTrigger=new EhrTrigger();
-				ehrTrigger.AutomationTriggerNum     = PIn.Long  (table.Rows[i]["EhrTriggerNum"].ToString());
-				ehrTrigger.Description              = PIn.String(table.Rows[i]["Description"].ToString());
-				ehrTrigger.SnomedList               = PIn.String(table.Rows[i]["SnomedList"].ToString());
-				ehrTrigger.Icd9List                 = PIn.String(table.Rows[i]["Icd9List"].ToString());
-				ehrTrigger.Icd10List                = PIn.String(table.Rows[i]["Icd10List"].ToString());
-				ehrTrigger.CvxList                  = PIn.String(table.Rows[i]["CvxList"].ToString());
-				ehrTrigger.RxCuiList                = PIn.String(table.Rows[i]["RxCuiList"].ToString());
-				ehrTrigger.LoincList                = PIn.String(table.Rows[i]["LoincList"].ToString());
-				ehrTrigger.DemographicAgeLessThan   = PIn.Int   (table.Rows[i]["DemographicAgeLessThan"].ToString());
-				ehrTrigger.DemographicAgeGreaterThan= PIn.Int   (table.Rows[i]["DemographicAgeGreaterThan"].ToString());
-				ehrTrigger.DemographicGender        = PIn.String(table.Rows[i]["DemographicGender"].ToString());
-				ehrTrigger.Cardinality              = (MatchCardinality)PIn.Int(table.Rows[i]["Cardinality"].ToString());
+				ehrTrigger.EhrTriggerNum    = PIn.Long  (table.Rows[i]["EhrTriggerNum"].ToString());
+				ehrTrigger.Description      = PIn.String(table.Rows[i]["Description"].ToString());
+				ehrTrigger.ProblemSnomedList= PIn.String(table.Rows[i]["ProblemSnomedList"].ToString());
+				ehrTrigger.ProblemIcd9List  = PIn.String(table.Rows[i]["ProblemIcd9List"].ToString());
+				ehrTrigger.ProblemIcd10List = PIn.String(table.Rows[i]["ProblemIcd10List"].ToString());
+				ehrTrigger.ProblemDefNumList= PIn.String(table.Rows[i]["ProblemDefNumList"].ToString());
+				ehrTrigger.MedicationNumList= PIn.String(table.Rows[i]["MedicationNumList"].ToString());
+				ehrTrigger.RxCuiList        = PIn.String(table.Rows[i]["RxCuiList"].ToString());
+				ehrTrigger.CvxList          = PIn.String(table.Rows[i]["CvxList"].ToString());
+				ehrTrigger.AllergyDefNumList= PIn.String(table.Rows[i]["AllergyDefNumList"].ToString());
+				ehrTrigger.DemographicsList = PIn.String(table.Rows[i]["DemographicsList"].ToString());
+				ehrTrigger.LabLoincList     = PIn.String(table.Rows[i]["LabLoincList"].ToString());
+				ehrTrigger.VitalLoincList   = PIn.String(table.Rows[i]["VitalLoincList"].ToString());
+				ehrTrigger.Cardinality      = (MatchCardinality)PIn.Int(table.Rows[i]["Cardinality"].ToString());
 				retVal.Add(ehrTrigger);
 			}
 			return retVal;
 		}
 
-		///<summary>Inserts one AutoTrigger into the database.  Returns the new priKey.</summary>
-		public static long Insert(EhrTrigger autoTrigger){
+		///<summary>Inserts one EhrTrigger into the database.  Returns the new priKey.</summary>
+		public static long Insert(EhrTrigger ehrTrigger){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				autoTrigger.AutomationTriggerNum=DbHelper.GetNextOracleKey("autotrigger","AutomationTriggerNum");
+				ehrTrigger.EhrTriggerNum=DbHelper.GetNextOracleKey("ehrtrigger","EhrTriggerNum");
 				int loopcount=0;
 				while(loopcount<100){
 					try {
-						return Insert(autoTrigger,true);
+						return Insert(ehrTrigger,true);
 					}
 					catch(Oracle.DataAccess.Client.OracleException ex){
 						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
-							autoTrigger.AutomationTriggerNum++;
+							ehrTrigger.EhrTriggerNum++;
 							loopcount++;
 						}
 						else{
@@ -85,121 +87,133 @@ namespace OpenDentBusiness.Crud{
 				throw new ApplicationException("Insert failed.  Could not generate primary key.");
 			}
 			else {
-				return Insert(autoTrigger,false);
+				return Insert(ehrTrigger,false);
 			}
 		}
 
-		///<summary>Inserts one AutoTrigger into the database.  Provides option to use the existing priKey.</summary>
-		public static long Insert(EhrTrigger autoTrigger,bool useExistingPK){
+		///<summary>Inserts one EhrTrigger into the database.  Provides option to use the existing priKey.</summary>
+		public static long Insert(EhrTrigger ehrTrigger,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
-				autoTrigger.AutomationTriggerNum=ReplicationServers.GetKey("autotrigger","AutomationTriggerNum");
+				ehrTrigger.EhrTriggerNum=ReplicationServers.GetKey("ehrtrigger","EhrTriggerNum");
 			}
-			string command="INSERT INTO autotrigger (";
+			string command="INSERT INTO ehrtrigger (";
 			if(useExistingPK || PrefC.RandomKeys) {
-				command+="AutomationTriggerNum,";
+				command+="EhrTriggerNum,";
 			}
-			command+="Description,SnomedList,Icd9List,Icd10List,CvxList,RxCuiList,LoincList,DemographicAgeLessThan,DemographicAgeGreaterThan,DemographicGender,Cardinality) VALUES(";
+			command+="Description,ProblemSnomedList,ProblemIcd9List,ProblemIcd10List,ProblemDefNumList,MedicationNumList,RxCuiList,CvxList,AllergyDefNumList,DemographicsList,LabLoincList,VitalLoincList,Cardinality) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
-				command+=POut.Long(autoTrigger.AutomationTriggerNum)+",";
+				command+=POut.Long(ehrTrigger.EhrTriggerNum)+",";
 			}
 			command+=
-				 "'"+POut.String(autoTrigger.Description)+"',"
-				+"'"+POut.String(autoTrigger.SnomedList)+"',"
-				+"'"+POut.String(autoTrigger.Icd9List)+"',"
-				+"'"+POut.String(autoTrigger.Icd10List)+"',"
-				+"'"+POut.String(autoTrigger.CvxList)+"',"
-				+"'"+POut.String(autoTrigger.RxCuiList)+"',"
-				+"'"+POut.String(autoTrigger.LoincList)+"',"
-				+    POut.Int   (autoTrigger.DemographicAgeLessThan)+","
-				+    POut.Int   (autoTrigger.DemographicAgeGreaterThan)+","
-				+"'"+POut.String(autoTrigger.DemographicGender)+"',"
-				+    POut.Int   ((int)autoTrigger.Cardinality)+")";
+				 "'"+POut.String(ehrTrigger.Description)+"',"
+				+"'"+POut.String(ehrTrigger.ProblemSnomedList)+"',"
+				+"'"+POut.String(ehrTrigger.ProblemIcd9List)+"',"
+				+"'"+POut.String(ehrTrigger.ProblemIcd10List)+"',"
+				+"'"+POut.String(ehrTrigger.ProblemDefNumList)+"',"
+				+"'"+POut.String(ehrTrigger.MedicationNumList)+"',"
+				+"'"+POut.String(ehrTrigger.RxCuiList)+"',"
+				+"'"+POut.String(ehrTrigger.CvxList)+"',"
+				+"'"+POut.String(ehrTrigger.AllergyDefNumList)+"',"
+				+"'"+POut.String(ehrTrigger.DemographicsList)+"',"
+				+"'"+POut.String(ehrTrigger.LabLoincList)+"',"
+				+"'"+POut.String(ehrTrigger.VitalLoincList)+"',"
+				+    POut.Int   ((int)ehrTrigger.Cardinality)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {
-				autoTrigger.AutomationTriggerNum=Db.NonQ(command,true);
+				ehrTrigger.EhrTriggerNum=Db.NonQ(command,true);
 			}
-			return autoTrigger.AutomationTriggerNum;
+			return ehrTrigger.EhrTriggerNum;
 		}
 
-		///<summary>Updates one AutoTrigger in the database.</summary>
-		public static void Update(EhrTrigger autoTrigger){
-			string command="UPDATE autotrigger SET "
-				+"Description              = '"+POut.String(autoTrigger.Description)+"', "
-				+"SnomedList               = '"+POut.String(autoTrigger.SnomedList)+"', "
-				+"Icd9List                 = '"+POut.String(autoTrigger.Icd9List)+"', "
-				+"Icd10List                = '"+POut.String(autoTrigger.Icd10List)+"', "
-				+"CvxList                  = '"+POut.String(autoTrigger.CvxList)+"', "
-				+"RxCuiList                = '"+POut.String(autoTrigger.RxCuiList)+"', "
-				+"LoincList                = '"+POut.String(autoTrigger.LoincList)+"', "
-				+"DemographicAgeLessThan   =  "+POut.Int   (autoTrigger.DemographicAgeLessThan)+", "
-				+"DemographicAgeGreaterThan=  "+POut.Int   (autoTrigger.DemographicAgeGreaterThan)+", "
-				+"DemographicGender        = '"+POut.String(autoTrigger.DemographicGender)+"', "
-				+"Cardinality              =  "+POut.Int   ((int)autoTrigger.Cardinality)+" "
-				+"WHERE AutomationTriggerNum = "+POut.Long(autoTrigger.AutomationTriggerNum);
+		///<summary>Updates one EhrTrigger in the database.</summary>
+		public static void Update(EhrTrigger ehrTrigger){
+			string command="UPDATE ehrtrigger SET "
+				+"Description      = '"+POut.String(ehrTrigger.Description)+"', "
+				+"ProblemSnomedList= '"+POut.String(ehrTrigger.ProblemSnomedList)+"', "
+				+"ProblemIcd9List  = '"+POut.String(ehrTrigger.ProblemIcd9List)+"', "
+				+"ProblemIcd10List = '"+POut.String(ehrTrigger.ProblemIcd10List)+"', "
+				+"ProblemDefNumList= '"+POut.String(ehrTrigger.ProblemDefNumList)+"', "
+				+"MedicationNumList= '"+POut.String(ehrTrigger.MedicationNumList)+"', "
+				+"RxCuiList        = '"+POut.String(ehrTrigger.RxCuiList)+"', "
+				+"CvxList          = '"+POut.String(ehrTrigger.CvxList)+"', "
+				+"AllergyDefNumList= '"+POut.String(ehrTrigger.AllergyDefNumList)+"', "
+				+"DemographicsList = '"+POut.String(ehrTrigger.DemographicsList)+"', "
+				+"LabLoincList     = '"+POut.String(ehrTrigger.LabLoincList)+"', "
+				+"VitalLoincList   = '"+POut.String(ehrTrigger.VitalLoincList)+"', "
+				+"Cardinality      =  "+POut.Int   ((int)ehrTrigger.Cardinality)+" "
+				+"WHERE EhrTriggerNum = "+POut.Long(ehrTrigger.EhrTriggerNum);
 			Db.NonQ(command);
 		}
 
-		///<summary>Updates one AutoTrigger in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		public static void Update(EhrTrigger autoTrigger,EhrTrigger oldAutoTrigger){
+		///<summary>Updates one EhrTrigger in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
+		public static void Update(EhrTrigger ehrTrigger,EhrTrigger oldEhrTrigger){
 			string command="";
-			if(autoTrigger.Description != oldAutoTrigger.Description) {
+			if(ehrTrigger.Description != oldEhrTrigger.Description) {
 				if(command!=""){ command+=",";}
-				command+="Description = '"+POut.String(autoTrigger.Description)+"'";
+				command+="Description = '"+POut.String(ehrTrigger.Description)+"'";
 			}
-			if(autoTrigger.SnomedList != oldAutoTrigger.SnomedList) {
+			if(ehrTrigger.ProblemSnomedList != oldEhrTrigger.ProblemSnomedList) {
 				if(command!=""){ command+=",";}
-				command+="SnomedList = '"+POut.String(autoTrigger.SnomedList)+"'";
+				command+="ProblemSnomedList = '"+POut.String(ehrTrigger.ProblemSnomedList)+"'";
 			}
-			if(autoTrigger.Icd9List != oldAutoTrigger.Icd9List) {
+			if(ehrTrigger.ProblemIcd9List != oldEhrTrigger.ProblemIcd9List) {
 				if(command!=""){ command+=",";}
-				command+="Icd9List = '"+POut.String(autoTrigger.Icd9List)+"'";
+				command+="ProblemIcd9List = '"+POut.String(ehrTrigger.ProblemIcd9List)+"'";
 			}
-			if(autoTrigger.Icd10List != oldAutoTrigger.Icd10List) {
+			if(ehrTrigger.ProblemIcd10List != oldEhrTrigger.ProblemIcd10List) {
 				if(command!=""){ command+=",";}
-				command+="Icd10List = '"+POut.String(autoTrigger.Icd10List)+"'";
+				command+="ProblemIcd10List = '"+POut.String(ehrTrigger.ProblemIcd10List)+"'";
 			}
-			if(autoTrigger.CvxList != oldAutoTrigger.CvxList) {
+			if(ehrTrigger.ProblemDefNumList != oldEhrTrigger.ProblemDefNumList) {
 				if(command!=""){ command+=",";}
-				command+="CvxList = '"+POut.String(autoTrigger.CvxList)+"'";
+				command+="ProblemDefNumList = '"+POut.String(ehrTrigger.ProblemDefNumList)+"'";
 			}
-			if(autoTrigger.RxCuiList != oldAutoTrigger.RxCuiList) {
+			if(ehrTrigger.MedicationNumList != oldEhrTrigger.MedicationNumList) {
 				if(command!=""){ command+=",";}
-				command+="RxCuiList = '"+POut.String(autoTrigger.RxCuiList)+"'";
+				command+="MedicationNumList = '"+POut.String(ehrTrigger.MedicationNumList)+"'";
 			}
-			if(autoTrigger.LoincList != oldAutoTrigger.LoincList) {
+			if(ehrTrigger.RxCuiList != oldEhrTrigger.RxCuiList) {
 				if(command!=""){ command+=",";}
-				command+="LoincList = '"+POut.String(autoTrigger.LoincList)+"'";
+				command+="RxCuiList = '"+POut.String(ehrTrigger.RxCuiList)+"'";
 			}
-			if(autoTrigger.DemographicAgeLessThan != oldAutoTrigger.DemographicAgeLessThan) {
+			if(ehrTrigger.CvxList != oldEhrTrigger.CvxList) {
 				if(command!=""){ command+=",";}
-				command+="DemographicAgeLessThan = "+POut.Int(autoTrigger.DemographicAgeLessThan)+"";
+				command+="CvxList = '"+POut.String(ehrTrigger.CvxList)+"'";
 			}
-			if(autoTrigger.DemographicAgeGreaterThan != oldAutoTrigger.DemographicAgeGreaterThan) {
+			if(ehrTrigger.AllergyDefNumList != oldEhrTrigger.AllergyDefNumList) {
 				if(command!=""){ command+=",";}
-				command+="DemographicAgeGreaterThan = "+POut.Int(autoTrigger.DemographicAgeGreaterThan)+"";
+				command+="AllergyDefNumList = '"+POut.String(ehrTrigger.AllergyDefNumList)+"'";
 			}
-			if(autoTrigger.DemographicGender != oldAutoTrigger.DemographicGender) {
+			if(ehrTrigger.DemographicsList != oldEhrTrigger.DemographicsList) {
 				if(command!=""){ command+=",";}
-				command+="DemographicGender = '"+POut.String(autoTrigger.DemographicGender)+"'";
+				command+="DemographicsList = '"+POut.String(ehrTrigger.DemographicsList)+"'";
 			}
-			if(autoTrigger.Cardinality != oldAutoTrigger.Cardinality) {
+			if(ehrTrigger.LabLoincList != oldEhrTrigger.LabLoincList) {
 				if(command!=""){ command+=",";}
-				command+="Cardinality = "+POut.Int   ((int)autoTrigger.Cardinality)+"";
+				command+="LabLoincList = '"+POut.String(ehrTrigger.LabLoincList)+"'";
+			}
+			if(ehrTrigger.VitalLoincList != oldEhrTrigger.VitalLoincList) {
+				if(command!=""){ command+=",";}
+				command+="VitalLoincList = '"+POut.String(ehrTrigger.VitalLoincList)+"'";
+			}
+			if(ehrTrigger.Cardinality != oldEhrTrigger.Cardinality) {
+				if(command!=""){ command+=",";}
+				command+="Cardinality = "+POut.Int   ((int)ehrTrigger.Cardinality)+"";
 			}
 			if(command==""){
 				return;
 			}
-			command="UPDATE autotrigger SET "+command
-				+" WHERE AutomationTriggerNum = "+POut.Long(autoTrigger.AutomationTriggerNum);
+			command="UPDATE ehrtrigger SET "+command
+				+" WHERE EhrTriggerNum = "+POut.Long(ehrTrigger.EhrTriggerNum);
 			Db.NonQ(command);
 		}
 
-		///<summary>Deletes one AutoTrigger from the database.</summary>
-		public static void Delete(long automationTriggerNum){
-			string command="DELETE FROM autotrigger "
-				+"WHERE AutomationTriggerNum = "+POut.Long(automationTriggerNum);
+		///<summary>Deletes one EhrTrigger from the database.</summary>
+		public static void Delete(long ehrTriggerNum){
+			string command="DELETE FROM ehrtrigger "
+				+"WHERE EhrTriggerNum = "+POut.Long(ehrTriggerNum);
 			Db.NonQ(command);
 		}
 

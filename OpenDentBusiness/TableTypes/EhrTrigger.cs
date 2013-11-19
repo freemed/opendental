@@ -8,36 +8,86 @@ namespace OpenDentBusiness {
 	public class EhrTrigger:TableBase {
 		///<summary>Primary key.</summary>
 		[CrudColumn(IsPriKey=true)]
-		public long AutomationTriggerNum;
+		public long EhrTriggerNum;
 		///<summary>Short description to describe the trigger.</summary>
 		public string Description;
 		///<summary></summary>
-		public string SnomedList;
+		public string ProblemSnomedList;
 		///<summary></summary>
-		public string Icd9List;
+		public string ProblemIcd9List;
 		///<summary></summary>
-		public string Icd10List;
+		public string ProblemIcd10List;
+		///<summary></summary>
+		public string ProblemDefNumList;
+		///<summary></summary>
+		public string MedicationNumList;
+		///<summary></summary>
+		public string RxCuiList;
 		///<summary></summary>
 		public string CvxList;
 		///<summary></summary>
-		public string RxCuiList;
-		///<summary>LabResults and VitalSign. </summary>
-		public string LoincList;
-		///<summary>Applies if patient is younger than this many years. </summary>
-		public int DemographicAgeLessThan;
-		///<summary>Applies if patient is older than this many years. </summary>
-		public int DemographicAgeGreaterThan;
-		///<summary>M, F, U.  Comma delimited list. </summary>
-		public string DemographicGender;
+		public string AllergyDefNumList;
+		///<summary>Age, Gender.  Can be multiple age entries but only one gender entry as coma delimited values.  Example: " age,>18  age&lt;=55  gender,male"
+		///</summary>
+		public string DemographicsList;
+		///<summary></summary>
+		public string LabLoincList;
+		///<summary>Height, Weight, Bp s/d, and BMI</summary>
+		public string VitalLoincList;
 		///<summary>Requires One, OneOfEachCategory, TwoOrMore, or All for trigger to match.  </summary>
 		public MatchCardinality Cardinality;
-
-
 
 		///<summary></summary>
 		public EhrTrigger Copy() {
 			return (EhrTrigger)this.MemberwiseClone();
 		}
+
+		public EhrTrigger() {
+			Description="";
+			ProblemSnomedList="";
+			ProblemIcd9List="";
+			ProblemIcd10List="";
+			ProblemDefNumList="";
+			MedicationNumList="";
+			RxCuiList="";
+			CvxList="";
+			AllergyDefNumList="";
+			DemographicsList="";
+			LabLoincList="";
+			VitalLoincList="";
+			Cardinality=MatchCardinality.One;
+		}
+
+		///<summary>Used for displaying what elements of the trigger are set. Example: Medication, Demographics</summary>
+		public string GetTriggerCategories() {
+			string retVal="";
+			if(ProblemSnomedList.Trim()!=""
+				|| ProblemIcd9List.Trim()!=""
+				|| ProblemIcd10List.Trim()!=""
+				|| ProblemDefNumList.Trim()!="") 
+			{
+				retVal+="Problem";
+			}
+			if(MedicationNumList.Trim()!=""
+				|| CvxList.Trim()!=""
+				|| RxCuiList.Trim()!="") {
+				retVal+=(retVal==""?"":", ")+"Medication";
+			}
+			if(AllergyDefNumList.Trim()!=""){
+				retVal+=(retVal==""?"":", ")+"Allergy";
+			}
+			if(DemographicsList.Trim()!="") {
+				retVal+=(retVal==""?"":", ")+"Demographic";
+			}
+			if(LabLoincList.Trim()!="") {
+				retVal+=(retVal==""?"":", ")+"Lab Result";
+			}
+			if(VitalLoincList.Trim()!="") {
+				retVal+=(retVal==""?"":", ")+"Vitals";
+			}
+			return retVal;
+		}
+
 	}
 
 	/// <summary></summary>

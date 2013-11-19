@@ -48,12 +48,23 @@ namespace OpenDentBusiness{
 		#endregion
 		*/
 
+		public static List<EhrTrigger> GetAll() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<EhrTrigger>>(MethodBase.GetCurrentMethod());
+			}
+			string command="SELECT * FROM ehrtrigger";
+			return Crud.EhrTriggerCrud.SelectMany(command);
+		}
+
 		///<summary>This is the first step of automation, this checks to see if the new object matches one of the trigger conditions. </summary>
 		/// <param name="triggerObject">Can be DiseaseDef, Disease, RxPat, Medication, Allergy, AllergyDef, Snomed, Icd9, Icd10, RxNorm, Cvx, Patient, or null. If patient, will check demographics. if null, will check all existing triggers.</param>
 		/// <param name="PatCur">Triggers and intervention are currently always dependant on current patient. </param>
 		/// <returns>Returns a dictionary keyed on triggers and a list of all the objects that the trigger matched on. Should be used to generate CDS intervention message and later be passed to FormInfobutton for knowledge request.</returns>
-		public static SortedDictionary<string,List<object>> TriggerMatch(object triggerObject,Patient PatCur) {
-			SortedDictionary<string,List<object>> retVal=new SortedDictionary<string,List<object>>();
+		public static Dictionary<string,List<object>> TriggerMatch(object triggerObject,Patient PatCur) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Dictionary<string,List<object>>>(MethodBase.GetCurrentMethod(),triggerObject,PatCur);
+			}
+			Dictionary<string,List<object>> retVal=new Dictionary<string,List<object>>();
 			//Define objects to be used in matching triggers.
 			DiseaseDef diseaseDef;
 			Disease disease;
@@ -186,7 +197,7 @@ namespace OpenDentBusiness{
 				//VitalSign.BpSystolic (Loinc)
 				//VitalSign.BpDiastolic (Loinc)
 				//VitalSign.WeightCode (Snomed)
-				//VitalSign.PregDiseaseNum (Loinc)
+				//VitalSign.PregDiseaseNum (Snomed)
 				//Use object matches to check if required conditions are met-------------------------------------------------------------------------------
 				switch(listEhrTriggers[i].Cardinality) {
 					case MatchCardinality.One:
@@ -208,7 +219,7 @@ namespace OpenDentBusiness{
 						break;
 					case MatchCardinality.All:
 						//Match all Icd9Codes-------------------------------------------------------------------------------------------------------------------------------------------------
-						string[] arrayIcd9Codes=listEhrTriggers[i].Icd9List.Split(new string[] {" "},StringSplitOptions.RemoveEmptyEntries);
+						string[] arrayIcd9Codes=listEhrTriggers[i].ProblemIcd9List.Split(new string[] {" "},StringSplitOptions.RemoveEmptyEntries);
 						bool allConditionsMet=true;
 						for(int c=0;c<arrayIcd9Codes.Length;c++) {
 							if(MatchedCodes.Contains(arrayIcd9Codes[i])){
@@ -222,7 +233,7 @@ namespace OpenDentBusiness{
 							continue;//next trigger
 						}
 						//Match all Icd10Codes------------------------------------------------------------------------------------------------------------------------------------------------
-						string[] arrayIcd10Codes=listEhrTriggers[i].Icd10List.Split(new string[] { " " },StringSplitOptions.RemoveEmptyEntries);
+						string[] arrayIcd10Codes=listEhrTriggers[i].ProblemIcd10List.Split(new string[] { " " },StringSplitOptions.RemoveEmptyEntries);
 						for(int c=0;c<arrayIcd10Codes.Length;c++) {
 							if(MatchedCodes.Contains(arrayIcd10Codes[i])) {
 								continue;//found required code
@@ -235,7 +246,7 @@ namespace OpenDentBusiness{
 							continue;//next trigger
 						}
 						//Match all SnomedCodes-----------------------------------------------------------------------------------------------------------------------------------------------
-						string[] arraySnomedCodes=listEhrTriggers[i].SnomedList.Split(new string[] { " " },StringSplitOptions.RemoveEmptyEntries);
+						string[] arraySnomedCodes=listEhrTriggers[i].ProblemSnomedList.Split(new string[] { " " },StringSplitOptions.RemoveEmptyEntries);
 						for(int c=0;c<arraySnomedCodes.Length;c++) {
 							if(MatchedCodes.Contains(arraySnomedCodes[i])) {
 								continue;//found required code
@@ -265,27 +276,45 @@ namespace OpenDentBusiness{
 						//Match all Vitals----------------------------------------------------------------------------------------------------------------------------------------------------
 						//TODO:with values
 						//Match all Demographics---------------------------------------------------------------------------------------------------------------------------------------------
-						if(listEhrTriggers[i].DemographicAgeGreaterThan!=0){
-							if(PatCur.Birthdate.Year>1880 && PatCur.Birthdate.AddYears(listEhrTriggers[i].DemographicAgeGreaterThan)>DateTime.Now){//patient too young
-								continue;//next trigger
-							}
-						}
-						if(listEhrTriggers[i].DemographicAgeLessThan!=0){
-							if(PatCur.Birthdate.Year>1880 && PatCur.Birthdate.AddYears(listEhrTriggers[i].DemographicAgeGreaterThan)<DateTime.Now){//patient too old
-								continue;//next trigger
-							}
-						}
-						if(listEhrTriggers[i].DemographicGender!=""){
-							if(!listEhrTriggers[i].DemographicGender.Contains(PatCur.Gender.ToString())){//Patient Gender not in gender list of trigger
-								continue;//next trigger
-							}
-						}
+						//if(listEhrTriggers[i].DemographicAgeGreaterThan!=0){
+						//	if(PatCur.Birthdate.Year>1880 && PatCur.Birthdate.AddYears(listEhrTriggers[i].DemographicAgeGreaterThan)>DateTime.Now){//patient too young
+						//		continue;//next trigger
+						//	}
+						//}
+						//if(listEhrTriggers[i].DemographicAgeLessThan!=0){
+						//	if(PatCur.Birthdate.Year>1880 && PatCur.Birthdate.AddYears(listEhrTriggers[i].DemographicAgeGreaterThan)<DateTime.Now){//patient too old
+						//		continue;//next trigger
+						//	}
+						//}
+						//if(listEhrTriggers[i].DemographicGender!=""){
+						//	if(!listEhrTriggers[i].DemographicGender.Contains(PatCur.Gender.ToString())){//Patient Gender not in gender list of trigger
+						//		continue;//next trigger
+						//	}
+						//}
 						//TODO: construct trigger message using all the codes in the trigger.
 						break;
 				}//end switch trigger cardinality
 				retVal.Add(triggerMessage,ListObjectMatches);
 			}
 			return retVal;
+		}
+
+		///<summary></summary>
+		public static long Insert(EhrTrigger ehrTrigger) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				ehrTrigger.EhrTriggerNum=Meth.GetLong(MethodBase.GetCurrentMethod(),ehrTrigger);
+				return ehrTrigger.EhrTriggerNum;
+			}
+			return Crud.EhrTriggerCrud.Insert(ehrTrigger);
+		}
+
+		///<summary></summary>
+		public static void Update(EhrTrigger ehrTrigger) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),ehrTrigger);
+				return;
+			}
+			Crud.EhrTriggerCrud.Update(ehrTrigger);
 		}
 
 		/*
