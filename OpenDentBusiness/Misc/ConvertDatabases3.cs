@@ -2053,15 +2053,17 @@ namespace OpenDentBusiness {
 					command=@"CREATE TABLE ehrtrigger (
 						EhrTriggerNum bigint NOT NULL auto_increment PRIMARY KEY,
 						Description varchar(255) NOT NULL,
-						SnomedList varchar(255) NOT NULL,
-						Icd9List varchar(255) NOT NULL,
-						Icd10List varchar(255) NOT NULL,
-						CvxList varchar(255) NOT NULL,
-						RxCuiList varchar(255) NOT NULL,
-						LoincList varchar(255) NOT NULL,
-						DemographicAgeLessThan int NOT NULL,
-						DemographicAgeGreaterThan int NOT NULL,
-						DemographicGender varchar(255) NOT NULL,
+						ProblemSnomedList text NOT NULL,
+						ProblemIcd9List text NOT NULL,
+						ProblemIcd10List text NOT NULL,
+						ProblemDefNumList text NOT NULL,
+						MedicationNumList text NOT NULL,
+						RxCuiList text NOT NULL,
+						CvxList text NOT NULL,
+						AllergyDefNumList text NOT NULL,
+						DemographicsList text NOT NULL,
+						LabLoincList text NOT NULL,
+						VitalLoincList text NOT NULL,
 						Cardinality tinyint NOT NULL
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
@@ -2072,15 +2074,17 @@ namespace OpenDentBusiness {
 					command=@"CREATE TABLE ehrtrigger (
 						EhrTriggerNum number(20) NOT NULL,
 						Description varchar2(255),
-						SnomedList varchar2(255),
-						Icd9List varchar2(255),
-						Icd10List varchar2(255),
-						CvxList varchar2(255),
-						RxCuiList varchar2(255),
-						LoincList varchar2(255),
-						DemographicAgeLessThan number(11) NOT NULL,
-						DemographicAgeGreaterThan number(11) NOT NULL,
-						DemographicGender varchar2(255),
+						ProblemSnomedList varchar2(4000),
+						ProblemIcd9List varchar2(4000),
+						ProblemIcd10List varchar2(4000),
+						ProblemDefNumList varchar2(4000),
+						MedicationNumList varchar2(4000),
+						RxCuiList varchar2(4000),
+						CvxList varchar2(4000),
+						AllergyDefNumList varchar2(4000),
+						DemographicsList varchar2(4000),
+						LabLoincList varchar2(4000),
+						VitalLoincList varchar2(4000),
 						Cardinality number(3) NOT NULL,
 						CONSTRAINT ehrtrigger_EhrTriggerNum PRIMARY KEY (EhrTriggerNum)
 						)";
@@ -2118,6 +2122,7 @@ namespace OpenDentBusiness {
 
 	}
 }
+
 
 
 
