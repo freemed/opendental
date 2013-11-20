@@ -85,6 +85,14 @@ namespace OpenDentBusiness{
 			return Crud.InterventionCrud.SelectMany(command);
 		}
 
+		public static List<Intervention> Refresh(long patNum,InterventionCodeSet codeSet) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Intervention>>(MethodBase.GetCurrentMethod(),codeSet);
+			}
+			string command="SELECT * FROM intervention WHERE PatNum = "+POut.Long(patNum)+" AND CodeSet = "+POut.Int((int)codeSet);
+			return Crud.InterventionCrud.SelectMany(command);
+		}
+
 		///<summary>Gets one Intervention from the db.</summary>
 		public static Intervention GetOne(long interventionNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
