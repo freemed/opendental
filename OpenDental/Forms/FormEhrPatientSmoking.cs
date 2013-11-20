@@ -104,27 +104,30 @@ namespace OpenDental {
 				}
 			}
 			#endregion
+			textDateAssessed.Text=DateTime.Now.ToShortDateString();
 		}
 
 		private void FillGrid() {
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn("DateTime",135);
+			ODGridColumn col=new ODGridColumn("Date",70);
 			gridMain.Columns.Add(col); 
-			col=new ODGridColumn("Type",130);
+			col=new ODGridColumn("Type",170);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Documentation",150);
+			col=new ODGridColumn("Documentation",180);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
+			List<ODGridRow> listRows=new List<ODGridRow>();
 			#region AssessedEvents
 			_ListEvents=EhrMeasureEvents.RefreshByType(PatCur.PatNum,EhrMeasureEventType.TobaccoUseAssessed);
 			for(int i=0;i<_ListEvents.Count;i++) {
 				row=new ODGridRow();
-				row.Cells.Add(_ListEvents[i].DateTEvent.ToString());
+				row.Cells.Add(_ListEvents[i].DateTEvent.ToShortDateString());
 				row.Cells.Add(_ListEvents[i].EventType.ToString());
 				row.Cells.Add(_ListEvents[i].MoreInfo);
-				gridMain.Rows.Add(row);
+				row.Tag=_ListEvents[i];
+				listRows.Add(row);
 			}
 			#endregion
 			#region CessationInterventions
@@ -149,6 +152,8 @@ namespace OpenDental {
 						break;
 				}
 				row.Cells.Add(_ListInterventions[i].CodeValue+" - "+descript);
+				row.Tag=_ListInterventions[i];
+				listRows.Add(row);
 			}
 			#endregion
 			#region CessationMedications
@@ -180,15 +185,30 @@ namespace OpenDental {
 					dateRange+=_ListMedPats[i].DateStop.ToShortDateString();
 				}
 				if(dateRange=="") {
-					dateRange=_ListMedPats[i].DateTStamp.ToString();
+					dateRange=_ListMedPats[i].DateTStamp.ToShortDateString();
 				}
 				row.Cells.Add(dateRange);
 				row.Cells.Add(InterventionCodeSet.TobaccoCessation.ToString()+" Medication");
 				string medDescript=RxNorms.GetDescByRxCui(_ListMedPats[i].RxCui.ToString());
 				row.Cells.Add(_ListMedPats[i].RxCui.ToString()+" - "+medDescript);
+				row.Tag=_ListMedPats[i];
+				listRows.Add(row);
 			}
 			#endregion
+			listRows.Sort(SortDate);
+			for(int i=0;i<listRows.Count;i++) {
+				gridMain.Rows.Add(listRows[i]);
+			}
 			gridMain.EndUpdate();
+		}
+
+		///<summary>Sort function to order grid of ehrmeasureevents, interventions, and medicationpats by date, then alphabetically by type name.</summary>
+		private int SortDate(ODGridRow row1,ODGridRow row2) {
+			int diff=PIn.Date(row1.Cells[0].Text).Date.CompareTo(PIn.Date(row2.Cells[0].Text).Date);
+			if(diff!=0) {
+				return diff;
+			}
+			return row1.Tag.GetType().Name.CompareTo(row2.Tag.GetType().Name);
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
@@ -204,6 +224,9 @@ namespace OpenDental {
 
 		private void comboSmokeStatus_SelectionChangeCommitted(object sender,EventArgs e) {
 			if(comboSmokeStatus.SelectedIndex==0) {//If None, do not create an event
+				return;
+			}
+			if(PIn.Date(textDateAssessed.Text).Date!=DateTime.Today) {//if date set to date other than current date, do not auto insert
 				return;
 			}
 			//Automatically make an entry
@@ -228,16 +251,26 @@ namespace OpenDental {
 				return;
 			}
 			for(int i=0;i<_ListEvents.Count;i++) {
-				if(_ListEvents[i].DateTEvent.Date==DateTime.Today) {
-					MessageBox.Show("A Tobacco Assessment entry already exists with today's date.");
+				if(_ListEvents[i].DateTEvent.Date==PIn.Date(textDateAssessed.Text).Date) {
+					MessageBox.Show("A Tobacco Assessment entry already exists with the selected date.");
 					return;
 				}
 			}
 			EhrMeasureEvent meas = new EhrMeasureEvent();
-			meas.DateTEvent=DateTime.Now;
+			meas.DateTEvent=PIn.Date(textDateAssessed.Text);
 			meas.EventType=EhrMeasureEventType.TobaccoUseAssessed;
 			meas.PatNum=PatCur.PatNum;
-			meas.MoreInfo=comboSmokeStatus.SelectedItem.ToString();
+			string moreInfo=_TobaccoCodeSelected;
+			if(comboSmokeStatus.SelectedIndex==-1) {
+				Snomed selectedSnomed=Snomeds.GetByCode(_TobaccoCodeSelected);
+				if(selectedSnomed!=null) {
+					moreInfo+=" - "+selectedSnomed.Description;
+				}
+			}
+			else {
+				moreInfo+=" - "+comboSmokeStatus.SelectedItem.ToString();
+			}
+			meas.MoreInfo=moreInfo;
 			EhrMeasureEvents.Insert(meas);
 			FillGrid();
 		}
@@ -260,7 +293,6 @@ namespace OpenDental {
 			if(FormInt.DialogResult==DialogResult.OK) {
 				FillGrid();
 			}
-			FillGrid();
 		}
 
 		private void butSnomed_Click(object sender,EventArgs e) {
