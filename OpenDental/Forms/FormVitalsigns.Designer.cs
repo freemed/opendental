@@ -90,7 +90,7 @@
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "FormVitalsigns";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "FormVitalsigns";
+			this.Text = "Vital Signs";
 			this.Load += new System.EventHandler(this.FormVitalsigns_Load);
 			this.ResumeLayout(false);
 
