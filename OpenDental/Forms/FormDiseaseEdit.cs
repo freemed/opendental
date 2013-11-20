@@ -414,23 +414,15 @@ namespace OpenDental{
 				if(listVitalsAttached.Count>0) {
 					//See if the vitalsign exam date is now outside of the active dates of the disease (pregnancy)
 					string dates="";
-					for(int i=listVitalsAttached.Count-1;i>-1;i--) {
+					for(int i=0;i<listVitalsAttached.Count;i++) {
 						if(listVitalsAttached[i].DateTaken<DiseaseCur.DateStart || (DiseaseCur.DateStop.Year>1880 && listVitalsAttached[i].DateTaken>DiseaseCur.DateStop)) {
-							dates="\r\n"+listVitalsAttached[i].DateTaken.ToShortDateString();
-						}
-						else {
-							listVitalsAttached.Remove(listVitalsAttached[i]);
+							dates+="\r\n"+listVitalsAttached[i].DateTaken.ToShortDateString();
 						}
 					}
-					//If vitalsign exams still in the list, ask if they want to remove this problem from the exam pregnancy dx
-					if(listVitalsAttached.Count>0) {
-						if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"This problem is attached to 1 or more vital sign exams as a pregnancy diagnosis with dates:"+dates+"\r\nThe date of the exams is now outside the active dates of this problem.  Do you want to remove this problem from those vital sign exams?")) {
-							return;
-						}
-						for(int j=0;j<listVitalsAttached.Count;j++) {
-							listVitalsAttached[j].PregDiseaseNum=0;
-							Vitalsigns.Update(listVitalsAttached[j]);
-						}
+					//If vitalsign exam is now outside the dates of the problem, tell the user they must fix the dates of the pregnancy dx
+					if(dates.Length>0) {
+						MsgBox.Show(this,"This problem is attached to 1 or more vital sign exams as a pregnancy diagnosis with dates:"+dates+"\r\nNot allowed to change the active dates of the diagnosis to be outside the dates of the exam(s).  You must first remove the diagnosis from the vital sign exam(s).");
+						return;
 					}
 				}
 				Diseases.Update(DiseaseCur);
