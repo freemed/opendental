@@ -205,6 +205,7 @@ namespace OpenDental {
 						break;
 					case EhrMeasureType.TimelyAccess:
 						FormPatientPortal FormPatPort=new FormPatientPortal();
+						FormPatPort.PatCur=PatCur;
 						FormPatPort.ShowDialog();
 						FillGridMu();
 						//ResultOnClosing=EhrFormResult.Online;
