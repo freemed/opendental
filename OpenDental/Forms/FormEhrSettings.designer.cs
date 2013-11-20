@@ -55,9 +55,9 @@ namespace OpenDental{
 			this.label12 = new System.Windows.Forms.Label();
 			this.label13 = new System.Windows.Forms.Label();
 			this.groupGlobalSettings = new System.Windows.Forms.GroupBox();
+			this.checkAlertHighSeverity = new System.Windows.Forms.CheckBox();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.checkAlertHighSeverity = new System.Windows.Forms.CheckBox();
 			this.groupEncounter.SuspendLayout();
 			this.groupPregnancy.SuspendLayout();
 			this.groupGlobalSettings.SuspendLayout();
@@ -425,6 +425,19 @@ namespace OpenDental{
 			this.groupGlobalSettings.TabStop = false;
 			this.groupGlobalSettings.Text = "Global Settings";
 			// 
+			// checkAlertHighSeverity
+			// 
+			this.checkAlertHighSeverity.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkAlertHighSeverity.Location = new System.Drawing.Point(174, 19);
+			this.checkAlertHighSeverity.Name = "checkAlertHighSeverity";
+			this.checkAlertHighSeverity.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+			this.checkAlertHighSeverity.Size = new System.Drawing.Size(270, 20);
+			this.checkAlertHighSeverity.TabIndex = 6;
+			this.checkAlertHighSeverity.Text = "Only show high significance Rx alerts";
+			this.checkAlertHighSeverity.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkAlertHighSeverity.UseVisualStyleBackColor = true;
+			this.checkAlertHighSeverity.Click += new System.EventHandler(this.checkAlertHighSeverity_Click);
+			// 
 			// butOK
 			// 
 			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
@@ -454,19 +467,6 @@ namespace OpenDental{
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// checkAlertHighSeverity
-			// 
-			this.checkAlertHighSeverity.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkAlertHighSeverity.Location = new System.Drawing.Point(174, 19);
-			this.checkAlertHighSeverity.Name = "checkAlertHighSeverity";
-			this.checkAlertHighSeverity.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-			this.checkAlertHighSeverity.Size = new System.Drawing.Size(270, 20);
-			this.checkAlertHighSeverity.TabIndex = 6;
-			this.checkAlertHighSeverity.Text = "Only show high significance Rx alerts";
-			this.checkAlertHighSeverity.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkAlertHighSeverity.UseVisualStyleBackColor = true;
-			this.checkAlertHighSeverity.Click += new System.EventHandler(this.checkAlertHighSeverity_Click);
 			// 
 			// FormEhrSettings
 			// 

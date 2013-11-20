@@ -98,7 +98,7 @@ namespace OpenDental{
 			// 
 			this.textDateTimeEnc.Location = new System.Drawing.Point(120, 20);
 			this.textDateTimeEnc.Name = "textDateTimeEnc";
-			this.textDateTimeEnc.Size = new System.Drawing.Size(158, 20);
+			this.textDateTimeEnc.Size = new System.Drawing.Size(80, 20);
 			this.textDateTimeEnc.TabIndex = 1;
 			// 
 			// textCodeDescript

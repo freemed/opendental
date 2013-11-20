@@ -145,7 +145,7 @@
 			this.gridMain.TranslationName = null;
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
-			// FormQualityMeasures2014
+			// FormEhrQualityMeasures2014
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -162,7 +162,7 @@
 			this.Controls.Add(this.butClose);
 			this.Controls.Add(this.gridMain);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.Name = "FormQualityMeasures2014";
+			this.Name = "FormEhrQualityMeasures2014";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Clinical Quality Measures 2014";
 			this.Load += new System.EventHandler(this.FormQualityMeasures_Load);

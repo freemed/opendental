@@ -341,7 +341,7 @@
 			this.labelExclusExceptNA.Text = "Exclusions/Exceptions NA Label";
 			this.labelExclusExceptNA.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// FormQualityMeasureEdit2014
+			// FormEhrQualityMeasureEdit2014
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -374,7 +374,7 @@
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.butClose);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.Name = "FormQualityMeasureEdit2014";
+			this.Name = "FormEhrQualityMeasureEdit2014";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Edit Quality Measure";
 			this.Load += new System.EventHandler(this.FormQualityEdit2014_Load);

@@ -23,6 +23,7 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormEhrQualityMeasures));
 			this.butClose = new System.Windows.Forms.Button();
 			this.butRefresh = new System.Windows.Forms.Button();
 			this.textDateEnd = new System.Windows.Forms.TextBox();
@@ -144,7 +145,7 @@
 			this.butShow.UseVisualStyleBackColor = true;
 			this.butShow.Click += new System.EventHandler(this.butShow_Click);
 			// 
-			// FormQualityMeasures
+			// FormEhrQualityMeasures
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -160,7 +161,8 @@
 			this.Controls.Add(this.label5);
 			this.Controls.Add(this.butClose);
 			this.Controls.Add(this.gridMain);
-			this.Name = "FormQualityMeasures";
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.Name = "FormEhrQualityMeasures";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Clinical Quality Measures";
 			this.Load += new System.EventHandler(this.FormQualityMeasures_Load);

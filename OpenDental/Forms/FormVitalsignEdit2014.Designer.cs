@@ -64,8 +64,8 @@
 			this.checkNotPerf = new System.Windows.Forms.CheckBox();
 			this.labelPregNotice = new System.Windows.Forms.Label();
 			this.groupInterventions = new System.Windows.Forms.GroupBox();
-			this.butAdd = new System.Windows.Forms.Button();
 			this.gridInterventions = new OpenDental.UI.ODGrid();
+			this.butAdd = new System.Windows.Forms.Button();
 			this.textReasonDescript = new OpenDental.ODtextBox();
 			this.textPregCodeDescript = new OpenDental.ODtextBox();
 			this.groupExclusion.SuspendLayout();
@@ -121,7 +121,7 @@
 			// 
 			this.textDateTaken.Location = new System.Drawing.Point(122, 18);
 			this.textDateTaken.Name = "textDateTaken";
-			this.textDateTaken.Size = new System.Drawing.Size(100, 20);
+			this.textDateTaken.Size = new System.Drawing.Size(80, 20);
 			this.textDateTaken.TabIndex = 0;
 			this.textDateTaken.Leave += new System.EventHandler(this.textDateTaken_Leave);
 			// 
@@ -456,16 +456,6 @@
 			this.groupInterventions.TabStop = false;
 			this.groupInterventions.Text = "Interventions";
 			// 
-			// butAdd
-			// 
-			this.butAdd.Location = new System.Drawing.Point(497, 19);
-			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(75, 23);
-			this.butAdd.TabIndex = 153;
-			this.butAdd.Text = "Add";
-			this.butAdd.UseVisualStyleBackColor = true;
-			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
-			// 
 			// gridInterventions
 			// 
 			this.gridInterventions.HScrollVisible = false;
@@ -477,6 +467,16 @@
 			this.gridInterventions.Title = "Interventions and/or Medications";
 			this.gridInterventions.TranslationName = null;
 			this.gridInterventions.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridInterventions_CellDoubleClick);
+			// 
+			// butAdd
+			// 
+			this.butAdd.Location = new System.Drawing.Point(497, 19);
+			this.butAdd.Name = "butAdd";
+			this.butAdd.Size = new System.Drawing.Size(75, 23);
+			this.butAdd.TabIndex = 153;
+			this.butAdd.Text = "Add";
+			this.butAdd.UseVisualStyleBackColor = true;
+			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
 			// textReasonDescript
 			// 
