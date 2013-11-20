@@ -496,7 +496,7 @@ namespace OpenDental{
 				butAdj.Enabled=false;
 				butCalcWeekOT.Enabled=false;//butCompute.Enabled=false;
 			}
-			Text=Lan.g(this,"TimeCard for")+" "+EmployeeCur.FName+" "+EmployeeCur.LName
+			Text=Lan.g(this,"Time Card for")+" "+EmployeeCur.FName+" "+EmployeeCur.LName
 				+(cannotEdit?" - You cannot modify your timecard":"");
 			TimeDelta=MiscData.GetNowDateTime()-DateTime.Now;
 			if(SelectedPayPeriod==0) {
