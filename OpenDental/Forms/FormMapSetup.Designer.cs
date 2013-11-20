@@ -51,9 +51,9 @@
 			// checkShowGrid
 			// 
 			this.checkShowGrid.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkShowGrid.Location = new System.Drawing.Point(15, 93);
+			this.checkShowGrid.Location = new System.Drawing.Point(9, 93);
 			this.checkShowGrid.Name = "checkShowGrid";
-			this.checkShowGrid.Size = new System.Drawing.Size(225, 16);
+			this.checkShowGrid.Size = new System.Drawing.Size(120, 16);
 			this.checkShowGrid.TabIndex = 3;
 			this.checkShowGrid.Text = "Show Grid";
 			this.checkShowGrid.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -62,16 +62,16 @@
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(11, 22);
+			this.label2.Location = new System.Drawing.Point(5, 22);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(209, 16);
+			this.label2.Size = new System.Drawing.Size(104, 16);
 			this.label2.TabIndex = 15;
 			this.label2.Text = "Floor Width (in feet)";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// numFloorWidthFeet
 			// 
-			this.numFloorWidthFeet.Location = new System.Drawing.Point(226, 20);
+			this.numFloorWidthFeet.Location = new System.Drawing.Point(115, 20);
 			this.numFloorWidthFeet.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -83,7 +83,7 @@
             0,
             0});
 			this.numFloorWidthFeet.Name = "numFloorWidthFeet";
-			this.numFloorWidthFeet.Size = new System.Drawing.Size(86, 20);
+			this.numFloorWidthFeet.Size = new System.Drawing.Size(60, 20);
 			this.numFloorWidthFeet.TabIndex = 14;
 			this.numFloorWidthFeet.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			this.numFloorWidthFeet.Value = new decimal(new int[] {
@@ -95,16 +95,16 @@
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(11, 47);
+			this.label3.Location = new System.Drawing.Point(5, 47);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(209, 16);
+			this.label3.Size = new System.Drawing.Size(104, 16);
 			this.label3.TabIndex = 17;
 			this.label3.Text = "Floor Height (in feet)";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// numFloorHeightFeet
 			// 
-			this.numFloorHeightFeet.Location = new System.Drawing.Point(226, 45);
+			this.numFloorHeightFeet.Location = new System.Drawing.Point(115, 45);
 			this.numFloorHeightFeet.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -116,7 +116,7 @@
             0,
             0});
 			this.numFloorHeightFeet.Name = "numFloorHeightFeet";
-			this.numFloorHeightFeet.Size = new System.Drawing.Size(86, 20);
+			this.numFloorHeightFeet.Size = new System.Drawing.Size(60, 20);
 			this.numFloorHeightFeet.TabIndex = 16;
 			this.numFloorHeightFeet.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			this.numFloorHeightFeet.Value = new decimal(new int[] {
@@ -128,16 +128,16 @@
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(11, 72);
+			this.label4.Location = new System.Drawing.Point(5, 72);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(209, 16);
+			this.label4.Size = new System.Drawing.Size(104, 16);
 			this.label4.TabIndex = 18;
 			this.label4.Text = "Pixels Per Foot";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// numPixelsPerFoot
 			// 
-			this.numPixelsPerFoot.Location = new System.Drawing.Point(226, 70);
+			this.numPixelsPerFoot.Location = new System.Drawing.Point(115, 70);
 			this.numPixelsPerFoot.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -149,7 +149,7 @@
             0,
             0});
 			this.numPixelsPerFoot.Name = "numPixelsPerFoot";
-			this.numPixelsPerFoot.Size = new System.Drawing.Size(86, 20);
+			this.numPixelsPerFoot.Size = new System.Drawing.Size(60, 20);
 			this.numPixelsPerFoot.TabIndex = 19;
 			this.numPixelsPerFoot.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			this.numPixelsPerFoot.Value = new decimal(new int[] {
@@ -164,9 +164,9 @@
 			this.checkShowOutline.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkShowOutline.Checked = true;
 			this.checkShowOutline.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkShowOutline.Location = new System.Drawing.Point(14, 113);
+			this.checkShowOutline.Location = new System.Drawing.Point(8, 113);
 			this.checkShowOutline.Name = "checkShowOutline";
-			this.checkShowOutline.Size = new System.Drawing.Size(225, 16);
+			this.checkShowOutline.Size = new System.Drawing.Size(120, 16);
 			this.checkShowOutline.TabIndex = 21;
 			this.checkShowOutline.Text = "Show Outline";
 			this.checkShowOutline.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -175,6 +175,7 @@
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox1.Controls.Add(this.label2);
 			this.groupBox1.Controls.Add(this.checkShowGrid);
 			this.groupBox1.Controls.Add(this.checkShowOutline);
@@ -183,12 +184,12 @@
 			this.groupBox1.Controls.Add(this.numPixelsPerFoot);
 			this.groupBox1.Controls.Add(this.label3);
 			this.groupBox1.Controls.Add(this.label4);
-			this.groupBox1.Location = new System.Drawing.Point(1230, 34);
+			this.groupBox1.Location = new System.Drawing.Point(1392, 34);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(334, 138);
+			this.groupBox1.Size = new System.Drawing.Size(182, 138);
 			this.groupBox1.TabIndex = 23;
 			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Preview Different Options (will not persist after you close this form)";
+			this.groupBox1.Text = "Preview Different Options";
 			// 
 			// menu
 			// 
@@ -223,12 +224,13 @@
 			// 
 			// gridEmployees
 			// 
+			this.gridEmployees.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridEmployees.Font = new System.Drawing.Font("Calibri", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.gridEmployees.HScrollVisible = false;
-			this.gridEmployees.Location = new System.Drawing.Point(1230, 178);
+			this.gridEmployees.Location = new System.Drawing.Point(1392, 178);
 			this.gridEmployees.Name = "gridEmployees";
 			this.gridEmployees.ScrollValue = 0;
-			this.gridEmployees.Size = new System.Drawing.Size(334, 729);
+			this.gridEmployees.Size = new System.Drawing.Size(182, 729);
 			this.gridEmployees.TabIndex = 25;
 			this.gridEmployees.Title = "Employees";
 			this.gridEmployees.TranslationName = "TableEmployees";
@@ -237,11 +239,15 @@
 			// 
 			this.mapAreaPanel.AllowDragging = true;
 			this.mapAreaPanel.AllowEditing = true;
+			this.mapAreaPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.mapAreaPanel.AutoScroll = true;
-			this.mapAreaPanel.AutoScrollMinSize = new System.Drawing.Size(1207, 969);
+			this.mapAreaPanel.AutoScrollMinSize = new System.Drawing.Size(1326, 935);
+			this.mapAreaPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.mapAreaPanel.FloorColor = System.Drawing.Color.White;
-			this.mapAreaPanel.FloorHeightFeet = 57;
-			this.mapAreaPanel.FloorWidthFeet = 71;
+			this.mapAreaPanel.FloorHeightFeet = 55;
+			this.mapAreaPanel.FloorWidthFeet = 78;
 			this.mapAreaPanel.Font = new System.Drawing.Font("Calibri", 25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.mapAreaPanel.FontCubicle = new System.Drawing.Font("Calibri", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.mapAreaPanel.FontCubicleHeader = new System.Drawing.Font("Calibri", 19F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -252,7 +258,7 @@
 			this.mapAreaPanel.PixelsPerFoot = 17;
 			this.mapAreaPanel.ShowGrid = false;
 			this.mapAreaPanel.ShowOutline = true;
-			this.mapAreaPanel.Size = new System.Drawing.Size(1212, 970);
+			this.mapAreaPanel.Size = new System.Drawing.Size(1374, 973);
 			this.mapAreaPanel.TabIndex = 4;
 			this.mapAreaPanel.MapAreaChanged += new System.EventHandler(this.mapAreaPanel_MapAreaChanged);
 			this.mapAreaPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mapAreaPanel_MouseUp);
@@ -265,7 +271,7 @@
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(1489, 1016);
+			this.butCancel.Location = new System.Drawing.Point(1499, 1023);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 28;
@@ -282,7 +288,7 @@
 			this.butAddMapArea.CornerRadius = 4F;
 			this.butAddMapArea.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAddMapArea.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAddMapArea.Location = new System.Drawing.Point(1490, 913);
+			this.butAddMapArea.Location = new System.Drawing.Point(1499, 913);
 			this.butAddMapArea.Name = "butAddMapArea";
 			this.butAddMapArea.Size = new System.Drawing.Size(75, 24);
 			this.butAddMapArea.TabIndex = 49;
@@ -293,7 +299,7 @@
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.AutoScroll = true;
-			this.ClientSize = new System.Drawing.Size(1577, 1042);
+			this.ClientSize = new System.Drawing.Size(1579, 1049);
 			this.Controls.Add(this.butAddMapArea);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.label1);

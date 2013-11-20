@@ -8,8 +8,8 @@ namespace OpenDental {
 	public partial class MapAreaRoomControl:DraggableControl {
 
 		#region Member not available in designer.
-		
-		public MapArea MapAreaItem=new MapArea();		
+
+		public MapArea MapAreaItem=new MapArea();
 
 		#endregion
 
@@ -17,42 +17,70 @@ namespace OpenDental {
 
 		[Category("Employee Info")]
 		[Description("Primary Key From employee Table")]
-		public long EmployeeNum { get; set; }		
+		public long EmployeeNum { get; set; }
 
 		[Category("Employee Info")]
 		[Description("Employee's Name")]
 		public string EmployeeName { get; set; }
-		
+
 		[Category("Employee Info")]
 		[Description("Employee's Phone Extension #")]
 		public string Extension { get; set; }
-		
+
 		[Category("Employee Info")]
-		[Description("Elapsed Time Since Last Status Change")]		
+		[Description("Elapsed Time Since Last Status Change")]
 		public string Elapsed { get; set; }
-		
+
 		[Category("Employee Info")]
-		[Description("Current Employee Status")]		
+		[Description("Current Employee Status")]
 		public string Status { get; set; }
-		
+
 		[Category("Employee Info")]
-		[Description("Image Indicating Employee's Current Phone Status")]		
+		[Description("Image Indicating Employee's Current Phone Status")]
 		public Image PhoneImage { get; set; }
+
+		[Category("Appearance")]
+		[Description("Overrides the drawing of the control and just makes it look like a label with a custom border")]
+		[EditorBrowsable(EditorBrowsableState.Always)]
+		[Browsable(true)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+		[Bindable(true)]
+		public override string Text {
+			get {
+				return base.Text;
+			}
+			set {
+				base.Text = value;
+				Invalidate();
+			}
+		}
+
+		private int _borderThickness=6;
+		[Category("Appearance")]
+		[Description("Thickness of the border drawn around the control")]
+		public int BorderThickness {
+			get {
+				return _borderThickness;
+			}
+			set {
+				_borderThickness=value;
+				Invalidate();
+			}
+		}
 
 		///<summary>Set when flashing starts so we know what inner color to go back to.</summary>
 		private Color _innerColorRestore=Color.FromArgb(128,Color.Red);
 		private Color DefaultOuterColor=Color.Red;
 		[Category("Appearance")]
 		[Description("Exterior Border Color")]
-		public Color OuterColor
-		{ 
+		public Color OuterColor {
 			get {
-				return DefaultOuterColor; 
-			} 
-			set { 
-				DefaultOuterColor=value; 
-				Invalidate(); 
-			} 
+				return DefaultOuterColor;
+			}
+			set {
+				DefaultOuterColor=value;
+				Invalidate();
+			}
 		}
 
 		///<summary>Set when flashing starts so we know what outer color to go back to.</summary>
@@ -62,12 +90,12 @@ namespace OpenDental {
 		[Description("Interior Fill Color")]
 		public Color InnerColor {
 			get {
-				return DefaultInnerColor; 
-			} 
-			set { 
+				return DefaultInnerColor;
+			}
+			set {
 				DefaultInnerColor=value;
-				Invalidate(); 
-			} 
+				Invalidate();
+			}
 		}
 
 		private bool IsEmpty=false;
@@ -82,7 +110,7 @@ namespace OpenDental {
 				Invalidate();
 			}
 		}
-		
+
 		private bool _allowEdit=false;
 		[Category("Behavior")]
 		[Description("Double-click will open editor")]
@@ -119,7 +147,7 @@ namespace OpenDental {
 		#region Events
 
 		public event EventHandler MapAreaRoomChanged;
-		
+
 		#endregion
 
 		#region Ctor
@@ -130,14 +158,15 @@ namespace OpenDental {
 		}
 
 		///<summary>Takes all required fields as input. Suggest using this version when adding a cubicle to a ClinicMapPanel.</summary>
-		public MapAreaRoomControl(MapArea cubicle,string elapsed,string employeeName,long employeeNum,string extension,string status,Font font,Font fontHeader,Color innerColor,Color outerColor,Color backColor,Point location,Size size,Image phoneImage,bool allowDragging,bool allowEdit) :this() {
+		public MapAreaRoomControl(MapArea cubicle,string elapsed,string employeeName,long employeeNum,string extension,string status,Font font,Font fontHeader,Color innerColor,Color outerColor,Color backColor,Point location,Size size,Image phoneImage,bool allowDragging,bool allowEdit)
+			: this() {
 			cubicle.ItemType=MapItemType.Room;
 			MapAreaItem=cubicle;
 			Elapsed = elapsed;
 			EmployeeName = employeeName;
 			EmployeeNum = employeeNum;
 			Extension = extension;
-			Status = status; 
+			Status = status;
 			Font = font;
 			FontHeader=fontHeader;
 			Location = location;
@@ -189,15 +218,18 @@ namespace OpenDental {
 		private void MapAreaRoomControl_Paint(object sender,PaintEventArgs e) {
 			Brush brushInner=new SolidBrush(Empty?Color.FromArgb(20,Color.Gray):InnerColor);
 			Brush brushText=new SolidBrush(Empty?Color.FromArgb(128,Color.Gray):ForeColor);
-			Pen penOuter=new Pen(Empty?Color.FromArgb(128,Color.Gray):OuterColor,10);			
+			Pen penOuter=new Pen(Empty?Color.FromArgb(128,Color.Gray):OuterColor,BorderThickness);
 			try {
-				Rectangle rcOuter=this.ClientRectangle;
+				RectangleF rcOuter=this.ClientRectangle;
 				//clear control canvas
 				e.Graphics.Clear(this.BackColor);
+				float halfPenThickness=BorderThickness/(float)2;
+				//deflate for border
+				rcOuter.Inflate(-halfPenThickness,-halfPenThickness);
 				//draw border
-				e.Graphics.DrawRectangle(penOuter,rcOuter);
+				e.Graphics.DrawRectangle(penOuter,rcOuter.X,rcOuter.Y,rcOuter.Width,rcOuter.Height);
 				//deflate to drawable region
-				rcOuter.Inflate(-5,-5);
+				rcOuter.Inflate(-halfPenThickness,-halfPenThickness);
 				//fill interior
 				e.Graphics.FillRectangle(brushInner,rcOuter);
 				StringFormat stringFormat=new StringFormat(StringFormatFlags.NoWrap);
@@ -205,6 +237,10 @@ namespace OpenDental {
 				stringFormat.LineAlignment=StringAlignment.Center;
 				if(this.Empty) { //empty room so gray out and return
 					e.Graphics.DrawString("EMPTY",Font,brushText,rcOuter,stringFormat);
+					return;
+				}
+				else if(this.Text!="") { //using as a label so just draw the string
+					FitText(this.Text,Font,brushText,rcOuter,stringFormat,e.Graphics);
 					return;
 				}
 				//4 rows of data
@@ -226,7 +262,7 @@ namespace OpenDental {
 							rectImage.X-=(bitmap.Width-rectImage.Width)/2;
 						}
 						e.Graphics.DrawImageUnscaled(PhoneImage,Rectangle.Round(rectImage));
-					}					
+					}
 				}
 				yPosBottom+=typicalRowHeight*2; //row 2 is 2/9 tall				
 				//row 3 - elapsed time
@@ -250,16 +286,14 @@ namespace OpenDental {
 			while(true) {
 				using(Font newFont=new Font(font.FontFamily,emSize,font.Style)) {
 					Size size=TextRenderer.MeasureText(text,newFont);
-					if(size.Width<rectF.Width //does our new font fit?
-						|| (font.Size-emSize)>4) //only allow maximum of 4 point reduction
-					{
+					if(size.Width<rectF.Width || emSize<2) { //does our new font fit? only allow smallest of 2 point font.
 						graphics.DrawString(text,newFont,brush,rectF,stringFormat);
 						return;
 					}
 				}
 				//text didn't fit so decrement the font size and try again
 				emSize-=.1F;
-			}			
+			}
 		}
 
 		#endregion

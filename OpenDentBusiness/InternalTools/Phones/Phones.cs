@@ -27,7 +27,7 @@ namespace OpenDentBusiness {
 			private static Color COLOR_DUAL_OuterUnavailable=Color.FromArgb(100,100,100);
 			private static Color COLOR_DUAL_InnerTriageAway=Color.White;
 			public static Color COLOR_DUAL_InnerTriageHere=Color.LightCyan;
-			private static Color COLOR_DUAL_OuterTriage=Color.Blue;
+			public static Color COLOR_DUAL_OuterTriage=Color.Blue;
 			private static Color COLOR_DUAL_InnerOnPhone=Color.FromArgb(254,235,233);
 			private static Color COLOR_DUAL_OuterOnPhone=Color.Red;
 			private static Color COLOR_DUAL_InnerLunchBreak=Color.White;
@@ -219,12 +219,14 @@ namespace OpenDentBusiness {
 			if(clockStatusDb=="") {
 				clockStatusDb=clockStatus.ToString();
 			}
-			//User is going to a status of Home, Break, or Lunch.  Always clear the DateTimeStart column no matter what.
-			if(clockStatus==ClockStatusEnum.Home
-				|| clockStatus==ClockStatusEnum.Lunch
-				|| clockStatus==ClockStatusEnum.Break) 
+			if(clockStatus==ClockStatusEnum.Break
+					|| clockStatus==ClockStatusEnum.Lunch) {
+				//The user is going on Lunch or Break.  Start the DateTimeStart counter so we know how long they have been gone.
+				dateTimeStart="DateTimeStart=NOW(), ";
+			}
+			else if(clockStatus==ClockStatusEnum.Home) 
 			{
-				//The user is going home or on break.  Simply clear the DateTimeStart column.
+				//User is going Home.  Always clear the DateTimeStart column no matter what.
 				dateTimeStart="DateTimeStart='0001-01-01', ";
 			}
 			else {//User shows as a color on big phones and is not going to a status of Home, Lunch, or Break.  Example: Available, Training etc.
@@ -238,6 +240,9 @@ namespace OpenDentBusiness {
 					//The user is clocking in from home, lunch, or break.  Start the timer up.
 					if(hasColor) {//Only start up the timer when someone with color clocks in.
 						dateTimeStart="DateTimeStart=NOW(), ";
+					}
+					else { //Someone with no color then reset the timer. They are back from break, that's all we need to know.
+						dateTimeStart="DateTimeStart='0001-01-01', ";
 					}
 				}
 			}

@@ -24,7 +24,8 @@ namespace OpenDental {
 
 		private void FormMapHQ_Load(object sender,EventArgs e) {
 			FillMapAreaPanel();
-			labelTriageOpsStaff.BackColor=Phones.PhoneColorScheme.COLOR_DUAL_InnerTriageHere;
+			labelTriageOpsStaff.InnerColor=Phones.PhoneColorScheme.COLOR_DUAL_InnerTriageHere;
+			labelTriageOpsStaff.OuterColor=Phones.PhoneColorScheme.COLOR_DUAL_OuterTriage;
 		}
 
 		///<summary>Setup the map panel with the cubicles and labels before filling with real-time data. Call this on load or anytime the cubicle layout has changed.</summary>
@@ -80,7 +81,7 @@ namespace OpenDental {
 					}
 					//we got this far so we found a corresponding cubicle for this phone entry
 					room.EmployeeNum=phone.EmployeeNum;
-					room.EmployeeName=phone.EmployeeName;
+					room.EmployeeName=phone.EmployeeName;					
 					if(phone.DateTimeStart.Date==DateTime.Today) {
 						TimeSpan span=DateTime.Now-phone.DateTimeStart+_timeDelta;
 						DateTime timeOfDay=DateTime.Today+span;
@@ -140,19 +141,19 @@ namespace OpenDental {
 				this.labelTriageRedTimeSpan.Text=timeBehind.ToStringmmss();
 			}
 			if(calls>1) { //we are behind
-				labelTriageRedCalls.BackColor=Color.Red;
+				labelTriageRedCalls.InnerColor=Color.Red;
 				labelTriageRedCalls.ForeColor=Color.White;
 			}
 			else { //we are ok
-				labelTriageRedCalls.BackColor=Color.White;
+				labelTriageRedCalls.InnerColor=Color.White;
 				labelTriageRedCalls.ForeColor=Color.Black;
 			}
 			if(timeBehind>TimeSpan.FromMinutes(1)) { //we are behind
-				labelTriageRedTimeSpan.BackColor=Color.Red;
+				labelTriageRedTimeSpan.InnerColor=Color.Red;
 				labelTriageRedTimeSpan.ForeColor=Color.White;
 			}
 			else { //we are ok
-				labelTriageRedTimeSpan.BackColor=Color.White;
+				labelTriageRedTimeSpan.InnerColor=Color.White;
 				labelTriageRedTimeSpan.ForeColor=Color.Black;
 			}
 		}
@@ -166,19 +167,19 @@ namespace OpenDental {
 				this.labelVoicemailTimeSpan.Text=timeBehind.ToStringmmss();
 			}
 			if(calls>5) { //we are behind
-				labelVoicemailCalls.BackColor=Color.Red;
+				labelVoicemailCalls.InnerColor=Color.Red;
 				labelVoicemailCalls.ForeColor=Color.White;
 			}
 			else { //we are ok
-				labelVoicemailCalls.BackColor=Color.White;
+				labelVoicemailCalls.InnerColor=Color.White;
 				labelVoicemailCalls.ForeColor=Color.Black;
 			}
 			if(timeBehind>TimeSpan.FromMinutes(5)) { //we are behind
-				labelVoicemailTimeSpan.BackColor=Color.Red;
+				labelVoicemailTimeSpan.InnerColor=Color.Red;
 				labelVoicemailTimeSpan.ForeColor=Color.White;
 			}
 			else { //we are ok
-				labelVoicemailTimeSpan.BackColor=Color.White;
+				labelVoicemailTimeSpan.InnerColor=Color.White;
 				labelVoicemailTimeSpan.ForeColor=Color.Black;
 			}
 		}
@@ -197,18 +198,21 @@ namespace OpenDental {
 				this.labelTriageCalls.Text="("+callsWithNotes.ToString()+")";
 			}
 			if(callsWithNoNotes>10) { //we are behind
-				labelTriageCalls.BackColor=Color.Red;
+				labelTriageCalls.InnerColor=Color.Red;
 				labelTriageCalls.ForeColor=Color.White;
 			}
 			else { //we are ok
-				labelTriageCalls.BackColor=Color.White;
+				labelTriageCalls.InnerColor=Color.White;
 				labelTriageCalls.ForeColor=Color.Black;
 			}
 			if(timeBehind>TimeSpan.FromMinutes(19)) { //we are behind
 				labelTriageTimeSpan.ForeColor=Color.Red;
+				labelTriageTimeSpan.OuterColor=Color.Red;
 			}
 			else { //we are ok
 				labelTriageTimeSpan.ForeColor=Color.Black;
+				labelTriageTimeSpan.OuterColor=Color.Black;
+				labelTriageTimeSpan.InnerColor=Color.White;
 			}
 		}
 
@@ -222,6 +226,7 @@ namespace OpenDental {
 				this.WindowState=FormWindowState.Normal;
 				this.FormBorderStyle=System.Windows.Forms.FormBorderStyle.None;
 				this.Bounds=System.Windows.Forms.Screen.FromControl(this).Bounds;
+				this.mapAreaPanelHQ.PixelsPerFoot=18;
 			}
 			else { //set back to defaults
 				this.fullScreenToolStripMenuItem.Text="Full Screen";
@@ -229,7 +234,8 @@ namespace OpenDental {
 				this.FormBorderStyle=FormCMS.FormBorderStyle;
 				this.Size=FormCMS.Size;
 				this.CenterToScreen();
-				this.setupToolStripMenuItem.Visible=true;				
+				this.setupToolStripMenuItem.Visible=true;
+				this.mapAreaPanelHQ.PixelsPerFoot=17;
 			}
 		}
 
