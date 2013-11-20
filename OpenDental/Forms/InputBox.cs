@@ -123,6 +123,7 @@ namespace OpenDental{
 			// comboSelection
 			// 
 			this.comboSelection.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboSelection.DropDownWidth = 395;
 			this.comboSelection.Location = new System.Drawing.Point(32, 77);
 			this.comboSelection.MaxDropDownItems = 30;
 			this.comboSelection.Name = "comboSelection";
