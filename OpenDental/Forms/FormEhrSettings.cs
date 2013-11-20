@@ -68,10 +68,6 @@ namespace OpenDental {
 							textEncCodeValue.Text=cEnc.CptCode;
 							textEncCodeDescript.Text=cEnc.Description;
 						}
-						else {//try the ProcedureCode table, some people insert CPT codes manually into that table
-							textEncCodeValue.Text=ProcedureCodes.GetProcCode(defaultEncCode).ProcCode;//Will return a new ProcCode object, not null, if not found
-							textEncCodeDescript.Text=ProcedureCodes.GetProcCode(defaultEncCode).Descript;
-						}
 						break;
 					case "SNOMEDCT":
 						Snomed sEnc=Snomeds.GetByCode(defaultEncCode);
