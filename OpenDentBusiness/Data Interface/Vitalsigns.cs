@@ -24,6 +24,15 @@ namespace OpenDentBusiness{
 			return Crud.VitalsignCrud.SelectOne(vitalsignNum);
 		}
 
+		///<summary>Get vitalsign that this EhrNotPerformed object is linked to. Returns null if not found.</summary>
+		public static Vitalsign GetFromEhrNotPerformedNum(long ehrNotPerfNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Vitalsign>(MethodBase.GetCurrentMethod(),ehrNotPerfNum);
+			}
+			string command="SELECT * FROM vitalsign WHERE EhrNotPerformedNum="+POut.Long(ehrNotPerfNum);
+			return Crud.VitalsignCrud.SelectOne(command);
+		}
+
 		///<summary>Gets one Vitalsign with the given DiseaseNum as the PregDiseaseNum.</summary>
 		public static List<Vitalsign> GetListFromPregDiseaseNum(long pregDiseaseNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
