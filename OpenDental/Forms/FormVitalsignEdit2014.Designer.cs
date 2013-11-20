@@ -57,17 +57,17 @@
 			this.label6 = new System.Windows.Forms.Label();
 			this.groupExclusion = new System.Windows.Forms.GroupBox();
 			this.butChangeDefault = new System.Windows.Forms.Button();
-			this.textReasonDescript = new OpenDental.ODtextBox();
 			this.label4 = new System.Windows.Forms.Label();
 			this.labelNotPerf = new System.Windows.Forms.Label();
 			this.textReasonCode = new System.Windows.Forms.TextBox();
-			this.textPregCodeDescript = new OpenDental.ODtextBox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.checkNotPerf = new System.Windows.Forms.CheckBox();
 			this.labelPregNotice = new System.Windows.Forms.Label();
 			this.groupInterventions = new System.Windows.Forms.GroupBox();
-			this.gridInterventions = new OpenDental.UI.ODGrid();
 			this.butAdd = new System.Windows.Forms.Button();
+			this.gridInterventions = new OpenDental.UI.ODGrid();
+			this.textReasonDescript = new OpenDental.ODtextBox();
+			this.textPregCodeDescript = new OpenDental.ODtextBox();
 			this.groupExclusion.SuspendLayout();
 			this.groupInterventions.SuspendLayout();
 			this.SuspendLayout();
@@ -386,20 +386,6 @@
 			this.butChangeDefault.UseVisualStyleBackColor = true;
 			this.butChangeDefault.Click += new System.EventHandler(this.butChangeDefault_Click);
 			// 
-			// textReasonDescript
-			// 
-			this.textReasonDescript.AcceptsTab = true;
-			this.textReasonDescript.BackColor = System.Drawing.SystemColors.ControlLightLight;
-			this.textReasonDescript.DetectUrls = false;
-			this.textReasonDescript.Location = new System.Drawing.Point(377, 133);
-			this.textReasonDescript.Name = "textReasonDescript";
-			this.textReasonDescript.QuickPasteType = OpenDentBusiness.QuickPasteType.None;
-			this.textReasonDescript.ReadOnly = true;
-			this.textReasonDescript.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-			this.textReasonDescript.Size = new System.Drawing.Size(195, 40);
-			this.textReasonDescript.TabIndex = 141;
-			this.textReasonDescript.Text = "";
-			// 
 			// label4
 			// 
 			this.label4.Location = new System.Drawing.Point(273, 134);
@@ -426,20 +412,6 @@
 			this.textReasonCode.ReadOnly = true;
 			this.textReasonCode.Size = new System.Drawing.Size(100, 20);
 			this.textReasonCode.TabIndex = 139;
-			// 
-			// textPregCodeDescript
-			// 
-			this.textPregCodeDescript.AcceptsTab = true;
-			this.textPregCodeDescript.BackColor = System.Drawing.SystemColors.ControlLightLight;
-			this.textPregCodeDescript.DetectUrls = false;
-			this.textPregCodeDescript.Location = new System.Drawing.Point(377, 40);
-			this.textPregCodeDescript.Name = "textPregCodeDescript";
-			this.textPregCodeDescript.QuickPasteType = OpenDentBusiness.QuickPasteType.None;
-			this.textPregCodeDescript.ReadOnly = true;
-			this.textPregCodeDescript.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-			this.textPregCodeDescript.Size = new System.Drawing.Size(195, 40);
-			this.textPregCodeDescript.TabIndex = 132;
-			this.textPregCodeDescript.Text = "";
 			// 
 			// label3
 			// 
@@ -484,6 +456,16 @@
 			this.groupInterventions.TabStop = false;
 			this.groupInterventions.Text = "Interventions";
 			// 
+			// butAdd
+			// 
+			this.butAdd.Location = new System.Drawing.Point(497, 19);
+			this.butAdd.Name = "butAdd";
+			this.butAdd.Size = new System.Drawing.Size(75, 23);
+			this.butAdd.TabIndex = 153;
+			this.butAdd.Text = "Add";
+			this.butAdd.UseVisualStyleBackColor = true;
+			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
+			// 
 			// gridInterventions
 			// 
 			this.gridInterventions.HScrollVisible = false;
@@ -494,16 +476,35 @@
 			this.gridInterventions.TabIndex = 161;
 			this.gridInterventions.Title = "Interventions and/or Medications";
 			this.gridInterventions.TranslationName = null;
+			this.gridInterventions.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridInterventions_CellDoubleClick);
 			// 
-			// butAdd
+			// textReasonDescript
 			// 
-			this.butAdd.Location = new System.Drawing.Point(497, 19);
-			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(75, 23);
-			this.butAdd.TabIndex = 153;
-			this.butAdd.Text = "Add";
-			this.butAdd.UseVisualStyleBackColor = true;
-			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
+			this.textReasonDescript.AcceptsTab = true;
+			this.textReasonDescript.BackColor = System.Drawing.SystemColors.ControlLightLight;
+			this.textReasonDescript.DetectUrls = false;
+			this.textReasonDescript.Location = new System.Drawing.Point(377, 133);
+			this.textReasonDescript.Name = "textReasonDescript";
+			this.textReasonDescript.QuickPasteType = OpenDentBusiness.QuickPasteType.None;
+			this.textReasonDescript.ReadOnly = true;
+			this.textReasonDescript.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+			this.textReasonDescript.Size = new System.Drawing.Size(195, 40);
+			this.textReasonDescript.TabIndex = 141;
+			this.textReasonDescript.Text = "";
+			// 
+			// textPregCodeDescript
+			// 
+			this.textPregCodeDescript.AcceptsTab = true;
+			this.textPregCodeDescript.BackColor = System.Drawing.SystemColors.ControlLightLight;
+			this.textPregCodeDescript.DetectUrls = false;
+			this.textPregCodeDescript.Location = new System.Drawing.Point(377, 40);
+			this.textPregCodeDescript.Name = "textPregCodeDescript";
+			this.textPregCodeDescript.QuickPasteType = OpenDentBusiness.QuickPasteType.None;
+			this.textPregCodeDescript.ReadOnly = true;
+			this.textPregCodeDescript.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+			this.textPregCodeDescript.Size = new System.Drawing.Size(195, 40);
+			this.textPregCodeDescript.TabIndex = 132;
+			this.textPregCodeDescript.Text = "";
 			// 
 			// FormVitalsignEdit2014
 			// 

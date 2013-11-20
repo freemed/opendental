@@ -52,7 +52,7 @@ namespace OpenDentBusiness.Crud{
 				intervention.CodeValue      = PIn.String(table.Rows[i]["CodeValue"].ToString());
 				intervention.CodeSystem     = PIn.String(table.Rows[i]["CodeSystem"].ToString());
 				intervention.Note           = PIn.String(table.Rows[i]["Note"].ToString());
-				intervention.DateTimeEntry  = PIn.Date  (table.Rows[i]["DateTimeEntry"].ToString());
+				intervention.DateEntry      = PIn.Date  (table.Rows[i]["DateEntry"].ToString());
 				intervention.CodeSet        = (InterventionCodeSet)PIn.Int(table.Rows[i]["CodeSet"].ToString());
 				retVal.Add(intervention);
 			}
@@ -94,7 +94,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="InterventionNum,";
 			}
-			command+="PatNum,ProvNum,CodeValue,CodeSystem,Note,DateTimeEntry,CodeSet) VALUES(";
+			command+="PatNum,ProvNum,CodeValue,CodeSystem,Note,DateEntry,CodeSet) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(intervention.InterventionNum)+",";
 			}
@@ -104,7 +104,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(intervention.CodeValue)+"',"
 				+"'"+POut.String(intervention.CodeSystem)+"',"
 				+"'"+POut.String(intervention.Note)+"',"
-				+    POut.Date  (intervention.DateTimeEntry)+","
+				+    POut.Date  (intervention.DateEntry)+","
 				+    POut.Int   ((int)intervention.CodeSet)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -123,7 +123,7 @@ namespace OpenDentBusiness.Crud{
 				+"CodeValue      = '"+POut.String(intervention.CodeValue)+"', "
 				+"CodeSystem     = '"+POut.String(intervention.CodeSystem)+"', "
 				+"Note           = '"+POut.String(intervention.Note)+"', "
-				+"DateTimeEntry  =  "+POut.Date  (intervention.DateTimeEntry)+", "
+				+"DateEntry      =  "+POut.Date  (intervention.DateEntry)+", "
 				+"CodeSet        =  "+POut.Int   ((int)intervention.CodeSet)+" "
 				+"WHERE InterventionNum = "+POut.Long(intervention.InterventionNum);
 			Db.NonQ(command);
@@ -152,9 +152,9 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="Note = '"+POut.String(intervention.Note)+"'";
 			}
-			if(intervention.DateTimeEntry != oldIntervention.DateTimeEntry) {
+			if(intervention.DateEntry != oldIntervention.DateEntry) {
 				if(command!=""){ command+=",";}
-				command+="DateTimeEntry = "+POut.Date(intervention.DateTimeEntry)+"";
+				command+="DateEntry = "+POut.Date(intervention.DateEntry)+"";
 			}
 			if(intervention.CodeSet != oldIntervention.CodeSet) {
 				if(command!=""){ command+=",";}

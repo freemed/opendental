@@ -13,6 +13,7 @@ namespace OpenDental {
 		public Intervention InterventionCur;
 		///<summary>If launching from another form, like FormVitalsignEdit2014, we will give the user a list of codes from which to choose that are in the value sets above/below normal follow-up and referrals where weight assessment may occur.  This bool will indicate that we have given them a recommended set of codes to choose from and if they select a code from a different set of codes we need to warn them about the affect on CQM's.</summary>
 		public bool IsAllTypes;
+		public bool IsSelectionMode;
 		private List<EhrCode> listCodes;
 		private string Description;
 		private Dictionary<string,string> dictValueCodeSets;
@@ -24,44 +25,59 @@ namespace OpenDental {
 
 		///<summary>If launched from a EHR CQM form we will set the IntervCodeSetIndex based on the situation.  For example, if launched from FormVitalsignEdit2014 due to overweight, we will set IntervCodeSetIndex=InterventionCodeSet.AboveNormalWeight and set IsRecommend=true.  If the user changes the code list to one of the other sub-sets, with IsRecommend=true, we will warn the user that the code will no longer apply to the measure.  If they add an intervention by opening FormInterventions and pressing Add, set IsRecommend=false and IntervCodeSetIndex will default to 0.  We will not warn the user for changing the code set and allow them to enter any of the available intervention codes.</summary>
 		private void FormInterventionEdit_Load(object sender,EventArgs e) {
+			if(!IsSelectionMode) {
+				butOK.Enabled=false;
+			}
 			dictValueCodeSets=new Dictionary<string,string>();
 			comboCodeSet.Items.Add("All");
 			if(IsAllTypes || InterventionCur.CodeSet==InterventionCodeSet.AboveNormalWeight) {
 				comboCodeSet.Items.Add(InterventionCodeSet.AboveNormalWeight.ToString()+" Follow-up");
-				dictValueCodeSets.Add("2.16.840.1.113883.3.600.1.1525",InterventionCodeSet.AboveNormalWeight.ToString()+" Follow-up");
+				dictValueCodeSets.Add(InterventionCodeSet.AboveNormalWeight.ToString()+" Follow-up","2.16.840.1.113883.3.600.1.1525");
 				comboCodeSet.Items.Add(InterventionCodeSet.AboveNormalWeight.ToString()+" Referral");
-				dictValueCodeSets.Add("2.16.840.1.113883.3.600.1.1527",InterventionCodeSet.AboveNormalWeight.ToString()+" Referral");
+				dictValueCodeSets.Add(InterventionCodeSet.AboveNormalWeight.ToString()+" Referral","2.16.840.1.113883.3.600.1.1527");
 				comboCodeSet.Items.Add(InterventionCodeSet.AboveNormalWeight.ToString()+" Medication");
-				dictValueCodeSets.Add("2.16.840.1.113883.3.600.1.1498",InterventionCodeSet.AboveNormalWeight.ToString()+" Medication");
+				dictValueCodeSets.Add(InterventionCodeSet.AboveNormalWeight.ToString()+" Medication","2.16.840.1.113883.3.600.1.1498");
 			}
 			if(IsAllTypes || InterventionCur.CodeSet==InterventionCodeSet.BelowNormalWeight) {
 				comboCodeSet.Items.Add(InterventionCodeSet.BelowNormalWeight.ToString()+" Follow-up");
-				dictValueCodeSets.Add("2.16.840.1.113883.3.600.1.1528",InterventionCodeSet.BelowNormalWeight.ToString()+" Follow-up");
+				dictValueCodeSets.Add(InterventionCodeSet.BelowNormalWeight.ToString()+" Follow-up","2.16.840.1.113883.3.600.1.1528");
 				comboCodeSet.Items.Add(InterventionCodeSet.BelowNormalWeight.ToString()+" Referral");
-				dictValueCodeSets.Add("2.16.840.1.113883.3.600.1.1527",InterventionCodeSet.BelowNormalWeight.ToString()+" Referral");
+				dictValueCodeSets.Add(InterventionCodeSet.BelowNormalWeight.ToString()+" Referral","2.16.840.1.113883.3.600.1.1527");
 				comboCodeSet.Items.Add(InterventionCodeSet.BelowNormalWeight.ToString()+" Medication");
-				dictValueCodeSets.Add("2.16.840.1.113883.3.600.1.1499",InterventionCodeSet.BelowNormalWeight.ToString()+" Medication");
+				dictValueCodeSets.Add(InterventionCodeSet.BelowNormalWeight.ToString()+" Medication","2.16.840.1.113883.3.600.1.1499");
 			}
 			if(IsAllTypes || InterventionCur.CodeSet==InterventionCodeSet.Nutrition || InterventionCur.CodeSet==InterventionCodeSet.PhysicalActivity) {
 				comboCodeSet.Items.Add(InterventionCodeSet.Nutrition.ToString()+" Counseling");
-				dictValueCodeSets.Add("2.16.840.1.113883.3.464.1003.195.12.1003",InterventionCodeSet.Nutrition.ToString()+" Counseling");
+				dictValueCodeSets.Add(InterventionCodeSet.Nutrition.ToString()+" Counseling","2.16.840.1.113883.3.464.1003.195.12.1003");
 				comboCodeSet.Items.Add(InterventionCodeSet.PhysicalActivity.ToString()+" Counseling");
-				dictValueCodeSets.Add("2.16.840.1.113883.3.464.1003.118.12.1035",InterventionCodeSet.PhysicalActivity.ToString()+" Counseling");
+				dictValueCodeSets.Add(InterventionCodeSet.PhysicalActivity.ToString()+" Counseling","2.16.840.1.113883.3.464.1003.118.12.1035");
 			}
 			if(IsAllTypes || InterventionCur.CodeSet==InterventionCodeSet.TobaccoCessation) {
 				comboCodeSet.Items.Add(InterventionCodeSet.TobaccoCessation.ToString()+" Counseling");
-				dictValueCodeSets.Add("2.16.840.1.113883.3.526.3.509",InterventionCodeSet.TobaccoCessation.ToString()+" Counseling");
+				dictValueCodeSets.Add(InterventionCodeSet.TobaccoCessation.ToString()+" Counseling","2.16.840.1.113883.3.526.3.509");
 				comboCodeSet.Items.Add(InterventionCodeSet.TobaccoCessation.ToString()+" Medication");
-				dictValueCodeSets.Add("2.16.840.1.113883.3.526.3.1190",InterventionCodeSet.TobaccoCessation.ToString()+" Medication");
+				dictValueCodeSets.Add(InterventionCodeSet.TobaccoCessation.ToString()+" Medication","2.16.840.1.113883.3.526.3.1190");
 			}
 			if(IsAllTypes || InterventionCur.CodeSet==InterventionCodeSet.Dialysis) {
 				comboCodeSet.Items.Add(InterventionCodeSet.Dialysis.ToString()+" Education");
-				dictValueCodeSets.Add("2.16.840.1.113883.3.464.1003.109.12.1016",InterventionCodeSet.Dialysis.ToString()+" Education");
+				dictValueCodeSets.Add(InterventionCodeSet.Dialysis.ToString()+" Education","2.16.840.1.113883.3.464.1003.109.12.1016");
 				comboCodeSet.Items.Add(InterventionCodeSet.Dialysis.ToString()+" Related Services");
-				dictValueCodeSets.Add("2.16.840.1.113883.3.464.1003.109.12.1015",InterventionCodeSet.Dialysis.ToString()+" Related Services");
+				dictValueCodeSets.Add(InterventionCodeSet.Dialysis.ToString()+" Related Services","2.16.840.1.113883.3.464.1003.109.12.1015");
 			}
 			comboCodeSet.SelectedIndex=0;
-			textDate.Text=InterventionCur.DateTimeEntry.ToShortDateString();
+			//need to set the comboCodeSet based on InterventionCur sent in
+			int codeSetIdx=0;//this will be the index to set the comboCodeSet to if found in a subset of codes, otherwise defaults to All (index 0).
+			foreach(string val in dictValueCodeSets.Values) {
+				codeSetIdx++;
+				listCodes=EhrCodes.GetForValueSetOIDs(new List<string> { val },true);
+				for(int i=0;i<listCodes.Count;i++) {
+					if(listCodes[i].CodeValue==InterventionCur.CodeValue && listCodes[i].CodeSystem==InterventionCur.CodeSystem) {
+						comboCodeSet.SelectedIndex=codeSetIdx;
+						break;
+					}
+				}
+			}
+			textDate.Text=InterventionCur.DateEntry.ToShortDateString();
 			textNote.Text=InterventionCur.Note;
 			Description="";
 			FillGrid();
@@ -79,26 +95,57 @@ namespace OpenDental {
 			string selectedValue=comboCodeSet.SelectedItem.ToString();
 			List<string> listValSetOIDs=new List<string>();
 			if(selectedValue=="All") {
-				listValSetOIDs=new List<string>(dictValueCodeSets.Keys);
+				listValSetOIDs=new List<string>(dictValueCodeSets.Values);
 			}
-			else {
-				foreach(KeyValuePair<string,string> kvp in dictValueCodeSets) {
-					if(kvp.Value==selectedValue) {
-						listValSetOIDs.Add(kvp.Key);
-					}
-				}
+			else {//this will limit the codes to only one value set oid
+				listValSetOIDs.Add(dictValueCodeSets[selectedValue]);
 			}
-			listCodes=EhrCodes.GetForValueSetOIDs(listValSetOIDs,true);//this can be all codes in the available set of codes or one that they selected
+			listCodes=EhrCodes.GetForValueSetOIDs(listValSetOIDs,true);//these codes will exist in the corresponding table or will not be in the list
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			int selectedIdx=-1;
-			for(int i=0;i<listCodes.Count;i++) {
-				//We might not be able to display and let the user select codes from systems that require purchasing the code system, like CPT codes.  Might have to hide unless they exist in the CPT (or other code system) table.
+			for(int i=0;i<listCodes.Count;i++) {				
 				row=new ODGridRow();
 				row.Cells.Add(listCodes[i].CodeValue);
 				row.Cells.Add(listCodes[i].CodeSystem);
-				//Since we require them to select from allowed codes from the table ehrcode we do not need to retrieve the description from the big tables.  If we ever allow the user to select a code from the master list, we will have to get the description from the associated table. (i.e. get the descript from the snomed, icd9, ...etc tables)
-				row.Cells.Add(listCodes[i].Description);
+				//Retrieve description from the associated table
+				string descript="";
+				switch(listCodes[i].CodeSystem) {
+					case "CPT":
+						Cpt cCur=Cpts.GetByCode(listCodes[i].CodeValue);
+						if(cCur!=null) {
+							descript=cCur.Description;
+						}
+						break;
+					case "HCPCS":
+						Hcpcs hCur=Hcpcses.GetByCode(listCodes[i].CodeValue);
+						if(hCur!=null) {
+							descript=hCur.DescriptionShort;
+						}
+						break;
+					case "ICD9CM":
+						ICD9 i9Cur=ICD9s.GetByCode(listCodes[i].CodeValue);
+						if(i9Cur!=null) {
+							descript=i9Cur.Description;
+						}
+						break;
+					case "ICD10CM":
+						Icd10 i10Cur=Icd10s.GetByCode(listCodes[i].CodeValue);
+						if(i10Cur!=null) {
+							descript=i10Cur.Description;
+						}
+						break;
+					case "RXNORM":
+						descript=RxNorms.GetDescByRxCui(listCodes[i].CodeValue);
+						break;
+					case "SNOMEDCT":
+						Snomed sCur=Snomeds.GetByCode(listCodes[i].CodeValue);
+						if(sCur!=null) {
+							descript=sCur.Description;
+						}
+						break;
+				}
+				row.Cells.Add(descript);
 				gridMain.Rows.Add(row);
 				if(listCodes[i].CodeValue==InterventionCur.CodeValue && listCodes[i].CodeSystem==InterventionCur.CodeSystem) {
 					selectedIdx=i;
@@ -164,6 +211,7 @@ namespace OpenDental {
 					medCur.RxCui=PIn.Long(codeVal);
 					medCur.MedName=RxNorms.GetDescByRxCui(codeVal);
 					Medications.Update(medCur);
+					Medications.Refresh();//refresh cache to include new medication
 				}
 				MedicationPat medPatCur=new MedicationPat();
 				medPatCur.PatNum=InterventionCur.PatNum;
@@ -171,7 +219,6 @@ namespace OpenDental {
 				medPatCur.MedicationNum=medCur.MedicationNum;
 				medPatCur.RxCui=medCur.RxCui;
 				medPatCur.DateStart=date;
-				medPatCur.PatNote="Enter instructions for this to be considered a medication order.";
 				FormMedPat FormMP=new FormMedPat();
 				FormMP.MedicationPatCur=medPatCur;
 				FormMP.IsNew=true;
@@ -179,44 +226,67 @@ namespace OpenDental {
 				if(FormMP.DialogResult!=DialogResult.OK) {
 					return;
 				}
-				if(FormMP.MedicationPatCur.PatNote=="" || FormMP.MedicationPatCur.DateStart.Year<1880) {
-					MsgBox.Show(this,"For the medication just entered to be considerd a medication order for CQM's, it must have a start date and instructions.  You can modify the medication in the patient's medical history window.");
+				if(FormMP.MedicationPatCur.DateStart.Date<InterventionCur.DateEntry.AddMonths(-6).Date || FormMP.MedicationPatCur.DateStart.Date>InterventionCur.DateEntry.Date) {
+					MsgBox.Show(this,"The medication order just entered is not within the 6 months prior to the date of this intervention.  You can modify the date of the medication order in the patient's medical history section.");
 				}
 				DialogResult=DialogResult.OK;
+				return;
 			}
-			InterventionCur.DateTimeEntry=date;
+			InterventionCur.DateEntry=date;
 			InterventionCur.CodeValue=codeVal;
 			InterventionCur.CodeSystem=codeSys;
 			InterventionCur.Note=textNote.Text;
+			string selectedCodeSet=comboCodeSet.SelectedItem.ToString().Split(new char[]{' '},StringSplitOptions.RemoveEmptyEntries)[0];
 			if(IsAllTypes) {//CodeSet will be set by calling function unless showing all types, in which case we need to determine which InterventionCodeSet to assign
-				string selectedValue=comboCodeSet.SelectedItem.ToString();
-				if(selectedValue=="All") {//All types showing and set to All, have to determine which InterventionCodeSet this code belongs to
+				if(selectedCodeSet=="All") {//All types showing and set to All, have to determine which InterventionCodeSet this code belongs to
+					List<string> listVSFound=new List<string>();
 					foreach(KeyValuePair<string,string> kvp in dictValueCodeSets) {
-						List<EhrCode> listCodes=EhrCodes.GetForValueSetOIDs(new List<string> { kvp.Key });
-						bool found=false;
+						List<EhrCode> listCodes=EhrCodes.GetForValueSetOIDs(new List<string> { kvp.Value },true);
 						for(int i=0;i<listCodes.Count;i++) {
 							if(listCodes[i].CodeValue==codeVal) {
-								found=true;
+								listVSFound.Add(kvp.Key);
 								break;
 							}
 						}
-						if(found) {
-							InterventionCur.CodeSet=(InterventionCodeSet)Enum.Parse(typeof(InterventionCodeSet),kvp.Value.Split(new char[' '])[0],true);
+					}
+					if(listVSFound.Count>1) {//Selected code found in more than one value set, ask the user which InterventionCodeSet to assign to this intervention
+						InputBox chooseSet=new InputBox(Lan.g(this,"The selected code belongs to more than one intervention code set.  Select the code set to assign to this intervention from the list below."),listVSFound);
+						if(chooseSet.ShowDialog()!=DialogResult.OK) {
+							return;
+						}
+						if(chooseSet.comboSelection.SelectedIndex==-1) {
+							MsgBox.Show(this,"You must select an intervention code set for the selected code.");
+							return;
+						}
+						selectedCodeSet=chooseSet.comboSelection.SelectedItem.ToString().Split(new char[] { ' ' },StringSplitOptions.RemoveEmptyEntries)[0];
+					}
+					else {//the code must belong to at least one value set, since count in listVSFound is not greater than 1, it must be a code from exactly one set, use that for the InterventionCodeSet
+						selectedCodeSet=listVSFound[0].Split(new char[] { ' ' },StringSplitOptions.RemoveEmptyEntries)[0];
+					}
+				}
+				InterventionCur.CodeSet=(InterventionCodeSet)Enum.Parse(typeof(InterventionCodeSet),selectedCodeSet);
+			}
+			//Nutrition is used for both nutrition and physical activity counseling for children, we have to determine which set this code belongs to
+			else if(InterventionCur.CodeSet==InterventionCodeSet.Nutrition && selectedCodeSet!="Nutrition") {//Nutrition set by calling form, user is showing all or physical activity codes only
+				if(selectedCodeSet=="All") {//showing all codes from Nutrition and PhysicalActivity interventions, determine which set it belongs to
+					//No codes exist in both code sets, so if it is not in the PhysicalActivity code set, we can safely assume this is a Nutrition intervention
+					List<EhrCode> listCodes=EhrCodes.GetForValueSetOIDs(new List<string> { dictValueCodeSets[InterventionCodeSet.PhysicalActivity.ToString()+" Counseling"] },true);
+					for(int i=0;i<listCodes.Count;i++) {
+						if(listCodes[i].CodeValue==codeVal) {
+							InterventionCur.CodeSet=InterventionCodeSet.PhysicalActivity;
 							break;
 						}
 					}
 				}
 				else {
-					for(int i=0;i<Enum.GetNames(typeof(InterventionCodeSet)).Length;i++) {
-						if(comboCodeSet.SelectedItem.ToString().StartsWith(((InterventionCodeSet)i).ToString())) {
-							InterventionCur.CodeSet=(InterventionCodeSet)i;
-							break;
-						}
-					}
+					InterventionCur.CodeSet=InterventionCodeSet.PhysicalActivity;
 				}
 			}
+			else {
+				//if not all types, and not Nutrition with All or PhysicalActivity selected in combo box, the code set sent in by calling form will remain the code set for this intervention
+			}
 			if(InterventionCur.IsNew) {
-				Interventions.Insert(InterventionCur);;
+				Interventions.Insert(InterventionCur);
 			}
 			else {
 				Interventions.Update(InterventionCur);

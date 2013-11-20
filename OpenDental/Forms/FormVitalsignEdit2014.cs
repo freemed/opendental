@@ -50,6 +50,7 @@ namespace OpenDental {
 			listBMICodes=new List<Loinc>();
 			FillBMICodeLists();
 			comboBMIPercentileCode.Items.Add("none");
+			comboBMIPercentileCode.SelectedIndex=0;
 			for(int i=0;i<listBMICodes.Count;i++) {
 				if(listBMICodes[i].NameShort=="" || listBMICodes[i].NameLongCommon.Length<30) {//30 is roughly the number of characters that will fit in the combo box
 					comboBMIPercentileCode.Items.Add(listBMICodes[i].NameLongCommon);
@@ -57,11 +58,12 @@ namespace OpenDental {
 				else {
 					comboBMIPercentileCode.Items.Add(listBMICodes[i].NameShort);
 				}
-				if(VitalsignCur.BMIExamCode==listBMICodes[i].LoincCode) {
+				if(i==0 || VitalsignCur.BMIExamCode==listBMICodes[i].LoincCode) {//default to the top code in the list of codes in the loinc table, or if the code was already set and it is not the top one, select that one.
 					comboBMIPercentileCode.SelectedIndex=i+1;
 				}
 			}
 			comboHeightExamCode.Items.Add("none");
+			comboHeightExamCode.SelectedIndex=0;
 			for(int i=0;i<listHeightCodes.Count;i++) {
 				if(listHeightCodes[i].NameShort=="" || listHeightCodes[i].NameLongCommon.Length<30) {//30 is roughly the number of characters that will fit in the combo box
 					comboHeightExamCode.Items.Add(listHeightCodes[i].NameLongCommon);
@@ -69,11 +71,12 @@ namespace OpenDental {
 				else {
 					comboHeightExamCode.Items.Add(listHeightCodes[i].NameShort);
 				}
-				if(VitalsignCur.HeightExamCode==listHeightCodes[i].LoincCode) {
+				if(i==0 || VitalsignCur.HeightExamCode==listHeightCodes[i].LoincCode) {
 					comboHeightExamCode.SelectedIndex=i+1;
 				}
 			}
 			comboWeightExamCode.Items.Add("none");
+			comboWeightExamCode.SelectedIndex=0;
 			for(int i=0;i<listWeightCodes.Count;i++) {
 				if(listWeightCodes[i].NameShort=="" || listWeightCodes[i].NameLongCommon.Length<30) {//30 is roughly the number of characters that will fit in the combo box
 					comboWeightExamCode.Items.Add(listWeightCodes[i].NameLongCommon);
@@ -81,31 +84,25 @@ namespace OpenDental {
 				else {
 					comboWeightExamCode.Items.Add(listWeightCodes[i].NameShort);
 				}
-				if(VitalsignCur.WeightExamCode==listWeightCodes[i].LoincCode) {
+				if(i==0 || VitalsignCur.WeightExamCode==listWeightCodes[i].LoincCode) {
 					comboWeightExamCode.SelectedIndex=i+1;
 				}
-			}
-			if(comboBMIPercentileCode.SelectedIndex==-1) {
-				comboBMIPercentileCode.SelectedIndex=0;
-			}
-			if(comboHeightExamCode.SelectedIndex==-1) {
-				comboHeightExamCode.SelectedIndex=0;
-			}
-			if(comboWeightExamCode.SelectedIndex==-1) {
-				comboWeightExamCode.SelectedIndex=0;
 			}
 			#endregion
 			#region SetPregCodeAndDescript
 			if(VitalsignCur.PregDiseaseNum>0) {
 				checkPregnant.Checked=true;
 				SetPregCodeAndDescript();//if after this function disdefNumCur=0, the PregDiseaseNum is pointing to an invalid disease or diseasedef, or the default is set to 'none'
-				if(pregDisDefNumCur>0) {
+				if(VitalsignCur.PregDiseaseNum==0) {
+					checkPregnant.Checked=false;
+					textPregCode.Clear();
+					textPregCodeDescript.Clear();
+					labelPregNotice.Visible=false;
+				}
+				else if(pregDisDefNumCur>0) {
 					labelPregNotice.Visible=true;
 					butChangeDefault.Text="Go to Problem";
 				}
-			}
-			else {
-				pregDisDefNumCur=0;
 			}
 			#endregion
 			#region SetEhrNotPerformedReasonCodeAndDescript
@@ -274,24 +271,24 @@ namespace OpenDental {
 		}
 
 		private void FillBMICodeLists() {
-			bool isNotInLoincTable=false;
+			bool isInLoincTable=true;
 			//The list returned will only contain the Loincs that are actually in the loinc table.
 			List<Loinc> listLoincs=Loincs.GetForCodeList("59574-4,59575-1,59576-9");//Body mass index (BMI) [Percentile],Body mass index (BMI) [Percentile] Per age,Body mass index (BMI) [Percentile] Per age and gender
 			if(listLoincs.Count<3) {
-				isNotInLoincTable=true;
+				isInLoincTable=false;
 			}
 			listBMICodes.AddRange(listLoincs);
 			listLoincs=Loincs.GetForCodeList("8302-2,3137-7,3138-5,8306-3,8307-1,8308-9");//Body height,Body height Measured,Body height Stated,Body height --lying,Body height --pre surgery,Body height --standing
 			if(listLoincs.Count<6) {
-				isNotInLoincTable=true;
+				isInLoincTable=false;
 			}
 			listHeightCodes.AddRange(listLoincs);
 			listLoincs=Loincs.GetForCodeList("29463-7,18833-4,3141-9,3142-7,8350-1,8351-9");//Body weight,First Body weight,Body weight Measured,Body weight Stated,Body weight Measured --with clothes,Body weight Measured --without clothes
 			if(listLoincs.Count<6) {
-				isNotInLoincTable=true;
+				isInLoincTable=false;
 			}
 			listWeightCodes.AddRange(listLoincs);
-			if(isNotInLoincTable) {
+			if(!isInLoincTable) {
 				MsgBox.Show(this,"The LOINC table does not contain one or more codes used to report vitalsign exam statistics.  The LOINC table should be updated by running the Code System Importer tool found in Setup | EHR.");
 			}
 		}
@@ -320,17 +317,24 @@ namespace OpenDental {
 			float bmi=Vitalsigns.CalcBMI(weight,height);// ((float)(weight*703)/(height*height));
 			textBMI.Text=bmi.ToString("n1");
 			labelWeightCode.Text=calcOverUnderBMIHelper(bmi);
-			groupInterventions.Visible=false;
+			bool isIntGroupVisible=false;
+			string childGroupLabel="Child Counseling for Nutrition and Physical Activity";
+			string overUnderGroupLabel="Intervention for BMI Above or Below Normal";
 			if(ageBeforeJanFirst<17) {
-				groupInterventions.Visible=true;
-				groupInterventions.Text="Child Counseling for Nutrition and Physical Activity";
+				isIntGroupVisible=true;
+				if(groupInterventions.Text!=childGroupLabel) {
+					groupInterventions.Text=childGroupLabel;
+				}
 				FillGridInterventions(true);
 			}
 			else if(ageBeforeJanFirst>=18 && labelWeightCode.Text!="") {//if over 18 and given an over/underweight code due to BMI
-				groupInterventions.Visible=true;
-				groupInterventions.Text="Intervention for BMI Above or Below Normal";
+				isIntGroupVisible=true;
+				if(groupInterventions.Text!=overUnderGroupLabel) {
+					groupInterventions.Text=overUnderGroupLabel;
+				}
 				FillGridInterventions(false);
 			}
+			groupInterventions.Visible=isIntGroupVisible;
 			if(Loincs.GetByCode("39156-5")!=null) {
 				textBMIExamCode.Text="LOINC 39156-5";//This is the only code allowed for the BMI procedure.  It is not stored with this vitalsign object, we will display it if they have the code in the loinc table and will calculate CQM's with the assumption that all vitalsign objects with valid height and weight are this code if they have it in the LOINC table.
 			}
@@ -339,7 +343,7 @@ namespace OpenDental {
 
 		private string calcOverUnderBMIHelper(float bmi) {
 			if(ageBeforeJanFirst<18) {//Do not clasify children as over/underweight
-				intervCodeSet=InterventionCodeSet.Nutrition;
+				intervCodeSet=InterventionCodeSet.Nutrition;//we will sent Nutrition to FormInterventionEdit, but this could also be a physical activity intervention
 				return "";
 			}
 			else if(ageBeforeJanFirst<65) {
@@ -385,7 +389,7 @@ namespace OpenDental {
 				}
 				for(int i=listIntervention.Count-1;i>-1;i--) {
 					if(listCodeSets.Contains(listIntervention[i].CodeSet)) {
-						if(listIntervention[i].DateTimeEntry.Date<=examDate.Date && listIntervention[i].DateTimeEntry.Date>examDate.AddMonths(-6).Date) {
+						if(listIntervention[i].DateEntry.Date<=examDate.Date && listIntervention[i].DateEntry.Date>examDate.AddMonths(-6).Date) {
 							continue;
 						}
 					}
@@ -434,7 +438,7 @@ namespace OpenDental {
 			#region AddInterventionRows
 			for(int i=0;i<listIntervention.Count;i++) {
 				row=new ODGridRow();
-				row.Cells.Add(listIntervention[i].DateTimeEntry.ToShortDateString());
+				row.Cells.Add(listIntervention[i].DateEntry.ToShortDateString());
 				row.Cells.Add(listIntervention[i].CodeSet.ToString());
 				//Description of Intervention---------------------------------------------
 				//to get description, first determine which table the code is from.  Interventions are allowed to be SNOMEDCT, ICD9, ICD10, HCPCS, or CPT.
@@ -465,11 +469,14 @@ namespace OpenDental {
 						}
 						break;
 					case "CPT":
-						//no need to check for null, return new ProcedureCode object if not found, Descript will be blank
-						descript=ProcedureCodes.GetProcCode(listIntervention[i].CodeValue).Descript;
+						Cpt cptCur=Cpts.GetByCode(listIntervention[i].CodeValue);
+						if(cptCur!=null) {
+							descript=cptCur.Description;
+						}
 						break;
 				}
 				row.Cells.Add(descript);
+				row.Tag=listIntervention[i];
 				gridInterventions.Rows.Add(row);
 			}
 			#endregion
@@ -478,15 +485,16 @@ namespace OpenDental {
 				row=new ODGridRow();
 				row.Cells.Add(listMedPats[i].DateStart.ToShortDateString());
 				if(listMedPats[i].RxCui==314153 || listMedPats[i].RxCui==692876) {
-					row.Cells.Add("AboveNormalWeightMedication");
+					row.Cells.Add(InterventionCodeSet.AboveNormalWeight.ToString()+" Medication");
 				}
 				else {
-					row.Cells.Add("BelowNormalWeightMedication");
+					row.Cells.Add(InterventionCodeSet.BelowNormalWeight.ToString()+" Medication");
 				}
 				//Description of Medication----------------------------------------------
 				//only meds in EHR table are from RxNorm table
 				string descript=RxNorms.GetDescByRxCui(listMedPats[i].RxCui.ToString());
 				row.Cells.Add(descript);
+				row.Tag=listMedPats[i];
 				gridInterventions.Rows.Add(row);
 			}
 			#endregion
@@ -648,6 +656,7 @@ Do you want to remove the pregnancy diagnosis?"))
 					FormNP.EhrNotPerfCur.ProvNum=patCur.PriProv;
 					FormNP.SelectedItemIndex=(int)EhrNotPerformedItem.BMIExam;//The code and code value will be set in FormEhrNotPerformedEdit, set the selected index to the EhrNotPerformedItem enum index for BMIExam
 					FormNP.EhrNotPerfCur.DateEntry=PIn.Date(textDateTaken.Text);
+					FormNP.IsDateReadOnly=true;//if this not performed item will be linked to this exam, force the dates to match.  User can change exam date and recheck the box to affect the not performed item date, but forcing them to be the same will allow us to avoid other complications.
 				}
 				else {
 					FormNP.EhrNotPerfCur=EhrNotPerformeds.GetOne(VitalsignCur.EhrNotPerformedNum);
@@ -667,6 +676,9 @@ Do you want to remove the pregnancy diagnosis?"))
 					checkNotPerf.Checked=false;
 					textReasonCode.Clear();
 					textReasonDescript.Clear();
+					if(EhrNotPerformeds.GetOne(VitalsignCur.EhrNotPerformedNum)==null) {//could be linked to a not performed item that no longer exists or has been deleted
+						VitalsignCur.EhrNotPerformedNum=0;
+					}
 				}
 			}
 			else {
@@ -681,14 +693,33 @@ Do you want to remove the pregnancy diagnosis?"))
 			FormInt.InterventionCur.IsNew=true;
 			FormInt.InterventionCur.PatNum=patCur.PatNum;
 			FormInt.InterventionCur.ProvNum=patCur.PriProv;
-			FormInt.InterventionCur.DateTimeEntry=PIn.Date(textDateTaken.Text);
+			FormInt.InterventionCur.DateEntry=PIn.Date(textDateTaken.Text);
 			FormInt.InterventionCur.CodeSet=intervCodeSet;
 			FormInt.IsAllTypes=false;
+			FormInt.IsSelectionMode=true;
 			FormInt.ShowDialog();
 			if(FormInt.DialogResult==DialogResult.OK) {
 				bool child=ageBeforeJanFirst<17;
 				FillGridInterventions(child);
 			}
+		}
+
+		private void gridInterventions_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			object objCur=gridInterventions.Rows[e.Row].Tag;
+			if(objCur.GetType().Name=="Intervention") {//grid can contain MedicationPat or Intervention objects, launch appropriate window
+				FormInterventionEdit FormInt=new FormInterventionEdit();
+				FormInt.InterventionCur=(Intervention)objCur;
+				FormInt.IsAllTypes=false;
+				FormInt.IsSelectionMode=false;
+				FormInt.ShowDialog();
+			}
+			if(objCur.GetType().Name=="MedicationPat") {
+				FormMedPat FormMP=new FormMedPat();
+				FormMP.MedicationPatCur=(MedicationPat)objCur;
+				FormMP.IsNew=false;
+				FormMP.ShowDialog();
+			}
+			FillGridInterventions(ageBeforeJanFirst<17);
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {

@@ -2131,7 +2131,18 @@ namespace OpenDentBusiness {
 				Db.NonQ(command);
 				command="UPDATE ehrmeasureevent SET CodeSystem='LOINC' WHERE EventType=8";//All TobaccoUseAssessed codes are LOINC codes
 				Db.NonQ(command);
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE intervention CHANGE DateTimeEntry DateEntry date NOT NULL DEFAULT '0001-01-01'";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE intervention CHANGE DateTimeEntry DateEntry date";
+					Db.NonQ(command);
+					command="UPDATE intervention SET DateEntry = TO_DATE('0001-01-01','YYYY-MM-DD') WHERE DateEntry IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE intervention MODIFY DateEntry NOT NULL";
+					Db.NonQ(command);
+				}
 
 
 
@@ -2147,7 +2158,6 @@ namespace OpenDentBusiness {
 
 	}
 }
-
 
 
 

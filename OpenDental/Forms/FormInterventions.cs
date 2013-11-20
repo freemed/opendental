@@ -13,6 +13,7 @@ namespace OpenDental {
 	public partial class FormInterventions:Form {
 		public Patient PatCur;
 		private List<Intervention> listIntervention;
+		private List<MedicationPat> listMedPats;
 
 		public FormInterventions() {
 			InitializeComponent();
@@ -39,12 +40,13 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("Note",100);
 			gridMain.Columns.Add(col);
-			listIntervention=Interventions.Refresh(PatCur.PatNum);
 			gridMain.Rows.Clear();
 			ODGridRow row;
+			#region Interventions
+			listIntervention=Interventions.Refresh(PatCur.PatNum);
 			for(int i=0;i<listIntervention.Count;i++) {
 				row=new ODGridRow();
-				row.Cells.Add(listIntervention[i].DateTimeEntry.ToShortDateString());
+				row.Cells.Add(listIntervention[i].DateEntry.ToShortDateString());
 				row.Cells.Add(Providers.GetAbbr(listIntervention[i].ProvNum));
 				row.Cells.Add(listIntervention[i].CodeSet.ToString());
 				row.Cells.Add(listIntervention[i].CodeValue);
@@ -78,23 +80,79 @@ namespace OpenDental {
 						}
 						break;
 					case "CPT":
-						//no need to check for null, return new ProcedureCode object if not found, Descript will be blank
-						descript=ProcedureCodes.GetProcCode(listIntervention[i].CodeValue).Descript;
+						Cpt cptCur=Cpts.GetByCode(listIntervention[i].CodeValue);
+						if(cptCur!=null) {
+							descript=cptCur.Description;
+						}
 						break;
 				}
 				row.Cells.Add(descript);
-				//Reason Code-------------------------------------------------------------------
 				row.Cells.Add(listIntervention[i].Note);
+				row.Tag=listIntervention[i];
 				gridMain.Rows.Add(row);
 			}
+			#endregion
+			#region MedicationPats
+			listMedPats=MedicationPats.Refresh(PatCur.PatNum,true);
+			if(listMedPats.Count>0) {
+				//The following medications are used as interventions for some measures.  Include them in the intervention window if they belong to these value sets.
+				//Above Normal Medications RxNorm Value Set, Below Normal Medications RxNorm Value Set, Tobacco Use Cessation Pharmacotherapy Value Set
+				List<string> listVS=new List<string> { "2.16.840.1.113883.3.600.1.1498","2.16.840.1.113883.3.600.1.1499","2.16.840.1.113883.3.526.3.1190" };
+				List<EhrCode> listEhrMeds=EhrCodes.GetForValueSetOIDs(listVS,true);
+				for(int i=listMedPats.Count-1;i>-1;i--) {
+					bool found=false;
+					for(int j=0;j<listEhrMeds.Count;j++) {
+						if(listMedPats[i].RxCui.ToString()==listEhrMeds[j].CodeValue) {
+							found=true;
+							break;
+						}
+					}
+					if(!found) {
+						listMedPats.RemoveAt(i);
+					}
+				}
+			}
+			for(int i=0;i<listMedPats.Count;i++) {
+				row=new ODGridRow();
+				row.Cells.Add(listMedPats[i].DateStart.ToShortDateString());
+				row.Cells.Add(Providers.GetAbbr(listMedPats[i].ProvNum));
+				if(listMedPats[i].RxCui==314153 || listMedPats[i].RxCui==692876) {
+					row.Cells.Add(InterventionCodeSet.AboveNormalWeight.ToString()+" Medication");
+				}
+				else if(listMedPats[i].RxCui==577154 || listMedPats[i].RxCui==860215 || listMedPats[i].RxCui==860221 || listMedPats[i].RxCui==860225 || listMedPats[i].RxCui==860231) {
+					row.Cells.Add(InterventionCodeSet.BelowNormalWeight.ToString()+" Medication");
+				}
+				else {//There are 48 total medications that can be used as interventions.  The remaining 41 medications are tobacco cessation medications
+					row.Cells.Add(InterventionCodeSet.TobaccoCessation.ToString()+" Medication");
+				}
+				row.Cells.Add(listMedPats[i].RxCui.ToString());
+				row.Cells.Add("RXNORM");
+				//Medications that are used as interventions are all RxNorm codes, get description from that table
+				string descript=RxNorms.GetDescByRxCui(listMedPats[i].RxCui.ToString());
+				row.Cells.Add(descript);
+				row.Cells.Add(listMedPats[i].PatNote);
+				row.Tag=listMedPats[i];
+				gridMain.Rows.Add(row);
+			}
+			#endregion
 			gridMain.EndUpdate();
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			FormInterventionEdit FormInt=new FormInterventionEdit();
-			FormInt.InterventionCur=listIntervention[e.Row];
-			FormInt.IsAllTypes=false;
-			FormInt.ShowDialog();
+			object objCur=gridMain.Rows[e.Row].Tag;
+			if(objCur.GetType().Name=="Intervention") {//grid can contain MedicationPat or Intervention objects, launch appropriate window
+				FormInterventionEdit FormInt=new FormInterventionEdit();
+				FormInt.InterventionCur=(Intervention)objCur;
+				FormInt.IsAllTypes=false;
+				FormInt.IsSelectionMode=false;
+				FormInt.ShowDialog();
+			}
+			if(objCur.GetType().Name=="MedicationPat") {
+				FormMedPat FormMP=new FormMedPat();
+				FormMP.MedicationPatCur=(MedicationPat)objCur;
+				FormMP.IsNew=false;
+				FormMP.ShowDialog();
+			}
 			FillGrid();
 		}
 
@@ -104,8 +162,9 @@ namespace OpenDental {
 			FormInt.InterventionCur.IsNew=true;
 			FormInt.InterventionCur.PatNum=PatCur.PatNum;
 			FormInt.InterventionCur.ProvNum=PatCur.PriProv;
-			FormInt.InterventionCur.DateTimeEntry=DateTime.Now;
+			FormInt.InterventionCur.DateEntry=DateTime.Now;
 			FormInt.IsAllTypes=true;
+			FormInt.IsSelectionMode=true;
 			FormInt.ShowDialog();
 			FillGrid();
 		}
