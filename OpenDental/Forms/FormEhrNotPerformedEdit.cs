@@ -11,9 +11,8 @@ namespace OpenDental {
 	public partial class FormEhrNotPerformedEdit:Form {
 		public EhrNotPerformed EhrNotPerfCur;
 		public int SelectedItemIndex;
+		public bool IsDateReadOnly;
 		private List<EhrCode> listEhrCodesReason;
-		private List<string> listCodeAndDescriptReason;
-		private List<string> listCodeReason;
 
 		public FormEhrNotPerformedEdit() {
 			InitializeComponent();
@@ -23,6 +22,9 @@ namespace OpenDental {
 
 		///<summary>If using the Add button on FormEhrNotPerformed, an input box will allow the user to select from the list of available items that are not being performed.  The SelectedItemIndex will hold the index of the item selected wich corresponds to the enum EhrNotPerformedItem.  We will use this selected item index to set the EhrNotPerformed code and code system.</summary>
 		private void FormEhrNotPerformedEdit_Load(object sender,EventArgs e) {
+			if(IsDateReadOnly) {
+				textDate.ReadOnly=true;
+			}
 			List<string> listValueSetOIDs=new List<string>();
 			switch(SelectedItemIndex) {
 				case 0://BMIExam
@@ -61,13 +63,15 @@ namespace OpenDental {
 					}
 					InputBox chooseItem=new InputBox(Lan.g(this,"Select the "+Enum.GetNames(typeof(EhrNotPerformedItem))[SelectedItemIndex]+" not being performed from the list below."),listCodeDescripts);
 					if(SelectedItemIndex==(int)EhrNotPerformedItem.InfluenzaVaccination) {
-						chooseItem.comboSelection.DropDownWidth=700;
+						chooseItem.comboSelection.DropDownWidth=730;
 					}
 					if(chooseItem.ShowDialog()!=DialogResult.OK) {
+						DialogResult=DialogResult.Cancel;
 						return;
 					}
 					if(chooseItem.comboSelection.SelectedIndex==-1) {
 						MsgBox.Show(this,"You must select the "+Enum.GetNames(typeof(EhrNotPerformedItem))[SelectedItemIndex]+" not being performed.");
+						DialogResult=DialogResult.Cancel;
 						return;
 					}
 					EhrNotPerfCur.CodeValue=listEhrCodes[chooseItem.comboSelection.SelectedIndex].CodeValue;
@@ -97,6 +101,7 @@ namespace OpenDental {
 			string systemReason="2.16.840.1.113883.3.526.3.1009";//'System Reason' value set
 			string patientRefusedReason="2.16.840.1.113883.3.600.1.1503";//'Patient Reason Refused' value set
 			string medicalOrOtherReason="2.16.840.1.113883.3.600.1.1502";//'Medical or Other reason not done' value set
+			string limitedLifeExpectancy="2.16.840.1.113883.3.526.3.1259";//'Limited Life Expectancy' value set
 			switch(SelectedItemIndex) {
 				case 0://BMIExam
 					listValueSetOIDsReason=new List<string> { patientRefusedReason,medicalOrOtherReason };
@@ -145,7 +150,7 @@ namespace OpenDental {
 					}
 					break;
 				case 2://TobaccoScreening
-					listValueSetOIDsReason=new List<string> { medicalReason };
+					listValueSetOIDsReason=new List<string> { medicalReason,limitedLifeExpectancy };
 					break;
 				case 3://DocumentCurrentMeds
 					listValueSetOIDsReason=new List<string> { medicalOrOtherReason };
@@ -153,23 +158,15 @@ namespace OpenDental {
 				default://should never happen
 					break;
 			}
-			List<EhrCode> listReasonCodes=EhrCodes.GetForValueSetOIDs(listValueSetOIDsReason,true);//these are all SNOMEDCT codes and will only show if they exist in the snomed table.
-			if(listReasonCodes.Count==0) {
+			listEhrCodesReason=EhrCodes.GetForValueSetOIDs(listValueSetOIDsReason,true);//these are all SNOMEDCT codes and will only show if they exist in the snomed table.
+			if(listEhrCodesReason.Count==0) {
 				MsgBox.Show(this,"There are no codes in the database for reasons not performed.  You must run the Code System Importer tool in Setup | EHR to import the SNOMEDCT table in order to enter a valid reason.");
 			}
-			listEhrCodesReason=new List<EhrCode>();
-			listEhrCodesReason.AddRange(listReasonCodes);
-			listCodeAndDescriptReason=new List<string>();
-			listCodeReason=new List<string>();
 			comboCodeReason.Items.Clear();
 			comboCodeReason.Items.Add("none");
 			comboCodeReason.SelectedIndex=0;//default to 'none' if no reason set for the not performed item
 			for(int i=0;i<listEhrCodesReason.Count;i++) {
-				listCodeAndDescriptReason.Add(listEhrCodesReason[i].CodeValue+" - "+listEhrCodesReason[i].Description);
-				listCodeReason.Add(listEhrCodesReason[i].CodeValue);
-			}
-			for(int i=0;i<listCodeAndDescriptReason.Count;i++) {
-				comboCodeReason.Items.Add(listCodeReason[i]);
+				comboCodeReason.Items.Add(listEhrCodesReason[i].CodeValue);
 				if(EhrNotPerfCur.CodeValueReason==listEhrCodesReason[i].CodeValue && EhrNotPerfCur.CodeSystemReason==listEhrCodesReason[i].CodeSystem) {
 					comboCodeReason.SelectedIndex=i+1;//+1 for 'none'
 					textCodeSystemReason.Text=listEhrCodesReason[i].CodeSystem;
@@ -211,8 +208,8 @@ namespace OpenDental {
 			int selectedIndex=comboCodeReason.SelectedIndex;
 			comboCodeReason.Items.Clear();
 			comboCodeReason.Items.Add("none");
-			for(int i=0;i<listCodeAndDescriptReason.Count;i++) {
-				comboCodeReason.Items.Add(listCodeAndDescriptReason[i]);
+			for(int i=0;i<listEhrCodesReason.Count;i++) {
+				comboCodeReason.Items.Add(listEhrCodesReason[i].CodeValue+" - "+listEhrCodesReason[i].Description);
 			}
 			comboCodeReason.SelectedIndex=selectedIndex;
 		}
@@ -222,7 +219,7 @@ namespace OpenDental {
 			comboCodeReason.Items.Clear();
 			comboCodeReason.Items.Add("none");
 			for(int i=0;i<listEhrCodesReason.Count;i++) {
-				comboCodeReason.Items.Add(listCodeReason[i]);
+				comboCodeReason.Items.Add(listEhrCodesReason[i].CodeValue);
 			}
 			comboCodeReason.SelectedIndex=selectedIndex;
 		}
@@ -234,6 +231,14 @@ namespace OpenDental {
 			}
 			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete?")) {
 				return;
+			}
+			Vitalsign vitCur=Vitalsigns.GetFromEhrNotPerformedNum(EhrNotPerfCur.EhrNotPerformedNum);
+			if(vitCur!=null) {
+				if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Deleting this will remove it from the vitalsign exam it refers to.\r\nDelete anyway?")) {
+					return;
+				}
+				vitCur.EhrNotPerformedNum=0;
+				Vitalsigns.Update(vitCur);
 			}
 			EhrNotPerformeds.Delete(EhrNotPerfCur.EhrNotPerformedNum);
 			DialogResult=DialogResult.Cancel;
@@ -253,6 +258,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please fix date first.");
 				return;
 			}
+			//we force the date to match the item not being performed (like vitalsign exam) by making the date text box read only if launched from other item.  Users can still manually add a not performed item from FormEhrNotPerformed by pressing Add and choose any valid date they wish, but it will not be linked to an item.
 			string codeValReas="";
 			string codeSysReas="";
 			if(comboCodeReason.SelectedIndex<1) {//selected 'none' or possibly still -1 (although -1 should never happen)

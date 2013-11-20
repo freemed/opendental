@@ -66,19 +66,21 @@ namespace OpenDental {
 						break;
 				}
 				//Code not performed------------------------------------------------------------
-				row.Cells.Add(listNotPerf[i].CodeValue);
+				row.Cells.Add(listNotPerf[i].CodeValue+" ("+listNotPerf[i].CodeSystem+")");
 				//Description of code not performed---------------------------------------------
 				string descript="";
 				//to get description, first determine which table the code is from.  EhrNotPerformed is allowed to be CPT, CVX, LOINC, SNOMEDCT.
 				switch(listNotPerf[i].CodeSystem) {
 					case "CPT":
-						//no need to check for null, return new ProcedureCode object if not found, Descript will be blank
-						descript=ProcedureCodes.GetProcCode(listNotPerf[i].CodeValue).Descript;
+						Cpt cptCur=Cpts.GetByCode(listNotPerf[i].CodeValue);
+						if(cptCur!=null) {
+							descript=cptCur.Description;
+						}
 						break;
 					case "CVX":
-						Cvx cCur=Cvxs.GetOneFromDb(listNotPerf[i].CodeValue);
-						if(cCur!=null) {
-							descript=cCur.Description;
+						Cvx cvxCur=Cvxs.GetOneFromDb(listNotPerf[i].CodeValue);
+						if(cvxCur!=null) {
+							descript=cvxCur.Description;
 						}
 						break;
 					case "LOINC":
@@ -96,7 +98,7 @@ namespace OpenDental {
 				}
 				row.Cells.Add(descript);
 				//Reason Code-------------------------------------------------------------------
-				row.Cells.Add(listNotPerf[i].CodeValueReason);
+				row.Cells.Add(listNotPerf[i].CodeValueReason+" ("+listNotPerf[i].CodeSystemReason+")");
 				//Reason Description------------------------------------------------------------
 				descript="";
 				if(listNotPerf[i].CodeValueReason!="") {

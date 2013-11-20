@@ -56,7 +56,7 @@ namespace OpenDental{
 			// 
 			this.textDate.Location = new System.Drawing.Point(110, 18);
 			this.textDate.Name = "textDate";
-			this.textDate.Size = new System.Drawing.Size(100, 20);
+			this.textDate.Size = new System.Drawing.Size(80, 20);
 			this.textDate.TabIndex = 143;
 			// 
 			// label5
@@ -221,7 +221,7 @@ namespace OpenDental{
 			// comboCodeReason
 			// 
 			this.comboCodeReason.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboCodeReason.DropDownWidth = 367;
+			this.comboCodeReason.DropDownWidth = 385;
 			this.comboCodeReason.Location = new System.Drawing.Point(98, 35);
 			this.comboCodeReason.MaxDropDownItems = 30;
 			this.comboCodeReason.Name = "comboCodeReason";
