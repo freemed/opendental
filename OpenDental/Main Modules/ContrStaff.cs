@@ -262,7 +262,7 @@ namespace OpenDental{
 			this.butTimeCard.Name = "butTimeCard";
 			this.butTimeCard.Size = new System.Drawing.Size(108, 25);
 			this.butTimeCard.TabIndex = 16;
-			this.butTimeCard.Text = "View Timecard";
+			this.butTimeCard.Text = "View Time Card";
 			this.butTimeCard.Click += new System.EventHandler(this.butTimeCard_Click);
 			// 
 			// butClockIn
