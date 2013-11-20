@@ -49,13 +49,22 @@ namespace OpenDental {
 						descript=ProcedureCodes.GetProcCode(listEncs[i].CodeValue).Descript;//this may need to get code from cdt table instead, if Ryan creates a one
 						break;
 					case "CPT":
-
+						Cpt cptCur=Cpts.GetByCode(listEncs[i].CodeValue);
+						if(cptCur!=null) {
+							descript=cptCur.Description;
+						}
 						break;
 					case "HCPCS":
-						descript=Hcpcses.GetByCode(listEncs[i].CodeValue).DescriptionShort;
+						Hcpcs hCur=Hcpcses.GetByCode(listEncs[i].CodeValue);
+						if(hCur!=null) {
+							descript=hCur.DescriptionShort;
+						}
 						break;
 					case "SNOMEDCT":
-						descript=Snomeds.GetByCode(listEncs[i].CodeValue).Description;
+						Snomed sCur=Snomeds.GetByCode(listEncs[i].CodeValue);
+						if(sCur!=null) {
+							descript=sCur.Description;
+						}
 						break;
 				}
 				row.Cells.Add(descript);
