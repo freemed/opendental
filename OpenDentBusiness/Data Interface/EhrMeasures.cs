@@ -240,9 +240,10 @@ namespace OpenDentBusiness{
 						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
 						+"GROUP BY patient.PatNum) A "
 						+"LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM disease WHERE DiseaseDefNum="+POut.Long(PrefC.GetLong(PrefName.ProblemsIndicateNone))+" "
-						+"GROUP BY PatNum) problemsNone ON problemsNone.PatNum=A.PatNum "
+						+"AND ProbStatus=0 GROUP BY PatNum) problemsNone ON problemsNone.PatNum=A.PatNum "
 						+"LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM disease "
 						+"INNER JOIN diseasedef ON disease.DiseaseDefNum=diseasedef.DiseaseDefNum "
+						+"AND disease.DiseaseDefNum!="+POut.Long(PrefC.GetLong(PrefName.ProblemsIndicateNone))+" "
 						+"WHERE (diseasedef.SnomedCode!='' OR diseasedef.ICD9Code!='') "
 						+"GROUP BY PatNum) problemsAll ON problemsAll.PatNum=A.PatNum";
 					tableRaw=Db.GetTable(command);
@@ -258,8 +259,10 @@ namespace OpenDentBusiness{
 						+"GROUP BY patient.PatNum) A "
 						+"LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM medicationpat "
 						+"WHERE MedicationNum="+POut.Long(PrefC.GetLong(PrefName.MedicationsIndicateNone))+" "
-						+"GROUP BY PatNum) medsNone ON medsNone.PatNum=A.PatNum "
-						+"LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM medicationpat GROUP BY PatNum) medsAll ON medsAll.PatNum=A.PatNum";
+						+"AND (YEAR(DateStop)<1880 OR DateStop>"+POut.Date(dateEnd)+") GROUP BY PatNum) medsNone ON medsNone.PatNum=A.PatNum "
+						+"LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM medicationpat "
+						+"WHERE MedicationNum!="+POut.Long(PrefC.GetLong(PrefName.MedicationsIndicateNone))+" "
+						+"GROUP BY PatNum) medsAll ON medsAll.PatNum=A.PatNum";
 					tableRaw=Db.GetTable(command);
 					break;
 				#endregion
@@ -284,9 +287,11 @@ namespace OpenDentBusiness{
 						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
 						+"GROUP BY patient.PatNum) A "
 						+"LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM allergy	"
-						+"WHERE AllergyDefNum="+POut.Long(PrefC.GetLong(PrefName.AllergiesIndicateNone))+" "
+						+"WHERE AllergyDefNum="+POut.Long(PrefC.GetLong(PrefName.AllergiesIndicateNone))+" AND StatusIsActive=1 "
 						+"GROUP BY PatNum) allergiesNone ON allergiesNone.PatNum=A.PatNum "
-						+"LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM allergy	GROUP BY PatNum) allergiesAll ON allergiesAll.PatNum=A.PatNum";
+						+"LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM allergy	"
+						+"WHERE AllergyDefNum!="+POut.Long(PrefC.GetLong(PrefName.AllergiesIndicateNone))+" "
+						+"GROUP BY PatNum) allergiesAll ON allergiesAll.PatNum=A.PatNum";
 					tableRaw=Db.GetTable(command);
 					break;
 				#endregion
@@ -406,15 +411,15 @@ namespace OpenDentBusiness{
 					//	+"WHERE mp2.PatNote!='' AND mp2.DateStart > "+POut.Date(new DateTime(1880,1,1))+" "
 					//	+"GROUP BY PatNum) countOrders ON countOrders.PatNum=A.PatNum";
 					//Now using IsCpoe flag instead of PatNote and DateStart to mark as an order
-					command="SELECT A.*,COALESCE(CountCpoe.Count,0) AS CountCpoe "
+					command="SELECT allpats.*,COALESCE(CountCpoe.Count,0) AS CountCpoe "
 						+"FROM (SELECT patient.PatNum,patient.LName,patient.FName FROM patient "
 						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
 						+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
 						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
-						+"INNER JOIN medicationpat ON medicationpat.PatNum=patient.PatNum "
-						+"GROUP BY patient.PatNum) A "
+						+"INNER JOIN medicationpat ON medicationpat.PatNum=patient.PatNum AND MedicationNum!="+POut.Long(PrefC.GetLong(PrefName.MedicationsIndicateNone))+" "
+						+"GROUP BY patient.PatNum) allpats "//allpats seen by provider in date range with medication in med list that is not the 'None' medication
 						+"LEFT JOIN (SELECT medicationpat.PatNum,COUNT(*) AS 'Count' FROM medicationpat "
-						+"WHERE medicationpat.IsCpoe=1 GROUP BY PatNum) CountCpoe ON CountCpoe.PatNum=A.PatNum";
+						+"WHERE medicationpat.IsCpoe=1 GROUP BY medicationpat.PatNum) CountCpoe ON CountCpoe.PatNum=allpats.PatNum";
 					tableRaw=Db.GetTable(command);
 					break;
 				#endregion
@@ -435,19 +440,20 @@ namespace OpenDentBusiness{
 				#region CPOE_PreviouslyOrdered
 				case EhrMeasureType.CPOE_PreviouslyOrdered:
 					//For details regarding this optional alternate see: https://questions.cms.gov/faq.php?id=5005&faqId=3257, summmary: If you prescribe more than 100 meds during the reporting period, maintain medication lists that include meds the Provider did not order, and orders meds for less than 30% of patients with meds in med list during the reporting period, then the denominator can be limited to only those patients for whom the Provider has previously ordered meds.
-					command="SELECT A.*,COALESCE(CountCpoe.Count,0) AS CountCpoe "
+					command="SELECT allpatsprevordered.*,COALESCE(CountCpoe.Count,0) AS CountCpoe "
 						+"FROM (SELECT patient.PatNum,patient.LName,patient.FName FROM patient "
 						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
 						+"AND procedurelog.ProvNum IN("+POut.String(provs)+") "
 						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
-						+"INNER JOIN medicationpat ON medicationpat.PatNum=patient.PatNum ";
+						+"INNER JOIN medicationpat ON medicationpat.PatNum=patient.PatNum "
+						+"AND medicationpat.MedicationNum!="+POut.Long(PrefC.GetLong(PrefName.MedicationsIndicateNone))+" ";
 					//this next join limits to only patients for whom the provider has previously ordered medications
 					command+="INNER JOIN (SELECT PatNum FROM medicationpat "
 						+"WHERE PatNote!='' AND DateStart > "+POut.Date(new DateTime(1880,1,1))+" "
-						+"AND ProvNum IN("+POut.String(provs)+") GROUP BY PatNum) B ON B.PatNum=patient.PatNum "
-						+"GROUP BY patient.PatNum) A "
+						+"AND ProvNum IN("+POut.String(provs)+") GROUP BY PatNum) prevordered ON prevordered.PatNum=patient.PatNum "
+						+"GROUP BY patient.PatNum) allpatsprevordered "
 						+"LEFT JOIN (SELECT medicationpat.PatNum,COUNT(*) AS 'Count' FROM medicationpat "
-						+"WHERE medicationpat.IsCpoe=1 GROUP BY PatNum) CountCpoe ON CountCpoe.PatNum=A.PatNum";
+						+"WHERE medicationpat.IsCpoe=1 GROUP BY PatNum) CountCpoe ON CountCpoe.PatNum=allpatsprevordered.PatNum";
 					tableRaw=Db.GetTable(command);
 					break;
 				#endregion
@@ -833,7 +839,7 @@ namespace OpenDentBusiness{
 							explanation="Problems entered: "+tableRaw.Rows[i]["problemsAll"].ToString();
 							row["met"]="X";
 						}
-						else{
+						else {
 							//explanation="No Problems entered";
 							explanation="No Problems entered with ICD-9 code or SNOMED code attached.";
 						}
