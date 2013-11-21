@@ -105,7 +105,7 @@ namespace OpenDentBusiness{
 			if(PIn.Int(Db.GetCount(command))!=0) {
 				return true;
 			}
-			command="SELECT COUNT(*) FROM eduresources WHERE MedicationNum="+POut.Long(medicationNum);
+			command="SELECT COUNT(*) FROM eduresource WHERE MedicationNum="+POut.Long(medicationNum);
 			if(PIn.Int(Db.GetCount(command))!=0) {
 				return true;
 			}
