@@ -22,8 +22,8 @@ namespace OpenDental {
 			if(EduResourceCur.DiseaseDefNum!=0) {
 				DiseaseDef def=DiseaseDefs.GetItem(EduResourceCur.DiseaseDefNum);
 				textProblem.Text=def.DiseaseName;
-				textICD9.Text=def.ICD9Code;
-				textSnomed.Text=def.SnomedCode;
+				textICD9.Text=ICD9s.GetCodeAndDescription(def.ICD9Code);
+				textSnomed.Text=Snomeds.GetCodeAndDescription(def.SnomedCode);
 			}
 			else if(EduResourceCur.MedicationNum!=0) {
 				textMedication.Text=Medications.GetDescription(EduResourceCur.MedicationNum);
@@ -41,27 +41,14 @@ namespace OpenDental {
 			if(FormDD.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			textProblem.Text=DiseaseDefs.GetName(FormDD.SelectedDiseaseDefNum);
-			EduResourceCur.DiseaseDefNum=FormDD.SelectedDiseaseDefNum;
-			textICD9.Text="";
-			textMedication.Text="";
-			EduResourceCur.MedicationNum=0;
-			textLabResultsID.Text="";
-			textLabTestName.Text="";
-			textCompareValue.Text="";
-		}
-
-		private void butICD9Select_Click(object sender,EventArgs e) {
-			FormIcd9s FormICD9=new FormIcd9s();
-			FormICD9.IsSelectionMode=true;
-			FormICD9.ShowDialog();
-			if(FormICD9.DialogResult!=DialogResult.OK) {
+			DiseaseDef disCur=DiseaseDefs.GetItem(FormDD.SelectedDiseaseDefNum);
+			if(disCur==null) {
 				return;
 			}
-			textProblem.Text="";
-			EduResourceCur.DiseaseDefNum=0;
-			textICD9.Text="ICD9: "+FormICD9.SelectedIcd9.Description;
-			textMedication.Text="";
+			EduResourceCur.DiseaseDefNum=FormDD.SelectedDiseaseDefNum;
+			textProblem.Text=disCur.DiseaseName;
+			textICD9.Text=ICD9s.GetCodeAndDescription(disCur.ICD9Code);
+			textSnomed.Text=Snomeds.GetCodeAndDescription(disCur.SnomedCode);
 			EduResourceCur.MedicationNum=0;
 			textLabResultsID.Text="";
 			textLabTestName.Text="";
@@ -78,6 +65,7 @@ namespace OpenDental {
 			textProblem.Text="";
 			EduResourceCur.DiseaseDefNum=0;
 			textICD9.Text="";
+			textSnomed.Text="";
 			textMedication.Text=Medications.GetDescription(FormM.SelectedMedicationNum);
 			EduResourceCur.MedicationNum=FormM.SelectedMedicationNum;
 			textLabResultsID.Text="";
@@ -90,6 +78,7 @@ namespace OpenDental {
 			textProblem.Text="";
 			EduResourceCur.DiseaseDefNum=0;
 			textICD9.Text="";
+			textSnomed.Text="";
 			textMedication.Text="";
 			EduResourceCur.MedicationNum=0;
 		}
