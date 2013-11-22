@@ -239,8 +239,8 @@ namespace OpenDental {
 					e.Graphics.DrawString("EMPTY",Font,brushText,rcOuter,stringFormat);
 					return;
 				}
-				else if(this.Text!="") { //using as a label so just draw the string
-					FitText(this.Text,Font,brushText,rcOuter,stringFormat,e.Graphics);
+				else if(this.Text!="") { //using as a label so just draw the string					
+					FitText(this.Text,Font,brushText,new RectangleF(rcOuter.Left,rcOuter.Top+2,rcOuter.Width,rcOuter.Height),stringFormat,e.Graphics);
 					return;
 				}
 				//4 rows of data
