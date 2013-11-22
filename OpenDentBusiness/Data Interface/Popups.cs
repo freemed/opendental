@@ -230,7 +230,7 @@ namespace OpenDentBusiness{
 			string command="UPDATE popup "
 					+"SET PopupLevel = "+POut.Int((int)EnumPopupLevel.Family)+" "
 					+"WHERE PopupLevel = "+POut.Int((int)EnumPopupLevel.SuperFamily)+" "
-					+"AND PatNum IN (SELECT PatNum FROM Patient WHERE SuperFamily="+POut.Long(pat.SuperFamily)+") "
+					+"AND PatNum IN (SELECT PatNum FROM patient WHERE SuperFamily="+POut.Long(pat.SuperFamily)+") "
 					+"AND PopupNumArchive = 0";
 			Db.NonQ(command);
 		}
