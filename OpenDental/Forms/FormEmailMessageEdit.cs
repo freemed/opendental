@@ -62,6 +62,7 @@ namespace OpenDental{
 		private Label label5;
 		private WebBrowser webBrowser;
 		private UI.Button butEncryptAndSend;
+		private UI.Button butRawMessage;
 		///<summary>Used when attaching to get AtoZ folder, and when sending to get Clinic.</summary>
 		private Patient PatCur;
 
@@ -130,6 +131,7 @@ namespace OpenDental{
 			this.textBodyText = new OpenDental.ODtextBox();
 			this.butSend = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.butRawMessage = new OpenDental.UI.Button();
 			this.panelTemplates.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -514,10 +516,27 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// butRawMessage
+			// 
+			this.butRawMessage.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butRawMessage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butRawMessage.Autosize = true;
+			this.butRawMessage.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRawMessage.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRawMessage.CornerRadius = 4F;
+			this.butRawMessage.Location = new System.Drawing.Point(138, 635);
+			this.butRawMessage.Name = "butRawMessage";
+			this.butRawMessage.Size = new System.Drawing.Size(89, 26);
+			this.butRawMessage.TabIndex = 36;
+			this.butRawMessage.Text = "Raw Message";
+			this.butRawMessage.Visible = false;
+			this.butRawMessage.Click += new System.EventHandler(this.butRawMessage_Click);
+			// 
 			// FormEmailMessageEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.ClientSize = new System.Drawing.Size(941, 672);
+			this.Controls.Add(this.butRawMessage);
 			this.Controls.Add(this.butEncryptAndSend);
 			this.Controls.Add(this.webBrowser);
 			this.Controls.Add(this.textSentOrReceived);
@@ -607,6 +626,7 @@ namespace OpenDental{
 				MessageCur.SentOrReceived==EmailSentOrReceived.WebMailReceived ||
 				MessageCur.SentOrReceived==EmailSentOrReceived.WebMailRecdRead)
 			{
+				butRawMessage.Visible=true;
 				textBodyText.ReadOnly=true;
 				textBodyText.SpellCheckIsEnabled=false;//Prevents slowness when resizing the window, because the spell checker runs each time the resize event is fired.
 				//If an html body is received, then we display the body using a webbrowser control, so the user sees the message formatted as intended.
@@ -855,6 +875,11 @@ namespace OpenDental{
 					DialogResult=DialogResult.OK;
 				}
 			}
+		}
+
+		private void butRawMessage_Click(object sender,EventArgs e) {
+			MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste(MessageCur.RawEmailIn);
+			msgbox.ShowDialog();
 		}
 
 		private void butDecrypt_Click(object sender,EventArgs e) {

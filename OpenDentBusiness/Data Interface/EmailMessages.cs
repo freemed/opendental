@@ -257,7 +257,7 @@ namespace OpenDentBusiness{
 			if(emailSentOrReceivedAck==EmailSentOrReceived.AckDirectProcessed) {
 				notificationType=Health.Direct.Common.Mail.Notifications.MDNStandard.NotificationType.Processed;
 			}
-			IEnumerable<Health.Direct.Common.Mail.Notifications.NotificationMessage> notificationMsgs=inMsg.CreateAcks("OpenDental","",notificationType);
+			IEnumerable<Health.Direct.Common.Mail.Notifications.NotificationMessage> notificationMsgs=inMsg.CreateAcks("OpenDental "+Assembly.GetExecutingAssembly().GetName().Version,"",notificationType);
 			if(notificationMsgs==null) {
 				return "";
 			}
@@ -278,6 +278,21 @@ namespace OpenDentBusiness{
 					if(notificationMsg.ToValue.Trim().ToLower()==notificationMsg.FromValue.Trim().ToLower()) {
 						continue;//Do not send an ack to self.
 					}
+					//THE FOLLOWING DID NOT FIX THE WARNING IN THE TRANSPORT TESTING TOOL.  We also tried adding these headers up a level directly on the encrypted message itself and that did not work either.
+					////The CreateAcks() function creates the 4 required MDN fields within the body of the email, but not in the headers of the message.
+					////The Transport Testing Tool (TTT) displays a warning if they are not also in the header of the unencrypted.
+					////Here we grab the data for the 4 MDN fields and copy them into the header before sending.
+					//Health.Direct.Common.Mime.HeaderCollection collectionMdnHeaders=new Health.Direct.Common.Mime.HeaderCollection();
+					//string[] arrayBodyLines=notificationMsg.Body.Text.Split(new string[] { "\r\n" },StringSplitOptions.RemoveEmptyEntries);
+					//string[] arrayFieldNamesToCopy=new string[] { "Disposition","Reporting-UA","Original-Message-ID","Final-Recipient" };
+					//for(int i=0;i<arrayBodyLines.Length;i++) {
+					//	for(int j=0;j<arrayFieldNamesToCopy.Length;j++) {
+					//		if(arrayBodyLines[i].StartsWith(arrayFieldNamesToCopy[j]+":")) {
+					//			collectionMdnHeaders.Add(arrayFieldNamesToCopy[j],arrayBodyLines[i].Substring(arrayFieldNamesToCopy[j].Length+1));
+					//		}
+					//	}
+					//}
+					//outMsgDirect.Message.Headers.Add(collectionMdnHeaders);//Add the MDN headers.
 					string strErrors=SendEmailDirect(outMsgDirect,emailAddressFrom);//encryption is performed in this step
 					if(strErrors=="") {
 						EmailMessage emailMessage=ConvertMessageToEmailMessage(outMsgDirect.Message,false);
@@ -299,16 +314,24 @@ namespace OpenDentBusiness{
 			return strErrorsAll;
 		}
 
+		///<summary>Call to cleanup newlines within a string before including in an email. The RFC 822 guide states that every single line in a raw email message must end with \r\n, also known as CRLF.
+		///Certain email providers will reject outgoing email from us if we have any lines ending with \n or \r. Email providers that we know care: Prosites. Other email providers seem to handle
+		///all different types of newlines, even though \r or \n by itself is not standard. This function replaces all \r and \n with \r\n.</summary>
+		private static string Tidy(string str) {
+			//This function assumes the worst case, which is a string that has all 3 types of newlines: \r, \n and \r\n
+			//We will first convert \r\n and \r into \n so that all our line endings are the same. Then replace \n with \r\n to make the newlines proper.
+			string retVal=str.Replace("\r\n","\n");//We must replace the two character newline first so that our following replacements do not create extra newlines.
+			retVal=retVal.Replace("\r","\n");//After this step, all newlines are in the form \n.
+			retVal=retVal.Replace("\n","\r\n");//After this step, all newlines will be in form \r\n.
+			return retVal;
+		}
+
 		/// <summary>This is used from wherever email needs to be sent throughout the program.  If a message must be encrypted, then encrypt it before calling this function.  nameValueCollectionHeaders can be null.</summary>
 		private static void SendEmailUnsecure(EmailMessage emailMessage,EmailAddress emailAddress,NameValueCollection nameValueCollectionHeaders,params AlternateView[] arrayAlternateViews) {
-			//In the message body, we must remove bare line feeds (\r or \n by themselves) from the message body.
-			//Newlines must be specified with \r\n as required by the 822 SMTP protocol, and some email providers
-			//will reject messages if each and every newline in the entire raw email is not exactly "\r\n". For example, Prosites.
-			string strMsgBodyText=emailMessage.BodyText.Replace("\r\n","\n").Replace("\r","\n").Replace("\n","\r\n");
 			//No need to check RemotingRole; no call to db.
 			if(emailAddress.ServerPort==465) {//implicit
 				//uses System.Web.Mail, which is marked as deprecated, but still supports implicit
-				System.Web.Mail.MailMessage message = new System.Web.Mail.MailMessage();
+				System.Web.Mail.MailMessage message=new System.Web.Mail.MailMessage();
 				message.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpserver",emailAddress.SMTPserver);
 				message.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpserverport","465");
 				message.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendusing","2");//sendusing: cdoSendUsingPort, value 2, for sending the message using the network.
@@ -319,8 +342,8 @@ namespace OpenDentBusiness{
 				message.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpusessl","true");//false was also tested and does not work
 				message.From=emailMessage.FromAddress;
 				message.To=emailMessage.ToAddress;
-				message.Subject=emailMessage.Subject;
-				message.Body=strMsgBodyText;
+				message.Subject=Tidy(emailMessage.Subject);
+				message.Body=Tidy(emailMessage.BodyText);
 				//message.Cc=;
 				//message.Bcc=;
 				//message.UrlContentBase=;
@@ -333,6 +356,7 @@ namespace OpenDentBusiness{
 						message.Headers.Add(arrayHeaderKeys[i],nameValueCollectionHeaders[arrayHeaderKeys[i]]);
 					}
 				}
+				//TODO: We need to add some kind of alternatve view or similar replacement for outgoing Direct messages to work with SSL. Write the body to a temporary file and attach with the correct mime type and name?
 				string attachPath=EmailMessages.GetEmailAttachPath();
 				System.Web.Mail.MailAttachment attach;
 				//foreach (string sSubstr in sAttach.Split(delim)){
@@ -355,8 +379,8 @@ namespace OpenDentBusiness{
 				MailMessage message=new MailMessage();
 				message.From=new MailAddress(emailMessage.FromAddress);
 				message.To.Add(emailMessage.ToAddress);
-				message.Subject=emailMessage.Subject;
-				message.Body=strMsgBodyText;
+				message.Subject=Tidy(emailMessage.Subject);
+				message.Body=Tidy(emailMessage.BodyText);
 				message.IsBodyHtml=false;
 				if(nameValueCollectionHeaders!=null) {
 					message.Headers.Add(nameValueCollectionHeaders);//Needed for Direct Acks to work.
@@ -632,6 +656,7 @@ namespace OpenDentBusiness{
 			EmailMessage emailMessage=null;
 			if(isEncrypted) {
 				emailMessage=ConvertMessageToEmailMessage(inMsg.Message,false);//Exclude attachments until we decrypt.
+				emailMessage.RawEmailIn=strRawEmail;//This raw email is encrypted.
 				emailMessage.EmailMessageNum=emailMessageNum;
 				emailMessage.SentOrReceived=EmailSentOrReceived.ReceivedEncrypted;
 				//The entire contents of the email are saved in the emailMessage.BodyText field, so that if decryption fails, the email will still be saved to the db for decryption later if possible.
@@ -642,6 +667,7 @@ namespace OpenDentBusiness{
 					//throw new ApplicationException("test decryption failure");
 					inMsg=directAgent.ProcessIncoming(inMsg);//Decrypts, valudates trust, etc.
 					emailMessage=ConvertMessageToEmailMessage(inMsg.Message,true);//If the message was wrapped, then the To, From, Subject and Date can change after decyption. We also need to create the attachments for the decrypted message.
+					emailMessage.RawEmailIn=inMsg.SerializeMessage();//Now that we have decrypted, we must get the raw email contents differently (cannot use strRawEmail). 
 					emailMessage.EmailMessageNum=emailMessageNum;
 					emailMessage.SentOrReceived=EmailSentOrReceived.ReceivedDirect;
 					emailMessage.RecipientAddress=emailAddressReceiver.EmailUsername;
@@ -658,6 +684,7 @@ namespace OpenDentBusiness{
 			}
 			else {//Unencrypted
 				emailMessage=ConvertMessageToEmailMessage(inMsg.Message,true);
+				emailMessage.RawEmailIn=strRawEmail;
 				emailMessage.EmailMessageNum=emailMessageNum;
 				emailMessage.SentOrReceived=EmailSentOrReceived.Received;
 				emailMessage.RecipientAddress=emailAddressReceiver.EmailUsername;
@@ -721,8 +748,13 @@ namespace OpenDentBusiness{
 			if(message.DateValue!=null) {//Is null when sending, but should not be null when receiving.
 				//The received email message date must be in a very specific format and must match the RFC822 standard.  Is a required field for RFC822.  http://tools.ietf.org/html/rfc822
 				//We need the received time from the server, so we can quickly identify messages which have already been downloaded and to avoid downloading duplicates.
-				string strDateVal=message.DateValue.Substring(0,31);//Example: "Tue, 12 Nov 2013 17:10:37 +0000 (UTC)"
-				emailMessage.MsgDateTime=DateTime.ParseExact(strDateVal,"ddd, dd MMM yyyy HH:mm:ss zzz",System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat);
+				//Examples: "12 Nov 2013 17:10:37 -0800", "Tue, 12 Nov 2013 17:10:37 +0000 (UTC)"
+				if(message.DateValue.Contains(",")) {//The day-of-week, comma and following space are optional. Examples: "Tue, 12 Nov 2013 17:10:37 +0000", "Tue, 12 Nov 2013 17:10:37 +0000 (UTC)"
+					emailMessage.MsgDateTime=DateTime.ParseExact(message.DateValue.Substring(0,31),"ddd, dd MMM yyyy HH:mm:ss zzz",System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat);
+				}
+				else {//Examples: "12 Nov 2013 17:10:37 -0800", "12 Nov 2013 17:10:37 -0800 (UTC)"
+					emailMessage.MsgDateTime=DateTime.ParseExact(message.DateValue.Substring(0,26),"dd MMM yyyy HH:mm:ss zzz",System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat);
+				}
 			}
 			else {//Sending the email.
 				emailMessage.MsgDateTime=DateTime.Now;
