@@ -2160,7 +2160,11 @@ namespace OpenDentBusiness {
 					command="ALTER TABLE intervention MODIFY DateEntry NOT NULL";
 					Db.NonQ(command);
 				}
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE ehrsummaryccd MODIFY ContentSummary longtext NOT NULL";
+					Db.NonQ(command);
+				}
+				//oracle ContentSummary data type is already clob which can handle up to 4GB of data.
 
 
 				command="UPDATE preference SET ValueString = '14.1.0.0' WHERE PrefName = 'DataBaseVersion'";
@@ -2168,6 +2172,9 @@ namespace OpenDentBusiness {
 			}
 			//To14_2_0();
 		}
+
+
+		
 
 
 
