@@ -2039,6 +2039,23 @@ namespace OpenDentBusiness {
 				command="UPDATE preference SET ValueString = '13.3.5.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To13_3_6();
+		}
+
+		private static void To13_3_6() {
+			if(FromVersion<new Version("13.3.6.0")) {
+				string command;
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE emailmessage ADD RawEmailIn longtext NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE emailmessage ADD RawEmailIn clob";
+					Db.NonQ(command);
+				}
+				command="UPDATE preference SET ValueString = '13.3.6.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To14_1_0();
 		}
 

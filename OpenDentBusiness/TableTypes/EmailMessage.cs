@@ -29,6 +29,10 @@ namespace OpenDentBusiness {
 		///Similar to the ToAddress, except the ToAddress could contain multiple recipient addresses
 		///or group email address instead. The recipient address helps match the an email to a particular EmailAddress.</summary>
 		public string RecipientAddress;
+		///<summary>For incomming email only.  The raw email contents.  Can be used for debugging if there are any issues parsing the content.
+		///This will bloat the database a little bit, but we need it for now to ensure our inbox is working in real world scenarios.
+		///We may remove later or move into a different table to increase the speed at which the inbox loads.</summary>
+		public string RawEmailIn;
 		///<summary>Not a database column.</summary>
 		[CrudColumn(IsNotDbColumn=true)]
 		public List<EmailAttach> Attachments;
