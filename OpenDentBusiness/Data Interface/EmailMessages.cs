@@ -228,6 +228,7 @@ namespace OpenDentBusiness{
 				strErrors+=ex.Message;
 				return strErrors;//Cannot recover from an encryption error.
 			}
+			outMsgEncrypted.Message.SubjectValue="Encrypted Message";//Prevents a warning in the transport testing tool (TTT). http://tools.ietf.org/html/rfc5322#section-3.6.5
 			EmailMessage emailMessageEncrypted=ConvertMessageToEmailMessage(outMsgEncrypted.Message,false);//No point in saving the encrypted attachment, because nobody can read it and it will bloat the OpenDentImages folder.
 			NameValueCollection nameValueCollectionHeaders=new NameValueCollection();
 			for(int i=0;i<outMsgEncrypted.Message.Headers.Count;i++) {
@@ -352,7 +353,6 @@ namespace OpenDentBusiness{
 				client.EnableSsl=emailAddress.UseSSL;
 				client.Timeout=180000;//3 minutes
 				MailMessage message=new MailMessage();
-				Attachment attach;
 				message.From=new MailAddress(emailMessage.FromAddress);
 				message.To.Add(emailMessage.ToAddress);
 				message.Subject=emailMessage.Subject;
@@ -365,6 +365,7 @@ namespace OpenDentBusiness{
 					message.AlternateViews.Add(arrayAlternateViews[i]);
 				}
 				string attachPath=EmailMessages.GetEmailAttachPath();
+				Attachment attach;
 				for(int i=0;i<emailMessage.Attachments.Count;i++) {
 					attach=new Attachment(ODFileUtils.CombinePaths(attachPath,emailMessage.Attachments[i].ActualFileName));
 					//@"C:\OpenDentalData\EmailAttachments\1");
@@ -471,6 +472,10 @@ namespace OpenDentBusiness{
 					}
 				}
 				directAgent.EncryptMessages=true;
+				//The Transport Testing Tool (TTT) complained when we sent a message that was not wrapped.
+				//Specifically, the tool looks for the headers Orig-Date and Message-Id after the message is decrypted.
+				//See http://tools.ietf.org/html/rfc5322#section-3.6.1 and http://tools.ietf.org/html/rfc5322#section-3.6.4 for details about these two header fields.
+				directAgent.WrapMessages=true;
 				HashDirectAgents[domain]=directAgent;
 			}
 			return directAgent;
@@ -793,6 +798,7 @@ namespace OpenDentBusiness{
 			return emailMessage;
 		}
 
+		///<summary>Converts our internal EmailMessage object to a Direct message object.  Used for outgoing email.  Wraps the message.</summary>
 		private static Health.Direct.Common.Mail.Message ConvertEmailMessageToMessage(EmailMessage emailMessage,bool hasAttachments) {
 			//No need to check RemotingRole; no call to db.
 			//We need to use emailAddressFrom.Username instead of emailAddressFrom.SenderAddress, because of how strict encryption is for matching the name to the certificate.
@@ -801,6 +807,14 @@ namespace OpenDentBusiness{
 				Health.Direct.Common.Mime.Header headerSubject=new Health.Direct.Common.Mime.Header("Subject",emailMessage.Subject);
 				message.Headers.Add(headerSubject);
 			}
+			//The Transport Testing Tool (TTT) complained when we sent a message that was not wrapped.
+			//It appears that wrapped messages are preferred when sending a message, although support for incoming wrapped messages is optional (unwrapped is required).  We support both unwrapped and wrapped.
+			//Specifically, the tool looks for the headers Orig-Date and Message-Id after the message is decrypted, so we need to include these two headers before encrypting an outgoing email.
+			//The message date must be in a very specific format and must match the RFC822 standard.  Is a required field for RFC822.  http://tools.ietf.org/html/rfc822
+			string strOrigDate=DateTime.Now.ToString("ddd, dd MMM yyyy HH:mm:ss zzz");//Example: "Tue, 12 Nov 2013 17:10:37 +08:00", which has an extra colon in the Zulu offset.
+			strOrigDate=strOrigDate.Remove(29,1);//Remove the colon from the Zulu offset, as required by the RFC 822 message format.
+			message.Date=new Health.Direct.Common.Mime.Header("Date",strOrigDate);//http://tools.ietf.org/html/rfc5322#section-3.6.1
+			message.AssignMessageID();//http://tools.ietf.org/html/rfc5322#section-3.6.4
 			string strBoundry="";
 			List<Health.Direct.Common.Mime.MimeEntity> listMimeParts=new List<Health.Direct.Common.Mime.MimeEntity>();
 			if(emailMessage.BodyText.Trim().Length>4 && emailMessage.BodyText.Trim().StartsWith("--") && emailMessage.BodyText.Trim().EndsWith("--")) {//The body text is multi-part.
