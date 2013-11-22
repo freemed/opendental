@@ -3160,8 +3160,14 @@ namespace OpenDental {
 				}
 				//if no dentist/hygenist is assigned to spot, then keep the original dentist/hygenist without prompt.  All appts must have prov.
 				if((assignedDent!=0 && assignedDent!=apt.ProvNum) || (assignedHyg!=0 && assignedHyg!=apt.ProvHyg)) {
-					if(Plugins.HookMethod(this, "ContrAppt.ContrApptSheet2_MouseUp_apptProvChangeQuestion",apt.AptStatus)
-						|| MsgBox.Show(this,MsgBoxButtons.YesNo,"Change provider?")) {
+					object[] parameters3={ apt,assignedDent,assignedHyg,procsForSingleApt,this };//Only used in following plugin hook.
+					if((Plugins.HookMethod(this,"ContrAppt.ContrApptSheet2_MouseUp_apptProvChangeQuestion",parameters3))) {
+						apt=(Appointment)parameters3[0];
+						assignedDent=(long)parameters3[1];
+						assignedDent=(long)parameters3[2];
+						goto PluginApptProvChangeQuestionEnd;
+					}
+					if(MsgBox.Show(this,MsgBoxButtons.YesNo,"Change provider?")) {
 						if(assignedDent!=0) {//the dentist will only be changed if the spot has a dentist.
 							apt.ProvNum=assignedDent;
 						}
@@ -3201,19 +3207,13 @@ namespace OpenDental {
 								}
 							}
 							else {//appt time not locked
-								object[] parameters = { apt.Pattern,calcPattern };
-								if((Plugins.HookMethod(this,"ContrAppt.ContrApptSheet2_MouseUp_changeProvApptLength",parameters))) {
-									apt.Pattern = (string)parameters[0];
-									calcPattern = (string)parameters[1];
-									goto PluginSkipQuestionProvLength;
-								}
 								if(MsgBox.Show(this,MsgBoxButtons.YesNo,"Change length for new provider?")) {
 									apt.Pattern=calcPattern;
 								}
-								PluginSkipQuestionProvLength: { }
 							}
 						}
 					}
+				PluginApptProvChangeQuestionEnd:{}
 				}
 			}
 			if(DoesOverlap(apt)) {
