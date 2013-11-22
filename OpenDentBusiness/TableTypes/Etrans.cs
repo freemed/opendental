@@ -113,7 +113,9 @@ namespace OpenDentBusiness{
 		///<summary>27 X12-835. Not used yet.</summary>
 		ERA_835,
 		///<summary>28 Ack from clearinghouse. X12-999.</summary>
-		Acknowledge_999
+		Acknowledge_999,
+		///<summary>29 Simple and generic ack from clearinghouse which is used to replace 997s, 999s, or 277s.</summary>
+		Ack_Interchange,
 	}
 
 

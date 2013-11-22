@@ -51,26 +51,33 @@ namespace OpenDentBusiness
 				row=messageRows[i];
 				segment=new X12Segment(row,Separators);
 				Segments.Add(segment);
-				if(segment.SegmentID=="IEA"){//if end of interchange
+				if(messageRows[i]=="") {
 					//do nothing
 				}
-				if(segment.SegmentID=="GS"){//if new functional group
+				else if(segment.SegmentID=="IEA") {//if end of interchange
+					//do nothing
+				}
+				else if(segment.SegmentID=="GS") {//if new functional group
 					FunctGroups.Add(new X12FunctionalGroup(segment));
 				}
-				else if(segment.SegmentID=="GE"){//if end of functional group
+				else if(segment.SegmentID=="GE") {//if end of functional group
 					//do nothing
 				}
-				else if(segment.SegmentID=="ST"){//if new transaction set
-					if(LastGroup().Transactions==null){
+				else if(segment.SegmentID=="ST") {//if new transaction set
+					if(LastGroup().Transactions==null) {
 						LastGroup().Transactions=new List<X12Transaction>();
 					}
 					LastGroup().Transactions.Add(new X12Transaction(segment));
 				}
-				else if(segment.SegmentID=="SE"){//if end of transaction
+				else if(segment.SegmentID=="SE") {//if end of transaction
 					//do nothing
 				}
-				else{//it must be a detail segment within a transaction.
-					if(LastTransaction().Segments==null){
+				else if(segment.SegmentID=="TA1") {//This segment can either replace or supplement any GS segments for any ack type (997,999,277).  The TA1 will always be before the first GS segment.
+					//Ignore for now.  We should eventually match TA101 with the ISA13 of the claim that we sent, so we can report the status to the user using fields TA104 and TA105.
+					//This segment is neither mandated or prohibited (see 277.pdf pg. 207).
+				}
+				else {//it must be a detail segment within a transaction.
+					if(LastTransaction().Segments==null) {
 						LastTransaction().Segments=new List<X12Segment>();
 					}
 					LastTransaction().Segments.Add(segment);
@@ -103,6 +110,22 @@ namespace OpenDentBusiness
 			string format=GetFormat();
 			if(format.Length>=6) {
 				return (format.Substring(2,4)=="5010");
+			}
+			return false;
+		}
+
+		///<summary>Returns true if there is a TA1 segment. The TA1 segment is neither mandated or prohibited (see 277.pdf pg. 207).
+		///The Inmidiata clearinghouse likes to use TA1 segments to replace the usual acknowledgements (format ISA-TA1-IEA).</summary>
+		public bool IsAckInterchange() {
+			for(int i=0;i<Segments.Count;i++) {
+				if(Segments[i].SegmentID=="GS") {
+					return false;//If a GS is present, it will get handled elsewhere.
+				}
+			}
+			for(int i=0;i<Segments.Count;i++) {
+				if(Segments[i].SegmentID=="TA1") {
+					return true;//A TA1 can be used when there are no GS segments.  That implies that it is an interchange ack.
+				}
 			}
 			return false;
 		}

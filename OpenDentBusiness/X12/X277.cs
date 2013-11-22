@@ -69,16 +69,25 @@ namespace OpenDentBusiness
 							seg=segments[i];//at least one STC segment is required at this location.
 							while(seg.SegmentID=="STC") {//there may be multiple STC segments.
 								i++;
+								if(i>=segments.Count) {
+									return;//End of file
+								}
 								seg=segments[i];
 							}
 							//Followed by 0 to 3 situational REF segments.
 							for(int j=0;j<3 && (seg.SegmentID=="REF");j++) {
 								i++;
+								if(i>=segments.Count) {
+									return;//End of file
+								}
 								seg=segments[i];
 							}
 							//Followed by 0 or 1 DTP segments. 
 							if(seg.SegmentID=="DTP") {
 								i++;
+								if(i>=segments.Count) {
+									return;//End of file
+								}
 								seg=segments[i];
 							}
 							//An entire iteration of loop 2200D is now finished. If another iteration is present, it will begin with a TRN segment.
@@ -295,45 +304,16 @@ namespace OpenDentBusiness
 					segNum++;
 					seg=segments[segNum];//STC segment. At least one, maybe multiple, but we only care about the first one.
 					string[] stc01=seg.Get(1).Split(new string[] { Separators.Subelement },StringSplitOptions.None);
-					//The codes are pulled from the Washington Publishing Company website (the makers of X12).
-					//http://www.wpc-edi.com/reference/codelists/healthcare/claim-status-category-codes/
-					//Code source 507. Since we only send batches, we can only get status codes starting with "A" returned to us.
-					switch(stc01[0]) {
-						case "A0"://Acknowledgement/Forwarded-The claim/encounter has been forwarded to another entity.
-							result[3]="A";
-							break;
-						case "A1"://Acknowledgement/Receipt-The claim/encounter has been received. This does not mean that the claim has been accepted for adjudication.
-							result[3]="A";//We say accepted, because if rejected later, then there should hopefully be another 277 which overwrites this one.
-							break;
-						case "A2"://Acknowledgement/Acceptance into adjudication system-The claim/encounter has been accepted into the adjudication system.
-							result[3]="A";
-							break;
-						case "A3"://Acknowledgement/Returned as unprocessable claim-The claim/encounter has been rejected and has not been entered into the adjudication system.
-							result[3]="R";
-							break;
-						case "A4"://Acknowledgement/Not Found-The claim/encounter can not be found in the adjudication system.
-							result[3]="R";//Not really rejected, but no way it could be accepted.
-							break;
-						case "A5"://Acknowledgement/Split Claim-The claim/encounter has been split upon acceptance into the adjudication system.
-							result[3]="A";
-							break;
-						case "A6"://Acknowledgement/Rejected for Missing Information - The claim/encounter is missing the information specified in the Status details and has been rejected.
-							result[3]="R";
-							break;
-						case "A7"://Acknowledgement/Rejected for Invalid Information - The claim/encounter has invalid information as specified in the Status details and has been rejected.
-							result[3]="R";
-							break;
-						case "A8"://cknowledgement / Rejected for relational field in error.
-							result[3]="R";
-							break;
-						default:
-							result[3]="";//Unknown.
-							break;
+					result[3]=GetStringForExternalSourceCode507(stc01[0]);
+					if(stc01.Length>1) {
+						result[8]=GetStringForExternalSourceCode508(stc01[1]);//STC01-2
 					}
-					result[8]=GetStringForExternalSourceCode508(PIn.Int(stc01[1]));//STC01-2
 					result[9]=seg.Get(4);
 					//Skip the remaining STC segments (if any).
 					segNum++;
+					if(segNum>=segments.Count) {
+						return result;//End of file
+					}
 					seg=segments[segNum];
 					while(seg.SegmentID=="STC") {
 						segNum++;
@@ -353,6 +333,9 @@ namespace OpenDentBusiness
 							result[5]=seg.Get(2);
 						}
 						segNum++;
+						if(segNum>=segments.Count) {
+							return result;//End of file
+						}
 						seg=segments[segNum];
 					}
 					//The DTP segment for the date of service will not be present when an invalid date was originally sent to the carrier (even though the specifications have it marked as a required segment).
@@ -396,94 +379,120 @@ namespace OpenDentBusiness
 			return result;
 		}
 
-		///<summary>Convert the given source code to a string. Only 0 to 56 included so far. All codes listed at http://www.wpc-edi.com/reference/codelists/healthcare/claim-status-codes. </summary>
-		public static string GetStringForExternalSourceCode508(int sourceCode) {
+		///<summary>Code source 507. Since we only send batches, we can only get status codes starting with "A" returned to us.  Returns empty string if no matches. 
+		///The codes are pulled from the Washington Publishing Company website (the makers of X12). http://www.wpc-edi.com/reference/codelists/healthcare/claim-status-category-codes. </summary>
+		public static string GetStringForExternalSourceCode507(string sourceCode) {
 			switch(sourceCode) {
-				case 0:
+				case "A0"://Acknowledgement/Forwarded-The claim/encounter has been forwarded to another entity.
+					return "A";
+				case "A1"://Acknowledgement/Receipt-The claim/encounter has been received. This does not mean that the claim has been accepted for adjudication.
+					return "A";//We say accepted, because if rejected later, then there should hopefully be another 277 which overwrites this one.
+				case "A2"://Acknowledgement/Acceptance into adjudication system-The claim/encounter has been accepted into the adjudication system.
+					return "A";
+				case "A3"://Acknowledgement/Returned as unprocessable claim-The claim/encounter has been rejected and has not been entered into the adjudication system.
+					return "R";
+				case "A4"://Acknowledgement/Not Found-The claim/encounter can not be found in the adjudication system.
+					return "R";//Not really rejected, but no way it could be accepted.
+				case "A5"://Acknowledgement/Split Claim-The claim/encounter has been split upon acceptance into the adjudication system.
+					return "A";
+				case "A6"://Acknowledgement/Rejected for Missing Information - The claim/encounter is missing the information specified in the Status details and has been rejected.
+					return "R";
+				case "A7"://Acknowledgement/Rejected for Invalid Information - The claim/encounter has invalid information as specified in the Status details and has been rejected.
+					return "R";
+				case "A8"://cknowledgement / Rejected for relational field in error.
+					return "R";
+			}
+			return "";//We have to return blank because this value is used to update the etrans table.
+		}
+
+		///<summary>Convert the given source code to a string. Only 0 to 56 included so far. All codes listed at http://www.wpc-edi.com/reference/codelists/healthcare/claim-status-codes. </summary>
+		public static string GetStringForExternalSourceCode508(string sourceCode) {
+			switch(sourceCode) {
+				case "0":
 					return "Cannot provide further status electronically.";
-				case 1:
+				case "1":
 					return "For more detailed information, see remittance advice.";
-				case 2:
+				case "2":
 					return "More detailed information in letter.";
-				case 3:
+				case "3":
 					return "Claim has been adjudicated and is awaiting payment cycle.";
-				case 6:
+				case "6":
 					return "Balance due from the subscriber.";
-				case 12:
+				case "12":
 					return "One or more originally submitted procedure codes have been combined.";
-				case 15:
+				case "15":
 					return "One or more originally submitted procedure code have been modified.";
-				case 16:
+				case "16":
 					return "Claim/encounter has been forwarded to entity. Note: This code requires use of an Entity Code.";
-				case 17:
+				case "17":
 					return "Claim/encounter has been forwarded by third party entity to entity. Note: This code requires use of an Entity Code.";
-				case 18:
+				case "18":
 					return "Entity received claim/encounter, but returned invalid status. Note: This code requires use of an Entity Code.";
-				case 19:
+				case "19":
 					return "Entity acknowledges receipt of claim/encounter. Note: This code requires use of an Entity Code.";
-				case 20:
+				case "20":
 					return "Accepted for processing.";
-				case 21:
+				case "21":
 					return "Missing or invalid information. Note: At least one other status code is required to identify the missing or invalid information.";
-				case 23:
+				case "23":
 					return "Returned to Entity. Note: This code requires use of an Entity Code.";
-				case 24:
+				case "24":
 					return "Entity not approved as an electronic submitter. Note: This code requires use of an Entity Code.";
-				case 25:
+				case "25":
 					return "Entity not approved. Note: This code requires use of an Entity Code.";
-				case 26:
+				case "26":
 					return "Entity not found. Note: This code requires use of an Entity Code.";
-				case 27:
+				case "27":
 					return "Policy canceled.";
-				case 29:
+				case "29":
 					return "Subscriber and policy number/contract number mismatched.";
-				case 30:
+				case "30":
 					return "Subscriber and subscriber id mismatched.";
-				case 31:
+				case "31":
 					return "Subscriber and policyholder name mismatched.";
-				case 32:
+				case "32":
 					return "Subscriber and policy number/contract number not found.";
-				case 33:
+				case "33":
 					return "Subscriber and subscriber id not found.";
-				case 34:
+				case "34":
 					return "Subscriber and policyholder name not found.";
-				case 35:
+				case "35":
 					return "Claim/encounter not found.";
-				case 37:
+				case "37":
 					return "Predetermination is on file, awaiting completion of services.";
-				case 38:
+				case "38":
 					return "Awaiting next periodic adjudication cycle.";
-				case 39:
+				case "39":
 					return "Charges for pregnancy deferred until delivery.";
-				case 40:
+				case "40":
 					return "Waiting for final approval.";
-				case 41:
+				case "41":
 					return "Special handling required at payer site.";
-				case 42:
+				case "42":
 					return "Awaiting related charges.";
-				case 44:
+				case "44":
 					return "Charges pending provider audit.";
-				case 45:
+				case "45":
 					return "Awaiting benefit determination.";
-				case 46:
+				case "46":
 					return "Internal review/audit.";
-				case 47:
+				case "47":
 					return "Internal review/audit - partial payment made.";
-				case 49:
+				case "49":
 					return "Pending provider accreditation review.";
-				case 50:
+				case "50":
 					return "Claim waiting for internal provider verification.";
-				case 51:
+				case "51":
 					return "Investigating occupational illness/accident.";
-				case 52:
+				case "52":
 					return "Investigating existence of other insurance coverage.";
-				case 53:
+				case "53":
 					return "Claim being researched for Insured ID/Group Policy Number error.";
-				case 54:
+				case "54":
 					return "Duplicate of a previously processed claim/line.";
-				case 55:
+				case "55":
 					return "Claim assigned to an approver/analyst.";
-				case 56:
+				case "56":
 					return "Awaiting eligibility determination.";
 			}
 			return sourceCode.ToString();//There are over 700 total, but we chose to display the most common codes. This will at least display the code number for the user so they can look it up.

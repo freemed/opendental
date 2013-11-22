@@ -490,7 +490,13 @@ namespace OpenDentBusiness{
 			string command;
 			if(X12object.IsX12(messageText)) {
 				X12object Xobj=new X12object(messageText);
-				if(Xobj.Is997()) {
+				if(Xobj.IsAckInterchange()) {
+					etrans.Etype=EtransType.Ack_Interchange;
+					Etranss.Insert(etrans);
+					//At some point in the future, we should use TA101 to match to batch number and TA104 to get the ack code, 
+					//then update historic etrans entries like we do for 997s, 999s and 277s.
+				}
+				else if(Xobj.Is997()) {
 					X997 x997=new X997(messageText);
 					etrans.Etype=EtransType.Acknowledge_997;
 					etrans.BatchNumber=x997.GetBatchNumber();
