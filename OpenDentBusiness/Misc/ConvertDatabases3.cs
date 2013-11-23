@@ -2124,30 +2124,50 @@ namespace OpenDentBusiness {
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE ehrmeasureevent ADD CodeValue varchar(30) NOT NULL";
+					command="ALTER TABLE ehrmeasureevent ADD CodeValueEvent varchar(30) NOT NULL";
 					Db.NonQ(command);
-					command="ALTER TABLE ehrmeasureevent ADD INDEX (CodeValue)";
+					command="ALTER TABLE ehrmeasureevent ADD INDEX (CodeValueEvent)";
 					Db.NonQ(command);
 				}
 				else {//oracle
-					command="ALTER TABLE ehrmeasureevent ADD CodeValue varchar2(30)";
+					command="ALTER TABLE ehrmeasureevent ADD CodeValueEvent varchar2(30)";
 					Db.NonQ(command);
-					command="CREATE INDEX ehrmeasureevent_CodeValue ON ehrmeasureevent (CodeValue)";
+					command="CREATE INDEX ehrmeasureevent_CodeValueEvent ON ehrmeasureevent (CodeValueEvent)";
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE ehrmeasureevent ADD CodeSystem varchar(30) NOT NULL";
+					command="ALTER TABLE ehrmeasureevent ADD CodeSystemEvent varchar(30) NOT NULL";
 					Db.NonQ(command);
 				}
 				else {//oracle
-					command="ALTER TABLE ehrmeasureevent ADD CodeSystem varchar2(30)";
+					command="ALTER TABLE ehrmeasureevent ADD CodeSystemEvent varchar2(30)";
 					Db.NonQ(command);
 				}
 				//oracle compatible
-				command="UPDATE ehrmeasureevent SET CodeValue='11366-2' WHERE EventType=8";//Set all TobaccoUseAssessed ehrmeasureevents to code for 'History of tobacco use Narrative'
+				command="UPDATE ehrmeasureevent SET CodeValueEvent='11366-2' WHERE EventType=8";//Set all TobaccoUseAssessed ehrmeasureevents to code for 'History of tobacco use Narrative'
 				Db.NonQ(command);
-				command="UPDATE ehrmeasureevent SET CodeSystem='LOINC' WHERE EventType=8";//All TobaccoUseAssessed codes are LOINC codes
+				command="UPDATE ehrmeasureevent SET CodeSystemEvent='LOINC' WHERE EventType=8";//All TobaccoUseAssessed codes are LOINC codes
 				Db.NonQ(command);
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE ehrmeasureevent ADD CodeValueResult varchar(30) NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE ehrmeasureevent ADD INDEX (CodeValueResult)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE ehrmeasureevent ADD CodeValueResult varchar2(30)";
+					Db.NonQ(command);
+					command="CREATE INDEX ehrmeasureevent_CodeValueResult ON ehrmeasureevent (CodeValueResult)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE ehrmeasureevent ADD CodeSystemResult varchar(30) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE ehrmeasureevent ADD CodeSystemResult varchar2(30)";
+					Db.NonQ(command);
+				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE intervention CHANGE DateTimeEntry DateEntry date NOT NULL DEFAULT '0001-01-01'";
 					Db.NonQ(command);

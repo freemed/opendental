@@ -30,8 +30,6 @@
 			this.comboSmokeStatus = new System.Windows.Forms.ComboBox();
 			this.butAssessed = new System.Windows.Forms.Button();
 			this.butIntervention = new System.Windows.Forms.Button();
-			this.butDelete = new System.Windows.Forms.Button();
-			this.label3 = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
 			this.comboAssessmentType = new System.Windows.Forms.ComboBox();
@@ -45,7 +43,7 @@
 			// butCancel
 			// 
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Location = new System.Drawing.Point(615, 416);
+			this.butCancel.Location = new System.Drawing.Point(615, 412);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 23);
 			this.butCancel.TabIndex = 8;
@@ -56,7 +54,7 @@
 			// butOK
 			// 
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Location = new System.Drawing.Point(534, 416);
+			this.butOK.Location = new System.Drawing.Point(534, 412);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75, 23);
 			this.butOK.TabIndex = 9;
@@ -103,42 +101,22 @@
 			this.butIntervention.UseVisualStyleBackColor = true;
 			this.butIntervention.Click += new System.EventHandler(this.butIntervention_Click);
 			// 
-			// butDelete
-			// 
-			this.butDelete.Anchor = System.Windows.Forms.AnchorStyles.None;
-			this.butDelete.Location = new System.Drawing.Point(117, 371);
-			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(75, 23);
-			this.butDelete.TabIndex = 22;
-			this.butDelete.Text = "Delete";
-			this.butDelete.UseVisualStyleBackColor = true;
-			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
-			// 
-			// label3
-			// 
-			this.label3.Anchor = System.Windows.Forms.AnchorStyles.None;
-			this.label3.Location = new System.Drawing.Point(198, 371);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(190, 31);
-			this.label3.TabIndex = 23;
-			this.label3.Text = "Delete any historical entries from the list above which are not accurate.";
-			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(413, 72);
+			this.label1.Location = new System.Drawing.Point(413, 67);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(237, 17);
+			this.label1.Size = new System.Drawing.Size(209, 30);
 			this.label1.TabIndex = 24;
-			this.label1.Text = "This is used for calculating MU measures";
+			this.label1.Text = "The patient\'s current smoking status.  Used for calculating MU measures.";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// label4
 			// 
 			this.label4.Location = new System.Drawing.Point(279, 109);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(371, 18);
+			this.label4.Size = new System.Drawing.Size(411, 18);
 			this.label4.TabIndex = 25;
-			this.label4.Text = "This is used for calculating Tabacco Assessment and Cessation CQMs";
+			this.label4.Text = "The history is used for calculating Tabacco Assessment and Cessation CQMs";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// comboAssessmentType
@@ -174,7 +152,7 @@
 			// 
 			this.textDateAssessed.Location = new System.Drawing.Point(117, 18);
 			this.textDateAssessed.Name = "textDateAssessed";
-			this.textDateAssessed.Size = new System.Drawing.Size(80, 20);
+			this.textDateAssessed.Size = new System.Drawing.Size(140, 20);
 			this.textDateAssessed.TabIndex = 29;
 			// 
 			// label6
@@ -183,7 +161,7 @@
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(100, 17);
 			this.label6.TabIndex = 30;
-			this.label6.Text = "Assessment Date";
+			this.label6.Text = "Date Assessed";
 			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// gridMain
@@ -194,7 +172,7 @@
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridMain.Size = new System.Drawing.Size(533, 229);
+			this.gridMain.Size = new System.Drawing.Size(573, 263);
 			this.gridMain.TabIndex = 19;
 			this.gridMain.Title = "History";
 			this.gridMain.TranslationName = null;
@@ -212,8 +190,6 @@
 			this.Controls.Add(this.label5);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.label1);
-			this.Controls.Add(this.label3);
-			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.butIntervention);
 			this.Controls.Add(this.butAssessed);
 			this.Controls.Add(this.gridMain);
@@ -240,8 +216,6 @@
 		private System.Windows.Forms.Button butAssessed;
 		private OpenDental.UI.ODGrid gridMain;
 		private System.Windows.Forms.Button butIntervention;
-		private System.Windows.Forms.Button butDelete;
-		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.ComboBox comboAssessmentType;

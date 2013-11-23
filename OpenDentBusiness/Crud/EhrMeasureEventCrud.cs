@@ -51,8 +51,10 @@ namespace OpenDentBusiness.Crud{
 				ehrMeasureEvent.EventType         = (EhrMeasureEventType)PIn.Int(table.Rows[i]["EventType"].ToString());
 				ehrMeasureEvent.PatNum            = PIn.Long  (table.Rows[i]["PatNum"].ToString());
 				ehrMeasureEvent.MoreInfo          = PIn.String(table.Rows[i]["MoreInfo"].ToString());
-				ehrMeasureEvent.CodeValue         = PIn.String(table.Rows[i]["CodeValue"].ToString());
-				ehrMeasureEvent.CodeSystem        = PIn.String(table.Rows[i]["CodeSystem"].ToString());
+				ehrMeasureEvent.CodeValueEvent    = PIn.String(table.Rows[i]["CodeValueEvent"].ToString());
+				ehrMeasureEvent.CodeSystemEvent   = PIn.String(table.Rows[i]["CodeSystemEvent"].ToString());
+				ehrMeasureEvent.CodeValueResult   = PIn.String(table.Rows[i]["CodeValueResult"].ToString());
+				ehrMeasureEvent.CodeSystemResult  = PIn.String(table.Rows[i]["CodeSystemResult"].ToString());
 				retVal.Add(ehrMeasureEvent);
 			}
 			return retVal;
@@ -93,7 +95,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="EhrMeasureEventNum,";
 			}
-			command+="DateTEvent,EventType,PatNum,MoreInfo,CodeValue,CodeSystem) VALUES(";
+			command+="DateTEvent,EventType,PatNum,MoreInfo,CodeValueEvent,CodeSystemEvent,CodeValueResult,CodeSystemResult) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(ehrMeasureEvent.EhrMeasureEventNum)+",";
 			}
@@ -102,8 +104,10 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Int   ((int)ehrMeasureEvent.EventType)+","
 				+    POut.Long  (ehrMeasureEvent.PatNum)+","
 				+"'"+POut.String(ehrMeasureEvent.MoreInfo)+"',"
-				+"'"+POut.String(ehrMeasureEvent.CodeValue)+"',"
-				+"'"+POut.String(ehrMeasureEvent.CodeSystem)+"')";
+				+"'"+POut.String(ehrMeasureEvent.CodeValueEvent)+"',"
+				+"'"+POut.String(ehrMeasureEvent.CodeSystemEvent)+"',"
+				+"'"+POut.String(ehrMeasureEvent.CodeValueResult)+"',"
+				+"'"+POut.String(ehrMeasureEvent.CodeSystemResult)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -120,8 +124,10 @@ namespace OpenDentBusiness.Crud{
 				+"EventType         =  "+POut.Int   ((int)ehrMeasureEvent.EventType)+", "
 				+"PatNum            =  "+POut.Long  (ehrMeasureEvent.PatNum)+", "
 				+"MoreInfo          = '"+POut.String(ehrMeasureEvent.MoreInfo)+"', "
-				+"CodeValue         = '"+POut.String(ehrMeasureEvent.CodeValue)+"', "
-				+"CodeSystem        = '"+POut.String(ehrMeasureEvent.CodeSystem)+"' "
+				+"CodeValueEvent    = '"+POut.String(ehrMeasureEvent.CodeValueEvent)+"', "
+				+"CodeSystemEvent   = '"+POut.String(ehrMeasureEvent.CodeSystemEvent)+"', "
+				+"CodeValueResult   = '"+POut.String(ehrMeasureEvent.CodeValueResult)+"', "
+				+"CodeSystemResult  = '"+POut.String(ehrMeasureEvent.CodeSystemResult)+"' "
 				+"WHERE EhrMeasureEventNum = "+POut.Long(ehrMeasureEvent.EhrMeasureEventNum);
 			Db.NonQ(command);
 		}
@@ -145,13 +151,21 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="MoreInfo = '"+POut.String(ehrMeasureEvent.MoreInfo)+"'";
 			}
-			if(ehrMeasureEvent.CodeValue != oldEhrMeasureEvent.CodeValue) {
+			if(ehrMeasureEvent.CodeValueEvent != oldEhrMeasureEvent.CodeValueEvent) {
 				if(command!=""){ command+=",";}
-				command+="CodeValue = '"+POut.String(ehrMeasureEvent.CodeValue)+"'";
+				command+="CodeValueEvent = '"+POut.String(ehrMeasureEvent.CodeValueEvent)+"'";
 			}
-			if(ehrMeasureEvent.CodeSystem != oldEhrMeasureEvent.CodeSystem) {
+			if(ehrMeasureEvent.CodeSystemEvent != oldEhrMeasureEvent.CodeSystemEvent) {
 				if(command!=""){ command+=",";}
-				command+="CodeSystem = '"+POut.String(ehrMeasureEvent.CodeSystem)+"'";
+				command+="CodeSystemEvent = '"+POut.String(ehrMeasureEvent.CodeSystemEvent)+"'";
+			}
+			if(ehrMeasureEvent.CodeValueResult != oldEhrMeasureEvent.CodeValueResult) {
+				if(command!=""){ command+=",";}
+				command+="CodeValueResult = '"+POut.String(ehrMeasureEvent.CodeValueResult)+"'";
+			}
+			if(ehrMeasureEvent.CodeSystemResult != oldEhrMeasureEvent.CodeSystemResult) {
+				if(command!=""){ command+=",";}
+				command+="CodeSystemResult = '"+POut.String(ehrMeasureEvent.CodeSystemResult)+"'";
 			}
 			if(command==""){
 				return;

@@ -18,10 +18,15 @@ namespace OpenDentBusiness {
 		public long PatNum;
 		///<summary>Only used for some types: EducationProvided, TobaccoCessation, TobaccoUseAssessed.</summary>
 		public string MoreInfo;
-		///<summary>The code for this event.  Example: TobaccoUseAssessed can be one of three LOINC codes: 11366-2 History of tobacco use Narrative, 68535-4 Have you used tobacco in the last 30 days SAMHSA, and 68536-2 Have you used smokeless tobacco product in the last 30 days SAMHSA.</summary>
-		public string CodeValue;
-		///<summary>The code system name for this code.  Examples: LOINC, SNOMEDCT.</summary>
-		public string CodeSystem;
+		///<summary>The code for this event.  Example: TobaccoUseAssessed can be one of three LOINC codes: 11366-2 History of tobacco use Narrative, 68535-4 Have you used tobacco in the last 30 days, and 68536-2 Have you used smokeless tobacco product in the last 30 days.</summary>
+		public string CodeValueEvent;
+		///<summary>The code system name for the event code.  Examples: LOINC, SNOMEDCT.</summary>
+		public string CodeSystemEvent;
+		///<summary>The code for this event result.  Example: A TobaccoUseAssessed event type could result in a finding of SNOMED code 8517006 - Ex-smoker (finding).  There are 54 allowed tobacco user/non-user codes, and the user is allowed to select from any SNOMED code if they wish, for a TobaccoUseAssessed event.</summary>
+		public string CodeValueResult;
+		///<summary>The code system for this event result.  Example: SNOMEDCT, </summary>
+		public string CodeSystemResult;
+
 
 		///<summary></summary>
 		public EhrMeasureEvent Copy() {

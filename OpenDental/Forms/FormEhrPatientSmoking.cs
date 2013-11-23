@@ -24,6 +24,9 @@ namespace OpenDental {
 		}
 
 		private void FormPatientSmoking_Load(object sender,EventArgs e) {
+			PatOld=PatCur.Copy();
+			_TobaccoCodeSelected=PatCur.SmokingSnoMed;
+			textDateAssessed.Text=DateTime.Now.ToString();
 			#region ComboSmokeStatus
 			comboSmokeStatus.Items.Add("None");//First and default index
 			//Smoking statuses add in the same order as they appear in the SmokingSnoMed enum (Starting at comboSmokeStatus index 1). Changes to the enum order will change the order added so they will always match
@@ -62,21 +65,16 @@ namespace OpenDental {
 					}
 				}
 			}
-			PatOld=PatCur.Copy();
-			_TobaccoCodeSelected=PatCur.SmokingSnoMed;
-			if(_TobaccoCodeSelected=="") {
-				comboSmokeStatus.SelectedIndex=0;//None
+			comboSmokeStatus.SelectedIndex=0;//None
+			try {
+				comboSmokeStatus.SelectedIndex=(int)Enum.Parse(typeof(SmokingSnoMed),"_"+_TobaccoCodeSelected,true)+1;
 			}
-			else {
-				try {
-					comboSmokeStatus.SelectedIndex=(int)Enum.Parse(typeof(SmokingSnoMed),"_"+_TobaccoCodeSelected,true)+1;
-				}
-				catch {
-					//if not one of the statuses in the enum, get the Snomed object from the patient's current smoking snomed code
-					Snomed smokeCur=Snomeds.GetByCode(_TobaccoCodeSelected);
-					if(smokeCur!=null) {//valid snomed code, set the combo box text to this snomed description
-						comboSmokeStatus.Text=smokeCur.Description;
-					}
+			catch {
+				//if not one of the statuses in the enum, get the Snomed object from the patient's current smoking snomed code
+				Snomed smokeCur=Snomeds.GetByCode(_TobaccoCodeSelected);
+				if(smokeCur!=null) {//valid snomed code, set the combo box text to this snomed description
+					comboSmokeStatus.SelectedIndex=-1;
+					comboSmokeStatus.Text=smokeCur.Description;
 				}
 			}
 			#endregion
@@ -92,6 +90,7 @@ namespace OpenDental {
 			for(int i=_ListEvents.Count-1;i>-1;i--) {
 				if(_ListEvents[i].EventType==EhrMeasureEventType.TobaccoUseAssessed) {
 					mostRecentAssessment=_ListEvents[i];//_ListEvents filled ordered by DateTEvent, most recent assessment is last one in the list of type assessed
+					break;
 				}
 			}
 			for(int i=0;i<_ListAssessmentCodes.Count;i++) {
@@ -99,12 +98,11 @@ namespace OpenDental {
 				if(i==0) {
 					comboAssessmentType.SelectedIndex=i;//default to the first one in the list, 'History of tobacco use Narrative'
 				}
-				if(mostRecentAssessment.CodeValue==_ListAssessmentCodes[i].CodeValue && mostRecentAssessment.CodeSystem==_ListAssessmentCodes[i].CodeSystem) {
+				if(mostRecentAssessment.CodeValueEvent==_ListAssessmentCodes[i].CodeValue && mostRecentAssessment.CodeSystemEvent==_ListAssessmentCodes[i].CodeSystem) {
 					comboAssessmentType.SelectedIndex=i;//set to most recent assessment
 				}
 			}
 			#endregion
-			textDateAssessed.Text=DateTime.Now.ToShortDateString();
 		}
 
 		private void FillGrid() {
@@ -124,7 +122,13 @@ namespace OpenDental {
 			for(int i=0;i<_ListEvents.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(_ListEvents[i].DateTEvent.ToShortDateString());
-				row.Cells.Add(_ListEvents[i].EventType.ToString());
+				Loinc lCur=Loincs.GetByCode(_ListEvents[i].CodeValueEvent);//TobaccoUseAssessed events can be one of three types, all LOINC codes
+				if(lCur!=null) {
+					row.Cells.Add(lCur.NameLongCommon);
+				}
+				else {
+					row.Cells.Add(_ListEvents[i].EventType.ToString());
+				}
 				row.Cells.Add(_ListEvents[i].MoreInfo);
 				row.Tag=_ListEvents[i];
 				listRows.Add(row);
@@ -212,35 +216,54 @@ namespace OpenDental {
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			if(_ListEvents[e.Row].EventType!=EhrMeasureEventType.TobaccoCessation) {
-				MessageBox.Show("Only Tobacco Cessation entries may be edited.");
-				return;
+			object objCur=gridMain.Rows[e.Row].Tag;
+			//gridMain is filled with assessments, interventions, and/or medications
+			if(objCur.GetType().Name=="EhrMeasureEvent") {
+				//if assessment, we will allow them to change the DateTEvent, but not the status or more info box
+				FormEhrMeasureEventEdit FormM=new FormEhrMeasureEventEdit();
+				FormM.MeasCur=(EhrMeasureEvent)objCur;
+				FormM.ShowDialog();
 			}
-			FormEhrMeasureEventEdit formM=new FormEhrMeasureEventEdit();
-			formM.MeasCur=_ListEvents[e.Row];
-			formM.ShowDialog();
+			if(objCur.GetType().Name=="Intervention") {
+				FormInterventionEdit FormI=new FormInterventionEdit();
+				FormI.InterventionCur=(Intervention)objCur;
+				FormI.IsAllTypes=false;
+				FormI.IsSelectionMode=false;
+				FormI.ShowDialog();
+			}
+			if(objCur.GetType().Name=="MedicationPat") {
+				FormMedPat FormMP=new FormMedPat();
+				FormMP.MedicationPatCur=(MedicationPat)objCur;
+				FormMP.IsNew=false;
+				FormMP.ShowDialog();
+			}
 			FillGrid();
 		}
 
 		private void comboSmokeStatus_SelectionChangeCommitted(object sender,EventArgs e) {
-			if(comboSmokeStatus.SelectedIndex==0) {//If None, do not create an event
+			if(comboSmokeStatus.SelectedIndex<=0) {//If None or text set to other selected Snomed code so -1, do not create an event
 				return;
 			}
-			if(PIn.Date(textDateAssessed.Text).Date!=DateTime.Today) {//if date set to date other than current date, do not auto insert
+			//SelectedIndex guaranteed to be greater than 0
+			_TobaccoCodeSelected=((SmokingSnoMed)comboSmokeStatus.SelectedIndex-1).ToString().Substring(1);
+			DateTime dateTEntered=PIn.DateT(textDateAssessed.Text);
+			if(dateTEntered.Year<1880 || dateTEntered.Date!=DateTime.Now.Date) {//if date set to date other than current date, do not auto insert
 				return;
 			}
 			//Automatically make an entry
 			for(int i=0;i<_ListEvents.Count;i++) {
-				if(_ListEvents[i].DateTEvent.Date==DateTime.Today) {
-					return;
+				if(_ListEvents[i].DateTEvent.Date==dateTEntered.Date) {
+					return;//if assessment already exists for date set, do not auto insert
 				}
 			}
-			//an entry for today does not yet exist
+			//an entry for the date entered does not yet exist
 			EhrMeasureEvent meas = new EhrMeasureEvent();
-			meas.DateTEvent=DateTime.Now;
+			meas.DateTEvent=dateTEntered;
 			meas.EventType=EhrMeasureEventType.TobaccoUseAssessed;
 			meas.PatNum=PatCur.PatNum;
-			meas.MoreInfo=comboSmokeStatus.SelectedItem.ToString();
+			meas.CodeValueEvent=_ListAssessmentCodes[comboAssessmentType.SelectedIndex].CodeValue;
+			meas.CodeSystemEvent=_ListAssessmentCodes[comboAssessmentType.SelectedIndex].CodeSystem;
+			meas.MoreInfo=_TobaccoCodeSelected+" - "+comboSmokeStatus.SelectedItem.ToString();
 			EhrMeasureEvents.Insert(meas);
 			FillGrid();
 		}
@@ -250,25 +273,30 @@ namespace OpenDental {
 				MessageBox.Show("You must select a smoking status.");
 				return;
 			}
+			DateTime dateTEntered=PIn.DateT(textDateAssessed.Text);
+			if(dateTEntered.Year<1880) {
+				MsgBox.Show(this,"Please fix date and time first.");
+				return;
+			}
 			for(int i=0;i<_ListEvents.Count;i++) {
-				if(_ListEvents[i].DateTEvent.Date==PIn.Date(textDateAssessed.Text).Date) {
+				if(_ListEvents[i].DateTEvent.Date==dateTEntered.Date) {
 					MessageBox.Show("A Tobacco Assessment entry already exists with the selected date.");
 					return;
 				}
 			}
-			EhrMeasureEvent meas = new EhrMeasureEvent();
-			meas.DateTEvent=PIn.Date(textDateAssessed.Text);
+			EhrMeasureEvent meas=new EhrMeasureEvent();
+			meas.DateTEvent=dateTEntered;
 			meas.EventType=EhrMeasureEventType.TobaccoUseAssessed;
 			meas.PatNum=PatCur.PatNum;
+			meas.CodeValueEvent=_ListAssessmentCodes[comboAssessmentType.SelectedIndex].CodeValue;
+			meas.CodeSystemEvent=_ListAssessmentCodes[comboAssessmentType.SelectedIndex].CodeSystem;
 			string moreInfo=_TobaccoCodeSelected;
-			if(comboSmokeStatus.SelectedIndex==-1) {
-				Snomed selectedSnomed=Snomeds.GetByCode(_TobaccoCodeSelected);
-				if(selectedSnomed!=null) {
-					moreInfo+=" - "+selectedSnomed.Description;
-				}
+			Snomed selectedSnomed=Snomeds.GetByCode(_TobaccoCodeSelected);
+			if(selectedSnomed==null) {//should not happen if they choose a snomed code from snomed list, so using SelectedItem is safe
+				moreInfo+=" - "+comboSmokeStatus.SelectedItem.ToString();
 			}
 			else {
-				moreInfo+=" - "+comboSmokeStatus.SelectedItem.ToString();
+				moreInfo+=" - "+selectedSnomed.Description;
 			}
 			meas.MoreInfo=moreInfo;
 			EhrMeasureEvents.Insert(meas);
@@ -296,6 +324,7 @@ namespace OpenDental {
 		}
 
 		private void butSnomed_Click(object sender,EventArgs e) {
+			MsgBox.Show(this,"Selecting a code that is not in the recommended list of codes may make it more difficult to meet Meaningful Use and CQM's.");
 			FormSnomeds FormS=new FormSnomeds();
 			FormS.IsSelectionMode=true;
 			FormS.ShowDialog();
@@ -314,32 +343,12 @@ namespace OpenDental {
 			comboSmokeStatus.Text=FormS.SelectedSnomed.Description;
 		}
 
-		private void butDelete_Click(object sender,EventArgs e) {
-			if(gridMain.SelectedIndices.Length < 1) {
-				MessageBox.Show("Please select at least one record to delete.");
-				return;
-			}
-			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
-				EhrMeasureEvents.Delete(_ListEvents[gridMain.SelectedIndices[i]].EhrMeasureEventNum);
-			}
-			FillGrid();
-		}
-
 		private void butOK_Click(object sender,EventArgs e) {
-			if(comboSmokeStatus.SelectedIndex==0//None
-				|| comboSmokeStatus.SelectedIndex==-1)//should never happen
-			{
+			if(comboSmokeStatus.SelectedIndex==0) {//None
 				PatCur.SmokingSnoMed="";
 			}
 			else {
-				string smokeStatusSelected="";
-				try {
-					smokeStatusSelected=((SmokingSnoMed)comboSmokeStatus.SelectedIndex-1).ToString().Substring(1);
-				}
-				catch {//selected index was greater than 0, but casting to SmokingSnoMed failed so it must not be one of the enum values, get the snomed object from the snomed table
-					smokeStatusSelected=comboSmokeStatus.SelectedItem.ToString().Split(new char[] { ' ' },StringSplitOptions.RemoveEmptyEntries)[0];
-				}
-				PatCur.SmokingSnoMed=smokeStatusSelected;
+				PatCur.SmokingSnoMed=_TobaccoCodeSelected;
 			}
 			Patients.Update(PatCur,PatOld);
 			DialogResult=DialogResult.OK;
