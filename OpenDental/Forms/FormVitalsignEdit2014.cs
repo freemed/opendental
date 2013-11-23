@@ -378,23 +378,20 @@ namespace OpenDental {
 		private void FillGridInterventions(bool isChild) {
 			DateTime examDate=PIn.Date(textDateTaken.Text);//this may be different than the saved VitalsignCur.DateTaken if user edited and has not hit ok to save
 			#region GetInterventionsThatApply
-			List<Intervention> listIntervention=Interventions.Refresh(VitalsignCur.PatNum);
-			if(listIntervention.Count>0) {
-				List<InterventionCodeSet> listCodeSets;
-				if(isChild) {
-					listCodeSets=new List<InterventionCodeSet> { InterventionCodeSet.Nutrition,InterventionCodeSet.PhysicalActivity };//Counseling for Nutrition or Physical Activity
+			List<Intervention> listIntervention=new List<Intervention>();
+			if(isChild) {
+				listIntervention=Interventions.Refresh(VitalsignCur.PatNum,InterventionCodeSet.Nutrition);
+				listIntervention.AddRange(Interventions.Refresh(VitalsignCur.PatNum,InterventionCodeSet.PhysicalActivity));
+			}
+			else {
+				listIntervention=Interventions.Refresh(VitalsignCur.PatNum,InterventionCodeSet.AboveNormalWeight);
+				listIntervention.AddRange(Interventions.Refresh(VitalsignCur.PatNum,InterventionCodeSet.BelowNormalWeight));
+			}
+			for(int i=listIntervention.Count-1;i>-1;i--) {
+				if(listIntervention[i].DateEntry.Date<=examDate.Date && listIntervention[i].DateEntry.Date>examDate.AddMonths(-6).Date) {
+					continue;
 				}
-				else {
-					listCodeSets=new List<InterventionCodeSet> { InterventionCodeSet.AboveNormalWeight,InterventionCodeSet.BelowNormalWeight };//Above Normal, Referral, Below Normal Interventions
-				}
-				for(int i=listIntervention.Count-1;i>-1;i--) {
-					if(listCodeSets.Contains(listIntervention[i].CodeSet)) {
-						if(listIntervention[i].DateEntry.Date<=examDate.Date && listIntervention[i].DateEntry.Date>examDate.AddMonths(-6).Date) {
-							continue;
-						}
-					}
-					listIntervention.RemoveAt(i);
-				}
+				listIntervention.RemoveAt(i);
 			}
 			#endregion
 			#region GetMedicationOrdersThatApply

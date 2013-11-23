@@ -11,8 +11,9 @@ using OpenDental.UI;
 namespace OpenDental {
 	public partial class FormInterventionEdit:Form {
 		public Intervention InterventionCur;
-		///<summary>If launching from another form, like FormVitalsignEdit2014, we will give the user a list of codes from which to choose that are in the value sets above/below normal follow-up and referrals where weight assessment may occur.  This bool will indicate that we have given them a recommended set of codes to choose from and if they select a code from a different set of codes we need to warn them about the affect on CQM's.</summary>
+		///<summary>This bool will determine if we show every intervention type we support or only a specific subset related to the form we launch from.  Currently only set to true when adding an intervention from FormInterventions when pressing the Add button.</summary>
 		public bool IsAllTypes;
+		///<summary>Do not let them edit historical interventions, the OK button will be disabled if this is false.</summary>
 		public bool IsSelectionMode;
 		private List<EhrCode> listCodes;
 		private string Description;
@@ -23,11 +24,9 @@ namespace OpenDental {
 			Lan.F(this);
 		}
 
-		///<summary>If launched from a EHR CQM form we will set the IntervCodeSetIndex based on the situation.  For example, if launched from FormVitalsignEdit2014 due to overweight, we will set IntervCodeSetIndex=InterventionCodeSet.AboveNormalWeight and set IsRecommend=true.  If the user changes the code list to one of the other sub-sets, with IsRecommend=true, we will warn the user that the code will no longer apply to the measure.  If they add an intervention by opening FormInterventions and pressing Add, set IsRecommend=false and IntervCodeSetIndex will default to 0.  We will not warn the user for changing the code set and allow them to enter any of the available intervention codes.</summary>
+		///<summary></summary>
 		private void FormInterventionEdit_Load(object sender,EventArgs e) {
-			if(!IsSelectionMode) {
-				butOK.Enabled=false;
-			}
+			butOK.Enabled=IsSelectionMode;//OK button only enabled in selection mode
 			dictValueCodeSets=new Dictionary<string,string>();
 			comboCodeSet.Items.Add("All");
 			if(IsAllTypes || InterventionCur.CodeSet==InterventionCodeSet.AboveNormalWeight) {
