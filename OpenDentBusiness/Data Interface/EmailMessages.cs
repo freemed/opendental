@@ -461,6 +461,11 @@ namespace OpenDentBusiness{
 						retVal.Add(emailMessage);
 						msgDownloadedCount++;
 					}
+					catch(ThreadAbortException) {
+						//This can happen if the application is exiting. We need to leave right away so the program does not lock up.
+						//Otherwise, this loop could continue for a while if there are a lot of messages to download.
+						throw;
+					}
 					catch {
 						//If one particular email fails to download, then skip it for now and move on to the next email.
 					}

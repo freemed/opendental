@@ -5656,10 +5656,13 @@ namespace OpenDental{
 			}
 			if(_isEmailThreadRunning) {
 				_isEmailThreadRunning=false;
-				_emailSleep.Set();
-				FormAlertSimple formAS=new FormAlertSimple(Lan.g(this,"Shutting down.\r\nPlease wait while email finishes downloading.\r\nMay take up to 3 minutes to complete."));
-				formAS.Show();//Non-modal, so the program will not wait for user input before closing.
+				_emailSleep.Set();//If the thread is just sitting around waiting for the next email check interval, then this will cause the thread to exit immediately.
+				//We used to show a message on exit because our email inbox used to delete messages after downloading. We only copy messages now, so we can kill the thread at any time.
+				//FormAlertSimple formAS=new FormAlertSimple(Lan.g(this,"Shutting down.\r\nPlease wait while email finishes downloading.\r\nMay take up to 3 minutes to complete."));
+				//formAS.Show();//Non-modal, so the program will not wait for user input before closing.
+				ThreadEmailInbox.Abort();
 				ThreadEmailInbox.Join();//We must wait for the thread to die, so that the .exe is freed up if the user is trying to update OD.
+				ThreadEmailInbox=null;
 			}
 			//if(PrefC.GetBool(PrefName.DistributorKey)) {//for OD HQ
 			//  for(int f=Application.OpenForms.Count-1;f>=0;f--) {
