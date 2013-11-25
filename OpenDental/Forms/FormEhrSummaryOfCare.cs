@@ -32,7 +32,7 @@ namespace OpenDental {
 		private void FillGridSent() {
 			gridSent.BeginUpdate();
 			gridSent.Columns.Clear();
-			ODGridColumn col=new ODGridColumn("DateTime",140);
+			ODGridColumn col=new ODGridColumn("DateTime",140,HorizontalAlignment.Center);
 			gridSent.Columns.Add(col);
 			listHistorySent=EhrMeasureEvents.RefreshByType(PatCur.PatNum,EhrMeasureEventType.SummaryOfCareProvidedToDr);
 			gridSent.Rows.Clear();
@@ -48,7 +48,7 @@ namespace OpenDental {
 		private void FillGridRec() {
 			gridRec.BeginUpdate();
 			gridRec.Columns.Clear();
-			ODGridColumn col=new ODGridColumn("DateTime",140);
+			ODGridColumn col=new ODGridColumn("DateTime",140,HorizontalAlignment.Center);
 			gridRec.Columns.Add(col);
 			listCcdRec=EhrSummaryCcds.Refresh(PatCur.PatNum);
 			gridRec.Rows.Clear();

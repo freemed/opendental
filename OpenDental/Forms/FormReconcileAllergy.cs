@@ -202,11 +202,11 @@ namespace OpenDental {
 			gridAllergyImport.Columns.Clear();
 			ODGridColumn col=new ODGridColumn("Last Modified",90,HorizontalAlignment.Center);
 			gridAllergyImport.Columns.Add(col);
-			col=new ODGridColumn("SNOMED",80,HorizontalAlignment.Center);
-			gridAllergyImport.Columns.Add(col);
 			col=new ODGridColumn("Description",200);
 			gridAllergyImport.Columns.Add(col);
 			col=new ODGridColumn("Reaction",100);
+			gridAllergyImport.Columns.Add(col);
+			col=new ODGridColumn("Inactive",80,HorizontalAlignment.Center);
 			gridAllergyImport.Columns.Add(col);
 			gridAllergyImport.Rows.Clear();
 			ODGridRow row;
@@ -214,12 +214,6 @@ namespace OpenDental {
 			for(int i=0;i<ListAllergyNew.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(DateTime.Now.ToShortDateString());
-				if(ListAllergyDefNew[i].SnomedAllergyTo==null) {
-					row.Cells.Add("");
-				}
-				else {
-					row.Cells.Add(ListAllergyDefNew[i].SnomedAllergyTo);
-				}
 				if(ListAllergyDefNew[i].Description==null) {
 					row.Cells.Add("");
 				}
@@ -232,6 +226,12 @@ namespace OpenDental {
 				else {
 					row.Cells.Add(ListAllergyNew[i].Reaction);
 				}
+				if(ListAllergyNew[i].StatusIsActive) {
+					row.Cells.Add("");
+				}
+				else {
+					row.Cells.Add("X");
+				}
 				gridAllergyImport.Rows.Add(row);
 			}
 			gridAllergyImport.EndUpdate();
@@ -242,11 +242,11 @@ namespace OpenDental {
 			gridAllergyExisting.Columns.Clear();
 			ODGridColumn col=new ODGridColumn("Last Modified",90,HorizontalAlignment.Center);
 			gridAllergyExisting.Columns.Add(col);
-			col=new ODGridColumn("SNOMED",80,HorizontalAlignment.Center);
-			gridAllergyExisting.Columns.Add(col);
 			col=new ODGridColumn("Description",200);
 			gridAllergyExisting.Columns.Add(col);
 			col=new ODGridColumn("Reaction",100);
+			gridAllergyExisting.Columns.Add(col);
+			col=new ODGridColumn("Inactive",80,HorizontalAlignment.Center);
 			gridAllergyExisting.Columns.Add(col);
 			gridAllergyExisting.Rows.Clear();
 			_listAllergyCur=Allergies.GetAll(PatCur.PatNum,false);
@@ -264,12 +264,6 @@ namespace OpenDental {
 				ald=new AllergyDef();
 				ald=AllergyDefs.GetOne(_listAllergyCur[i].AllergyDefNum,_listAllergyDefCur);
 				row.Cells.Add(_listAllergyCur[i].DateTStamp.ToShortDateString());
-				if(ald.SnomedAllergyTo==null) {
-					row.Cells.Add("");
-				}
-				else {
-					row.Cells.Add(ald.SnomedAllergyTo);
-				}
 				if(ald.Description==null) {
 					row.Cells.Add("");
 				}
@@ -282,6 +276,12 @@ namespace OpenDental {
 				else {
 					row.Cells.Add(_listAllergyCur[i].Reaction);
 				}
+				if(_listAllergyCur[i].StatusIsActive) {
+					row.Cells.Add("");
+				}
+				else {
+					row.Cells.Add("X");
+				}
 				gridAllergyExisting.Rows.Add(row);
 			}
 			gridAllergyExisting.EndUpdate();
@@ -292,11 +292,11 @@ namespace OpenDental {
 			gridAllergyReconcile.Columns.Clear();
 			ODGridColumn col=new ODGridColumn("Last Modified",90,HorizontalAlignment.Center);
 			gridAllergyReconcile.Columns.Add(col);
-			col=new ODGridColumn("SNOMED",80,HorizontalAlignment.Center);
-			gridAllergyReconcile.Columns.Add(col);
 			col=new ODGridColumn("Description",400);
 			gridAllergyReconcile.Columns.Add(col);
 			col=new ODGridColumn("Reaction",300);
+			gridAllergyReconcile.Columns.Add(col);
+			col=new ODGridColumn("Inactive",80,HorizontalAlignment.Center);
 			gridAllergyReconcile.Columns.Add(col);
 			col=new ODGridColumn("Is Incoming",100,HorizontalAlignment.Center);
 			gridAllergyReconcile.Columns.Add(col);
@@ -306,24 +306,17 @@ namespace OpenDental {
 			for(int i=0;i<_listAllergyReconcile.Count;i++) {
 				row=new ODGridRow();
 				ald=new AllergyDef();
+				if(_listAllergyReconcile[i].IsNew) {
+					//To find the allergy def for new allergies, get the index of the matching allergy in ListAllergyNew, and use that index in ListAllergyDefNew because they are 1 to 1 lists.
+					ald=ListAllergyDefNew[ListAllergyNew.IndexOf(_listAllergyReconcile[i])];
+				}
 				for(int j=0;j<_listAllergyDefCur.Count;j++) {
-					if(_listAllergyReconcile[i].IsNew) {
-						//To find the allergy def for new allergies, get the index of the matching allergy in ListAllergyNew, and use that index in ListAllergyDefNew because they are 1 to 1 lists.
-						ald=ListAllergyDefNew[ListAllergyNew.IndexOf(_listAllergyReconcile[i])];
-						break;
-					}
 					if(_listAllergyReconcile[i].AllergyDefNum > 0 && _listAllergyReconcile[i].AllergyDefNum==_listAllergyDefCur[j].AllergyDefNum) {
 						ald=_listAllergyDefCur[j];//Gets the allergydef matching the allergy so we can use it to populate the grid
 						break;
 					}
 				}
 				row.Cells.Add(DateTime.Now.ToShortDateString());
-				if(ald.SnomedAllergyTo==null) {
-					row.Cells.Add("");
-				}
-				else {
-					row.Cells.Add(ald.SnomedAllergyTo);
-				}
 				if(ald.Description==null) {
 					row.Cells.Add("");
 				}
@@ -335,6 +328,12 @@ namespace OpenDental {
 				}
 				else {
 					row.Cells.Add(_listAllergyReconcile[i].Reaction);
+				}
+				if(_listAllergyReconcile[i].StatusIsActive) {
+					row.Cells.Add("");
+				}
+				else {
+					row.Cells.Add("X");
 				}
 				row.Cells.Add(_listAllergyReconcile[i].IsNew?"X":"");
 				gridAllergyReconcile.Rows.Add(row);
@@ -485,7 +484,7 @@ namespace OpenDental {
 			AllergyDef alDU;
 			int index;
 			for(int j=0;j<_listAllergyReconcile.Count;j++) {
-				if(!_listAllergyReconcile[j].IsNew) {//TODO: implement this in the other classes.
+				if(!_listAllergyReconcile[j].IsNew) {
 					continue;
 				}
 				index=ListAllergyNew.IndexOf(_listAllergyReconcile[j]);//Returns -1 if not found.

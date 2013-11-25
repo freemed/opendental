@@ -66,8 +66,8 @@ namespace OpenDental {
 			}
 			FormReconcileProblem formRP=new FormReconcileProblem();
 			formRP.ListProblemNew=new List<Disease>();
-			List<DiseaseDef> listDiseaseDef=new List<DiseaseDef>();//TODO: Set formRP.ListProblemDefNew
-			EhrCCD.GetListDiseases(xmlDocCcd,formRP.ListProblemNew,listDiseaseDef);
+			formRP.ListProblemDefNew=new List<DiseaseDef>();
+			EhrCCD.GetListDiseases(xmlDocCcd,formRP.ListProblemNew,formRP.ListProblemDefNew);
 			formRP.ShowDialog();
 		}
 
@@ -84,8 +84,8 @@ namespace OpenDental {
 			}
 			FormReconcileAllergy formRA=new FormReconcileAllergy();
 			formRA.ListAllergyNew=new List<Allergy>();
-			List<AllergyDef> listAllergyDef=new List<AllergyDef>();//TODO: Set formRA ListAllergyDefNew
-			EhrCCD.GetListAllergies(xmlDocCcd,formRA.ListAllergyNew,listAllergyDef);
+			formRA.ListAllergyDefNew=new List<AllergyDef>();
+			EhrCCD.GetListAllergies(xmlDocCcd,formRA.ListAllergyNew,formRA.ListAllergyDefNew);
 			formRA.ShowDialog();
 		}
 

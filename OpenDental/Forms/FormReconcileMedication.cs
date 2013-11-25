@@ -128,14 +128,27 @@ namespace OpenDental {
 			gridMedImport.Columns.Add(col);
 			col=new ODGridColumn("Date Start",100,HorizontalAlignment.Center);
 			gridMedImport.Columns.Add(col);
-			col=new ODGridColumn("Description",320);
+			col=new ODGridColumn("Date Stop",100,HorizontalAlignment.Center);
+			gridMedImport.Columns.Add(col);
+			col=new ODGridColumn("Description",220);
 			gridMedImport.Columns.Add(col);
 			gridMedImport.Rows.Clear();
 			ODGridRow row;
 			for(int i=0;i<ListMedicationPatNew.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(DateTime.Now.ToShortDateString());
-				row.Cells.Add(ListMedicationPatNew[i].DateStart.ToShortDateString());
+				if(ListMedicationPatNew[i].DateStart.Year<1880) {
+					row.Cells.Add("");
+				}
+				else {
+					row.Cells.Add(ListMedicationPatNew[i].DateStart.ToShortDateString());
+				}
+				if(ListMedicationPatNew[i].DateStop.Year<1880) {
+					row.Cells.Add("");
+				}
+				else {
+					row.Cells.Add(ListMedicationPatNew[i].DateStop.ToShortDateString());
+				}
 				if(ListMedicationPatNew[i].MedDescript==null) {
 					row.Cells.Add("");
 				}
@@ -154,6 +167,8 @@ namespace OpenDental {
 			gridMedExisting.Columns.Add(col);
 			col=new ODGridColumn("Date Start",100,HorizontalAlignment.Center);
 			gridMedExisting.Columns.Add(col);
+			col=new ODGridColumn("Date Stop",100,HorizontalAlignment.Center);
+			gridMedExisting.Columns.Add(col);
 			col=new ODGridColumn("Description",320);
 			gridMedExisting.Columns.Add(col);
 			gridMedExisting.Rows.Clear();
@@ -171,7 +186,18 @@ namespace OpenDental {
 				row=new ODGridRow();
 				med=Medications.GetMedication(_listMedicationPatCur[i].MedicationNum);//Possibly change if we decided to postpone caching medications
 				row.Cells.Add(_listMedicationPatCur[i].DateTStamp.ToShortDateString());
-				row.Cells.Add(_listMedicationPatCur[i].DateStart.ToShortDateString());
+				if(_listMedicationPatCur[i].DateStart.Year<1880) {
+					row.Cells.Add("");
+				}
+				else {
+					row.Cells.Add(_listMedicationPatCur[i].DateStart.ToShortDateString());
+				}
+				if(_listMedicationPatCur[i].DateStop.Year<1880) {
+					row.Cells.Add("");
+				}
+				else {
+					row.Cells.Add(_listMedicationPatCur[i].DateStop.ToShortDateString());
+				}
 				if(med.MedName==null) {
 					row.Cells.Add("");
 				}
@@ -190,9 +216,11 @@ namespace OpenDental {
 			gridMedReconcile.Columns.Add(col);
 			col=new ODGridColumn("Date Start",100,HorizontalAlignment.Center);
 			gridMedReconcile.Columns.Add(col);
+			col=new ODGridColumn("Date Stop",100,HorizontalAlignment.Center);
+			gridMedReconcile.Columns.Add(col);
 			col=new ODGridColumn("Description",350);
 			gridMedReconcile.Columns.Add(col);
-			col=new ODGridColumn("Notes",250);
+			col=new ODGridColumn("Notes",150);
 			gridMedReconcile.Columns.Add(col);
 			col=new ODGridColumn("Is Incoming",50,HorizontalAlignment.Center);
 			gridMedReconcile.Columns.Add(col);
@@ -201,7 +229,18 @@ namespace OpenDental {
 			for(int i=0;i<_listMedicationPatReconcile.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(DateTime.Now.ToShortDateString());
-				row.Cells.Add(_listMedicationPatReconcile[i].DateStart.ToShortDateString());
+				if(_listMedicationPatReconcile[i].DateStart.Year<1880) {
+					row.Cells.Add("");
+				}
+				else {
+					row.Cells.Add(_listMedicationPatReconcile[i].DateStart.ToShortDateString());
+				}
+				if(_listMedicationPatReconcile[i].DateStop.Year<1880) {
+					row.Cells.Add("");
+				}
+				else {
+					row.Cells.Add(_listMedicationPatReconcile[i].DateStop.ToShortDateString());
+				}
 				if(_listMedicationPatReconcile[i].IsNew) {
 					if(_listMedicationPatReconcile[i].MedDescript==null) {
 						row.Cells.Add("");

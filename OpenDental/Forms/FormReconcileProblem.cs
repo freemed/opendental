@@ -195,19 +195,35 @@ namespace OpenDental {
 			gridProbImport.Columns.Add(col);
 			col=new ODGridColumn("Date Start",100,HorizontalAlignment.Center);
 			gridProbImport.Columns.Add(col);
-			col=new ODGridColumn("Problem Name",300);
+			col=new ODGridColumn("Problem Name",200);
+			gridProbImport.Columns.Add(col);
+			col=new ODGridColumn("Status",80,HorizontalAlignment.Center);
 			gridProbImport.Columns.Add(col);
 			gridProbImport.Rows.Clear();
 			ODGridRow row;
 			for(int i=0;i<ListProblemNew.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(DateTime.Now.ToShortDateString());
+				if(ListProblemNew[i].DateStart.Year<1880) {
+					row.Cells.Add("");
+				}
+				else {
 				row.Cells.Add(ListProblemNew[i].DateStart.ToShortDateString());
+					}
 				if(ListProblemDefNew[i].DiseaseName==null) {
 					row.Cells.Add("");
 				}
 				else {
 					row.Cells.Add(ListProblemDefNew[i].DiseaseName);
+				}
+				if(ListProblemNew[i].ProbStatus==ProblemStatus.Active) {
+					row.Cells.Add("Active");
+				}
+				else if(ListProblemNew[i].ProbStatus==ProblemStatus.Resolved) {
+					row.Cells.Add("Resolved");
+				}
+				else {
+					row.Cells.Add("Inactive");
 				}
 				gridProbImport.Rows.Add(row);
 			}
@@ -221,7 +237,9 @@ namespace OpenDental {
 			gridProbExisting.Columns.Add(col);
 			col=new ODGridColumn("Date Start",100,HorizontalAlignment.Center);
 			gridProbExisting.Columns.Add(col);
-			col=new ODGridColumn("Problem Name",300);
+			col=new ODGridColumn("Problem Name",200);
+			gridProbExisting.Columns.Add(col);
+			col=new ODGridColumn("Status",80,HorizontalAlignment.Center);
 			gridProbExisting.Columns.Add(col);
 			gridProbExisting.Rows.Clear();
 			_listProblemCur=Diseases.Refresh(PatCur.PatNum,true);
@@ -239,12 +257,26 @@ namespace OpenDental {
 				disD=new DiseaseDef();
 				disD=DiseaseDefs.GetItem(_listProblemCur[i].DiseaseDefNum);
 				row.Cells.Add(_listProblemCur[i].DateTStamp.ToShortDateString());
-				row.Cells.Add(_listProblemCur[i].DateStart.ToShortDateString());
+				if(_listProblemCur[i].DateStart.Year<1880) {
+					row.Cells.Add("");
+				}
+				else {
+					row.Cells.Add(_listProblemCur[i].DateStart.ToShortDateString());
+				}
 				if(disD.DiseaseName==null) {
 					row.Cells.Add("");
 				}
 				else {
 					row.Cells.Add(disD.DiseaseName);
+				}
+				if(_listProblemCur[i].ProbStatus==ProblemStatus.Active) {
+					row.Cells.Add("Active");
+				}
+				else if(_listProblemCur[i].ProbStatus==ProblemStatus.Resolved) {
+					row.Cells.Add("Resolved");
+				}
+				else {
+					row.Cells.Add("Inactive");
 				}
 				gridProbExisting.Rows.Add(row);
 			}
@@ -258,9 +290,11 @@ namespace OpenDental {
 			gridProbReconcile.Columns.Add(col);
 			col=new ODGridColumn("Date Start",100,HorizontalAlignment.Center);
 			gridProbReconcile.Columns.Add(col);
-			col=new ODGridColumn("Problem Name",340);
+			col=new ODGridColumn("Problem Name",260);
 			gridProbReconcile.Columns.Add(col);
 			col=new ODGridColumn("Notes",300);
+			gridProbReconcile.Columns.Add(col);
+			col=new ODGridColumn("Status",80,HorizontalAlignment.Center);
 			gridProbReconcile.Columns.Add(col);
 			col=new ODGridColumn("Is Incoming",50,HorizontalAlignment.Center);
 			gridProbReconcile.Columns.Add(col);
@@ -281,7 +315,12 @@ namespace OpenDental {
 					}
 				}
 				row.Cells.Add(DateTime.Now.ToShortDateString());
-				row.Cells.Add(_listProblemReconcile[i].DateStart.ToShortDateString());
+				if(_listProblemReconcile[i].DateStart.Year<1880) {
+					row.Cells.Add("");
+				}
+				else {
+					row.Cells.Add(_listProblemReconcile[i].DateStart.ToShortDateString());
+				}
 				if(disD.DiseaseName==null) {
 					row.Cells.Add("");
 				}
@@ -293,6 +332,15 @@ namespace OpenDental {
 				}
 				else {
 					row.Cells.Add(_listProblemReconcile[i].PatNote);
+				}
+				if(_listProblemReconcile[i].ProbStatus==ProblemStatus.Active) {
+					row.Cells.Add("Active");
+				}
+				else if(_listProblemReconcile[i].ProbStatus==ProblemStatus.Resolved) {
+					row.Cells.Add("Resolved");
+				}
+				else {
+					row.Cells.Add("Inactive");
 				}
 				row.Cells.Add(_listProblemReconcile[i].IsNew?"X":"");
 				gridProbReconcile.Rows.Add(row);
