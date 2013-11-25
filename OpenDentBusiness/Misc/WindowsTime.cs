@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 public class WindowsTime {
@@ -35,6 +36,8 @@ public class WindowsTime {
 		systime.wSecond=(ushort)newTime.Second;
 		systime.wMilliseconds=(ushort)newTime.Millisecond;
 		SetLocalTime(ref systime);
+		string messageText="System date and time set to:  "+newTime.ToString("MM/dd/yyyy hh:mm:ss.fff tt")+".";
+		EventLog.WriteEntry("OpenDental",messageText,EventLogEntryType.Information);
 	}
 }
 

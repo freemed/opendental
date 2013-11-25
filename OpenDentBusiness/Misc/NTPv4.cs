@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -30,6 +31,8 @@ namespace OpenDentBusiness {
 				socket.Shutdown(SocketShutdown.Both);
 				socket.Close();
 				socket.Dispose();
+				string messageTextFail="NTPv4 time request from "+nistServerUrl+" timed out.";
+				EventLog.WriteEntry("OpenDental",messageTextFail,EventLogEntryType.Information);
 				return (double.MaxValue);
 			}
 			//Convert the received NTP packet to a usable time stamp.
@@ -42,6 +45,13 @@ namespace OpenDentBusiness {
 			socket.Shutdown(SocketShutdown.Both);
 			socket.Close();
 			socket.Dispose();
+			string messageText="NTPv4 time request received from "+nistServerUrl+"."
+				+"\nOriginate:  "+originate.ToString("hh:mm:ss.fff tt")
+				+"\nReceive:  "+receive.ToString("hh:mm:ss.fff tt")
+				+"\nTransmit:  "+transmit.ToString("hh:mm:ss.fff tt")
+				+"\nDestination:  "+destination.ToString("hh:mm:ss.fff tt")
+				+"\nOffset:  "+offset+" milliseconds";
+			EventLog.WriteEntry("OpenDental",messageText,EventLogEntryType.Information);
 			return offset;
 		}
 

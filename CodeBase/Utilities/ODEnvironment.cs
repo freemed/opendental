@@ -35,5 +35,28 @@ namespace CodeBase{
 			return false;
 		}
 
+		///<summary>Will return true if the provided servername matches the local computer name or a local IPv4 or IPv6 address.  Will return true if servername is 'localhost' or '127.0.0.1'.  Returns false in all other cases.</summary>
+		public static bool IsRunningOnDbServer(string servername) {
+			servername=servername.ToLower();
+			//Compare servername against the local host name.  Also check if the servername is "localhost".
+			if(Environment.MachineName.ToLower()==servername || servername=="localhost") {
+				return true;
+			}
+			//Check to see if the servername is an ipaddress that is a loopback (127.XXX.XXX.XXX).  Catches failure in parsing.
+			try {
+				if(IPAddress.IsLoopback(IPAddress.Parse(servername))) {
+					return true;
+				}
+			}
+			catch {}	//not a valid IP address
+			IPHostEntry iphostentry=Dns.GetHostEntry(Environment.MachineName);
+			//Check against the local computer's IP addresses (does not include 127.0.0.1). Includes IPv4 and IPv6.
+			foreach(IPAddress ipaddress in iphostentry.AddressList) {
+				if(ipaddress.ToString()==servername) {
+					return true;
+				}
+			}
+			return false;
+		}
   }
 }

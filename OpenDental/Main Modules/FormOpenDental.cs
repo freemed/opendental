@@ -265,6 +265,11 @@ namespace OpenDental{
 		private Thread ThreadEmailInbox;
 		private bool _isEmailThreadRunning=false;
 		private AutoResetEvent _emailSleep=new AutoResetEvent(false);
+				/// <summary>If OpenDental is running on the same machine as the mysql server, then a thread is runs in the background to update the local machine's time
+		///using NTPv4 from the NIST time server set in the NistTimeServerUrl pref./// </summary>
+		private Thread _threadTimeSynch;
+		private bool _isTimeSynchThreadRunning=false;
+		private AutoResetEvent _timeSynchSleep=new AutoResetEvent(false);
 
 		///<summary></summary>
 		public FormOpenDental(string[] cla){
@@ -1784,6 +1789,10 @@ namespace OpenDental{
 				ContrChart2.InitializeOnStartup();
 				//MsgBox.Show(this,"Done optimizing tooth chart graphics.");
 			}
+			if(ODEnvironment.IsRunningOnDbServer(DataConnection.GetServerName()) && PrefC.GetBool(PrefName.ShowFeatureEhr)) {//OpenDental has EHR enabled and is running on the same machine as the mysql server it is connected to.*/
+				_threadTimeSynch=new Thread(new ThreadStart(ThreadTimeSynch_Synch));
+				_threadTimeSynch.Start();
+			}
 			if(Security.CurUser==null) {//It could already be set if using web service because login from ChooseDatabase window.
 				if(Programs.UsingEcwTightOrFullMode() && odUser!="") {//only leave it null if a user was passed in on the commandline.  If starting OD manually, it will jump into the else.
 					//leave user as null
@@ -1875,7 +1884,7 @@ namespace OpenDental{
 						return;
 					}
 				}
-				if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
+				if(PrefC.GetBool(PrefName.ShowFeatureEhr) && !_isTimeSynchThreadRunning) {
 					FormEhrTimeSynch FormEhrTS = new FormEhrTimeSynch();
 					FormEhrTS.IsAutoLaunch=true;
 					if(!FormEhrTS.TimesInSynchFast()) {
@@ -3742,6 +3751,29 @@ namespace OpenDental{
 					//Do not tell the user, because it would be annoying to see an error every 30 seconds (if the server was down for instance).
 					//Maybe we could log to the system EventViewer Application log someday if users complain. Keep in mind that the user can always manually go to Manage | Email Inbox to see the error message.
 				}
+			}
+		}
+
+		private void ThreadTimeSynch_Synch() {
+			_isTimeSynchThreadRunning=true;
+			while(_isTimeSynchThreadRunning) {
+				if(!_isTimeSynchThreadRunning) {
+					break;
+				}
+				NTPv4 ntp=new NTPv4();
+				double nistOffset=double.MaxValue;
+				try {
+					nistOffset=ntp.getTime(PrefC.GetString(PrefName.NistTimeServerUrl));
+				}
+				catch { } //Invalid NIST Server URL
+				if(nistOffset!=double.MaxValue) {
+					//Did not timeout, or have invalid NIST server URL
+					try {
+						WindowsTime.SetTime(DateTime.Now.AddMilliseconds(nistOffset)); //Sets local machine time
+					}
+					catch { } //Error setting local machine time
+				}
+				_timeSynchSleep.WaitOne(TimeSpan.FromMinutes(240));
 			}
 		}
 
@@ -5663,6 +5695,13 @@ namespace OpenDental{
 				ThreadEmailInbox.Abort();
 				ThreadEmailInbox.Join();//We must wait for the thread to die, so that the .exe is freed up if the user is trying to update OD.
 				ThreadEmailInbox=null;
+			}
+			if(_isTimeSynchThreadRunning) {
+				_isTimeSynchThreadRunning=false;
+				_timeSynchSleep.Set();
+				_threadTimeSynch.Abort();
+				_threadTimeSynch.Join();
+				_threadTimeSynch=null;
 			}
 			//if(PrefC.GetBool(PrefName.DistributorKey)) {//for OD HQ
 			//  for(int f=Application.OpenForms.Count-1;f>=0;f--) {

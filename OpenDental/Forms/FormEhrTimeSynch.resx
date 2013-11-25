@@ -118,9 +118,11 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="label5.Text" xml:space="preserve">
-    <value>If your local machine time is one second or more different from your server time, you can click the synch button to synch your local machine time with your server.
+    <value>If the red "All times are synchronized within one second" message is showing, all of your times are correctly in synch and you may close this window.
 
-If your database server time is one second or more different from the NIST server time, you will need to update your database server's Windows time configuration to synch with a NIST time server.</value>
+If your request timed out, wait four seconds and then click the Synch Time button to pull a new time from the Nist server.
+
+If your database time is out of synch you will need to make sure OpenDental is running on your database server machine.</value>
   </data>
   <metadata name="timer1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
