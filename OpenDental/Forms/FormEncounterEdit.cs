@@ -21,7 +21,7 @@ namespace OpenDental {
 		public void FormEncounters_Load(object sender,EventArgs e) {
 			patCur=Patients.GetPat(EncCur.PatNum);
 			this.Text+=" - "+patCur.GetNameLF();
-			textDateTimeEnc.Text=EncCur.DateEncounter.ToString();
+			textDateTimeEnc.Text=EncCur.DateEncounter.ToShortDateString();
 			comboProv.Items.Clear();
 			for(int i=0;i<ProviderC.ListShort.Count;i++) {
 				comboProv.Items.Add(ProviderC.ListShort[i].Abbr);
@@ -29,6 +29,8 @@ namespace OpenDental {
 					comboProv.SelectedIndex=i;
 				}
 			}
+			textCodeValue.Text=EncCur.CodeValue;
+			textCodeSystem.Text=EncCur.CodeSystem;
 		}
 
 		private void butPickProv_Click(object sender,EventArgs e) {
@@ -56,6 +58,18 @@ namespace OpenDental {
 			//EncCur.CodeSystemName=FormCP.CodeSystemName;
 		}
 
+		private void butSnomed_Click(object sender,EventArgs e) {
+
+		}
+
+		private void butHcpcs_Click(object sender,EventArgs e) {
+
+		}
+
+		private void butCdtCpt_Click(object sender,EventArgs e) {
+
+		}
+
 		private void butDelete_Click(object sender,EventArgs e) {
 			if(EncCur.IsNew) {
 				DialogResult=DialogResult.Cancel;
@@ -73,19 +87,8 @@ namespace OpenDental {
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {
-
+			DialogResult=DialogResult.Cancel;
 		}
 
-		private void butSnomed_Click(object sender,EventArgs e) {
-
-		}
-
-		private void butHcpcs_Click(object sender,EventArgs e) {
-
-		}
-
-		private void butCdtCpt_Click(object sender,EventArgs e) {
-
-		}
 	}
 }

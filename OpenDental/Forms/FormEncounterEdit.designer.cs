@@ -34,7 +34,7 @@ namespace OpenDental{
 			this.label2 = new System.Windows.Forms.Label();
 			this.textCodeValue = new System.Windows.Forms.TextBox();
 			this.label4 = new System.Windows.Forms.Label();
-			this.textBox1 = new System.Windows.Forms.TextBox();
+			this.textCodeSystem = new System.Windows.Forms.TextBox();
 			this.label5 = new System.Windows.Forms.Label();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
@@ -141,13 +141,13 @@ namespace OpenDental{
 			this.label4.Text = "Code";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textBox1
+			// textCodeSystem
 			// 
-			this.textBox1.Location = new System.Drawing.Point(120, 99);
-			this.textBox1.Name = "textBox1";
-			this.textBox1.ReadOnly = true;
-			this.textBox1.Size = new System.Drawing.Size(158, 20);
-			this.textBox1.TabIndex = 6;
+			this.textCodeSystem.Location = new System.Drawing.Point(120, 99);
+			this.textCodeSystem.Name = "textCodeSystem";
+			this.textCodeSystem.ReadOnly = true;
+			this.textCodeSystem.Size = new System.Drawing.Size(158, 20);
+			this.textCodeSystem.TabIndex = 6;
 			// 
 			// label5
 			// 
@@ -270,7 +270,7 @@ namespace OpenDental{
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.butDelete);
-			this.Controls.Add(this.textBox1);
+			this.Controls.Add(this.textCodeSystem);
 			this.Controls.Add(this.label5);
 			this.Controls.Add(this.textCodeValue);
 			this.Controls.Add(this.label4);
@@ -304,7 +304,7 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.TextBox textCodeValue;
 		private System.Windows.Forms.Label label4;
-		private System.Windows.Forms.TextBox textBox1;
+		private System.Windows.Forms.TextBox textCodeSystem;
 		private System.Windows.Forms.Label label5;
 		private UI.Button butCancel;
 		private UI.Button butDelete;
