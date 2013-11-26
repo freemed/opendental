@@ -50,6 +50,7 @@ namespace OpenDentBusiness.Crud{
 				ehrCarePlan.PatNum         = PIn.Long  (table.Rows[i]["PatNum"].ToString());
 				ehrCarePlan.SnomedEducation= PIn.String(table.Rows[i]["SnomedEducation"].ToString());
 				ehrCarePlan.Instructions   = PIn.String(table.Rows[i]["Instructions"].ToString());
+				ehrCarePlan.DatePlanned    = PIn.Date  (table.Rows[i]["DatePlanned"].ToString());
 				retVal.Add(ehrCarePlan);
 			}
 			return retVal;
@@ -90,14 +91,15 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="EhrCarePlanNum,";
 			}
-			command+="PatNum,SnomedEducation,Instructions) VALUES(";
+			command+="PatNum,SnomedEducation,Instructions,DatePlanned) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(ehrCarePlan.EhrCarePlanNum)+",";
 			}
 			command+=
 				     POut.Long  (ehrCarePlan.PatNum)+","
 				+"'"+POut.String(ehrCarePlan.SnomedEducation)+"',"
-				+"'"+POut.String(ehrCarePlan.Instructions)+"')";
+				+"'"+POut.String(ehrCarePlan.Instructions)+"',"
+				+    POut.Date  (ehrCarePlan.DatePlanned)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -112,7 +114,8 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE ehrcareplan SET "
 				+"PatNum         =  "+POut.Long  (ehrCarePlan.PatNum)+", "
 				+"SnomedEducation= '"+POut.String(ehrCarePlan.SnomedEducation)+"', "
-				+"Instructions   = '"+POut.String(ehrCarePlan.Instructions)+"' "
+				+"Instructions   = '"+POut.String(ehrCarePlan.Instructions)+"', "
+				+"DatePlanned    =  "+POut.Date  (ehrCarePlan.DatePlanned)+" "
 				+"WHERE EhrCarePlanNum = "+POut.Long(ehrCarePlan.EhrCarePlanNum);
 			Db.NonQ(command);
 		}
@@ -131,6 +134,10 @@ namespace OpenDentBusiness.Crud{
 			if(ehrCarePlan.Instructions != oldEhrCarePlan.Instructions) {
 				if(command!=""){ command+=",";}
 				command+="Instructions = '"+POut.String(ehrCarePlan.Instructions)+"'";
+			}
+			if(ehrCarePlan.DatePlanned != oldEhrCarePlan.DatePlanned) {
+				if(command!=""){ command+=",";}
+				command+="DatePlanned = "+POut.Date(ehrCarePlan.DatePlanned)+"";
 			}
 			if(command==""){
 				return;

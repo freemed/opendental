@@ -508,7 +508,63 @@ Medications
 
 		///<summary>Helper for GenerateCCD().</summary>
 		private static void GenerateCcdSectionPlanOfCare(XmlWriter w,Patient pat) {
-			//TODO:
+			w.WriteComment(@"
+=====================================================================================================
+Care Plan
+=====================================================================================================");
+			Start(w,"component");
+			Start(w,"section");
+			TemplateId(w,"2.16.840.1.113883.10.20.22.2.10","HL7 CCD");
+			w.WriteComment("Plan of Care section template");
+			StartAndEnd(w,"code","code","18776-5","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Treatment plan");
+			Start(w,"title");
+			w.WriteString("Care Plan");
+			End(w,"title");
+			Start(w,"text");//The following text will be parsed as html with a style sheet to be human readable.
+			Start(w,"table","width","100%","border","1");
+			Start(w,"thead");
+			Start(w,"tr");
+			Start(w,"th");
+			w.WriteString("Planned Activity");
+			End(w,"th");
+			Start(w,"th");
+			w.WriteString("Planned Date");
+			End(w,"th");
+			End(w,"tr");
+			End(w,"thead");
+			Start(w,"tbody");
+			List<EhrCarePlan> listEhrCarePlans=EhrCarePlans.Refresh(pat.PatNum);
+			for(int i=0;i<listEhrCarePlans.Count;i++) {
+				Start(w,"tr");
+				Start(w,"td");
+				w.WriteString(listEhrCarePlans[i].Instructions);
+				End(w,"td");
+				Start(w,"td");
+				WriteDate(w,listEhrCarePlans[i].DatePlanned);
+				End(w,"td");
+				End(w,"tr");
+			}
+			End(w,"tbody");
+			End(w,"table");
+			End(w,"text");
+			for(int i=0;i<listEhrCarePlans.Count;i++) {
+				Start(w,"entry","typeCode","DRIV");
+				Start(w,"act","classCode","ACT","moodCode","INT");
+				TemplateId(w,"2.16.840.1.113883.10.20.22.4.20");
+				w.WriteComment("Instructions template");
+				Start(w,"code");
+				w.WriteAttributeString("type","xsi","CE");
+				Snomed snomedEducation=Snomeds.GetByCode(listEhrCarePlans[i].SnomedEducation);
+				Attribs(w,"code",snomedEducation.SnomedCode,"codeSystem",strCodeSystemSnomed,"displayName",snomedEducation.Description);
+				Start(w,"text");
+				w.WriteString(listEhrCarePlans[i].Instructions);
+				End(w,"text");
+				StartAndEnd(w,"statusCode","code","completed");
+				End(w,"act");
+				End(w,"entry");
+			}
+			End(w,"section");
+			End(w,"component");
 		}
 
 		///<summary>Helper for GenerateCCD().  Problem section.</summary>
@@ -897,6 +953,14 @@ Laboratory Test Results
 			for(int i=0;i<attributes.Length;i+=2) {
 				writer.WriteAttributeString(attributes[i],attributes[i+1]);
 			}
+		}
+
+		///<summary>Writes the dateTime in the required date format.  Will not write if year is before 1880.</summary>
+		private static void WriteDate(XmlWriter writer,DateTime dateTime) {
+			if(dateTime.Year<1880) {
+				return;
+			}
+			writer.WriteString(dateTime.ToString("yyyyMMdd"));
 		}
 
 		public static bool IsCCD(string strXml) {

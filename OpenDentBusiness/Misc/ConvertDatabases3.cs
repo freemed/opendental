@@ -2258,6 +2258,18 @@ namespace OpenDentBusiness {
 					command=@"CREATE INDEX ucum_UCUMCode ON ucum (UCUMCode)";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE ehrcareplan ADD DatePlanned date NOT NULL DEFAULT '0001-01-01'";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE ehrcareplan ADD DatePlanned date";
+					Db.NonQ(command);
+					command="UPDATE ehrcareplan SET DatePlanned = TO_DATE('0001-01-01','YYYY-MM-DD') WHERE DatePlanned IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE ehrcareplan MODIFY DatePlanned NOT NULL";
+					Db.NonQ(command);
+				}
 
 
 				command="UPDATE preference SET ValueString = '14.1.0.0' WHERE PrefName = 'DataBaseVersion'";

@@ -13,6 +13,8 @@ namespace OpenDentBusiness{
 		public string SnomedEducation;
 		///<summary>Instructions provided to the patient.</summary>
 		public string Instructions;
+		///<summary>This field does not help much with care plan instructions, but will be more helpful for other types of care plans if we expand in the future (for example, planned procedures).  We also saw examples where this date was included in the human readable part of a CCD, but not in the machine readable part.</summary>
+		public DateTime DatePlanned;
 
 		///<summary></summary>
 		public EhrCarePlan Clone() {
