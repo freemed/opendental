@@ -41,6 +41,7 @@ namespace OpenDental {
 		private ToolStripMenuItem setupToolStripMenuItem;
 		private UI.Button butUDS;
 		private UI.Button butPatList;
+		private UI.Button butPatExport;
 		///<summary>After this form closes, this value is checked to see if any non-modal dialog boxes are needed.</summary>
 		public ReportModalSelection RpModalSelection;
 
@@ -94,6 +95,7 @@ namespace OpenDental {
 			this.setupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.butUDS = new OpenDental.UI.Button();
 			this.butPatList = new OpenDental.UI.Button();
+			this.butPatExport = new OpenDental.UI.Button();
 			this.menuMain.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -354,10 +356,26 @@ namespace OpenDental {
 			this.butPatList.Visible = false;
 			this.butPatList.Click += new System.EventHandler(this.butPatList_Click);
 			// 
+			// butPatExport
+			// 
+			this.butPatExport.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butPatExport.Autosize = true;
+			this.butPatExport.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPatExport.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPatExport.CornerRadius = 4F;
+			this.butPatExport.Location = new System.Drawing.Point(549, 117);
+			this.butPatExport.Name = "butPatExport";
+			this.butPatExport.Size = new System.Drawing.Size(92, 24);
+			this.butPatExport.TabIndex = 24;
+			this.butPatExport.Text = "EHR Pat Export";
+			this.butPatExport.Visible = false;
+			this.butPatExport.Click += new System.EventHandler(this.butPatExport_Click);
+			// 
 			// FormReportsMore
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.ClientSize = new System.Drawing.Size(680, 612);
+			this.Controls.Add(this.butPatExport);
 			this.Controls.Add(this.butPatList);
 			this.Controls.Add(this.butDashboard);
 			this.Controls.Add(this.labelArizonaPrimaryCare);
@@ -401,6 +419,7 @@ namespace OpenDental {
 			butPW.Visible=Programs.IsEnabled(ProgramName.PracticeWebReports);
 			//hiding fefature for 13.3
 			//butPatList.Visible=PrefC.GetBool(PrefName.ShowFeatureEhr);
+			butPatExport.Visible=PrefC.GetBool(PrefName.ShowFeatureEhr);
 			listProdInc.Items.AddRange(new string[] {
 				Lan.g(this,"Today"),
 				Lan.g(this,"Yesterday"),
@@ -840,6 +859,11 @@ namespace OpenDental {
 			FormPatListEHR2014 FormPL=new FormPatListEHR2014();
 			FormPL.ElementList=new List<EhrPatListElement2014>();
 			FormPL.ShowDialog();
+		}
+
+		private void butPatExport_Click(object sender,EventArgs e) {
+			FormEhrPatientExport FormEhrPE=new FormEhrPatientExport();
+			FormEhrPE.ShowDialog();
 		}
 
 		private void butClose_Click(object sender,System.EventArgs e) {

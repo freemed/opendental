@@ -400,6 +400,12 @@
     <Compile Include="Forms\FormAlertSimple.designer.cs">
       <DependentUpon>FormAlertSimple.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormEhrPatientExport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormEhrPatientExport.designer.cs">
+      <DependentUpon>FormEhrPatientExport.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormReconcileAllergy.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3254,6 +3260,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormAlertSimple.resx">
       <DependentUpon>FormAlertSimple.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormEhrPatientExport.resx">
+      <DependentUpon>FormEhrPatientExport.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormReconcileAllergy.resx">
       <DependentUpon>FormReconcileAllergy.cs</DependentUpon>

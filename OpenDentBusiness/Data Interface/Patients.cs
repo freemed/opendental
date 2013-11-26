@@ -2205,7 +2205,37 @@ FROM insplan";
 			return Crud.PatientCrud.SelectMany(command);
 		}
 
-
+		///<summary>Get a list of patients for FormEhrPatientExport. If provNum, clinicNum, or siteNum are =0 get all.</summary>
+		public static DataTable GetExportList(long patNum, string firstName,string lastName,long provNum,long clinicNum,long siteNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),firstName,lastName,provNum,clinicNum,siteNum);
+			}
+			string command = "SELECT patient.PatNum, patient.FName, patient.LName, provider.Abbr AS Provider, clinic.Description AS Clinic, site.Description AS Site "
+				+"FROM patient "
+				+"INNER JOIN provider ON patient.PriProv=provider.ProvNum "
+				+"LEFT JOIN clinic ON patient.ClinicNum=clinic.ClinicNum "
+				+"LEFT JOIN site ON patient.SiteNum=site.SiteNum "
+				+"WHERE patient.PatStatus=0 ";
+			if(patNum != 0) {
+				command+="AND patient.PatNum LIKE '%"+POut.Long(patNum)+"%' ";
+			}
+			if(firstName != "") {
+				command+="AND patient.FName LIKE '%"+POut.String(firstName)+"%' ";
+			}
+			if(lastName != "") {
+				command+="AND patient.LName LIKE '%"+POut.String(lastName)+"%' ";
+			}
+			if(provNum>0) {
+				command+="AND provider.ProvNum = "+POut.Long(provNum)+" ";
+			}
+			if(clinicNum>0) {
+				command+="AND clinic.ClinicNum = "+POut.Long(clinicNum)+" ";
+			}
+			if(siteNum>0) {
+				command+="AND site.SiteNum = "+POut.Long(siteNum)+" ";
+			}
+			return (Db.GetTable(command));
+		}
 
 
 	}
