@@ -209,6 +209,12 @@ Body
 				GenerateCcdAllergies(w,pat);
 				GenerateCcdMedications(w,pat);
 				GenerateCcdLabs(w,pat);
+				GenerateCcdSectionVitalSigns(w,pat);
+				GenerateCcdSectionImmunizations(w,pat);
+				GenerateCcdSectionPlanOfCare(w,pat);
+				GenerateCcdSectionEncounters(w,pat);
+				GenerateCcdSectionFunctionalStatus(w,pat);
+				GenerateCcdSectionReasonForReferral(w,pat);
 				End(w,"structuredBody");
 				End(w,"component");
 				End(w,"ClinicalDocument");
@@ -807,6 +813,36 @@ Problems
 			//w.WriteEndElement();//section
 			//w.WriteEndElement();//component
 #endregion
+		}
+
+		///<summary>Helper for GenerateCCD().</summary>
+		private static void GenerateCcdSectionVitalSigns(XmlWriter w,Patient pat) {
+			//TODO:
+		}
+
+		///<summary>Helper for GenerateCCD().</summary>
+		private static void GenerateCcdSectionImmunizations(XmlWriter w,Patient pat) {
+			//TODO:
+		}
+
+		///<summary>Helper for GenerateCCD().</summary>
+		private static void GenerateCcdSectionPlanOfCare(XmlWriter w,Patient pat) {
+			//TODO:
+		}
+
+		///<summary>Helper for GenerateCCD().</summary>
+		private static void GenerateCcdSectionEncounters(XmlWriter w,Patient pat) {
+			//TODO:
+		}
+
+		///<summary>Helper for GenerateCCD().</summary>
+		private static void GenerateCcdSectionFunctionalStatus(XmlWriter w,Patient pat) {
+			//TODO:
+		}
+
+		///<summary>Helper for GenerateCCD().</summary>
+		private static void GenerateCcdSectionReasonForReferral(XmlWriter w,Patient pat) {
+			//TODO:
 		}
 
 		///<summary>Helper for GenerateCCD(). Builds an Id an writes it to the file.</summary>
