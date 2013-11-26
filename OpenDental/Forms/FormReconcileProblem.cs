@@ -475,34 +475,20 @@ namespace OpenDental {
 				}
 				if(!isActive) {//Update current problems.
 					dis.ProbStatus=ProblemStatus.Inactive;
-					if(Security.IsAuthorized(Permissions.EhrShowCDS)) {
-						FormCDSIntervention FormCDSI=new FormCDSIntervention();
-						FormCDSI.DictEhrTriggerResults=EhrTriggers.TriggerMatch(_listProblemCur[i],Patients.GetPat(FormOpenDental.CurPatNum));
-						FormCDSI.ShowIfRequired();
-						if(FormCDSI.DialogResult==DialogResult.Cancel) {//using ==DialogResult.Cancel instead of !=DialogResult.OK
-							return;//effectively canceling the action.
-						}
-					}
 					Diseases.Update(_listProblemCur[i]);
 				}
 				
 			}
 			//Always update every current problem for the patient so that DateTStamp reflects the last reconcile date.
-			Diseases.ResetTimeStamps(PatCur.PatNum,ProblemStatus.Active);
+			if(_listProblemCur.Count>0) {
+				Diseases.ResetTimeStamps(PatCur.PatNum,ProblemStatus.Active);
+			}
 			DiseaseDef disDU=null;
 			int index;
 			for(int j=0;j<_listProblemReconcile.Count;j++) {
 				index=ListProblemNew.IndexOf(_listProblemReconcile[j]);
 				if(index<0) {
 					continue;
-				}
-				if(Security.IsAuthorized(Permissions.EhrShowCDS)) {
-					FormCDSIntervention FormCDSI=new FormCDSIntervention();
-					FormCDSI.DictEhrTriggerResults=EhrTriggers.TriggerMatch(ListProblemNew[index],Patients.GetPat(FormOpenDental.CurPatNum));
-					FormCDSI.ShowIfRequired();
-					if(FormCDSI.DialogResult==DialogResult.Cancel) {//using ==DialogResult.Cancel instead of !=DialogResult.OK
-						return;//effectively canceling the action.
-					}
 				}
 				if(_listProblemReconcile[j]==ListProblemNew[index]) {
 					disDU=DiseaseDefs.GetItem(DiseaseDefs.GetNumFromCode(ListProblemDefNew[index].SnomedCode));

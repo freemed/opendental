@@ -188,6 +188,10 @@ namespace OpenDental {
 						isValid=false;
 						break;
 					}
+					if(_listAllergyDefCur[j].MedicationNum==ListAllergyDefNew[i].MedicationNum) {//Check Medications to determine if the Reconcile list already has that MedicationNum
+						isValid=false;
+						break;
+					}
 				}
 				if(isValid) {
 					_listAllergyReconcile.Add(ListAllergyNew[i]);
@@ -371,6 +375,11 @@ namespace OpenDental {
 						skipCount++;
 						break;
 					}
+					if(alDR.MedicationNum!=0 && alDR.MedicationNum==alD.MedicationNum) {
+						isValid=false;
+						skipCount++;
+						break;
+					}
 				}
 				if(isValid) {
 					_listAllergyReconcile.Add(al);
@@ -400,6 +409,11 @@ namespace OpenDental {
 					if(_listAllergyCur[j].IsNew) {
 						for(int k=0;k<ListAllergyDefNew.Count;k++) {
 							if(alD.SnomedAllergyTo!="" && alD.SnomedAllergyTo==ListAllergyDefNew[k].SnomedAllergyTo) {
+								isValid=false;
+								skipCount++;
+								break;
+							}
+							if(alD.MedicationNum!=0 && alD.MedicationNum==ListAllergyDefNew[k].MedicationNum) {
 								isValid=false;
 								skipCount++;
 								break;
@@ -465,22 +479,20 @@ namespace OpenDental {
 						isActive=true;
 						break;
 					}
+					if(alDR.MedicationNum!=0 && alDR.MedicationNum==alD.MedicationNum) {//Has a Snomed code and they are equal
+						isActive=true;
+						break;
+					}
 				}
 				if(!isActive) {
 					_listAllergyCur[i].StatusIsActive=isActive;
-					if(Security.IsAuthorized(Permissions.EhrShowCDS)) {
-						FormCDSIntervention FormCDSI=new FormCDSIntervention();
-						FormCDSI.DictEhrTriggerResults=EhrTriggers.TriggerMatch(_listAllergyCur[i],Patients.GetPat(FormOpenDental.CurPatNum));
-						FormCDSI.ShowIfRequired();
-						if(FormCDSI.DialogResult==DialogResult.Cancel) {//using ==DialogResult.Cancel instead of !=DialogResult.OK
-							return;//effectively canceling the action.
-						}
-					}
 					Allergies.Update(_listAllergyCur[i]);
 				}
 			}
 			//Always update every current allergy for the patient so that DateTStamp reflects the last reconcile date.
-			Allergies.ResetTimeStamps(PatCur.PatNum, true);
+			if(_listAllergyCur.Count>0) {
+				Allergies.ResetTimeStamps(PatCur.PatNum,true);
+			}
 			AllergyDef alDU;
 			int index;
 			for(int j=0;j<_listAllergyReconcile.Count;j++) {
@@ -492,20 +504,17 @@ namespace OpenDental {
 					continue;
 				}
 				//Insert the AllergyDef and Allergy if needed.
-				alDU=AllergyDefs.GetAllergyDefFromCode(ListAllergyDefNew[index].SnomedAllergyTo);//Check if the Def already exists.
+				if(ListAllergyDefNew[index].MedicationNum!=0) {
+					alDU=AllergyDefs.GetAllergyDefFromMedication(ListAllergyDefNew[index].MedicationNum);
+				}
+				else {
+					alDU=AllergyDefs.GetAllergyDefFromCode(ListAllergyDefNew[index].SnomedAllergyTo);//Check if the Def already exists.
+				}
 				if(alDU==null) {//db is missing the def
 					ListAllergyNew[index].AllergyDefNum=AllergyDefs.Insert(ListAllergyDefNew[index]);
 				}
 				else {
 					ListAllergyNew[index].AllergyDefNum=alDU.AllergyDefNum;//Set the allergydefnum on the allergy.
-				}
-				if(Security.IsAuthorized(Permissions.EhrShowCDS)) {
-					FormCDSIntervention FormCDSI=new FormCDSIntervention();
-					FormCDSI.DictEhrTriggerResults=EhrTriggers.TriggerMatch(ListAllergyNew[index],PatCur);
-					FormCDSI.ShowIfRequired();
-					if(FormCDSI.DialogResult==DialogResult.Cancel) {//using ==DialogResult.Cancel instead of !=DialogResult.OK
-						return;//effectively canceling the action.
-					}
 				}
 				Allergies.Insert(ListAllergyNew[index]);
 			}

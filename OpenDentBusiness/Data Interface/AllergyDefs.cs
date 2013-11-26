@@ -207,5 +207,17 @@ namespace OpenDentBusiness{
 			return Crud.AllergyDefCrud.SelectOne(command);
 		}
 
+		///<summary>Returns the AllergyDef with the corresponding Medication. Returns null if medicationNum is 0.</summary>
+		public static AllergyDef GetAllergyDefFromMedication(long medicationNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<AllergyDef>(MethodBase.GetCurrentMethod(),medicationNum);
+			}
+			if(medicationNum==0) {
+				return null;
+			}
+			string command="SELECT * FROM allergyDef WHERE MedicationNum="+POut.Long(medicationNum);
+			return Crud.AllergyDefCrud.SelectOne(command);
+		}
+
 	}
 }

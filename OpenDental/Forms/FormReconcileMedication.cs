@@ -368,7 +368,9 @@ namespace OpenDental {
 				}
 			}
 			//Always update every current medication for the patient so that DateTStamp reflects the last reconcile date.
-			MedicationPats.ResetTimeStamps(PatCur.PatNum,true);
+			if(_listMedicationPatCur.Count>0) {
+				MedicationPats.ResetTimeStamps(PatCur.PatNum,true);
+			}
 			Medication med;
 			int index;
 			for(int j=0;j<_listMedicationPatReconcile.Count;j++) {

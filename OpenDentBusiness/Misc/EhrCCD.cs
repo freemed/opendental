@@ -234,10 +234,8 @@ Allergies
 			Medication med;
 			w.WriteStartElement("component");
 			w.WriteStartElement("section");
-			TemplateId(w,"2.16.840.1.113883.3.88.11.83.102","HITSP/C83");
-			TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.3.13","IHE PCC");
-			TemplateId(w,"2.16.840.1.113883.10.20.1.2","HL7 CCD");//alerts section template id, according to pages 103-104 of CCD-final.pdf
-			w.WriteComment("Allergies/Reactions section template");
+			TemplateId(w,"2.16.840.1.113883.10.20.22.2.6.1");
+			w.WriteComment("Allergies section template");
 			StartAndEnd(w,"code","code","48765-2","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Allergies");
 			w.WriteStartElement("title");
 			w.WriteString("Allergies and Adverse Reactions");
@@ -249,21 +247,22 @@ Allergies
 			w.WriteStartElement("thead");
 			w.WriteStartElement("tr");
 			w.WriteStartElement("th");
-			w.WriteString("SNOMED Allergy Type Code");
+			w.WriteString("Substance");
 			w.WriteEndElement();
-			w.WriteStartElement("th");
-			w.WriteString("Medication/Agent Allergy");
-			w.WriteEndElement();//
 			w.WriteStartElement("th");
 			w.WriteString("Reaction");
+			w.WriteEndElement();//
+			w.WriteStartElement("th");
+			w.WriteString("Allergy Type");
 			w.WriteEndElement();
 			w.WriteStartElement("th");
-			w.WriteString("Adverse Event Date");
+			w.WriteString("Status");
 			w.WriteEndElement();
 			w.WriteEndElement();//End tr
 			w.WriteEndElement();//End thead
 			w.WriteStartElement("tbody");
 			for(int i=0;i<listAllergy.Count;i++) {
+				String status=listAllergy[i].StatusIsActive?"Active":"Inactive";
 				allergyDef=AllergyDefs.GetOne(listAllergy[i].AllergyDefNum);
 				if(allergyDef.MedicationNum==0) {
 					continue;
@@ -274,16 +273,16 @@ Allergies
 				}
 				w.WriteStartElement("tr");
 				w.WriteStartElement("td");
-				w.WriteString(AllergyDefs.GetSnomedAllergyDesc(allergyDef.SnomedType));
-				w.WriteEndElement();
-				w.WriteStartElement("td");
 				w.WriteString(med.RxCui.ToString()+" - "+med.MedName);
 				w.WriteEndElement();
 				w.WriteStartElement("td");
 				w.WriteString(listAllergy[i].Reaction);
 				w.WriteEndElement();
 				w.WriteStartElement("td");
-				w.WriteString(listAllergy[i].DateAdverseReaction.ToShortDateString());
+				w.WriteString(AllergyDefs.GetSnomedAllergyDesc(allergyDef.SnomedType));
+				w.WriteEndElement();
+				w.WriteStartElement("td");
+				w.WriteString(status);
 				w.WriteEndElement();
 				w.WriteEndElement();//End tr
 			}
@@ -299,67 +298,150 @@ Allergies
 				if(med.RxCui==0) {
 					continue;
 				}
+				string status=listAllergy[i].StatusIsActive?"Active":"Inactive";
+				string allergyType="";
+				string allergyTypeName="";
+				#region Allergy Type
+				if(allergyDef.SnomedType==SnomedAllergy.AdverseReactionsToDrug) {
+					allergyType="419511003";
+					allergyTypeName="Propensity to adverse reaction to drug";
+				}
+				else if(allergyDef.SnomedType==SnomedAllergy.AdverseReactionsToFood) {
+					allergyType="418471000";
+					allergyTypeName="Propensity to adverse reaction to food";
+				}
+				else if(allergyDef.SnomedType==SnomedAllergy.AdverseReactionsToSubstance) {
+					allergyType="419199007";
+					allergyTypeName="Propensity to adverse reaction to substance";
+				}
+				else if(allergyDef.SnomedType==SnomedAllergy.AllergyToSubstance) {
+					allergyType="418038007";
+					allergyTypeName="Allergy to substance";
+				}
+				else if(allergyDef.SnomedType==SnomedAllergy.DrugAllergy) {
+					allergyType="416098002";
+					allergyTypeName="Drug allergy";
+				}
+				else if(allergyDef.SnomedType==SnomedAllergy.DrugIntolerance) {
+					allergyType="59037007";
+					allergyTypeName="Drug intolerance";
+				}
+				else if(allergyDef.SnomedType==SnomedAllergy.FoodAllergy) {
+					allergyType="414285001";
+					allergyTypeName="Food allergy";
+				}
+				else if(allergyDef.SnomedType==SnomedAllergy.FoodIntolerance) {
+					allergyType="235719002";
+					allergyTypeName="Food intolerance";
+				}
+				else if(allergyDef.SnomedType==SnomedAllergy.AdverseReactions) {
+					allergyType="420134006";
+					allergyTypeName="Adverse reaction";
+				}
+				else {
+					allergyType="";
+					allergyTypeName="None";
+				}
+				#endregion
+				allergyDef=AllergyDefs.GetOne(listAllergy[i].AllergyDefNum);
+				if(allergyDef.MedicationNum==0) {
+					continue;
+				}
+				med=Medications.GetMedication(allergyDef.MedicationNum);
+				if(med.RxCui==0) {
+					continue;
+				}
 				Start(w,"entry","typeCode","DRIV");
 				Start(w,"act","classCode","ACT","moodCode","EVN");
-				TemplateId(w,"2.16.840.1.113883.3.88.11.83.6","HITSP C83");
-				TemplateId(w,"2.16.840.1.113883.10.20.1.27","CCD");//problem act template id, according to pages 103-104 of CCD-final.pdf
-				TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.4.5.1","IHE PCC");
-				TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.4.5.3","IHE PCC");
-				StartAndEnd(w,"id","root","36e3e930-7b14-11db-9fe1-0800200c9a66");//line 368 in POCD_HD000040.xls
-				StartAndEnd(w,"code","nullFlavor","NA");//line 369 in POCD_HD000040.xls
-				StartAndEnd(w,"statusCode","code","completed");//line 372 in POCD_HD000040.xls
-				Start(w,"effectiveTime");//line 373 in POCD_HD000040.xls
-				StartAndEnd(w,"low","nullFlavor","UNK");
-				StartAndEnd(w,"high","nullFlavor","UNK");
+				TemplateId(w,"2.16.840.1.113883.10.20.22.4.30");
+				BuildIdAndWrite(w);
+				StartAndEnd(w,"code","code","48765-2","codeSystem",strCodeSystemLoinc,"codeSystemName","LOINC","displayName","Allergies and adverse reactions");
+				if(listAllergy[i].StatusIsActive) {
+					StartAndEnd(w,"statusCode","code","active");
+				}
+				else {
+					StartAndEnd(w,"statusCode","code","completed");
+				}
+				Start(w,"effectiveTime");
+				if(listAllergy[i].StatusIsActive) {
+					StartAndEnd(w,"low","value",listAllergy[i].DateTStamp.ToString("yyyymmdd"));
+					StartAndEnd(w,"high","nullFlavor","UNK");
+				}
+				else {
+					StartAndEnd(w,"low","nullFlavor","UNK");
+					StartAndEnd(w,"high","value",listAllergy[i].DateTStamp.ToString("yyyymmdd"));
+				}
 				End(w,"effectiveTime");
-				Start(w,"entryRelationship","typeCode","SUBJ","inversionInd","false");//line 319 in POCD_HD000040.xls
-				Start(w,"observation","classCode","OBS","moodCode","EVN");//line 385 in POCD_HD000040.xls
-				TemplateId(w,"2.16.840.1.113883.10.20.1.18","CCD");//alert observation template id, according to pages 103-104 of CCD-final.pdf
-				TemplateId(w,"2.16.840.1.113883.10.20.1.28","CCD");//problem observation template id, according to pages 103-104 of CCD-final.pdf
-				TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.4.5","IHE PCC");
-				TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.4.6","IHE PCC");
-				StartAndEnd(w,"id","root","4adc1020-7b14-11db-9fe1-0800200c9a66");//line 388 in POCD_HD000040.xls
-				StartAndEnd(w,"code","code","416098002","codeSystem",strCodeSystemSnomed,"displayName","drug allergy","codeSystemName",strCodeSystemNameSnomed);//line 389 in POCD_HD000040.xls
-				Start(w,"text");//line 392 in POCD_HD000040.xls
-				StartAndEnd(w,"reference","value","#ALGSUMMARY_1");
-				End(w,"text");
-				StartAndEnd(w,"statusCode","code","completed");//line 393 in POCD_HD000040.xls
-				Start(w,"effectiveTime");//line 394 in POCD_HD000040.xls
+				Start(w,"entryRelationship","typeCode","SUBJ");
+				Start(w,"observation","classCode","OBS","moodCode","EVN");
+				w.WriteComment("Allergy Observation template");
+				TemplateId(w,"2.16.840.1.113883.10.20.22.4.7");
+				BuildIdAndWrite(w);
+				StartAndEnd(w,"code","code","ASSERTION","codeSystem","2.16.840.1.113883.5.4");//Fixed Value
+				StartAndEnd(w,"statusCode","code","completed");//fixed value (required)
+				Start(w,"effectiveTime");
 				StartAndEnd(w,"low","nullFlavor","UNK");
+				StartAndEnd(w,"high","value",listAllergy[i].DateTStamp.ToString("yyyymmdd"));
 				End(w,"effectiveTime");
-				//Note that IHE/PCC and HITSP/C32 differ in how to represent the drug, substance, or food that one is allergic to.
-				//IHE/PCC expects to see that information in <value> and HITSP/C32 expects to see it in <participant>.
-				Start(w,"value");//line 398 in POCD_HD000040.xls
+				Start(w,"value");
 				w.WriteAttributeString("xsi","type",null,"CD");
-				Attribs(w,"code",med.RxCui.ToString(),"codeSystem",strCodeSystemRxNorm);
-				Attribs(w,"displayName",med.MedName,"codeSystemName",strCodeSystemNameRxNorm);
-				Start(w,"originalText");
-				StartAndEnd(w,"reference","value","#ALGSUB_1");
-				End(w,"originalText");
+				Attribs(w,"code",allergyType,"displayName",allergyTypeName,"codeSystem",strCodeSystemSnomed,"codeSystemName","SNOMED CT");
 				End(w,"value");
-				Start(w,"participant","typeCode","CSM");//line 294 in POCD_HD000040.xls? Isn't the observation supposed to end before this element?
-				Start(w,"participantRole","classCode","MANU");//line 299 in POCD_HD000040.xls?
-				StartAndEnd(w,"addr");//line 303 in POCD_HD000040.xls?
-				StartAndEnd(w,"telecom");//line 304 in POCD_HD000040.xls?
-				//TODO: Missing playingentitychoice element?
-				Start(w,"playingEntity","classCode","MMAT");//line 312 in POCD_HD000040.xls?
-				Start(w,"code","code","70618","codeSystem",strCodeSystemRxNorm);
-				Attribs(w,"displayName",med.MedName,"codeSystemName",strCodeSystemNameRxNorm);
-				Start(w,"originalText");
-				StartAndEnd(w,"reference","value","#ALGSUB_1");
-				End(w,"originalText");
-				End(w,"code");
-				w.WriteElementString("name",med.MedName);
+				Start(w,"participant","typeCode","CSM");
+				Start(w,"participantRole","classCode","MANU");
+				Start(w,"playingEntity","classCode","MMAT");
+				StartAndEnd(w,"code","code",med.RxCui.ToString(),"displayName",med.MedName,"codeSystem",strCodeSystemRxNorm,"codeSystemName","RxNorm");
 				End(w,"playingEntity");
 				End(w,"participantRole");
 				End(w,"participant");
+				Start(w,"entryRelationship","typeCode","SUBJ");
+				Start(w,"observation","classCode","OBS","moodCode","EVN");
+				w.WriteComment("Allergy Status Observation template");
+				TemplateId(w,"2.16.840.1.113883.10.20.22.4.28");
+				StartAndEnd(w,"code","code","33999-4","codeSystem",strCodeSystemLoinc,"codeSystemName","LOINC","displayName","Status");
+				StartAndEnd(w,"statusCode","code","completed");//fixed value (required)
+				if(status=="Active") {
+					Start(w,"value");
+					w.WriteAttributeString("xsi","type",null,"CE");
+					Attribs(w,"code","55561003","codeSystem",strCodeSystemSnomed,"displayName",status);
+					End(w,"value");
+				}
+				else {
+					Start(w,"value");
+					w.WriteAttributeString("xsi","type",null,"CE");
+					Attribs(w,"code","73425007","codeSystem",strCodeSystemSnomed,"displayName",status);
+					End(w,"value");
+				}
+				End(w,"observation");
+				End(w,"entryRelationship");
+				Start(w,"entryRelationship","typeCode","SUBJ");
+				Start(w,"observation","classCode","OBS","moodCode","EVN");
+				w.WriteComment("Reaction Observation template");
+				TemplateId(w,"2.16.840.1.113883.10.20.22.4.9");
+				BuildIdAndWrite(w);
+				StartAndEnd(w,"code","nullFlavor","NA");//Unknown why this is null, but can't find a good example of this
+				StartAndEnd(w,"statusCode","code","completed");//fixed value (required)
+				Start(w,"effectiveTime");
+				if(listAllergy[i].StatusIsActive) {
+					StartAndEnd(w,"low","value",listAllergy[i].DateTStamp.ToString("yyyymmdd"));
+				}
+				else {
+					StartAndEnd(w,"low","nullFlavor","UNK");
+				}
+				End(w,"effectiveTime");
+				Start(w,"value");
+				w.WriteAttributeString("xsi","type",null,"CD");
+				Attribs(w,"code",listAllergy[i].SnomedReaction,"codeSystem",strCodeSystemSnomed,"displayName",listAllergy[i].Reaction);
+				End(w,"value");
+				End(w,"observation");
+				End(w,"entryRelationship");
 				End(w,"observation");
 				End(w,"entryRelationship");
 				End(w,"act");
 				End(w,"entry");
 			}
-			w.WriteEndElement();//section
-			w.WriteEndElement();//component Alerts
+			End(w,"section");
+			End(w,"component");
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
@@ -461,7 +543,7 @@ Medications
 			w.WriteEndElement();//End tbody
 			w.WriteEndElement();//End table
 			w.WriteEndElement();//End text
-			string status;
+			string status;//May not be necessary, but no harm in setting it.
 			for(int i=0;i<listMedPat.Count;i++) {
 				long rxCui=listMedPat[i].RxCui;
 				string strMedName=listMedPat[i].MedDescript;//This might be blank, for example not from NewCrop.  
@@ -484,8 +566,9 @@ Medications
 				TemplateId(w,"2.16.840.1.113883.10.20.22.4.16");
 				w.WriteComment("Medication activity template");
 				BuildIdAndWrite(w);
-				StartAndEnd(w,"statusCode","code","completed");
-				Start(w,"effectiveTime","xsi:type","IVL_TS");
+				StartAndEnd(w,"statusCode","code","completed");//Fixed Value
+				Start(w,"effectiveTime");
+				w.WriteAttributeString("xsi","type",null,"IVL_TS");
 				StartAndEnd(w,"low","value",listMedPat[i].DateStart.ToString("yyyymmdd"));
 				StartAndEnd(w,"high","value",listMedPat[i].DateStop.ToString("yyyymmdd"));
 				End(w,"effectiveTime");
@@ -576,6 +659,7 @@ Problems
 			List<Disease> listProblem=Diseases.Refresh(pat.PatNum);
 			string status="Inactive";
 			string statusCode="73425007";
+			string statusOther="active";
 			w.WriteStartElement("component");
 			w.WriteStartElement("section");
 			TemplateId(w,"2.16.840.1.113883.10.20.22.2.5.1");
@@ -586,35 +670,44 @@ Problems
 			StartAndEnd(w,"content","ID","problems");
 			Start(w,"list","listType","ordered");
 			for(int i=0;i<listProblem.Count;i++) {//Fill Problems Table
+				if(listProblem[i].SnomedProblemType!="55607006") {
+					continue;
+				}
 				w.WriteStartElement("item");
 				w.WriteString(DiseaseDefs.GetName(listProblem[i].DiseaseDefNum)+" : "+"Status - ");
 				if(listProblem[i].ProbStatus==ProblemStatus.Active) {
 					w.WriteString("Active");
 					status="Active";
 					statusCode="55561003";
+					statusOther="active";
 				}
 				else if(listProblem[i].ProbStatus==ProblemStatus.Inactive) {
 					w.WriteString("Inactive");
 					status="Inactive";
 					statusCode="73425007";
+					statusOther="completed";
 				}
 				else {
 					w.WriteString("Resolved");
 					status="Resolved";
 					statusCode="413322009";
+					statusOther="completed";
 				}
 				w.WriteEndElement();//item end
 			}
 			w.WriteEndElement();//list end
 			w.WriteEndElement();//text end
 			for(int i=0;i<listProblem.Count;i++) {//Fill Problems Info
+				if(listProblem[i].SnomedProblemType!="55607006") {
+					continue;
+				}
 				Start(w,"entry","typeCode","DRIV");
 				Start(w,"act","classCode","ACT","moodCode","EVN");
 				w.WriteComment("Problem Concern Act template");//Concern Act Section
 				TemplateId(w,"2.16.840.1.113883.10.20.22.4.3");
 				BuildIdAndWrite(w);
-				StartAndEnd(w,"code","code","CONC","codeSystem","2.16.840.1.113883.5.6","displayName","Concern");//We are currently hard-coding in concern. Possibly change later.
-				StartAndEnd(w,"statusCode","code","active");
+				StartAndEnd(w,"code","code","55607006","codeSystem","2.16.840.1.113883.6.96","displayName","Problem");
+				StartAndEnd(w,"statusCode","code",statusOther);
 				Start(w,"effectiveTime");
 				StartAndEnd(w,"low","value",listProblem[i].DateStart.ToString("yyyymmdd"));
 				if(listProblem[i].DateStop.Year>1880) {
@@ -626,7 +719,7 @@ Problems
 				w.WriteComment("Problem Observation template");//Observation Section
 				TemplateId(w,"2.16.840.1.113883.10.20.22.4.4");
 				BuildIdAndWrite(w);
-				StartAndEnd(w,"code","code",DiseaseDefs.GetItem(listProblem[i].DiseaseDefNum).DiseaseName,"codeSystem","2.16.840.1.113883.6.96","displayName","Complaint");//TODO: Use a Snomed Type for this
+				StartAndEnd(w,"code","code",listProblem[i].SnomedProblemType,"codeSystem","2.16.840.1.113883.6.96","displayName",Snomeds.GetByCode(listProblem[i].SnomedProblemType).Description);
 				if(listProblem[i].ProbStatus==ProblemStatus.Active) {
 					StartAndEnd(w,"statusCode","code","active");
 				}
@@ -636,19 +729,28 @@ Problems
 				Start(w,"effectiveTime");
 				StartAndEnd(w,"low","value",listProblem[i].DateStart.ToString("yyyymmdd"));
 				End(w,"effectiveTime");
-				StartAndEnd(w,"value","xsi:type","CD","code",DiseaseDefs.GetItem(listProblem[i].DiseaseDefNum).SnomedCode,"codeSystem",strCodeSystemSnomed,"displayName",DiseaseDefs.GetItem(listProblem[i].DiseaseDefNum).DiseaseName);
+				Start(w,"value");
+				w.WriteAttributeString("xsi","type",null,"CD");
+				Attribs(w,"code",DiseaseDefs.GetItem(listProblem[i].DiseaseDefNum).SnomedCode,"codeSystem",strCodeSystemSnomed,"displayName",DiseaseDefs.GetItem(listProblem[i].DiseaseDefNum).DiseaseName);
+				End(w,"value");
 				Start(w,"entryRelationship","typeCode","REFR");
 				Start(w,"observation","classCode","OBS","moodCode","EVN");
 				w.WriteComment("Status Observation template");//Status Observation Section
 				TemplateId(w,"2.16.840.1.113883.10.20.22.4.6");
-				StartAndEnd(w,"code","xsi:type","CE","code","33999-4","codeSystem",strCodeSystemLoinc,"codeSystemName","LOINC","displayName","Status");
+				Start(w,"code");
+				w.WriteAttributeString("xsi","type",null,"CE");
+				Attribs(w,"code","33999-4","codeSystem",strCodeSystemLoinc,"codeSystemName","LOINC","displayName","Status");
+				End(w,"cpde");
 				if(listProblem[i].ProbStatus==ProblemStatus.Active) {
 					StartAndEnd(w,"statusCode","code","active");
 				}
 				else {
 					StartAndEnd(w,"statusCode","code","completed");
 				}
-				StartAndEnd(w,"value","xsi:type","CD","code",statusCode,"codeSystem",strCodeSystemSnomed,"displayName",status);
+				Start(w,"value");
+				w.WriteAttributeString("xsi","type",null,"CD");
+				Attribs(w,"code",statusCode,"codeSystem",strCodeSystemSnomed,"displayName",status);
+				End(w,"value");
 				End(w,"observation");
 				End(w,"entryRelationship");
 				End(w,"observation");
@@ -658,119 +760,6 @@ Problems
 			}
 			End(w,"section");
 			End(w,"component");
-			#region Old, possibly delete
-			////w.WriteStartElement("table");
-			////w.WriteAttributeString("width","100%");
-			////w.WriteAttributeString("border","1");
-			////w.WriteStartElement("thead");
-			////w.WriteStartElement("tr");
-			////w.WriteStartElement("th");
-			////w.WriteString("ICD-9 Code");
-			////w.WriteEndElement();
-			////w.WriteStartElement("th");
-			////w.WriteString("Patient Problem");
-			////w.WriteEndElement();
-			////w.WriteStartElement("th");
-			////w.WriteString("Date Diagnosed");
-			////w.WriteEndElement();
-			////w.WriteStartElement("th");
-			////w.WriteString("Status");
-			////w.WriteEndElement();
-			////w.WriteEndElement();//End tr
-			////w.WriteEndElement();//End thead
-			////w.WriteStartElement("tbody");
-			////for(int i=0;i<listProblem.Count;i++) {
-			////	if(DiseaseDefs.GetItem(listProblem[i].DiseaseDefNum).ICD9Code=="") {
-			////		continue;
-			////	}
-			////	icd9=ICD9s.GetByCode(DiseaseDefs.GetItem(listProblem[i].DiseaseDefNum).ICD9Code);
-			////	w.WriteStartElement("tr");
-			////	w.WriteStartElement("td");
-			////	if(icd9==null) {
-			////		w.WriteString(DiseaseDefs.GetItem(listProblem[i].DiseaseDefNum).ICD9Code);
-			////		w.WriteEndElement();//td
-			////		w.WriteStartElement("td");
-			////		w.WriteString(DiseaseDefs.GetItem(listProblem[i].DiseaseDefNum).DiseaseName);
-			////	}
-			////	else {
-			////		w.WriteString(icd9.ICD9Code);
-			////		w.WriteEndElement();//td
-			////		w.WriteStartElement("td");
-			////		w.WriteString(icd9.Description);
-			////	}
-			////	w.WriteEndElement();
-			////	w.WriteStartElement("td");
-			////	w.WriteString(listProblem[i].DateStart.ToShortDateString());
-			////	w.WriteEndElement();
-			////	w.WriteStartElement("td");
-			////	w.WriteString(listProblem[i].ProbStatus.ToString());
-			////	w.WriteEndElement();
-			////	w.WriteEndElement();//End tr
-			////}
-			////w.WriteEndElement();//tbody
-			////w.WriteEndElement();//table
-			//w.WriteEndElement();//text
-			//for(int i=0;i<listProblem.Count;i++) {
-			//	if(DiseaseDefs.GetItem(listProblem[i].DiseaseDefNum).ICD9Code=="") {
-			//		continue;
-			//	}
-			//	icd9=ICD9s.GetByCode(DiseaseDefs.GetItem(listProblem[i].DiseaseDefNum).ICD9Code);
-			//	Start(w,"entry","typeCode","DRIV");
-			//	Start(w,"act","classCode","ACT","moodCode","EVN");
-			//	TemplateId(w,"2.16.840.1.113883.3.88.11.83.7","HITSP C83");
-			//	TemplateId(w,"2.16.840.1.113883.10.20.1.27","CCD");//problem act template id, according to pages 103-104 of CCD-final.pdf
-			//	TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.4.5.1","IHE PCC");
-			//	TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.4.5.2","IHE PCC");
-			//	w.WriteComment("Problem act template");
-			//	StartAndEnd(w,"id","root","6a2fa88d-4174-4909-aece-db44b60a3abb");
-			//	StartAndEnd(w,"code","nullFlavor","NA");
-			//	StartAndEnd(w,"statusCode","code","completed");
-			//	Start(w,"effectiveTime");
-			//	StartAndEnd(w,"low","value","1950");
-			//	StartAndEnd(w,"high","nullFlavor","UNK");
-			//	End(w,"effectiveTime");
-			//	Start(w,"entryRelationship","typeCode","SUBJ","inversionInd","false");
-			//	Start(w,"observation","classCode","OBS","moodCode","EVN");
-			//	TemplateId(w,"2.16.840.1.113883.10.20.1.28","CCD");//problem observation template id, according to pages 103-104 of CCD-final.pdf
-			//	TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.4.5","IHE PCC");
-			//	w.WriteComment("Problem observation template - NOT episode template");
-			//	StartAndEnd(w,"id","root","d11275e7-67ae-11db-bd13-0800200c9a66");
-			//	Start(w,"code","nullFlavor","UNK");
-			//	if(icd9==null) {
-			//		StartAndEnd(w,"translation","code",DiseaseDefs.GetItem(listProblem[i].DiseaseDefNum).ICD9Code,"codeSystem","2.16.840.1.113883.6.103");
-			//	}
-			//	else {
-			//		StartAndEnd(w,"translation","code",icd9.ICD9Code,"codeSystem","2.16.840.1.113883.6.103");
-			//	}
-			//	End(w,"code");
-			//	Start(w,"text");
-			//	StartAndEnd(w,"reference","value","#PROBSUMMARY_1");
-			//	End(w,"text");
-			//	StartAndEnd(w,"statusCode","code","completed");
-			//	Start(w,"effectiveTime");
-			//	StartAndEnd(w,"low","value","1950");
-			//	End(w,"effectiveTime");
-			//	Start(w,"value");
-			//	w.WriteAttributeString("xsi","type",null,"CD");
-			//	Attribs(w,"nullFlavor","UNK");
-			//	Start(w,"translation");
-			//	w.WriteAttributeString("xsi","type",null,"CD");
-			//	if(icd9==null) {
-			//		Attribs(w,"code",DiseaseDefs.GetItem(listProblem[i].DiseaseDefNum).ICD9Code,"codeSystem","2.16.840.1.113883.6.103");
-			//	}
-			//	else {
-			//		Attribs(w,"code",icd9.ICD9Code,"codeSystem","2.16.840.1.113883.6.103");
-			//	}
-			//	End(w,"translation");
-			//	End(w,"value");
-			//	End(w,"observation");
-			//	End(w,"entryRelationship");
-			//	End(w,"act");
-			//	End(w,"entry");
-			//}
-			//w.WriteEndElement();//section
-			//w.WriteEndElement();//component
-			#endregion
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
@@ -1199,7 +1188,7 @@ Laboratory Test Results
 			List<XmlNode> listProbs=GetParentNodes(listProblemActTemplate);
 			for(int i=0;i<listProbs.Count;i++) {
 				//We have to start fairly high in the tree so that we can get the effective time if it is available.
-				List<XmlNode> xmlNodeEffectiveTimes=GetNodesByTagNameAndAttributes(listProbs[i],"effectiveTime");//POCD_HD00040.xls line 492. Not required.
+				List<XmlNode> xmlNodeEffectiveTimes=GetNodesByTagNameAndAttributes(listProbs[i],"effectiveTime");
 				DateTime dateTimeEffectiveLow=DateTime.MinValue;
 				DateTime dateTimeEffectiveHigh=DateTime.MinValue;
 				if(xmlNodeEffectiveTimes.Count>0) {
@@ -1209,13 +1198,16 @@ Laboratory Test Results
 				}
 				List<XmlNode> listProblemObservTemplate=GetNodesByTagNameAndAttributes(listProbs[i],"templateId","root","2.16.840.1.113883.10.20.22.4.4");// problem act template.
 				List<XmlNode> listProbObs=GetParentNodes(listProblemObservTemplate);
+				List<XmlNode> listTypeCodes=GetNodesByTagNameAndAttributesFromList(listProbObs,"code");
 				List<XmlNode> listCodes=GetNodesByTagNameAndAttributesFromList(listProbObs,"value");
+				string probType=listTypeCodes[0].Attributes["code"].Value;
 				string probCode=listCodes[0].Attributes["code"].Value;
 				string probName=listCodes[0].Attributes["displayName"].Value;
 				List<XmlNode> listStatusObservTemplate=GetNodesByTagNameAndAttributes(listProbs[i],"templateId","root","2.16.840.1.113883.10.20.22.4.6");// Status Observation template.
 				List<XmlNode> listStatusObs=GetParentNodes(listStatusObservTemplate);
 				List<XmlNode> listActive=GetNodesByTagNameAndAttributesFromList(listStatusObs,"value");
 				Disease dis=new Disease();
+				dis.SnomedProblemType=probType;
 				dis.DateStart=dateTimeEffectiveLow;
 				dis.IsNew=true;
 				if(listActive.Count>0 && listActive[0].Attributes["code"].Value=="55561003") {//Active (qualifier value)
@@ -1323,7 +1315,7 @@ Laboratory Test Results
 						continue;//We only want RxNorms here.
 					}
 					string strCodeRx=xmlNodeCode.Attributes["code"].Value;
-					string strRxName=xmlNodeCode.Attributes["displayName"].Value;
+					string strRxName=xmlNodeCode.Attributes["displayName"].Value;//Look into this being required or not.
 					allergyDefName=strRxName;
 					med=Medications.GetMedicationFromDbByRxCui(PIn.Long(strCodeRx));
 					if(med==null) {
