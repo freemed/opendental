@@ -226,7 +226,7 @@ namespace OpenDentBusiness{
 			if(AccountingAutoPays.Listt.Count==0){
 				return false;
 			}
-			if(PrefC.GetLong(PrefName.AccountingIncomeAccount)==0) {
+			if(PrefC.GetLong(PrefName.AccountingCashIncomeAccount)==0) {
 				return false;
 			}
 			//might add a few more checks later.

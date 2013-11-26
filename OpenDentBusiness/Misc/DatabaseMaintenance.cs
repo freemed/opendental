@@ -2259,6 +2259,44 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
+		public static string JournalEntryInvalidAccountNum(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			command="SELECT COUNT(*) FROM journalentry WHERE AccountNum NOT IN(SELECT AccountNum FROM account)";
+			int numFound=PIn.Int(Db.GetCount(command));
+			if(isCheck) {
+				if(numFound > 0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Transactions found attached to an invalid account")+": "+numFound+"\r\n";
+				}
+			}
+			else {
+				if(numFound > 0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Transactions found attached to an invalid account")+": "+numFound+"\r\n";
+				}
+				if(numFound > 0) {
+					//Check to see if there is already an active account called UNKNOWN.
+					command="SELECT AccountNum FROM account WHERE Description='UNKNOWN' AND Inactive=0";
+					long accountNum=PIn.Long(Db.GetScalar(command));
+					if(accountNum==0) {
+						//Create a new Account called UNKNOWN.
+						Account account=new Account();
+						account.Description="UNKNOWN";
+						account.Inactive=false;//Just in case.
+						account.AcctType=AccountType.Asset;//Default account type.  This DBM check was added to fix orphaned automatic payment journal entries, which should have been associated to an income account.
+						accountNum=Accounts.Insert(account);
+					}
+					//Update the journalentry table.
+					command="UPDATE journalentry SET AccountNum="+POut.Long(accountNum)+" WHERE AccountNum NOT IN(SELECT AccountNum FROM account)";
+					Db.NonQ(command);
+					log+=Lans.g("FormDatabaseMaintenance","   All invalid transactions have been attached to the account called UNKNOWN.")+"\r\n";
+					log+=Lans.g("FormDatabaseMaintenance","   They need to be fixed manually.")+"\r\n";
+				}
+			}
+			return log;
+		}
+
 		public static string LabCaseWithInvalidLaboratory(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);

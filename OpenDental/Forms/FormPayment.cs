@@ -863,7 +863,9 @@ namespace OpenDental {
 					//add only the description based on PaymentCur attached to transaction
 					List<JournalEntry> jeL=JournalEntries.GetForTrans(trans.TransactionNum);
 					for(int i=0;i<jeL.Count;i++) {
-						if(Accounts.GetAccount(jeL[i].AccountNum).AcctType==AccountType.Asset) {
+						Account account=Accounts.GetAccount(jeL[i].AccountNum);
+						//The account could be null if the AccountNum was never set correctly due to the automatic payment entry setup missing an income account from older versions.
+						if(account!=null && account.AcctType==AccountType.Asset) {
 							textDepositAccount.Text=jeL[i].DateDisplayed.ToShortDateString();
 							if(jeL[i].DebitAmt>0) {
 								textDepositAccount.Text+=" "+jeL[i].DebitAmt.ToString("c");
