@@ -24,10 +24,10 @@ namespace OpenDentBusiness {
 		///<summary>2.16.840.1.113883.6.1</summary>
 		private const string strCodeSystemLoinc="2.16.840.1.113883.6.1";
 		private const string strCodeSystemNameLoinc="LOINC";
-		private static HashSet<string> idHash;
+		private static HashSet<string> _hashCcdIds;
 
 		public static string GenerateCCD(Patient pat) {
-			idHash=new HashSet<string>();
+			_hashCcdIds=new HashSet<string>();//The IDs only need to be unique within each CCD document.
 			Medications.Refresh();
 			XmlWriterSettings xmlSettings=new XmlWriterSettings();
 			xmlSettings.Encoding=Encoding.UTF8;
@@ -205,16 +205,16 @@ Body
 =====================================================================================================");
 				w.WriteStartElement("component");
 				w.WriteStartElement("structuredBody");
-				GenerateCcdProblems(w,pat);
-				GenerateCcdAllergies(w,pat);
-				GenerateCcdMedications(w,pat);
-				GenerateCcdLabs(w,pat);
-				GenerateCcdSectionVitalSigns(w,pat);
-				GenerateCcdSectionImmunizations(w,pat);
-				GenerateCcdSectionPlanOfCare(w,pat);
+				GenerateCcdSectionAllergies(w,pat);
 				GenerateCcdSectionEncounters(w,pat);
 				GenerateCcdSectionFunctionalStatus(w,pat);
+				GenerateCcdSectionImmunizations(w,pat);
+				GenerateCcdSectionMedications(w,pat);
+				GenerateCcdSectionPlanOfCare(w,pat);
+				GenerateCcdSectionProblems(w,pat);
 				GenerateCcdSectionReasonForReferral(w,pat);
+				GenerateCcdSectionResults(w,pat);//Lab Results
+				GenerateCcdSectionVitalSigns(w,pat);
 				End(w,"structuredBody");
 				End(w,"component");
 				End(w,"ClinicalDocument");
@@ -224,254 +224,7 @@ Body
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdLabs(XmlWriter w,Patient pat) {
-			w.WriteComment(@"
-=====================================================================================================
-Laboratory Test Results
-=====================================================================================================");
-			List<LabResult> listLabResult=LabResults.GetAllForPatient(pat.PatNum);
-			LabPanel labPanel;
-			w.WriteStartElement("component");
-			w.WriteStartElement("section");
-			TemplateId(w,"2.16.840.1.113883.3.88.11.83.122","HITSP/C83");
-			TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.3.28","IHE PCC");
-			w.WriteComment("Diagnostic Results section template");
-			StartAndEnd(w,"code","code","30954-2","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Results");
-			w.WriteElementString("title","Diagnostic Results");
-			w.WriteStartElement("text");//The following text will be parsed as html with a style sheet to be human readable.
-			w.WriteStartElement("table");
-			w.WriteAttributeString("width","100%");
-			w.WriteAttributeString("border","1");
-			w.WriteStartElement("thead");
-			w.WriteStartElement("tr");
-			w.WriteStartElement("th");
-			w.WriteString("LOINC Code");
-			w.WriteEndElement();
-			w.WriteStartElement("th");
-			w.WriteString("Test");
-			w.WriteEndElement();//
-			w.WriteStartElement("th");
-			w.WriteString("Result");
-			w.WriteEndElement();
-			w.WriteStartElement("th");
-			w.WriteString("Abnormal Flag");
-			w.WriteEndElement();
-			w.WriteStartElement("th");
-			w.WriteString("Date Performed");
-			w.WriteEndElement();
-			w.WriteEndElement();//tr
-			w.WriteEndElement();//thead
-			w.WriteStartElement("tbody");
-			for(int i=0;i<listLabResult.Count;i++) {
-				w.WriteStartElement("tr");
-				w.WriteStartElement("td");
-				w.WriteString(listLabResult[i].TestID);
-				w.WriteEndElement();
-				w.WriteStartElement("td");
-				w.WriteString(listLabResult[i].TestName);
-				w.WriteEndElement();
-				w.WriteStartElement("td");
-				w.WriteString(listLabResult[i].ObsValue+" "+listLabResult[i].ObsUnits);
-				w.WriteEndElement();
-				w.WriteStartElement("td");
-				w.WriteString(listLabResult[i].AbnormalFlag.ToString());
-				w.WriteEndElement();
-				w.WriteStartElement("td");
-				w.WriteString(listLabResult[i].DateTimeTest.ToShortDateString());
-				w.WriteEndElement();
-				w.WriteEndElement();//tr
-			}
-			w.WriteEndElement();//tbody
-			w.WriteEndElement();//table
-			w.WriteEndElement();//text
-			for(int i=0;i<listLabResult.Count;i++) {
-				labPanel=LabPanels.GetOne(listLabResult[i].LabPanelNum);
-				Start(w,"entry","typeCode","DRIV");
-				Start(w,"organizer","classCode","BATTERY","moodCode","EVN");
-				StartAndEnd(w,"templateId","root","2.16.840.1.113883.10.20.1.32");//no authority name
-				w.WriteComment("Result organizer template");
-				StartAndEnd(w,"id","root","7d5a02b0-67a4-11db-bd13-0800200c9a66");
-				StartAndEnd(w,"code","code",labPanel.ServiceId,"codeSystem",strCodeSystemSnomed,"displayName",labPanel.ServiceName);
-				StartAndEnd(w,"statusCode","code","completed");
-				StartAndEnd(w,"effectiveTime","value",listLabResult[i].DateTimeTest.ToString("yyyyMMddHHmm"));
-				Start(w,"component");
-				Start(w,"procedure","classCode","PROC","moodCode","EVN");
-				TemplateId(w,"2.16.840.1.113883.3.88.11.83.17","HITSP C83");
-				TemplateId(w,"2.16.840.1.113883.10.20.1.29","CCD");//procedure activity template id, according to pages 103-104 of CCD-final.pdf
-				TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.4.19","IHE PCC");
-				StartAndEnd(w,"id");
-				Start(w,"code","code",labPanel.ServiceId,"codeSystem",strCodeSystemSnomed,"displayName",labPanel.ServiceName);
-				Start(w,"originalText");
-				w.WriteString(labPanel.ServiceName);
-				StartAndEnd(w,"reference","value","Ptr to text  in parent Section");
-				End(w,"originalText");
-				End(w,"code");
-				Start(w,"text");
-				w.WriteString(labPanel.ServiceName);
-				StartAndEnd(w,"reference","value","Ptr to text  in parent Section");
-				End(w,"text");
-				StartAndEnd(w,"statusCode","code","completed");
-				StartAndEnd(w,"effectiveTime","value",listLabResult[i].DateTimeTest.ToString("yyyyMMddHHmm"));
-				End(w,"procedure");
-				End(w,"component");
-				Start(w,"component");
-				Start(w,"observation","classCode","OBS","moodCode","EVN");
-				TemplateId(w,"2.16.840.1.113883.3.88.11.83.15.1","HITSP C83");
-				TemplateId(w,"2.16.840.1.113883.10.20.1.31","CCD");//result observation template id, according to pages 103-104 of CCD-final.pdf
-				TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.4.13","IHE PCC");
-				w.WriteComment("Result observation template");
-				StartAndEnd(w,"id","root","107c2dc0-67a5-11db-bd13-0800200c9a66");
-				StartAndEnd(w,"code","code",listLabResult[i].TestID,"codeSystem",strCodeSystemLoinc,"displayName",listLabResult[i].TestName);
-				Start(w,"text");
-				StartAndEnd(w,"reference","value","PtrToValueInsectionText");
-				End(w,"text");
-				StartAndEnd(w,"statusCode","code","completed");
-				StartAndEnd(w,"effectiveTime","value",listLabResult[i].DateTimeTest.ToString("yyyyMMddHHmm"));
-				Start(w,"value");
-				w.WriteAttributeString("xsi","type",null,"PQ");
-				Attribs(w,"value","13.2","unit","g/dl");
-				End(w,"value");
-				StartAndEnd(w,"interpretationCode","code","N","codeSystem","2.16.840.1.113883.5.83");
-				End(w,"observation");
-				End(w,"component");
-				End(w,"organizer");
-				End(w,"entry");
-			}
-			End(w,"section");
-			End(w,"component");
-		}
-
-		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdMedications(XmlWriter w,Patient pat) {
-			w.WriteComment(@"
-=====================================================================================================
-Medications
-=====================================================================================================");
-			List<MedicationPat> listMedPat=MedicationPats.Refresh(pat.PatNum,true);
-			Medication med;
-			w.WriteStartElement("component");
-			w.WriteStartElement("section");
-			TemplateId(w,"2.16.840.1.113883.10.20.22.2.1.1");//Required Medication Section
-			w.WriteComment("Medications section template");
-			StartAndEnd(w,"code","code","10160-0","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","History of medication use");
-			w.WriteElementString("title","Medications");
-			w.WriteStartElement("text");//The following text will be parsed as html with a style sheet to be human readable.
-			w.WriteStartElement("table");
-			w.WriteAttributeString("width","100%");
-			w.WriteAttributeString("border","1");
-			w.WriteStartElement("thead");
-			w.WriteStartElement("tr");
-			w.WriteStartElement("th");
-			w.WriteString("Medication");
-			w.WriteEndElement();
-			w.WriteStartElement("th");
-			w.WriteString("Directions");
-			w.WriteEndElement();
-			w.WriteStartElement("th");
-			w.WriteString("Start Date");
-			w.WriteEndElement();
-			w.WriteStartElement("th");
-			w.WriteString("End Date");
-			w.WriteEndElement();
-			w.WriteStartElement("th");
-			w.WriteString("Status");
-			w.WriteEndElement();
-			w.WriteStartElement("th");
-			w.WriteString("Indications");
-			w.WriteEndElement();
-			w.WriteStartElement("th");
-			w.WriteString("Fill Instructions");
-			w.WriteEndElement();
-			w.WriteEndElement();//End tr
-			w.WriteEndElement();//End thead
-			w.WriteStartElement("tbody");
-			for(int i=0;i<listMedPat.Count;i++) {
-				if(listMedPat[i].RxCui==0) {
-					continue;
-				}
-				if(listMedPat[i].MedicationNum==0) {
-					continue;
-				}
-				med=Medications.GetMedication(listMedPat[i].MedicationNum);
-				w.WriteStartElement("tr");
-				w.WriteStartElement("td");
-				w.WriteString(med.MedName);//Medication
-				w.WriteEndElement();
-				w.WriteStartElement("td");
-				w.WriteString(med.Notes);//Directions
-				w.WriteEndElement();
-				w.WriteStartElement("td");
-				w.WriteString(listMedPat[i].DateStart.ToShortDateString());//Start Date
-				w.WriteEndElement();
-				w.WriteStartElement("td");
-				if(listMedPat[i].DateStop.Year>1880) {
-					w.WriteString(listMedPat[i].DateStop.ToShortDateString());//End Date
-				}
-				else {
-					w.WriteString("");
-				}
-				w.WriteEndElement();
-				w.WriteStartElement("td");
-				w.WriteString(MedicationPats.IsMedActive(listMedPat[i])?"Active":"Inactive");//Status
-				w.WriteEndElement();
-				w.WriteStartElement("td");
-				w.WriteString(listMedPat[i].PatNote);//Indications
-				w.WriteEndElement();
-				w.WriteStartElement("td");
-				w.WriteString(listMedPat[i].MedDescript);//Fill Instructions
-				w.WriteEndElement();
-				w.WriteEndElement();//End tr
-			}
-			w.WriteEndElement();//End tbody
-			w.WriteEndElement();//End table
-			w.WriteEndElement();//End text
-			string status;
-			for(int i=0;i<listMedPat.Count;i++) {
-				long rxCui=listMedPat[i].RxCui;
-				string strMedName=listMedPat[i].MedDescript;//This might be blank, for example not from NewCrop.  
-				if(listMedPat[i].MedicationNum!=0) {//If NewCrop, this will be 0.  Also might be zero in the future when we start allowing freeform medications.
-					med=Medications.GetMedication(listMedPat[i].MedicationNum);
-					rxCui=med.RxCui;
-					strMedName=med.MedName;
-					if(listMedPat[i].DateStop.Year>1880 && listMedPat[i].DateStop>=DateTime.Now) {
-						status="active";
-					}
-					else {
-						status="completed";
-					}
-				}
-				if(rxCui==0) {
-					continue;
-				}
-				Start(w,"entry","typeCode","DRIV");
-				Start(w,"substanceAdministration","classCode","SBADM","moodCode","EVN");
-				TemplateId(w,"2.16.840.1.113883.10.20.22.4.16");
-				w.WriteComment("Medication activity template");
-				BuildIdAndWrite(w);
-				StartAndEnd(w,"statusCode","code","completed");
-				Start(w,"effectiveTime","xsi:type","IVL_TS");
-				StartAndEnd(w,"low","value",listMedPat[i].DateStart.ToString("yyyymmdd"));
-				StartAndEnd(w,"high","value",listMedPat[i].DateStop.ToString("yyyymmdd"));
-				End(w,"effectiveTime");
-				Start(w,"consumable");
-				Start(w,"manufacturedProduct");
-				TemplateId(w,"2.16.840.1.113883.10.20.22.4.23");
-				BuildIdAndWrite(w);
-				Start(w,"manufacturedMaterial");
-				Start(w,"code","code",rxCui.ToString(),"codeSystem",strCodeSystemRxNorm,"displayName",strMedName,"codeSystemName",strCodeSystemNameRxNorm);
-				End(w,"code");
-				End(w,"manufacturedMaterial");
-				End(w,"manufacturedProduct");
-				End(w,"consumable");
-				End(w,"substanceAdministration");
-				End(w,"entry");
-			}
-			w.WriteEndElement();//section
-			w.WriteEndElement();//component: Medication
-		}
-
-		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdAllergies(XmlWriter w,Patient pat) {
+		private static void GenerateCcdSectionAllergies(XmlWriter w,Patient pat) {
 			w.WriteComment(@"
 =====================================================================================================
 Allergies
@@ -610,7 +363,156 @@ Allergies
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdProblems(XmlWriter w, Patient pat) {
+		private static void GenerateCcdSectionEncounters(XmlWriter w,Patient pat) {
+			//TODO:
+		}
+
+		///<summary>Helper for GenerateCCD().</summary>
+		private static void GenerateCcdSectionFunctionalStatus(XmlWriter w,Patient pat) {
+			//TODO:
+		}
+
+		///<summary>Helper for GenerateCCD().</summary>
+		private static void GenerateCcdSectionImmunizations(XmlWriter w,Patient pat) {
+			//TODO:
+		}
+
+		///<summary>Helper for GenerateCCD().</summary>
+		private static void GenerateCcdSectionMedications(XmlWriter w,Patient pat) {
+			w.WriteComment(@"
+=====================================================================================================
+Medications
+=====================================================================================================");
+			List<MedicationPat> listMedPat=MedicationPats.Refresh(pat.PatNum,true);
+			Medication med;
+			w.WriteStartElement("component");
+			w.WriteStartElement("section");
+			TemplateId(w,"2.16.840.1.113883.10.20.22.2.1.1");//Required Medication Section
+			w.WriteComment("Medications section template");
+			StartAndEnd(w,"code","code","10160-0","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","History of medication use");
+			w.WriteElementString("title","Medications");
+			w.WriteStartElement("text");//The following text will be parsed as html with a style sheet to be human readable.
+			w.WriteStartElement("table");
+			w.WriteAttributeString("width","100%");
+			w.WriteAttributeString("border","1");
+			w.WriteStartElement("thead");
+			w.WriteStartElement("tr");
+			w.WriteStartElement("th");
+			w.WriteString("Medication");
+			w.WriteEndElement();
+			w.WriteStartElement("th");
+			w.WriteString("Directions");
+			w.WriteEndElement();
+			w.WriteStartElement("th");
+			w.WriteString("Start Date");
+			w.WriteEndElement();
+			w.WriteStartElement("th");
+			w.WriteString("End Date");
+			w.WriteEndElement();
+			w.WriteStartElement("th");
+			w.WriteString("Status");
+			w.WriteEndElement();
+			w.WriteStartElement("th");
+			w.WriteString("Indications");
+			w.WriteEndElement();
+			w.WriteStartElement("th");
+			w.WriteString("Fill Instructions");
+			w.WriteEndElement();
+			w.WriteEndElement();//End tr
+			w.WriteEndElement();//End thead
+			w.WriteStartElement("tbody");
+			for(int i=0;i<listMedPat.Count;i++) {
+				if(listMedPat[i].RxCui==0) {
+					continue;
+				}
+				if(listMedPat[i].MedicationNum==0) {
+					continue;
+				}
+				med=Medications.GetMedication(listMedPat[i].MedicationNum);
+				w.WriteStartElement("tr");
+				w.WriteStartElement("td");
+				w.WriteString(med.MedName);//Medication
+				w.WriteEndElement();
+				w.WriteStartElement("td");
+				w.WriteString(med.Notes);//Directions
+				w.WriteEndElement();
+				w.WriteStartElement("td");
+				w.WriteString(listMedPat[i].DateStart.ToShortDateString());//Start Date
+				w.WriteEndElement();
+				w.WriteStartElement("td");
+				if(listMedPat[i].DateStop.Year>1880) {
+					w.WriteString(listMedPat[i].DateStop.ToShortDateString());//End Date
+				}
+				else {
+					w.WriteString("");
+				}
+				w.WriteEndElement();
+				w.WriteStartElement("td");
+				w.WriteString(MedicationPats.IsMedActive(listMedPat[i])?"Active":"Inactive");//Status
+				w.WriteEndElement();
+				w.WriteStartElement("td");
+				w.WriteString(listMedPat[i].PatNote);//Indications
+				w.WriteEndElement();
+				w.WriteStartElement("td");
+				w.WriteString(listMedPat[i].MedDescript);//Fill Instructions
+				w.WriteEndElement();
+				w.WriteEndElement();//End tr
+			}
+			w.WriteEndElement();//End tbody
+			w.WriteEndElement();//End table
+			w.WriteEndElement();//End text
+			string status;
+			for(int i=0;i<listMedPat.Count;i++) {
+				long rxCui=listMedPat[i].RxCui;
+				string strMedName=listMedPat[i].MedDescript;//This might be blank, for example not from NewCrop.  
+				if(listMedPat[i].MedicationNum!=0) {//If NewCrop, this will be 0.  Also might be zero in the future when we start allowing freeform medications.
+					med=Medications.GetMedication(listMedPat[i].MedicationNum);
+					rxCui=med.RxCui;
+					strMedName=med.MedName;
+					if(listMedPat[i].DateStop.Year>1880 && listMedPat[i].DateStop>=DateTime.Now) {
+						status="active";
+					}
+					else {
+						status="completed";
+					}
+				}
+				if(rxCui==0) {
+					continue;
+				}
+				Start(w,"entry","typeCode","DRIV");
+				Start(w,"substanceAdministration","classCode","SBADM","moodCode","EVN");
+				TemplateId(w,"2.16.840.1.113883.10.20.22.4.16");
+				w.WriteComment("Medication activity template");
+				BuildIdAndWrite(w);
+				StartAndEnd(w,"statusCode","code","completed");
+				Start(w,"effectiveTime","xsi:type","IVL_TS");
+				StartAndEnd(w,"low","value",listMedPat[i].DateStart.ToString("yyyymmdd"));
+				StartAndEnd(w,"high","value",listMedPat[i].DateStop.ToString("yyyymmdd"));
+				End(w,"effectiveTime");
+				Start(w,"consumable");
+				Start(w,"manufacturedProduct");
+				TemplateId(w,"2.16.840.1.113883.10.20.22.4.23");
+				BuildIdAndWrite(w);
+				Start(w,"manufacturedMaterial");
+				Start(w,"code","code",rxCui.ToString(),"codeSystem",strCodeSystemRxNorm,"displayName",strMedName,"codeSystemName",strCodeSystemNameRxNorm);
+				End(w,"code");
+				End(w,"manufacturedMaterial");
+				End(w,"manufacturedProduct");
+				End(w,"consumable");
+				End(w,"substanceAdministration");
+				End(w,"entry");
+			}
+			w.WriteEndElement();//section
+			w.WriteEndElement();//component: Medication
+		}
+
+		///<summary>Helper for GenerateCCD().</summary>
+		private static void GenerateCcdSectionPlanOfCare(XmlWriter w,Patient pat) {
+			//TODO:
+		}
+
+		///<summary>Helper for GenerateCCD().  Problem section.</summary>
+		private static void GenerateCcdSectionProblems(XmlWriter w,Patient pat) {
 			w.WriteComment(@"
 =====================================================================================================
 Problems
@@ -812,32 +714,7 @@ Problems
 			//}
 			//w.WriteEndElement();//section
 			//w.WriteEndElement();//component
-#endregion
-		}
-
-		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdSectionVitalSigns(XmlWriter w,Patient pat) {
-			//TODO:
-		}
-
-		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdSectionImmunizations(XmlWriter w,Patient pat) {
-			//TODO:
-		}
-
-		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdSectionPlanOfCare(XmlWriter w,Patient pat) {
-			//TODO:
-		}
-
-		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdSectionEncounters(XmlWriter w,Patient pat) {
-			//TODO:
-		}
-
-		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdSectionFunctionalStatus(XmlWriter w,Patient pat) {
-			//TODO:
+			#endregion
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
@@ -845,13 +722,136 @@ Problems
 			//TODO:
 		}
 
-		///<summary>Helper for GenerateCCD(). Builds an Id an writes it to the file.</summary>
+		///<summary>Helper for GenerateCCD().  Exports Labs.</summary>
+		private static void GenerateCcdSectionResults(XmlWriter w,Patient pat) {
+			w.WriteComment(@"
+=====================================================================================================
+Laboratory Test Results
+=====================================================================================================");
+			List<LabResult> listLabResult=LabResults.GetAllForPatient(pat.PatNum);
+			LabPanel labPanel;
+			w.WriteStartElement("component");
+			w.WriteStartElement("section");
+			TemplateId(w,"2.16.840.1.113883.3.88.11.83.122","HITSP/C83");
+			TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.3.28","IHE PCC");
+			w.WriteComment("Diagnostic Results section template");
+			StartAndEnd(w,"code","code","30954-2","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Results");
+			w.WriteElementString("title","Diagnostic Results");
+			w.WriteStartElement("text");//The following text will be parsed as html with a style sheet to be human readable.
+			w.WriteStartElement("table");
+			w.WriteAttributeString("width","100%");
+			w.WriteAttributeString("border","1");
+			w.WriteStartElement("thead");
+			w.WriteStartElement("tr");
+			w.WriteStartElement("th");
+			w.WriteString("LOINC Code");
+			w.WriteEndElement();
+			w.WriteStartElement("th");
+			w.WriteString("Test");
+			w.WriteEndElement();//
+			w.WriteStartElement("th");
+			w.WriteString("Result");
+			w.WriteEndElement();
+			w.WriteStartElement("th");
+			w.WriteString("Abnormal Flag");
+			w.WriteEndElement();
+			w.WriteStartElement("th");
+			w.WriteString("Date Performed");
+			w.WriteEndElement();
+			w.WriteEndElement();//tr
+			w.WriteEndElement();//thead
+			w.WriteStartElement("tbody");
+			for(int i=0;i<listLabResult.Count;i++) {
+				w.WriteStartElement("tr");
+				w.WriteStartElement("td");
+				w.WriteString(listLabResult[i].TestID);
+				w.WriteEndElement();
+				w.WriteStartElement("td");
+				w.WriteString(listLabResult[i].TestName);
+				w.WriteEndElement();
+				w.WriteStartElement("td");
+				w.WriteString(listLabResult[i].ObsValue+" "+listLabResult[i].ObsUnits);
+				w.WriteEndElement();
+				w.WriteStartElement("td");
+				w.WriteString(listLabResult[i].AbnormalFlag.ToString());
+				w.WriteEndElement();
+				w.WriteStartElement("td");
+				w.WriteString(listLabResult[i].DateTimeTest.ToShortDateString());
+				w.WriteEndElement();
+				w.WriteEndElement();//tr
+			}
+			w.WriteEndElement();//tbody
+			w.WriteEndElement();//table
+			w.WriteEndElement();//text
+			for(int i=0;i<listLabResult.Count;i++) {
+				labPanel=LabPanels.GetOne(listLabResult[i].LabPanelNum);
+				Start(w,"entry","typeCode","DRIV");
+				Start(w,"organizer","classCode","BATTERY","moodCode","EVN");
+				StartAndEnd(w,"templateId","root","2.16.840.1.113883.10.20.1.32");//no authority name
+				w.WriteComment("Result organizer template");
+				StartAndEnd(w,"id","root","7d5a02b0-67a4-11db-bd13-0800200c9a66");
+				StartAndEnd(w,"code","code",labPanel.ServiceId,"codeSystem",strCodeSystemSnomed,"displayName",labPanel.ServiceName);
+				StartAndEnd(w,"statusCode","code","completed");
+				StartAndEnd(w,"effectiveTime","value",listLabResult[i].DateTimeTest.ToString("yyyyMMddHHmm"));
+				Start(w,"component");
+				Start(w,"procedure","classCode","PROC","moodCode","EVN");
+				TemplateId(w,"2.16.840.1.113883.3.88.11.83.17","HITSP C83");
+				TemplateId(w,"2.16.840.1.113883.10.20.1.29","CCD");//procedure activity template id, according to pages 103-104 of CCD-final.pdf
+				TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.4.19","IHE PCC");
+				StartAndEnd(w,"id");
+				Start(w,"code","code",labPanel.ServiceId,"codeSystem",strCodeSystemSnomed,"displayName",labPanel.ServiceName);
+				Start(w,"originalText");
+				w.WriteString(labPanel.ServiceName);
+				StartAndEnd(w,"reference","value","Ptr to text  in parent Section");
+				End(w,"originalText");
+				End(w,"code");
+				Start(w,"text");
+				w.WriteString(labPanel.ServiceName);
+				StartAndEnd(w,"reference","value","Ptr to text  in parent Section");
+				End(w,"text");
+				StartAndEnd(w,"statusCode","code","completed");
+				StartAndEnd(w,"effectiveTime","value",listLabResult[i].DateTimeTest.ToString("yyyyMMddHHmm"));
+				End(w,"procedure");
+				End(w,"component");
+				Start(w,"component");
+				Start(w,"observation","classCode","OBS","moodCode","EVN");
+				TemplateId(w,"2.16.840.1.113883.3.88.11.83.15.1","HITSP C83");
+				TemplateId(w,"2.16.840.1.113883.10.20.1.31","CCD");//result observation template id, according to pages 103-104 of CCD-final.pdf
+				TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.4.13","IHE PCC");
+				w.WriteComment("Result observation template");
+				StartAndEnd(w,"id","root","107c2dc0-67a5-11db-bd13-0800200c9a66");
+				StartAndEnd(w,"code","code",listLabResult[i].TestID,"codeSystem",strCodeSystemLoinc,"displayName",listLabResult[i].TestName);
+				Start(w,"text");
+				StartAndEnd(w,"reference","value","PtrToValueInsectionText");
+				End(w,"text");
+				StartAndEnd(w,"statusCode","code","completed");
+				StartAndEnd(w,"effectiveTime","value",listLabResult[i].DateTimeTest.ToString("yyyyMMddHHmm"));
+				Start(w,"value");
+				w.WriteAttributeString("xsi","type",null,"PQ");
+				Attribs(w,"value","13.2","unit","g/dl");
+				End(w,"value");
+				StartAndEnd(w,"interpretationCode","code","N","codeSystem","2.16.840.1.113883.5.83");
+				End(w,"observation");
+				End(w,"component");
+				End(w,"organizer");
+				End(w,"entry");
+			}
+			End(w,"section");
+			End(w,"component");
+		}
+
+		///<summary>Helper for GenerateCCD().</summary>
+		private static void GenerateCcdSectionVitalSigns(XmlWriter w,Patient pat) {
+			//TODO:
+		}
+		
+		///<summary>Helper for GenerateCCD(). Builds an Id element an writes it to the given XmlWriter.</summary>
 		private static void BuildIdAndWrite(XmlWriter w) {
 			string id=MiscUtils.CreateRandomAlphaNumericString(32);
-			while(idHash.Contains(id)) {
+			while(_hashCcdIds.Contains(id)) {
 				id=MiscUtils.CreateRandomAlphaNumericString(32);
 			}
-			idHash.Add(id);
+			_hashCcdIds.Add(id);
 			StartAndEnd(w,"id","root",id);
 		}
 
