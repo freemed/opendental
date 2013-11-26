@@ -46,14 +46,16 @@ namespace OpenDentBusiness.Crud{
 			Disease disease;
 			for(int i=0;i<table.Rows.Count;i++) {
 				disease=new Disease();
-				disease.DiseaseNum   = PIn.Long  (table.Rows[i]["DiseaseNum"].ToString());
-				disease.PatNum       = PIn.Long  (table.Rows[i]["PatNum"].ToString());
-				disease.DiseaseDefNum= PIn.Long  (table.Rows[i]["DiseaseDefNum"].ToString());
-				disease.PatNote      = PIn.String(table.Rows[i]["PatNote"].ToString());
-				disease.DateTStamp   = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
-				disease.ProbStatus   = (ProblemStatus)PIn.Int(table.Rows[i]["ProbStatus"].ToString());
-				disease.DateStart    = PIn.Date  (table.Rows[i]["DateStart"].ToString());
-				disease.DateStop     = PIn.Date  (table.Rows[i]["DateStop"].ToString());
+				disease.DiseaseNum       = PIn.Long  (table.Rows[i]["DiseaseNum"].ToString());
+				disease.PatNum           = PIn.Long  (table.Rows[i]["PatNum"].ToString());
+				disease.DiseaseDefNum    = PIn.Long  (table.Rows[i]["DiseaseDefNum"].ToString());
+				disease.PatNote          = PIn.String(table.Rows[i]["PatNote"].ToString());
+				disease.DateTStamp       = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
+				disease.ProbStatus       = (ProblemStatus)PIn.Int(table.Rows[i]["ProbStatus"].ToString());
+				disease.DateStart        = PIn.Date  (table.Rows[i]["DateStart"].ToString());
+				disease.DateStop         = PIn.Date  (table.Rows[i]["DateStop"].ToString());
+				disease.SnomedProblemType= PIn.String(table.Rows[i]["SnomedProblemType"].ToString());
+				disease.FunctionStatus   = (FunctionalStatus)PIn.Int(table.Rows[i]["FunctionStatus"].ToString());
 				retVal.Add(disease);
 			}
 			return retVal;
@@ -94,7 +96,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="DiseaseNum,";
 			}
-			command+="PatNum,DiseaseDefNum,PatNote,ProbStatus,DateStart,DateStop) VALUES(";
+			command+="PatNum,DiseaseDefNum,PatNote,ProbStatus,DateStart,DateStop,SnomedProblemType,FunctionStatus) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(disease.DiseaseNum)+",";
 			}
@@ -105,7 +107,9 @@ namespace OpenDentBusiness.Crud{
 				//DateTStamp can only be set by MySQL
 				+    POut.Int   ((int)disease.ProbStatus)+","
 				+    POut.Date  (disease.DateStart)+","
-				+    POut.Date  (disease.DateStop)+")";
+				+    POut.Date  (disease.DateStop)+","
+				+"'"+POut.String(disease.SnomedProblemType)+"',"
+				+    POut.Int   ((int)disease.FunctionStatus)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -118,13 +122,15 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one Disease in the database.</summary>
 		public static void Update(Disease disease){
 			string command="UPDATE disease SET "
-				+"PatNum       =  "+POut.Long  (disease.PatNum)+", "
-				+"DiseaseDefNum=  "+POut.Long  (disease.DiseaseDefNum)+", "
-				+"PatNote      = '"+POut.String(disease.PatNote)+"', "
+				+"PatNum           =  "+POut.Long  (disease.PatNum)+", "
+				+"DiseaseDefNum    =  "+POut.Long  (disease.DiseaseDefNum)+", "
+				+"PatNote          = '"+POut.String(disease.PatNote)+"', "
 				//DateTStamp can only be set by MySQL
-				+"ProbStatus   =  "+POut.Int   ((int)disease.ProbStatus)+", "
-				+"DateStart    =  "+POut.Date  (disease.DateStart)+", "
-				+"DateStop     =  "+POut.Date  (disease.DateStop)+" "
+				+"ProbStatus       =  "+POut.Int   ((int)disease.ProbStatus)+", "
+				+"DateStart        =  "+POut.Date  (disease.DateStart)+", "
+				+"DateStop         =  "+POut.Date  (disease.DateStop)+", "
+				+"SnomedProblemType= '"+POut.String(disease.SnomedProblemType)+"', "
+				+"FunctionStatus   =  "+POut.Int   ((int)disease.FunctionStatus)+" "
 				+"WHERE DiseaseNum = "+POut.Long(disease.DiseaseNum);
 			Db.NonQ(command);
 		}
@@ -156,6 +162,14 @@ namespace OpenDentBusiness.Crud{
 			if(disease.DateStop != oldDisease.DateStop) {
 				if(command!=""){ command+=",";}
 				command+="DateStop = "+POut.Date(disease.DateStop)+"";
+			}
+			if(disease.SnomedProblemType != oldDisease.SnomedProblemType) {
+				if(command!=""){ command+=",";}
+				command+="SnomedProblemType = '"+POut.String(disease.SnomedProblemType)+"'";
+			}
+			if(disease.FunctionStatus != oldDisease.FunctionStatus) {
+				if(command!=""){ command+=",";}
+				command+="FunctionStatus = "+POut.Int   ((int)disease.FunctionStatus)+"";
 			}
 			if(command==""){
 				return;

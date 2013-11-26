@@ -33,6 +33,12 @@ namespace OpenDental{
 		private UI.Button butTodayStop;
 		private TextBox textSnomed;
 		private Label label6;
+		private ComboBox comboSnomedProblemType;
+		private Label labelSnomedProblemType;
+		private Label label7;
+		private Label labelFunctionalStatus;
+		private ComboBox comboEhrFunctionalStatus;
+		private Label label8;
 		///<summary></summary>
 		public bool IsNew;
 
@@ -80,15 +86,21 @@ namespace OpenDental{
 			this.comboStatus = new System.Windows.Forms.ComboBox();
 			this.label4 = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
+			this.textSnomed = new System.Windows.Forms.TextBox();
+			this.label6 = new System.Windows.Forms.Label();
+			this.comboSnomedProblemType = new System.Windows.Forms.ComboBox();
+			this.labelSnomedProblemType = new System.Windows.Forms.Label();
+			this.butTodayStop = new OpenDental.UI.Button();
+			this.butTodayStart = new OpenDental.UI.Button();
 			this.textDateStop = new OpenDental.ValidDate();
 			this.textDateStart = new OpenDental.ValidDate();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.butTodayStart = new OpenDental.UI.Button();
-			this.butTodayStop = new OpenDental.UI.Button();
-			this.textSnomed = new System.Windows.Forms.TextBox();
-			this.label6 = new System.Windows.Forms.Label();
+			this.label7 = new System.Windows.Forms.Label();
+			this.labelFunctionalStatus = new System.Windows.Forms.Label();
+			this.comboEhrFunctionalStatus = new System.Windows.Forms.ComboBox();
+			this.label8 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// textNote
@@ -179,6 +191,69 @@ namespace OpenDental{
 			this.label5.Text = "Stop Date";
 			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// textSnomed
+			// 
+			this.textSnomed.Location = new System.Drawing.Point(118, 64);
+			this.textSnomed.Name = "textSnomed";
+			this.textSnomed.ReadOnly = true;
+			this.textSnomed.Size = new System.Drawing.Size(322, 20);
+			this.textSnomed.TabIndex = 87;
+			// 
+			// label6
+			// 
+			this.label6.Location = new System.Drawing.Point(14, 64);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(100, 19);
+			this.label6.TabIndex = 88;
+			this.label6.Text = "Snomed";
+			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// comboSnomedProblemType
+			// 
+			this.comboSnomedProblemType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboSnomedProblemType.FormattingEnabled = true;
+			this.comboSnomedProblemType.Location = new System.Drawing.Point(118, 295);
+			this.comboSnomedProblemType.Name = "comboSnomedProblemType";
+			this.comboSnomedProblemType.Size = new System.Drawing.Size(209, 21);
+			this.comboSnomedProblemType.TabIndex = 89;
+			// 
+			// labelSnomedProblemType
+			// 
+			this.labelSnomedProblemType.Location = new System.Drawing.Point(12, 296);
+			this.labelSnomedProblemType.Name = "labelSnomedProblemType";
+			this.labelSnomedProblemType.Size = new System.Drawing.Size(100, 17);
+			this.labelSnomedProblemType.TabIndex = 90;
+			this.labelSnomedProblemType.Text = "Problem Type";
+			this.labelSnomedProblemType.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// butTodayStop
+			// 
+			this.butTodayStop.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butTodayStop.Autosize = true;
+			this.butTodayStop.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butTodayStop.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butTodayStop.CornerRadius = 4F;
+			this.butTodayStop.Location = new System.Drawing.Point(263, 141);
+			this.butTodayStop.Name = "butTodayStop";
+			this.butTodayStop.Size = new System.Drawing.Size(64, 23);
+			this.butTodayStop.TabIndex = 86;
+			this.butTodayStop.Text = "Today";
+			this.butTodayStop.Click += new System.EventHandler(this.butTodayStop_Click);
+			// 
+			// butTodayStart
+			// 
+			this.butTodayStart.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butTodayStart.Autosize = true;
+			this.butTodayStart.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butTodayStart.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butTodayStart.CornerRadius = 4F;
+			this.butTodayStart.Location = new System.Drawing.Point(263, 115);
+			this.butTodayStart.Name = "butTodayStart";
+			this.butTodayStart.Size = new System.Drawing.Size(65, 23);
+			this.butTodayStart.TabIndex = 85;
+			this.butTodayStart.Text = "Today";
+			this.butTodayStart.Click += new System.EventHandler(this.butTodayStart_Click);
+			// 
 			// textDateStop
 			// 
 			this.textDateStop.Location = new System.Drawing.Point(118, 143);
@@ -203,7 +278,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(12, 305);
+			this.butDelete.Location = new System.Drawing.Point(12, 356);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(83, 26);
 			this.butDelete.TabIndex = 6;
@@ -218,7 +293,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(327, 305);
+			this.butOK.Location = new System.Drawing.Point(327, 356);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75, 26);
 			this.butOK.TabIndex = 1;
@@ -233,62 +308,59 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(408, 305);
+			this.butCancel.Location = new System.Drawing.Point(408, 356);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 26);
 			this.butCancel.TabIndex = 0;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// butTodayStart
+			// label7
 			// 
-			this.butTodayStart.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butTodayStart.Autosize = true;
-			this.butTodayStart.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butTodayStart.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butTodayStart.CornerRadius = 4F;
-			this.butTodayStart.Location = new System.Drawing.Point(263, 115);
-			this.butTodayStart.Name = "butTodayStart";
-			this.butTodayStart.Size = new System.Drawing.Size(65, 23);
-			this.butTodayStart.TabIndex = 85;
-			this.butTodayStart.Text = "Today";
-			this.butTodayStart.Click += new System.EventHandler(this.butTodayStart_Click);
+			this.label7.Location = new System.Drawing.Point(333, 296);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(150, 17);
+			this.label7.TabIndex = 91;
+			this.label7.Text = "Only for CCD";
+			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// butTodayStop
+			// labelFunctionalStatus
 			// 
-			this.butTodayStop.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butTodayStop.Autosize = true;
-			this.butTodayStop.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butTodayStop.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butTodayStop.CornerRadius = 4F;
-			this.butTodayStop.Location = new System.Drawing.Point(263, 141);
-			this.butTodayStop.Name = "butTodayStop";
-			this.butTodayStop.Size = new System.Drawing.Size(64, 23);
-			this.butTodayStop.TabIndex = 86;
-			this.butTodayStop.Text = "Today";
-			this.butTodayStop.Click += new System.EventHandler(this.butTodayStop_Click);
+			this.labelFunctionalStatus.Location = new System.Drawing.Point(17, 320);
+			this.labelFunctionalStatus.Name = "labelFunctionalStatus";
+			this.labelFunctionalStatus.Size = new System.Drawing.Size(97, 23);
+			this.labelFunctionalStatus.TabIndex = 93;
+			this.labelFunctionalStatus.Text = "Functional Status";
+			this.labelFunctionalStatus.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textSnomed
+			// comboEhrFunctionalStatus
 			// 
-			this.textSnomed.Location = new System.Drawing.Point(118, 64);
-			this.textSnomed.Name = "textSnomed";
-			this.textSnomed.ReadOnly = true;
-			this.textSnomed.Size = new System.Drawing.Size(322, 20);
-			this.textSnomed.TabIndex = 87;
+			this.comboEhrFunctionalStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboEhrFunctionalStatus.FormattingEnabled = true;
+			this.comboEhrFunctionalStatus.Location = new System.Drawing.Point(118, 322);
+			this.comboEhrFunctionalStatus.Name = "comboEhrFunctionalStatus";
+			this.comboEhrFunctionalStatus.Size = new System.Drawing.Size(210, 21);
+			this.comboEhrFunctionalStatus.TabIndex = 92;
 			// 
-			// label6
+			// label8
 			// 
-			this.label6.Location = new System.Drawing.Point(14, 64);
-			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(100, 19);
-			this.label6.TabIndex = 88;
-			this.label6.Text = "Snomed";
-			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.label8.Location = new System.Drawing.Point(333, 323);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(150, 17);
+			this.label8.TabIndex = 94;
+			this.label8.Text = "Only for CCD";
+			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// FormDiseaseEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(495, 343);
+			this.ClientSize = new System.Drawing.Size(495, 394);
+			this.Controls.Add(this.label8);
+			this.Controls.Add(this.labelFunctionalStatus);
+			this.Controls.Add(this.comboEhrFunctionalStatus);
+			this.Controls.Add(this.label7);
+			this.Controls.Add(this.labelSnomedProblemType);
+			this.Controls.Add(this.comboSnomedProblemType);
 			this.Controls.Add(this.label6);
 			this.Controls.Add(this.textSnomed);
 			this.Controls.Add(this.butTodayStop);
@@ -351,6 +423,41 @@ namespace OpenDental{
 			if(DiseaseCur.DateStop.Year>1880) {
 				textDateStop.Text=DiseaseCur.DateStop.ToShortDateString();
 			}
+			comboSnomedProblemType.Items.Clear();
+			comboSnomedProblemType.Items.Add("Problem");//0 - Default value.  Problem (finding).  55607006
+			comboSnomedProblemType.Items.Add("Finding");//1 - Clinical finding (finding).  404684003
+			comboSnomedProblemType.Items.Add("Complaint");//2 - Complaint (finding).  409586006
+			comboSnomedProblemType.Items.Add("Dignosis");//3 - Diagnosis interpretation (observable entity).  282291009
+			comboSnomedProblemType.Items.Add("Condition");//4 - Disease (disorder).  64572001
+			comboSnomedProblemType.Items.Add("FunctionalLimitation");//5 - Finding of functional performance and activity (finding).  248536006
+			comboSnomedProblemType.Items.Add("Symptom");//6 - Finding reported by subject or history provider (finding).  418799008
+			if(DiseaseCur.SnomedProblemType=="404684003") {//Finding
+				comboSnomedProblemType.SelectedIndex=1;
+			}
+			else if(DiseaseCur.SnomedProblemType=="409586006") {//Complaint
+				comboSnomedProblemType.SelectedIndex=2;
+			}
+			else if(DiseaseCur.SnomedProblemType=="282291009") {//Dignosis
+				comboSnomedProblemType.SelectedIndex=3;
+			}
+			else if(DiseaseCur.SnomedProblemType=="64572001") {//Condition
+				comboSnomedProblemType.SelectedIndex=4;
+			}
+			else if(DiseaseCur.SnomedProblemType=="248536006") {//FunctionalLimitation
+				comboSnomedProblemType.SelectedIndex=5;
+			}
+			else if(DiseaseCur.SnomedProblemType=="418799008") {//Symptom
+				comboSnomedProblemType.SelectedIndex=6;
+			}
+			else {//Problem
+				comboSnomedProblemType.SelectedIndex=0;
+			}
+			comboEhrFunctionalStatus.Items.Clear();
+			string[] arrayFunctionalStatusNames=Enum.GetNames(typeof(FunctionalStatus));
+			for(int i=0;i<arrayFunctionalStatusNames.Length;i++) {
+				comboEhrFunctionalStatus.Items.Add(Lan.g(this,arrayFunctionalStatusNames[i]));
+			}
+			comboEhrFunctionalStatus.SelectedIndex=(int)DiseaseCur.FunctionStatus;//The default value is 'Problem'
 		}
 
 		private void butTodayStart_Click(object sender,EventArgs e) {
@@ -402,7 +509,28 @@ namespace OpenDental{
 			DiseaseCur.DateStop=PIn.Date(textDateStop.Text);
 			DiseaseCur.ProbStatus=(ProblemStatus)comboStatus.SelectedIndex;
 			DiseaseCur.PatNote=textNote.Text;
-			//Todo: Save DateStop and DateStart values.
+			if(comboSnomedProblemType.SelectedIndex==1) {//Finding
+				DiseaseCur.SnomedProblemType="404684003";
+			}
+			else if(comboSnomedProblemType.SelectedIndex==2) {//Complaint
+				DiseaseCur.SnomedProblemType="409586006";
+			}
+			else if(comboSnomedProblemType.SelectedIndex==3) {//Dignosis
+				DiseaseCur.SnomedProblemType="282291009";
+			}
+			else if(comboSnomedProblemType.SelectedIndex==4) {//Condition
+				DiseaseCur.SnomedProblemType="64572001";
+			}
+			else if(comboSnomedProblemType.SelectedIndex==5) {//FunctionalLimitation
+				DiseaseCur.SnomedProblemType="248536006";
+			}
+			else if(comboSnomedProblemType.SelectedIndex==6) {//Symptom
+				DiseaseCur.SnomedProblemType="418799008";
+			}
+			else {//Problem
+				DiseaseCur.SnomedProblemType="55607006";
+			}
+			DiseaseCur.FunctionStatus=(FunctionalStatus)comboEhrFunctionalStatus.SelectedIndex;
 			if(IsNew){
 				//This code is never hit in current implementation 09/26/2013.
 				Diseases.Insert(DiseaseCur);

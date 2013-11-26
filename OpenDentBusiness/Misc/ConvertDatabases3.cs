@@ -2185,6 +2185,52 @@ namespace OpenDentBusiness {
 					Db.NonQ(command);
 				}
 				//oracle ContentSummary data type is already clob which can handle up to 4GB of data.
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE disease ADD SnomedProblemType varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE disease ADD SnomedProblemType varchar2(255)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE disease ADD FunctionStatus tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE disease ADD FunctionStatus number(3)";
+					Db.NonQ(command);
+					command="UPDATE disease SET FunctionStatus = 0 WHERE FunctionStatus IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE disease MODIFY FunctionStatus NOT NULL";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS ehrcareplan";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehrcareplan (
+						EhrCarePlanNum bigint NOT NULL auto_increment PRIMARY KEY,
+						PatNum bigint NOT NULL,
+						SnomedEducation varchar(255) NOT NULL,
+						Instructions varchar(255) NOT NULL,
+						INDEX(PatNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE ehrcareplan'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehrcareplan (
+						EhrCarePlanNum number(20) NOT NULL,
+						PatNum number(20) NOT NULL,
+						SnomedEducation varchar2(255),
+						Instructions varchar2(255),
+						CONSTRAINT ehrcareplan_EhrCarePlanNum PRIMARY KEY (EhrCarePlanNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX ehrcareplan_PatNum ON ehrcareplan (PatNum)";
+					Db.NonQ(command);
+				}
 
 
 				command="UPDATE preference SET ValueString = '14.1.0.0' WHERE PrefName = 'DataBaseVersion'";
