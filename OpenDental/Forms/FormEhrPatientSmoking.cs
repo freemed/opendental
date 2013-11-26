@@ -112,7 +112,9 @@ namespace OpenDental {
 			gridMain.Columns.Add(col); 
 			col=new ODGridColumn("Type",170);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Documentation",180);
+			col=new ODGridColumn("Description",170);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn("Documentation",170);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
@@ -128,6 +130,13 @@ namespace OpenDental {
 				}
 				else {
 					row.Cells.Add(_ListEvents[i].EventType.ToString());
+				}
+				Snomed sCur=Snomeds.GetByCode(_ListEvents[i].CodeValueResult);
+				if(sCur!=null) {
+					row.Cells.Add(sCur.Description);
+				}
+				else {
+					row.Cells.Add("");
 				}
 				row.Cells.Add(_ListEvents[i].MoreInfo);
 				row.Tag=_ListEvents[i];
@@ -155,7 +164,8 @@ namespace OpenDental {
 						}
 						break;
 				}
-				row.Cells.Add(_ListInterventions[i].CodeValue+" - "+descript);
+				row.Cells.Add(descript);
+				row.Cells.Add(_ListInterventions[i].Note);
 				row.Tag=_ListInterventions[i];
 				listRows.Add(row);
 			}
@@ -194,7 +204,8 @@ namespace OpenDental {
 				row.Cells.Add(dateRange);
 				row.Cells.Add(InterventionCodeSet.TobaccoCessation.ToString()+" Medication");
 				string medDescript=RxNorms.GetDescByRxCui(_ListMedPats[i].RxCui.ToString());
-				row.Cells.Add(_ListMedPats[i].RxCui.ToString()+" - "+medDescript);
+				row.Cells.Add(medDescript);
+				row.Cells.Add(_ListMedPats[i].PatNote);
 				row.Tag=_ListMedPats[i];
 				listRows.Add(row);
 			}
@@ -246,10 +257,7 @@ namespace OpenDental {
 			}
 			//SelectedIndex guaranteed to be greater than 0
 			_TobaccoCodeSelected=((SmokingSnoMed)comboSmokeStatus.SelectedIndex-1).ToString().Substring(1);
-			DateTime dateTEntered=PIn.DateT(textDateAssessed.Text);
-			if(dateTEntered.Year<1880 || dateTEntered.Date!=DateTime.Now.Date) {//if date set to date other than current date, do not auto insert
-				return;
-			}
+			DateTime dateTEntered=PIn.DateT(textDateAssessed.Text);//will be set to DateTime.Now when form loads
 			//Automatically make an entry
 			for(int i=0;i<_ListEvents.Count;i++) {
 				if(_ListEvents[i].DateTEvent.Date==dateTEntered.Date) {
@@ -263,7 +271,9 @@ namespace OpenDental {
 			meas.PatNum=PatCur.PatNum;
 			meas.CodeValueEvent=_ListAssessmentCodes[comboAssessmentType.SelectedIndex].CodeValue;
 			meas.CodeSystemEvent=_ListAssessmentCodes[comboAssessmentType.SelectedIndex].CodeSystem;
-			meas.MoreInfo=_TobaccoCodeSelected+" - "+comboSmokeStatus.SelectedItem.ToString();
+			meas.CodeValueResult=_TobaccoCodeSelected;
+			meas.CodeSystemResult="SNOMEDCT";//only allow SNOMEDCT codes for now.
+			meas.MoreInfo="";
 			EhrMeasureEvents.Insert(meas);
 			FillGrid();
 		}
@@ -274,10 +284,6 @@ namespace OpenDental {
 				return;
 			}
 			DateTime dateTEntered=PIn.DateT(textDateAssessed.Text);
-			if(dateTEntered.Year<1880) {
-				MsgBox.Show(this,"Please fix date and time first.");
-				return;
-			}
 			for(int i=0;i<_ListEvents.Count;i++) {
 				if(_ListEvents[i].DateTEvent.Date==dateTEntered.Date) {
 					MessageBox.Show("A Tobacco Assessment entry already exists with the selected date.");
@@ -290,15 +296,9 @@ namespace OpenDental {
 			meas.PatNum=PatCur.PatNum;
 			meas.CodeValueEvent=_ListAssessmentCodes[comboAssessmentType.SelectedIndex].CodeValue;
 			meas.CodeSystemEvent=_ListAssessmentCodes[comboAssessmentType.SelectedIndex].CodeSystem;
-			string moreInfo=_TobaccoCodeSelected;
-			Snomed selectedSnomed=Snomeds.GetByCode(_TobaccoCodeSelected);
-			if(selectedSnomed==null) {//should not happen if they choose a snomed code from snomed list, so using SelectedItem is safe
-				moreInfo+=" - "+comboSmokeStatus.SelectedItem.ToString();
-			}
-			else {
-				moreInfo+=" - "+selectedSnomed.Description;
-			}
-			meas.MoreInfo=moreInfo;
+			meas.CodeValueResult=_TobaccoCodeSelected;
+			meas.CodeSystemResult="SNOMEDCT";//only allow SNOMEDCT codes for now.
+			meas.MoreInfo="";
 			EhrMeasureEvents.Insert(meas);
 			FillGrid();
 		}

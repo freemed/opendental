@@ -152,6 +152,7 @@
 			// 
 			this.textDateAssessed.Location = new System.Drawing.Point(117, 18);
 			this.textDateAssessed.Name = "textDateAssessed";
+			this.textDateAssessed.ReadOnly = true;
 			this.textDateAssessed.Size = new System.Drawing.Size(140, 20);
 			this.textDateAssessed.TabIndex = 29;
 			// 
