@@ -384,6 +384,7 @@
     <Compile Include="Crud\ToothInitialCrud.cs" />
     <Compile Include="Crud\TransactionCrud.cs" />
     <Compile Include="Crud\TreatPlanCrud.cs" />
+    <Compile Include="Crud\UCUMCrud.cs" />
     <Compile Include="Crud\UserGroupCrud.cs" />
     <Compile Include="Crud\UserodCrud.cs" />
     <Compile Include="Crud\UserQueryCrud.cs" />
@@ -429,6 +430,7 @@
     <Compile Include="Data Interface\SecurityLogHashes.cs" />
     <Compile Include="Data Interface\Snomeds.cs" />
     <Compile Include="Data Interface\Sops.cs" />
+    <Compile Include="Data Interface\UCUMs.cs" />
     <Compile Include="Data Interface\WikiListHeaderWidths.cs" />
     <Compile Include="Data Interface\WikiLists.cs" />
     <Compile Include="Data Interface\CreditCards.cs" />
@@ -817,6 +819,7 @@
     <Compile Include="Plugins\PluginContainer.cs" />
     <Compile Include="Plugins\Plugins.cs" />
     <Compile Include="TableTypes\EhrCarePlan.cs" />
+    <Compile Include="TableTypes\Ucum.cs" />
     <Compile Include="TableTypes\EmailMessageUid.cs" />
     <Compile Include="TableTypes\EhrTrigger.cs" />
     <Compile Include="TableTypes\MapArea.cs" />

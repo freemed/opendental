@@ -2231,6 +2231,33 @@ namespace OpenDentBusiness {
 					command=@"CREATE INDEX ehrcareplan_PatNum ON ehrcareplan (PatNum)";
 					Db.NonQ(command);
 				}
+				//Add UCUM table
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS ucum";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ucum (
+						UCUMNum bigint NOT NULL auto_increment PRIMARY KEY,
+						UCUMCode varchar(255) NOT NULL,
+						Description varchar(255) NOT NULL,
+						IsInUse tinyint NOT NULL,
+						INDEX(UCUMCode)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE ucum'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ucum (
+						UCUMNum number(20) NOT NULL,
+						UCUMCode varchar2(255),
+						Description varchar2(255),
+						IsInUse number(3) NOT NULL,
+						CONSTRAINT ucum_UCUMNum PRIMARY KEY (UCUMNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX ucum_UCUMCode ON ucum (UCUMCode)";
+					Db.NonQ(command);
+				}
 
 
 				command="UPDATE preference SET ValueString = '14.1.0.0' WHERE PrefName = 'DataBaseVersion'";
@@ -2248,6 +2275,7 @@ namespace OpenDentBusiness {
 
 	}
 }
+
 
 
 
