@@ -425,7 +425,6 @@ namespace OpenDental{
 			this.gridFamilyHealth.TabIndex = 69;
 			this.gridFamilyHealth.Title = "Family Health History";
 			this.gridFamilyHealth.TranslationName = "TableDiseases";
-			this.gridFamilyHealth.Visible = false;
 			this.gridFamilyHealth.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridFamilyHealth_CellDoubleClick);
 			// 
 			// butAddFamilyHistory
@@ -442,7 +441,6 @@ namespace OpenDental{
 			this.butAddFamilyHistory.Size = new System.Drawing.Size(137, 23);
 			this.butAddFamilyHistory.TabIndex = 70;
 			this.butAddFamilyHistory.Text = "Add Family History";
-			this.butAddFamilyHistory.Visible = false;
 			this.butAddFamilyHistory.Click += new System.EventHandler(this.butAddFamilyHistory_Click);
 			// 
 			// FormMedical
