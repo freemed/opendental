@@ -32,7 +32,19 @@ namespace WebForms {
 				Graphics g=null;
 				Pen p=new Pen(Color.Black,2.0f);//1.0f does not show, this is a bug in the Drawing namespace.
 				if(FieldType==SheetFieldType.Rectangle || FieldType==SheetFieldType.Line) {
-					bmp=new Bitmap(sfdObj.Width,sfdObj.Height);
+					int bmpWidth=sfdObj.Width;
+					int bmpHeight=sfdObj.Height;
+					if(FieldType==SheetFieldType.Line) {
+						if(bmpWidth==0 && bmpHeight!=0) {
+							bmpWidth=4;//Increases the width of the "canvas" that the line will be drawn on.
+							p.Width+=p.Width;//Double the width of the pen so that it looks like the same thickness of diagonal lines.  Half the line will be drawn on the image, half off.
+						}
+						if(bmpWidth!=0 && bmpHeight==0) {
+							bmpHeight=4;//Increases the height of the "canvas" that the line will be drawn on.
+							p.Width+=p.Width;//Double the width of the pen so that it looks like the same thickness of diagonal lines.  Half the line will be drawn on the image, half off.
+						}
+					}
+					bmp=new Bitmap(bmpWidth,bmpHeight);
 					g=Graphics.FromImage(bmp);
 					//g.Clear(Color.Transparent);
 				}

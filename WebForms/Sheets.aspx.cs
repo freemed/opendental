@@ -150,11 +150,23 @@ namespace WebForms {
 							wc=lb;
 						}
 						if(FieldType==SheetFieldType.Image||FieldType==SheetFieldType.Rectangle||FieldType==SheetFieldType.Line) {
-							// this is a bug which must be addressed. Horizontal and vertical lines may have either height or width as zero. this throws an error, so they have been excluded for now
-							if(width!=0 && height!=0) { 
-								System.Web.UI.WebControls.Image img=new System.Web.UI.WebControls.Image();
-								img.ImageUrl=("~/Handler1.ashx?WebSheetFieldDefID="+WebSheetFieldDefID);
-								wc=img;
+							System.Web.UI.WebControls.Image img=new System.Web.UI.WebControls.Image();
+							img.ImageUrl=("~/Handler1.ashx?WebSheetFieldDefID="+WebSheetFieldDefID);
+							wc=img;
+							if(width==0 && height==0) {
+								wc=null;//Image won't be visible anyway so don't waste time trying to draw it.
+							}
+							else if((FieldType==SheetFieldType.Image || FieldType==SheetFieldType.Rectangle) && (width==0 || height==0)) {
+								wc=null;//Image with a width OR a height of 0 will cause an error.  Also, rectangles are stopped from having widths and heights of 0 within OD.
+							}
+							else if(FieldType==SheetFieldType.Line) {
+								//Horizontal and vertical lines may have a height or a width of zero.  To show up on a web page, the image that the line is drawn on needs to have some sort of a width or height.
+								if(width==0) {
+									width+=4;//Increases the width of the "canvas" that the image of the line will be drawn on.  Handler1.ashx.cs is where the actual line image itself is created.
+								}
+								if(height==0) {
+									height+=4;//Increases the height of the "canvas" that the image of the line will be drawn on.  Handler1.ashx.cs is where the actual line image itself is created.
+								}
 							}
 						}
 						if(FieldType==SheetFieldType.SigBox) {
