@@ -17,17 +17,26 @@ namespace OpenDentBusiness {
 
 		///<summary>2.16.840.1.113883.6.96</summary>
 		private const string strCodeSystemSnomed="2.16.840.1.113883.6.96";
+		///<summary>SNOMED CT</summary>
 		private const string strCodeSystemNameSnomed="SNOMED CT";
 		///<summary>2.16.840.1.113883.6.88</summary>
 		private const string strCodeSystemRxNorm="2.16.840.1.113883.6.88";
+		///<summary>RxNorm</summary>
 		private const string strCodeSystemNameRxNorm="RxNorm";
 		///<summary>2.16.840.1.113883.6.1</summary>
 		private const string strCodeSystemLoinc="2.16.840.1.113883.6.1";
+		///<summary>LOINC</summary>
 		private const string strCodeSystemNameLoinc="LOINC";
+		///<summary>Instantiated each time GenerateCCD() is called. Used by helper functions to avoid sending the writer as a parameter to each helper function.</summary>
+		private static XmlWriter _w=null;
+		///<summary>Instantiated each time GenerateCCD() is called. Used to generate unique "id" element "root" attribute identifiers. The Ids in this list are random alpha-numeric and 32 characters in length.</summary>
 		private static HashSet<string> _hashCcdIds;
+		///<summary>Instantiated each time GenerateCCD() is called. Used to generate unique "id" element "root" attribute identifiers. The Ids in this list are random GUIDs which are 36 characters in length.</summary>
+		private static HashSet<string> _hashCcdUuids;
 
 		public static string GenerateCCD(Patient pat) {
 			_hashCcdIds=new HashSet<string>();//The IDs only need to be unique within each CCD document.
+			_hashCcdUuids=new HashSet<string>();//The UUIDs only need to be unique within each CCD document.
 			Medications.Refresh();
 			XmlWriterSettings xmlSettings=new XmlWriterSettings();
 			xmlSettings.Encoding=Encoding.UTF8;
@@ -35,232 +44,154 @@ namespace OpenDentBusiness {
 			xmlSettings.Indent=true;
 			xmlSettings.IndentChars="   ";
 			StringBuilder strBuilder=new StringBuilder();
-			using(XmlWriter w=XmlWriter.Create(strBuilder,xmlSettings)) {
+			using(_w=XmlWriter.Create(strBuilder,xmlSettings)) {
 				//Begin Clinical Document
-				w.WriteRaw("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n");
-				w.WriteProcessingInstruction("xml-stylesheet","type=\"text/xsl\" href=\"ccd.xsl\"");
-				w.WriteWhitespace("\r\n");
-				w.WriteStartElement("ClinicalDocument","urn:hl7-org:v3");
-				w.WriteAttributeString("xmlns","xsi",null,"http://www.w3.org/2001/XMLSchema-instance");
-				w.WriteAttributeString("xsi","noNamespaceSchemaLocation",null,"Registry_Payment.xsd");
-				w.WriteAttributeString("xsi","schemaLocation",null,"urn:hl7-org:v3 http://xreg2.nist.gov:8080/hitspValidation/schema/cdar2c32/infrastructure/cda/C32_CDA.xsd");
-				w.WriteStartElement("realmCode");
-				w.WriteAttributeString("code","US");
-				w.WriteEndElement();//realmCode
-				w.WriteStartElement("typeId");
-				w.WriteAttributeString("extension","POCD_HD000040");
-				w.WriteAttributeString("root","2.16.840.1.113883.1.3");//template id to assert use of the CCD standard
-				w.WriteEndElement();//typeId
-				w.WriteStartElement("templateId");
-				w.WriteAttributeString("root","2.16.840.1.113883.3.27.1776");
-				w.WriteAttributeString("assigningAuthorityName","CDA/R2");
-				w.WriteEndElement();//templateId
-				w.WriteStartElement("templateId");
-				w.WriteAttributeString("root","2.16.840.1.113883.10.20.3");
-				w.WriteAttributeString("assigningAuthorityName","HL7/CDT Header");
-				w.WriteEndElement();//templateId
-				w.WriteStartElement("templateId");
-				w.WriteAttributeString("root","1.3.6.1.4.1.19376.1.5.3.1.1.1");
-				w.WriteAttributeString("assigningAuthorityName","IHE/PCC");
-				w.WriteEndElement();//templateId
-				w.WriteStartElement("templateId");
-				w.WriteAttributeString("root","2.16.840.1.113883.3.88.11.32.1");
-				w.WriteAttributeString("assigningAuthorityName","HITSP/C32");
-				w.WriteEndElement();//templateId
-				w.WriteStartElement("id");
-				w.WriteAttributeString("root","db734647-fc99-424c-a864-7e3cda82e703");
-				w.WriteEndElement();
-				w.WriteStartElement("code");
-				w.WriteAttributeString("code","34133-9");
-				w.WriteAttributeString("codeSystemName",strCodeSystemNameLoinc);
-				w.WriteAttributeString("codeSystem",strCodeSystemLoinc);
-				w.WriteAttributeString("displayName","Summary of episode note");
-				w.WriteEndElement();
-				w.WriteElementString("title","Continuity of Care Document");
-				w.WriteStartElement("effectiveTime");
-				string ccrCreationDateTime=DateTime.Now.ToString("yyyyMMddHHmmsszzz").Replace(":","");
-				w.WriteAttributeString("value",ccrCreationDateTime);
-				w.WriteEndElement();
-				w.WriteStartElement("confidentialityCode");//not documented
-				w.WriteAttributeString("code","N");
-				w.WriteAttributeString("codeSystem","2.16.840.1.113883.5.25");
-				w.WriteEndElement();
-				w.WriteStartElement("languageCode");
-				w.WriteAttributeString("code","en-US");
-				w.WriteEndElement();
-				w.WriteStartElement("recordTarget");
-				w.WriteStartElement("patientRole");
-				w.WriteStartElement("id");//not documented
-				w.WriteAttributeString("extension",pat.PatNum.ToString());//"996-756-495");
-				w.WriteAttributeString("root","2.16.840.1.113883.19.5");
-				w.WriteEndElement();
-				w.WriteStartElement("addr");
-				w.WriteAttributeString("use","HP");
-				w.WriteStartElement("streetAddressLine");
-				w.WriteString(pat.Address.ToString());
-				w.WriteEndElement();
-				w.WriteStartElement("streetAddressLine");
-				w.WriteString(pat.Address2.ToString());
-				w.WriteEndElement();
-				w.WriteStartElement("city");
-				w.WriteString(pat.City.ToString());
-				w.WriteEndElement();
-				w.WriteStartElement("state");
-				w.WriteString(pat.State.ToString());
-				w.WriteEndElement();
-				w.WriteStartElement("country");
-				w.WriteString("");
-				w.WriteEndElement();
-				w.WriteEndElement();//addr
-				w.WriteStartElement("telecom");
-				w.WriteEndElement();//telecom
-				w.WriteStartElement("patient");
-				w.WriteStartElement("name");
-				w.WriteAttributeString("use","L");
-				w.WriteStartElement("given");
-				w.WriteString(pat.FName.ToString());
-				w.WriteEndElement();
-				w.WriteStartElement("given");
-				w.WriteString(pat.MiddleI.ToString());
-				w.WriteEndElement();
-				w.WriteStartElement("family");
-				w.WriteString(pat.LName.ToString());
-				w.WriteEndElement();
-				w.WriteStartElement("suffix");
-				w.WriteAttributeString("qualifier","TITLE");
-				w.WriteString(pat.Title.ToString());
-				w.WriteEndElement();//suffix
-				w.WriteEndElement();//name
-				w.WriteStartElement("administrativeGenderCode");
+				_w.WriteRaw("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n");
+				_w.WriteProcessingInstruction("xml-stylesheet","type=\"text/xsl\" href=\"ccd.xsl\"");
+				_w.WriteWhitespace("\r\n");
+				_w.WriteStartElement("ClinicalDocument","urn:hl7-org:v3");
+				Attribs("xmlns","xsi",null,"http://www.w3.org/2001/XMLSchema-instance");
+				Attribs("xsi","noNamespaceSchemaLocation",null,"Registry_Payment.xsd");
+				Attribs("xsi","schemaLocation",null,"urn:hl7-org:v3 http://xreg2.nist.gov:8080/hitspValidation/schema/cdar2c32/infrastructure/cda/C32_CDA.xsd");
+				StartAndEnd("realmCode","code","US");
+				StartAndEnd("typeId","root","2.16.840.1.113883.1.3","extension","POCD_HD000040");//template id to assert use of the CCD standard
+				_w.WriteComment("US General Header Template");
+				TemplateId("2.16.840.1.113883.10.20.22.1.1");
+				_w.WriteComment("Conforms to CCD requirements");
+				TemplateId("2.16.840.1.113883.10.20.22.1.2");
+				Id();
+				StartAndEnd("code","code","34133-9","codeSystemName",strCodeSystemNameLoinc,"codeSystem",strCodeSystemLoinc,"displayName","Summarization of Episode Note");
+				_w.WriteElementString("title","Continuity of Care Document");
+				StartAndEnd("effectiveTime","value",DateTime.Now.ToString("yyyyMMddHHmmsszzz").Replace(":",""));
+				StartAndEnd("confidentialityCode","code","N","codeSystem","2.16.840.1.113883.5.25");//Fixed value.  Confidentiality Code System.  Codes: N=(Normal), R=(Restricted),V=(Very Restricted)
+				StartAndEnd("languageCode","code","en-US");
+				Start("recordTarget");
+				Start("patientRole");
+				StartAndEnd("id","extension",pat.PatNum.ToString(),"root","2.16.840.1.113883.19.5");
+				Start("addr","use","HP");
+				_w.WriteElementString("streetAddressLine",pat.Address.ToString());
+				_w.WriteElementString("streetAddressLine",pat.Address2.ToString());
+				_w.WriteElementString("city",pat.City.ToString());
+				_w.WriteElementString("state",pat.State.ToString());
+				_w.WriteElementString("country","");
+				End("addr");
+				StartAndEnd("telecom");
+				Start("patient");
+				Start("name","use","L");
+				_w.WriteElementString("given",pat.FName.ToString());
+				_w.WriteElementString("given",pat.MiddleI.ToString());
+				_w.WriteElementString("family",pat.LName.ToString());
+				Start("suffix","qualifier","TITLE");
+				_w.WriteString(pat.Title.ToString());
+				End("suffix");
+				End("name");
+				string strGender="M";
 				if(pat.Gender==PatientGender.Female) {
-					w.WriteAttributeString("code","F");
+					strGender="F";
 				}
-				else {
-					w.WriteAttributeString("code","M");
-				}
-				w.WriteAttributeString("codeSystem","2.16.840.1.113883.5.1");
-				w.WriteEndElement();//administrativeGenderCode
-				w.WriteStartElement("birthTime");
-				w.WriteAttributeString("value",pat.Birthdate.ToString("yyyyMMdd"));//missing birthdate should be represented with null
-				w.WriteEndElement();//birthTime
-				w.WriteEndElement();//patient
-				w.WriteEndElement();//patientRole
-				w.WriteEndElement();//recordTarget
+				StartAndEnd("administrativeGenderCode","code",strGender,"codeSystem","2.16.840.1.113883.5.1");
+				DateElement("birthTime",pat.Birthdate);
+				End("patient");
+				End("patientRole");
+				End("recordTarget");
 				//author--------------------------------------------------------------------------------------------------
-				w.WriteStartElement("author");
-				w.WriteStartElement("time");
-				w.WriteAttributeString("value",DateTime.Now.ToString("yyyyMMddHHmmsszzz").Replace(":",""));
-				w.WriteEndElement();//time
-				w.WriteStartElement("assignedAuthor");
-				w.WriteStartElement("id");
-				w.WriteAttributeString("root","20cf14fb-b65c-4c8c-a54d-b0cca834c18c");//not documented
-				w.WriteEndElement();//id
-				w.WriteElementString("addr","");
-				w.WriteElementString("telecom","");
-				w.WriteStartElement("assignedPerson");
-				w.WriteStartElement("name");
-				w.WriteEndElement();//name
-				w.WriteEndElement();//assignedPerson
-				w.WriteStartElement("representedOrganization");
-				w.WriteElementString("name",PrefC.GetString(PrefName.PracticeTitle));
-				w.WriteElementString("telecom","");
-				w.WriteElementString("addr","");
-				w.WriteEndElement();//representedOrganization
-				w.WriteEndElement();//assignedAuthor
-				w.WriteEndElement();//author
+				Start("author");
+				TimeElement("time",DateTime.Now);
+				Start("assignedAuthor");
+				Uuid();
+				_w.WriteElementString("addr","");
+				_w.WriteElementString("telecom","");
+				Start("assignedPerson");
+				_w.WriteElementString("name","");
+				End("assignedPerson");
+				Start("representedOrganization");
+				_w.WriteElementString("name",PrefC.GetString(PrefName.PracticeTitle));
+				_w.WriteElementString("telecom","");
+				_w.WriteElementString("addr","");
+				End("representedOrganization");
+				End("assignedAuthor");
+				End("author");
 				//custodian------------------------------------------------------------------------------------------------
-				w.WriteStartElement("custodian");
-				w.WriteStartElement("assignedCustodian");
-				w.WriteStartElement("representedCustodianOrganization");
-				w.WriteElementString("id","");
-				w.WriteElementString("name","");
-				w.WriteElementString("telecom","");
-				w.WriteElementString("addr","");
-				w.WriteEndElement();//representedCustodianOrganization
-				w.WriteEndElement();//assignedCustodian
-				w.WriteEndElement();//custodian
+				Start("custodian");
+				Start("assignedCustodian");
+				Start("representedCustodianOrganization");
+				_w.WriteElementString("id","");
+				_w.WriteElementString("name","");
+				_w.WriteElementString("telecom","");
+				_w.WriteElementString("addr","");
+				End("representedCustodianOrganization");
+				End("assignedCustodian");
+				End("custodian");
 				//legalAuthenticator--------------------------------------------------------------------------------------
 				//this is used by the style sheet to create the line at the bottom: Electronically Generated by: on date
-				Start(w,"legalAuthenticator");
-				StartAndEnd(w,"time","value",DateTime.Now.ToString("yyyyMMddHHmmsszzz").Replace(":",""));
-				StartAndEnd(w,"signatureCode","code","S");
-				Start(w,"assignedEntity");
-				StartAndEnd(w,"id","nullFlavor","NI");
-				StartAndEnd(w,"addr");
-				StartAndEnd(w,"telecom");
-				Start(w,"assignedPerson");
-				StartAndEnd(w,"name");
-				End(w,"assignedPerson");
-				Start(w,"representedOrganization");
-				StartAndEnd(w,"id","root","2.16.840.1.113883.19.5");
-				w.WriteElementString("name",PrefC.GetString(PrefName.PracticeTitle));
-				StartAndEnd(w,"telecom");
-				StartAndEnd(w,"addr");
-				End(w,"representedOrganization");
-				End(w,"assignedEntity");
-				End(w,"legalAuthenticator");
-				w.WriteComment(@"
+				Start("legalAuthenticator");
+				TimeElement("time",DateTime.Now);
+				StartAndEnd("signatureCode","code","S");
+				Start("assignedEntity");
+				StartAndEnd("id","nullFlavor","NI");
+				StartAndEnd("addr");
+				StartAndEnd("telecom");
+				Start("assignedPerson");
+				StartAndEnd("name");
+				End("assignedPerson");
+				Start("representedOrganization");
+				StartAndEnd("id","root","2.16.840.1.113883.19.5");
+				_w.WriteElementString("name",PrefC.GetString(PrefName.PracticeTitle));
+				StartAndEnd("telecom");
+				StartAndEnd("addr");
+				End("representedOrganization");
+				End("assignedEntity");
+				End("legalAuthenticator");
+				_w.WriteComment(@"
 =====================================================================================================
 Body
 =====================================================================================================");
-				w.WriteStartElement("component");
-				w.WriteStartElement("structuredBody");
-				GenerateCcdSectionAllergies(w,pat);
-				GenerateCcdSectionEncounters(w,pat);
-				GenerateCcdSectionFunctionalStatus(w,pat);
-				GenerateCcdSectionImmunizations(w,pat);
-				GenerateCcdSectionMedications(w,pat);
-				GenerateCcdSectionPlanOfCare(w,pat);
-				GenerateCcdSectionProblems(w,pat);
-				GenerateCcdSectionReasonForReferral(w,pat);
-				GenerateCcdSectionResults(w,pat);//Lab Results
-				GenerateCcdSectionVitalSigns(w,pat);
-				End(w,"structuredBody");
-				End(w,"component");
-				End(w,"ClinicalDocument");
+				Start("component");
+				Start("structuredBody");
+				GenerateCcdSectionAllergies(pat);
+				GenerateCcdSectionEncounters(pat);
+				GenerateCcdSectionFunctionalStatus(pat);
+				GenerateCcdSectionImmunizations(pat);
+				GenerateCcdSectionMedications(pat);
+				GenerateCcdSectionPlanOfCare(pat);
+				GenerateCcdSectionProblems(pat);
+				GenerateCcdSectionReasonForReferral(pat);
+				GenerateCcdSectionResults(pat);//Lab Results
+				GenerateCcdSectionVitalSigns(pat);
+				End("structuredBody");
+				End("component");
+				End("ClinicalDocument");
 			}
 			SecurityLogs.MakeLogEntry(Permissions.Copy,pat.PatNum,"CCD generated");			//Create audit log entry.
 			return strBuilder.ToString();
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdSectionAllergies(XmlWriter w,Patient pat) {
-			w.WriteComment(@"
+		private static void GenerateCcdSectionAllergies(Patient pat) {
+			_w.WriteComment(@"
 =====================================================================================================
 Allergies
 =====================================================================================================");
 			List<Allergy> listAllergy=Allergies.Refresh(pat.PatNum);
 			AllergyDef allergyDef;
 			Medication med;
-			w.WriteStartElement("component");
-			w.WriteStartElement("section");
-			TemplateId(w,"2.16.840.1.113883.10.20.22.2.6.1");
-			w.WriteComment("Allergies section template");
-			StartAndEnd(w,"code","code","48765-2","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Allergies");
-			w.WriteStartElement("title");
-			w.WriteString("Allergies and Adverse Reactions");
-			w.WriteEndElement();
-			w.WriteStartElement("text");//The following text will be parsed as html with a style sheet to be human readable.
-			w.WriteStartElement("table");
-			w.WriteAttributeString("width","100%");
-			w.WriteAttributeString("border","1");
-			w.WriteStartElement("thead");
-			w.WriteStartElement("tr");
-			w.WriteStartElement("th");
-			w.WriteString("Substance");
-			w.WriteEndElement();
-			w.WriteStartElement("th");
-			w.WriteString("Reaction");
-			w.WriteEndElement();//
-			w.WriteStartElement("th");
-			w.WriteString("Allergy Type");
-			w.WriteEndElement();
-			w.WriteStartElement("th");
-			w.WriteString("Status");
-			w.WriteEndElement();
-			w.WriteEndElement();//End tr
-			w.WriteEndElement();//End thead
-			w.WriteStartElement("tbody");
+			Start("component");
+			Start("section");
+			TemplateId("2.16.840.1.113883.10.20.22.2.6.1");
+			_w.WriteComment("Allergies section template");
+			StartAndEnd("code","code","48765-2","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Allergies");
+			_w.WriteElementString("title","Allergies and Adverse Reactions");
+			Start("text");//The following text will be parsed as html with a style sheet to be human readable.
+			Start("table","width","100%","border","1");
+			Start("thead");
+			Start("tr");
+			_w.WriteElementString("th","Substance");
+			_w.WriteElementString("th","Reaction");
+			_w.WriteElementString("th","Allergy Type");
+			_w.WriteElementString("th","Status");
+			End("tr");
+			End("thead");
+			Start("tbody");
 			for(int i=0;i<listAllergy.Count;i++) {
 				String status=listAllergy[i].StatusIsActive?"Active":"Inactive";
 				allergyDef=AllergyDefs.GetOne(listAllergy[i].AllergyDefNum);
@@ -271,24 +202,16 @@ Allergies
 				if(med.RxCui==0) {
 					continue;
 				}
-				w.WriteStartElement("tr");
-				w.WriteStartElement("td");
-				w.WriteString(med.RxCui.ToString()+" - "+med.MedName);
-				w.WriteEndElement();
-				w.WriteStartElement("td");
-				w.WriteString(listAllergy[i].Reaction);
-				w.WriteEndElement();
-				w.WriteStartElement("td");
-				w.WriteString(AllergyDefs.GetSnomedAllergyDesc(allergyDef.SnomedType));
-				w.WriteEndElement();
-				w.WriteStartElement("td");
-				w.WriteString(status);
-				w.WriteEndElement();
-				w.WriteEndElement();//End tr
+				Start("tr");
+				_w.WriteElementString("td",med.RxCui.ToString()+" - "+med.MedName);
+				_w.WriteElementString("td",listAllergy[i].Reaction);
+				_w.WriteElementString("td",AllergyDefs.GetSnomedAllergyDesc(allergyDef.SnomedType));
+				_w.WriteElementString("td",status);
+				End("tr");
 			}
-			w.WriteEndElement();//End tbody
-			w.WriteEndElement();//End table
-			w.WriteEndElement();//End text
+			End("tbody");
+			End("table");
+			End("text");
 			for(int i=0;i<listAllergy.Count;i++) {
 				allergyDef=AllergyDefs.GetOne(listAllergy[i].AllergyDefNum);
 				if(allergyDef.MedicationNum==0) {
@@ -351,158 +274,142 @@ Allergies
 				if(med.RxCui==0) {
 					continue;
 				}
-				Start(w,"entry","typeCode","DRIV");
-				Start(w,"act","classCode","ACT","moodCode","EVN");
-				TemplateId(w,"2.16.840.1.113883.10.20.22.4.30");
-				BuildIdAndWrite(w);
-				StartAndEnd(w,"code","code","48765-2","codeSystem",strCodeSystemLoinc,"codeSystemName","LOINC","displayName","Allergies and adverse reactions");
+				Start("entry","typeCode","DRIV");
+				Start("act","classCode","ACT","moodCode","EVN");
+				TemplateId("2.16.840.1.113883.10.20.22.4.30");
+				Id();
+				StartAndEnd("code","code","48765-2","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Allergies and adverse reactions");
 				if(listAllergy[i].StatusIsActive) {
-					StartAndEnd(w,"statusCode","code","active");
+					StartAndEnd("statusCode","code","active");
 				}
 				else {
-					StartAndEnd(w,"statusCode","code","completed");
+					StartAndEnd("statusCode","code","completed");
 				}
-				Start(w,"effectiveTime");
+				Start("effectiveTime");
 				if(listAllergy[i].StatusIsActive) {
-					StartAndEnd(w,"low","value",listAllergy[i].DateTStamp.ToString("yyyymmdd"));
-					StartAndEnd(w,"high","nullFlavor","UNK");
+					StartAndEnd("low","value",listAllergy[i].DateTStamp.ToString("yyyymmdd"));
+					StartAndEnd("high","nullFlavor","UNK");
 				}
 				else {
-					StartAndEnd(w,"low","nullFlavor","UNK");
-					StartAndEnd(w,"high","value",listAllergy[i].DateTStamp.ToString("yyyymmdd"));
+					StartAndEnd("low","nullFlavor","UNK");
+					StartAndEnd("high","value",listAllergy[i].DateTStamp.ToString("yyyymmdd"));
 				}
-				End(w,"effectiveTime");
-				Start(w,"entryRelationship","typeCode","SUBJ");
-				Start(w,"observation","classCode","OBS","moodCode","EVN");
-				w.WriteComment("Allergy Observation template");
-				TemplateId(w,"2.16.840.1.113883.10.20.22.4.7");
-				BuildIdAndWrite(w);
-				StartAndEnd(w,"code","code","ASSERTION","codeSystem","2.16.840.1.113883.5.4");//Fixed Value
-				StartAndEnd(w,"statusCode","code","completed");//fixed value (required)
-				Start(w,"effectiveTime");
-				StartAndEnd(w,"low","nullFlavor","UNK");
-				StartAndEnd(w,"high","value",listAllergy[i].DateTStamp.ToString("yyyymmdd"));
-				End(w,"effectiveTime");
-				Start(w,"value");
-				w.WriteAttributeString("xsi","type",null,"CD");
-				Attribs(w,"code",allergyType,"displayName",allergyTypeName,"codeSystem",strCodeSystemSnomed,"codeSystemName","SNOMED CT");
-				End(w,"value");
-				Start(w,"participant","typeCode","CSM");
-				Start(w,"participantRole","classCode","MANU");
-				Start(w,"playingEntity","classCode","MMAT");
-				StartAndEnd(w,"code","code",med.RxCui.ToString(),"displayName",med.MedName,"codeSystem",strCodeSystemRxNorm,"codeSystemName","RxNorm");
-				End(w,"playingEntity");
-				End(w,"participantRole");
-				End(w,"participant");
-				Start(w,"entryRelationship","typeCode","SUBJ");
-				Start(w,"observation","classCode","OBS","moodCode","EVN");
-				w.WriteComment("Allergy Status Observation template");
-				TemplateId(w,"2.16.840.1.113883.10.20.22.4.28");
-				StartAndEnd(w,"code","code","33999-4","codeSystem",strCodeSystemLoinc,"codeSystemName","LOINC","displayName","Status");
-				StartAndEnd(w,"statusCode","code","completed");//fixed value (required)
+				End("effectiveTime");
+				Start("entryRelationship","typeCode","SUBJ");
+				Start("observation","classCode","OBS","moodCode","EVN");
+				_w.WriteComment("Allergy Observation template");
+				TemplateId("2.16.840.1.113883.10.20.22.4.7");
+				Id();
+				StartAndEnd("code","code","ASSERTION","codeSystem","2.16.840.1.113883.5.4");//Fixed Value
+				StartAndEnd("statusCode","code","completed");//fixed value (required)
+				Start("effectiveTime");
+				StartAndEnd("low","nullFlavor","UNK");
+				StartAndEnd("high","value",listAllergy[i].DateTStamp.ToString("yyyymmdd"));
+				End("effectiveTime");
+				Start("value");
+				_w.WriteAttributeString("xsi","type",null,"CD");
+				Attribs("code",allergyType,"displayName",allergyTypeName,"codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed);
+				End("value");
+				Start("participant","typeCode","CSM");
+				Start("participantRole","classCode","MANU");
+				Start("playingEntity","classCode","MMAT");
+				StartAndEnd("code","code",med.RxCui.ToString(),"displayName",med.MedName,"codeSystem",strCodeSystemRxNorm,"codeSystemName",strCodeSystemNameRxNorm);
+				End("playingEntity");
+				End("participantRole");
+				End("participant");
+				Start("entryRelationship","typeCode","SUBJ");
+				Start("observation","classCode","OBS","moodCode","EVN");
+				_w.WriteComment("Allergy Status Observation template");
+				TemplateId("2.16.840.1.113883.10.20.22.4.28");
+				StartAndEnd("code","code","33999-4","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Status");
+				StartAndEnd("statusCode","code","completed");//fixed value (required)
 				if(status=="Active") {
-					Start(w,"value");
-					w.WriteAttributeString("xsi","type",null,"CE");
-					Attribs(w,"code","55561003","codeSystem",strCodeSystemSnomed,"displayName",status);
-					End(w,"value");
+					Start("value");
+					_w.WriteAttributeString("xsi","type",null,"CE");
+					Attribs("code","55561003","codeSystem",strCodeSystemSnomed,"displayName",status);
+					End("value");
 				}
 				else {
-					Start(w,"value");
-					w.WriteAttributeString("xsi","type",null,"CE");
-					Attribs(w,"code","73425007","codeSystem",strCodeSystemSnomed,"displayName",status);
-					End(w,"value");
+					Start("value");
+					_w.WriteAttributeString("xsi","type",null,"CE");
+					Attribs("code","73425007","codeSystem",strCodeSystemSnomed,"displayName",status);
+					End("value");
 				}
-				End(w,"observation");
-				End(w,"entryRelationship");
-				Start(w,"entryRelationship","typeCode","SUBJ");
-				Start(w,"observation","classCode","OBS","moodCode","EVN");
-				w.WriteComment("Reaction Observation template");
-				TemplateId(w,"2.16.840.1.113883.10.20.22.4.9");
-				BuildIdAndWrite(w);
-				StartAndEnd(w,"code","nullFlavor","NA");//Unknown why this is null, but can't find a good example of this
-				StartAndEnd(w,"statusCode","code","completed");//fixed value (required)
-				Start(w,"effectiveTime");
+				End("observation");
+				End("entryRelationship");
+				Start("entryRelationship","typeCode","SUBJ");
+				Start("observation","classCode","OBS","moodCode","EVN");
+				_w.WriteComment("Reaction Observation template");
+				TemplateId("2.16.840.1.113883.10.20.22.4.9");
+				Id();
+				StartAndEnd("code","nullFlavor","NA");//Unknown why this is null, but can't find a good example of this
+				StartAndEnd("statusCode","code","completed");//fixed value (required)
+				Start("effectiveTime");
 				if(listAllergy[i].StatusIsActive) {
-					StartAndEnd(w,"low","value",listAllergy[i].DateTStamp.ToString("yyyymmdd"));
+					StartAndEnd("low","value",listAllergy[i].DateTStamp.ToString("yyyymmdd"));
 				}
 				else {
-					StartAndEnd(w,"low","nullFlavor","UNK");
+					StartAndEnd("low","nullFlavor","UNK");
 				}
-				End(w,"effectiveTime");
-				Start(w,"value");
-				w.WriteAttributeString("xsi","type",null,"CD");
-				Attribs(w,"code",listAllergy[i].SnomedReaction,"codeSystem",strCodeSystemSnomed,"displayName",listAllergy[i].Reaction);
-				End(w,"value");
-				End(w,"observation");
-				End(w,"entryRelationship");
-				End(w,"observation");
-				End(w,"entryRelationship");
-				End(w,"act");
-				End(w,"entry");
+				End("effectiveTime");
+				Start("value");
+				_w.WriteAttributeString("xsi","type",null,"CD");
+				Attribs("code",listAllergy[i].SnomedReaction,"codeSystem",strCodeSystemSnomed,"displayName",listAllergy[i].Reaction);
+				End("value");
+				End("observation");
+				End("entryRelationship");
+				End("observation");
+				End("entryRelationship");
+				End("act");
+				End("entry");
 			}
-			End(w,"section");
-			End(w,"component");
+			End("section");
+			End("component");
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdSectionEncounters(XmlWriter w,Patient pat) {
+		private static void GenerateCcdSectionEncounters(Patient pat) {
 			//TODO:
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdSectionFunctionalStatus(XmlWriter w,Patient pat) {
+		private static void GenerateCcdSectionFunctionalStatus(Patient pat) {
 			//TODO:
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdSectionImmunizations(XmlWriter w,Patient pat) {
+		private static void GenerateCcdSectionImmunizations(Patient pat) {
 			//TODO:
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdSectionMedications(XmlWriter w,Patient pat) {
-			w.WriteComment(@"
+		private static void GenerateCcdSectionMedications(Patient pat) {
+			_w.WriteComment(@"
 =====================================================================================================
 Medications
 =====================================================================================================");
 			List<MedicationPat> listMedPat=MedicationPats.Refresh(pat.PatNum,true);
 			Medication med;
-			w.WriteStartElement("component");
-			w.WriteStartElement("section");
-			TemplateId(w,"2.16.840.1.113883.10.20.22.2.1.1");//Required Medication Section
-			w.WriteComment("Medications section template");
-			StartAndEnd(w,"code","code","10160-0","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","History of medication use");
-			w.WriteElementString("title","Medications");
-			w.WriteStartElement("text");//The following text will be parsed as html with a style sheet to be human readable.
-			w.WriteStartElement("table");
-			w.WriteAttributeString("width","100%");
-			w.WriteAttributeString("border","1");
-			w.WriteStartElement("thead");
-			w.WriteStartElement("tr");
-			w.WriteStartElement("th");
-			w.WriteString("Medication");
-			w.WriteEndElement();
-			w.WriteStartElement("th");
-			w.WriteString("Directions");
-			w.WriteEndElement();
-			w.WriteStartElement("th");
-			w.WriteString("Start Date");
-			w.WriteEndElement();
-			w.WriteStartElement("th");
-			w.WriteString("End Date");
-			w.WriteEndElement();
-			w.WriteStartElement("th");
-			w.WriteString("Status");
-			w.WriteEndElement();
-			w.WriteStartElement("th");
-			w.WriteString("Indications");
-			w.WriteEndElement();
-			w.WriteStartElement("th");
-			w.WriteString("Fill Instructions");
-			w.WriteEndElement();
-			w.WriteEndElement();//End tr
-			w.WriteEndElement();//End thead
-			w.WriteStartElement("tbody");
+			Start("component");
+			Start("section");
+			TemplateId("2.16.840.1.113883.10.20.22.2.1.1");//Required Medication Section
+			_w.WriteComment("Medications section template");
+			StartAndEnd("code","code","10160-0","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","History of medication use");
+			_w.WriteElementString("title","Medications");
+			Start("text");//The following text will be parsed as html with a style sheet to be human readable.
+			Start("table","width","100%","border","1");
+			Start("thead");
+			Start("tr");
+			_w.WriteElementString("th","Medication");
+			_w.WriteElementString("th","Directions");
+			_w.WriteElementString("th","Start Date");
+			_w.WriteElementString("th","End Date");
+			_w.WriteElementString("th","Status");
+			_w.WriteElementString("th","Indications");
+			_w.WriteElementString("th","Fill Instructions");
+			End("tr");
+			End("thead");
+			Start("tbody");
 			for(int i=0;i<listMedPat.Count;i++) {
 				if(listMedPat[i].RxCui==0) {
 					continue;
@@ -511,38 +418,19 @@ Medications
 					continue;
 				}
 				med=Medications.GetMedication(listMedPat[i].MedicationNum);
-				w.WriteStartElement("tr");
-				w.WriteStartElement("td");
-				w.WriteString(med.MedName);//Medication
-				w.WriteEndElement();
-				w.WriteStartElement("td");
-				w.WriteString(med.Notes);//Directions
-				w.WriteEndElement();
-				w.WriteStartElement("td");
-				w.WriteString(listMedPat[i].DateStart.ToShortDateString());//Start Date
-				w.WriteEndElement();
-				w.WriteStartElement("td");
-				if(listMedPat[i].DateStop.Year>1880) {
-					w.WriteString(listMedPat[i].DateStop.ToShortDateString());//End Date
-				}
-				else {
-					w.WriteString("");
-				}
-				w.WriteEndElement();
-				w.WriteStartElement("td");
-				w.WriteString(MedicationPats.IsMedActive(listMedPat[i])?"Active":"Inactive");//Status
-				w.WriteEndElement();
-				w.WriteStartElement("td");
-				w.WriteString(listMedPat[i].PatNote);//Indications
-				w.WriteEndElement();
-				w.WriteStartElement("td");
-				w.WriteString(listMedPat[i].MedDescript);//Fill Instructions
-				w.WriteEndElement();
-				w.WriteEndElement();//End tr
+				Start("tr");
+				_w.WriteElementString("td",med.MedName);//Medication
+				_w.WriteElementString("td",med.Notes);//Directions
+				_w.WriteElementString("td",listMedPat[i].DateStart.ToShortDateString());//Start Date
+				DateText("td",listMedPat[i].DateStop);//End Date
+				_w.WriteElementString("td",MedicationPats.IsMedActive(listMedPat[i])?"Active":"Inactive");//Status
+				_w.WriteElementString("td",listMedPat[i].PatNote);//Indications
+				_w.WriteElementString("td",listMedPat[i].MedDescript);//Fill Instructions
+				End("tr");
 			}
-			w.WriteEndElement();//End tbody
-			w.WriteEndElement();//End table
-			w.WriteEndElement();//End text
+			End("tbody");
+			End("table");
+			End("text");
 			string status;//May not be necessary, but no harm in setting it.
 			for(int i=0;i<listMedPat.Count;i++) {
 				long rxCui=listMedPat[i].RxCui;
@@ -561,98 +449,86 @@ Medications
 				if(rxCui==0) {
 					continue;
 				}
-				Start(w,"entry","typeCode","DRIV");
-				Start(w,"substanceAdministration","classCode","SBADM","moodCode","EVN");
-				TemplateId(w,"2.16.840.1.113883.10.20.22.4.16");
-				w.WriteComment("Medication activity template");
-				BuildIdAndWrite(w);
-				StartAndEnd(w,"statusCode","code","completed");//Fixed Value
-				Start(w,"effectiveTime");
-				w.WriteAttributeString("xsi","type",null,"IVL_TS");
-				StartAndEnd(w,"low","value",listMedPat[i].DateStart.ToString("yyyymmdd"));
-				StartAndEnd(w,"high","value",listMedPat[i].DateStop.ToString("yyyymmdd"));
-				End(w,"effectiveTime");
-				Start(w,"consumable");
-				Start(w,"manufacturedProduct");
-				TemplateId(w,"2.16.840.1.113883.10.20.22.4.23");
-				BuildIdAndWrite(w);
-				Start(w,"manufacturedMaterial");
-				Start(w,"code","code",rxCui.ToString(),"codeSystem",strCodeSystemRxNorm,"displayName",strMedName,"codeSystemName",strCodeSystemNameRxNorm);
-				End(w,"code");
-				End(w,"manufacturedMaterial");
-				End(w,"manufacturedProduct");
-				End(w,"consumable");
-				End(w,"substanceAdministration");
-				End(w,"entry");
+				Start("entry","typeCode","DRIV");
+				Start("substanceAdministration","classCode","SBADM","moodCode","EVN");
+				TemplateId("2.16.840.1.113883.10.20.22.4.16");
+				_w.WriteComment("Medication activity template");
+				Id();
+				StartAndEnd("statusCode","code","completed");//Fixed Value
+				Start("effectiveTime");
+				_w.WriteAttributeString("xsi","type",null,"IVL_TS");
+				StartAndEnd("low","value",listMedPat[i].DateStart.ToString("yyyymmdd"));
+				StartAndEnd("high","value",listMedPat[i].DateStop.ToString("yyyymmdd"));
+				End("effectiveTime");
+				Start("consumable");
+				Start("manufacturedProduct");
+				TemplateId("2.16.840.1.113883.10.20.22.4.23");
+				Id();
+				Start("manufacturedMaterial");
+				Start("code","code",rxCui.ToString(),"codeSystem",strCodeSystemRxNorm,"displayName",strMedName,"codeSystemName",strCodeSystemNameRxNorm);
+				End("code");
+				End("manufacturedMaterial");
+				End("manufacturedProduct");
+				End("consumable");
+				End("substanceAdministration");
+				End("entry");
 			}
-			w.WriteEndElement();//section
-			w.WriteEndElement();//component: Medication
+			End("section");
+			End("component");
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdSectionPlanOfCare(XmlWriter w,Patient pat) {
-			w.WriteComment(@"
+		private static void GenerateCcdSectionPlanOfCare(Patient pat) {
+			_w.WriteComment(@"
 =====================================================================================================
 Care Plan
 =====================================================================================================");
-			Start(w,"component");
-			Start(w,"section");
-			TemplateId(w,"2.16.840.1.113883.10.20.22.2.10","HL7 CCD");
-			w.WriteComment("Plan of Care section template");
-			StartAndEnd(w,"code","code","18776-5","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Treatment plan");
-			Start(w,"title");
-			w.WriteString("Care Plan");
-			End(w,"title");
-			Start(w,"text");//The following text will be parsed as html with a style sheet to be human readable.
-			Start(w,"table","width","100%","border","1");
-			Start(w,"thead");
-			Start(w,"tr");
-			Start(w,"th");
-			w.WriteString("Planned Activity");
-			End(w,"th");
-			Start(w,"th");
-			w.WriteString("Planned Date");
-			End(w,"th");
-			End(w,"tr");
-			End(w,"thead");
-			Start(w,"tbody");
+			Start("component");
+			Start("section");
+			TemplateId("2.16.840.1.113883.10.20.22.2.10");
+			_w.WriteComment("Plan of Care section template");
+			StartAndEnd("code","code","18776-5","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Treatment plan");
+			_w.WriteElementString("title","Care Plan");
+			Start("text");//The following text will be parsed as html with a style sheet to be human readable.
+			Start("table","width","100%","border","1");
+			Start("thead");
+			Start("tr");
+			_w.WriteElementString("th","Planned Activity");
+			_w.WriteElementString("th","Planned Date");
+			End("tr");
+			End("thead");
+			Start("tbody");
 			List<EhrCarePlan> listEhrCarePlans=EhrCarePlans.Refresh(pat.PatNum);
 			for(int i=0;i<listEhrCarePlans.Count;i++) {
-				Start(w,"tr");
-				Start(w,"td");
-				w.WriteString(listEhrCarePlans[i].Instructions);
-				End(w,"td");
-				Start(w,"td");
-				WriteDate(w,listEhrCarePlans[i].DatePlanned);
-				End(w,"td");
-				End(w,"tr");
+				Start("tr");
+				_w.WriteElementString("td",listEhrCarePlans[i].Instructions);//Planned Activity
+				DateText("td",listEhrCarePlans[i].DatePlanned);//Planned Date
+				End("tr");
 			}
-			End(w,"tbody");
-			End(w,"table");
-			End(w,"text");
+			End("tbody");
+			End("table");
+			End("text");
 			for(int i=0;i<listEhrCarePlans.Count;i++) {
-				Start(w,"entry","typeCode","DRIV");
-				Start(w,"act","classCode","ACT","moodCode","INT");
-				TemplateId(w,"2.16.840.1.113883.10.20.22.4.20");
-				w.WriteComment("Instructions template");
-				Start(w,"code");
-				w.WriteAttributeString("type","xsi","CE");
+				Start("entry","typeCode","DRIV");
+				Start("act","classCode","ACT","moodCode","INT");
+				TemplateId("2.16.840.1.113883.10.20.22.4.20");
+				_w.WriteComment("Instructions template");
+				Start("code");
+				_w.WriteAttributeString("xsi","type",null,"CE");
 				Snomed snomedEducation=Snomeds.GetByCode(listEhrCarePlans[i].SnomedEducation);
-				Attribs(w,"code",snomedEducation.SnomedCode,"codeSystem",strCodeSystemSnomed,"displayName",snomedEducation.Description);
-				Start(w,"text");
-				w.WriteString(listEhrCarePlans[i].Instructions);
-				End(w,"text");
-				StartAndEnd(w,"statusCode","code","completed");
-				End(w,"act");
-				End(w,"entry");
+				Attribs("code",snomedEducation.SnomedCode,"codeSystem",strCodeSystemSnomed,"displayName",snomedEducation.Description);
+				_w.WriteElementString("text",listEhrCarePlans[i].Instructions);
+				StartAndEnd("statusCode","code","completed");
+				End("act");
+				End("entry");
 			}
-			End(w,"section");
-			End(w,"component");
+			End("section");
+			End("component");
 		}
 
 		///<summary>Helper for GenerateCCD().  Problem section.</summary>
-		private static void GenerateCcdSectionProblems(XmlWriter w,Patient pat) {
-			w.WriteComment(@"
+		private static void GenerateCcdSectionProblems(Patient pat) {
+			_w.WriteComment(@"
 =====================================================================================================
 Problems
 =====================================================================================================");
@@ -660,296 +536,310 @@ Problems
 			string status="Inactive";
 			string statusCode="73425007";
 			string statusOther="active";
-			w.WriteStartElement("component");
-			w.WriteStartElement("section");
-			TemplateId(w,"2.16.840.1.113883.10.20.22.2.5.1");
-			w.WriteComment("Problems section template");
-			StartAndEnd(w,"code","code","11450-4","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Problem list");
-			w.WriteElementString("title","PROBLEMS");
-			w.WriteStartElement("text");
-			StartAndEnd(w,"content","ID","problems");
-			Start(w,"list","listType","ordered");
+			Start("component");
+			Start("section");
+			TemplateId("2.16.840.1.113883.10.20.22.2.5.1");
+			_w.WriteComment("Problems section template");
+			StartAndEnd("code","code","11450-4","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Problem list");
+			_w.WriteElementString("title","PROBLEMS");
+			Start("text");
+			StartAndEnd("content","ID","problems");
+			Start("list","listType","ordered");
 			for(int i=0;i<listProblem.Count;i++) {//Fill Problems Table
 				if(listProblem[i].SnomedProblemType!="55607006") {
 					continue;
 				}
-				w.WriteStartElement("item");
-				w.WriteString(DiseaseDefs.GetName(listProblem[i].DiseaseDefNum)+" : "+"Status - ");
+				Start("item");
+				_w.WriteString(DiseaseDefs.GetName(listProblem[i].DiseaseDefNum)+" : "+"Status - ");
 				if(listProblem[i].ProbStatus==ProblemStatus.Active) {
-					w.WriteString("Active");
+					_w.WriteString("Active");
 					status="Active";
 					statusCode="55561003";
 					statusOther="active";
 				}
 				else if(listProblem[i].ProbStatus==ProblemStatus.Inactive) {
-					w.WriteString("Inactive");
+					_w.WriteString("Inactive");
 					status="Inactive";
 					statusCode="73425007";
 					statusOther="completed";
 				}
 				else {
-					w.WriteString("Resolved");
+					_w.WriteString("Resolved");
 					status="Resolved";
 					statusCode="413322009";
 					statusOther="completed";
 				}
-				w.WriteEndElement();//item end
+				End("item");
 			}
-			w.WriteEndElement();//list end
-			w.WriteEndElement();//text end
+			End("list");
+			End("text");
 			for(int i=0;i<listProblem.Count;i++) {//Fill Problems Info
 				if(listProblem[i].SnomedProblemType!="55607006") {
 					continue;
 				}
-				Start(w,"entry","typeCode","DRIV");
-				Start(w,"act","classCode","ACT","moodCode","EVN");
-				w.WriteComment("Problem Concern Act template");//Concern Act Section
-				TemplateId(w,"2.16.840.1.113883.10.20.22.4.3");
-				BuildIdAndWrite(w);
-				StartAndEnd(w,"code","code","55607006","codeSystem","2.16.840.1.113883.6.96","displayName","Problem");
-				StartAndEnd(w,"statusCode","code",statusOther);
-				Start(w,"effectiveTime");
-				StartAndEnd(w,"low","value",listProblem[i].DateStart.ToString("yyyymmdd"));
-				if(listProblem[i].DateStop.Year>1880) {
-					StartAndEnd(w,"high","value",listProblem[i].DateStop.ToString("yyyymmdd"));
-				}
-				End(w,"effectiveTime");
-				Start(w,"entryRelationship","typeCode","SUBJ");
-				Start(w,"observation","classCode","OBS","moodCode","EVN");
-				w.WriteComment("Problem Observation template");//Observation Section
-				TemplateId(w,"2.16.840.1.113883.10.20.22.4.4");
-				BuildIdAndWrite(w);
-				StartAndEnd(w,"code","code",listProblem[i].SnomedProblemType,"codeSystem","2.16.840.1.113883.6.96","displayName",Snomeds.GetByCode(listProblem[i].SnomedProblemType).Description);
+				Start("entry","typeCode","DRIV");
+				Start("act","classCode","ACT","moodCode","EVN");
+				_w.WriteComment("Problem Concern Act template");//Concern Act Section
+				TemplateId("2.16.840.1.113883.10.20.22.4.3");
+				Id();
+				StartAndEnd("code","code","55607006","codeSystem",strCodeSystemSnomed,"displayName","Problem");
+				StartAndEnd("statusCode","code",statusOther);
+				Start("effectiveTime");
+				StartAndEnd("low","value",listProblem[i].DateStart.ToString("yyyymmdd"));
+				DateElement("high",listProblem[i].DateStop);
+				End("effectiveTime");
+				Start("entryRelationship","typeCode","SUBJ");
+				Start("observation","classCode","OBS","moodCode","EVN");
+				_w.WriteComment("Problem Observation template");//Observation Section
+				TemplateId("2.16.840.1.113883.10.20.22.4.4");
+				Id();
+				StartAndEnd("code","code",listProblem[i].SnomedProblemType,"codeSystem",strCodeSystemSnomed,"displayName",Snomeds.GetByCode(listProblem[i].SnomedProblemType).Description);
 				if(listProblem[i].ProbStatus==ProblemStatus.Active) {
-					StartAndEnd(w,"statusCode","code","active");
+					StartAndEnd("statusCode","code","active");
 				}
 				else {
-					StartAndEnd(w,"statusCode","code","completed");
+					StartAndEnd("statusCode","code","completed");
 				}
-				Start(w,"effectiveTime");
-				StartAndEnd(w,"low","value",listProblem[i].DateStart.ToString("yyyymmdd"));
-				End(w,"effectiveTime");
-				Start(w,"value");
-				w.WriteAttributeString("xsi","type",null,"CD");
-				Attribs(w,"code",DiseaseDefs.GetItem(listProblem[i].DiseaseDefNum).SnomedCode,"codeSystem",strCodeSystemSnomed,"displayName",DiseaseDefs.GetItem(listProblem[i].DiseaseDefNum).DiseaseName);
-				End(w,"value");
-				Start(w,"entryRelationship","typeCode","REFR");
-				Start(w,"observation","classCode","OBS","moodCode","EVN");
-				w.WriteComment("Status Observation template");//Status Observation Section
-				TemplateId(w,"2.16.840.1.113883.10.20.22.4.6");
-				Start(w,"code");
-				w.WriteAttributeString("xsi","type",null,"CE");
-				Attribs(w,"code","33999-4","codeSystem",strCodeSystemLoinc,"codeSystemName","LOINC","displayName","Status");
-				End(w,"cpde");
+				Start("effectiveTime");
+				DateElement("low",listProblem[i].DateStart);
+				End("effectiveTime");
+				Start("value");
+				_w.WriteAttributeString("xsi","type",null,"CD");
+				Attribs("code",DiseaseDefs.GetItem(listProblem[i].DiseaseDefNum).SnomedCode,"codeSystem",strCodeSystemSnomed,"displayName",DiseaseDefs.GetItem(listProblem[i].DiseaseDefNum).DiseaseName);
+				End("value");
+				Start("entryRelationship","typeCode","REFR");
+				Start("observation","classCode","OBS","moodCode","EVN");
+				_w.WriteComment("Status Observation template");//Status Observation Section
+				TemplateId("2.16.840.1.113883.10.20.22.4.6");
+				Start("code");
+				_w.WriteAttributeString("xsi","type",null,"CE");
+				Attribs("code","33999-4","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Status");
+				End("code");
 				if(listProblem[i].ProbStatus==ProblemStatus.Active) {
-					StartAndEnd(w,"statusCode","code","active");
+					StartAndEnd("statusCode","code","active");
 				}
 				else {
-					StartAndEnd(w,"statusCode","code","completed");
+					StartAndEnd("statusCode","code","completed");
 				}
-				Start(w,"value");
-				w.WriteAttributeString("xsi","type",null,"CD");
-				Attribs(w,"code",statusCode,"codeSystem",strCodeSystemSnomed,"displayName",status);
-				End(w,"value");
-				End(w,"observation");
-				End(w,"entryRelationship");
-				End(w,"observation");
-				End(w,"entryRelationship");
-				End(w,"act");
-				End(w,"entry");
+				Start("value");
+				_w.WriteAttributeString("xsi","type",null,"CD");
+				Attribs("code",statusCode,"codeSystem",strCodeSystemSnomed,"displayName",status);
+				End("value");
+				End("observation");
+				End("entryRelationship");
+				End("observation");
+				End("entryRelationship");
+				End("act");
+				End("entry");
 			}
-			End(w,"section");
-			End(w,"component");
+			End("section");
+			End("component");
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdSectionReasonForReferral(XmlWriter w,Patient pat) {
+		private static void GenerateCcdSectionReasonForReferral(Patient pat) {
 			//TODO:
 		}
 
 		///<summary>Helper for GenerateCCD().  Exports Labs.</summary>
-		private static void GenerateCcdSectionResults(XmlWriter w,Patient pat) {
-			w.WriteComment(@"
+		private static void GenerateCcdSectionResults(Patient pat) {
+			_w.WriteComment(@"
 =====================================================================================================
 Laboratory Test Results
 =====================================================================================================");
 			List<LabResult> listLabResult=LabResults.GetAllForPatient(pat.PatNum);
 			LabPanel labPanel;
-			w.WriteStartElement("component");
-			w.WriteStartElement("section");
-			TemplateId(w,"2.16.840.1.113883.3.88.11.83.122","HITSP/C83");
-			TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.3.28","IHE PCC");
-			w.WriteComment("Diagnostic Results section template");
-			StartAndEnd(w,"code","code","30954-2","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Results");
-			w.WriteElementString("title","Diagnostic Results");
-			w.WriteStartElement("text");//The following text will be parsed as html with a style sheet to be human readable.
-			w.WriteStartElement("table");
-			w.WriteAttributeString("width","100%");
-			w.WriteAttributeString("border","1");
-			w.WriteStartElement("thead");
-			w.WriteStartElement("tr");
-			w.WriteStartElement("th");
-			w.WriteString("LOINC Code");
-			w.WriteEndElement();
-			w.WriteStartElement("th");
-			w.WriteString("Test");
-			w.WriteEndElement();//
-			w.WriteStartElement("th");
-			w.WriteString("Result");
-			w.WriteEndElement();
-			w.WriteStartElement("th");
-			w.WriteString("Abnormal Flag");
-			w.WriteEndElement();
-			w.WriteStartElement("th");
-			w.WriteString("Date Performed");
-			w.WriteEndElement();
-			w.WriteEndElement();//tr
-			w.WriteEndElement();//thead
-			w.WriteStartElement("tbody");
+			Start("component");
+			Start("section");
+			TemplateId("2.16.840.1.113883.3.88.11.83.122","HITSP/C83");
+			TemplateId("1.3.6.1.4.1.19376.1.5.3.1.3.28","IHE PCC");
+			_w.WriteComment("Diagnostic Results section template");
+			StartAndEnd("code","code","30954-2","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Results");
+			_w.WriteElementString("title","Diagnostic Results");
+			Start("text");//The following text will be parsed as html with a style sheet to be human readable.
+			Start("table","width","100%","border","1");
+			Start("thead");
+			Start("tr");
+			_w.WriteElementString("th","LOINC Code");
+			_w.WriteElementString("th","Test");
+			_w.WriteElementString("th","Result");
+			_w.WriteElementString("th","Abnormal Flag");
+			_w.WriteElementString("th","Date Performed");
+			End("tr");
+			End("thead");
+			Start("tbody");
 			for(int i=0;i<listLabResult.Count;i++) {
-				w.WriteStartElement("tr");
-				w.WriteStartElement("td");
-				w.WriteString(listLabResult[i].TestID);
-				w.WriteEndElement();
-				w.WriteStartElement("td");
-				w.WriteString(listLabResult[i].TestName);
-				w.WriteEndElement();
-				w.WriteStartElement("td");
-				w.WriteString(listLabResult[i].ObsValue+" "+listLabResult[i].ObsUnits);
-				w.WriteEndElement();
-				w.WriteStartElement("td");
-				w.WriteString(listLabResult[i].AbnormalFlag.ToString());
-				w.WriteEndElement();
-				w.WriteStartElement("td");
-				w.WriteString(listLabResult[i].DateTimeTest.ToShortDateString());
-				w.WriteEndElement();
-				w.WriteEndElement();//tr
+				Start("tr");
+				_w.WriteElementString("td",listLabResult[i].TestID);//LOINC Code
+				_w.WriteElementString("td",listLabResult[i].TestName);//Test
+				_w.WriteElementString("td",listLabResult[i].ObsValue+" "+listLabResult[i].ObsUnits);//Result
+				_w.WriteElementString("td",listLabResult[i].AbnormalFlag.ToString());//Abnormal Flag
+				_w.WriteElementString("td",listLabResult[i].DateTimeTest.ToShortDateString());//Date Performed
+				End("tr");
 			}
-			w.WriteEndElement();//tbody
-			w.WriteEndElement();//table
-			w.WriteEndElement();//text
+			End("tbody");
+			End("table");
+			End("text");
 			for(int i=0;i<listLabResult.Count;i++) {
 				labPanel=LabPanels.GetOne(listLabResult[i].LabPanelNum);
-				Start(w,"entry","typeCode","DRIV");
-				Start(w,"organizer","classCode","BATTERY","moodCode","EVN");
-				StartAndEnd(w,"templateId","root","2.16.840.1.113883.10.20.1.32");//no authority name
-				w.WriteComment("Result organizer template");
-				StartAndEnd(w,"id","root","7d5a02b0-67a4-11db-bd13-0800200c9a66");
-				StartAndEnd(w,"code","code",labPanel.ServiceId,"codeSystem",strCodeSystemSnomed,"displayName",labPanel.ServiceName);
-				StartAndEnd(w,"statusCode","code","completed");
-				StartAndEnd(w,"effectiveTime","value",listLabResult[i].DateTimeTest.ToString("yyyyMMddHHmm"));
-				Start(w,"component");
-				Start(w,"procedure","classCode","PROC","moodCode","EVN");
-				TemplateId(w,"2.16.840.1.113883.3.88.11.83.17","HITSP C83");
-				TemplateId(w,"2.16.840.1.113883.10.20.1.29","CCD");//procedure activity template id, according to pages 103-104 of CCD-final.pdf
-				TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.4.19","IHE PCC");
-				StartAndEnd(w,"id");
-				Start(w,"code","code",labPanel.ServiceId,"codeSystem",strCodeSystemSnomed,"displayName",labPanel.ServiceName);
-				Start(w,"originalText");
-				w.WriteString(labPanel.ServiceName);
-				StartAndEnd(w,"reference","value","Ptr to text  in parent Section");
-				End(w,"originalText");
-				End(w,"code");
-				Start(w,"text");
-				w.WriteString(labPanel.ServiceName);
-				StartAndEnd(w,"reference","value","Ptr to text  in parent Section");
-				End(w,"text");
-				StartAndEnd(w,"statusCode","code","completed");
-				StartAndEnd(w,"effectiveTime","value",listLabResult[i].DateTimeTest.ToString("yyyyMMddHHmm"));
-				End(w,"procedure");
-				End(w,"component");
-				Start(w,"component");
-				Start(w,"observation","classCode","OBS","moodCode","EVN");
-				TemplateId(w,"2.16.840.1.113883.3.88.11.83.15.1","HITSP C83");
-				TemplateId(w,"2.16.840.1.113883.10.20.1.31","CCD");//result observation template id, according to pages 103-104 of CCD-final.pdf
-				TemplateId(w,"1.3.6.1.4.1.19376.1.5.3.1.4.13","IHE PCC");
-				w.WriteComment("Result observation template");
-				StartAndEnd(w,"id","root","107c2dc0-67a5-11db-bd13-0800200c9a66");
-				StartAndEnd(w,"code","code",listLabResult[i].TestID,"codeSystem",strCodeSystemLoinc,"displayName",listLabResult[i].TestName);
-				Start(w,"text");
-				StartAndEnd(w,"reference","value","PtrToValueInsectionText");
-				End(w,"text");
-				StartAndEnd(w,"statusCode","code","completed");
-				StartAndEnd(w,"effectiveTime","value",listLabResult[i].DateTimeTest.ToString("yyyyMMddHHmm"));
-				Start(w,"value");
-				w.WriteAttributeString("xsi","type",null,"PQ");
-				Attribs(w,"value","13.2","unit","g/dl");
-				End(w,"value");
-				StartAndEnd(w,"interpretationCode","code","N","codeSystem","2.16.840.1.113883.5.83");
-				End(w,"observation");
-				End(w,"component");
-				End(w,"organizer");
-				End(w,"entry");
+				Start("entry","typeCode","DRIV");
+				Start("organizer","classCode","BATTERY","moodCode","EVN");
+				StartAndEnd("templateId","root","2.16.840.1.113883.10.20.1.32");//no authority name
+				_w.WriteComment("Result organizer template");
+				StartAndEnd("id","root","7d5a02b0-67a4-11db-bd13-0800200c9a66");
+				StartAndEnd("code","code",labPanel.ServiceId,"codeSystem",strCodeSystemSnomed,"displayName",labPanel.ServiceName);
+				StartAndEnd("statusCode","code","completed");
+				StartAndEnd("effectiveTime","value",listLabResult[i].DateTimeTest.ToString("yyyyMMddHHmm"));
+				Start("component");
+				Start("procedure","classCode","PROC","moodCode","EVN");
+				TemplateId("2.16.840.1.113883.3.88.11.83.17","HITSP C83");
+				TemplateId("2.16.840.1.113883.10.20.1.29","CCD");//procedure activity template id, according to pages 103-104 of CCD-final.pdf
+				TemplateId("1.3.6.1.4.1.19376.1.5.3.1.4.19","IHE PCC");
+				StartAndEnd("id");
+				Start("code","code",labPanel.ServiceId,"codeSystem",strCodeSystemSnomed,"displayName",labPanel.ServiceName);
+				Start("originalText");
+				_w.WriteString(labPanel.ServiceName);
+				StartAndEnd("reference","value","Ptr to text  in parent Section");
+				End("originalText");
+				End("code");
+				Start("text");
+				_w.WriteString(labPanel.ServiceName);
+				StartAndEnd("reference","value","Ptr to text  in parent Section");
+				End("text");
+				StartAndEnd("statusCode","code","completed");
+				StartAndEnd("effectiveTime","value",listLabResult[i].DateTimeTest.ToString("yyyyMMddHHmm"));
+				End("procedure");
+				End("component");
+				Start("component");
+				Start("observation","classCode","OBS","moodCode","EVN");
+				TemplateId("2.16.840.1.113883.3.88.11.83.15.1","HITSP C83");
+				TemplateId("2.16.840.1.113883.10.20.1.31","CCD");//result observation template id, according to pages 103-104 of CCD-final.pdf
+				TemplateId("1.3.6.1.4.1.19376.1.5.3.1.4.13","IHE PCC");
+				_w.WriteComment("Result observation template");
+				Uuid();
+				StartAndEnd("code","code",listLabResult[i].TestID,"codeSystem",strCodeSystemLoinc,"displayName",listLabResult[i].TestName);
+				Start("text");
+				StartAndEnd("reference","value","PtrToValueInsectionText");
+				End("text");
+				StartAndEnd("statusCode","code","completed");
+				StartAndEnd("effectiveTime","value",listLabResult[i].DateTimeTest.ToString("yyyyMMddHHmm"));
+				Start("value");
+				_w.WriteAttributeString("xsi","type",null,"PQ");
+				Attribs("value","13.2","unit","g/dl");
+				End("value");
+				StartAndEnd("interpretationCode","code","N","codeSystem","2.16.840.1.113883.5.83");
+				End("observation");
+				End("component");
+				End("organizer");
+				End("entry");
 			}
-			End(w,"section");
-			End(w,"component");
+			End("section");
+			End("component");
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdSectionVitalSigns(XmlWriter w,Patient pat) {
+		private static void GenerateCcdSectionVitalSigns(Patient pat) {
 			//TODO:
 		}
 		
-		///<summary>Helper for GenerateCCD(). Builds an Id element an writes it to the given XmlWriter.</summary>
-		private static void BuildIdAndWrite(XmlWriter w) {
+		///<summary>Helper for GenerateCCD(). Builds an "id" element and writes a random 32 character alpha-numeric string into the "root" attribute.</summary>
+		private static void Id() {
 			string id=MiscUtils.CreateRandomAlphaNumericString(32);
 			while(_hashCcdIds.Contains(id)) {
 				id=MiscUtils.CreateRandomAlphaNumericString(32);
 			}
 			_hashCcdIds.Add(id);
-			StartAndEnd(w,"id","root",id);
+			StartAndEnd("id","root",id);
+		}
+
+		///<summary>Helper for GenerateCCD(). Builds an "id" element and writes a 36 character GUID string into the "root" attribute.
+		///An example of how the uid might look: "20cf14fb-B65c-4c8c-A54d-b0cca834C18c"</summary>
+		private static void Uuid() {
+			Guid uuid=System.Guid.NewGuid();
+			while(_hashCcdUuids.Contains(uuid.ToString())) {
+				uuid=System.Guid.NewGuid();
+			}
+			_hashCcdUuids.Add(uuid.ToString());
+			StartAndEnd("id","root",uuid.ToString());
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void TemplateId(XmlWriter writer,string rootNumber) {
-			writer.WriteStartElement("templateId");
-			writer.WriteAttributeString("root",rootNumber);
-			writer.WriteEndElement();
+		private static void TemplateId(string rootNumber) {
+			_w.WriteStartElement("templateId");
+			_w.WriteAttributeString("root",rootNumber);
+			_w.WriteEndElement();
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void TemplateId(XmlWriter writer,string rootNumber,string authorityName) {
-			writer.WriteStartElement("templateId");
-			writer.WriteAttributeString("root",rootNumber);
-			writer.WriteAttributeString("assigningAuthorityName",authorityName);
-			writer.WriteEndElement();
+		private static void TemplateId(string rootNumber,string authorityName) {
+			_w.WriteStartElement("templateId");
+			_w.WriteAttributeString("root",rootNumber);
+			_w.WriteAttributeString("assigningAuthorityName",authorityName);
+			_w.WriteEndElement();
 		}
 
 		///<summary>Helper for GenerateCCD().  Performs a WriteStartElement, followed by any attributes.  Attributes must be in pairs: name, value.</summary>
-		private static void Start(XmlWriter writer,string elementName,params string[] attributes) {
-			writer.WriteStartElement(elementName);
+		private static void Start(string elementName,params string[] attributes) {
+			_w.WriteStartElement(elementName);
 			for(int i=0;i<attributes.Length;i+=2) {
-				writer.WriteAttributeString(attributes[i],attributes[i+1]);
+				_w.WriteAttributeString(attributes[i],attributes[i+1]);
 			}
 		}
 
-		///<summary>Helper for GenerateCCD().  Performs a WriteEndElement.</summary>
-		private static void End(XmlWriter writer,string elementName) {
-			writer.WriteEndElement();
+		///<summary>Helper for GenerateCCD().  Performs a WriteEndElement.  The specified elementName is for readability only.</summary>
+		private static void End(string elementName) {
+			_w.WriteEndElement();
 		}
 
 		///<summary>Helper for GenerateCCD().  Performs a WriteStartElement, followed by any attributes, followed by a WriteEndElement.  Attributes must be in pairs: name, value.</summary>
-		private static void StartAndEnd(XmlWriter writer,string elementName,params string[] attributes) {
-			writer.WriteStartElement(elementName);
+		private static void StartAndEnd(string elementName,params string[] attributes) {
+			_w.WriteStartElement(elementName);
 			for(int i=0;i<attributes.Length;i+=2) {
-				writer.WriteAttributeString(attributes[i],attributes[i+1]);
+				_w.WriteAttributeString(attributes[i],attributes[i+1]);
 			}
-			writer.WriteEndElement();
+			_w.WriteEndElement();
 		}
 
 		///<summary>Helper for GenerateCCD().  Performs a WriteAttributeString for each attribute.  Attributes must be in pairs: name, value.</summary>
-		private static void Attribs(XmlWriter writer,params string[] attributes) {
+		private static void Attribs(params string[] attributes) {
 			for(int i=0;i<attributes.Length;i+=2) {
-				writer.WriteAttributeString(attributes[i],attributes[i+1]);
+				_w.WriteAttributeString(attributes[i],attributes[i+1]);
 			}
 		}
 
-		///<summary>Writes the dateTime in the required date format.  Will not write if year is before 1880.</summary>
-		private static void WriteDate(XmlWriter writer,DateTime dateTime) {
-			if(dateTime.Year<1880) {
-				return;
+		///<summary>Writes the element strElement name and writes the dateTime string in the required date format.  Will not write if year is before 1880.</summary>
+		private static void DateText(string strElementName,DateTime dateTime) {
+			Start(strElementName);
+			if(dateTime.Year>1880) {
+				_w.WriteString(dateTime.ToString("yyyyMMdd"));
 			}
-			writer.WriteString(dateTime.ToString("yyyyMMdd"));
+			End(strElementName);
+		}
+
+		///<summary>Writes the element strElement name and writes the dateTime in the required date format into the value attribute.
+		///Will write nullFlavor="UNK" instead of value if year is before 1880.</summary>
+		private static void DateElement(string strElementName,DateTime dateTime) {
+			Start(strElementName);
+			if(dateTime.Year<1880) {
+				Attribs("nullFlavor","UNK");
+			}
+			else {
+				Attribs("value",dateTime.ToString("yyyyMMdd"));
+			}
+			End(strElementName);
+		}
+
+		///<summary>Writes the element strElement name and writes the dateTime in the required date format into the value attribute.
+		///Will write nullFlavor="UNK" instead of value if year is before 1880.</summary>
+		private static void TimeElement(string strElementName,DateTime dateTime) {
+			Start(strElementName);
+			if(dateTime.Year<1880) {
+				Attribs("nullFlavor","UNK");
+			}
+			else {
+				Attribs("value",dateTime.ToString("yyyyMMddHHmmsszzz").Replace(":",""));
+			}
+			End(strElementName);
 		}
 
 		public static bool IsCCD(string strXml) {
