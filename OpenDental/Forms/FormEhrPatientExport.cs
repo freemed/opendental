@@ -150,13 +150,27 @@ namespace OpenDental {
 				return;
 			}
 			Patient patCur;
-			string filename;
+			string fileName;
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
 				patCur=Patients.GetPat((long)gridMain.Rows[gridMain.SelectedIndices[i]].Tag);//Cannot use GetLim because more information is needed in the CCD message generation below.
-				filename=patCur.LName+"_"+patCur.FName+"_"+patCur.PatNum;
+				fileName="";
+				string lName=patCur.LName;
+				for(int j=0;j<lName.Length;j++) {  //Strip all non-letters from FName
+					if(Char.IsLetter(lName,j)) {
+						fileName+=lName.Substring(j,1);
+					}
+				}
+				fileName+="_";
+				string fName=patCur.FName;
+				for(int k=0;k<fName.Length;k++) {  //Strip all non-letters from LName
+					if(Char.IsLetter(fName,k)) {
+						fileName+=fName.Substring(k,1);
+					}
+				}
+				fileName+="_"+patCur.PatNum;  //LName_FName_PatNum
 				string ccd=EhrCCD.GenerateCCD(patCur);
 				try {
-					File.WriteAllText(ODFileUtils.CombinePaths(folderPath,filename+".xml"),ccd);
+					File.WriteAllText(ODFileUtils.CombinePaths(folderPath,fileName+".xml"),ccd);
 				}
 				catch {
 					MessageBox.Show("Error, Could not create xml file");
