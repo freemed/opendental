@@ -933,44 +933,45 @@ namespace OpenDental{
 				text=(procAmt+adjAmt).ToString("c");
 				par.AddFormattedText(text,fontBold);
 			}
-			else if(PrefC.GetBool(PrefName.BalancesDontSubtractIns)){
-				text = PatGuar.BalTotal.ToString("c");
-				par.AddFormattedText(text, fontBold);
-				//par.AddLineBreak();
-				//text = PatGuar.InsEst.ToString("c");
-				//par.AddFormattedText(text, font);
-				//par.AddLineBreak();
-				//text = (PatGuar.BalTotal - PatGuar.InsEst).ToString("c");
-				//par.AddFormattedText(text, font);
-				//par.AddLineBreak();
+			else if(PrefC.GetBool(PrefName.BalancesDontSubtractIns)) {
+				if(Stmt.SinglePatient) {
+					//Show the current patient's balance without subtracting insurance estimates.
+					text = pat.EstBalance.ToString("c");
+					par.AddFormattedText(text,font);
+				}
+				else {
+					//Show the current family's balance without subtracting insurance estimates.
+					text = PatGuar.BalTotal.ToString("c");
+					par.AddFormattedText(text,fontBold);
+				}
 			}
-			else{//more common
-				if(Stmt.SinglePatient){
+			else {//more common
+				if(Stmt.SinglePatient) {
 					double patInsEst=0;
-					for(int m=0;m<tableMisc.Rows.Count;m++){
-						if(tableMisc.Rows[m]["descript"].ToString()=="patInsEst"){
+					for(int m=0;m<tableMisc.Rows.Count;m++) {
+						if(tableMisc.Rows[m]["descript"].ToString()=="patInsEst") {
 							patInsEst=PIn.Double(tableMisc.Rows[m]["value"].ToString());
 						}
 					}
 					double patBal=pat.EstBalance-patInsEst;
 					text = pat.EstBalance.ToString("c");
-					par.AddFormattedText(text, font);
+					par.AddFormattedText(text,font);
 					par.AddLineBreak();
 					text = patInsEst.ToString("c");
-					par.AddFormattedText(text, font);
+					par.AddFormattedText(text,font);
 					par.AddLineBreak();
 					text = patBal.ToString("c");
-					par.AddFormattedText(text, fontBold);
+					par.AddFormattedText(text,fontBold);
 				}
-				else{
+				else {
 					text = PatGuar.BalTotal.ToString("c");
-					par.AddFormattedText(text, font);
+					par.AddFormattedText(text,font);
 					par.AddLineBreak();
 					text = PatGuar.InsEst.ToString("c");
-					par.AddFormattedText(text, font);
+					par.AddFormattedText(text,font);
 					par.AddLineBreak();
 					text = (PatGuar.BalTotal - PatGuar.InsEst).ToString("c");
-					par.AddFormattedText(text, fontBold);
+					par.AddFormattedText(text,fontBold);
 					par.AddLineBreak();
 				}
 			}
