@@ -27,16 +27,19 @@ namespace OpenDentBusiness {
 		private const string strCodeSystemLoinc="2.16.840.1.113883.6.1";
 		///<summary>LOINC</summary>
 		private const string strCodeSystemNameLoinc="LOINC";
+		///<summary>Set each time GenerateCCD() is called. Used by helper functions to avoid sending the patient as a parameter to each helper function.</summary>
+		private static Patient _patOutCcd=null;
 		///<summary>Instantiated each time GenerateCCD() is called. Used by helper functions to avoid sending the writer as a parameter to each helper function.</summary>
 		private static XmlWriter _w=null;
 		///<summary>Instantiated each time GenerateCCD() is called. Used to generate unique "id" element "root" attribute identifiers. The Ids in this list are random alpha-numeric and 32 characters in length.</summary>
 		private static HashSet<string> _hashCcdIds;
 		///<summary>Instantiated each time GenerateCCD() is called. Used to generate unique "id" element "root" attribute identifiers. The Ids in this list are random GUIDs which are 36 characters in length.</summary>
-		private static HashSet<string> _hashCcdUuids;
+		private static HashSet<string> _hashCcdGuids;
 
 		public static string GenerateCCD(Patient pat) {
+			_patOutCcd=pat;
 			_hashCcdIds=new HashSet<string>();//The IDs only need to be unique within each CCD document.
-			_hashCcdUuids=new HashSet<string>();//The UUIDs only need to be unique within each CCD document.
+			_hashCcdGuids=new HashSet<string>();//The UUIDs only need to be unique within each CCD document.
 			Medications.Refresh();
 			XmlWriterSettings xmlSettings=new XmlWriterSettings();
 			xmlSettings.Encoding=Encoding.UTF8;
@@ -50,40 +53,41 @@ namespace OpenDentBusiness {
 				_w.WriteProcessingInstruction("xml-stylesheet","type=\"text/xsl\" href=\"ccd.xsl\"");
 				_w.WriteWhitespace("\r\n");
 				_w.WriteStartElement("ClinicalDocument","urn:hl7-org:v3");
-				Attribs("xmlns","xsi",null,"http://www.w3.org/2001/XMLSchema-instance");
-				Attribs("xsi","noNamespaceSchemaLocation",null,"Registry_Payment.xsd");
-				Attribs("xsi","schemaLocation",null,"urn:hl7-org:v3 http://xreg2.nist.gov:8080/hitspValidation/schema/cdar2c32/infrastructure/cda/C32_CDA.xsd");
+				_w.WriteAttributeString("xmlns","xsi",null,"http://www.w3.org/2001/XMLSchema-instance");
+				_w.WriteAttributeString("xsi","noNamespaceSchemaLocation",null,"Registry_Payment.xsd");
+				_w.WriteAttributeString("xsi","schemaLocation",null,"urn:hl7-org:v3 http://xreg2.nist.gov:8080/hitspValidation/schema/cdar2c32/infrastructure/cda/C32_CDA.xsd");
 				StartAndEnd("realmCode","code","US");
 				StartAndEnd("typeId","root","2.16.840.1.113883.1.3","extension","POCD_HD000040");//template id to assert use of the CCD standard
 				_w.WriteComment("US General Header Template");
 				TemplateId("2.16.840.1.113883.10.20.22.1.1");
 				_w.WriteComment("Conforms to CCD requirements");
 				TemplateId("2.16.840.1.113883.10.20.22.1.2");
-				Id();
+				Guid();
 				StartAndEnd("code","code","34133-9","codeSystemName",strCodeSystemNameLoinc,"codeSystem",strCodeSystemLoinc,"displayName","Summarization of Episode Note");
 				_w.WriteElementString("title","Continuity of Care Document");
-				StartAndEnd("effectiveTime","value",DateTime.Now.ToString("yyyyMMddHHmmsszzz").Replace(":",""));
+				TimeElement("effectiveTime",DateTime.Now);
 				StartAndEnd("confidentialityCode","code","N","codeSystem","2.16.840.1.113883.5.25");//Fixed value.  Confidentiality Code System.  Codes: N=(Normal), R=(Restricted),V=(Very Restricted)
 				StartAndEnd("languageCode","code","en-US");
 				Start("recordTarget");
 				Start("patientRole");
-				StartAndEnd("id","extension",pat.PatNum.ToString(),"root","2.16.840.1.113883.19.5");
-				Start("addr","use","HP");
-				_w.WriteElementString("streetAddressLine",pat.Address.ToString());
-				_w.WriteElementString("streetAddressLine",pat.Address2.ToString());
-				_w.WriteElementString("city",pat.City.ToString());
-				_w.WriteElementString("state",pat.State.ToString());
-				_w.WriteElementString("country","");
-				End("addr");
-				StartAndEnd("telecom");
+				StartAndEnd("id","extension",pat.PatNum.ToString(),"root","2.16.840.1.113883.4.6");
+				if(pat.SSN.Length==9) {
+					StartAndEnd("id","extension",pat.SSN,"root","2.16.840.1.113883.4.1");
+				}
+				AddressUnitedStates(pat.Address,pat.Address2,pat.City,pat.State);
+				StartAndEnd("telecom","use","HP","value","tel:"+pat.HmPhone);
 				Start("patient");
 				Start("name","use","L");
-				_w.WriteElementString("given",pat.FName.ToString());
-				_w.WriteElementString("given",pat.MiddleI.ToString());
-				_w.WriteElementString("family",pat.LName.ToString());
-				Start("suffix","qualifier","TITLE");
-				_w.WriteString(pat.Title.ToString());
-				End("suffix");
+				_w.WriteElementString("given",pat.FName);
+				if(pat.MiddleI!="") {
+					_w.WriteElementString("given",pat.MiddleI);
+				}
+				_w.WriteElementString("family",pat.LName);
+				if(pat.Title!="") {
+					Start("suffix","qualifier","TITLE");
+					_w.WriteString(pat.Title);
+					End("suffix");
+				}
 				End("name");
 				string strGender="M";
 				if(pat.Gender==PatientGender.Female) {
@@ -91,73 +95,114 @@ namespace OpenDentBusiness {
 				}
 				StartAndEnd("administrativeGenderCode","code",strGender,"codeSystem","2.16.840.1.113883.5.1");
 				DateElement("birthTime",pat.Birthdate);
+				if(pat.Position==PatientPosition.Divorced) {
+					StartAndEnd("maritalStatusCode","code","D","displayName","Divorced","codeSystem","2.16.840.1.113883.5.2","codeSystemName","MaritalStatusCode");
+				}
+				else if(pat.Position==PatientPosition.Married) {
+					StartAndEnd("maritalStatusCode","code","M","displayName","Married","codeSystem","2.16.840.1.113883.5.2","codeSystemName","MaritalStatusCode");
+				}
+				else if(pat.Position==PatientPosition.Widowed) {
+					StartAndEnd("maritalStatusCode","code","W","displayName","Widowed","codeSystem","2.16.840.1.113883.5.2","codeSystemName","MaritalStatusCode");
+				}
+				else {//Single and child
+					StartAndEnd("maritalStatusCode","code","S","displayName","Never Married","codeSystem","2.16.840.1.113883.5.2","codeSystemName","MaritalStatusCode");
+				}
+				bool isRaceFound=true;
+				PatRace patRace=PatRace.DeclinedToSpecify;
+				bool isHispanicOrLatino=false;
+				List <PatientRace> listPatientRaces=PatientRaces.GetForPatient(pat.PatNum);
+				for(int i=0;i<listPatientRaces.Count;i++) {
+					if(listPatientRaces[i].Race==PatRace.Hispanic) {
+						isHispanicOrLatino=true;
+					}
+					else if(listPatientRaces[i].Race==PatRace.NotHispanic) {
+						//Nothing to do. Flag is set to false by default.
+					}
+					else if(listPatientRaces[i].Race==PatRace.DeclinedToSpecify) {
+						isRaceFound=false;
+					}
+					else if(patRace==PatRace.DeclinedToSpecify) {//Only once race can be specified in the CCD document.
+						patRace=listPatientRaces[i].Race;
+					}
+				}
+				if(isRaceFound) {//The patient did not decline to specify.
+					if(patRace==PatRace.AfricanAmerican) {
+						StartAndEnd("raceCode","code","2054-5","displayName","Black or African American","codeSystem","2.16.840.1.113883.6.238","codeSystemName","Race &amp; Ethnicity - CDC");
+					}
+					else if(patRace==PatRace.AmericanIndian) {
+						StartAndEnd("raceCode","code","1002-5","displayName","American Indian or Alaska Native","codeSystem","2.16.840.1.113883.6.238","codeSystemName","Race &amp; Ethnicity - CDC");
+					}
+					else if(patRace==PatRace.Asian) {
+						StartAndEnd("raceCode","code","2028-9","displayName","Asian","codeSystem","2.16.840.1.113883.6.238","codeSystemName","Race &amp; Ethnicity - CDC");
+					}
+					else if(patRace==PatRace.HawaiiOrPacIsland) {
+						StartAndEnd("raceCode","code","2076-8","displayName","Native Hawaiian or Other Pacific Islander","codeSystem","2.16.840.1.113883.6.238","codeSystemName","Race &amp; Ethnicity - CDC");
+					}
+					else if(patRace==PatRace.White) {
+						StartAndEnd("raceCode","code","2106-3","displayName","White","codeSystem","2.16.840.1.113883.6.238","codeSystemName","Race &amp; Ethnicity - CDC");
+					}
+					else {//Aboriginal, Other, Multiracial
+						StartAndEnd("raceCode","code","2131-1","displayName","Other Race","codeSystem","2.16.840.1.113883.6.238","codeSystemName","Race &amp; Ethnicity - CDC");
+					}
+				}
+				if(isHispanicOrLatino) {
+					StartAndEnd("ethnicGroupCode","code","2135-2","displayName","Hispanic or Latino","codeSystem","2.16.840.1.113883.6.238","codeSystemName","Race &amp; Ethnicity - CDC");
+				}
+				else {//Not hispanic
+					StartAndEnd("ethnicGroupCode","code","2186-5","displayName","Not Hispanic or Latino","codeSystem","2.16.840.1.113883.6.238","codeSystemName","Race &amp; Ethnicity - CDC");
+				}
 				End("patient");
 				End("patientRole");
 				End("recordTarget");
 				//author--------------------------------------------------------------------------------------------------
+				//"Represents the creator of the clinical document." Section 2.1.2, page 65
+				Provider provAuthor=Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv));
 				Start("author");
 				TimeElement("time",DateTime.Now);
 				Start("assignedAuthor");
-				Uuid();
-				_w.WriteElementString("addr","");
-				_w.WriteElementString("telecom","");
+				StartAndEnd("id","extension",provAuthor.NationalProvID,"root","2.16.840.1.113883.4.6");
+				//TODO: SHOULD contain a code representing provider specialty. Example: <code code="200000000X" codeSystem="2.16.840.1.113883.6.101" displayName="Allopathic &amp; Osteopathic Physicians"/>
+				AddressUnitedStates(PrefC.GetString(PrefName.PracticeAddress),PrefC.GetString(PrefName.PracticeAddress2),PrefC.GetString(PrefName.PracticeCity),PrefC.GetString(PrefName.PracticeST));
+				string strPracticePhone=PrefC.GetString(PrefName.PracticePhone);
+				strPracticePhone=strPracticePhone.Substring(0,3)+"-"+strPracticePhone.Substring(3,3)+"-"+strPracticePhone.Substring(6);
+				StartAndEnd("telecom","use","WP","value","tel:"+strPracticePhone);
 				Start("assignedPerson");
-				_w.WriteElementString("name","");
+				Start("name");
+				_w.WriteElementString("given",provAuthor.FName);
+				_w.WriteElementString("family",provAuthor.LName);
+				End("name");
 				End("assignedPerson");
-				Start("representedOrganization");
-				_w.WriteElementString("name",PrefC.GetString(PrefName.PracticeTitle));
-				_w.WriteElementString("telecom","");
-				_w.WriteElementString("addr","");
-				End("representedOrganization");
 				End("assignedAuthor");
 				End("author");
 				//custodian------------------------------------------------------------------------------------------------
+				//"Represents the organization in charge of maintaining the document." Section 2.1.5, page 72
+				Provider provCustodian=Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv));
 				Start("custodian");
 				Start("assignedCustodian");
 				Start("representedCustodianOrganization");
-				_w.WriteElementString("id","");
-				_w.WriteElementString("name","");
-				_w.WriteElementString("telecom","");
-				_w.WriteElementString("addr","");
+				StartAndEnd("id","extension",provAuthor.NationalProvID,"root","2.16.840.1.113883.4.6");
+				_w.WriteElementString("name",PrefC.GetString(PrefName.PracticeTitle));
+				StartAndEnd("telecom","use","WP","value","tel:"+strPracticePhone);
+				AddressUnitedStates(PrefC.GetString(PrefName.PracticeAddress),PrefC.GetString(PrefName.PracticeAddress2),PrefC.GetString(PrefName.PracticeCity),PrefC.GetString(PrefName.PracticeST));
 				End("representedCustodianOrganization");
 				End("assignedCustodian");
 				End("custodian");
-				//legalAuthenticator--------------------------------------------------------------------------------------
-				//this is used by the style sheet to create the line at the bottom: Electronically Generated by: on date
-				Start("legalAuthenticator");
-				TimeElement("time",DateTime.Now);
-				StartAndEnd("signatureCode","code","S");
-				Start("assignedEntity");
-				StartAndEnd("id","nullFlavor","NI");
-				StartAndEnd("addr");
-				StartAndEnd("telecom");
-				Start("assignedPerson");
-				StartAndEnd("name");
-				End("assignedPerson");
-				Start("representedOrganization");
-				StartAndEnd("id","root","2.16.840.1.113883.19.5");
-				_w.WriteElementString("name",PrefC.GetString(PrefName.PracticeTitle));
-				StartAndEnd("telecom");
-				StartAndEnd("addr");
-				End("representedOrganization");
-				End("assignedEntity");
-				End("legalAuthenticator");
 				_w.WriteComment(@"
 =====================================================================================================
 Body
 =====================================================================================================");
 				Start("component");
 				Start("structuredBody");
-				GenerateCcdSectionAllergies(pat);
-				GenerateCcdSectionEncounters(pat);
-				GenerateCcdSectionFunctionalStatus(pat);
-				GenerateCcdSectionImmunizations(pat);
-				GenerateCcdSectionMedications(pat);
-				GenerateCcdSectionPlanOfCare(pat);
-				GenerateCcdSectionProblems(pat);
-				GenerateCcdSectionReasonForReferral(pat);
-				GenerateCcdSectionResults(pat);//Lab Results
-				GenerateCcdSectionVitalSigns(pat);
+				GenerateCcdSectionAllergies();
+				GenerateCcdSectionEncounters();
+				GenerateCcdSectionFunctionalStatus();
+				GenerateCcdSectionImmunizations();
+				GenerateCcdSectionMedications();
+				GenerateCcdSectionPlanOfCare();
+				GenerateCcdSectionProblems();
+				GenerateCcdSectionReasonForReferral();
+				GenerateCcdSectionResults();//Lab Results
+				GenerateCcdSectionVitalSigns();
 				End("structuredBody");
 				End("component");
 				End("ClinicalDocument");
@@ -167,12 +212,12 @@ Body
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdSectionAllergies(Patient pat) {
+		private static void GenerateCcdSectionAllergies() {
 			_w.WriteComment(@"
 =====================================================================================================
 Allergies
 =====================================================================================================");
-			List<Allergy> listAllergy=Allergies.Refresh(pat.PatNum);
+			List<Allergy> listAllergy=Allergies.Refresh(_patOutCcd.PatNum);
 			AllergyDef allergyDef;
 			Medication med;
 			Start("component");
@@ -195,15 +240,29 @@ Allergies
 			for(int i=0;i<listAllergy.Count;i++) {
 				String status=listAllergy[i].StatusIsActive?"Active":"Inactive";
 				allergyDef=AllergyDefs.GetOne(listAllergy[i].AllergyDefNum);
-				if(allergyDef.MedicationNum==0) {
-					continue;
+				bool isMedAllergy=false;
+				med=null;
+				if(allergyDef.MedicationNum!=0) {
+					med=Medications.GetMedication(allergyDef.MedicationNum);
+					if(med.RxCui!=0) {
+						isMedAllergy=true;
+					}
 				}
-				med=Medications.GetMedication(allergyDef.MedicationNum);
-				if(med.RxCui==0) {
+				bool isSnomedAllergy=false;
+				if(allergyDef.SnomedAllergyTo!="") {
+					isSnomedAllergy=true;
+				}
+				if(!isMedAllergy && !isSnomedAllergy) {
 					continue;
 				}
 				Start("tr");
-				_w.WriteElementString("td",med.RxCui.ToString()+" - "+med.MedName);
+				if(isSnomedAllergy) {
+					Snomed snomedAllergyTo=Snomeds.GetByCode(allergyDef.SnomedAllergyTo);
+					_w.WriteElementString("td",snomedAllergyTo.SnomedCode+" - "+snomedAllergyTo.Description);
+				}
+				else {//Medication allergy
+					_w.WriteElementString("td",med.RxCui.ToString()+" - "+med.MedName);
+				}
 				_w.WriteElementString("td",listAllergy[i].Reaction);
 				_w.WriteElementString("td",AllergyDefs.GetSnomedAllergyDesc(allergyDef.SnomedType));
 				_w.WriteElementString("td",status);
@@ -214,11 +273,19 @@ Allergies
 			End("text");
 			for(int i=0;i<listAllergy.Count;i++) {
 				allergyDef=AllergyDefs.GetOne(listAllergy[i].AllergyDefNum);
-				if(allergyDef.MedicationNum==0) {
-					continue;
+				bool isMedAllergy=false;
+				med=null;
+				if(allergyDef.MedicationNum!=0) {
+					med=Medications.GetMedication(allergyDef.MedicationNum);
+					if(med.RxCui!=0) {
+						isMedAllergy=true;
+					}
 				}
-				med=Medications.GetMedication(allergyDef.MedicationNum);
-				if(med.RxCui==0) {
+				bool isSnomedAllergy=false;
+				if(allergyDef.SnomedAllergyTo!="") {
+					isSnomedAllergy=true;
+				}
+				if(!isMedAllergy && !isSnomedAllergy) {
 					continue;
 				}
 				string status=listAllergy[i].StatusIsActive?"Active":"Inactive";
@@ -266,18 +333,10 @@ Allergies
 					allergyTypeName="None";
 				}
 				#endregion
-				allergyDef=AllergyDefs.GetOne(listAllergy[i].AllergyDefNum);
-				if(allergyDef.MedicationNum==0) {
-					continue;
-				}
-				med=Medications.GetMedication(allergyDef.MedicationNum);
-				if(med.RxCui==0) {
-					continue;
-				}
 				Start("entry","typeCode","DRIV");
 				Start("act","classCode","ACT","moodCode","EVN");
 				TemplateId("2.16.840.1.113883.10.20.22.4.30");
-				Id();
+				Guid();
 				StartAndEnd("code","code","48765-2","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Allergies and adverse reactions");
 				if(listAllergy[i].StatusIsActive) {
 					StartAndEnd("statusCode","code","active");
@@ -299,7 +358,7 @@ Allergies
 				Start("observation","classCode","OBS","moodCode","EVN");
 				_w.WriteComment("Allergy Observation template");
 				TemplateId("2.16.840.1.113883.10.20.22.4.7");
-				Id();
+				Guid();
 				StartAndEnd("code","code","ASSERTION","codeSystem","2.16.840.1.113883.5.4");//Fixed Value
 				StartAndEnd("statusCode","code","completed");//fixed value (required)
 				Start("effectiveTime");
@@ -313,11 +372,18 @@ Allergies
 				Start("participant","typeCode","CSM");
 				Start("participantRole","classCode","MANU");
 				Start("playingEntity","classCode","MMAT");
-				StartAndEnd("code","code",med.RxCui.ToString(),"displayName",med.MedName,"codeSystem",strCodeSystemRxNorm,"codeSystemName",strCodeSystemNameRxNorm);
+				//pg. 331 item 9. The code must be a "2.16.840.1.113883.3.88.12.80.16 Medication Brand", or "2.16.840.1.113883.3.88.12.80.18 Medication Drug", or "2.16.840.1.113883.3.88.12.80.20 Ingredient Name"
+				if(isSnomedAllergy) {
+					Snomed snomedAllergyTo=Snomeds.GetByCode(allergyDef.SnomedAllergyTo);
+					StartAndEnd("code","code",snomedAllergyTo.SnomedCode,"displayName",snomedAllergyTo.Description,"codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed);
+				}
+				else {//Medication allergy
+					StartAndEnd("code","code",med.RxCui.ToString(),"displayName",med.MedName,"codeSystem",strCodeSystemRxNorm,"codeSystemName",strCodeSystemNameRxNorm);
+				}
 				End("playingEntity");
 				End("participantRole");
 				End("participant");
-				Start("entryRelationship","typeCode","SUBJ");
+				Start("entryRelationship","typeCode","SUBJ","inversionInd","true");
 				Start("observation","classCode","OBS","moodCode","EVN");
 				_w.WriteComment("Allergy Status Observation template");
 				TemplateId("2.16.840.1.113883.10.20.22.4.28");
@@ -337,27 +403,29 @@ Allergies
 				}
 				End("observation");
 				End("entryRelationship");
-				Start("entryRelationship","typeCode","SUBJ");
-				Start("observation","classCode","OBS","moodCode","EVN");
-				_w.WriteComment("Reaction Observation template");
-				TemplateId("2.16.840.1.113883.10.20.22.4.9");
-				Id();
-				StartAndEnd("code","nullFlavor","NA");//Unknown why this is null, but can't find a good example of this
-				StartAndEnd("statusCode","code","completed");//fixed value (required)
-				Start("effectiveTime");
-				if(listAllergy[i].StatusIsActive) {
-					StartAndEnd("low","value",listAllergy[i].DateTStamp.ToString("yyyymmdd"));
-				}
-				else {
-					StartAndEnd("low","nullFlavor","UNK");
-				}
-				End("effectiveTime");
-				Start("value");
-				_w.WriteAttributeString("xsi","type",null,"CD");
-				Attribs("code",listAllergy[i].SnomedReaction,"codeSystem",strCodeSystemSnomed,"displayName",listAllergy[i].Reaction);
-				End("value");
-				End("observation");
-				End("entryRelationship");
+				if(listAllergy[i].SnomedReaction!="") {//Blank codes are invalid
+					Start("entryRelationship","typeCode","SUBJ");
+					Start("observation","classCode","OBS","moodCode","EVN");
+					_w.WriteComment("Reaction Observation template");
+					TemplateId("2.16.840.1.113883.10.20.22.4.9");
+					Id();
+					StartAndEnd("code","nullFlavor","NA");//Unknown why this is null, but can't find a good example of this
+					StartAndEnd("statusCode","code","completed");//fixed value (required)
+					Start("effectiveTime");
+					if(listAllergy[i].StatusIsActive) {
+						StartAndEnd("low","value",listAllergy[i].DateTStamp.ToString("yyyymmdd"));
+					}
+					else {
+						StartAndEnd("low","nullFlavor","UNK");
+					}
+					End("effectiveTime");
+					Start("value");
+					_w.WriteAttributeString("xsi","type",null,"CD");
+					Attribs("code",listAllergy[i].SnomedReaction,"codeSystem",strCodeSystemSnomed,"displayName",listAllergy[i].Reaction);
+					End("value");
+					End("observation");
+					End("entryRelationship");
+				}//end snomed reaction
 				End("observation");
 				End("entryRelationship");
 				End("act");
@@ -368,27 +436,27 @@ Allergies
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdSectionEncounters(Patient pat) {
+		private static void GenerateCcdSectionEncounters() {
 			//TODO:
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdSectionFunctionalStatus(Patient pat) {
+		private static void GenerateCcdSectionFunctionalStatus() {
 			//TODO:
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdSectionImmunizations(Patient pat) {
+		private static void GenerateCcdSectionImmunizations() {
 			//TODO:
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdSectionMedications(Patient pat) {
+		private static void GenerateCcdSectionMedications() {
 			_w.WriteComment(@"
 =====================================================================================================
 Medications
 =====================================================================================================");
-			List<MedicationPat> listMedPat=MedicationPats.Refresh(pat.PatNum,true);
+			List<MedicationPat> listMedPat=MedicationPats.Refresh(_patOutCcd.PatNum,true);
 			Medication med;
 			Start("component");
 			Start("section");
@@ -453,7 +521,7 @@ Medications
 				Start("substanceAdministration","classCode","SBADM","moodCode","EVN");
 				TemplateId("2.16.840.1.113883.10.20.22.4.16");
 				_w.WriteComment("Medication activity template");
-				Id();
+				Guid();
 				StartAndEnd("statusCode","code","completed");//Fixed Value
 				Start("effectiveTime");
 				_w.WriteAttributeString("xsi","type",null,"IVL_TS");
@@ -461,9 +529,9 @@ Medications
 				StartAndEnd("high","value",listMedPat[i].DateStop.ToString("yyyymmdd"));
 				End("effectiveTime");
 				Start("consumable");
-				Start("manufacturedProduct");
+				Start("manufacturedProduct","classCode","MANU");
 				TemplateId("2.16.840.1.113883.10.20.22.4.23");
-				Id();
+				Guid();
 				Start("manufacturedMaterial");
 				Start("code","code",rxCui.ToString(),"codeSystem",strCodeSystemRxNorm,"displayName",strMedName,"codeSystemName",strCodeSystemNameRxNorm);
 				End("code");
@@ -478,7 +546,7 @@ Medications
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdSectionPlanOfCare(Patient pat) {
+		private static void GenerateCcdSectionPlanOfCare() {
 			_w.WriteComment(@"
 =====================================================================================================
 Care Plan
@@ -498,7 +566,7 @@ Care Plan
 			End("tr");
 			End("thead");
 			Start("tbody");
-			List<EhrCarePlan> listEhrCarePlans=EhrCarePlans.Refresh(pat.PatNum);
+			List<EhrCarePlan> listEhrCarePlans=EhrCarePlans.Refresh(_patOutCcd.PatNum);
 			for(int i=0;i<listEhrCarePlans.Count;i++) {
 				Start("tr");
 				_w.WriteElementString("td",listEhrCarePlans[i].Instructions);//Planned Activity
@@ -527,12 +595,12 @@ Care Plan
 		}
 
 		///<summary>Helper for GenerateCCD().  Problem section.</summary>
-		private static void GenerateCcdSectionProblems(Patient pat) {
+		private static void GenerateCcdSectionProblems() {
 			_w.WriteComment(@"
 =====================================================================================================
 Problems
 =====================================================================================================");
-			List<Disease> listProblem=Diseases.Refresh(pat.PatNum);
+			List<Disease> listProblem=Diseases.Refresh(_patOutCcd.PatNum);
 			string status="Inactive";
 			string statusCode="73425007";
 			string statusOther="active";
@@ -545,9 +613,13 @@ Problems
 			Start("text");
 			StartAndEnd("content","ID","problems");
 			Start("list","listType","ordered");
+			string snomedProblemType="55607006";
 			for(int i=0;i<listProblem.Count;i++) {//Fill Problems Table
-				if(listProblem[i].SnomedProblemType!="55607006") {
-					continue;
+				if(listProblem[i].SnomedProblemType!="" && listProblem[i].SnomedProblemType!=snomedProblemType) {
+					continue;//Not a "problem".
+				}
+				if(listProblem[i].FunctionStatus!=FunctionalStatus.Problem) {
+					continue;//Not a "problem".
 				}
 				Start("item");
 				_w.WriteString(DiseaseDefs.GetName(listProblem[i].DiseaseDefNum)+" : "+"Status - ");
@@ -574,15 +646,18 @@ Problems
 			End("list");
 			End("text");
 			for(int i=0;i<listProblem.Count;i++) {//Fill Problems Info
-				if(listProblem[i].SnomedProblemType!="55607006") {
-					continue;
+				if(listProblem[i].SnomedProblemType!="" && listProblem[i].SnomedProblemType!=snomedProblemType) {
+					continue;//Not a "problem".
+				}
+				if(listProblem[i].FunctionStatus!=FunctionalStatus.Problem) {
+					continue;//Not a "problem".
 				}
 				Start("entry","typeCode","DRIV");
 				Start("act","classCode","ACT","moodCode","EVN");
 				_w.WriteComment("Problem Concern Act template");//Concern Act Section
 				TemplateId("2.16.840.1.113883.10.20.22.4.3");
-				Id();
-				StartAndEnd("code","code","55607006","codeSystem",strCodeSystemSnomed,"displayName","Problem");
+				Guid();
+				StartAndEnd("code","code","CONC","codeSystem","2.16.840.1.113883.5.6","displayName","Concern");
 				StartAndEnd("statusCode","code",statusOther);
 				Start("effectiveTime");
 				StartAndEnd("low","value",listProblem[i].DateStart.ToString("yyyymmdd"));
@@ -592,8 +667,8 @@ Problems
 				Start("observation","classCode","OBS","moodCode","EVN");
 				_w.WriteComment("Problem Observation template");//Observation Section
 				TemplateId("2.16.840.1.113883.10.20.22.4.4");
-				Id();
-				StartAndEnd("code","code",listProblem[i].SnomedProblemType,"codeSystem",strCodeSystemSnomed,"displayName",Snomeds.GetByCode(listProblem[i].SnomedProblemType).Description);
+				Guid();
+				StartAndEnd("code","code",snomedProblemType,"codeSystem",strCodeSystemSnomed,"displayName","Problem");
 				if(listProblem[i].ProbStatus==ProblemStatus.Active) {
 					StartAndEnd("statusCode","code","active");
 				}
@@ -603,6 +678,7 @@ Problems
 				Start("effectiveTime");
 				DateElement("low",listProblem[i].DateStart);
 				End("effectiveTime");
+				StartAndEnd("statusCode","code","completed");
 				Start("value");
 				_w.WriteAttributeString("xsi","type",null,"CD");
 				Attribs("code",DiseaseDefs.GetItem(listProblem[i].DiseaseDefNum).SnomedCode,"codeSystem",strCodeSystemSnomed,"displayName",DiseaseDefs.GetItem(listProblem[i].DiseaseDefNum).DiseaseName);
@@ -615,12 +691,12 @@ Problems
 				_w.WriteAttributeString("xsi","type",null,"CE");
 				Attribs("code","33999-4","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Status");
 				End("code");
-				if(listProblem[i].ProbStatus==ProblemStatus.Active) {
-					StartAndEnd("statusCode","code","active");
-				}
-				else {
+				//if(listProblem[i].ProbStatus==ProblemStatus.Active) {
+				//	StartAndEnd("statusCode","code","active");//This was breaking validation with the testing tool.
+				//}
+				//else {
 					StartAndEnd("statusCode","code","completed");
-				}
+				//}
 				Start("value");
 				_w.WriteAttributeString("xsi","type",null,"CD");
 				Attribs("code",statusCode,"codeSystem",strCodeSystemSnomed,"displayName",status);
@@ -637,17 +713,17 @@ Problems
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdSectionReasonForReferral(Patient pat) {
+		private static void GenerateCcdSectionReasonForReferral() {
 			//TODO:
 		}
 
 		///<summary>Helper for GenerateCCD().  Exports Labs.</summary>
-		private static void GenerateCcdSectionResults(Patient pat) {
+		private static void GenerateCcdSectionResults() {
 			_w.WriteComment(@"
 =====================================================================================================
 Laboratory Test Results
 =====================================================================================================");
-			List<LabResult> listLabResult=LabResults.GetAllForPatient(pat.PatNum);
+			List<LabResult> listLabResult=LabResults.GetAllForPatient(_patOutCcd.PatNum);
 			LabPanel labPanel;
 			Start("component");
 			Start("section");
@@ -681,6 +757,9 @@ Laboratory Test Results
 			End("table");
 			End("text");
 			for(int i=0;i<listLabResult.Count;i++) {
+				if(listLabResult[i].TestID=="") {
+					continue;//Blank codes not allowed in format.
+				}
 				labPanel=LabPanels.GetOne(listLabResult[i].LabPanelNum);
 				Start("entry","typeCode","DRIV");
 				Start("organizer","classCode","BATTERY","moodCode","EVN");
@@ -716,7 +795,7 @@ Laboratory Test Results
 				TemplateId("2.16.840.1.113883.10.20.1.31","CCD");//result observation template id, according to pages 103-104 of CCD-final.pdf
 				TemplateId("1.3.6.1.4.1.19376.1.5.3.1.4.13","IHE PCC");
 				_w.WriteComment("Result observation template");
-				Uuid();
+				Guid();
 				StartAndEnd("code","code",listLabResult[i].TestID,"codeSystem",strCodeSystemLoinc,"displayName",listLabResult[i].TestName);
 				Start("text");
 				StartAndEnd("reference","value","PtrToValueInsectionText");
@@ -738,7 +817,7 @@ Laboratory Test Results
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdSectionVitalSigns(Patient pat) {
+		private static void GenerateCcdSectionVitalSigns() {
 			//TODO:
 		}
 		
@@ -754,12 +833,12 @@ Laboratory Test Results
 
 		///<summary>Helper for GenerateCCD(). Builds an "id" element and writes a 36 character GUID string into the "root" attribute.
 		///An example of how the uid might look: "20cf14fb-B65c-4c8c-A54d-b0cca834C18c"</summary>
-		private static void Uuid() {
+		private static void Guid() {
 			Guid uuid=System.Guid.NewGuid();
-			while(_hashCcdUuids.Contains(uuid.ToString())) {
+			while(_hashCcdGuids.Contains(uuid.ToString())) {
 				uuid=System.Guid.NewGuid();
 			}
-			_hashCcdUuids.Add(uuid.ToString());
+			_hashCcdGuids.Add(uuid.ToString());
 			StartAndEnd("id","root",uuid.ToString());
 		}
 
@@ -840,6 +919,18 @@ Laboratory Test Results
 				Attribs("value",dateTime.ToString("yyyyMMddHHmmsszzz").Replace(":",""));
 			}
 			End(strElementName);
+		}
+
+		private static void AddressUnitedStates(string strAddress1,string strAddress2,string strCity,string strState) {
+			Start("addr","use","HP");
+			_w.WriteElementString("streetAddressLine",strAddress1);
+			if(strAddress2!="") {
+				_w.WriteElementString("streetAddressLine",strAddress2);
+			}
+			_w.WriteElementString("city",strCity);
+			_w.WriteElementString("state",strState);
+			_w.WriteElementString("country","United States");
+			End("addr");
 		}
 
 		public static bool IsCCD(string strXml) {

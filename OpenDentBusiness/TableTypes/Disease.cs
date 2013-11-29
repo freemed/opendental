@@ -28,7 +28,7 @@ namespace OpenDentBusiness {
 		///<summary>Date that the disease was set resolved or inactive.  Will be minval if still active.  ProbStatus should be used to determine if it is active or not.</summary>
 		public DateTime DateStop;
 		///<summary>FK snomed.SnomedCode.  Used in EHR CCD export/import only.  Must be one of the following SNOMED codes:
-		///Problem (55607006), Finding (404684003), Complaint (409586006), Dignosis (282291009), Condition (64572001), FunctionalLimitation (248536006), Symptom (418799008).</summary>
+		///Problem/Concern (55607006 or blank), Finding (404684003), Complaint (409586006), Dignosis (282291009), Condition (64572001), FunctionalLimitation (248536006), Symptom (418799008).</summary>
 		public string SnomedProblemType;
 		///<summary>Enum:FunctionalStatus  Used to export EHR CCD functional status and/or cognitive status information only.</summary>
 		public FunctionalStatus FunctionStatus;
