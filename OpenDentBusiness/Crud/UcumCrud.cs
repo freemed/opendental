@@ -7,12 +7,12 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	public class UCUMCrud {
+	public class UcumCrud {
 		///<summary>Gets one UCUM object from the database using the primary key.  Returns null if not found.</summary>
-		public static UCUM SelectOne(long uCUMNum){
+		public static Ucum SelectOne(long uCUMNum){
 			string command="SELECT * FROM ucum "
 				+"WHERE UCUMNum = "+POut.Long(uCUMNum);
-			List<UCUM> list=TableToList(Db.GetTable(command));
+			List<Ucum> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
 			}
@@ -20,11 +20,11 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one UCUM object from the database using a query.</summary>
-		public static UCUM SelectOne(string command){
+		public static Ucum SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
-			List<UCUM> list=TableToList(Db.GetTable(command));
+			List<Ucum> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
 			}
@@ -32,22 +32,22 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of UCUM objects from the database using a query.</summary>
-		public static List<UCUM> SelectMany(string command){
+		public static List<Ucum> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
-			List<UCUM> list=TableToList(Db.GetTable(command));
+			List<Ucum> list=TableToList(Db.GetTable(command));
 			return list;
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		public static List<UCUM> TableToList(DataTable table){
-			List<UCUM> retVal=new List<UCUM>();
-			UCUM uCUM;
+		public static List<Ucum> TableToList(DataTable table){
+			List<Ucum> retVal=new List<Ucum>();
+			Ucum uCUM;
 			for(int i=0;i<table.Rows.Count;i++) {
-				uCUM=new UCUM();
-				uCUM.UCUMNum    = PIn.Long  (table.Rows[i]["UCUMNum"].ToString());
-				uCUM.UCUMCode   = PIn.String(table.Rows[i]["UCUMCode"].ToString());
+				uCUM=new Ucum();
+				uCUM.UcumNum    = PIn.Long  (table.Rows[i]["UCUMNum"].ToString());
+				uCUM.UcumCode   = PIn.String(table.Rows[i]["UCUMCode"].ToString());
 				uCUM.Description= PIn.String(table.Rows[i]["Description"].ToString());
 				uCUM.IsInUse    = PIn.Bool  (table.Rows[i]["IsInUse"].ToString());
 				retVal.Add(uCUM);
@@ -56,9 +56,9 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one UCUM into the database.  Returns the new priKey.</summary>
-		public static long Insert(UCUM uCUM){
+		public static long Insert(Ucum uCUM){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				uCUM.UCUMNum=DbHelper.GetNextOracleKey("ucum","UCUMNum");
+				uCUM.UcumNum=DbHelper.GetNextOracleKey("ucum","UCUMNum");
 				int loopcount=0;
 				while(loopcount<100){
 					try {
@@ -66,7 +66,7 @@ namespace OpenDentBusiness.Crud{
 					}
 					catch(Oracle.DataAccess.Client.OracleException ex){
 						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
-							uCUM.UCUMNum++;
+							uCUM.UcumNum++;
 							loopcount++;
 						}
 						else{
@@ -82,9 +82,9 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one UCUM into the database.  Provides option to use the existing priKey.</summary>
-		public static long Insert(UCUM uCUM,bool useExistingPK){
+		public static long Insert(Ucum uCUM,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
-				uCUM.UCUMNum=ReplicationServers.GetKey("ucum","UCUMNum");
+				uCUM.UcumNum=ReplicationServers.GetKey("ucum","UCUMNum");
 			}
 			string command="INSERT INTO ucum (";
 			if(useExistingPK || PrefC.RandomKeys) {
@@ -92,37 +92,37 @@ namespace OpenDentBusiness.Crud{
 			}
 			command+="UCUMCode,Description,IsInUse) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
-				command+=POut.Long(uCUM.UCUMNum)+",";
+				command+=POut.Long(uCUM.UcumNum)+",";
 			}
 			command+=
-				 "'"+POut.String(uCUM.UCUMCode)+"',"
+				 "'"+POut.String(uCUM.UcumCode)+"',"
 				+"'"+POut.String(uCUM.Description)+"',"
 				+    POut.Bool  (uCUM.IsInUse)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {
-				uCUM.UCUMNum=Db.NonQ(command,true);
+				uCUM.UcumNum=Db.NonQ(command,true);
 			}
-			return uCUM.UCUMNum;
+			return uCUM.UcumNum;
 		}
 
 		///<summary>Updates one UCUM in the database.</summary>
-		public static void Update(UCUM uCUM){
+		public static void Update(Ucum uCUM){
 			string command="UPDATE ucum SET "
-				+"UCUMCode   = '"+POut.String(uCUM.UCUMCode)+"', "
+				+"UCUMCode   = '"+POut.String(uCUM.UcumCode)+"', "
 				+"Description= '"+POut.String(uCUM.Description)+"', "
 				+"IsInUse    =  "+POut.Bool  (uCUM.IsInUse)+" "
-				+"WHERE UCUMNum = "+POut.Long(uCUM.UCUMNum);
+				+"WHERE UCUMNum = "+POut.Long(uCUM.UcumNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Updates one UCUM in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		public static void Update(UCUM uCUM,UCUM oldUCUM){
+		public static void Update(Ucum uCUM,Ucum oldUCUM){
 			string command="";
-			if(uCUM.UCUMCode != oldUCUM.UCUMCode) {
+			if(uCUM.UcumCode != oldUCUM.UcumCode) {
 				if(command!=""){ command+=",";}
-				command+="UCUMCode = '"+POut.String(uCUM.UCUMCode)+"'";
+				command+="UCUMCode = '"+POut.String(uCUM.UcumCode)+"'";
 			}
 			if(uCUM.Description != oldUCUM.Description) {
 				if(command!=""){ command+=",";}
@@ -136,7 +136,7 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE ucum SET "+command
-				+" WHERE UCUMNum = "+POut.Long(uCUM.UCUMNum);
+				+" WHERE UCUMNum = "+POut.Long(uCUM.UcumNum);
 			Db.NonQ(command);
 		}
 

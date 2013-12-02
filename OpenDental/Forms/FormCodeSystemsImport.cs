@@ -278,6 +278,10 @@ subject to the End User limitations noted in 4.","SNOMED CT sub-license End User
 						CodeSystems.ImportSop(tempFile);
 						MsgBox.Show(this,"SOP codes imported successfully.");
 						break;
+					case "UCUM":
+						CodeSystems.ImportUcum(tempFile);
+						MsgBox.Show(this,"UCUM codes imported successfully.");
+						break;
 					default:
 						//should never happen
 						return false;

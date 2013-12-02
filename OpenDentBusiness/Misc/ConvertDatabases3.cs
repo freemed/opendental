@@ -2236,11 +2236,11 @@ namespace OpenDentBusiness {
 					command="DROP TABLE IF EXISTS ucum";
 					Db.NonQ(command);
 					command=@"CREATE TABLE ucum (
-						UCUMNum bigint NOT NULL auto_increment PRIMARY KEY,
-						UCUMCode varchar(255) NOT NULL,
+						UcumNum bigint NOT NULL auto_increment PRIMARY KEY,
+						UcumCode varchar(255) NOT NULL,
 						Description varchar(255) NOT NULL,
 						IsInUse tinyint NOT NULL,
-						INDEX(UCUMCode)
+						INDEX(UcumCode)
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
 				}
@@ -2248,16 +2248,19 @@ namespace OpenDentBusiness {
 					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE ucum'; EXCEPTION WHEN OTHERS THEN NULL; END;";
 					Db.NonQ(command);
 					command=@"CREATE TABLE ucum (
-						UCUMNum number(20) NOT NULL,
-						UCUMCode varchar2(255),
+						UcumNum number(20) NOT NULL,
+						UcumCode varchar2(255),
 						Description varchar2(255),
 						IsInUse number(3) NOT NULL,
-						CONSTRAINT ucum_UCUMNum PRIMARY KEY (UCUMNum)
+						CONSTRAINT ucum_UcumNum PRIMARY KEY (UcumNum)
 						)";
 					Db.NonQ(command);
-					command=@"CREATE INDEX ucum_UCUMCode ON ucum (UCUMCode)";
+					command=@"CREATE INDEX ucum_UcumCode ON ucum (UcumCode)";
 					Db.NonQ(command);
 				}
+				//Add UCUM to Code System Importer
+				command=@"INSERT INTO codesystem (CodeSystemNum,CodeSystemName,HL7OID) VALUES (13,'UCUM','2.16.840.1.113883.6.8')";
+				Db.NonQ(command);
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE ehrcareplan ADD DatePlanned date NOT NULL DEFAULT '0001-01-01'";
 					Db.NonQ(command);

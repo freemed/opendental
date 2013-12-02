@@ -59,6 +59,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
 		public static void ImportCdcrec(string tempFileName) {
+			if(tempFileName==null) {
+				return;
+			}
 			HashSet<string> codeHash=new HashSet<string>(Cdcrecs.GetAllCodes());
 			string[] lines=File.ReadAllLines(tempFileName);
 			string[] arrayCDCREC;
@@ -81,6 +84,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Called after user provides resource file.  Throws exceptions.</summary>
 		public static void ImportCpt(string tempFileName) {
+			if(tempFileName==null) {
+				return;
+			}
 			HashSet<string> codeHash=new HashSet<string>(Cpts.GetAllCodes());
 			string[] lines=File.ReadAllLines(tempFileName);
 			string[] arrayCpt;
@@ -106,6 +112,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
 		public static void ImportCvx(string tempFileName) {
+			if(tempFileName==null) {
+				return;
+			}
 			HashSet<string> codeHash=new HashSet<string>(Cvxs.GetAllCodes());
 			string[] lines=File.ReadAllLines(tempFileName);
 			string[] arrayCvx;
@@ -124,6 +133,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
 		public static void ImportHcpcs(string tempFileName) {
+			if(tempFileName==null) {
+				return;
+			}
 			HashSet<string> codeHash=new HashSet<string>(Hcpcses.GetAllCodes());
 			string[] lines=File.ReadAllLines(tempFileName);
 			string[] arrayHCPCS;
@@ -142,6 +154,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
 		public static void ImportIcd10(string tempFileName) {
+			if(tempFileName==null) {
+				return;
+			}
 			HashSet<string> codeHash=new HashSet<string>(Icd10s.GetAllCodes());
 			string[] lines=File.ReadAllLines(tempFileName);
 			string[] arrayICD10;
@@ -161,6 +176,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
 		public static void ImportIcd9(string tempFileName) {
+			if(tempFileName==null) {
+				return;
+			}
 			//Customers may have an old codeset that has a truncated uppercase description, if so we want to update with new descriptions.
 			bool IsOldDescriptions=ICD9s.IsOldDescriptions();
 			HashSet<string> codeHash=new HashSet<string>(ICD9s.GetAllCodes());
@@ -186,6 +204,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
 		public static void ImportLoinc(string tempFileName) {
+			if(tempFileName==null) {
+				return;
+			}
 			HashSet<string> codeHash=new HashSet<string>(Loincs.GetAllCodes());
 			string[] lines=File.ReadAllLines(tempFileName);
 			string[] arrayLoinc;
@@ -220,6 +241,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
 		public static void ImportRxNorm(string tempFileName) {
+			if(tempFileName==null) {
+				return;
+			}
 			HashSet<string> codeHash=new HashSet<string>(RxNorms.GetAllCodes());
 			string[] lines=File.ReadAllLines(tempFileName);
 			string[] arrayRxNorm;
@@ -239,6 +263,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
 		public static void ImportSnomed(string tempFileName) {
+			if(tempFileName==null) {
+				return;
+			}
 			HashSet<string> codeHash=new HashSet<string>(Snomeds.GetAllCodes());
 			string[] lines=File.ReadAllLines(tempFileName);
 			string[] arraySnomed;
@@ -257,6 +284,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
 		public static void ImportSop(string tempFileName) {
+			if(tempFileName==null) {
+				return;
+			}
 			HashSet<string> codeHash=new HashSet<string>(Sops.GetAllCodes());
 			string[] lines=File.ReadAllLines(tempFileName);
 			string[] arraySop;
@@ -269,6 +299,28 @@ namespace OpenDentBusiness{
 				sop.SopCode			=arraySop[0];
 				sop.Description	=arraySop[1];
 				Sops.Insert(sop);
+			}
+			File.Delete(tempFileName);
+		}
+
+		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
+		public static void ImportUcum(string tempFileName) {
+			if(tempFileName==null) {
+				return;
+			}
+			HashSet<string> codeHash=new HashSet<string>(Ucums.GetAllCodes());
+			string[] lines=File.ReadAllLines(tempFileName);
+			string[] arrayUcum;
+			Ucum ucum=new Ucum();
+			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
+				arrayUcum=lines[i].Split('\t');
+				if(codeHash.Contains(arrayUcum[0])) {//code already exists
+					continue;
+				}
+				ucum.UcumCode			=arrayUcum[0];
+				ucum.Description	=arrayUcum[1];
+				ucum.IsInUse			=false;
+				Ucums.Insert(ucum);
 			}
 			File.Delete(tempFileName);
 		}
