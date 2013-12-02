@@ -321,7 +321,7 @@ namespace OpenDental {
 			// setupToolStripMenuItem
 			// 
 			this.setupToolStripMenuItem.Name = "setupToolStripMenuItem";
-			this.setupToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
+			this.setupToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
 			this.setupToolStripMenuItem.Text = "Setup";
 			this.setupToolStripMenuItem.Click += new System.EventHandler(this.setupToolStripMenuItem_Click);
 			// 
@@ -353,7 +353,6 @@ namespace OpenDental {
 			this.butPatList.Size = new System.Drawing.Size(92, 24);
 			this.butPatList.TabIndex = 23;
 			this.butPatList.Text = "EHR Patient List";
-			this.butPatList.Visible = false;
 			this.butPatList.Click += new System.EventHandler(this.butPatList_Click);
 			// 
 			// butPatExport
@@ -857,7 +856,6 @@ namespace OpenDental {
 
 		private void butPatList_Click(object sender,EventArgs e) {
 			FormPatListEHR2014 FormPL=new FormPatListEHR2014();
-			FormPL.ElementList=new List<EhrPatListElement2014>();
 			FormPL.ShowDialog();
 		}
 

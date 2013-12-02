@@ -9,10 +9,14 @@ using OpenDental.UI;
 
 namespace OpenDental {
 	public partial class FormPatListEHR2014:Form {
-		public List<EhrPatListElement2014> ElementList;
+		private List<EhrPatListElement2014> _elementList;
 
 		public FormPatListEHR2014() {
 			InitializeComponent();
+		}
+
+		private void FormPatListEHR2014_Load(object sender,EventArgs e) {
+			_elementList=new List<EhrPatListElement2014>();
 		}
 
 		private void FillGrid() {
@@ -35,40 +39,40 @@ namespace OpenDental {
 			//gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			for(int i=0;i<ElementList.Count;i++) {
+			for(int i=0;i<_elementList.Count;i++) {
 				row=new ODGridRow();
-				row.Cells.Add(ElementList[i].Restriction.ToString());
-				if(ElementList[i].Restriction==EhrRestrictionType.Problem) {
-					if(Snomeds.CodeExists(ElementList[i].CompareString)) {
-						row.Cells.Add(ElementList[i].CompareString+" - "+Snomeds.GetByCode(ElementList[i].CompareString).Description);
+				row.Cells.Add(_elementList[i].Restriction.ToString());
+				if(_elementList[i].Restriction==EhrRestrictionType.Problem) {
+					if(Snomeds.CodeExists(_elementList[i].CompareString)) {
+						row.Cells.Add(_elementList[i].CompareString+" - "+Snomeds.GetByCode(_elementList[i].CompareString).Description);
 					}
 					else {
-						row.Cells.Add(ElementList[i].CompareString+" - NON-SNOMED CODE");
+						row.Cells.Add(_elementList[i].CompareString+" - NON-SNOMED CODE");
 					}
 				}
 				else {
-					row.Cells.Add(ElementList[i].CompareString);
+					row.Cells.Add(_elementList[i].CompareString);
 				}
-				if(ElementList[i].Restriction==EhrRestrictionType.Gender
-					|| ElementList[i].Restriction==EhrRestrictionType.Problem
-					|| ElementList[i].Restriction==EhrRestrictionType.Medication
-					|| ElementList[i].Restriction==EhrRestrictionType.CommPref
-					|| ElementList[i].Restriction==EhrRestrictionType.Allergy) 
+				if(_elementList[i].Restriction==EhrRestrictionType.Gender
+					|| _elementList[i].Restriction==EhrRestrictionType.Problem
+					|| _elementList[i].Restriction==EhrRestrictionType.Medication
+					|| _elementList[i].Restriction==EhrRestrictionType.CommPref
+					|| _elementList[i].Restriction==EhrRestrictionType.Allergy) 
 				{
 					row.Cells.Add("");
 				}
 				else {
-					row.Cells.Add(ElementList[i].Operand.ToString());
+					row.Cells.Add(_elementList[i].Operand.ToString());
 				}
-				row.Cells.Add(ElementList[i].LabValue);
-				if(ElementList[i].StartDate.Year>1880) {
-					row.Cells.Add(ElementList[i].StartDate.ToShortDateString());
+				row.Cells.Add(_elementList[i].LabValue);
+				if(_elementList[i].StartDate.Year>1880) {
+					row.Cells.Add(_elementList[i].StartDate.ToShortDateString());
 				}
 				else {
 					row.Cells.Add("");
 				}
-				if(ElementList[i].EndDate.Year>1880) {
-					row.Cells.Add(ElementList[i].EndDate.ToShortDateString());
+				if(_elementList[i].EndDate.Year>1880) {
+					row.Cells.Add(_elementList[i].EndDate.ToShortDateString());
 				}
 				else {
 					row.Cells.Add("");
@@ -91,7 +95,7 @@ namespace OpenDental {
 			FormPLEE.IsNew=true;
 			FormPLEE.ShowDialog();
 			if(FormPLEE.DialogResult==DialogResult.OK) {
-				ElementList.Add(FormPLEE.Element);
+				_elementList.Add(FormPLEE.Element);
 			}
 			FillGrid();
 		}
@@ -103,10 +107,10 @@ namespace OpenDental {
 				return;
 			}
 			FormPatListElementEditEHR2014 FormPLEE=new FormPatListElementEditEHR2014();
-			FormPLEE.Element=ElementList[index];
+			FormPLEE.Element=_elementList[index];
 			FormPLEE.ShowDialog();
 			if(FormPLEE.DialogResult==DialogResult.Cancel && FormPLEE.Delete) {
-				ElementList.Remove(ElementList[index]);
+				_elementList.Remove(_elementList[index]);
 			}
 			FillGrid();
 		}
@@ -126,12 +130,12 @@ namespace OpenDental {
 			//    hasOrder=true;
 			//  }
 			//}
-			FormPatListResultsEHR2014 FormPLR14=new FormPatListResultsEHR2014(ElementList);
+			FormPatListResultsEHR2014 FormPLR14=new FormPatListResultsEHR2014(_elementList);
 			FormPLR14.ShowDialog();
 		}
 
 		private void butClear_Click(object sender,EventArgs e) {
-			ElementList.Clear();
+			_elementList.Clear();
 			FillGrid();
 		}
 

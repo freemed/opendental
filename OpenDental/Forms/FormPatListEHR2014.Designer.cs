@@ -181,6 +181,7 @@
 			this.Name = "FormPatListEHR2014";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Patient List";
+			this.Load += new System.EventHandler(this.FormPatListEHR2014_Load);
 			this.ResumeLayout(false);
 
 		}
