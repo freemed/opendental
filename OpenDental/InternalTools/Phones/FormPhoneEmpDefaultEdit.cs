@@ -683,6 +683,9 @@ namespace OpenDental{
 			}
 			//Get the current database state of the phone emp default (before we change it)
 			PhoneEmpDefault pedFromDatabase=PhoneEmpDefaults.GetOne(PedCur.EmployeeNum);
+			if(pedFromDatabase==null) {
+				pedFromDatabase=new PhoneEmpDefault();
+			}
 			int newExtension=PIn.Int(textPhoneExt.Text);
 			bool extensionChange=pedFromDatabase.PhoneExt!=newExtension;
 			if(extensionChange) { //Only check when extension has changed and clocked in.
@@ -741,6 +744,13 @@ namespace OpenDental{
 			PedCur.IsTriageOperator=checkIsTriageOperator.Checked;
 			if(IsNew){
 				PhoneEmpDefaults.Insert(PedCur);
+				//insert the new Phone record to keep the 2 tables in sync
+				Phone phoneNew=new Phone();
+				phoneNew.EmployeeName=PedCur.EmpName;
+				phoneNew.EmployeeNum=PedCur.EmployeeNum;
+				phoneNew.Extension=PedCur.PhoneExt;
+				phoneNew.ClockStatus=ClockStatusEnum.Home;
+				Phones.Insert(phoneNew);
 			}
 			else{
 				PhoneEmpDefaults.Update(PedCur);

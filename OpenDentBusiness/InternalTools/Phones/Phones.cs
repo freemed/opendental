@@ -145,6 +145,14 @@ namespace OpenDentBusiness {
 			}
 		}
 
+		public static void Insert(Phone phone) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),phone);
+				return;
+			}
+			Crud.PhoneCrud.Insert(phone);//db sets the PK
+		}
+
 		public static List<Phone> GetPhoneList() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Phone>>(MethodBase.GetCurrentMethod());
