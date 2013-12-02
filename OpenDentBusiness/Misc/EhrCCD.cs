@@ -222,10 +222,10 @@ Body
 Allergies
 =====================================================================================================");
 			AllergyDef allergyDef;
-			List<Allergy> listAllergy=Allergies.Refresh(_patOutCcd.PatNum);
-			List<Allergy> listAllergiesToExport=new List<Allergy>();
-			for(int i=0;i<listAllergy.Count;i++) {
-				allergyDef=AllergyDefs.GetOne(listAllergy[i].AllergyDefNum);
+			List<Allergy> listAllergiesAll=Allergies.Refresh(_patOutCcd.PatNum);
+			List<Allergy> listAllergiesFiltered=new List<Allergy>();
+			for(int i=0;i<listAllergiesAll.Count;i++) {
+				allergyDef=AllergyDefs.GetOne(listAllergiesAll[i].AllergyDefNum);
 				bool isMedAllergy=false;
 				if(allergyDef.MedicationNum!=0) {
 					Medication med=Medications.GetMedication(allergyDef.MedicationNum);
@@ -240,11 +240,16 @@ Allergies
 				if(!isMedAllergy && !isSnomedAllergy) {
 					continue;
 				}
-				listAllergiesToExport.Add(listAllergy[i]);
+				listAllergiesFiltered.Add(listAllergiesAll[i]);
 			}
 			Start("component");
 			Start("section");
-			TemplateId("2.16.840.1.113883.10.20.22.2.6.1");//page 230 Template for required entries "2.16.840.1.113883.10.20.22.2.6.1". Template for optional entries "2.16.840.1.113883.10.20.22.2.6".
+			if(listAllergiesFiltered.Count==0) {
+				TemplateId("2.16.840.1.113883.10.20.22.2.6");//page 230 Allergy template with optional entries.
+			}
+			else {
+				TemplateId("2.16.840.1.113883.10.20.22.2.6.1");//page 230 Allergy template with required entries.
+			}
 			_w.WriteComment("Allergies section template");
 			StartAndEnd("code","code","48765-2","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Allergies");
 			_w.WriteElementString("title","Allergies and Adverse Reactions");
@@ -259,8 +264,8 @@ Allergies
 			End("tr");
 			End("thead");
 			Start("tbody");
-			for(int i=0;i<listAllergiesToExport.Count;i++) {
-				Allergy allergy=listAllergiesToExport[i];
+			for(int i=0;i<listAllergiesFiltered.Count;i++) {
+				Allergy allergy=listAllergiesFiltered[i];
 				allergyDef=AllergyDefs.GetOne(allergy.AllergyDefNum);
 				Start("tr");
 				if(allergyDef.SnomedAllergyTo!="") {//Is Snomed allergy.
@@ -279,8 +284,8 @@ Allergies
 			End("tbody");
 			End("table");
 			End("text");
-			for(int i=0;i<listAllergiesToExport.Count;i++) {
-				Allergy allergy=listAllergiesToExport[i];
+			for(int i=0;i<listAllergiesFiltered.Count;i++) {
+				Allergy allergy=listAllergiesFiltered[i];
 				allergyDef=AllergyDefs.GetOne(allergy.AllergyDefNum);
 				string allergyType="";
 				string allergyTypeName="";
@@ -447,11 +452,23 @@ Allergies
 =====================================================================================================
 Immunizations
 =====================================================================================================");
-			List<Allergy> listAllergy=Allergies.Refresh(_patOutCcd.PatNum);//TODO: Change to Immunizations once they get implemented
+			List<VaccinePat> listVaccinePatsAll=VaccinePats.Refresh(_patOutCcd.PatNum);
+			List<VaccinePat> listVaccinePatsFiltered=new List<VaccinePat>();
+			for(int i=0;i<listVaccinePatsAll.Count;i++) {
+				if(listVaccinePatsAll[i].NotGiven) {
+					continue;
+				}
+				listVaccinePatsFiltered.Add(listVaccinePatsAll[i]);
+			}
 			Start("component");
 			Start("section");
-			TemplateId("2.16.840.1.113883.10.20.22.2.2.1");
-			_w.WriteComment("immunizations section template");
+			if(listVaccinePatsFiltered.Count==0) {
+				TemplateId("2.16.840.1.113883.10.20.22.2.2");//Immunizations section with coded entries optional.
+			}
+			else {
+				TemplateId("2.16.840.1.113883.10.20.22.2.2.1");//Immunizations section with coded entries required.
+			}
+			_w.WriteComment("Immunizations section template");
 			StartAndEnd("code","code","11369-6","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","History of immunizations");
 			_w.WriteElementString("title","IMMUNIZATIONS");
 			Start("text");//The following text will be parsed as html with a style sheet to be human readable.
@@ -463,20 +480,22 @@ Immunizations
 			_w.WriteElementString("th","Status");
 			End("tr");
 			End("thead");
-			Start("tbody");//TODO: Fill Immune Table
-			for(int i=0;i<listAllergy.Count;i++) {
+			Start("tbody");
+			for(int i=0;i<listVaccinePatsFiltered.Count;i++) {
+				VaccineDef vaccineDef=VaccineDefs.GetOne(listVaccinePatsFiltered[i].VaccineDefNum);
 				Start("tr");
-				_w.WriteElementString("td","INSERT Vaccine Info");
-				_w.WriteElementString("td","INSERT DateStart");
-				_w.WriteElementString("td","INSERT Status");
+				_w.WriteElementString("td",vaccineDef.VaccineName);
+				DateElement("td",listVaccinePatsFiltered[i].DateTimeStart);
+				_w.WriteElementString("td","Completed");
 				End("tr");
 			}
 			End("tbody");
 			End("table");
 			End("text");
-			for(int i=0;i<listAllergy.Count;i++) {
+			for(int i=0;i<listVaccinePatsFiltered.Count;i++) {
 				Start("entry","typeCode","DRIV");
-				Start("substanceAdministration","classCode","SBADM","moodCode","EVN","negationInd","INSERT Immunization Taken Status");
+				bool isTaken=true;//TODO: Set value depending on data.
+				Start("substanceAdministration","classCode","SBADM","moodCode","EVN","negationInd",isTaken?"true":"false");
 				TemplateId("2.16.840.1.113883.10.20.22.4.52");
 				_w.WriteComment("Immunization Activity Template");
 				Guid();
@@ -508,11 +527,26 @@ Immunizations
 =====================================================================================================
 Medications
 =====================================================================================================");
-			List<MedicationPat> listMedPat=MedicationPats.Refresh(_patOutCcd.PatNum,true);
+			List<MedicationPat> listMedPatsAll=MedicationPats.Refresh(_patOutCcd.PatNum,true);
+			List<MedicationPat> listMedPatsFiltered=new List<MedicationPat>();
+			for(int i=0;i<listMedPatsAll.Count;i++) {
+				if(listMedPatsAll[i].RxCui==0) {
+					continue;
+				}
+				if(listMedPatsAll[i].MedicationNum==0) {
+					continue;
+				}
+				listMedPatsFiltered.Add(listMedPatsAll[i]);
+			}
 			Medication med;
 			Start("component");
 			Start("section");
-			TemplateId("2.16.840.1.113883.10.20.22.2.1.1");//Required Medication Section
+			if(listMedPatsFiltered.Count==0) {
+				TemplateId("2.16.840.1.113883.10.20.22.2.1");//Medication section with coded entries optional.
+			}
+			else {
+				TemplateId("2.16.840.1.113883.10.20.22.2.1.1");//Medication section with coded entries required.
+			}
 			_w.WriteComment("Medications section template");
 			StartAndEnd("code","code","10160-0","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","History of medication use");
 			_w.WriteElementString("title","Medications");
@@ -530,36 +564,30 @@ Medications
 			End("tr");
 			End("thead");
 			Start("tbody");
-			for(int i=0;i<listMedPat.Count;i++) {
-				if(listMedPat[i].RxCui==0) {
-					continue;
-				}
-				if(listMedPat[i].MedicationNum==0) {
-					continue;
-				}
-				med=Medications.GetMedication(listMedPat[i].MedicationNum);
+			for(int i=0;i<listMedPatsFiltered.Count;i++) {
+				med=Medications.GetMedication(listMedPatsFiltered[i].MedicationNum);
 				Start("tr");
 				_w.WriteElementString("td",med.MedName);//Medication
 				_w.WriteElementString("td",med.Notes);//Directions
-				_w.WriteElementString("td",listMedPat[i].DateStart.ToShortDateString());//Start Date
-				DateText("td",listMedPat[i].DateStop);//End Date
-				_w.WriteElementString("td",MedicationPats.IsMedActive(listMedPat[i])?"Active":"Inactive");//Status
-				_w.WriteElementString("td",listMedPat[i].PatNote);//Indications
-				_w.WriteElementString("td",listMedPat[i].MedDescript);//Fill Instructions
+				_w.WriteElementString("td",listMedPatsFiltered[i].DateStart.ToShortDateString());//Start Date
+				DateText("td",listMedPatsFiltered[i].DateStop);//End Date
+				_w.WriteElementString("td",MedicationPats.IsMedActive(listMedPatsFiltered[i])?"Active":"Inactive");//Status
+				_w.WriteElementString("td",listMedPatsFiltered[i].PatNote);//Indications
+				_w.WriteElementString("td",listMedPatsFiltered[i].MedDescript);//Fill Instructions
 				End("tr");
 			}
 			End("tbody");
 			End("table");
 			End("text");
 			string status;//May not be necessary, but no harm in setting it.
-			for(int i=0;i<listMedPat.Count;i++) {
-				long rxCui=listMedPat[i].RxCui;
-				string strMedName=listMedPat[i].MedDescript;//This might be blank, for example not from NewCrop.  
-				if(listMedPat[i].MedicationNum!=0) {//If NewCrop, this will be 0.  Also might be zero in the future when we start allowing freeform medications.
-					med=Medications.GetMedication(listMedPat[i].MedicationNum);
+			for(int i=0;i<listMedPatsFiltered.Count;i++) {
+				long rxCui=listMedPatsFiltered[i].RxCui;
+				string strMedName=listMedPatsFiltered[i].MedDescript;//This might be blank, for example not from NewCrop.  
+				if(listMedPatsFiltered[i].MedicationNum!=0) {//If NewCrop, this will be 0.  Also might be zero in the future when we start allowing freeform medications.
+					med=Medications.GetMedication(listMedPatsFiltered[i].MedicationNum);
 					rxCui=med.RxCui;
 					strMedName=med.MedName;
-					if(listMedPat[i].DateStop.Year>1880 && listMedPat[i].DateStop>=DateTime.Now) {
+					if(listMedPatsFiltered[i].DateStop.Year>1880 && listMedPatsFiltered[i].DateStop>=DateTime.Now) {
 						status="active";
 					}
 					else {
@@ -577,8 +605,8 @@ Medications
 				StartAndEnd("statusCode","code","completed");//Fixed Value
 				Start("effectiveTime");
 				_w.WriteAttributeString("xsi","type",null,"IVL_TS");
-				StartAndEnd("low","value",listMedPat[i].DateStart.ToString("yyyymmdd"));
-				StartAndEnd("high","value",listMedPat[i].DateStop.ToString("yyyymmdd"));
+				StartAndEnd("low","value",listMedPatsFiltered[i].DateStart.ToString("yyyymmdd"));
+				StartAndEnd("high","value",listMedPatsFiltered[i].DateStop.ToString("yyyymmdd"));
 				End("effectiveTime");
 				Start("consumable");
 				Start("manufacturedProduct","classCode","MANU");
@@ -603,9 +631,15 @@ Medications
 =====================================================================================================
 Care Plan
 =====================================================================================================");
+			List<EhrCarePlan> listEhrCarePlansAll=EhrCarePlans.Refresh(_patOutCcd.PatNum);
+			List<EhrCarePlan> listEhrCarePlansFiltered=new List<EhrCarePlan>();
+			for(int i=0;i<listEhrCarePlansAll.Count;i++) {
+				//No filters yet. This loop is here to match our pattern. If we need to add filters later, the change will be safer and more obvious.
+				listEhrCarePlansFiltered.Add(listEhrCarePlansAll[i]);
+			}
 			Start("component");
 			Start("section");
-			TemplateId("2.16.840.1.113883.10.20.22.2.10");
+			TemplateId("2.16.840.1.113883.10.20.22.2.10");//Only one template id allowed (unlike other sections).
 			_w.WriteComment("Plan of Care section template");
 			StartAndEnd("code","code","18776-5","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Treatment plan");
 			_w.WriteElementString("title","Care Plan");
@@ -618,27 +652,26 @@ Care Plan
 			End("tr");
 			End("thead");
 			Start("tbody");
-			List<EhrCarePlan> listEhrCarePlans=EhrCarePlans.Refresh(_patOutCcd.PatNum);
-			for(int i=0;i<listEhrCarePlans.Count;i++) {
+			for(int i=0;i<listEhrCarePlansFiltered.Count;i++) {
 				Start("tr");
-				_w.WriteElementString("td",listEhrCarePlans[i].Instructions);//Planned Activity
-				DateText("td",listEhrCarePlans[i].DatePlanned);//Planned Date
+				_w.WriteElementString("td",listEhrCarePlansFiltered[i].Instructions);//Planned Activity
+				DateText("td",listEhrCarePlansFiltered[i].DatePlanned);//Planned Date
 				End("tr");
 			}
 			End("tbody");
 			End("table");
 			End("text");
-			for(int i=0;i<listEhrCarePlans.Count;i++) {
+			for(int i=0;i<listEhrCarePlansFiltered.Count;i++) {
 				Start("entry","typeCode","DRIV");
 				Start("act","classCode","ACT","moodCode","INT");
 				TemplateId("2.16.840.1.113883.10.20.22.4.20");
 				_w.WriteComment("Instructions template");
 				Start("code");
 				_w.WriteAttributeString("xsi","type",null,"CE");
-				Snomed snomedEducation=Snomeds.GetByCode(listEhrCarePlans[i].SnomedEducation);
+				Snomed snomedEducation=Snomeds.GetByCode(listEhrCarePlansFiltered[i].SnomedEducation);
 				Attribs("code",snomedEducation.SnomedCode,"codeSystem",strCodeSystemSnomed,"displayName",snomedEducation.Description);
 				End("code");
-				_w.WriteElementString("text",listEhrCarePlans[i].Instructions);
+				_w.WriteElementString("text",listEhrCarePlansFiltered[i].Instructions);
 				StartAndEnd("statusCode","code","completed");
 				End("act");
 				End("entry");
@@ -649,40 +682,49 @@ Care Plan
 
 		///<summary>Helper for GenerateCCD().  Problem section.</summary>
 		private static void GenerateCcdSectionProblems() {
+			string snomedProblemType="55607006";
 			_w.WriteComment(@"
 =====================================================================================================
 Problems
 =====================================================================================================");
-			List<Disease> listProblem=Diseases.Refresh(_patOutCcd.PatNum);
+			List<Disease> listProblemsAll=Diseases.Refresh(_patOutCcd.PatNum);
+			List<Disease> listProblemsFiltered=new List<Disease>();
+			for(int i=0;i<listProblemsAll.Count;i++) {
+				if(listProblemsAll[i].SnomedProblemType!="" && listProblemsAll[i].SnomedProblemType!=snomedProblemType) {
+					continue;//Not a "problem".
+				}
+				if(listProblemsAll[i].FunctionStatus!=FunctionalStatus.Problem) {
+					continue;//Not a "problem".
+				}
+				listProblemsFiltered.Add(listProblemsAll[i]);
+			}
 			string status="Inactive";
 			string statusCode="73425007";
 			string statusOther="active";
 			Start("component");
 			Start("section");
-			TemplateId("2.16.840.1.113883.10.20.22.2.5.1");
+			if(listProblemsFiltered.Count==0) {
+				TemplateId("2.16.840.1.113883.10.20.22.2.5");//Problems section with coded entries optional.
+			}
+			else {
+				TemplateId("2.16.840.1.113883.10.20.22.2.5.1");//Problems section with coded entries required.
+			}
 			_w.WriteComment("Problems section template");
 			StartAndEnd("code","code","11450-4","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Problem list");
 			_w.WriteElementString("title","PROBLEMS");
 			Start("text");
 			StartAndEnd("content","ID","problems");
 			Start("list","listType","ordered");
-			string snomedProblemType="55607006";
-			for(int i=0;i<listProblem.Count;i++) {//Fill Problems Table
-				if(listProblem[i].SnomedProblemType!="" && listProblem[i].SnomedProblemType!=snomedProblemType) {
-					continue;//Not a "problem".
-				}
-				if(listProblem[i].FunctionStatus!=FunctionalStatus.Problem) {
-					continue;//Not a "problem".
-				}
+			for(int i=0;i<listProblemsFiltered.Count;i++) {//Fill Problems Table				
 				Start("item");
-				_w.WriteString(DiseaseDefs.GetName(listProblem[i].DiseaseDefNum)+" : "+"Status - ");
-				if(listProblem[i].ProbStatus==ProblemStatus.Active) {
+				_w.WriteString(DiseaseDefs.GetName(listProblemsFiltered[i].DiseaseDefNum)+" : "+"Status - ");
+				if(listProblemsFiltered[i].ProbStatus==ProblemStatus.Active) {
 					_w.WriteString("Active");
 					status="Active";
 					statusCode="55561003";
 					statusOther="active";
 				}
-				else if(listProblem[i].ProbStatus==ProblemStatus.Inactive) {
+				else if(listProblemsFiltered[i].ProbStatus==ProblemStatus.Inactive) {
 					_w.WriteString("Inactive");
 					status="Inactive";
 					statusCode="73425007";
@@ -698,13 +740,7 @@ Problems
 			}
 			End("list");
 			End("text");
-			for(int i=0;i<listProblem.Count;i++) {//Fill Problems Info
-				if(listProblem[i].SnomedProblemType!="" && listProblem[i].SnomedProblemType!=snomedProblemType) {
-					continue;//Not a "problem".
-				}
-				if(listProblem[i].FunctionStatus!=FunctionalStatus.Problem) {
-					continue;//Not a "problem".
-				}
+			for(int i=0;i<listProblemsFiltered.Count;i++) {//Fill Problems Info
 				Start("entry","typeCode","DRIV");
 				Start("act","classCode","ACT","moodCode","EVN");
 				_w.WriteComment("Problem Concern Act template");//Concern Act Section
@@ -713,8 +749,8 @@ Problems
 				StartAndEnd("code","code","CONC","codeSystem","2.16.840.1.113883.5.6","displayName","Concern");
 				StartAndEnd("statusCode","code",statusOther);//Allowed values: active, suspended, aborted, completed.
 				Start("effectiveTime");
-				StartAndEnd("low","value",listProblem[i].DateStart.ToString("yyyymmdd"));
-				DateElement("high",listProblem[i].DateStop);
+				StartAndEnd("low","value",listProblemsFiltered[i].DateStart.ToString("yyyymmdd"));
+				DateElement("high",listProblemsFiltered[i].DateStop);
 				End("effectiveTime");
 				Start("entryRelationship","typeCode","SUBJ");
 				Start("observation","classCode","OBS","moodCode","EVN");
@@ -724,11 +760,11 @@ Problems
 				StartAndEnd("code","code",snomedProblemType,"codeSystem",strCodeSystemSnomed,"displayName","Problem");
 				StartAndEnd("statusCode","code","completed");//Allowed values: completed.
 				Start("effectiveTime");
-				DateElement("low",listProblem[i].DateStart);
+				DateElement("low",listProblemsFiltered[i].DateStart);
 				End("effectiveTime");
 				Start("value");
 				_w.WriteAttributeString("xsi","type",null,"CD");
-				Attribs("code",DiseaseDefs.GetItem(listProblem[i].DiseaseDefNum).SnomedCode,"codeSystem",strCodeSystemSnomed,"displayName",DiseaseDefs.GetItem(listProblem[i].DiseaseDefNum).DiseaseName);
+				Attribs("code",DiseaseDefs.GetItem(listProblemsFiltered[i].DiseaseDefNum).SnomedCode,"codeSystem",strCodeSystemSnomed,"displayName",DiseaseDefs.GetItem(listProblemsFiltered[i].DiseaseDefNum).DiseaseName);
 				End("value");
 				Start("entryRelationship","typeCode","REFR");
 				Start("observation","classCode","OBS","moodCode","EVN");
@@ -765,22 +801,22 @@ Problems
 =====================================================================================================
 Laboratory Test Results
 =====================================================================================================");
-			List<LabResult> listLabResult=LabResults.GetAllForPatient(_patOutCcd.PatNum);
-			List<LabResult> listLabResultValid=new List<LabResult>();
-			for(int i=0;i<listLabResult.Count;i++) {
-				if(listLabResult[i].TestID=="") {
+			List<LabResult> listLabResultAll=LabResults.GetAllForPatient(_patOutCcd.PatNum);
+			List<LabResult> listLabResultFiltered=new List<LabResult>();
+			for(int i=0;i<listLabResultAll.Count;i++) {
+				if(listLabResultAll[i].TestID=="") {
 					continue;//Blank codes not allowed in format.
 				}
-				listLabResultValid.Add(listLabResult[i]);
+				listLabResultFiltered.Add(listLabResultAll[i]);
 			}
 			LabPanel labPanel;
 			Start("component");
 			Start("section");
-			if(listLabResultValid.Count==0) {
-				TemplateId("2.16.840.1.113883.10.20.22.2.3");//page 309 Results section with entries optional. We could always use this templateid, but the TTT complained when we used this templateid for module b.2.
+			if(listLabResultFiltered.Count==0) {
+				TemplateId("2.16.840.1.113883.10.20.22.2.3");//page 309 Results section with coded entries optional.
 			}
 			else {
-				TemplateId("2.16.840.1.113883.10.20.22.2.3.1");//page 309 Results section with entries required.
+				TemplateId("2.16.840.1.113883.10.20.22.2.3.1");//page 309 Results section with coded entries required.
 			}
 			_w.WriteComment("Diagnostic Results section template");
 			StartAndEnd("code","code","30954-2","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Results");
@@ -797,20 +833,20 @@ Laboratory Test Results
 			End("tr");
 			End("thead");
 			Start("tbody");
-			for(int i=0;i<listLabResultValid.Count;i++) {
+			for(int i=0;i<listLabResultFiltered.Count;i++) {
 				Start("tr");
-				_w.WriteElementString("td",listLabResultValid[i].TestID);//LOINC Code
-				_w.WriteElementString("td",listLabResultValid[i].TestName);//Test
-				_w.WriteElementString("td",listLabResultValid[i].ObsValue+" "+listLabResultValid[i].ObsUnits);//Result
-				_w.WriteElementString("td",listLabResultValid[i].AbnormalFlag.ToString());//Abnormal Flag
-				_w.WriteElementString("td",listLabResultValid[i].DateTimeTest.ToShortDateString());//Date Performed
+				_w.WriteElementString("td",listLabResultFiltered[i].TestID);//LOINC Code
+				_w.WriteElementString("td",listLabResultFiltered[i].TestName);//Test
+				_w.WriteElementString("td",listLabResultFiltered[i].ObsValue+" "+listLabResultFiltered[i].ObsUnits);//Result
+				_w.WriteElementString("td",listLabResultFiltered[i].AbnormalFlag.ToString());//Abnormal Flag
+				_w.WriteElementString("td",listLabResultFiltered[i].DateTimeTest.ToShortDateString());//Date Performed
 				End("tr");
 			}
 			End("tbody");
 			End("table");
 			End("text");
-			for(int i=0;i<listLabResultValid.Count;i++) {
-				labPanel=LabPanels.GetOne(listLabResultValid[i].LabPanelNum);
+			for(int i=0;i<listLabResultFiltered.Count;i++) {
+				labPanel=LabPanels.GetOne(listLabResultFiltered[i].LabPanelNum);
 				Start("entry","typeCode","DRIV");
 				Start("organizer","classCode","BATTERY","moodCode","EVN");
 				StartAndEnd("templateId","root","2.16.840.1.113883.10.20.22.4.1");
@@ -849,17 +885,17 @@ Laboratory Test Results
 				TemplateId("2.16.840.1.113883.10.20.22.4.2");
 				_w.WriteComment("Result observation template");
 				Guid();
-				StartAndEnd("code","code",listLabResultValid[i].TestID,"displayName",listLabResultValid[i].TestName,"codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc);
+				StartAndEnd("code","code",listLabResultFiltered[i].TestID,"displayName",listLabResultFiltered[i].TestName,"codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc);
 				StartAndEnd("statusCode","code","completed");//Allowed values: aborted, active, cancelled, completed, held, or suspended.
-				StartAndEnd("effectiveTime","value",listLabResultValid[i].DateTimeTest.ToString("yyyyMMddHHmm"));
+				StartAndEnd("effectiveTime","value",listLabResultFiltered[i].DateTimeTest.ToString("yyyyMMddHHmm"));
 				Start("value");
 				_w.WriteAttributeString("xsi","type",null,"PQ");
-				Attribs("value",listLabResultValid[i].ObsValue,"unit",listLabResultValid[i].ObsUnits);
+				Attribs("value",listLabResultFiltered[i].ObsValue,"unit",listLabResultFiltered[i].ObsUnits);
 				End("value");
 				StartAndEnd("interpretationCode","code","N","codeSystem","2.16.840.1.113883.5.83");
 				Start("referenceRange");
 				Start("observationRange");
-				_w.WriteElementString("text",listLabResultValid[i].ObsRange);
+				_w.WriteElementString("text",listLabResultFiltered[i].ObsRange);
 				End("observationRange");
 				End("referenceRange");
 				End("observation");
@@ -877,10 +913,20 @@ Laboratory Test Results
 =====================================================================================================
 Vital Signs
 =====================================================================================================");
-			List<Vitalsign> listVitals=Vitalsigns.Refresh(_patOutCcd.PatNum);
+			List<Vitalsign> listVitalSignsAll=Vitalsigns.Refresh(_patOutCcd.PatNum);
+			List<Vitalsign> listVitalSignsFiltered=new List<Vitalsign>();
+			for(int i=0;i<listVitalSignsAll.Count;i++) {
+				//No filters yet. This loop is here to match our pattern. If we need to add filters later, the change will be safer and more obvious.
+				listVitalSignsFiltered.Add(listVitalSignsAll[i]);
+			}
 			Start("component");
 			Start("section");
-			TemplateId("2.16.840.1.113883.10.20.22.2.4.1");
+			if(listVitalSignsFiltered.Count==0) {
+				TemplateId("2.16.840.1.113883.10.20.22.2.4");//Vital signs section with coded entries optional.
+			}
+			else {
+				TemplateId("2.16.840.1.113883.10.20.22.2.4.1");//Vital signs section with coded entries required.
+			}
 			_w.WriteComment("Problems section template");
 			StartAndEnd("code","code","8716-3","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Vital Signs");
 			_w.WriteElementString("title","VITAL SIGNS");
@@ -894,7 +940,7 @@ Vital Signs
 			End("tr");
 			End("thead");
 			Start("tbody");
-			for(int i=0;i<listVitals.Count;i++) {
+			for(int i=0;i<listVitalSignsFiltered.Count;i++) {
 				Start("tr");
 				_w.WriteElementString("td","Height");
 				_w.WriteElementString("td","Weight");
@@ -904,7 +950,7 @@ Vital Signs
 			End("tbody");
 			End("table");
 			End("text");
-			for(int i=0;i<listVitals.Count;i++) {//Fill Vital Signs Info
+			for(int i=0;i<listVitalSignsFiltered.Count;i++) {//Fill Vital Signs Info
 				Start("entry","typeCode","DRIV");
 				Start("organizer","classCode","CLUSTER","moodCode","EVN");
 				_w.WriteComment("Vital Signs Organizer template");//Vital Signs Organizer
