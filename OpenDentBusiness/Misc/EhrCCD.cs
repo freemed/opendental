@@ -440,12 +440,12 @@ Allergies
 
 		///<summary>Helper for GenerateCCD().</summary>
 		private static void GenerateCcdSectionEncounters() {
-			//TODO:
+			//TODO: Allen
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
 		private static void GenerateCcdSectionFunctionalStatus() {
-			//TODO:
+			//TODO: Allen
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
@@ -794,12 +794,87 @@ Problems
 
 		///<summary>Helper for GenerateCCD().</summary>
 		private static void GenerateCcdSectionProcedures() {
-			//TODO:
+			_w.WriteComment(@"
+=====================================================================================================
+Procedures
+=====================================================================================================");
+			List<Procedure> listProcsAll=Procedures.Refresh(_patOutCcd.PatNum);
+			List<Procedure> listProcsFiltered=new List<Procedure>();
+			for(int i=0;i<listProcsAll.Count;i++) {
+				if(listProcsAll[i].ProcStatus==ProcStat.D) {
+					continue;
+				}
+				listProcsFiltered.Add(listProcsAll[i]);
+			}
+			Start("component");
+			Start("section");
+			if(listProcsFiltered.Count==0) {
+				TemplateId("2.16.840.1.113883.10.20.22.2.7");//Procedures section with coded entries optional (Page 285).
+			}
+			else {
+				TemplateId("2.16.840.1.113883.10.20.22.2.7.1");//Procedures section with coded entries required (Page 285).
+			}
+			_w.WriteComment("Procedures section template");
+			StartAndEnd("code","code","47519-4","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","History of procedures");
+			_w.WriteElementString("title","PROCEDURES");
+			Start("text");//The following text will be parsed as html with a style sheet to be human readable.
+			Start("table","width","100%","border","1");
+			Start("thead");
+			Start("tr");
+			_w.WriteElementString("th","Procedure");
+			_w.WriteElementString("th","Date");
+			End("tr");
+			End("thead");
+			Start("tbody");
+			for(int i=0;i<listProcsFiltered.Count;i++) {
+				Start("tr");
+				_w.WriteElementString("td","INSERT PROCEDURE NAME");//TODO: Fill ProcName
+				DateElement("td",listProcsFiltered[i].DateTP);//TODO: Decide on a date
+				End("tr");
+			}
+			End("tbody");
+			End("table");
+			End("text");
+			for(int i=0;i<listProcsFiltered.Count;i++) {
+				Start("entry","typeCode","DRIV");
+				Start("procedure","classCode","PROC","moodCode","EVN");
+				TemplateId("2.16.840.1.113883.10.20.22.4.14");//Procedure Activity Section (Page 487).
+				_w.WriteComment("Procedure Activity Template");
+				Guid();
+				StartAndEnd("code","code","SNOMEDCODE","codeSystem",strCodeSystemSnomed,"displayName","PROCEDURENAME","codeSystemName",strCodeSystemNameSnomed);//TODO: Fill in Snomeds
+				StartAndEnd("statusCode","code","completed");
+				StartAndEnd("effectiveTime","value","CHOOSEADATE");//Todo: choose a date
+				StartAndEnd("targetSiteCode","code","SNOMEDCODE","codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed,"displayName","SITEOFTHEPROC");//TODO: I included this, but I am not sure if it is necessary or if we can populate it with the relevant info.
+				//The next section I am not sure if we can populate or if we need to, but it isn't hurting anything to add if we just want to comment it out for now.
+				Start("performer");
+				Start("assignedEntity");
+				Guid();
+				Start("addr");
+				_w.WriteElementString("streetAddressLine","STREETNAME");
+				_w.WriteElementString("city","CITYNAME");
+				_w.WriteElementString("state","STATEABRV");
+				_w.WriteElementString("postalCode","ZIP");
+				_w.WriteElementString("country","COUNTRY");//Might be able to default this to US
+				End("addr");
+				StartAndEnd("telecom","use","CHOOSEAPHONETYPE","value","PHONENUMBER");//TODO: Phone type is something like (WP) for work phone
+				Start("representedOrganization");//This section is really completely optional inside the Performer, but it does display the organization name if it is a large group
+				Guid();
+				_w.WriteElementString("name","PRACTICENAME");
+				StartAndEnd("telecom","nullFlavor","UNK");//these are set to UNK because they would be the same as above.
+				StartAndEnd("addr","nullFlavor","UNK");//these are set to UNK because they would be the same as above.
+				End("representedOrganization");
+				End("assignedEntity");
+				End("performer");
+				End("procedure");
+				End("entry");
+			}
+			End("section");
+			End("component");
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
 		private static void GenerateCcdSectionReasonForReferral() {
-			//TODO:
+			//TODO: Allen
 		}
 
 		///<summary>Helper for GenerateCCD().  Exports Labs.</summary>
@@ -916,7 +991,71 @@ Laboratory Test Results
 
 		///<summary>Helper for GenerateCCD().</summary>
 		private static void GenerateCcdSectionSocialHistory() {
-			//TODO:
+			_w.WriteComment(@"
+=====================================================================================================
+Social History
+=====================================================================================================");
+			List<Procedure> listProcsAll=Procedures.Refresh(_patOutCcd.PatNum);//Not sure which lists to use, if we even need one for this section
+			List<Procedure> listProcsFiltered=new List<Procedure>();
+			for(int i=0;i<listProcsAll.Count;i++) {
+				if(listProcsAll[i].ProcStatus==ProcStat.D) {
+					continue;
+				}
+				listProcsFiltered.Add(listProcsAll[i]);
+			}
+			Start("component");
+			Start("section");
+			if(listProcsFiltered.Count==0) {
+				TemplateId("2.16.840.1.113883.10.20.22.2.17");//Social History section with coded entries optional (Page 293).
+			}
+			else {
+				TemplateId("2.16.840.1.113883.10.20.22.2.17.1");//Social History section with coded entries required (Not Sure if this exists).
+			}
+			_w.WriteComment("Social History section template");
+			StartAndEnd("code","code","29762-2","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Social History");
+			_w.WriteElementString("title","SOCIAL HISTORY");
+			Start("text");//The following text will be parsed as html with a style sheet to be human readable.
+			Start("table","width","100%","border","1");
+			Start("thead");
+			Start("tr");
+			_w.WriteElementString("th","Social History Element");
+			_w.WriteElementString("th","Description");
+			_w.WriteElementString("th","Effective Dates");
+			End("tr");
+			End("thead");
+			Start("tbody");
+			for(int i=0;i<listProcsFiltered.Count;i++) {
+				Start("tr");
+				_w.WriteElementString("td","SOCIAL HISTORY");//TODO: Fill Social history
+				_w.WriteElementString("td","SOCIAL HISTORY DESCRIPTION");//TODO: Fill Social history description
+				DateElement("td",listProcsFiltered[i].DateTP);//TODO: Decide on a date
+				End("tr");
+			}
+			End("tbody");
+			End("table");
+			End("text");
+			for(int i=0;i<listProcsFiltered.Count;i++) {
+				//Pregnancy Observation Template could easily be added in the future, but for now it is skipped (Page 453)
+				Start("entry","typeCode","DRIV");
+				Start("observation","classCode","OBS","moodCode","EVN");
+				TemplateId("2.16.840.1.113883.10.22.4.78");//Smoking Status Observation Section (Page 519).
+				_w.WriteComment("Smokin Status Observation Template");
+				Guid();
+				StartAndEnd("code","code","ASSERTION","codeSystem","2.16.840.1.113883.5.4");
+				StartAndEnd("statusCode","code","completed");
+				Start("effectiveTime");
+				StartAndEnd("low","value","STARTDATE");//TODO: Fill Dates
+				StartAndEnd("high","value","ENDDATE");
+				End("effectiveTime");
+				Start("value");
+				_w.WriteAttributeString("xsi","type",null,"CD");
+				Attribs("code","SMOKING STATUS CODE","displayName","SMOKING STATUS NAME","codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed);
+				End("value");
+				End("observation");
+				End("entry");
+			}
+			End("section");
+			End("component");
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
