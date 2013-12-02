@@ -221,12 +221,30 @@ Body
 =====================================================================================================
 Allergies
 =====================================================================================================");
-			List<Allergy> listAllergy=Allergies.Refresh(_patOutCcd.PatNum);
 			AllergyDef allergyDef;
-			Medication med;
+			List<Allergy> listAllergy=Allergies.Refresh(_patOutCcd.PatNum);
+			List<Allergy> listAllergiesToExport=new List<Allergy>();
+			for(int i=0;i<listAllergy.Count;i++) {
+				allergyDef=AllergyDefs.GetOne(listAllergy[i].AllergyDefNum);
+				bool isMedAllergy=false;
+				if(allergyDef.MedicationNum!=0) {
+					Medication med=Medications.GetMedication(allergyDef.MedicationNum);
+					if(med.RxCui!=0) {
+						isMedAllergy=true;
+					}
+				}
+				bool isSnomedAllergy=false;
+				if(allergyDef.SnomedAllergyTo!="") {
+					isSnomedAllergy=true;
+				}
+				if(!isMedAllergy && !isSnomedAllergy) {
+					continue;
+				}
+				listAllergiesToExport.Add(listAllergy[i]);
+			}
 			Start("component");
 			Start("section");
-			TemplateId("2.16.840.1.113883.10.20.22.2.6.1");
+			TemplateId("2.16.840.1.113883.10.20.22.2.6.1");//page 230 Template for required entries "2.16.840.1.113883.10.20.22.2.6.1". Template for optional entries "2.16.840.1.113883.10.20.22.2.6".
 			_w.WriteComment("Allergies section template");
 			StartAndEnd("code","code","48765-2","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Allergies");
 			_w.WriteElementString("title","Allergies and Adverse Reactions");
@@ -241,58 +259,29 @@ Allergies
 			End("tr");
 			End("thead");
 			Start("tbody");
-			for(int i=0;i<listAllergy.Count;i++) {
-				String status=listAllergy[i].StatusIsActive?"Active":"Inactive";
-				allergyDef=AllergyDefs.GetOne(listAllergy[i].AllergyDefNum);
-				bool isMedAllergy=false;
-				med=null;
-				if(allergyDef.MedicationNum!=0) {
-					med=Medications.GetMedication(allergyDef.MedicationNum);
-					if(med.RxCui!=0) {
-						isMedAllergy=true;
-					}
-				}
-				bool isSnomedAllergy=false;
-				if(allergyDef.SnomedAllergyTo!="") {
-					isSnomedAllergy=true;
-				}
-				if(!isMedAllergy && !isSnomedAllergy) {
-					continue;
-				}
+			for(int i=0;i<listAllergiesToExport.Count;i++) {
+				Allergy allergy=listAllergiesToExport[i];
+				allergyDef=AllergyDefs.GetOne(allergy.AllergyDefNum);
 				Start("tr");
-				if(isSnomedAllergy) {
+				if(allergyDef.SnomedAllergyTo!="") {//Is Snomed allergy.
 					Snomed snomedAllergyTo=Snomeds.GetByCode(allergyDef.SnomedAllergyTo);
 					_w.WriteElementString("td",snomedAllergyTo.SnomedCode+" - "+snomedAllergyTo.Description);
 				}
 				else {//Medication allergy
+					Medication med=Medications.GetMedication(allergyDef.MedicationNum);
 					_w.WriteElementString("td",med.RxCui.ToString()+" - "+med.MedName);
 				}
-				_w.WriteElementString("td",listAllergy[i].Reaction);
+				_w.WriteElementString("td",allergy.Reaction);
 				_w.WriteElementString("td",AllergyDefs.GetSnomedAllergyDesc(allergyDef.SnomedType));
-				_w.WriteElementString("td",status);
+				_w.WriteElementString("td",allergy.StatusIsActive?"Active":"Inactive");
 				End("tr");
 			}
 			End("tbody");
 			End("table");
 			End("text");
-			for(int i=0;i<listAllergy.Count;i++) {
-				allergyDef=AllergyDefs.GetOne(listAllergy[i].AllergyDefNum);
-				bool isMedAllergy=false;
-				med=null;
-				if(allergyDef.MedicationNum!=0) {
-					med=Medications.GetMedication(allergyDef.MedicationNum);
-					if(med.RxCui!=0) {
-						isMedAllergy=true;
-					}
-				}
-				bool isSnomedAllergy=false;
-				if(allergyDef.SnomedAllergyTo!="") {
-					isSnomedAllergy=true;
-				}
-				if(!isMedAllergy && !isSnomedAllergy) {
-					continue;
-				}
-				string status=listAllergy[i].StatusIsActive?"Active":"Inactive";
+			for(int i=0;i<listAllergiesToExport.Count;i++) {
+				Allergy allergy=listAllergiesToExport[i];
+				allergyDef=AllergyDefs.GetOne(allergy.AllergyDefNum);
 				string allergyType="";
 				string allergyTypeName="";
 				#region Allergy Type
@@ -342,20 +331,21 @@ Allergies
 				TemplateId("2.16.840.1.113883.10.20.22.4.30");
 				Guid();
 				StartAndEnd("code","code","48765-2","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Allergies and adverse reactions");
-				if(listAllergy[i].StatusIsActive) {
+				//statusCode values allowed: active, suspended, aborted, completed.
+				if(allergy.StatusIsActive) {
 					StartAndEnd("statusCode","code","active");
 				}
 				else {
 					StartAndEnd("statusCode","code","completed");
 				}
 				Start("effectiveTime");
-				if(listAllergy[i].StatusIsActive) {
-					StartAndEnd("low","value",listAllergy[i].DateTStamp.ToString("yyyymmdd"));
+				if(allergy.StatusIsActive) {
+					StartAndEnd("low","value",allergy.DateTStamp.ToString("yyyymmdd"));
 					StartAndEnd("high","nullFlavor","UNK");
 				}
 				else {
 					StartAndEnd("low","nullFlavor","UNK");
-					StartAndEnd("high","value",listAllergy[i].DateTStamp.ToString("yyyymmdd"));
+					StartAndEnd("high","value",allergy.DateTStamp.ToString("yyyymmdd"));
 				}
 				End("effectiveTime");
 				Start("entryRelationship","typeCode","SUBJ");
@@ -367,7 +357,7 @@ Allergies
 				StartAndEnd("statusCode","code","completed");//fixed value (required)
 				Start("effectiveTime");
 				StartAndEnd("low","nullFlavor","UNK");
-				StartAndEnd("high","value",listAllergy[i].DateTStamp.ToString("yyyymmdd"));
+				StartAndEnd("high","value",allergy.DateTStamp.ToString("yyyymmdd"));
 				End("effectiveTime");
 				Start("value");
 				_w.WriteAttributeString("xsi","type",null,"CD");
@@ -377,11 +367,12 @@ Allergies
 				Start("participantRole","classCode","MANU");
 				Start("playingEntity","classCode","MMAT");
 				//pg. 331 item 9. The code must be a "2.16.840.1.113883.3.88.12.80.16 Medication Brand", or "2.16.840.1.113883.3.88.12.80.18 Medication Drug", or "2.16.840.1.113883.3.88.12.80.20 Ingredient Name"
-				if(isSnomedAllergy) {
+				if(allergyDef.SnomedAllergyTo!="") {//Is Snomed allergy.
 					Snomed snomedAllergyTo=Snomeds.GetByCode(allergyDef.SnomedAllergyTo);
 					StartAndEnd("code","code",snomedAllergyTo.SnomedCode,"displayName",snomedAllergyTo.Description,"codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed);
 				}
 				else {//Medication allergy
+					Medication med=Medications.GetMedication(allergyDef.MedicationNum);
 					StartAndEnd("code","code",med.RxCui.ToString(),"displayName",med.MedName,"codeSystem",strCodeSystemRxNorm,"codeSystemName",strCodeSystemNameRxNorm);
 				}
 				End("playingEntity");
@@ -393,6 +384,7 @@ Allergies
 				TemplateId("2.16.840.1.113883.10.20.22.4.28");
 				StartAndEnd("code","code","33999-4","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Status");
 				StartAndEnd("statusCode","code","completed");//fixed value (required)
+				string status=allergy.StatusIsActive?"Active":"Inactive";
 				if(status=="Active") {
 					Start("value");
 					_w.WriteAttributeString("xsi","type",null,"CE");
@@ -407,7 +399,7 @@ Allergies
 				}
 				End("observation");
 				End("entryRelationship");
-				if(listAllergy[i].SnomedReaction!="") {//Blank codes are invalid
+				if(allergy.SnomedReaction!="") {//Blank codes are invalid
 					Start("entryRelationship","typeCode","SUBJ");
 					Start("observation","classCode","OBS","moodCode","EVN");
 					_w.WriteComment("Reaction Observation template");
@@ -416,8 +408,8 @@ Allergies
 					StartAndEnd("code","nullFlavor","NA");//Unknown why this is null, but can't find a good example of this
 					StartAndEnd("statusCode","code","completed");//fixed value (required)
 					Start("effectiveTime");
-					if(listAllergy[i].StatusIsActive) {
-						StartAndEnd("low","value",listAllergy[i].DateTStamp.ToString("yyyymmdd"));
+					if(allergy.StatusIsActive) {
+						StartAndEnd("low","value",allergy.DateTStamp.ToString("yyyymmdd"));
 					}
 					else {
 						StartAndEnd("low","nullFlavor","UNK");
@@ -425,7 +417,7 @@ Allergies
 					End("effectiveTime");
 					Start("value");
 					_w.WriteAttributeString("xsi","type",null,"CD");
-					Attribs("code",listAllergy[i].SnomedReaction,"codeSystem",strCodeSystemSnomed,"displayName",listAllergy[i].Reaction);
+					Attribs("code",allergy.SnomedReaction,"codeSystem",strCodeSystemSnomed,"displayName",allergy.Reaction);
 					End("value");
 					End("observation");
 					End("entryRelationship");
@@ -645,6 +637,7 @@ Care Plan
 				_w.WriteAttributeString("xsi","type",null,"CE");
 				Snomed snomedEducation=Snomeds.GetByCode(listEhrCarePlans[i].SnomedEducation);
 				Attribs("code",snomedEducation.SnomedCode,"codeSystem",strCodeSystemSnomed,"displayName",snomedEducation.Description);
+				End("code");
 				_w.WriteElementString("text",listEhrCarePlans[i].Instructions);
 				StartAndEnd("statusCode","code","completed");
 				End("act");
@@ -718,7 +711,7 @@ Problems
 				TemplateId("2.16.840.1.113883.10.20.22.4.3");
 				Guid();
 				StartAndEnd("code","code","CONC","codeSystem","2.16.840.1.113883.5.6","displayName","Concern");
-				StartAndEnd("statusCode","code",statusOther);
+				StartAndEnd("statusCode","code",statusOther);//Allowed values: active, suspended, aborted, completed.
 				Start("effectiveTime");
 				StartAndEnd("low","value",listProblem[i].DateStart.ToString("yyyymmdd"));
 				DateElement("high",listProblem[i].DateStop);
@@ -729,16 +722,10 @@ Problems
 				TemplateId("2.16.840.1.113883.10.20.22.4.4");
 				Guid();
 				StartAndEnd("code","code",snomedProblemType,"codeSystem",strCodeSystemSnomed,"displayName","Problem");
-				if(listProblem[i].ProbStatus==ProblemStatus.Active) {
-					StartAndEnd("statusCode","code","active");
-				}
-				else {
-					StartAndEnd("statusCode","code","completed");
-				}
+				StartAndEnd("statusCode","code","completed");//Allowed values: completed.
 				Start("effectiveTime");
 				DateElement("low",listProblem[i].DateStart);
 				End("effectiveTime");
-				StartAndEnd("statusCode","code","completed");
 				Start("value");
 				_w.WriteAttributeString("xsi","type",null,"CD");
 				Attribs("code",DiseaseDefs.GetItem(listProblem[i].DiseaseDefNum).SnomedCode,"codeSystem",strCodeSystemSnomed,"displayName",DiseaseDefs.GetItem(listProblem[i].DiseaseDefNum).DiseaseName);
@@ -751,12 +738,7 @@ Problems
 				_w.WriteAttributeString("xsi","type",null,"CE");
 				Attribs("code","33999-4","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Status");
 				End("code");
-				//if(listProblem[i].ProbStatus==ProblemStatus.Active) {
-				//	StartAndEnd("statusCode","code","active");//This was breaking validation with the testing tool.
-				//}
-				//else {
-					StartAndEnd("statusCode","code","completed");
-				//}
+				StartAndEnd("statusCode","code","completed");//Allowed values: completed.
 				Start("value");
 				_w.WriteAttributeString("xsi","type",null,"CD");
 				Attribs("code",statusCode,"codeSystem",strCodeSystemSnomed,"displayName",status);
@@ -784,11 +766,22 @@ Problems
 Laboratory Test Results
 =====================================================================================================");
 			List<LabResult> listLabResult=LabResults.GetAllForPatient(_patOutCcd.PatNum);
+			List<LabResult> listLabResultValid=new List<LabResult>();
+			for(int i=0;i<listLabResult.Count;i++) {
+				if(listLabResult[i].TestID=="") {
+					continue;//Blank codes not allowed in format.
+				}
+				listLabResultValid.Add(listLabResult[i]);
+			}
 			LabPanel labPanel;
 			Start("component");
 			Start("section");
-			TemplateId("2.16.840.1.113883.3.88.11.83.122","HITSP/C83");
-			TemplateId("1.3.6.1.4.1.19376.1.5.3.1.3.28","IHE PCC");
+			if(listLabResultValid.Count==0) {
+				TemplateId("2.16.840.1.113883.10.20.22.2.3");//page 309 Results section with entries optional. We could always use this templateid, but the TTT complained when we used this templateid for module b.2.
+			}
+			else {
+				TemplateId("2.16.840.1.113883.10.20.22.2.3.1");//page 309 Results section with entries required.
+			}
 			_w.WriteComment("Diagnostic Results section template");
 			StartAndEnd("code","code","30954-2","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Results");
 			_w.WriteElementString("title","Diagnostic Results");
@@ -804,69 +797,71 @@ Laboratory Test Results
 			End("tr");
 			End("thead");
 			Start("tbody");
-			for(int i=0;i<listLabResult.Count;i++) {
+			for(int i=0;i<listLabResultValid.Count;i++) {
 				Start("tr");
-				_w.WriteElementString("td",listLabResult[i].TestID);//LOINC Code
-				_w.WriteElementString("td",listLabResult[i].TestName);//Test
-				_w.WriteElementString("td",listLabResult[i].ObsValue+" "+listLabResult[i].ObsUnits);//Result
-				_w.WriteElementString("td",listLabResult[i].AbnormalFlag.ToString());//Abnormal Flag
-				_w.WriteElementString("td",listLabResult[i].DateTimeTest.ToShortDateString());//Date Performed
+				_w.WriteElementString("td",listLabResultValid[i].TestID);//LOINC Code
+				_w.WriteElementString("td",listLabResultValid[i].TestName);//Test
+				_w.WriteElementString("td",listLabResultValid[i].ObsValue+" "+listLabResultValid[i].ObsUnits);//Result
+				_w.WriteElementString("td",listLabResultValid[i].AbnormalFlag.ToString());//Abnormal Flag
+				_w.WriteElementString("td",listLabResultValid[i].DateTimeTest.ToShortDateString());//Date Performed
 				End("tr");
 			}
 			End("tbody");
 			End("table");
 			End("text");
-			for(int i=0;i<listLabResult.Count;i++) {
-				if(listLabResult[i].TestID=="") {
-					continue;//Blank codes not allowed in format.
-				}
-				labPanel=LabPanels.GetOne(listLabResult[i].LabPanelNum);
+			for(int i=0;i<listLabResultValid.Count;i++) {
+				labPanel=LabPanels.GetOne(listLabResultValid[i].LabPanelNum);
 				Start("entry","typeCode","DRIV");
 				Start("organizer","classCode","BATTERY","moodCode","EVN");
-				StartAndEnd("templateId","root","2.16.840.1.113883.10.20.1.32");//no authority name
+				StartAndEnd("templateId","root","2.16.840.1.113883.10.20.22.4.1");
 				_w.WriteComment("Result organizer template");
-				StartAndEnd("id","root","7d5a02b0-67a4-11db-bd13-0800200c9a66");
-				StartAndEnd("code","code",labPanel.ServiceId,"codeSystem",strCodeSystemSnomed,"displayName",labPanel.ServiceName);
-				StartAndEnd("statusCode","code","completed");
-				StartAndEnd("effectiveTime","value",listLabResult[i].DateTimeTest.ToString("yyyyMMddHHmm"));
-				Start("component");
-				Start("procedure","classCode","PROC","moodCode","EVN");
-				TemplateId("2.16.840.1.113883.3.88.11.83.17","HITSP C83");
-				TemplateId("2.16.840.1.113883.10.20.1.29","CCD");//procedure activity template id, according to pages 103-104 of CCD-final.pdf
-				TemplateId("1.3.6.1.4.1.19376.1.5.3.1.4.19","IHE PCC");
-				StartAndEnd("id");
-				Start("code","code",labPanel.ServiceId,"codeSystem",strCodeSystemSnomed,"displayName",labPanel.ServiceName);
-				Start("originalText");
-				_w.WriteString(labPanel.ServiceName);
-				StartAndEnd("reference","value","Ptr to text  in parent Section");
-				End("originalText");
-				End("code");
-				Start("text");
-				_w.WriteString(labPanel.ServiceName);
-				StartAndEnd("reference","value","Ptr to text  in parent Section");
-				End("text");
-				StartAndEnd("statusCode","code","completed");
-				StartAndEnd("effectiveTime","value",listLabResult[i].DateTimeTest.ToString("yyyyMMddHHmm"));
-				End("procedure");
-				End("component");
+				Guid();
+				if(labPanel.ServiceId=="") {
+					StartAndEnd("code","nullFlavor","NA");//Null allowed for this code.
+				}
+				else {
+					StartAndEnd("code","code",labPanel.ServiceId,"codeSystem",strCodeSystemLoinc,"displayName",labPanel.ServiceName);//Code systems allowed: LOINC, or other "local codes".
+				}
+				StartAndEnd("statusCode","code","completed");//page 532 Allowed values: aborted, active, cancelled, completed, held, suspended.
+				//StartAndEnd("effectiveTime","value",listLabResultValid[i].DateTimeTest.ToString("yyyyMMddHHmm"));
+				//Start("component");
+				//Start("procedure","classCode","PROC","moodCode","EVN");
+				//TemplateId("2.16.840.1.113883.3.88.11.83.17","HITSP C83");
+				//TemplateId("2.16.840.1.113883.10.20.1.29","CCD");//procedure activity template id, according to pages 103-104 of CCD-final.pdf
+				//TemplateId("1.3.6.1.4.1.19376.1.5.3.1.4.19","IHE PCC");
+				//StartAndEnd("id");
+				//Start("code","code",labPanel.ServiceId,"codeSystem",strCodeSystemSnomed,"displayName",labPanel.ServiceName);
+				//Start("originalText");
+				//_w.WriteString(labPanel.ServiceName);
+				//StartAndEnd("reference","value","Ptr to text  in parent Section");
+				//End("originalText");
+				//End("code");
+				//Start("text");
+				//_w.WriteString(labPanel.ServiceName);
+				//StartAndEnd("reference","value","Ptr to text  in parent Section");
+				//End("text");
+				//StartAndEnd("statusCode","code","completed");
+				//StartAndEnd("effectiveTime","value",listLabResultValid[i].DateTimeTest.ToString("yyyyMMddHHmm"));
+				//End("procedure");
+				//End("component");
 				Start("component");
 				Start("observation","classCode","OBS","moodCode","EVN");
-				TemplateId("2.16.840.1.113883.3.88.11.83.15.1","HITSP C83");
-				TemplateId("2.16.840.1.113883.10.20.1.31","CCD");//result observation template id, according to pages 103-104 of CCD-final.pdf
-				TemplateId("1.3.6.1.4.1.19376.1.5.3.1.4.13","IHE PCC");
+				TemplateId("2.16.840.1.113883.10.20.22.4.2");
 				_w.WriteComment("Result observation template");
 				Guid();
-				StartAndEnd("code","code",listLabResult[i].TestID,"codeSystem",strCodeSystemLoinc,"displayName",listLabResult[i].TestName);
-				Start("text");
-				StartAndEnd("reference","value","PtrToValueInsectionText");
-				End("text");
-				StartAndEnd("statusCode","code","completed");
-				StartAndEnd("effectiveTime","value",listLabResult[i].DateTimeTest.ToString("yyyyMMddHHmm"));
+				StartAndEnd("code","code",listLabResultValid[i].TestID,"displayName",listLabResultValid[i].TestName,"codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc);
+				StartAndEnd("statusCode","code","completed");//Allowed values: aborted, active, cancelled, completed, held, or suspended.
+				StartAndEnd("effectiveTime","value",listLabResultValid[i].DateTimeTest.ToString("yyyyMMddHHmm"));
 				Start("value");
 				_w.WriteAttributeString("xsi","type",null,"PQ");
-				Attribs("value","13.2","unit","g/dl");
+				Attribs("value",listLabResultValid[i].ObsValue,"unit",listLabResultValid[i].ObsUnits);
 				End("value");
 				StartAndEnd("interpretationCode","code","N","codeSystem","2.16.840.1.113883.5.83");
+				Start("referenceRange");
+				Start("observationRange");
+				_w.WriteElementString("text",listLabResultValid[i].ObsRange);
+				End("observationRange");
+				End("referenceRange");
 				End("observation");
 				End("component");
 				End("organizer");
@@ -888,7 +883,7 @@ Vital Signs
 			TemplateId("2.16.840.1.113883.10.20.22.2.4.1");
 			_w.WriteComment("Problems section template");
 			StartAndEnd("code","code","8716-3","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Vital Signs");
-			StartAndEnd("title","VITAL SIGNS");
+			_w.WriteElementString("title","VITAL SIGNS");
 			Start("text");//The following text will be parsed as html with a style sheet to be human readable.
 			Start("table","width","100%","border","1");
 			Start("thead");
