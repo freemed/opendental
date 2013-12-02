@@ -27,6 +27,10 @@ namespace OpenDentBusiness {
 		private const string strCodeSystemLoinc="2.16.840.1.113883.6.1";
 		///<summary>LOINC</summary>
 		private const string strCodeSystemNameLoinc="LOINC";
+		///<summary>2.16.840.1.113883.12.292</summary>
+		private const string strCodeSystemCvx="2.16.840.1.113883.12.292";
+		///<summary>CVX</summary>
+		private const string strCodeSystemNameCvx="CVX";
 		///<summary>Set each time GenerateCCD() is called. Used by helper functions to avoid sending the patient as a parameter to each helper function.</summary>
 		private static Patient _patOutCcd=null;
 		///<summary>Instantiated each time GenerateCCD() is called. Used by helper functions to avoid sending the writer as a parameter to each helper function.</summary>
@@ -447,7 +451,63 @@ Allergies
 
 		///<summary>Helper for GenerateCCD().</summary>
 		private static void GenerateCcdSectionImmunizations() {
-			//TODO:
+			_w.WriteComment(@"
+=====================================================================================================
+Immunizations
+=====================================================================================================");
+			List<Allergy> listAllergy=Allergies.Refresh(_patOutCcd.PatNum);//TODO: Change to Immunizations once they get implemented
+			Start("component");
+			Start("section");
+			TemplateId("2.16.840.1.113883.10.20.22.2.2.1");
+			_w.WriteComment("immunizations section template");
+			StartAndEnd("code","code","11369-6","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","History of immunizations");
+			_w.WriteElementString("title","IMMUNIZATIONS");
+			Start("text");//The following text will be parsed as html with a style sheet to be human readable.
+			Start("table","width","100%","border","1");
+			Start("thead");
+			Start("tr");
+			_w.WriteElementString("th","Vaccine");
+			_w.WriteElementString("th","Date");
+			_w.WriteElementString("th","Status");
+			End("tr");
+			End("thead");
+			Start("tbody");//TODO: Fill Immune Table
+			for(int i=0;i<listAllergy.Count;i++) {
+				Start("tr");
+				_w.WriteElementString("td","INSERT Vaccine Info");
+				_w.WriteElementString("td","INSERT DateStart");
+				_w.WriteElementString("td","INSERT Status");
+				End("tr");
+			}
+			End("tbody");
+			End("table");
+			End("text");
+			for(int i=0;i<listAllergy.Count;i++) {
+				Start("entry","typeCode","DRIV");
+				Start("substanceAdministration","classCode","SBADM","moodCode","EVN","negationInd","INSERT Immunization Taken Status");
+				TemplateId("2.16.840.1.113883.10.20.22.4.52");
+				_w.WriteComment("Immunization Activity Template");
+				Guid();
+				StartAndEnd("statusCode","code","completed");
+				Start("effectiveTime");
+				_w.WriteAttributeString("xsi","type",null,"IVL_TS");
+				Attribs("value","INSERT Date Start");
+				End("effectiveTime");
+				Start("consumable");
+				Start("manufacturedProduct","classCode","MANU");
+				TemplateId("2.16.840.1.113883.10.20.22.4.54");
+				_w.WriteComment("Immunization Medication Information");
+				Start("manufacturedMaterial");
+				StartAndEnd("code","code","CVX Code Value","codeSystem",strCodeSystemCvx,"displayName","CVX Code Name","codeSystemName",strCodeSystemNameCvx);
+				End("manufacturedMaterial");
+				End("manufacturedProduct");
+				End("consumable");
+				//Possibly add an Instructions Template
+				End("substanceAdministration");
+				End("entry");
+			}
+			End("section");
+			End("component");
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
@@ -817,8 +877,95 @@ Laboratory Test Results
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdSectionVitalSigns() {
-			//TODO:
+		private static void GenerateCcdSectionVitalSigns() {//Currently just a skeleton
+			_w.WriteComment(@"
+=====================================================================================================
+Vital Signs
+=====================================================================================================");
+			List<Vitalsign> listVitals=Vitalsigns.Refresh(_patOutCcd.PatNum);
+			Start("component");
+			Start("section");
+			TemplateId("2.16.840.1.113883.10.20.22.2.4.1");
+			_w.WriteComment("Problems section template");
+			StartAndEnd("code","code","8716-3","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Vital Signs");
+			StartAndEnd("title","VITAL SIGNS");
+			Start("text");//The following text will be parsed as html with a style sheet to be human readable.
+			Start("table","width","100%","border","1");
+			Start("thead");
+			Start("tr");
+			_w.WriteElementString("th","Date / Time:");
+			_w.WriteElementString("th","Insert Start Date");
+			_w.WriteElementString("th","Insert End Date");
+			End("tr");
+			End("thead");
+			Start("tbody");
+			for(int i=0;i<listVitals.Count;i++) {
+				Start("tr");
+				_w.WriteElementString("td","Height");
+				_w.WriteElementString("td","Weight");
+				_w.WriteElementString("td","Blood Pressure");
+				End("tr");
+			}
+			End("tbody");
+			End("table");
+			End("text");
+			for(int i=0;i<listVitals.Count;i++) {//Fill Vital Signs Info
+				Start("entry","typeCode","DRIV");
+				Start("organizer","classCode","CLUSTER","moodCode","EVN");
+				_w.WriteComment("Vital Signs Organizer template");//Vital Signs Organizer
+				TemplateId("2.16.840.1.113883.10.20.22.4.26");
+				Guid();
+				StartAndEnd("code","code","InsertSnomedCode","codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed,"displayName","Vital signs");//TODO: Implement Snomed code
+				StartAndEnd("statusCode","code","completed");
+				StartAndEnd("effectiveTime","value",DateTime.Now.ToString("yyyymmdd"));//TODO: Implement actual date
+				//Height Section ---- TODO: Implement this section
+				Start("component");
+				Start("observation","classCode","OBS","moodCode","EVN");
+				_w.WriteComment("Vital Sign Observation template");//Vital Sign Observation Section
+				TemplateId("2.16.840.1.113883.10.20.22.4.27");
+				Guid();
+				StartAndEnd("code","code","8302-2","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Height");
+				StartAndEnd("statusCode","code","completed");
+				StartAndEnd("effectiveTime","value",DateTime.Now.ToString("yyyymmdd"));//TODO: Implement actual date
+				Start("value");
+				_w.WriteAttributeString("xsi","type",null,"PQ");
+				Attribs("value","HeightValue","unit","HeightUnits");
+				End("value");
+				End("observation");
+				End("component");
+				//Weight Section ---- TODO: Implement this section
+				Start("component");
+				Start("observation","classCode","OBS","moodCode","EVN");
+				_w.WriteComment("Vital Sign Observation template");//Vital Sign Observation Section
+				TemplateId("2.16.840.1.113883.10.20.22.4.27");
+				Guid();
+				StartAndEnd("code","code","8302-2","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Height");
+				StartAndEnd("statusCode","code","completed");
+				StartAndEnd("effectiveTime","value",DateTime.Now.ToString("yyyymmdd"));//TODO: Implement actual date
+				Start("value");
+				_w.WriteAttributeString("xsi","type",null,"PQ");
+				Attribs("value","HeightValue","unit","HeightUnits");
+				End("value");
+				End("observation");
+				End("component");
+				//Blood Pressure ---- TODO: Implement this section
+				Start("component");
+				Start("observation","classCode","OBS","moodCode","EVN");
+				_w.WriteComment("Vital Sign Observation template");//Vital Sign Observation Section
+				TemplateId("2.16.840.1.113883.10.20.22.4.27");
+				Guid();
+				StartAndEnd("code","code","8302-2","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Height");
+				StartAndEnd("statusCode","code","completed");
+				StartAndEnd("effectiveTime","value",DateTime.Now.ToString("yyyymmdd"));//TODO: Implement actual date
+				Start("value");
+				_w.WriteAttributeString("xsi","type",null,"PQ");
+				Attribs("value","HeightValue","unit","HeightUnits");
+				End("value");
+				End("observation");
+				End("component");
+			}
+			End("section");
+			End("component");
 		}
 		
 		///<summary>Helper for GenerateCCD(). Builds an "id" element and writes a random 32 character alpha-numeric string into the "root" attribute.</summary>
