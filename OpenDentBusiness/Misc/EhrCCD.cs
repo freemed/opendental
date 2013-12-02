@@ -204,8 +204,10 @@ Body
 				GenerateCcdSectionMedications();
 				GenerateCcdSectionPlanOfCare();
 				GenerateCcdSectionProblems();
+				GenerateCcdSectionProcedures();
 				GenerateCcdSectionReasonForReferral();
 				GenerateCcdSectionResults();//Lab Results
+				GenerateCcdSectionSocialHistory();
 				GenerateCcdSectionVitalSigns();
 				End("structuredBody");
 				End("component");
@@ -791,6 +793,11 @@ Problems
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
+		private static void GenerateCcdSectionProcedures() {
+			//TODO:
+		}
+
+		///<summary>Helper for GenerateCCD().</summary>
 		private static void GenerateCcdSectionReasonForReferral() {
 			//TODO:
 		}
@@ -905,6 +912,11 @@ Laboratory Test Results
 			}
 			End("section");
 			End("component");
+		}
+
+		///<summary>Helper for GenerateCCD().</summary>
+		private static void GenerateCcdSectionSocialHistory() {
+			//TODO:
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
