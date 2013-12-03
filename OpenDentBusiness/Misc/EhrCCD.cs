@@ -347,12 +347,12 @@ Allergies
 				}
 				Start("effectiveTime");
 				if(allergy.StatusIsActive) {
-					StartAndEnd("low","value",allergy.DateTStamp.ToString("yyyymmdd"));
+					StartAndEnd("low","value",allergy.DateTStamp.ToString("yyyyMMdd"));
 					StartAndEnd("high","nullFlavor","UNK");
 				}
 				else {
 					StartAndEnd("low","nullFlavor","UNK");
-					StartAndEnd("high","value",allergy.DateTStamp.ToString("yyyymmdd"));
+					StartAndEnd("high","value",allergy.DateTStamp.ToString("yyyyMMdd"));
 				}
 				End("effectiveTime");
 				Start("entryRelationship","typeCode","SUBJ");
@@ -364,7 +364,7 @@ Allergies
 				StartAndEnd("statusCode","code","completed");//fixed value (required)
 				Start("effectiveTime");
 				StartAndEnd("low","nullFlavor","UNK");
-				StartAndEnd("high","value",allergy.DateTStamp.ToString("yyyymmdd"));
+				StartAndEnd("high","value",allergy.DateTStamp.ToString("yyyyMMdd"));
 				End("effectiveTime");
 				Start("value");
 				_w.WriteAttributeString("xsi","type",null,"CD");
@@ -416,7 +416,7 @@ Allergies
 					StartAndEnd("statusCode","code","completed");//fixed value (required)
 					Start("effectiveTime");
 					if(allergy.StatusIsActive) {
-						StartAndEnd("low","value",allergy.DateTStamp.ToString("yyyymmdd"));
+						StartAndEnd("low","value",allergy.DateTStamp.ToString("yyyyMMdd"));
 					}
 					else {
 						StartAndEnd("low","nullFlavor","UNK");
@@ -959,7 +959,7 @@ Problems
 				StartAndEnd("code","code","CONC","codeSystem","2.16.840.1.113883.5.6","displayName","Concern");
 				StartAndEnd("statusCode","code",statusOther);//Allowed values: active, suspended, aborted, completed.
 				Start("effectiveTime");
-				StartAndEnd("low","value",listProblemsFiltered[i].DateStart.ToString("yyyymmdd"));
+				StartAndEnd("low","value",listProblemsFiltered[i].DateStart.ToString("yyyyMMdd"));
 				DateElement("high",listProblemsFiltered[i].DateStop);
 				End("effectiveTime");
 				Start("entryRelationship","typeCode","SUBJ");
