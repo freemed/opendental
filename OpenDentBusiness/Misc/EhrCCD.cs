@@ -937,27 +937,6 @@ Laboratory Test Results
 					StartAndEnd("code","code",labPanel.ServiceId,"codeSystem",strCodeSystemLoinc,"displayName",labPanel.ServiceName);//Code systems allowed: LOINC, or other "local codes".
 				}
 				StartAndEnd("statusCode","code","completed");//page 532 Allowed values: aborted, active, cancelled, completed, held, suspended.
-				//StartAndEnd("effectiveTime","value",listLabResultValid[i].DateTimeTest.ToString("yyyyMMddHHmm"));
-				//Start("component");
-				//Start("procedure","classCode","PROC","moodCode","EVN");
-				//TemplateId("2.16.840.1.113883.3.88.11.83.17","HITSP C83");
-				//TemplateId("2.16.840.1.113883.10.20.1.29","CCD");//procedure activity template id, according to pages 103-104 of CCD-final.pdf
-				//TemplateId("1.3.6.1.4.1.19376.1.5.3.1.4.19","IHE PCC");
-				//StartAndEnd("id");
-				//Start("code","code",labPanel.ServiceId,"codeSystem",strCodeSystemSnomed,"displayName",labPanel.ServiceName);
-				//Start("originalText");
-				//_w.WriteString(labPanel.ServiceName);
-				//StartAndEnd("reference","value","Ptr to text  in parent Section");
-				//End("originalText");
-				//End("code");
-				//Start("text");
-				//_w.WriteString(labPanel.ServiceName);
-				//StartAndEnd("reference","value","Ptr to text  in parent Section");
-				//End("text");
-				//StartAndEnd("statusCode","code","completed");
-				//StartAndEnd("effectiveTime","value",listLabResultValid[i].DateTimeTest.ToString("yyyyMMddHHmm"));
-				//End("procedure");
-				//End("component");
 				Start("component");
 				Start("observation","classCode","OBS","moodCode","EVN");
 				TemplateId("2.16.840.1.113883.10.20.22.4.2");
@@ -985,31 +964,35 @@ Laboratory Test Results
 			End("component");
 		}
 
-		///<summary>Helper for GenerateCCD().</summary>
+		///<summary>Helper for GenerateCCD().  Exports smoking and pregnancy information.</summary>
 		private static void GenerateCcdSectionSocialHistory() {
 			_w.WriteComment(@"
 =====================================================================================================
 Social History
 =====================================================================================================");
-			List<Procedure> listProcsAll=Procedures.Refresh(_patOutCcd.PatNum);//Not sure which lists to use, if we even need one for this section
-			List<Procedure> listProcsFiltered=new List<Procedure>();
-			for(int i=0;i<listProcsAll.Count;i++) {
-				if(listProcsAll[i].ProcStatus==ProcStat.D) {
+			List <EhrMeasureEvent> listEhrMeasureEventsAll=EhrMeasureEvents.Refresh(_patOutCcd.PatNum);
+			List <EhrMeasureEvent> listEhrMeasureEventsFiltered=new List<EhrMeasureEvent>();
+			for(int i=0;i<listEhrMeasureEventsAll.Count;i++) {
+				if(listEhrMeasureEventsAll[i].EventType!=EhrMeasureEventType.TobaccoUseAssessed) {
 					continue;
 				}
-				listProcsFiltered.Add(listProcsAll[i]);
+				if(listEhrMeasureEventsAll[i].CodeSystemResult!="SNOMEDCT") {
+					continue;//The user is currently only allowed to pick SNOMED smoking statuses. This is here in case we add more code system in the future, to prevent the format from breaking until we enhance.
+				}
+				if(listEhrMeasureEventsAll[i].DateTEvent.Year<1880) {
+					continue;//Not sure if a blank date can happen. This is here just in case.
+				}
+				listEhrMeasureEventsFiltered.Add(listEhrMeasureEventsAll[i]);
 			}
+			listEhrMeasureEventsFiltered.Sort(CompareEhrMeasureEvents);
+			//The pattern for this section is special. We do not have any lists to use in this section.
+			//The section will always be present with at least one entry, beacuse we know the patient smoking status (which includes the UnknownIfEver option).
 			Start("component");
 			Start("section");
-			if(listProcsFiltered.Count==0) {
-				TemplateId("2.16.840.1.113883.10.20.22.2.17");//Social History section with coded entries optional (Page 293).
-			}
-			else {
-				TemplateId("2.16.840.1.113883.10.20.22.2.17.1");//Social History section with coded entries required (Not Sure if this exists).
-			}
+			TemplateId("2.16.840.1.113883.10.20.22.2.17");//Social History section (page 311). Only one template. No entries are required.
 			_w.WriteComment("Social History section template");
 			StartAndEnd("code","code","29762-2","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Social History");
-			_w.WriteElementString("title","SOCIAL HISTORY");
+			_w.WriteElementString("title","Social History");
 			Start("text");//The following text will be parsed as html with a style sheet to be human readable.
 			Start("table","width","100%","border","1");
 			Start("thead");
@@ -1020,38 +1003,67 @@ Social History
 			End("tr");
 			End("thead");
 			Start("tbody");
-			for(int i=0;i<listProcsFiltered.Count;i++) {
+			for(int i=0;i<listEhrMeasureEventsFiltered.Count;i++) {
 				Start("tr");
-				_w.WriteElementString("td","SOCIAL HISTORY");//TODO: Fill Social history
-				_w.WriteElementString("td","SOCIAL HISTORY DESCRIPTION");//TODO: Fill Social history description
-				DateElement("td",listProcsFiltered[i].DateTP);//TODO: Decide on a date
+				_w.WriteElementString("td","Smoking");
+				Snomed snomedSmoking=Snomeds.GetByCode(listEhrMeasureEventsFiltered[i].CodeValueResult);
+				_w.WriteElementString("td",snomedSmoking.Description);
+				DateTime dateTimeLow=listEhrMeasureEventsFiltered[i].DateTEvent;
+				DateTime dateTimeHigh=DateTime.Now;
+				if(i<listEhrMeasureEventsFiltered.Count-1) {//There is another smoking event after this one (remember, they are sorted by date).
+					dateTimeHigh=listEhrMeasureEventsFiltered[i+1].DateTEvent.AddDays(-1);//The day before the next smoking event.
+					if(dateTimeHigh<dateTimeLow) {
+						dateTimeHigh=dateTimeLow;//Just in case the user entered two measures for the same date.
+					}
+				}
+				_w.WriteElementString("td",dateTimeLow.ToString("yyyyMMdd")+" to "+dateTimeHigh.ToString("yyyyMMdd"));
 				End("tr");
 			}
 			End("tbody");
 			End("table");
 			End("text");
-			for(int i=0;i<listProcsFiltered.Count;i++) {
+			for(int i=0;i<listEhrMeasureEventsFiltered.Count;i++) {
 				//Pregnancy Observation Template could easily be added in the future, but for now it is skipped (Page 453)
 				Start("entry","typeCode","DRIV");
 				Start("observation","classCode","OBS","moodCode","EVN");
-				TemplateId("2.16.840.1.113883.10.22.4.78");//Smoking Status Observation Section (Page 519).
-				_w.WriteComment("Smokin Status Observation Template");
-				Guid();
+				TemplateId("2.16.840.1.113883.10.20.22.4.78");//Smoking Status Observation Section (Page 519).
+				_w.WriteComment("Smoking Status Observation Template");
 				StartAndEnd("code","code","ASSERTION","codeSystem","2.16.840.1.113883.5.4");
-				StartAndEnd("statusCode","code","completed");
+				StartAndEnd("statusCode","code","completed");//Allowed values: completed.
+				//The effectiveTime/low element must be present. If the patient is an ex-smoker (8517006), the effectiveTime/high element must also be present. For simplicity, we always export both low and high dates.
+				DateTime dateTimeLow=listEhrMeasureEventsFiltered[i].DateTEvent;
+				DateTime dateTimeHigh=DateTime.Now;
+				if(i<listEhrMeasureEventsFiltered.Count-1) {//There is another smoking event after this one (remember, they are sorted by date).
+					dateTimeHigh=listEhrMeasureEventsFiltered[i+1].DateTEvent.AddDays(-1);//The day before the next smoking event.
+					if(dateTimeHigh<dateTimeLow) {
+						dateTimeHigh=dateTimeLow;//Just in case the user entered two measures for the same date.
+					}
+				}
 				Start("effectiveTime");
-				StartAndEnd("low","value","STARTDATE");//TODO: Fill Dates
-				StartAndEnd("high","value","ENDDATE");
+				DateElement("low",dateTimeLow);
+				DateElement("high",dateTimeHigh);
 				End("effectiveTime");
 				Start("value");
 				_w.WriteAttributeString("xsi","type",null,"CD");
-				Attribs("code","SMOKING STATUS CODE","displayName","SMOKING STATUS NAME","codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed);
+				Snomed snomedSmoking=Snomeds.GetByCode(listEhrMeasureEventsFiltered[i].CodeValueResult);
+				Attribs("code",snomedSmoking.SnomedCode,"displayName",snomedSmoking.Description,"codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed);
 				End("value");
 				End("observation");
 				End("entry");
 			}
 			End("section");
 			End("component");
+		}
+
+		///<summary>Helper for GenerateCcdSectionSocialHistory().  Sort function.  Currently sorts by date ascending.</summary>
+		private static int CompareEhrMeasureEvents(EhrMeasureEvent ehrMeasureEventL,EhrMeasureEvent ehrMeasureEventR) {
+			if(ehrMeasureEventL.DateTEvent<ehrMeasureEventR.DateTEvent) {
+				return -1;
+			}
+			else if(ehrMeasureEventL.DateTEvent>ehrMeasureEventR.DateTEvent) {
+				return 1;
+			}
+			return 0;//equal
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
