@@ -74,9 +74,9 @@ namespace OpenDentBusiness {
 				StartAndEnd("languageCode","code","en-US");
 				Start("recordTarget");
 				Start("patientRole");
-				StartAndEnd("id","extension",pat.PatNum.ToString(),"root","2.16.840.1.113883.4.6");
+				StartAndEnd("id","extension",pat.PatNum.ToString(),"root","2.16.840.1.113883.4.6");//TODO: We might need to assign a global GUID for each office so that the patient can be uniquely identified anywhere in the world.
 				if(pat.SSN.Length==9) {
-					StartAndEnd("id","extension",pat.SSN,"root","2.16.840.1.113883.4.1");
+					StartAndEnd("id","extension",pat.SSN,"root","2.16.840.1.113883.4.1");//TODO: We might need to assign a global GUID for each office so that the patient can be uniquely identified anywhere in the world.
 				}
 				AddressUnitedStates(pat.Address,pat.Address2,pat.City,pat.State);
 				StartAndEnd("telecom","use","HP","value","tel:"+pat.HmPhone);
@@ -164,7 +164,7 @@ namespace OpenDentBusiness {
 				Start("author");
 				TimeElement("time",DateTime.Now);
 				Start("assignedAuthor");
-				StartAndEnd("id","extension",provAuthor.NationalProvID,"root","2.16.840.1.113883.4.6");
+				StartAndEnd("id","extension",provAuthor.NationalProvID,"root","2.16.840.1.113883.4.6");//TODO: We might need to assign a global GUID for each office so that the provider can be uniquely identified anywhere in the world.
 				//TODO: SHOULD contain a code representing provider specialty. Example: <code code="200000000X" codeSystem="2.16.840.1.113883.6.101" displayName="Allopathic &amp; Osteopathic Physicians"/>
 				AddressUnitedStates(PrefC.GetString(PrefName.PracticeAddress),PrefC.GetString(PrefName.PracticeAddress2),PrefC.GetString(PrefName.PracticeCity),PrefC.GetString(PrefName.PracticeST));
 				string strPracticePhone=PrefC.GetString(PrefName.PracticePhone);
@@ -184,7 +184,7 @@ namespace OpenDentBusiness {
 				Start("custodian");
 				Start("assignedCustodian");
 				Start("representedCustodianOrganization");
-				StartAndEnd("id","extension",provAuthor.NationalProvID,"root","2.16.840.1.113883.4.6");
+				StartAndEnd("id","extension",provAuthor.NationalProvID,"root","2.16.840.1.113883.4.6");//TODO: We might need to assign a global GUID for each office so that the provider can be uniquely identified anywhere in the world.
 				_w.WriteElementString("name",PrefC.GetString(PrefName.PracticeTitle));
 				StartAndEnd("telecom","use","WP","value","tel:"+strPracticePhone);
 				AddressUnitedStates(PrefC.GetString(PrefName.PracticeAddress),PrefC.GetString(PrefName.PracticeAddress2),PrefC.GetString(PrefName.PracticeCity),PrefC.GetString(PrefName.PracticeST));
@@ -457,8 +457,9 @@ Immunizations
 			List<VaccinePat> listVaccinePatsAll=VaccinePats.Refresh(_patOutCcd.PatNum);
 			List<VaccinePat> listVaccinePatsFiltered=new List<VaccinePat>();
 			for(int i=0;i<listVaccinePatsAll.Count;i++) {
-				if(listVaccinePatsAll[i].NotGiven) {
-					continue;
+				VaccineDef vaccineDef=VaccineDefs.GetOne(listVaccinePatsAll[i].VaccineDefNum);
+				if(!Cvxs.CodeExists(vaccineDef.CVXCode)) {
+					continue;//This code is required, so we must skip any vaccines missing a CVX.
 				}
 				listVaccinePatsFiltered.Add(listVaccinePatsAll[i]);
 			}
@@ -472,7 +473,7 @@ Immunizations
 			}
 			_w.WriteComment("Immunizations section template");
 			StartAndEnd("code","code","11369-6","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","History of immunizations");
-			_w.WriteElementString("title","IMMUNIZATIONS");
+			_w.WriteElementString("title","Immunizations");
 			Start("text");//The following text will be parsed as html with a style sheet to be human readable.
 			Start("table","width","100%","border","1");
 			Start("thead");
@@ -487,7 +488,7 @@ Immunizations
 				VaccineDef vaccineDef=VaccineDefs.GetOne(listVaccinePatsFiltered[i].VaccineDefNum);
 				Start("tr");
 				_w.WriteElementString("td",vaccineDef.VaccineName);
-				DateElement("td",listVaccinePatsFiltered[i].DateTimeStart);
+				DateText("td",listVaccinePatsFiltered[i].DateTimeStart);
 				_w.WriteElementString("td","Completed");
 				End("tr");
 			}
@@ -495,23 +496,24 @@ Immunizations
 			End("table");
 			End("text");
 			for(int i=0;i<listVaccinePatsFiltered.Count;i++) {
+				VaccineDef vaccineDef=VaccineDefs.GetOne(listVaccinePatsFiltered[i].VaccineDefNum);
 				Start("entry","typeCode","DRIV");
-				bool isTaken=true;//TODO: Set value depending on data.
-				Start("substanceAdministration","classCode","SBADM","moodCode","EVN","negationInd",isTaken?"true":"false");
+				Start("substanceAdministration","classCode","SBADM","moodCode","EVN","negationInd",listVaccinePatsFiltered[i].NotGiven?"true":"false");
 				TemplateId("2.16.840.1.113883.10.20.22.4.52");
 				_w.WriteComment("Immunization Activity Template");
 				Guid();
 				StartAndEnd("statusCode","code","completed");
 				Start("effectiveTime");
 				_w.WriteAttributeString("xsi","type",null,"IVL_TS");
-				Attribs("value","INSERT Date Start");
+				Attribs("value",listVaccinePatsFiltered[i].DateTimeStart.ToString("yyyyMMdd"));
 				End("effectiveTime");
 				Start("consumable");
 				Start("manufacturedProduct","classCode","MANU");
 				TemplateId("2.16.840.1.113883.10.20.22.4.54");
 				_w.WriteComment("Immunization Medication Information");
 				Start("manufacturedMaterial");
-				StartAndEnd("code","code","CVX Code Value","codeSystem",strCodeSystemCvx,"displayName","CVX Code Name","codeSystemName",strCodeSystemNameCvx);
+				Cvx cvx=Cvxs.GetOneFromDb(vaccineDef.CVXCode);
+				StartAndEnd("code","code",cvx.CvxCode,"codeSystem",strCodeSystemCvx,"displayName",cvx.Description,"codeSystemName",strCodeSystemNameCvx);
 				End("manufacturedMaterial");
 				End("manufacturedProduct");
 				End("consumable");
@@ -535,12 +537,11 @@ Medications
 				if(listMedPatsAll[i].RxCui==0) {
 					continue;
 				}
-				if(listMedPatsAll[i].MedicationNum==0) {
-					continue;
+				if(listMedPatsAll[i].DateStart.Year<1880 && listMedPatsAll[i].DateStop.Year<1880) {
+					continue;//We cannot export these, because the format requires at least one of these dates.
 				}
 				listMedPatsFiltered.Add(listMedPatsAll[i]);
 			}
-			Medication med;
 			Start("component");
 			Start("section");
 			if(listMedPatsFiltered.Count==0) {
@@ -567,55 +568,50 @@ Medications
 			End("thead");
 			Start("tbody");
 			for(int i=0;i<listMedPatsFiltered.Count;i++) {
-				med=Medications.GetMedication(listMedPatsFiltered[i].MedicationNum);
+				string strMedName=listMedPatsFiltered[i].MedDescript;
+				if(listMedPatsFiltered[i].MedicationNum!=0) {
+					strMedName=Medications.GetNameOnly(listMedPatsFiltered[i].MedicationNum);
+				}
 				Start("tr");
-				_w.WriteElementString("td",med.MedName);//Medication
-				_w.WriteElementString("td",med.Notes);//Directions
-				_w.WriteElementString("td",listMedPatsFiltered[i].DateStart.ToShortDateString());//Start Date
+				_w.WriteElementString("td",strMedName);//Medication
+				_w.WriteElementString("td",listMedPatsFiltered[i].PatNote);//Directions
+				DateText("td",listMedPatsFiltered[i].DateStart);//Start Date
 				DateText("td",listMedPatsFiltered[i].DateStop);//End Date
 				_w.WriteElementString("td",MedicationPats.IsMedActive(listMedPatsFiltered[i])?"Active":"Inactive");//Status
-				_w.WriteElementString("td",listMedPatsFiltered[i].PatNote);//Indications
-				_w.WriteElementString("td",listMedPatsFiltered[i].MedDescript);//Fill Instructions
+				_w.WriteElementString("td","");//Indications (The conditions which make the medication necessary). We do not record this information anywhere.
+				_w.WriteElementString("td","");//Fill Instructions (Generic substitution allowed or not). We do not record this information anywhere.
 				End("tr");
 			}
 			End("tbody");
 			End("table");
 			End("text");
-			string status;//May not be necessary, but no harm in setting it.
 			for(int i=0;i<listMedPatsFiltered.Count;i++) {
-				long rxCui=listMedPatsFiltered[i].RxCui;
 				string strMedName=listMedPatsFiltered[i].MedDescript;//This might be blank, for example not from NewCrop.  
 				if(listMedPatsFiltered[i].MedicationNum!=0) {//If NewCrop, this will be 0.  Also might be zero in the future when we start allowing freeform medications.
-					med=Medications.GetMedication(listMedPatsFiltered[i].MedicationNum);
-					rxCui=med.RxCui;
-					strMedName=med.MedName;
-					if(listMedPatsFiltered[i].DateStop.Year>1880 && listMedPatsFiltered[i].DateStop>=DateTime.Now) {
-						status="active";
-					}
-					else {
-						status="completed";
-					}
-				}
-				if(rxCui==0) {
-					continue;
+					strMedName=Medications.GetNameOnly(listMedPatsFiltered[i].MedicationNum);					
 				}
 				Start("entry","typeCode","DRIV");
 				Start("substanceAdministration","classCode","SBADM","moodCode","EVN");
 				TemplateId("2.16.840.1.113883.10.20.22.4.16");
 				_w.WriteComment("Medication activity template");
 				Guid();
-				StartAndEnd("statusCode","code","completed");//Fixed Value
+				string strStatus="completed";
+				if(MedicationPats.IsMedActive(listMedPatsFiltered[i])) {
+					strStatus="active";
+				}
+				StartAndEnd("statusCode","code",strStatus);
+				_w.WriteElementString("text",listMedPatsFiltered[i].PatNote);
 				Start("effectiveTime");
 				_w.WriteAttributeString("xsi","type",null,"IVL_TS");
-				StartAndEnd("low","value",listMedPatsFiltered[i].DateStart.ToString("yyyymmdd"));
-				StartAndEnd("high","value",listMedPatsFiltered[i].DateStop.ToString("yyyymmdd"));
-				End("effectiveTime");
+				DateElement("low",listMedPatsFiltered[i].DateStart);//Only one of these dates can be null, because of our filter above.
+				DateElement("high",listMedPatsFiltered[i].DateStop);//Only one of these dates can be null, because of our filter above.
+				End("effectiveTime");		
 				Start("consumable");
 				Start("manufacturedProduct","classCode","MANU");
 				TemplateId("2.16.840.1.113883.10.20.22.4.23");
 				Guid();
 				Start("manufacturedMaterial");
-				Start("code","code",rxCui.ToString(),"codeSystem",strCodeSystemRxNorm,"displayName",strMedName,"codeSystemName",strCodeSystemNameRxNorm);
+				Start("code","code",listMedPatsFiltered[i].RxCui.ToString(),"codeSystem",strCodeSystemRxNorm,"displayName",strMedName,"codeSystemName",strCodeSystemNameRxNorm);
 				End("code");
 				End("manufacturedMaterial");
 				End("manufacturedProduct");
@@ -713,7 +709,7 @@ Problems
 			}
 			_w.WriteComment("Problems section template");
 			StartAndEnd("code","code","11450-4","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Problem list");
-			_w.WriteElementString("title","PROBLEMS");
+			_w.WriteElementString("title","Problems");
 			Start("text");
 			StartAndEnd("content","ID","problems");
 			Start("list","listType","ordered");
@@ -1067,7 +1063,15 @@ Vital Signs
 			List<Vitalsign> listVitalSignsAll=Vitalsigns.Refresh(_patOutCcd.PatNum);
 			List<Vitalsign> listVitalSignsFiltered=new List<Vitalsign>();
 			for(int i=0;i<listVitalSignsAll.Count;i++) {
-				//No filters yet. This loop is here to match our pattern. If we need to add filters later, the change will be safer and more obvious.
+				Vitalsign vitalsign=listVitalSignsAll[i];
+				if(vitalsign.DateTaken.Year<1880) {
+					continue;
+				}
+				//Each of the vital sign values are optional, so we must skip filter out empty vital signs.
+				float bmi=Vitalsigns.CalcBMI(vitalsign.Weight,vitalsign.Height);//will be 0 if either wight is 0 or height is 0.
+				if(vitalsign.Height==0 && vitalsign.Weight==0 && bmi==0 && (vitalsign.BpSystolic==0 || vitalsign.BpDiastolic==0)) {
+					continue;//Nothing to report.
+				}
 				listVitalSignsFiltered.Add(listVitalSignsAll[i]);
 			}
 			Start("component");
@@ -1080,83 +1084,110 @@ Vital Signs
 			}
 			_w.WriteComment("Problems section template");
 			StartAndEnd("code","code","8716-3","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Vital Signs");
-			_w.WriteElementString("title","VITAL SIGNS");
+			_w.WriteElementString("title","Vital Signs");
 			Start("text");//The following text will be parsed as html with a style sheet to be human readable.
 			Start("table","width","100%","border","1");
 			Start("thead");
 			Start("tr");
-			_w.WriteElementString("th","Date / Time:");
-			_w.WriteElementString("th","Insert Start Date");
-			_w.WriteElementString("th","Insert End Date");
+			_w.WriteElementString("th","Date");
+			_w.WriteElementString("th","Height");
+			_w.WriteElementString("th","Weight");
+			_w.WriteElementString("th","BMI");
+			_w.WriteElementString("th","Blood Pressure");
 			End("tr");
 			End("thead");
 			Start("tbody");
 			for(int i=0;i<listVitalSignsFiltered.Count;i++) {
+				Vitalsign vitalsign=listVitalSignsFiltered[i];
 				Start("tr");
-				_w.WriteElementString("td","Height");
-				_w.WriteElementString("td","Weight");
-				_w.WriteElementString("td","Blood Pressure");
+				DateText("td",vitalsign.DateTaken);
+				if(vitalsign.Height>0) {
+					_w.WriteElementString("td",vitalsign.Height.ToString("f0")+" in");
+				}
+				else {
+					_w.WriteElementString("td","");
+				}
+				if(vitalsign.Weight>0) {
+					_w.WriteElementString("td",vitalsign.Weight.ToString("f0")+" lbs");
+				}
+				else {
+					_w.WriteElementString("td","");
+				}
+				float bmi=Vitalsigns.CalcBMI(vitalsign.Weight,vitalsign.Height);//will be 0 if either wight is 0 or height is 0.
+				if(bmi>0) {
+					_w.WriteElementString("td",bmi.ToString("f0")+" lbs/in");
+				}
+				else {
+					_w.WriteElementString("td","");
+				}
+				if(vitalsign.BpSystolic>0 && vitalsign.BpDiastolic>0) {
+					_w.WriteElementString("td",vitalsign.BpSystolic.ToString("f0")+"/"+vitalsign.BpDiastolic.ToString("f0"));
+				}
+				else {
+					_w.WriteElementString("td","");
+				}
 				End("tr");
 			}
 			End("tbody");
 			End("table");
 			End("text");
 			for(int i=0;i<listVitalSignsFiltered.Count;i++) {//Fill Vital Signs Info
+				Vitalsign vitalsign=listVitalSignsFiltered[i];
 				Start("entry","typeCode","DRIV");
 				Start("organizer","classCode","CLUSTER","moodCode","EVN");
 				_w.WriteComment("Vital Signs Organizer template");//Vital Signs Organizer
 				TemplateId("2.16.840.1.113883.10.20.22.4.26");
 				Guid();
-				StartAndEnd("code","code","InsertSnomedCode","codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed,"displayName","Vital signs");//TODO: Implement Snomed code
+				StartAndEnd("code","code","46680005","codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed,"displayName","Vital signs");
 				StartAndEnd("statusCode","code","completed");
-				StartAndEnd("effectiveTime","value",DateTime.Now.ToString("yyyymmdd"));//TODO: Implement actual date
-				//Height Section ---- TODO: Implement this section
-				Start("component");
-				Start("observation","classCode","OBS","moodCode","EVN");
-				_w.WriteComment("Vital Sign Observation template");//Vital Sign Observation Section
-				TemplateId("2.16.840.1.113883.10.20.22.4.27");
-				Guid();
-				StartAndEnd("code","code","8302-2","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Height");
-				StartAndEnd("statusCode","code","completed");
-				StartAndEnd("effectiveTime","value",DateTime.Now.ToString("yyyymmdd"));//TODO: Implement actual date
-				Start("value");
-				_w.WriteAttributeString("xsi","type",null,"PQ");
-				Attribs("value","HeightValue","unit","HeightUnits");
-				End("value");
-				End("observation");
-				End("component");
-				//Weight Section ---- TODO: Implement this section
-				Start("component");
-				Start("observation","classCode","OBS","moodCode","EVN");
-				_w.WriteComment("Vital Sign Observation template");//Vital Sign Observation Section
-				TemplateId("2.16.840.1.113883.10.20.22.4.27");
-				Guid();
-				StartAndEnd("code","code","8302-2","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Height");
-				StartAndEnd("statusCode","code","completed");
-				StartAndEnd("effectiveTime","value",DateTime.Now.ToString("yyyymmdd"));//TODO: Implement actual date
-				Start("value");
-				_w.WriteAttributeString("xsi","type",null,"PQ");
-				Attribs("value","HeightValue","unit","HeightUnits");
-				End("value");
-				End("observation");
-				End("component");
-				//Blood Pressure ---- TODO: Implement this section
-				Start("component");
-				Start("observation","classCode","OBS","moodCode","EVN");
-				_w.WriteComment("Vital Sign Observation template");//Vital Sign Observation Section
-				TemplateId("2.16.840.1.113883.10.20.22.4.27");
-				Guid();
-				StartAndEnd("code","code","8302-2","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Height");
-				StartAndEnd("statusCode","code","completed");
-				StartAndEnd("effectiveTime","value",DateTime.Now.ToString("yyyymmdd"));//TODO: Implement actual date
-				Start("value");
-				_w.WriteAttributeString("xsi","type",null,"PQ");
-				Attribs("value","HeightValue","unit","HeightUnits");
-				End("value");
-				End("observation");
-				End("component");
+				DateElement("effectiveTime",vitalsign.DateTaken);
+				if(vitalsign.Height>0) {
+					GenerateCcdVitalSign("8302-2",vitalsign.DateTaken,vitalsign.Height,"in");//Height
+				}
+				if(vitalsign.Weight>0) {
+					GenerateCcdVitalSign("3141-9",vitalsign.DateTaken,vitalsign.Weight,"lbs");//Weight
+				}
+				float bmi=Vitalsigns.CalcBMI(vitalsign.Weight,vitalsign.Height);//will be 0 if either wight is 0 or height is 0.
+				if(bmi>0) {
+					GenerateCcdVitalSign("39156-5",vitalsign.DateTaken,bmi,"lbs/in");//BMI
+				}
+				if(vitalsign.BpSystolic>0 && vitalsign.BpDiastolic>0) {
+					GenerateCcdVitalSign("8480-6",vitalsign.DateTaken,vitalsign.BpSystolic,"mmHg");//Blood Pressure Systolic
+					GenerateCcdVitalSign("8462-4",vitalsign.DateTaken,vitalsign.BpDiastolic,"mmHg");//Blood Pressure Diastolic
+				}
 			}
 			End("section");
+			End("component");
+		}
+
+		///<summary>Helper for GenerateCcdSectionVitalSigns(). Writes on observation. 
+		///Allowed vital sign observation template LOINC codes (strLoincObservationCode):
+		///9279-1		Respiratory Rate
+		///8867-4		Heart Rate
+		///2710-2		O2 % BldC Oximetry,
+		///8480-6		BP Systolic
+		///8462-4		BP Diastolic
+		///8310-5		Body Temperature,
+		///8302-2		Height
+		///8306-3		Height (Lying)
+		///8287-5		Head Circumference,
+		///3141-9		Weight Measured
+		///39156-5	BMI (Body Mass Index)
+		///3140-1 BSA (Body Surface Area)</summary>
+		private static void GenerateCcdVitalSign(string strLoincObservationCode,DateTime dateTimeObservation,float observationValue,string observationUnits) {
+			Start("component");
+			Start("observation","classCode","OBS","moodCode","EVN");
+			_w.WriteComment("Vital Sign Observation template");//Vital Sign Observation Section
+			TemplateId("2.16.840.1.113883.10.20.22.4.27");
+			Guid();
+			StartAndEnd("code","code",strLoincObservationCode,"codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Height");
+			StartAndEnd("statusCode","code","completed");//Allowed values: completed.
+			DateElement("effectiveTime",dateTimeObservation);
+			Start("value");
+			_w.WriteAttributeString("xsi","type",null,"PQ");
+			Attribs("value",observationValue.ToString("f0"),"unit",observationUnits);
+			End("value");
+			End("observation");
 			End("component");
 		}
 		
@@ -1225,7 +1256,7 @@ Vital Signs
 			}
 		}
 
-		///<summary>Writes the element strElement name and writes the dateTime string in the required date format.  Will not write if year is before 1880.</summary>
+		///<summary>Use for HTML tables. Writes the element strElement name and writes the dateTime string in the required date format.  Will not write if year is before 1880.</summary>
 		private static void DateText(string strElementName,DateTime dateTime) {
 			Start(strElementName);
 			if(dateTime.Year>1880) {
@@ -1234,7 +1265,7 @@ Vital Signs
 			End(strElementName);
 		}
 
-		///<summary>Writes the element strElement name and writes the dateTime in the required date format into the value attribute.
+		///<summary>Use for XML. Writes the element strElement name and writes the dateTime in the required date format into the value attribute.
 		///Will write nullFlavor="UNK" instead of value if year is before 1880.</summary>
 		private static void DateElement(string strElementName,DateTime dateTime) {
 			Start(strElementName);

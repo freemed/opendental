@@ -13,9 +13,9 @@ namespace OpenDentBusiness {
 		public float Height;
 		///<summary>Lbs.  Allowed to be 0. Six possible LOINC codes, most applicable is 29463-7, "Body weight".</summary>
 		public float Weight;
-		///<summary>Allowed to be 0. LOINC code 8480-6.</summary>
+		///<summary>Units are mmHg (millimeters of mercury). Allowed to be 0. LOINC code 8480-6.</summary>
 		public int BpSystolic;
-		///<summary>Allowed to be 0. LOINC code 8462-4.</summary>
+		///<summary>Units are mmHg (millimeters of mercury). Allowed to be 0. LOINC code 8462-4.</summary>
 		public int BpDiastolic;
 		///<summary>The date that the vitalsigns were taken.</summary>
 		public DateTime DateTaken;
