@@ -55,7 +55,7 @@ namespace OpenDental {
 					return;
 				}
 			}
-			string ccd=EhrCCD.GenerateCCD(PatCur);
+			string ccd=EhrCCD.GenerateClinicalSummary(PatCur);
 			File.WriteAllText(Path.Combine(dlg.SelectedPath,"ccd.xml"),ccd);
 			File.WriteAllText(Path.Combine(dlg.SelectedPath,"ccd.xsl"),FormEHR.GetEhrResource("CCD"));
 			EhrMeasureEvent newMeasureEvent = new EhrMeasureEvent();
@@ -75,7 +75,7 @@ namespace OpenDental {
 			EhrMeasureEvents.Insert(newMeasureEvent);
 			FillGridEHRMeasureEvents();
 			Cursor=Cursors.WaitCursor;
-			string ccd=EhrCCD.GenerateCCD(PatCur);
+			string ccd=EhrCCD.GenerateClinicalSummary(PatCur);
 			try {
 				EmailMessages.SendTestUnsecure("Clinical Summary","ccd.xml",ccd,"ccd.xsl",FormEHR.GetEhrResource("CCD"));
 			}
@@ -89,7 +89,7 @@ namespace OpenDental {
 		}
 
 		private void butShowXhtml_Click(object sender,EventArgs e) {
-			string ccd=EhrCCD.GenerateCCD(PatCur);
+			string ccd=EhrCCD.GenerateClinicalSummary(PatCur);
 			bool didPrint=FormEhrSummaryOfCare.DisplayCCD(ccd);
 			if(didPrint) {
 				//we are printing a ccd so add new measure event.					
@@ -103,7 +103,7 @@ namespace OpenDental {
 		}
 
 		private void butShowXml_Click(object sender,EventArgs e) {
-			string ccd=EhrCCD.GenerateCCD(PatCur);
+			string ccd=EhrCCD.GenerateClinicalSummary(PatCur);
 			MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste(ccd);
 			msgbox.ShowDialog();
 		}

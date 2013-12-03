@@ -40,7 +40,31 @@ namespace OpenDentBusiness {
 		///<summary>Instantiated each time GenerateCCD() is called. Used to generate unique "id" element "root" attribute identifiers. The Ids in this list are random GUIDs which are 36 characters in length.</summary>
 		private static HashSet<string> _hashCcdGuids;
 
-		public static string GenerateCCD(Patient pat) {
+		///<summary>Generates a Clinical Summary XML document with an appropriate referral string.</summary>
+		public static string GenerateClinicalSummary(Patient pat) {
+			string referralReason="Summary of previous appointment requested.";
+			return GenerateCCD(pat,referralReason);
+		}
+
+		///<summary>Generates a Summary of Care XML document with an appropriate referral string.</summary>
+		public static string GenerateSummaryOfCare(Patient pat) {
+			string referralReason="Transfer of care to another provider.";
+			return GenerateCCD(pat,referralReason);
+		}
+
+		///<summary>Generates an Electronic Copy XML document with an appropriate referral string.</summary>
+		public static string GenerateElectronicCopy(Patient pat) {
+			string referralReason="Patient requested a copy of medical records.";
+			return GenerateCCD(pat,referralReason);
+		}
+
+		///<summary>Generates a Patient Export XML document with an appropriate referral string.</summary>
+		public static string GeneratePatientExport(Patient pat) {
+			string referralReason="Patient requested export.";
+			return GenerateCCD(pat,referralReason);
+		}
+
+		private static string GenerateCCD(Patient pat,string referralReason) {
 			_patOutCcd=pat;
 			_hashCcdIds=new HashSet<string>();//The IDs only need to be unique within each CCD document.
 			_hashCcdGuids=new HashSet<string>();//The UUIDs only need to be unique within each CCD document.
@@ -205,7 +229,7 @@ Body
 				GenerateCcdSectionPlanOfCare();
 				GenerateCcdSectionProblems();
 				GenerateCcdSectionProcedures();
-				GenerateCcdSectionReasonForReferral();
+				GenerateCcdSectionReasonForReferral(referralReason);
 				GenerateCcdSectionResults();//Lab Results
 				GenerateCcdSectionSocialHistory();
 				GenerateCcdSectionVitalSigns();
@@ -1081,8 +1105,18 @@ Procedures
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdSectionReasonForReferral() {
-			//TODO: Allen
+		private static void GenerateCcdSectionReasonForReferral(string referralReason) {
+			Start("component");
+			Start("section");
+			TemplateId("1.3.6.1.4.1.19376.1.5.3.1.3.1");
+			_w.WriteComment("Reason for Referral Section Template");
+			StartAndEnd("code","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"code","42349-1","displayName","Reason for Referral");
+			_w.WriteElementString("title","Reason for Referral");
+			Start("text");
+			_w.WriteElementString("paragraph",referralReason);
+			End("text");
+			End("section");
+			End("component");
 		}
 
 		///<summary>Helper for GenerateCCD().  Exports Labs.</summary>

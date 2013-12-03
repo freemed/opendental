@@ -104,7 +104,7 @@ namespace OpenDental {
 					return;
 				}
 			}
-			string ccd=EhrCCD.GenerateCCD(PatCur);
+			string ccd=EhrCCD.GenerateElectronicCopy(PatCur);
 			File.WriteAllText(Path.Combine(dlg.SelectedPath,"ccd.xml"),ccd);
 			File.WriteAllText(Path.Combine(dlg.SelectedPath,"ccd.xsl"),FormEHR.GetEhrResource("CCD"));
 			RecordRequestAndProvide();
@@ -114,7 +114,7 @@ namespace OpenDental {
 		private void butSendEmail_Click(object sender,EventArgs e) {
 			RecordRequestAndProvide();
 			Cursor=Cursors.WaitCursor;
-			string ccd=EhrCCD.GenerateCCD(PatCur);
+			string ccd=EhrCCD.GenerateElectronicCopy(PatCur);
 			try {
 				EmailMessages.SendTestUnsecure("Electronic Copy of Health Information","ccd.xml",ccd,"ccd.xsl",FormEHR.GetEhrResource("CCD"));
 			}
@@ -128,12 +128,12 @@ namespace OpenDental {
 		}
 
 		private void butShowXhtml_Click(object sender,EventArgs e) {
-			string ccd=EhrCCD.GenerateCCD(PatCur);
+			string ccd=EhrCCD.GenerateElectronicCopy(PatCur);
 			FormEhrSummaryOfCare.DisplayCCD(ccd);
 		}
 
 		private void butShowXml_Click(object sender,EventArgs e) {
-			string ccd=EhrCCD.GenerateCCD(PatCur);
+			string ccd=EhrCCD.GenerateElectronicCopy(PatCur);
 			MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste(ccd);
 			msgbox.ShowDialog();
 		}

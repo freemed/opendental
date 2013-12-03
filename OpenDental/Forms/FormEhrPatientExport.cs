@@ -168,7 +168,7 @@ namespace OpenDental {
 					}
 				}
 				fileName+="_"+patCur.PatNum;  //LName_FName_PatNum
-				string ccd=EhrCCD.GenerateCCD(patCur);
+				string ccd=EhrCCD.GeneratePatientExport(patCur);
 				try {
 					File.WriteAllText(ODFileUtils.CombinePaths(folderPath,fileName+".xml"),ccd);
 				}
