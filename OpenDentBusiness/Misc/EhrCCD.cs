@@ -440,12 +440,224 @@ Allergies
 
 		///<summary>Helper for GenerateCCD().</summary>
 		private static void GenerateCcdSectionEncounters() {
-			//TODO: Allen
+			_w.WriteComment(@"
+=====================================================================================================
+Encounters
+=====================================================================================================");
+			List<Encounter> listEncountersAll=Encounters.Refresh(_patOutCcd.PatNum);
+			List<Encounter> listEncountersFiltered=new List<Encounter>();
+			for(int i=0;i<listEncountersAll.Count;i++) {
+				if(listEncountersAll[i].DateEncounter.Year<1880) {
+					continue;//A valid date must be entered
+				}
+				if(listEncountersAll[i].CodeValue=="") {
+					continue;//This code is required, so we must skip any vaccines missing a CVX.
+				}
+				listEncountersFiltered.Add(listEncountersAll[i]);
+			}
+			Start("component");
+			Start("section");
+			if(listEncountersFiltered.Count==0) {
+				TemplateId("2.16.840.1.113883.10.20.22.2.22");//Encounters section with coded entries optional.
+			}
+			else {
+				TemplateId("2.16.840.1.113883.10.20.22.2.22.1");//Encounters section with coded entries required.
+			}
+			_w.WriteComment("Encounters section template");//(Page 227)
+			StartAndEnd("code","code","46240-8","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","History of encounters");
+			_w.WriteElementString("title","Encounters");
+			Start("text");//The following text will be parsed as html with a style sheet to be human readable.
+			Start("table","width","100%","border","1");
+			Start("thead");
+			Start("tr");
+			_w.WriteElementString("th","Encounter");
+			_w.WriteElementString("th","Performer");
+			_w.WriteElementString("th","Location");
+			_w.WriteElementString("th","Date");
+			End("tr");
+			End("thead");
+			Start("tbody");
+			for(int i=0;i<listEncountersFiltered.Count;i++) {
+				Start("tr");
+				_w.WriteElementString("td",listEncountersFiltered[i].Note);//Need to fix these
+				DateText("td",listEncountersFiltered[i].DateEncounter);
+				_w.WriteElementString("td","Completed");
+				_w.WriteElementString("td","Completed");
+				End("tr");
+			}
+			End("tbody");
+			End("table");
+			End("text");
+			for(int i=0;i<listEncountersFiltered.Count;i++) {
+				Start("entry","typeCode","DRIV");
+				Start("encounter","classCode","ENC","moodCode","EVN");
+				TemplateId("2.16.840.1.113883.10.20.22.4.49");
+				_w.WriteComment("Encounter Activity Template");//(Page 358)
+				Guid();
+				StartAndEnd("code","code","99212","displayName","Outpatient Visit","codeSystemName","CPT");//Determine whether to use CPT or not
+				StartAndEnd("effectiveTime","value",DateTime.Now.ToShortDateString());//Add correct date
+				//performer section *May not be necessary*
+				Start("performer");
+				Start("assignedEntity");
+				Guid();
+				_w.WriteComment("Performer Information");
+				Provider prov=Providers.GetProv(listEncountersFiltered[i].ProvNum);
+				StartAndEnd("code","code",prov.SSN,"codeSystem",strCodeSystemSnomed,"displayName","","codeSystemName",strCodeSystemNameSnomed);//Determine how to put in the correct values
+				End("assignedEntity");
+				End("performer");
+				//Possibly add an Instructions Template
+				bool isInversion=false;
+				Start("entryRelationship","typeCode","SUBJ","inversionInd",isInversion.ToString());//Determine how to find Inversion Ind
+				Start("act","classCode","ACT","moodCode","EVN");
+				_w.WriteComment("Encounter Diagnosis Template");//(Page 362)
+				TemplateId("2.16.840.1.113883.10.20.22.4.80");
+				Guid();
+				Start("code");
+				_w.WriteAttributeString("xsi","type",null,"CE");
+				Attribs("code","29308-4","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Encounter Diagnosis");
+				End("code");
+				StartAndEnd("statusCode","code","active");//Not sure why its marked active
+				Start("effectiveTime");
+				StartAndEnd("low","value",listEncountersFiltered[i].DateEncounter.ToShortDateString());//Possibly fix date
+				End("effectiveTime");
+				Start("entryRelationship","typeCode","SUBJ","inversionInd",isInversion.ToString());
+				Start("observation","classCode","OBS","moodCode","EVN","negationInd",isInversion.ToString());
+				TemplateId("2.16.840.1.113883.10.20.22.4.4");//(Page 466)
+				Guid();
+				StartAndEnd("code","code","409586006","codeSystem",strCodeSystemSnomed,"displayName","Complaint");
+				StartAndEnd("statusCode","code","completed");
+				Start("effectiveTime");
+				StartAndEnd("low","value",listEncountersFiltered[i].DateEncounter.ToShortDateString());//Possibly fix date
+				End("effectiveTime");
+				List<string> codes=EhrCodes.GetValueSetOIDsForCode(listEncountersFiltered[i].CodeValue,listEncountersFiltered[i].CodeSystem);
+				List<EhrCode> ehrCode=EhrCodes.GetForValueSetOIDs(codes);
+				Start("value");
+				_w.WriteAttributeString("xsi","type",null,"CD");
+				Attribs("code",listEncountersFiltered[i].CodeValue,"codeSystem",codes[0],"codeSystemName",listEncountersFiltered[i].CodeSystem,"displayName",ehrCode[0].ValueSetName);
+				End("value");
+				End("observation");
+				End("entryRelationship");
+				End("act");
+				End("entryRelationship");
+				End("encounter");
+				End("entry");
+			}
+			End("section");
+			End("component");
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
 		private static void GenerateCcdSectionFunctionalStatus() {
-			//TODO: Allen
+			string snomedProblemType="55607006";
+			_w.WriteComment(@"
+=====================================================================================================
+Functional and Cognitive Status
+=====================================================================================================");
+			List<Disease> listProblemsAll=Diseases.Refresh(_patOutCcd.PatNum);
+			List<Disease> listProblemsFiltered=new List<Disease>();
+			for(int i=0;i<listProblemsAll.Count;i++) {
+				if(listProblemsAll[i].SnomedProblemType!="" && listProblemsAll[i].SnomedProblemType!=snomedProblemType) {
+					continue;//Not a "problem".
+				}
+				if(listProblemsAll[i].FunctionStatus==FunctionalStatus.Problem) {
+					continue;//Not a "problem".
+				}
+				listProblemsFiltered.Add(listProblemsAll[i]);
+			}
+			Start("component");
+			Start("section");
+			if(listProblemsFiltered.Count==0) {
+				TemplateId("2.16.840.1.113883.10.20.22.2.14");//Functional Status section with coded entries optional.
+			}
+			else {
+				TemplateId("2.16.840.1.113883.10.20.22.2.14.1");//Not sure if this is necessary
+			}
+			_w.WriteComment("Functional Status section template");//(Page 232)
+			StartAndEnd("code","code","47420-5","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","History of encounters");
+			_w.WriteElementString("title","Functional Status");
+			Start("text");//The following text will be parsed as html with a style sheet to be human readable.
+			Start("table","width","100%","border","1");
+			Start("thead");
+			Start("tr");
+			_w.WriteElementString("th","Functional Condition");
+			_w.WriteElementString("th","Effective Dates");
+			_w.WriteElementString("th","Condition Status");
+			End("tr");
+			End("thead");
+			Start("tbody");
+			for(int i=0;i<listProblemsFiltered.Count;i++) {
+				Start("tr");
+				_w.WriteElementString("td",listProblemsFiltered[i].DateStart.ToShortDateString());//Need to fix these
+				_w.WriteElementString("td",listProblemsFiltered[i].PatNote);
+				_w.WriteElementString("td","Completed");
+				End("tr");
+			}
+			End("tbody");
+			End("table");
+			End("text");
+			for(int i=0;i<listProblemsFiltered.Count;i++) {
+				DiseaseDef disD=DiseaseDefs.GetItem(listProblemsFiltered[i].DiseaseDefNum);
+				Start("entry","typeCode","DRIV");
+				Start("observation","classCode","OBS","moodCode","EVN");
+				if(listProblemsFiltered[i].FunctionStatus==FunctionalStatus.FunctionalResult) {
+					TemplateId("2.16.840.1.113883.10.20.22.4.67");//(Page 383)
+					_w.WriteComment("Functional Status Result Observation");
+					Guid();
+					StartAndEnd("code","code","54744-8","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc);
+					StartAndEnd("statusCode","code","completed");
+					StartAndEnd("effectiveTime","value",listProblemsFiltered[i].DateStart.ToShortDateString());
+					Start("value");
+					_w.WriteAttributeString("xsi","type",null,"CD");
+					End("value");
+					StartAndEnd("code","code",disD.SnomedCode,"displayName",disD.DiseaseName,"codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed);
+				}
+				else if(listProblemsFiltered[i].FunctionStatus==FunctionalStatus.CognitiveResult) {
+					TemplateId("2.16.840.1.113883.10.20.22.4.74");//(Page 342)
+					_w.WriteComment("Cognitive Status Result Observation");
+					Guid();
+					StartAndEnd("code","code","5249-2","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc);
+					Start("statusCode","code","completed");
+					StartAndEnd("effectiveTime","value",listProblemsFiltered[i].DateStart.ToShortDateString());
+					Start("value");
+					_w.WriteAttributeString("xsi","type",null,"CD");
+					End("value");
+					StartAndEnd("code","code",disD.SnomedCode,"displayName",disD.DiseaseName,"codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed);
+				}
+				else if(listProblemsFiltered[i].FunctionStatus==FunctionalStatus.FunctionalProblem) {
+					TemplateId("2.16.840.1.113883.10.20.22.4.68");//(Page 379)
+					_w.WriteComment("Functional Status Problem Observation");
+					Guid();
+					//Hard coded the value into the next line, but not sure if it should stay
+					StartAndEnd("code","code","404684003","codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed,"displayName","Finding of Functional Performance and activity");
+					StartAndEnd("statusCode","code","completed");
+					Start("effectiveTime");
+					StartAndEnd("low","value",listProblemsFiltered[i].DateStart.ToShortDateString());
+					End("effectiveTime");
+					Start("value");
+					_w.WriteAttributeString("xsi","type",null,"CD");
+					Attribs("code",disD.SnomedCode,"codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed,"displayName",disD.DiseaseName);
+					End("value");
+				}
+				else if(listProblemsFiltered[i].FunctionStatus==FunctionalStatus.CognitiveProblem) {
+					TemplateId("2.16.840.1.113883.10.20.22.4.73");//(Page 336)
+					_w.WriteComment("Cognitive Status Problem Observation");
+					Guid();
+					//Hard coded the value into the next line, but not sure if it should stay
+					StartAndEnd("code","code","373930000","codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed,"displayName","Cognitive Function Finding");
+					StartAndEnd("statusCode","code","completed");
+					Start("effectiveTime");
+					StartAndEnd("low","value",listProblemsFiltered[i].DateStart.ToShortDateString());
+					End("effectiveTime");
+					Start("value");
+					_w.WriteAttributeString("xsi","type",null,"CD");
+					Attribs("code",disD.SnomedCode,"codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed,"displayName",disD.DiseaseName);
+					End("value");
+				}
+				End("observation");
+				End("entry");
+			}
+			End("section");
+			End("component");
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
