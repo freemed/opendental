@@ -753,12 +753,22 @@ namespace OpenDentBusiness{
 			if(message.DateValue!=null) {//Is null when sending, but should not be null when receiving.
 				//The received email message date must be in a very specific format and must match the RFC822 standard.  Is a required field for RFC822.  http://tools.ietf.org/html/rfc822
 				//We need the received time from the server, so we can quickly identify messages which have already been downloaded and to avoid downloading duplicates.
-				//Examples: "12 Nov 2013 17:10:37 -0800", "Tue, 12 Nov 2013 17:10:37 +0000 (UTC)"
-				if(message.DateValue.Contains(",")) {//The day-of-week, comma and following space are optional. Examples: "Tue, 12 Nov 2013 17:10:37 +0000", "Tue, 12 Nov 2013 17:10:37 +0000 (UTC)"
-					emailMessage.MsgDateTime=DateTime.ParseExact(message.DateValue.Substring(0,31),"ddd, dd MMM yyyy HH:mm:ss zzz",System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat);
+				//Examples: "3 Dec 2013 17:10:37 -0800", "10 Dec 2013 17:10:37 -0800", "Tue, 5 Nov 2013 17:10:37 +0000 (UTC)", "Tue, 12 Nov 2013 17:10:37 +0000 (UTC)"
+				if(message.DateValue.Contains(",")) {//The day-of-week, comma and following space are optional. Examples: "Tue, 3 Dec 2013 17:10:37 +0000", "Tue, 12 Nov 2013 17:10:37 +0000 (UTC)"
+					try {
+						emailMessage.MsgDateTime=DateTime.ParseExact(message.DateValue.Substring(0,31),"ddd, d MMM yyyy HH:mm:ss zzz",System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat);
+					}
+					catch {
+						emailMessage.MsgDateTime=DateTime.ParseExact(message.DateValue.Substring(0,30),"ddd, d MMM yyyy HH:mm:ss zzz",System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat);
+					}
 				}
-				else {//Examples: "12 Nov 2013 17:10:37 -0800", "12 Nov 2013 17:10:37 -0800 (UTC)"
-					emailMessage.MsgDateTime=DateTime.ParseExact(message.DateValue.Substring(0,26),"dd MMM yyyy HH:mm:ss zzz",System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat);
+				else {//Examples: "3 Dec 2013 17:10:37 -0800", "12 Nov 2013 17:10:37 -0800 (UTC)"
+					try {
+						emailMessage.MsgDateTime=DateTime.ParseExact(message.DateValue.Substring(0,26),"d MMM yyyy HH:mm:ss zzz",System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat);
+					}
+					catch {
+						emailMessage.MsgDateTime=DateTime.ParseExact(message.DateValue.Substring(0,25),"d MMM yyyy HH:mm:ss zzz",System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat);
+					}
 				}
 			}
 			else {//Sending the email.
