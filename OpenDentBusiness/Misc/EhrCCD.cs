@@ -222,14 +222,14 @@ Body
 				Start("component");
 				Start("structuredBody");
 				GenerateCcdSectionAllergies();
-				GenerateCcdSectionEncounters();
+				//GenerateCcdSectionEncounters();
 				GenerateCcdSectionFunctionalStatus();
 				GenerateCcdSectionImmunizations();
 				GenerateCcdSectionMedications();
 				GenerateCcdSectionPlanOfCare();
 				GenerateCcdSectionProblems();
-				GenerateCcdSectionProcedures();
-				GenerateCcdSectionReasonForReferral(referralReason);
+				//GenerateCcdSectionProcedures();
+				//GenerateCcdSectionReasonForReferral(referralReason);
 				GenerateCcdSectionResults();//Lab Results
 				GenerateCcdSectionSocialHistory();
 				GenerateCcdSectionVitalSigns();
@@ -584,20 +584,18 @@ Functional and Cognitive Status
 					continue;//Not a "problem".
 				}
 				if(listProblemsAll[i].FunctionStatus==FunctionalStatus.Problem) {
-					continue;//Not a "problem".
+					continue;//Is a standard problem, not a cognitive or functional problem.
+				}
+				if(listProblemsAll[i].DateStart.Year<1880) {
+					continue;
 				}
 				listProblemsFiltered.Add(listProblemsAll[i]);
 			}
 			Start("component");
 			Start("section");
-			if(listProblemsFiltered.Count==0) {
-				TemplateId("2.16.840.1.113883.10.20.22.2.14");//Functional Status section with coded entries optional.
-			}
-			else {
-				TemplateId("2.16.840.1.113883.10.20.22.2.14.1");//Not sure if this is necessary
-			}
+			TemplateId("2.16.840.1.113883.10.20.22.2.14");//Functional Status section. There is only one allowed template id.
 			_w.WriteComment("Functional Status section template");//(Page 232)
-			StartAndEnd("code","code","47420-5","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","History of encounters");
+			StartAndEnd("code","code","47420-5","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Functional Status");
 			_w.WriteElementString("title","Functional Status");
 			Start("text");//The following text will be parsed as html with a style sheet to be human readable.
 			Start("table","width","100%","border","1");
@@ -610,9 +608,21 @@ Functional and Cognitive Status
 			End("thead");
 			Start("tbody");
 			for(int i=0;i<listProblemsFiltered.Count;i++) {
+				DiseaseDef diseaseDef=DiseaseDefs.GetItem(listProblemsFiltered[i].DiseaseDefNum);
+				Snomed snomedProblem=Snomeds.GetByCode(diseaseDef.SnomedCode);
 				Start("tr");
-				_w.WriteElementString("td",listProblemsFiltered[i].DateStart.ToShortDateString());//Need to fix these
-				_w.WriteElementString("td",listProblemsFiltered[i].PatNote);
+				_w.WriteElementString("td",snomedProblem.SnomedCode+" - "+snomedProblem.Description);
+				if(listProblemsFiltered[i].FunctionStatus==FunctionalStatus.FunctionalResult || listProblemsFiltered[i].FunctionStatus==FunctionalStatus.CognitiveResult) {
+					DateText("td",listProblemsFiltered[i].DateStart);
+				}
+				else {//functional problem and cognitive problem
+					if(listProblemsFiltered[i].DateStop.Year>1880) {
+						_w.WriteElementString("td",listProblemsFiltered[i].DateStart.ToString("yyyyMMdd")+" to "+listProblemsFiltered[i].DateStop.ToString("yyyyMMdd"));
+					}
+					else {
+						DateText("td",listProblemsFiltered[i].DateStart);
+					}
+				}
 				_w.WriteElementString("td","Completed");
 				End("tr");
 			}
@@ -620,7 +630,8 @@ Functional and Cognitive Status
 			End("table");
 			End("text");
 			for(int i=0;i<listProblemsFiltered.Count;i++) {
-				DiseaseDef disD=DiseaseDefs.GetItem(listProblemsFiltered[i].DiseaseDefNum);
+				DiseaseDef diseaseDef=DiseaseDefs.GetItem(listProblemsFiltered[i].DiseaseDefNum);
+				Snomed snomedProblem=Snomeds.GetByCode(diseaseDef.SnomedCode);
 				Start("entry","typeCode","DRIV");
 				Start("observation","classCode","OBS","moodCode","EVN");
 				if(listProblemsFiltered[i].FunctionStatus==FunctionalStatus.FunctionalResult) {
@@ -629,52 +640,60 @@ Functional and Cognitive Status
 					Guid();
 					StartAndEnd("code","code","54744-8","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc);
 					StartAndEnd("statusCode","code","completed");
-					StartAndEnd("effectiveTime","value",listProblemsFiltered[i].DateStart.ToShortDateString());
+					DateElement("effectiveTime",listProblemsFiltered[i].DateStart);
 					Start("value");
 					_w.WriteAttributeString("xsi","type",null,"CD");
+					Attribs("code",snomedProblem.SnomedCode,"displayName",snomedProblem.Description,"codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed);
 					End("value");
-					StartAndEnd("code","code",disD.SnomedCode,"displayName",disD.DiseaseName,"codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed);
 				}
 				else if(listProblemsFiltered[i].FunctionStatus==FunctionalStatus.CognitiveResult) {
 					TemplateId("2.16.840.1.113883.10.20.22.4.74");//(Page 342)
 					_w.WriteComment("Cognitive Status Result Observation");
 					Guid();
 					StartAndEnd("code","code","5249-2","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc);
-					Start("statusCode","code","completed");
-					StartAndEnd("effectiveTime","value",listProblemsFiltered[i].DateStart.ToShortDateString());
+					StartAndEnd("statusCode","code","completed");
+					DateElement("effectiveTime",listProblemsFiltered[i].DateStart);
 					Start("value");
 					_w.WriteAttributeString("xsi","type",null,"CD");
+					Attribs("code",snomedProblem.SnomedCode,"displayName",snomedProblem.Description,"codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed);
 					End("value");
-					StartAndEnd("code","code",disD.SnomedCode,"displayName",disD.DiseaseName,"codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed);
 				}
 				else if(listProblemsFiltered[i].FunctionStatus==FunctionalStatus.FunctionalProblem) {
 					TemplateId("2.16.840.1.113883.10.20.22.4.68");//(Page 379)
 					_w.WriteComment("Functional Status Problem Observation");
 					Guid();
-					//Hard coded the value into the next line, but not sure if it should stay
-					StartAndEnd("code","code","404684003","codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed,"displayName","Finding of Functional Performance and activity");
+					StartAndEnd("code","code","404684003","codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed,"displayName","Finding of Functional Performance and Activity");
 					StartAndEnd("statusCode","code","completed");
 					Start("effectiveTime");
-					StartAndEnd("low","value",listProblemsFiltered[i].DateStart.ToShortDateString());
+					DateElement("low",listProblemsFiltered[i].DateStart);
+					//"If the problem is known to be resolved, but the date of resolution is not known, then the high element SHALL be present, and 
+					//the nullFlavor attribute SHALL be set to 'UNK'. Therefore, the existence of an high element within a problem does indicate that the problem has been resolved."
+					if(listProblemsFiltered[i].DateStop.Year>1880) {
+						DateElement("high",listProblemsFiltered[i].DateStop);
+					}
 					End("effectiveTime");
 					Start("value");
 					_w.WriteAttributeString("xsi","type",null,"CD");
-					Attribs("code",disD.SnomedCode,"codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed,"displayName",disD.DiseaseName);
+					Attribs("code",snomedProblem.SnomedCode,"displayName",snomedProblem.Description,"codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed);
 					End("value");
 				}
 				else if(listProblemsFiltered[i].FunctionStatus==FunctionalStatus.CognitiveProblem) {
 					TemplateId("2.16.840.1.113883.10.20.22.4.73");//(Page 336)
 					_w.WriteComment("Cognitive Status Problem Observation");
 					Guid();
-					//Hard coded the value into the next line, but not sure if it should stay
 					StartAndEnd("code","code","373930000","codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed,"displayName","Cognitive Function Finding");
 					StartAndEnd("statusCode","code","completed");
+					//"If the problem is known to be resolved, but the date of resolution is not known, then the high element SHALL be present, and 
+					//the nullFlavor attribute SHALL be set to 'UNK'. Therefore, the existence of a high element within a problem does indicate that the problem has been resolved."
 					Start("effectiveTime");
-					StartAndEnd("low","value",listProblemsFiltered[i].DateStart.ToShortDateString());
+					DateElement("low",listProblemsFiltered[i].DateStart);
+					if(listProblemsFiltered[i].DateStop.Year>1880) {
+						DateElement("high",listProblemsFiltered[i].DateStop);
+					}
 					End("effectiveTime");
 					Start("value");
 					_w.WriteAttributeString("xsi","type",null,"CD");
-					Attribs("code",disD.SnomedCode,"codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed,"displayName",disD.DiseaseName);
+					Attribs("code",snomedProblem.SnomedCode,"displayName",snomedProblem.Description,"codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed);
 					End("value");
 				}
 				End("observation");
@@ -835,8 +854,8 @@ Medications
 				if(MedicationPats.IsMedActive(listMedPatsFiltered[i])) {
 					strStatus="active";
 				}
-				StartAndEnd("statusCode","code",strStatus);
 				_w.WriteElementString("text",listMedPatsFiltered[i].PatNote);
+				StartAndEnd("statusCode","code",strStatus);
 				Start("effectiveTime");
 				_w.WriteAttributeString("xsi","type",null,"IVL_TS");
 				DateElement("low",listMedPatsFiltered[i].DateStart);//Only one of these dates can be null, because of our filter above.
@@ -1034,7 +1053,13 @@ Procedures
 			List<Procedure> listProcsFiltered=new List<Procedure>();
 			for(int i=0;i<listProcsAll.Count;i++) {
 				if(listProcsAll[i].ProcStatus==ProcStat.D) {
-					continue;
+					continue;//Ignore deleted procedures.
+				}
+				if(listProcsAll[i].ProcStatus==ProcStat.TP) {
+					continue;//Ignore treatment planned procedures.  These procedures should be sent out in the Care Plan section in the future.  We are not required to send treatment planned items.
+				}
+				if(listProcsAll[i].ProcStatus==ProcStat.R) {
+					continue;//Ignore procedures referred out.  It is the responsibility of the treating dentist to perform work they have completed.
 				}
 				listProcsFiltered.Add(listProcsAll[i]);
 			}
