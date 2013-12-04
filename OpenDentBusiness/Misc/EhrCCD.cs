@@ -229,7 +229,7 @@ Body
 				GenerateCcdSectionPlanOfCare();
 				GenerateCcdSectionProblems();
 				//GenerateCcdSectionProcedures();
-				//GenerateCcdSectionReasonForReferral(referralReason);
+				GenerateCcdSectionReasonForReferral(referralReason);
 				GenerateCcdSectionResults();//Lab Results
 				GenerateCcdSectionSocialHistory();
 				GenerateCcdSectionVitalSigns();
@@ -1131,6 +1131,10 @@ Procedures
 
 		///<summary>Helper for GenerateCCD().</summary>
 		private static void GenerateCcdSectionReasonForReferral(string referralReason) {
+			_w.WriteComment(@"
+=====================================================================================================
+Reason for Referral
+=====================================================================================================");
 			Start("component");
 			Start("section");
 			TemplateId("1.3.6.1.4.1.19376.1.5.3.1.3.1");
