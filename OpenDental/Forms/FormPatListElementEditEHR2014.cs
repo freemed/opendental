@@ -326,10 +326,10 @@ namespace OpenDental {
 						MsgBox.Show(this,"Please select a valid Loinc Code.");
 						return false;
 					}
-					if(Loincs.GetByCode(textCompareString.Text)==null) {
-						MsgBox.Show(this,"Loinc code does not exist in database, pick from list.");
-						return false;
-					}
+					//if(Loincs.GetByCode(textCompareString.Text)==null) {
+					//	MsgBox.Show(this,"Loinc code does not exist in database, pick from list.");
+					//	return false;
+					//}
 					if(textDateStart.errorProvider1.GetError(textDateStart)!=""
 						|| textDateStop.errorProvider1.GetError(textDateStop)!=""
 						) {

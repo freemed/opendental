@@ -30,7 +30,7 @@ namespace OpenDentBusiness {
 						select+=",labresult"+i+".ObsValue,labresult"+i+".DateTimeTest";//format column name when filling grid.
 						from+=",labresult AS labresult"+i+", labpanel AS labpanel"+i;
 						where+="AND labpanel"+i+".LabpanelNum=labresult"+i+".LabpanelNum AND patient.PatNum=labpanel"+i+".PatNum ";//join
-						where+="AND labresult"+i+".TestName='"+elementList[i].CompareString+"' "
+						where+="AND labresult"+i+".TestId='"+elementList[i].CompareString+"' "
 									+"AND labresult"+i+".ObsValue"+GetOperandText(elementList[i].Operand)+"'"+PIn.String(elementList[i].LabValue)+"' ";//filter
 						if(elementList[i].StartDate!=null && elementList[i].StartDate.Year>1880) {
 							where+="AND labresult"+i+".DateTimeTest>"+POut.Date(elementList[i].StartDate)+" ";//after this date
@@ -45,7 +45,7 @@ namespace OpenDentBusiness {
 						where+="AND medicationpat"+i+".PatNum=patient.PatNum ";//join
 						//This is unusual.  Part of the join logic is in the code below because medicationPat.MedicationNum might be 0 if it came from newcrop.
 						where+="AND ((medication"+i+".MedicationNum=MedicationPat"+i+".MedicationNum AND medication"+i+".MedName LIKE '%"+PIn.String(elementList[i].CompareString)+"%') "
-						      +"  OR (medication.MedicationNum=0 AND medicationpat.MedDescript LIKE '%"+PIn.String(elementList[i].CompareString)+"%')) ";
+						      +"  OR (medication"+i+".MedicationNum=0 AND medicationpat"+i+".MedDescript LIKE '%"+PIn.String(elementList[i].CompareString)+"%')) ";
 						if(elementList[i].StartDate!=null && elementList[i].StartDate.Year>1880) {
 							where+="AND medicationpat"+i+".DateStart>"+POut.Date(elementList[i].StartDate)+" ";//after this date
 						}
@@ -78,7 +78,7 @@ namespace OpenDentBusiness {
 						}
 						break;
 					case EhrRestrictionType.CommPref://----------------------------------------------------------------------------------------------------------------------------
-						select+=",patient.PreferContactMethod";
+						select+=",patient.PreferContactConfidential";
 						from+="";//only selecting from patient table
 						where+="AND patient.PreferContactConfidential="+PIn.Int(contactMethodHelper(elementList[i].CompareString))+" ";
 						break;
