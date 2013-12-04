@@ -31,6 +31,18 @@ namespace OpenDentBusiness {
 		private const string strCodeSystemCvx="2.16.840.1.113883.12.292";
 		///<summary>CVX</summary>
 		private const string strCodeSystemNameCvx="CVX";
+		///<summary>2.16.840.1.113883.6.12</summary>
+		private const string strCodeSystemCpt4="2.16.840.1.113883.6.12";
+		///<summary>CPT-4</summary>
+		private const string strCodeSystemNameCpt4="CPT-4";
+		///<summary>2.16.840.1.113883.6.104</summary>
+		private const string strCodeSystemIcd9="2.16.840.1.113883.6.104";
+		///<summary>ICD9</summary>
+		private const string strCodeSystemNameIcd9="ICD9";
+		///<summary>2.16.840.1.113883.6.4</summary>
+		private const string strCodeSystemIcd10="2.16.840.1.113883.6.4";
+		///<summary>ICD10</summary>
+		private const string strCodeSystemNameIcd10="ICD10";
 		///<summary>Set each time GenerateCCD() is called. Used by helper functions to avoid sending the patient as a parameter to each helper function.</summary>
 		private static Patient _patOutCcd=null;
 		///<summary>Instantiated each time GenerateCCD() is called. Used by helper functions to avoid sending the writer as a parameter to each helper function.</summary>
@@ -228,7 +240,7 @@ Body
 				GenerateCcdSectionMedications();
 				GenerateCcdSectionPlanOfCare();
 				GenerateCcdSectionProblems();
-				//GenerateCcdSectionProcedures();
+				GenerateCcdSectionProcedures();
 				GenerateCcdSectionReasonForReferral(referralReason);
 				GenerateCcdSectionResults();//Lab Results
 				GenerateCcdSectionSocialHistory();
@@ -1052,6 +1064,7 @@ Procedures
 			List<Procedure> listProcsAll=Procedures.Refresh(_patOutCcd.PatNum);
 			List<Procedure> listProcsFiltered=new List<Procedure>();
 			for(int i=0;i<listProcsAll.Count;i++) {
+				ProcedureCode procCode=ProcedureCodes.GetProcCode(listProcsAll[i].CodeNum);
 				if(listProcsAll[i].ProcStatus==ProcStat.D) {
 					continue;//Ignore deleted procedures.
 				}
@@ -1059,7 +1072,10 @@ Procedures
 					continue;//Ignore treatment planned procedures.  These procedures should be sent out in the Care Plan section in the future.  We are not required to send treatment planned items.
 				}
 				if(listProcsAll[i].ProcStatus==ProcStat.R) {
-					continue;//Ignore procedures referred out.  It is the responsibility of the treating dentist to perform work they have completed.
+					continue;//Ignore procedures referred out.  It is the responsibility of the treating dentist to record work they have performed.
+				}
+				if(procCode.MedicalCode=="") {
+					continue;//We need a medical CPT-4 code, since ADA codes are not allowed in this format. MedicalCodes are optional, so we must make sure to filter out procedures missing medical codes.
 				}
 				listProcsFiltered.Add(listProcsAll[i]);
 			}
@@ -1073,7 +1089,7 @@ Procedures
 			}
 			_w.WriteComment("Procedures section template");
 			StartAndEnd("code","code","47519-4","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","History of procedures");
-			_w.WriteElementString("title","PROCEDURES");
+			_w.WriteElementString("title","Procedures");
 			Start("text");//The following text will be parsed as html with a style sheet to be human readable.
 			Start("table","width","100%","border","1");
 			Start("thead");
@@ -1084,44 +1100,29 @@ Procedures
 			End("thead");
 			Start("tbody");
 			for(int i=0;i<listProcsFiltered.Count;i++) {
+				ProcedureCode procCode=ProcedureCodes.GetProcCode(listProcsFiltered[i].CodeNum);
 				Start("tr");
-				_w.WriteElementString("td","INSERT PROCEDURE NAME");//TODO: Fill ProcName
-				DateElement("td",listProcsFiltered[i].DateTP);//TODO: Decide on a date
+				_w.WriteElementString("td",procCode.MedicalCode+" - "+procCode.Descript);
+				DateText("td",listProcsFiltered[i].ProcDate);
 				End("tr");
 			}
 			End("tbody");
 			End("table");
 			End("text");
 			for(int i=0;i<listProcsFiltered.Count;i++) {
+				ProcedureCode procCode=ProcedureCodes.GetProcCode(listProcsFiltered[i].CodeNum);
 				Start("entry","typeCode","DRIV");
 				Start("procedure","classCode","PROC","moodCode","EVN");
 				TemplateId("2.16.840.1.113883.10.20.22.4.14");//Procedure Activity Section (Page 487).
 				_w.WriteComment("Procedure Activity Template");
 				Guid();
-				StartAndEnd("code","code","SNOMEDCODE","codeSystem",strCodeSystemSnomed,"displayName","PROCEDURENAME","codeSystemName",strCodeSystemNameSnomed);//TODO: Fill in Snomeds
-				StartAndEnd("statusCode","code","completed");
-				StartAndEnd("effectiveTime","value","CHOOSEADATE");//Todo: choose a date
-				StartAndEnd("targetSiteCode","code","SNOMEDCODE","codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed,"displayName","SITEOFTHEPROC");//TODO: I included this, but I am not sure if it is necessary or if we can populate it with the relevant info.
-				//The next section I am not sure if we can populate or if we need to, but it isn't hurting anything to add if we just want to comment it out for now.
-				Start("performer");
-				Start("assignedEntity");
-				Guid();
-				Start("addr");
-				_w.WriteElementString("streetAddressLine","STREETNAME");
-				_w.WriteElementString("city","CITYNAME");
-				_w.WriteElementString("state","STATEABRV");
-				_w.WriteElementString("postalCode","ZIP");
-				_w.WriteElementString("country","COUNTRY");//Might be able to default this to US
-				End("addr");
-				StartAndEnd("telecom","use","CHOOSEAPHONETYPE","value","PHONENUMBER");//TODO: Phone type is something like (WP) for work phone
-				Start("representedOrganization");//This section is really completely optional inside the Performer, but it does display the organization name if it is a large group
-				Guid();
-				_w.WriteElementString("name","PRACTICENAME");
-				StartAndEnd("telecom","nullFlavor","UNK");//these are set to UNK because they would be the same as above.
-				StartAndEnd("addr","nullFlavor","UNK");//these are set to UNK because they would be the same as above.
-				End("representedOrganization");
-				End("assignedEntity");
-				End("performer");
+				//"This code in a procedure activity SHOULD be selected from LOINC (codeSystem 2.16.840.1.113883.6.1) or SNOMED CT (CodeSystem: 2.16.840.1.113883.6.96),
+				//and MAY be selected from CPT-4 (CodeSystem: 2.16.840.1.113883.6.12), ICD9 Procedures (CodeSystem: 2.16.840.1.113883.6.104),
+				//ICD10 Procedure Coding System (CodeSystem: 2.16.840.1.113883.6.4) (CONF:7657)."
+				//We already have a place for CPT codes, and that is ProcedureCode.MedicalCode. We will simply use this field for now.
+				StartAndEnd("code","code",procCode.MedicalCode,"codeSystem",strCodeSystemCpt4,"displayName",procCode.Descript,"codeSystemName",strCodeSystemNameCpt4);
+				StartAndEnd("statusCode","code","completed");//Allowed values: completed, active, aborted, cancelled.
+				DateElement("effectiveTime",listProcsFiltered[i].ProcDate);
 				End("procedure");
 				End("entry");
 			}
