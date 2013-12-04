@@ -43,6 +43,10 @@ namespace OpenDentBusiness {
 		private const string strCodeSystemIcd10="2.16.840.1.113883.6.4";
 		///<summary>ICD10</summary>
 		private const string strCodeSystemNameIcd10="ICD10";
+		///<summary>2.16.840.1.113883.6.101</summary>
+		private const string strCodeSystemNucc="2.16.840.1.113883.6.101";
+		///<summary>NUCC</summary>
+		private const string strCodeSystemNameNucc="NUCC";
 		///<summary>Set each time GenerateCCD() is called. Used by helper functions to avoid sending the patient as a parameter to each helper function.</summary>
 		private static Patient _patOutCcd=null;
 		///<summary>Instantiated each time GenerateCCD() is called. Used by helper functions to avoid sending the writer as a parameter to each helper function.</summary>
@@ -201,7 +205,7 @@ namespace OpenDentBusiness {
 				TimeElement("time",DateTime.Now);
 				Start("assignedAuthor");
 				StartAndEnd("id","extension",provAuthor.NationalProvID,"root","2.16.840.1.113883.4.6");//TODO: We might need to assign a global GUID for each office so that the provider can be uniquely identified anywhere in the world.
-				//TODO: SHOULD contain a code representing provider specialty. Example: <code code="200000000X" codeSystem="2.16.840.1.113883.6.101" displayName="Allopathic &amp; Osteopathic Physicians"/>
+				StartAndEnd("code","code",GetTaxonomy(provAuthor),"codeSystem",strCodeSystemNucc,"codeSystemName",strCodeSystemNameNucc);
 				AddressUnitedStates(PrefC.GetString(PrefName.PracticeAddress),PrefC.GetString(PrefName.PracticeAddress2),PrefC.GetString(PrefName.PracticeCity),PrefC.GetString(PrefName.PracticeST));
 				string strPracticePhone=PrefC.GetString(PrefName.PracticePhone);
 				strPracticePhone=strPracticePhone.Substring(0,3)+"-"+strPracticePhone.Substring(3,3)+"-"+strPracticePhone.Substring(6);
@@ -251,6 +255,31 @@ Body
 			}
 			SecurityLogs.MakeLogEntry(Permissions.Copy,pat.PatNum,"CCD generated");			//Create audit log entry.
 			return strBuilder.ToString();
+		}
+
+		///<summary>Helper for GenerateCCD() and GenerateCcdSectionEncounters(). Exactly the same taxonomy codes used for X12 in eclaims.</summary>
+		public static string GetTaxonomy(Provider provider) {
+			if(provider.TaxonomyCodeOverride!="") {
+				return provider.TaxonomyCodeOverride;
+			}
+			string spec="1223G0001X";//general
+			switch(provider.Specialty) {
+				case DentalSpecialty.General: spec="1223G0001X"; break;
+				case DentalSpecialty.Hygienist: spec="124Q00000X"; break;
+				case DentalSpecialty.PublicHealth: spec="1223D0001X"; break;
+				case DentalSpecialty.Endodontics: spec="1223E0200X"; break;
+				case DentalSpecialty.Pathology: spec="1223P0106X"; break;
+				case DentalSpecialty.Radiology: spec="1223X0008X"; break;
+				case DentalSpecialty.Surgery: spec="1223S0112X"; break;
+				case DentalSpecialty.Ortho: spec="1223X0400X"; break;
+				case DentalSpecialty.Pediatric: spec="1223P0221X"; break;
+				case DentalSpecialty.Perio: spec="1223P0300X"; break;
+				case DentalSpecialty.Prosth: spec="1223P0700X"; break;
+				case DentalSpecialty.Denturist: spec="122400000X"; break;
+				case DentalSpecialty.Assistant: spec="126800000X"; break;
+				case DentalSpecialty.LabTech: spec="126900000X"; break;
+			}
+			return spec;
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
@@ -486,8 +515,11 @@ Encounters
 				if(listEncountersAll[i].DateEncounter.Year<1880) {
 					continue;//A valid date must be entered
 				}
+				if(listEncountersAll[i].CodeSystem!="SNOMEDCT") {
+					continue;//The format only allows SNOMED codes and ICD10 codes. We do not have a way to enter ICD10 codes, and SNOMED appears to be the preferred code system anyway.
+				}
 				if(listEncountersAll[i].CodeValue=="") {
-					continue;//This code is required, so we must skip any vaccines missing a CVX.
+					continue;//This code is required, so we must skip any encounters missing a code.
 				}
 				listEncountersFiltered.Add(listEncountersAll[i]);
 			}
@@ -519,7 +551,8 @@ Encounters
 					Start("tr");
 				}
 				_w.WriteElementString("td",Providers.GetProv(listEncountersFiltered[i].ProvNum).GetFormalName());
-				_w.WriteElementString("td",DiseaseDefs.GetNameByCode(listEncountersFiltered[i].CodeValue));
+				Snomed snomedDiagnosis=Snomeds.GetByCode(listEncountersFiltered[i].CodeValue);
+				_w.WriteElementString("td",snomedDiagnosis.SnomedCode+" - "+snomedDiagnosis.Description);
 			  DateText("td",listEncountersFiltered[i].DateEncounter);
 				_w.WriteElementString("td",listEncountersFiltered[i].Note);
 				if(i>0) {
@@ -536,20 +569,26 @@ Encounters
 				TemplateId("2.16.840.1.113883.10.20.22.4.49");
 				_w.WriteComment("Encounter Activity Template");//(Page 358)
 				Guid();
-				StartAndEnd("code","code","99212","displayName","Outpatient Visit","codeSystemName","CPT");//Determine whether to use CPT or not
-				StartAndEnd("effectiveTime","value",listEncountersFiltered[i].DateEncounter.ToString("yyyyMMdd"));//Add correct date
-				//performer section *May not be necessary*
+				StartAndEnd("code","code","99212","displayName","Outpatient Visit","codeSystemName","CPT-4");//CPT-4 is required. Valid codes are 99201 through 99607.
+				StartAndEnd("effectiveTime","value",listEncountersFiltered[i].DateEncounter.ToString("yyyyMMdd"));
 				Start("performer");
 				Start("assignedEntity");
 				Guid();
 				_w.WriteComment("Performer Information");
 				Provider prov=Providers.GetProv(listEncountersFiltered[i].ProvNum);
-				StartAndEnd("code","code",prov.SSN,"codeSystem",strCodeSystemSnomed,"displayName","","codeSystemName",strCodeSystemNameSnomed);//Determine how to put in the correct values
+				StartAndEnd("code","code",GetTaxonomy(prov),"codeSystem",strCodeSystemNucc,"codeSystemName",strCodeSystemNameNucc);
+				//The assignedPerson element might not be allowed here. If that is the case, then performer is useless, because it would only contain the specialty code. Our HTML output shows the prov name.
+				Start("assignedPerson");
+				Start("name");
+				_w.WriteElementString("given",prov.FName);
+				_w.WriteElementString("family",prov.LName);
+				End("name");
+				End("assignedPerson");
 				End("assignedEntity");
 				End("performer");
 				//Possibly add an Instructions Template
-				bool isInversion=false;
-				Start("entryRelationship","typeCode","SUBJ","inversionInd",isInversion.ToString());//Determine how to find Inversion Ind
+				bool isInversion=false;//Specifies that the problem was or was not observed. All problems are "observed" for now.
+				Start("entryRelationship","typeCode","SUBJ","inversionInd",isInversion?"true":"false");
 				Start("act","classCode","ACT","moodCode","EVN");
 				_w.WriteComment("Encounter Diagnosis Template");
 				TemplateId("2.16.840.1.113883.10.20.22.4.80");//(Page 362)
@@ -558,25 +597,28 @@ Encounters
 				_w.WriteAttributeString("xsi","type",null,"CE");
 				Attribs("code","29308-4","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Encounter Diagnosis");
 				End("code");
-				StartAndEnd("statusCode","code","active");//Not sure why its marked active
+				StartAndEnd("statusCode","code","completed");
 				Start("effectiveTime");
-				StartAndEnd("low","value",listEncountersFiltered[i].DateEncounter.ToShortDateString());//Possibly fix date
+				DateElement("low",listEncountersFiltered[i].DateEncounter);
 				End("effectiveTime");
-				Start("entryRelationship","typeCode","SUBJ","inversionInd",isInversion.ToString());
-				Start("observation","classCode","OBS","moodCode","EVN","negationInd",isInversion.ToString());
+				Start("entryRelationship","typeCode","SUBJ","inversionInd",isInversion?"true":"false");
+				Start("observation","classCode","OBS","moodCode","EVN","negationInd",isInversion?"true":"false");
 				_w.WriteComment("Problem Observation Template");
 				TemplateId("2.16.840.1.113883.10.20.22.4.4");//(Page 466)
 				Guid();
 				StartAndEnd("code","code","409586006","codeSystem",strCodeSystemSnomed,"displayName","Complaint");
 				StartAndEnd("statusCode","code","completed");
 				Start("effectiveTime");
-				StartAndEnd("low","value",listEncountersFiltered[i].DateEncounter.ToShortDateString());//Possibly fix date
+				DateElement("low",listEncountersFiltered[i].DateEncounter);
+				//"If the problem is known to be resolved, but the date of resolution is not known, 
+				//then the high element SHALL be present, and the nullFlavor attribute SHALL be set to 'UNK'.
+				//Therefore, the existence of an high element within a problem does indicate that the problem has been resolved."
 				End("effectiveTime");
-				List<string> codes=EhrCodes.GetValueSetOIDsForCode(listEncountersFiltered[i].CodeValue,listEncountersFiltered[i].CodeSystem);
-				List<EhrCode> ehrCode=EhrCodes.GetForValueSetOIDs(codes);
 				Start("value");
 				_w.WriteAttributeString("xsi","type",null,"CD");
-				Attribs("code",listEncountersFiltered[i].CodeValue,"codeSystem",codes[0],"codeSystemName",listEncountersFiltered[i].CodeSystem,"displayName",DiseaseDefs.GetNameByCode(listEncountersFiltered[i].CodeValue));
+				//The format only allows SNOMED and ICD10 code systems. If we support ICD10 in the future, then the value must be specified in a special manner. SNOMED appears to be preferred. See the guide for details.
+				Snomed snomedDiagnosis=Snomeds.GetByCode(listEncountersFiltered[i].CodeValue);
+				Attribs("code",snomedDiagnosis.SnomedCode,"codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed,"displayName",snomedDiagnosis.Description);
 				End("value");
 				End("observation");
 				End("entryRelationship");
@@ -761,7 +803,7 @@ Immunizations
 			for(int i=0;i<listVaccinePatsFiltered.Count;i++) {
 				VaccineDef vaccineDef=VaccineDefs.GetOne(listVaccinePatsFiltered[i].VaccineDefNum);
 				Start("tr");
-				_w.WriteElementString("td",vaccineDef.VaccineName);
+				_w.WriteElementString("td",vaccineDef.CVXCode+" - "+vaccineDef.VaccineName);
 				DateText("td",listVaccinePatsFiltered[i].DateTimeStart);
 				_w.WriteElementString("td","Completed");
 				End("tr");
@@ -847,7 +889,7 @@ Medications
 					strMedName=Medications.GetNameOnly(listMedPatsFiltered[i].MedicationNum);
 				}
 				Start("tr");
-				_w.WriteElementString("td",strMedName);//Medication
+				_w.WriteElementString("td",listMedPatsFiltered[i].RxCui+" - "+strMedName);//Medication
 				_w.WriteElementString("td",listMedPatsFiltered[i].PatNote);//Directions
 				DateText("td",listMedPatsFiltered[i].DateStart);//Start Date
 				DateText("td",listMedPatsFiltered[i].DateStop);//End Date
@@ -968,6 +1010,10 @@ Problems
 				if(listProblemsAll[i].FunctionStatus!=FunctionalStatus.Problem) {
 					continue;//Not a "problem".
 				}
+				DiseaseDef diseaseDef=DiseaseDefs.GetItem(listProblemsAll[i].DiseaseDefNum);
+				if(diseaseDef.SnomedCode=="") {
+					continue;//A code is required in the output.
+				}
 				listProblemsFiltered.Add(listProblemsAll[i]);
 			}
 			string status="Inactive";
@@ -987,9 +1033,10 @@ Problems
 			Start("text");
 			StartAndEnd("content","ID","problems");
 			Start("list","listType","ordered");
-			for(int i=0;i<listProblemsFiltered.Count;i++) {//Fill Problems Table				
+			for(int i=0;i<listProblemsFiltered.Count;i++) {//Fill Problems Table
+				DiseaseDef diseaseDef=DiseaseDefs.GetItem(listProblemsFiltered[i].DiseaseDefNum);
 				Start("item");
-				_w.WriteString(DiseaseDefs.GetName(listProblemsFiltered[i].DiseaseDefNum)+" : "+"Status - ");
+				_w.WriteString(diseaseDef.SnomedCode+" - "+diseaseDef.DiseaseName+" : "+"Status - ");
 				if(listProblemsFiltered[i].ProbStatus==ProblemStatus.Active) {
 					_w.WriteString("Active");
 					status="Active";
@@ -1013,6 +1060,7 @@ Problems
 			End("list");
 			End("text");
 			for(int i=0;i<listProblemsFiltered.Count;i++) {//Fill Problems Info
+				DiseaseDef diseaseDef=DiseaseDefs.GetItem(listProblemsFiltered[i].DiseaseDefNum);
 				Start("entry","typeCode","DRIV");
 				Start("act","classCode","ACT","moodCode","EVN");
 				_w.WriteComment("Problem Concern Act template");//Concern Act Section
@@ -1036,7 +1084,7 @@ Problems
 				End("effectiveTime");
 				Start("value");
 				_w.WriteAttributeString("xsi","type",null,"CD");
-				Attribs("code",DiseaseDefs.GetItem(listProblemsFiltered[i].DiseaseDefNum).SnomedCode,"codeSystem",strCodeSystemSnomed,"displayName",DiseaseDefs.GetItem(listProblemsFiltered[i].DiseaseDefNum).DiseaseName);
+				Attribs("code",diseaseDef.SnomedCode,"codeSystem",strCodeSystemSnomed,"displayName",diseaseDef.DiseaseName);
 				End("value");
 				Start("entryRelationship","typeCode","REFR");
 				Start("observation","classCode","OBS","moodCode","EVN");
@@ -1262,6 +1310,9 @@ Social History
 				if(listEhrMeasureEventsAll[i].CodeSystemResult!="SNOMEDCT") {
 					continue;//The user is currently only allowed to pick SNOMED smoking statuses. This is here in case we add more code system in the future, to prevent the format from breaking until we enhance.
 				}
+				if(listEhrMeasureEventsAll[i].CodeValueResult=="") {
+					continue;//A code is required in the output.
+				}
 				if(listEhrMeasureEventsAll[i].DateTEvent.Year<1880) {
 					continue;//Not sure if a blank date can happen. This is here just in case.
 				}
@@ -1290,7 +1341,7 @@ Social History
 				Start("tr");
 				_w.WriteElementString("td","Smoking");
 				Snomed snomedSmoking=Snomeds.GetByCode(listEhrMeasureEventsFiltered[i].CodeValueResult);
-				_w.WriteElementString("td",snomedSmoking.Description);
+				_w.WriteElementString("td",snomedSmoking.SnomedCode+" - "+snomedSmoking.Description);
 				DateTime dateTimeLow=listEhrMeasureEventsFiltered[i].DateTEvent;
 				DateTime dateTimeHigh=DateTime.Now;
 				if(i<listEhrMeasureEventsFiltered.Count-1) {//There is another smoking event after this one (remember, they are sorted by date).
