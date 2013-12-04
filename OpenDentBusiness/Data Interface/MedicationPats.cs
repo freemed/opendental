@@ -180,9 +180,9 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum,onlyActive);
 				return;
 			}
-			string command="UPDATE disease SET DateTStamp = CURRENT_TIMESTAMP WHERE PatNum ="+POut.Long(patNum);
+			string command="UPDATE medicationpat SET DateTStamp = CURRENT_TIMESTAMP WHERE PatNum = "+POut.Long(patNum);
 				if(onlyActive) {
-					command+=" AND DateStop > 1880 OR DateStop <= CURDATE())";
+					command+=" AND (DateStop > 1880 OR DateStop <= CURDATE())";
 			}
 			Db.NonQ(command);
 		}
