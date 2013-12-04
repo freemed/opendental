@@ -234,7 +234,7 @@ Body
 				Start("component");
 				Start("structuredBody");
 				GenerateCcdSectionAllergies();
-				//GenerateCcdSectionEncounters();
+				GenerateCcdSectionEncounters();
 				GenerateCcdSectionFunctionalStatus();
 				GenerateCcdSectionImmunizations();
 				GenerateCcdSectionMedications();
@@ -506,21 +506,27 @@ Encounters
 			Start("table","width","100%","border","1");
 			Start("thead");
 			Start("tr");
-			_w.WriteElementString("th","Encounter");
 			_w.WriteElementString("th","Performer");
-			_w.WriteElementString("th","Location");
+			_w.WriteElementString("th","Observation");
 			_w.WriteElementString("th","Date");
+			_w.WriteElementString("th","Notes");
 			End("tr");
 			End("thead");
 			Start("tbody");
+			Start("tr");
 			for(int i=0;i<listEncountersFiltered.Count;i++) {
-				Start("tr");
-				_w.WriteElementString("td",listEncountersFiltered[i].Note);//Need to fix these
-				DateText("td",listEncountersFiltered[i].DateEncounter);
-				_w.WriteElementString("td","Completed");
-				_w.WriteElementString("td","Completed");
-				End("tr");
+				if(i>0) {
+					Start("tr");
+				}
+				_w.WriteElementString("td",Providers.GetProv(listEncountersFiltered[i].ProvNum).GetFormalName());
+				_w.WriteElementString("td",DiseaseDefs.GetNameByCode(listEncountersFiltered[i].CodeValue));
+			  DateText("td",listEncountersFiltered[i].DateEncounter);
+				_w.WriteElementString("td",listEncountersFiltered[i].Note);
+				if(i>0) {
+					End("tr");
+				}
 			}
+			End("tr");
 			End("tbody");
 			End("table");
 			End("text");
@@ -531,7 +537,7 @@ Encounters
 				_w.WriteComment("Encounter Activity Template");//(Page 358)
 				Guid();
 				StartAndEnd("code","code","99212","displayName","Outpatient Visit","codeSystemName","CPT");//Determine whether to use CPT or not
-				StartAndEnd("effectiveTime","value",DateTime.Now.ToShortDateString());//Add correct date
+				StartAndEnd("effectiveTime","value",listEncountersFiltered[i].DateEncounter.ToString("yyyyMMdd"));//Add correct date
 				//performer section *May not be necessary*
 				Start("performer");
 				Start("assignedEntity");
@@ -545,8 +551,8 @@ Encounters
 				bool isInversion=false;
 				Start("entryRelationship","typeCode","SUBJ","inversionInd",isInversion.ToString());//Determine how to find Inversion Ind
 				Start("act","classCode","ACT","moodCode","EVN");
-				_w.WriteComment("Encounter Diagnosis Template");//(Page 362)
-				TemplateId("2.16.840.1.113883.10.20.22.4.80");
+				_w.WriteComment("Encounter Diagnosis Template");
+				TemplateId("2.16.840.1.113883.10.20.22.4.80");//(Page 362)
 				Guid();
 				Start("code");
 				_w.WriteAttributeString("xsi","type",null,"CE");
@@ -558,6 +564,7 @@ Encounters
 				End("effectiveTime");
 				Start("entryRelationship","typeCode","SUBJ","inversionInd",isInversion.ToString());
 				Start("observation","classCode","OBS","moodCode","EVN","negationInd",isInversion.ToString());
+				_w.WriteComment("Problem Observation Template");
 				TemplateId("2.16.840.1.113883.10.20.22.4.4");//(Page 466)
 				Guid();
 				StartAndEnd("code","code","409586006","codeSystem",strCodeSystemSnomed,"displayName","Complaint");
@@ -569,7 +576,7 @@ Encounters
 				List<EhrCode> ehrCode=EhrCodes.GetForValueSetOIDs(codes);
 				Start("value");
 				_w.WriteAttributeString("xsi","type",null,"CD");
-				Attribs("code",listEncountersFiltered[i].CodeValue,"codeSystem",codes[0],"codeSystemName",listEncountersFiltered[i].CodeSystem,"displayName",ehrCode[0].ValueSetName);
+				Attribs("code",listEncountersFiltered[i].CodeValue,"codeSystem",codes[0],"codeSystemName",listEncountersFiltered[i].CodeSystem,"displayName",DiseaseDefs.GetNameByCode(listEncountersFiltered[i].CodeValue));
 				End("value");
 				End("observation");
 				End("entryRelationship");
