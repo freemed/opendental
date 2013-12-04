@@ -24,12 +24,12 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent() {
 			this.components = new System.ComponentModel.Container();
-			this.textBoxTo = new System.Windows.Forms.TextBox();
+			this.textTo = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
-			this.textBoxFrom = new System.Windows.Forms.TextBox();
+			this.textFrom = new System.Windows.Forms.TextBox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
-			this.textBoxSubject = new System.Windows.Forms.TextBox();
+			this.textSubject = new System.Windows.Forms.TextBox();
 			this.label4 = new System.Windows.Forms.Label();
 			this.labelNotification = new System.Windows.Forms.Label();
 			this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
@@ -42,11 +42,11 @@ namespace OpenDental{
 			// 
 			// textBoxTo
 			// 
-			this.textBoxTo.Location = new System.Drawing.Point(96, 25);
-			this.textBoxTo.Name = "textBoxTo";
-			this.textBoxTo.ReadOnly = true;
-			this.textBoxTo.Size = new System.Drawing.Size(328, 20);
-			this.textBoxTo.TabIndex = 0;
+			this.textTo.Location = new System.Drawing.Point(96, 25);
+			this.textTo.Name = "textBoxTo";
+			this.textTo.ReadOnly = true;
+			this.textTo.Size = new System.Drawing.Size(328, 20);
+			this.textTo.TabIndex = 0;
 			// 
 			// label1
 			// 
@@ -59,11 +59,11 @@ namespace OpenDental{
 			// 
 			// textBoxFrom
 			// 
-			this.textBoxFrom.Location = new System.Drawing.Point(96, 51);
-			this.textBoxFrom.Name = "textBoxFrom";
-			this.textBoxFrom.ReadOnly = true;
-			this.textBoxFrom.Size = new System.Drawing.Size(328, 20);
-			this.textBoxFrom.TabIndex = 1;
+			this.textFrom.Location = new System.Drawing.Point(96, 51);
+			this.textFrom.Name = "textBoxFrom";
+			this.textFrom.ReadOnly = true;
+			this.textFrom.Size = new System.Drawing.Size(328, 20);
+			this.textFrom.TabIndex = 1;
 			// 
 			// label3
 			// 
@@ -85,12 +85,12 @@ namespace OpenDental{
 			// 
 			// textBoxSubject
 			// 
-			this.textBoxSubject.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.textSubject.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.textBoxSubject.Location = new System.Drawing.Point(96, 84);
-			this.textBoxSubject.Name = "textBoxSubject";
-			this.textBoxSubject.Size = new System.Drawing.Size(619, 20);
-			this.textBoxSubject.TabIndex = 2;
+			this.textSubject.Location = new System.Drawing.Point(96, 84);
+			this.textSubject.Name = "textBoxSubject";
+			this.textSubject.Size = new System.Drawing.Size(619, 20);
+			this.textSubject.TabIndex = 2;
 			// 
 			// label4
 			// 
@@ -105,7 +105,7 @@ namespace OpenDental{
 			// 
 			this.labelNotification.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.labelNotification.ForeColor = System.Drawing.SystemColors.ControlText;
-			this.labelNotification.Location = new System.Drawing.Point(12, 475);
+			this.labelNotification.Location = new System.Drawing.Point(12, 349);
 			this.labelNotification.Name = "labelNotification";
 			this.labelNotification.Size = new System.Drawing.Size(541, 14);
 			this.labelNotification.TabIndex = 17;
@@ -133,7 +133,7 @@ namespace OpenDental{
 			this.butPreview.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butPreview.CornerRadius = 4F;
 			this.butPreview.Image = global::OpenDental.Properties.Resources.butPreview;
-			this.butPreview.Location = new System.Drawing.Point(21, 426);
+			this.butPreview.Location = new System.Drawing.Point(21, 300);
 			this.butPreview.Name = "butPreview";
 			this.butPreview.Size = new System.Drawing.Size(69, 24);
 			this.butPreview.TabIndex = 18;
@@ -151,7 +151,7 @@ namespace OpenDental{
 			this.textBoxBody.Name = "textBoxBody";
 			this.textBoxBody.QuickPasteType = OpenDentBusiness.QuickPasteType.Email;
 			this.textBoxBody.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-			this.textBoxBody.Size = new System.Drawing.Size(619, 338);
+			this.textBoxBody.Size = new System.Drawing.Size(619, 212);
 			this.textBoxBody.TabIndex = 3;
 			this.textBoxBody.Text = "";
 			// 
@@ -163,7 +163,7 @@ namespace OpenDental{
 			this.butSend.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butSend.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSend.CornerRadius = 4F;
-			this.butSend.Location = new System.Drawing.Point(559, 470);
+			this.butSend.Location = new System.Drawing.Point(559, 344);
 			this.butSend.Name = "butSend";
 			this.butSend.Size = new System.Drawing.Size(75, 24);
 			this.butSend.TabIndex = 4;
@@ -178,7 +178,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(640, 470);
+			this.butCancel.Location = new System.Drawing.Point(640, 344);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 5;
@@ -188,16 +188,16 @@ namespace OpenDental{
 			// FormWebMailMessageEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(744, 506);
+			this.ClientSize = new System.Drawing.Size(744, 380);
 			this.Controls.Add(this.butPreview);
 			this.Controls.Add(this.labelNotification);
-			this.Controls.Add(this.textBoxSubject);
+			this.Controls.Add(this.textSubject);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.textBoxBody);
-			this.Controls.Add(this.textBoxFrom);
+			this.Controls.Add(this.textFrom);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label3);
-			this.Controls.Add(this.textBoxTo);
+			this.Controls.Add(this.textTo);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.butSend);
 			this.Controls.Add(this.butCancel);
@@ -215,13 +215,13 @@ namespace OpenDental{
 
 		private OpenDental.UI.Button butSend;
 		private OpenDental.UI.Button butCancel;
-		private System.Windows.Forms.TextBox textBoxTo;
+		private System.Windows.Forms.TextBox textTo;
 		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.TextBox textBoxFrom;
+		private System.Windows.Forms.TextBox textFrom;
 		private System.Windows.Forms.Label label3;
 		private ODtextBox textBoxBody;
 		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.TextBox textBoxSubject;
+		private System.Windows.Forms.TextBox textSubject;
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.Label labelNotification;
 		private System.Windows.Forms.MainMenu mainMenu1;

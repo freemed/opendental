@@ -55,7 +55,7 @@ namespace OpenDentBusiness{
 					+POut.Int((int)EmailSentOrReceived.WebMailRecdRead)+","
 					+POut.Int((int)EmailSentOrReceived.WebMailReceived)
 					//can belong to either the RecipientAddress OR the ProvNumWebMail
-				+") AND (RecipientAddress='"+POut.String(emailAddressInbox)+"' OR ProvNumWebMail="+provNum.ToString()+") "
+				+") AND (RecipientAddress='"+POut.String(emailAddressInbox)+"' OR ProvNumWebMail="+POut.Long(provNum)+") "
 				+"ORDER BY MsgDateTime";
 			List<EmailMessage> retVal=Crud.EmailMessageCrud.SelectMany(command);
 			for(int i=0;i<retVal.Count;i++) {

@@ -35,7 +35,7 @@ namespace OpenDental {
 			_allowSendSecureMessage=false;
 			butSend.Enabled=false;
 			butPreview.Enabled=false;
-			labelNotification.Text=Lan.g(this,"Warning: Secure email send prevented - ")+Lan.g(this,reason);
+			labelNotification.Text=Lan.g(this,"Warning")+": "+Lan.g(this,"Secure email send prevented")+" - "+Lan.g(this,reason);
 			labelNotification.ForeColor=Color.Red;
 		}
 
@@ -43,7 +43,7 @@ namespace OpenDental {
 			_allowSendNotificationMessage=false;
 			butSend.Enabled=false;
 			butPreview.Enabled=false;
-			labelNotification.Text=Lan.g(this,"Warning: Notification email send prevented - ")+Lan.g(this,reason);
+			labelNotification.Text=Lan.g(this,"Warning")+": "+Lan.g(this,"Notification email send prevented")+" - "+Lan.g(this,reason);
 			labelNotification.ForeColor=Color.Red;
 		}
 
@@ -57,7 +57,7 @@ namespace OpenDental {
 				BlockSendSecureMessage("Patient is invalid.");
 			}
 			else {
-				textBoxTo.Text=patCur.GetNameFL();
+				textTo.Text=patCur.GetNameFL();
 				Provider priProv=Providers.GetProv(patCur.PriProv);
 				if(priProv==null) {
 					BlockSendSecureMessage("Invalid primary provider for this patient.");
@@ -66,20 +66,20 @@ namespace OpenDental {
 					priProvNum=priProv.ProvNum;
 					Provider userODProv=Providers.GetProv(Security.CurUser.ProvNum);
 					if(userODProv==null) {
-						BlockSendSecureMessage("Not logged in as valid provider.");
+						BlockSendSecureMessage("Not logged in as valid provider. Login as patient's primary provider to send message.");
 					}
 					else if(userODProv.ProvNum!=priProv.ProvNum) {
-						BlockSendSecureMessage("The patient's primary provider does not match the provider attached to the user currently logged in.");
+						BlockSendSecureMessage("The patient's primary provider does not match the provider attached to the user currently logged in. Login as patient's primary provider to send message.");
 					}
 					else {
-						textBoxFrom.Text=priProv.GetFormalName();					
+						textFrom.Text=priProv.GetFormalName();					
 					}
 				}
 				if(patCur.Email=="") {
-					BlockSendNotificationMessage("Patient email is not setup properly.");
+					BlockSendNotificationMessage("Missing patient email. Setup patient email using Family module.");
 				}
 				if(patCur.OnlinePassword=="") {
-					BlockSendNotificationMessage("Patient has not been given online access.");
+					BlockSendNotificationMessage("Patient has not been given online access. Setup patient online access using Family module.");
 				}
 			}
 			//We are replying to an existing message so verify that the provider linked to this message matches our currently logged in provider.  
@@ -91,31 +91,35 @@ namespace OpenDental {
 					DialogResult=DialogResult.Abort;  //nothing to show so abort, caller should be waiting for abort to determine if message should be marked read
 					return;
 				}				
-				textBoxSubject.Text="RE: "+replyToEmailMessage.Subject;
+				textSubject.Text=replyToEmailMessage.Subject;
+				if(replyToEmailMessage.Subject.IndexOf("RE:")!=0) {
+					textSubject.Text="RE: "+textSubject.Text;
+				} 
 				textBoxBody.Text="\r\n\r\n-----"+Lan.g(this,"Original Message")+"-----\r\n"
 					+Lan.g(this,"From")+": "+replyToEmailMessage.FromAddress+"\r\n"
 					+Lan.g(this,"Sent")+": "+replyToEmailMessage.MsgDateTime.ToShortDateString()+" "+replyToEmailMessage.MsgDateTime.ToShortTimeString()+"\r\n"
-					+Lan.g(this,"To")+":"+replyToEmailMessage.ToAddress+"\r\n"
+					+Lan.g(this,"To")+": "+replyToEmailMessage.ToAddress+"\r\n"
 					+Lan.g(this,"Subject")+": "+replyToEmailMessage.Subject
-					+"\r\n\r\n"+replyToEmailMessage.BodyText;						
+					+"\r\n\r\n"+replyToEmailMessage.BodyText;
+				
 			}
 			notificationSubject=PrefC.GetString(PrefName.PatientPortalNotifySubject);
 			notificationBodyNoUrl=PrefC.GetString(PrefName.PatientPortalNotifyBody);
 			notificationURL=PrefC.GetString(PrefName.PatientPortalURL);
 			_emailAddressSender=EmailAddresses.GetByClinic(0);//Default for clinic/practice.
 			if(_emailAddressSender==null) {
-				BlockSendNotificationMessage("Provider email is not setup properly.");
+				BlockSendNotificationMessage("Practice email is not setup properly. Setup practice email in setup.");
 			}			
 			if(notificationSubject=="") {
-				BlockSendNotificationMessage("Notification email Subject is not setup properly.");
+				BlockSendNotificationMessage("Missing notification email subject. Create a subject in setup.");
 			}
 			if(notificationBodyNoUrl=="") {
-				BlockSendNotificationMessage("Notification email Body is not setup properly.");
+				BlockSendNotificationMessage("Missing notification email body. Create a body in setup.");
 			}
 			if(_allowSendSecureMessage) {
 				_secureMessage=new EmailMessage();
-				_secureMessage.FromAddress=textBoxFrom.Text;
-				_secureMessage.ToAddress=textBoxTo.Text;
+				_secureMessage.FromAddress=textFrom.Text;
+				_secureMessage.ToAddress=textTo.Text;
 				_secureMessage.PatNum=patCur.PatNum;
 				_secureMessage.SentOrReceived=EmailSentOrReceived.WebMailSent;  //this is secure so mark as webmail sent
 				_secureMessage.ProvNumWebMail=priProvNum;
@@ -130,14 +134,14 @@ namespace OpenDental {
 				_insecureMessage.SentOrReceived=EmailSentOrReceived.Sent; //this is not secure so just mark as regular sent
 			}
 			if(_allowSendSecureMessage && _allowSendNotificationMessage) {
-				labelNotification.Text=Lan.g(this,"Notification email will be sent to patient: ")+patCur.Email;
+				labelNotification.Text=Lan.g(this,"Notification email will be sent to patient")+": "+patCur.Email;
 			}
 		}
 
 		private bool VerifyOutputs() {
-			if(textBoxSubject.Text=="") {
+			if(textSubject.Text=="") {
 				MsgBox.Show(this,"Enter a subject");
-				textBoxSubject.Focus();
+				textSubject.Focus();
 				return false;
 			} 
 			if(textBoxBody.Text=="") {
@@ -171,8 +175,8 @@ namespace OpenDental {
 			}
 			sb.AppendLine();
 			sb.AppendLine("------ "+Lan.g(this,"Secure web mail message that will be sent to the patient's portal:"));
-			sb.AppendLine(Lan.g(this,"Subject")+": "+textBoxSubject.Text);
-			sb.AppendLine(Lan.g(this,"Body")+": "+textBoxBody.Text);
+			sb.AppendLine(Lan.g(this,"Subject")+": "+textSubject.Text);
+			sb.AppendLine(Lan.g(this,"Body")+": "+textBoxBody.Text.Replace("\n","\r\n"));
 			MsgBoxCopyPaste msgBox=new MsgBoxCopyPaste(sb.ToString());
 			msgBox.ShowDialog();
 		}
@@ -188,7 +192,7 @@ namespace OpenDental {
 			//Insert the message. The patient will not see this as an actual email.
 			//Rather, they must login to the patient portal (secured) and view the message that way.
 			//This is how we get around sending the patient a secure message, which would be a hassle for all involved.
-			_secureMessage.Subject=textBoxSubject.Text;
+			_secureMessage.Subject=textSubject.Text;
 			_secureMessage.BodyText=textBoxBody.Text;
 			_secureMessage.MsgDateTime=DateTime.Now;
 			EmailMessages.Insert(_secureMessage);
