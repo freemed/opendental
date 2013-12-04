@@ -23,25 +23,30 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.textToAddress = new System.Windows.Forms.TextBox();
+			this.components = new System.ComponentModel.Container();
+			this.textBoxTo = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
-			this.textFromAddress = new System.Windows.Forms.TextBox();
+			this.textBoxFrom = new System.Windows.Forms.TextBox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
-			this.textBodyText = new OpenDental.ODtextBox();
+			this.textBoxSubject = new System.Windows.Forms.TextBox();
+			this.label4 = new System.Windows.Forms.Label();
+			this.labelNotification = new System.Windows.Forms.Label();
+			this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
+			this.menuItemSetup = new System.Windows.Forms.MenuItem();
+			this.butPreview = new OpenDental.UI.Button();
+			this.textBoxBody = new OpenDental.ODtextBox();
 			this.butSend = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.textSubject = new System.Windows.Forms.TextBox();
-			this.label4 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
-			// textToAddress
+			// textBoxTo
 			// 
-			this.textToAddress.Location = new System.Drawing.Point(96, 25);
-			this.textToAddress.Name = "textToAddress";
-			this.textToAddress.ReadOnly = true;
-			this.textToAddress.Size = new System.Drawing.Size(328, 20);
-			this.textToAddress.TabIndex = 10;
+			this.textBoxTo.Location = new System.Drawing.Point(96, 25);
+			this.textBoxTo.Name = "textBoxTo";
+			this.textBoxTo.ReadOnly = true;
+			this.textBoxTo.Size = new System.Drawing.Size(328, 20);
+			this.textBoxTo.TabIndex = 0;
 			// 
 			// label1
 			// 
@@ -52,13 +57,13 @@ namespace OpenDental{
 			this.label1.Text = "To:";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textFromAddress
+			// textBoxFrom
 			// 
-			this.textFromAddress.Location = new System.Drawing.Point(96, 51);
-			this.textFromAddress.Name = "textFromAddress";
-			this.textFromAddress.ReadOnly = true;
-			this.textFromAddress.Size = new System.Drawing.Size(328, 20);
-			this.textFromAddress.TabIndex = 12;
+			this.textBoxFrom.Location = new System.Drawing.Point(96, 51);
+			this.textBoxFrom.Name = "textBoxFrom";
+			this.textBoxFrom.ReadOnly = true;
+			this.textBoxFrom.Size = new System.Drawing.Size(328, 20);
+			this.textBoxFrom.TabIndex = 1;
 			// 
 			// label3
 			// 
@@ -78,20 +83,77 @@ namespace OpenDental{
 			this.label2.Text = "Message:";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textBodyText
+			// textBoxSubject
 			// 
-			this.textBodyText.AcceptsTab = true;
-			this.textBodyText.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.textBoxSubject.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.textBoxSubject.Location = new System.Drawing.Point(96, 84);
+			this.textBoxSubject.Name = "textBoxSubject";
+			this.textBoxSubject.Size = new System.Drawing.Size(619, 20);
+			this.textBoxSubject.TabIndex = 2;
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(3, 88);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(92, 14);
+			this.label4.TabIndex = 16;
+			this.label4.Text = "Subject:";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// labelNotification
+			// 
+			this.labelNotification.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.labelNotification.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.labelNotification.Location = new System.Drawing.Point(12, 475);
+			this.labelNotification.Name = "labelNotification";
+			this.labelNotification.Size = new System.Drawing.Size(541, 14);
+			this.labelNotification.TabIndex = 17;
+			this.labelNotification.Text = "Warning: Patient email is not setup properly. No notification email will be sent " +
+    "to this patient.";
+			this.labelNotification.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// mainMenu1
+			// 
+			this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItemSetup});
+			// 
+			// menuItemSetup
+			// 
+			this.menuItemSetup.Index = 0;
+			this.menuItemSetup.Text = "Setup";
+			this.menuItemSetup.Click += new System.EventHandler(this.menuItemSetup_Click);
+			// 
+			// butPreview
+			// 
+			this.butPreview.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butPreview.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butPreview.Autosize = true;
+			this.butPreview.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPreview.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPreview.CornerRadius = 4F;
+			this.butPreview.Image = global::OpenDental.Properties.Resources.butPreview;
+			this.butPreview.Location = new System.Drawing.Point(21, 426);
+			this.butPreview.Name = "butPreview";
+			this.butPreview.Size = new System.Drawing.Size(69, 24);
+			this.butPreview.TabIndex = 18;
+			this.butPreview.Text = "&Cancel";
+			this.butPreview.Click += new System.EventHandler(this.butPreview_Click);
+			// 
+			// textBoxBody
+			// 
+			this.textBoxBody.AcceptsTab = true;
+			this.textBoxBody.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.textBodyText.DetectUrls = false;
-			this.textBodyText.Location = new System.Drawing.Point(96, 112);
-			this.textBodyText.Name = "textBodyText";
-			this.textBodyText.QuickPasteType = OpenDentBusiness.QuickPasteType.Email;
-			this.textBodyText.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-			this.textBodyText.Size = new System.Drawing.Size(657, 372);
-			this.textBodyText.TabIndex = 14;
-			this.textBodyText.Text = "";
+			this.textBoxBody.DetectUrls = false;
+			this.textBoxBody.Location = new System.Drawing.Point(96, 112);
+			this.textBoxBody.Name = "textBoxBody";
+			this.textBoxBody.QuickPasteType = OpenDentBusiness.QuickPasteType.Email;
+			this.textBoxBody.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+			this.textBoxBody.Size = new System.Drawing.Size(619, 338);
+			this.textBoxBody.TabIndex = 3;
+			this.textBoxBody.Text = "";
 			// 
 			// butSend
 			// 
@@ -101,10 +163,10 @@ namespace OpenDental{
 			this.butSend.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butSend.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSend.CornerRadius = 4F;
-			this.butSend.Location = new System.Drawing.Point(597, 496);
+			this.butSend.Location = new System.Drawing.Point(559, 470);
 			this.butSend.Name = "butSend";
 			this.butSend.Size = new System.Drawing.Size(75, 24);
-			this.butSend.TabIndex = 3;
+			this.butSend.TabIndex = 4;
 			this.butSend.Text = "&Send";
 			this.butSend.Click += new System.EventHandler(this.butSend_Click);
 			// 
@@ -116,45 +178,30 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(678, 496);
+			this.butCancel.Location = new System.Drawing.Point(640, 470);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
-			this.butCancel.TabIndex = 2;
+			this.butCancel.TabIndex = 5;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// textSubject
-			// 
-			this.textSubject.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.textSubject.Location = new System.Drawing.Point(96, 84);
-			this.textSubject.Name = "textSubject";
-			this.textSubject.Size = new System.Drawing.Size(657, 20);
-			this.textSubject.TabIndex = 15;
-			// 
-			// label4
-			// 
-			this.label4.Location = new System.Drawing.Point(3, 88);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(92, 14);
-			this.label4.TabIndex = 16;
-			this.label4.Text = "Subject:";
-			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// FormWebMailMessageEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(778, 529);
-			this.Controls.Add(this.textSubject);
+			this.ClientSize = new System.Drawing.Size(744, 506);
+			this.Controls.Add(this.butPreview);
+			this.Controls.Add(this.labelNotification);
+			this.Controls.Add(this.textBoxSubject);
 			this.Controls.Add(this.label4);
-			this.Controls.Add(this.textBodyText);
-			this.Controls.Add(this.textFromAddress);
+			this.Controls.Add(this.textBoxBody);
+			this.Controls.Add(this.textBoxFrom);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label3);
-			this.Controls.Add(this.textToAddress);
+			this.Controls.Add(this.textBoxTo);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.butSend);
 			this.Controls.Add(this.butCancel);
+			this.Menu = this.mainMenu1;
 			this.Name = "FormWebMailMessageEdit";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Web Mail Message Edit";
@@ -168,13 +215,17 @@ namespace OpenDental{
 
 		private OpenDental.UI.Button butSend;
 		private OpenDental.UI.Button butCancel;
-		private System.Windows.Forms.TextBox textToAddress;
+		private System.Windows.Forms.TextBox textBoxTo;
 		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.TextBox textFromAddress;
+		private System.Windows.Forms.TextBox textBoxFrom;
 		private System.Windows.Forms.Label label3;
-		private ODtextBox textBodyText;
+		private ODtextBox textBoxBody;
 		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.TextBox textSubject;
+		private System.Windows.Forms.TextBox textBoxSubject;
 		private System.Windows.Forms.Label label4;
+		private System.Windows.Forms.Label labelNotification;
+		private System.Windows.Forms.MainMenu mainMenu1;
+		private System.Windows.Forms.MenuItem menuItemSetup;
+		private UI.Button butPreview;
 	}
 }

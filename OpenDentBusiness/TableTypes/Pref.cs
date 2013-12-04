@@ -261,6 +261,10 @@ namespace OpenDentBusiness {
 		OracleInsertId,
 		PasswordsMustBeStrong,
 		PatientFormsShowConsent,
+		///<summary>Free-form 'Body' text of the notification sent by this practice when a new secure EmailMessage is sent to patient.</summary>
+		PatientPortalNotifyBody,
+		///<summary>Free-form 'Subject' text of the notification sent by this practice when a new secure EmailMessage is sent to patient.</summary>
+		PatientPortalNotifySubject,
 		PatientPortalURL,
 		PatientSelectUsesSearchButton,
 		PayPlansBillInAdvanceDays,

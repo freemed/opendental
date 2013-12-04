@@ -18,6 +18,13 @@ namespace OpenDental {
 
 		private void FormPatientPortalSetup_Load(object sender,EventArgs e) {
 			textPatientPortalURL.Text=PrefC.GetString(PrefName.PatientPortalURL);
+			textBoxNotificationSubject.Text=PrefC.GetString(PrefName.PatientPortalNotifySubject);
+			textBoxNotificationBody.Text=PrefC.GetString(PrefName.PatientPortalNotifyBody);
+			if(!Security.IsAuthorized(Permissions.Setup)) {
+				butOK.Enabled=false;
+				buttonGetURL.Enabled=false;
+				groupBoxNotification.Enabled=false;
+			}
 		}
 
 		private void buttonGetURL_Click(object sender,EventArgs e) {
@@ -67,7 +74,28 @@ namespace OpenDental {
 				MsgBox.Show(this,"Patient Portal URL must start with HTTPS.");
 				return;
 			}
-			Prefs.UpdateString(PrefName.PatientPortalURL,textPatientPortalURL.Text);
+			if(textBoxNotificationSubject.Text=="") {
+				MsgBox.Show(this,"Notification Subject is empty");
+				textBoxNotificationSubject.Focus();
+				return;
+			}
+			if(textBoxNotificationBody.Text=="") {
+				MsgBox.Show(this,"Notification Body is empty");
+				textBoxNotificationBody.Focus();
+				return;
+			}
+			if(!textBoxNotificationBody.Text.Contains("[URL]")) { //prompt user that they omitted the URL field but don't prevent them from continuing
+				if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"[URL] not included in notification body. Continue without setting the [URL] field?")) {
+					textBoxNotificationBody.Focus();
+					return;
+				}
+			}
+			if(Prefs.UpdateString(PrefName.PatientPortalURL,textPatientPortalURL.Text)
+				| Prefs.UpdateString(PrefName.PatientPortalNotifySubject,textBoxNotificationSubject.Text)
+				| Prefs.UpdateString(PrefName.PatientPortalNotifyBody,textBoxNotificationBody.Text)) 
+			{
+				DataValid.SetInvalid(InvalidType.Prefs);
+			}
 			DialogResult=DialogResult.OK;
 		}
 

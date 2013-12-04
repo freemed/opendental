@@ -39,12 +39,14 @@ namespace OpenDentBusiness{
 			return emailMessage;
 		}
 
-		public static List<EmailMessage> GetInboxForAddress(string emailAddressInbox) {
+		///<summary>Gets all inbox email messages where EmailMessage.RecipientAddress==emailAddressInbox OR EmailMessage.ProvNumWebMail==provNum.</summary>
+		public static List<EmailMessage> GetInboxForAddress(string emailAddressInbox,long provNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List <EmailMessage>>(MethodBase.GetCurrentMethod(),emailAddressInbox);
 			}
 			string command="SELECT * FROM emailmessage "
 				+"WHERE SentOrReceived IN ("
+					//must match one of these EmailSentOrReceived statuses
 					+POut.Int((int)EmailSentOrReceived.Read)+","
 					+POut.Int((int)EmailSentOrReceived.Received)+","
 					+POut.Int((int)EmailSentOrReceived.ReceivedEncrypted)+","
@@ -52,7 +54,8 @@ namespace OpenDentBusiness{
 					+POut.Int((int)EmailSentOrReceived.ReadDirect)+","
 					+POut.Int((int)EmailSentOrReceived.WebMailRecdRead)+","
 					+POut.Int((int)EmailSentOrReceived.WebMailReceived)
-				+") AND RecipientAddress='"+POut.String(emailAddressInbox)+"' "
+					//can belong to either the RecipientAddress OR the ProvNumWebMail
+				+") AND (RecipientAddress='"+POut.String(emailAddressInbox)+"' OR ProvNumWebMail="+provNum.ToString()+") "
 				+"ORDER BY MsgDateTime";
 			List<EmailMessage> retVal=Crud.EmailMessageCrud.SelectMany(command);
 			for(int i=0;i<retVal.Count;i++) {
@@ -176,7 +179,8 @@ namespace OpenDentBusiness{
 
 		///<summary>Encrypts the message, verifies trust, locates the public encryption key for the To address (if already stored locally), etc.  emailMessage.  
 		///Use this polymorphism when the attachments have already been saved to the email attachments folder in file form.  patNum can be 0.
-		///Returns an empty string upon success, or an error string if there were errors.  It is possible that the email was sent to some trusted recipients and not sent to untrusted recipients (in which case there would be errors but some recipients would receive successfully).</summary>
+		///Returns an empty string upon success, or an error string if there were errors.  It is possible that the email was sent to some trusted recipients and not sent to untrusted recipients (in which case there would be errors but some recipients would receive successfully).
+		///Surround with a try catch.</summary>
 		public static string SendEmailDirect(EmailMessage emailMessage,EmailAddress emailAddressFrom) {
 			//No need to check RemotingRole; no call to db.
 			emailMessage.FromAddress=emailAddressFrom.EmailUsername;//Cannot be emailAddressFrom.SenderAddress, or else will not find the correct encryption certificate.  Used in ConvertEmailMessageToMessage().
@@ -401,7 +405,8 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		/// <summary>This is used from wherever unencrypted email needs to be sent throughout the program.  If a message must be encrypted, then encrypt it before calling this function.</summary>
+		/// <summary>This is used from wherever unencrypted email needs to be sent throughout the program.  If a message must be encrypted, then encrypt it before calling this function.
+		///Surround with a try catch.</summary>
 		public static void SendEmailUnsecure(EmailMessage emailMessage,EmailAddress emailAddress) {
 			//No need to check RemotingRole; no call to db.
 			SendEmailUnsecure(emailMessage,emailAddress,null);

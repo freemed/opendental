@@ -2273,6 +2273,40 @@ namespace OpenDentBusiness {
 					command="ALTER TABLE ehrcareplan MODIFY DatePlanned NOT NULL";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('PatientPortalNotifyBody','Please go to this link and login using your credentials. [URL]')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'PatientPortalNotifyBody','Please go to this link and login using your credentials. [URL]')";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('PatientPortalNotifySubject','You have a secure message waiting for you')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'PatientPortalNotifySubject','You have a secure message waiting for you')";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE emailmessage ADD ProvNumWebMail bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE emailmessage ADD INDEX (ProvNumWebMail)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE emailmessage ADD ProvNumWebMail number(20)";
+					Db.NonQ(command);
+					command="UPDATE emailmessage SET ProvNumWebMail = 0 WHERE ProvNumWebMail IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE emailmessage MODIFY ProvNumWebMail NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX emailmessage_ProvNumWebMail ON emailmessage (ProvNumWebMail)";
+					Db.NonQ(command);
+				}
+
+
 
 
 				command="UPDATE preference SET ValueString = '14.1.0.0' WHERE PrefName = 'DataBaseVersion'";
@@ -2290,9 +2324,3 @@ namespace OpenDentBusiness {
 
 	}
 }
-
-
-
-
-
-

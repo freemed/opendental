@@ -91,7 +91,7 @@ namespace OpenDental {
 				ListEmailMessages=new List<EmailMessage>();
 			}
 			else {
-				ListEmailMessages=EmailMessages.GetInboxForAddress(AddressInbox.EmailUsername);
+				ListEmailMessages=EmailMessages.GetInboxForAddress(AddressInbox.EmailUsername,Security.CurUser.ProvNum);
 			}
 			if(gridEmailMessages.Columns.Count==0) {//Columns do not change.  We only need to set them once.
 				gridEmailMessages.BeginUpdate();
@@ -149,11 +149,24 @@ namespace OpenDental {
 				return;
 			}
 			EmailMessage emailMessage=(EmailMessage)gridEmailMessages.Rows[e.Row].Tag;
-			FormEmailMessageEdit formEME=new FormEmailMessageEdit(emailMessage);
-			formEME.ShowDialog();
-			emailMessage=EmailMessages.GetOne(emailMessage.EmailMessageNum);//Fetch from DB, in case changed to to decrypt.
-			if(emailMessage!=null && emailMessage.SentOrReceived!=EmailSentOrReceived.ReceivedEncrypted) {//emailMessage could be null if the message was deleted in FormEmailMessageEdit().
-				EmailMessages.UpdateSentOrReceivedRead(emailMessage);
+			if(emailMessage.SentOrReceived==EmailSentOrReceived.WebMailReceived
+					|| emailMessage.SentOrReceived==EmailSentOrReceived.WebMailRecdRead
+					|| emailMessage.SentOrReceived==EmailSentOrReceived.WebMailSent
+					|| emailMessage.SentOrReceived==EmailSentOrReceived.WebMailSentRead) 
+			{
+				//web mail uses special secure messaging portal
+				FormWebMailMessageEdit FormWMME=new FormWebMailMessageEdit(emailMessage.PatNum,emailMessage.EmailMessageNum);
+				if(FormWMME.ShowDialog()!=DialogResult.Abort) { //will only return Abort if validation fails on load, in which case the message will remain unread
+					EmailMessages.UpdateSentOrReceivedRead(emailMessage);//Mark the message read.
+				}				
+			}
+			else {
+				FormEmailMessageEdit formEME=new FormEmailMessageEdit(emailMessage);
+				formEME.ShowDialog();
+				emailMessage=EmailMessages.GetOne(emailMessage.EmailMessageNum);//Fetch from DB, in case changed to to decrypt.
+				if(emailMessage!=null && emailMessage.SentOrReceived!=EmailSentOrReceived.ReceivedEncrypted) {//emailMessage could be null if the message was deleted in FormEmailMessageEdit().
+					EmailMessages.UpdateSentOrReceivedRead(emailMessage);
+				}
 			}
 			FillGridEmailMessages();//To show the email is read.
 		}

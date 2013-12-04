@@ -6731,10 +6731,23 @@ namespace OpenDental{
 			}
 			else if(row["EmailMessageNum"].ToString()!="0") {
 				EmailMessage msg=EmailMessages.GetOne(PIn.Long(row["EmailMessageNum"].ToString()));
-				FormEmailMessageEdit FormE=new FormEmailMessageEdit(msg);
-				FormE.ShowDialog();
-				if(FormE.DialogResult!=DialogResult.OK) {
-					return;
+				if(msg.SentOrReceived==EmailSentOrReceived.WebMailReceived
+					|| msg.SentOrReceived==EmailSentOrReceived.WebMailRecdRead
+					|| msg.SentOrReceived==EmailSentOrReceived.WebMailSent
+					|| msg.SentOrReceived==EmailSentOrReceived.WebMailSentRead) 
+				{
+					//web mail uses special secure messaging portal
+					FormWebMailMessageEdit FormWMME=new FormWebMailMessageEdit(PatCur.PatNum,msg.EmailMessageNum);
+					if(FormWMME.ShowDialog()!=DialogResult.OK) {
+						return;
+					}
+				}
+				else {
+					FormEmailMessageEdit FormE=new FormEmailMessageEdit(msg);
+					FormE.ShowDialog();
+					if(FormE.DialogResult!=DialogResult.OK) {
+						return;
+					}
 				}
 			}
 			else if(row["SheetNum"].ToString()!="0") {

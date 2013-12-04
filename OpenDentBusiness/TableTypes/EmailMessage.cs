@@ -11,9 +11,9 @@ namespace OpenDentBusiness {
 		public long EmailMessageNum;
 		///<summary>FK to patient.PatNum</summary>
 		public long PatNum;
-		///<summary>Single valid email address. Bcc field might be added later, although it won't be very useful.  We will never allow visible cc for privacy reasons.</summary>
+		///<summary>Single valid email address. Bcc field might be added later, although it won't be very useful.  We will never allow visible cc for privacy reasons.  For web mail messages, this will not be an email address.  Instead, it will be the name of the corresponding patient or provider.</summary>
 		public string ToAddress;
-		///<summary>Valid email address.</summary>
+		///<summary>Valid email address.  For web mail messages, this will not be an email address.  Instead, it will be the name of the corresponding patient or provider.</summary>
 		public string FromAddress;
 		///<summary>Subject line.</summary>
 		public string Subject;
@@ -36,7 +36,9 @@ namespace OpenDentBusiness {
 		///<summary>Not a database column.</summary>
 		[CrudColumn(IsNotDbColumn=true)]
 		public List<EmailAttach> Attachments;
-
+		///<summary>FK to provider.ProvNum.  The provider to whom this message was sent or from whom this message was sent.  Only used when EmailSentOrReceived is WebMailReceived, WebMailRecdRead, WebMailSent, or WebMailSentRead.  Will be 0 if not a web mail message.</summary>
+		public long ProvNumWebMail;
+		
 		///<summary>Constructor</summary>
 		public EmailMessage(){
 			Attachments=new List<EmailAttach>();
