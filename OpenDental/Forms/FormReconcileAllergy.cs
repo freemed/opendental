@@ -15,7 +15,7 @@ namespace OpenDental {
 		private List<Allergy> _listAllergyReconcile;
 		private List<AllergyDef> _listAllergyDefCur;
 		private List<Allergy> _listAllergyCur;
-		public Patient PatCur;
+		private Patient _patCur;
 
 		public FormReconcileAllergy() {
 			InitializeComponent();
@@ -23,9 +23,9 @@ namespace OpenDental {
 		}
 
 		private void FormReconcileAllergy_Load(object sender,EventArgs e) {
-			PatCur=Patients.GetPat(FormOpenDental.CurPatNum);
+			_patCur=Patients.GetPat(FormOpenDental.CurPatNum);
 			for(int index=0;index<ListAllergyNew.Count;index++) {
-				ListAllergyNew[index].PatNum=PatCur.PatNum;
+				ListAllergyNew[index].PatNum=_patCur.PatNum;
 			}
 			FillExistingGrid();//Done first so that _listAllergyCur and _listAllergyDefCur are populated.
 			_listAllergyReconcile=new List<Allergy>(_listAllergyCur);
@@ -253,7 +253,7 @@ namespace OpenDental {
 			col=new ODGridColumn("Inactive",80,HorizontalAlignment.Center);
 			gridAllergyExisting.Columns.Add(col);
 			gridAllergyExisting.Rows.Clear();
-			_listAllergyCur=Allergies.GetAll(PatCur.PatNum,false);
+			_listAllergyCur=Allergies.GetAll(_patCur.PatNum,false);
 			List<long> allergyDefNums=new List<long>();
 			for(int h=0;h<_listAllergyCur.Count;h++) {
 				if(_listAllergyCur[h].AllergyDefNum > 0) {
@@ -491,7 +491,7 @@ namespace OpenDental {
 			}
 			//Always update every current allergy for the patient so that DateTStamp reflects the last reconcile date.
 			if(_listAllergyCur.Count>0) {
-				Allergies.ResetTimeStamps(PatCur.PatNum,true);
+				Allergies.ResetTimeStamps(_patCur.PatNum,true);
 			}
 			AllergyDef alDU;
 			int index;

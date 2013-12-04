@@ -14,7 +14,7 @@ namespace OpenDental {
 		private List<MedicationPat> _listMedicationPatReconcile;
 		private List<MedicationPat> _listMedicationPatCur;
 		private List<Medication> _listMedicationCur;
-		public Patient PatCur;
+		private Patient _patCur;
 
 		public FormReconcileMedication() {
 			InitializeComponent();
@@ -22,9 +22,9 @@ namespace OpenDental {
 		}
 
 		private void FormReconcileMedication_Load(object sender,EventArgs e) {
-			PatCur=Patients.GetPat(FormOpenDental.CurPatNum);
+			_patCur=Patients.GetPat(FormOpenDental.CurPatNum);
 			for(int index=0;index<ListMedicationPatNew.Count;index++) {
-				ListMedicationPatNew[index].PatNum=PatCur.PatNum;
+				ListMedicationPatNew[index].PatNum=_patCur.PatNum;
 			}
 			FillExistingGrid();
 			_listMedicationPatReconcile=new List<MedicationPat>(_listMedicationPatCur);
@@ -172,7 +172,7 @@ namespace OpenDental {
 			col=new ODGridColumn("Description",320);
 			gridMedExisting.Columns.Add(col);
 			gridMedExisting.Rows.Clear();
-			_listMedicationPatCur=MedicationPats.GetMedPatsForReconcile(PatCur.PatNum);
+			_listMedicationPatCur=MedicationPats.GetMedPatsForReconcile(_patCur.PatNum);
 			List<long> medicationNums=new List<long>();
 			for(int h=0;h<_listMedicationPatCur.Count;h++) {
 				if(_listMedicationPatCur[h].MedicationNum > 0) {
@@ -369,7 +369,7 @@ namespace OpenDental {
 			}
 			//Always update every current medication for the patient so that DateTStamp reflects the last reconcile date.
 			if(_listMedicationPatCur.Count>0) {
-				MedicationPats.ResetTimeStamps(PatCur.PatNum,true);
+				MedicationPats.ResetTimeStamps(_patCur.PatNum,true);
 			}
 			Medication med;
 			int index;
@@ -398,7 +398,7 @@ namespace OpenDental {
 			EhrMeasureEvent newMeasureEvent=new EhrMeasureEvent();
 			newMeasureEvent.DateTEvent=DateTime.Now;
 			newMeasureEvent.EventType=EhrMeasureEventType.MedicationReconcile;
-			newMeasureEvent.PatNum=PatCur.PatNum;
+			newMeasureEvent.PatNum=_patCur.PatNum;
 			newMeasureEvent.MoreInfo="";
 			EhrMeasureEvents.Insert(newMeasureEvent);
 			DialogResult=DialogResult.OK;

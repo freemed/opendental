@@ -16,21 +16,21 @@ namespace OpenDental {
 	public partial class FormEhrSummaryCcdEdit:Form {
 		public string StrXmlFilePath;
 		public bool DidPrint;
-		private bool IsReconcile;
+		private bool _isReconcile;
 
 		public FormEhrSummaryCcdEdit(string strXmlFilePath,bool isReconcile) {
 			InitializeComponent();
 			StrXmlFilePath=strXmlFilePath;
-			IsReconcile=isReconcile;
+			_isReconcile=isReconcile;
 		}
 
 		private void FormEhrSummaryCcdEdit_Load(object sender,EventArgs e) {
-			//if(IsReconcile) { //Cannot reconcile until version 14.1.
-			//	labelReconcile.Visible=true;
-			//	butReconcileMedications.Visible=true;
-			//	butReconcileProblems.Visible=true;
-			//	butReconcileAllergies.Visible=true;
-			//}
+			if(FormOpenDental.CurPatNum==0) {//No patient is currently selected.  Do not show reconcile UI.
+				labelReconcile.Visible=false;
+				butReconcileAllergies.Visible=false;
+				butReconcileMedications.Visible=false;
+				butReconcileProblems.Visible=false;
+			}
 			Cursor=Cursors.WaitCursor;
 			webBrowser1.Url=new Uri(StrXmlFilePath);
 			Cursor=Cursors.Default;

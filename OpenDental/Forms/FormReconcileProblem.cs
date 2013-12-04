@@ -15,7 +15,7 @@ namespace OpenDental {
 		private List<Disease> _listProblemReconcile;
 		private List<DiseaseDef> _listProblemDefCur;
 		private List<Disease> _listProblemCur;
-		public Patient PatCur;
+		private Patient _patCur;
 
 		public FormReconcileProblem() {
 			InitializeComponent();
@@ -23,9 +23,9 @@ namespace OpenDental {
 		}
 
 		private void FormReconcileProblem_Load(object sender,EventArgs e) {
-			PatCur=Patients.GetPat(FormOpenDental.CurPatNum);
+			_patCur=Patients.GetPat(FormOpenDental.CurPatNum);
 			for(int index=0;index<ListProblemNew.Count;index++) {
-				ListProblemNew[index].PatNum=PatCur.PatNum;
+				ListProblemNew[index].PatNum=_patCur.PatNum;
 			}
 			FillExistingGrid();//Done first so that _listReconcileCur and _listReconcileDefCur are populated.
 			_listProblemReconcile=new List<Disease>(_listProblemCur);
@@ -242,7 +242,7 @@ namespace OpenDental {
 			col=new ODGridColumn("Status",80,HorizontalAlignment.Center);
 			gridProbExisting.Columns.Add(col);
 			gridProbExisting.Rows.Clear();
-			_listProblemCur=Diseases.Refresh(PatCur.PatNum,true);
+			_listProblemCur=Diseases.Refresh(_patCur.PatNum,true);
 			List<long> problemDefNums=new List<long>();
 			for(int h=0;h<_listProblemCur.Count;h++) {
 				if(_listProblemCur[h].DiseaseDefNum > 0) {
@@ -481,7 +481,7 @@ namespace OpenDental {
 			}
 			//Always update every current problem for the patient so that DateTStamp reflects the last reconcile date.
 			if(_listProblemCur.Count>0) {
-				Diseases.ResetTimeStamps(PatCur.PatNum,ProblemStatus.Active);
+				Diseases.ResetTimeStamps(_patCur.PatNum,ProblemStatus.Active);
 			}
 			DiseaseDef disDU=null;
 			int index;
