@@ -25,7 +25,7 @@ namespace OpenDental {
 		}
 
 		private void FormEhrSummaryCcdEdit_Load(object sender,EventArgs e) {
-			if(FormOpenDental.CurPatNum==0) {//No patient is currently selected.  Do not show reconcile UI.
+			if(FormOpenDental.CurPatNum==0 || !_isReconcile) {//No patient is currently selected.  Do not show reconcile UI.
 				labelReconcile.Visible=false;
 				butReconcileAllergies.Visible=false;
 				butReconcileMedications.Visible=false;
