@@ -295,7 +295,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormPopupDisplay_Load(object sender,EventArgs e) {
-			textDescription.Text=PopupCur.Description;
+			textDescription.Text=PopupCur.Description.Replace("\r\n","\n").Replace("\n","\r\n");
 			if(PopupCur.UserNum!=0) {
 				textUser.Text=Userods.GetUser(PopupCur.UserNum).UserName;
 			}
