@@ -57,6 +57,7 @@ namespace OpenDentBusiness.Crud{
 				emailMessage.RecipientAddress= PIn.String(table.Rows[i]["RecipientAddress"].ToString());
 				emailMessage.RawEmailIn      = PIn.String(table.Rows[i]["RawEmailIn"].ToString());
 				emailMessage.ProvNumWebMail  = PIn.Long  (table.Rows[i]["ProvNumWebMail"].ToString());
+				emailMessage.PatNumSubj      = PIn.Long  (table.Rows[i]["PatNumSubj"].ToString());
 				retVal.Add(emailMessage);
 			}
 			return retVal;
@@ -97,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="EmailMessageNum,";
 			}
-			command+="PatNum,ToAddress,FromAddress,Subject,BodyText,MsgDateTime,SentOrReceived,RecipientAddress,RawEmailIn,ProvNumWebMail) VALUES(";
+			command+="PatNum,ToAddress,FromAddress,Subject,BodyText,MsgDateTime,SentOrReceived,RecipientAddress,RawEmailIn,ProvNumWebMail,PatNumSubj) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(emailMessage.EmailMessageNum)+",";
 			}
@@ -111,7 +112,8 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Int   ((int)emailMessage.SentOrReceived)+","
 				+"'"+POut.String(emailMessage.RecipientAddress)+"',"
 				+"'"+POut.String(emailMessage.RawEmailIn)+"',"
-				+    POut.Long  (emailMessage.ProvNumWebMail)+")";
+				+    POut.Long  (emailMessage.ProvNumWebMail)+","
+				+    POut.Long  (emailMessage.PatNumSubj)+")";
 			if(emailMessage.BodyText==null) {
 				emailMessage.BodyText="";
 			}
@@ -137,7 +139,8 @@ namespace OpenDentBusiness.Crud{
 				+"SentOrReceived  =  "+POut.Int   ((int)emailMessage.SentOrReceived)+", "
 				+"RecipientAddress= '"+POut.String(emailMessage.RecipientAddress)+"', "
 				+"RawEmailIn      = '"+POut.String(emailMessage.RawEmailIn)+"', "
-				+"ProvNumWebMail  =  "+POut.Long  (emailMessage.ProvNumWebMail)+" "
+				+"ProvNumWebMail  =  "+POut.Long  (emailMessage.ProvNumWebMail)+", "
+				+"PatNumSubj      =  "+POut.Long  (emailMessage.PatNumSubj)+" "
 				+"WHERE EmailMessageNum = "+POut.Long(emailMessage.EmailMessageNum);
 			if(emailMessage.BodyText==null) {
 				emailMessage.BodyText="";
@@ -188,6 +191,10 @@ namespace OpenDentBusiness.Crud{
 			if(emailMessage.ProvNumWebMail != oldEmailMessage.ProvNumWebMail) {
 				if(command!=""){ command+=",";}
 				command+="ProvNumWebMail = "+POut.Long(emailMessage.ProvNumWebMail)+"";
+			}
+			if(emailMessage.PatNumSubj != oldEmailMessage.PatNumSubj) {
+				if(command!=""){ command+=",";}
+				command+="PatNumSubj = "+POut.Long(emailMessage.PatNumSubj)+"";
 			}
 			if(command==""){
 				return;

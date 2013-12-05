@@ -34,6 +34,8 @@ namespace OpenDental{
 			this.labelNotification = new System.Windows.Forms.Label();
 			this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
 			this.menuItemSetup = new System.Windows.Forms.MenuItem();
+			this.label5 = new System.Windows.Forms.Label();
+			this.comboRegardingPatient = new System.Windows.Forms.ComboBox();
 			this.butPreview = new OpenDental.UI.Button();
 			this.textBoxBody = new OpenDental.ODtextBox();
 			this.butSend = new OpenDental.UI.Button();
@@ -42,15 +44,15 @@ namespace OpenDental{
 			// 
 			// textTo
 			// 
-			this.textTo.Location = new System.Drawing.Point(96, 25);
+			this.textTo.Location = new System.Drawing.Point(119, 30);
 			this.textTo.Name = "textTo";
 			this.textTo.ReadOnly = true;
-			this.textTo.Size = new System.Drawing.Size(328, 20);
-			this.textTo.TabIndex = 0;
+			this.textTo.Size = new System.Drawing.Size(305, 20);
+			this.textTo.TabIndex = 1;
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(3, 29);
+			this.label1.Location = new System.Drawing.Point(22, 33);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(92, 14);
 			this.label1.TabIndex = 11;
@@ -59,15 +61,15 @@ namespace OpenDental{
 			// 
 			// textFrom
 			// 
-			this.textFrom.Location = new System.Drawing.Point(96, 51);
+			this.textFrom.Location = new System.Drawing.Point(119, 57);
 			this.textFrom.Name = "textFrom";
 			this.textFrom.ReadOnly = true;
-			this.textFrom.Size = new System.Drawing.Size(328, 20);
-			this.textFrom.TabIndex = 1;
+			this.textFrom.Size = new System.Drawing.Size(305, 20);
+			this.textFrom.TabIndex = 2;
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(3, 55);
+			this.label3.Location = new System.Drawing.Point(22, 60);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(92, 14);
 			this.label3.TabIndex = 13;
@@ -76,7 +78,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(3, 112);
+			this.label2.Location = new System.Drawing.Point(22, 112);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(92, 14);
 			this.label2.TabIndex = 13;
@@ -87,14 +89,14 @@ namespace OpenDental{
 			// 
 			this.textSubject.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.textSubject.Location = new System.Drawing.Point(96, 84);
+			this.textSubject.Location = new System.Drawing.Point(119, 84);
 			this.textSubject.Name = "textSubject";
-			this.textSubject.Size = new System.Drawing.Size(619, 20);
-			this.textSubject.TabIndex = 2;
+			this.textSubject.Size = new System.Drawing.Size(670, 20);
+			this.textSubject.TabIndex = 3;
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(3, 88);
+			this.label4.Location = new System.Drawing.Point(22, 87);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(92, 14);
 			this.label4.TabIndex = 16;
@@ -105,7 +107,7 @@ namespace OpenDental{
 			// 
 			this.labelNotification.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.labelNotification.ForeColor = System.Drawing.SystemColors.ControlText;
-			this.labelNotification.Location = new System.Drawing.Point(12, 349);
+			this.labelNotification.Location = new System.Drawing.Point(86, 412);
 			this.labelNotification.Name = "labelNotification";
 			this.labelNotification.Size = new System.Drawing.Size(541, 14);
 			this.labelNotification.TabIndex = 17;
@@ -124,6 +126,25 @@ namespace OpenDental{
 			this.menuItemSetup.Text = "Setup";
 			this.menuItemSetup.Click += new System.EventHandler(this.menuItemSetup_Click);
 			// 
+			// label5
+			// 
+			this.label5.Location = new System.Drawing.Point(14, 6);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(100, 14);
+			this.label5.TabIndex = 19;
+			this.label5.Text = "Regarding Patient:";
+			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// comboRegardingPatient
+			// 
+			this.comboRegardingPatient.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboRegardingPatient.FormattingEnabled = true;
+			this.comboRegardingPatient.Location = new System.Drawing.Point(120, 4);
+			this.comboRegardingPatient.MaxDropDownItems = 30;
+			this.comboRegardingPatient.Name = "comboRegardingPatient";
+			this.comboRegardingPatient.Size = new System.Drawing.Size(304, 21);
+			this.comboRegardingPatient.TabIndex = 0;
+			// 
 			// butPreview
 			// 
 			this.butPreview.AdjustImageLocation = new System.Drawing.Point(0, 0);
@@ -133,10 +154,10 @@ namespace OpenDental{
 			this.butPreview.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butPreview.CornerRadius = 4F;
 			this.butPreview.Image = global::OpenDental.Properties.Resources.butPreview;
-			this.butPreview.Location = new System.Drawing.Point(21, 300);
+			this.butPreview.Location = new System.Drawing.Point(44, 363);
 			this.butPreview.Name = "butPreview";
 			this.butPreview.Size = new System.Drawing.Size(69, 24);
-			this.butPreview.TabIndex = 18;
+			this.butPreview.TabIndex = 5;
 			this.butPreview.Text = "&Cancel";
 			this.butPreview.Click += new System.EventHandler(this.butPreview_Click);
 			// 
@@ -147,12 +168,12 @@ namespace OpenDental{
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.textBoxBody.DetectUrls = false;
-			this.textBoxBody.Location = new System.Drawing.Point(96, 112);
+			this.textBoxBody.Location = new System.Drawing.Point(119, 112);
 			this.textBoxBody.Name = "textBoxBody";
 			this.textBoxBody.QuickPasteType = OpenDentBusiness.QuickPasteType.Email;
 			this.textBoxBody.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-			this.textBoxBody.Size = new System.Drawing.Size(619, 212);
-			this.textBoxBody.TabIndex = 3;
+			this.textBoxBody.Size = new System.Drawing.Size(670, 275);
+			this.textBoxBody.TabIndex = 4;
 			this.textBoxBody.Text = "";
 			// 
 			// butSend
@@ -163,10 +184,10 @@ namespace OpenDental{
 			this.butSend.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butSend.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSend.CornerRadius = 4F;
-			this.butSend.Location = new System.Drawing.Point(559, 344);
+			this.butSend.Location = new System.Drawing.Point(633, 407);
 			this.butSend.Name = "butSend";
 			this.butSend.Size = new System.Drawing.Size(75, 24);
-			this.butSend.TabIndex = 4;
+			this.butSend.TabIndex = 6;
 			this.butSend.Text = "&Send";
 			this.butSend.Click += new System.EventHandler(this.butSend_Click);
 			// 
@@ -178,17 +199,19 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(640, 344);
+			this.butCancel.Location = new System.Drawing.Point(714, 407);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
-			this.butCancel.TabIndex = 5;
+			this.butCancel.TabIndex = 7;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// FormWebMailMessageEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(744, 380);
+			this.ClientSize = new System.Drawing.Size(818, 443);
+			this.Controls.Add(this.comboRegardingPatient);
+			this.Controls.Add(this.label5);
 			this.Controls.Add(this.butPreview);
 			this.Controls.Add(this.labelNotification);
 			this.Controls.Add(this.textSubject);
@@ -227,5 +250,7 @@ namespace OpenDental{
 		private System.Windows.Forms.MainMenu mainMenu1;
 		private System.Windows.Forms.MenuItem menuItemSetup;
 		private UI.Button butPreview;
+		private System.Windows.Forms.Label label5;
+		private System.Windows.Forms.ComboBox comboRegardingPatient;
 	}
 }

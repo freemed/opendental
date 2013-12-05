@@ -2305,8 +2305,22 @@ namespace OpenDentBusiness {
 					command=@"CREATE INDEX emailmessage_ProvNumWebMail ON emailmessage (ProvNumWebMail)";
 					Db.NonQ(command);
 				}
-
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE emailmessage ADD PatNumSubj bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE emailmessage ADD INDEX (PatNumSubj)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE emailmessage ADD PatNumSubj number(20)";
+					Db.NonQ(command);
+					command="UPDATE emailmessage SET PatNumSubj = 0 WHERE PatNumSubj IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE emailmessage MODIFY PatNumSubj NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX emailmessage_PatNumSubj ON emailmessage (PatNumSubj)";
+					Db.NonQ(command);
+				}
 
 
 				command="UPDATE preference SET ValueString = '14.1.0.0' WHERE PrefName = 'DataBaseVersion'";
@@ -2324,3 +2338,4 @@ namespace OpenDentBusiness {
 
 	}
 }
+

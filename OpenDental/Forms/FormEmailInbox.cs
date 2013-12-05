@@ -128,11 +128,16 @@ namespace OpenDental {
 				row.Cells.Add(new UI.ODGridCell(ListEmailMessages[i].SentOrReceived.ToString()));//Status
 				row.Cells.Add(new UI.ODGridCell(ListEmailMessages[i].Subject));//Subject
 				row.Cells.Add(new UI.ODGridCell(ListEmailMessages[i].FromAddress));//From
-				if(ListEmailMessages[i].PatNum==0) {
+				long patNumRegardingPatient=ListEmailMessages[i].PatNum;
+				//Webmail messages should list the patient as the PatNumSubj, which means "the patient whom this message is regarding".
+				if(ListEmailMessages[i].SentOrReceived==EmailSentOrReceived.WebMailReceived || ListEmailMessages[i].SentOrReceived==EmailSentOrReceived.WebMailRecdRead) {
+					patNumRegardingPatient=ListEmailMessages[i].PatNumSubj;
+				}
+				if(patNumRegardingPatient==0) {
 					row.Cells.Add(new UI.ODGridCell(""));//Patient
 				}
 				else {
-					Patient pat=Patients.GetPat(ListEmailMessages[i].PatNum);
+					Patient pat=Patients.GetPat(patNumRegardingPatient);
 					row.Cells.Add(new UI.ODGridCell(pat.GetNameLF()));//Patient
 				}
 				string preview=ListEmailMessages[i].BodyText.Replace("\r\n"," ").Replace('\n',' ');//Replace newlines with spaces, in order to compress the preview.

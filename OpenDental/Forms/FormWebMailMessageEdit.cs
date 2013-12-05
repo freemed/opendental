@@ -4,6 +4,7 @@ using System.Text;
 using System.Windows.Forms;
 using CodeBase;
 using OpenDentBusiness;
+using System.Collections.Generic;
 
 namespace OpenDental {
 	///<summary>DialogResult will be Abort if message was unable to be read. If message is read successfully (Ok or Cancel), then caller is responsible for updating SentOrReceived to read (where applicable).</summary>
@@ -15,7 +16,8 @@ namespace OpenDental {
 		private long _replyToEmailMessageNum;
 		private bool _allowSendSecureMessage=true;
 		private bool _allowSendNotificationMessage=true;
-		
+		private List<Patient> _listPatients=null;
+	
 		///<summary>Default ctor. This implies that we are composing a new message, NOT replying to an existing message. Provider attached to this message should be Security.CurUser.ProvNum</summary>
 		public FormWebMailMessageEdit(long patNum) : this(patNum,0) { }
 
@@ -47,16 +49,31 @@ namespace OpenDental {
 			labelNotification.ForeColor=Color.Red;
 		}
 
-		private void VerifyInputs() {			
+		public void AllowSendMessages() {
+			_allowSendSecureMessage=true;
+			_allowSendNotificationMessage=true;
+			butSend.Enabled=true;
+			butPreview.Enabled=true;
+			labelNotification.ForeColor=SystemColors.ControlText;
+			labelNotification.ForeColor=SystemColors.ControlText;
+		}
+
+		private void VerifyInputs() {
+			AllowSendMessages();
 			long priProvNum=0;
+			long patNumSubj=_patNum;
 			string notificationSubject;
 			string notificationBodyNoUrl;
 			string notificationURL;
+			Family family=null;
 			Patient patCur=Patients.GetPat(_patNum);
+			comboRegardingPatient.Items.Clear();
 			if(patCur==null) {
 				BlockSendSecureMessage("Patient is invalid.");
+				_listPatients=null;
 			}
-			else {
+			else {			
+				family=Patients.GetFamily(_patNum);				
 				textTo.Text=patCur.GetNameFL();
 				Provider priProv=Providers.GetProv(patCur.PriProv);
 				if(priProv==null) {
@@ -94,14 +111,34 @@ namespace OpenDental {
 				textSubject.Text=replyToEmailMessage.Subject;
 				if(replyToEmailMessage.Subject.IndexOf("RE:")!=0) {
 					textSubject.Text="RE: "+textSubject.Text;
-				} 
+				}
+				patNumSubj=replyToEmailMessage.PatNumSubj;
+				Patient patRegarding=Patients.GetOnePat(family.ListPats,patNumSubj);
 				textBoxBody.Text="\r\n\r\n-----"+Lan.g(this,"Original Message")+"-----\r\n"
+					+(patRegarding == null ? "" : (Lan.g(this,"Regarding Patient")+": "+patRegarding.GetNameFL()+"\r\n"))
 					+Lan.g(this,"From")+": "+replyToEmailMessage.FromAddress+"\r\n"
 					+Lan.g(this,"Sent")+": "+replyToEmailMessage.MsgDateTime.ToShortDateString()+" "+replyToEmailMessage.MsgDateTime.ToShortTimeString()+"\r\n"
 					+Lan.g(this,"To")+": "+replyToEmailMessage.ToAddress+"\r\n"
 					+Lan.g(this,"Subject")+": "+replyToEmailMessage.Subject
-					+"\r\n\r\n"+replyToEmailMessage.BodyText;
+					+"\r\n\r\n"+replyToEmailMessage.BodyText;		
 				
+			}
+			if(patCur==null || family==null) {
+				BlockSendSecureMessage("Patient's family not setup propertly. Make sure guarantor is valid.");
+			}
+			else {
+				_listPatients=new List<Patient>();
+				bool isGuar=patCur.Guarantor==patCur.PatNum;
+				for(int i=0;i<family.ListPats.Length;i++) {
+					Patient patFamilyMember=family.ListPats[i];
+					if(isGuar || patFamilyMember.PatNum==patNumSubj) {
+						_listPatients.Add(patFamilyMember);
+						comboRegardingPatient.Items.Add(patFamilyMember.GetNameFL());
+						if(patFamilyMember.PatNum==patNumSubj) {
+							comboRegardingPatient.SelectedIndex=(comboRegardingPatient.Items.Count-1);
+						}
+					}
+				}
 			}
 			notificationSubject=PrefC.GetString(PrefName.PatientPortalNotifySubject);
 			notificationBodyNoUrl=PrefC.GetString(PrefName.PatientPortalNotifyBody);
@@ -149,7 +186,24 @@ namespace OpenDental {
 				textBoxBody.Focus();
 				return false;
 			}
+			if(GetPatNumSubj()<=0) {
+				MsgBox.Show(this,"Select a valid patient");
+				comboRegardingPatient.Focus();
+				return false;
+			}
 			return true;
+		}
+
+		private long GetPatNumSubj() {
+			try {
+				if(_listPatients==null) {
+					return 0;
+				}
+				return _listPatients[comboRegardingPatient.SelectedIndex].PatNum;
+			}
+			catch {
+				return 0;
+			}
 		}
 
 		private void menuItemSetup_Click(object sender,EventArgs e) {
@@ -195,10 +249,12 @@ namespace OpenDental {
 			_secureMessage.Subject=textSubject.Text;
 			_secureMessage.BodyText=textBoxBody.Text;
 			_secureMessage.MsgDateTime=DateTime.Now;
+			_secureMessage.PatNumSubj=GetPatNumSubj();
 			EmailMessages.Insert(_secureMessage);
 			if(_allowSendNotificationMessage) { 
 				//Send an insecure notification email to the patient.
-				_insecureMessage.MsgDateTime=DateTime.Now;				
+				_insecureMessage.MsgDateTime=DateTime.Now;
+				_insecureMessage.PatNumSubj=GetPatNumSubj();
 				try {
 					EmailMessages.SendEmailUnsecure(_insecureMessage,_emailAddressSender);
 					//Insert the notification email into the emailmessage table so we have a record that it was sent.

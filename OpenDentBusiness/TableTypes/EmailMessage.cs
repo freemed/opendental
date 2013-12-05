@@ -9,7 +9,7 @@ namespace OpenDentBusiness {
 		///<summary>Primary key.</summary>
 		[CrudColumn(IsPriKey=true)]
 		public long EmailMessageNum;
-		///<summary>FK to patient.PatNum</summary>
+		///<summary>FK to patient.PatNum. The patient whom is sending this message. May be sent by a guarantor on behalf of a dependent.</summary>
 		public long PatNum;
 		///<summary>Single valid email address. Bcc field might be added later, although it won't be very useful.  We will never allow visible cc for privacy reasons.  For web mail messages, this will not be an email address.  Instead, it will be the name of the corresponding patient or provider.</summary>
 		public string ToAddress;
@@ -38,6 +38,8 @@ namespace OpenDentBusiness {
 		public List<EmailAttach> Attachments;
 		///<summary>FK to provider.ProvNum.  The provider to whom this message was sent or from whom this message was sent.  Only used when EmailSentOrReceived is WebMailReceived, WebMailRecdRead, WebMailSent, or WebMailSentRead.  Will be 0 if not a web mail message.</summary>
 		public long ProvNumWebMail;
+		///<summary>FK to patient.PatNum. Represents the patient to whom this email message is addressed, or from whom it is being sent on behalf of. If guarantor is sending on behalf of self then this field will match PatNum field.</summary>
+		public long PatNumSubj;
 		
 		///<summary>Constructor</summary>
 		public EmailMessage(){
