@@ -40,10 +40,10 @@ namespace OpenDental{
 			this.butCancel = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
-			// textBoxTo
+			// textTo
 			// 
 			this.textTo.Location = new System.Drawing.Point(96, 25);
-			this.textTo.Name = "textBoxTo";
+			this.textTo.Name = "textTo";
 			this.textTo.ReadOnly = true;
 			this.textTo.Size = new System.Drawing.Size(328, 20);
 			this.textTo.TabIndex = 0;
@@ -57,10 +57,10 @@ namespace OpenDental{
 			this.label1.Text = "To:";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textBoxFrom
+			// textFrom
 			// 
 			this.textFrom.Location = new System.Drawing.Point(96, 51);
-			this.textFrom.Name = "textBoxFrom";
+			this.textFrom.Name = "textFrom";
 			this.textFrom.ReadOnly = true;
 			this.textFrom.Size = new System.Drawing.Size(328, 20);
 			this.textFrom.TabIndex = 1;
@@ -83,12 +83,12 @@ namespace OpenDental{
 			this.label2.Text = "Message:";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textBoxSubject
+			// textSubject
 			// 
 			this.textSubject.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.textSubject.Location = new System.Drawing.Point(96, 84);
-			this.textSubject.Name = "textBoxSubject";
+			this.textSubject.Name = "textSubject";
 			this.textSubject.Size = new System.Drawing.Size(619, 20);
 			this.textSubject.TabIndex = 2;
 			// 
