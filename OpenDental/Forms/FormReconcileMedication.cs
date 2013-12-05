@@ -250,7 +250,13 @@ namespace OpenDental {
 					}
 				}
 				else {
-					//Use Medication Name instead
+					Medication med=Medications.GetMedication(_listMedicationPatReconcile[i].MedicationNum);
+					if(med.MedName==null) {
+						row.Cells.Add("");
+					}
+					else {
+						row.Cells.Add(med.MedName);
+					}
 				}
 				if(_listMedicationPatReconcile[i].PatNote==null) {
 					row.Cells.Add("");
