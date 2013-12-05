@@ -40,16 +40,17 @@ namespace OpenDental {
 		///<summary>Gets new messages from email inbox, as well as older messages from the db. Also fills the grid.</summary>
 		private int GetMessages() {
 			AddressInbox=EmailAddresses.GetByClinic(0);//Default for clinic/practice.
-			if(AddressInbox.Pop3ServerIncoming=="") {//Email address not setup.
-				Text="Email Inbox";
-				AddressInbox=null;
-				MsgBox.Show(this,"Default email address has not been setup completely.");
-				return 0;
-			}
-			Text="Email Inbox for "+AddressInbox.EmailUsername;
 			Cursor=Cursors.WaitCursor;
 			FillGridEmailMessages();//Show what is in db.
 			Cursor=Cursors.Default;
+			if(AddressInbox.Pop3ServerIncoming=="") {//Email address not setup.
+				Text="Email Inbox";
+				AddressInbox=null;
+				//todo: Message Box is too instrusive, move this to a status label.
+				//MsgBox.Show(this,"Default email address has not been setup completely.");
+				return 0;
+			}
+			Text="Email Inbox for "+AddressInbox.EmailUsername;
 			Application.DoEvents();//So that something is showing while the page is loading.
 			if(!CodeBase.ODEnvironment.IdIsThisComputer(PrefC.GetString(PrefName.EmailInboxComputerName))) {//This is not the computer to get new messages from.
 				return 0;
