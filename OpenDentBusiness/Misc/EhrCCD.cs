@@ -851,7 +851,8 @@ Immunizations
 			for(int i=0;i<listVaccinePatsFiltered.Count;i++) {
 				VaccineDef vaccineDef=VaccineDefs.GetOne(listVaccinePatsFiltered[i].VaccineDefNum);
 				Start("tr");
-				_w.WriteElementString("td",vaccineDef.CVXCode+" - "+vaccineDef.VaccineName);
+				Cvx cvx=Cvxs.GetOneFromDb(vaccineDef.CVXCode);
+				_w.WriteElementString("td",cvx.CvxCode+" - "+cvx.Description);
 				DateText("td",listVaccinePatsFiltered[i].DateTimeStart);
 				_w.WriteElementString("td","Completed");
 				End("tr");
@@ -1017,7 +1018,8 @@ Care Plan
 			Start("tbody");
 			for(int i=0;i<listEhrCarePlansFiltered.Count;i++) {
 				Start("tr");
-				_w.WriteElementString("td",listEhrCarePlansFiltered[i].Instructions);//Planned Activity
+				Snomed snomedEducation=Snomeds.GetByCode(listEhrCarePlansFiltered[i].SnomedEducation);
+				_w.WriteElementString("td","Goal: "+snomedEducation.Description+"; Instructions: "+listEhrCarePlansFiltered[i].Instructions);//Planned Activity
 				DateText("td",listEhrCarePlansFiltered[i].DatePlanned);//Planned Date
 				End("tr");
 			}
@@ -1079,35 +1081,73 @@ Problems
 			_w.WriteComment("Problems section template");
 			StartAndEnd("code","code","11450-4","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Problem list");
 			_w.WriteElementString("title","Problems");
-			Start("text");
-			StartAndEnd("content","ID","problems");
-			Start("list","listType","ordered");
-			for(int i=0;i<listProblemsFiltered.Count;i++) {//Fill Problems Table
+			Start("text");//The following text will be parsed as html with a style sheet to be human readable.
+			Start("table","width","100%","border","1");
+			Start("thead");
+			Start("tr");
+			_w.WriteElementString("th","Problem");
+			_w.WriteElementString("th","Date Start");
+			_w.WriteElementString("th","Date End");
+			_w.WriteElementString("th","Status");
+			End("tr");
+			End("thead");
+			Start("tbody");
+			for(int i=0;i<listProblemsFiltered.Count;i++) {
 				DiseaseDef diseaseDef=DiseaseDefs.GetItem(listProblemsFiltered[i].DiseaseDefNum);
-				Start("item");
-				_w.WriteString(diseaseDef.SnomedCode+" - "+diseaseDef.DiseaseName+" : "+"Status - ");
+				Start("tr");
+				_w.WriteElementString("td",diseaseDef.SnomedCode+" - "+diseaseDef.DiseaseName);
+				DateText("td",listProblemsFiltered[i].DateStart);
+				DateText("td",listProblemsFiltered[i].DateStop);
 				if(listProblemsFiltered[i].ProbStatus==ProblemStatus.Active) {
-					_w.WriteString("Active");
 					status="Active";
 					statusCode="55561003";
 					statusOther="active";
 				}
 				else if(listProblemsFiltered[i].ProbStatus==ProblemStatus.Inactive) {
-					_w.WriteString("Inactive");
 					status="Inactive";
 					statusCode="73425007";
 					statusOther="completed";
 				}
 				else {
-					_w.WriteString("Resolved");
 					status="Resolved";
 					statusCode="413322009";
 					statusOther="completed";
 				}
-				End("item");
+				_w.WriteElementString("td",status);
+				End("tr");
 			}
-			End("list");
+			End("tbody");
+			End("table");
 			End("text");
+			//Start("text");
+			//StartAndEnd("content","ID","problems");
+			//Start("list","listType","ordered");
+			//for(int i=0;i<listProblemsFiltered.Count;i++) {//Fill Problems Table
+			//	DiseaseDef diseaseDef=DiseaseDefs.GetItem(listProblemsFiltered[i].DiseaseDefNum);
+			//	Start("item");
+			//	_w.WriteString(diseaseDef.SnomedCode+" - "+diseaseDef.DiseaseName+" : "+"Status - ");
+			//	if(listProblemsFiltered[i].ProbStatus==ProblemStatus.Active) {
+			//		_w.WriteString("Active");
+			//		status="Active";
+			//		statusCode="55561003";
+			//		statusOther="active";
+			//	}
+			//	else if(listProblemsFiltered[i].ProbStatus==ProblemStatus.Inactive) {
+			//		_w.WriteString("Inactive");
+			//		status="Inactive";
+			//		statusCode="73425007";
+			//		statusOther="completed";
+			//	}
+			//	else {
+			//		_w.WriteString("Resolved");
+			//		status="Resolved";
+			//		statusCode="413322009";
+			//		statusOther="completed";
+			//	}
+			//	End("item");
+			//}
+			//End("list");
+			//End("text");
 			for(int i=0;i<listProblemsFiltered.Count;i++) {//Fill Problems Info
 				DiseaseDef diseaseDef=DiseaseDefs.GetItem(listProblemsFiltered[i].DiseaseDefNum);
 				Start("entry","typeCode","DRIV");
@@ -1297,7 +1337,7 @@ Laboratory Test Results
 				_w.WriteElementString("td",listLabResultFiltered[i].TestName);//Test
 				_w.WriteElementString("td",listLabResultFiltered[i].ObsValue+" "+listLabResultFiltered[i].ObsUnits);//Result
 				_w.WriteElementString("td",listLabResultFiltered[i].AbnormalFlag.ToString());//Abnormal Flag
-				_w.WriteElementString("td",listLabResultFiltered[i].DateTimeTest.ToShortDateString());//Date Performed
+				DateText("td",listLabResultFiltered[i].DateTimeTest);
 				End("tr");
 			}
 			End("tbody");
