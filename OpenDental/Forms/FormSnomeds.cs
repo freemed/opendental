@@ -12,7 +12,9 @@ using OpenDental.UI;
 namespace OpenDental {
 	public partial class FormSnomeds:Form {
 		public bool IsSelectionMode;
+		public bool IsMultiSelectMode;
 		public Snomed SelectedSnomed;
+		public List<Snomed> ListSelectedSnomeds;
 		private List<Snomed> SnomedList;
 		private bool changed;
 
@@ -22,11 +24,14 @@ namespace OpenDental {
 		}
 
 		private void FormSnomeds_Load(object sender,EventArgs e) {
-			if(IsSelectionMode) {
+			if(IsSelectionMode || IsMultiSelectMode) {
 				butClose.Text=Lan.g(this,"Cancel");
 			}
 			else {
 				butOK.Visible=false;
+			}
+			if(IsMultiSelectMode) {
+				gridMain.SelectionMode=GridSelectionMode.MultiExtended;
 			}
 			ActiveControl=textCode;
 			if(!FormEHR.QuarterlyKeyIsValid(DateTime.Now.ToString("yy")//year
@@ -201,8 +206,10 @@ namespace OpenDental {
 		//}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			if(IsSelectionMode) {
+			if(IsSelectionMode || IsMultiSelectMode) {
 				SelectedSnomed=(Snomed)gridMain.Rows[e.Row].Tag;
+				ListSelectedSnomeds=new List<Snomed>();
+				ListSelectedSnomeds.Add((Snomed)gridMain.Rows[e.Row].Tag);
 				DialogResult=DialogResult.OK;
 				return;
 			}
@@ -300,7 +307,7 @@ namespace OpenDental {
 			MessageBox.Show(Lan.g(this,"SNOMED codes added: ")+changeCount);
 		}
 
-//		private void butRSIT_Click(object sender,EventArgs e) {
+//		private void butRSIT_Click(object sender,EventArgs e) {//Ryan's Snomed Import Tool
 //			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"This tool is being used by Ryan to process the raw SNOMED data. Push Cancel if you do not know what this tool is doing.")) {
 //				return;
 //			}
@@ -384,6 +391,10 @@ namespace OpenDental {
 				return;
 			}
 			SelectedSnomed=(Snomed)gridMain.Rows[gridMain.GetSelectedIndex()].Tag;
+			ListSelectedSnomeds=new List<Snomed>();
+			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
+				ListSelectedSnomeds.Add((Snomed)gridMain.Rows[gridMain.SelectedIndices[i]].Tag);
+			}
 			DialogResult=DialogResult.OK;
 		}
 

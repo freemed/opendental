@@ -15,7 +15,9 @@ namespace OpenDental {
 		private List<RxNorm> rxList;
 		///<summary>When this window is used for selecting an RxNorm (medication.RxCui), then use must click OK, None, or double click in grid.  In those cases, this field will have a value.  If None was clicked, it will be a new RxNorm with an RxCui of zero.</summary>
 		public RxNorm SelectedRxNorm;
+		public List<RxNorm> ListSelectedRxNorms;
 		public bool IsSelectionMode;
+		public bool IsMultiSelectMode;
 
 		public FormRxNorms() {
 			InitializeComponent();
@@ -23,10 +25,13 @@ namespace OpenDental {
 		}
 
 		private void FormRxNorms_Load(object sender,EventArgs e) {
-			if(!IsSelectionMode) {
+			if(!IsSelectionMode && !IsMultiSelectMode) {
 				butNone.Visible=false;
 				butOK.Visible=false;
 				butCancel.Text="Close";
+			}
+			if(IsMultiSelectMode) {
+				gridMain.SelectionMode=GridSelectionMode.MultiExtended;
 			}
 			checkIgnore.Checked=true;
 		}
@@ -72,6 +77,8 @@ namespace OpenDental {
 				return;
 			}
 			SelectedRxNorm=rxList[e.Row];
+			ListSelectedRxNorms=new List<RxNorm>();
+			ListSelectedRxNorms.Add(rxList[e.Row]);
 			DialogResult=DialogResult.OK;
 		}
 
@@ -93,6 +100,7 @@ namespace OpenDental {
 
 		private void butNone_Click(object sender,EventArgs e) {
 			SelectedRxNorm=new RxNorm();
+			ListSelectedRxNorms=new List<RxNorm>();
 			DialogResult=DialogResult.OK;
 		}
 
@@ -102,6 +110,10 @@ namespace OpenDental {
 				return;
 			}
 			SelectedRxNorm=rxList[gridMain.GetSelectedIndex()];
+			ListSelectedRxNorms=new List<RxNorm>();
+			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
+				ListSelectedRxNorms.Add(rxList[gridMain.SelectedIndices[i]]);
+			}
 			DialogResult=DialogResult.OK;
 		}
 

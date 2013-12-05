@@ -57,7 +57,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static RxNorm GetByRxCUI(string rxCui) {
-			string command="SELECT * FROM rxnorm WHERE RxCui='"+POut.String(rxCui)+"'";
+			string command="SELECT * FROM rxnorm WHERE RxCui='"+POut.String(rxCui)+"' AND MmslCode=''";
 			return Crud.RxNormCrud.SelectOne(command);
 		}
 

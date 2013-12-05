@@ -581,6 +581,14 @@ namespace OpenDental{
 			if(FormM.DialogResult!=DialogResult.OK){
 				return;
 			}
+			if(Security.IsAuthorized(Permissions.EhrShowCDS,true)) {
+				FormCDSIntervention FormCDSI=new FormCDSIntervention();
+				FormCDSI.DictEhrTriggerResults=EhrTriggers.TriggerMatch(Medications.GetMedication(FormM.SelectedMedicationNum),PatCur);
+				FormCDSI.ShowIfRequired();
+				if(FormCDSI.DialogResult==DialogResult.Abort) {
+					return;//do not add medication
+				}
+			}
 			MedicationPat MedicationPatCur=new MedicationPat();
 			MedicationPatCur.PatNum=PatCur.PatNum;
 			MedicationPatCur.MedicationNum=FormM.SelectedMedicationNum;
@@ -862,6 +870,14 @@ namespace OpenDental{
 				return;
 			}
 			for(int i=0;i<formDD.SelectedDiseaseDefNums.Count;i++) {
+				if(Security.IsAuthorized(Permissions.EhrShowCDS,true)){
+					FormCDSIntervention FormCDSI=new FormCDSIntervention();
+					FormCDSI.DictEhrTriggerResults=EhrTriggers.TriggerMatch(DiseaseDefs.GetItem(formDD.SelectedDiseaseDefNums[i]),PatCur);
+					FormCDSI.ShowIfRequired();
+					if(FormCDSI.DialogResult==DialogResult.Abort) {
+						continue;//cancel 
+					}
+				}
 				SecurityLogs.MakeLogEntry(Permissions.PatProblemListEdit,PatCur.PatNum,DiseaseDefs.GetName(formDD.SelectedDiseaseDefNums[i])+" added"); //Audit log made outside form because the form is just a list of problems and is called from many places.
 				Disease disease=new Disease();
 				disease.PatNum=PatCur.PatNum;
@@ -989,6 +1005,15 @@ namespace OpenDental{
 			formA.AllergyCur.PatNum=PatCur.PatNum;
 			formA.AllergyCur.IsNew=true;
 			formA.ShowDialog();
+			if(formA.DialogResult!=DialogResult.OK) {
+				return;
+			}
+
+			if(Security.IsAuthorized(Permissions.EhrShowCDS,true)) {
+				FormCDSIntervention FormCDSI=new FormCDSIntervention();
+				FormCDSI.DictEhrTriggerResults=EhrTriggers.TriggerMatch(AllergyDefs.GetOne(formA.AllergyCur.AllergyDefNum),PatCur);
+				FormCDSI.ShowIfRequired(false);
+			}
 			FillAllergies();
 		}
 

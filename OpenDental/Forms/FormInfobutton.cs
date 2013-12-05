@@ -144,42 +144,70 @@ namespace OpenDental {
 				row=new ODGridRow();
 				switch(ListObjects[i].GetType().ToString().Split(new string[]{"."},StringSplitOptions.None)[1]) {
 					case "DiseaseDef":
-						row.Cells.Add("Problem");
 						if(((DiseaseDef)ListObjects[i]).ICD9Code!="") {
+							row=new ODGridRow();//just in case;
 							ICD9 icd9=ICD9s.GetByCode(((DiseaseDef)ListObjects[i]).ICD9Code);
+							row.Cells.Add("Problem");
 							row.Cells.Add(icd9.ICD9Code);
 							row.Cells.Add("ICD9-CM");
 							row.Cells.Add(icd9.Description);
 							row.Tag=icd9;
+							gridMain.Rows.Add(row);
 						}
-						else if(((DiseaseDef)ListObjects[i]).SnomedCode!="") {
+						if(((DiseaseDef)ListObjects[i]).SnomedCode!="") {
+							row=new ODGridRow();//just in case
 							Snomed snomed=Snomeds.GetByCode(((DiseaseDef)ListObjects[i]).SnomedCode);
+							row.Cells.Add("Problem");
 							row.Cells.Add(snomed.SnomedCode);
 							row.Cells.Add("SNOMED CT");
 							row.Cells.Add(snomed.Description);
 							row.Tag=snomed;
+							gridMain.Rows.Add(row);
 						}
-						else if(((DiseaseDef)ListObjects[i]).Icd10Code!="") {
+						if(((DiseaseDef)ListObjects[i]).Icd10Code!="") {
+							row=new ODGridRow();//just in case
+							row.Cells.Add("Problem");
 							Icd10 icd10=Icd10s.GetByCode(((DiseaseDef)ListObjects[i]).Icd10Code);
 							row.Cells.Add(icd10.Icd10Code);
 							row.Cells.Add("SNOMED CT");
 							row.Cells.Add(icd10.Description);
 							row.Tag=icd10;
+							gridMain.Rows.Add(row);
 						}
-						else {
+						if(((DiseaseDef)ListObjects[i]).ICD9Code!=""
+							&& ((DiseaseDef)ListObjects[i]).SnomedCode!=""
+							&& ((DiseaseDef)ListObjects[i]).Icd10Code!="") 
+						{
+							row=new ODGridRow();//just in case
+							row.Cells.Add("Problem");
 							row.Cells.Add("none");
 							row.Cells.Add("none");
 							row.Cells.Add(((DiseaseDef)ListObjects[i]).DiseaseName);
 							row.Tag=null;
+							gridMain.Rows.Add(row);
 						}
-						break;
+						continue;//not break, because we have already added the rows.
 					case "Medication":
-						row.Cells.Add("Medication");
-						row.Cells.Add("TODO");
-						row.Cells.Add("TODO");
-						row.Cells.Add("TODO");
-						row.Tag=null;
-						break;
+						if(((Medication)ListObjects[i]).RxCui!=0) {
+							row=new ODGridRow();//just in case
+							row.Cells.Add("Medication");
+							RxNorm rxNorm=RxNorms.GetByRxCUI(((Medication)ListObjects[i]).RxCui.ToString());
+							row.Cells.Add(rxNorm.RxCui);
+							row.Cells.Add("RxNorm");
+							row.Cells.Add(rxNorm.Description);
+							row.Tag=rxNorm;
+							gridMain.Rows.Add(row);
+						}
+						if(((Medication)ListObjects[i]).RxCui==0) {
+							row=new ODGridRow();//just in case
+							row.Cells.Add("Medication");
+							row.Cells.Add("none");
+							row.Cells.Add("none");
+							row.Cells.Add(((Medication)ListObjects[i]).MedName);
+							row.Tag=ListObjects[i];
+							gridMain.Rows.Add(row);
+						}
+						continue;
 					case "ICD9":
 						ICD9 icd9Obj=(ICD9)ListObjects[i];
 						row.Cells.Add("Code");
@@ -211,6 +239,15 @@ namespace OpenDental {
 						row.Cells.Add("RxNorm");
 						row.Cells.Add(rxNormObj.Description);
 						row.Tag=rxNormObj;
+						break;
+					case "LabResult":
+						//TODO
+						//Loinc loincObj=(Loinc)ListObjects[i];
+						//row.Cells.Add("Code");
+						//row.Cells.Add(loincObj.LoincCode);
+						//row.Cells.Add("LOINC");
+						//row.Cells.Add(loincObj.NameShort);
+						//row.Tag=loincObj;
 						break;
 					case "Loinc":
 						Loinc loincObj=(Loinc)ListObjects[i];
