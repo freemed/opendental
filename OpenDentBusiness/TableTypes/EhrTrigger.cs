@@ -36,6 +36,17 @@ namespace OpenDentBusiness {
 		public string VitalLoincList;
 		///<summary>Requires One, OneOfEachCategory, TwoOrMore, or All for trigger to match.  </summary>
 		public MatchCardinality Cardinality;
+		///<summary>The reccomended course of action for this intervention.  </summary>
+		public string Reccomendation;
+		///<summary>Bibliographic citation, not a URL. </summary>
+		public string Bibliography;
+		///<summary>URI/link to the bibliographic source, if available. </summary>
+		public string BibliographicLink;
+		///<summary>The person or organization that developed this CDS intervention. </summary>
+		public string Developer;
+		///<summary>The person or organization that funded the research behind this CDS intervention. </summary>
+		public string FundingSource;
+
 
 		///<summary></summary>
 		public EhrTrigger Copy() {

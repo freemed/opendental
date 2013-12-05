@@ -24,8 +24,8 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent() {
 			this.gridMain = new OpenDental.UI.ODGrid();
+			this.butAddTrigger = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.butAddDisease = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// gridMain
@@ -37,11 +37,29 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(12, 12);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(483, 560);
+			this.gridMain.Size = new System.Drawing.Size(683, 560);
 			this.gridMain.TabIndex = 199;
 			this.gridMain.Title = "EHR Triggers";
 			this.gridMain.TranslationName = "";
 			this.gridMain.WrapText = false;
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			// 
+			// butAddTrigger
+			// 
+			this.butAddTrigger.AdjustImageLocation = new System.Drawing.Point(0, 1);
+			this.butAddTrigger.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.butAddTrigger.Autosize = true;
+			this.butAddTrigger.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddTrigger.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddTrigger.CornerRadius = 4F;
+			this.butAddTrigger.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAddTrigger.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAddTrigger.Location = new System.Drawing.Point(701, 12);
+			this.butAddTrigger.Name = "butAddTrigger";
+			this.butAddTrigger.Size = new System.Drawing.Size(75, 23);
+			this.butAddTrigger.TabIndex = 201;
+			this.butAddTrigger.Text = "Add";
+			this.butAddTrigger.Click += new System.EventHandler(this.butAddTrigger_Click);
 			// 
 			// butCancel
 			// 
@@ -51,33 +69,18 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(501, 548);
+			this.butCancel.Location = new System.Drawing.Point(701, 548);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 2;
-			this.butCancel.Text = "&Cancel";
+			this.butCancel.Text = "&Close";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// butAddDisease
-			// 
-			this.butAddDisease.AdjustImageLocation = new System.Drawing.Point(0, 1);
-			this.butAddDisease.Autosize = true;
-			this.butAddDisease.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAddDisease.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAddDisease.CornerRadius = 4F;
-			this.butAddDisease.Image = global::OpenDental.Properties.Resources.Add;
-			this.butAddDisease.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAddDisease.Location = new System.Drawing.Point(501, 12);
-			this.butAddDisease.Name = "butAddDisease";
-			this.butAddDisease.Size = new System.Drawing.Size(75, 23);
-			this.butAddDisease.TabIndex = 201;
-			this.butAddDisease.Text = "Add";
 			// 
 			// FormEhrTriggers
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(588, 584);
-			this.Controls.Add(this.butAddDisease);
+			this.ClientSize = new System.Drawing.Size(788, 584);
+			this.Controls.Add(this.butAddTrigger);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butCancel);
 			this.Name = "FormEhrTriggers";
@@ -92,6 +95,6 @@ namespace OpenDental{
 
 		private OpenDental.UI.Button butCancel;
 		private UI.ODGrid gridMain;
-		private UI.Button butAddDisease;
+		private UI.Button butAddTrigger;
 	}
 }
