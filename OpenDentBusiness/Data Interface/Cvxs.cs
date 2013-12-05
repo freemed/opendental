@@ -71,6 +71,15 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
+		///<summary>Gets one Cvx object directly from the database by CodeValue.  If code does not exist, returns null.</summary>
+		public static Cvx GetByCode(string cvxCode) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Cvx>(MethodBase.GetCurrentMethod(),cvxCode);
+			}
+			string command="SELECT * FROM Cvx WHERE CvxCode='"+POut.String(cvxCode)+"'";
+			return Crud.CvxCrud.SelectOne(command);
+		}
+
 		///<summary>Gets one Cvx by CvxNum directly from the db.</summary>
 		public static Cvx GetOneFromDb(string cvxCode) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
