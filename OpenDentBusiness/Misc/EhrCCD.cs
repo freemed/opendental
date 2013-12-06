@@ -710,7 +710,7 @@ Functional and Cognitive Status
 			Start("table","width","100%","border","1");
 			Start("thead");
 			Start("tr");
-			_w.WriteElementString("th","Functional Condition");
+			_w.WriteElementString("th","Condition");
 			_w.WriteElementString("th","Effective Dates");
 			_w.WriteElementString("th","Condition Status");
 			End("tr");
