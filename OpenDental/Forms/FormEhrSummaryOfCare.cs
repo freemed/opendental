@@ -1,18 +1,11 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
 using CodeBase;
 using System.Xml;
-using System.Xml.XPath;
 using OpenDental.UI;
-
 
 namespace OpenDental {
 	public partial class FormEhrSummaryOfCare:Form {
@@ -63,16 +56,19 @@ namespace OpenDental {
 
 		private void gridRec_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			string xmltext=listCcdRec[gridRec.GetSelectedIndex()].ContentSummary;
-			DisplayCCD(xmltext,true);
+			DisplayCCD(xmltext,PatCur);
 		}
 
-		///<summary>Returns true if user performed a print job on the CCD.  Cannot be moved to OpenDentBusiness/Misc/EhrCCD.cs, because this function uses windows UI components.</summary>
+		///<summary>Returns true if user performed a print job on the CCD.  Cannot be moved to OpenDentBusiness/Misc/EhrCCD.cs, because this function uses windows UI components.  
+		///Strictly used for displaying CCD messages.  Will not allow user to reconcile meds, problems, or allergies into the patient's account.</summary>
 		public static bool DisplayCCD(string strXmlCCD) {
-			return DisplayCCD(strXmlCCD,false);
+			return DisplayCCD(strXmlCCD,null);
 		}
 
-		///<summary>Returns true if user performed a print job on the CCD.  Cannot be moved to OpenDentBusiness/Misc/EhrCCD.cs, because this function uses windows UI components.  Set isReconcile to true if the CCD is being displayed to reconcile (incoporate into patient record) medications and/or problems and/or allergies.</summary>
-		public static bool DisplayCCD(string strXmlCCD,bool isReconcile) {
+		///<summary>Returns true if user performed a print job on the CCD.  Cannot be moved to OpenDentBusiness/Misc/EhrCCD.cs, because this function uses windows UI components. 
+		///Pass in a valid patient if the CCD is being displayed to reconcile (incoporate into patient record) medications and/or problems and/or allergies.
+		///patCur can be null, or patCur.PatNum can be 0, to hide the three reconcile buttons.</summary>
+		public static bool DisplayCCD(string strXmlCCD,Patient patCur) {
 			//string xmltext=GetSampleMissingStylesheet();
 			XmlDocument doc=new XmlDocument();
 			try {
@@ -110,7 +106,7 @@ namespace OpenDental {
 			}
 			File.WriteAllText(Path.Combine(Path.GetTempPath(),xmlFileName),doc.InnerXml.ToString());
 			File.WriteAllText(Path.Combine(Path.GetTempPath(),xslFileName),xslContents);
-			FormEhrSummaryCcdEdit formESCD=new FormEhrSummaryCcdEdit(Path.Combine(Path.GetTempPath(),xmlFileName),isReconcile);
+			FormEhrSummaryCcdEdit formESCD=new FormEhrSummaryCcdEdit(Path.Combine(Path.GetTempPath(),xmlFileName),patCur);
 			formESCD.ShowDialog();
 			return formESCD.DidPrint;
 		}
@@ -211,7 +207,7 @@ namespace OpenDental {
 			ehrSummaryCcd.PatNum=PatCur.PatNum;
 			EhrSummaryCcds.Insert(ehrSummaryCcd);
 			FillGridRec();
-			DisplayCCD(text,true);
+			DisplayCCD(text,PatCur);
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {

@@ -1,31 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 using CodeBase;
-using OpenDental.UI;
 using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class FormEhrSummaryCcdEdit:Form {
 		public string StrXmlFilePath;
 		public bool DidPrint;
-		private bool _isReconcile;
+		///<summary>Will be set to the patient that this CCD message is indicated for.  Can be null if not meant for incorporating into a patient's account.</summary>
+		private Patient _patCur;
 
-		public FormEhrSummaryCcdEdit(string strXmlFilePath,bool isReconcile) {
+		///<summary>Patient can be null.  If null, or if PatNum is 0, reconciles will not be available.</summary>
+		public FormEhrSummaryCcdEdit(string strXmlFilePath,Patient patCur) {
 			InitializeComponent();
 			StrXmlFilePath=strXmlFilePath;
-			_isReconcile=isReconcile;
+			_patCur=patCur;
 		}
 
 		private void FormEhrSummaryCcdEdit_Load(object sender,EventArgs e) {
-			if(FormOpenDental.CurPatNum==0 || !_isReconcile) {//No patient is currently selected.  Do not show reconcile UI.
+			if(_patCur==null || _patCur.PatNum==0) {//No patient is currently selected.  Do not show reconcile UI.
 				labelReconcile.Visible=false;
 				butReconcileAllergies.Visible=false;
 				butReconcileMedications.Visible=false;
@@ -47,7 +43,7 @@ namespace OpenDental {
 				MessageBox.Show(Lan.g(this,"Error reading file")+": "+ex.Message);
 				return;
 			}
-			FormReconcileMedication formRM=new FormReconcileMedication();
+			FormReconcileMedication formRM=new FormReconcileMedication(_patCur);
 			formRM.ListMedicationPatNew=new List<MedicationPat>();
 			EhrCCD.GetListMedicationPats(xmlDocCcd,formRM.ListMedicationPatNew);
 			formRM.ShowDialog();
@@ -64,7 +60,7 @@ namespace OpenDental {
 				MessageBox.Show(Lan.g(this,"Error reading file")+": "+ex.Message);
 				return;
 			}
-			FormReconcileProblem formRP=new FormReconcileProblem();
+			FormReconcileProblem formRP=new FormReconcileProblem(_patCur);
 			formRP.ListProblemNew=new List<Disease>();
 			formRP.ListProblemDefNew=new List<DiseaseDef>();
 			EhrCCD.GetListDiseases(xmlDocCcd,formRP.ListProblemNew,formRP.ListProblemDefNew);
@@ -82,7 +78,7 @@ namespace OpenDental {
 				MessageBox.Show(Lan.g(this,"Error reading file")+": "+ex.Message);
 				return;
 			}
-			FormReconcileAllergy formRA=new FormReconcileAllergy();
+			FormReconcileAllergy formRA=new FormReconcileAllergy(_patCur);
 			formRA.ListAllergyNew=new List<Allergy>();
 			formRA.ListAllergyDefNew=new List<AllergyDef>();
 			EhrCCD.GetListAllergies(xmlDocCcd,formRA.ListAllergyNew,formRA.ListAllergyDefNew);

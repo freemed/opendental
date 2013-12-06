@@ -1,9 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
 using OpenDental.UI;
@@ -17,13 +13,14 @@ namespace OpenDental {
 		private List<Allergy> _listAllergyCur;
 		private Patient _patCur;
 
-		public FormReconcileAllergy() {
+		///<summary>Patient must be valid.  Do not pass null.</summary>
+		public FormReconcileAllergy(Patient patCur) {
 			InitializeComponent();
 			Lan.F(this);
+			_patCur=patCur;
 		}
 
 		private void FormReconcileAllergy_Load(object sender,EventArgs e) {
-			_patCur=Patients.GetPat(FormOpenDental.CurPatNum);
 			for(int index=0;index<ListAllergyNew.Count;index++) {
 				ListAllergyNew[index].PatNum=_patCur.PatNum;
 			}

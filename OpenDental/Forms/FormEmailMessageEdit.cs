@@ -1,15 +1,8 @@
 using System;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Printing;
-using System.Collections;
-using System.ComponentModel;
 using System.IO;
-using System.Net;
-using System.Net.Mail;
-using System.Net.Mime;
 using System.Windows.Forms;
-using System.Xml;
 //using OpenDental.Reporting;
 //using Indy.Sockets.IndySMTP;
 //using Indy.Sockets.IndyMessage;
@@ -64,14 +57,14 @@ namespace OpenDental{
 		private UI.Button butEncryptAndSend;
 		private UI.Button butRawMessage;
 		///<summary>Used when attaching to get AtoZ folder, and when sending to get Clinic.</summary>
-		private Patient PatCur;
+		private Patient _patCur;
 
 		///<summary></summary>
 		public FormEmailMessageEdit(EmailMessage messageCur){
 			InitializeComponent();// Required for Windows Form Designer support
 			Lan.F(this);
 			MessageCur=messageCur.Copy();
-			PatCur=Patients.GetPat(messageCur.PatNum);//we could just as easily pass this in.
+			_patCur=Patients.GetPat(messageCur.PatNum);//we could just as easily pass this in.
 			listAttachments.ContextMenu=contextMenuAttachments;
 		}
 
@@ -730,11 +723,11 @@ namespace OpenDental{
 			OpenFileDialog dlg=new OpenFileDialog();
 			dlg.Multiselect=true;
 			//PatCur=Patients.GetPat(MessageCur.PatNum);
-			if(PatCur.ImageFolder!=""){
+			if(_patCur.ImageFolder!=""){
 				if(PrefC.AtoZfolderUsed){
 					dlg.InitialDirectory=ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),
-																																				PatCur.ImageFolder.Substring(0,1).ToUpper(),
-																																				PatCur.ImageFolder);
+																																				_patCur.ImageFolder.Substring(0,1).ToUpper(),
+																																				_patCur.ImageFolder);
 				}
 				else{
 					//Use the OS default directory for this type of file viewer.
@@ -818,11 +811,11 @@ namespace OpenDental{
 				if(EhrCCD.IsCcdEmailAttachment(MessageCur.Attachments[listAttachments.SelectedIndex])) {
 					string strTextXml=File.ReadAllText(strFilePathAttach);
 					if(EhrCCD.IsCCD(strTextXml)) {
-						bool isReconcile=false;
+						Patient patEmail=null;//Will be null for most email messages.
 						if(MessageCur.SentOrReceived==EmailSentOrReceived.ReadDirect || MessageCur.SentOrReceived==EmailSentOrReceived.ReceivedDirect) {
-							isReconcile=true;//Do not show reconcile options when user is composing message or when viewing message that was sent. Only allow reconcile if received via Direct.
+							patEmail=_patCur;//Only allow reconcile if received via Direct.
 						}
-						FormEhrSummaryOfCare.DisplayCCD(strTextXml,isReconcile);
+						FormEhrSummaryOfCare.DisplayCCD(strTextXml,patEmail);
 						return;
 					}	
 				}
@@ -935,10 +928,10 @@ namespace OpenDental{
 		}
 
 		private EmailAddress GetEmailAddress() {
-			if(PatCur==null) {//can happen if sending deposit slip by email
+			if(_patCur==null) {//can happen if sending deposit slip by email
 				return EmailAddresses.GetByClinic(0);//gets the practice default address
 			}
-			return EmailAddresses.GetByClinic(PatCur.ClinicNum);
+			return EmailAddresses.GetByClinic(_patCur.ClinicNum);
 		}
 
 		private void butEncryptAndSend_Click(object sender,EventArgs e) {
