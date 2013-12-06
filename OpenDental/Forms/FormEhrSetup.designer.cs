@@ -335,6 +335,7 @@ namespace OpenDental{
 			this.butCDSSetup.Size = new System.Drawing.Size(128, 24);
 			this.butCDSSetup.TabIndex = 139;
 			this.butCDSSetup.Text = "CDS Setup";
+			this.butCDSSetup.Visible = false;
 			// 
 			// FormEhrSetup
 			// 
