@@ -356,11 +356,7 @@ namespace OpenDental {
 				isActive=false;
 				medP=_listMedicationPatCur[i];
 				for(int j=0;j<_listMedicationPatReconcile.Count;j++) {//Compare each reconcile medication to the current medication
-					if(medP.RxCui > 0 && medP.RxCui==_listMedicationPatReconcile[j].RxCui) {//Has an RxNorm code and they are equal
-						isActive=true;
-						break;
-					}
-					else if(_listMedicationPatReconcile[j].MedicationNum==_listMedicationPatCur[i].MedicationNum) {//Has identical MedicationNums
+					if(medP.RxCui > 0 && medP.RxCui==_listMedicationPatReconcile[j].RxCui && _listMedicationPatReconcile[j].MedicationNum==_listMedicationPatCur[i].MedicationNum) {//Has an RxNorm code and they are equal
 						isActive=true;
 						break;
 					}
