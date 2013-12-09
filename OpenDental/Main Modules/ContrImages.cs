@@ -1328,6 +1328,12 @@ namespace OpenDental {
 					pd.OriginAtMargins=true;
 					pd.DefaultPageSettings.Margins=new Margins(50,50,50,50);//Half-inch all around
 					pd.Print();
+					if(DocSelected.Description=="") {
+						SecurityLogs.MakeLogEntry(Permissions.Printing,PatCur.PatNum,"Patient image "+DocSelected.FileName+" printed");
+					}
+					else {
+						SecurityLogs.MakeLogEntry(Permissions.Printing,PatCur.PatNum,"Patient image "+DocSelected.Description+" printed");
+					}
 				}
 			}
 			catch(Exception ex) {
