@@ -168,6 +168,10 @@ namespace OpenDental {
 			}
 			if(IsSelectMode) {
 				SelectedSupply = Supplies.GetSupply((long)gridMain.Rows[e.Row].Tag);
+				ListSelectedSupplies.Clear();//just in case
+				for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
+					ListSelectedSupplies.Add(ListSupply[gridMain.SelectedIndices[i]]);
+				}				
 				DialogResult = DialogResult.OK;
 				return;
 			}

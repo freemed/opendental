@@ -25,7 +25,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<SupplyOrder>>(MethodBase.GetCurrentMethod());
 			}
-			string command="SELECT * FROM supplyorder ORDER BY DatePlaced DESC";
+			string command="SELECT * FROM supplyorder ORDER BY DatePlaced";
 			return Crud.SupplyOrderCrud.SelectMany(command);
 		}
 

@@ -34,6 +34,7 @@ namespace OpenDental {
 			ListOrders = new List<SupplyOrder>();
 			FillComboSupplier();
 			FillGridOrders();
+			gridOrders.ScrollToEnd();
 		}
 
 		private void FillComboSupplier() {
@@ -48,6 +49,7 @@ namespace OpenDental {
 
 		private void comboSupplier_SelectedIndexChanged(object sender,EventArgs e) {
 			FillGridOrders();
+			gridOrders.ScrollToEnd();
 			FillGridOrderItem();
 		}
 
@@ -289,6 +291,8 @@ namespace OpenDental {
 			ListOrdersAll=SupplyOrders.GetAll();//Refresh the list all.
 			FillGridOrders();
 			gridOrders.SetSelected(ListOrders.Count-1,true);
+			gridOrders.ScrollToEnd();
+			FillGridOrderItem();
 		}
 
 		private void butPrint_Click(object sender,EventArgs e) {
