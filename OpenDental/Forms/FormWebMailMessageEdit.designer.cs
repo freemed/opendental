@@ -37,9 +37,9 @@ namespace OpenDental{
 			this.label5 = new System.Windows.Forms.Label();
 			this.comboRegardingPatient = new System.Windows.Forms.ComboBox();
 			this.butPreview = new OpenDental.UI.Button();
-			this.textBoxBody = new OpenDental.ODtextBox();
 			this.butSend = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.textBody = new OpenDental.ODtextBox();
 			this.SuspendLayout();
 			// 
 			// textTo
@@ -107,7 +107,7 @@ namespace OpenDental{
 			// 
 			this.labelNotification.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.labelNotification.ForeColor = System.Drawing.SystemColors.ControlText;
-			this.labelNotification.Location = new System.Drawing.Point(86, 412);
+			this.labelNotification.Location = new System.Drawing.Point(86, 391);
 			this.labelNotification.Name = "labelNotification";
 			this.labelNotification.Size = new System.Drawing.Size(541, 14);
 			this.labelNotification.TabIndex = 17;
@@ -154,27 +154,12 @@ namespace OpenDental{
 			this.butPreview.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butPreview.CornerRadius = 4F;
 			this.butPreview.Image = global::OpenDental.Properties.Resources.butPreview;
-			this.butPreview.Location = new System.Drawing.Point(44, 363);
+			this.butPreview.Location = new System.Drawing.Point(44, 342);
 			this.butPreview.Name = "butPreview";
 			this.butPreview.Size = new System.Drawing.Size(69, 24);
 			this.butPreview.TabIndex = 5;
 			this.butPreview.Text = "&Cancel";
 			this.butPreview.Click += new System.EventHandler(this.butPreview_Click);
-			// 
-			// textBoxBody
-			// 
-			this.textBoxBody.AcceptsTab = true;
-			this.textBoxBody.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.textBoxBody.DetectUrls = false;
-			this.textBoxBody.Location = new System.Drawing.Point(119, 112);
-			this.textBoxBody.Name = "textBoxBody";
-			this.textBoxBody.QuickPasteType = OpenDentBusiness.QuickPasteType.Email;
-			this.textBoxBody.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-			this.textBoxBody.Size = new System.Drawing.Size(670, 275);
-			this.textBoxBody.TabIndex = 4;
-			this.textBoxBody.Text = "";
 			// 
 			// butSend
 			// 
@@ -184,7 +169,7 @@ namespace OpenDental{
 			this.butSend.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butSend.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSend.CornerRadius = 4F;
-			this.butSend.Location = new System.Drawing.Point(633, 407);
+			this.butSend.Location = new System.Drawing.Point(633, 386);
 			this.butSend.Name = "butSend";
 			this.butSend.Size = new System.Drawing.Size(75, 24);
 			this.butSend.TabIndex = 6;
@@ -199,24 +184,39 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(714, 407);
+			this.butCancel.Location = new System.Drawing.Point(714, 386);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 7;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// textBody
+			// 
+			this.textBody.AcceptsTab = true;
+			this.textBody.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.textBody.DetectUrls = false;
+			this.textBody.Location = new System.Drawing.Point(119, 112);
+			this.textBody.Name = "textBody";
+			this.textBody.QuickPasteType = OpenDentBusiness.QuickPasteType.Email;
+			this.textBody.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+			this.textBody.Size = new System.Drawing.Size(670, 254);
+			this.textBody.TabIndex = 4;
+			this.textBody.Text = "";
+			// 
 			// FormWebMailMessageEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(818, 443);
+			this.ClientSize = new System.Drawing.Size(818, 422);
 			this.Controls.Add(this.comboRegardingPatient);
 			this.Controls.Add(this.label5);
 			this.Controls.Add(this.butPreview);
 			this.Controls.Add(this.labelNotification);
 			this.Controls.Add(this.textSubject);
 			this.Controls.Add(this.label4);
-			this.Controls.Add(this.textBoxBody);
+			this.Controls.Add(this.textBody);
 			this.Controls.Add(this.textFrom);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label3);
@@ -242,7 +242,7 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.TextBox textFrom;
 		private System.Windows.Forms.Label label3;
-		private ODtextBox textBoxBody;
+		private ODtextBox textBody;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.TextBox textSubject;
 		private System.Windows.Forms.Label label4;
