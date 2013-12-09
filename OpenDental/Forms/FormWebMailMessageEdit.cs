@@ -114,7 +114,7 @@ namespace OpenDental {
 				}
 				patNumSubj=replyToEmailMessage.PatNumSubj;
 				Patient patRegarding=Patients.GetOnePat(family.ListPats,patNumSubj);
-				textBoxBody.Text="\r\n\r\n-----"+Lan.g(this,"Original Message")+"-----\r\n"
+				textBody.Text="\r\n\r\n-----"+Lan.g(this,"Original Message")+"-----\r\n"
 					+(patRegarding == null ? "" : (Lan.g(this,"Regarding Patient")+": "+patRegarding.GetNameFL()+"\r\n"))
 					+Lan.g(this,"From")+": "+replyToEmailMessage.FromAddress+"\r\n"
 					+Lan.g(this,"Sent")+": "+replyToEmailMessage.MsgDateTime.ToShortDateString()+" "+replyToEmailMessage.MsgDateTime.ToShortTimeString()+"\r\n"
@@ -180,10 +180,10 @@ namespace OpenDental {
 				MsgBox.Show(this,"Enter a subject");
 				textSubject.Focus();
 				return false;
-			} 
-			if(textBoxBody.Text=="") {
+			}
+			if(textBody.Text=="") {
 				MsgBox.Show(this,"Email body is empty");
-				textBoxBody.Focus();
+				textBody.Focus();
 				return false;
 			}
 			if(GetPatNumSubj()<=0) {
@@ -230,7 +230,7 @@ namespace OpenDental {
 			sb.AppendLine();
 			sb.AppendLine("------ "+Lan.g(this,"Secure web mail message that will be sent to the patient's portal:"));
 			sb.AppendLine(Lan.g(this,"Subject")+": "+textSubject.Text);
-			sb.AppendLine(Lan.g(this,"Body")+": "+textBoxBody.Text.Replace("\n","\r\n"));
+			sb.AppendLine(Lan.g(this,"Body")+": "+textBody.Text.Replace("\n","\r\n"));
 			MsgBoxCopyPaste msgBox=new MsgBoxCopyPaste(sb.ToString());
 			msgBox.ShowDialog();
 		}
@@ -247,7 +247,7 @@ namespace OpenDental {
 			//Rather, they must login to the patient portal (secured) and view the message that way.
 			//This is how we get around sending the patient a secure message, which would be a hassle for all involved.
 			_secureMessage.Subject=textSubject.Text;
-			_secureMessage.BodyText=textBoxBody.Text;
+			_secureMessage.BodyText=textBody.Text;
 			_secureMessage.MsgDateTime=DateTime.Now;
 			_secureMessage.PatNumSubj=GetPatNumSubj();
 			EmailMessages.Insert(_secureMessage);
