@@ -357,7 +357,7 @@ namespace OpenDental {
 				//Since gridAllergyImport and ListAllergyNew are a 1:1 list we can use the selected index position to get our allergy
 				al=ListAllergyNew[gridAllergyImport.SelectedIndices[i]];
 				alD=ListAllergyDefNew[gridAllergyImport.SelectedIndices[i]];//ListAllergyDefNew is also a 1:1 to gridAllergyImport.
-				for(int j=0;j<gridAllergyReconcile.Rows.Count;j++) {
+				for(int j=0;j<_listAllergyReconcile.Count;j++) {
 					if(_listAllergyReconcile[j].IsNew) {
 						alDR=ListAllergyDefNew[ListAllergyNew.IndexOf(_listAllergyReconcile[j])];
 					}
@@ -367,7 +367,7 @@ namespace OpenDental {
 					if(alDR==null) {
 						continue;
 					}
-					if(alDR.SnomedAllergyTo!="" && alDR.SnomedAllergyTo==alD.SnomedAllergyTo) {
+					if(alDR.SnomedAllergyTo!="" && alDR.SnomedAllergyTo!=null && alDR.SnomedAllergyTo==alD.SnomedAllergyTo) {
 						isValid=false;
 						skipCount++;
 						break;
@@ -402,27 +402,36 @@ namespace OpenDental {
 				//Since gridAllergyExisting and _listAllergyCur are a 1:1 list we can use the selected index position to get our allergy
 				al=_listAllergyCur[gridAllergyExisting.SelectedIndices[i]];
 				alD=AllergyDefs.GetOne(al.AllergyDefNum,_listAllergyDefCur);
-				for(int j=0;j<_listAllergyCur.Count;j++) {
-					if(_listAllergyCur[j].IsNew) {
-						for(int k=0;k<ListAllergyDefNew.Count;k++) {
-							if(alD.SnomedAllergyTo!="" && alD.SnomedAllergyTo==ListAllergyDefNew[k].SnomedAllergyTo) {
-								isValid=false;
-								skipCount++;
-								break;
-							}
-							if(alD.MedicationNum!=0 && alD.MedicationNum==ListAllergyDefNew[k].MedicationNum) {
-								isValid=false;
-								skipCount++;
-								break;
-							}
-						}
-					}
-					if(!isValid) {
+				if(_listAllergyReconcile.Count==0) {
+					_listAllergyReconcile.Add(al);
+					continue;
+				}
+				for(int j=0;j<_listAllergyReconcile.Count;j++) {
+					if(!_listAllergyReconcile[j].IsNew && _listAllergyReconcile[j].AllergyNum==al.AllergyNum) {//If not new, then from existing list.  Check allergynums
+						isValid=false;
+						skipCount++;
 						break;
+					}
+					if(_listAllergyReconcile[j].IsNew) {
+						//This is an allergy that is coming in from and external source.
+						AllergyDef alDN=null;
+						int index=ListAllergyNew.IndexOf(_listAllergyReconcile[j]);//Find the corresponding allergy def by looping through the incoming allergies.
+						if(index==-1) {
+							continue;//This should not happen
+						}
+						alDN=ListAllergyDefNew[index];//Incoming allergy and allergy def lists are 1 to 1 so we can use the same index.
+						if(alDN!=null && alDN.MedicationNum==alD.MedicationNum) {
+							isValid=false;
+							skipCount++;
+							break;
+						}
 					}
 					if(al.AllergyDefNum==_listAllergyReconcile[j].AllergyDefNum) {
 						isValid=false;
 						skipCount++;
+						break;
+					}
+					if(!isValid) {
 						break;
 					}
 				}
