@@ -311,8 +311,11 @@ namespace OpenDentBusiness{
 						strErrorsAll+=strErrors;
 					}
 				}
-				catch {
-					//Nothing to do. Just an MDN. The sender can resend the email to us if they believe that we did not receive the message (due to lack of MDN response).
+				catch(Exception ex) {
+					if(strErrorsAll!="") {
+						strErrorsAll+="\r\n";
+					}
+					strErrorsAll+=ex.Message;
 				}
 			}
 			return strErrorsAll;
@@ -743,8 +746,10 @@ namespace OpenDentBusiness{
 				//The MDN will be attached to the same patient as the incoming message.
 				string strErrors=SendAckDirect(inMsg,emailAddressReceiver,emailMessage.PatNum,EmailSentOrReceived.AckDirectProcessed);
 				if(strErrors!="") {
-					//This could happen if a message is received from an untrusted source who is not hosting their certificate for discovery (probably a temporary technical issue).
-					//Even if an error happens here, we should either ignore or at best log an error message.  Not worth mentioning to user, since this is just an ack.
+					//This could happen if:
+					//1) There was a loss of connection or timeout for some other reason.
+					//2) A message is received from an untrusted source who is not hosting their certificate for discovery (probably a temporary technical issue).
+					//TODO: We need to resend the Ack, probably when refreshing the Inbox.
 				}
 			}
 			return emailMessage;
