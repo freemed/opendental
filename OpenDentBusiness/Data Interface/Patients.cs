@@ -723,6 +723,7 @@ namespace OpenDentBusiness{
 				+",Address2 = '"   +POut.String(pat.Address2)+"'"
 				+",City = '"       +POut.String(pat.City)+"'"
 				+",State = '"      +POut.String(pat.State)+"'"
+				+",Country = '"    +POut.String(pat.Country)+"'"
 				+",Zip = '"        +POut.String(pat.Zip)+"'"
 				+",HmPhone = '"    +POut.String(pat.HmPhone)+"'"
 				+",credittype = '" +POut.String(pat.CreditType)+"'"
