@@ -84,6 +84,9 @@ namespace OpenDentBusiness {
 		ReadDirect,
 		///<summary>12 Message Delivery Notification (MDN) processed.  Always outgoing.  Indicates to sender that a Direct message was received and decrypted, but not necessarily displayed for the user.  Does not show in patient Chart.  Attached to the same patient as the incoming email which caused the MDN to be sent.</summary>
 		AckDirectProcessed,
+		///<summary>13 Message Delivery Notification (MDN) created and saved to db, but not sent yet.  Does not show in patient Chart.  Attached to the same patient as the incoming email which caused the MDN to be created.
+		///This status is used to try resending MDNs if they fail to send.  The MDN is saved to the db so the unset MDNs can be found easily, and also because MDNs are hard to rebuild again later.</summary>
+		AckDirectNotSent,
 	}
 
 

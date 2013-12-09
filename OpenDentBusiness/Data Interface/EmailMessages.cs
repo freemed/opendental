@@ -249,24 +249,24 @@ namespace OpenDentBusiness{
 			return strErrors;
 		}
 
-		/// <summary>Used for sending encrypted Message Disposition Notification (MDN) ack messages for Direct.
-		/// An ack must be sent when a message is received, and other acks must be sent when other events occur (for example, when the user reads a decrypted message we must send an ack with notification type of Displayed).</summary>
-		private static string SendAckDirect(Health.Direct.Agent.IncomingMessage inMsg,EmailAddress emailAddressFrom,long patNum,EmailSentOrReceived emailSentOrReceivedAck) {
+		///<summary>Used for sending encrypted Message Disposition Notification (MDN) ack messages for Direct.
+		///An ack must be sent when a message is received, and other acks are supposed be sent when other events occur.
+		///For example, when the user reads a decrypted message we must send an ack with notification type of Displayed.</summary>
+		private static string SendAckDirect(Health.Direct.Agent.IncomingMessage inMsg,EmailAddress emailAddressFrom,long patNum) {
 			//No need to check RemotingRole; no call to db.
 			//The CreateAcks() function handles the case where the incoming message is an MDN, in which case we do not reply with anything.
 			//The CreateAcks() function also takes care of figuring out where to send the MDN, because the rules are complicated.
 			//According to http://wiki.directproject.org/Applicability+Statement+for+Secure+Health+Transport+Working+Version#x3.0%20Message%20Disposition%20Notification,
 			//The MDN must be sent to the first available of: Disposition-Notification-To header, MAIL FROM SMTP command, Sender header, From header.
 			Health.Direct.Common.Mail.Notifications.MDNStandard.NotificationType notificationType=Health.Direct.Common.Mail.Notifications.MDNStandard.NotificationType.Failed;
-			if(emailSentOrReceivedAck==EmailSentOrReceived.AckDirectProcessed) {
-				notificationType=Health.Direct.Common.Mail.Notifications.MDNStandard.NotificationType.Processed;
-			}
+			notificationType=Health.Direct.Common.Mail.Notifications.MDNStandard.NotificationType.Processed;
 			IEnumerable<Health.Direct.Common.Mail.Notifications.NotificationMessage> notificationMsgs=inMsg.CreateAcks("OpenDental "+Assembly.GetExecutingAssembly().GetName().Version,"",notificationType);
 			if(notificationMsgs==null) {
 				return "";
 			}
 			string strErrorsAll="";
 			foreach(Health.Direct.Common.Mail.Notifications.NotificationMessage notificationMsg in notificationMsgs) {
+				string strErrors="";
 				try {
 					//According to RFC3798, section 3 - Format of a Message Disposition Notification http://tools.ietf.org/html/rfc3798#page-3
 					//A message disposition notification is a MIME message with a top-level
@@ -282,43 +282,53 @@ namespace OpenDentBusiness{
 					if(notificationMsg.ToValue.Trim().ToLower()==notificationMsg.FromValue.Trim().ToLower()) {
 						continue;//Do not send an ack to self.
 					}
-					//THE FOLLOWING DID NOT FIX THE WARNING IN THE TRANSPORT TESTING TOOL.  We also tried adding these headers up a level directly on the encrypted message itself and that did not work either.
-					////The CreateAcks() function creates the 4 required MDN fields within the body of the email, but not in the headers of the message.
-					////The Transport Testing Tool (TTT) displays a warning if they are not also in the header of the unencrypted.
-					////Here we grab the data for the 4 MDN fields and copy them into the header before sending.
-					//Health.Direct.Common.Mime.HeaderCollection collectionMdnHeaders=new Health.Direct.Common.Mime.HeaderCollection();
-					//string[] arrayBodyLines=notificationMsg.Body.Text.Split(new string[] { "\r\n" },StringSplitOptions.RemoveEmptyEntries);
-					//string[] arrayFieldNamesToCopy=new string[] { "Disposition","Reporting-UA","Original-Message-ID","Final-Recipient" };
-					//for(int i=0;i<arrayBodyLines.Length;i++) {
-					//	for(int j=0;j<arrayFieldNamesToCopy.Length;j++) {
-					//		if(arrayBodyLines[i].StartsWith(arrayFieldNamesToCopy[j]+":")) {
-					//			collectionMdnHeaders.Add(arrayFieldNamesToCopy[j],arrayBodyLines[i].Substring(arrayFieldNamesToCopy[j].Length+1));
-					//		}
-					//	}
-					//}
-					//outMsgDirect.Message.Headers.Add(collectionMdnHeaders);//Add the MDN headers.
-					string strErrors=SendEmailDirect(outMsgDirect,emailAddressFrom);//encryption is performed in this step
+					EmailMessage emailMessage=ConvertMessageToEmailMessage(outMsgDirect.Message,false);
+					emailMessage.PatNum=patNum;
+					strErrors=SendEmailDirect(outMsgDirect,emailAddressFrom);//encryption is performed in this step
 					if(strErrors=="") {
-						EmailMessage emailMessage=ConvertMessageToEmailMessage(outMsgDirect.Message,false);
-						emailMessage.PatNum=patNum;
-						emailMessage.SentOrReceived=emailSentOrReceivedAck;
-						Insert(emailMessage);
+						emailMessage.SentOrReceived=EmailSentOrReceived.AckDirectProcessed;
 					}
 					else {
-						if(strErrorsAll!="") {
-							strErrorsAll+="\r\n";
-						}
-						strErrorsAll+=strErrors;
+						emailMessage.SentOrReceived=EmailSentOrReceived.AckDirectNotSent;
+						MemoryStream ms=new MemoryStream();
+						notificationMsg.Save(ms);
+						byte[] arrayMdnMessageBytes=ms.ToArray();
+						emailMessage.BodyText=Encoding.UTF8.GetString(arrayMdnMessageBytes);
+						ms.Dispose();
 					}
+					Insert(emailMessage);
 				}
 				catch(Exception ex) {
-					if(strErrorsAll!="") {
-						strErrorsAll+="\r\n";
-					}
-					strErrorsAll+=ex.Message;
+					strErrors=ex.Message;
 				}
+				if(strErrorsAll!="") {
+					strErrorsAll+="\r\n";
+				}
+				strErrorsAll+=strErrors;
 			}
 			return strErrorsAll;
+		}
+
+		///<summary>Gets all MDN email messages from the database for the given emailAddressFrom which have not been sent yet and
+		///tries to send them using from the emailAddressFrom.  Throws exceptions.</summary>
+		public static void ResendAcks(EmailAddress emailAddressFrom) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod());
+				return;
+			}
+			string command="SELECT * FROM emailmessage WHERE SentOrReceived="+POut.Long((int)EmailSentOrReceived.AckDirectNotSent);
+			List <EmailMessage> listEmailMessageUnsentMdns=Crud.EmailMessageCrud.SelectMany(command);
+			for(int i=0;i<listEmailMessageUnsentMdns.Count;i++) {
+				EmailMessage emailMessage=listEmailMessageUnsentMdns[i];
+				string strRawEmailMdn=emailMessage.BodyText;
+				Health.Direct.Agent.MessageEnvelope messageEnvelopeMdn=new Health.Direct.Agent.MessageEnvelope(strRawEmailMdn);
+				Health.Direct.Agent.OutgoingMessage outMsgDirect=new Health.Direct.Agent.OutgoingMessage(messageEnvelopeMdn);
+				string strErrors=SendEmailDirect(outMsgDirect,emailAddressFrom);//encryption is performed in this step
+				if(strErrors=="") {
+					emailMessage.SentOrReceived=EmailSentOrReceived.AckDirectProcessed;
+					Update(emailMessage);
+				}
+			}
 		}
 
 		///<summary>Call to cleanup newlines within a string before including in an email. The RFC 822 guide states that every single line in a raw email message must end with \r\n, also known as CRLF.
@@ -744,13 +754,7 @@ namespace OpenDentBusiness{
 			if(isEncrypted) {
 				//Send a Message Disposition Notification (MDN) message to the sender, as required by the Direct messaging specifications.
 				//The MDN will be attached to the same patient as the incoming message.
-				string strErrors=SendAckDirect(inMsg,emailAddressReceiver,emailMessage.PatNum,EmailSentOrReceived.AckDirectProcessed);
-				if(strErrors!="") {
-					//This could happen if:
-					//1) There was a loss of connection or timeout for some other reason.
-					//2) A message is received from an untrusted source who is not hosting their certificate for discovery (probably a temporary technical issue).
-					//TODO: We need to resend the Ack, probably when refreshing the Inbox.
-				}
+				SendAckDirect(inMsg,emailAddressReceiver,emailMessage.PatNum);
 			}
 			return emailMessage;
 		}

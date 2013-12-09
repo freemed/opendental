@@ -82,6 +82,9 @@ namespace OpenDental {
 			finally {
 				Text="Email Inbox for "+AddressInbox.EmailUsername;
 			}
+			Text="Email Inbox for "+AddressInbox.EmailUsername+" - Resending any acknowledgments which previously failed...";
+			EmailMessages.ResendAcks(AddressInbox);
+			Text="Email Inbox for "+AddressInbox.EmailUsername;
 			Cursor=Cursors.Default;
 			return emailMessagesTotalCount;
 		}
