@@ -41,6 +41,10 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please use hours only, no minutes.");
 				return false;
 			}
+			if(stop.Hour==start.Hour) {//If stop time is the same as start time.
+				MsgBox.Show(this,"Start time must be different than stop time.");
+				return false;
+			}
 			if(stop.Hour!=0 && stop.Hour<start.Hour) {//If stop time is earlier than start time.
 				MsgBox.Show(this,"Start time cannot exceed stop time.");
 				return false;
