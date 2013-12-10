@@ -166,29 +166,31 @@ namespace OpenDental {
 
 		///<summary>Used to show EULA or other pre-download actions.  Displays message boxes. Returns false if pre-download checks not satisfied.</summary>
 		private bool PreDownloadHelper(string codeSystemName) {
+			string programVersion=PrefC.GetString(PrefName.ProgramVersion);
 			switch(codeSystemName) {
 				//Code system specific pre-download actions.
 				case "SNOMEDCT":
 					#region SNOMEDCT EULA
-					//TODO: make better UI.
-					if(MessageBox.Show(@"Open Dental "+PrefC.GetString(PrefName.ProgramVersion)+@" includes SNOMED Clinical Terms® (SNOMED CT®) which is used by permission of the International Health Terminology Standards Development Organization (IHTSDO). All rights reserved. SNOMED CT® was originally created by the College of American Pathologists. “SNOMED”, “SNOMED CT” and “SNOMED Clinical Terms” are registered trademarks of the IHTSDO (www.ihtsdo.org).\r\n"
-							+@"Use of SNOMED CT in Open Dental "+PrefC.GetString(PrefName.ProgramVersion)+@" is governed by the conditions of the following SNOMED CT Sub-license issued by Open Dental Software Inc.\r\n"
-							+@"1. The meaning of the terms “Affiliate”, or “Data Analysis System”, “Data Creation System”, “Derivative”, “End User”, “Extension”, “Member”, “Non-Member Territory”, “SNOMED CT” and “SNOMED CT Content” are as defined in the IHTSDO Affiliate License Agreement (see www.ihtsdo.org/license.pdf).\r\n"
-							+@"2. Information about Affiliate Licensing is available at www.ihtsdo.org/license. Individuals or organizations wishing to register as IHTSDO Affiliates can register at www.ihtsdo.org/salsa, subject to acceptance of the Affiliate License Agreement (see www.ihtsdo.org/license.pdf).\r\n"
-							+@"3. The current list of IHTSDO Member Territories can be viewed at www.ihtsdo.org/members. Countries not included in that list are “Non-Member Territories”.\r\n"
-							+@"4. End Users, that do not hold an IHTSDO Affiliate License, may access SNOMED CT® using [ProductName] subject to acceptance of and adherence to the following sub-license limitations:\r\n"
-							+@"a) The sub-licensee is only permitted to access SNOMED CT® using this software (or service) for the purpose of exploring and evaluating the terminology.\r\n"
-							+@"b) The sub-licensee is not permitted the use of this software as part of a system that constitutes a SNOMED CT “Data Creation System” or “Data Analysis System”, as defined in the IHTSDO Affiliate License. This means that the sub-licensee must not use Open Dental "+PrefC.GetString(PrefName.ProgramVersion)+@" to add or copy SNOMED CT identifiers into any type of record system, database or document.\r\n"
-							+@"c) The sub-licensee is not permitted to translate or modify SNOMED CT Content or Derivatives.\r\n"
-							+@"d) The sub-licensee is not permitted to distribute or share SNOMED CT Content or Derivatives.\r\n"
-							+@"5. IHTSDO Affiliates may use Open Dental "+PrefC.GetString(PrefName.ProgramVersion)+@" as part of a “Data Creation System” or “Data Analysis System” subject to the following conditions:\r\n"
-							+@"a) The IHTSDO Affiliate, using Open Dental "+PrefC.GetString(PrefName.ProgramVersion)+@" must accept full responsibility for any reporting and fees due for use or deployment of such a system in a Non-Member Territory.\r\n"
-							+@"b) The IHTSDO Affiliate must not use Open Dental "+PrefC.GetString(PrefName.ProgramVersion)+@" to access or interact with SNOMED CT in any way that is not permitted by the Affiliate License Agreement.\r\n"
-							+@"c) In the event of termination of the Affiliate License Agreement, the use of Open Dental "+PrefC.GetString(PrefName.ProgramVersion)+@" will be 
-subject to the End User limitations noted in 4.","SNOMED CT sub-license End User Licence Agreement",MessageBoxButtons.OKCancel)!=DialogResult.OK) 
-					{
-						MsgBox.Show(this,"SNOMED CT codes will not be imported.");
+					string EULA=@"Open Dental "+programVersion+@" includes SNOMED Clinical Terms® (SNOMED CT®) which is used by permission of the International Health Terminology Standards Development Organization (IHTSDO). All rights reserved. SNOMED CT® was originally created by the College of American Pathologists. “SNOMED”, “SNOMED CT” and “SNOMED Clinical Terms” are registered trademarks of the IHTSDO (www.ihtsdo.org).
+Use of SNOMED CT in Open Dental "+programVersion+@" is governed by the conditions of the following SNOMED CT Sub-license issued by Open Dental Software Inc.
+1. The meaning of the terms “Affiliate”, or “Data Analysis System”, “Data Creation System”, “Derivative”, “End User”, “Extension”, “Member”, “Non-Member Territory”, “SNOMED CT” and “SNOMED CT Content” are as defined in the IHTSDO Affiliate License Agreement (see www.ihtsdo.org/license.pdf).
+2. Information about Affiliate Licensing is available at www.ihtsdo.org/license. Individuals or organizations wishing to register as IHTSDO Affiliates can register at www.ihtsdo.org/salsa, subject to acceptance of the Affiliate License Agreement (see www.ihtsdo.org/license.pdf).
+3. The current list of IHTSDO Member Territories can be viewed at www.ihtsdo.org/members. Countries not included in that list are “Non-Member Territories”.
+4. End Users, that do not hold an IHTSDO Affiliate License, may access SNOMED CT® using [ProductName] subject to acceptance of and adherence to the following sub-license limitations:
+  a) The sub-licensee is only permitted to access SNOMED CT® using this software (or service) for the purpose of exploring and evaluating the terminology.
+  b) The sub-licensee is not permitted the use of this software as part of a system that constitutes a SNOMED CT “Data Creation System” or “Data Analysis System”, as defined in the IHTSDO Affiliate License. This means that the sub-licensee must not use Open Dental "+programVersion+@" to add or copy SNOMED CT identifiers into any type of record system, database or document.
+  c) The sub-licensee is not permitted to translate or modify SNOMED CT Content or Derivatives.
+  d) The sub-licensee is not permitted to distribute or share SNOMED CT Content or Derivatives.
+5. IHTSDO Affiliates may use Open Dental "+programVersion+@" as part of a “Data Creation System” or “Data Analysis System” subject to the following conditions:
+  a) The IHTSDO Affiliate, using Open Dental "+programVersion+@" must accept full responsibility for any reporting and fees due for use or deployment of such a system in a Non-Member Territory.
+  b) The IHTSDO Affiliate must not use Open Dental "+programVersion+@" to access or interact with SNOMED CT in any way that is not permitted by the Affiliate License Agreement.
+  c) In the event of termination of the Affiliate License Agreement, the use of Open Dental "+programVersion+@" will be 
+subject to the End User limitations noted in 4.";
 					#endregion
+					MsgBoxCopyPaste FormMBCP=new MsgBoxCopyPaste(EULA);
+					FormMBCP.ShowDialog();
+					if(FormMBCP.DialogResult!=DialogResult.OK) {
+						MsgBox.Show(this,"SNOMED CT codes will not be imported.");
 						return false;//next selected index
 					}
 					break;
