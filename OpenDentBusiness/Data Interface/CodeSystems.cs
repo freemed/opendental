@@ -20,7 +20,7 @@ namespace OpenDentBusiness{
 #if DEBUG
 			string command="SELECT * FROM codesystem";// WHERE CodeSystemName IN ('ICD9CM','RXNORM','SNOMEDCT','CPT')";
 #else
-			string command="SELECT * FROM codesystem WHERE CodeSystemName IN ('ICD9CM','RXNORM','SNOMEDCT','CPT')";
+			string command="SELECT * FROM codesystem WHERE CodeSystemName IN ('ICD9CM','RXNORM','SNOMEDCT','CPT','CVX')";
 #endif
 			return Crud.CodeSystemCrud.SelectMany(command);
 		}
