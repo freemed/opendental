@@ -1353,6 +1353,7 @@ namespace OpenDental{
 			#if DEBUG
 				Text="AptNum"+AptCur.AptNum;
 			#endif
+			Plugins.HookAddCode(this,"FormApptEdit.Load_End",pat,butText);
 		}
 
 		///<summary>If an eCW program link is turned on, then this attaches completed procs with the same date as the appt.</summary>
