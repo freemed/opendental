@@ -102,6 +102,14 @@ namespace OpenDentBusiness{
 			return true;
 		}
 
+		public static long GetCodeCount() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<int>(MethodBase.GetCurrentMethod());
+			}
+			string command="SELECT COUNT(*) FROM cvx";
+			return PIn.Long(Db.GetCount(command));
+		}
+
 
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.

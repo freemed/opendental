@@ -93,6 +93,14 @@ namespace OpenDental {
 		}
 
 		private void butExport_Click(object sender,EventArgs e) {
+			string ccd="";
+			try {
+				ccd=EhrCCD.GenerateElectronicCopy(PatCur);
+			}
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
+				return;
+			}
 			FolderBrowserDialog dlg=new FolderBrowserDialog();
 			dlg.SelectedPath=ImageStore.GetPatientFolder(PatCur,ImageStore.GetPreferredAtoZpath());//Default to patient image folder.
 			DialogResult result=dlg.ShowDialog();
@@ -104,7 +112,6 @@ namespace OpenDental {
 					return;
 				}
 			}
-			string ccd=EhrCCD.GenerateElectronicCopy(PatCur);
 			File.WriteAllText(Path.Combine(dlg.SelectedPath,"ccd.xml"),ccd);
 			File.WriteAllText(Path.Combine(dlg.SelectedPath,"ccd.xsl"),FormEHR.GetEhrResource("CCD"));
 			RecordRequestAndProvide();
@@ -112,9 +119,16 @@ namespace OpenDental {
 		}
 
 		private void butSendEmail_Click(object sender,EventArgs e) {
+			string ccd="";
+			try {
+				ccd=EhrCCD.GenerateElectronicCopy(PatCur);
+			}
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
+				return;
+			}
 			RecordRequestAndProvide();
 			Cursor=Cursors.WaitCursor;
-			string ccd=EhrCCD.GenerateElectronicCopy(PatCur);
 			try {
 				EmailMessages.SendTestUnsecure("Electronic Copy of Health Information","ccd.xml",ccd,"ccd.xsl",FormEHR.GetEhrResource("CCD"));
 			}
@@ -128,12 +142,26 @@ namespace OpenDental {
 		}
 
 		private void butShowXhtml_Click(object sender,EventArgs e) {
-			string ccd=EhrCCD.GenerateElectronicCopy(PatCur);
+			string ccd="";
+			try {
+				ccd=EhrCCD.GenerateElectronicCopy(PatCur);
+			}
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
+				return;
+			}
 			FormEhrSummaryOfCare.DisplayCCD(ccd);
 		}
 
 		private void butShowXml_Click(object sender,EventArgs e) {
-			string ccd=EhrCCD.GenerateElectronicCopy(PatCur);
+			string ccd="";
+			try {
+				ccd=EhrCCD.GenerateElectronicCopy(PatCur);
+			}
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
+				return;
+			}
 			MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste(ccd);
 			msgbox.ShowDialog();
 		}

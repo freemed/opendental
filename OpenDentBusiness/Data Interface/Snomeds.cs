@@ -3543,5 +3543,13 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
+		public static long GetCodeCount() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<int>(MethodBase.GetCurrentMethod());
+			}
+			string command="SELECT COUNT(*) FROM snomed";
+			return PIn.Long(Db.GetCount(command));
+		}
+
 	}
 }

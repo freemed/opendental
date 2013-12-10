@@ -128,6 +128,11 @@ namespace OpenDental {
 		}
 
 		private void butExport_Click(object sender,EventArgs e) {
+			string strCcdValidationErrors=EhrCCD.ValidateSettings();
+			if(strCcdValidationErrors!="") {//Do not even try to export if global settings are invalid.
+				MessageBox.Show(strCcdValidationErrors);//We do not want to use translations here, because the text is dynamic. The errors are generated in the business layer, and Lan.g() is not available there.
+				return;
+			}
 			FolderBrowserDialog dlg=new FolderBrowserDialog();
 			DialogResult result=dlg.ShowDialog();
 			if(result!=DialogResult.OK) {
@@ -151,8 +156,16 @@ namespace OpenDental {
 			}
 			Patient patCur;
 			string fileName;
+			int numSkipped=0;
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
 				patCur=Patients.GetPat((long)gridMain.Rows[gridMain.SelectedIndices[i]].Tag);//Cannot use GetLim because more information is needed in the CCD message generation below.
+				strCcdValidationErrors=EhrCCD.ValidatePatient(patCur);
+				if(strCcdValidationErrors!="") {
+					//If one patient is missing the required information for export, then simply skip the patient. We do not want to popup a message,
+					//because it would be hard to get through the export if many patients were missing required information.
+					numSkipped++;
+					continue;
+				}
 				fileName="";
 				string lName=patCur.LName;
 				for(int j=0;j<lName.Length;j++) {  //Strip all non-letters from FName
@@ -178,7 +191,11 @@ namespace OpenDental {
 				}
 				//File.WriteAllText(Path.Combine(folderpath,filename+".xsl"),FormEHR.GetEhrResource("CCD"));
 			}
-			MessageBox.Show("Exported");
+			string strMsg=Lan.g(this,"Exported");
+			if(numSkipped>0) {
+				strMsg+=". "+Lan.g(this,"Number of patinets skipped due to missing information")+": "+numSkipped;
+			}
+			MessageBox.Show(strMsg);
 		}
 
 		private void butExportAll_Click(object sender,EventArgs e) {

@@ -901,7 +901,7 @@ namespace OpenDentBusiness{
 					Health.Direct.Common.Mime.MimeEntity mimeEntityAttach=new Health.Direct.Common.Mime.MimeEntity(Convert.ToBase64String(Encoding.UTF8.GetBytes(strAttachText)));
 					mimeEntityAttach.ContentDisposition="attachment;";
 					mimeEntityAttach.ContentTransferEncoding="base64;";
-					if(Path.GetExtension(emailMessage.Attachments[i].ActualFileName).ToLower()==".xml") {
+					if(Path.GetExtension(emailMessage.Attachments[i].ActualFileName).ToLower()==".xml" || Path.GetExtension(emailMessage.Attachments[i].ActualFileName).ToLower()==".xsl") {
 						mimeEntityAttach.ContentType="text/xml;";
 					}
 					else {

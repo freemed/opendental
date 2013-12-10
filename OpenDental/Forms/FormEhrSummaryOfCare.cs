@@ -112,6 +112,14 @@ namespace OpenDental {
 		}
 
 		private void butExport_Click(object sender,EventArgs e) {
+			string ccd="";
+			try {
+				ccd=EhrCCD.GenerateSummaryOfCare(PatCur);
+			}
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
+				return;
+			}
 			FolderBrowserDialog dlg=new FolderBrowserDialog();
 			dlg.SelectedPath=ImageStore.GetPatientFolder(PatCur,ImageStore.GetPreferredAtoZpath());//Default to patient image folder.
 			DialogResult result=dlg.ShowDialog();
@@ -123,7 +131,6 @@ namespace OpenDental {
 					return;
 				}
 			}
-			string ccd=EhrCCD.GenerateSummaryOfCare(PatCur);
 			File.WriteAllText(Path.Combine(dlg.SelectedPath,"ccd.xml"),ccd);
 			File.WriteAllText(Path.Combine(dlg.SelectedPath,"ccd.xsl"),FormEHR.GetEhrResource("CCD"));
 			EhrMeasureEvent newMeasureEvent = new EhrMeasureEvent();
@@ -136,6 +143,14 @@ namespace OpenDental {
 		}
 
 		private void butSendEmail_Click(object sender,EventArgs e) {
+			string ccd="";
+			try {
+				ccd=EhrCCD.GenerateSummaryOfCare(PatCur);
+			}
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
+				return;
+			}
 			Cursor=Cursors.WaitCursor;
 			EmailAddress emailAddressFrom=EmailAddresses.GetByClinic(0);//Default for clinic/practice.
 			EmailMessage emailMessage=new EmailMessage();
@@ -146,9 +161,8 @@ namespace OpenDental {
 			emailMessage.ToAddress="";//User must set inside of FormEmailMessageEdit
 			emailMessage.Subject="Summary of Care";
 			emailMessage.BodyText="Summary of Care";
-			string strCCD=EhrCCD.GenerateSummaryOfCare(PatCur);
 			try {
-				EmailMessages.CreateAttachmentFromText(emailMessage,strCCD,"ccd.xml");
+				EmailMessages.CreateAttachmentFromText(emailMessage,ccd,"ccd.xml");
 				EmailMessages.CreateAttachmentFromText(emailMessage,FormEHR.GetEhrResource("CCD"),"ccd.xsl");
 			}
 			catch(Exception ex) {
@@ -170,7 +184,14 @@ namespace OpenDental {
 		}
 
 		private void butShowXhtml_Click(object sender,EventArgs e) {
-			string ccd=EhrCCD.GenerateSummaryOfCare(PatCur);
+			string ccd="";
+			try {
+				ccd=EhrCCD.GenerateSummaryOfCare(PatCur);
+			}
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
+				return;
+			}
 			bool didPrint=DisplayCCD(ccd);
 			if(didPrint) {
 				//we are printing a ccd so add new measure event.					
@@ -184,7 +205,14 @@ namespace OpenDental {
 		}
 
 		private void butShowXml_Click(object sender,EventArgs e) {
-			string ccd=EhrCCD.GenerateSummaryOfCare(PatCur);
+			string ccd="";
+			try {
+				ccd=EhrCCD.GenerateSummaryOfCare(PatCur);
+			}
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
+				return;
+			}
 			MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste(ccd);
 			msgbox.ShowDialog();
 		}

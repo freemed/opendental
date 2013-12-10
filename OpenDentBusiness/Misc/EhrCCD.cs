@@ -56,31 +56,42 @@ namespace OpenDentBusiness {
 		///<summary>Instantiated each time GenerateCCD() is called. Used to generate unique "id" element "root" attribute identifiers. The Ids in this list are random GUIDs which are 36 characters in length.</summary>
 		private static HashSet<string> _hashCcdGuids;
 
-		///<summary>Generates a Clinical Summary XML document with an appropriate referral string.</summary>
+		#region CCD Creation
+
+		///<summary>Generates a Clinical Summary XML document with an appropriate referral string. Throws an exception if validation fails.</summary>
 		public static string GenerateClinicalSummary(Patient pat) {
 			string referralReason="Summary of previous appointment requested.";
 			return GenerateCCD(pat,referralReason);
 		}
 
-		///<summary>Generates a Summary of Care XML document with an appropriate referral string.</summary>
+		///<summary>Generates a Summary of Care XML document with an appropriate referral string. Throws an exception if validation fails.</summary>
 		public static string GenerateSummaryOfCare(Patient pat) {
 			string referralReason="Transfer of care to another provider.";
 			return GenerateCCD(pat,referralReason);
 		}
 
-		///<summary>Generates an Electronic Copy XML document with an appropriate referral string.</summary>
+		///<summary>Generates an Electronic Copy XML document with an appropriate referral string. Throws an exception if validation fails.</summary>
 		public static string GenerateElectronicCopy(Patient pat) {
 			string referralReason="Patient requested a copy of medical records.";
 			return GenerateCCD(pat,referralReason);
 		}
 
-		///<summary>Generates a Patient Export XML document with an appropriate referral string.</summary>
+		///<summary>Generates a Patient Export XML document with an appropriate referral string. Throws an exception if validation fails.</summary>
 		public static string GeneratePatientExport(Patient pat) {
 			string referralReason="Patient requested export.";
 			return GenerateCCD(pat,referralReason);
 		}
 
+		///<summary>Throws an exception if validation fails.</summary>
 		private static string GenerateCCD(Patient pat,string referralReason) {
+			string strErrors=ValidateSettings();
+			if(strErrors!="") {
+				throw new ApplicationException(strErrors);
+			}
+			strErrors=ValidatePatient(pat);
+			if(strErrors!="") {
+				throw new ApplicationException(strErrors);
+			}
 			_patOutCcd=pat;
 			_hashCcdIds=new HashSet<string>();//The IDs only need to be unique within each CCD document.
 			_hashCcdGuids=new HashSet<string>();//The UUIDs only need to be unique within each CCD document.
@@ -118,27 +129,38 @@ namespace OpenDentBusiness {
 				if(pat.SSN.Length==9) {
 					StartAndEnd("id","extension",pat.SSN,"root","2.16.840.1.113883.4.1");//TODO: We might need to assign a global GUID for each office so that the patient can be uniquely identified anywhere in the world.
 				}
-				AddressUnitedStates(pat.Address,pat.Address2,pat.City,pat.State);
-				StartAndEnd("telecom","use","HP","value","tel:"+pat.HmPhone);
+				AddressUnitedStates(pat.Address,pat.Address2,pat.City,pat.State);//Validated
+				if(pat.WirelessPhone.Trim()!="") {//There is at least one phone, due to validation.
+					StartAndEnd("telecom","use","HP","value","tel:"+pat.WirelessPhone.Trim());
+				}
+				else if(pat.HmPhone.Trim()!="") {
+					StartAndEnd("telecom","use","HP","value","tel:"+pat.HmPhone.Trim());
+				}
+				else if(pat.WkPhone.Trim()!="") {
+					StartAndEnd("telecom","use","HP","value","tel:"+pat.WkPhone.Trim());
+				}
 				Start("patient");
 				Start("name","use","L");
-				_w.WriteElementString("given",pat.FName);
+				_w.WriteElementString("given",pat.FName);//Validated
 				if(pat.MiddleI!="") {
 					_w.WriteElementString("given",pat.MiddleI);
 				}
-				_w.WriteElementString("family",pat.LName);
+				_w.WriteElementString("family",pat.LName);//Validated
 				if(pat.Title!="") {
 					Start("suffix","qualifier","TITLE");
 					_w.WriteString(pat.Title);
 					End("suffix");
 				}
 				End("name");
-				string strGender="M";
+				string strGender="UN";//Undifferentiated
 				if(pat.Gender==PatientGender.Female) {
 					strGender="F";
 				}
-				StartAndEnd("administrativeGenderCode","code",strGender,"codeSystem","2.16.840.1.113883.5.1");
-				DateElement("birthTime",pat.Birthdate);
+				else if(pat.Gender==PatientGender.Male) {
+					strGender="M";
+				}
+				StartAndEnd("administrativeGenderCode","code",strGender,"codeSystem","2.16.840.1.113883.5.1");//Will always be present, because there are only 3 options and the user is forced to make a choice in the UI.
+				DateElement("birthTime",pat.Birthdate);//Validated
 				if(pat.Position==PatientPosition.Divorced) {
 					StartAndEnd("maritalStatusCode","code","D","displayName","Divorced","codeSystem","2.16.840.1.113883.5.2","codeSystemName","MaritalStatusCode");
 				}
@@ -195,6 +217,14 @@ namespace OpenDentBusiness {
 				else {//Not hispanic
 					StartAndEnd("ethnicGroupCode","code","2186-5","displayName","Not Hispanic or Latino","codeSystem","2.16.840.1.113883.6.238","codeSystemName","Race &amp; Ethnicity - CDC");
 				}
+				if(_patOutCcd.Language.Trim().Length==3) {
+					//This segment is optional, but we added it because it seems to be important to Drummond.
+					//We can only allow 3 letter ISO-3 codes. It is possible that the user manually typed something which is 3 characters and is not an ISO code,
+					//but we will enhance for that situation later. This should catch 98% of all situations for now.					
+					Start("languageCommunication");
+					StartAndEnd("languageCode","code",pat.Language.Trim().ToLower());
+					End("languageCommunication");
+				}
 				End("patient");
 				End("patientRole");
 				End("recordTarget");
@@ -204,16 +234,16 @@ namespace OpenDentBusiness {
 				Start("author");
 				TimeElement("time",DateTime.Now);
 				Start("assignedAuthor");
-				StartAndEnd("id","extension",provAuthor.NationalProvID,"root","2.16.840.1.113883.4.6");//TODO: We might need to assign a global GUID for each office so that the provider can be uniquely identified anywhere in the world.
+				StartAndEnd("id","extension",provAuthor.NationalProvID,"root","2.16.840.1.113883.4.6");//Validated NPI. TODO: We might need to assign a global GUID for each office so that the provider can be uniquely identified anywhere in the world.
 				StartAndEnd("code","code",GetTaxonomy(provAuthor),"codeSystem",strCodeSystemNucc,"codeSystemName",strCodeSystemNameNucc);
-				AddressUnitedStates(PrefC.GetString(PrefName.PracticeAddress),PrefC.GetString(PrefName.PracticeAddress2),PrefC.GetString(PrefName.PracticeCity),PrefC.GetString(PrefName.PracticeST));
-				string strPracticePhone=PrefC.GetString(PrefName.PracticePhone);
+				AddressUnitedStates(PrefC.GetString(PrefName.PracticeAddress),PrefC.GetString(PrefName.PracticeAddress2),PrefC.GetString(PrefName.PracticeCity),PrefC.GetString(PrefName.PracticeST));//Validated
+				string strPracticePhone=PrefC.GetString(PrefName.PracticePhone);//Validated
 				strPracticePhone=strPracticePhone.Substring(0,3)+"-"+strPracticePhone.Substring(3,3)+"-"+strPracticePhone.Substring(6);
-				StartAndEnd("telecom","use","WP","value","tel:"+strPracticePhone);
+				StartAndEnd("telecom","use","WP","value","tel:"+strPracticePhone);//Validated
 				Start("assignedPerson");
 				Start("name");
-				_w.WriteElementString("given",provAuthor.FName);
-				_w.WriteElementString("family",provAuthor.LName);
+				_w.WriteElementString("given",provAuthor.FName);//Validated
+				_w.WriteElementString("family",provAuthor.LName);//Validated
 				End("name");
 				End("assignedPerson");
 				End("assignedAuthor");
@@ -224,10 +254,10 @@ namespace OpenDentBusiness {
 				Start("custodian");
 				Start("assignedCustodian");
 				Start("representedCustodianOrganization");
-				StartAndEnd("id","extension",provAuthor.NationalProvID,"root","2.16.840.1.113883.4.6");//TODO: We might need to assign a global GUID for each office so that the provider can be uniquely identified anywhere in the world.
-				_w.WriteElementString("name",PrefC.GetString(PrefName.PracticeTitle));
-				StartAndEnd("telecom","use","WP","value","tel:"+strPracticePhone);
-				AddressUnitedStates(PrefC.GetString(PrefName.PracticeAddress),PrefC.GetString(PrefName.PracticeAddress2),PrefC.GetString(PrefName.PracticeCity),PrefC.GetString(PrefName.PracticeST));
+				StartAndEnd("id","extension",provAuthor.NationalProvID,"root","2.16.840.1.113883.4.6");//Validated NPI. We might need to assign a global GUID for each office so that the provider can be uniquely identified anywhere in the world.
+				_w.WriteElementString("name",PrefC.GetString(PrefName.PracticeTitle));//Validated
+				StartAndEnd("telecom","use","WP","value","tel:"+strPracticePhone);//Validated
+				AddressUnitedStates(PrefC.GetString(PrefName.PracticeAddress),PrefC.GetString(PrefName.PracticeAddress2),PrefC.GetString(PrefName.PracticeCity),PrefC.GetString(PrefName.PracticeST));//Validated
 				End("representedCustodianOrganization");
 				End("assignedCustodian");
 				End("custodian");
@@ -238,13 +268,13 @@ namespace OpenDentBusiness {
 				StartAndEnd("signatureCode","code","S");
 				Start("assignedEntity");
 				Provider provLegal=Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv));
-				StartAndEnd("id","root","2.16.840.1.113883.4.6","extension",provLegal.NationalProvID);
-				AddressUnitedStates(PrefC.GetString(PrefName.PracticeAddress),PrefC.GetString(PrefName.PracticeAddress2),PrefC.GetString(PrefName.PracticeCity),PrefC.GetString(PrefName.PracticeST));
-				StartAndEnd("telecom","use","WP","value","tel:"+strPracticePhone);
+				StartAndEnd("id","root","2.16.840.1.113883.4.6","extension",provLegal.NationalProvID);//Validated NPI. We might need to assign a global GUID for each office so that the provider can be uniquely identified anywhere in the world.
+				AddressUnitedStates(PrefC.GetString(PrefName.PracticeAddress),PrefC.GetString(PrefName.PracticeAddress2),PrefC.GetString(PrefName.PracticeCity),PrefC.GetString(PrefName.PracticeST));//Validated
+				StartAndEnd("telecom","use","WP","value","tel:"+strPracticePhone);//Validated
 				Start("assignedPerson");
 				Start("name");
-				_w.WriteElementString("given",provLegal.FName);
-				_w.WriteElementString("family",provLegal.LName);
+				_w.WriteElementString("given",provLegal.FName);//Validated
+				_w.WriteElementString("family",provLegal.LName);//Validated
 				End("name");
 				End("assignedPerson");
 				End("assignedEntity");
@@ -261,13 +291,13 @@ namespace OpenDentBusiness {
 				if(provPri==null) {
 					provPri=Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv));
 				}
-				StartAndEnd("id","root","2.16.840.1.113883.4.6","extension",provPri.NationalProvID);
-				AddressUnitedStates(PrefC.GetString(PrefName.PracticeAddress),PrefC.GetString(PrefName.PracticeAddress2),PrefC.GetString(PrefName.PracticeCity),PrefC.GetString(PrefName.PracticeST));
-				StartAndEnd("telecom","use","WP","value","tel:"+strPracticePhone);
+				StartAndEnd("id","root","2.16.840.1.113883.4.6","extension",provPri.NationalProvID);//Validated NPI. We might need to assign a global GUID for each office so that the provider can be uniquely identified anywhere in the world.
+				AddressUnitedStates(PrefC.GetString(PrefName.PracticeAddress),PrefC.GetString(PrefName.PracticeAddress2),PrefC.GetString(PrefName.PracticeCity),PrefC.GetString(PrefName.PracticeST));//Validated
+				StartAndEnd("telecom","use","WP","value","tel:"+strPracticePhone);//Validated
 				Start("assignedPerson");
 				Start("name");
-				_w.WriteElementString("given",provPri.FName);
-				_w.WriteElementString("family",provPri.LName);
+				_w.WriteElementString("given",provPri.FName);//Validated
+				_w.WriteElementString("family",provPri.LName);//Validated
 				End("name");
 				End("assignedPerson");
 				End("assignedEntity");
@@ -1738,22 +1768,151 @@ Vital Signs
 			End("addr");
 		}
 
-		public static bool IsCCD(string strXml) {
-			XmlDocument doc=new XmlDocument();
-			try {
-				doc.LoadXml(strXml);
+		///<summary>Checks data values for preferences and provider information to ensure required data is available for CCD creation.
+		///Returns empty string if no errors, otherwise returns a string containing error messages.</summary>
+		public static string ValidateSettings() {
+			string strErrors="";
+			if(PrefC.GetString(PrefName.PracticeTitle).Trim()=="") {
+				if(strErrors!="") {
+					strErrors+="\r\n";
+				}
+				strErrors+="Missing practice title.";
 			}
-			catch {
-				return false;
+			if(PrefC.GetString(PrefName.PracticePhone).Trim()=="") {
+				if(strErrors!="") {
+					strErrors+="\r\n";
+				}
+				strErrors+="Missing practice phone.";
 			}
-			if(doc.DocumentElement.Name.ToLower()=="clinicaldocument") {//CCD and CCDA
-				return true;
+			if(PrefC.GetString(PrefName.PracticeAddress).Trim()=="") {
+				if(strErrors!="") {
+					strErrors+="\r\n";
+				}
+				strErrors+="Missing practice address line 1.";
 			}
-			else if(doc.DocumentElement.Name.ToLower()=="continuityofcarerecord" || doc.DocumentElement.Name.ToLower()=="ccr:continuityofcarerecord") {//CCR
-				return true;
+			if(PrefC.GetString(PrefName.PracticeCity).Trim()=="") {
+				if(strErrors!="") {
+					strErrors+="\r\n";
+				}
+				strErrors+="Missing practice city.";
 			}
-			return false;
+			if(PrefC.GetString(PrefName.PracticeST).Trim().Length!=2) {
+				if(strErrors!="") {
+					strErrors+="\r\n";
+				}
+				strErrors+="Invalid practice state.  Must be two letters.";
+			}
+			Provider provDefault=Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv));
+			if(provDefault.FName.Trim()=="") {
+				if(strErrors!="") {
+					strErrors+="\r\n";
+				}
+				strErrors+="Missing provider "+provDefault.Abbr+" first name.";
+			}
+			if(provDefault.LName.Trim()=="") {
+				if(strErrors!="") {
+					strErrors+="\r\n";
+				}
+				strErrors+="Missing provider "+provDefault.Abbr+" last name.";
+			}
+			if(provDefault.NationalProvID.Trim()=="") {
+				if(strErrors!="") {
+					strErrors+="\r\n";
+				}
+				strErrors+="Missing provider "+provDefault.Abbr+" NPI.";
+			}
+			if(Snomeds.GetCodeCount()==0) {
+				//TODO: We need to replace this check with a more extensive check which validates the SNOMED codes that will actually go out on the CCD to ensure they are in our database.
+				//One way a SNOMED code could get into the patinet record without being in the snomed table, would be via an imported CCD. We might get around this issue by simply
+				//exporting the code without the description, because the descriptions are usually optional.
+				if(strErrors!="") {
+					strErrors+="\r\n";
+				}
+				strErrors+="Missing SNOMED codes.  Go to Setup | EHR | Code System Importer to download.";
+			}
+			if(Cvxs.GetCodeCount()==0) {
+				//TODO: We need to replace this check with a more extensive check which validates the CVX codes that will actually go out on the CCD to ensure they are in our database.
+				//One way a CVX code could get into the patinet record without being in the snomed table, would be via an imported CCD. We might get around this issue by simply
+				//exporting the code without the description, because the descriptions are usually optional.
+				if(strErrors!="") {
+					strErrors+="\r\n";
+				}
+				strErrors+="Missing CVX codes.  Go to Setup | EHR | Code System Importer to download.";
+			}
+			return strErrors;
 		}
+
+		///<summary>Checks data values for pat as well as primary provider information to ensure required data is available for CCD creation.
+		///Returns empty string if no errors, otherwise returns a string containing error messages.</summary>
+		public static string ValidatePatient(Patient pat) {
+			string strErrors="";
+			if(pat.FName.Trim()=="") {
+				if(strErrors!="") {
+					strErrors+="\r\n";
+				}
+				strErrors+="Missing patient first name.";
+			}
+			if(pat.LName.Trim()=="") {
+				if(strErrors!="") {
+					strErrors+="\r\n";
+				}
+				strErrors+="Missing patient last name.";
+			}
+			if(pat.Address.Trim()=="") {
+				if(strErrors!="") {
+					strErrors+="\r\n";
+				}
+				strErrors+="Missing patient address line 1.";
+			}
+			if(pat.City.Trim()=="") {
+				if(strErrors!="") {
+					strErrors+="\r\n";
+				}
+				strErrors+="Missing patient city.";
+			}
+			if(pat.State.Trim().Length!=2) {
+				if(strErrors!="") {
+					strErrors+="\r\n";
+				}
+				strErrors+="Invalid patient state.  Must be two letters.";
+			}
+			if(pat.Birthdate.Year<1880) {
+				if(strErrors!="") {
+					strErrors+="\r\n";
+				}
+				strErrors+="Missing patient birth date.";
+			}
+			if(pat.HmPhone.Trim()=="" && pat.WirelessPhone.Trim()=="" && pat.WkPhone.Trim()=="") {
+				if(strErrors!="") {
+					strErrors+="\r\n";
+				}
+				strErrors+="Missing patient phone. Must have home, wireless, or work phone.";
+			}
+			Provider provPri=Providers.GetProv(pat.PriProv);
+			if(provPri.FName.Trim()=="") {
+				if(strErrors!="") {
+					strErrors+="\r\n";
+				}
+				strErrors+="Missing provider "+provPri.Abbr+" first name.";
+			}
+			if(provPri.LName.Trim()=="") {
+				if(strErrors!="") {
+					strErrors+="\r\n";
+				}
+				strErrors+="Missing provider "+provPri.Abbr+" last name.";
+			}
+			if(provPri.NationalProvID.Trim()=="") {
+				if(strErrors!="") {
+					strErrors+="\r\n";
+				}
+				strErrors+="Missing provider "+provPri.Abbr+" NPI.";
+			}
+			return strErrors;
+		}
+
+		#endregion CCD Creation
+
+		#region CCD Reading
 
 		///<summary>Returns the PatNum for the unique patient who matches the patient name and birthdate within the CCD document xmlDocCcd.
 		///Returns 0 if there are no patient matches.  Returns the first match if there are multiple matches (unlikely).</summary>
@@ -2169,6 +2328,27 @@ Vital Signs
 			}
 		}
 
+		#endregion CCD Reading
+
+		#region Helpers
+
+		public static bool IsCCD(string strXml) {
+			XmlDocument doc=new XmlDocument();
+			try {
+				doc.LoadXml(strXml);
+			}
+			catch {
+				return false;
+			}
+			if(doc.DocumentElement.Name.ToLower()=="clinicaldocument") {//CCD and CCDA
+				return true;
+			}
+			else if(doc.DocumentElement.Name.ToLower()=="continuityofcarerecord" || doc.DocumentElement.Name.ToLower()=="ccr:continuityofcarerecord") {//CCR
+				return true;
+			}
+			return false;
+		}
+
 		public static bool IsCcdEmailAttachment(EmailAttach emailAttach) {
 			string strFilePathAttach=ODFileUtils.CombinePaths(EmailMessages.GetEmailAttachPath(),emailAttach.ActualFileName);
 			if(Path.GetExtension(strFilePathAttach).ToLower()!=".xml") {
@@ -2192,6 +2372,9 @@ Vital Signs
 			}
 			return false;
 		}
+
+
+		#endregion Helpers
 
 	}
 }
