@@ -13,7 +13,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<EhrCarePlan>>(MethodBase.GetCurrentMethod(),patNum);
 			}
-			string command="SELECT * FROM ehrcareplan WHERE PatNum = "+POut.Long(patNum);
+			string command="SELECT * FROM ehrcareplan WHERE PatNum = "+POut.Long(patNum)+" ORDER BY DatePlanned";
 			return Crud.EhrCarePlanCrud.SelectMany(command);
 		}
 
@@ -25,21 +25,10 @@ namespace OpenDentBusiness{
 			}
 			return Crud.EhrCarePlanCrud.Insert(ehrCarePlan);
 		}
-		
-		/*
-		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
-
-		///<summary>Gets one EhrCarePlan from the db.</summary>
-		public static EhrCarePlan GetOne(long ehrCarePlanNum){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				return Meth.GetObject<EhrCarePlan>(MethodBase.GetCurrentMethod(),ehrCarePlanNum);
-			}
-			return Crud.EhrCarePlanCrud.SelectOne(ehrCarePlanNum);
-		}
 
 		///<summary></summary>
-		public static void Update(EhrCarePlan ehrCarePlan){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+		public static void Update(EhrCarePlan ehrCarePlan) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),ehrCarePlan);
 				return;
 			}
@@ -55,6 +44,18 @@ namespace OpenDentBusiness{
 			string command= "DELETE FROM ehrcareplan WHERE EhrCarePlanNum = "+POut.Long(ehrCarePlanNum);
 			Db.NonQ(command);
 		}
+		
+		/*
+		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
+
+		///<summary>Gets one EhrCarePlan from the db.</summary>
+		public static EhrCarePlan GetOne(long ehrCarePlanNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				return Meth.GetObject<EhrCarePlan>(MethodBase.GetCurrentMethod(),ehrCarePlanNum);
+			}
+			return Crud.EhrCarePlanCrud.SelectOne(ehrCarePlanNum);
+		}
+
 		*/
 
 

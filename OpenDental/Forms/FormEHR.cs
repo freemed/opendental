@@ -430,6 +430,11 @@ namespace OpenDental {
 			FormInt.ShowDialog();
 		}
 
+		private void butCarePlans_Click(object sender,EventArgs e) {
+			FormEhrCarePlans FormCP=new FormEhrCarePlans(PatCur);
+			FormCP.ShowDialog();
+		}
+
 		public static bool ProvKeyIsValid(string lName,string fName,bool hasReportAccess,string provKey) {
 			try{
 				#if EHRTEST //This pattern allows the code to compile without having the EHR code available.
