@@ -873,7 +873,7 @@ namespace OpenDentBusiness{
 			//Specifically, the tool looks for the headers Orig-Date and Message-Id after the message is decrypted, so we need to include these two headers before encrypting an outgoing email.
 			//The message date must be in a very specific format and must match the RFC822 standard.  Is a required field for RFC822.  http://tools.ietf.org/html/rfc822
 			string strOrigDate=DateTime.Now.ToString("ddd, dd MMM yyyy HH:mm:ss zzz");//Example: "Tue, 12 Nov 2013 17:10:37 +08:00", which has an extra colon in the Zulu offset.
-			strOrigDate=strOrigDate.Remove(29,1);//Remove the colon from the Zulu offset, as required by the RFC 822 message format.
+			strOrigDate=strOrigDate.Remove(strOrigDate.LastIndexOf(':'),1);//Remove the colon from the Zulu offset, as required by the RFC 822 message format.
 			message.Date=new Health.Direct.Common.Mime.Header("Date",strOrigDate);//http://tools.ietf.org/html/rfc5322#section-3.6.1
 			message.AssignMessageID();//http://tools.ietf.org/html/rfc5322#section-3.6.4
 			string strBoundry="";
@@ -901,7 +901,13 @@ namespace OpenDentBusiness{
 					Health.Direct.Common.Mime.MimeEntity mimeEntityAttach=new Health.Direct.Common.Mime.MimeEntity(Convert.ToBase64String(Encoding.UTF8.GetBytes(strAttachText)));
 					mimeEntityAttach.ContentDisposition="attachment;";
 					mimeEntityAttach.ContentTransferEncoding="base64;";
-					mimeEntityAttach.ContentType="text/plain; name="+strAttachFileName+";";
+					if(Path.GetExtension(emailMessage.Attachments[i].ActualFileName).ToLower()==".xml") {
+						mimeEntityAttach.ContentType="text/xml;";
+					}
+					else {
+						mimeEntityAttach.ContentType="text/plain;";
+					}
+					mimeEntityAttach.ContentType+=" name="+strAttachFileName+";";
 					listMimeParts.Add(mimeEntityAttach);
 				}
 			}
