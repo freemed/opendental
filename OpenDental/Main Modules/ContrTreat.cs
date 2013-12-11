@@ -2523,7 +2523,7 @@ namespace OpenDental{
 				}
 				//Get fee schedule for medical or dental.
 				long feeSch;
-				if(PrefC.GetBool(PrefName.MedicalFeeUsedForNewProcs) && isMed) {
+				if(isMed) {
 					feeSch=Fees.GetMedFeeSched(PatCur,InsPlanList,PatPlanList,SubList);
 				}
 				else {
