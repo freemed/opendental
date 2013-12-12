@@ -119,26 +119,10 @@ namespace OpenDental {
 		}
 
 		private void butSendEmail_Click(object sender,EventArgs e) {
-			string ccd="";
-			try {
-				ccd=EhrCCD.GenerateElectronicCopy(PatCur);
-			}
-			catch(Exception ex) {
-				MessageBox.Show(ex.Message);
-				return;
-			}
-			RecordRequestAndProvide();
-			Cursor=Cursors.WaitCursor;
-			try {
-				EmailMessages.SendTestUnsecure("Electronic Copy of Health Information","ccd.xml",ccd,"ccd.xsl",FormEHR.GetEhrResource("CCD"));
-			}
-			catch(Exception ex) {
-				Cursor=Cursors.Default;
-				MessageBox.Show(ex.Message);
-				return;
-			}
-			Cursor=Cursors.Default;
-			MessageBox.Show("Sent");
+			MsgBox.Show(this,
+				"Electronic copies cannot be emailed to patients due to security concerns.\r\n"+
+				"Instruct the patient to access their information in the patient portal.\r\n"+
+				"If you are trying to send the patient information directly to another provider, then go to Chart | EHR | Send/Receive summary of care.");
 		}
 
 		private void butShowXhtml_Click(object sender,EventArgs e) {

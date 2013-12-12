@@ -75,31 +75,10 @@ namespace OpenDental {
 		}
 
 		private void butSendEmail_Click(object sender,EventArgs e) {
-			string ccd="";
-			try {
-				ccd=EhrCCD.GenerateClinicalSummary(PatCur);
-			}
-			catch(Exception ex) {
-				MessageBox.Show(ex.Message);
-				return;
-			}
-			EhrMeasureEvent newMeasureEvent=new EhrMeasureEvent();
-			newMeasureEvent.DateTEvent=DateTime.Now;
-			newMeasureEvent.EventType=EhrMeasureEventType.ClinicalSummaryProvidedToPt;
-			newMeasureEvent.PatNum=PatCur.PatNum;
-			EhrMeasureEvents.Insert(newMeasureEvent);
-			FillGridEHRMeasureEvents();
-			Cursor=Cursors.WaitCursor;
-			try {
-				EmailMessages.SendTestUnsecure("Clinical Summary","ccd.xml",ccd,"ccd.xsl",FormEHR.GetEhrResource("CCD"));
-			}
-			catch(Exception ex) {
-				Cursor=Cursors.Default;
-				MessageBox.Show(ex.Message);
-				return;
-			}
-			Cursor=Cursors.Default;
-			MessageBox.Show("Sent");
+			MsgBox.Show(this,
+				"Clinical summaries cannot be emailed to patients due to security concerns.\r\n"+
+				"Instruct the patient to access their information in the patient portal.\r\n"+
+				"If you are trying to send the patient information directly to another provider, then go to Chart | EHR | Send/Receive summary of care.");
 		}
 
 		private void butShowXhtml_Click(object sender,EventArgs e) {
