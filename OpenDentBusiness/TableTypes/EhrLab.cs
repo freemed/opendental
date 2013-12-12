@@ -59,14 +59,14 @@ namespace OpenDentBusiness {
 		public string OrderingProviderSuffix;
 		///<summary>Example: DR, Not MD, MD would be stored in an optional field that was not implemented called OrderingProviderDegree.  ORC.12.6</summary>
 		public string OrderingProviderPrefix;
-			#region Ordering Provider Id Assigning Authority
-			///<summary>Usually empty, "The value of [this field] reflects a local code that represents the combination of [the next two fields]."  ORC.12.9.1</summary>
-			public string OrderingProviderAssigningAuthoritNamespaceID;
-			///<summary>ISO compliant OID that represents the organization that assigned the unique provider ID.  ORC.12.9.2</summary>
-			public string OrderingProviderAssigningAuthoritUniversalID;
-			///<summary>Always "ISO", unless importing from outside source.  ORC.12.9.3</summary>
-			public string OrderingProviderAssigningAuthorityIDType;
-			#endregion
+		#region Ordering Provider Id Assigning Authority
+		///<summary>Usually empty, "The value of [this field] reflects a local code that represents the combination of [the next two fields]."  ORC.12.9.1</summary>
+		public string OrderingProviderAssigningAuthorityNamespaceID;
+		///<summary>ISO compliant OID that represents the organization that assigned the unique provider ID.  ORC.12.9.2</summary>
+		public string OrderingProviderAssigningAuthorityUniversalID;
+		///<summary>Always "ISO", unless importing from outside source.  ORC.12.9.3</summary>
+		public string OrderingProviderAssigningAuthorityIDType;
+		#endregion
 		///<summary>Describes the type of name used.  ORC.12.10</summary>
 		public HL70200 OrderingProviderNameTypeCode;
 		///<summary>Must be value from HL70203 code set, see note at bottom of EhrLab.cs for usage.  ORC.12.13</summary>
@@ -95,9 +95,9 @@ namespace OpenDentBusiness {
 		public string UsiTextOriginal;
 		#endregion
 		///<summary>Stored as string in the format YYYY[MM[DD[HH[MM[SS]]]]] where bracketed values are optional.  When time is not known will be valued "0000".  OBR.7.1</summary>
-		public string DateTimeObservationStart;
+		public string ObservationDateTimeStart;
 		///<summary>May be empty.  Stored as string in the format YYYY[MM[DD[HH[MM[SS]]]]] where bracketed values are optional.  OBR.8.1</summary>
-		public string DateTimeObservationEnd;
+		public string ObservationDateTimeEnd;
 		///<summary>OBR.11</summary>
 		public HL70065 SpecimenActionCode;
 		///<summary>[0..*]This is not a data column but is stored in a seperate table named EhrLabClinicalInfo.  OBR.13.*</summary>
@@ -150,7 +150,6 @@ namespace OpenDentBusiness {
 		///<summary>Always "ISO", unless importing from other sources.  OBR.29.2.4</summary>
 		public string ParentFillerOrderUniversalIDType;
 		#endregion
-
 		#endregion
 		///<summary>[0..*]This is not a data column but is stored in a seperate table named EhrLabResultsHandling. OBR.49.*</summary>
 		[CrudColumn(IsNotDbColumn=true)]
@@ -163,7 +162,7 @@ namespace OpenDentBusiness {
 		#endregion
 		#region TQ1 fields.
 		///<summary>Enumerates the TQ1 segments within a single message starting with 1.  TQ1.1</summary>
-		public long SetIdTQ1;
+		public long TQ1SetId;
 		///<summary>Stored as string in the format YYYY[MM[DD[HH[MM[SS]]]]] where bracketed values are optional.  TQ1.7</summary>
 		public string TQ1DateTimeStart;
 		///<summary>Stored as string in the format YYYY[MM[DD[HH[MM[SS]]]]] where bracketed values are optional.  TQ1.8</summary>
@@ -351,179 +350,178 @@ namespace EhrLaboratories {
 
 	///<summary>Identifier Type.  OID:2.16.840.1.113883.12.203  HL70369 code:HL70203.  Source phinvads.cdc.gov</summary>
 	public enum HL70203 {
-	///<summary>0 - Account number</summary>
-	AN,
-	///<summary>1 - Account number Creditor</summary>
-	ANC,
-	///<summary>2 - Account number debitor</summary>
-	AND,
-	///<summary>3 - Advanced Practice Registered Nurse number</summary>
-	APRN,
-	///<summary>4 - American Express</summary>
-	AM,
-	///<summary>5 - Anonymous identifier</summary>
-	ANON,
-	///<summary>6 - Bank Account Number</summary>
-	BA,
-	///<summary>7 - Bank Card Number</summary>
-	BC,
-	///<summary>8 - Birth registry number</summary>
-	BR,
-	///<summary>9 - Breed Registry Number</summary>
-	BRN,
-	///<summary>10 - Cost Center number</summary>
-	CC,
-	///<summary>11 - County number</summary>
-	CY,
-	///<summary>12 - Dentist license number</summary>
-	DDS,
-	///<summary>13 - Diner_s Club card</summary>
-	DI,
-	///<summary>14 - Discover Card</summary>
-	DS,
-	///<summary>15 - Doctor number</summary>
-	DN,
-	///<summary>16 - Donor Registration Number</summary>
-	DR,
-	///<summary>17 - Driver_s license number</summary>
-	DL,
-	///<summary>18 - Drug Enforcement Administration registration number</summary>
-	DEA,
-	///<summary>19 - Drug Furnishing or prescriptive authority Number</summary>
-	DFN,
-	///<summary>20 - Employee number</summary>
-	EI,
-	///<summary>21 - Employer number</summary>
-	EN,
-	///<summary>22 - Facility ID</summary>
-	FI,
-	///<summary>23 - General ledger number</summary>
-	GL,
-	///<summary>24 - Guarantor external identifier</summary>
-	GN,
-	///<summary>25 - Guarantor internal identifier</summary>
-	GI,
-	///<summary>26 - Health Card Number</summary>
-	HC,
-	///<summary>27 - Indigenous/Aboriginal</summary>
-	IND,
-	///<summary>28 - Jurisdictional health number (Canada)</summary>
-	JHN,
-	///<summary>29 - Labor and industries number</summary>
-	LI,
-	///<summary>30 - License number</summary>
-	LN,
-	///<summary>31 - Living Subject Enterprise Number</summary>
-	PE,
-	///<summary>32 - Local Registry ID</summary>
-	LR,
-	///<summary>33 - MasterCard</summary>
-	MS,
-	///<summary>34 - Medical License number</summary>
-	MD,
-	///<summary>35 - Medical record number</summary>
-	MR,
-	///<summary>36 - Medicare/CMS (formerly HCFA)_s Universal Physician Identification numbers</summary>
-	UPIN,
-	///<summary>37 - Member Number</summary>
-	MB,
-	///<summary>38 - Microchip Number</summary>
-	MCN,
-	///<summary>39 - Military ID number</summary>
-	MI,
-	///<summary>40 - National employer identifier</summary>
-	NE,
-	///<summary>41 - National Health Plan Identifier</summary>
-	NH,
-	///<summary>42 - National Insurance Organization Identifier</summary>
-	NII,
-	///<summary>43 - National Insurance Payor Identifier (Payor)</summary>
-	NIIP,
-	///<summary>44 - National Person Identifier where the xxx is the ISO table 3166 3-character (alphabetic) country code</summary>
-	NNxxx,
-	///<summary>45 - National provider identifier</summary>
-	NPI,
-	///<summary>46 - National unique individual identifier</summary>
-	NI,
-	///<summary>47 - Nurse practitioner number</summary>
-	NP,
-	///<summary>48 - Optometrist license number</summary>
-	OD,
-	///<summary>49 - Organization identifier</summary>
-	XX,
-	///<summary>50 - Osteopathic License number</summary>
-	DO,
-	///<summary>51 - Passport number</summary>
-	PPN,
-	///<summary>52 - Patient external identifier</summary>
-	PT,
-	///<summary>53 - Patient internal identifier</summary>
-	PI,
-	///<summary>54 - Patient Medicaid number</summary>
-	MA,
-	///<summary>55 - Patient's Medicare number</summary>
-	MC,
-	///<summary>56 - Penitentiary/correctional institution Number</summary>
-	PCN,
-	///<summary>57 - Pension Number</summary>
-	PEN,
-	///<summary>58 - Permanent Resident Card Number</summary>
-	PRC,
-	///<summary>59 - Person number</summary>
-	PN,
-	///<summary>60 - Pharmacist license number</summary>
-	RPH,
-	///<summary>61 - Physician Assistant number</summary>
-	PA,
-	///<summary>62 - Podiatrist license number</summary>
-	DPM,
-	///<summary>63 - Practitioner Medicaid number</summary>
-	MCD,
-	///<summary>64 - Practitioner Medicare number</summary>
-	MCR,
-	///<summary>65 - Provider number</summary>
-	PRN,
-	///<summary>66 - QA number</summary>
-	QA,
-	///<summary>67 - Railroad Retirement number</summary>
-	RR,
-	///<summary>68 - Regional registry ID</summary>
-	RRI,
-	///<summary>69 - Registered Nurse Number</summary>
-	RN,
-	///<summary>70 - Resource identifier</summary>
-	RI,
-	///<summary>71 - Social Security number</summary>
-	SS,
-	///<summary>72 - Specimen Identifier</summary>
-	SID,
-	///<summary>73 - State license</summary>
-	SL,
-	///<summary>74 - State registry ID</summary>
-	SR,
-	///<summary>75 - Subscriber Number</summary>
-	SN,
-	///<summary>76 - Tax ID number</summary>
-	TAX,
-	///<summary>77 - Temporary Account Number</summary>
-	ANT,
-	///<summary>78 - Temporary Living Subject Number</summary>
-	PNT,
-	///<summary>79 - Temporary Medical Record Number</summary>
-	MRT,
-	///<summary>80 - Treaty Number/ (Canada)</summary>
-	TN,
-	///<summary>81 - Unspecified identifier</summary>
-	U,
-	///<summary>82 - VISA</summary>
-	VS,
-	///<summary>83 - Visit number</summary>
-	VN,
-	///<summary>84 - WIC identifier</summary>
-	WC,
-	///<summary>85 - Workers_ Comp Number</summary>
-	WCN
-
+		///<summary>0 - Account number</summary>
+		AN,
+		///<summary>1 - Account number Creditor</summary>
+		ANC,
+		///<summary>2 - Account number debitor</summary>
+		AND,
+		///<summary>3 - Advanced Practice Registered Nurse number</summary>
+		APRN,
+		///<summary>4 - American Express</summary>
+		AM,
+		///<summary>5 - Anonymous identifier</summary>
+		ANON,
+		///<summary>6 - Bank Account Number</summary>
+		BA,
+		///<summary>7 - Bank Card Number</summary>
+		BC,
+		///<summary>8 - Birth registry number</summary>
+		BR,
+		///<summary>9 - Breed Registry Number</summary>
+		BRN,
+		///<summary>10 - Cost Center number</summary>
+		CC,
+		///<summary>11 - County number</summary>
+		CY,
+		///<summary>12 - Dentist license number</summary>
+		DDS,
+		///<summary>13 - Diner_s Club card</summary>
+		DI,
+		///<summary>14 - Discover Card</summary>
+		DS,
+		///<summary>15 - Doctor number</summary>
+		DN,
+		///<summary>16 - Donor Registration Number</summary>
+		DR,
+		///<summary>17 - Driver_s license number</summary>
+		DL,
+		///<summary>18 - Drug Enforcement Administration registration number</summary>
+		DEA,
+		///<summary>19 - Drug Furnishing or prescriptive authority Number</summary>
+		DFN,
+		///<summary>20 - Employee number</summary>
+		EI,
+		///<summary>21 - Employer number</summary>
+		EN,
+		///<summary>22 - Facility ID</summary>
+		FI,
+		///<summary>23 - General ledger number</summary>
+		GL,
+		///<summary>24 - Guarantor external identifier</summary>
+		GN,
+		///<summary>25 - Guarantor internal identifier</summary>
+		GI,
+		///<summary>26 - Health Card Number</summary>
+		HC,
+		///<summary>27 - Indigenous/Aboriginal</summary>
+		IND,
+		///<summary>28 - Jurisdictional health number (Canada)</summary>
+		JHN,
+		///<summary>29 - Labor and industries number</summary>
+		LI,
+		///<summary>30 - License number</summary>
+		LN,
+		///<summary>31 - Living Subject Enterprise Number</summary>
+		PE,
+		///<summary>32 - Local Registry ID</summary>
+		LR,
+		///<summary>33 - MasterCard</summary>
+		MS,
+		///<summary>34 - Medical License number</summary>
+		MD,
+		///<summary>35 - Medical record number</summary>
+		MR,
+		///<summary>36 - Medicare/CMS (formerly HCFA)_s Universal Physician Identification numbers</summary>
+		UPIN,
+		///<summary>37 - Member Number</summary>
+		MB,
+		///<summary>38 - Microchip Number</summary>
+		MCN,
+		///<summary>39 - Military ID number</summary>
+		MI,
+		///<summary>40 - National employer identifier</summary>
+		NE,
+		///<summary>41 - National Health Plan Identifier</summary>
+		NH,
+		///<summary>42 - National Insurance Organization Identifier</summary>
+		NII,
+		///<summary>43 - National Insurance Payor Identifier (Payor)</summary>
+		NIIP,
+		///<summary>44 - National Person Identifier where the xxx is the ISO table 3166 3-character (alphabetic) country code</summary>
+		NNxxx,
+		///<summary>45 - National provider identifier</summary>
+		NPI,
+		///<summary>46 - National unique individual identifier</summary>
+		NI,
+		///<summary>47 - Nurse practitioner number</summary>
+		NP,
+		///<summary>48 - Optometrist license number</summary>
+		OD,
+		///<summary>49 - Organization identifier</summary>
+		XX,
+		///<summary>50 - Osteopathic License number</summary>
+		DO,
+		///<summary>51 - Passport number</summary>
+		PPN,
+		///<summary>52 - Patient external identifier</summary>
+		PT,
+		///<summary>53 - Patient internal identifier</summary>
+		PI,
+		///<summary>54 - Patient Medicaid number</summary>
+		MA,
+		///<summary>55 - Patient's Medicare number</summary>
+		MC,
+		///<summary>56 - Penitentiary/correctional institution Number</summary>
+		PCN,
+		///<summary>57 - Pension Number</summary>
+		PEN,
+		///<summary>58 - Permanent Resident Card Number</summary>
+		PRC,
+		///<summary>59 - Person number</summary>
+		PN,
+		///<summary>60 - Pharmacist license number</summary>
+		RPH,
+		///<summary>61 - Physician Assistant number</summary>
+		PA,
+		///<summary>62 - Podiatrist license number</summary>
+		DPM,
+		///<summary>63 - Practitioner Medicaid number</summary>
+		MCD,
+		///<summary>64 - Practitioner Medicare number</summary>
+		MCR,
+		///<summary>65 - Provider number</summary>
+		PRN,
+		///<summary>66 - QA number</summary>
+		QA,
+		///<summary>67 - Railroad Retirement number</summary>
+		RR,
+		///<summary>68 - Regional registry ID</summary>
+		RRI,
+		///<summary>69 - Registered Nurse Number</summary>
+		RN,
+		///<summary>70 - Resource identifier</summary>
+		RI,
+		///<summary>71 - Social Security number</summary>
+		SS,
+		///<summary>72 - Specimen Identifier</summary>
+		SID,
+		///<summary>73 - State license</summary>
+		SL,
+		///<summary>74 - State registry ID</summary>
+		SR,
+		///<summary>75 - Subscriber Number</summary>
+		SN,
+		///<summary>76 - Tax ID number</summary>
+		TAX,
+		///<summary>77 - Temporary Account Number</summary>
+		ANT,
+		///<summary>78 - Temporary Living Subject Number</summary>
+		PNT,
+		///<summary>79 - Temporary Medical Record Number</summary>
+		MRT,
+		///<summary>80 - Treaty Number/ (Canada)</summary>
+		TN,
+		///<summary>81 - Unspecified identifier</summary>
+		U,
+		///<summary>82 - VISA</summary>
+		VS,
+		///<summary>83 - Visit number</summary>
+		VN,
+		///<summary>84 - WIC identifier</summary>
+		WC,
+		///<summary>85 - Workers_ Comp Number</summary>
+		WCN
 	}
 
 	///<summary>Coding Systems.  OID:2.16.840.1.113883.12.369  Source phinvads.cdc.gov</summary>
@@ -1443,7 +1441,6 @@ namespace EhrLaboratories {
 		///<para>Category:General Codes</para>
 		///<para>Status:Active</para></summary>
 		X12DEnnnn
-
 	}
 
 }
