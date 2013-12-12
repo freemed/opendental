@@ -24,7 +24,7 @@ namespace OpenDentBusiness {
 		///<summary>If this is an element, then this is the color.</summary>
 		[XmlIgnore]
 		public Color ElementColor;
-		///<summary>Enum:ApptViewAlignment. If this is an element, then this is the alignment of the element within the appointment.</summary>
+		///<summary>Enum:ApptViewAlignment If this is an element, then this is the alignment of the element within the appointment.</summary>
 		public ApptViewAlignment ElementAlignment;
 		///<summary>FK to apptfielddef.ApptFieldDefNum.  If this is an element, and the element is an appt field, then this tells us which one.</summary>
 		public long ApptFieldDefNum;

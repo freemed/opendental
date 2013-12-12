@@ -61,7 +61,7 @@ namespace OpenDentBusiness{
 		public string CanadianInstitutionCode;
 		///<summary>BIN location number.  Only used with EHR.</summary>
 		public string RxBIN;
-		///<summary>Enum:EnumCobRule. 0=Basic, 1=Standard, 2=CarveOut. </summary>
+		///<summary>Enum:EnumCobRule 0=Basic, 1=Standard, 2=CarveOut. </summary>
 		public EnumCobRule CobRule;
 		///<summary>FK to sop.SopCode. Examples: 121, 3115, etc.  Acts as default for all patients using this insurance.  When code is changed for an insplan, it should change automatically for patients having that primary insurance. </summary>
 		public string SopCode;

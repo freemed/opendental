@@ -14,7 +14,7 @@ namespace OpenDentBusiness{
 		public string Description;
 		///<summary>If true, then the popup won't automatically show when a patient is selected.  Kind of useless except for offices that want to still show historical popups.</summary>
 		public bool IsDisabled;
-		/// <summary>Enum:EnumPopupFamily 0=Patient, 1=Family, 2=Superfamily. If Family, then this Popup will apply to the entire family and PatNum will the Guarantor PatNum.  If Superfamily, then this popup will apply to the entire superfamily and PatNum will be the head of the superfamily. This column will need to be synched for all family actions where the guarantor changes.  </summary>
+		/// <summary>Enum:EnumPopupLevel 0=Patient, 1=Family, 2=Superfamily. If Family, then this Popup will apply to the entire family and PatNum will the Guarantor PatNum.  If Superfamily, then this popup will apply to the entire superfamily and PatNum will be the head of the superfamily. This column will need to be synched for all family actions where the guarantor changes.  </summary>
 		public EnumPopupLevel PopupLevel;//rename to PopupLevel
 		///<summary>FK to userod.UserNum.</summary>
 		public long UserNum;
@@ -33,13 +33,13 @@ namespace OpenDentBusiness{
 
 	}
 
-
+	///<summary></summary>
 	public enum EnumPopupLevel {
 		/// <summary>0=Patient</summary>
 		Patient,
 		/// <summary>1=Family</summary>
 		Family,
-		/// <summary>3=SuperFamily</summary>
+		/// <summary>2=SuperFamily</summary>
 		SuperFamily
 	}
 

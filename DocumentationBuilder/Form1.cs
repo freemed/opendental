@@ -91,8 +91,8 @@ namespace DocumentationBuilder {
 				|| tableName=="anesthvsdata"
 				|| tableName=="reseller"
 				|| tableName=="resellerservice"
-				|| tableName=="") {
-				
+				|| tableName=="") 
+			{				
 				return;
 			}
 			writer.WriteStartElement("table");
@@ -161,22 +161,28 @@ namespace DocumentationBuilder {
 			writer.WriteEndElement();
 		}
 
-		private void WriteEnum(XmlWriter writer,string enumName){
+		private void WriteEnum(XmlWriter writer,string enumName) {
+			if(enumName.EndsWith(".")) {
+				throw new Exception("ERROR! enum: "+enumName+" ends with \".\" and this causes the documentation to fail.\r\nCorrect the enum summary in the table type and rebuild Open Dental in release mode to update the serialization file.");
+			}
+			string summary="";
 			//get an ordered list from OpenDental.xml
 			//T:OpenDental.AccountType
 			//first the summary for the enum itsef
 			XPathNavigator navEnum=Navigator.SelectSingleNode("//member[@name='T:OpenDentBusiness."+enumName+"']");
-			if(navEnum==null) {
-				return;
+			if(navEnum!=null) {//Enumerations that are not in the Enumerations.cs file will be null.
+				summary=navEnum.Value;
 			}
-			string summary=navEnum.Value;
 			writer.WriteStartElement("Enumeration");
 			writer.WriteAttributeString("name",enumName);
-			writer.WriteElementString("summary",summary);
+			writer.WriteElementString("summary",summary);//No summary if the enum node was not found.  This is for enumerations that are not present in Enumerations.cs
 			//now, the individual enumsItems
 			//F:OpenDental.AccountType.Asset
 			//*[starts-with(name(),'B')]
 			XPathNodeIterator nodes=Navigator.Select("//member[contains(@name,'F:OpenDentBusiness."+enumName+".')]");
+			if(nodes.Count==0) {
+				throw new Exception("ERROR! enum: "+enumName+" was not found.  Something is wrong with the serialized xml documentation.");
+			}
 				//("//member[@name='F:OpenDental."+enumName+".*']");
 			string itemName;
 			int lastDot;
