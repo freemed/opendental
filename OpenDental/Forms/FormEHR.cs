@@ -67,7 +67,8 @@ namespace OpenDental {
 		}
 
 		///<summary>Loads a resource file from the EHR assembly and returns the file text as a string.
-		///Returns "" is the EHR assembly did not load. strResourceName can be either "CCD" or "CCR".</summary>
+		///Returns "" is the EHR assembly did not load. strResourceName can be either "CCD" or "CCR".
+		///This function performs a late binding to the EHR.dll, because resellers do not have EHR.dll necessarily.</summary>
 		public static string GetEhrResource(string strResourceName) {
 			if(AssemblyEHR==null) {
 				contructObjFormEhrMeasuresHelper();
