@@ -125,7 +125,7 @@ namespace OpenDentBusiness{
 				List<Popup> archivePopups=GetArchivesForPopup(FamilyPopups[i].PopupNum);
 				Popup popupArchive;
 				for(int j=0;j<archivePopups.Count;j++) {
-					popupArchive=archivePopups[i].Copy();
+					popupArchive=archivePopups[j].Copy();
 					if(popupArchive.PatNum==pat.PatNum) {//if popup is on the patient who's leaving, copy to guarantor of old family.
 						popupArchive.PatNum=pat.Guarantor;
 					}
