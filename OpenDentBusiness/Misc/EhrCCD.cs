@@ -59,9 +59,9 @@ namespace OpenDentBusiness {
 		#region CCD Creation
 
 		///<summary>Generates a Clinical Summary XML document with an appropriate referral string. Throws an exception if validation fails.</summary>
-		public static string GenerateClinicalSummary(Patient pat) {
+		public static string GenerateClinicalSummary(Patient pat,bool hasAllergy,bool hasEncounter,bool hasFunctionalStatus,bool hasImmunization,bool hasMedication,bool hasPlanOfCare,bool hasProblem,bool hasProcedure,bool hasResult,bool hasSocialHistory,bool hasVitalSign) {
 			string referralReason="Summary of previous appointment requested.";
-			return GenerateCCD(pat,referralReason);
+			return GenerateCCD(pat,referralReason,hasAllergy,hasEncounter,hasFunctionalStatus,hasImmunization,hasMedication,hasPlanOfCare,hasProblem,hasProcedure,hasResult,hasSocialHistory,hasVitalSign);
 		}
 
 		///<summary>Generates a Summary of Care XML document with an appropriate referral string. Throws an exception if validation fails.</summary>
@@ -84,6 +84,11 @@ namespace OpenDentBusiness {
 
 		///<summary>Throws an exception if validation fails.</summary>
 		private static string GenerateCCD(Patient pat,string referralReason) {
+			return GenerateCCD(pat,referralReason,true,true,true,true,true,true,true,true,true,true,true);
+		}
+
+		///<summary>Throws an exception if validation fails.</summary>
+		private static string GenerateCCD(Patient pat,string referralReason,bool hasAllergy,bool hasEncounter,bool hasFunctionalStatus,bool hasImmunization,bool hasMedication,bool hasPlanOfCare,bool hasProblem,bool hasProcedure,bool hasResult,bool hasSocialHistory,bool hasVitalSign) {
 			string strErrors=ValidateSettings();
 			if(strErrors!="") {
 				throw new ApplicationException(strErrors);
@@ -176,7 +181,7 @@ namespace OpenDentBusiness {
 				bool isRaceFound=true;
 				PatRace patRace=PatRace.DeclinedToSpecify;
 				bool isHispanicOrLatino=false;
-				List <PatientRace> listPatientRaces=PatientRaces.GetForPatient(pat.PatNum);
+				List<PatientRace> listPatientRaces=PatientRaces.GetForPatient(pat.PatNum);
 				for(int i=0;i<listPatientRaces.Count;i++) {
 					if(listPatientRaces[i].Race==PatRace.Hispanic) {
 						isHispanicOrLatino=true;
@@ -310,18 +315,18 @@ Body
 =====================================================================================================");
 				Start("component");
 				Start("structuredBody");
-				GenerateCcdSectionAllergies();
-				GenerateCcdSectionEncounters();
-				GenerateCcdSectionFunctionalStatus();
-				GenerateCcdSectionImmunizations();
-				GenerateCcdSectionMedications();
-				GenerateCcdSectionPlanOfCare();
-				GenerateCcdSectionProblems();
-				GenerateCcdSectionProcedures();
+				GenerateCcdSectionAllergies(hasAllergy);
+				GenerateCcdSectionEncounters(hasEncounter);
+				GenerateCcdSectionFunctionalStatus(hasFunctionalStatus);
+				GenerateCcdSectionImmunizations(hasImmunization);
+				GenerateCcdSectionMedications(hasMedication);
+				GenerateCcdSectionPlanOfCare(hasPlanOfCare);
+				GenerateCcdSectionProblems(hasProblem);
+				GenerateCcdSectionProcedures(hasProcedure);
 				GenerateCcdSectionReasonForReferral(referralReason);
-				GenerateCcdSectionResults();//Lab Results
-				GenerateCcdSectionSocialHistory();
-				GenerateCcdSectionVitalSigns();
+				GenerateCcdSectionResults(hasResult);//Lab Results
+				GenerateCcdSectionSocialHistory(hasSocialHistory);
+				GenerateCcdSectionVitalSigns(hasVitalSign);
 				End("structuredBody");
 				End("component");
 				End("ClinicalDocument");
@@ -356,7 +361,7 @@ Body
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdSectionAllergies() {
+		private static void GenerateCcdSectionAllergies(bool hasAllergy) {
 			_w.WriteComment(@"
 =====================================================================================================
 Allergies
@@ -365,6 +370,9 @@ Allergies
 			List<Allergy> listAllergiesAll=Allergies.Refresh(_patOutCcd.PatNum);
 			List<Allergy> listAllergiesFiltered=new List<Allergy>();
 			for(int i=0;i<listAllergiesAll.Count;i++) {
+				if(!hasAllergy) {
+					continue;
+				}
 				allergyDef=AllergyDefs.GetOne(listAllergiesAll[i].AllergyDefNum);
 				bool isMedAllergy=false;
 				if(allergyDef.MedicationNum!=0) {
@@ -387,49 +395,58 @@ Allergies
 			}
 			Start("component");
 			Start("section");
-			if(listAllergiesFiltered.Count==0) {
-				TemplateId("2.16.840.1.113883.10.20.22.2.6");//page 230 Allergy template with optional entries.
-			}
-			else {
-				TemplateId("2.16.840.1.113883.10.20.22.2.6.1");//page 230 Allergy template with required entries.
-			}
+			TemplateId("2.16.840.1.113883.10.20.22.2.6.1");//page 230 Allergy template with required entries.
 			_w.WriteComment("Allergies section template");
 			StartAndEnd("code","code","48765-2","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Allergies");
 			_w.WriteElementString("title","Allergies and Adverse Reactions");
 			Start("text");//The following text will be parsed as html with a style sheet to be human readable.
-			Start("table","width","100%","border","1");
-			Start("thead");
-			Start("tr");
-			_w.WriteElementString("th","Substance");
-			_w.WriteElementString("th","Reaction");
-			_w.WriteElementString("th","Allergy Type");
-			_w.WriteElementString("th","Status");
-			End("tr");
-			End("thead");
-			Start("tbody");
-			for(int i=0;i<listAllergiesFiltered.Count;i++) {
-				Allergy allergy=listAllergiesFiltered[i];
-				allergyDef=AllergyDefs.GetOne(allergy.AllergyDefNum);
+			if(listAllergiesFiltered.Count>0 && hasAllergy) {
+				Start("table","width","100%","border","1");
+				Start("thead");
 				Start("tr");
-				//if(allergyDef.SnomedAllergyTo!="") {//Is Snomed allergy.
-				//	Snomed snomedAllergyTo=Snomeds.GetByCode(allergyDef.SnomedAllergyTo);
-				//	_w.WriteElementString("td",snomedAllergyTo.SnomedCode+" - "+snomedAllergyTo.Description);
-				//}
-				//else {//Medication allergy
+				_w.WriteElementString("th","Substance");
+				_w.WriteElementString("th","Reaction");
+				_w.WriteElementString("th","Allergy Type");
+				_w.WriteElementString("th","Status");
+				End("tr");
+				End("thead");
+				Start("tbody");
+				for(int i=0;i<listAllergiesFiltered.Count;i++) {
+					Allergy allergy=listAllergiesFiltered[i];
+					allergyDef=AllergyDefs.GetOne(allergy.AllergyDefNum);
+					Start("tr");
+					//if(allergyDef.SnomedAllergyTo!="") {//Is Snomed allergy.
+					//	Snomed snomedAllergyTo=Snomeds.GetByCode(allergyDef.SnomedAllergyTo);
+					//	_w.WriteElementString("td",snomedAllergyTo.SnomedCode+" - "+snomedAllergyTo.Description);
+					//}
+					//else {//Medication allergy
 					Medication med=Medications.GetMedication(allergyDef.MedicationNum);
 					_w.WriteElementString("td",med.RxCui.ToString()+" - "+med.MedName);
-				//}
-				_w.WriteElementString("td",allergy.Reaction);
-				_w.WriteElementString("td",AllergyDefs.GetSnomedAllergyDesc(allergyDef.SnomedType));
-				_w.WriteElementString("td",allergy.StatusIsActive?"Active":"Inactive");
-				End("tr");
+					//}
+					_w.WriteElementString("td",allergy.Reaction);
+					_w.WriteElementString("td",AllergyDefs.GetSnomedAllergyDesc(allergyDef.SnomedType));
+					_w.WriteElementString("td",allergy.StatusIsActive?"Active":"Inactive");
+					End("tr");
+				}
+				End("tbody");
+				End("table");
 			}
-			End("tbody");
-			End("table");
+			else {
+				_w.WriteString("None");
+			}
 			End("text");
+			if(listAllergiesFiltered.Count==0) {//If there are no entries in the filtered list, then we want to add a dummy entry since at least one is required.
+				Allergy al=new Allergy();
+				listAllergiesFiltered.Add(al);
+			}
 			for(int i=0;i<listAllergiesFiltered.Count;i++) {
 				Allergy allergy=listAllergiesFiltered[i];
-				allergyDef=AllergyDefs.GetOne(allergy.AllergyDefNum);
+				if(allergy.PatNum==0) {
+					allergyDef=new AllergyDef();
+				}
+				else {
+					allergyDef=AllergyDefs.GetOne(allergy.AllergyDefNum);
+				}
 				string allergyType="";
 				string allergyTypeName="";
 				#region Allergy Type
@@ -487,7 +504,11 @@ Allergies
 					StartAndEnd("statusCode","code","completed");
 				}
 				Start("effectiveTime");
-				if(allergy.StatusIsActive) {
+				if(allergy.DateTStamp.Year<1880) {
+					StartAndEnd("low","nullFlavor","UNK");
+					StartAndEnd("high","nullFlavor","UNK");
+				}
+				else if(allergy.StatusIsActive) {
 					StartAndEnd("low","value",allergy.DateTStamp.ToString("yyyyMMdd"));
 					StartAndEnd("high","nullFlavor","UNK");
 				}
@@ -506,7 +527,12 @@ Allergies
 				StartAndEnd("effectiveTime","nullFlavor","UNK");//We have no field to store the date the allergy became active. DateTStamp is not the same as the active date.
 				Start("value");
 				_w.WriteAttributeString("xsi","type",null,"CD");
-				Attribs("code",allergyType,"displayName",allergyTypeName,"codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed);
+				if(allergyDef.SnomedType==SnomedAllergy.None) {
+					Attribs("nullFlavor","UNK");
+				}
+				else {
+					Attribs("code",allergyType,"displayName",allergyTypeName,"codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed);
+				}
 				End("value");
 				Start("participant","typeCode","CSM");
 				Start("participantRole","classCode","MANU");
@@ -522,8 +548,14 @@ Allergies
 				//}
 				//else {//Medication allergy
 				//TODO: We must handle allergies to classes of medications as well as food/substance allergies in the near future.
+				if(allergyDef.MedicationNum==0) {
+					StartAndEnd("code","nullFlavor","UNK");
+				}
+				else {
 					Medication med=Medications.GetMedication(allergyDef.MedicationNum);
 					StartAndEnd("code","code",med.RxCui.ToString(),"displayName",med.MedName,"codeSystem",strCodeSystemRxNorm,"codeSystemName",strCodeSystemNameRxNorm);
+				}
+
 				//}
 				End("playingEntity");
 				End("participantRole");
@@ -535,7 +567,13 @@ Allergies
 				StartAndEnd("code","code","33999-4","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Status");
 				StartAndEnd("statusCode","code","completed");//fixed value (required)
 				string status=allergy.StatusIsActive?"Active":"Inactive";
-				if(status=="Active") {
+				if(allergy.AllergyNum==0) {
+					Start("value");
+					_w.WriteAttributeString("xsi","type",null,"CE");
+					Attribs("nullFlavor","UNK");
+					End("value");
+				}
+				else if(status=="Active") {
 					Start("value");
 					_w.WriteAttributeString("xsi","type",null,"CE");
 					Attribs("code","55561003","codeSystem",strCodeSystemSnomed,"displayName",status);
@@ -549,29 +587,38 @@ Allergies
 				}
 				End("observation");
 				End("entryRelationship");
-				if(allergy.SnomedReaction!="") {//Blank codes are invalid
-					Start("entryRelationship","typeCode","SUBJ");
-					Start("observation","classCode","OBS","moodCode","EVN");
-					_w.WriteComment("Reaction Observation template");
-					TemplateId("2.16.840.1.113883.10.20.22.4.9");
-					Id();
-					StartAndEnd("code","nullFlavor","NA");//Unknown why this is null, but can't find a good example of this
-					StartAndEnd("statusCode","code","completed");//fixed value (required)
-					Start("effectiveTime");
-					if(allergy.StatusIsActive) {
-						StartAndEnd("low","value",allergy.DateTStamp.ToString("yyyyMMdd"));
-					}
-					else {
-						StartAndEnd("low","nullFlavor","UNK");
-					}
-					End("effectiveTime");
+				Start("entryRelationship","typeCode","SUBJ","inversionInd","true");
+				Start("observation","classCode","OBS","moodCode","EVN");
+				_w.WriteComment("Reaction Observation template");
+				TemplateId("2.16.840.1.113883.10.20.22.4.9");
+				Id();
+				StartAndEnd("code","nullFlavor","NA");//Unknown why this is null, but can't find a good example of this
+				StartAndEnd("statusCode","code","completed");//fixed value (required)
+				Start("effectiveTime");
+				if(allergy.DateTStamp.Year<1880) {
+					StartAndEnd("low","nullFlavor","UNK");
+				}
+				else if(allergy.StatusIsActive) {
+					StartAndEnd("low","value",allergy.DateTStamp.ToString("yyyyMMdd"));
+				}
+				else {
+					StartAndEnd("low","nullFlavor","UNK");
+				}
+				End("effectiveTime");
+				if(allergy.SnomedReaction==null || allergy.SnomedReaction=="") {
+					Start("value");
+					_w.WriteAttributeString("xsi","type",null,"CD");
+					Attribs("nullFlavor","UNK");
+					End("value");
+				}
+				else {
 					Start("value");
 					_w.WriteAttributeString("xsi","type",null,"CD");
 					Attribs("code",allergy.SnomedReaction,"codeSystem",strCodeSystemSnomed,"displayName",allergy.Reaction);
 					End("value");
-					End("observation");
-					End("entryRelationship");
-				}//end snomed reaction
+				}
+				End("observation");
+				End("entryRelationship");
 				End("observation");
 				End("entryRelationship");
 				End("act");
@@ -582,7 +629,7 @@ Allergies
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdSectionEncounters() {
+		private static void GenerateCcdSectionEncounters(bool hasEncounter) {
 			_w.WriteComment(@"
 =====================================================================================================
 Encounters
@@ -590,57 +637,58 @@ Encounters
 			List<Encounter> listEncountersAll=Encounters.Refresh(_patOutCcd.PatNum);
 			List<Encounter> listEncountersFiltered=new List<Encounter>();
 			for(int i=0;i<listEncountersAll.Count;i++) {
-				if(listEncountersAll[i].DateEncounter.Year<1880) {
-					continue;//A valid date must be entered
+				if(!hasEncounter) {
+					continue;
 				}
 				if(listEncountersAll[i].CodeSystem!="SNOMEDCT") {
 					continue;//The format only allows SNOMED codes and ICD10 codes. We do not have a way to enter ICD10 codes, and SNOMED appears to be the preferred code system anyway.
-				}
-				if(listEncountersAll[i].CodeValue=="") {
-					continue;//This code is required, so we must skip any encounters missing a code.
 				}
 				listEncountersFiltered.Add(listEncountersAll[i]);
 			}
 			Start("component");
 			Start("section");
-			if(listEncountersFiltered.Count==0) {
-				TemplateId("2.16.840.1.113883.10.20.22.2.22");//Encounters section with coded entries optional.
-			}
-			else {
-				TemplateId("2.16.840.1.113883.10.20.22.2.22.1");//Encounters section with coded entries required.
-			}
+			TemplateId("2.16.840.1.113883.10.20.22.2.22.1");//Encounters section with coded entries required.
 			_w.WriteComment("Encounters section template");//(Page 227)
 			StartAndEnd("code","code","46240-8","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","History of encounters");
 			_w.WriteElementString("title","Encounters");
 			Start("text");//The following text will be parsed as html with a style sheet to be human readable.
-			Start("table","width","100%","border","1");
-			Start("thead");
-			Start("tr");
-			_w.WriteElementString("th","Performer");
-			_w.WriteElementString("th","Observation");
-			_w.WriteElementString("th","Date");
-			_w.WriteElementString("th","Notes");
-			End("tr");
-			End("thead");
-			Start("tbody");
-			Start("tr");
-			for(int i=0;i<listEncountersFiltered.Count;i++) {
-				if(i>0) {
-					Start("tr");
+			if(listEncountersFiltered.Count>0 && hasEncounter) {
+				Start("table","width","100%","border","1");
+				Start("thead");
+				Start("tr");
+				_w.WriteElementString("th","Performer");
+				_w.WriteElementString("th","Observation");
+				_w.WriteElementString("th","Date");
+				_w.WriteElementString("th","Notes");
+				End("tr");
+				End("thead");
+				Start("tbody");
+				Start("tr");
+				for(int i=0;i<listEncountersFiltered.Count;i++) {
+					if(i>0) {
+						Start("tr");
+					}
+					_w.WriteElementString("td",Providers.GetProv(listEncountersFiltered[i].ProvNum).GetFormalName());
+					Snomed snomedDiagnosis=Snomeds.GetByCode(listEncountersFiltered[i].CodeValue);
+					_w.WriteElementString("td",snomedDiagnosis.SnomedCode+" - "+snomedDiagnosis.Description);
+					DateText("td",listEncountersFiltered[i].DateEncounter);
+					_w.WriteElementString("td",listEncountersFiltered[i].Note);
+					if(i>0) {
+						End("tr");
+					}
 				}
-				_w.WriteElementString("td",Providers.GetProv(listEncountersFiltered[i].ProvNum).GetFormalName());
-				Snomed snomedDiagnosis=Snomeds.GetByCode(listEncountersFiltered[i].CodeValue);
-				_w.WriteElementString("td",snomedDiagnosis.SnomedCode+" - "+snomedDiagnosis.Description);
-			  DateText("td",listEncountersFiltered[i].DateEncounter);
-				_w.WriteElementString("td",listEncountersFiltered[i].Note);
-				if(i>0) {
-					End("tr");
-				}
+				End("tr");
+				End("tbody");
+				End("table");
 			}
-			End("tr");
-			End("tbody");
-			End("table");
+			else {
+				_w.WriteString("None");
+			}
 			End("text");
+			if(listEncountersFiltered.Count==0) {//If there are no entries in the filtered list, then we want to add a dummy entry since at least one is required.
+				Encounter enc=new Encounter();
+				listEncountersFiltered.Add(enc);
+			}
 			for(int i=0;i<listEncountersFiltered.Count;i++) {
 				Start("entry","typeCode","DRIV");
 				Start("encounter","classCode","ENC","moodCode","EVN");
@@ -648,19 +696,35 @@ Encounters
 				_w.WriteComment("Encounter Activity Template");//(Page 358)
 				Guid();
 				StartAndEnd("code","code","99212","displayName","Outpatient Visit","codeSystemName","CPT-4");//CPT-4 is required. Valid codes are 99201 through 99607.
-				StartAndEnd("effectiveTime","value",listEncountersFiltered[i].DateEncounter.ToString("yyyyMMdd"));
+				if(listEncountersFiltered[i].DateEncounter.Year<1880) {
+					StartAndEnd("effectiveTime","nullFlavor","UNK");
+				}
+				else {
+					StartAndEnd("effectiveTime","value",listEncountersFiltered[i].DateEncounter.ToString("yyyyMMdd"));
+				}
 				Start("performer");
 				Start("assignedEntity");
 				Guid();
 				_w.WriteComment("Performer Information");
-				Provider prov=Providers.GetProv(listEncountersFiltered[i].ProvNum);
-				StartAndEnd("code","code",GetTaxonomy(prov),"codeSystem",strCodeSystemNucc,"codeSystemName",strCodeSystemNameNucc);
+				Provider prov=null;
+				if(listEncountersFiltered[i].ProvNum==0) {
+					StartAndEnd("code","nullFlavor","UNK");
+				}
+				else {
+					prov=Providers.GetProv(listEncountersFiltered[i].ProvNum);
+					StartAndEnd("code","code",GetTaxonomy(prov),"codeSystem",strCodeSystemNucc,"codeSystemName",strCodeSystemNameNucc);
+				}
 				//The assignedPerson element might not be allowed here. If that is the case, then performer is useless, because it would only contain the specialty code. Our HTML output shows the prov name.
 				Start("assignedPerson");
-				Start("name");
-				_w.WriteElementString("given",prov.FName);
-				_w.WriteElementString("family",prov.LName);
-				End("name");
+				if(listEncountersFiltered[i].ProvNum==0) {
+					StartAndEnd("name","nullFlavor","UNK");
+				}
+				else {
+					Start("name");
+					_w.WriteElementString("given",prov.FName);
+					_w.WriteElementString("family",prov.LName);
+					End("name");
+				}
 				End("assignedPerson");
 				End("assignedEntity");
 				End("performer");
@@ -677,7 +741,12 @@ Encounters
 				End("code");
 				StartAndEnd("statusCode","code","completed");
 				Start("effectiveTime");
-				DateElement("low",listEncountersFiltered[i].DateEncounter);
+				if(listEncountersFiltered[i].DateEncounter.Year<1880) {
+					StartAndEnd("low","nullFlavor","UNK");
+				}
+				else {
+					DateElement("low",listEncountersFiltered[i].DateEncounter);
+				}
 				End("effectiveTime");
 				Start("entryRelationship","typeCode","SUBJ","inversionInd",isInversion?"true":"false");
 				Start("observation","classCode","OBS","moodCode","EVN","negationInd",isInversion?"true":"false");
@@ -687,17 +756,30 @@ Encounters
 				StartAndEnd("code","code","409586006","codeSystem",strCodeSystemSnomed,"displayName","Complaint");
 				StartAndEnd("statusCode","code","completed");
 				Start("effectiveTime");
-				DateElement("low",listEncountersFiltered[i].DateEncounter);
+				if(listEncountersFiltered[i].DateEncounter.Year<1880) {
+					StartAndEnd("low","nullFlavor","UNK");
+				}
+				else {
+					DateElement("low",listEncountersFiltered[i].DateEncounter);
+				}
 				//"If the problem is known to be resolved, but the date of resolution is not known, 
 				//then the high element SHALL be present, and the nullFlavor attribute SHALL be set to 'UNK'.
 				//Therefore, the existence of an high element within a problem does indicate that the problem has been resolved."
 				End("effectiveTime");
-				Start("value");
-				_w.WriteAttributeString("xsi","type",null,"CD");
-				//The format only allows SNOMED and ICD10 code systems. If we support ICD10 in the future, then the value must be specified in a special manner. SNOMED appears to be preferred. See the guide for details.
-				Snomed snomedDiagnosis=Snomeds.GetByCode(listEncountersFiltered[i].CodeValue);
-				Attribs("code",snomedDiagnosis.SnomedCode,"codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed,"displayName",snomedDiagnosis.Description);
-				End("value");
+				if(listEncountersFiltered[i].CodeValue==null || listEncountersFiltered[i].CodeValue=="") {
+					Start("value");
+					_w.WriteAttributeString("xsi","type",null,"CD");
+					Attribs("nullFlavor","UNK");
+					End("value");
+				}
+				else {
+					Start("value");
+					_w.WriteAttributeString("xsi","type",null,"CD");
+					//The format only allows SNOMED and ICD10 code systems. If we support ICD10 in the future, then the value must be specified in a special manner. SNOMED appears to be preferred. See the guide for details.
+					Snomed snomedDiagnosis=Snomeds.GetByCode(listEncountersFiltered[i].CodeValue);
+					Attribs("code",snomedDiagnosis.SnomedCode,"codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed,"displayName",snomedDiagnosis.Description);
+					End("value");
+				}
 				End("observation");
 				End("entryRelationship");
 				End("act");
@@ -710,7 +792,7 @@ Encounters
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdSectionFunctionalStatus() {
+		private static void GenerateCcdSectionFunctionalStatus(bool hasFunctionalStatus) {
 			string snomedProblemType="55607006";
 			_w.WriteComment(@"
 =====================================================================================================
@@ -719,14 +801,14 @@ Functional and Cognitive Status
 			List<Disease> listProblemsAll=Diseases.Refresh(_patOutCcd.PatNum);
 			List<Disease> listProblemsFiltered=new List<Disease>();
 			for(int i=0;i<listProblemsAll.Count;i++) {
+				if(!hasFunctionalStatus) {
+					continue;
+				}
 				if(listProblemsAll[i].SnomedProblemType!="" && listProblemsAll[i].SnomedProblemType!=snomedProblemType) {
 					continue;//Not a "problem".
 				}
 				if(listProblemsAll[i].FunctionStatus==FunctionalStatus.Problem) {
 					continue;//Is a standard problem, not a cognitive or functional problem.
-				}
-				if(listProblemsAll[i].DateStart.Year<1880) {
-					continue;
 				}
 				listProblemsFiltered.Add(listProblemsAll[i]);
 			}
@@ -737,40 +819,58 @@ Functional and Cognitive Status
 			StartAndEnd("code","code","47420-5","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Functional Status");
 			_w.WriteElementString("title","Functional Status");
 			Start("text");//The following text will be parsed as html with a style sheet to be human readable.
-			Start("table","width","100%","border","1");
-			Start("thead");
-			Start("tr");
-			_w.WriteElementString("th","Condition");
-			_w.WriteElementString("th","Effective Dates");
-			_w.WriteElementString("th","Condition Status");
-			End("tr");
-			End("thead");
-			Start("tbody");
-			for(int i=0;i<listProblemsFiltered.Count;i++) {
-				DiseaseDef diseaseDef=DiseaseDefs.GetItem(listProblemsFiltered[i].DiseaseDefNum);
-				Snomed snomedProblem=Snomeds.GetByCode(diseaseDef.SnomedCode);
+			if(listProblemsFiltered.Count>0 && hasFunctionalStatus) {
+				Start("table","width","100%","border","1");
+				Start("thead");
 				Start("tr");
-				_w.WriteElementString("td",snomedProblem.SnomedCode+" - "+snomedProblem.Description);
-				if(listProblemsFiltered[i].FunctionStatus==FunctionalStatus.FunctionalResult || listProblemsFiltered[i].FunctionStatus==FunctionalStatus.CognitiveResult) {
-					DateText("td",listProblemsFiltered[i].DateStart);
-				}
-				else {//functional problem and cognitive problem
-					if(listProblemsFiltered[i].DateStop.Year>1880) {
-						_w.WriteElementString("td",listProblemsFiltered[i].DateStart.ToString("yyyyMMdd")+" to "+listProblemsFiltered[i].DateStop.ToString("yyyyMMdd"));
-					}
-					else {
+				_w.WriteElementString("th","Condition");
+				_w.WriteElementString("th","Effective Dates");
+				_w.WriteElementString("th","Condition Status");
+				End("tr");
+				End("thead");
+				Start("tbody");
+				for(int i=0;i<listProblemsFiltered.Count;i++) {
+					DiseaseDef diseaseDef=DiseaseDefs.GetItem(listProblemsFiltered[i].DiseaseDefNum);
+					Snomed snomedProblem=Snomeds.GetByCode(diseaseDef.SnomedCode);
+					Start("tr");
+					_w.WriteElementString("td",snomedProblem.SnomedCode+" - "+snomedProblem.Description);
+					if(listProblemsFiltered[i].FunctionStatus==FunctionalStatus.FunctionalResult || listProblemsFiltered[i].FunctionStatus==FunctionalStatus.CognitiveResult) {
 						DateText("td",listProblemsFiltered[i].DateStart);
 					}
+					else {//functional problem and cognitive problem
+						if(listProblemsFiltered[i].DateStop.Year>1880) {
+							_w.WriteElementString("td",listProblemsFiltered[i].DateStart.ToString("yyyyMMdd")+" to "+listProblemsFiltered[i].DateStop.ToString("yyyyMMdd"));
+						}
+						else {
+							DateText("td",listProblemsFiltered[i].DateStart);
+						}
+					}
+					_w.WriteElementString("td","Completed");
+					End("tr");
 				}
-				_w.WriteElementString("td","Completed");
-				End("tr");
+				End("tbody");
+				End("table");
 			}
-			End("tbody");
-			End("table");
+			else {
+				_w.WriteString("None");
+			}
 			End("text");
+			if(listProblemsFiltered.Count==0) {//If there are no entries in the filtered list, then we want to add a dummy entry since at least one is required.
+				Disease dis=new Disease();
+				dis.FunctionStatus=FunctionalStatus.FunctionalProblem;//Just needs a version other than problem.
+				listProblemsFiltered.Add(dis);
+			}
 			for(int i=0;i<listProblemsFiltered.Count;i++) {
-				DiseaseDef diseaseDef=DiseaseDefs.GetItem(listProblemsFiltered[i].DiseaseDefNum);
-				Snomed snomedProblem=Snomeds.GetByCode(diseaseDef.SnomedCode);
+				DiseaseDef diseaseDef;
+				Snomed snomedProblem;
+				if(listProblemsFiltered[i].PatNum==0) {
+					diseaseDef=new DiseaseDef();
+					snomedProblem=new Snomed();
+				}
+				else {
+					diseaseDef=DiseaseDefs.GetItem(listProblemsFiltered[i].DiseaseDefNum);
+					snomedProblem=Snomeds.GetByCode(diseaseDef.SnomedCode);
+				}
 				Start("entry","typeCode","DRIV");
 				Start("observation","classCode","OBS","moodCode","EVN");
 				if(listProblemsFiltered[i].FunctionStatus==FunctionalStatus.FunctionalResult) {
@@ -779,11 +879,24 @@ Functional and Cognitive Status
 					Guid();
 					StartAndEnd("code","code","54744-8","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc);
 					StartAndEnd("statusCode","code","completed");
-					DateElement("effectiveTime",listProblemsFiltered[i].DateStart);
-					Start("value");
-					_w.WriteAttributeString("xsi","type",null,"CD");
-					Attribs("code",snomedProblem.SnomedCode,"displayName",snomedProblem.Description,"codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed);
-					End("value");
+					if(listProblemsFiltered[i].DateStart.Year<1880) {
+						StartAndEnd("effectiveTime","nullFlavor","UNK");
+					}
+					else {
+						DateElement("effectiveTime",listProblemsFiltered[i].DateStart);
+					}
+					if(snomedProblem.SnomedCode==null || snomedProblem.SnomedCode=="") {
+						Start("value");
+						_w.WriteAttributeString("xsi","type",null,"CD");
+						Attribs("nullFlavor","UNK");
+						End("value");
+					}
+					else {
+						Start("value");
+						_w.WriteAttributeString("xsi","type",null,"CD");
+						Attribs("code",snomedProblem.SnomedCode,"displayName",snomedProblem.Description,"codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed);
+						End("value");
+					}
 				}
 				else if(listProblemsFiltered[i].FunctionStatus==FunctionalStatus.CognitiveResult) {
 					TemplateId("2.16.840.1.113883.10.20.22.4.74");//(Page 342)
@@ -791,11 +904,24 @@ Functional and Cognitive Status
 					Guid();
 					StartAndEnd("code","code","5249-2","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc);
 					StartAndEnd("statusCode","code","completed");
-					DateElement("effectiveTime",listProblemsFiltered[i].DateStart);
-					Start("value");
-					_w.WriteAttributeString("xsi","type",null,"CD");
-					Attribs("code",snomedProblem.SnomedCode,"displayName",snomedProblem.Description,"codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed);
-					End("value");
+					if(listProblemsFiltered[i].DateStart.Year<1880) {
+						StartAndEnd("effectiveTime","nullFlavor","UNK");
+					}
+					else {
+						DateElement("effectiveTime",listProblemsFiltered[i].DateStart);
+					}
+					if(snomedProblem.SnomedCode==null || snomedProblem.SnomedCode=="") {
+						Start("value");
+						_w.WriteAttributeString("xsi","type",null,"CD");
+						Attribs("nullFlavor","UNK");
+						End("value");
+					}
+					else {
+						Start("value");
+						_w.WriteAttributeString("xsi","type",null,"CD");
+						Attribs("code",snomedProblem.SnomedCode,"displayName",snomedProblem.Description,"codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed);
+						End("value");
+					}
 				}
 				else if(listProblemsFiltered[i].FunctionStatus==FunctionalStatus.FunctionalProblem) {
 					TemplateId("2.16.840.1.113883.10.20.22.4.68");//(Page 379)
@@ -804,17 +930,33 @@ Functional and Cognitive Status
 					StartAndEnd("code","code","404684003","codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed,"displayName","Finding of Functional Performance and Activity");
 					StartAndEnd("statusCode","code","completed");
 					Start("effectiveTime");
-					DateElement("low",listProblemsFiltered[i].DateStart);
+					if(listProblemsFiltered[i].DateStart.Year<1880) {
+						StartAndEnd("low","nullFlavor","UNK");
+					}
+					else {
+						DateElement("low",listProblemsFiltered[i].DateStart);
+					}
 					//"If the problem is known to be resolved, but the date of resolution is not known, then the high element SHALL be present, and 
 					//the nullFlavor attribute SHALL be set to 'UNK'. Therefore, the existence of an high element within a problem does indicate that the problem has been resolved."
-					if(listProblemsFiltered[i].DateStop.Year>1880) {
+					if(listProblemsFiltered[i].DateStop.Year<1880) {
+						StartAndEnd("high","nullFlavor","UNK");
+					}
+					else {
 						DateElement("high",listProblemsFiltered[i].DateStop);
 					}
 					End("effectiveTime");
-					Start("value");
-					_w.WriteAttributeString("xsi","type",null,"CD");
-					Attribs("code",snomedProblem.SnomedCode,"displayName",snomedProblem.Description,"codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed);
-					End("value");
+					if(snomedProblem.SnomedCode==null || snomedProblem.SnomedCode=="") {
+						Start("value");
+						_w.WriteAttributeString("xsi","type",null,"CD");
+						Attribs("nullFlavor","UNK");
+						End("value");
+					}
+					else {
+						Start("value");
+						_w.WriteAttributeString("xsi","type",null,"CD");
+						Attribs("code",snomedProblem.SnomedCode,"displayName",snomedProblem.Description,"codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed);
+						End("value");
+					}
 				}
 				else if(listProblemsFiltered[i].FunctionStatus==FunctionalStatus.CognitiveProblem) {
 					TemplateId("2.16.840.1.113883.10.20.22.4.73");//(Page 336)
@@ -825,15 +967,31 @@ Functional and Cognitive Status
 					//"If the problem is known to be resolved, but the date of resolution is not known, then the high element SHALL be present, and 
 					//the nullFlavor attribute SHALL be set to 'UNK'. Therefore, the existence of a high element within a problem does indicate that the problem has been resolved."
 					Start("effectiveTime");
-					DateElement("low",listProblemsFiltered[i].DateStart);
-					if(listProblemsFiltered[i].DateStop.Year>1880) {
+					if(listProblemsFiltered[i].DateStart.Year<1880) {
+						StartAndEnd("low","nullFlavor","UNK");
+					}
+					else {
+						DateElement("low",listProblemsFiltered[i].DateStart);
+					}
+					if(listProblemsFiltered[i].DateStop.Year<1880) {
+						StartAndEnd("high","nullFlavor","UNK");
+					}
+					else {
 						DateElement("high",listProblemsFiltered[i].DateStop);
 					}
 					End("effectiveTime");
-					Start("value");
-					_w.WriteAttributeString("xsi","type",null,"CD");
-					Attribs("code",snomedProblem.SnomedCode,"displayName",snomedProblem.Description,"codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed);
-					End("value");
+					if(snomedProblem.SnomedCode==null || snomedProblem.SnomedCode=="") {
+						Start("value");
+						_w.WriteAttributeString("xsi","type",null,"CD");
+						Attribs("nullFlavor","UNK");
+						End("value");
+					}
+					else {
+						Start("value");
+						_w.WriteAttributeString("xsi","type",null,"CD");
+						Attribs("code",snomedProblem.SnomedCode,"displayName",snomedProblem.Description,"codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed);
+						End("value");
+					}
 				}
 				End("observation");
 				End("entry");
@@ -843,7 +1001,7 @@ Functional and Cognitive Status
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdSectionImmunizations() {
+		private static void GenerateCcdSectionImmunizations(bool hasImmunization) {
 			_w.WriteComment(@"
 =====================================================================================================
 Immunizations
@@ -851,47 +1009,56 @@ Immunizations
 			List<VaccinePat> listVaccinePatsAll=VaccinePats.Refresh(_patOutCcd.PatNum);
 			List<VaccinePat> listVaccinePatsFiltered=new List<VaccinePat>();
 			for(int i=0;i<listVaccinePatsAll.Count;i++) {
-				VaccineDef vaccineDef=VaccineDefs.GetOne(listVaccinePatsAll[i].VaccineDefNum);
-				if(!Cvxs.CodeExists(vaccineDef.CVXCode)) {
-					continue;//This code is required, so we must skip any vaccines missing a CVX.
+				if(!hasImmunization) {
+					continue;
 				}
 				listVaccinePatsFiltered.Add(listVaccinePatsAll[i]);
 			}
 			Start("component");
 			Start("section");
-			if(listVaccinePatsFiltered.Count==0) {
-				TemplateId("2.16.840.1.113883.10.20.22.2.2");//Immunizations section with coded entries optional.
-			}
-			else {
-				TemplateId("2.16.840.1.113883.10.20.22.2.2.1");//Immunizations section with coded entries required.
-			}
+			TemplateId("2.16.840.1.113883.10.20.22.2.2.1");//Immunizations section with coded entries required.
 			_w.WriteComment("Immunizations section template");
 			StartAndEnd("code","code","11369-6","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","History of immunizations");
 			_w.WriteElementString("title","Immunizations");
 			Start("text");//The following text will be parsed as html with a style sheet to be human readable.
-			Start("table","width","100%","border","1");
-			Start("thead");
-			Start("tr");
-			_w.WriteElementString("th","Vaccine");
-			_w.WriteElementString("th","Date");
-			_w.WriteElementString("th","Status");
-			End("tr");
-			End("thead");
-			Start("tbody");
-			for(int i=0;i<listVaccinePatsFiltered.Count;i++) {
-				VaccineDef vaccineDef=VaccineDefs.GetOne(listVaccinePatsFiltered[i].VaccineDefNum);
+			if(listVaccinePatsFiltered.Count>0 && hasImmunization) {
+				Start("table","width","100%","border","1");
+				Start("thead");
 				Start("tr");
-				Cvx cvx=Cvxs.GetOneFromDb(vaccineDef.CVXCode);
-				_w.WriteElementString("td",cvx.CvxCode+" - "+cvx.Description);
-				DateText("td",listVaccinePatsFiltered[i].DateTimeStart);
-				_w.WriteElementString("td","Completed");
+				_w.WriteElementString("th","Vaccine");
+				_w.WriteElementString("th","Date");
+				_w.WriteElementString("th","Status");
 				End("tr");
+				End("thead");
+				Start("tbody");
+				for(int i=0;i<listVaccinePatsFiltered.Count;i++) {
+					VaccineDef vaccineDef=VaccineDefs.GetOne(listVaccinePatsFiltered[i].VaccineDefNum);
+					Start("tr");
+					Cvx cvx=Cvxs.GetOneFromDb(vaccineDef.CVXCode);
+					_w.WriteElementString("td",cvx.CvxCode+" - "+cvx.Description);
+					DateText("td",listVaccinePatsFiltered[i].DateTimeStart);
+					_w.WriteElementString("td","Completed");
+					End("tr");
+				}
+				End("tbody");
+				End("table");
 			}
-			End("tbody");
-			End("table");
+			else {
+				_w.WriteString("None");
+			}
 			End("text");
+			if(listVaccinePatsFiltered.Count==0) {//If there are no entries in the filtered list, then we want to add a dummy entry since at least one is required.
+				VaccinePat vacPat=new VaccinePat();
+				listVaccinePatsFiltered.Add(vacPat);
+			}
 			for(int i=0;i<listVaccinePatsFiltered.Count;i++) {
-				VaccineDef vaccineDef=VaccineDefs.GetOne(listVaccinePatsFiltered[i].VaccineDefNum);
+				VaccineDef vaccineDef;
+				if(listVaccinePatsFiltered[i].VaccinePatNum==0) {
+					vaccineDef=new VaccineDef();
+				}
+				else {
+					vaccineDef=VaccineDefs.GetOne(listVaccinePatsFiltered[i].VaccineDefNum);
+				}
 				Start("entry","typeCode","DRIV");
 				Start("substanceAdministration","classCode","SBADM","moodCode","EVN","negationInd",listVaccinePatsFiltered[i].NotGiven?"true":"false");
 				TemplateId("2.16.840.1.113883.10.20.22.4.52");
@@ -900,15 +1067,25 @@ Immunizations
 				StartAndEnd("statusCode","code","completed");
 				Start("effectiveTime");
 				_w.WriteAttributeString("xsi","type",null,"IVL_TS");
-				Attribs("value",listVaccinePatsFiltered[i].DateTimeStart.ToString("yyyyMMdd"));
+				if(listVaccinePatsFiltered[i].DateTimeStart.Year<1880) {
+					Attribs("nullFlavor","UNK");
+				}
+				else {
+					Attribs("value",listVaccinePatsFiltered[i].DateTimeStart.ToString("yyyyMMdd"));
+				}
 				End("effectiveTime");
 				Start("consumable");
 				Start("manufacturedProduct","classCode","MANU");
 				TemplateId("2.16.840.1.113883.10.20.22.4.54");
 				_w.WriteComment("Immunization Medication Information");
 				Start("manufacturedMaterial");
-				Cvx cvx=Cvxs.GetOneFromDb(vaccineDef.CVXCode);
-				StartAndEnd("code","code",cvx.CvxCode,"codeSystem",strCodeSystemCvx,"displayName",cvx.Description,"codeSystemName",strCodeSystemNameCvx);
+				if(vaccineDef.CVXCode==null || vaccineDef.CVXCode=="") {
+					StartAndEnd("code","nullFlavor","UNK");
+				}
+				else {
+					Cvx cvx=Cvxs.GetOneFromDb(vaccineDef.CVXCode);
+					StartAndEnd("code","code",cvx.CvxCode,"codeSystem",strCodeSystemCvx,"displayName",cvx.Description,"codeSystemName",strCodeSystemNameCvx);
+				}
 				End("manufacturedMaterial");
 				End("manufacturedProduct");
 				End("consumable");
@@ -921,7 +1098,7 @@ Immunizations
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdSectionMedications() {
+		private static void GenerateCcdSectionMedications(bool hasMedication) {
 			_w.WriteComment(@"
 =====================================================================================================
 Medications
@@ -929,59 +1106,63 @@ Medications
 			List<MedicationPat> listMedPatsAll=MedicationPats.Refresh(_patOutCcd.PatNum,true);
 			List<MedicationPat> listMedPatsFiltered=new List<MedicationPat>();
 			for(int i=0;i<listMedPatsAll.Count;i++) {
-				if(listMedPatsAll[i].RxCui==0) {
+				if(!hasMedication) {
 					continue;
-				}
-				if(listMedPatsAll[i].DateStart.Year<1880 && listMedPatsAll[i].DateStop.Year<1880) {
-					continue;//We cannot export these, because the format requires at least one of these dates.
 				}
 				listMedPatsFiltered.Add(listMedPatsAll[i]);
 			}
 			Start("component");
 			Start("section");
-			if(listMedPatsFiltered.Count==0) {
-				TemplateId("2.16.840.1.113883.10.20.22.2.1");//Medication section with coded entries optional.
-			}
-			else {
-				TemplateId("2.16.840.1.113883.10.20.22.2.1.1");//Medication section with coded entries required.
-			}
+			TemplateId("2.16.840.1.113883.10.20.22.2.1.1");//Medication section with coded entries required.
 			_w.WriteComment("Medications section template");
 			StartAndEnd("code","code","10160-0","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","History of medication use");
 			_w.WriteElementString("title","Medications");
 			Start("text");//The following text will be parsed as html with a style sheet to be human readable.
-			Start("table","width","100%","border","1");
-			Start("thead");
-			Start("tr");
-			_w.WriteElementString("th","Medication");
-			_w.WriteElementString("th","Directions");
-			_w.WriteElementString("th","Start Date");
-			_w.WriteElementString("th","End Date");
-			_w.WriteElementString("th","Status");
-			_w.WriteElementString("th","Indications");
-			_w.WriteElementString("th","Fill Instructions");
-			End("tr");
-			End("thead");
-			Start("tbody");
-			for(int i=0;i<listMedPatsFiltered.Count;i++) {
-				string strMedName=listMedPatsFiltered[i].MedDescript;
-				if(listMedPatsFiltered[i].MedicationNum!=0) {
-					strMedName=Medications.GetNameOnly(listMedPatsFiltered[i].MedicationNum);
-				}
+			if(listMedPatsFiltered.Count>0 && hasMedication) {
+				Start("table","width","100%","border","1");
+				Start("thead");
 				Start("tr");
-				_w.WriteElementString("td",listMedPatsFiltered[i].RxCui+" - "+strMedName);//Medication
-				_w.WriteElementString("td",listMedPatsFiltered[i].PatNote);//Directions
-				DateText("td",listMedPatsFiltered[i].DateStart);//Start Date
-				DateText("td",listMedPatsFiltered[i].DateStop);//End Date
-				_w.WriteElementString("td",MedicationPats.IsMedActive(listMedPatsFiltered[i])?"Active":"Inactive");//Status
-				_w.WriteElementString("td","");//Indications (The conditions which make the medication necessary). We do not record this information anywhere.
-				_w.WriteElementString("td","");//Fill Instructions (Generic substitution allowed or not). We do not record this information anywhere.
+				_w.WriteElementString("th","Medication");
+				_w.WriteElementString("th","Directions");
+				_w.WriteElementString("th","Start Date");
+				_w.WriteElementString("th","End Date");
+				_w.WriteElementString("th","Status");
+				_w.WriteElementString("th","Indications");
+				_w.WriteElementString("th","Fill Instructions");
 				End("tr");
+				End("thead");
+				Start("tbody");
+				for(int i=0;i<listMedPatsFiltered.Count;i++) {
+					string strMedName=listMedPatsFiltered[i].MedDescript;
+					if(listMedPatsFiltered[i].MedicationNum!=0) {
+						strMedName=Medications.GetNameOnly(listMedPatsFiltered[i].MedicationNum);
+					}
+					Start("tr");
+					_w.WriteElementString("td",listMedPatsFiltered[i].RxCui+" - "+strMedName);//Medication
+					_w.WriteElementString("td",listMedPatsFiltered[i].PatNote);//Directions
+					DateText("td",listMedPatsFiltered[i].DateStart);//Start Date
+					DateText("td",listMedPatsFiltered[i].DateStop);//End Date
+					_w.WriteElementString("td",MedicationPats.IsMedActive(listMedPatsFiltered[i])?"Active":"Inactive");//Status
+					_w.WriteElementString("td","");//Indications (The conditions which make the medication necessary). We do not record this information anywhere.
+					_w.WriteElementString("td","");//Fill Instructions (Generic substitution allowed or not). We do not record this information anywhere.
+					End("tr");
+				}
+				End("tbody");
+				End("table");
 			}
-			End("tbody");
-			End("table");
+			else {
+				_w.WriteString("None");
+			}
 			End("text");
+			if(listMedPatsFiltered.Count==0) {//If there are no entries in the filtered list, then we want to add a dummy entry since at least one is required.
+				MedicationPat medPat=new MedicationPat();
+				listMedPatsFiltered.Add(medPat);
+			}
 			for(int i=0;i<listMedPatsFiltered.Count;i++) {
-				string strMedName=listMedPatsFiltered[i].MedDescript;//This might be blank, for example not from NewCrop.  
+				string strMedName="";
+				if(listMedPatsFiltered[i].MedDescript!=null) {
+					strMedName=listMedPatsFiltered[i].MedDescript;//This might be blank, for example not from NewCrop.
+				}
 				if(listMedPatsFiltered[i].MedicationNum!=0) {//If NewCrop, this will be 0.  Also might be zero in the future when we start allowing freeform medications.
 					strMedName=Medications.GetNameOnly(listMedPatsFiltered[i].MedicationNum);					
 				}
@@ -990,16 +1171,27 @@ Medications
 				TemplateId("2.16.840.1.113883.10.20.22.4.16");
 				_w.WriteComment("Medication activity template");
 				Guid();
-				string strStatus="completed";
-				if(MedicationPats.IsMedActive(listMedPatsFiltered[i])) {
-					strStatus="active";
+				if(listMedPatsFiltered[i].PatNote==null || listMedPatsFiltered[i].PatNote=="") {
+					StartAndEnd("text","nullFlavor","UNK");
 				}
-				_w.WriteElementString("text",listMedPatsFiltered[i].PatNote);
-				StartAndEnd("statusCode","code",strStatus);
+				else {
+					_w.WriteElementString("text",listMedPatsFiltered[i].PatNote);
+				}
+				StartAndEnd("statusCode","code","active");
 				Start("effectiveTime");
 				_w.WriteAttributeString("xsi","type",null,"IVL_TS");
-				DateElement("low",listMedPatsFiltered[i].DateStart);//Only one of these dates can be null, because of our filter above.
-				DateElement("high",listMedPatsFiltered[i].DateStop);//Only one of these dates can be null, because of our filter above.
+				if(listMedPatsFiltered[i].DateStart.Year<1880) {
+					StartAndEnd("low","nullFlavor","UNK");
+				}
+				else {
+					DateElement("low",listMedPatsFiltered[i].DateStart);//Only one of these dates can be null, because of our filter above.
+				}
+				if(listMedPatsFiltered[i].DateStop.Year<1880) {
+					StartAndEnd("high","nullFlavor","UNK");
+				}
+				else {
+					DateElement("high",listMedPatsFiltered[i].DateStop);//Only one of these dates can be null, because of our filter above.
+				}
 				End("effectiveTime");		
 				Start("consumable");
 				Start("manufacturedProduct","classCode","MANU");
@@ -1007,7 +1199,12 @@ Medications
 				Guid();
 				Start("manufacturedMaterial");
 				//The code must be an RxNorm.
-				Start("code","code",listMedPatsFiltered[i].RxCui.ToString(),"codeSystem",strCodeSystemRxNorm,"displayName",strMedName,"codeSystemName",strCodeSystemNameRxNorm);
+				if(listMedPatsFiltered[i].RxCui==0) {
+					Start("code","nullFlavor","UNK");
+				}
+				else {
+					Start("code","code",listMedPatsFiltered[i].RxCui.ToString(),"codeSystem",strCodeSystemRxNorm,"displayName",strMedName,"codeSystemName",strCodeSystemNameRxNorm);
+				}
 				End("code");
 				End("manufacturedMaterial");
 				End("manufacturedProduct");
@@ -1020,7 +1217,7 @@ Medications
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdSectionPlanOfCare() {
+		private static void GenerateCcdSectionPlanOfCare(bool hasPlanOfCare) {
 			_w.WriteComment(@"
 =====================================================================================================
 Care Plan
@@ -1028,6 +1225,9 @@ Care Plan
 			List<EhrCarePlan> listEhrCarePlansAll=EhrCarePlans.Refresh(_patOutCcd.PatNum);
 			List<EhrCarePlan> listEhrCarePlansFiltered=new List<EhrCarePlan>();
 			for(int i=0;i<listEhrCarePlansAll.Count;i++) {
+				if(!hasPlanOfCare) {
+					continue;
+				}
 				//No filters yet. This loop is here to match our pattern. If we need to add filters later, the change will be safer and more obvious.
 				listEhrCarePlansFiltered.Add(listEhrCarePlansAll[i]);
 			}
@@ -1038,24 +1238,33 @@ Care Plan
 			StartAndEnd("code","code","18776-5","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Treatment plan");
 			_w.WriteElementString("title","Care Plan");
 			Start("text");//The following text will be parsed as html with a style sheet to be human readable.
-			Start("table","width","100%","border","1");
-			Start("thead");
-			Start("tr");
-			_w.WriteElementString("th","Planned Activity");
-			_w.WriteElementString("th","Planned Date");
-			End("tr");
-			End("thead");
-			Start("tbody");
-			for(int i=0;i<listEhrCarePlansFiltered.Count;i++) {
+			if(listEhrCarePlansFiltered.Count>0 && hasPlanOfCare) {
+				Start("table","width","100%","border","1");
+				Start("thead");
 				Start("tr");
-				Snomed snomedEducation=Snomeds.GetByCode(listEhrCarePlansFiltered[i].SnomedEducation);
-				_w.WriteElementString("td","Goal: "+snomedEducation.Description+"; Instructions: "+listEhrCarePlansFiltered[i].Instructions);//Planned Activity
-				DateText("td",listEhrCarePlansFiltered[i].DatePlanned);//Planned Date
+				_w.WriteElementString("th","Planned Activity");
+				_w.WriteElementString("th","Planned Date");
 				End("tr");
+				End("thead");
+				Start("tbody");
+				for(int i=0;i<listEhrCarePlansFiltered.Count;i++) {
+					Start("tr");
+					Snomed snomedEducation=Snomeds.GetByCode(listEhrCarePlansFiltered[i].SnomedEducation);
+					_w.WriteElementString("td","Goal: "+snomedEducation.Description+"; Instructions: "+listEhrCarePlansFiltered[i].Instructions);//Planned Activity
+					DateText("td",listEhrCarePlansFiltered[i].DatePlanned);//Planned Date
+					End("tr");
+				}
+				End("tbody");
+				End("table");
 			}
-			End("tbody");
-			End("table");
+			else {
+				_w.WriteString("None");
+			}
 			End("text");
+			if(listEhrCarePlansFiltered.Count==0) {//If there are no entries in the filtered list, then we want to add a dummy entry since at least one is required.
+				EhrCarePlan eCP=new EhrCarePlan();
+				listEhrCarePlansFiltered.Add(eCP);
+			}
 			for(int i=0;i<listEhrCarePlansFiltered.Count;i++) {
 				Start("entry","typeCode","DRIV");
 				Start("act","classCode","ACT","moodCode","INT");
@@ -1063,10 +1272,21 @@ Care Plan
 				_w.WriteComment("Instructions template");
 				Start("code");
 				_w.WriteAttributeString("xsi","type",null,"CE");
-				Snomed snomedEducation=Snomeds.GetByCode(listEhrCarePlansFiltered[i].SnomedEducation);
-				Attribs("code",snomedEducation.SnomedCode,"codeSystem",strCodeSystemSnomed,"displayName",snomedEducation.Description);
+				Snomed snomedEducation;
+				if(listEhrCarePlansFiltered[i].SnomedEducation==null || listEhrCarePlansFiltered[i].SnomedEducation=="") {
+					Attribs("nullFlavor","UNK");
+				}
+				else {
+					snomedEducation=Snomeds.GetByCode(listEhrCarePlansFiltered[i].SnomedEducation);
+					Attribs("code",snomedEducation.SnomedCode,"codeSystem",strCodeSystemSnomed,"displayName",snomedEducation.Description);
+				}
 				End("code");
-				_w.WriteElementString("text",listEhrCarePlansFiltered[i].Instructions);
+				if(listEhrCarePlansFiltered[i].Instructions=="") {
+					StartAndEnd("text","nullFlavor","UNK");
+				}
+				else {
+					_w.WriteElementString("text",listEhrCarePlansFiltered[i].Instructions);
+				}
 				StartAndEnd("statusCode","code","completed");
 				End("act");
 				End("entry");
@@ -1076,7 +1296,7 @@ Care Plan
 		}
 
 		///<summary>Helper for GenerateCCD().  Problem section.</summary>
-		private static void GenerateCcdSectionProblems() {
+		private static void GenerateCcdSectionProblems(bool hasProblem) {
 			string snomedProblemType="55607006";
 			_w.WriteComment(@"
 =====================================================================================================
@@ -1085,15 +1305,14 @@ Problems
 			List<Disease> listProblemsAll=Diseases.Refresh(_patOutCcd.PatNum);
 			List<Disease> listProblemsFiltered=new List<Disease>();
 			for(int i=0;i<listProblemsAll.Count;i++) {
+				if(!hasProblem) {
+					continue;
+				}
 				if(listProblemsAll[i].SnomedProblemType!="" && listProblemsAll[i].SnomedProblemType!=snomedProblemType) {
 					continue;//Not a "problem".
 				}
 				if(listProblemsAll[i].FunctionStatus!=FunctionalStatus.Problem) {
 					continue;//Not a "problem".
-				}
-				DiseaseDef diseaseDef=DiseaseDefs.GetItem(listProblemsAll[i].DiseaseDefNum);
-				if(diseaseDef.SnomedCode=="") {
-					continue;//A code is required in the output.
 				}
 				listProblemsFiltered.Add(listProblemsAll[i]);
 			}
@@ -1102,52 +1321,52 @@ Problems
 			string statusOther="active";
 			Start("component");
 			Start("section");
-			if(listProblemsFiltered.Count==0) {
-				TemplateId("2.16.840.1.113883.10.20.22.2.5");//Problems section with coded entries optional.
-			}
-			else {
-				TemplateId("2.16.840.1.113883.10.20.22.2.5.1");//Problems section with coded entries required.
-			}
+			TemplateId("2.16.840.1.113883.10.20.22.2.5.1");//Problems section with coded entries required.
 			_w.WriteComment("Problems section template");
 			StartAndEnd("code","code","11450-4","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Problem list");
 			_w.WriteElementString("title","Problems");
 			Start("text");//The following text will be parsed as html with a style sheet to be human readable.
-			Start("table","width","100%","border","1");
-			Start("thead");
-			Start("tr");
-			_w.WriteElementString("th","Problem");
-			_w.WriteElementString("th","Date Start");
-			_w.WriteElementString("th","Date End");
-			_w.WriteElementString("th","Status");
-			End("tr");
-			End("thead");
-			Start("tbody");
-			for(int i=0;i<listProblemsFiltered.Count;i++) {
-				DiseaseDef diseaseDef=DiseaseDefs.GetItem(listProblemsFiltered[i].DiseaseDefNum);
+			if(listProblemsFiltered.Count>0 && hasProblem) {
+				Start("table","width","100%","border","1");
+				Start("thead");
 				Start("tr");
-				_w.WriteElementString("td",diseaseDef.SnomedCode+" - "+diseaseDef.DiseaseName);
-				DateText("td",listProblemsFiltered[i].DateStart);
-				DateText("td",listProblemsFiltered[i].DateStop);
-				if(listProblemsFiltered[i].ProbStatus==ProblemStatus.Active) {
-					status="Active";
-					statusCode="55561003";
-					statusOther="active";
-				}
-				else if(listProblemsFiltered[i].ProbStatus==ProblemStatus.Inactive) {
-					status="Inactive";
-					statusCode="73425007";
-					statusOther="completed";
-				}
-				else {
-					status="Resolved";
-					statusCode="413322009";
-					statusOther="completed";
-				}
-				_w.WriteElementString("td",status);
+				_w.WriteElementString("th","Problem");
+				_w.WriteElementString("th","Date Start");
+				_w.WriteElementString("th","Date End");
+				_w.WriteElementString("th","Status");
 				End("tr");
+				End("thead");
+				Start("tbody");
+				for(int i=0;i<listProblemsFiltered.Count;i++) {
+					DiseaseDef diseaseDef=DiseaseDefs.GetItem(listProblemsFiltered[i].DiseaseDefNum);
+					Start("tr");
+					_w.WriteElementString("td",diseaseDef.SnomedCode+" - "+diseaseDef.DiseaseName);
+					DateText("td",listProblemsFiltered[i].DateStart);
+					DateText("td",listProblemsFiltered[i].DateStop);
+					if(listProblemsFiltered[i].ProbStatus==ProblemStatus.Active) {
+						status="Active";
+						statusCode="55561003";
+						statusOther="active";
+					}
+					else if(listProblemsFiltered[i].ProbStatus==ProblemStatus.Inactive) {
+						status="Inactive";
+						statusCode="73425007";
+						statusOther="completed";
+					}
+					else {
+						status="Resolved";
+						statusCode="413322009";
+						statusOther="completed";
+					}
+					_w.WriteElementString("td",status);
+					End("tr");
+				}
+				End("tbody");
+				End("table");
 			}
-			End("tbody");
-			End("table");
+			else {
+				_w.WriteString("None");
+			}
 			End("text");
 			//Start("text");
 			//StartAndEnd("content","ID","problems");
@@ -1178,8 +1397,18 @@ Problems
 			//}
 			//End("list");
 			//End("text");
+			if(listProblemsFiltered.Count==0) {//If there are no entries in the filtered list, then we want to add a dummy entry since at least one is required.
+				Disease dis=new Disease();
+				listProblemsFiltered.Add(dis);
+			}
 			for(int i=0;i<listProblemsFiltered.Count;i++) {//Fill Problems Info
-				DiseaseDef diseaseDef=DiseaseDefs.GetItem(listProblemsFiltered[i].DiseaseDefNum);
+				DiseaseDef diseaseDef;
+				if(listProblemsFiltered[i].DiseaseDefNum==0) {
+					diseaseDef=new DiseaseDef();
+				}
+				else {
+					diseaseDef=DiseaseDefs.GetItem(listProblemsFiltered[i].DiseaseDefNum);
+				}
 				Start("entry","typeCode","DRIV");
 				Start("act","classCode","ACT","moodCode","EVN");
 				_w.WriteComment("Problem Concern Act template");//Concern Act Section
@@ -1188,8 +1417,18 @@ Problems
 				StartAndEnd("code","code","CONC","codeSystem","2.16.840.1.113883.5.6","displayName","Concern");
 				StartAndEnd("statusCode","code",statusOther);//Allowed values: active, suspended, aborted, completed.
 				Start("effectiveTime");
-				StartAndEnd("low","value",listProblemsFiltered[i].DateStart.ToString("yyyyMMdd"));
-				DateElement("high",listProblemsFiltered[i].DateStop);
+				if(listProblemsFiltered[i].DateStart.Year<1880) {
+					StartAndEnd("low","nullFlavor","UNK");
+				}
+				else {
+					DateElement("low",listProblemsFiltered[i].DateStart);
+				}
+				if(listProblemsFiltered[i].DateStop.Year<1880) {
+					StartAndEnd("high","nullFlavor","UNK");
+				}
+				else {
+					DateElement("high",listProblemsFiltered[i].DateStop);
+				}
 				End("effectiveTime");
 				Start("entryRelationship","typeCode","SUBJ");
 				Start("observation","classCode","OBS","moodCode","EVN");
@@ -1199,11 +1438,21 @@ Problems
 				StartAndEnd("code","code",snomedProblemType,"codeSystem",strCodeSystemSnomed,"displayName","Problem");
 				StartAndEnd("statusCode","code","completed");//Allowed values: completed.
 				Start("effectiveTime");
-				DateElement("low",listProblemsFiltered[i].DateStart);
+				if(listProblemsFiltered[i].DateStart.Year<1880) {
+					StartAndEnd("low","nullFlavor","UNK");
+				}
+				else {
+					DateElement("low",listProblemsFiltered[i].DateStart);
+				}
 				End("effectiveTime");
 				Start("value");
 				_w.WriteAttributeString("xsi","type",null,"CD");
-				Attribs("code",diseaseDef.SnomedCode,"codeSystem",strCodeSystemSnomed,"displayName",diseaseDef.DiseaseName);
+				if(diseaseDef.SnomedCode==null || diseaseDef.SnomedCode=="") {
+					Attribs("nullFlavor","UNK");
+				}
+				else {
+					Attribs("code",diseaseDef.SnomedCode,"codeSystem",strCodeSystemSnomed,"displayName",diseaseDef.DiseaseName);
+				}
 				End("value");
 				Start("entryRelationship","typeCode","REFR");
 				Start("observation","classCode","OBS","moodCode","EVN");
@@ -1230,7 +1479,7 @@ Problems
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdSectionProcedures() {
+		private static void GenerateCcdSectionProcedures(bool hasProcedure) {
 			_w.WriteComment(@"
 =====================================================================================================
 Procedures
@@ -1238,6 +1487,9 @@ Procedures
 			List<Procedure> listProcsAll=Procedures.Refresh(_patOutCcd.PatNum);
 			List<Procedure> listProcsFiltered=new List<Procedure>();
 			for(int i=0;i<listProcsAll.Count;i++) {
+				if(!hasProcedure) {
+					continue;
+				}
 				ProcedureCode procCode=ProcedureCodes.GetProcCode(listProcsAll[i].CodeNum);
 				if(listProcsAll[i].ProcStatus==ProcStat.D) {
 					continue;//Ignore deleted procedures.
@@ -1248,43 +1500,50 @@ Procedures
 				if(listProcsAll[i].ProcStatus==ProcStat.R) {
 					continue;//Ignore procedures referred out.  It is the responsibility of the treating dentist to record work they have performed.
 				}
-				if(procCode.MedicalCode=="") {
-					continue;//We need a medical CPT-4 code, since ADA codes are not allowed in this format. MedicalCodes are optional, so we must make sure to filter out procedures missing medical codes.
-				}
 				listProcsFiltered.Add(listProcsAll[i]);
 			}
 			Start("component");
 			Start("section");
-			if(listProcsFiltered.Count==0) {
-				TemplateId("2.16.840.1.113883.10.20.22.2.7");//Procedures section with coded entries optional (Page 285).
-			}
-			else {
-				TemplateId("2.16.840.1.113883.10.20.22.2.7.1");//Procedures section with coded entries required (Page 285).
-			}
+			TemplateId("2.16.840.1.113883.10.20.22.2.7.1");//Procedures section with coded entries required (Page 285).
 			_w.WriteComment("Procedures section template");
 			StartAndEnd("code","code","47519-4","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","History of procedures");
 			_w.WriteElementString("title","Procedures");
 			Start("text");//The following text will be parsed as html with a style sheet to be human readable.
-			Start("table","width","100%","border","1");
-			Start("thead");
-			Start("tr");
-			_w.WriteElementString("th","Procedure");
-			_w.WriteElementString("th","Date");
-			End("tr");
-			End("thead");
-			Start("tbody");
-			for(int i=0;i<listProcsFiltered.Count;i++) {
-				ProcedureCode procCode=ProcedureCodes.GetProcCode(listProcsFiltered[i].CodeNum);
+			if(listProcsFiltered.Count>0 && hasProcedure) {
+				Start("table","width","100%","border","1");
+				Start("thead");
 				Start("tr");
-				_w.WriteElementString("td",procCode.MedicalCode+" - "+procCode.Descript);
-				DateText("td",listProcsFiltered[i].ProcDate);
+				_w.WriteElementString("th","Procedure");
+				_w.WriteElementString("th","Date");
 				End("tr");
+				End("thead");
+				Start("tbody");
+				for(int i=0;i<listProcsFiltered.Count;i++) {
+					ProcedureCode procCode=ProcedureCodes.GetProcCode(listProcsFiltered[i].CodeNum);
+					Start("tr");
+					_w.WriteElementString("td",procCode.MedicalCode+" - "+procCode.Descript);
+					DateText("td",listProcsFiltered[i].ProcDate);
+					End("tr");
+				}
+				End("tbody");
+				End("table");
 			}
-			End("tbody");
-			End("table");
+			else {
+				_w.WriteString("None");
+			}
 			End("text");
+			if(listProcsFiltered.Count==0) {//If there are no entries in the filtered list, then we want to add a dummy entry since at least one is required.
+				Procedure proc=new Procedure();
+				listProcsFiltered.Add(proc);
+			}
 			for(int i=0;i<listProcsFiltered.Count;i++) {
-				ProcedureCode procCode=ProcedureCodes.GetProcCode(listProcsFiltered[i].CodeNum);
+				ProcedureCode procCode;
+				if(listProcsFiltered[i].CodeNum==0) {
+					procCode=new ProcedureCode();
+				}
+				else {
+					procCode=ProcedureCodes.GetProcCode(listProcsFiltered[i].CodeNum);
+				}
 				Start("entry","typeCode","DRIV");
 				Start("procedure","classCode","PROC","moodCode","EVN");
 				TemplateId("2.16.840.1.113883.10.20.22.4.14");//Procedure Activity Section (Page 487).
@@ -1294,9 +1553,19 @@ Procedures
 				//and MAY be selected from CPT-4 (CodeSystem: 2.16.840.1.113883.6.12), ICD9 Procedures (CodeSystem: 2.16.840.1.113883.6.104),
 				//ICD10 Procedure Coding System (CodeSystem: 2.16.840.1.113883.6.4) (CONF:7657)."
 				//We already have a place for CPT codes, and that is ProcedureCode.MedicalCode. We will simply use this field for now.
-				StartAndEnd("code","code",procCode.MedicalCode,"codeSystem",strCodeSystemCpt4,"displayName",procCode.Descript,"codeSystemName",strCodeSystemNameCpt4);
+				if(procCode.MedicalCode==null || procCode.MedicalCode=="") {
+					StartAndEnd("code","nullFlavor","UNK");
+				}
+				else {
+					StartAndEnd("code","code",procCode.MedicalCode,"codeSystem",strCodeSystemCpt4,"displayName",procCode.Descript,"codeSystemName",strCodeSystemNameCpt4);
+				}
 				StartAndEnd("statusCode","code","completed");//Allowed values: completed, active, aborted, cancelled.
-				DateElement("effectiveTime",listProcsFiltered[i].ProcDate);
+				if(listProcsFiltered[i].ProcDate.Year<1880) {
+					StartAndEnd("effectiveTime","nullFlavor","UNK");
+				}
+				else {
+					DateElement("effectiveTime",listProcsFiltered[i].ProcDate);
+				}
 				End("procedure");
 				End("entry");
 			}
@@ -1324,7 +1593,7 @@ Reason for Referral
 		}
 
 		///<summary>Helper for GenerateCCD().  Exports Labs.</summary>
-		private static void GenerateCcdSectionResults() {
+		private static void GenerateCcdSectionResults(bool hasSectionResult) {
 			_w.WriteComment(@"
 =====================================================================================================
 Laboratory Test Results
@@ -1332,6 +1601,9 @@ Laboratory Test Results
 			List<LabResult> listLabResultAll=LabResults.GetAllForPatient(_patOutCcd.PatNum);
 			List<LabResult> listLabResultFiltered=new List<LabResult>();
 			for(int i=0;i<listLabResultAll.Count;i++) {
+				if(!hasSectionResult) {
+					continue;
+				}
 				if(listLabResultAll[i].TestID=="") {
 					continue;//Blank codes not allowed in format.
 				}
@@ -1340,47 +1612,56 @@ Laboratory Test Results
 			LabPanel labPanel;
 			Start("component");
 			Start("section");
-			if(listLabResultFiltered.Count==0) {
-				TemplateId("2.16.840.1.113883.10.20.22.2.3");//page 309 Results section with coded entries optional.
-			}
-			else {
-				TemplateId("2.16.840.1.113883.10.20.22.2.3.1");//page 309 Results section with coded entries required.
-			}
+			TemplateId("2.16.840.1.113883.10.20.22.2.3.1");//page 309 Results section with coded entries required.
 			_w.WriteComment("Diagnostic Results section template");
 			StartAndEnd("code","code","30954-2","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Results");
 			_w.WriteElementString("title","Diagnostic Results");
 			Start("text");//The following text will be parsed as html with a style sheet to be human readable.
-			Start("table","width","100%","border","1");
-			Start("thead");
-			Start("tr");
-			_w.WriteElementString("th","LOINC Code");
-			_w.WriteElementString("th","Test");
-			_w.WriteElementString("th","Result");
-			_w.WriteElementString("th","Abnormal Flag");
-			_w.WriteElementString("th","Date Performed");
-			End("tr");
-			End("thead");
-			Start("tbody");
-			for(int i=0;i<listLabResultFiltered.Count;i++) {
+			if(listLabResultFiltered.Count>0 && hasSectionResult) {
+				Start("table","width","100%","border","1");
+				Start("thead");
 				Start("tr");
-				_w.WriteElementString("td",listLabResultFiltered[i].TestID);//LOINC Code
-				_w.WriteElementString("td",listLabResultFiltered[i].TestName);//Test
-				_w.WriteElementString("td",listLabResultFiltered[i].ObsValue+" "+listLabResultFiltered[i].ObsUnits);//Result
-				_w.WriteElementString("td",listLabResultFiltered[i].AbnormalFlag.ToString());//Abnormal Flag
-				DateText("td",listLabResultFiltered[i].DateTimeTest);
+				_w.WriteElementString("th","LOINC Code");
+				_w.WriteElementString("th","Test");
+				_w.WriteElementString("th","Result");
+				_w.WriteElementString("th","Abnormal Flag");
+				_w.WriteElementString("th","Date Performed");
 				End("tr");
+				End("thead");
+				Start("tbody");
+				for(int i=0;i<listLabResultFiltered.Count;i++) {
+					Start("tr");
+					_w.WriteElementString("td",listLabResultFiltered[i].TestID);//LOINC Code
+					_w.WriteElementString("td",listLabResultFiltered[i].TestName);//Test
+					_w.WriteElementString("td",listLabResultFiltered[i].ObsValue+" "+listLabResultFiltered[i].ObsUnits);//Result
+					_w.WriteElementString("td",listLabResultFiltered[i].AbnormalFlag.ToString());//Abnormal Flag
+					DateText("td",listLabResultFiltered[i].DateTimeTest);
+					End("tr");
+				}
+				End("tbody");
+				End("table");
 			}
-			End("tbody");
-			End("table");
+			else {
+				_w.WriteString("None");
+			}
 			End("text");
+			if(listLabResultFiltered.Count==0) {//If there are no entries in the filtered list, then we want to add a dummy entry since at least one is required.
+				LabResult labR=new LabResult();
+				listLabResultFiltered.Add(labR);
+			}
 			for(int i=0;i<listLabResultFiltered.Count;i++) {
-				labPanel=LabPanels.GetOne(listLabResultFiltered[i].LabPanelNum);
+				if(listLabResultFiltered[i].LabPanelNum==0) {
+					labPanel=new LabPanel();
+				}
+				else {
+					labPanel=LabPanels.GetOne(listLabResultFiltered[i].LabPanelNum);
+				}
 				Start("entry","typeCode","DRIV");
 				Start("organizer","classCode","BATTERY","moodCode","EVN");
 				StartAndEnd("templateId","root","2.16.840.1.113883.10.20.22.4.1");
 				_w.WriteComment("Result organizer template");
 				Guid();
-				if(labPanel.ServiceId=="") {
+				if(labPanel.ServiceId==null || labPanel.ServiceId=="") {
 					StartAndEnd("code","nullFlavor","NA");//Null allowed for this code.
 				}
 				else {
@@ -1392,17 +1673,37 @@ Laboratory Test Results
 				TemplateId("2.16.840.1.113883.10.20.22.4.2");
 				_w.WriteComment("Result observation template");
 				Guid();
-				StartAndEnd("code","code",listLabResultFiltered[i].TestID,"displayName",listLabResultFiltered[i].TestName,"codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc);
+				if(listLabResultFiltered[i].TestID==null || listLabResultFiltered[i].TestID=="") {
+					StartAndEnd("code","nullFlavor","UNK");
+				}
+				else {
+					StartAndEnd("code","code",listLabResultFiltered[i].TestID,"displayName",listLabResultFiltered[i].TestName,"codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc);
+				}
 				StartAndEnd("statusCode","code","completed");//Allowed values: aborted, active, cancelled, completed, held, or suspended.
-				StartAndEnd("effectiveTime","value",listLabResultFiltered[i].DateTimeTest.ToString("yyyyMMddHHmm"));
+				if(listLabResultFiltered[i].DateTimeTest.Year<1880) {
+					StartAndEnd("effectiveTime","nullFlavor","UNK");
+				}
+				else {
+					StartAndEnd("effectiveTime","value",listLabResultFiltered[i].DateTimeTest.ToString("yyyyMMddHHmm"));
+				}
 				Start("value");
 				_w.WriteAttributeString("xsi","type",null,"PQ");
-				Attribs("value",listLabResultFiltered[i].ObsValue,"unit",listLabResultFiltered[i].ObsUnits);
+				if(listLabResultFiltered[i].ObsValue==null || listLabResultFiltered[i].ObsValue=="") {
+					Attribs("nullFlavor","UNK");
+				}
+				else {
+					Attribs("value",listLabResultFiltered[i].ObsValue,"unit",listLabResultFiltered[i].ObsUnits);
+				}
 				End("value");
 				StartAndEnd("interpretationCode","code","N","codeSystem","2.16.840.1.113883.5.83");
 				Start("referenceRange");
 				Start("observationRange");
-				_w.WriteElementString("text",listLabResultFiltered[i].ObsRange);
+				if(listLabResultFiltered[i].ObsRange==null || listLabResultFiltered[i].ObsRange=="") {
+					StartAndEnd("text","nullFlavor","UNK");
+				}
+				else {
+					_w.WriteElementString("text",listLabResultFiltered[i].ObsRange);
+				}
 				End("observationRange");
 				End("referenceRange");
 				End("observation");
@@ -1415,7 +1716,7 @@ Laboratory Test Results
 		}
 
 		///<summary>Helper for GenerateCCD().  Exports smoking and pregnancy information.</summary>
-		private static void GenerateCcdSectionSocialHistory() {
+		private static void GenerateCcdSectionSocialHistory(bool hasSocialHistory) {
 			_w.WriteComment(@"
 =====================================================================================================
 Social History
@@ -1423,17 +1724,14 @@ Social History
 			List <EhrMeasureEvent> listEhrMeasureEventsAll=EhrMeasureEvents.Refresh(_patOutCcd.PatNum);
 			List <EhrMeasureEvent> listEhrMeasureEventsFiltered=new List<EhrMeasureEvent>();
 			for(int i=0;i<listEhrMeasureEventsAll.Count;i++) {
+				if(!hasSocialHistory) {
+					continue;
+				}
 				if(listEhrMeasureEventsAll[i].EventType!=EhrMeasureEventType.TobaccoUseAssessed) {
 					continue;
 				}
 				if(listEhrMeasureEventsAll[i].CodeSystemResult!="SNOMEDCT") {
 					continue;//The user is currently only allowed to pick SNOMED smoking statuses. This is here in case we add more code system in the future, to prevent the format from breaking until we enhance.
-				}
-				if(listEhrMeasureEventsAll[i].CodeValueResult=="") {
-					continue;//A code is required in the output.
-				}
-				if(listEhrMeasureEventsAll[i].DateTEvent.Year<1880) {
-					continue;//Not sure if a blank date can happen. This is here just in case.
 				}
 				listEhrMeasureEventsFiltered.Add(listEhrMeasureEventsAll[i]);
 			}
@@ -1447,34 +1745,43 @@ Social History
 			StartAndEnd("code","code","29762-2","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Social History");
 			_w.WriteElementString("title","Social History");
 			Start("text");//The following text will be parsed as html with a style sheet to be human readable.
-			Start("table","width","100%","border","1");
-			Start("thead");
-			Start("tr");
-			_w.WriteElementString("th","Social History Element");
-			_w.WriteElementString("th","Description");
-			_w.WriteElementString("th","Effective Dates");
-			End("tr");
-			End("thead");
-			Start("tbody");
-			for(int i=0;i<listEhrMeasureEventsFiltered.Count;i++) {
+			if(listEhrMeasureEventsFiltered.Count>0 && hasSocialHistory) {
+				Start("table","width","100%","border","1");
+				Start("thead");
 				Start("tr");
-				_w.WriteElementString("td","Smoking");
-				Snomed snomedSmoking=Snomeds.GetByCode(listEhrMeasureEventsFiltered[i].CodeValueResult);
-				_w.WriteElementString("td",snomedSmoking.SnomedCode+" - "+snomedSmoking.Description);
-				DateTime dateTimeLow=listEhrMeasureEventsFiltered[i].DateTEvent;
-				DateTime dateTimeHigh=DateTime.Now;
-				if(i<listEhrMeasureEventsFiltered.Count-1) {//There is another smoking event after this one (remember, they are sorted by date).
-					dateTimeHigh=listEhrMeasureEventsFiltered[i+1].DateTEvent.AddDays(-1);//The day before the next smoking event.
-					if(dateTimeHigh<dateTimeLow) {
-						dateTimeHigh=dateTimeLow;//Just in case the user entered two measures for the same date.
-					}
-				}
-				_w.WriteElementString("td",dateTimeLow.ToString("yyyyMMdd")+" to "+dateTimeHigh.ToString("yyyyMMdd"));
+				_w.WriteElementString("th","Social History Element");
+				_w.WriteElementString("th","Description");
+				_w.WriteElementString("th","Effective Dates");
 				End("tr");
+				End("thead");
+				Start("tbody");
+				for(int i=0;i<listEhrMeasureEventsFiltered.Count;i++) {
+					Start("tr");
+					_w.WriteElementString("td","Smoking");
+					Snomed snomedSmoking=Snomeds.GetByCode(listEhrMeasureEventsFiltered[i].CodeValueResult);
+					_w.WriteElementString("td",snomedSmoking.SnomedCode+" - "+snomedSmoking.Description);
+					DateTime dateTimeLow=listEhrMeasureEventsFiltered[i].DateTEvent;
+					DateTime dateTimeHigh=DateTime.Now;
+					if(i<listEhrMeasureEventsFiltered.Count-1) {//There is another smoking event after this one (remember, they are sorted by date).
+						dateTimeHigh=listEhrMeasureEventsFiltered[i+1].DateTEvent.AddDays(-1);//The day before the next smoking event.
+						if(dateTimeHigh<dateTimeLow) {
+							dateTimeHigh=dateTimeLow;//Just in case the user entered two measures for the same date.
+						}
+					}
+					_w.WriteElementString("td",dateTimeLow.ToString("yyyyMMdd")+" to "+dateTimeHigh.ToString("yyyyMMdd"));
+					End("tr");
+				}
+				End("tbody");
+				End("table");
 			}
-			End("tbody");
-			End("table");
+			else {
+				_w.WriteString("None");
+			}
 			End("text");
+			if(listEhrMeasureEventsFiltered.Count==0) {//If there are no entries in the filtered list, then we want to add a dummy entry since at least one is required.
+				EhrMeasureEvent eME=new EhrMeasureEvent();
+				listEhrMeasureEventsFiltered.Add(eME);
+			}
 			for(int i=0;i<listEhrMeasureEventsFiltered.Count;i++) {
 				//Pregnancy Observation Template could easily be added in the future, but for now it is skipped (Page 453)
 				Start("entry","typeCode","DRIV");
@@ -1493,13 +1800,28 @@ Social History
 					}
 				}
 				Start("effectiveTime");
-				DateElement("low",dateTimeLow);
-				DateElement("high",dateTimeHigh);
+				if(dateTimeLow.Year<1880) {
+					StartAndEnd("low","nullFlavor","UNK");
+				}
+				else {
+					DateElement("low",dateTimeLow);
+				}
+				if(dateTimeHigh.Year<1880) {
+					StartAndEnd("high","nullFlavor","UNK");
+				}
+				else {
+					DateElement("high",dateTimeHigh);
+				}
 				End("effectiveTime");
 				Start("value");
 				_w.WriteAttributeString("xsi","type",null,"CD");
-				Snomed snomedSmoking=Snomeds.GetByCode(listEhrMeasureEventsFiltered[i].CodeValueResult);
-				Attribs("code",snomedSmoking.SnomedCode,"displayName",snomedSmoking.Description,"codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed);
+				if(listEhrMeasureEventsFiltered[i].CodeValueResult==null || listEhrMeasureEventsFiltered[i].CodeValueResult=="") {
+					Attribs("nullFlavor","UNK");
+				}
+				else {
+					Snomed snomedSmoking=Snomeds.GetByCode(listEhrMeasureEventsFiltered[i].CodeValueResult);
+					Attribs("code",snomedSmoking.SnomedCode,"displayName",snomedSmoking.Description,"codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed);
+				}
 				End("value");
 				End("observation");
 				End("entry");
@@ -1520,7 +1842,7 @@ Social History
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdSectionVitalSigns() {//Currently just a skeleton
+		private static void GenerateCcdSectionVitalSigns(bool hasVitalSign) {//Currently just a skeleton
 			_w.WriteComment(@"
 =====================================================================================================
 Vital Signs
@@ -1528,10 +1850,10 @@ Vital Signs
 			List<Vitalsign> listVitalSignsAll=Vitalsigns.Refresh(_patOutCcd.PatNum);
 			List<Vitalsign> listVitalSignsFiltered=new List<Vitalsign>();
 			for(int i=0;i<listVitalSignsAll.Count;i++) {
-				Vitalsign vitalsign=listVitalSignsAll[i];
-				if(vitalsign.DateTaken.Year<1880) {
+				if(!hasVitalSign) {
 					continue;
 				}
+				Vitalsign vitalsign=listVitalSignsAll[i];
 				//Each of the vital sign values are optional, so we must skip filter out empty vital signs.
 				float bmi=Vitalsigns.CalcBMI(vitalsign.Weight,vitalsign.Height);//will be 0 if either wight is 0 or height is 0.
 				if(vitalsign.Height==0 && vitalsign.Weight==0 && bmi==0 && (vitalsign.BpSystolic==0 || vitalsign.BpDiastolic==0)) {
@@ -1541,61 +1863,65 @@ Vital Signs
 			}
 			Start("component");
 			Start("section");
-			if(listVitalSignsFiltered.Count==0) {
-				TemplateId("2.16.840.1.113883.10.20.22.2.4");//Vital signs section with coded entries optional.
-			}
-			else {
-				TemplateId("2.16.840.1.113883.10.20.22.2.4.1");//Vital signs section with coded entries required.
-			}
+			TemplateId("2.16.840.1.113883.10.20.22.2.4.1");//Vital signs section with coded entries required.
 			_w.WriteComment("Problems section template");
 			StartAndEnd("code","code","8716-3","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Vital Signs");
 			_w.WriteElementString("title","Vital Signs");
 			Start("text");//The following text will be parsed as html with a style sheet to be human readable.
-			Start("table","width","100%","border","1");
-			Start("thead");
-			Start("tr");
-			_w.WriteElementString("th","Date");
-			_w.WriteElementString("th","Height");
-			_w.WriteElementString("th","Weight");
-			_w.WriteElementString("th","BMI");
-			_w.WriteElementString("th","Blood Pressure");
-			End("tr");
-			End("thead");
-			Start("tbody");
-			for(int i=0;i<listVitalSignsFiltered.Count;i++) {
-				Vitalsign vitalsign=listVitalSignsFiltered[i];
+			if(listVitalSignsFiltered.Count>0 && hasVitalSign) {
+				Start("table","width","100%","border","1");
+				Start("thead");
 				Start("tr");
-				DateText("td",vitalsign.DateTaken);
-				if(vitalsign.Height>0) {
-					_w.WriteElementString("td",vitalsign.Height.ToString("f0")+" in");
-				}
-				else {
-					_w.WriteElementString("td","");
-				}
-				if(vitalsign.Weight>0) {
-					_w.WriteElementString("td",vitalsign.Weight.ToString("f0")+" lbs");
-				}
-				else {
-					_w.WriteElementString("td","");
-				}
-				float bmi=Vitalsigns.CalcBMI(vitalsign.Weight,vitalsign.Height);//will be 0 if either wight is 0 or height is 0.
-				if(bmi>0) {
-					_w.WriteElementString("td",bmi.ToString("f0")+" lbs/in");
-				}
-				else {
-					_w.WriteElementString("td","");
-				}
-				if(vitalsign.BpSystolic>0 && vitalsign.BpDiastolic>0) {
-					_w.WriteElementString("td",vitalsign.BpSystolic.ToString("f0")+"/"+vitalsign.BpDiastolic.ToString("f0"));
-				}
-				else {
-					_w.WriteElementString("td","");
-				}
+				_w.WriteElementString("th","Date");
+				_w.WriteElementString("th","Height");
+				_w.WriteElementString("th","Weight");
+				_w.WriteElementString("th","BMI");
+				_w.WriteElementString("th","Blood Pressure");
 				End("tr");
+				End("thead");
+				Start("tbody");
+				for(int i=0;i<listVitalSignsFiltered.Count;i++) {
+					Vitalsign vitalsign=listVitalSignsFiltered[i];
+					Start("tr");
+					DateText("td",vitalsign.DateTaken);
+					if(vitalsign.Height>0) {
+						_w.WriteElementString("td",vitalsign.Height.ToString("f0")+" in");
+					}
+					else {
+						_w.WriteElementString("td","");
+					}
+					if(vitalsign.Weight>0) {
+						_w.WriteElementString("td",vitalsign.Weight.ToString("f0")+" lbs");
+					}
+					else {
+						_w.WriteElementString("td","");
+					}
+					float bmi=Vitalsigns.CalcBMI(vitalsign.Weight,vitalsign.Height);//will be 0 if either wight is 0 or height is 0.
+					if(bmi>0) {
+						_w.WriteElementString("td",bmi.ToString("f0")+" lbs/in");
+					}
+					else {
+						_w.WriteElementString("td","");
+					}
+					if(vitalsign.BpSystolic>0 && vitalsign.BpDiastolic>0) {
+						_w.WriteElementString("td",vitalsign.BpSystolic.ToString("f0")+"/"+vitalsign.BpDiastolic.ToString("f0"));
+					}
+					else {
+						_w.WriteElementString("td","");
+					}
+					End("tr");
+				}
+				End("tbody");
+				End("table");
 			}
-			End("tbody");
-			End("table");
+			else {
+				_w.WriteString("None");
+			}
 			End("text");
+			if(listVitalSignsFiltered.Count==0) {//If there are no entries in the filtered list, then we want to add a dummy entry since at least one is required.
+				Vitalsign viS=new Vitalsign();
+				listVitalSignsFiltered.Add(viS);
+			}
 			for(int i=0;i<listVitalSignsFiltered.Count;i++) {//Fill Vital Signs Info
 				Vitalsign vitalsign=listVitalSignsFiltered[i];
 				Start("entry","typeCode","DRIV");
@@ -1605,21 +1931,18 @@ Vital Signs
 				Guid();
 				StartAndEnd("code","code","46680005","codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed,"displayName","Vital signs");
 				StartAndEnd("statusCode","code","completed");
-				DateElement("effectiveTime",vitalsign.DateTaken);
-				if(vitalsign.Height>0) {
-					GenerateCcdVitalSign("8302-2",vitalsign.DateTaken,vitalsign.Height,"in");//Height
+				if(vitalsign.DateTaken.Year<1880) {
+					StartAndEnd("effectiveTime","nullFlavor","UNK");
 				}
-				if(vitalsign.Weight>0) {
-					GenerateCcdVitalSign("3141-9",vitalsign.DateTaken,vitalsign.Weight,"lbs");//Weight
+				else {
+					DateElement("effectiveTime",vitalsign.DateTaken);
 				}
+				GenerateCcdVitalSign("8302-2",vitalsign.DateTaken,vitalsign.Height,"in");//Height
+				GenerateCcdVitalSign("3141-9",vitalsign.DateTaken,vitalsign.Weight,"lbs");//Weight
 				float bmi=Vitalsigns.CalcBMI(vitalsign.Weight,vitalsign.Height);//will be 0 if either wight is 0 or height is 0.
-				if(bmi>0) {
-					GenerateCcdVitalSign("39156-5",vitalsign.DateTaken,bmi,"lbs/in");//BMI
-				}
-				if(vitalsign.BpSystolic>0 && vitalsign.BpDiastolic>0) {
-					GenerateCcdVitalSign("8480-6",vitalsign.DateTaken,vitalsign.BpSystolic,"mmHg");//Blood Pressure Systolic
-					GenerateCcdVitalSign("8462-4",vitalsign.DateTaken,vitalsign.BpDiastolic,"mmHg");//Blood Pressure Diastolic
-				}
+				GenerateCcdVitalSign("39156-5",vitalsign.DateTaken,bmi,"lbs/in");//BMI
+				GenerateCcdVitalSign("8480-6",vitalsign.DateTaken,vitalsign.BpSystolic,"mmHg");//Blood Pressure Systolic
+				GenerateCcdVitalSign("8462-4",vitalsign.DateTaken,vitalsign.BpDiastolic,"mmHg");//Blood Pressure Diastolic
 			}
 			End("section");
 			End("component");
@@ -1647,10 +1970,20 @@ Vital Signs
 			Guid();
 			StartAndEnd("code","code",strLoincObservationCode,"codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Height");
 			StartAndEnd("statusCode","code","completed");//Allowed values: completed.
-			DateElement("effectiveTime",dateTimeObservation);
+			if(dateTimeObservation.Year<1880) {
+				StartAndEnd("effectiveTime","nullFlavor","UNK");
+			}
+			else {
+				DateElement("effectiveTime",dateTimeObservation);
+			}
 			Start("value");
 			_w.WriteAttributeString("xsi","type",null,"PQ");
-			Attribs("value",observationValue.ToString("f0"),"unit",observationUnits);
+			if(observationValue==0) {
+				Attribs("nullFlavor","UNK");
+			}
+			else {
+				Attribs("value",observationValue.ToString("f0"),"unit",observationUnits);
+			}
 			End("value");
 			End("observation");
 			End("component");

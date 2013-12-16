@@ -46,7 +46,15 @@ namespace OpenDental {
 		private void butExport_Click(object sender,EventArgs e) {
 			string ccd="";
 			try {
-				ccd=EhrCCD.GenerateClinicalSummary(PatCur);
+				FormEhrExportCCD FormEEC=new FormEhrExportCCD();
+				FormEEC.Pat=PatCur;
+				FormEEC.ShowDialog();
+				if(FormEEC.DialogResult==DialogResult.OK) {
+					ccd=FormEEC.Ccd;
+				}
+				else {
+					return;
+				}
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
@@ -84,7 +92,15 @@ namespace OpenDental {
 		private void butShowXhtml_Click(object sender,EventArgs e) {
 			string ccd="";
 			try {
-				ccd=EhrCCD.GenerateClinicalSummary(PatCur);
+				FormEhrExportCCD FormEEC=new FormEhrExportCCD();
+				FormEEC.Pat=PatCur;
+				FormEEC.ShowDialog();
+				if(FormEEC.DialogResult==DialogResult.OK) {
+					ccd=FormEEC.Ccd;
+				}
+				else {
+					return;
+				}
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
@@ -105,7 +121,15 @@ namespace OpenDental {
 		private void butShowXml_Click(object sender,EventArgs e) {
 			string ccd="";
 			try {
-				ccd=EhrCCD.GenerateClinicalSummary(PatCur);
+				FormEhrExportCCD FormEEC=new FormEhrExportCCD();
+				FormEEC.Pat=PatCur;
+				FormEEC.ShowDialog();
+				if(FormEEC.DialogResult==DialogResult.OK) {
+					ccd=FormEEC.Ccd;
+				}
+				else {
+					return;
+				}
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
