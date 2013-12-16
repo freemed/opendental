@@ -3923,6 +3923,10 @@ namespace OpenDental{
 
 		///<summary>Returns true if new information was pulled back from NewCrop.</summary>
 		private bool NewCropRefreshPrescriptions() {
+			Program programNewCrop=Programs.GetCur(ProgramName.NewCrop);
+			if(!programNewCrop.Enabled) {
+				return false;
+			}
 			if(PatCur==null) {
 				return false;
 			}
@@ -4186,8 +4190,9 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.RxCreate)) {
 				return;
 			}
+			Program programNewCrop=Programs.GetCur(ProgramName.NewCrop);
 			string newCropAccountId=PrefC.GetString(PrefName.NewCropAccountId);
-			if(newCropAccountId==""){
+			if(newCropAccountId==""){//NewCrop has not been enabled yet.
 				if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Are you sure you want to enable NewCrop electronic prescriptions?  The cost is $15/month for each prescribing provider.  NewCrop only works for the United States and its territories, including Puerto Rico.")) {
 					return;
 				}
@@ -4235,9 +4240,8 @@ namespace OpenDental{
 					checkSum+=Convert.ToByte(newCropAccountId[newCropAccountId.IndexOf('-')+3])*7;
 					newCropAccountId+=(checkSum%100).ToString().PadLeft(2,'0');
 					Prefs.UpdateString(PrefName.NewCropAccountId,newCropAccountId);
-					Program prog=Programs.GetCur(ProgramName.NewCrop);
-					prog.Enabled=true;
-					Programs.Update(prog);
+					programNewCrop.Enabled=true;
+					Programs.Update(programNewCrop);
 				}
 				catch(Exception ex) {
 					MessageBox.Show(ex.Message);
@@ -4245,6 +4249,10 @@ namespace OpenDental{
 				}
 			}
 			else { //newCropAccountId!=""
+				if(!programNewCrop.Enabled) {
+					MessageBox.Show(Lan.g(this,"Electronic prescriptions are currently disabled.")+"\r\n"+Lan.g(this,"To enable, go to Setup | Program Links | NewCrop."));
+					return;
+				}
 				if(!NewCropIsAccountIdValid()) {
 					string newCropName=PrefC.GetString(PrefName.NewCropName);
 					string newCropPassword=PrefC.GetString(PrefName.NewCropPassword);
