@@ -28,6 +28,12 @@ namespace OpenDental
 		private bool spellCheckIsEnabled;//set to true in constructor
 		private Point textEndPoint;
 
+		//public override string TextRN {
+		//	get {
+		//		return base.Text.Replace("\n","\r\n");
+		//	}
+		//}
+
 		///<summary>Set true to enable spell checking in this control.</summary>
 		[Category("Behavior"),Description("Set true to enable spell checking.")]
 		[DefaultValue(true)]
@@ -63,6 +69,7 @@ namespace OpenDental
 			}
 			ListCorrect=new List<string>();
 			ListCorrect.Add("\n");
+			//ListCorrect.Add("\r\n");
 			ListCorrect.Add("\t");
 			ListIncorrect=new List<string>();
 			EventHandler onClick=new EventHandler(menuItem_Click);
@@ -715,6 +722,7 @@ namespace OpenDental
 			Text=Text.Insert(caret,strPaste);
 			SelectionStart=caret+strPaste.Length;
 		}
+
 
 		///<summary>Analogous to a Match.  We use it to keep track of words that we find and their location within the larger string.</summary>
 		private class MatchOD {

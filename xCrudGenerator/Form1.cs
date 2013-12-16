@@ -152,6 +152,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;"+rn);
+			if(className.StartsWith("EhrLab")) {
+				strb.Append("using EhrLaboratories;"+rn);
+			}
 			if(isMobile){
 				strb.Append(rn+"namespace OpenDentBusiness.Mobile.Crud{");
 			}

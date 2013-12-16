@@ -32,6 +32,8 @@ namespace OpenDental{
 			this.butRxNorm = new OpenDental.UI.Button();
 			this.butICD9s = new OpenDental.UI.Button();
 			this.butSnomeds = new OpenDental.UI.Button();
+			this.butCDSSetup = new OpenDental.UI.Button();
+			this.butEhrTriggers = new OpenDental.UI.Button();
 			this.butTimeSynch = new OpenDental.UI.Button();
 			this.butLoincs = new OpenDental.UI.Button();
 			this.butKeys = new OpenDental.UI.Button();
@@ -45,8 +47,6 @@ namespace OpenDental{
 			this.butVaccineDef = new OpenDental.UI.Button();
 			this.butAllergies = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
-			this.butEhrTriggers = new OpenDental.UI.Button();
-			this.butCDSSetup = new OpenDental.UI.Button();
 			this.groupCodeSystems.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -130,6 +130,33 @@ namespace OpenDental{
 			this.butSnomeds.TabIndex = 12;
 			this.butSnomeds.Text = "SNOMED CTs";
 			this.butSnomeds.Click += new System.EventHandler(this.butSnomeds_Click);
+			// 
+			// butCDSSetup
+			// 
+			this.butCDSSetup.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butCDSSetup.Autosize = true;
+			this.butCDSSetup.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCDSSetup.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCDSSetup.CornerRadius = 4F;
+			this.butCDSSetup.Location = new System.Drawing.Point(214, 288);
+			this.butCDSSetup.Name = "butCDSSetup";
+			this.butCDSSetup.Size = new System.Drawing.Size(128, 24);
+			this.butCDSSetup.TabIndex = 139;
+			this.butCDSSetup.Text = "CDS Setup";
+			// 
+			// butEhrTriggers
+			// 
+			this.butEhrTriggers.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butEhrTriggers.Autosize = true;
+			this.butEhrTriggers.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butEhrTriggers.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butEhrTriggers.CornerRadius = 4F;
+			this.butEhrTriggers.Location = new System.Drawing.Point(214, 212);
+			this.butEhrTriggers.Name = "butEhrTriggers";
+			this.butEhrTriggers.Size = new System.Drawing.Size(128, 24);
+			this.butEhrTriggers.TabIndex = 138;
+			this.butEhrTriggers.Text = "EHR Triggers";
+			this.butEhrTriggers.Click += new System.EventHandler(this.butEhrTriggers_Click);
 			// 
 			// butTimeSynch
 			// 
@@ -302,7 +329,7 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(461, 292);
+			this.butClose.Location = new System.Drawing.Point(461, 270);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75, 24);
 			this.butClose.TabIndex = 16;
@@ -340,7 +367,7 @@ namespace OpenDental{
 			// FormEhrSetup
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(561, 343);
+			this.ClientSize = new System.Drawing.Size(561, 321);
 			this.Controls.Add(this.butCDSSetup);
 			this.Controls.Add(this.butEhrTriggers);
 			this.Controls.Add(this.butTimeSynch);

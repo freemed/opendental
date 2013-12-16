@@ -2081,6 +2081,8 @@ namespace OpenDentBusiness {
 						DemographicsList text NOT NULL,
 						LabLoincList text NOT NULL,
 						VitalLoincList text NOT NULL,
+						Instructions text NOT NULL,
+						Bibliography text NOT NULL,
 						Cardinality tinyint NOT NULL
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
@@ -2102,6 +2104,8 @@ namespace OpenDentBusiness {
 						DemographicsList varchar2(4000),
 						LabLoincList varchar2(4000),
 						VitalLoincList varchar2(4000),
+						Instructions varchar2(4000),
+						Bibliography varchar2(4000),
 						Cardinality number(3) NOT NULL,
 						CONSTRAINT ehrtrigger_EhrTriggerNum PRIMARY KEY (EhrTriggerNum)
 						)";
@@ -2321,7 +2325,574 @@ namespace OpenDentBusiness {
 					command=@"CREATE INDEX emailmessage_PatNumSubj ON emailmessage (PatNumSubj)";
 					Db.NonQ(command);
 				}
-
+				//Added Table cdspermission
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS cdspermission";
+					Db.NonQ(command);
+					command=@"CREATE TABLE cdspermission (
+						CDSPermissionNum bigint NOT NULL auto_increment PRIMARY KEY,
+						UserNum bigint NOT NULL,
+						SetupCDS tinyint NOT NULL,
+						ShowCDS tinyint NOT NULL,
+						AccessBibliography tinyint NOT NULL,
+						ProblemCDS tinyint NOT NULL,
+						MedicationCDS tinyint NOT NULL,
+						AllergyCDS tinyint NOT NULL,
+						DemographicCDS tinyint NOT NULL,
+						LabTestCDS tinyint NOT NULL,
+						VitalCDS tinyint NOT NULL,
+						INDEX(UserNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE cdspermission'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE cdspermission (
+						CDSPermissionNum number(20) NOT NULL,
+						UserNum number(20) NOT NULL,
+						SetupCDS number(3) NOT NULL,
+						ShowCDS number(3) NOT NULL,
+						AccessBibliography number(3) NOT NULL,
+						ProblemCDS number(3) NOT NULL,
+						MedicationCDS number(3) NOT NULL,
+						AllergyCDS number(3) NOT NULL,
+						DemographicCDS number(3) NOT NULL,
+						LabTestCDS number(3) NOT NULL,
+						VitalCDS number(3) NOT NULL,
+						CONSTRAINT cdspermission_CDSPermissionNum PRIMARY KEY (CDSPermissionNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX cdspermission_UserNum ON cdspermission (UserNum)";
+					Db.NonQ(command);
+				}
+				#region EHR Lab framework (never going to be used)
+				//Added table ehrlab
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS ehrlab";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehrlab (
+						EhrLabNum bigint NOT NULL auto_increment PRIMARY KEY,
+						PatNum bigint NOT NULL,
+						EhrLabMessageNum bigint NOT NULL,
+						OrderControlCode varchar(255) NOT NULL,
+						PlacerOrderNum varchar(255) NOT NULL,
+						PlacerOrderNamespace varchar(255) NOT NULL,
+						PlacerOrderUniversalID varchar(255) NOT NULL,
+						PlacerOrderUniversalIDType varchar(255) NOT NULL,
+						FillerOrderNum varchar(255) NOT NULL,
+						FillerOrderNamespace varchar(255) NOT NULL,
+						FillerOrderUniversalID varchar(255) NOT NULL,
+						FillerOrderUniversalIDType varchar(255) NOT NULL,
+						PlacerGroupNum varchar(255) NOT NULL,
+						PlacerGroupNamespace varchar(255) NOT NULL,
+						PlacerGroupUniversalID varchar(255) NOT NULL,
+						PlacerGroupUniversalIDType varchar(255) NOT NULL,
+						OrderingProviderID varchar(255) NOT NULL,
+						OrderingProviderLName varchar(255) NOT NULL,
+						OrderingProviderFName varchar(255) NOT NULL,
+						OrderingProviderMiddleNames varchar(255) NOT NULL,
+						OrderingProviderSuffix varchar(255) NOT NULL,
+						OrderingProviderPrefix varchar(255) NOT NULL,
+						OrderingProviderAssigningAuthorityNamespaceID varchar(255) NOT NULL,
+						OrderingProviderAssigningAuthorityUniversalID varchar(255) NOT NULL,
+						OrderingProviderAssigningAuthorityIDType varchar(255) NOT NULL,
+						OrderingProviderNameTypeCode varchar(255) NOT NULL,
+						OrderingProviderIdentifierTypeCode varchar(255) NOT NULL,
+						SetIdOBR bigint NOT NULL,
+						UsiID varchar(255) NOT NULL,
+						UsiText varchar(255) NOT NULL,
+						UsiCodeSystemName varchar(255) NOT NULL,
+						UsiIDAlt varchar(255) NOT NULL,
+						UsiTextAlt varchar(255) NOT NULL,
+						UsiCodeSystemNameAlt varchar(255) NOT NULL,
+						UsiTextOriginal varchar(255) NOT NULL,
+						ObservationDateTimeStart varchar(255) NOT NULL,
+						ObservationDateTimeEnd varchar(255) NOT NULL,
+						SpecimenActionCode varchar(255) NOT NULL,
+						ResultDateTime varchar(255) NOT NULL,
+						ResultStatus varchar(255) NOT NULL,
+						ParentObservationID varchar(255) NOT NULL,
+						ParentObservationText varchar(255) NOT NULL,
+						ParentObservationCodeSystemName varchar(255) NOT NULL,
+						ParentObservationIDAlt varchar(255) NOT NULL,
+						ParentObservationTextAlt varchar(255) NOT NULL,
+						ParentObservationCodeSystemNameAlt tinyint NOT NULL,
+						ParentObservationTextOriginal varchar(255) NOT NULL,
+						ParentObservationSubID varchar(255) NOT NULL,
+						ParentPlacerOrderNum varchar(255) NOT NULL,
+						ParentPlacerOrderNamespace varchar(255) NOT NULL,
+						ParentPlacerOrderUniversalID varchar(255) NOT NULL,
+						ParentPlacerOrderUniversalIDType varchar(255) NOT NULL,
+						ParentFillerOrderNum varchar(255) NOT NULL,
+						ParentFillerOrderNamespace varchar(255) NOT NULL,
+						ParentFillerOrderUniversalID varchar(255) NOT NULL,
+						ParentFillerOrderUniversalIDType varchar(255) NOT NULL,
+						ListEhrLabResultsHandlingF tinyint NOT NULL,
+						ListEhrLabResultsHandlingN tinyint NOT NULL,
+						TQ1SetId bigint NOT NULL,
+						TQ1DateTimeStart varchar(255) NOT NULL,
+						TQ1DateTimeEnd varchar(255) NOT NULL,
+						INDEX(PatNum),
+						INDEX(EhrLabMessageNum),
+						INDEX(SetIdOBR),
+						INDEX(TQ1SetId)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE ehrlab'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehrlab (
+						EhrLabNum number(20) NOT NULL,
+						PatNum number(20) NOT NULL,
+						EhrLabMessageNum number(20) NOT NULL,
+						OrderControlCode varchar2(255),
+						PlacerOrderNum varchar2(255),
+						PlacerOrderNamespace varchar2(255),
+						PlacerOrderUniversalID varchar2(255),
+						PlacerOrderUniversalIDType varchar2(255),
+						FillerOrderNum varchar2(255),
+						FillerOrderNamespace varchar2(255),
+						FillerOrderUniversalID varchar2(255),
+						FillerOrderUniversalIDType varchar2(255),
+						PlacerGroupNum varchar2(255),
+						PlacerGroupNamespace varchar2(255),
+						PlacerGroupUniversalID varchar2(255),
+						PlacerGroupUniversalIDType varchar2(255),
+						OrderingProviderID varchar2(255),
+						OrderingProviderLName varchar2(255),
+						OrderingProviderFName varchar2(255),
+						OrderingProviderMiddleNames varchar2(255),
+						OrderingProviderSuffix varchar2(255),
+						OrderingProviderPrefix varchar2(255),
+						OrderingProviderAssigningAuthorityNamespaceID varchar2(255),
+						OrderingProviderAssigningAuthorityUniversalID varchar2(255),
+						OrderingProviderAssigningAuthorityIDType varchar2(255),
+						OrderingProviderNameTypeCode varchar2(255),
+						OrderingProviderIdentifierTypeCode varchar2(255),
+						SetIdOBR number(20) NOT NULL,
+						UsiID varchar2(255),
+						UsiText varchar2(255),
+						UsiCodeSystemName varchar2(255),
+						UsiIDAlt varchar2(255),
+						UsiTextAlt varchar2(255),
+						UsiCodeSystemNameAlt varchar2(255),
+						UsiTextOriginal varchar2(255),
+						ObservationDateTimeStart varchar2(255),
+						ObservationDateTimeEnd varchar2(255),
+						SpecimenActionCode varchar2(255),
+						ResultDateTime varchar2(255),
+						ResultStatus varchar2(255),
+						ParentObservationID varchar2(255),
+						ParentObservationText varchar2(255),
+						ParentObservationCodeSystemName varchar2(255),
+						ParentObservationIDAlt varchar2(255),
+						ParentObservationTextAlt varchar2(255),
+						ParentObservationCodeSystemNameAlt number(3) NOT NULL,
+						ParentObservationTextOriginal varchar2(255),
+						ParentObservationSubID varchar2(255),
+						ParentPlacerOrderNum varchar2(255),
+						ParentPlacerOrderNamespace varchar2(255),
+						ParentPlacerOrderUniversalID varchar2(255),
+						ParentPlacerOrderUniversalIDType varchar2(255),
+						ParentFillerOrderNum varchar2(255),
+						ParentFillerOrderNamespace varchar2(255),
+						ParentFillerOrderUniversalID varchar2(255),
+						ParentFillerOrderUniversalIDType varchar2(255),
+						ListEhrLabResultsHandlingF number(3) NOT NULL,
+						ListEhrLabResultsHandlingN number(3) NOT NULL,
+						TQ1SetId number(20) NOT NULL,
+						TQ1DateTimeStart varchar2(255),
+						TQ1DateTimeEnd varchar2(255),
+						CONSTRAINT ehrlab_EhrLabNum PRIMARY KEY (EhrLabNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX ehrlab_PatNum ON ehrlab (PatNum)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX ehrlab_EhrLabMessageNum ON ehrlab (EhrLabMessageNum)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX ehrlab_SetIdOBR ON ehrlab (SetIdOBR)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX ehrlab_TQ1SetId ON ehrlab (TQ1SetId)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS ehrlabclinicalinfo";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehrlabclinicalinfo (
+						EhrLabClinicalInfoNum bigint NOT NULL auto_increment PRIMARY KEY,
+						EhrLabNum bigint NOT NULL,
+						ClinicalInfoID varchar(255) NOT NULL,
+						ClinicalInfoText varchar(255) NOT NULL,
+						ClinicalInfoCodeSystemName varchar(255) NOT NULL,
+						ClinicalInfoIDAlt varchar(255) NOT NULL,
+						ClinicalInfoTextAlt varchar(255) NOT NULL,
+						ClinicalInfoCodeSystemNameAlt varchar(255) NOT NULL,
+						ClinicalInfoTextOriginal varchar(255) NOT NULL,
+						INDEX(EhrLabNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE ehrlabclinicalinfo'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehrlabclinicalinfo (
+						EhrLabClinicalInfoNum number(20) NOT NULL,
+						EhrLabNum number(20) NOT NULL,
+						ClinicalInfoID varchar2(255),
+						ClinicalInfoText varchar2(255),
+						ClinicalInfoCodeSystemName varchar2(255),
+						ClinicalInfoIDAlt varchar2(255),
+						ClinicalInfoTextAlt varchar2(255),
+						ClinicalInfoCodeSystemNameAlt varchar2(255),
+						ClinicalInfoTextOriginal varchar2(255),
+						CONSTRAINT ehrlabclinicalinfo_EhrLabClini PRIMARY KEY (EhrLabClinicalInfoNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX ehrlabclinicalinfo_EhrLabNum ON ehrlabclinicalinfo (EhrLabNum)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS ehrlabnote";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehrlabnote (
+						EhrLabNoteNum bigint NOT NULL auto_increment PRIMARY KEY,
+						EhrLabNum bigint NOT NULL,
+						EhrLabResultNum bigint NOT NULL,
+						comments text NOT NULL,
+						INDEX(EhrLabNum),
+						INDEX(EhrLabResultNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE ehrlabnote'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehrlabnote (
+						EhrLabNoteNum number(20) NOT NULL,
+						EhrLabNum number(20) NOT NULL,
+						EhrLabResultNum number(20) NOT NULL,
+						comments clob,
+						CONSTRAINT ehrlabnote_EhrLabNoteNum PRIMARY KEY (EhrLabNoteNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX ehrlabnote_EhrLabNum ON ehrlabnote (EhrLabNum)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX ehrlabnote_EhrLabResultNum ON ehrlabnote (EhrLabResultNum)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS ehrlabresult";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehrlabresult (
+						EhrLabResultNum bigint NOT NULL auto_increment PRIMARY KEY,
+						EhrLabNum bigint NOT NULL,
+						SetIdOBX bigint NOT NULL,
+						ValueType varchar(255) NOT NULL,
+						ObservationIdentifierID varchar(255) NOT NULL,
+						ObservationIdentifierText varchar(255) NOT NULL,
+						ObservationIdentifierCodeSystemName varchar(255) NOT NULL,
+						ObservationIdentifierIDAlt varchar(255) NOT NULL,
+						ObservationIdentifierTextAlt varchar(255) NOT NULL,
+						ObservationIdentifierCodeSystemNameAlt varchar(255) NOT NULL,
+						ObservationIdentifierTextOriginal varchar(255) NOT NULL,
+						ObservationIdentifierSub varchar(255) NOT NULL,
+						ObservationValueCodedElementID varchar(255) NOT NULL,
+						ObservationValueCodedElementText varchar(255) NOT NULL,
+						ObservationValueCodedElementCodeSystemName varchar(255) NOT NULL,
+						ObservationValueCodedElementIDAlt varchar(255) NOT NULL,
+						ObservationValueCodedElementTextAlt varchar(255) NOT NULL,
+						ObservationValueCodedElementCodeSystemNameAlt varchar(255) NOT NULL,
+						ObservationValueCodedElementTextOriginal varchar(255) NOT NULL,
+						ObservationValueDateTime varchar(255) NOT NULL,
+						ObservationValueTime time NOT NULL DEFAULT '00:00:00',
+						ObservationValueComparator varchar(255) NOT NULL,
+						ObservationValueNumber1 double NOT NULL,
+						ObservationValueSeparatorOrSuffix varchar(255) NOT NULL,
+						ObservationValueNumber2 double NOT NULL,
+						ObservationValueNumeric double NOT NULL,
+						ObservationValueText varchar(255) NOT NULL,
+						UnitsID varchar(255) NOT NULL,
+						UnitsText varchar(255) NOT NULL,
+						UnitsCodeSystemName varchar(255) NOT NULL,
+						UnitsIDAlt varchar(255) NOT NULL,
+						UnitsTextAlt varchar(255) NOT NULL,
+						UnitsCodeSystemNameAlt varchar(255) NOT NULL,
+						UnitsTextOriginal varchar(255) NOT NULL,
+						referenceRange varchar(255) NOT NULL,
+						AbnormalFlags varchar(255) NOT NULL,
+						ObservationResultStatus varchar(255) NOT NULL,
+						ObservationDateTime varchar(255) NOT NULL,
+						AnalysisDateTime varchar(255) NOT NULL,
+						PerformingOrganizationName varchar(255) NOT NULL,
+						PerformingOrganizationNameAssigningAuthorityNamespaceId varchar(255) NOT NULL,
+						PerformingOrganizationNameAssigningAuthorityUniversalId varchar(255) NOT NULL,
+						PerformingOrganizationNameAssigningAuthorityUniversalIdType varchar(255) NOT NULL,
+						PerformingOrganizationIdentifierTypeCode varchar(255) NOT NULL,
+						PerformingOrganizationIdentifier varchar(255) NOT NULL,
+						PerformingOrganizationAddressStreet varchar(255) NOT NULL,
+						PerformingOrganizationAddressOtherDesignation varchar(255) NOT NULL,
+						PerformingOrganizationAddressCity varchar(255) NOT NULL,
+						PerformingOrganizationAddressStateOrProvince tinyint NOT NULL,
+						PerformingOrganizationAddressZipOrPostalCode varchar(255) NOT NULL,
+						PerformingOrganizationAddressCountryCode varchar(255) NOT NULL,
+						PerformingOrganizationAddressAddressType varchar(255) NOT NULL,
+						PerformingOrganizationAddressCountyOrParishCode varchar(255) NOT NULL,
+						MedicalDirectorID varchar(255) NOT NULL,
+						MedicalDirectorLName varchar(255) NOT NULL,
+						MedicalDirectorFName varchar(255) NOT NULL,
+						MedicalDirectorMiddleNames varchar(255) NOT NULL,
+						MedicalDirectorSuffix varchar(255) NOT NULL,
+						MedicalDirectorPrefix varchar(255) NOT NULL,
+						MedicalDirectorAssigningAuthorityNamespaceID varchar(255) NOT NULL,
+						MedicalDirectorAssigningAuthorityUniversalID varchar(255) NOT NULL,
+						MedicalDirectorAssigningAuthorityIDType varchar(255) NOT NULL,
+						MedicalDirectorNameTypeCode varchar(255) NOT NULL,
+						MedicalDirectorIdentifierTypeCode varchar(255) NOT NULL,
+						INDEX(EhrLabNum),
+						INDEX(SetIdOBX)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE ehrlabresult'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehrlabresult (
+						EhrLabResultNum number(20) NOT NULL,
+						EhrLabNum number(20) NOT NULL,
+						SetIdOBX number(20) NOT NULL,
+						ValueType varchar2(255),
+						ObservationIdentifierID varchar2(255),
+						ObservationIdentifierText varchar2(255),
+						ObservationIdentifierCodeSystemName varchar2(255),
+						ObservationIdentifierIDAlt varchar2(255),
+						ObservationIdentifierTextAlt varchar2(255),
+						ObservationIdentifierCodeSystemNameAlt varchar2(255),
+						ObservationIdentifierTextOriginal varchar2(255),
+						ObservationIdentifierSub varchar2(255),
+						ObservationValueCodedElementID varchar2(255),
+						ObservationValueCodedElementText varchar2(255),
+						ObservationValueCodedElementCodeSystemName varchar2(255),
+						ObservationValueCodedElementIDAlt varchar2(255),
+						ObservationValueCodedElementTextAlt varchar2(255),
+						ObservationValueCodedElementCodeSystemNameAlt varchar2(255),
+						ObservationValueCodedElementTextOriginal varchar2(255),
+						ObservationValueDateTime varchar2(255),
+						ObservationValueTime date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+						ObservationValueComparator varchar2(255),
+						ObservationValueNumber1 number(38,8) NOT NULL,
+						ObservationValueSeparatorOrSuffix varchar2(255),
+						ObservationValueNumber2 number(38,8) NOT NULL,
+						ObservationValueNumeric number(38,8) NOT NULL,
+						ObservationValueText varchar2(255),
+						UnitsID varchar2(255),
+						UnitsText varchar2(255),
+						UnitsCodeSystemName varchar2(255),
+						UnitsIDAlt varchar2(255),
+						UnitsTextAlt varchar2(255),
+						UnitsCodeSystemNameAlt varchar2(255),
+						UnitsTextOriginal varchar2(255),
+						referenceRange varchar2(255),
+						AbnormalFlags varchar2(255),
+						ObservationResultStatus varchar2(255),
+						ObservationDateTime varchar2(255),
+						AnalysisDateTime varchar2(255),
+						PerformingOrganizationName varchar2(255),
+						PerformingOrganizationNameAssigningAuthorityNamespaceId varchar2(255),
+						PerformingOrganizationNameAssigningAuthorityUniversalId varchar2(255),
+						PerformingOrganizationNameAssigningAuthorityUniversalIdType varchar2(255),
+						PerformingOrganizationIdentifierTypeCode varchar2(255),
+						PerformingOrganizationIdentifier varchar2(255),
+						PerformingOrganizationAddressStreet varchar2(255),
+						PerformingOrganizationAddressOtherDesignation varchar2(255),
+						PerformingOrganizationAddressCity varchar2(255),
+						PerformingOrganizationAddressStateOrProvince number(3) NOT NULL,
+						PerformingOrganizationAddressZipOrPostalCode varchar2(255),
+						PerformingOrganizationAddressCountryCode varchar2(255),
+						PerformingOrganizationAddressAddressType varchar2(255),
+						PerformingOrganizationAddressCountyOrParishCode varchar2(255),
+						MedicalDirectorID varchar2(255),
+						MedicalDirectorLName varchar2(255),
+						MedicalDirectorFName varchar2(255),
+						MedicalDirectorMiddleNames varchar2(255),
+						MedicalDirectorSuffix varchar2(255),
+						MedicalDirectorPrefix varchar2(255),
+						MedicalDirectorAssigningAuthorityNamespaceID varchar2(255),
+						MedicalDirectorAssigningAuthorityUniversalID varchar2(255),
+						MedicalDirectorAssigningAuthorityIDType varchar2(255),
+						MedicalDirectorNameTypeCode varchar2(255),
+						MedicalDirectorIdentifierTypeCode varchar2(255),
+						CONSTRAINT ehrlabresult_EhrLabResultNum PRIMARY KEY (EhrLabResultNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX ehrlabresult_EhrLabNum ON ehrlabresult (EhrLabNum)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX ehrlabresult_SetIdOBX ON ehrlabresult (SetIdOBX)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS ehrlabresultscopyto";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehrlabresultscopyto (
+						EhrLabResultsCopyToNum bigint NOT NULL auto_increment PRIMARY KEY,
+						EhrLabNum bigint NOT NULL,
+						CopyToID varchar(255) NOT NULL,
+						CopyToLName varchar(255) NOT NULL,
+						CopyToFName varchar(255) NOT NULL,
+						CopyToMiddleNames varchar(255) NOT NULL,
+						CopyToSuffix varchar(255) NOT NULL,
+						CopyToPrefix varchar(255) NOT NULL,
+						CopyToAssigningAuthorityNamespaceID varchar(255) NOT NULL,
+						CopyToAssigningAuthorityUniversalID varchar(255) NOT NULL,
+						CopyToAssigningAuthorityIDType varchar(255) NOT NULL,
+						CopyToNameTypeCode varchar(255) NOT NULL,
+						CopyToIdentifierTypeCode varchar(255) NOT NULL,
+						INDEX(EhrLabNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE ehrlabresultscopyto'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehrlabresultscopyto (
+						EhrLabResultsCopyToNum number(20) NOT NULL,
+						EhrLabNum number(20) NOT NULL,
+						CopyToID varchar2(255),
+						CopyToLName varchar2(255),
+						CopyToFName varchar2(255),
+						CopyToMiddleNames varchar2(255),
+						CopyToSuffix varchar2(255),
+						CopyToPrefix varchar2(255),
+						CopyToAssigningAuthorityNamespaceID varchar2(255),
+						CopyToAssigningAuthorityUniversalID varchar2(255),
+						CopyToAssigningAuthorityIDType varchar2(255),
+						CopyToNameTypeCode varchar2(255),
+						CopyToIdentifierTypeCode varchar2(255),
+						CONSTRAINT ehrlabresultscopyto_EhrLabResu PRIMARY KEY (EhrLabResultsCopyToNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX ehrlabresultscopyto_EhrLabNum ON ehrlabresultscopyto (EhrLabNum)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS ehrlabspecimen";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehrlabspecimen (
+						EhrLabSpecimenNum bigint NOT NULL auto_increment PRIMARY KEY,
+						EhrLabNum bigint NOT NULL,
+						SetIdSPM bigint NOT NULL,
+						SpecimenTypeID varchar(255) NOT NULL,
+						SpecimenTypeText varchar(255) NOT NULL,
+						SpecimenTypeCodeSystemName varchar(255) NOT NULL,
+						SpecimenTypeIDAlt varchar(255) NOT NULL,
+						SpecimenTypeTextAlt varchar(255) NOT NULL,
+						SpecimenTypeCodeSystemNameAlt varchar(255) NOT NULL,
+						SpecimenTypeTextOriginal varchar(255) NOT NULL,
+						CollectionDateTimeStart varchar(255) NOT NULL,
+						CollectionDateTimeEnd varchar(255) NOT NULL,
+						INDEX(EhrLabNum),
+						INDEX(SetIdSPM)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE ehrlabspecimen'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehrlabspecimen (
+						EhrLabSpecimenNum number(20) NOT NULL,
+						EhrLabNum number(20) NOT NULL,
+						SetIdSPM number(20) NOT NULL,
+						SpecimenTypeID varchar2(255),
+						SpecimenTypeText varchar2(255),
+						SpecimenTypeCodeSystemName varchar2(255),
+						SpecimenTypeIDAlt varchar2(255),
+						SpecimenTypeTextAlt varchar2(255),
+						SpecimenTypeCodeSystemNameAlt varchar2(255),
+						SpecimenTypeTextOriginal varchar2(255),
+						CollectionDateTimeStart varchar2(255),
+						CollectionDateTimeEnd varchar2(255),
+						CONSTRAINT ehrlabspecimen_EhrLabSpecimenN PRIMARY KEY (EhrLabSpecimenNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX ehrlabspecimen_EhrLabNum ON ehrlabspecimen (EhrLabNum)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX ehrlabspecimen_SetIdSPM ON ehrlabspecimen (SetIdSPM)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS ehrlabspecimencondition";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehrlabspecimencondition (
+						EhrLabSpecimenConditionNum bigint NOT NULL auto_increment PRIMARY KEY,
+						EhrLabSpecimenNum bigint NOT NULL,
+						SpecimenConditionID varchar(255) NOT NULL,
+						SpecimenConditionText varchar(255) NOT NULL,
+						SpecimenConditionCodeSystemName varchar(255) NOT NULL,
+						SpecimenConditionIDAlt varchar(255) NOT NULL,
+						SpecimenConditionTextAlt varchar(255) NOT NULL,
+						SpecimenConditionCodeSystemNameAlt varchar(255) NOT NULL,
+						SpecimenConditionTextOriginal varchar(255) NOT NULL,
+						INDEX(EhrLabSpecimenNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE ehrlabspecimencondition'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehrlabspecimencondition (
+						EhrLabSpecimenConditionNum number(20) NOT NULL,
+						EhrLabSpecimenNum number(20) NOT NULL,
+						SpecimenConditionID varchar2(255),
+						SpecimenConditionText varchar2(255),
+						SpecimenConditionCodeSystemName varchar2(255),
+						SpecimenConditionIDAlt varchar2(255),
+						SpecimenConditionTextAlt varchar2(255),
+						SpecimenConditionCodeSystemNameAlt varchar2(255),
+						SpecimenConditionTextOriginal varchar2(255),
+						CONSTRAINT ehrlabspecimencondition_EhrLab PRIMARY KEY (EhrLabSpecimenConditionNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX ehrlabspecimencondition_EhrLab ON ehrlabspecimencondition (EhrLabSpecimenNum)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS ehrlabspecimenrejectreason";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehrlabspecimenrejectreason (
+						EhrLabSpecimenRejectReasonNum bigint NOT NULL auto_increment PRIMARY KEY,
+						EhrLabSpecimenNum bigint NOT NULL,
+						SpecimenRejectReasonID varchar(255) NOT NULL,
+						SpecimenRejectReasonText varchar(255) NOT NULL,
+						SpecimenRejectReasonCodeSystemName varchar(255) NOT NULL,
+						SpecimenRejectReasonIDAlt varchar(255) NOT NULL,
+						SpecimenRejectReasonTextAlt varchar(255) NOT NULL,
+						SpecimenRejectReasonCodeSystemNameAlt varchar(255) NOT NULL,
+						SpecimenRejectReasonTextOriginal varchar(255) NOT NULL,
+						INDEX(EhrLabSpecimenNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE ehrlabspecimenrejectreason'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehrlabspecimenrejectreason (
+						EhrLabSpecimenRejectReasonNum number(20) NOT NULL,
+						EhrLabSpecimenNum number(20) NOT NULL,
+						SpecimenRejectReasonID varchar2(255),
+						SpecimenRejectReasonText varchar2(255),
+						SpecimenRejectReasonCodeSystemName varchar2(255),
+						SpecimenRejectReasonIDAlt varchar2(255),
+						SpecimenRejectReasonTextAlt varchar2(255),
+						SpecimenRejectReasonCodeSystemNameAlt varchar2(255),
+						SpecimenRejectReasonTextOriginal varchar2(255),
+						CONSTRAINT ehrlabspecimenrejectreason_Ehr PRIMARY KEY (EhrLabSpecimenRejectReasonNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX ehrlabspecimenrejectreason_Ehr ON ehrlabspecimenrejectreason (EhrLabSpecimenNum)";
+					Db.NonQ(command);
+				}
+				#endregion
 
 				command="UPDATE preference SET ValueString = '14.1.0.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
@@ -2338,4 +2909,5 @@ namespace OpenDentBusiness {
 
 	}
 }
+
 

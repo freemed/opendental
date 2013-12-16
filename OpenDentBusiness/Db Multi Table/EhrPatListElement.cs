@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EhrLaboratories;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -49,5 +50,8 @@ namespace OpenDentBusiness {
 		public DateTime StartDate;
 		///<summary>Only select records before this date, i.e. date of diagnosis, prescription, lab date, etc... If ==null or ==DateTime.MinValue this value is ignored.</summary>
 		public DateTime EndDate;
+		///<summary>Used to determine how the LabValue should be compaired.</summary>
+		public HL70125 ValueTypeLab;
+
 	}
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EhrLaboratories;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
@@ -27,6 +28,10 @@ namespace OpenDentBusiness {
 						select+=",patient.Gender";//will look odd if user adds multiple gender columns, enum needs to be "decoded" when filling grid.
 						break;
 					case EhrRestrictionType.LabResult://---------------------------------------------------------------------------------------------------------------------------
+						HL70125 ValueType=new HL70125();
+						switch(ValueType) {
+
+						}
 						select+=",labresult"+i+".ObsValue,labresult"+i+".DateTimeTest";//format column name when filling grid.
 						from+=",labresult AS labresult"+i+", labpanel AS labpanel"+i;
 						where+="AND labpanel"+i+".LabpanelNum=labresult"+i+".LabpanelNum AND patient.PatNum=labpanel"+i+".PatNum ";//join

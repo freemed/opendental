@@ -58,11 +58,21 @@ namespace OpenDentBusiness{
 		}
 
 		public static DataTable GetByName(string listName) {
+			return GetByName(listName,"");
+		}
+
+		public static DataTable GetByName(string listName, string orderBy) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod(),listName);
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),listName, orderBy);
 			}
 			DataTable tableDescript = Db.GetTable("DESCRIBE wikilist_"+POut.String(listName));
 			string command = "SELECT * FROM wikilist_"+POut.String(listName);
+			//Manual ovverride of Order By
+			if(orderBy!="") {
+				command+=" ORDER BY "+POut.String(orderBy);
+				return Db.GetTable(command);
+			}
+			//Automatic OrderBy
 			switch(tableDescript.Rows.Count) {
 				case 0://should never happen
 					break;

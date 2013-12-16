@@ -583,7 +583,7 @@ namespace OpenDental{
 			}
 			if(Security.IsAuthorized(Permissions.EhrShowCDS,true)) {
 				FormCDSIntervention FormCDSI=new FormCDSIntervention();
-				FormCDSI.DictEhrTriggerResults=EhrTriggers.TriggerMatch(Medications.GetMedication(FormM.SelectedMedicationNum),PatCur);
+				FormCDSI.ListCDSI=EhrTriggers.TriggerMatch(Medications.GetMedication(FormM.SelectedMedicationNum),PatCur);
 				FormCDSI.ShowIfRequired();
 				if(FormCDSI.DialogResult==DialogResult.Abort) {
 					return;//do not add medication
@@ -872,7 +872,7 @@ namespace OpenDental{
 			for(int i=0;i<formDD.SelectedDiseaseDefNums.Count;i++) {
 				if(Security.IsAuthorized(Permissions.EhrShowCDS,true)){
 					FormCDSIntervention FormCDSI=new FormCDSIntervention();
-					FormCDSI.DictEhrTriggerResults=EhrTriggers.TriggerMatch(DiseaseDefs.GetItem(formDD.SelectedDiseaseDefNums[i]),PatCur);
+					FormCDSI.ListCDSI=EhrTriggers.TriggerMatch(DiseaseDefs.GetItem(formDD.SelectedDiseaseDefNums[i]),PatCur);
 					FormCDSI.ShowIfRequired();
 					if(FormCDSI.DialogResult==DialogResult.Abort) {
 						continue;//cancel 
@@ -1011,7 +1011,7 @@ namespace OpenDental{
 
 			if(Security.IsAuthorized(Permissions.EhrShowCDS,true)) {
 				FormCDSIntervention FormCDSI=new FormCDSIntervention();
-				FormCDSI.DictEhrTriggerResults=EhrTriggers.TriggerMatch(AllergyDefs.GetOne(formA.AllergyCur.AllergyDefNum),PatCur);
+				FormCDSI.ListCDSI=EhrTriggers.TriggerMatch(AllergyDefs.GetOne(formA.AllergyCur.AllergyDefNum),PatCur);
 				FormCDSI.ShowIfRequired(false);
 			}
 			FillAllergies();

@@ -60,11 +60,12 @@ namespace OpenDentBusiness{
 		/// <param name="triggerObject">Can be DiseaseDef, ICD9, Icd10, Snomed, Medication, RxNorm, Cvx, AllerfyDef, Patient, or VitalSign.  Later: will accept Lab values.</param>
 		/// <param name="PatCur">Triggers and intervention are currently always dependant on current patient. </param>
 		/// <returns>Returns a dictionary keyed on triggers and a list of all the objects that the trigger matched on. Should be used to generate CDS intervention message and later be passed to FormInfobutton for knowledge request.</returns>
-		public static Dictionary<string,List<object>> TriggerMatch(object triggerObject,Patient PatCur) {
+		public static List<CDSIntervention> TriggerMatch(object triggerObject,Patient PatCur) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<Dictionary<string,List<object>>>(MethodBase.GetCurrentMethod(),triggerObject,PatCur);
+				return Meth.GetObject<List<CDSIntervention>>(MethodBase.GetCurrentMethod(),triggerObject,PatCur);
 			}
-			Dictionary<string,List<object>> retVal=new Dictionary<string,List<object>>();
+			//Dictionary<string,List<object>> retVal=new Dictionary<string,List<object>>();
+			List<CDSIntervention> retVal=new List<CDSIntervention>();
 			//Define objects to be used in matching triggers.
 			DiseaseDef diseaseDef;
 			ICD9 icd9;
@@ -116,7 +117,7 @@ namespace OpenDentBusiness{
 					break;
 				case "Medication":
 					medication=(Medication)triggerObject;
-					//TODO: TriggerObjectMessage
+					triggerObjectMessage="  - "+medication.MedName+(medication.RxCui==0?"":" (RxCui:"+RxNorms.GetByRxCUI(medication.RxCui.ToString()).RxCui+")")+"\r\n";
 					command="SELECT * FROM ehrtrigger"
 					+" WHERE MedicationNumList LIKE '% "+POut.String(medication.MedicationNum.ToString())+" %'";// '% <code> %' so that we can get exact matches.
 					if(medication.RxCui!=0) {
@@ -125,7 +126,7 @@ namespace OpenDentBusiness{
 					break;
 				case "RxNorm":
 					rxNorm=(RxNorm)triggerObject;
-					//TODO: TriggerObjectMessage
+					triggerObjectMessage="  - "+rxNorm.Description+"(RxCui:"+rxNorm.RxCui+")\r\n";
 					command="SELECT * FROM ehrtrigger"
 					+" WHERE RxCuiList LIKE '% "+POut.String(rxNorm.RxCui)+" %'";// '% <code> %' so that we can get exact matches.
 					break;
@@ -180,7 +181,11 @@ namespace OpenDentBusiness{
 				triggerMessage+=triggerObjectMessage;//Example:"  -Patient Age 67\r\n"
 				List<object> ListObjectMatches=new List<object>();
 				ListObjectMatches.Add(triggerObject);
-				retVal.Add(triggerMessage,ListObjectMatches);
+				CDSIntervention cdsi=new CDSIntervention();
+				cdsi.EhrTrigger=listEhrTriggers[i];
+				cdsi.InterventionMessage=triggerMessage;
+				cdsi.TriggerObjects=ListObjectMatches;
+				retVal.Add(cdsi);
 			}
 			//Fill object lists to be checked-------------------------------------------------------------------------------------------------
 			List<Allergy> ListAllergy=Allergies.GetAll(PatCur.PatNum,false);
@@ -386,7 +391,12 @@ namespace OpenDentBusiness{
 						//TODO: construct trigger message using all the codes in the trigger.
 						break;
 				}//end switch trigger cardinality
-				retVal.Add(triggerMessage,ListObjectMatches);
+				//retVal.Add(triggerMessage,ListObjectMatches);
+				CDSIntervention cdsi=new CDSIntervention();
+				cdsi.EhrTrigger=listEhrTriggers[i];
+				cdsi.InterventionMessage=triggerMessage;
+				cdsi.TriggerObjects=ListObjectMatches;
+				retVal.Add(cdsi);
 			}//end triggers
 			return retVal;
 		}

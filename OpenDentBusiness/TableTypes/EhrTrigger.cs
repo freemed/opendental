@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace OpenDentBusiness {
@@ -27,25 +28,18 @@ namespace OpenDentBusiness {
 		public string CvxList;
 		///<summary></summary>
 		public string AllergyDefNumList;
-		///<summary>Age, Gender.  Can be multiple age entries but only one gender entry as coma delimited values.  Example: " age,>18  age&lt;=55  gender,male"
-		///</summary>
+		///<summary>Age, Gender.  Can be multiple age entries but only one gender entry as coma delimited values.  Example: " age,>18  age&lt;=55  gender,male"</summary>
 		public string DemographicsList;
-		///<summary></summary>
+		///<summary>Tab delimited list, sub-components separated by semicolon. Loinc;Value;Units\t Example: Cholesterol [Mass/volume] in Serum or Plasma>150mg/dL=="2093-3;>150;mg/dL"</summary>
 		public string LabLoincList;
 		///<summary>Height, Weight, Bp s/d, and BMI</summary>
 		public string VitalLoincList;
+		///<summary>The reccomended course of action for this intervention.  </summary>
+		public string Instructions;
+		///<summary>Bibliographic information, not a URL. </summary>
+		public string Bibliography;
 		///<summary>Requires One, OneOfEachCategory, TwoOrMore, or All for trigger to match.  </summary>
 		public MatchCardinality Cardinality;
-		///<summary>The reccomended course of action for this intervention.  </summary>
-		public string Reccomendation;
-		///<summary>Bibliographic citation, not a URL. </summary>
-		public string Bibliography;
-		///<summary>URI/link to the bibliographic source, if available. </summary>
-		public string BibliographicLink;
-		///<summary>The person or organization that developed this CDS intervention. </summary>
-		public string Developer;
-		///<summary>The person or organization that funded the research behind this CDS intervention. </summary>
-		public string FundingSource;
 
 
 		///<summary></summary>
@@ -99,6 +93,16 @@ namespace OpenDentBusiness {
 			return retVal;
 		}
 
+	}
+
+	///<summary>Not a DB table. Used to pass intervention information to FormCDSI based on matched trigger. </summary>
+	public class CDSIntervention {
+		///<summary>The EHRtrigger that this CDSIntervention is generated from. </summary>
+		public EhrTrigger EhrTrigger;
+		///<summary>The message generated for the user based on the specific objects that triggered the intervention. </summary>
+		public string InterventionMessage;
+		///<summary>The list of objects that will be passed to FormInfobutton. </summary>
+		public List<object> TriggerObjects;
 	}
 
 	/// <summary></summary>

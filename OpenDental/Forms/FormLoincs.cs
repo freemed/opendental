@@ -23,6 +23,7 @@ namespace OpenDental {
 
 		private void FormLoincPicker_Load(object sender,EventArgs e) {
 			listLoincSearch=new List<Loinc>();
+			ActiveControl=textCode;
 		}
 
 		private void fillGrid() {

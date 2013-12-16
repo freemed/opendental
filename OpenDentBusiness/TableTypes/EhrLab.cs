@@ -15,6 +15,7 @@ namespace OpenDentBusiness {
 		public long EhrLabMessageNum;
 		#region ORC fields
 		///<summary>Always RE unless importing from outside sources.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public HL70119 OrderControlCode;
 		#region Placer Order Num OCR.2 and OBR.2
 		///<summary>Placer order number assigned to this lab order, usually assigned by the dental office.  Not the same as EhrLabNum, but similar.  OBR.2.1 and ORC.2.1.</summary>
@@ -59,7 +60,7 @@ namespace OpenDentBusiness {
 		public string OrderingProviderSuffix;
 		///<summary>Example: DR, Not MD, MD would be stored in an optional field that was not implemented called OrderingProviderDegree.  ORC.12.6</summary>
 		public string OrderingProviderPrefix;
-		#region Ordering Provider Id Assigning Authority
+		#region Ordering Provider Id Assigning Authority ORC.12.9
 		///<summary>Usually empty, "The value of [this field] reflects a local code that represents the combination of [the next two fields]."  ORC.12.9.1</summary>
 		public string OrderingProviderAssigningAuthorityNamespaceID;
 		///<summary>ISO compliant OID that represents the organization that assigned the unique provider ID.  ORC.12.9.2</summary>
@@ -68,8 +69,10 @@ namespace OpenDentBusiness {
 		public string OrderingProviderAssigningAuthorityIDType;
 		#endregion
 		///<summary>Describes the type of name used.  ORC.12.10</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public HL70200 OrderingProviderNameTypeCode;
 		///<summary>Must be value from HL70203 code set, see note at bottom of EhrLab.cs for usage.  ORC.12.13</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public HL70203 OrderingProviderIdentifierTypeCode;
 		#endregion
 		#endregion OCR
@@ -84,12 +87,14 @@ namespace OpenDentBusiness {
 		///<summary>Description of UsiId.  OBR.4.2</summary>
 		public string UsiText;
 		///<summary>CodeSystem that UsiId came from.  OBR.4.3</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public HL70369 UsiCodeSystemName;
 		///<summary>OBR.4.4</summary>
 		public string UsiIDAlt;
 		///<summary>Description of UsiIdAlt.  OBR.4.5</summary>
 		public string UsiTextAlt;
 		///<summary>CodeSystem that UsiId came from.  OBR.4.6</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public HL70369 UsiCodeSystemNameAlt;
 		///<summary>Optional text that describes the original text used to encode the values above.  OBR.4.9</summary>
 		public string UsiTextOriginal;
@@ -99,6 +104,7 @@ namespace OpenDentBusiness {
 		///<summary>May be empty.  Stored as string in the format YYYY[MM[DD[HH[MM[SS]]]]] where bracketed values are optional.  OBR.8.1</summary>
 		public string ObservationDateTimeEnd;
 		///<summary>OBR.11</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public HL70065 SpecimenActionCode;
 		///<summary>[0..*]This is not a data column but is stored in a seperate table named EhrLabClinicalInfo.  OBR.13.*</summary>
 		[CrudColumn(IsNotDbColumn=true)]
@@ -107,6 +113,7 @@ namespace OpenDentBusiness {
 		///<summary>Date Time that the result was stored or last updated.  Stored in the format YYYYMMDDHHmmss.  Required to be accurate to the second.  OBR.22.1</summary>
 		public string ResultDateTime;
 		///<summary>OBR.25</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public HL70123 ResultStatus;
 		#region Parent Result OBR.26
 		///<summary>OBR.26.1.1</summary>
@@ -114,6 +121,7 @@ namespace OpenDentBusiness {
 		///<summary>Description of ParentObservationId.  OBR.26.1.2</summary>
 		public string ParentObservationText;
 		///<summary>CodeSystem that ParentObservationId came from.  OBR.26.1.3</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public HL70369 ParentObservationCodeSystemName;
 		///<summary>OBR.26.1.4</summary>
 		public string ParentObservationIDAlt;
@@ -151,9 +159,10 @@ namespace OpenDentBusiness {
 		public string ParentFillerOrderUniversalIDType;
 		#endregion
 		#endregion
-		///<summary>[0..*]This is not a data column but is stored in a seperate table named EhrLabResultsHandling. OBR.49.*</summary>
-		[CrudColumn(IsNotDbColumn=true)]
-		public List<EhrLabResultsHandling> ListEhrLabResultsHandling;
+		///<summary>"Film with patient."  Technically a coded value from HL70507.  Stored as a bool instead of 7 seperate columns. OBR.49.* is used to set both ListEhrLabResultsHandlingF and ListEhrLabResultsHandlingN.  OBR.49.*</summary>
+		public bool ListEhrLabResultsHandlingF;
+		///<summary>"Notify provider when ready."  Technically a coded value from HL70507.  Stored as a bool instead of 7 seperate columns. OBR.49.* is used to set both ListEhrLabResultsHandlingF and ListEhrLabResultsHandlingN.  OBR.49.*</summary>
+		public bool ListEhrLabResultsHandlingN;
 		#endregion OBR
 		#region NTE segments pertaining to OBR;  NTE.*
 		///<summary>[0..*]This is not a data column but is stored in a seperate table named EhrLabNote. NTE.*</summary>
@@ -168,7 +177,9 @@ namespace OpenDentBusiness {
 		///<summary>Stored as string in the format YYYY[MM[DD[HH[MM[SS]]]]] where bracketed values are optional.  TQ1.8</summary>
 		public string TQ1DateTimeEnd;
 		#endregion
-
+		///<summary>[0..*] This is not a data column but is stored in a seperate table named EhrLabResult. OBX.*</summary>
+		[CrudColumn(IsNotDbColumn=true)]
+		public List<EhrLabResult> ListEhrLabResults;
 
 		///<summary></summary>
 		public EhrLab Copy() {

@@ -55,6 +55,14 @@ namespace OpenDentBusiness{
 			return Crud.UcumCrud.Insert(ucum);
 		}
 
+		public static List<Ucum> GetAll() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Ucum>>(MethodBase.GetCurrentMethod());
+			}
+			string command="SELECT * FROM ucum ORDER BY UcumCode";
+			return Crud.UcumCrud.SelectMany(command);
+		}
+
 		///<summary>Returns a list of just the codes for use in update or insert logic.</summary>
 		public static List<string> GetAllCodes() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

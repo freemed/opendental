@@ -59,6 +59,8 @@ namespace OpenDentBusiness.Crud{
 				ehrTrigger.DemographicsList = PIn.String(table.Rows[i]["DemographicsList"].ToString());
 				ehrTrigger.LabLoincList     = PIn.String(table.Rows[i]["LabLoincList"].ToString());
 				ehrTrigger.VitalLoincList   = PIn.String(table.Rows[i]["VitalLoincList"].ToString());
+				ehrTrigger.Instructions     = PIn.String(table.Rows[i]["Instructions"].ToString());
+				ehrTrigger.Bibliography     = PIn.String(table.Rows[i]["Bibliography"].ToString());
 				ehrTrigger.Cardinality      = (MatchCardinality)PIn.Int(table.Rows[i]["Cardinality"].ToString());
 				retVal.Add(ehrTrigger);
 			}
@@ -100,7 +102,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="EhrTriggerNum,";
 			}
-			command+="Description,ProblemSnomedList,ProblemIcd9List,ProblemIcd10List,ProblemDefNumList,MedicationNumList,RxCuiList,CvxList,AllergyDefNumList,DemographicsList,LabLoincList,VitalLoincList,Cardinality) VALUES(";
+			command+="Description,ProblemSnomedList,ProblemIcd9List,ProblemIcd10List,ProblemDefNumList,MedicationNumList,RxCuiList,CvxList,AllergyDefNumList,DemographicsList,LabLoincList,VitalLoincList,Instructions,Bibliography,Cardinality) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(ehrTrigger.EhrTriggerNum)+",";
 			}
@@ -117,6 +119,8 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(ehrTrigger.DemographicsList)+"',"
 				+"'"+POut.String(ehrTrigger.LabLoincList)+"',"
 				+"'"+POut.String(ehrTrigger.VitalLoincList)+"',"
+				+"'"+POut.String(ehrTrigger.Instructions)+"',"
+				+"'"+POut.String(ehrTrigger.Bibliography)+"',"
 				+    POut.Int   ((int)ehrTrigger.Cardinality)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -142,6 +146,8 @@ namespace OpenDentBusiness.Crud{
 				+"DemographicsList = '"+POut.String(ehrTrigger.DemographicsList)+"', "
 				+"LabLoincList     = '"+POut.String(ehrTrigger.LabLoincList)+"', "
 				+"VitalLoincList   = '"+POut.String(ehrTrigger.VitalLoincList)+"', "
+				+"Instructions     = '"+POut.String(ehrTrigger.Instructions)+"', "
+				+"Bibliography     = '"+POut.String(ehrTrigger.Bibliography)+"', "
 				+"Cardinality      =  "+POut.Int   ((int)ehrTrigger.Cardinality)+" "
 				+"WHERE EhrTriggerNum = "+POut.Long(ehrTrigger.EhrTriggerNum);
 			Db.NonQ(command);
@@ -197,6 +203,14 @@ namespace OpenDentBusiness.Crud{
 			if(ehrTrigger.VitalLoincList != oldEhrTrigger.VitalLoincList) {
 				if(command!=""){ command+=",";}
 				command+="VitalLoincList = '"+POut.String(ehrTrigger.VitalLoincList)+"'";
+			}
+			if(ehrTrigger.Instructions != oldEhrTrigger.Instructions) {
+				if(command!=""){ command+=",";}
+				command+="Instructions = '"+POut.String(ehrTrigger.Instructions)+"'";
+			}
+			if(ehrTrigger.Bibliography != oldEhrTrigger.Bibliography) {
+				if(command!=""){ command+=",";}
+				command+="Bibliography = '"+POut.String(ehrTrigger.Bibliography)+"'";
 			}
 			if(ehrTrigger.Cardinality != oldEhrTrigger.Cardinality) {
 				if(command!=""){ command+=",";}

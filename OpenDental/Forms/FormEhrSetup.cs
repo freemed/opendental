@@ -126,18 +126,18 @@ namespace OpenDental {
 			FormS.ShowDialog();
 		}
 
-		private void button1_Click(object sender,EventArgs e) {
-			Random rand=new Random();
-			FormCDSIntervention FormCDSI=new FormCDSIntervention();
-			FormCDSI.DictEhrTriggerResults=EhrTriggers.TriggerMatch(ICD9s.GetOne(rand.Next(8000)),Patients.GetPat(1));
-			FormCDSI.ShowIfRequired();
-			if(FormCDSI.DialogResult==DialogResult.Cancel) {//using ==DialogResult.Cancel instead of !=DialogResult.OK
-				MsgBox.Show(this,"You have disarmed the nuke.");
-				return;//effectively canceling the action.
-			}
-			MsgBox.Show(this,"Yay, you did it.");
-			//stuff you might do, like prescribe meds or diagnose problem.
-		}
+		//private void button1_Click(object sender,EventArgs e) {
+		//	Random rand=new Random();
+		//	FormCDSIntervention FormCDSI=new FormCDSIntervention();
+		//	FormCDSI.DictEhrTriggerResults=EhrTriggers.TriggerMatch(ICD9s.GetOne(rand.Next(8000)),Patients.GetPat(1));
+		//	FormCDSI.ShowIfRequired();
+		//	if(FormCDSI.DialogResult==DialogResult.Cancel) {//using ==DialogResult.Cancel instead of !=DialogResult.OK
+		//		MsgBox.Show(this,"You have disarmed the nuke.");
+		//		return;//effectively canceling the action.
+		//	}
+		//	MsgBox.Show(this,"Yay, you did it.");
+		//	//stuff you might do, like prescribe meds or diagnose problem.
+		//}
 
 //		private void butICD9CM31_Click(object sender,EventArgs e) {
 //			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"This button does not perform error checking and only works from Ryan's computer.")) {

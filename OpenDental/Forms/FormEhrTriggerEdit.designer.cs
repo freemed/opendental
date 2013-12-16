@@ -53,6 +53,10 @@ namespace OpenDental{
 			this.comboCardinality = new System.Windows.Forms.ComboBox();
 			this.labelCardinality = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
+			this.label3 = new System.Windows.Forms.Label();
+			this.textInstruction = new System.Windows.Forms.TextBox();
+			this.label1 = new System.Windows.Forms.Label();
+			this.textBibliography = new System.Windows.Forms.TextBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
@@ -194,7 +198,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(105, 77);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(589, 430);
+			this.gridMain.Size = new System.Drawing.Size(589, 392);
 			this.gridMain.TabIndex = 202;
 			this.gridMain.Title = "Trigger Conditions";
 			this.gridMain.TranslationName = "";
@@ -346,7 +350,6 @@ namespace OpenDental{
 			this.butAddLab.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAddLab.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAddLab.CornerRadius = 4F;
-			this.butAddLab.Enabled = false;
 			this.butAddLab.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAddLab.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butAddLab.Location = new System.Drawing.Point(6, 15);
@@ -480,10 +483,48 @@ namespace OpenDental{
 			this.label4.Text = "Cardinality";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(105, 478);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(93, 17);
+			this.label3.TabIndex = 218;
+			this.label3.Text = "Instructions";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textInstruction
+			// 
+			this.textInstruction.Location = new System.Drawing.Point(200, 478);
+			this.textInstruction.Multiline = true;
+			this.textInstruction.Name = "textInstruction";
+			this.textInstruction.Size = new System.Drawing.Size(494, 84);
+			this.textInstruction.TabIndex = 217;
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(105, 568);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(93, 17);
+			this.label1.TabIndex = 220;
+			this.label1.Text = "Bibliography";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textBibliography
+			// 
+			this.textBibliography.Location = new System.Drawing.Point(200, 568);
+			this.textBibliography.Multiline = true;
+			this.textBibliography.Name = "textBibliography";
+			this.textBibliography.Size = new System.Drawing.Size(494, 42);
+			this.textBibliography.TabIndex = 219;
+			// 
 			// FormEhrTriggerEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(706, 652);
+			this.Controls.Add(this.label1);
+			this.Controls.Add(this.textBibliography);
+			this.Controls.Add(this.label3);
+			this.Controls.Add(this.textInstruction);
 			this.Controls.Add(this.comboCardinality);
 			this.Controls.Add(this.labelCardinality);
 			this.Controls.Add(this.label4);
@@ -546,5 +587,9 @@ namespace OpenDental{
 		private System.Windows.Forms.ComboBox comboCardinality;
 		private System.Windows.Forms.Label labelCardinality;
 		private System.Windows.Forms.Label label4;
+		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.TextBox textInstruction;
+		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.TextBox textBibliography;
 	}
 }
