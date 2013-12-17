@@ -196,7 +196,8 @@ namespace OpenDentBusiness {
 }
 
 namespace EhrLaboratories {
-	///<summary>Value Type.  OID:2.16.840.1.113883.12.125  HL70369 code:HL70125.  Source HL7 2.5.1 Labratory Reporting Interface documentation.</summary>
+	///<summary>Value Type.  OID:2.16.840.1.113883.12.125  HL70369 code:HL70125.  Source HL7 2.5.1 Labratory Reporting Interface documentation.
+	///<para>This enum is also used in FormPatListElementEditEHR2014.cs and assumes the order of this enum does not change. If it does, the combo box filled with these values must also be updated.</para></summary>
 	public enum HL70125 {
 		///<summary>0 - Coded Entry.
 		///<para>Usage: R </para>

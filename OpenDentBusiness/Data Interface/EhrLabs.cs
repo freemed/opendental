@@ -7,6 +7,42 @@ using System.Text;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class EhrLabs{
+
+		//Processes an HL7 message into an EHRLab object.
+		public EhrLab ProcessHl7Message(string message){
+			EhrLab retVal=new EhrLab();
+			//TODO:
+			return retVal;
+		}
+
+		///<summary>Gets one EhrLab from the db.</summary>
+		public static EhrLab GetOne(long ehrLabNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<EhrLab>(MethodBase.GetCurrentMethod(),ehrLabNum);
+			}
+			return Crud.EhrLabCrud.SelectOne(ehrLabNum);
+		}
+
+		///<summary>Gets one EhrLab from the db.</summary>
+		public static EhrLab GetByGUID(string root, string extension) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<EhrLab>(MethodBase.GetCurrentMethod(),root, extension);
+			}
+			string command="";
+			//TODO:
+			return Crud.EhrLabCrud.SelectOne(command);
+		}
+
+		///<summary></summary>
+		public static long Insert(EhrLab ehrLab) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				ehrLab.EhrLabNum=Meth.GetLong(MethodBase.GetCurrentMethod(),ehrLab);
+				return ehrLab.EhrLabNum;
+			}
+			//TODO:Insert if new, Update if not; Update/Insert children like labresults and the like.
+			return Crud.EhrLabCrud.Insert(ehrLab);
+		}
+
 		//If this table type will exist as cached data, uncomment the CachePattern region below and edit.
 		/*
 		#region CachePattern
@@ -57,14 +93,6 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT * FROM ehrlab WHERE PatNum = "+POut.Long(patNum);
 			return Crud.EhrLabCrud.SelectMany(command);
-		}
-
-		///<summary>Gets one EhrLab from the db.</summary>
-		public static EhrLab GetOne(long ehrLabNum){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				return Meth.GetObject<EhrLab>(MethodBase.GetCurrentMethod(),ehrLabNum);
-			}
-			return Crud.EhrLabCrud.SelectOne(ehrLabNum);
 		}
 
 		///<summary></summary>

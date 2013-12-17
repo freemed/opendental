@@ -7,12 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using EhrLaboratories;
 
 namespace OpenDental {
 	public partial class FormPatListElementEditEHR2014:Form {
 		public EhrPatListElement2014 Element;
-		public bool IsNew; 
+		public bool IsNew;
 		public bool Delete;
+		private List<Ucum> _listUCUM;
 
 		public FormPatListElementEditEHR2014() {
 			InitializeComponent();
@@ -39,6 +41,11 @@ namespace OpenDental {
 					//no harm in continuing since this form is error checked on OK click.
 				}
 			}
+			fillCombos();
+			if(!IsNew) {
+				comboUnits.Text=Element.LabValueUnits;
+				comboLabValueType.SelectedIndex=(int)Element.LabValueType;
+			}
 			textLabValue.Text=Element.LabValue;
 			if(Element.StartDate.Year>1880) {
 				textDateStart.Text=Element.StartDate.ToShortDateString();
@@ -47,6 +54,35 @@ namespace OpenDental {
 				textDateStop.Text=Element.EndDate.ToShortDateString();
 			}
 			ChangeLayout();
+		}
+
+		private void fillCombos() {
+			//Units of measure----------------------------------------
+			_listUCUM=Ucums.GetAll();
+			if(_listUCUM.Count==0) {
+				MsgBox.Show(this,"Units of measure have not been imported. Go to the code system importer window to import UCUM codes to continue.");
+				DialogResult=DialogResult.Cancel;
+			}
+			int _tempSelectedIndex=0;
+			for(int i=0;i<_listUCUM.Count;i++) {
+				comboUnits.Items.Add(_listUCUM[i].UcumCode);
+				if(_listUCUM[i].UcumCode=="mg/dL") {//arbitrarily chosen common unit of measure.
+					_tempSelectedIndex=i;
+				}
+			}
+			comboUnits.SelectedIndex=_tempSelectedIndex;
+			//Lab Value Type.  Based off of the HL70125 data type (Value Type)----------------------------------------
+			comboLabValueType.Items.Add("Coded Entry");
+			comboLabValueType.Items.Add("Coded with Exceptions");
+			comboLabValueType.Items.Add("Date");
+			comboLabValueType.Items.Add("Formatted Text");
+			comboLabValueType.Items.Add("Numeric");//default
+			comboLabValueType.Items.Add("Structured Numeric");
+			comboLabValueType.Items.Add("String Data");
+			comboLabValueType.Items.Add("Time");
+			comboLabValueType.Items.Add("Time Stamp");
+			comboLabValueType.Items.Add("Text Data");
+			comboLabValueType.SelectedIndex=4;//Numeric.  This is what we used to assume all lab results were like.
 		}
 
 		private void listRestriction_SelectedIndexChanged(object sender,EventArgs e) {
@@ -64,6 +100,7 @@ namespace OpenDental {
 			labelBeforeDate.Visible=false;
 			labelExample.Visible=false;
 			labelProblemSuggest.Visible=false;
+			labelLabValueType.Visible=false;
 			//TextBoxes
 			textCompareString.Visible=false;
 			textSNOMED.Visible=false;
@@ -74,6 +111,9 @@ namespace OpenDental {
 			butPicker.Visible=false;
 			butSNOMED.Visible=false;
 			butProblem.Visible=false;
+			//ComboBoxes
+			comboUnits.Visible=false;
+			comboLabValueType.Visible=false;
 			//ListBoxes
 			listOperand.Visible=false;
 			switch(listRestriction.SelectedIndex) {
@@ -133,6 +173,7 @@ namespace OpenDental {
 					labelBeforeDate.Visible=true;
 					labelExample.Visible=true;
 					labelExample.Text="Ex: 1004-1";
+					labelLabValueType.Visible=true;
 					//TextBoxes
 					textCompareString.Visible=true;
 					textLabValue.Visible=true;
@@ -140,6 +181,9 @@ namespace OpenDental {
 					textDateStop.Visible=true;
 					//Buttons
 					butPicker.Visible=true;
+					//ComboBoxes
+					comboUnits.Visible=true;
+					comboLabValueType.Visible=true;
 					//ListBoxes
 					listOperand.Visible=true;
 					break;
@@ -426,6 +470,7 @@ namespace OpenDental {
 						return;
 					}
 					textCompareString.Text=FormL.SelectedLoinc.LoincCode;
+					comboUnits.Text=FormL.SelectedLoinc.UnitsUCUM;//may be valued, may be blank.
 					break;
 				case 4://Gender
 					//Not visible
@@ -502,6 +547,8 @@ namespace OpenDental {
 				Element.CompareString=textSNOMED.Text;
 			}
 			Element.LabValue=textLabValue.Text;
+			Element.LabValueType=(HL70125)comboLabValueType.SelectedIndex;
+			Element.LabValueUnits=comboUnits.Text;//UCUM units or blank.
 			try {
 				Element.StartDate=DateTime.Parse(textDateStart.Text);
 			}

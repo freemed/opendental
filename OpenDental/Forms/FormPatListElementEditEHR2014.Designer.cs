@@ -45,6 +45,9 @@
 			this.textDateStop = new OpenDental.ValidDate();
 			this.textDateStart = new OpenDental.ValidDate();
 			this.labelProblemSuggest = new System.Windows.Forms.Label();
+			this.labelLabValueType = new System.Windows.Forms.Label();
+			this.comboUnits = new System.Windows.Forms.ComboBox();
+			this.comboLabValueType = new System.Windows.Forms.ComboBox();
 			this.SuspendLayout();
 			// 
 			// labelOperand
@@ -59,7 +62,7 @@
 			// butCancel
 			// 
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Location = new System.Drawing.Point(409, 291);
+			this.butCancel.Location = new System.Drawing.Point(409, 337);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 23);
 			this.butCancel.TabIndex = 7;
@@ -70,7 +73,7 @@
 			// butOK
 			// 
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Location = new System.Drawing.Point(328, 291);
+			this.butOK.Location = new System.Drawing.Point(328, 337);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75, 23);
 			this.butOK.TabIndex = 3;
@@ -81,7 +84,7 @@
 			// butDelete
 			// 
 			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butDelete.Location = new System.Drawing.Point(24, 291);
+			this.butDelete.Location = new System.Drawing.Point(24, 337);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(75, 23);
 			this.butDelete.TabIndex = 8;
@@ -174,7 +177,7 @@
 			// 
 			// labelAfterDate
 			// 
-			this.labelAfterDate.Location = new System.Drawing.Point(12, 237);
+			this.labelAfterDate.Location = new System.Drawing.Point(12, 267);
 			this.labelAfterDate.Name = "labelAfterDate";
 			this.labelAfterDate.Size = new System.Drawing.Size(177, 17);
 			this.labelAfterDate.TabIndex = 22;
@@ -183,7 +186,7 @@
 			// 
 			// labelBeforeDate
 			// 
-			this.labelBeforeDate.Location = new System.Drawing.Point(12, 259);
+			this.labelBeforeDate.Location = new System.Drawing.Point(12, 289);
 			this.labelBeforeDate.Name = "labelBeforeDate";
 			this.labelBeforeDate.Size = new System.Drawing.Size(177, 17);
 			this.labelBeforeDate.TabIndex = 24;
@@ -239,32 +242,61 @@
 			// 
 			// textDateStop
 			// 
-			this.textDateStop.Location = new System.Drawing.Point(190, 258);
+			this.textDateStop.Location = new System.Drawing.Point(190, 288);
 			this.textDateStop.Name = "textDateStop";
 			this.textDateStop.Size = new System.Drawing.Size(137, 20);
 			this.textDateStop.TabIndex = 27;
 			// 
 			// textDateStart
 			// 
-			this.textDateStart.Location = new System.Drawing.Point(190, 234);
+			this.textDateStart.Location = new System.Drawing.Point(190, 264);
 			this.textDateStart.Name = "textDateStart";
 			this.textDateStart.Size = new System.Drawing.Size(137, 20);
 			this.textDateStart.TabIndex = 26;
 			// 
 			// labelProblemSuggest
 			// 
-			this.labelProblemSuggest.Location = new System.Drawing.Point(333, 213);
+			this.labelProblemSuggest.Location = new System.Drawing.Point(333, 243);
 			this.labelProblemSuggest.Name = "labelProblemSuggest";
 			this.labelProblemSuggest.Size = new System.Drawing.Size(146, 65);
 			this.labelProblemSuggest.TabIndex = 35;
 			this.labelProblemSuggest.Text = "Note: Picking from problem list above will provide the best results.";
 			this.labelProblemSuggest.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
+			// labelLabValueType
+			// 
+			this.labelLabValueType.Location = new System.Drawing.Point(65, 238);
+			this.labelLabValueType.Name = "labelLabValueType";
+			this.labelLabValueType.Size = new System.Drawing.Size(124, 17);
+			this.labelLabValueType.TabIndex = 37;
+			this.labelLabValueType.Text = "Lab Value Type";
+			this.labelLabValueType.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.labelLabValueType.Visible = false;
+			// 
+			// comboUnits
+			// 
+			this.comboUnits.FormattingEnabled = true;
+			this.comboUnits.Location = new System.Drawing.Point(333, 209);
+			this.comboUnits.Name = "comboUnits";
+			this.comboUnits.Size = new System.Drawing.Size(75, 21);
+			this.comboUnits.TabIndex = 226;
+			// 
+			// comboLabValueType
+			// 
+			this.comboLabValueType.FormattingEnabled = true;
+			this.comboLabValueType.Location = new System.Drawing.Point(190, 237);
+			this.comboLabValueType.Name = "comboLabValueType";
+			this.comboLabValueType.Size = new System.Drawing.Size(137, 21);
+			this.comboLabValueType.TabIndex = 227;
+			// 
 			// FormPatListElementEditEHR2014
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(496, 326);
+			this.ClientSize = new System.Drawing.Size(496, 372);
+			this.Controls.Add(this.comboLabValueType);
+			this.Controls.Add(this.comboUnits);
+			this.Controls.Add(this.labelLabValueType);
 			this.Controls.Add(this.labelProblemSuggest);
 			this.Controls.Add(this.butProblem);
 			this.Controls.Add(this.labelSNOMED);
@@ -320,5 +352,8 @@
 		private System.Windows.Forms.Label labelSNOMED;
 		private System.Windows.Forms.Button butProblem;
 		private System.Windows.Forms.Label labelProblemSuggest;
+		private System.Windows.Forms.Label labelLabValueType;
+		private System.Windows.Forms.ComboBox comboUnits;
+		private System.Windows.Forms.ComboBox comboLabValueType;
 	}
 }
