@@ -165,6 +165,31 @@ namespace OpenDentBusiness {
 			throw new Exception("Unrecognized date format string.");
 		}
 
+		///<summary>The format must be the MySQL format.  The following formats are currently acceptable as input: %c/%d/%Y %H:%i:%s and %m/%d/%Y %H:%i:%s.</summary>
+		public static string DateTFormatColumn(string colName,string format) {
+			if(DataConnection.DBtype==DatabaseType.Oracle) {
+				if(format=="%c/%d/%Y %H:%i:%s") {
+					return "TO_CHAR("+colName+",'MM/DD/YYYY %HH24:%MI:%SS')";//Sadly, not exactly the same but closest option.
+				}
+				else if(format=="%m/%d/%Y %H:%i:%s") {
+					return "TO_CHAR("+colName+",'MM/DD/YYYY %HH24:%MI:%SS')";//Sadly, not exactly the same but closest option.
+				}
+				throw new Exception("Unrecognized datetime format string.");
+			}
+			//MySQL-----------------------------------------------------------------------------
+			if(System.Globalization.CultureInfo.CurrentCulture.Name.EndsWith("US")) {
+				return "DATE_FORMAT("+colName+",'"+format+"')";
+			}
+			//foreign, assume d/m/y
+			if(format=="%c/%d/%Y %H:%i:%s") {
+				return "DATE_FORMAT("+colName+",'%d/%c/%Y %H:%i:%s')";
+			}
+			else if(format=="%m/%d/%Y %H:%i:%s") {
+				return "DATE_FORMAT("+colName+",'%d/%m/%Y %H:%i:%s')";
+			}
+			throw new Exception("Unrecognized datetime format string.");
+		}
+
 		/* Not used
 		///<summary>Helper for Oracle that will return equivalent of MySql CURTIME().</summary>
 		public static string Curtime() {

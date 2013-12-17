@@ -28,21 +28,70 @@ namespace OpenDentBusiness {
 						select+=",patient.Gender";//will look odd if user adds multiple gender columns, enum needs to be "decoded" when filling grid.
 						break;
 					case EhrRestrictionType.LabResult://---------------------------------------------------------------------------------------------------------------------------
-						HL70125 ValueType=new HL70125();
-						switch(ValueType) {
-
-						}
-						select+=",labresult"+i+".ObsValue,labresult"+i+".DateTimeTest";//format column name when filling grid.
-						from+=",labresult AS labresult"+i+", labpanel AS labpanel"+i;
-						where+="AND labpanel"+i+".LabpanelNum=labresult"+i+".LabpanelNum AND patient.PatNum=labpanel"+i+".PatNum ";//join
-						where+="AND labresult"+i+".TestId='"+elementList[i].CompareString+"' "
-									+"AND labresult"+i+".ObsValue"+GetOperandText(elementList[i].Operand)+"'"+PIn.String(elementList[i].LabValue)+"' ";//filter
+						//TODO Units
+						from+=",ehrlab AS ehrlab"+i+",ehrlabresult AS ehrlabresult"+i+" ";
+						where+="AND ehrlab"+i+".PatNum=patient.PatNum AND ehrlab"+i+".EhrLabNum=ehrlabresult"+i+".EhrLabNum ";//join
+						where+="AND ("+elementList[i].CompareString+"=ehrlabresult"+i+".ObservationIdentifierID OR " 
+							+elementList[i].CompareString+"=ehrlabresult"+i+".ObservationIdentifierIDAlt) ";//filter, LOINC of lab observation
 						if(elementList[i].StartDate!=null && elementList[i].StartDate.Year>1880) {
-							where+="AND labresult"+i+".DateTimeTest>"+POut.Date(elementList[i].StartDate)+" ";//after this date
+							where+="AND "+DbHelper.DateColumn("ehrlabresult"+i+".ObservationDateTime")+">="+POut.Date(elementList[i].StartDate)+" ";//on or after this date
 						}
 						if(elementList[i].EndDate!=null && elementList[i].EndDate.Year>1880) {
-							where+="AND labresult"+i+".DateTimeTest<"+POut.Date(elementList[i].EndDate)+" ";//before this date
+							where+="AND "+DbHelper.DateColumn("ehrlabresult"+i+".ObservationDateTime")+"<="+POut.Date(elementList[i].EndDate)+" ";//on or before this date
 						}
+						switch(elementList[i].LabValueType) {
+							//CE and CWE should be SNOMEDCT codes, string compare elementList[i].LabValue to ehrlabresult.ObservationValueCodedElementID or ObservationValueCodedElementIDAlt
+							case HL70125.CE:
+							case HL70125.CWE:
+								select+=",(CASE WHEN ehrlabresult"+i+".ObservationValueCodedElementID='' THEN ehrlabresult"+i+".ObservationValueCodedElementIDAlt ELSE ehrlabresult"+i+".ObservationValueCodedElementID END) AS LabValue";
+								where+="AND (ehrlabresult"+i+".ObservationValueCodedElementID"+GetOperandText(elementList[i].Operand)+"'"+elementList[i].LabValue+"' OR "
+									+"ehrlabresult"+i+".ObservationValueCodedElementIDAlt"+GetOperandText(elementList[i].Operand)+"'"+elementList[i].LabValue+"') ";
+								break;
+							//DT is stored as a string in ehrlabresult.ObservationValueDateTime as YYYY[MM[DD]]
+							case HL70125.DT:
+								select+=","+DbHelper.DateFormatColumn("RPAD(ehrlabresult"+i+".ObservationValueDateTime,8,'01')","%m/%d/%Y");
+								where+="AND "+DbHelper.DateColumn("RPAD(ehrlabresult"+i+".ObservationValueDateTime,8,'01')")
+									+GetOperandText(elementList[i].Operand)+POut.Date(PIn.Date(elementList[i].LabValue))+" ";
+								break;
+							//TS is YYYYMMDDHHMMSS, string compare
+							case HL70125.TS:
+								select+=","+DbHelper.DateTFormatColumn("ehrlabresult"+i+".ObservationValueDateTime","%m/%d/%Y %H:%i:%s");
+								where+="AND "+POut.DateT(PIn.DateT(DbHelper.DateTFormatColumn("ehrlabresult"+i+".ObservationValueDateTime","%m/%d/%Y %H:%i:%s")))
+									+GetOperandText(elementList[i].Operand)+POut.DateT(PIn.DateT(elementList[i].LabValue))+" ";
+								break;
+							//00:00:00
+							case HL70125.TM:
+								select+=",ehrlabresult"+i+".ObservationValueTime";
+								where+="AND ehrlabresult"+i+".ObservationValueTime"+GetOperandText(elementList[i].Operand)+POut.TSpan(PIn.TSpan(elementList[i].LabValue))+" ";
+								break;
+							case HL70125.SN:
+								select+=",CONCAT(CONCAT(CONCAT(ehrlabresult"+i+".ObservationValueComparator,ehrlabresult"+i+".ObservationValueNumber1),ehrlabresult"+i+".ObservationValueSeparatorOrSuffix),ehrlabresult"+i+".ObservationValueNumber2)";
+								//where+="AND TRUE ";
+								break;
+							case HL70125.NM:
+								select+=",ehrlabresult"+i+".ObservationValueNumeric";
+								where+="AND ehrlabresult"+i+".ObservationValueNumeric"+GetOperandText(elementList[i].Operand)+POut.Double(PIn.Double(elementList[i].LabValue))+" ";
+								break;
+							case HL70125.FT:
+							case HL70125.ST:
+							case HL70125.TX:
+								select+=",ehrlabresult"+i+".ObservationValueText";
+								where+="AND ehrlabresult"+i+".ObservationValueText"+GetOperandText(elementList[i].Operand)+POut.String(elementList[i].LabValue)+" ";
+								break;
+						}
+						select+=",ehrlabresult"+i+".ObservationDateTime ";
+
+						//select+=",labresult"+i+".ObsValue,labresult"+i+".DateTimeTest";//format column name when filling grid.
+						//from+=",labresult AS labresult"+i+", labpanel AS labpanel"+i;
+						//where+="AND labpanel"+i+".LabpanelNum=labresult"+i+".LabpanelNum AND patient.PatNum=labpanel"+i+".PatNum ";//join
+						//where+="AND labresult"+i+".TestId='"+elementList[i].CompareString+"' "
+						//			+"AND labresult"+i+".ObsValue"+GetOperandText(elementList[i].Operand)+"'"+PIn.String(elementList[i].LabValue)+"' ";//filter
+						//if(elementList[i].StartDate!=null && elementList[i].StartDate.Year>1880) {
+						//	where+="AND labresult"+i+".DateTimeTest>"+POut.Date(elementList[i].StartDate)+" ";//after this date
+						//}
+						//if(elementList[i].EndDate!=null && elementList[i].EndDate.Year>1880) {
+						//	where+="AND labresult"+i+".DateTimeTest<"+POut.Date(elementList[i].EndDate)+" ";//before this date
+						//}
 						break;
 					case EhrRestrictionType.Medication://--------------------------------------------------------------------------------------------------------------------------
 						select+=",medicationpat"+i+".DateStart";//Name of medication will be in column title.
