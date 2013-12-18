@@ -98,6 +98,13 @@ namespace OpenDental {
 			ListFeeSchedFilesOntario.Add("ON_ODA_2013_PA.txt");//Ontario Dental Association 2013 fee schedule for Paediatric Dentists.
 			ListFeeSchedFilesOntario.Add("ON_ODA_2013_PE.txt");//Ontario Dental Association 2013 fee schedule for Periodontists.
 			ListFeeSchedFilesOntario.Add("ON_ODA_2013_PR.txt");//Ontario Dental Association 2013 fee schedule for Prosthodontists.
+			ListFeeSchedFilesOntario.Add("ON_ODA_2014_AN.txt");//Ontario Dental Association 2014 fee schedule for Anaesthesiologists.
+			ListFeeSchedFilesOntario.Add("ON_ODA_2014_EN.txt");//Ontario Dental Association 2014 fee schedule for Endodontists.
+			ListFeeSchedFilesOntario.Add("ON_ODA_2014_GP.txt");//Ontario Dental Association 2014 fee schedule for General Practitioners.
+			ListFeeSchedFilesOntario.Add("ON_ODA_2014_OS.txt");//Ontario Dental Association 2014 fee schedule for Oral & Maxillofacial Surgeons.
+			ListFeeSchedFilesOntario.Add("ON_ODA_2014_PA.txt");//Ontario Dental Association 2014 fee schedule for Paediatric Dentists.
+			ListFeeSchedFilesOntario.Add("ON_ODA_2014_PE.txt");//Ontario Dental Association 2014 fee schedule for Periodontists.
+			ListFeeSchedFilesOntario.Add("ON_ODA_2014_PR.txt");//Ontario Dental Association 2014 fee schedule for Prosthodontists.
 		}		
 
 		private void gridFeeSchedFiles_CellClick(object sender,ODGridClickEventArgs e) {
