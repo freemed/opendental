@@ -2893,6 +2893,24 @@ namespace OpenDentBusiness {
 					Db.NonQ(command);
 				}
 				#endregion
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE guardian ADD IsGuardian tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE guardian ADD IsGuardian number(3)";
+					Db.NonQ(command);
+					command="UPDATE guardian SET IsGuardian = 0 WHERE IsGuardian IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE guardian MODIFY IsGuardian NOT NULL";
+					Db.NonQ(command);
+				}
+				command="UPDATE guardian SET IsGuardian=1";//Works for both MySQL and Oracle.
+				Db.NonQ(command);
+
+
+
+
 
 				command="UPDATE preference SET ValueString = '14.1.0.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
@@ -2909,5 +2927,6 @@ namespace OpenDentBusiness {
 
 	}
 }
+
 
 

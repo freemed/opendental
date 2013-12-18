@@ -50,6 +50,7 @@ namespace OpenDentBusiness.Crud{
 				guardian.PatNumChild   = PIn.Long  (table.Rows[i]["PatNumChild"].ToString());
 				guardian.PatNumGuardian= PIn.Long  (table.Rows[i]["PatNumGuardian"].ToString());
 				guardian.Relationship  = (GuardianRelationship)PIn.Int(table.Rows[i]["Relationship"].ToString());
+				guardian.IsGuardian    = PIn.Bool  (table.Rows[i]["IsGuardian"].ToString());
 				retVal.Add(guardian);
 			}
 			return retVal;
@@ -90,14 +91,15 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="GuardianNum,";
 			}
-			command+="PatNumChild,PatNumGuardian,Relationship) VALUES(";
+			command+="PatNumChild,PatNumGuardian,Relationship,IsGuardian) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(guardian.GuardianNum)+",";
 			}
 			command+=
 				     POut.Long  (guardian.PatNumChild)+","
 				+    POut.Long  (guardian.PatNumGuardian)+","
-				+    POut.Int   ((int)guardian.Relationship)+")";
+				+    POut.Int   ((int)guardian.Relationship)+","
+				+    POut.Bool  (guardian.IsGuardian)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -112,7 +114,8 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE guardian SET "
 				+"PatNumChild   =  "+POut.Long  (guardian.PatNumChild)+", "
 				+"PatNumGuardian=  "+POut.Long  (guardian.PatNumGuardian)+", "
-				+"Relationship  =  "+POut.Int   ((int)guardian.Relationship)+" "
+				+"Relationship  =  "+POut.Int   ((int)guardian.Relationship)+", "
+				+"IsGuardian    =  "+POut.Bool  (guardian.IsGuardian)+" "
 				+"WHERE GuardianNum = "+POut.Long(guardian.GuardianNum);
 			Db.NonQ(command);
 		}
@@ -131,6 +134,10 @@ namespace OpenDentBusiness.Crud{
 			if(guardian.Relationship != oldGuardian.Relationship) {
 				if(command!=""){ command+=",";}
 				command+="Relationship = "+POut.Int   ((int)guardian.Relationship)+"";
+			}
+			if(guardian.IsGuardian != oldGuardian.IsGuardian) {
+				if(command!=""){ command+=",";}
+				command+="IsGuardian = "+POut.Bool(guardian.IsGuardian)+"";
 			}
 			if(command==""){
 				return;

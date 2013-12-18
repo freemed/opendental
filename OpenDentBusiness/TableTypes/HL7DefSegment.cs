@@ -84,6 +84,8 @@ namespace OpenDentBusiness {
 		MSA,
 		///<summary>Message Header</summary>
 		MSH,
+		///<summary>Next of Kin</summary>
+		NK1,
 		///<summary>Observations Request</summary>
 		OBR,
 		///<summary>Observation Related to OBR</summary>

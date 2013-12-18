@@ -18,7 +18,7 @@ namespace OpenDentBusiness.HL7 {
 		}
 		
 		///<summary>Creates the Message object and fills it with data.  Vaccines must all be for the same patient.</summary>
-		public void Initialize(Patient pat,List<VaccinePat> vaccines){
+		public void Initialize(Patient pat,List<VaccinePat> vaccines) {
 			if(vaccines.Count==0) {
 				throw new ApplicationException("Must be at least one vaccine.");
 			}
@@ -26,8 +26,8 @@ namespace OpenDentBusiness.HL7 {
 			MSH();//MSH segment. Required.  Cardinality [1..1].
 			//SFT segment. Optional. Cardinality [0..*].  Undefined and may be locally specified.
 			PID(pat);//PID segment.  Required.  Cardinality [1..1].
-			PD1();//PD1 segment.  Required if known.  Cardinality [0..1].
-			NK1();//NK1 segment.  Required if known.  Cardinality [0..1].
+			PD1(pat);//PD1 segment.  Required if known.  Cardinality [0..1].
+			NK1(pat);//NK1 segment.  Required if known.  Cardinality [0..1].
 			//PV1 segment.  Optional.  Cardinality [0..1].  Undefined and may be locally specified.
 			//PV2 segment.  Optional.  Cardinality [0..1].  Undefined and may be locally specified.
 			//GT1 segment.  Optional.  Cardinality [0..*].  Undefined and may be locally specified.
@@ -82,7 +82,17 @@ namespace OpenDentBusiness.HL7 {
 		}
 
 		///<summary>Next of Kin segment.  Guide page 111.</summary>
-		private void NK1() {
+		private void NK1(Patient pat) {
+			//Existing guardian relationships: Father, Mother, Stepfather, Stepmother, Grandfather, Grandmother, Sitter
+			//Guardians.Refresh(
+
+			//_seg=new SegmentHL7(SegmentNameHL7.NK1);
+			//_seg.SetField(0,"NK1");
+			//_seg.SetField(1,);//NK1-1 Set ID.  Required (length unspecified).  Cardinality [1..1].
+			////NK1-3 (guide page 196).
+
+
+			_msg.Segments.Add(_seg);
 		}
 
 		///<summary>Note segment.  Guide page 116.</summary>
@@ -102,14 +112,50 @@ namespace OpenDentBusiness.HL7 {
 		}
 
 		///<summary>Patient Demographic segment.  Additional demographics.  Guide page 132.</summary>
-		private void PD1() {
+		private void PD1(Patient pat) {
+			_seg=new SegmentHL7(SegmentNameHL7.PD1);
+			_seg.SetField(0,"PD1");
+			//PD1-1 Living Dependency.  Optional.  Cardinality [0..1].
+			//PD1-2 Living Arrangement.  Optional.  Cardinality [0..1].
+			//PD1-3 Patient Primary Facility.  Optional.  Cardinality [0..1].
+			//PD1-4 Patient Primary Care Provider Name & ID Number.  Optional.  Cardinality [0..1].
+			//PD1-5 Student Indicator.  Optional.  Cardinality [0..1].
+			//PD1-6 Handicap.  Optional.  Cardinality [0..1].
+			//PD1-7 Living Will Code.  Optional.  Cardinality [0..1].
+			//PD1-8 Organ Donor Code.  Optional.  Cardinality [0..1].
+			//PD1-9 Separate Bill.  Optional.  Cardinality [0..1].
+			//PD1-10 Duplicate Patient.  Optional.  Cardinality [0..1].
+			//PD1-11 Publicity Code.  Required if known (length 2..2).  Cardinality [0..1].  Value set HL70215 (guide page 209).
+			string strPublicityCode="";
+			if(pat.PreferRecallMethod==ContactMethod.DoNotCall) {
+				strPublicityCode="07";//Recall only - no calls.
+			}
+			else if(pat.PreferRecallMethod==ContactMethod.None) {
+				strPublicityCode="01";//No reminder/recall.
+			}
+			else {
+				strPublicityCode="02";//Reminder/recall - any method.
+			}
+			_seg.SetField(11,strPublicityCode);
+			//PD1-12 Protection Indicator.  Required if known (length 1..1).  Cardinality [0..1].  Value set HL70136 (guide page 199).  Allowed values are "Y" for yes, "N" for no, or blank for unknown.
+			//PD1-13 Protection Indicator.  Required if PD1-12 is not blank (length unspecified).  Cardinality [0..1].
+			//PD1-14 Place of Worship.  Optional (length unspecified).  Cardinality [0..1].
+			//PD1-15 Advance Directive Code.  Optional (length unspecified).  Cardinality [0..1].
+			//PD1-16 Immunization Registry Status.  Required if known (length unspecified).  Cardinality [0..1].  Value set HL70441 (guide page 232).
+			//PD1-17 Immunization Registry Status Effective Date.  Required if PD1-16 is not blank.  Cardinality [0..1].
+			//PD1-18 Publicity Code Effective Date.  Required if PD1-11 is not blank.
+			_seg.SetField(18,DateTime.Today.ToString("yyyyMMdd"));
+			//PD1-19 Military Branch.  Optional.
+			//PD1-20 Military Rank/Grade.  Optional.
+			//PD1-21 Military Status.  Optional.
+			_msg.Segments.Add(_seg);
 		}
 
 		///<summary>Patient Identifier segment.  Guide page 137.</summary>
 		private void PID(Patient pat){
 			_seg=new SegmentHL7(SegmentNameHL7.PID);
 			_seg.SetField(0,"PID");
-			//PID-1 Set ID - PID.  Required if known.  Cardinality [0..1].
+			_seg.SetField(1,"1");//PID-1 Set ID - PID.  Required if known.  Cardinality [0..1].  Must be "1" for the first occurrence.  Not sure why there would ever be more than one.
 			//PID-2 Patient ID.  No longer used.
 			_seg.SetField(3,//PID-3 Patient Identifier List.  Required.  Cardinality [1..*].  Type CX (see guide page 58 for type definition).
 				pat.PatNum.ToString(),//PID-3.1 ID Number.  Required (length 1..15).  
@@ -157,11 +203,10 @@ namespace OpenDentBusiness.HL7 {
 			if(listPatRacesFiltered.Count==0) {//No selection or declined to specify.
 				hl7Race+=""//PID-10.1 Identifier.  Required (length 1..50).  Blank for unknown.
 					+"^Unknown/undetermined"//PID-10.2  Text.  Required if known (length 1..999). Human readable text that is not further used.
-					+"^Race and Ethnicity"//PID-10.3 Name of Coding System.  Required (length 1..20).  The full name is actually "Race &amp; Ethnicity - CDC", but it is more than 20 characters.
+					+"^Race and Ethnicity";//PID-10.3 Name of Coding System.  Required (length 1..20).  The full name is actually "Race &amp; Ethnicity - CDC", but it is more than 20 characters.
 					//PID-10.4 Alternate Identifier.  Required if known (length 1..50).
 					//PID-10.5 Alternate Text.  Required if known (length 1..999).
 					//PID-10.6 Name of Alternate Coding system.  Required if PID-10.4 is not blank.
-				;
 			}
 			else {
 				for(int i=0;i<listPatRacesFiltered.Count;i++) {
@@ -197,11 +242,10 @@ namespace OpenDentBusiness.HL7 {
 					}
 					hl7Race+=strRaceCode//PID-10.1 Identifier.  Required (length 1..50).
 						+"^"+strRaceName//PID-10.2  Text.  Required if known (length 1..999). Human readable text that is not further used.
-						+"^Race and Ethnicity"//PID-10.3 Name of Coding System.  Required (length 1..20).  The full name is actually "Race &amp; Ethnicity - CDC", but it is more than 20 characters.
+						+"^Race and Ethnicity";//PID-10.3 Name of Coding System.  Required (length 1..20).  The full name is actually "Race &amp; Ethnicity - CDC", but it is more than 20 characters.
 						//PID-10.4 Alternate Identifier.  Required if known (length 1..50).
 						//PID-10.5 Alternate Text.  Required if known (length 1..999).
 						//PID-10.6 Name of Alternate Coding system.  Required if PID-10.4 is not blank.
-					;
 				}
 			}
 			_seg.SetField(10,hl7Race);
@@ -211,7 +255,7 @@ namespace OpenDentBusiness.HL7 {
 				pat.City,//PID-11.3 City.  Required if known (length 1..50).
 				pat.State,//PID-11.4 State or Province.  Required if known (length 1..50).
 				pat.Zip,//PID-11.5 Zip or Postal Code.  Required if known (length 1..12).
-				"USA",//PID-11.6 Country.  Required if known.  Value set HL70399.  Defaults to USA.
+				"USA",//PID-11.6 Country.  Required if known (length 3..3).  Value set HL70399.  Defaults to USA.
 				"M"//PID-11.7 Address Type.  Required (length 1..3).  Value set HL70190 (guide page 202).  M is for mailing.
 				//PID-11.8 Other Geographic Designation.  Optional.
 				//PID-11.9 County/Parish Code.  Optional.
@@ -222,7 +266,23 @@ namespace OpenDentBusiness.HL7 {
 				//PID-11.14 Expiration Date.  Optional.
 			);
 			//PID-12 County Code.  No longer used.
-			_seg.SetField(13,ConvertPhone(pat.HmPhone));//PID-13 Phone Number - Home.  Required if known (length unspecified).  Cardinality [0..*].  Type XTN (guide page 84).
+			string strHmPhone=ConvertPhone(pat.HmPhone);
+			if(strHmPhone!="") {
+				_seg.SetField(13,//PID-13 Phone Number - Home.  Required if known (length unspecified).  Cardinality [0..*].  Type XTN (guide page 84).
+					"",//PID-13.1 Telephone Number.  No longer used.
+					"PRN",//PID-13.2 Telecommunication Use Code.  Required.  Value set HL70201 (guide page 203).
+					"PH",//PID-13.3 Telecommunication Equipment Type.  Required if known.  Value set HL70202 (guide page 203).
+					"",//PID-13.4 Email Address.  Required when PID-13.2 is set to "NET" (length 1..199).
+					"",//PID-13.5 Country Code.  Optional.
+					strHmPhone.Substring(0,3),//PID-13.6 Area/City Code.  Required when PID-13.2 is NOT set to "NET" (length 5..5).
+					strHmPhone.Substring(3)//PID-13.7 Local Number.  Required when PID-13.2 is NOT set to "NET" (length 9..9).  I think the length is probably recorded wrong in the documentation.  It should be 7.
+					//PID-13.8 Extension.  Optional.
+					//PID-13.9 Any Text.  Optional.
+					//PID-13.10 Extension Prefix.  Optional.
+					//PID-13.11 Speed Dial Code.  Optional.
+					//PID-13.12 Unformatted Telephone Number.  Optional.
+					);
+			}
 			//PID-14 Phone Number - Business.  Optional.
 			//PID-15 Primary Language.  Optional.
 			//PID-16 Marital Status.  Optional.
@@ -238,15 +298,26 @@ namespace OpenDentBusiness.HL7 {
 			else if(isHispanicOrLatino) {
 				_seg.SetField(22,"H");
 			}
-			else {
-				_seg.SetField(22,"N");//Not hispanic or latino.
+			else {//Not hispanic or latino.
+				_seg.SetField(22,"N");
 			}
-			//if(isHispanicOrLatino) {
-			//	StartAndEnd("ethnicGroupCode","code","2135-2","displayName","Hispanic or Latino","codeSystem","2.16.840.1.113883.6.238","codeSystemName","Race &amp; Ethnicity - CDC");
-			//}
-			//else {//Not hispanic
-			//	StartAndEnd("ethnicGroupCode","code","2186-5","displayName","Not Hispanic or Latino","codeSystem","2.16.840.1.113883.6.238","codeSystemName","Race &amp; Ethnicity - CDC");
-			//}
+			//PID-23 Birth Place.  Optional.  Cardinaility [0..1].
+			//PID-24 Multiple Birth Indicator.  Optional.  Cardinaility [0..1].
+			//PID-25 Birth Order.  Required when PID-24 is set to "Y".  Cardinaility [0..1].
+			//PID-26 Citizenship.  Optional.  Cardinaility [0..1].
+			//PID-27 Veterans Military Status.  Optional.  Cardinaility [0..1].
+			//PID-28 Nationality.  Optional.  Cardinaility [0..1].
+			//PID-29 Patient Death Date and Time.  Required if PID-30 is set to "Y".  Cardinaility [0..1].  TODO: We need a UI for this information as required for EHR.
+			//PID-30 Patient Death Indicator.  Required if known.  Cardinaility [0..1].  Value set HL70136.  TODO: Set this field to "Y" if the death date and time year is greater than 1880, otherwise do not set.
+			//PID-31 Identity Unknown.  Optional.  Cardinaility [0..1].
+			//PID-32 Identity Reliability Code.  Optional.  Cardinaility [0..1].
+			//PID-33 Last Update Date/Time.  Optional.  Cardinaility [0..1].
+			//PID-34 Last Update Facility.  Optional.  Cardinaility [0..1].
+			//PID-35 Species Code.  Optional.  Cardinaility [0..1].
+			//PID-36 Breed Code.  Optional.  Cardinaility [0..1].
+			//PID-37 Strain.  Optional.  Cardinaility [0..1].
+			//PID-38 Production Class Code.  Optional.  Cardinaility [0..1].
+			//PID-39 Tribal Citizenship.  Optional.  Cardinaility [0..1].
 			_msg.Segments.Add(_seg);
 		}
 
@@ -299,6 +370,7 @@ namespace OpenDentBusiness.HL7 {
 			return "U";
 		}
 
+		///<summary>Type XTN (guide page 84).</summary>
 		private string ConvertPhone(string phone) {
 			string digits="";
 			for(int i=0;i<phone.Length;i++) {
@@ -313,13 +385,7 @@ namespace OpenDentBusiness.HL7 {
 			if(digits.Length!=10) {
 				return "";
 			}
-			string retVal="";
-			retVal+="^";//1:deprecated
-			retVal+="PRN^";//2:table201. PRN=primary residence number.  (Guide page 203)
-			retVal+="^^^";//3-5:
-			retVal+=digits.Substring(0,3)+"^";//6:area code
-			retVal+=digits.Substring(3);
-			return retVal;
+			return digits;
 		}
 
 
