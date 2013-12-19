@@ -24,6 +24,8 @@ namespace OpenDentBusiness{
 
 		///<summary>Used to cache DirectAgent objects, because creating a new DirectAgent object takes up to 10 seconds. If we did not cache, then inbox load would be slow and so would Direct message sending.</summary>
 		private static Hashtable HashDirectAgents=new Hashtable();
+		private static object _lockEmailReceive=new object();
+		private static bool _isReceivingEmail=false;
 
 		///<summary>Gets one email message from the database.</summary>
 		public static EmailMessage GetOne(long msgNum) {
@@ -432,6 +434,28 @@ namespace OpenDentBusiness{
 		///<summary>Fetches up to fetchCount number of messages from a POP3 server.  Set fetchCount=0 for all messages.  Typically, fetchCount is 0 or 1.
 		///Example host name, pop3.live.com. Port is Normally 110 for plain POP3, 995 for SSL POP3.</summary>
 		public static List<EmailMessage> ReceiveFromInbox(int receiveCount,EmailAddress emailAddressInbox) {
+			List<EmailMessage> retVal=new List<EmailMessage>();
+			if(_isReceivingEmail) {
+				return retVal;//Already in the process of receving email. This can happen if the user clicks the refresh button at the same time the main polling thread is receiving.
+			}
+			_isReceivingEmail=true;
+			try {
+				lock(_lockEmailReceive) {
+					retVal=ReceiveFromInboxThreadSafe(receiveCount,emailAddressInbox);
+				}
+			}
+			catch(Exception) {
+				throw;
+			}
+			finally {
+				_isReceivingEmail=false;
+			}
+			return retVal;
+		}
+
+		///<summary>Fetches up to fetchCount number of messages from a POP3 server.  Set fetchCount=0 for all messages.  Typically, fetchCount is 0 or 1.
+		///Example host name, pop3.live.com. Port is Normally 110 for plain POP3, 995 for SSL POP3.</summary>
+		private static List<EmailMessage> ReceiveFromInboxThreadSafe(int receiveCount,EmailAddress emailAddressInbox) {
 			//No need to check RemotingRole; no call to db.
 			List<EmailMessage> retVal=new List<EmailMessage>();
 			//This code is modified from the example at: http://hpop.sourceforge.net/exampleFetchAllMessages.php
