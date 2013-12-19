@@ -1469,6 +1469,38 @@ namespace OpenDental.UI {
 		#endregion Scrolling
 
 		#region Sorting
+		///<summary>Set sortedByColIdx to -1 to clear sorting. Copied from SortByColumn. No need to call fill grid after calling this.</summary>
+		public void SortForced(int sortedByColIdx,bool isAsc) {
+			sortedIsAscending=isAsc;
+			sortedByColumnIdx=sortedByColIdx;
+			if(sortedByColIdx==-1) {
+				return;
+			}
+			List<ODGridRow> rowsSorted=new List<ODGridRow>();
+			for(int i=0;i<rows.Count;i++) {
+				rowsSorted.Add(rows[i]);
+			}
+			if(columns[sortedByColumnIdx].SortingStrategy==GridSortingStrategy.StringCompare) {
+				rowsSorted.Sort(SortStringCompare);
+			}
+			else if(columns[sortedByColumnIdx].SortingStrategy==GridSortingStrategy.DateParse) {
+				rowsSorted.Sort(SortDateParse);
+			}
+			else if(columns[sortedByColumnIdx].SortingStrategy==GridSortingStrategy.ToothNumberParse) {
+				rowsSorted.Sort(SortToothNumberParse);
+			}
+			else if(columns[sortedByColumnIdx].SortingStrategy==GridSortingStrategy.AmountParse) {
+				rowsSorted.Sort(SortAmountParse);
+			}
+			BeginUpdate();
+			rows.Clear();
+			for(int i=0;i<rowsSorted.Count;i++) {
+				rows.Add(rowsSorted[i]);
+			}
+			EndUpdate();
+			sortedByColumnIdx=sortedByColIdx;//Must be set again since set to -1 in EndUpdate();
+		}
+
 		///<summary>Gets run on mouse down on a column header.</summary>
 		private void SortByColumn(int mouseDownCol) {
 			if(mouseDownCol==-1) {

@@ -145,6 +145,56 @@ namespace OpenDentBusiness {
 			return Db.GetTable(command);
 		}
 
+		///<summary>This is a potential fix to be backported to 13.2 so that patient lists can be used for MU1 2013. on large databases these queries take way to long to run. (At least several minutes).</summary>
+		public static DataTable GetListOrderBy2014Retro(List<EhrPatListElement> elementList) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),elementList);
+			}
+			DataTable table=new DataTable();
+			string select="SELECT patient.PatNum,patient.LName,patient.FName";
+			string from="FROM patient";
+			string where="WHERE TRUE ";//Makes formatting easier when adding additional clauses because they will all be AND clauses.
+			for(int i=0;i<elementList.Count;i++) {
+				switch(elementList[i].Restriction) {
+					case EhrRestrictionType.Birthdate://---------------------------------------------------------------------------------------------------------------------------
+						select+=",patient.BirthDate, ((YEAR(CURDATE())-YEAR(DATE(patient.Birthdate))) - (RIGHT(CURDATE(),5)<RIGHT(DATE(patient.Birthdate),5))) AS Age";
+						from+="";//only selecting from patient table
+						where+="AND ((YEAR(CURDATE())-YEAR(DATE(patient.Birthdate))) - (RIGHT(CURDATE(),5)<RIGHT(DATE(patient.Birthdate),5)))"+GetOperandText(elementList[i].Operand)+""+PIn.String(elementList[i].CompareString)+" ";
+						break;
+					case EhrRestrictionType.Gender://------------------------------------------------------------------------------------------------------------------------------
+						select+=",patient.Gender";//will look odd if user adds multiple gender columns, enum needs to be "decoded" when filling grid.
+						break;
+					case EhrRestrictionType.LabResult://---------------------------------------------------------------------------------------------------------------------------
+						select+=",labresult"+i+".ObsValue,labresult"+i+".DateTimeTest";//format column name when filling grid.
+						from+=",labresult AS labresult"+i+", labpanel AS labpanel"+i;
+						where+="AND labpanel"+i+".LabpanelNum=labresult"+i+".LabpanelNum AND patient.PatNum=labpanel"+i+".PatNum ";//join
+						where+="AND labresult"+i+".TestId='"+elementList[i].CompareString+"' "
+									+"AND labresult"+i+".ObsValue"+GetOperandText(elementList[i].Operand)+"'"+PIn.String(elementList[i].LabValue)+"' ";//filter
+						break;
+					case EhrRestrictionType.Medication://--------------------------------------------------------------------------------------------------------------------------
+						select+=",medicationpat"+i+".DateStart";//Name of medication will be in column title.
+						from+=",medication AS medication"+i+", medicationpat AS medicationpat"+i;
+						where+="AND medicationpat"+i+".PatNum=patient.PatNum ";//join
+						//This is unusual.  Part of the join logic is in the code below because medicationPat.MedicationNum might be 0 if it came from newcrop.
+						where+="AND ((medication"+i+".MedicationNum=MedicationPat"+i+".MedicationNum AND medication"+i+".MedName LIKE '%"+PIn.String(elementList[i].CompareString)+"%') "
+						      +"  OR (medication"+i+".MedicationNum=0 AND medicationpat"+i+".MedDescript LIKE '%"+PIn.String(elementList[i].CompareString)+"%')) ";
+						break;
+					case EhrRestrictionType.Problem://-----------------------------------------------------------------------------------------------------------------------------
+						select+=",disease"+i+".DateStart";//Name of problem will be in column title.
+						from+=",disease AS disease"+i+", diseasedef AS diseasedef"+i;
+						where+="AND diseasedef"+i+".DiseaseDefNum=disease"+i+".DiseaseDefNum AND disease"+i+".PatNum=patient.PatNum ";//join
+						where+="AND (diseasedef"+i+".ICD9Code='"+PIn.String(elementList[i].CompareString)+"' OR diseasedef"+i+".SnomedCode='"+PIn.String(elementList[i].CompareString)+"') ";//filter
+						break;
+					default:
+						//Can happen because EhrRestrictionType was expanded for 2014.
+						//If we reach this point in the code, we will effectively just ignore the pat list element.
+						continue;
+				}
+			}
+			string command=select+" "+from+" "+where+" ORDER BY Patient.LName, Patient.FName";
+			return Db.GetTable(command);
+		}
+
 		///<summary>Tries to match input string to enum name of ContactMethod and returns an int(as a string). Returns empty string if no match.</summary>
 		private static string contactMethodHelper(string contactEnumName) {
 			string[] names=Enum.GetNames(typeof(ContactMethod));

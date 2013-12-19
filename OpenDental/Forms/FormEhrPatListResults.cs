@@ -15,6 +15,8 @@ namespace OpenDental {
 		private DataTable table;
 		private bool headingPrinted;
 		private int pagesPrinted;
+		/// <summary>Used to sort and keep the ASC/DESC UI intact, mostly useless.</summary>
+		private int orderByColumn=-1;
 
 		public FormEhrPatListResults(List<EhrPatListElement> ElementList) {
 			InitializeComponent();
@@ -25,84 +27,114 @@ namespace OpenDental {
 			FillGrid(true);
 		}
 
+		///<summary>Deprecated.  We no longer need to pass in a bool.</summary>
 		private void FillGrid(bool isAsc) {
-			table=EhrPatListElements.GetListOrderBy(elementList,isAsc);
+			FillGrid();
+		}
+
+		private void FillGrid() {
+			table=EhrPatListElements.GetListOrderBy2014Retro(elementList);
 			int colWidth=0;
 			Graphics g=CreateGraphics();
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col;
 			col=new ODGridColumn("PatNum",60,HorizontalAlignment.Center);
+			col.SortingStrategy=GridSortingStrategy.AmountParse;
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Full Name",110);
+			col=new ODGridColumn("Full Name",200);
+			col.SortingStrategy=GridSortingStrategy.StringCompare;
 			gridMain.Columns.Add(col);
 			for(int i=0;i<elementList.Count;i++) {
-				if(elementList[i].Restriction==EhrRestrictionType.Birthdate) {
-					col=new ODGridColumn("Birthdate",80,HorizontalAlignment.Center);
-					gridMain.Columns.Add(col);
+				if(orderByColumn==-1 && elementList[i].OrderBy) {
+					//There can be 0 to 1 elements that have OrderBy set to true. 
+					//we will use this to determine how to use the ASC/DESC buttons.
+					//some elements add one column, others add two, this selects the column that is to be added next.
+					orderByColumn=gridMain.Columns.Count;
 				}
-				else if(elementList[i].Restriction==EhrRestrictionType.Gender) {
-					col=new ODGridColumn("Gender",70,HorizontalAlignment.Center);
-					gridMain.Columns.Add(col);
-				}
-				else if(elementList[i].Restriction==EhrRestrictionType.Problem) {
-					col=new ODGridColumn("Disease",160,HorizontalAlignment.Center);
-					gridMain.Columns.Add(col);
-				}
-				else {
-					colWidth=System.Convert.ToInt32(g.MeasureString(elementList[i].CompareString,this.Font).Width);
-					colWidth=colWidth+(colWidth/10);//Add 10%
-					if(colWidth<90) {
-						colWidth=90;//Minimum of 90 width.
-					}
-					col=new ODGridColumn(elementList[i].CompareString,colWidth,HorizontalAlignment.Center);
-					gridMain.Columns.Add(col);
+				switch(elementList[i].Restriction) {
+					case EhrRestrictionType.Birthdate:
+						col=new ODGridColumn("Birthdate",80,HorizontalAlignment.Center);
+						col.SortingStrategy=GridSortingStrategy.DateParse;
+						gridMain.Columns.Add(col);
+						col=new ODGridColumn("Age",80,HorizontalAlignment.Center);
+						col.SortingStrategy=GridSortingStrategy.AmountParse;
+						gridMain.Columns.Add(col);
+						break;
+					case EhrRestrictionType.Gender:
+						col=new ODGridColumn("Gender",80,HorizontalAlignment.Center);
+						gridMain.Columns.Add(col);
+						break;
+					case EhrRestrictionType.LabResult:
+						colWidth=System.Convert.ToInt32(g.MeasureString("Lab Value: "+elementList[i].CompareString,this.Font).Width);
+						col.SortingStrategy=GridSortingStrategy.AmountParse;
+						colWidth=colWidth+(colWidth/10);//Add 10%
+						col=new ODGridColumn("Lab Value: "+elementList[i].CompareString,colWidth,HorizontalAlignment.Center);
+						gridMain.Columns.Add(col);
+						colWidth=System.Convert.ToInt32(g.MeasureString("Lab Date: "+elementList[i].CompareString,this.Font).Width);
+						colWidth=colWidth+(colWidth/10);//Add 10%
+						col=new ODGridColumn("Lab Date: "+elementList[i].CompareString,colWidth,HorizontalAlignment.Center);
+						col.SortingStrategy=GridSortingStrategy.DateParse;
+						gridMain.Columns.Add(col);
+						break;
+					case EhrRestrictionType.Medication:
+						colWidth=System.Convert.ToInt32(g.MeasureString("Prescription Date: "+elementList[i].CompareString,this.Font).Width);
+						colWidth=colWidth+(colWidth/10);//Add 10%
+						col=new ODGridColumn("Prescription Date: "+elementList[i].CompareString,colWidth,HorizontalAlignment.Center);
+						col.SortingStrategy=GridSortingStrategy.DateParse;
+						gridMain.Columns.Add(col);
+						break;
+					case EhrRestrictionType.Problem:
+						colWidth=System.Convert.ToInt32(g.MeasureString("Date Diagnosed: "+DiseaseDefs.GetNameByCode(elementList[i].CompareString),this.Font).Width);
+						colWidth=colWidth+(colWidth/10);//Add 10%
+						col=new ODGridColumn("Date Diagnosed: "+DiseaseDefs.GetNameByCode(elementList[i].CompareString),colWidth,HorizontalAlignment.Center);
+						col.SortingStrategy=GridSortingStrategy.DateParse;
+						gridMain.Columns.Add(col);
+						break;
+					default:
+						//should not happen.
+						break;
 				}
 			}
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			string icd9Desc;
 			for(int i=0;i<table.Rows.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(table.Rows[i]["PatNum"].ToString());
 				row.Cells.Add(table.Rows[i]["LName"].ToString()+", "+table.Rows[i]["FName"].ToString());
 				//Add 3 to j to compensate for PatNum, LName and FName.
-				for(int j=0;j<elementList.Count;j++) {
-					if(elementList[j].Restriction==EhrRestrictionType.Problem) {
-						ICD9 icd;
-						try {
-							icd=ICD9s.GetOne(PIn.Long(table.Rows[i][j+3].ToString()));
-							icd9Desc="("+icd.ICD9Code+")-"+icd.Description;
-							row.Cells.Add(icd9Desc);
-						}
-						catch {//Graceful fail just in case.
-							row.Cells.Add("X");
-						}
-						continue;
+				int k=0;//added to j to iterate through the table columns as j itterates through the elementList 
+				for(int j=0;j<elementList.Count;j++) {//sometimes one element might pull two columns, Lab Results for instance.//<elementList.Count;j++) {
+					switch(elementList[j].Restriction) {
+						case EhrRestrictionType.Medication:
+						case EhrRestrictionType.Problem:
+							row.Cells.Add(table.Rows[i][j+k+3].ToString().Replace(" 12:00:00 AM",""));//safely remove irrelevant time entries.//dates
+							break;
+						case EhrRestrictionType.Birthdate:
+							row.Cells.Add(table.Rows[i][j+k+3].ToString().Replace(" 12:00:00 AM",""));//safely remove irrelevant time entries.//date
+							row.Cells.Add(table.Rows[i][j+k+4].ToString());//age
+							k++;//to keep the count correct.
+							break;
+						case EhrRestrictionType.LabResult:
+							row.Cells.Add(table.Rows[i][j+k+3].ToString());//obsVal
+							row.Cells.Add(table.Rows[i][j+k+4].ToString().Replace(" 12:00:00 AM",""));//safely remove irrelevant time entries.//date
+							k++;//to keep the count correct.
+							break;
+						case EhrRestrictionType.Gender:
+							switch(table.Rows[i][j+k+3].ToString()) {
+								case "0"://Male
+									row.Cells.Add("Male");
+									break;
+								case "1"://Female
+									row.Cells.Add("Female");
+									break;
+								case "2"://Unknown
+								default:
+									row.Cells.Add("Unknown");
+									break;
+							}
+							break;
 					}
-					if(elementList[j].Restriction==EhrRestrictionType.Medication)	{
-						row.Cells.Add("X");
-						continue;
-					}
-					if(elementList[j].Restriction==EhrRestrictionType.Birthdate) {
-						row.Cells.Add(PIn.Date(table.Rows[i][j+3].ToString()).ToShortDateString());
-						continue;
-					}
-					if(elementList[j].Restriction==EhrRestrictionType.Gender)	{
-						switch(table.Rows[i][j+3].ToString()) {
-							case "0":
-								row.Cells.Add("Male");
-								break;
-							case "1":
-								row.Cells.Add("Female");
-								break;
-							default:
-								row.Cells.Add("Unknown");
-								break;
-						}
-						continue;
-					}
-					row.Cells.Add(table.Rows[i][j+3].ToString());
 				}
 				gridMain.Rows.Add(row);
 			}
@@ -110,12 +142,110 @@ namespace OpenDental {
 			g.Dispose();
 		}
 
-		private void radioAsc_CheckedChanged(object sender,EventArgs e) {
-			FillGrid(true);
-		}
+		////private void FillGrid(bool isAsc) {
+		////	table=EhrPatListElements.GetListOrderBy(elementList,isAsc);
+		////	int colWidth=0;
+		////	Graphics g=CreateGraphics();
+		////	gridMain.BeginUpdate();
+		////	gridMain.Columns.Clear();
+		////	ODGridColumn col;
+		////	col=new ODGridColumn("PatNum",60,HorizontalAlignment.Center);
+		////	gridMain.Columns.Add(col);
+		////	col=new ODGridColumn("Full Name",110);
+		////	gridMain.Columns.Add(col);
+		////	for(int i=0;i<elementList.Count;i++) {
+		////		if(elementList[i].Restriction==EhrRestrictionType.Birthdate) {
+		////			col=new ODGridColumn("Birthdate",80,HorizontalAlignment.Center);
+		////			gridMain.Columns.Add(col);
+		////		}
+		////		else if(elementList[i].Restriction==EhrRestrictionType.Gender) {
+		////			col=new ODGridColumn("Gender",70,HorizontalAlignment.Center);
+		////			gridMain.Columns.Add(col);
+		////		}
+		////		else if(elementList[i].Restriction==EhrRestrictionType.Problem) {
+		////			col=new ODGridColumn("Disease",160,HorizontalAlignment.Center);
+		////			gridMain.Columns.Add(col);
+		////		}
+		////		else {
+		////			colWidth=System.Convert.ToInt32(g.MeasureString(elementList[i].CompareString,this.Font).Width);
+		////			colWidth=colWidth+(colWidth/10);//Add 10%
+		////			if(colWidth<90) {
+		////				colWidth=90;//Minimum of 90 width.
+		////			}
+		////			col=new ODGridColumn(elementList[i].CompareString,colWidth,HorizontalAlignment.Center);
+		////			gridMain.Columns.Add(col);
+		////		}
+		////	}
+		////	gridMain.Rows.Clear();
+		////	ODGridRow row;
+		////	string icd9Desc;
+		////	for(int i=0;i<table.Rows.Count;i++) {
+		////		row=new ODGridRow();
+		////		row.Cells.Add(table.Rows[i]["PatNum"].ToString());
+		////		row.Cells.Add(table.Rows[i]["LName"].ToString()+", "+table.Rows[i]["FName"].ToString());
+		////		//Add 3 to j to compensate for PatNum, LName and FName.
+		////		for(int j=0;j<elementList.Count;j++) {
+		////			if(elementList[j].Restriction==EhrRestrictionType.Problem) {
+		////				ICD9 icd;
+		////				try {
+		////					icd=ICD9s.GetOne(PIn.Long(table.Rows[i][j+3].ToString()));
+		////					icd9Desc="("+icd.ICD9Code+")-"+icd.Description;
+		////					row.Cells.Add(icd9Desc);
+		////				}
+		////				catch {//Graceful fail just in case.
+		////					row.Cells.Add("X");
+		////				}
+		////				continue;
+		////			}
+		////			if(elementList[j].Restriction==EhrRestrictionType.Medication)	{
+		////				row.Cells.Add("X");
+		////				continue;
+		////			}
+		////			if(elementList[j].Restriction==EhrRestrictionType.Birthdate) {
+		////				row.Cells.Add(PIn.Date(table.Rows[i][j+3].ToString()).ToShortDateString());
+		////				continue;
+		////			}
+		////			if(elementList[j].Restriction==EhrRestrictionType.Gender)	{
+		////				switch(table.Rows[i][j+3].ToString()) {
+		////					case "0":
+		////						row.Cells.Add("Male");
+		////						break;
+		////					case "1":
+		////						row.Cells.Add("Female");
+		////						break;
+		////					default:
+		////						row.Cells.Add("Unknown");
+		////						break;
+		////				}
+		////				continue;
+		////			}
+		////			row.Cells.Add(table.Rows[i][j+3].ToString());
+		////		}
+		////		gridMain.Rows.Add(row);
+		////	}
+		////	gridMain.EndUpdate();
+		////	g.Dispose();
+		////}
 
-		private void radioDesc_CheckedChanged(object sender,EventArgs e) {
-			FillGrid(false);
+		//private void radioAsc_CheckedChanged(object sender,EventArgs e) {
+		//	if(orderByColumn==-1 || orderByColumn>gridMain.Columns.Count-1){
+		//		return;//no order by collumn set, or index out of bounds.
+		//	}
+		//	gridMain.SortForced(orderByColumn,true);
+		//}
+
+		//private void radioDesc_CheckedChanged(object sender,EventArgs e) {
+		//	if(orderByColumn==-1 || orderByColumn>gridMain.Columns.Count-1) {
+		//		return;//no order by collumn set, or index out of bounds.
+		//	}
+		//	gridMain.SortForced(orderByColumn,false);
+		//}
+
+		private void radioOrderBy_CheckedChanged(object sender,EventArgs e) {
+			if(orderByColumn==-1 || orderByColumn>gridMain.Columns.Count-1) {
+				return;//no order by collumn set, or index out of bounds.
+			}
+			gridMain.SortForced(orderByColumn,radioAsc.Checked);
 		}
 
 		private void butPrint_Click(object sender,EventArgs e) {
