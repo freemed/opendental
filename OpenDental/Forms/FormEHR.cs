@@ -46,23 +46,23 @@ namespace OpenDental {
 		public FormEHR() {
 			InitializeComponent();
 			if(PrefC.GetBoolSilent(PrefName.ShowFeatureEhr,false)) {
-				contructObjFormEhrMeasuresHelper();
+				constructObjFormEhrMeasuresHelper();
 			}
 		}
 
 		///<summary>Constructs the ObjFormEhrMeasures fro use with late binding.</summary>
-		private static void contructObjFormEhrMeasuresHelper() {
+		private static void constructObjFormEhrMeasuresHelper() {
+			string dllPathEHR=ODFileUtils.CombinePaths(Application.StartupPath,"EHR.dll");
+			ObjFormEhrMeasures=null;
+			AssemblyEHR=null;
+			if(File.Exists(dllPathEHR)) {//EHR.dll is available, so load it up
+				AssemblyEHR=Assembly.LoadFile(dllPathEHR);
+				Type type=AssemblyEHR.GetType("EHR.FormEhrMeasures");//namespace.class
+				ObjFormEhrMeasures=Activator.CreateInstance(type);
+				return;
+			}
 			#if EHRTEST
 				ObjFormEhrMeasures=new FormEhrMeasures();
-			#else
-				string dllPathEHR=ODFileUtils.CombinePaths(Application.StartupPath,"EHR.dll");
-				ObjFormEhrMeasures=null;
-				AssemblyEHR=null;
-				if(File.Exists(dllPathEHR)) {//EHR.dll is available, so load it up
-					AssemblyEHR=Assembly.LoadFile(dllPathEHR);
-					Type type=AssemblyEHR.GetType("EHR.FormEhrMeasures");//namespace.class
-					ObjFormEhrMeasures=Activator.CreateInstance(type);
-				}
 			#endif
 		}
 
@@ -71,7 +71,7 @@ namespace OpenDental {
 		///This function performs a late binding to the EHR.dll, because resellers do not have EHR.dll necessarily.</summary>
 		public static string GetEhrResource(string strResourceName) {
 			if(AssemblyEHR==null) {
-				contructObjFormEhrMeasuresHelper();
+				constructObjFormEhrMeasuresHelper();
 				if(AssemblyEHR==null) {
 					return "";
 				}
