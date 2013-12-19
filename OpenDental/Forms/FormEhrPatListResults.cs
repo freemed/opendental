@@ -57,9 +57,6 @@ namespace OpenDental {
 						col=new ODGridColumn("Birthdate",80,HorizontalAlignment.Center);
 						col.SortingStrategy=GridSortingStrategy.DateParse;
 						gridMain.Columns.Add(col);
-						col=new ODGridColumn("Age",80,HorizontalAlignment.Center);
-						col.SortingStrategy=GridSortingStrategy.AmountParse;
-						gridMain.Columns.Add(col);
 						break;
 					case EhrRestrictionType.Gender:
 						col=new ODGridColumn("Gender",80,HorizontalAlignment.Center);
@@ -71,24 +68,15 @@ namespace OpenDental {
 						colWidth=colWidth+(colWidth/10);//Add 10%
 						col=new ODGridColumn("Lab Value: "+elementList[i].CompareString,colWidth,HorizontalAlignment.Center);
 						gridMain.Columns.Add(col);
-						colWidth=System.Convert.ToInt32(g.MeasureString("Lab Date: "+elementList[i].CompareString,this.Font).Width);
-						colWidth=colWidth+(colWidth/10);//Add 10%
-						col=new ODGridColumn("Lab Date: "+elementList[i].CompareString,colWidth,HorizontalAlignment.Center);
-						col.SortingStrategy=GridSortingStrategy.DateParse;
-						gridMain.Columns.Add(col);
 						break;
 					case EhrRestrictionType.Medication:
-						colWidth=System.Convert.ToInt32(g.MeasureString("Prescription Date: "+elementList[i].CompareString,this.Font).Width);
-						colWidth=colWidth+(colWidth/10);//Add 10%
-						col=new ODGridColumn("Prescription Date: "+elementList[i].CompareString,colWidth,HorizontalAlignment.Center);
-						col.SortingStrategy=GridSortingStrategy.DateParse;
+						col=new ODGridColumn("Medication",90,HorizontalAlignment.Center);
+						col.SortingStrategy=GridSortingStrategy.StringCompare;
 						gridMain.Columns.Add(col);
 						break;
 					case EhrRestrictionType.Problem:
-						colWidth=System.Convert.ToInt32(g.MeasureString("Date Diagnosed: "+DiseaseDefs.GetNameByCode(elementList[i].CompareString),this.Font).Width);
-						colWidth=colWidth+(colWidth/10);//Add 10%
-						col=new ODGridColumn("Date Diagnosed: "+DiseaseDefs.GetNameByCode(elementList[i].CompareString),colWidth,HorizontalAlignment.Center);
-						col.SortingStrategy=GridSortingStrategy.DateParse;
+						col=new ODGridColumn("Disease",160,HorizontalAlignment.Center);
+						col.SortingStrategy=GridSortingStrategy.StringCompare;
 						gridMain.Columns.Add(col);
 						break;
 					default:
@@ -103,25 +91,20 @@ namespace OpenDental {
 				row.Cells.Add(table.Rows[i]["PatNum"].ToString());
 				row.Cells.Add(table.Rows[i]["LName"].ToString()+", "+table.Rows[i]["FName"].ToString());
 				//Add 3 to j to compensate for PatNum, LName and FName.
-				int k=0;//added to j to iterate through the table columns as j itterates through the elementList 
 				for(int j=0;j<elementList.Count;j++) {//sometimes one element might pull two columns, Lab Results for instance.//<elementList.Count;j++) {
 					switch(elementList[j].Restriction) {
 						case EhrRestrictionType.Medication:
 						case EhrRestrictionType.Problem:
-							row.Cells.Add(table.Rows[i][j+k+3].ToString().Replace(" 12:00:00 AM",""));//safely remove irrelevant time entries.//dates
+							row.Cells.Add(table.Rows[i][j+3].ToString());
 							break;
 						case EhrRestrictionType.Birthdate:
-							row.Cells.Add(table.Rows[i][j+k+3].ToString().Replace(" 12:00:00 AM",""));//safely remove irrelevant time entries.//date
-							row.Cells.Add(table.Rows[i][j+k+4].ToString());//age
-							k++;//to keep the count correct.
+							row.Cells.Add(table.Rows[i][j+3].ToString().Replace(" 12:00:00 AM",""));
 							break;
 						case EhrRestrictionType.LabResult:
-							row.Cells.Add(table.Rows[i][j+k+3].ToString());//obsVal
-							row.Cells.Add(table.Rows[i][j+k+4].ToString().Replace(" 12:00:00 AM",""));//safely remove irrelevant time entries.//date
-							k++;//to keep the count correct.
+							row.Cells.Add(table.Rows[i][j+3].ToString());//obsVal
 							break;
 						case EhrRestrictionType.Gender:
-							switch(table.Rows[i][j+k+3].ToString()) {
+							switch(table.Rows[i][j+3].ToString()) {
 								case "0"://Male
 									row.Cells.Add("Male");
 									break;
@@ -135,6 +118,7 @@ namespace OpenDental {
 							}
 							break;
 					}
+					
 				}
 				gridMain.Rows.Add(row);
 			}
