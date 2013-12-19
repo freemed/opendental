@@ -47,19 +47,6 @@ namespace OpenDentBusiness {
 				if(status!="OK") {
 					log+=Lans.g("FormDatabaseMaintenance","Corrupt file found for table")+" "+tableNames[i]+"\r\n";
 					allOK=false;
-					//Sometimes dangerous because it can remove table rows (it has happened a few times). Repair of tables is necessary frequently though, so left the code here.
-					if(!isCheck){
-						command="REPAIR TABLE "+tableNames[i];
-						DataTable tableResults=Db.GetTable(command);
-						//we always log the results of a repair table, regardless of whether user wants to show all.
-						log+=Lans.g("FormDatabaseMaintenance","Repair log:")+"\r\n";
-						for(int t=0;t<tableResults.Rows.Count;t++) {
-							for(int j=0;j<tableResults.Columns.Count;j++) {
-								log+=PIn.ByteArray(tableResults.Rows[t][j])+",";
-							}
-							log+="\r\n";
-						}
-					}
 				}
 			}
 			if(allOK) {
@@ -69,19 +56,22 @@ namespace OpenDentBusiness {
 			}
 			else {
 				success=false;//no other checks should be done until we can successfully get past this.
-				if(!isCheck) {
-					log+=Lans.g("FormDatabaseMaintenance","Corrupted files probably fixed.  Look closely at the log.  Also, run again to be sure they were really fixed.")+"\r\n"
-						+Lans.g("FormDatabaseMaintenance","Done.");
-				}
+				log+=Lans.g("FormDatabaseMaintenance","Corrupted files found.  Run the optimize tool to repair them, then click check to be sure they were really fixed.")+"\r\n"
+					+Lans.g("FormDatabaseMaintenance","Done.");
 			}
 			return log;
 		}
 
-		///<summary>This is currently called whenever mysql is upgraded.  There's also a button in dbm window.  Needs to be made more elegant.</summary>
-		public static void RepairAndOptimize() {
+		///<summary>If using MySQL, tries to make a backup of the database and then optimizes and repairs each table.  Returns true if a backup was made.
+		///We have to backup the database before running the repair commands because it has a tendency to delete data it cannot understand which is problematic.
+		///Currently called whenever MySQL is upgraded and when users click Optimize in database maintenance.</summary>
+		public static void BackupRepairAndOptimize() {
 			if(DataConnection.DBtype!=DatabaseType.MySql) {
 				return;
 			}
+			#if !DEBUG
+			MiscData.MakeABackup();
+			#endif
 			command="SHOW TABLES";
 			table=Db.GetTable(command);
 			string[] tableNames=new string[table.Rows.Count];
@@ -1640,7 +1630,7 @@ namespace OpenDentBusiness {
 				}
 			}
 			else{
-				//slightly dangerous.  User will have to creat ins check again.  But does not alter financials.
+				//slightly dangerous.  User will have to create ins check again.  But does not alter financials.
 				command=@"UPDATE claimproc SET ClaimPaymentNum=0 WHERE claimpaymentnum !=0 AND NOT EXISTS(
 					SELECT * FROM claimpayment WHERE claimpayment.ClaimPaymentNum=claimproc.ClaimPaymentNum)";
 				long numberFixed=Db.NonQ(command);

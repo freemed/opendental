@@ -2,10 +2,7 @@ using System;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Printing;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Globalization;
 using System.IO;
 using System.Security;
 using System.Text;
@@ -91,6 +88,8 @@ namespace OpenDental {
 			this.butPrint = new OpenDental.UI.Button();
 			this.butFix = new OpenDental.UI.Button();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.label8 = new System.Windows.Forms.Label();
+			this.butRemoveNulls = new OpenDental.UI.Button();
 			this.label7 = new System.Windows.Forms.Label();
 			this.butTokens = new OpenDental.UI.Button();
 			this.label6 = new System.Windows.Forms.Label();
@@ -103,8 +102,6 @@ namespace OpenDental {
 			this.butApptProcs = new OpenDental.UI.Button();
 			this.butOptimize = new OpenDental.UI.Button();
 			this.butInsPayFix = new OpenDental.UI.Button();
-			this.label8 = new System.Windows.Forms.Label();
-			this.butRemoveNulls = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -153,6 +150,9 @@ namespace OpenDental {
 			// 
 			// textLog
 			// 
+			this.textLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.textLog.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.textLog.Location = new System.Drawing.Point(27, 77);
 			this.textLog.Multiline = true;
@@ -213,6 +213,7 @@ namespace OpenDental {
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.groupBox1.Controls.Add(this.label8);
 			this.groupBox1.Controls.Add(this.butRemoveNulls);
 			this.groupBox1.Controls.Add(this.label7);
@@ -233,6 +234,29 @@ namespace OpenDental {
 			this.groupBox1.TabIndex = 31;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Database Tools";
+			// 
+			// label8
+			// 
+			this.label8.Location = new System.Drawing.Point(103, 176);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(355, 20);
+			this.label8.TabIndex = 44;
+			this.label8.Text = "Replace all null strings with empty strings.";
+			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// butRemoveNulls
+			// 
+			this.butRemoveNulls.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butRemoveNulls.Autosize = true;
+			this.butRemoveNulls.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRemoveNulls.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRemoveNulls.CornerRadius = 4F;
+			this.butRemoveNulls.Location = new System.Drawing.Point(10, 172);
+			this.butRemoveNulls.Name = "butRemoveNulls";
+			this.butRemoveNulls.Size = new System.Drawing.Size(87, 26);
+			this.butRemoveNulls.TabIndex = 43;
+			this.butRemoveNulls.Text = "Remove Nulls";
+			this.butRemoveNulls.Click += new System.EventHandler(this.butRemoveNulls_Click);
 			// 
 			// label7
 			// 
@@ -304,7 +328,7 @@ namespace OpenDental {
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(355, 20);
 			this.label3.TabIndex = 36;
-			this.label3.Text = "Repairs and Optimizes tables.";
+			this.label3.Text = "Back up, optimize, and repair tables.";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// label2
@@ -372,29 +396,6 @@ namespace OpenDental {
 			this.butInsPayFix.Text = "Ins Pay Fix";
 			this.butInsPayFix.Click += new System.EventHandler(this.butInsPayFix_Click);
 			// 
-			// label8
-			// 
-			this.label8.Location = new System.Drawing.Point(103, 176);
-			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(355, 20);
-			this.label8.TabIndex = 44;
-			this.label8.Text = "Replace all null strings with empty strings.";
-			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// butRemoveNulls
-			// 
-			this.butRemoveNulls.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butRemoveNulls.Autosize = true;
-			this.butRemoveNulls.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRemoveNulls.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butRemoveNulls.CornerRadius = 4F;
-			this.butRemoveNulls.Location = new System.Drawing.Point(10, 172);
-			this.butRemoveNulls.Name = "butRemoveNulls";
-			this.butRemoveNulls.Size = new System.Drawing.Size(87, 26);
-			this.butRemoveNulls.TabIndex = 43;
-			this.butRemoveNulls.Text = "Remove Nulls";
-			this.butRemoveNulls.Click += new System.EventHandler(this.butRemoveNulls_Click);
-			// 
 			// FormDatabaseMaintenance
 			// 
 			this.AcceptButton = this.buttonCheck;
@@ -413,6 +414,7 @@ namespace OpenDental {
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
+			this.MinimumSize = new System.Drawing.Size(966, 434);
 			this.Name = "FormDatabaseMaintenance";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -434,9 +436,23 @@ namespace OpenDental {
 		}
 
 		private void butOptimize_Click(object sender,EventArgs e) {
+			if(MessageBox.Show(Lan.g("FormDatabaseMaintenance","This tool will backup, optimize, and repair all tables.")+"\r\n"+Lan.g("FormDatabaseMaintenance","Continue?")
+				,Lan.g("FormDatabaseMaintenance","Backup Optimize Repair")
+				,MessageBoxButtons.OKCancel)!=DialogResult.OK) 
+			{
+				return;
+			}
 			Cursor=Cursors.WaitCursor;
 			textLog.Text=DateTime.Now.ToString()+"\r\n";
-			DatabaseMaintenance.RepairAndOptimize();
+			try {
+				DatabaseMaintenance.BackupRepairAndOptimize();
+			}
+			catch(Exception ex) {
+				if(ex.Message!="") {
+					textLog.Text+=ex.Message+"\r\n";
+				}
+				textLog.Text+=Lan.g("FormDatabaseMaintenance","Backup failed.  Your database has not been altered.")+"\r\n";
+			}
 			textLog.Text+=Lan.g("FormDatabaseMaintenance","Optimization Done");
 			SaveLogToFile();
 			Cursor=Cursors.Default;

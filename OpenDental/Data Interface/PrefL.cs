@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Diagnostics;
 using System.IO;
-using System.Text;
 using System.Threading;
 using OpenDentBusiness;
 using System.Windows.Forms;
@@ -250,6 +247,7 @@ namespace OpenDental {
 			if(DataConnection.DBtype!=DatabaseType.MySql) {
 				return true;
 			}
+			bool hasBackup=false;
 			string thisVersion=MiscData.GetMySqlVersion();
 			float floatVersion=PIn.Float(thisVersion.Substring(0,3));
 			if(floatVersion < 5.0f) {
@@ -263,11 +261,22 @@ namespace OpenDental {
 				//We're going to skip this.  We will recommend that people first upgrade OD, then MySQL, so this won't be an issue.
 			}
 			else if(Prefs.UpdateString(PrefName.MySqlVersion,floatVersion.ToString("f1"))) {
-				if(!MsgBox.Show("Prefs",MsgBoxButtons.OKCancel,"Tables will now be optimized.  This will take a minute or two.")) {
+				if(!MsgBox.Show("Prefs",MsgBoxButtons.OKCancel,"Tables will now be backed up, optimized, and repaired.  This will take a minute or two.  Continue?")) {
 					Application.Exit();
 					return false;
 				}
-				DatabaseMaintenance.RepairAndOptimize();
+				try {
+					DatabaseMaintenance.BackupRepairAndOptimize();
+					hasBackup=true;
+				}
+				catch(Exception e) {
+					if(e.Message!="") {
+						MessageBox.Show(e.Message);
+					}
+					MsgBox.Show("Prefs","Backup failed. Your database has not been altered.");
+					Application.Exit();
+					return false;//but this should never happen
+				}
 			}
 			if(PrefC.ContainsKey("DatabaseConvertedForMySql41")) {
 				return true;//already converted
@@ -278,7 +287,9 @@ namespace OpenDental {
 			}
 			//ClassConvertDatabase CCD=new ClassConvertDatabase();
 			try {
-				MiscData.MakeABackup();
+				if(!hasBackup) {//A backup could have been made if the tables were optimized and repaired above.
+					MiscData.MakeABackup();
+				}
 			}
 			catch(Exception e) {
 				if(e.Message!="") {
