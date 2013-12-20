@@ -26,20 +26,21 @@ namespace OpenDental {
 				comboSnomedAllergyType.Items.Add(Enum.GetNames(typeof(SnomedAllergy))[i]);
 			}
 			comboSnomedAllergyType.SelectedIndex=(int)AllergyDefCur.SnomedType;
-			snomedAllergicTo=Snomeds.GetByCode(AllergyDefCur.SnomedAllergyTo);
+			//snomedAllergicTo=Snomeds.GetByCode(AllergyDefCur.SnomedAllergyTo);// TODO: change to Unii
 			if(snomedAllergicTo!=null) {
-				textSnomedAllergicTo.Text=snomedAllergicTo.Description;
+				//textSnomedAllergicTo.Text=snomedAllergicTo.Description;
 			}
 			textMedication.Text=Medications.GetDescription(AllergyDefCur.MedicationNum);
 		}
 
-		private void butAllergicToSelect_Click(object sender,EventArgs e) {
-			FormSnomeds formS=new FormSnomeds();
-			formS.IsSelectionMode=true;
-			if(formS.ShowDialog()==DialogResult.OK) {
-				snomedAllergicTo=formS.SelectedSnomed;
-				textSnomedAllergicTo.Text=snomedAllergicTo.Description;
-			}
+		private void butUniiToSelect_Click(object sender,EventArgs e) {
+			//FormSnomeds formS=new FormSnomeds();
+			//formS.IsSelectionMode=true;
+			//if(formS.ShowDialog()==DialogResult.OK) {
+			//	snomedAllergicTo=formS.SelectedSnomed;
+			//	//textSnomedAllergicTo.Text=snomedAllergicTo.Description;
+			//}
+			//TODO: Implement similar code for Unii
 		}
 
 		private void butMedicationSelect_Click(object sender,EventArgs e) {
@@ -53,9 +54,8 @@ namespace OpenDental {
 			textMedication.Text=Medications.GetDescription(AllergyDefCur.MedicationNum);
 		}
 
-		private void butNoneAllergicTo_Click(object sender,EventArgs e) {
-			snomedAllergicTo=null;
-			textSnomedAllergicTo.Text="";
+		private void butNoneUniiTo_Click(object sender,EventArgs e) {
+			//TODO: Implement this
 		}
 
 		private void butNone_Click(object sender,EventArgs e) {
@@ -71,10 +71,10 @@ namespace OpenDental {
 			AllergyDefCur.Description=textDescription.Text;
 			AllergyDefCur.IsHidden=checkHidden.Checked;
 			AllergyDefCur.SnomedType=(SnomedAllergy)comboSnomedAllergyType.SelectedIndex;
-			AllergyDefCur.SnomedAllergyTo="";
-			if(snomedAllergicTo!=null) {
-				AllergyDefCur.SnomedAllergyTo=snomedAllergicTo.SnomedCode;
-			}
+			//AllergyDefCur.SnomedAllergyTo="";//TODO: Change to UNII
+			//if(snomedAllergicTo!=null) {
+			//	AllergyDefCur.SnomedAllergyTo=snomedAllergicTo.SnomedCode;
+			//}
 			if(AllergyDefCur.IsNew) {
 				AllergyDefs.Insert(AllergyDefCur);
 			}
