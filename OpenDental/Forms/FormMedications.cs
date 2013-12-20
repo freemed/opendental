@@ -215,7 +215,9 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Generic Name"),120);
 			gridMain.Columns.Add(col);
-			 col=new ODGridColumn(Lan.g(this,"Notes for Generic"),250);
+			col=new ODGridColumn(Lan.g(this,"RxNorm"),55);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"Notes for Generic"),250);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
@@ -229,6 +231,7 @@ namespace OpenDental{
 					row.Cells.Add(medList[i].MedName);
 					row.Cells.Add(Medications.GetGenericName(medList[i].GenericNum));
 				}
+				row.Cells.Add(medList[i].RxCui==0?"":medList[i].RxCui.ToString());
 				row.Cells.Add(medList[i].Notes);
 				gridMain.Rows.Add(row);
 			}
