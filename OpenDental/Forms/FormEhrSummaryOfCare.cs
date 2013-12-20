@@ -65,10 +65,18 @@ namespace OpenDental {
 			return DisplayCCD(strXmlCCD,null);
 		}
 
+		public static bool DisplayCCD(string strXmlCCD,Patient patCur) {
+			return DisplayCCD(strXmlCCD,null,"");
+		}
+
 		///<summary>Returns true if user performed a print job on the CCD.  Cannot be moved to OpenDentBusiness/Misc/EhrCCD.cs, because this function uses windows UI components. 
 		///Pass in a valid patient if the CCD is being displayed to reconcile (incoporate into patient record) medications and/or problems and/or allergies.
-		///patCur can be null, or patCur.PatNum can be 0, to hide the three reconcile buttons.</summary>
-		public static bool DisplayCCD(string strXmlCCD,Patient patCur) {
+		///patCur can be null, or patCur.PatNum can be 0, to hide the three reconcile buttons. 
+		///strXmlCCD is the actual text of the CCD. 
+		///strAlterateFilPathXslCCD is a full file path to an alternative style sheet. 
+		///This file will only be used in the case where the EHR dll version of the stylesheet couldn not be loaded. 
+		///If neither method works for attaining the stylesheet then an excption will be thrown.</summary>
+		public static bool DisplayCCD(string strXmlCCD,Patient patCur,string strAlterateFilPathXslCCD) {
 			//string xmltext=GetSampleMissingStylesheet();
 			XmlDocument doc=new XmlDocument();
 			try {
@@ -84,6 +92,14 @@ namespace OpenDental {
 				xmlFileName="ccd.xml";
 				xslFileName="ccd.xsl";
 				xslContents=FormEHR.GetEhrResource("CCD");
+				if(xslContents=="") { //XSL load from EHR dll failed so see if caller provided an alternative
+					if(strAlterateFilPathXslCCD!="") { //alternative XSL file was provided so use that for our stylesheet
+						xslContents=File.ReadAllText(strAlterateFilPathXslCCD);	
+					}
+				}
+				if(xslContents=="") { //one last check to see if we succeeded in finding a stylesheet
+					throw new Exception("No stylesheet found");
+				}
 			}
 			else if(doc.DocumentElement.Name.ToLower()=="continuityofcarerecord" || doc.DocumentElement.Name.ToLower()=="ccr:continuityofcarerecord") {//CCR
 				xmlFileName="ccr.xml";

@@ -815,7 +815,15 @@ namespace OpenDental{
 						if(MessageCur.SentOrReceived==EmailSentOrReceived.ReadDirect || MessageCur.SentOrReceived==EmailSentOrReceived.ReceivedDirect) {
 							patEmail=_patCur;//Only allow reconcile if received via Direct.
 						}
-						FormEhrSummaryOfCare.DisplayCCD(strTextXml,patEmail);
+						string strAlterateFilPathXslCCD="";
+						//Try to find a corresponding stylesheet. This will only be used in the event that the default stylesheet cannot be loaded from the EHR dll.
+						for(int i=0;i<MessageCur.Attachments.Count;i++) {
+							if(Path.GetExtension(MessageCur.Attachments[i].ActualFileName).ToLower()==".xsl") { 
+								strAlterateFilPathXslCCD=ODFileUtils.CombinePaths(EmailMessages.GetEmailAttachPath(),MessageCur.Attachments[i].ActualFileName);
+								break;
+							}
+						}
+						FormEhrSummaryOfCare.DisplayCCD(strTextXml,patEmail,strAlterateFilPathXslCCD);
 						return;
 					}	
 				}
