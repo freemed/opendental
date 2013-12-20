@@ -104,17 +104,15 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Enabled = false;
 			this.label2.Location = new System.Drawing.Point(0, 46);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(141, 20);
 			this.label2.TabIndex = 26;
-			this.label2.Text = "SNOMED Reaction (not yet)";
+			this.label2.Text = "SNOMED Reaction";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textSnomedReaction
 			// 
-			this.textSnomedReaction.Enabled = false;
 			this.textSnomedReaction.Location = new System.Drawing.Point(144, 46);
 			this.textSnomedReaction.Name = "textSnomedReaction";
 			this.textSnomedReaction.ReadOnly = true;
@@ -128,7 +126,6 @@ namespace OpenDental{
 			this.butNoneSnomedReaction.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butNoneSnomedReaction.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butNoneSnomedReaction.CornerRadius = 4F;
-			this.butNoneSnomedReaction.Enabled = false;
 			this.butNoneSnomedReaction.Location = new System.Drawing.Point(449, 46);
 			this.butNoneSnomedReaction.Name = "butNoneSnomedReaction";
 			this.butNoneSnomedReaction.Size = new System.Drawing.Size(51, 22);
@@ -143,7 +140,6 @@ namespace OpenDental{
 			this.butSnomedReactionSelect.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butSnomedReactionSelect.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSnomedReactionSelect.CornerRadius = 4F;
-			this.butSnomedReactionSelect.Enabled = false;
 			this.butSnomedReactionSelect.Location = new System.Drawing.Point(421, 46);
 			this.butSnomedReactionSelect.Name = "butSnomedReactionSelect";
 			this.butSnomedReactionSelect.Size = new System.Drawing.Size(22, 22);
