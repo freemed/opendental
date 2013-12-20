@@ -2907,7 +2907,17 @@ namespace OpenDentBusiness {
 				}
 				command="UPDATE guardian SET IsGuardian=1";//Works for both MySQL and Oracle.
 				Db.NonQ(command);
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE allergydef ADD UniiCode varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE allergydef ADD UniiCode varchar2(255)";
+					Db.NonQ(command);
+				}
+				//Oracle compatible.
+				command="ALTER TABLE allergydef DROP COLUMN SnomedAllergyTo";
+				Db.NonQ(command);
 
 
 
@@ -2927,6 +2937,4 @@ namespace OpenDentBusiness {
 
 	}
 }
-
-
 

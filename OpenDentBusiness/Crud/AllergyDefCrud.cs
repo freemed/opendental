@@ -46,13 +46,13 @@ namespace OpenDentBusiness.Crud{
 			AllergyDef allergyDef;
 			for(int i=0;i<table.Rows.Count;i++) {
 				allergyDef=new AllergyDef();
-				allergyDef.AllergyDefNum  = PIn.Long  (table.Rows[i]["AllergyDefNum"].ToString());
-				allergyDef.Description    = PIn.String(table.Rows[i]["Description"].ToString());
-				allergyDef.IsHidden       = PIn.Bool  (table.Rows[i]["IsHidden"].ToString());
-				allergyDef.DateTStamp     = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
-				allergyDef.SnomedType     = (SnomedAllergy)PIn.Int(table.Rows[i]["SnomedType"].ToString());
-				allergyDef.MedicationNum  = PIn.Long  (table.Rows[i]["MedicationNum"].ToString());
-				allergyDef.SnomedAllergyTo= PIn.String(table.Rows[i]["SnomedAllergyTo"].ToString());
+				allergyDef.AllergyDefNum= PIn.Long  (table.Rows[i]["AllergyDefNum"].ToString());
+				allergyDef.Description  = PIn.String(table.Rows[i]["Description"].ToString());
+				allergyDef.IsHidden     = PIn.Bool  (table.Rows[i]["IsHidden"].ToString());
+				allergyDef.DateTStamp   = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
+				allergyDef.SnomedType   = (SnomedAllergy)PIn.Int(table.Rows[i]["SnomedType"].ToString());
+				allergyDef.MedicationNum= PIn.Long  (table.Rows[i]["MedicationNum"].ToString());
+				allergyDef.UniiCode     = PIn.String(table.Rows[i]["UniiCode"].ToString());
 				retVal.Add(allergyDef);
 			}
 			return retVal;
@@ -93,7 +93,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="AllergyDefNum,";
 			}
-			command+="Description,IsHidden,SnomedType,MedicationNum,SnomedAllergyTo) VALUES(";
+			command+="Description,IsHidden,SnomedType,MedicationNum,UniiCode) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(allergyDef.AllergyDefNum)+",";
 			}
@@ -103,7 +103,7 @@ namespace OpenDentBusiness.Crud{
 				//DateTStamp can only be set by MySQL
 				+    POut.Int   ((int)allergyDef.SnomedType)+","
 				+    POut.Long  (allergyDef.MedicationNum)+","
-				+"'"+POut.String(allergyDef.SnomedAllergyTo)+"')";
+				+"'"+POut.String(allergyDef.UniiCode)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -116,12 +116,12 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one AllergyDef in the database.</summary>
 		public static void Update(AllergyDef allergyDef){
 			string command="UPDATE allergydef SET "
-				+"Description    = '"+POut.String(allergyDef.Description)+"', "
-				+"IsHidden       =  "+POut.Bool  (allergyDef.IsHidden)+", "
+				+"Description  = '"+POut.String(allergyDef.Description)+"', "
+				+"IsHidden     =  "+POut.Bool  (allergyDef.IsHidden)+", "
 				//DateTStamp can only be set by MySQL
-				+"SnomedType     =  "+POut.Int   ((int)allergyDef.SnomedType)+", "
-				+"MedicationNum  =  "+POut.Long  (allergyDef.MedicationNum)+", "
-				+"SnomedAllergyTo= '"+POut.String(allergyDef.SnomedAllergyTo)+"' "
+				+"SnomedType   =  "+POut.Int   ((int)allergyDef.SnomedType)+", "
+				+"MedicationNum=  "+POut.Long  (allergyDef.MedicationNum)+", "
+				+"UniiCode     = '"+POut.String(allergyDef.UniiCode)+"' "
 				+"WHERE AllergyDefNum = "+POut.Long(allergyDef.AllergyDefNum);
 			Db.NonQ(command);
 		}
@@ -146,9 +146,9 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="MedicationNum = "+POut.Long(allergyDef.MedicationNum)+"";
 			}
-			if(allergyDef.SnomedAllergyTo != oldAllergyDef.SnomedAllergyTo) {
+			if(allergyDef.UniiCode != oldAllergyDef.UniiCode) {
 				if(command!=""){ command+=",";}
-				command+="SnomedAllergyTo = '"+POut.String(allergyDef.SnomedAllergyTo)+"'";
+				command+="UniiCode = '"+POut.String(allergyDef.UniiCode)+"'";
 			}
 			if(command==""){
 				return;

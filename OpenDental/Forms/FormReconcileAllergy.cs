@@ -181,10 +181,10 @@ namespace OpenDental {
 			for(int i=0;i<ListAllergyNew.Count;i++) {
 				isValid=true;
 				for(int j=0;j<_listAllergyDefCur.Count;j++) {
-					if(_listAllergyDefCur[j].SnomedAllergyTo==ListAllergyDefNew[i].SnomedAllergyTo) {//Check SNOMEDS to determine if the Reconcile list already has that SNOMED code
-						isValid=false;
-						break;
-					}
+					//if(_listAllergyDefCur[j].SnomedAllergyTo==ListAllergyDefNew[i].SnomedAllergyTo) {//TODO: Change to UNII
+					//	isValid=false;
+					//	break;
+					//}
 					if(_listAllergyDefCur[j].MedicationNum==ListAllergyDefNew[i].MedicationNum) {//Check Medications to determine if the Reconcile list already has that MedicationNum
 						isValid=false;
 						break;
@@ -367,11 +367,11 @@ namespace OpenDental {
 					if(alDR==null) {
 						continue;
 					}
-					if(alDR.SnomedAllergyTo!="" && alDR.SnomedAllergyTo!=null && alDR.SnomedAllergyTo==alD.SnomedAllergyTo) {
-						isValid=false;
-						skipCount++;
-						break;
-					}
+					//if(alDR.SnomedAllergyTo!="" && alDR.SnomedAllergyTo!=null && alDR.SnomedAllergyTo==alD.SnomedAllergyTo) {//TODO: Change to UNII
+					//	isValid=false;
+					//	skipCount++;
+					//	break;
+					//}
 					if(alDR.MedicationNum!=0 && alDR.MedicationNum==alD.MedicationNum) {
 						isValid=false;
 						skipCount++;
@@ -481,10 +481,10 @@ namespace OpenDental {
 					if(alDR==null) {
 						continue;
 					}
-					if(alDR.SnomedAllergyTo!="" && alDR.SnomedAllergyTo==alD.SnomedAllergyTo) {//Has a Snomed code and they are equal
-						isActive=true;
-						break;
-					}
+					//if(alDR.SnomedAllergyTo!="" && alDR.SnomedAllergyTo==alD.SnomedAllergyTo) {//TODO: Change to UNII
+					//	isActive=true;
+					//	break;
+					//}
 					if(alDR.MedicationNum!=0 && alDR.MedicationNum==alD.MedicationNum) {//Has a Snomed code and they are equal
 						isActive=true;
 						break;
@@ -514,7 +514,8 @@ namespace OpenDental {
 					alDU=AllergyDefs.GetAllergyDefFromMedication(ListAllergyDefNew[index].MedicationNum);
 				}
 				else {
-					alDU=AllergyDefs.GetAllergyDefFromCode(ListAllergyDefNew[index].SnomedAllergyTo);//Check if the Def already exists.
+					alDU=null;//remove once UNII is implemented
+					//alDU=AllergyDefs.GetAllergyDefFromCode(ListAllergyDefNew[index].SnomedAllergyTo);//TODO: Change to UNII
 				}
 				if(alDU==null) {//db is missing the def
 					ListAllergyNew[index].AllergyDefNum=AllergyDefs.Insert(ListAllergyDefNew[index]);
