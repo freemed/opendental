@@ -8,12 +8,16 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class FormEhrExportCCD:Form {
-		public string Ccd;
-		public Patient Pat;
+		private Patient _patCur;
+		private string _ccd;
 
-		public FormEhrExportCCD() {
+		public string CCD { get { return _ccd; } }
+
+		public FormEhrExportCCD(Patient patCur) {
 			InitializeComponent();
 			Lan.F(this);
+			_patCur=patCur;
+			_ccd="";
 		}
 
 		private void butCheckAll_Click(object sender,EventArgs e) {
@@ -26,6 +30,7 @@ namespace OpenDental {
 			checkProblem.Checked=true;
 			checkProcedure.Checked=true;
 			checkResult.Checked=true;
+			checkReferral.Checked=true;
 			checkSocialHistory.Checked=true;
 			checkVitalSign.Checked=true;
 		}
@@ -40,12 +45,13 @@ namespace OpenDental {
 			checkProblem.Checked=false;
 			checkProcedure.Checked=false;
 			checkResult.Checked=false;
+			checkReferral.Checked=false;
 			checkSocialHistory.Checked=false;
 			checkVitalSign.Checked=false;
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-				Ccd=EhrCCD.GenerateClinicalSummary(Pat,checkAllergy.Checked,checkEncounter.Checked,checkFunctionalStatus.Checked,checkImmunization.Checked,checkMedication.Checked,checkPlanOfCare.Checked,checkProblem.Checked,checkProcedure.Checked,checkResult.Checked,checkSocialHistory.Checked,checkVitalSign.Checked);
+			_ccd=EhrCCD.GenerateClinicalSummary(_patCur,checkAllergy.Checked,checkEncounter.Checked,checkFunctionalStatus.Checked,checkImmunization.Checked,checkMedication.Checked,checkPlanOfCare.Checked,checkProblem.Checked,checkProcedure.Checked,checkReferral.Checked,checkResult.Checked,checkSocialHistory.Checked,checkVitalSign.Checked,textInstructions.Text);
 			DialogResult=DialogResult.OK;
 		}
 
