@@ -876,7 +876,7 @@ namespace OpenDentBusiness{
 			command="SELECT PatNumChild,PatNumGuardian,Relationship,patient.FName,patient.Preferred "
 				+"FROM guardian "
 				+"LEFT JOIN patient ON patient.PatNum=guardian.PatNumGuardian "
-				+"WHERE PatNumChild IN (";
+				+"WHERE IsGuardian<>0 AND PatNumChild IN (";
 			if(raw.Rows.Count==0){
 				command+="0";
 			}

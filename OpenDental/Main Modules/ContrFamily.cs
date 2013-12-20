@@ -878,6 +878,9 @@ namespace OpenDental{
 						List<Guardian> guardianList=Guardians.Refresh(PatCur.PatNum);
 						string str="";
 						for(int g=0;g<guardianList.Count;g++) {
+							if(!guardianList[g].IsGuardian) {
+								continue;
+							}
 							if(g>0) {
 								str+=",";
 							}

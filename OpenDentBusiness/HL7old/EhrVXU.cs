@@ -83,15 +83,117 @@ namespace OpenDentBusiness.HL7 {
 
 		///<summary>Next of Kin segment.  Guide page 111.</summary>
 		private void NK1(Patient pat) {
-			//Existing guardian relationships: Father, Mother, Stepfather, Stepmother, Grandfather, Grandmother, Sitter
-			//Guardians.Refresh(
+			List<Guardian> listGuardians=Guardians.Refresh(pat.PatNum);
+			for(int i=0;i<listGuardians.Count;i++) {//One NK1 segment for each relationship.
+				_seg=new SegmentHL7(SegmentNameHL7.NK1);
+				_seg.SetField(0,"NK1");
+				_seg.SetField(1,i.ToString());//NK1-1 Set ID.  Required (length unspecified).  Cardinality [1..1].
+				//NK-2 Name.  Required (length unspecified).  Type XPN (guide page 82).  Cardinarlity [1..1].
+				_seg.SetField(2,
+					pat.LName,//NK-2.1 Family Name.  Required (length 1..50).  Type FN (guide page 64).  Cardinality [1..1].  The FN type only requires the last name field and it is the first field.
+					pat.FName,//NK-2.2 Given Name.  Required (length 1..30).  Cardinality [1..1].
+					pat.MiddleI//NK-2.3 Second and Further Given Names or Initials Thereof (middle name).  Required if known (length 1..30). 
+					//NK-2.4 Suffix.  Optional.
+					//NK-2.5 Prefix.  Optional.
+					//NK-2.6 Degree.  No longer used.
+					//NK-2.7 Name Type Code.  Required if known (length 1..1).  Value set HL70200 (guide page 203).
+					//NK-2.8 Name Representation Code.  Optional.
+					//NK-2.9 Name Context.  Optional.
+					//NK-2.10 Name Validity Range.  No longer used.
+					//NK-2.11 Name Assembly Order.  Optional.
+					//NK-2.12 Effective Date.  Optional.
+					//NK-2.13 Expiration Date.  Optional.
+					//NK-2.14 Professional Suffix.  Optional.
+					);
+				//NK1-3 Relationship.  Required.  Cardinality [1..1].  Value set HL70063 (guide page 196).
+				GuardianRelationship relat=listGuardians[i].Relationship;
+				string strRelat="";
+				if(relat==GuardianRelationship.Brother) {
+					strRelat="BRO";
+				}
+				else if(relat==GuardianRelationship.CareGiver) {
+					strRelat="CGV";
+				}
+				else if(relat==GuardianRelationship.Child) {
+					strRelat="CHD";//This relationship type is not documented in the guide, but it is defined as part of HL7 0063 in a more recent publication.  We added because it seemed like a basic relationship type.
+				}
+				else if(relat==GuardianRelationship.Father) {
+					strRelat="FTH";
+				}
+				else if(relat==GuardianRelationship.FosterChild) {
+					strRelat="FCH";
+				}
+				else if(relat==GuardianRelationship.Friend) {
+					strRelat="FND";//This relationship type is not documented in the guide, but it is defined as part of HL7 0063 in a more recent publication.  We added because it seemed like a basic relationship type.
+				}
+				else if(relat==GuardianRelationship.Grandchild) {
+					strRelat="GCH";//This relationship type is not documented in the guide, but it is defined as part of HL7 0063 in a more recent publication.  We added because it seemed like a basic relationship type.
+				}
+				else if(relat==GuardianRelationship.Grandfather) { //This status is from our older guardian implementation.
+					strRelat="GRD";//Grandparent
+				}
+				else if(relat==GuardianRelationship.Grandmother) { //This status is from our older guardian implementation.
+					strRelat="GRD";//Grandparent
+				}
+				else if(relat==GuardianRelationship.Grandparent) {
+					strRelat="GRD";
+				}
+				else if(relat==GuardianRelationship.Guardian) {
+					strRelat="GRD";
+				}
+				else if(relat==GuardianRelationship.LifePartner) {
+					strRelat="DOM";//This relationship type is not documented in the guide, but it is defined as part of HL7 0063 in a more recent publication.  We added because it seemed like a basic relationship type.
+				}
+				else if(relat==GuardianRelationship.Mother) {
+					strRelat="MTH";
+				}
+				else if(relat==GuardianRelationship.Other) {
+					strRelat="OTH";
+				}
+				else if(relat==GuardianRelationship.Parent) {
+					strRelat="PAR";
+				}
+				else if(relat==GuardianRelationship.Self) {
+					strRelat="SEL";
+				}
+				else if(relat==GuardianRelationship.Sibling) {
+					strRelat="SIB";
+				}
+				else if(relat==GuardianRelationship.Sister) {
+					strRelat="SIS";
+				}
+				else if(relat==GuardianRelationship.Sitter) { //This status is from our older guardian implementation.
+					strRelat="CGV";//Caregiver
+				}
+				else if(relat==GuardianRelationship.Spouse) {
+					strRelat="SPO";
+				}
+				else if(relat==GuardianRelationship.Stepchild) {
+					strRelat="SCH";
+				}
+				else if(relat==GuardianRelationship.Stepfather) { //This status is from our older guardian implementation.
+					strRelat="PAR";//parent
+				}
+				else if(relat==GuardianRelationship.Stepmother) { //This status is from our older guardian implementation.
+					strRelat="PAR";//parent
+				}
+				else {
+					continue;//Skip the entire segment if the relationship is not known.
+				}
+				_seg.SetField(3,strRelat);
+				//NK-4 Address.  Required if known (length unspecified).  Cardinality [0..1].  Type XAD (guide page 74).  The first instance must be the primary address.
+				_seg.SetField(4,
+					pat.Address,//NK-4.1 Street Address.  Required if known (length 1..120).  Type SAD (guide page 72).  Only the first field of a SAD is required (Street or Mailing Address).
+					pat.Address2,//NK-4.2 Other Designation.  Required if known (length 1..120).
+					pat.City,//NK-4.3 City.  Required if known (length 1..50).
+					pat.State,//NK-4.4 State or Province.  Required if known (1..50).
+					pat.Zip,//NK-4.5 Zip or Postal Code.  Required if known (length 1..12).
+					"USA",//NK-4.6 Country.  Required if known (length 1..3).  Value set HL70399 (not in guide).  Defaults to USA.
+					"P"//NK-4.7 Address Type.  Required (length 1..3).  Value set HL70190 (guide page 202).  P=permanent.
+					//TODO: continue from NK-4.8
+					);
 
-			//_seg=new SegmentHL7(SegmentNameHL7.NK1);
-			//_seg.SetField(0,"NK1");
-			//_seg.SetField(1,);//NK1-1 Set ID.  Required (length unspecified).  Cardinality [1..1].
-			////NK1-3 (guide page 196).
-
-
+			}
 			_msg.Segments.Add(_seg);
 		}
 

@@ -151,7 +151,7 @@ namespace OpenDental{
 		private Label labelCanadianEligibilityCode;
 		private ComboBox comboCanadianEligibilityCode;
 		private Label label41;
-		private ListBox listGuardians;
+		private ListBox listRelationships;
 		private OpenDental.UI.Button butAddGuardian;
 		///<summary>Will include the languages setup in the settings, and also the language of this patient if that language is not on the selection list.</summary>
 		private List<string> languageList;
@@ -357,7 +357,7 @@ namespace OpenDental{
 			this.textTitle = new System.Windows.Forms.TextBox();
 			this.label26 = new System.Windows.Forms.Label();
 			this.label41 = new System.Windows.Forms.Label();
-			this.listGuardians = new System.Windows.Forms.ListBox();
+			this.listRelationships = new System.Windows.Forms.ListBox();
 			this.butAddGuardian = new OpenDental.UI.Button();
 			this.butGuardianDefaults = new OpenDental.UI.Button();
 			this.textAskToArriveEarly = new System.Windows.Forms.TextBox();
@@ -1551,17 +1551,17 @@ namespace OpenDental{
 			this.label41.Name = "label41";
 			this.label41.Size = new System.Drawing.Size(117, 17);
 			this.label41.TabIndex = 105;
-			this.label41.Text = "Guardians";
+			this.label41.Text = "Family Relationships";
 			this.label41.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
-			// listGuardians
+			// listRelationships
 			// 
-			this.listGuardians.FormattingEnabled = true;
-			this.listGuardians.Location = new System.Drawing.Point(364, 177);
-			this.listGuardians.Name = "listGuardians";
-			this.listGuardians.Size = new System.Drawing.Size(114, 69);
-			this.listGuardians.TabIndex = 106;
-			this.listGuardians.DoubleClick += new System.EventHandler(this.listGuardians_DoubleClick);
+			this.listRelationships.FormattingEnabled = true;
+			this.listRelationships.Location = new System.Drawing.Point(364, 177);
+			this.listRelationships.Name = "listRelationships";
+			this.listRelationships.Size = new System.Drawing.Size(114, 69);
+			this.listRelationships.TabIndex = 106;
+			this.listRelationships.DoubleClick += new System.EventHandler(this.listRelationships_DoubleClick);
 			// 
 			// butAddGuardian
 			// 
@@ -1662,7 +1662,7 @@ namespace OpenDental{
 			this.Controls.Add(this.label42);
 			this.Controls.Add(this.butGuardianDefaults);
 			this.Controls.Add(this.butAddGuardian);
-			this.Controls.Add(this.listGuardians);
+			this.Controls.Add(this.listRelationships);
 			this.Controls.Add(this.label41);
 			this.Controls.Add(this.textTitle);
 			this.Controls.Add(this.label26);
@@ -2113,9 +2113,9 @@ namespace OpenDental{
 
 		private void FillGuardians(){
 			GuardianList=Guardians.Refresh(PatCur.PatNum);
-			listGuardians.Items.Clear();
+			listRelationships.Items.Clear();
 			for(int i=0;i<GuardianList.Count;i++){
-				listGuardians.Items.Add(FamCur.GetNameInFamFirst(GuardianList[i].PatNumGuardian)+" "
+				listRelationships.Items.Add(FamCur.GetNameInFamFirst(GuardianList[i].PatNumGuardian)+" "
 					+Guardians.GetGuardianRelationshipStr(GuardianList[i].Relationship));
 			}
 		}
@@ -2733,22 +2733,17 @@ namespace OpenDental{
 			//CheckGuardianUiState();
 		}
 
-		private void listGuardians_DoubleClick(object sender,EventArgs e) {
-			if(listGuardians.SelectedIndex==-1) {
+		private void listRelationships_DoubleClick(object sender,EventArgs e) {
+			if(listRelationships.SelectedIndex==-1) {
 				return;
 			}
-			FormGuardianEdit formG=new FormGuardianEdit(GuardianList[listGuardians.SelectedIndex],FamCur);
+			FormGuardianEdit formG=new FormGuardianEdit(GuardianList[listRelationships.SelectedIndex],FamCur);
 			if(formG.ShowDialog()==DialogResult.OK) {
 				FillGuardians();
 			}
 		}
 
 		private void butAddGuardian_Click(object sender,EventArgs e) {
-			if(listPosition.SelectedIndex!=2) {
-				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Guardians are usually only added from a child window.  Continue anyway?")) {
-					return;
-				}
-			}
 			Guardian guardian=new Guardian();
 			guardian.IsNew=true;
 			guardian.PatNumChild=PatCur.PatNum;

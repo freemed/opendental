@@ -1,67 +1,79 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class FormGuardianEdit:Form {
-		private Guardian GuardianCur;
-		private Family Fam;
+
+		private Guardian _guardianCur;
+		private Family _fam;
+		private List<string> _listRelationshipNames;
 
 		public FormGuardianEdit(Guardian guardianCur,Family fam){
 			InitializeComponent();
-			GuardianCur=guardianCur;
-			Fam=fam;
 			Lan.F(this);
+			_guardianCur=guardianCur;
+			_fam=fam;
 		}
 
 		private void FormGuardianEdit_Load(object sender,EventArgs e) {
-			textDependant.Text=Fam.GetNameInFamFL(GuardianCur.PatNumChild);
-			textGuardian.Text=Fam.GetNameInFamFL(GuardianCur.PatNumGuardian);
-			string[] relationshipNames=Enum.GetNames(typeof(GuardianRelationship));
-			for(int i=0;i<relationshipNames.Length;i++){
-				listRelationship.Items.Add(Lan.g("enumGuardianRelationship",relationshipNames[i]));
+			textPatient.Text=_fam.GetNameInFamFL(_guardianCur.PatNumChild);
+			if(_guardianCur.PatNumGuardian!=0) {
+				textFamilyMember.Text=_fam.GetNameInFamFL(_guardianCur.PatNumGuardian);
 			}
-			listRelationship.SelectedIndex=(int)GuardianCur.Relationship;
+			Patient patChild=Patients.GetPat(_guardianCur.PatNumChild);
+			if(_guardianCur.IsNew) {
+				if(patChild.Position==PatientPosition.Child) {
+					//True by default if entering relationship from a child patient, because this is how the old guardian feature worked before we added support for other relationship types.
+					checkIsGuardian.Checked=true;
+				}
+			}
+			else { //Existing guardian record.
+				checkIsGuardian.Checked=_guardianCur.IsGuardian;
+			}
+			_listRelationshipNames=new List<string>(Enum.GetNames(typeof(GuardianRelationship)));
+			_listRelationshipNames.Sort();
+			for(int i=0;i<_listRelationshipNames.Count;i++){
+				comboRelationship.Items.Add(Lan.g("enumGuardianRelationship",_listRelationshipNames[i]));
+				if(_listRelationshipNames[i]==_guardianCur.Relationship.ToString()) {
+					comboRelationship.SelectedIndex=i;
+				}
+			}
 		}
 
 		private void butPick_Click(object sender,EventArgs e) {
-			FormFamilyMemberSelect FormF=new FormFamilyMemberSelect(Fam);
+			FormFamilyMemberSelect FormF=new FormFamilyMemberSelect(_fam);
 			FormF.ShowDialog();
 			if(FormF.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			GuardianCur.PatNumGuardian=FormF.SelectedPatNum;
-			textGuardian.Text=Fam.GetNameInFamFL(GuardianCur.PatNumGuardian);
+			_guardianCur.PatNumGuardian=FormF.SelectedPatNum;
+			textFamilyMember.Text=_fam.GetNameInFamFL(_guardianCur.PatNumGuardian);
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
-			if(GuardianCur.IsNew) {
+			if(_guardianCur.IsNew) {
 				DialogResult=DialogResult.Cancel;
 			}
 			else {
-				Guardians.Delete(GuardianCur.GuardianNum);
+				Guardians.Delete(_guardianCur.GuardianNum);
 				DialogResult=DialogResult.OK;
 			}
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			if(GuardianCur.PatNumGuardian==0) {
-				MsgBox.Show(this,"Please set a guardian first.");
-				return;
-			}
 			//PatNumChild already set
 			//PatNumGuardian already set
-			GuardianCur.Relationship=(GuardianRelationship)listRelationship.SelectedIndex;
-			if(GuardianCur.IsNew) {
-				Guardians.Insert(GuardianCur);
+			_guardianCur.IsGuardian=checkIsGuardian.Checked;
+			string relatName=comboRelationship.Items[comboRelationship.SelectedIndex].ToString();
+			List <string> listRelationshipNamesRaw=new List<string>(Enum.GetNames(typeof(GuardianRelationship)));
+			_guardianCur.Relationship=(GuardianRelationship)listRelationshipNamesRaw.IndexOf(relatName);
+			if(_guardianCur.IsNew) {
+				Guardians.Insert(_guardianCur);
 			}
 			else {
-				Guardians.Update(GuardianCur);
+				Guardians.Update(_guardianCur);
 			}
 			DialogResult=DialogResult.OK;
 		}
@@ -69,12 +81,6 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
-
-		
-		
-
-		
-
 		
 	}
 }

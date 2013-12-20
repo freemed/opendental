@@ -72,13 +72,29 @@ namespace OpenDentBusiness{
 		public static string GetGuardianRelationshipStr(GuardianRelationship relat) {
 			//No need to check RemotingRole; no call to db.
 			switch(relat) {
+				case GuardianRelationship.Brother: return "(br)";
+				case GuardianRelationship.CareGiver: return "(cg)";
+				case GuardianRelationship.Child: return "(c)";
 				case GuardianRelationship.Father: return "(d)";
-				case GuardianRelationship.Mother: return "(m)";
-				case GuardianRelationship.Stepfather: return "(sf)";
-				case GuardianRelationship.Stepmother: return "(sm)";
+				case GuardianRelationship.FosterChild: return "(fc)";
+				case GuardianRelationship.Friend: return "(f)";
+				case GuardianRelationship.Grandchild: return "(gc)";
 				case GuardianRelationship.Grandfather: return "(gf)";
 				case GuardianRelationship.Grandmother: return "(gm)";
+				case GuardianRelationship.Grandparent: return "(gp)";
+				case GuardianRelationship.Guardian: return "(g)";
+				case GuardianRelationship.LifePartner: return "(lp)";
+				case GuardianRelationship.Mother: return "(m)";
+				case GuardianRelationship.Other: return "(o)";
+				case GuardianRelationship.Parent: return "(p)";
+				case GuardianRelationship.Self: return "(se)";
+				case GuardianRelationship.Sibling: return "(sb)";
+				case GuardianRelationship.Sister: return "(ss)";
 				case GuardianRelationship.Sitter: return "(s)";
+				case GuardianRelationship.Spouse: return "(sp)";
+				case GuardianRelationship.Stepchild: return "(sc)";
+				case GuardianRelationship.Stepfather: return "(sf)";
+				case GuardianRelationship.Stepmother: return "(sm)";
 			}
 			return "";
 		}
