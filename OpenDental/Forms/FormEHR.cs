@@ -441,7 +441,7 @@ namespace OpenDental {
 				#if EHRTEST //This pattern allows the code to compile without having the EHR code available.
 					return FormEhrMeasures.ProvKeyIsValid(lName,fName,hasReportAccess,provKey);
 				#else
-					contructObjFormEhrMeasuresHelper();
+					constructObjFormEhrMeasuresHelper();
 					Type type=AssemblyEHR.GetType("EHR.FormEhrMeasures");//namespace.class
 					object[] args=new object[] { lName,fName,hasReportAccess,provKey };
 					return (bool)type.InvokeMember("ProvKeyIsValid",System.Reflection.BindingFlags.InvokeMethod,null,ObjFormEhrMeasures,args);
@@ -457,7 +457,7 @@ namespace OpenDental {
 				#if EHRTEST //This pattern allows the code to compile without having the EHR code available.
 					return FormEhrMeasures.QuarterlyKeyIsValid(year,quarter,practiceTitle,qkey);
 				#else
-					contructObjFormEhrMeasuresHelper();
+					constructObjFormEhrMeasuresHelper();
 					Type type=AssemblyEHR.GetType("EHR.FormEhrMeasures");//namespace.class
 					object[] args=new object[] { year,quarter,practiceTitle,qkey };
 					return (bool)type.InvokeMember("QuarterlyKeyIsValid",System.Reflection.BindingFlags.InvokeMethod,null,ObjFormEhrMeasures,args);
