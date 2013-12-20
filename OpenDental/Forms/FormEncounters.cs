@@ -46,7 +46,7 @@ namespace OpenDental {
 				//to get description, first determine which table the code is from.  Encounter is only allowed to be a CDT, CPT, HCPCS, and SNOMEDCT.
 				switch(listEncs[i].CodeSystem) {
 					case "CDT":
-						descript=ProcedureCodes.GetProcCode(listEncs[i].CodeValue).Descript;//this may need to get code from cdt table instead, if Ryan creates a one
+						descript=ProcedureCodes.GetProcCode(listEncs[i].CodeValue).Descript;
 						break;
 					case "CPT":
 						Cpt cptCur=Cpts.GetByCode(listEncs[i].CodeValue);
