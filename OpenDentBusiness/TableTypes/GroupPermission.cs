@@ -180,7 +180,9 @@ namespace OpenDentBusiness{
 		///<summary>75- TODO description and verify name.  This is more like a user level preference than a permission.</summary>
 		EhrShowCDS,
 		///<summary>76- TODO description and verify name.  This is more like a user level preference than a permission.</summary>
-		EhrInfoButton
+		EhrInfoButton,
+		///<summary>77- There is no user interface in the security window for this permission.  It is only used for tracking.  Patient Portal access of patient information.  Required by EHR.</summary>
+		PatientPortal
 	}
 
 	
