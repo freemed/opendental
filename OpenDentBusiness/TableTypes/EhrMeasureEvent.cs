@@ -54,7 +54,9 @@ namespace OpenDentBusiness {
 		///<summary>8</summary>
 		TobaccoUseAssessed,
 		///<summary>9</summary>
-		TobaccoCessation
+		TobaccoCessation,
+		///<summary>10</summary>
+		CurrentMedsDocumented
 	}
 
 }
