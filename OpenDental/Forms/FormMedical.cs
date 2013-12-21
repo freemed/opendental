@@ -47,7 +47,9 @@ namespace OpenDental{
 		private ODGrid gridFamilyHealth;
 		private UI.Button butAddFamilyHistory;
 		private List<FamilyHealth> ListFamHealth;
+		private CheckBox checkDocumentedMeds;
 		private int headingPrintH;
+		private long _EhrMeasureEventNum;
 
 
 
@@ -107,6 +109,7 @@ namespace OpenDental{
 			this.imageListInfoButton = new System.Windows.Forms.ImageList(this.components);
 			this.gridFamilyHealth = new OpenDental.UI.ODGrid();
 			this.butAddFamilyHistory = new OpenDental.UI.Button();
+			this.checkDocumentedMeds = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// butOK
@@ -304,7 +307,7 @@ namespace OpenDental{
 			// 
 			// checkDiscontinued
 			// 
-			this.checkDiscontinued.Location = new System.Drawing.Point(514, 2);
+			this.checkDiscontinued.Location = new System.Drawing.Point(523, 3);
 			this.checkDiscontinued.Name = "checkDiscontinued";
 			this.checkDiscontinued.Size = new System.Drawing.Size(201, 23);
 			this.checkDiscontinued.TabIndex = 61;
@@ -443,12 +446,25 @@ namespace OpenDental{
 			this.butAddFamilyHistory.Text = "Add Family History";
 			this.butAddFamilyHistory.Click += new System.EventHandler(this.butAddFamilyHistory_Click);
 			// 
+			// checkDocumentedMeds
+			// 
+			this.checkDocumentedMeds.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkDocumentedMeds.Location = new System.Drawing.Point(656, 248);
+			this.checkDocumentedMeds.Name = "checkDocumentedMeds";
+			this.checkDocumentedMeds.Size = new System.Drawing.Size(303, 23);
+			this.checkDocumentedMeds.TabIndex = 71;
+			this.checkDocumentedMeds.Tag = "";
+			this.checkDocumentedMeds.Text = "All current medications have been documented";
+			this.checkDocumentedMeds.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkDocumentedMeds.UseVisualStyleBackColor = true;
+			// 
 			// FormMedical
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(964, 683);
+			this.Controls.Add(this.checkDocumentedMeds);
 			this.Controls.Add(this.butAddFamilyHistory);
 			this.Controls.Add(this.gridFamilyHealth);
 			this.Controls.Add(this.label1);
@@ -498,9 +514,18 @@ namespace OpenDental{
 			FillProblems();
 			FillAllergies();
 			FillFamilyHealth();
+			List<EhrMeasureEvent> listDocumentedMedEvents=EhrMeasureEvents.RefreshByType(PatCur.PatNum,EhrMeasureEventType.CurrentMedsDocumented);
+			_EhrMeasureEventNum=0;
+			for(int i=0;i<listDocumentedMedEvents.Count;i++) {
+				if(listDocumentedMedEvents[i].DateTEvent.Date==DateTime.Today) {
+					checkDocumentedMeds.Checked=true;
+					_EhrMeasureEventNum=listDocumentedMedEvents[i].EhrMeasureEventNum;
+					break;
+				}
+			}
 		}
 
-		private void FillMeds(){
+		private void FillMeds() {
 			Medications.Refresh();
 			medList=MedicationPats.Refresh(PatCur.PatNum,checkDiscontinued.Checked);
 			gridMeds.BeginUpdate();
@@ -1026,6 +1051,20 @@ namespace OpenDental{
 			PatientNoteCur.Service=textService.Text;
 			PatientNoteCur.MedicalComp=textMedicalComp.Text;
 			PatientNotes.Update(PatientNoteCur, PatCur.Guarantor);
+			//Insert an ehrmeasureevent for CurrentMedsDocumented is checkDocumentedMeds is checked and there isn't one for today's date
+			if(checkDocumentedMeds.Checked && _EhrMeasureEventNum==0) {
+				EhrMeasureEvent ehrMeasureEventCur=new EhrMeasureEvent();
+				ehrMeasureEventCur.PatNum=PatCur.PatNum;
+				ehrMeasureEventCur.DateTEvent=DateTime.Now;
+				ehrMeasureEventCur.EventType=EhrMeasureEventType.CurrentMedsDocumented;
+				ehrMeasureEventCur.CodeValueEvent="428191000124101";//SNOMEDCT code for document current meds procedure
+				ehrMeasureEventCur.CodeSystemEvent="SNOMEDCT";
+				EhrMeasureEvents.Insert(ehrMeasureEventCur);
+			}
+			//if unchecked and there is one with today's date, delete it.  Safe since it is only used for reporting and not linked to anything. 
+			else if(!checkDocumentedMeds.Checked && _EhrMeasureEventNum>0) {
+				EhrMeasureEvents.Delete(_EhrMeasureEventNum);
+			}
 			DialogResult=DialogResult.OK;
 		}
 
