@@ -21,9 +21,6 @@ namespace OpenDental {
 		}
 
 		private void FormEhrSetup_Load(object sender,EventArgs e) {
-			//hidden until EHR 2014
-			menuItemSettings.Text="";
-			menuItemSettings.Enabled=false;
 			if(PrefC.GetBool(PrefName.EhrEmergencyNow)) {
 				panelEmergencyNow.BackColor=Color.Red;
 			}
