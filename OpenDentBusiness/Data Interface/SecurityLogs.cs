@@ -107,13 +107,7 @@ namespace OpenDentBusiness{
 			MakeLogEntry(permType,patNum,logText,0);
 		}	
 
-		///<summary>A foreign key to a table associated with the PermType.  0 indicates not in use.
-		///This is typically used for objects that have specific audit trails so that users can see all audit entries related to a particular object.  
-		///For the patient portal, it is used to indicate logs created on behalf of other patients.
-		///AptNum with PermType: AppointmentCreate, AppointmentEdit, or AppointmentMove.  Tracks all appointment logs for a particular appointment.
-		///CodeNum with PermType: ProcFeeEdit.  Currently only tracks fee changes.
-		///PatNum with PermType: PatientPortal.  Represents an entry that a patient made on behalf of another patient.  The PatNum column will represent the patient who is taking the action.</summary>
-		///PlanNum with PermType: InsPlanChangeCarrierName.  Tracks carrier name changes.</summary>		
+		///<summary>Takes a foreign key to a table associated with that PermType.  PatNum can be 0.</summary>
 		public static void MakeLogEntry(Permissions permType,long patNum,string logText,long fKey) {
 			//No need to check RemotingRole; no call to db.
 			SecurityLog securityLog=new SecurityLog();
