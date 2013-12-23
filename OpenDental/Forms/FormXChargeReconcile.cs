@@ -69,11 +69,11 @@ namespace OpenDental {
 						continue;
 					}
 					transCheck=XChargeTransactions.CheckByBatchItem(trans.BatchNum,trans.ItemNum);
-					if(transCheck==null) {
+					if(transCheck==trans) {
+						XChargeTransactions.Delete(transCheck.XChargeTransactionNum);
 						XChargeTransactions.Insert(trans);
 					}
 					else {
-						XChargeTransactions.Delete(transCheck.XChargeTransactionNum);
 						XChargeTransactions.Insert(trans);
 					}
 					line=sr.ReadLine();
