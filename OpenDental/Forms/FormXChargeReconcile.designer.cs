@@ -41,7 +41,7 @@ namespace OpenDental{
 			// label5
 			// 
 			this.label5.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.label5.Location = new System.Drawing.Point(121, 35);
+			this.label5.Location = new System.Drawing.Point(105, 35);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(244, 20);
 			this.label5.TabIndex = 14;
@@ -50,20 +50,20 @@ namespace OpenDental{
 			// 
 			// date2
 			// 
-			this.date2.Location = new System.Drawing.Point(290, 94);
+			this.date2.Location = new System.Drawing.Point(282, 94);
 			this.date2.Name = "date2";
 			this.date2.TabIndex = 24;
 			// 
 			// date1
 			// 
-			this.date1.Location = new System.Drawing.Point(34, 94);
+			this.date1.Location = new System.Drawing.Point(18, 94);
 			this.date1.Name = "date1";
 			this.date1.TabIndex = 23;
 			// 
 			// label2
 			// 
 			this.label2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.label2.Location = new System.Drawing.Point(121, 374);
+			this.label2.Location = new System.Drawing.Point(105, 344);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(296, 20);
 			this.label2.TabIndex = 14;
@@ -73,7 +73,7 @@ namespace OpenDental{
 			// label3
 			// 
 			this.label3.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.label3.Location = new System.Drawing.Point(121, 404);
+			this.label3.Location = new System.Drawing.Point(105, 372);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(272, 20);
 			this.label3.TabIndex = 14;
@@ -83,7 +83,7 @@ namespace OpenDental{
 			// label4
 			// 
 			this.label4.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.label4.Location = new System.Drawing.Point(121, 292);
+			this.label4.Location = new System.Drawing.Point(105, 270);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(244, 20);
 			this.label4.TabIndex = 14;
@@ -93,7 +93,7 @@ namespace OpenDental{
 			// label7
 			// 
 			this.label7.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.label7.Location = new System.Drawing.Point(121, 322);
+			this.label7.Location = new System.Drawing.Point(105, 300);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(296, 20);
 			this.label7.TabIndex = 14;
@@ -107,7 +107,7 @@ namespace OpenDental{
 			this.butExtra.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butExtra.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butExtra.CornerRadius = 4F;
-			this.butExtra.Location = new System.Drawing.Point(34, 402);
+			this.butExtra.Location = new System.Drawing.Point(18, 370);
 			this.butExtra.Name = "butExtra";
 			this.butExtra.Size = new System.Drawing.Size(81, 24);
 			this.butExtra.TabIndex = 3;
@@ -121,7 +121,7 @@ namespace OpenDental{
 			this.butMissing.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butMissing.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butMissing.CornerRadius = 4F;
-			this.butMissing.Location = new System.Drawing.Point(34, 372);
+			this.butMissing.Location = new System.Drawing.Point(18, 342);
 			this.butMissing.Name = "butMissing";
 			this.butMissing.Size = new System.Drawing.Size(81, 24);
 			this.butMissing.TabIndex = 3;
@@ -135,7 +135,7 @@ namespace OpenDental{
 			this.butPayments.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butPayments.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butPayments.CornerRadius = 4F;
-			this.butPayments.Location = new System.Drawing.Point(34, 320);
+			this.butPayments.Location = new System.Drawing.Point(18, 298);
 			this.butPayments.Name = "butPayments";
 			this.butPayments.Size = new System.Drawing.Size(81, 24);
 			this.butPayments.TabIndex = 3;
@@ -149,7 +149,7 @@ namespace OpenDental{
 			this.butViewImported.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butViewImported.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butViewImported.CornerRadius = 4F;
-			this.butViewImported.Location = new System.Drawing.Point(34, 290);
+			this.butViewImported.Location = new System.Drawing.Point(18, 268);
 			this.butViewImported.Name = "butViewImported";
 			this.butViewImported.Size = new System.Drawing.Size(81, 24);
 			this.butViewImported.TabIndex = 3;
@@ -163,7 +163,7 @@ namespace OpenDental{
 			this.butImport.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butImport.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butImport.CornerRadius = 4F;
-			this.butImport.Location = new System.Drawing.Point(34, 33);
+			this.butImport.Location = new System.Drawing.Point(18, 33);
 			this.butImport.Name = "butImport";
 			this.butImport.Size = new System.Drawing.Size(81, 24);
 			this.butImport.TabIndex = 3;
@@ -178,7 +178,7 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(414, 457);
+			this.butClose.Location = new System.Drawing.Point(414, 378);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75, 24);
 			this.butClose.TabIndex = 2;
@@ -188,7 +188,7 @@ namespace OpenDental{
 			// FormXChargeReconcile
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(527, 511);
+			this.ClientSize = new System.Drawing.Size(527, 432);
 			this.Controls.Add(this.date2);
 			this.Controls.Add(this.date1);
 			this.Controls.Add(this.label3);
