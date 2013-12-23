@@ -42,18 +42,14 @@ namespace OpenDentBusiness.HL7 {
 				//TQ1 segment.  Optional.  Cardinality [0..1]. Undefined and may be locally specified.
 				//TQ2 segment.  Optional.  Cardinality [0..1]. Undefined and may be locally specified.
 				RXA(vaccines[i]);//RXA segment.  Required.  Cardinality [1..1].
-				RXR();//RXR segment.  Required if known.  Cardinality [0..1].
+				RXR(vaccines[i]);//RXR segment.  Required if known.  Cardinality [0..1].
 				OBX();//OBX segment.  Required if known.  Cardinality [0..*].
 				NTE();//NTE segment.  Required if known.  Cardinality [0..1].
 			}
 			//End Order group.
 		}
-
-		///<summary>Event Type segment.  Guide page 99.</summary>
-		private void EVN() {
-		}
 		
-		///<summary>Message Segment Header segment.  Defines intent, source, destination and syntax of the message.  Guide page 104.</summary>
+		///<summary>Message Segment Header segment.  Required.  Defines intent, source, destination and syntax of the message.  Guide page 104.</summary>
 		private void MSH() {
 			_seg=new SegmentHL7("MSH"
 				+"|"//MSH-1 Field Separator (|).  Required (length 1..1).
@@ -81,7 +77,7 @@ namespace OpenDentBusiness.HL7 {
 			_msg.Segments.Add(_seg);
 		}
 
-		///<summary>Next of Kin segment.  Guide page 111.</summary>
+		///<summary>Next of Kin segment.  Required if known.  Guide page 111.</summary>
 		private void NK1(Patient pat) {
 			List<Guardian> listGuardians=Guardians.Refresh(pat.PatNum);
 			for(int i=0;i<listGuardians.Count;i++) {//One NK1 segment for each relationship.
@@ -190,30 +186,110 @@ namespace OpenDentBusiness.HL7 {
 					pat.Zip,//NK-4.5 Zip or Postal Code.  Required if known (length 1..12).
 					"USA",//NK-4.6 Country.  Required if known (length 1..3).  Value set HL70399 (not in guide).  Defaults to USA.
 					"P"//NK-4.7 Address Type.  Required (length 1..3).  Value set HL70190 (guide page 202).  P=permanent.
-					//TODO: continue from NK-4.8
+					//NK-4.8 Other Geographic Designation.  Optional.
+					//NK-4.9 County/Parish Code.  Optional.
+					//NK-4.10 Census Tract.  Optional.
+					//NK-4.11 Address Representation Code.  Optional.
+					//NK-4.12 Address Validity Range.  No longer used.
+					//NK-4.13 Effective Date.  Optional.
+					//NK-4.14 Expiration Date.  Optional.
 					);
-
+				//NK-5 Phone Number.  Required if known.  Cardinality [0..*].  Type XTN (guide page 84).  The first instance shall be the primary phone number.
+				Patient patNextOfKin=Patients.GetPat(listGuardians[i].PatNumGuardian);
+				WritePhone(_seg,5,"PRN","PH",patNextOfKin.HmPhone,patNextOfKin.WirelessPhone);
+				//NK-6 Business Phone Number.  Optional.  Type XTN (guide page 84).
+				WritePhone(_seg,5,"PRN","PH",patNextOfKin.WkPhone);
+				//NK-7 Contact Role.  Optional.
+				//NK-8 Start Date.  Optional.
+				//NK-9 End Date.  Optional.
+				//NK-10 Next of Kin/Associated Parties Job Title.  Optional.
+				//NK-11 Next of Kin/Associated Parties Job Code/Class.  Optional.
+				//NK-12 Next of Kin/Associated Parties Employee Number.  Optional.
+				//NK-13 Organization Name - NK1.  Optional.
+				//NK-14 Marital Status.  Optional.
+				//NK-15 Administrative Sex.  Optional.
+				//NK-16 Date/Time of Birth.  Optional.
+				//NK-17 Living Dependency.  Optional.
+				//NK-18 Ambulatory Status.  Optional.
+				//NK-19 Citizenship.  Optional.
+				//NK-20 Primary Language.  Optional.
+				//NK-21 Living Arrangement.  Optional.
+				//NK-22 Publicity Code.  Optional.
+				//NK-23 Protection Indicator.  Optional.
+				//NK-24 Student Indicator.  Optional.
+				//NK-25 Religion.  Optional.
+				//NK-26 Mother's Maiden Name.  Optional.
+				//NK-27 Nationality.  Optional.
+				//NK-28 Ethnic Group.  Optional.
+				//NK-29 Contact Reason.  Optional.
+				//NK-30 Contact Person's Name.  Optional.
+				//NK-31 Contact Person's Telephone Number.  Optional.
+				//NK-32 Contact Person's Address.  Optional.
+				//NK-33 Next of Kin/Associated Party's Identifiers.  Optional.
+				//NK-34 Job Status.  Optional.
+				//NK-35 Race.  Optional.
+				//NK-36 Handicap.  Optional.
+				//NK-37 Contact Person Social Security Number.  Optional.
+				//NK-38 Next of Kin Birth Place.  Optional.
+				//NK-39 VIP Indicator.  Optional.
 			}
 			_msg.Segments.Add(_seg);
 		}
 
-		///<summary>Note segment.  Guide page 116.</summary>
+		///<summary>Note segment.  Required if known.  Guide page 116.</summary>
 		private void NTE() {
 		}
 
-		///<summary>Observation Result segment.  The basic format is question and answer.  Guide page 116.</summary>
+		///<summary>Observation Result segment.  Required if known.  The basic format is question and answer.  Guide page 116.</summary>
 		private void OBX() {
 		}
 		
-		///<summary>Order Request segment.  Optional and rarely included.  Guide page 126.</summary>
+		///<summary>Order Request segment.  Required.  Guide page 126.</summary>
 		private void ORC() {
 			_seg=new SegmentHL7(SegmentNameHL7.ORC);
 			_seg.SetField(0,"ORC");
-			_seg.SetField(1,"RE");//fixed
+			_seg.SetField(1,"RE");//ORC-1 Order Control.  Required (length 2).  Cardinality [1..1].  Value set HL70119.  The only allowed value is "RE".
+			//ORC-2 Placer Order Number.  Required if known.  Cardinality [0..1].  Type EI (guid page 62).
+			//ORC-2.1 Entity Identifier.  Required (length 1..199). 
+			//ORC-2.2 Namespace ID.  Required if ORC-2.3 is blank (length 1..20).  Value set HL70363 (guide page 229, 3 letter abbreviation for US state, US city, or US territory).
+			//ORC-2.3 Universal ID.  Required if ORC-2.1 is blank (length 1..199).
+			//ORC-2.4 Universal ID Type.  Required if ORC-2.3 is not blank (length 6..6).  Value set HL70301 (guide page 224).
+			_seg.SetField(3,//ORC-3 Filler Order Number.  Required.  Cardinality [0..1].  Type EI (guid page 62).  TODO:
+			"",//ORC-3.1 Entity Identifier.  Required (length 1..199). 
+			"",//ORC-3.2 Namespace ID.  Required if ORC-3.3 is blank (length 1..20).  Value set HL70363 (guide page 229, 3 letter abbreviation for US state, US city, or US territory).
+			"",//ORC-3.3 Universal ID.  Required if ORC-3.1 is blank (length 1..199).
+			"");//ORC-3.4 Universal ID Type.  Required if ORC-3.3 is not blank (length 6..6).  Value set HL70301 (guide page 224).  Must be "ISO" or blank.
 			_msg.Segments.Add(_seg);
+			//ORC-3.5 Order Status.  Optional.
+			//ORD-3.6 Response Flag.  Optional.
+			//ORD-3.7 Quantity/Timing.  No longer used.
+			//ORD-3.8 Parent.  Optional.
+			//ORD-3.9 Date/Time of Transaction.  Optional.
+			//ORD-3.10 Entered By.  Required if known.  Cardinality [0..1].  This is the person that entered the immunization record into the system.
+			//ORD-3.11 Verified By.  Optional.
+			//ORD-3.12 Ordering Provider.  Required if known. Cardinality [0..1].  This shall be the provider ordering the immunization.  It is expected to be empty if the immunization record is transcribed from a historical record.
+			//ORD-3.13 Enterer's Location.  Optional.
+			//ORD-3.14 Call Back Phone Number.  Optional.
+			//ORD-3.15 Order Effective Date/Time.  Optional.
+			//ORD-3.16 Order Control Code Reason.  Optional.
+			//ORD-3.17 Entering Organization.  Optional.
+			//ORD-3.18 Entering Device.  Optional.
+			//ORD-3.19 Action By.  Optional.
+			//ORD-3.20 Advanced Beneficiary Notice Code.  Optional.
+			//ORD-3.21 Ordering Facility Name.  Optional.
+			//ORD-3.22 Ordering Facility Address.  Optional.
+			//ORD-3.23 Ordering Facility.  Optional.
+			//ORD-3.24 Order Provider Address.  Optional.
+			//ORD-3.25 Order Status Modifier.  Optional.
+			//ORD-3.26 Advanced Beneficiary Notice Override Reason.  Optional.
+			//ORD-3.27 Filler's Expected Availability Date/Time.  Optional.
+			//ORD-3.28 Confidentiality Code.  Optional.
+			//ORD-3.29 Order Type.  Optional.
+			//ORD-3.30 Enterer Authorization Mode.  Optional.
+			//ORD-3.31 Parent Universal Service Modifier.  Optional.
 		}
 
-		///<summary>Patient Demographic segment.  Additional demographics.  Guide page 132.</summary>
+		///<summary>Patient Demographic segment.  Required if known.  Additional demographics.  Guide page 132.</summary>
 		private void PD1(Patient pat) {
 			_seg=new SegmentHL7(SegmentNameHL7.PD1);
 			_seg.SetField(0,"PD1");
@@ -253,7 +329,7 @@ namespace OpenDentBusiness.HL7 {
 			_msg.Segments.Add(_seg);
 		}
 
-		///<summary>Patient Identifier segment.  Guide page 137.</summary>
+		///<summary>Patient Identifier segment.  Required.  Guide page 137.</summary>
 		private void PID(Patient pat){
 			_seg=new SegmentHL7(SegmentNameHL7.PID);
 			_seg.SetField(0,"PID");
@@ -368,23 +444,7 @@ namespace OpenDentBusiness.HL7 {
 				//PID-11.14 Expiration Date.  Optional.
 			);
 			//PID-12 County Code.  No longer used.
-			string strHmPhone=ConvertPhone(pat.HmPhone);
-			if(strHmPhone!="") {
-				_seg.SetField(13,//PID-13 Phone Number - Home.  Required if known (length unspecified).  Cardinality [0..*].  Type XTN (guide page 84).
-					"",//PID-13.1 Telephone Number.  No longer used.
-					"PRN",//PID-13.2 Telecommunication Use Code.  Required.  Value set HL70201 (guide page 203).
-					"PH",//PID-13.3 Telecommunication Equipment Type.  Required if known.  Value set HL70202 (guide page 203).
-					"",//PID-13.4 Email Address.  Required when PID-13.2 is set to "NET" (length 1..199).
-					"",//PID-13.5 Country Code.  Optional.
-					strHmPhone.Substring(0,3),//PID-13.6 Area/City Code.  Required when PID-13.2 is NOT set to "NET" (length 5..5).
-					strHmPhone.Substring(3)//PID-13.7 Local Number.  Required when PID-13.2 is NOT set to "NET" (length 9..9).  I think the length is probably recorded wrong in the documentation.  It should be 7.
-					//PID-13.8 Extension.  Optional.
-					//PID-13.9 Any Text.  Optional.
-					//PID-13.10 Extension Prefix.  Optional.
-					//PID-13.11 Speed Dial Code.  Optional.
-					//PID-13.12 Unformatted Telephone Number.  Optional.
-					);
-			}
+			WritePhone(_seg,13,"PRN","PH",pat.HmPhone,pat.WirelessPhone,pat.WkPhone);//PID-13 Phone Number - Home.  Required if known (length unspecified).  Cardinality [0..*].  Type XTN (guide page 84).
 			//PID-14 Phone Number - Business.  Optional.
 			//PID-15 Primary Language.  Optional.
 			//PID-16 Marital Status.  Optional.
@@ -423,38 +483,79 @@ namespace OpenDentBusiness.HL7 {
 			_msg.Segments.Add(_seg);
 		}
 
-		///<summary>Pharmacy/Treatment Administration segment.  Guide page 149.</summary>
+		///<summary>Pharmacy/Treatment Administration segment.  Required.  Guide page 149.</summary>
 		private void RXA(VaccinePat vaccine) {
 			VaccineDef vaccineDef=VaccineDefs.GetOne(vaccine.VaccineDefNum);
 			_seg=new SegmentHL7(SegmentNameHL7.RXA);
 			_seg.SetField(0,"RXA");
-			_seg.SetField(1,"0");//fixed
-			_seg.SetField(2,"1");//fixed
-			_seg.SetField(3,vaccine.DateTimeStart.ToString("yyyyMMddHHmm"));
-			_seg.SetField(4,vaccine.DateTimeEnd.ToString("yyyyMMddHHmm"));
-			_seg.SetField(5,vaccineDef.CVXCode,vaccineDef.VaccineName,"HL70292");
+			_seg.SetField(1,"0");//RXA-1 Give Sub-ID Counter.  Required.  Must be "0".
+			_seg.SetField(2,"1");//RXA-2 Administration Sub-ID Counter.  Required.  Must be "1".
+			_seg.SetField(3,vaccine.DateTimeStart.ToString("yyyyMMddHHmm"));//RXA-3 Date/Time Start of Administration.  Required.  This segment can also be used to planned vaccinations.
+			_seg.SetField(4,vaccine.DateTimeEnd.ToString("yyyyMMddHHmm"));//RXA-4 Date/Time End of Administration.  Required if known.  Must be same as RXA-3 or blank.  UI forces RXA-4 and RXA-3 to be equal.  This would be blank if for a planned vaccine.
+			_seg.SetField(5,//RXA-5 Administered Code.  Required.  Cardinality [1..1].  Type CE (guide page 53).  Must be a CVX code.
+				vaccineDef.CVXCode,//RXA-5.1 Identifier.  Required (length 1..50).
+				vaccineDef.VaccineName,//RXA-5.2 Text.  Required if known (length 1..999).
+				"CVX"//RXA-5.3 Name of Coding System.  Required (length 1..20).  Value set HL70396 (guide page 231).
+				//RXA-5.4 Alternate Identifier.  Required if known (length 1..50).
+				//RXA-5.5 Alternate Text.  Required if known (length 1..999).
+				//RXA-5.6 Name of Alternate Coding System (1..20).  Required if RXA-5.4 is not blank.  Value set HL70396 (guide page 231).
+				);
+			//RXA-6 Administered Amount.  Required (length 1..20).  If amount is not known or not meaningful, then use "999".
 			if(vaccine.AdministeredAmt==0){
-				_seg.SetField(6,"999");
+				_seg.SetField(6,"999");//Registries that do not collect administered amount should record the value as "999".
 			}
 			else{
 				_seg.SetField(6,vaccine.AdministeredAmt.ToString());
 			}
-			if(vaccine.DrugUnitNum!=0){
+			//RXA-7 Administered Units.  Required if RXA-6 is not "999".  Cadinality [0..1].  Type CE (guide page 53).  Value set HL70396 (guide page 231).  Must be UCUM.
+			if(vaccine.AdministeredAmt==0 && vaccine.DrugUnitNum!=0) {
 				DrugUnit drugUnit=DrugUnits.GetOne(vaccine.DrugUnitNum);
-				_seg.SetField(7,drugUnit.UnitIdentifier,drugUnit.UnitText,"ISO+");
+				_seg.SetField(7,drugUnit.UnitIdentifier,drugUnit.UnitText,"ISO+");//TODO: This seems wrong.  Is this UCUM?  I don't see this option or UCUM in table HL70396.
 			}
-			_seg.SetField(15,vaccine.LotNumber);//optional.
-			//17-Manufacturer.  Is this really optional?
-			if(vaccineDef.DrugManufacturerNum!=0) {//always?
-				DrugManufacturer manufacturer=DrugManufacturers.GetOne(vaccineDef.DrugManufacturerNum);
-				_seg.SetField(17,manufacturer.ManufacturerCode,manufacturer.ManufacturerName,"HL70227");
-			}
-			_seg.SetField(21,"A");//21-Action code, A=Add
+			//RXA-8 Administered Dosage Form.  Optional.
+			//RXA-9 Administration Notes.  Required if RXA-20 is "CP" or "PA".
+			//RXA-10 Administering Provider.  Required if known.  This is the person who gave the administration or the vaccinator.  It is not the ordering clinician.
+			//RXA-11 Administered-at Location.  Required if known.  This is the clinic/site where the vaccine was administered.
+			//RXA-12 Administered Per (Time Unit).  Optional.
+			//RXA-13 Administered Strength.  Optional.
+			//RXA-14 Administered Strength Units.  Optional.
+			//_seg.SetField(15,vaccine.LotNumber);//RXA-15 Substance Lot Number.  Required if RXA-9.1 is "00".
+			//RXA-16 Substance Expiration Date.  Required if RXA-15 is not blank.
+			//RXA-17 Substance Manufacturer Name.  Requred if RXA-9.1 is "00".  Cardinality [0..*].  Value set MVX.
+			//if(vaccineDef.DrugManufacturerNum!=0) {
+			//	DrugManufacturer manufacturer=DrugManufacturers.GetOne(vaccineDef.DrugManufacturerNum);
+			//	_seg.SetField(17,manufacturer.ManufacturerCode,manufacturer.ManufacturerName,"HL70227");
+			//}
+			//RXA-18 Substance/Treatment Refusal Reason.  Required if RXA-20 is "RE".  Cardinality [0..*].  Only allowed to be "RE" or blank.
+			//RXA-19 Indication.  Optional.
+			//RXA-20 Completion Status.  Required if known (length 2..2).  Value set HL70322 (guide page 225).  CP=complete, RE=Refused, NA=Not Administered, PA=Partially Administered.			
+			//_seg.SetField(21,"A");//RXA-21 Action code.  Required if known (length 2..2).  Value set HL70323 (guide page 225).  A=Add, D=Delete, U=Update.
+			//RXA-22 System Entry Date/Time.  Optional.
+			//RXA-23 Administered Drug Strength.  Optional.
+			//RXA-24 Administered Drug Strength Volume Units.  Optional.
+			//RXA-25 Administered Barcode Identifier.  Optional.
+			//RXA-26 Pharmacy Order Type.  Optional.
 			_msg.Segments.Add(_seg);
 		}
 
-		///<summary>Pharmacy/Treatment Route segment.  Guide page 158.</summary>
-		private void RXR() {
+		///<summary>Pharmacy/Treatment Route segment.  Required if known (no way to enter in UI).  Guide page 158.</summary>
+		private void RXR(VaccinePat vaccine) {
+			//_seg=new SegmentHL7(SegmentNameHL7.RXR);
+			//_seg.SetField(0,"RXR");
+			//_seg.SetField(1,//RXR-1 Route.  Required.  Cardinality [1..1].  Value set HL70162 (guide page 200). Type CE (guide page 53).
+			//	"",//RXR-1.1 Identifier.  Required (length 1..50).  We would need a UI for route with the values from HL70162.
+			//	"",//RXR-1.2 Text (description).  Required if known (length 1..999).
+			//	"HL70162"//RXR-1.3 Name of Coding System. Required (length 1..20).  Value Set HL70396.
+			//	//RXR-1.4 Alternate Identifier.  Required if known (length 1..50).
+			//	//RXR-1.5 Alternate Text.  Required if known (length 1..999).
+			//	//RXR-1.6 Name of Alternate Coding System (length 1..20).  Required if RXR-1.4 if not blank.  Value Set HL70396.
+			//	);
+			////RXR-2 Administration Site.  Required if known.  Cardinality [0..1].  Value set HL70163 (guide page 201, details where the vaccine was physically administered on the patient's body).
+			////RXR-3 Administration Device.  Optional.
+			////RXR-4 Administration Method.  Optional.
+			////RXR-5 Routing Instruction.  Optional.
+			////RXR-6 Administration Site Modifier.  Optional.
+			//_msg.Segments.Add(_seg);
 		}
 
 		public string GenerateMessage() {
@@ -472,22 +573,42 @@ namespace OpenDentBusiness.HL7 {
 			return "U";
 		}
 
-		///<summary>Type XTN (guide page 84).</summary>
-		private string ConvertPhone(string phone) {
-			string digits="";
-			for(int i=0;i<phone.Length;i++) {
-				if(!Char.IsNumber(phone,i)) {
-					continue;
+		///<summary>Type XTN (guide page 84).
+		///strTeleUseCode must be from value set HL70201 (guide page 203).
+		///strTeleEquipType must be from value set HL70202 (guide page 203).
+		///Can specify 0 or more phone numbers. The first valid phone number in the list will be written and the other phone numbers will be ignored.</summary>
+		private void WritePhone(SegmentHL7 seg,int fieldIndex,string strTeleUseCode,string strTeleEquipType,params string[] arrayPhoneNumbers) {
+			for(int i=0;i<arrayPhoneNumbers.Length;i++) {
+				string phone=arrayPhoneNumbers[i];
+				string digits="";
+				for(int j=0;j<phone.Length;j++) {
+					if(!Char.IsNumber(phone,j)) {
+						continue;
+					}
+					if(digits=="" && phone.Substring(j,1)=="1") {
+						continue;//skip leading 1.
+					}
+					digits+=phone.Substring(j,1);
 				}
-				if(digits=="" && phone.Substring(i,1)=="1") {
-					continue;//skip leading 1.
+				if(digits.Length!=10) {
+					continue;//The current phone number is invalid. Skip it and try the next number.
 				}
-				digits+=phone.Substring(i,1);
+				seg.SetField(fieldIndex,
+					"",//XTN.1 Telephone Number.  No longer used.
+					strTeleUseCode,//XTN.2 Telecommunication Use Code.  Required.  Value set HL70201 (guide page 203).
+					strTeleEquipType,//XTN.3 Telecommunication Equipment Type.  Required if known.  Value set HL70202 (guide page 203).
+					"",//XTN.4 Email Address.  Required when XTN.2 is set to "NET" (length 1..199).
+					"",//XTN.5 Country Code.  Optional.
+					digits.Substring(0,3),//XTN.6 Area/City Code.  Required when XTN.2 is NOT set to "NET" (length 5..5).
+					digits.Substring(3)//XTN.7 Local Number.  Required when XTN.2 is NOT set to "NET" (length 9..9).  I think the length is probably recorded wrong in the documentation.  It should be 7.
+					//XTN.8 Extension.  Optional.
+					//XTN.9 Any Text.  Optional.
+					//XTN.10 Extension Prefix.  Optional.
+					//XTN.11 Speed Dial Code.  Optional.
+					//XTN.12 Unformatted Telephone Number.  Optional.
+					);
+				return;//We can only write one phone number per phone field. We must exist after the first valid phone number is written.
 			}
-			if(digits.Length!=10) {
-				return "";
-			}
-			return digits;
 		}
 
 

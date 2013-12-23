@@ -100,6 +100,8 @@ namespace OpenDentBusiness {
 		PV1,
 		///<summary>Pharmacy Administration Segment</summary>
 		RXA,
+		///<summary>Pharmacy/Treatment Route</summary>
+		RXR,
 		///<summary>Scheduling Activity Information</summary>
 		SCH,
 		///<summary>This can happen for unsupported segments.</summary>
