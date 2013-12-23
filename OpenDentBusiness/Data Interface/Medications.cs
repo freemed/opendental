@@ -82,48 +82,62 @@ namespace OpenDentBusiness{
 			return Crud.MedicationCrud.Insert(Cur);
 		}
 
-		///<summary>Dependent brands and patients will already be checked.</summary>
+		///<summary>Dependent brands and patients will already be checked.  Be sure to surround with try-catch.</summary>
 		public static void Delete(Medication Cur){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
 				return;
 			}
+			string s=IsInUse(Cur);
+			if(s!="") {
+				throw new ApplicationException(Lans.g("Medications",s));
+			}
 			string command = "DELETE from medication WHERE medicationNum = '"+Cur.MedicationNum.ToString()+"'";
 			Db.NonQ(command);
 		}
 
-		///<summary>Returns true if medication is in use in medicationpat, allergydef, eduresources, or preference.MedicationsIndicateNone.</summary>
-		public static bool IsInUse(long medicationNum) {
+		///<summary>Returns a string if medication is in use in medicationpat, allergydef, eduresources, or preference.MedicationsIndicateNone. The string will explain where the medication is in use.</summary>
+		public static string IsInUse(Medication med) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetBool(MethodBase.GetCurrentMethod(),medicationNum);
+				return Meth.GetString(MethodBase.GetCurrentMethod(),med.MedicationNum);
 			}
-			string command="SELECT COUNT(*) FROM medicationpat WHERE MedicationNum="+POut.Long(medicationNum);
+			string[] brands;
+			if(med.MedicationNum==med.GenericNum) {
+				brands=GetBrands(med.MedicationNum);
+			}
+			else {
+				brands=new string[0];
+			}
+			if(brands.Length>0) {
+				return "You can not delete a medication that has brand names attached.";
+			}
+			string command="SELECT COUNT(*) FROM medicationpat WHERE MedicationNum="+POut.Long(med.MedicationNum);
 			if(PIn.Int(Db.GetCount(command))!=0) {
-				return true;
+				return "Not allowed to delete medication because it is in use by a patient";
 			}
-			command="SELECT COUNT(*) FROM allergydef WHERE MedicationNum="+POut.Long(medicationNum);
+			command="SELECT COUNT(*) FROM allergydef WHERE MedicationNum="+POut.Long(med.MedicationNum);
 			if(PIn.Int(Db.GetCount(command))!=0) {
-				return true;
+				return "Not allowed to delete medication because it is in use by an allergy";
 			}
-			command="SELECT COUNT(*) FROM eduresource WHERE MedicationNum="+POut.Long(medicationNum);
+			command="SELECT COUNT(*) FROM eduresource WHERE MedicationNum="+POut.Long(med.MedicationNum);
 			if(PIn.Int(Db.GetCount(command))!=0) {
-				return true;
+				return "Not allowed to delete medication because it is in use by an education resource";
 			}
-			if(PrefC.GetLong(PrefName.MedicationsIndicateNone)==medicationNum) {
-				return true;
+			if(PrefC.GetLong(PrefName.MedicationsIndicateNone)==med.MedicationNum) {
+				return "Not allowed to delete medication because it is in use by a medication";
 			}
-			return false;
+			return "";
 		}
 
-		///<summary>Returns a list of all patients using this medication.</summary>
-		public static string[] GetPats(long medicationNum) {
+		///<summary>Returns an array of all patient names who are using this medication.</summary>
+		public static string[] GetPatNamesForMed(long medicationNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<string[]>(MethodBase.GetCurrentMethod(),medicationNum);
 			}
 			string command =
 				"SELECT CONCAT(CONCAT(CONCAT(CONCAT(LName,', '),FName),' '),Preferred) FROM medicationpat,patient "
 				+"WHERE medicationpat.PatNum=patient.PatNum "
-				+"AND medicationpat.MedicationNum="+medicationNum.ToString();
+				+"AND medicationpat.MedicationNum="+POut.Long(medicationNum);
 			DataTable table=Db.GetTable(command);
 			string[] retVal=new string[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){

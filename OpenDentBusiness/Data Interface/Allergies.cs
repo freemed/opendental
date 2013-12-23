@@ -102,6 +102,22 @@ namespace OpenDentBusiness{
 			return allergyList;
 		}
 
+		///<summary>Returns an array of all patient names who are using this allergy.</summary>
+		public static string[] GetPatNamesForAllergy(long allergyDefNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<string[]>(MethodBase.GetCurrentMethod(),allergyDefNum);
+			}
+			string command="SELECT CONCAT(CONCAT(CONCAT(CONCAT(LName,', '),FName),' '),Preferred) FROM allergy,patient "
+				+"WHERE allergy.PatNum=patient.PatNum "
+				+"AND allergy.AllergyDefNum="+POut.Long(allergyDefNum);
+			DataTable table=Db.GetTable(command);
+			string[] retVal=new string[table.Rows.Count];
+			for(int i=0;i<table.Rows.Count;i++) {
+				retVal[i]=PIn.String(table.Rows[i][0].ToString());
+			}
+			return retVal;
+		}
+
 		///<summary>Changes the value of the DateTStamp column to the current time stamp for all allergies of a patient</summary>
 		public static void ResetTimeStamps(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
