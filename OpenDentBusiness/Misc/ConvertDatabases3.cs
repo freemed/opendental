@@ -786,6 +786,52 @@ namespace OpenDentBusiness {
 				command="UPDATE preference SET ValueString = '13.2.16.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To13_2_22();
+		}
+
+		private static void To13_2_22() {
+			if(FromVersion<new Version("13.2.22.0")) {
+				string command;
+				//Moving codes to the Obsolete category that were deleted in CDT 2014.
+				if(CultureInfo.CurrentCulture.Name.EndsWith("US")) {//United States
+					//Move depricated codes to the Obsolete procedure code category.
+					//Make sure the procedure code category exists before moving the procedure codes.
+					string procCatDescript="Obsolete";
+					long defNum=0;
+					command="SELECT DefNum FROM definition WHERE Category=11 AND ItemName='"+POut.String(procCatDescript)+"'";//11 is DefCat.ProcCodeCats
+					DataTable dtDef=Db.GetTable(command);
+					if(dtDef.Rows.Count==0) { //The procedure code category does not exist, add it
+						if(DataConnection.DBtype==DatabaseType.MySql) {
+							command="INSERT INTO definition (Category,ItemName,ItemOrder) "
+									+"VALUES (11"+",'"+POut.String(procCatDescript)+"',"+POut.Long(DefC.Long[11].Length)+")";//11 is DefCat.ProcCodeCats
+						}
+						else {//oracle
+							command="INSERT INTO definition (DefNum,Category,ItemName,ItemOrder) "
+									+"VALUES ((SELECT MAX(DefNum)+1 FROM definition),11,'"+POut.String(procCatDescript)+"',"+POut.Long(DefC.Long[11].Length)+")";//11 is DefCat.ProcCodeCats
+						}
+						defNum=Db.NonQ(command,true);
+					}
+					else { //The procedure code category already exists, get the existing defnum
+						defNum=PIn.Long(dtDef.Rows[0]["DefNum"].ToString());
+					}
+					string[] cdtCodesDeleted=new string[] {
+						"D0363","D3354","D5860","D5861"
+					};
+					for(int i=0;i<cdtCodesDeleted.Length;i++) {
+						string procCode=cdtCodesDeleted[i];
+						command="SELECT CodeNum FROM procedurecode WHERE ProcCode='"+POut.String(procCode)+"'";
+						DataTable dtProcCode=Db.GetTable(command);
+						if(dtProcCode.Rows.Count==0) { //The procedure code does not exist in this database.
+							continue;//Do not try to move it.
+						}
+						long codeNum=PIn.Long(dtProcCode.Rows[0]["CodeNum"].ToString());
+						command="UPDATE procedurecode SET ProcCat="+POut.Long(defNum)+" WHERE CodeNum="+POut.Long(codeNum);
+						Db.NonQ(command);
+					}
+				}//end United States update
+				command="UPDATE preference SET ValueString = '13.2.22.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To13_3_1();
 		}
 
