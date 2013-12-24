@@ -103,7 +103,7 @@ namespace OpenDental {
 		}
 
 		private void butHcpcs_Click(object sender,EventArgs e) {
-			FormHcpcses formHcpcses=new FormHcpcses();
+			FormHcpcs formHcpcses=new FormHcpcs();
 			formHcpcses.IsSelectionMode=true;
 			if(formHcpcses.ShowDialog()==DialogResult.OK) {
 				_encCur.CodeSystem="HCPCS";

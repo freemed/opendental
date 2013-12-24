@@ -10,18 +10,18 @@ using System.IO;
 using OpenDental.UI;
 
 namespace OpenDental {
-	public partial class FormHcpcses:Form {
+	public partial class FormHcpcs:Form {
 		public bool IsSelectionMode;
 		public Hcpcs SelectedHcpcs;
 		private List<Hcpcs> listHcpcses;
 		private bool changed;
 
-		public FormHcpcses() {
+		public FormHcpcs() {
 			InitializeComponent();
 			Lan.F(this);
 		}
 
-		private void FormHcpcses_Load(object sender,EventArgs e) {
+		private void FormHcpcs_Load(object sender,EventArgs e) {
 			if(IsSelectionMode) {
 				butClose.Text=Lan.g(this,"Cancel");
 			}

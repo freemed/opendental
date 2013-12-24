@@ -1,5 +1,5 @@
 namespace OpenDental{
-	partial class FormHcpcses {
+	partial class FormHcpcs {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -123,7 +123,7 @@ namespace OpenDental{
 			this.Name = "FormHcpcses";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "HCPCS";
-			this.Load += new System.EventHandler(this.FormHcpcses_Load);
+			this.Load += new System.EventHandler(this.FormHcpcs_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

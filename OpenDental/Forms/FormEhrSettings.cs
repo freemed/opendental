@@ -264,7 +264,7 @@ namespace OpenDental {
 		}
 
 		private void butEncHcpcs_Click(object sender,EventArgs e) {
-			FormHcpcses FormH=new FormHcpcses();
+			FormHcpcs FormH=new FormHcpcs();
 			if(!Security.IsAuthorized(Permissions.SecurityAdmin,false)) {
 				FormH.IsSelectionMode=false;
 			}
