@@ -2441,15 +2441,8 @@ namespace OpenDentBusiness
 				}
 			}
 			//billProv
-			if(billProv.LName=="") {
-				Comma(strb);
-				strb.Append("Billing Prov LName");
-			}
-			if(billProv.FName=="" && !billProv.IsNotPerson) {//if is a person, first name cannot be blank.
-				Comma(strb);
-				strb.Append("Billing Prov FName");
-			}
-			if(IsEmdeonMedical(clearhouse)) {
+			X12Validate.BillProv(billProv,strb);
+			if(IsEmdeonMedical(clearhouse)) {//The X12 standard has a basic character set, but Emdeon Medical only allows a subset of the basic character set, as seen in error messages within their interface.
 				if(!billProv.IsNotPerson && !Regex.IsMatch(billProv.FName,"^[A-Za-z ']+$")) {//If not a person, then X12 generation will leave this blank, regardless of what user entered.
 					Comma(strb);
 					strb.Append("Billing Prov FName may contain letters spaces and apostrophes only");
@@ -2462,22 +2455,6 @@ namespace OpenDentBusiness
 					Comma(strb);
 					strb.Append("Billing Prov Middle Name may contain letters spaces and apostrophes only");
 				}
-			}
-			if(billProv.NationalProvID.Length<2) {
-				Comma(strb);
-				strb.Append("Billing Prov NPI");
-			}
-			if(billProv.TaxonomyCodeOverride.Length>0 && billProv.TaxonomyCodeOverride.Length!=10) {
-				Comma(strb);
-				strb.Append("Billing Prov Taxonomy Code must be 10 characters");
-			}
-			if(!Regex.IsMatch(billProv.SSN,"^[0-9]{9}$")) {//and >=2
-				Comma(strb);
-				strb.Append("Billing Prov SSN/TIN must be a 9 digit number");
-			}
-			if(!Regex.IsMatch(billProv.NationalProvID,"^(80840)?[0-9]{10}$")) {
-				Comma(strb);
-				strb.Append("Billing Prov NPI must be a 10 digit number with an optional prefix of 80840");
 			}
 			if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
 				X12Validate.BillingAddress(strb);

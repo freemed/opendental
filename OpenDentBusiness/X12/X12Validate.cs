@@ -71,13 +71,13 @@ namespace OpenDentBusiness {
 				Comma(strb);
 				strb.Append("Billing Prov LName");
 			}
-			if(!billProv.IsNotPerson && billProv.FName==""){//if is a person, first name cannot be blank.
+			if(!billProv.IsNotPerson && billProv.FName=="") {//if is a person, first name cannot be blank.
 				Comma(strb);
 				strb.Append("Billing Prov FName");
 			}
-			if(billProv.SSN.Length<2) {
+			if(!Regex.IsMatch(billProv.SSN,"^[0-9]{9}$")) {//must be exactly 9 in length (no dashes)
 				Comma(strb);
-				strb.Append("Billing Prov SSN");
+				strb.Append("Billing Prov SSN/TIN must be a 9 digit number");
 			}
 			if(!Regex.IsMatch(billProv.NationalProvID,"^(80840)?[0-9]{10}$")) {
 				Comma(strb);
@@ -86,6 +86,24 @@ namespace OpenDentBusiness {
 			if(billProv.TaxonomyCodeOverride.Length>0 && billProv.TaxonomyCodeOverride.Length!=10) {
 				Comma(strb);
 				strb.Append("Billing Prov Taxonomy Code must be 10 characters");
+			}
+			//Always check provider name variables regardless of IsNotPerson.
+			if(!billProv.IsNotPerson) {//The first name and middle name are only required if the billing provider is a person. For an organization, these fields are never sent.
+				string fNameInvalidChars=GetNonAN(billProv.FName);
+				if(fNameInvalidChars!="") {
+					Comma(strb);
+					strb.Append("Billing Prov First Name contains invalid characters: "+fNameInvalidChars);
+				}
+				string middleInvalidChars=GetNonAN(billProv.MI);
+				if(middleInvalidChars!="") {
+					Comma(strb);
+					strb.Append("Billing Prov MI contains invalid characters: "+middleInvalidChars);
+				}
+			}
+			string lNameInvalidChars=GetNonAN(billProv.LName);
+			if(lNameInvalidChars!="") {
+				Comma(strb);
+				strb.Append("Billing Prov Last Name contains invalid characters: "+lNameInvalidChars);
 			}
 			/* This was causing problems when dummy providers were used for office and no license number was applicable.
 			 * Delta carriers key off this number and start assigning to wrong provider. Customer: ATD.
@@ -214,6 +232,20 @@ namespace OpenDentBusiness {
 			if(strb.Length!=0) {
 				strb.Append(",");
 			}
+		}
+
+		///<summary>Returns a string containing all characters not in the Basic Character Set from the given input.  AN stands for alphanumeric.</summary>
+		private static string GetNonAN(string str) {
+			string strUpper=str.ToUpper();//All strings in our X12s are set to uppercase.
+			//Basic Character Set, includes those selected from the uppercase letters, digits, space, and special characters as specified below.
+			string validChars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!\"&'()*+,-./:;?= ";
+			StringBuilder retVal=new StringBuilder();
+			for(int i=0;i<strUpper.Length;i++) {
+				if(validChars.IndexOf(strUpper[i])==-1) {//Not found.
+					retVal.Append(strUpper[i]);
+				}
+			}
+			return retVal.ToString();
 		}
 
 
