@@ -93,6 +93,18 @@ namespace OpenDentBusiness{
 			return true;
 		}
 
+		public static List<Hcpcs> GetBySearchText(string searchText) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Hcpcs>>(MethodBase.GetCurrentMethod(),searchText);
+			}
+			string[] searchTokens=searchText.Split(' ');
+			string command=@"SELECT * FROM hcpcs ";
+			for(int i=0;i<searchTokens.Length;i++) {
+				command+=(i==0?"WHERE ":"AND ")+"(HcpcsCode LIKE '%"+POut.String(searchTokens[i])+"%' OR DescriptionShort LIKE '%"+POut.String(searchTokens[i])+"%') ";
+			}
+			return Crud.HcpcsCrud.SelectMany(command);
+		}
+
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 

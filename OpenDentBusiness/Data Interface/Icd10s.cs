@@ -93,6 +93,17 @@ namespace OpenDentBusiness{
 			return true;
 		}
 
+		public static List<Icd10> GetBySearchText(string searchText) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Icd10>>(MethodBase.GetCurrentMethod(),searchText);
+			}
+			string[] searchTokens=searchText.Split(' ');
+			string command=@"SELECT * FROM icd10 ";
+			for(int i=0;i<searchTokens.Length;i++) {
+				command+=(i==0?"WHERE ":"AND ")+"(Icd10Code LIKE '%"+POut.String(searchTokens[i])+"%' OR Description LIKE '%"+POut.String(searchTokens[i])+"%') ";
+			}
+			return Crud.Icd10Crud.SelectMany(command);
+		}
 
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
