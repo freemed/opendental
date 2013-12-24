@@ -263,23 +263,22 @@ namespace OpenDental {
 			}
 		}
 
-		///<summary>The HCPCS code picker form has not been implemented, when it has this code may need massaged.</summary>
 		private void butEncHcpcs_Click(object sender,EventArgs e) {
-			//FormHcpcs FormH=new FormHcpcs();
-			//if(!Security.IsAuthorized(Permissions.SecurityAdmin,false)) {
-			//	FormH.IsSelectionMode=false;
-			//}
-			//else {
-			//	FormH.IsSelectionMode=true;
-			//}
-			//FormH.ShowDialog();
-			//if(FormH.DialogResult==DialogResult.OK) {
-			//	NewEncCodeSystem="HCPCS";
-			//	comboEncCodes.SelectedIndex=-1;
-			//	textEncCodeValue.Text=FormH.SelectedHcpcs.HcpcsCode;
-			//	textEncCodeDescript.Text=FormH.SelectedHcpcs.Description;
-			//	labelEncounterWarning.Visible=true;
-			//}
+			FormHcpcses FormH=new FormHcpcses();
+			if(!Security.IsAuthorized(Permissions.SecurityAdmin,false)) {
+				FormH.IsSelectionMode=false;
+			}
+			else {
+				FormH.IsSelectionMode=true;
+			}
+			FormH.ShowDialog();
+			if(FormH.DialogResult==DialogResult.OK) {
+				NewEncCodeSystem="HCPCS";
+				comboEncCodes.SelectedIndex=-1;
+				textEncCodeValue.Text=FormH.SelectedHcpcs.HcpcsCode;
+				textEncCodeDescript.Text=FormH.SelectedHcpcs.DescriptionShort;
+				labelEncWarning.Visible=true;
+			}
 		}
 
 		private void butEncCdt_Click(object sender,EventArgs e) {
@@ -366,23 +365,22 @@ namespace OpenDental {
 			}
 		}
 
-		///<summary>The ICD10 code picker form has not been implemented, when it has this code may need massaged.</summary>
 		private void butPregIcd10_Click(object sender,EventArgs e) {
-			//FormIcd10s FormI10=new FormIcd10s();
-			//if(!Security.IsAuthorized(Permissions.SecurityAdmin,false)) {
-			//	FormI10.IsSelectionMode=false;
-			//}
-			//else {
-			//	FormI10.IsSelectionMode=true;
-			//}
-			//FormI10.ShowDialog();
-			//if(FormI10.DialogResult==DialogResult.OK) {
-			//	NewPregCodeSystem="ICD10CM";
-			//	comboPregCodes.SelectedIndex=-1;
-			//	textPregCodeValue.Text=FormI10.SelectedIcd10.ICD9Code;
-			//	textPregCodeDescript.Text=FormI10.SelectedIcd10.Description;
-			//	labelPregWarning.Visible=true;
-			//}
+			FormIcd10s FormI10=new FormIcd10s();
+			if(!Security.IsAuthorized(Permissions.SecurityAdmin,false)) {
+				FormI10.IsSelectionMode=false;
+			}
+			else {
+				FormI10.IsSelectionMode=true;
+			}
+			FormI10.ShowDialog();
+			if(FormI10.DialogResult==DialogResult.OK) {
+				NewPregCodeSystem="ICD10CM";
+				comboPregCodes.SelectedIndex=-1;
+				textPregCodeValue.Text=FormI10.SelectedIcd10.Icd10Code;
+				textPregCodeDescript.Text=FormI10.SelectedIcd10.Description;
+				labelPregWarning.Visible=true;
+			}
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
