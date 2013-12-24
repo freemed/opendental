@@ -9,25 +9,32 @@ namespace OpenDentBusiness.HL7 {
 	///To view specific HL7 table definitions, see http://hl7.org/implement/standards/fhir/terminologies-v2.html. </summary>
 	public class EhrVXU {
 
+		///<summary>Set in constructor and must not be modified.</summary>
+		private Patient _pat;
+		///<summary>Set in constructor and must not be modified.</summary>
+		private List<VaccinePat> _vaccines;
+		///<summary>The entire message object after it is successfully built.</summary>
 		private MessageHL7 _msg;
+		///<summary>Helper variable.</summary>
 		private SegmentHL7 _seg;
 
-		///<summary></summary>
-		public EhrVXU() {
-			
-		}
-		
-		///<summary>Creates the Message object and fills it with data.  Vaccines must all be for the same patient.</summary>
-		public void Initialize(Patient pat,List<VaccinePat> vaccines) {
+		///<summary>Creates the Message object and fills it with data.  Vaccines must all be for the same patient.  A list of vaccines is passed in so the user can select a subset of vaccines to send for the patient.</summary>
+		public EhrVXU(Patient pat,List<VaccinePat> vaccines) {
 			if(vaccines.Count==0) {
 				throw new ApplicationException("Must be at least one vaccine.");
 			}
+			_pat=pat;
+			_vaccines=vaccines;
+			BuildMessage();
+		}		
+		
+		private void BuildMessage() {
 			_msg=new MessageHL7(MessageTypeHL7.VXU);//Message format for VXU is on guide page 160.
 			MSH();//MSH segment. Required.  Cardinality [1..1].
 			//SFT segment. Optional. Cardinality [0..*].  Undefined and may be locally specified.
-			PID(pat);//PID segment.  Required.  Cardinality [1..1].
-			PD1(pat);//PD1 segment.  Required if known.  Cardinality [0..1].
-			NK1(pat);//NK1 segment.  Required if known.  Cardinality [0..1].
+			PID();//PID segment.  Required.  Cardinality [1..1].
+			PD1();//PD1 segment.  Required if known.  Cardinality [0..1].
+			NK1();//NK1 segment.  Required if known.  Cardinality [0..1].
 			//PV1 segment.  Optional.  Cardinality [0..1].  Undefined and may be locally specified.
 			//PV2 segment.  Optional.  Cardinality [0..1].  Undefined and may be locally specified.
 			//GT1 segment.  Optional.  Cardinality [0..*].  Undefined and may be locally specified.
@@ -37,12 +44,12 @@ namespace OpenDentBusiness.HL7 {
 			//IN3 segment.  Optional.  Cardinality [0..1].  Undefined and may be locally specified.  Guide page 102.
 			//End Insurance group.
 			//Begin Order group.
-			for(int i=0;i<vaccines.Count;i++) {
-				ORC();//ORC segment.  Required.  Cardinality [1..1].
+			for(int i=0;i<_vaccines.Count;i++) {
+				ORC(_vaccines[i]);//ORC segment.  Required.  Cardinality [1..1].
 				//TQ1 segment.  Optional.  Cardinality [0..1]. Undefined and may be locally specified.
 				//TQ2 segment.  Optional.  Cardinality [0..1]. Undefined and may be locally specified.
-				RXA(vaccines[i]);//RXA segment.  Required.  Cardinality [1..1].
-				RXR(vaccines[i]);//RXR segment.  Required if known.  Cardinality [0..1].
+				RXA(_vaccines[i]);//RXA segment.  Required.  Cardinality [1..1].
+				RXR(_vaccines[i]);//RXR segment.  Required if known.  Cardinality [0..1].
 				OBX();//OBX segment.  Required if known.  Cardinality [0..*].
 				NTE();//NTE segment.  Required if known.  Cardinality [0..1].
 			}
@@ -54,10 +61,10 @@ namespace OpenDentBusiness.HL7 {
 			_seg=new SegmentHL7("MSH"
 				+"|"//MSH-1 Field Separator (|).  Required (length 1..1).
 				+@"^~\&"//MSH-2 Encoding Characters.  Required (length 4..4).  Component separator (^), then field repetition separator (~), then escape character (\), then Sub-component separator (&).
-				+"|Open Dental"//MSH-3 Sending Application.  Required if known (length unspecified).  Value set HL70361.
-				+"|"//MSH-4 Sending Facility.  Required if known (length unspecified).  Value set HL70362.
-				+"|"//MSH-5 Receiving Application.  Required if known (length unspecified).  Value set HL70361.
-				+"|"//MSH-6 Receiving Facility.  Required if known (length unspecified).  Value set HL70362.
+				+"|Open Dental"//MSH-3 Sending Application.  Required if known (length unspecified).  Value set HL70361  (guide page 229, "no suggested values defined").  Type HD (guide page 65).
+				+"|"//MSH-4 Sending Facility.  Required if known (length unspecified).  Value set HL70362 (guide page 229, "no suggested values defined").  Type HD (guide page 65). TODO: Need UI in clinic for this field.
+				+"|"//MSH-5 Receiving Application.  Required if known (length unspecified).  Value set HL70361 (guide page 229, "no suggested values defined").  Type HD (guide page 65).
+				+"|"//MSH-6 Receiving Facility.  Required if known (length unspecified).  Value set HL70362 (guide page 229, "no suggested values defined").  Type HD (guide page 65).  TODO: We need a UI where user can type this in when sending.
 				+"|"+DateTime.Now.ToString("yyyyMMddHHmmss")//MSH-7 Date/Time of Message.  Required (length 12..19).
 				+"|"//MSH-8 Security.  Optional (length unspecified).
 				+"|VXU^VO4^VXU_V04"//MSH-9 Message Type. Required (length unspecified).
@@ -78,127 +85,97 @@ namespace OpenDentBusiness.HL7 {
 		}
 
 		///<summary>Next of Kin segment.  Required if known.  Guide page 111.</summary>
-		private void NK1(Patient pat) {
-			List<Guardian> listGuardians=Guardians.Refresh(pat.PatNum);
+		private void NK1() {
+			List<Guardian> listGuardians=Guardians.Refresh(_pat.PatNum);
 			for(int i=0;i<listGuardians.Count;i++) {//One NK1 segment for each relationship.
 				_seg=new SegmentHL7(SegmentNameHL7.NK1);
 				_seg.SetField(0,"NK1");
 				_seg.SetField(1,i.ToString());//NK1-1 Set ID.  Required (length unspecified).  Cardinality [1..1].
 				//NK-2 Name.  Required (length unspecified).  Type XPN (guide page 82).  Cardinarlity [1..1].
-				_seg.SetField(2,
-					pat.LName,//NK-2.1 Family Name.  Required (length 1..50).  Type FN (guide page 64).  Cardinality [1..1].  The FN type only requires the last name field and it is the first field.
-					pat.FName,//NK-2.2 Given Name.  Required (length 1..30).  Cardinality [1..1].
-					pat.MiddleI//NK-2.3 Second and Further Given Names or Initials Thereof (middle name).  Required if known (length 1..30). 
-					//NK-2.4 Suffix.  Optional.
-					//NK-2.5 Prefix.  Optional.
-					//NK-2.6 Degree.  No longer used.
-					//NK-2.7 Name Type Code.  Required if known (length 1..1).  Value set HL70200 (guide page 203).
-					//NK-2.8 Name Representation Code.  Optional.
-					//NK-2.9 Name Context.  Optional.
-					//NK-2.10 Name Validity Range.  No longer used.
-					//NK-2.11 Name Assembly Order.  Optional.
-					//NK-2.12 Effective Date.  Optional.
-					//NK-2.13 Expiration Date.  Optional.
-					//NK-2.14 Professional Suffix.  Optional.
-					);
-				//NK1-3 Relationship.  Required.  Cardinality [1..1].  Value set HL70063 (guide page 196).
+				Patient patNextOfKin=Patients.GetPat(listGuardians[i].PatNumGuardian);
+				WriteXPN(2,patNextOfKin.FName,patNextOfKin.LName,patNextOfKin.MiddleI);
+				//NK1-3 Relationship.  Required.  Cardinality [1..1].  Value set HL70063 (guide page 196).  Type CE.
 				GuardianRelationship relat=listGuardians[i].Relationship;
-				string strRelat="";
+				string strRelatCode="";
 				if(relat==GuardianRelationship.Brother) {
-					strRelat="BRO";
+					strRelatCode="BRO";
 				}
 				else if(relat==GuardianRelationship.CareGiver) {
-					strRelat="CGV";
+					strRelatCode="CGV";
 				}
 				else if(relat==GuardianRelationship.Child) {
-					strRelat="CHD";//This relationship type is not documented in the guide, but it is defined as part of HL7 0063 in a more recent publication.  We added because it seemed like a basic relationship type.
+					strRelatCode="CHD";//This relationship type is not documented in the guide, but it is defined as part of HL7 0063 in a more recent publication.  We added because it seemed like a basic relationship type.
 				}
 				else if(relat==GuardianRelationship.Father) {
-					strRelat="FTH";
+					strRelatCode="FTH";
 				}
 				else if(relat==GuardianRelationship.FosterChild) {
-					strRelat="FCH";
+					strRelatCode="FCH";
 				}
 				else if(relat==GuardianRelationship.Friend) {
-					strRelat="FND";//This relationship type is not documented in the guide, but it is defined as part of HL7 0063 in a more recent publication.  We added because it seemed like a basic relationship type.
+					strRelatCode="FND";//This relationship type is not documented in the guide, but it is defined as part of HL7 0063 in a more recent publication.  We added because it seemed like a basic relationship type.
 				}
 				else if(relat==GuardianRelationship.Grandchild) {
-					strRelat="GCH";//This relationship type is not documented in the guide, but it is defined as part of HL7 0063 in a more recent publication.  We added because it seemed like a basic relationship type.
+					strRelatCode="GCH";//This relationship type is not documented in the guide, but it is defined as part of HL7 0063 in a more recent publication.  We added because it seemed like a basic relationship type.
 				}
 				else if(relat==GuardianRelationship.Grandfather) { //This status is from our older guardian implementation.
-					strRelat="GRD";//Grandparent
+					strRelatCode="GRD";//Grandparent
 				}
 				else if(relat==GuardianRelationship.Grandmother) { //This status is from our older guardian implementation.
-					strRelat="GRD";//Grandparent
+					strRelatCode="GRD";//Grandparent
 				}
 				else if(relat==GuardianRelationship.Grandparent) {
-					strRelat="GRD";
+					strRelatCode="GRD";
 				}
 				else if(relat==GuardianRelationship.Guardian) {
-					strRelat="GRD";
+					strRelatCode="GRD";
 				}
 				else if(relat==GuardianRelationship.LifePartner) {
-					strRelat="DOM";//This relationship type is not documented in the guide, but it is defined as part of HL7 0063 in a more recent publication.  We added because it seemed like a basic relationship type.
+					strRelatCode="DOM";//This relationship type is not documented in the guide, but it is defined as part of HL7 0063 in a more recent publication.  We added because it seemed like a basic relationship type.
 				}
 				else if(relat==GuardianRelationship.Mother) {
-					strRelat="MTH";
+					strRelatCode="MTH";
 				}
 				else if(relat==GuardianRelationship.Other) {
-					strRelat="OTH";
+					strRelatCode="OTH";
 				}
 				else if(relat==GuardianRelationship.Parent) {
-					strRelat="PAR";
+					strRelatCode="PAR";
 				}
 				else if(relat==GuardianRelationship.Self) {
-					strRelat="SEL";
+					strRelatCode="SEL";
 				}
 				else if(relat==GuardianRelationship.Sibling) {
-					strRelat="SIB";
+					strRelatCode="SIB";
 				}
 				else if(relat==GuardianRelationship.Sister) {
-					strRelat="SIS";
+					strRelatCode="SIS";
 				}
 				else if(relat==GuardianRelationship.Sitter) { //This status is from our older guardian implementation.
-					strRelat="CGV";//Caregiver
+					strRelatCode="CGV";//Caregiver
 				}
 				else if(relat==GuardianRelationship.Spouse) {
-					strRelat="SPO";
+					strRelatCode="SPO";
 				}
 				else if(relat==GuardianRelationship.Stepchild) {
-					strRelat="SCH";
+					strRelatCode="SCH";
 				}
 				else if(relat==GuardianRelationship.Stepfather) { //This status is from our older guardian implementation.
-					strRelat="PAR";//parent
+					strRelatCode="PAR";//parent
 				}
 				else if(relat==GuardianRelationship.Stepmother) { //This status is from our older guardian implementation.
-					strRelat="PAR";//parent
+					strRelatCode="PAR";//parent
 				}
 				else {
 					continue;//Skip the entire segment if the relationship is not known.
 				}
-				_seg.SetField(3,strRelat);
+				WriteCE(3,strRelatCode,relat.ToString(),"HL70063");
 				//NK-4 Address.  Required if known (length unspecified).  Cardinality [0..1].  Type XAD (guide page 74).  The first instance must be the primary address.
-				_seg.SetField(4,
-					pat.Address,//NK-4.1 Street Address.  Required if known (length 1..120).  Type SAD (guide page 72).  Only the first field of a SAD is required (Street or Mailing Address).
-					pat.Address2,//NK-4.2 Other Designation.  Required if known (length 1..120).
-					pat.City,//NK-4.3 City.  Required if known (length 1..50).
-					pat.State,//NK-4.4 State or Province.  Required if known (1..50).
-					pat.Zip,//NK-4.5 Zip or Postal Code.  Required if known (length 1..12).
-					"USA",//NK-4.6 Country.  Required if known (length 1..3).  Value set HL70399 (not in guide).  Defaults to USA.
-					"P"//NK-4.7 Address Type.  Required (length 1..3).  Value set HL70190 (guide page 202).  P=permanent.
-					//NK-4.8 Other Geographic Designation.  Optional.
-					//NK-4.9 County/Parish Code.  Optional.
-					//NK-4.10 Census Tract.  Optional.
-					//NK-4.11 Address Representation Code.  Optional.
-					//NK-4.12 Address Validity Range.  No longer used.
-					//NK-4.13 Effective Date.  Optional.
-					//NK-4.14 Expiration Date.  Optional.
-					);
+				WriteXAD(4,patNextOfKin.Address,patNextOfKin.Address2,patNextOfKin.City,patNextOfKin.State,patNextOfKin.Zip);
 				//NK-5 Phone Number.  Required if known.  Cardinality [0..*].  Type XTN (guide page 84).  The first instance shall be the primary phone number.
-				Patient patNextOfKin=Patients.GetPat(listGuardians[i].PatNumGuardian);
-				WritePhone(_seg,5,"PRN","PH",patNextOfKin.HmPhone,patNextOfKin.WirelessPhone);
+				WriteXTN(5,"PRN","PH",patNextOfKin.HmPhone,patNextOfKin.WirelessPhone);
 				//NK-6 Business Phone Number.  Optional.  Type XTN (guide page 84).
-				WritePhone(_seg,5,"PRN","PH",patNextOfKin.WkPhone);
+				WriteXTN(6,"PRN","PH",patNextOfKin.WkPhone);
 				//NK-7 Contact Role.  Optional.
 				//NK-8 Start Date.  Optional.
 				//NK-9 End Date.  Optional.
@@ -245,7 +222,7 @@ namespace OpenDentBusiness.HL7 {
 		}
 		
 		///<summary>Order Request segment.  Required.  Guide page 126.</summary>
-		private void ORC() {
+		private void ORC(VaccinePat vaccine) {
 			_seg=new SegmentHL7(SegmentNameHL7.ORC);
 			_seg.SetField(0,"ORC");
 			_seg.SetField(1,"RE");//ORC-1 Order Control.  Required (length 2).  Cardinality [1..1].  Value set HL70119.  The only allowed value is "RE".
@@ -254,12 +231,15 @@ namespace OpenDentBusiness.HL7 {
 			//ORC-2.2 Namespace ID.  Required if ORC-2.3 is blank (length 1..20).  Value set HL70363 (guide page 229, 3 letter abbreviation for US state, US city, or US territory).
 			//ORC-2.3 Universal ID.  Required if ORC-2.1 is blank (length 1..199).
 			//ORC-2.4 Universal ID Type.  Required if ORC-2.3 is not blank (length 6..6).  Value set HL70301 (guide page 224).
-			_seg.SetField(3,//ORC-3 Filler Order Number.  Required.  Cardinality [0..1].  Type EI (guid page 62).  TODO:
-			"",//ORC-3.1 Entity Identifier.  Required (length 1..199). 
-			"",//ORC-3.2 Namespace ID.  Required if ORC-3.3 is blank (length 1..20).  Value set HL70363 (guide page 229, 3 letter abbreviation for US state, US city, or US territory).
-			"",//ORC-3.3 Universal ID.  Required if ORC-3.1 is blank (length 1..199).
-			"");//ORC-3.4 Universal ID Type.  Required if ORC-3.3 is not blank (length 6..6).  Value set HL70301 (guide page 224).  Must be "ISO" or blank.
-			_msg.Segments.Add(_seg);
+			//ORC-3 Filler Order Number.  Required.  Cardinality [0..1].  Type EI (guid page 62).  "Shall be the unique ID of the sending system."  The city and state are used to record the region where the vaccine record is filed.
+			string fillerOrderCity=PrefC.GetString(PrefName.PracticeCity);
+			string fillerOrderState=PrefC.GetString(PrefName.PracticeST);
+			if(_pat.ClinicNum!=0) {
+				Clinic clinic=Clinics.GetClinic(_pat.ClinicNum);
+				fillerOrderCity=clinic.City;
+				fillerOrderState=clinic.State;
+			}
+			WriteEI(3,vaccine.VaccinePatNum.ToString(),fillerOrderCity,fillerOrderState);
 			//ORC-3.5 Order Status.  Optional.
 			//ORD-3.6 Response Flag.  Optional.
 			//ORD-3.7 Quantity/Timing.  No longer used.
@@ -287,10 +267,11 @@ namespace OpenDentBusiness.HL7 {
 			//ORD-3.29 Order Type.  Optional.
 			//ORD-3.30 Enterer Authorization Mode.  Optional.
 			//ORD-3.31 Parent Universal Service Modifier.  Optional.
+			_msg.Segments.Add(_seg);
 		}
 
 		///<summary>Patient Demographic segment.  Required if known.  Additional demographics.  Guide page 132.</summary>
-		private void PD1(Patient pat) {
+		private void PD1() {
 			_seg=new SegmentHL7(SegmentNameHL7.PD1);
 			_seg.SetField(0,"PD1");
 			//PD1-1 Living Dependency.  Optional.  Cardinality [0..1].
@@ -303,24 +284,23 @@ namespace OpenDentBusiness.HL7 {
 			//PD1-8 Organ Donor Code.  Optional.  Cardinality [0..1].
 			//PD1-9 Separate Bill.  Optional.  Cardinality [0..1].
 			//PD1-10 Duplicate Patient.  Optional.  Cardinality [0..1].
-			//PD1-11 Publicity Code.  Required if known (length 2..2).  Cardinality [0..1].  Value set HL70215 (guide page 209).
-			string strPublicityCode="";
-			if(pat.PreferRecallMethod==ContactMethod.DoNotCall) {
-				strPublicityCode="07";//Recall only - no calls.
+			//PD1-11 Publicity Code.  Required if known (length 2..2).  Cardinality [0..1].  Value set HL70215 (guide page 209).  Type CE.
+			if(_pat.PreferRecallMethod==ContactMethod.DoNotCall) {
+				WriteCE(11,"07","Recall only - no calls","HL70215");
 			}
-			else if(pat.PreferRecallMethod==ContactMethod.None) {
-				strPublicityCode="01";//No reminder/recall.
+			else if(_pat.PreferRecallMethod==ContactMethod.None) {
+				WriteCE(11,"01","No reminder/recall","HL70215");
 			}
 			else {
-				strPublicityCode="02";//Reminder/recall - any method.
+				WriteCE(11,"02","Reminder/recall - any method","HL70215");
 			}
-			_seg.SetField(11,strPublicityCode);
 			//PD1-12 Protection Indicator.  Required if known (length 1..1).  Cardinality [0..1].  Value set HL70136 (guide page 199).  Allowed values are "Y" for yes, "N" for no, or blank for unknown.
 			//PD1-13 Protection Indicator.  Required if PD1-12 is not blank (length unspecified).  Cardinality [0..1].
 			//PD1-14 Place of Worship.  Optional (length unspecified).  Cardinality [0..1].
 			//PD1-15 Advance Directive Code.  Optional (length unspecified).  Cardinality [0..1].
-			//PD1-16 Immunization Registry Status.  Required if known (length unspecified).  Cardinality [0..1].  Value set HL70441 (guide page 232).
+			_seg.SetField(16,"A");//PD1-16 Immunization Registry Status.  Required if known (length unspecified).  Cardinality [0..1].  Value set HL70441 (guide page 232).  TODO: May need UI for this field.
 			//PD1-17 Immunization Registry Status Effective Date.  Required if PD1-16 is not blank.  Cardinality [0..1].
+			_seg.SetField(17,DateTime.Today.ToString("yyyyMMdd"));
 			//PD1-18 Publicity Code Effective Date.  Required if PD1-11 is not blank.
 			_seg.SetField(18,DateTime.Today.ToString("yyyyMMdd"));
 			//PD1-19 Military Branch.  Optional.
@@ -330,13 +310,13 @@ namespace OpenDentBusiness.HL7 {
 		}
 
 		///<summary>Patient Identifier segment.  Required.  Guide page 137.</summary>
-		private void PID(Patient pat){
+		private void PID() {
 			_seg=new SegmentHL7(SegmentNameHL7.PID);
 			_seg.SetField(0,"PID");
 			_seg.SetField(1,"1");//PID-1 Set ID - PID.  Required if known.  Cardinality [0..1].  Must be "1" for the first occurrence.  Not sure why there would ever be more than one.
 			//PID-2 Patient ID.  No longer used.
 			_seg.SetField(3,//PID-3 Patient Identifier List.  Required.  Cardinality [1..*].  Type CX (see guide page 58 for type definition).
-				pat.PatNum.ToString(),//PID-3.1 ID Number.  Required (length 1..15).  
+				_pat.PatNum.ToString(),//PID-3.1 ID Number.  Required (length 1..15).  
 				"",//PID-3.2 Check Digit.  Optional (length 1..1).
 				"",//PID-3.3 Check Digit Scheme.  Required if PID-3.2 is specified.  Not required for our purposes.  Value set HL70061.
 				"Open Dental",//PID-3.4 Assigning Authority.  Required.  Value set HL70363.
@@ -348,19 +328,19 @@ namespace OpenDentBusiness.HL7 {
 				//PID-3.10 Assigning Agency or Department.  Optional (length undefined).
 			);
 			//PID-4 Alternate Patient ID - 00106.  No longer used.
-			_seg.SetField(5,pat.LName,pat.FName);//PID-5 Patient Name.  Required (length unspecified).  Cardinality [1..*].  The first repetition must contain the legal name.
-			//PID-6 Mother's Maiden Name.  Required if known (length unspecified).  Cardinality [0..1].  TODO: This will be required for us to pass EHR testing.
+			WriteXPN(5,_pat.FName,_pat.LName,_pat.MiddleI);//PID-5 Patient Name.  Required (length unspecified).  Cardinality [1..*].  Type XPN.  The first repetition must contain the legal name.
+			//WriteXPN(6,);//PID-6 Mother's Maiden Name.  Required if known (length unspecified).  Cardinality [0..1].  Type XPN.  TODO: We need a textbox in the patient edit window to enter this information.
 			//PID-7 Date/Time of Birth.  Required.  Cardinality [1..1].  We must specify "UNK" if unknown.
-			if(pat.Birthdate.Year<1880) {
+			if(_pat.Birthdate.Year<1880) {
 				_seg.SetField(7,"UNK");
 			}
 			else {
-				_seg.SetField(7,pat.Birthdate.ToString("yyyyMMdd"));
+				_seg.SetField(7,_pat.Birthdate.ToString("yyyyMMdd"));
 			}
-			_seg.SetField(8,ConvertGender(pat.Gender));//PID-8 Administrative Sex.  Required if known.  Cardinality [0..1].  Value set HL70001.
+			WriteGender(8,_pat.Gender);//PID-8 Administrative Sex.  Required if known.  Cardinality [0..1].  Value set HL70001.
 			//PID-9 Patient Alias.  No longer used.
 			//PID-10 Race.  Required if known.  Cardinality [0..*].  Value set HL70005 (guide page 194).  Each race definition must be type CE.  Type CE is defined on guide page 53.
-			List<PatientRace> listPatientRaces=PatientRaces.GetForPatient(pat.PatNum);
+			List<PatientRace> listPatientRaces=PatientRaces.GetForPatient(_pat.PatNum);
 			List<PatRace> listPatRacesFiltered=new List<PatRace>();
 			bool isHispanicOrLatino=false;
 			for(int i=0;i<listPatientRaces.Count;i++) {
@@ -377,7 +357,7 @@ namespace OpenDentBusiness.HL7 {
 				}
 				listPatRacesFiltered.Add(patRace);
 			}
-			string hl7Race="";
+			string hl7Race="";//TODO: Test a patient with multiple races.
 			if(listPatRacesFiltered.Count==0) {//No selection or declined to specify.
 				hl7Race+=""//PID-10.1 Identifier.  Required (length 1..50).  Blank for unknown.
 					+"^Unknown/undetermined"//PID-10.2  Text.  Required if known (length 1..999). Human readable text that is not further used.
@@ -420,31 +400,17 @@ namespace OpenDentBusiness.HL7 {
 					}
 					hl7Race+=strRaceCode//PID-10.1 Identifier.  Required (length 1..50).
 						+"^"+strRaceName//PID-10.2  Text.  Required if known (length 1..999). Human readable text that is not further used.
-						+"^Race and Ethnicity";//PID-10.3 Name of Coding System.  Required (length 1..20).  The full name is actually "Race &amp; Ethnicity - CDC", but it is more than 20 characters.
+						+"^HL70005";//PID-10.3 Name of Coding System.  Required (length 1..20).
 						//PID-10.4 Alternate Identifier.  Required if known (length 1..50).
 						//PID-10.5 Alternate Text.  Required if known (length 1..999).
 						//PID-10.6 Name of Alternate Coding system.  Required if PID-10.4 is not blank.
 				}
 			}
 			_seg.SetField(10,hl7Race);
-			_seg.SetField(11,//PID-11 Patient Address.  Required if known (length unspecified).  Cardinality [0..*].  Type XAD (guide page 74).  First repetition must be the primary address.
-				pat.Address,//PID-11.1 Street Address.  Required if known (length unspecified).  Data type SAD (guide page 72).  The SAD type only requires the first sub-component.
-				pat.Address2,//PID-11.2 Other Designation.  Required if known (length 1..120).
-				pat.City,//PID-11.3 City.  Required if known (length 1..50).
-				pat.State,//PID-11.4 State or Province.  Required if known (length 1..50).
-				pat.Zip,//PID-11.5 Zip or Postal Code.  Required if known (length 1..12).
-				"USA",//PID-11.6 Country.  Required if known (length 3..3).  Value set HL70399.  Defaults to USA.
-				"M"//PID-11.7 Address Type.  Required (length 1..3).  Value set HL70190 (guide page 202).  M is for mailing.
-				//PID-11.8 Other Geographic Designation.  Optional.
-				//PID-11.9 County/Parish Code.  Optional.
-				//PID-11.10 Census Tract.  Optional.
-				//PID-11.11 Address Representation Code.  Optional.
-				//PID-11.12 Address Validity Range.  No longer used.
-				//PID-11.13 Effective Date.  Optional.
-				//PID-11.14 Expiration Date.  Optional.
-			);
+			//PID-11 Patient Address.  Required if known (length unspecified).  Cardinality [0..*].  Type XAD (guide page 74).  First repetition must be the primary address.
+			WriteXAD(11,_pat.Address,_pat.Address,_pat.City,_pat.State,_pat.Zip);
 			//PID-12 County Code.  No longer used.
-			WritePhone(_seg,13,"PRN","PH",pat.HmPhone,pat.WirelessPhone,pat.WkPhone);//PID-13 Phone Number - Home.  Required if known (length unspecified).  Cardinality [0..*].  Type XTN (guide page 84).
+			WriteXTN(13,"PRN","PH",_pat.HmPhone,_pat.WirelessPhone,_pat.WkPhone);//PID-13 Phone Number - Home.  Required if known (length unspecified).  Cardinality [0..*].  Type XTN (guide page 84).
 			//PID-14 Phone Number - Business.  Optional.
 			//PID-15 Primary Language.  Optional.
 			//PID-16 Marital Status.  Optional.
@@ -453,15 +419,14 @@ namespace OpenDentBusiness.HL7 {
 			//PID-19 SSN Number - Patient.  No longer used.
 			//PID-20 Driver's License Number - Patient.  No longer used.
 			//PID-21 Mother's Identifier.  No longer used.
-			//PID-22 Ethnic Group.  Required if known (length unspecified).  Cardinality [0..1].  Value set HL70189 (guide page 201).
-			if(listPatRacesFiltered.Count==0) {
-				_seg.SetField(22,"U");//Unknown
-			}
-			else if(isHispanicOrLatino) {
-				_seg.SetField(22,"H");
-			}
-			else {//Not hispanic or latino.
-				_seg.SetField(22,"N");
+			//PID-22 Ethnic Group.  Required if known (length unspecified).  Cardinality [0..1].  Value set HL70189 (guide page 201).  Type CE.
+			if(listPatRacesFiltered.Count>0) {//The user specified a race and ethnicity and did not select the decline to specify option.
+				if(isHispanicOrLatino) {
+					WriteCE(22,"2135-2","Hispanic or Latino","CDCREC");
+				}
+				else {//Not hispanic or latino.
+					WriteCE(22,"2186-5","not Hispanic or Latino","CDCREC");
+				}
 			}
 			//PID-23 Birth Place.  Optional.  Cardinaility [0..1].
 			//PID-24 Multiple Birth Indicator.  Optional.  Cardinaility [0..1].
@@ -562,22 +527,148 @@ namespace OpenDentBusiness.HL7 {
 			return _msg.ToString();
 		}
 
-		///<summary>For the given patient gender, returns a string corresponding to table HL70001 (guide page 193).</summary>
-		private string ConvertGender(PatientGender gender) {
-			if(gender==PatientGender.Female) {
-				return "F";
-			}
-			if(gender==PatientGender.Male) {
-				return "M";
-			}
-			return "U";
+		#region Field Helpers
+
+		///<summary>Type CE (guide page 53).  Writes a coded element into the fieldIndex field of the current segment.</summary>
+		private void WriteCE(int fieldIndex,string strIdentifier,string strText,string strNameCodeSystem) {
+			_seg.SetField(fieldIndex,
+				strIdentifier,//CE.1 Identifier.  Required (length 1..50).
+				strText,//CE.2 Text.  Required if known (length 1..999). Human readable text that is not further used.
+				strNameCodeSystem//CE.3 Name of Coding System.  Required (length 1..20).
+				//CE.4 Alternate Identifier.  Required if known (length 1..50).
+				//CE.5 Alternate Text.  Required if known (length 1..999).
+				//CE.6 Name of Alternate Coding system.  Required if CE.4 is not blank.
+			);
 		}
 
-		///<summary>Type XTN (guide page 84).
+		///<summary>Type EI (guid page 62).  Writes an Entity Identifier (order number) into the fieldIndex field of the current segment.</summary>
+		private void WriteEI(int fieldIndex,string identifier,string city,string state) {
+			string namespaceId="";//A value from Value set HL70363 (guide page 229, 3 letter abbreviation for US state, US city, or US territory).
+			//TODO: fill namespaceId using city and state.
+			//List<string> stateCodes=new List<string>(new string[] {
+			//	//50 States.
+			//	"AK","AL","AR","AZ","CA","CO","CT","DE","FL","GA",
+			//	"HI","IA","ID","IL","IN","KS","KY","LA","MA","MD",
+			//	"ME","MI","MN","MO","MS","MT","NC","ND","NE","NH",
+			//	"NJ","NM","NV","NY","OH","OK","OR","PA","RI","SC",
+			//	"SD","TN","TX","UT","VA","VT","WA","WI","WV","WY",
+			//	//US Districts
+			//	"DC",
+			//	//US territories. Reference http://www.itl.nist.gov/fipspubs/fip5-2.htm
+			//	"AS","FM","GU","MH","MP","PW","PR","UM","VI",
+			//});
+
+			//From table HL70363 (guide page 229), also known as Assigning Authority:
+			//AKA			ALASKA
+			//ALA			ALABAMA
+			//ARA			ARKANSAS
+			//ASA			AMERICAN SAMOA
+			//AZA			ARIZONA
+			//BAA			NEW YORK CITY
+			//CAA			CALIFORNIA
+			//CHA			CHICAGO
+			//COA			COLORADO
+			//CTA			CONNECTICUT
+			//DCA			DISTRICT OF COLUMBIA
+			//DEA			DELAWARE
+			//FLA			FLORIDA
+			//FMA			FED STATES MICRO
+			//GAA			GEORGIA
+			//GUA			GUAM
+			//HIA			HAWAII
+			//IAA			IOWA
+			//IDA			IDAHO
+			//ILA			ILLINOIS
+			//INA			INDIANA
+			//KSA			KANSAS
+			//KYA			KENTUCKY
+			//LAA			LOUISIANA
+			//MAA			MASSACHUSETTS
+			//MDA			MARYLAND
+			//MEA			MAINE
+			//MHA			REP MARS ISLANDS
+			//MIA			MICHIGAN
+			//MNA			MINNESOTA
+			//MOA			MISSOURI
+			//MPA			NO. MARIANA ISLAND
+			//MSA			MISSISSIPPI
+			//MTA			MONTANA
+			//NCA			NORTH CAROLINA
+			//NDA			NORTH DAKOTA
+			//NEA			NEBRASKA
+			//NHA			NEW HAMPSHIRE
+			//NJA			NEW JERSEY
+			//NMA			NEW MEXICO
+			//NVA			NEVADA
+			//NYA			NEW YORK STATE
+			//OHA			OHIO
+			//OKA			OKLAHOMA
+			//ORA			OREGON
+			//PAA			PENNSYLVANIA
+			//PHA			PHILADELPHIA
+			//PRA			PUERTO RICO
+			//RIA			RHODE ISLAND
+			//RPA			REPUBLIC PALAU
+			//SCA			SOUTH CAROLINA
+			//SDA			SOUTH DAKOTA
+			//TBA			SAN ANTONIO
+			//THA			HOUSTON
+			//TNA			TENNESSEE
+			//TXA			TEXAS
+			//UTA			UTAH
+			//VAA			VIRGINIA
+			//VIA			VIRGIN ISLANDS
+			//VTA			VERMONT
+			//WAA			WASHINGTON
+			//WIA			WISCONSIN
+			//WVA			WEST VIRGINIA
+			//WYA			WYOMING
+
+
+			_seg.SetField(fieldIndex,
+				identifier,//EI.1 Entity Identifier.  Required (length 1..199).
+				namespaceId,//EI.2 Namespace ID.  Required if EI.3 is blank (length 1..20).  Value set HL70363 (guide page 229, 3 letter abbreviation for US state, US city, or US territory).
+				"",//EI.3 Universal ID.  Required if EI.1 is blank (length 1..199).
+				"");//EI.4 Universal ID Type.  Required if EI.3 is not blank (length 6..6).  Value set HL70301 (guide page 224).  Must be "ISO" or blank.
+		}
+
+		///<summary>Type IS (guide page 68).  Writes a string corresponding to table HL70001 (guide page 193) into the fieldIndex field for the current segment.</summary>
+		private void WriteGender(int fieldIndex,PatientGender gender) {
+			string strGenderCode="U";//unknown
+			if(gender==PatientGender.Female) {
+				strGenderCode="F";
+			}
+			if(gender==PatientGender.Male) {
+				strGenderCode="M";
+			}
+			_seg.SetField(fieldIndex,strGenderCode);
+		}
+
+		///<summary>Type XAD (guide page 74).  Writes an extended address into the fieldIndex field for the current segment.</summary>
+		private void WriteXAD(int fieldIndex,string address1,string address2,string city,string state,string zip) {
+			_seg.SetField(fieldIndex,
+				address1,//XAD.1 Street Address.  Required if known (length unspecified).  Data type SAD (guide page 72).  The SAD type only requires the first sub-component.
+				address2,//XAD.2 Other Designation.  Required if known (length 1..120).
+				city,//XAD.3 City.  Required if known (length 1..50).
+				state,//XAD.4 State or Province.  Required if known (length 1..50).
+				zip,//XAD.5 Zip or Postal Code.  Required if known (length 1..12).
+				"USA",//XAD.6 Country.  Required if known (length 3..3).  Value set HL70399.  Defaults to USA.
+				"L"//XAD.7 Address Type.  Required (length 1..3).  Value set HL70190 (guide page 202).  C=Current or temporary,P=Permanent,M=Mailing,B=Firm/Business,O=Office,H=Home,L=Legal address,etc...
+				//XAD.8 Other Geographic Designation.  Optional.
+				//XAD.9 County/Parish Code.  Optional.
+				//XAD.10 Census Tract.  Optional.
+				//XAD.11 Address Representation Code.  Optional.
+				//XAD.12 Address Validity Range.  No longer used.
+				//XAD.13 Effective Date.  Optional.
+				//XAD.14 Expiration Date.  Optional.
+			);
+		}
+
+		///<summary>Type XTN (guide page 84).  Writes a phone number into the fieldIndex field for the current segment.
 		///strTeleUseCode must be from value set HL70201 (guide page 203).
 		///strTeleEquipType must be from value set HL70202 (guide page 203).
 		///Can specify 0 or more phone numbers. The first valid phone number in the list will be written and the other phone numbers will be ignored.</summary>
-		private void WritePhone(SegmentHL7 seg,int fieldIndex,string strTeleUseCode,string strTeleEquipType,params string[] arrayPhoneNumbers) {
+		private void WriteXTN(int fieldIndex,string strTeleUseCode,string strTeleEquipType,params string[] arrayPhoneNumbers) {
 			for(int i=0;i<arrayPhoneNumbers.Length;i++) {
 				string phone=arrayPhoneNumbers[i];
 				string digits="";
@@ -593,7 +684,7 @@ namespace OpenDentBusiness.HL7 {
 				if(digits.Length!=10) {
 					continue;//The current phone number is invalid. Skip it and try the next number.
 				}
-				seg.SetField(fieldIndex,
+				_seg.SetField(fieldIndex,
 					"",//XTN.1 Telephone Number.  No longer used.
 					strTeleUseCode,//XTN.2 Telecommunication Use Code.  Required.  Value set HL70201 (guide page 203).
 					strTeleEquipType,//XTN.3 Telecommunication Equipment Type.  Required if known.  Value set HL70202 (guide page 203).
@@ -611,7 +702,29 @@ namespace OpenDentBusiness.HL7 {
 			}
 		}
 
+		///<summary>Type XPN (guide page 82).  Writes an person's name into the fieldIndex field for the current segment.
+		///The fName and lName cannot be blank.
+		///The middleI may be blank.</summary>
+		private void WriteXPN(int fieldIndex,string fName,string lName,string middleI) {
+			_seg.SetField(fieldIndex,
+				lName,//XPN.1 Family Name.  Required (length 1..50).  Type FN (guide page 64).  Cardinality [1..1].  The FN type only requires the last name field and it is the first field.
+				fName,//XPN.2 Given Name.  Required (length 1..30).  Cardinality [1..1].
+				middleI,//XPN.3 Second and Further Given Names or Initials Thereof (middle name).  Required if known (length 1..30). 
+				"",//XPN.4 Suffix.  Optional.
+				"",//XPN.5 Prefix.  Optional.
+				"",//XPN.6 Degree.  No longer used.
+				"L"//XPN.7 Name Type Code.  Required if known (length 1..1).  Value set HL70200 (guide page 203).  A=Alias Name,L=Legal Name,D=Display Name,M=Maiden Name,C=Adopted Name,B=Name at birth,P=Name of partner/spouse,U=Unspecified.
+				//XPN.8 Name Representation Code.  Optional.
+				//XPN.9 Name Context.  Optional.
+				//XPN.10 Name Validity Range.  No longer used.
+				//XPN.11 Name Assembly Order.  Optional.
+				//XPN.12 Effective Date.  Optional.
+				//XPN.13 Expiration Date.  Optional.
+				//XPN.14 Professional Suffix.  Optional.
+				);
+		}
 
+		#endregion Field Helpers
 
 		//The 2 examples below have been edited slightly for our purposes.  They still pass validation.
 
