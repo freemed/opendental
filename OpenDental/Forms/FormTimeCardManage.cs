@@ -891,7 +891,7 @@ namespace OpenDental {
 			string errors="";
 			string warnings="";
 			string errorIndent="  ";
-			strb.AppendLine("Co Code,Batch ID,File #,Reg Hours,O/T Hours,Shift");
+			strb.AppendLine("Co Code,Batch ID,File #,Rate Code,Reg Hours,O/T Hours");
 			string coCode=PrefC.GetString(PrefName.ADPCompanyCode);
 			string batchID=DateStop.ToString("yyyyMMdd");//max 8 characters
 			if(coCode.Length<2 || coCode.Length>3){
@@ -918,16 +918,16 @@ namespace OpenDental {
 				else {//pad payrollIDs that are too short. No effect if payroll ID is 6 digits long.
 					fileNum=fileNum.PadLeft(6,'0');
 				}
-				string r1hours	=(PIn.TSpan(MainTable.Rows[i]["rate1Hours"  ].ToString())).TotalHours.ToString("F4").Replace("0.0000","");//adp allows 4 digit precision
-				string r1OThours=(PIn.TSpan(MainTable.Rows[i]["rate1OTHours"].ToString())).TotalHours.ToString("F4").Replace("0.0000","");//adp allows 4 digit precision
-				string r2hours	=(PIn.TSpan(MainTable.Rows[i]["rate2Hours"  ].ToString())).TotalHours.ToString("F4").Replace("0.0000","");//adp allows 4 digit precision
-				string r2OThours=(PIn.TSpan(MainTable.Rows[i]["rate2OTHours"].ToString())).TotalHours.ToString("F4").Replace("0.0000","");//adp allows 4 digit precision
+				string r1hours	=(PIn.TSpan(MainTable.Rows[i]["rate1Hours"  ].ToString())).TotalHours.ToString("F2").Replace("0.00","");//adp allows 2 digit precision
+				string r1OThours=(PIn.TSpan(MainTable.Rows[i]["rate1OTHours"].ToString())).TotalHours.ToString("F2").Replace("0.00","");//adp allows 2 digit precision
+				string r2hours	=(PIn.TSpan(MainTable.Rows[i]["rate2Hours"  ].ToString())).TotalHours.ToString("F2").Replace("0.00","");//adp allows 2 digit precision
+				string r2OThours=(PIn.TSpan(MainTable.Rows[i]["rate2OTHours"].ToString())).TotalHours.ToString("F2").Replace("0.00","");//adp allows 2 digit precision
 				string textToAdd="";
 				if(r1hours!="" || r1OThours!="") {//no entry should be made unless there are actually hours for this employee.
-					textToAdd+=coCode+","+batchID+","+fileNum+","+r1hours+","+r1OThours+",2\r\n";
+					textToAdd+=coCode+","+batchID+","+fileNum+",,"+r1hours+","+r1OThours+"\r\n";
 				}
 				if(r2hours!="" || r2OThours!="") {//no entry should be made unless there are actually hours for this employee.
-					textToAdd+=coCode+","+batchID+","+fileNum+","+r2hours+","+r2OThours+",3\r\n";
+					textToAdd+=coCode+","+batchID+","+fileNum+",2,"+r2hours+","+r2OThours+"\r\n";
 				}
 				if(textToAdd=="") {
 					warningsForEmployee+=errorIndent+"No clocked hours.\r\n";// for "+Employees.GetNameFL(Employees.GetEmp(PIn.Long(MainTable.Rows[i]["EmployeeNum"].ToString())))+"\r\n";
