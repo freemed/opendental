@@ -17,6 +17,10 @@ namespace OpenDentBusiness.HL7 {
 		private MessageHL7 _msg;
 		///<summary>Helper variable.</summary>
 		private SegmentHL7 _seg;
+		///<summary>A variable which is used in multiple places but always has the same value. At class level for convenience.</summary>
+		private string cityWhereEntered="";
+		///<summary>A variable which is used in multiple places but always has the same value. At class level for convenience.</summary>
+		private string stateWhereEntered="";
 
 		///<summary>Creates the Message object and fills it with data.  Vaccines must all be for the same patient.  A list of vaccines is passed in so the user can select a subset of vaccines to send for the patient.</summary>
 		public EhrVXU(Patient pat,List<VaccinePat> vaccines) {
@@ -25,8 +29,19 @@ namespace OpenDentBusiness.HL7 {
 			}
 			_pat=pat;
 			_vaccines=vaccines;
+			InitializeVariables();
 			BuildMessage();
-		}		
+		}
+
+		private void InitializeVariables() {
+			cityWhereEntered=PrefC.GetString(PrefName.PracticeCity);
+			stateWhereEntered=PrefC.GetString(PrefName.PracticeST);
+			if(_pat.ClinicNum!=0) {
+				Clinic clinic=Clinics.GetClinic(_pat.ClinicNum);
+				cityWhereEntered=clinic.City;
+				stateWhereEntered=clinic.State;
+			}
+		}
 		
 		private void BuildMessage() {
 			_msg=new MessageHL7(MessageTypeHL7.VXU);//Message format for VXU is on guide page 160.
@@ -219,6 +234,36 @@ namespace OpenDentBusiness.HL7 {
 
 		///<summary>Observation Result segment.  Required if known.  The basic format is question and answer.  Guide page 116.</summary>
 		private void OBX() {
+			int i=0;//TODO: Create a loop with variable i, once there is a list to loop through.
+			_seg=new SegmentHL7(SegmentNameHL7.OBX);
+			_seg.SetField(0,"OBX");
+			_seg.SetField(1,i.ToString());//OBX-1 Set ID - OBX.  Required (length 1..4).  Cardinality [1..1].
+			_seg.SetField(2,"CE");//OBX-2 Value Type.  Required (length 2..3).  Cardinality [1..1].  Value Set HL70125 (constrained, not in guide).  CE=Coded Entry,DT=Date,NM=Numberic,ST=String,TS=Time Stamp (Date & Time).  TODO: We need UI for this.
+			//OBX-3 Observation Identifier.  Required.  Cardinality [1..1].  Value set NIP003 (25 items).  Type CE.  Purpose is to pose the question that is answered by OBX-5.  TODO: We need UI for this.
+			WriteCE(3,"","","LN");
+			//OBX-4 Observation Sub-ID.  Required (length 1..20).  Cardinality [1..1].  We need UI for this.
+			//OBX-5 Observation Value.  Required. Cardinality [1..1].  Value set varies, depending on the value of OBX-2 (Use type CE if OBX-2 is "CE", otherwise treat as a string).  Purpose is to answer the quesiton posed by OBX-3.  TODO: UI needed.
+			//OBX-6 Units.  Required if OBX-2 is "NM" or "SN".
+			//OBX-7 References Range.  Optional.
+			//OBX-8 Abnormal Flags.  Optional.
+			//OBX-9 Probability.  Optional.
+			//OBX-10 Nature of Abnormal Test.  Optional.
+			_seg.SetField(11,"F");//OBX-11 Observation Result Status.  Required (length 1..1).  Cardinality [1..1].  Value set HL70085 (constrained, guide page 198).  We are expected to use value F=Final.
+			//OBX-12 Effective Date of Reference Range Values.  Optional.
+			//OBX-13 User Defined Access Checks.  Optional.
+			//OBX-14 Date/Time of the Observation.  Required if known.  Cardinality [0..1].  TODO: UI needed.
+			//OBX-15 Producer's Reference.  Optional.
+			//OBX-16 Responsible Observer.  Optional.
+			//OBX-17 Observation Method.  Required if OBX-3.1 is “64994-7”.  Value set CDCPHINVS. Type CE.  TODO: UI needed.
+			//OBX-18 Equipment Instance Identifier.  Optional.
+			//OBX-19 Date/Time of the Analysis.  Optional.
+			//OBX-20 Reserved for harmonization with V2.6.  Optional.
+			//OBX-21 Reserved for harmonization with V2.6.  Optional.
+			//OBX-22 Reserved for harmonization with V2.6.  Optional.
+			//OBX-23 Performing Organization Name.  Optional.
+			//OBX-24 Performing Organization Address.  Optional.
+			//OBX-25 Performing Organization Medical Director.  Optional.
+			_msg.Segments.Add(_seg);
 		}
 		
 		///<summary>Order Request segment.  Required.  Guide page 126.</summary>
@@ -228,14 +273,7 @@ namespace OpenDentBusiness.HL7 {
 			_seg.SetField(1,"RE");//ORC-1 Order Control.  Required (length 2).  Cardinality [1..1].  Value set HL70119.  The only allowed value is "RE".
 			//ORC-2 Placer Order Number.  Required if known.  Cardinality [0..1].  Type EI (guid page 62).
 			//ORC-3 Filler Order Number.  Required.  Cardinality [0..1].  Type EI (guid page 62).  "Shall be the unique ID of the sending system."  The city and state are used to record the region where the vaccine record is filed.
-			string fillerOrderCity=PrefC.GetString(PrefName.PracticeCity);
-			string fillerOrderState=PrefC.GetString(PrefName.PracticeST);
-			if(_pat.ClinicNum!=0) {
-				Clinic clinic=Clinics.GetClinic(_pat.ClinicNum);
-				fillerOrderCity=clinic.City;
-				fillerOrderState=clinic.State;
-			}
-			WriteEI(3,vaccine.VaccinePatNum.ToString(),fillerOrderCity,fillerOrderState);
+			WriteEI(3,vaccine.VaccinePatNum.ToString(),cityWhereEntered,stateWhereEntered);
 			//ORC-4 Placer Group Number.  Optional.
 			//ORC-5 Order Status.  Optional.
 			//ORD-6 Response Flag.  Optional.
@@ -243,13 +281,6 @@ namespace OpenDentBusiness.HL7 {
 			//ORD-8 Parent.  Optional.
 			//ORD-9 Date/Time of Transaction.  Optional.
 			//ORD-10 Entered By.  Required if known.  Cardinality [0..1].  Type XCN.  This is the person that entered the immunization record into the system.  TODO: We need UI for user entered by (maintain city/state logic).
-			string cityWhereEntered=PrefC.GetString(PrefName.PracticeCity);
-			string stateWhereEntered=PrefC.GetString(PrefName.PracticeST);
-			if(_pat.ClinicNum!=0) {
-				Clinic clinic=Clinics.GetClinic(_pat.ClinicNum);
-				cityWhereEntered=clinic.City;
-				stateWhereEntered=clinic.State;
-			}
 			string fName="";
 			string lName="";
 			string middleI="";
@@ -498,23 +529,23 @@ namespace OpenDentBusiness.HL7 {
 			//RXA-9 Administration Notes.  Required if RXA-20 is "CP" or "PA".  Value set NIP 0001.  Type CE.  TODO: We need a UI for Admininstration Note, and the code system NIP 0001 needs to be built in.
 			WriteCE(9,"","","");
 			//RXA-10 Administering Provider.  Required if known.  This is the person who gave the administration or the vaccinaton.  It is not the ordering clinician.  TODO: We need a provider picker UI for the administering provider.
-			//RXA-11 Administered-at Location.  Required if known.  This is the clinic/site where the vaccine was administered.
+			//RXA-11 Administered-at Location.  Required if known.  Type LA2 (guide page 68).  This is the clinic/site where the vaccine was administered.
+			WriteLA2(11,cityWhereEntered,stateWhereEntered);
 			//RXA-12 Administered Per (Time Unit).  Optional.
 			//RXA-13 Administered Strength.  Optional.
-			//RXA-14 Administered Strength Units.  Required if RXA-9.1 is "00".
-			if(vaccine.LotNumber!="") {
-				_seg.SetField(15,vaccine.LotNumber);//RXA-15 Substance Lot Number.
+			//RXA-14 Administered Strength Units.  Optional.
+			//RXA-15 Substance Lot Number.  Required if the value in RXA-9.1 is "00".
+			_seg.SetField(15,vaccine.LotNumber);
+			//RXA-16 Substance Expiration Date.  Required if RXA-15 is not blank.  TODO: We need UI for substance expiration date.
+			//RXA-17 Substance Manufacturer Name.  Requred if RXA-9.1 is "00".  Cardinality [0..*].  Value set MVX.  Type CE.  TODO: Consider limiting the UI choices to code set MVX, since only MVX codes are allowed here.
+			if(vaccineDef.DrugManufacturerNum!=0) {
+				DrugManufacturer manufacturer=DrugManufacturers.GetOne(vaccineDef.DrugManufacturerNum);
+				WriteCE(17,manufacturer.ManufacturerCode,manufacturer.ManufacturerName,"HL70227");
 			}
-			//RXA-16 Substance Expiration Date.  Required if RXA-15 is not blank.
-			//RXA-17 Substance Manufacturer Name.  Requred if RXA-9.1 is "00".  Cardinality [0..*].  Value set MVX.
-			//if(vaccineDef.DrugManufacturerNum!=0) {
-			//	DrugManufacturer manufacturer=DrugManufacturers.GetOne(vaccineDef.DrugManufacturerNum);
-			//	_seg.SetField(17,manufacturer.ManufacturerCode,manufacturer.ManufacturerName,"HL70227");
-			//}
-			//RXA-18 Substance/Treatment Refusal Reason.  Required if RXA-20 is "RE".  Cardinality [0..*].  Only allowed to be "RE" or blank.
+			//RXA-18 Substance/Treatment Refusal Reason.  Required if RXA-20 is "RE".  Cardinality [0..*].  Required when RXA-20 is "RE", otherwise do not send.  Value set NIP002.  Type CE.  TODO: We need UI for refusal reason.
 			//RXA-19 Indication.  Optional.
 			//RXA-20 Completion Status.  Required if known (length 2..2).  Value set HL70322 (guide page 225).  CP=Complete, RE=Refused, NA=Not Administered, PA=Partially Administered.  TODO: We need UI for completion status.
-			//_seg.SetField(21,"A");//RXA-21 Action code.  Required if known (length 2..2).  Value set HL70323 (guide page 225).  A=Add, D=Delete, U=Update.
+			//RXA-21 Action code.  Required if known (length 2..2).  Value set HL70323 (guide page 225).  A=Add, D=Delete, U=Update.  TODO: We need UI for action code.
 			//RXA-22 System Entry Date/Time.  Optional.
 			//RXA-23 Administered Drug Strength.  Optional.
 			//RXA-24 Administered Drug Strength Volume Units.  Optional.
@@ -525,22 +556,17 @@ namespace OpenDentBusiness.HL7 {
 
 		///<summary>Pharmacy/Treatment Route segment.  Required if known (no way to enter in UI).  Guide page 158.</summary>
 		private void RXR(VaccinePat vaccine) {
-			//_seg=new SegmentHL7(SegmentNameHL7.RXR);
-			//_seg.SetField(0,"RXR");
-			//_seg.SetField(1,//RXR-1 Route.  Required.  Cardinality [1..1].  Value set HL70162 (guide page 200). Type CE (guide page 53).
-			//	"",//RXR-1.1 Identifier.  Required (length 1..50).  We would need a UI for route with the values from HL70162.
-			//	"",//RXR-1.2 Text (description).  Required if known (length 1..999).
-			//	"HL70162"//RXR-1.3 Name of Coding System. Required (length 1..20).  Value Set HL70396.
-			//	//RXR-1.4 Alternate Identifier.  Required if known (length 1..50).
-			//	//RXR-1.5 Alternate Text.  Required if known (length 1..999).
-			//	//RXR-1.6 Name of Alternate Coding System (length 1..20).  Required if RXR-1.4 if not blank.  Value Set HL70396.
-			//	);
-			////RXR-2 Administration Site.  Required if known.  Cardinality [0..1].  Value set HL70163 (guide page 201, details where the vaccine was physically administered on the patient's body).
-			////RXR-3 Administration Device.  Optional.
-			////RXR-4 Administration Method.  Optional.
-			////RXR-5 Routing Instruction.  Optional.
-			////RXR-6 Administration Site Modifier.  Optional.
-			//_msg.Segments.Add(_seg);
+			_seg=new SegmentHL7(SegmentNameHL7.RXR);
+			_seg.SetField(0,"RXR");
+			//RXR-1 Route.  Required.  Cardinality [1..1].  Value set HL70162 (guide page 200). Type CE (guide page 53).  TODO: Need UI for Administration Route.
+			WriteCE(1,"","","HL70162");
+			//RXR-2 Administration Site.  Required if known.  Cardinality [0..1].  Value set HL70163 (guide page 201, details where the vaccine was physically administered on the patient's body).  Type CE.  TODO: We need UI for this field.
+			WriteCE(2,"","","HL70163");
+			//RXR-3 Administration Device.  Optional.
+			//RXR-4 Administration Method.  Optional.
+			//RXR-5 Routing Instruction.  Optional.
+			//RXR-6 Administration Site Modifier.  Optional.
+			_msg.Segments.Add(_seg);
 		}
 
 		public string GenerateMessage() {
@@ -611,6 +637,31 @@ namespace OpenDentBusiness.HL7 {
 				strGenderCode="M";
 			}
 			_seg.SetField(fieldIndex,strGenderCode);
+		}
+
+		///<summary>Type LA2 (guide page 68).  Writes facility information into the fieldIndex field of the current segment.</summary>
+		private void WriteLA2(int fieldIndex,string city,string state) {
+			_seg.SetField(fieldIndex,
+				"",//LA2.1 Point of Care.  Optional.
+				"",//LA2.2 Room.  Optional.
+				"",//LA2.3 Bed.  Optional.
+				//LA2.4 Facility.  Required.  Type HD (guide page 66).
+				GetAssigningAuthority(city,state)//LA2.4.1 Namespace ID.  Required when LA2.4.2 is blank.  Value sets HL70300 (guide page 224), HL70361 (guide page 229), HL70362 (guide page 229), HL70363 (guide page 229).  Value set used depends on usage.
+				//LA2.4.2 Universal ID.  Required when LA2.4.1 is blank.
+				//LA2.4.3 Universal ID Type.  Required when LA2.4.2 is not blank.  Value set HL70301 (guide page 224).
+				//LA2.5 Location Status.  Optional.
+				//LA2.6 Patient Location Type.  Optional.
+				//LA2.7 Building.  Optional.
+				//LA2.8 Floor.  Optional.
+				//LA2.9 Street Address.  Optional.
+				//LA2.10 Other Designation.  Optional.
+				//LA2.11 City.  Optional.
+				//LA2.12 State or Province.  Optional.
+				//LA2.13 Zip or Postal Code.  Optional.
+				//LA2.14 Country.  Optional.
+				//LA2.15 Address Type.  Optional.
+				//LA2.16 Other Geographic Designation.  Optional.
+				);
 		}
 
 		///<summary>Type XAD (guide page 74).  Writes an extended address into the fieldIndex field for the current segment.</summary>
