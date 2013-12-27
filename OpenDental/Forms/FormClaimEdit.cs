@@ -5146,7 +5146,7 @@ namespace OpenDental{
 			FormClaimPrint FormCP=new FormClaimPrint();
 			FormCP.PatNumCur=ClaimCur.PatNum;
 			FormCP.ClaimNumCur=ClaimCur.ClaimNum;
-			if(!FormCP.PrintImmediate(pd.PrinterSettings.PrinterName,pd.PrinterSettings.Copies)) {
+			if(!FormCP.PrintImmediate(pd.PrinterSettings)) {
 				return;
 			}
 			if(!notAuthorized) {//if already sent, we want to block users from changing sent date without permission.

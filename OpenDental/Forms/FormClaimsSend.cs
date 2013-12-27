@@ -628,7 +628,7 @@ namespace OpenDental{
 			}
 			FormClaimPrint FormCP=new FormClaimPrint();
 			FormCP.PrintBlank=true;
-			FormCP.PrintImmediate(pd.PrinterSettings.PrinterName,pd.PrinterSettings.Copies);
+			FormCP.PrintImmediate(pd.PrinterSettings);
 		}
 
 		private void toolBarButPrint_Click(){
@@ -649,11 +649,12 @@ namespace OpenDental{
 			if(!PrinterL.SetPrinter(pd,PrintSituation.Claim,0,"Multiple claims printed")){
 				return;
 			}
+			pd.PrinterSettings.Copies=1; //Used to be sent in the FormCP.PrintImmediate function call below.  Moved up here to keep same logic.
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
 				FormCP.PatNumCur=listQueue[gridMain.SelectedIndices[i]].PatNum;
 				FormCP.ClaimNumCur=listQueue[gridMain.SelectedIndices[i]].ClaimNum;
 				FormCP.ClaimFormCur=null;//so that it will pull from the individual claim or plan.
-				if(!FormCP.PrintImmediate(pd.PrinterSettings.PrinterName,1)){
+				if(!FormCP.PrintImmediate(pd.PrinterSettings)) {
 					return;
 				}
 				Etranss.SetClaimSentOrPrinted(listQueue[gridMain.SelectedIndices[i]].ClaimNum,listQueue[gridMain.SelectedIndices[i]].PatNum,0,EtransType.ClaimPrinted,0);

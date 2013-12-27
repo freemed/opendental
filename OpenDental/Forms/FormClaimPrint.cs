@@ -225,9 +225,10 @@ namespace OpenDental{
 			Preview2.InvalidatePreview();
 		}
 
-		///<summary>Only called from external forms without ever loading this form.  Prints without showing any print preview.  Returns true if printed successfully.  You have to supply a printer name because this can be called multiple times when printing batch claims.</summary>
-		public bool PrintImmediate(string printerName,short copies){
+		///<summary>Only called from external forms without ever loading this form.  Prints without showing any print preview.  Returns true if printed successfully.  Make sure to call PrinterL.SetPrinter() before calling this method so that a printer name is set for when printing batch claims.</summary>
+		public bool PrintImmediate(PrinterSettings ps) {
 			pd2=new PrintDocument();
+			pd2.PrinterSettings=ps;
 			pagesPrinted=0;
 			pd2.OriginAtMargins=true;
 			pd2.DefaultPageSettings.Margins=new Margins(0,0,0,0);
@@ -236,8 +237,6 @@ namespace OpenDental{
 				pd2.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
 			}
 			pd2.PrintPage+=new PrintPageEventHandler(this.pd2_PrintPage);
-			pd2.PrinterSettings.PrinterName=printerName;
-			pd2.PrinterSettings.Copies=copies;
 			try{
 				pd2.Print();
 			}
