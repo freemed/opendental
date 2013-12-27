@@ -47,9 +47,12 @@ namespace OpenDental{
 		private ODGrid gridFamilyHealth;
 		private UI.Button butAddFamilyHistory;
 		private List<FamilyHealth> ListFamHealth;
-		private CheckBox checkDocumentedMeds;
 		private int headingPrintH;
+		private GroupBox groupMedsDocumented;
+		private RadioButton radioMedsDocumentedNo;
+		private RadioButton radioMedsDocumentedYes;
 		private long _EhrMeasureEventNum;
+		private long _EhrNotPerfNum;
 
 
 
@@ -109,7 +112,10 @@ namespace OpenDental{
 			this.imageListInfoButton = new System.Windows.Forms.ImageList(this.components);
 			this.gridFamilyHealth = new OpenDental.UI.ODGrid();
 			this.butAddFamilyHistory = new OpenDental.UI.Button();
-			this.checkDocumentedMeds = new System.Windows.Forms.CheckBox();
+			this.groupMedsDocumented = new System.Windows.Forms.GroupBox();
+			this.radioMedsDocumentedYes = new System.Windows.Forms.RadioButton();
+			this.radioMedsDocumentedNo = new System.Windows.Forms.RadioButton();
+			this.groupMedsDocumented.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// butOK
@@ -446,17 +452,36 @@ namespace OpenDental{
 			this.butAddFamilyHistory.Text = "Add Family History";
 			this.butAddFamilyHistory.Click += new System.EventHandler(this.butAddFamilyHistory_Click);
 			// 
-			// checkDocumentedMeds
+			// groupMedsDocumented
 			// 
-			this.checkDocumentedMeds.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkDocumentedMeds.Location = new System.Drawing.Point(656, 248);
-			this.checkDocumentedMeds.Name = "checkDocumentedMeds";
-			this.checkDocumentedMeds.Size = new System.Drawing.Size(303, 23);
-			this.checkDocumentedMeds.TabIndex = 71;
-			this.checkDocumentedMeds.Tag = "";
-			this.checkDocumentedMeds.Text = "All current medications have been documented";
-			this.checkDocumentedMeds.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkDocumentedMeds.UseVisualStyleBackColor = true;
+			this.groupMedsDocumented.Controls.Add(this.radioMedsDocumentedNo);
+			this.groupMedsDocumented.Controls.Add(this.radioMedsDocumentedYes);
+			this.groupMedsDocumented.Location = new System.Drawing.Point(800, 248);
+			this.groupMedsDocumented.Name = "groupMedsDocumented";
+			this.groupMedsDocumented.Size = new System.Drawing.Size(159, 43);
+			this.groupMedsDocumented.TabIndex = 72;
+			this.groupMedsDocumented.TabStop = false;
+			this.groupMedsDocumented.Text = "Current Meds Documented";
+			// 
+			// radioMedsDocumentedYes
+			// 
+			this.radioMedsDocumentedYes.Location = new System.Drawing.Point(23, 19);
+			this.radioMedsDocumentedYes.Name = "radioMedsDocumentedYes";
+			this.radioMedsDocumentedYes.Size = new System.Drawing.Size(66, 17);
+			this.radioMedsDocumentedYes.TabIndex = 0;
+			this.radioMedsDocumentedYes.TabStop = true;
+			this.radioMedsDocumentedYes.Text = "Yes";
+			this.radioMedsDocumentedYes.UseVisualStyleBackColor = true;
+			// 
+			// radioMedsDocumentedNo
+			// 
+			this.radioMedsDocumentedNo.Location = new System.Drawing.Point(93, 19);
+			this.radioMedsDocumentedNo.Name = "radioMedsDocumentedNo";
+			this.radioMedsDocumentedNo.Size = new System.Drawing.Size(60, 17);
+			this.radioMedsDocumentedNo.TabIndex = 1;
+			this.radioMedsDocumentedNo.TabStop = true;
+			this.radioMedsDocumentedNo.Text = "No";
+			this.radioMedsDocumentedNo.UseVisualStyleBackColor = true;
 			// 
 			// FormMedical
 			// 
@@ -464,7 +489,7 @@ namespace OpenDental{
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(964, 683);
-			this.Controls.Add(this.checkDocumentedMeds);
+			this.Controls.Add(this.groupMedsDocumented);
 			this.Controls.Add(this.butAddFamilyHistory);
 			this.Controls.Add(this.gridFamilyHealth);
 			this.Controls.Add(this.label1);
@@ -498,6 +523,7 @@ namespace OpenDental{
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Medical";
 			this.Load += new System.EventHandler(this.FormMedical_Load);
+			this.groupMedsDocumented.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -518,8 +544,20 @@ namespace OpenDental{
 			_EhrMeasureEventNum=0;
 			for(int i=0;i<listDocumentedMedEvents.Count;i++) {
 				if(listDocumentedMedEvents[i].DateTEvent.Date==DateTime.Today) {
-					checkDocumentedMeds.Checked=true;
+					radioMedsDocumentedYes.Checked=true;
 					_EhrMeasureEventNum=listDocumentedMedEvents[i].EhrMeasureEventNum;
+					break;
+				}
+			}
+			_EhrNotPerfNum=0;
+			List<EhrNotPerformed> listNotPerfs=EhrNotPerformeds.Refresh(PatCur.PatNum);
+			for(int i=0;i<listNotPerfs.Count;i++) {
+				if(listNotPerfs[i].CodeValue!="428191000124101") {//this is the only allowed code for Current Meds Documented procedure
+					continue;
+				}
+				if(listNotPerfs[i].DateEntry.Date==DateTime.Today) {
+					radioMedsDocumentedNo.Checked=!radioMedsDocumentedYes.Checked;//only check the No radio button if the Yes radio button is not already set
+					_EhrNotPerfNum=listNotPerfs[i].EhrNotPerformedNum;
 					break;
 				}
 			}
@@ -1051,8 +1089,8 @@ namespace OpenDental{
 			PatientNoteCur.Service=textService.Text;
 			PatientNoteCur.MedicalComp=textMedicalComp.Text;
 			PatientNotes.Update(PatientNoteCur, PatCur.Guarantor);
-			//Insert an ehrmeasureevent for CurrentMedsDocumented is checkDocumentedMeds is checked and there isn't one for today's date
-			if(checkDocumentedMeds.Checked && _EhrMeasureEventNum==0) {
+			//Insert an ehrmeasureevent for CurrentMedsDocumented if user selected Yes and there isn't one with today's date
+			if(radioMedsDocumentedYes.Checked && _EhrMeasureEventNum==0) {
 				EhrMeasureEvent ehrMeasureEventCur=new EhrMeasureEvent();
 				ehrMeasureEventCur.PatNum=PatCur.PatNum;
 				ehrMeasureEventCur.DateTEvent=DateTime.Now;
@@ -1061,9 +1099,25 @@ namespace OpenDental{
 				ehrMeasureEventCur.CodeSystemEvent="SNOMEDCT";
 				EhrMeasureEvents.Insert(ehrMeasureEventCur);
 			}
-			//if unchecked and there is one with today's date, delete it.  Safe since it is only used for reporting and not linked to anything. 
-			else if(!checkDocumentedMeds.Checked && _EhrMeasureEventNum>0) {
-				EhrMeasureEvents.Delete(_EhrMeasureEventNum);
+			//No is selected, if no EhrNotPerformed item for current meds documented, launch not performed edit window to allow user to select valid reason.
+			if(radioMedsDocumentedNo.Checked) {
+				if(_EhrNotPerfNum==0) {
+					FormEhrNotPerformedEdit FormNP=new FormEhrNotPerformedEdit();
+					FormNP.EhrNotPerfCur=new EhrNotPerformed();
+					FormNP.EhrNotPerfCur.IsNew=true;
+					FormNP.EhrNotPerfCur.PatNum=PatCur.PatNum;
+					FormNP.EhrNotPerfCur.ProvNum=PatCur.PriProv;
+					FormNP.SelectedItemIndex=(int)EhrNotPerformedItem.DocumentCurrentMeds;
+					FormNP.EhrNotPerfCur.DateEntry=DateTime.Today;
+					FormNP.IsDateReadOnly=true;
+					FormNP.ShowDialog();
+					if(FormNP.DialogResult==DialogResult.OK) {//if they just inserted a not performed item, set the private class-wide variable for the next if statement
+						_EhrNotPerfNum=FormNP.EhrNotPerfCur.EhrNotPerformedNum;
+					}
+				}
+				if(_EhrNotPerfNum>0 && _EhrMeasureEventNum>0) {//if not performed item is entered with today's date, delete existing performed item
+					EhrMeasureEvents.Delete(_EhrMeasureEventNum);
+				}
 			}
 			DialogResult=DialogResult.OK;
 		}
