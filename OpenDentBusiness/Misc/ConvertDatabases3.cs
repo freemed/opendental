@@ -916,7 +916,15 @@ namespace OpenDentBusiness {
 					Db.NonQ(command);
 				}
 				else {//oracle
-					command="ALTER TABLE emailmessage MODIFY (BodyText clob NOT NULL)";
+					//Changing a column's datatype from VARCHAR2 to clob yields the following error in oracle:  ORA-22858: invalid alteration of datatype
+					//The easiest way to get change the datatype from VARCHAR2 to clob is to create a temp column then rename it.
+					command="ALTER TABLE emailmessage ADD (BodyTextClob clob NOT NULL)";
+					Db.NonQ(command);
+					command="UPDATE emailmessage SET BodyTextClob=BodyText";
+					Db.NonQ(command);
+					command="ALTER TABLE emailmessage DROP COLUMN BodyText";
+					Db.NonQ(command);
+					command="ALTER TABLE emailmessage RENAME COLUMN BodyTextClob TO BodyText";
 					Db.NonQ(command);
 				}
 				//Electronic Dental Services (EDS) clearinghouse.
@@ -1013,7 +1021,7 @@ namespace OpenDentBusiness {
 						CONSTRAINT cdcrec_CdcrecNum PRIMARY KEY (CdcrecNum)
 						)";
 					Db.NonQ(command);
-					command=@"CREATE INDEX administrativesex_CodeValue ON intervention (CodeValue)";
+					command=@"CREATE INDEX cdcrec_CdcrecCode ON cdcrec (CdcrecCode)";
 					Db.NonQ(command);
 				}
 				//CDT ----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1466,7 +1474,7 @@ namespace OpenDentBusiness {
 					Db.NonQ(command);
 					command="ALTER TABLE patientrace MODIFY CdcrecCode NOT NULL";
 					Db.NonQ(command);
-					command=@"CREATE INDEX patientrace_CdcrecCode ON intervention (CdcrecCode)";
+					command=@"CREATE INDEX patientrace_CdcrecCode ON patientrace (CdcrecCode)";
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
@@ -1677,9 +1685,9 @@ namespace OpenDentBusiness {
 					Db.NonQ(command);
 					command=@"CREATE INDEX ehrnotperformed_ProvNum ON ehrnotperformed (ProvNum)";
 					Db.NonQ(command);
-					command=@"CREATE INDEX ehrnotperformed_CodeValueReason ON ehrnotperformed (CodeValueReason)";
+					command=@"CREATE INDEX ehrnotperformed_CodeValue ON ehrnotperformed (CodeValue)";
 					Db.NonQ(command);
-					command=@"CREATE INDEX ehrnotperformed_CodeValueReason ON ehrnotperformed (CodeValueReason)";
+					command=@"CREATE INDEX ehrnotperformed_CodeValueReaso ON ehrnotperformed (CodeValueReason)";
 					Db.NonQ(command);
 				}
 				//encounter
@@ -1937,7 +1945,7 @@ namespace OpenDentBusiness {
 					Db.NonQ(command);
 				}
 				else {//oracle
-					command="ALTER TABLE allergydef CHANGE Snomed SnomedType int";
+					command="ALTER TABLE allergydef RENAME COLUMN Snomed TO SnomedType";
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
@@ -2051,7 +2059,7 @@ namespace OpenDentBusiness {
 					Db.NonQ(command);
 					command=@"CREATE TABLE emailmessageuid (
 						EmailMessageUidNum number(20) NOT NULL,
-						Uid varchar2(4000),
+						""Uid"" varchar2(4000),
 						RecipientAddress varchar2(255),
 						CONSTRAINT emailmessageuid_EmailMessageUi PRIMARY KEY (EmailMessageUidNum)
 						)";
@@ -2088,6 +2096,7 @@ namespace OpenDentBusiness {
 			To13_3_6();
 		}
 
+		///<summary>Oracle compatible: 12/26/2013</summary>
 		private static void To13_3_6() {
 			if(FromVersion<new Version("13.3.6.0")) {
 				string command;

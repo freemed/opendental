@@ -139,7 +139,8 @@ namespace xCrudGenerator {
 				strb.Append(rn+tb+t1+"command=\"ALTER TABLE "+tableName+" MODIFY "+col.ColumnName+" NOT NULL\";");
 				strb.Append(rn+tb+t1+"Db.NonQ(command);");
 				if(col.DataType==OdDbType.Long) {//key or foreign key
-					strb.Append(rn+tb+t1+"command=@\"CREATE INDEX "+tableName+"_"+col.ColumnName+" ON "+tableName+" ("+col.ColumnName+")\";");
+					string indexName=tableName+"_"+col.ColumnName;
+					strb.Append(rn+tb+t1+"command=@\"CREATE INDEX "+indexName.Substring(0,Math.Min(30,indexName.Length))+" ON "+tableName+" ("+col.ColumnName+")\";");
 					strb.Append(rn+tb+t1+"Db.NonQ(command);");
 				}
 			}
@@ -177,7 +178,8 @@ namespace xCrudGenerator {
 			strb.Append(rn+tb+t1+"Db.NonQ(command);");
 			strb.Append(rn+tb+"}");
 			strb.Append(rn+tb+"else {//oracle");
-			strb.Append(rn+tb+t1+"command=\"CREATE INDEX "+tableName+"_"+colName+" ON "+tableName+" ("+colName+")\";");
+			string indexName=tableName+"_"+colName;
+			strb.Append(rn+tb+t1+"command=\"CREATE INDEX "+indexName.Substring(0,Math.Min(30,indexName.Length))+" ON "+tableName+" ("+colName+")\";");
 			strb.Append(rn+tb+t1+"Db.NonQ(command);");
 			strb.Append(rn+tb+"}");
 			return strb.ToString();
