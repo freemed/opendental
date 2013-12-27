@@ -227,10 +227,6 @@ namespace OpenDentBusiness.HL7 {
 			_seg.SetField(0,"ORC");
 			_seg.SetField(1,"RE");//ORC-1 Order Control.  Required (length 2).  Cardinality [1..1].  Value set HL70119.  The only allowed value is "RE".
 			//ORC-2 Placer Order Number.  Required if known.  Cardinality [0..1].  Type EI (guid page 62).
-			//ORC-2.1 Entity Identifier.  Required (length 1..199). 
-			//ORC-2.2 Namespace ID.  Required if ORC-2.3 is blank (length 1..20).  Value set HL70363 (guide page 229, 3 letter abbreviation for US state, US city, or US territory).
-			//ORC-2.3 Universal ID.  Required if ORC-2.1 is blank (length 1..199).
-			//ORC-2.4 Universal ID Type.  Required if ORC-2.3 is not blank (length 6..6).  Value set HL70301 (guide page 224).
 			//ORC-3 Filler Order Number.  Required.  Cardinality [0..1].  Type EI (guid page 62).  "Shall be the unique ID of the sending system."  The city and state are used to record the region where the vaccine record is filed.
 			string fillerOrderCity=PrefC.GetString(PrefName.PracticeCity);
 			string fillerOrderState=PrefC.GetString(PrefName.PracticeST);
@@ -240,33 +236,60 @@ namespace OpenDentBusiness.HL7 {
 				fillerOrderState=clinic.State;
 			}
 			WriteEI(3,vaccine.VaccinePatNum.ToString(),fillerOrderCity,fillerOrderState);
-			//ORC-3.5 Order Status.  Optional.
-			//ORD-3.6 Response Flag.  Optional.
-			//ORD-3.7 Quantity/Timing.  No longer used.
-			//ORD-3.8 Parent.  Optional.
-			//ORD-3.9 Date/Time of Transaction.  Optional.
-			//ORD-3.10 Entered By.  Required if known.  Cardinality [0..1].  This is the person that entered the immunization record into the system.
-			//ORD-3.11 Verified By.  Optional.
-			//ORD-3.12 Ordering Provider.  Required if known. Cardinality [0..1].  This shall be the provider ordering the immunization.  It is expected to be empty if the immunization record is transcribed from a historical record.
-			//ORD-3.13 Enterer's Location.  Optional.
-			//ORD-3.14 Call Back Phone Number.  Optional.
-			//ORD-3.15 Order Effective Date/Time.  Optional.
-			//ORD-3.16 Order Control Code Reason.  Optional.
-			//ORD-3.17 Entering Organization.  Optional.
-			//ORD-3.18 Entering Device.  Optional.
-			//ORD-3.19 Action By.  Optional.
-			//ORD-3.20 Advanced Beneficiary Notice Code.  Optional.
-			//ORD-3.21 Ordering Facility Name.  Optional.
-			//ORD-3.22 Ordering Facility Address.  Optional.
-			//ORD-3.23 Ordering Facility.  Optional.
-			//ORD-3.24 Order Provider Address.  Optional.
-			//ORD-3.25 Order Status Modifier.  Optional.
-			//ORD-3.26 Advanced Beneficiary Notice Override Reason.  Optional.
-			//ORD-3.27 Filler's Expected Availability Date/Time.  Optional.
-			//ORD-3.28 Confidentiality Code.  Optional.
-			//ORD-3.29 Order Type.  Optional.
-			//ORD-3.30 Enterer Authorization Mode.  Optional.
-			//ORD-3.31 Parent Universal Service Modifier.  Optional.
+			//ORC-4 Placer Group Number.  Optional.
+			//ORC-5 Order Status.  Optional.
+			//ORD-6 Response Flag.  Optional.
+			//ORD-7 Quantity/Timing.  No longer used.
+			//ORD-8 Parent.  Optional.
+			//ORD-9 Date/Time of Transaction.  Optional.
+			//ORD-10 Entered By.  Required if known.  Cardinality [0..1].  Type XCN.  This is the person that entered the immunization record into the system.  TODO: We need UI for user entered by (maintain city/state logic).
+			string cityWhereEntered=PrefC.GetString(PrefName.PracticeCity);
+			string stateWhereEntered=PrefC.GetString(PrefName.PracticeST);
+			if(_pat.ClinicNum!=0) {
+				Clinic clinic=Clinics.GetClinic(_pat.ClinicNum);
+				cityWhereEntered=clinic.City;
+				stateWhereEntered=clinic.State;
+			}
+			string fName="";
+			string lName="";
+			string middleI="";
+			if(Security.CurUser.EmployeeNum!=0) {
+				Employee employee=Employees.GetEmp(Security.CurUser.EmployeeNum);
+				fName=employee.FName;
+				lName=employee.LName;
+				middleI=employee.MiddleI;
+			}
+			WriteXCN(10,fName,lName,middleI,Security.CurUser.UserNum.ToString(),cityWhereEntered,stateWhereEntered);
+			//ORD-11 Verified By.  Optional.
+			//ORD-12 Ordering Provider.  Required if known. Cardinality [0..1].  Type XCN.  This shall be the provider ordering the immunization.  It is expected to be empty if the immunization record is transcribed from a historical record.
+			//TODO: We need provider picker UI for ordering provider.
+			long provNumOrdering=Security.CurUser.ProvNum;
+			if(provNumOrdering==0) {
+				provNumOrdering=_pat.PriProv;
+			}
+			if(provNumOrdering!=0) {
+				Provider provOrdering=Providers.GetProv(provNumOrdering);
+				WriteXCN(12,provOrdering.FName,provOrdering.LName,provOrdering.MI,provNumOrdering.ToString(),cityWhereEntered,stateWhereEntered);
+			}
+			//ORD-13 Enterer's Location.  Optional.
+			//ORD-14 Call Back Phone Number.  Optional.
+			//ORD-15 Order Effective Date/Time.  Optional.
+			//ORD-16 Order Control Code Reason.  Optional.
+			//ORD-17 Entering Organization.  Optional.
+			//ORD-18 Entering Device.  Optional.
+			//ORD-19 Action By.  Optional.
+			//ORD-20 Advanced Beneficiary Notice Code.  Optional.
+			//ORD-21 Ordering Facility Name.  Optional.
+			//ORD-22 Ordering Facility Address.  Optional.
+			//ORD-23 Ordering Facility.  Optional.
+			//ORD-24 Order Provider Address.  Optional.
+			//ORD-25 Order Status Modifier.  Optional.
+			//ORD-26 Advanced Beneficiary Notice Override Reason.  Optional.
+			//ORD-27 Filler's Expected Availability Date/Time.  Optional.
+			//ORD-28 Confidentiality Code.  Optional.
+			//ORD-29 Order Type.  Optional.
+			//ORD-30 Enterer Authorization Mode.  Optional.
+			//ORD-31 Parent Universal Service Modifier.  Optional.
 			_msg.Segments.Add(_seg);
 		}
 
@@ -457,34 +480,31 @@ namespace OpenDentBusiness.HL7 {
 			_seg.SetField(2,"1");//RXA-2 Administration Sub-ID Counter.  Required.  Must be "1".
 			_seg.SetField(3,vaccine.DateTimeStart.ToString("yyyyMMddHHmm"));//RXA-3 Date/Time Start of Administration.  Required.  This segment can also be used to planned vaccinations.
 			_seg.SetField(4,vaccine.DateTimeEnd.ToString("yyyyMMddHHmm"));//RXA-4 Date/Time End of Administration.  Required if known.  Must be same as RXA-3 or blank.  UI forces RXA-4 and RXA-3 to be equal.  This would be blank if for a planned vaccine.
-			_seg.SetField(5,//RXA-5 Administered Code.  Required.  Cardinality [1..1].  Type CE (guide page 53).  Must be a CVX code.
-				vaccineDef.CVXCode,//RXA-5.1 Identifier.  Required (length 1..50).
-				vaccineDef.VaccineName,//RXA-5.2 Text.  Required if known (length 1..999).
-				"CVX"//RXA-5.3 Name of Coding System.  Required (length 1..20).  Value set HL70396 (guide page 231).
-				//RXA-5.4 Alternate Identifier.  Required if known (length 1..50).
-				//RXA-5.5 Alternate Text.  Required if known (length 1..999).
-				//RXA-5.6 Name of Alternate Coding System (1..20).  Required if RXA-5.4 is not blank.  Value set HL70396 (guide page 231).
-				);
+			//RXA-5 Administered Code.  Required.  Cardinality [1..1].  Type CE (guide page 53).  Must be a CVX code.
+			WriteCE(5,vaccineDef.CVXCode,vaccineDef.VaccineName,"CVX");
 			//RXA-6 Administered Amount.  Required (length 1..20).  If amount is not known or not meaningful, then use "999".
-			if(vaccine.AdministeredAmt==0){
+			if(vaccine.AdministeredAmt>0){
 				_seg.SetField(6,"999");//Registries that do not collect administered amount should record the value as "999".
 			}
 			else{
 				_seg.SetField(6,vaccine.AdministeredAmt.ToString());
 			}
-			//RXA-7 Administered Units.  Required if RXA-6 is not "999".  Cadinality [0..1].  Type CE (guide page 53).  Value set HL70396 (guide page 231).  Must be UCUM.
-			if(vaccine.AdministeredAmt==0 && vaccine.DrugUnitNum!=0) {
+			//RXA-7 Administered Units.  Required if RXA-6 is not "999".  Cadinality [0..1].  Type CE (guide page 53).  Value set HL70396 (guide page 231).  Must be UCUM coding.
+			if(vaccine.AdministeredAmt>0 && vaccine.DrugUnitNum!=0) {
 				DrugUnit drugUnit=DrugUnits.GetOne(vaccine.DrugUnitNum);
-				_seg.SetField(7,drugUnit.UnitIdentifier,drugUnit.UnitText,"ISO+");//TODO: This seems wrong.  Is this UCUM?  I don't see this option or UCUM in table HL70396.
+				WriteCE(7,drugUnit.UnitIdentifier,drugUnit.UnitText,"UCUM");//UCUM is not in table HL70396, but it there was a note stating that it was required in the guide and this value was required in the test cases.
 			}
 			//RXA-8 Administered Dosage Form.  Optional.
-			//RXA-9 Administration Notes.  Required if RXA-20 is "CP" or "PA".
-			//RXA-10 Administering Provider.  Required if known.  This is the person who gave the administration or the vaccinator.  It is not the ordering clinician.
+			//RXA-9 Administration Notes.  Required if RXA-20 is "CP" or "PA".  Value set NIP 0001.  Type CE.  TODO: We need a UI for Admininstration Note, and the code system NIP 0001 needs to be built in.
+			WriteCE(9,"","","");
+			//RXA-10 Administering Provider.  Required if known.  This is the person who gave the administration or the vaccinaton.  It is not the ordering clinician.  TODO: We need a provider picker UI for the administering provider.
 			//RXA-11 Administered-at Location.  Required if known.  This is the clinic/site where the vaccine was administered.
 			//RXA-12 Administered Per (Time Unit).  Optional.
 			//RXA-13 Administered Strength.  Optional.
-			//RXA-14 Administered Strength Units.  Optional.
-			//_seg.SetField(15,vaccine.LotNumber);//RXA-15 Substance Lot Number.  Required if RXA-9.1 is "00".
+			//RXA-14 Administered Strength Units.  Required if RXA-9.1 is "00".
+			if(vaccine.LotNumber!="") {
+				_seg.SetField(15,vaccine.LotNumber);//RXA-15 Substance Lot Number.
+			}
 			//RXA-16 Substance Expiration Date.  Required if RXA-15 is not blank.
 			//RXA-17 Substance Manufacturer Name.  Requred if RXA-9.1 is "00".  Cardinality [0..*].  Value set MVX.
 			//if(vaccineDef.DrugManufacturerNum!=0) {
@@ -493,7 +513,7 @@ namespace OpenDentBusiness.HL7 {
 			//}
 			//RXA-18 Substance/Treatment Refusal Reason.  Required if RXA-20 is "RE".  Cardinality [0..*].  Only allowed to be "RE" or blank.
 			//RXA-19 Indication.  Optional.
-			//RXA-20 Completion Status.  Required if known (length 2..2).  Value set HL70322 (guide page 225).  CP=complete, RE=Refused, NA=Not Administered, PA=Partially Administered.			
+			//RXA-20 Completion Status.  Required if known (length 2..2).  Value set HL70322 (guide page 225).  CP=Complete, RE=Refused, NA=Not Administered, PA=Partially Administered.  TODO: We need UI for completion status.
 			//_seg.SetField(21,"A");//RXA-21 Action code.  Required if known (length 2..2).  Value set HL70323 (guide page 225).  A=Add, D=Delete, U=Update.
 			//RXA-22 System Entry Date/Time.  Optional.
 			//RXA-23 Administered Drug Strength.  Optional.
@@ -543,93 +563,42 @@ namespace OpenDentBusiness.HL7 {
 
 		///<summary>Type EI (guid page 62).  Writes an Entity Identifier (order number) into the fieldIndex field of the current segment.</summary>
 		private void WriteEI(int fieldIndex,string identifier,string city,string state) {
-			string namespaceId="";//A value from Value set HL70363 (guide page 229, 3 letter abbreviation for US state, US city, or US territory).
-			//TODO: fill namespaceId using city and state.
-			//List<string> stateCodes=new List<string>(new string[] {
-			//	//50 States.
-			//	"AK","AL","AR","AZ","CA","CO","CT","DE","FL","GA",
-			//	"HI","IA","ID","IL","IN","KS","KY","LA","MA","MD",
-			//	"ME","MI","MN","MO","MS","MT","NC","ND","NE","NH",
-			//	"NJ","NM","NV","NY","OH","OK","OR","PA","RI","SC",
-			//	"SD","TN","TX","UT","VA","VT","WA","WI","WV","WY",
-			//	//US Districts
-			//	"DC",
-			//	//US territories. Reference http://www.itl.nist.gov/fipspubs/fip5-2.htm
-			//	"AS","FM","GU","MH","MP","PW","PR","UM","VI",
-			//});
-
-			//From table HL70363 (guide page 229), also known as Assigning Authority:
-			//AKA			ALASKA
-			//ALA			ALABAMA
-			//ARA			ARKANSAS
-			//ASA			AMERICAN SAMOA
-			//AZA			ARIZONA
-			//BAA			NEW YORK CITY
-			//CAA			CALIFORNIA
-			//CHA			CHICAGO
-			//COA			COLORADO
-			//CTA			CONNECTICUT
-			//DCA			DISTRICT OF COLUMBIA
-			//DEA			DELAWARE
-			//FLA			FLORIDA
-			//FMA			FED STATES MICRO
-			//GAA			GEORGIA
-			//GUA			GUAM
-			//HIA			HAWAII
-			//IAA			IOWA
-			//IDA			IDAHO
-			//ILA			ILLINOIS
-			//INA			INDIANA
-			//KSA			KANSAS
-			//KYA			KENTUCKY
-			//LAA			LOUISIANA
-			//MAA			MASSACHUSETTS
-			//MDA			MARYLAND
-			//MEA			MAINE
-			//MHA			REP MARS ISLANDS
-			//MIA			MICHIGAN
-			//MNA			MINNESOTA
-			//MOA			MISSOURI
-			//MPA			NO. MARIANA ISLAND
-			//MSA			MISSISSIPPI
-			//MTA			MONTANA
-			//NCA			NORTH CAROLINA
-			//NDA			NORTH DAKOTA
-			//NEA			NEBRASKA
-			//NHA			NEW HAMPSHIRE
-			//NJA			NEW JERSEY
-			//NMA			NEW MEXICO
-			//NVA			NEVADA
-			//NYA			NEW YORK STATE
-			//OHA			OHIO
-			//OKA			OKLAHOMA
-			//ORA			OREGON
-			//PAA			PENNSYLVANIA
-			//PHA			PHILADELPHIA
-			//PRA			PUERTO RICO
-			//RIA			RHODE ISLAND
-			//RPA			REPUBLIC PALAU
-			//SCA			SOUTH CAROLINA
-			//SDA			SOUTH DAKOTA
-			//TBA			SAN ANTONIO
-			//THA			HOUSTON
-			//TNA			TENNESSEE
-			//TXA			TEXAS
-			//UTA			UTAH
-			//VAA			VIRGINIA
-			//VIA			VIRGIN ISLANDS
-			//VTA			VERMONT
-			//WAA			WASHINGTON
-			//WIA			WISCONSIN
-			//WVA			WEST VIRGINIA
-			//WYA			WYOMING
-
-
 			_seg.SetField(fieldIndex,
 				identifier,//EI.1 Entity Identifier.  Required (length 1..199).
-				namespaceId,//EI.2 Namespace ID.  Required if EI.3 is blank (length 1..20).  Value set HL70363 (guide page 229, 3 letter abbreviation for US state, US city, or US territory).
+				GetAssigningAuthority(city,state),//EI.2 Namespace ID.  Required if EI.3 is blank (length 1..20).  Value set HL70363 (guide page 229, 3 letter abbreviation for US state, US city, or US territory).
 				"",//EI.3 Universal ID.  Required if EI.1 is blank (length 1..199).
 				"");//EI.4 Universal ID Type.  Required if EI.3 is not blank (length 6..6).  Value set HL70301 (guide page 224).  Must be "ISO" or blank.
+		}
+
+		///<summary>Corresponds to table HL70363 (guide page 229).</summary>
+		private string GetAssigningAuthority(string city,string state) {
+			if(city.Length!=2) {
+				return "";
+			}
+			//TODO: Validate state code somewhere before the export begins.  Same state codes as for NewCrop, except excludes "UM" (U.S. Minor Outlying Islands).
+			string code="";//A value from Value set HL70363 (guide page 229, 3 letter abbreviation for US state, US city, or US territory).
+			string st=state.ToUpper();
+			string c=city.ToUpper().Replace(" ","");
+			code=st+"A";//Most of the codes are just the state code followed by an 'A'.  This includes American territories and districts. http://www.itl.nist.gov/fipspubs/fip5-2.htm
+			if(st=="IL" && c=="CHICAGO") { //CHICAGO ILLINOIS
+				code="CHA";//CHICAGO has thier own code.
+			}
+			else if(st=="NY" && c=="NEWYORK") { //NEW YORK NEW YORK
+				code="BAA";//NEW YORK CITY has their own code.
+			}
+			else if(st=="PA" && c=="PHILADELPHIA") { //PHILADELPHIA PENNSYLVANIA
+				code="PHA";//Philadelphia has their own code.
+			}
+			else if(st=="PW") { //REPUBLIC PALAU (American territory)
+				code="RPA";//This code is one that does not match the pattern for the rest of the codes.
+			}
+			else if(st=="TX" && c=="SANANTONIO") { //SAN ANTONIO TEXAS
+				code="TBA";//SAN ANTONIO has their own code.
+			}
+			else if(st=="TX" && c=="HOUSTON") { //HOUSTON TEXAS
+				code="THA";//HOUSTON has their own code.
+			}
+			return code;
 		}
 
 		///<summary>Type IS (guide page 68).  Writes a string corresponding to table HL70001 (guide page 193) into the fieldIndex field for the current segment.</summary>
@@ -662,6 +631,51 @@ namespace OpenDentBusiness.HL7 {
 				//XAD.13 Effective Date.  Optional.
 				//XAD.14 Expiration Date.  Optional.
 			);
+		}
+
+		///<summary>Type XCN (guide page 77).  Writes user name and id into the fieldIndex field for the current segment.
+		///Either the fName and lName must be specified, or id and city and state must be specified. All fields may be specified.</summary>
+		private void WriteXCN(int fieldIndex,string fName,string lName,string middleI,string id,string city,string state) {
+			bool hasName=false;
+			if(fName!="" && lName!="") {
+				hasName=true;
+			}
+			bool hasId=false;
+			string idModified="";
+			string assigningAuthority="";
+			if(id!="" && city!="" && state!="") {//All 3 fields must be present, or none of them should be sent.
+				hasId=true;
+				idModified=id;
+				assigningAuthority=GetAssigningAuthority(city,state);
+			}
+			if(!hasName && !hasId) {
+				return;//Nothing valid to write.
+			}
+			_seg.SetField(fieldIndex,
+				idModified,//XCN.1 ID Number.  Required if XCN.2 and XCN.3 are blank.
+				lName,//XCN.2 Family Name.  Required if known.
+				fName,//XCN.3 Given Name.  Required if known (length 1..30).
+				middleI,//XCN.4 Second and Further Given Names or Initials Thereof.  Required if known (length 1..30).
+				//XCN.5 Suffix.  Optional.
+				//XCN.6 Prefix.  Optional.
+				//XCN.7 Degree.  No longer used.
+				//XCN.8 Source Table.  Optional.
+				assigningAuthority,//XCN.9 Assigning Authority.  Required if XCN.1 is not blank.  Value set HL70363 (guide page 229).
+				"L"//XCN.10 Name Type Code.  Required if known (length 1..1).  Value set HL70200 (guide page 203).  A=Alias name,L=Legal name,D=Display name,M=Maiden name,C=Adopted name,B=Name at birth,P=Name of partner/spouse,U=Unspecified.
+				//XCN.11 Identifier Check Digit.  Optional.
+				//XCN.12 Check Digit Scheme.  Required if XCN.11 is not blank.
+				//XCN.13 Identifier Type Code.  Optional.
+				//XCN.14 Assigning Facility.  Optional.
+				//XCN.15 Name Representation Code.  Optional.
+				//XCN.16 Name Context.  Optional.
+				//XCN.17 Name Validity Range.  No longer used.
+				//XCN.18 Name Assembly Order.  No longer used.
+				//XCN.19 Effective Date.  Optional.
+				//XCN.20 Expiration Date.  Optional.
+				//XCN.21 Professional Suffix.  Optional.
+				//XCN.22 Assigning Jurisdiction.  Optional.
+				//XCN.23 Assinging Agency or Department.  Optional.
+				);
 		}
 
 		///<summary>Type XTN (guide page 84).  Writes a phone number into the fieldIndex field for the current segment.
