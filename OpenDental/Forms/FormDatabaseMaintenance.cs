@@ -842,7 +842,7 @@ namespace OpenDental {
 		}
 
 		private void butSpecChar_Click(object sender,EventArgs e) {
-			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"This is only used if your mobile synch is failing.  This cannot be undone.  Do you wish to continue?")) {
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"This is only used if your mobile synch or middle tier is failing.  This cannot be undone.  Do you wish to continue?")) {
 				return;
 			}
 			InputBox box=new InputBox("In our online manual, on the database maintenance page, look for the password and enter it below.");
@@ -853,8 +853,14 @@ namespace OpenDental {
 				MessageBox.Show("Wrong password.");
 				return;
 			}
+			StringBuilder strB=new StringBuilder();
+			strB.Append('-',65);
+			textLog.Text=DateTime.Now.ToString()+strB.ToString()+"\r\n";
+			Application.DoEvents();
 			DatabaseMaintenance.FixSpecialCharacters();
-			MsgBox.Show(this,"Special Characters have been removed from Appointment Notes, Appointment Procedure Descriptions, Patient Address Notes, and Patient Family Financial Urgent Notes.  Mobile synch should now function properly.");
+			textLog.Text+=Lan.g("FormDatabaseMaintenance","Done");
+			Application.DoEvents();
+			MsgBox.Show(this,"Special Characters have been removed from Appointment Notes, Appointment Procedure Descriptions, Patient Address Notes, and Patient Family Financial Urgent Notes.  Invalid null characters have been removed from Adjustment Notes, Payment Notes, and Definition Names.");
 		}
 
 		private void butRemoveNulls_Click(object sender,EventArgs e) {

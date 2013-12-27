@@ -228,70 +228,73 @@ namespace OpenDentBusiness {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
-			if(isCheck) {
-				command="SELECT * FROM appointment WHERE (ProcDescript REGEXP '[^[:alnum:]^[:space:]^[:punct:]]+') OR (Note REGEXP '[^[:alnum:]^[:space:]^[:punct:]]+')";
-				List<Appointment> apts=Crud.AppointmentCrud.SelectMany(command);
-				List<char> specialCharsFound=new List<char>();
-				int specialCharCount=0;
-				int intC=0;
-				foreach(Appointment apt in apts) {
-					foreach(char c in apt.Note) {
-						intC=(int)c;
-						if((intC<126&&intC>31)//31 - 126 are all safe.
-							||intC==9			//"Horizontal Tabulation"
-							||intC==10		//Line Feed
-							||intC==13) {	//carriage return
-							continue;
-						}
-						specialCharCount++;
-						if(specialCharsFound.Contains(c)) {
-							continue;
-						}
-						specialCharsFound.Add(c);
+			//this will run for fix or check, but will only fix if the special char button is used 
+			//Fix code is in a dedicated button "Spec Char"
+			command="SELECT * FROM appointment WHERE (ProcDescript REGEXP '[^[:alnum:]^[:space:]^[:punct:]]+') OR (Note REGEXP '[^[:alnum:]^[:space:]^[:punct:]]+')";
+			List<Appointment> apts=Crud.AppointmentCrud.SelectMany(command);
+			List<char> specialCharsFound=new List<char>();
+			int specialCharCount=0;
+			int intC=0;
+			foreach(Appointment apt in apts) {
+				foreach(char c in apt.Note) {
+					intC=(int)c;
+					if((intC<126&&intC>31)//31 - 126 are all safe.
+						||intC==9			//"Horizontal Tabulation"
+						||intC==10		//Line Feed
+						||intC==13) {	//carriage return
+						continue;
 					}
-					foreach(char c in apt.ProcDescript) {//search every character in ProcDescript
-						intC=(int)c;
-						if((intC<126&&intC>31)//31 - 126 are all safe.
-							||intC==9			//"Horizontal Tabulation"
-							||intC==10		//Line Feed
-							||intC==13) {	//carriage return
-							continue;
-						}
-						specialCharCount++;
-						if(specialCharsFound.Contains(c)) {
-							continue;
-						}
-						specialCharsFound.Add(c);
+					specialCharCount++;
+					if(specialCharsFound.Contains(c)) {
+						continue;
 					}
+					specialCharsFound.Add(c);
 				}
-				command="SELECT * FROM patient WHERE AddrNote REGEXP '[^[:alnum:]^[:space:]]+'";
-				List<Patient> pats=OpenDentBusiness.Crud.PatientCrud.SelectMany(command);
-				intC=0;
-				foreach(Patient pat in pats) {
-					foreach(char c in pat.AddrNote) {
-						intC=(int)c;
-						if((intC<126 && intC>31)//31 - 126 are all safe.
-							|| intC==9			//"Horizontal Tabulation"
-							|| intC==10			//Line Feed
-							|| intC==13) {	//carriage return
-							continue;
-						}
-						specialCharCount++;
-						if(specialCharsFound.Contains(c)) {
-							continue;
-						}
-						specialCharsFound.Add(c);
+				foreach(char c in apt.ProcDescript) {//search every character in ProcDescript
+					intC=(int)c;
+					if((intC<126&&intC>31)//31 - 126 are all safe.
+						||intC==9			//"Horizontal Tabulation"
+						||intC==10		//Line Feed
+						||intC==13) {	//carriage return
+						continue;
 					}
-				}
-				foreach(char c in specialCharsFound) {
-					log+=c.ToString()+" doesn't work.\r\n";
-				}
-				if(specialCharCount!=0||verbose) {
-					log+=specialCharCount.ToString()+" "+Lans.g("FormDatabaseMaintenance","Total special characters found.  These will cause mobile synch to fail.  If your mobile synch is failing, use the Spec Char button below to fix.")+"\r\n";
+					specialCharCount++;
+					if(specialCharsFound.Contains(c)) {
+						continue;
+					}
+					specialCharsFound.Add(c);
 				}
 			}
-			else {
-				//Fix code is in a dedicated button "Spec Char"
+			command="SELECT * FROM patient WHERE AddrNote REGEXP '[^[:alnum:]^[:space:]]+'";
+			List<Patient> pats=OpenDentBusiness.Crud.PatientCrud.SelectMany(command);
+			intC=0;
+			foreach(Patient pat in pats) {
+				foreach(char c in pat.AddrNote) {
+					intC=(int)c;
+					if((intC<126 && intC>31)//31 - 126 are all safe.
+						|| intC==9			//"Horizontal Tabulation"
+						|| intC==10			//Line Feed
+						|| intC==13) {	//carriage return
+						continue;
+					}
+					specialCharCount++;
+					if(specialCharsFound.Contains(c)) {
+						continue;
+					}
+					specialCharsFound.Add(c);
+				}
+			}
+			foreach(char c in specialCharsFound) {
+				log+=c.ToString()+" doesn't work.\r\n";
+			}
+			command="SELECT COUNT(*) FROM adjustment WHERE AdjNote LIKE '%"+POut.String("\0")+"%'";
+			specialCharCount+=PIn.Int(Db.GetCount(command));
+			command="SELECT COUNT(*) FROM definition WHERE ItemName LIKE '%"+POut.String("\0")+"%'";
+			specialCharCount+=PIn.Int(Db.GetCount(command));
+			command="SELECT COUNT(*) FROM payment WHERE PayNote LIKE '%"+POut.String("\0")+"%'";
+			specialCharCount+=PIn.Int(Db.GetCount(command));
+			if(specialCharCount!=0||verbose) {
+				log+=specialCharCount.ToString()+" "+Lans.g("FormDatabaseMaintenance","total special characters found.  The Spec Char button below will remove these characters.")+"\r\n";
 			}
 			return log;
 		}
@@ -4318,7 +4321,7 @@ HAVING cnt>1";
 			return log;
 		}
 
-		///<summary>Removes unsupported unicode characters from appointment.ProcDescript, appointment.Note, and patient.AddrNote</summary>
+		///<summary>Removes unsupported unicode characters from appointment.ProcDescript, appointment.Note, and patient.AddrNote.  Also removes mysql null character ("\0" or CHAR(0)) from adjustment.AdjNote, payment.PayNote, and definition.ItemName.  These null characters were causing the middle tier deserialization to fail as they are not UTF-16 supported characters.  They are, however, allowed in UTF-8.</summary>
 		public static void FixSpecialCharacters() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod());
@@ -4392,6 +4395,12 @@ HAVING cnt>1";
 					Db.NonQ(command);
 				}
 			}
+			command="UPDATE adjustment SET AdjNote=REPLACE(AdjNote,CHAR(0),'') WHERE AdjNote LIKE '%"+POut.String("\0")+"%'";
+			Db.NonQ(command);
+			command="UPDATE payment SET PayNote=REPLACE(PayNote,CHAR(0),'') WHERE PayNote LIKE '%"+POut.String("\0")+"%'";
+			Db.NonQ(command);
+			command="UPDATE definition SET ItemName=REPLACE(ItemName,CHAR(0),'') WHERE ItemName LIKE '%"+POut.String("\0")+"%'";
+			Db.NonQ(command);
 			return;
 		}
 
