@@ -147,6 +147,26 @@ namespace OpenDentBusiness{
 			return retval;
 		}
 
+		///<summary>Returns a dictionary of CodeValue and CodeSystem pairs where the value set is in the supplied list.</summary>
+		public static Dictionary<string,string> GetCodeAndCodeSystem(List<string> listValueSetOIDs,bool usingIsInDb) {
+			Dictionary<string,string> retval=new Dictionary<string,string>();
+			for(int i=0;i<Listt.Count;i++) {
+				if(usingIsInDb && !Listt[i].IsInDb) {
+					continue;
+				}
+				for(int j=0;j<listValueSetOIDs.Count;j++) {
+					if(Listt[i].ValueSetOID!=listValueSetOIDs[j]) {
+						continue;
+					}
+					if(!retval.ContainsKey(Listt[i].CodeValue)) {
+						retval.Add(Listt[i].CodeValue,Listt[i].CodeSystem);
+					}
+					break;
+				}
+			}
+			return retval;
+		}
+
 		///<summary>Returns a dictionary of CodeValue,CodeSystem pairs of all codes that belong to every ValueSetOID sent in the incoming list as long as the code exists in the corresponding table in the database.</summary>
 		public static Dictionary<string,string> GetCodesExistingInAllSets(List<string> listValueSetOIDs) {
 			Dictionary<string,string> retval=new Dictionary<string,string>();
@@ -181,13 +201,16 @@ namespace OpenDentBusiness{
 		}
 
 		public static List<string> GetValueSetOIDsForCode(string codeValue,string codeSystem) {
-			string retval="";
+			List<string> retval=new List<string>();
 			for(int i=0;i<Listt.Count;i++) {
+				if(retval.Contains(Listt[i].ValueSetOID)) {
+					continue;
+				}
 				if(Listt[i].CodeValue==codeValue && Listt[i].CodeSystem==codeSystem) {
-					//if(retval.Contains(Listt[i].Me
+					retval.Add(Listt[i].ValueSetOID);
 				}
 			}
-			return null;
+			return retval;
 		}
 
 

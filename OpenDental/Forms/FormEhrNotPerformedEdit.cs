@@ -278,7 +278,7 @@ namespace OpenDental {
 			EhrNotPerfCur.CodeSystemReason=codeSysReas;
 			EhrNotPerfCur.Note=textNote.Text;
 			if(EhrNotPerfCur.IsNew) {
-				EhrNotPerformeds.Insert(EhrNotPerfCur);
+				EhrNotPerfCur.EhrNotPerformedNum=EhrNotPerformeds.Insert(EhrNotPerfCur);
 			}
 			else {
 				EhrNotPerformeds.Update(EhrNotPerfCur);

@@ -70,7 +70,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Returns an Sop description based on the given payor type info.</summary>
-		public static string GetRecentPayorTypeDescription(string sopCode) {
+		public static string GetDescriptionFromCode(string sopCode) {
 			string desc="";
 			for(int i=0;i<Listt.Count;i++) {
 				if(sopCode==Listt[i].SopCode) {

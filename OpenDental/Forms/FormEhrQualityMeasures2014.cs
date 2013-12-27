@@ -70,7 +70,7 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("Description",200);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Denom",50,HorizontalAlignment.Center);
+			col=new ODGridColumn("Denominator",75,HorizontalAlignment.Center);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("Numerator",65,HorizontalAlignment.Center);
 			gridMain.Columns.Add(col);
@@ -108,20 +108,9 @@ namespace OpenDental {
 
 		///<summary>Launches edit window for double clicked item.</summary>
 		private void gridMain_CellDoubleClick(object sender,OpenDental.UI.ODGridClickEventArgs e) {
-			try {
-				DateTime.Parse(textDateStart.Text);
-				DateTime.Parse(textDateEnd.Text);
-			}
-			catch {
-				MessageBox.Show("Please fix dates first.");
-				return;
-			}
-			FormEhrQualityMeasureEdit2014 formQe=new FormEhrQualityMeasureEdit2014();
-			formQe.DateStart=PIn.Date(textDateStart.Text);
-			formQe.DateEnd=PIn.Date(textDateEnd.Text);
-			formQe.ProvNum=listProvsKeyed[comboProv.SelectedIndex].ProvNum;
-			formQe.Qcur=listQ[e.Row];
-			formQe.ShowDialog();
+			FormEhrQualityMeasureEdit2014 FormQME=new FormEhrQualityMeasureEdit2014();
+			FormQME.MeasureCur=listQ[e.Row];
+			FormQME.ShowDialog();
 		}
 
 		private void butRefresh_Click(object sender,EventArgs e) {
@@ -168,7 +157,7 @@ namespace OpenDental {
 			}
 			Cursor=Cursors.WaitCursor;
 			try {
-				EmailMessages.SendTestUnsecure("QRDA","qrda.xml",GenerateQRDA_xml());
+				//EmailMessages.SendTestUnsecure("QRDA","qrda.xml",GenerateQRDA_xml());
 			}
 			catch(Exception ex) {
 				Cursor=Cursors.Default;

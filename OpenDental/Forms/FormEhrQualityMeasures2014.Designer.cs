@@ -40,7 +40,7 @@
 			// butClose
 			// 
 			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butClose.Location = new System.Drawing.Point(633, 635);
+			this.butClose.Location = new System.Drawing.Point(658, 408);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75, 23);
 			this.butClose.TabIndex = 1;
@@ -93,7 +93,7 @@
 			// butSubmit
 			// 
 			this.butSubmit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butSubmit.Location = new System.Drawing.Point(246, 635);
+			this.butSubmit.Location = new System.Drawing.Point(246, 408);
 			this.butSubmit.Name = "butSubmit";
 			this.butSubmit.Size = new System.Drawing.Size(84, 23);
 			this.butSubmit.TabIndex = 22;
@@ -122,7 +122,7 @@
 			// butShow
 			// 
 			this.butShow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butShow.Location = new System.Drawing.Point(140, 635);
+			this.butShow.Location = new System.Drawing.Point(140, 408);
 			this.butShow.Name = "butShow";
 			this.butShow.Size = new System.Drawing.Size(84, 23);
 			this.butShow.TabIndex = 25;
@@ -139,7 +139,7 @@
 			this.gridMain.Location = new System.Drawing.Point(12, 36);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(696, 593);
+			this.gridMain.Size = new System.Drawing.Size(721, 366);
 			this.gridMain.TabIndex = 0;
 			this.gridMain.Title = "Clinical Quality Measures 2014";
 			this.gridMain.TranslationName = null;
@@ -149,7 +149,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(720, 665);
+			this.ClientSize = new System.Drawing.Size(745, 438);
 			this.Controls.Add(this.butShow);
 			this.Controls.Add(this.textDateEnd);
 			this.Controls.Add(this.comboProv);

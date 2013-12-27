@@ -7,6 +7,8 @@ using System.Text;
 namespace OpenDentBusiness {
 	///<summary>Used in Ehr quality measures.</summary>
 	public class QualityMeasures {
+		private static string _elapsedtimetext;
+
 		///<summary>Generates a list of all the quality measures for 2011.  Performs all calculations and manipulations.  Returns list for viewing/output.</summary>
 		public static List<QualityMeasure> GetAll(DateTime dateStart,DateTime dateEnd,long provNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -47,30 +49,37 @@ namespace OpenDentBusiness {
 			}
 			List<QualityMeasure> list=new List<QualityMeasure>();
 			//add one of each type
-			QualityMeasure measure;
+			QualityMeasure measureCur;
+			_elapsedtimetext="Elapsed time for each measurement.\r\n";
 			for(int i=0;i<Enum.GetValues(typeof(QualityType2014)).Length;i++) {
-				measure=new QualityMeasure();
-				measure.Type2014=(QualityType2014)i;
-				measure.Id=GetId2014(measure.Type2014);
-				measure.Descript=GetDescript2014(measure.Type2014);
-				DataTable table=GetTable2014(measure.Type2014,dateStart,dateEnd,provNum);
-				if(table!=null) {
-					measure.Denominator=table.Rows.Count;
-					measure.Numerator=CalcNumerator(table);
-					measure.Exclusions=CalcExclusions(table);
-					measure.NotMet=measure.Denominator-measure.Exclusions-measure.Numerator;
-					measure.ReportingRate=100;
-					measure.PerformanceRate=0;
-					if(measure.Numerator > 0) {
-						measure.PerformanceRate=(int)((float)(measure.Numerator*100)/(float)(measure.Numerator+measure.NotMet));
+				measureCur=GetEhrCqmData((QualityType2014)i,dateStart,dateEnd,provNum);
+				measureCur.Type2014=(QualityType2014)i;
+				measureCur.Id=GetId2014(measureCur.Type2014);
+				measureCur.Descript=GetDescript2014(measureCur.Type2014);
+				if(measureCur.ListEhrPats!=null) {
+					measureCur.Denominator=measureCur.ListEhrPats.Count;
+					measureCur.Numerator=CalcNumerator2014(measureCur.ListEhrPats);
+					measureCur.Exclusions=CalcExclusions2014(measureCur.ListEhrPats);
+					measureCur.Exceptions=CalcExceptions2014(measureCur.ListEhrPats);
+					measureCur.NotMet=measureCur.Denominator-measureCur.Exclusions-measureCur.Numerator-measureCur.Exceptions;
+					//Reporting rate is (Numerator+Exclusions+Exceptions)/Denominator.  Percentage of qualifying pats classified in one of the three groups Numerator, Exception, Exclusion.
+					measureCur.ReportingRate=0;
+					if(measureCur.Denominator>0) {
+						measureCur.ReportingRate=Math.Round(((decimal)((measureCur.Numerator+measureCur.Exclusions+measureCur.Exceptions)*100)/(decimal)(measureCur.Denominator)),1,MidpointRounding.AwayFromZero);
 					}
-					measure.DenominatorExplain=GetDenominatorExplain2014(measure.Type2014);
-					measure.NumeratorExplain=GetNumeratorExplain2014(measure.Type2014);
-					measure.ExclusionsExplain=GetExclusionsExplain2014(measure.Type2014);
-					measure.ExceptionsExplain=GetExceptionsExplain2014(measure.Type2014);
+					//Performance rate is Numerator/(Denominator-Exclusions-Exceptions).  Percentage of qualifying pats (who were not in the Exclusions or Exceptions) who were in the Numerator.
+					measureCur.PerformanceRate=0;
+					if(measureCur.Numerator>0) {
+						measureCur.PerformanceRate=Math.Round(((decimal)(measureCur.Numerator*100)/(decimal)(measureCur.Denominator-measureCur.Exclusions-measureCur.Exceptions)),1,MidpointRounding.AwayFromZero);
+					}
+					measureCur.DenominatorExplain=GetDenominatorExplain2014(measureCur.Type2014);
+					measureCur.NumeratorExplain=GetNumeratorExplain2014(measureCur.Type2014);
+					measureCur.ExclusionsExplain=GetExclusionsExplain2014(measureCur.Type2014);
+					measureCur.ExceptionsExplain=GetExceptionsExplain2014(measureCur.Type2014);
 				}
-				list.Add(measure);
+				list.Add(measureCur);
 			}
+			System.Windows.Forms.MessageBox.Show(_elapsedtimetext);
 			return list;
 		}
 
@@ -625,7 +634,7 @@ namespace OpenDentBusiness {
 						+"tempehrquality.NotGiven=vaccinepat.NotGiven "
 						+"WHERE tempehrquality.PatNum=vaccinepat.PatNum "
 						+"AND vaccinepat.VaccineDefNum=vaccinedef.VaccineDefNum "
-						+"AND vaccinepat.DateTimeStart=tempehrquality.DateVaccine "
+						+"AND DATE(vaccinepat.DateTimeStart)=tempehrquality.DateVaccine "
 						+"AND vaccinedef.CVXCode IN('135','15')";
 					Db.NonQ(command);
 					command="SELECT * FROM tempehrquality";
@@ -2161,469 +2170,1034 @@ namespace OpenDentBusiness {
 			}
 			return table;
 		}
-
-
-		public static DataTable GetTable2014(QualityType2014 qtype,DateTime dateStart,DateTime dateEnd,long provNum) {
+		
+		///<summary>Only called from GetAll2014.  Once the EhrCqmData object is created, all of the data relevant to the measure and required by the QRDA category 1 and category 3 reporting is part of the object.</summary>
+		public static QualityMeasure GetEhrCqmData(QualityType2014 qtype,DateTime dateStart,DateTime dateEnd,long provNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod(),qtype,dateStart,dateEnd,provNum);
+				return Meth.GetObject<QualityMeasure>(MethodBase.GetCurrentMethod(),qtype,dateStart,dateEnd,provNum);
 			}
 			//these queries only work for mysql
-			string command="";
-			DataTable tableRaw=new DataTable();
+			string command="SELECT GROUP_CONCAT(provider.ProvNum) FROM provider WHERE provider.EhrKey="
+				+"(SELECT pv.EhrKey FROM provider pv WHERE pv.ProvNum="+POut.Long(provNum)+")";
+			string provs=Db.GetScalar(command);
+			QualityMeasure measureCur=new QualityMeasure();
+			System.Diagnostics.Stopwatch s=new System.Diagnostics.Stopwatch();
+			List<string> listOneOfEncOIDs=new List<string>();
+			List<string> listTwoOfEncOIDs=new List<string>();
+			//This adultEncQuery is used by several CQMs
+			//All encounters in the date range by the provider (based on ehrkey, so may be list of providers) for patients over 18 at the start of the measurement period
+			string adultEncCommand="SELECT encounter.* FROM encounter "
+				+"INNER JOIN patient ON patient.PatNum=encounter.PatNum "
+				+"WHERE YEAR(patient.Birthdate)>1880 "//valid birthdate
+				+"AND patient.Birthdate<="+POut.Date(dateStart)+"-INTERVAL 18 YEAR "//18 or over at start of measurement period
+				+"AND encounter.ProvNum IN("+POut.String(provs)+") "
+				+"AND DATE(encounter.DateEncounter) BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+				+"ORDER BY encounter.PatNum,encounter.DateEncounter";
 			switch(qtype) {
 				#region MedicationsEntered
 				case QualityType2014.MedicationsEntered:
-					command="";
-					//tableRaw=Db.GetTable(command);
+					s.Restart();
+					#region GetValidEncounters
+					listOneOfEncOIDs.Add("2.16.840.1.113883.3.600.1.1834");//Medications Encounter Code Set Grouping Value Set
+					//measureCur.ListEncounters will include all encounters that belong to the OneOf and TwoOf lists, so a patient will appear more than once
+					//if they had more than one encounter from those sets in date range
+					measureCur.DictPatNumListEncounters=GetEncountersForInitialPatPop(adultEncCommand,listOneOfEncOIDs,listTwoOfEncOIDs);
+					#endregion
+					#region GetInitialPatientPopulation
+					//Denominator is equal to inital patient population for this measure, no exclusions
+					measureCur.ListEhrPats=GetEhrPatsFromEncounters(measureCur.DictPatNumListEncounters);
+					#endregion
+					#region GetCurrentMedicationsDocumentedProcedures
+					//Get procedures from the value set that occurred during measurement period
+					List<string> listProcValueSetOIDs=new List<string>() { "2.16.840.1.113883.3.600.1.462" };//Current Medications Documented SNMD SNOMED-CT Value Set
+					//Only one procedure code in the value set for this measure, SNOMEDCT - 428191000124101 - Documentation of current medications (procedure)
+					measureCur.DictPatNumListMeasureEvents=GetMedDocumentedProcs(listProcValueSetOIDs,dateStart,dateEnd);
+					#endregion
+					#region GetMedProcsNotPerformed
+					//Get a list of all not performed items from the value set that occurred during the measurement period with valid readson
+					List<string> listMedsDocumentedOIDs=new List<string>() { "2.16.840.1.113883.3.600.1.462" };//Current Medications Documented SNMD SNOMED-CT Value Set
+					List<string> listMedicalOtherReasonOIDs=new List<string>() { "2.16.840.1.113883.3.600.1.1502" };//Medical or Other reason not done SNOMED-CT Value Set
+					measureCur.DictPatNumListNotPerfs=GetNotPerformeds(listMedsDocumentedOIDs,listMedicalOtherReasonOIDs,dateStart,dateEnd);
+					#endregion
 					break;
 				#endregion
 				#region WeightOver65
+				//The two populations are >= 18 and < 64 at start of measurement period and >= 65 at start of measurement period.
+				//These two populations exclude patients who are 64 at the start of the measurement period apparently on purpose.
 				case QualityType2014.WeightOver65:
-					command="";
-					//tableRaw=Db.GetTable(command);
+					//Strategy: Get all eligible encounters for patients 18 and over at start of measurement period
+					//Get Not Performed items with valid reason ("Medical or Other" and "Patient" reasons)
+					//Remove from the encounter list any encounters that have a Not Performed item on the same day
+					//Get from disease table all palliative care 'procedures' (not likely ever going to be any, but these 'procedure orders' will be stored in the disease table)
+					//Remove from the encounter list any encounters that occurred for patients who have a palliative care order that starts before or during the encounter
+					//Get patient data from the remaining encounters (for reporting).
+					//Remove any patients (and their encounters) who are 64 at the start of the measurement period.
+					//These patients are the initial patient population.  They will be in one of the two groups; group 1: >= 18 and < 64, group 2: >= 65.  Ages are at startDate.
+					s.Restart();
+					listOneOfEncOIDs.Add("2.16.840.1.113883.3.600.1.1751");//BMI Encounter Code Set Grouping Value Set
 					break;
 				#endregion
 				#region WeightAdult
 				case QualityType2014.WeightAdult:
-					command="";
-					//tableRaw=Db.GetTable(command);
+					s.Restart();
 					break;
 				#endregion
 				#region CariesPrevent
 				case QualityType2014.CariesPrevent:
-					command="";
-					//tableRaw=Db.GetTable(command);
+					s.Restart();
 					break;
 				#endregion
 				#region CariesPrevent_1
 				case QualityType2014.CariesPrevent_1:
-					command="";
-					//tableRaw=Db.GetTable(command);
+					s.Restart();
 					break;
 				#endregion
 				#region CariesPrevent_2
 				case QualityType2014.CariesPrevent_2:
-					command="";
-					//tableRaw=Db.GetTable(command);
+					s.Restart();
 					break;
 				#endregion
 				#region CariesPrevent_3
 				case QualityType2014.CariesPrevent_3:
-					command="";
-					//tableRaw=Db.GetTable(command);
+					s.Restart();
 					break;
 				#endregion
 				#region ChildCaries
 				case QualityType2014.ChildCaries:
-					command="";
-					//tableRaw=Db.GetTable(command);
+					s.Restart();
 					break;
 				#endregion
 				#region Pneumonia
 				case QualityType2014.Pneumonia:
-					command="";
-					//tableRaw=Db.GetTable(command);
+					s.Restart();
 					break;
 				#endregion
 				#region TobaccoCessation
 				case QualityType2014.TobaccoCessation:
-					command="";
-					//tableRaw=Db.GetTable(command);
+					s.Restart();
+					#region GetValidEncounters
+					//add one of encounter OIDs to list
+					listOneOfEncOIDs.Add("2.16.840.1.113883.3.526.3.1240");//Annual Wellness Visit Grouping Value Set
+					listOneOfEncOIDs.Add("2.16.840.1.113883.3.464.1003.101.12.1023");//Preventive Care Services-Initial Office Visit, 18 and Up Grouping Value Set
+					listOneOfEncOIDs.Add("2.16.840.1.113883.3.464.1003.101.12.1025");//Preventive Care Services - Established Office Visit, 18 and Up Grouping Value Set
+					listOneOfEncOIDs.Add("2.16.840.1.113883.3.464.1003.101.12.1026");//Preventive Care Services-Individual Counseling Grouping Value Set
+					listOneOfEncOIDs.Add("2.16.840.1.113883.3.464.1003.101.12.1027");//Preventive Care Services - Group Counseling Grouping Value Set
+					listOneOfEncOIDs.Add("2.16.840.1.113883.3.464.1003.101.12.1030");//Preventive Care Services - Other Grouping Value Set
+					listOneOfEncOIDs.Add("2.16.840.1.113883.3.464.1003.101.12.1048");//Face-to-Face Interaction Grouping Value Set
+					//add two of encounter OIDs to list
+					listTwoOfEncOIDs.Add("2.16.840.1.113883.3.464.1003.101.12.1001");//Office Visit Grouping Value Set
+					listTwoOfEncOIDs.Add("2.16.840.1.113883.3.526.3.1011");//Occupational Therapy Evaluation Grouping Value Set
+					listTwoOfEncOIDs.Add("2.16.840.1.113883.3.526.3.1020");//Health & Behavioral Assessment - Individual Grouping Value Set
+					listTwoOfEncOIDs.Add("2.16.840.1.113883.3.526.3.1141");//Psychoanalysis Grouping Value Set
+					listTwoOfEncOIDs.Add("2.16.840.1.113883.3.526.3.1245");//Health and Behavioral Assessment - Initial Grouping Value Set
+					listTwoOfEncOIDs.Add("2.16.840.1.113883.3.526.3.1285");//Ophthalmological Services Grouping Value Set
+					listTwoOfEncOIDs.Add("2.16.840.1.113883.3.526.3.1492");//Psych Visit - Diagnostic Evaluation Grouping Value Set
+					listTwoOfEncOIDs.Add("2.16.840.1.113883.3.526.3.1496");//Psych Visit - Psychotherapy Grouping Value Set
+					//measureCur.ListEncounters will include all encounters that belong to the OneOf and TwoOf lists, so a patient will appear more than once
+					//if they had more than one encounter from those sets in date range
+					measureCur.DictPatNumListEncounters=GetEncountersForInitialPatPop(adultEncCommand,listOneOfEncOIDs,listTwoOfEncOIDs);
+					#endregion
+					#region GetInitialPatientPopulation
+					//Denominator is equal to initial patient population for this measure
+					//the Inital Patient Population will be unique patients in ListEncounters, loop through and count unique patients
+					measureCur.ListEhrPats=GetEhrPatsFromEncounters(measureCur.DictPatNumListEncounters);
+					#endregion
+					#region GetTobaccoCessationInterventions
+					//Get all interventions within 24 months of end of measurement period
+					command="SELECT * FROM intervention "
+						+"WHERE intervention.DateEntry>="+POut.Date(dateEnd)+"-INTERVAL 24 MONTH "
+						+"ORDER BY intervention.PatNum,intervention.DateEntry DESC";
+					List<string> tobaccoInterventionOIDs=new List<string>() { "2.16.840.1.113883.3.526.3.509" };//Tobacco Use Cessation Counseling Grouping Value Set
+					measureCur.DictPatNumListInterventions=GetInterventions(command,tobaccoInterventionOIDs);
+					#endregion
+					//Get a list of all tobacco assessment events that happened within 24 of end of measurement period
+					measureCur.DictPatNumListMeasureEvents=GetTobaccoAssessmentEvents(dateEnd);
+					//Get a list of all tobacco cessation meds active/ordered within 24 months of end of measurement period
+					measureCur.DictPatNumListMedPats=GetTobaccoMeds(dateEnd);
+					#region GetTobaccoScreeningsNotPerformed
+					//Get a list of all tobacco assessment not performed items that happened in the measurement period that belong to the value set
+					//that also have a valid medical reason attached from the above value set
+					List<string> listTobaccoScreenOIDs=new List<string>() { "2.16.840.1.113883.3.526.3.1278" };//Tobacco Use Screening Grouping Value Set
+					List<string> listMedicalReasonOIDs=new List<string>() { "2.16.840.1.113883.3.526.3.1007" };//Medical Reason Grouping Value Set
+					measureCur.DictPatNumListNotPerfs=GetNotPerformeds(listTobaccoScreenOIDs,listMedicalReasonOIDs,dateStart,dateEnd);
+					#endregion
+					#region GetLimitedLifeExpectancyProbs
+					List<string> listLimitedLifeExpectOIDs=new List<string>() {"2.16.840.1.113883.3.526.3.1259"};//Limited Life Expectancy Grouping Value Set
+					//Get a list of all limited life expectancy diagnoses in the measurement period that belong to the above value set
+					measureCur.DictPatNumListProblems=GetProblems(listLimitedLifeExpectOIDs,dateStart,dateEnd);
+					#endregion
 					break;
 				#endregion
 				#region Influenza
 				case QualityType2014.Influenza:
-					command="";
-					//tableRaw=Db.GetTable(command);
+					s.Restart();
 					break;
 				#endregion
 				#region WeightChild_1
 				case QualityType2014.WeightChild_1_1:
+					s.Restart();
+					break;
 				case QualityType2014.WeightChild_1_2:
+					s.Restart();
+					break;
 				case QualityType2014.WeightChild_1_3:
-					command="";
-					//tableRaw=Db.GetTable(command);
+					s.Restart();
 					break;
 				#endregion
 				#region WeightChild_2
 				case QualityType2014.WeightChild_2_1:
+					s.Restart();
+					break;
 				case QualityType2014.WeightChild_2_2:
+					s.Restart();
+					break;
 				case QualityType2014.WeightChild_2_3:
-					command="";
-					//tableRaw=Db.GetTable(command);
+					s.Restart();
 					break;
 				#endregion
 				#region WeightChild_3
 				case QualityType2014.WeightChild_3_1:
+					s.Restart();
+					break;
 				case QualityType2014.WeightChild_3_2:
+					s.Restart();
+					break;
 				case QualityType2014.WeightChild_3_3:
-					command="";
-					//tableRaw=Db.GetTable(command);
+					s.Restart();
 					break;
 				#endregion
 				#region BloodPressureManage
 				case QualityType2014.BloodPressureManage:
-					command="";
-					//tableRaw=Db.GetTable(command);
+					s.Restart();
 					break;
 				#endregion
 				default:
 					throw new ApplicationException("Type not found: "+qtype.ToString());
 			}
-			//PatNum, PatientName, Numerator(X), and Exclusion(X).
-			DataTable table=new DataTable("audit");
-			DataRow row;
-			table.Columns.Add("PatNum");
-			table.Columns.Add("patientName");
-			table.Columns.Add("numerator");//X
-			table.Columns.Add("exclusion");//X
-			table.Columns.Add("explanation");
-			List<DataRow> rows=new List<DataRow>();
-			Patient pat;
-			//string explanation;
-			for(int i=0;i<tableRaw.Rows.Count;i++) {
-				row=table.NewRow();
-				row["PatNum"]=tableRaw.Rows[i]["PatNum"].ToString();
-				pat=new Patient();
-				pat.LName=tableRaw.Rows[i]["LName"].ToString();
-				pat.FName=tableRaw.Rows[i]["FName"].ToString();
-				pat.Preferred="";
-				row["patientName"]=pat.GetNameLF();
-				row["numerator"]="";
-				row["exclusion"]="";
-				row["explanation"]="";
-				float weight=0;
-				float height=0;
-				float bmi=0;
-				DateTime dateVisit;
-				switch(qtype) {
-					#region MedicationsEntered
-					case QualityType2014.MedicationsEntered:
+			//this will mark the patients in ListEhrPats as Numerator, Exclusion, or Exception, with explanation
+			ClassifyPatients(measureCur,qtype);
+			s.Stop();
+			_elapsedtimetext+=qtype.ToString()+": "+s.Elapsed.ToString()+"\r\n";
+			return measureCur;
+		}
+
+		///<summary>The string command will retrieve all unique encounters in the date range, for the provider (based on provider.EhrKey, so may be more than one ProvNum), with age limitation or other restrictions applied.  The encounters will then be required to belong to the value sets identified by the oneOf and twoOf lists of OID's (Object Identifiers), and the patient will have to have had one or more of the oneOf encounters or two or more of the two of encounters in the list returned by the string command.  We will return a dictionary with PatNum as the key that links to a list of all EhrCqmEncounter objects for that patient with all of the required elements for creating the QRDA Category I and III documents.</summary>
+		private static Dictionary<long,List<EhrCqmEncounter>> GetEncountersForInitialPatPop(string command,List<string> oneOfEncOIDs,List<string> twoOfEncOIDs) {
+			List<Encounter> listEncs=Crud.EncounterCrud.SelectMany(command);
+			List<EhrCode> listOneOfEncs=EhrCodes.GetForValueSetOIDs(oneOfEncOIDs,false);
+			List<EhrCode> listTwoOfEncs=EhrCodes.GetForValueSetOIDs(twoOfEncOIDs,false);
+			Dictionary<long,int> dictPatNumAndTwoOfCount=new Dictionary<long,int>();
+			List<long> listPatNums=new List<long>();
+			Dictionary<long,EhrCode> dictEncNumEhrCode=new Dictionary<long,EhrCode>();
+			//Remove any encounters that are not one of the allowed types and create a list of patients who had 1 or more of the OneOf encounters and a dictionary with PatNum,Count
+			//for counting the number of TwoOf encounters for each patient
+			for(int i=listEncs.Count-1;i>-1;i--) {
+				bool isOneOf=false;
+				for(int j=0;j<listOneOfEncs.Count;j++) {
+					if(listEncs[i].CodeValue==listOneOfEncs[j].CodeValue && listEncs[i].CodeSystem==listOneOfEncs[j].CodeSystem) {
+						if(!listPatNums.Contains(listEncs[i].PatNum)) {
+							listPatNums.Add(listEncs[i].PatNum);
+						}
+						dictEncNumEhrCode.Add(listEncs[i].EncounterNum,listOneOfEncs[j]);
+						isOneOf=true;
 						break;
-					#endregion
-					#region WeightOver65
-					case QualityType2014.WeightOver65:
-						weight=PIn.Float(tableRaw.Rows[i]["Weight"].ToString());
-						height=PIn.Float(tableRaw.Rows[i]["Height"].ToString());
-						bmi=Vitalsigns.CalcBMI(weight,height);
-						bool hasFollowupPlan=PIn.Bool(tableRaw.Rows[i]["HasFollowupPlan"].ToString());
-						bool isIneligible=PIn.Bool(tableRaw.Rows[i]["IsIneligible"].ToString());
-						string documentation=tableRaw.Rows[i]["Documentation"].ToString();
-						if(bmi==0) {
-							row["explanation"]="No BMI";
-						}
-						else if(bmi < 22) {
-							row["explanation"]="Underweight";
-							if(hasFollowupPlan) {
-								row["explanation"]+=", has followup plan: "+documentation;
-								row["numerator"]="X";
-							}
-						}
-						else if(bmi < 30) {
-							row["numerator"]="X";
-							row["explanation"]="Normal weight";
-						}
-						else {
-							row["explanation"]="Overweight";
-							if(hasFollowupPlan) {
-								row["explanation"]+=", has followup plan: "+documentation;
-								row["numerator"]="X";
-							}
-						}
-						if(isIneligible) {
-							row["exclusion"]="X";
-							row["explanation"]+=", "+documentation;
-						}
-						break;
-					#endregion
-					#region WeightAdult
-					case QualityType2014.WeightAdult:
-						weight=PIn.Float(tableRaw.Rows[i]["Weight"].ToString());
-						height=PIn.Float(tableRaw.Rows[i]["Height"].ToString());
-						bmi=Vitalsigns.CalcBMI(weight,height);
-						hasFollowupPlan=PIn.Bool(tableRaw.Rows[i]["HasFollowupPlan"].ToString());
-						isIneligible=PIn.Bool(tableRaw.Rows[i]["IsIneligible"].ToString());
-						documentation=tableRaw.Rows[i]["Documentation"].ToString();
-						if(bmi==0) {
-							row["explanation"]="No BMI";
-						}
-						else if(bmi < 18.5f) {
-							row["explanation"]="Underweight";
-							if(hasFollowupPlan) {
-								row["explanation"]+=", has followup plan: "+documentation;
-								row["numerator"]="X";
-							}
-						}
-						else if(bmi < 25) {
-							row["numerator"]="X";
-							row["explanation"]="Normal weight";
-						}
-						else {
-							row["explanation"]="Overweight";
-							if(hasFollowupPlan) {
-								row["explanation"]+=", has followup plan: "+documentation;
-								row["numerator"]="X";
-							}
-						}
-						if(isIneligible) {
-							row["exclusion"]="X";
-							row["explanation"]+=", "+documentation;
-						}
-						break;
-					#endregion
-					#region CariesPrevent
-					case QualityType2014.CariesPrevent:
-						break;
-					#endregion
-					#region CariesPrevent_1
-					case QualityType2014.CariesPrevent_1:
-						break;
-					#endregion
-					#region CariesPrevent_2
-					case QualityType2014.CariesPrevent_2:
-						break;
-					#endregion
-					#region CariesPrevent_3
-					case QualityType2014.CariesPrevent_3:
-						break;
-					#endregion
-					#region ChildCaries
-					case QualityType2014.ChildCaries:
-						break;
-					#endregion
-					#region Pneumonia
-					case QualityType2014.Pneumonia:
-						DateTime DateVaccine=PIn.Date(tableRaw.Rows[i]["DateVaccine"].ToString());
-						if(DateVaccine.Year<1880) {
-							row["explanation"]="No pneumococcal vaccine given";
-						}
-						else {
-							row["numerator"]="X";
-							row["explanation"]="Pneumococcal vaccine given";
-						}
-						break;
-					#endregion
-					#region TobaccoCessation
-					case QualityType2014.TobaccoCessation:
-						dateVisit=PIn.Date(tableRaw.Rows[i]["DateVisit"].ToString());
-						//visitCount=PIn.Int(tableRaw.Rows[i]["VisitCount"].ToString());
-						DateTime dateAssessment=PIn.Date(tableRaw.Rows[i]["DateAssessment"].ToString());
-						if(dateVisit<dateStart || dateVisit>dateEnd) {//no visits in the measurement period
-							continue;//don't add this row.  Not part of denominator.
-						}
-						//if(visitCount<2) {//no, as explained in comments in GetDenominatorExplain().
-						//	continue;
-						//}
-						if(dateAssessment.Year<1880) {
-							row["explanation"]="No tobacco use entered.";
-						}
-						else if(dateAssessment < dateVisit.AddYears(-2)) {
-							row["explanation"]="No tobacco use entered within timeframe.";
-						}
-						else {
-							row["numerator"]="X";
-							row["explanation"]="Tobacco use entered.";
-						}
-						break;
-					#endregion
-					#region Influenza
-					case QualityType2014.Influenza:
-						DateVaccine=PIn.Date(tableRaw.Rows[i]["DateVaccine"].ToString());
-						bool notGiven=PIn.Bool(tableRaw.Rows[i]["NotGiven"].ToString());
-						documentation=tableRaw.Rows[i]["Documentation"].ToString();
-						if(DateVaccine.Year<1880) {
-							row["explanation"]="No influenza vaccine given";
-						}
-						else if(notGiven) {
-							row["exclusion"]="X";
-							row["explanation"]+="No influenza vaccine given, "+documentation;
-						}
-						else {
-							row["numerator"]="X";
-							row["explanation"]="Influenza vaccine given";
-						}
-						break;
-					#endregion
-					#region WeightChild_1_1
-					case QualityType2014.WeightChild_1_1:
-						bool isPregnant=PIn.Bool(tableRaw.Rows[i]["IsPregnant"].ToString());
-						bool hasBMI=PIn.Bool(tableRaw.Rows[i]["HasBMI"].ToString());
-						if(isPregnant) {
-							continue;
-						}
-						if(hasBMI) {
-							row["numerator"]="X";
-							row["explanation"]="BMI entered";
-						}
-						else {
-							row["explanation"]="No BMI entered";
-						}
-						break;
-					#endregion
-					#region WeightChild_1_2
-					case QualityType2014.WeightChild_1_2:
-						isPregnant=PIn.Bool(tableRaw.Rows[i]["IsPregnant"].ToString());
-						bool ChildGotNutrition=PIn.Bool(tableRaw.Rows[i]["ChildGotNutrition"].ToString());
-						if(isPregnant) {
-							continue;
-						}
-						if(ChildGotNutrition) {
-							row["numerator"]="X";
-							row["explanation"]="Counseled for nutrition";
-						}
-						else {
-							row["explanation"]="Not counseled for nutrition";
-						}
-						break;
-					#endregion
-					#region WeightChild_1_3
-					case QualityType2014.WeightChild_1_3:
-						isPregnant=PIn.Bool(tableRaw.Rows[i]["IsPregnant"].ToString());
-						bool ChildGotPhysCouns=PIn.Bool(tableRaw.Rows[i]["ChildGotPhysCouns"].ToString());
-						if(isPregnant) {
-							continue;
-						}
-						if(ChildGotPhysCouns) {
-							row["numerator"]="X";
-							row["explanation"]="Counseled for physical activity";
-						}
-						else {
-							row["explanation"]="Not counseled for physical activity";
-						}
-						break;
-					#endregion
-					#region WeightChild_2_1
-					case QualityType2014.WeightChild_2_1:
-						isPregnant=PIn.Bool(tableRaw.Rows[i]["IsPregnant"].ToString());
-						hasBMI=PIn.Bool(tableRaw.Rows[i]["HasBMI"].ToString());
-						if(isPregnant) {
-							continue;
-						}
-						if(hasBMI) {
-							row["numerator"]="X";
-							row["explanation"]="BMI entered";
-						}
-						else {
-							row["explanation"]="No BMI entered";
-						}
-						break;
-					#endregion
-					#region WeightChild_2_2
-					case QualityType2014.WeightChild_2_2:
-						isPregnant=PIn.Bool(tableRaw.Rows[i]["IsPregnant"].ToString());
-						ChildGotNutrition=PIn.Bool(tableRaw.Rows[i]["ChildGotNutrition"].ToString());
-						if(isPregnant) {
-							continue;
-						}
-						if(ChildGotNutrition) {
-							row["numerator"]="X";
-							row["explanation"]="Counseled for nutrition";
-						}
-						else {
-							row["explanation"]="Not counseled for nutrition";
-						}
-						break;
-					#endregion
-					#region WeightChild_2_3
-					case QualityType2014.WeightChild_2_3:
-						isPregnant=PIn.Bool(tableRaw.Rows[i]["IsPregnant"].ToString());
-						ChildGotPhysCouns=PIn.Bool(tableRaw.Rows[i]["ChildGotPhysCouns"].ToString());
-						if(isPregnant) {
-							continue;
-						}
-						if(ChildGotPhysCouns) {
-							row["numerator"]="X";
-							row["explanation"]="Counseled for physical activity";
-						}
-						else {
-							row["explanation"]="Not counseled for physical activity";
-						}
-						break;
-					#endregion
-					#region WeightChild_3_1
-					case QualityType2014.WeightChild_3_1:
-						isPregnant=PIn.Bool(tableRaw.Rows[i]["IsPregnant"].ToString());
-						hasBMI=PIn.Bool(tableRaw.Rows[i]["HasBMI"].ToString());
-						if(isPregnant) {
-							continue;
-						}
-						if(hasBMI) {
-							row["numerator"]="X";
-							row["explanation"]="BMI entered";
-						}
-						else {
-							row["explanation"]="No BMI entered";
-						}
-						break;
-					#endregion
-					#region WeightChild_3_2
-					case QualityType2014.WeightChild_3_2:
-						isPregnant=PIn.Bool(tableRaw.Rows[i]["IsPregnant"].ToString());
-						ChildGotNutrition=PIn.Bool(tableRaw.Rows[i]["ChildGotNutrition"].ToString());
-						if(isPregnant) {
-							continue;
-						}
-						if(ChildGotNutrition) {
-							row["numerator"]="X";
-							row["explanation"]="Counseled for nutrition";
-						}
-						else {
-							row["explanation"]="Not counseled for nutrition";
-						}
-						break;
-					#endregion
-					#region WeightChild_3_3
-					case QualityType2014.WeightChild_3_3:
-						isPregnant=PIn.Bool(tableRaw.Rows[i]["IsPregnant"].ToString());
-						ChildGotPhysCouns=PIn.Bool(tableRaw.Rows[i]["ChildGotPhysCouns"].ToString());
-						if(isPregnant) {
-							continue;
-						}
-						if(ChildGotPhysCouns) {
-							row["numerator"]="X";
-							row["explanation"]="Counseled for physical activity";
-						}
-						else {
-							row["explanation"]="Not counseled for physical activity";
-						}
-						break;
-					#endregion
-					#region BloodPressureManage
-					case QualityType2014.BloodPressureManage:
-						bool HasDiagnosisHypertension=PIn.Bool(tableRaw.Rows[i]["HasDiagnosisHypertension"].ToString());
-						bool HasProcedureESRD=PIn.Bool(tableRaw.Rows[i]["HasProcedureESRD"].ToString());
-						bool HasDiagnosisPregnancy=PIn.Bool(tableRaw.Rows[i]["HasDiagnosisPregnancy"].ToString());
-						bool HasDiagnosisESRD=PIn.Bool(tableRaw.Rows[i]["HasDiagnosisESRD"].ToString());
-						DateTime DateBP=PIn.Date(tableRaw.Rows[i]["DateBP"].ToString());
-						int systolic=PIn.Int(tableRaw.Rows[i]["Systolic"].ToString());
-						int diastolic=PIn.Int(tableRaw.Rows[i]["Diastolic"].ToString());
-						if(!HasDiagnosisHypertension) {
-							continue;//not part of denominator
-						}
-						if(HasProcedureESRD || HasDiagnosisPregnancy || HasDiagnosisESRD) {
-							continue;//not part of denominator
-						}
-						if(DateBP.Year<1880) {
-							row["explanation"]="No BP entered";
-						}
-						else if(systolic < 90 && diastolic < 140) {
-							row["numerator"]="X";
-							row["explanation"]="Controlled blood pressure: "+systolic.ToString()+"/"+diastolic.ToString();
-						}
-						else {
-							row["explanation"]="High blood pressure: "+systolic.ToString()+"/"+diastolic.ToString();
-						}
-						break;
-					#endregion
-					default:
-						throw new ApplicationException("Type not found: "+qtype.ToString());
+					}
 				}
-				rows.Add(row);
+				if(isOneOf) {
+					continue;
+				}
+				bool isTwoOf=false;
+				for(int j=0;j<listTwoOfEncs.Count;j++) {
+					if(listEncs[i].CodeValue==listTwoOfEncs[j].CodeValue && listEncs[i].CodeSystem==listTwoOfEncs[j].CodeSystem) {
+						if(dictPatNumAndTwoOfCount.ContainsKey(listEncs[i].PatNum)) {
+							dictPatNumAndTwoOfCount[listEncs[i].PatNum]++;
+						}
+						else {
+							dictPatNumAndTwoOfCount.Add(listEncs[i].PatNum,1);
+						}
+						dictEncNumEhrCode.Add(listEncs[i].EncounterNum,listTwoOfEncs[j]);
+						isTwoOf=true;
+						break;
+					}
+				}
+				if(!isTwoOf) {//not oneOf or twoOf encounter, remove from list
+					listEncs.RemoveAt(i);//not an eligible encounter
+				}
 			}
-			for(int i=0;i<rows.Count;i++) {
-				table.Rows.Add(rows[i]);
+			//add the patients who had 2 or more of the TwoOf encounters to the list of patients
+			foreach(KeyValuePair<long,int> kpairCur in dictPatNumAndTwoOfCount) {
+				if(listPatNums.Contains(kpairCur.Key)) {
+					continue;
+				}
+				if(kpairCur.Value>1) {
+					listPatNums.Add(kpairCur.Key);
+				}
 			}
-			return table;
+			//remove any encounters from the list for patients who did not have a OneOf or two or more of the TwoOf encounters.
+			for(int i=listEncs.Count-1;i>-1;i--) {
+				if(!listPatNums.Contains(listEncs[i].PatNum)) {
+					listEncs.RemoveAt(i);
+				}
+			}
+			//listEncs is now all encounters returned by the command (should be date restricted, age restricted, provider restricted, etc.) that belong to the OneOf or TwoOf list
+			//for patients who had one or more of the OneOf encounters and/or two or more of the TwoOf encounters
+			//dictEncNumEhrCode links an EncounterNum to an EhrCode object.  This will be an easy way to get the ValueSetOID, ValueSetName, and CodeSystemOID for the encounter.
+			Dictionary<long,List<EhrCqmEncounter>> retval=new Dictionary<long,List<EhrCqmEncounter>>();
+			for(int i=0;i<listEncs.Count;i++) {
+				EhrCqmEncounter ehrEncCur=new EhrCqmEncounter();
+				ehrEncCur.EhrCqmEncounterNum=listEncs[i].EncounterNum;
+				ehrEncCur.PatNum=listEncs[i].PatNum;
+				ehrEncCur.ProvNum=listEncs[i].ProvNum;
+				ehrEncCur.CodeValue=listEncs[i].CodeValue;
+				ehrEncCur.CodeSystemName=listEncs[i].CodeSystem;
+				ehrEncCur.DateEncounter=listEncs[i].DateEncounter;
+				EhrCode ehrCodeCur=dictEncNumEhrCode[listEncs[i].EncounterNum];
+				ehrEncCur.ValueSetName=ehrCodeCur.ValueSetName;
+				ehrEncCur.ValueSetOID=ehrCodeCur.ValueSetOID;
+				ehrEncCur.CodeSystemOID=ehrCodeCur.CodeSystemOID;
+				string descript="";
+				descript=ehrEncCur.Description;//in case not in table default to EhrCode object description
+				//to get description, first determine which table the code is from.  Encounter is only allowed to be a CDT, CPT, HCPCS, and SNOMEDCT.
+				switch(ehrEncCur.CodeSystemName) {
+					case "CDT":
+						descript=ProcedureCodes.GetProcCode(ehrEncCur.CodeValue).Descript;
+						break;
+					case "CPT":
+						Cpt cptCur=Cpts.GetByCode(ehrEncCur.CodeValue);
+						if(cptCur!=null) {
+							descript=cptCur.Description;
+						}
+						break;
+					case "HCPCS":
+						Hcpcs hCur=Hcpcses.GetByCode(ehrEncCur.CodeValue);
+						if(hCur!=null) {
+							descript=hCur.DescriptionShort;
+						}
+						break;
+					case "SNOMEDCT":
+						Snomed sCur=Snomeds.GetByCode(ehrEncCur.CodeValue);
+						if(sCur!=null) {
+							descript=sCur.Description;
+						}
+						break;
+				}
+				ehrEncCur.Description=descript;
+				if(retval.ContainsKey(ehrEncCur.PatNum)) {
+					retval[ehrEncCur.PatNum].Add(ehrEncCur);
+				}
+				else {
+					retval.Add(ehrEncCur.PatNum,new List<EhrCqmEncounter>() { ehrEncCur });
+				}
+			}
+			return retval;
+		}
+
+		///<summary>Get relevant demographic and supplemental patient data required for CQM reporting for each unique patient in the list of eligible encounters in the dictionary of PatNums linked to a list of encounters for each PatNum.</summary>
+		private static List<EhrCqmPatient> GetEhrPatsFromEncounters(Dictionary<long,List<EhrCqmEncounter>> dictPatNumListEncounters) {
+			//get list of distinct PatNums from the keys in the incoming dictionary
+			List<long> listPatNums=new List<long>(dictPatNumListEncounters.Keys);
+			Patient[] uniquePats=Patients.GetMultPats(listPatNums); 
+			//All PayerType codes in ehrcode list are SOP codes
+			List<EhrCode> listEhrCodesForPayerTypeOID=EhrCodes.GetForValueSetOIDs(new List<string>() { "2.16.840.1.114222.4.11.3591" },false);
+			List<EhrCqmPatient> retval=new List<EhrCqmPatient>();
+			for(int i=0;i<uniquePats.Length;i++) {
+				EhrCqmPatient ehrPatCur=new EhrCqmPatient();
+				ehrPatCur.EhrCqmPat=uniquePats[i];
+				List<PatientRace> listPatRaces=PatientRaces.GetForPatient(ehrPatCur.EhrCqmPat.PatNum);
+				for(int j=0;j<listPatRaces.Count;j++) {
+					if(listPatRaces[j].Race==PatRace.Hispanic || listPatRaces[j].Race==PatRace.NotHispanic) {
+						ehrPatCur.Ethnicity=listPatRaces[j];//if race is entered, either one or the other ethnicity
+						continue;
+					}
+					if(listPatRaces[j].Race==PatRace.AmericanIndian
+						|| listPatRaces[j].Race==PatRace.AfricanAmerican
+						|| listPatRaces[j].Race==PatRace.Asian
+						|| listPatRaces[j].Race==PatRace.HawaiiOrPacIsland
+						|| listPatRaces[j].Race==PatRace.White
+						|| listPatRaces[j].Race==PatRace.Other)
+					{
+						ehrPatCur.ListPatientRaces.Add(listPatRaces[j]);
+					}
+					//if not one of these races, not sure what to do with it, cannot report it??
+				}
+				PayorType payerTypeCur=PayorTypes.GetCurrentType(ehrPatCur.EhrCqmPat.PatNum);
+				ehrPatCur.PayorSopCode="";
+				ehrPatCur.PayorDescription="";
+				ehrPatCur.PayorValueSetOID="";
+				if(payerTypeCur!=null) {
+					for(int j=0;j<listEhrCodesForPayerTypeOID.Count;j++) {
+						if(listEhrCodesForPayerTypeOID[j].CodeValue==payerTypeCur.SopCode) {//add payer information if it is in the value set
+							ehrPatCur.PayorSopCode=payerTypeCur.SopCode;
+							ehrPatCur.PayorDescription=Sops.GetDescriptionFromCode(payerTypeCur.SopCode);
+							ehrPatCur.PayorValueSetOID=listEhrCodesForPayerTypeOID[j].ValueSetOID;
+							break;
+						}
+					}
+				}
+				retval.Add(ehrPatCur);
+			}
+			return retval;
+		}
+
+		///<summary>Get ehrmeasureevents of type TobaccoAssessment where the event code is in the Tobacco Use Screening value set and the assessment resulted in categorizing the patient as a user or non-user and the screening was within 24 months of the measurement period end date.  Ordered by PatNum, DateTEvent for making CQM calc easier.</summary>
+		private static Dictionary<long,List<EhrCqmMeasEvent>> GetTobaccoAssessmentEvents(DateTime dateEnd) {
+			string command="SELECT ehrmeasureevent.*,COALESCE(snomed.Description,'') AS Description "
+				+"FROM ehrmeasureevent "
+				+"LEFT JOIN snomed ON snomed.SnomedCode=ehrmeasureevent.CodeValueResult AND ehrmeasureevent.CodeSystemResult='SNOMEDCT' "
+				+"WHERE EventType="+POut.Int((int)EhrMeasureEventType.TobaccoUseAssessed)+" " 
+				+"AND "+DbHelper.DateColumn("DateTEvent")+">="+POut.Date(dateEnd)+"-INTERVAL 24 MONTH "
+				+"ORDER BY ehrmeasureevent.PatNum,ehrmeasureevent.DateTEvent DESC";
+			DataTable tableEvents=Db.GetTable(command);
+			Dictionary<string,string> dictEventCodesAndSystems=EhrCodes.GetCodeAndCodeSystem(new List<string>() { "2.16.840.1.113883.3.526.3.1278" },true);//Tobacco Use Screening Value Set
+			List<string> listTobaccoStatusOIDs=new List<string>();
+			listTobaccoStatusOIDs.Add("2.16.840.1.113883.3.526.3.1170");//Tobacco User Grouping Value Set
+			listTobaccoStatusOIDs.Add("2.16.840.1.113883.3.526.3.1189");//Tobacco Non-User Grouping Value Set
+			List<EhrCode> listTobaccoStatusCodes=EhrCodes.GetForValueSetOIDs(listTobaccoStatusOIDs,false);
+			Dictionary<long,EhrCode> dictEventNumEhrCode=new Dictionary<long,EhrCode>();
+			for(int i=tableEvents.Rows.Count-1;i>-1;i--) {
+				bool isValidEvent=false;
+				if(dictEventCodesAndSystems.ContainsKey(tableEvents.Rows[i]["CodeValueEvent"].ToString())
+					&& dictEventCodesAndSystems[tableEvents.Rows[i]["CodeValueEvent"].ToString()]==tableEvents.Rows[i]["CodeSystemEvent"].ToString())
+				{
+					isValidEvent=true;
+				}
+				int indexStatus=-1;
+				for(int j=0;j<listTobaccoStatusCodes.Count;j++) {
+					if(listTobaccoStatusCodes[j].CodeValue==tableEvents.Rows[i]["CodeValueResult"].ToString()
+						&& listTobaccoStatusCodes[j].CodeSystem==tableEvents.Rows[i]["CodeSystemResult"].ToString())
+					{
+						indexStatus=j;
+						break;
+					}
+				}
+				if(isValidEvent && indexStatus>-1) {
+					dictEventNumEhrCode.Add(PIn.Long(tableEvents.Rows[i]["EhrMeasureEventNum"].ToString()),listTobaccoStatusCodes[indexStatus]);
+					continue;
+				}
+				tableEvents.Rows.RemoveAt(i);
+			}
+			Dictionary<long,List<EhrCqmMeasEvent>> retval=new Dictionary<long,List<EhrCqmMeasEvent>>();
+			for(int i=0;i<tableEvents.Rows.Count;i++) {
+				EhrCqmMeasEvent tobaccoAssessCur=new EhrCqmMeasEvent();
+				tobaccoAssessCur.EhrCqmMeasEventNum=PIn.Long(tableEvents.Rows[i]["EhrMeasureEventNum"].ToString());
+				tobaccoAssessCur.PatNum=PIn.Long(tableEvents.Rows[i]["PatNum"].ToString());
+				tobaccoAssessCur.CodeValue=tableEvents.Rows[i]["CodeValueResult"].ToString();
+				tobaccoAssessCur.CodeSystemName=tableEvents.Rows[i]["CodeSystemResult"].ToString();
+				tobaccoAssessCur.DateTEvent=PIn.DateT(tableEvents.Rows[i]["DateTEvent"].ToString());
+				string descript=tableEvents.Rows[i]["Description"].ToString();//if code is not in snomed table we will use description of EhrCode object
+				EhrCode ehrCodeCur=dictEventNumEhrCode[tobaccoAssessCur.EhrCqmMeasEventNum];
+				tobaccoAssessCur.CodeSystemOID=ehrCodeCur.CodeSystemOID;
+				tobaccoAssessCur.ValueSetName=ehrCodeCur.ValueSetName;
+				tobaccoAssessCur.ValueSetOID=ehrCodeCur.ValueSetOID;
+				//all statuses for tobacco use are SNOMEDCT codes
+				if(descript=="") {
+					descript=ehrCodeCur.Description;//default to description of EhrCode object
+				}
+				tobaccoAssessCur.Description=descript;
+				if(retval.ContainsKey(tobaccoAssessCur.PatNum)) {
+					retval[tobaccoAssessCur.PatNum].Add(tobaccoAssessCur);
+				}
+				else {
+					retval.Add(tobaccoAssessCur.PatNum,new List<EhrCqmMeasEvent>() { tobaccoAssessCur });
+				}
+			}
+			return retval;
+		}
+
+		///<summary>Get all data needed for reporting QRDA's for interventions from the supplied command where the code belongs to the value set(s) sent in.  Command orders interventions by patnum, then date entered so the first one found for patient is most recent intervention when looping through table.</summary>
+		private static Dictionary<long,List<EhrCqmIntervention>> GetInterventions(string command,List<string> valueSetOIDs) {
+			List<Intervention> listInterventions=Crud.InterventionCrud.SelectMany(command);
+			//remove any interventions that are not in the Tobacco Use Cessation Counseling Grouping Value Set
+			List<EhrCode> listAllInterventionCodes=EhrCodes.GetForValueSetOIDs(valueSetOIDs,false);//Tobacco Use Cessation Counseling Grouping Value Set
+			Dictionary<long,EhrCode> dictInterventionNumEhrCode=new Dictionary<long,EhrCode>();
+			for(int i=listInterventions.Count-1;i>-1;i--) {
+				bool isValidIntervention=false;
+				for(int j=0;j<listAllInterventionCodes.Count;j++) {
+					if(listInterventions[i].CodeValue==listAllInterventionCodes[j].CodeValue
+								&& listInterventions[i].CodeSystem==listAllInterventionCodes[j].CodeSystem) {
+						isValidIntervention=true;
+						dictInterventionNumEhrCode.Add(listInterventions[i].InterventionNum,listAllInterventionCodes[j]);
+						break;
+					}
+				}
+				if(!isValidIntervention) {
+					listInterventions.RemoveAt(i);
+				}
+			}
+			Dictionary<long,List<EhrCqmIntervention>> retval=new Dictionary<long,List<EhrCqmIntervention>>();
+			for(int i=0;i<listInterventions.Count;i++) {
+				EhrCqmIntervention interventionCur=new EhrCqmIntervention();
+				interventionCur.EhrCqmInterventionNum=listInterventions[i].InterventionNum;
+				interventionCur.PatNum=listInterventions[i].PatNum;
+				interventionCur.ProvNum=listInterventions[i].ProvNum;
+				interventionCur.CodeValue=listInterventions[i].CodeValue;
+				interventionCur.CodeSystemName=listInterventions[i].CodeSystem;
+				interventionCur.DateEntry=listInterventions[i].DateEntry;
+				EhrCode ehrCodeCur=dictInterventionNumEhrCode[listInterventions[i].InterventionNum];
+				interventionCur.CodeSystemOID=ehrCodeCur.CodeSystemOID;
+				interventionCur.ValueSetName=ehrCodeCur.ValueSetName;
+				interventionCur.ValueSetOID=ehrCodeCur.ValueSetOID;
+				string descript=ehrCodeCur.Description;//if not in table or not a CPT, ICD9CM, ICD10CM, HCPCS, or SNOMEDCT code, default to EhrCode object description
+				switch(listInterventions[i].CodeSystem) {
+					case "CPT":
+						Cpt cCur=Cpts.GetByCode(listInterventions[i].CodeValue);
+						if(cCur!=null) {
+							descript=cCur.Description;
+						}
+						break;
+					case "HCPCS":
+						Hcpcs hCur=Hcpcses.GetByCode(listInterventions[i].CodeValue);
+						if(hCur!=null) {
+							descript=hCur.DescriptionShort;
+						}
+						break;
+					case "ICD9CM":
+						ICD9 i9Cur=ICD9s.GetByCode(listInterventions[i].CodeValue);
+						if(i9Cur!=null) {
+							descript=i9Cur.Description;
+						}
+						break;
+					case "ICD10CM":
+						Icd10 i10Cur=Icd10s.GetByCode(listInterventions[i].CodeValue);
+						if(i10Cur!=null) {
+							descript=i10Cur.Description;
+						}
+						break;
+					case "SNOMEDCT":
+						Snomed sCur=Snomeds.GetByCode(listInterventions[i].CodeValue);
+						if(sCur!=null) {
+							descript=sCur.Description;
+						}
+						break;
+				}
+				interventionCur.Description=descript;
+				if(retval.ContainsKey(interventionCur.PatNum)) {
+					retval[interventionCur.PatNum].Add(interventionCur);
+				}
+				else {
+					retval.Add(interventionCur.PatNum,new List<EhrCqmIntervention>() { interventionCur });
+				}
+			}
+			return retval;
+		}
+
+		///<summary>Get the medication information for medications where the code belongs to the Tobacco Use Cessation Pharmacotherapy Grouping Value Set and the medication start date is within 24 months of the measurement period end date, ordered by PatNum,DateStart so first found for patient is most recent to make calculation easier.  If there is a PatNote, this is a Medication Order so we do not need to check the stop date.  If there is no note and there is either no stop date or the stop date is after the measurement period end date, this is a Medication Active.</summary>
+		private static Dictionary<long,List<EhrCqmMedicationPat>> GetTobaccoMeds(DateTime dateEnd) {
+			string command="SELECT medicationpat.MedicationPatNum,medicationpat.PatNum,medicationpat.DateStart,medicationpat.DateStop,medicationpat.PatNote,"
+				+"(CASE WHEN medication.RxCui IS NULL THEN medicationpat.RxCui ELSE medication.RxCui END) AS RxCui "
+				+"FROM medicationpat "
+				+"LEFT JOIN medication ON medication.MedicationNum=medicationpat.MedicationNum "
+				+"WHERE (medication.RxCui IS NOT NULL OR medicationpat.RxCui>0) "
+				+"AND DATE(medicationpat.DateStart)>="+POut.Date(dateEnd)+"-INTERVAL 24 MONTH "
+				+"AND (YEAR(medicationpat.DateStop)<1880 OR medicationpat.DateStop>"+POut.Date(dateEnd)+") "//no valid stop date or stop date after measurement period end date
+				+"ORDER BY medicationpat.PatNum,medicationpat.DateStart DESC";
+			DataTable tableTobaccoCessationMeds=Db.GetTable(command);
+			List<EhrCode> listTobaccoCessationMedCodes=EhrCodes.GetForValueSetOIDs(new List<string>() { "2.16.840.1.113883.3.526.3.1190" },false);//Tobacco Use Cessation Pharmacotherapy Grouping Value Set
+			Dictionary<long,EhrCode> dictMedicationPatNumEhrCode=new Dictionary<long,EhrCode>();
+			for(int i=tableTobaccoCessationMeds.Rows.Count-1;i>-1;i--) {
+				bool isValidMedication=false;
+				for(int j=0;j<listTobaccoCessationMedCodes.Count;j++) {
+					if(tableTobaccoCessationMeds.Rows[i]["RxCui"].ToString()==listTobaccoCessationMedCodes[j].CodeValue) {
+						dictMedicationPatNumEhrCode.Add(PIn.Long(tableTobaccoCessationMeds.Rows[i]["MedicationPatNum"].ToString()),listTobaccoCessationMedCodes[j]);
+						isValidMedication=true;
+						break;
+					}
+				}
+				if(!isValidMedication) {
+					tableTobaccoCessationMeds.Rows.RemoveAt(i);
+				}
+			}
+			Dictionary<long,List<EhrCqmMedicationPat>> retval=new Dictionary<long,List<EhrCqmMedicationPat>>();
+			for(int i=0;i<tableTobaccoCessationMeds.Rows.Count;i++) {
+				EhrCqmMedicationPat ehrMedPatCur=new EhrCqmMedicationPat();
+				ehrMedPatCur.EhrCqmMedicationPatNum=PIn.Long(tableTobaccoCessationMeds.Rows[i]["MedicationPatNum"].ToString());
+				ehrMedPatCur.PatNum=PIn.Long(tableTobaccoCessationMeds.Rows[i]["PatNum"].ToString());
+				ehrMedPatCur.PatNote=tableTobaccoCessationMeds.Rows[i]["PatNote"].ToString();
+				ehrMedPatCur.RxCui=PIn.Long(tableTobaccoCessationMeds.Rows[i]["RxCui"].ToString());
+				ehrMedPatCur.DateStart=PIn.Date(tableTobaccoCessationMeds.Rows[i]["DateStart"].ToString());
+				ehrMedPatCur.DateStop=PIn.Date(tableTobaccoCessationMeds.Rows[i]["DateStop"].ToString());
+				EhrCode ehrCodeCur=dictMedicationPatNumEhrCode[ehrMedPatCur.EhrCqmMedicationPatNum];
+				ehrMedPatCur.CodeSystemName=ehrCodeCur.CodeSystem;
+				ehrMedPatCur.CodeSystemOID=ehrCodeCur.CodeSystemOID;
+				ehrMedPatCur.ValueSetName=ehrCodeCur.ValueSetName;
+				ehrMedPatCur.ValueSetOID=ehrCodeCur.ValueSetOID;
+				string descript=ehrCodeCur.Description;
+				RxNorm rCur=RxNorms.GetByRxCUI(ehrMedPatCur.RxCui.ToString());
+				if(rCur!=null) {
+					descript=rCur.Description;
+				}
+				ehrMedPatCur.Description=descript;//description either from rxnorm table or, if not in table, default to EhrCode object description
+				if(retval.ContainsKey(ehrMedPatCur.PatNum)) {
+					retval[ehrMedPatCur.PatNum].Add(ehrMedPatCur);
+				}
+				else {
+					retval.Add(ehrMedPatCur.PatNum,new List<EhrCqmMedicationPat>() { ehrMedPatCur });
+				}
+			}
+			return retval;
+		}
+
+		///<summary>Get all NotPerformed items that belong to one of the ValueSetOIDs in listItemOIDs, with valid reasons that belong to one of the ValueSetOIDs in listReasonOIDs, that were entered between dateStart and dateStop.  For QRDA reporting, the resulting list must include the item not performed, a code for 'reason', and the code for the specific reason.  Example: If not administering a flu vaccine, you would have the code not being done (like CVX 141 "Influenza, seasonal, injectable"), the code for 'reason' (like SNOMEDCT 281000124100 "Patient reason for exclusion from performance measure (observable entity)"), and the code for the specific reason (like SNOMEDCT 105480006 "Refusal of treatment by patient (situation)").  Not fun.</summary>
+		private static Dictionary<long,List<EhrCqmNotPerf>> GetNotPerformeds(List<string> listItemOIDs,List<string> listReasonOIDs,DateTime dateStart,DateTime dateEnd) {			
+			//Reasons not done come from these value sets for our 9 CQMs:
+			//Medical Reason Grouping Value Set 2.16.840.1.113883.3.526.3.1007
+			//Patient Reason Grouping Value Set 2.16.840.1.113883.3.526.3.1008
+			//System Reason Grouping Value Set 2.16.840.1.113883.3.526.3.1009
+			//Patient Reason Refused SNOMED-CT Value Set 2.16.840.1.113883.3.600.1.1503 (this is a sub-set of Patient Reason ...1008 above)
+			//Medical or Other reason not done SNOMED-CT Value Set 2.16.840.1.113883.3.600.1.1502 (this is a sub-set of Medical Reason ...1007 above)
+			string command="SELECT ehrnotperformed.*, "
+				+"COALESCE(snomed.Description,loinc.NameLongCommon,cpt.Description,cvx.Description,'') AS Description, "
+				+"COALESCE(sReason.Description,'') AS DescriptionReason "
+				+"FROM ehrnotperformed "
+				+"LEFT JOIN cpt ON cpt.CptCode=ehrnotperformed.CodeValue AND ehrnotperformed.CodeSystem='CPT' "
+				+"LEFT JOIN cvx ON cvx.CvxCode=ehrnotperformed.CodeValue AND ehrnotperformed.CodeSystem='CVX' "
+				+"LEFT JOIN loinc ON loinc.LoincCode=ehrnotperformed.CodeValue AND ehrnotperformed.CodeSystem='LOINC' "
+				+"LEFT JOIN snomed ON snomed.SnomedCode=ehrnotperformed.CodeValue AND ehrnotperformed.CodeSystem='SNOMEDCT' "
+				+"LEFT JOIN snomed sReason ON sReason.SnomedCode=ehrnotperformed.CodeValueReason AND ehrnotperformed.CodeSystemReason='SNOMEDCT' "
+				+"WHERE ehrnotperformed.DateEntry BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+				+"GROUP BY ehrnotperformed.EhrNotPerformedNum "//just in case a code was in one of the code system tables more than once, should never happen
+				+"ORDER BY ehrnotperformed.PatNum,ehrnotperformed.DateEntry DESC";
+			DataTable tableNotPerfs=Db.GetTable(command);
+			List<EhrCode> listItems=EhrCodes.GetForValueSetOIDs(listItemOIDs,false);
+			List<EhrCode> listReasons=EhrCodes.GetForValueSetOIDs(listReasonOIDs,false);
+			Dictionary<long,EhrCode> dictItemNumEhrCode=new Dictionary<long,EhrCode>();
+			Dictionary<long,EhrCode> dictReasonNumEhrCode=new Dictionary<long,EhrCode>();
+			//loop through items and remove if not in valid value set or if reason is not in valid reason value set
+			//link the item to the EhrCode object for both the item code and the reason code using dictionaries for retrieving required data for QRDA reports
+			for(int i=tableNotPerfs.Rows.Count-1;i>-1;i--) {
+				bool isValidItem=false;
+				for(int j=0;j<listItems.Count;j++) {
+					if(tableNotPerfs.Rows[i]["CodeValue"].ToString()==listItems[j].CodeValue
+						&& tableNotPerfs.Rows[i]["CodeSystem"].ToString()==listItems[j].CodeSystem)
+					{
+						dictItemNumEhrCode.Add(PIn.Long(tableNotPerfs.Rows[i]["EhrNotPerformedNum"].ToString()),listItems[j]);
+						isValidItem=true;
+						break;
+					}
+				}
+				if(!isValidItem) {
+					tableNotPerfs.Rows.RemoveAt(i);
+					continue;
+				}
+				isValidItem=false;
+				for(int j=0;j<listReasons.Count;j++) {
+					if(tableNotPerfs.Rows[i]["CodeValueReason"].ToString()==listReasons[j].CodeValue
+						&& tableNotPerfs.Rows[i]["CodeSystemReason"].ToString()==listReasons[j].CodeSystem)
+					{
+						dictReasonNumEhrCode.Add(PIn.Long(tableNotPerfs.Rows[i]["EhrNotPerformedNum"].ToString()),listReasons[j]);
+						isValidItem=true;
+						break;
+					}
+				}
+				if(!isValidItem) {
+					tableNotPerfs.Rows.RemoveAt(i);
+				}
+			}
+			Dictionary<long,List<EhrCqmNotPerf>> retval=new Dictionary<long,List<EhrCqmNotPerf>>();
+			for(int i=0;i<tableNotPerfs.Rows.Count;i++) {
+				EhrCqmNotPerf ehrNotPerfCur=new EhrCqmNotPerf();
+				ehrNotPerfCur.EhrCqmNotPerfNum=PIn.Long(tableNotPerfs.Rows[i]["EhrNotPerformedNum"].ToString());
+				ehrNotPerfCur.PatNum=PIn.Long(tableNotPerfs.Rows[i]["PatNum"].ToString());
+				ehrNotPerfCur.CodeValue=tableNotPerfs.Rows[i]["CodeValue"].ToString();
+				ehrNotPerfCur.CodeSystemName=tableNotPerfs.Rows[i]["CodeSystem"].ToString();
+				ehrNotPerfCur.CodeValueReason=tableNotPerfs.Rows[i]["CodeValueReason"].ToString();
+				ehrNotPerfCur.CodeSystemNameReason=tableNotPerfs.Rows[i]["CodeSystemReason"].ToString();
+				ehrNotPerfCur.DateEntry=PIn.Date(tableNotPerfs.Rows[i]["DateEntry"].ToString());
+				EhrCode itemEhrCode=dictItemNumEhrCode[ehrNotPerfCur.EhrCqmNotPerfNum];
+				ehrNotPerfCur.CodeSystemOID=itemEhrCode.CodeSystemOID;
+				ehrNotPerfCur.ValueSetName=itemEhrCode.ValueSetName;
+				ehrNotPerfCur.ValueSetOID=itemEhrCode.ValueSetOID;
+				EhrCode reasonEhrCode=dictReasonNumEhrCode[ehrNotPerfCur.EhrCqmNotPerfNum];
+				ehrNotPerfCur.CodeSystemOIDReason=reasonEhrCode.CodeSystemOID;
+				ehrNotPerfCur.ValueSetNameReason=reasonEhrCode.ValueSetName;
+				ehrNotPerfCur.ValueSetOIDReason=reasonEhrCode.ValueSetOID;
+				string descript=tableNotPerfs.Rows[i]["Description"].ToString();
+				if(descript=="") {//just in case not found in table, will default to description of EhrCode object
+					descript=itemEhrCode.Description;
+				}
+				ehrNotPerfCur.Description=descript;
+				string reasonDescript=tableNotPerfs.Rows[i]["DescriptionReason"].ToString();
+				if(reasonDescript=="") {//just in case not found in table, will default to description of EhrCode object
+					reasonDescript=reasonEhrCode.Description;
+				}
+				ehrNotPerfCur.DescriptionReason=reasonDescript;
+				if(retval.ContainsKey(ehrNotPerfCur.PatNum)) {
+					retval[ehrNotPerfCur.PatNum].Add(ehrNotPerfCur);
+				}
+				else {
+					retval.Add(ehrNotPerfCur.PatNum,new List<EhrCqmNotPerf>() { ehrNotPerfCur });
+				}
+			}
+			return retval;
+		}
+
+		///<summary>Get all problems that started before or during the date range, that have a code that belong to the value sets in listProbOIDs, that either have no stop date or the stop date is after the start of the measurement period, and the problem is still marked 'Active'.  Ordered by PatNum, DateStart DESC for making calculating CQM easier.</summary>
+		private static Dictionary<long,List<EhrCqmProblem>> GetProblems(List<string> listProbOIDs,DateTime dateStart,DateTime dateEnd) {
+			string command="SELECT disease.DiseaseNum,disease.PatNum,disease.DateStart,disease.DateStop,"
+				+"diseasedef.SnomedCode,diseasedef.ICD9Code,diseasedef.Icd10Code,"
+				+"COALESCE(snomed.Description,icd9.Description,icd10.Description,diseasedef.DiseaseName) AS Description "
+				+"FROM disease INNER JOIN diseasedef ON disease.DiseaseDefNum=diseasedef.DiseaseDefNum "
+				+"LEFT JOIN snomed ON snomed.SnomedCode=diseasedef.SnomedCode "
+				+"LEFT JOIN icd9 ON icd9.ICD9Code=diseasedef.ICD9Code "
+				+"LEFT JOIN icd10 ON icd10.Icd10Code=diseasedef.Icd10Code "
+				+"WHERE disease.DateStart<="+POut.Date(dateEnd)+" "
+				+"AND (YEAR(disease.DateStop)<1880 OR disease.DateStop>"+POut.Date(dateStart)+") "
+				+"AND disease.ProbStatus="+POut.Int((int)ProblemStatus.Active)+" "
+				+"ORDER BY disease.PatNum,disease.DateStart DESC";
+			DataTable tableAllProbs=Db.GetTable(command);
+			List<EhrCode> listValidProbs=EhrCodes.GetForValueSetOIDs(listProbOIDs,false);
+			Dictionary<long,EhrCode> dictDiseaseNumEhrCode=new Dictionary<long,EhrCode>();
+			for(int i=tableAllProbs.Rows.Count-1;i>-1;i--) {
+				bool isValid=false;
+				for(int j=0;j<listValidProbs.Count;j++) {//all problems are either SNOMED, ICD9, or ICD10 codes
+					if((listValidProbs[j].CodeSystem=="SNOMEDCT" && tableAllProbs.Rows[i]["SnomedCode"].ToString()==listValidProbs[j].CodeValue)
+						|| (listValidProbs[j].CodeSystem=="ICD9CM" && tableAllProbs.Rows[i]["ICD9Code"].ToString()==listValidProbs[j].CodeValue)
+						|| (listValidProbs[j].CodeSystem=="ICD10CM" && tableAllProbs.Rows[i]["Icd10Code"].ToString()==listValidProbs[j].CodeValue)) {
+						dictDiseaseNumEhrCode.Add(PIn.Long(tableAllProbs.Rows[i]["DiseaseNum"].ToString()),listValidProbs[j]);//link the problem to the EhrCode object for retrieving information
+						isValid=true;
+						break;
+					}
+				}
+				if(!isValid) {
+					tableAllProbs.Rows.RemoveAt(i);//remove problems that are not in the value set
+				}
+			}
+			Dictionary<long,List<EhrCqmProblem>> retval=new Dictionary<long,List<EhrCqmProblem>>();
+			for(int i=0;i<tableAllProbs.Rows.Count;i++) {
+				EhrCqmProblem ehrProblemCur=new EhrCqmProblem();
+				ehrProblemCur.EhrCqmProblemNum=PIn.Long(tableAllProbs.Rows[i]["DiseaseNum"].ToString());
+				ehrProblemCur.PatNum=PIn.Long(tableAllProbs.Rows[i]["PatNum"].ToString());
+				ehrProblemCur.DateStart=PIn.Date(tableAllProbs.Rows[i]["DateStart"].ToString());
+				ehrProblemCur.DateStop=PIn.Date(tableAllProbs.Rows[i]["DateStop"].ToString());
+				ehrProblemCur.Description=tableAllProbs.Rows[i]["Description"].ToString();
+				EhrCode ehrCodeCur=dictDiseaseNumEhrCode[ehrProblemCur.EhrCqmProblemNum];
+				ehrProblemCur.CodeValue=ehrCodeCur.CodeValue;//use the code value from the ehrcode object because diseasedef can have an ICD9CM, ICD10CM, and SNOMEDCT code, and the codes do not have to be for the same thing, so use the code that belongs to the ValueSetOID that makes it valid for this measure
+				ehrProblemCur.CodeSystemName=ehrCodeCur.CodeSystem;
+				ehrProblemCur.CodeSystemOID=ehrCodeCur.CodeSystemOID;
+				ehrProblemCur.ValueSetName=ehrCodeCur.ValueSetName;
+				ehrProblemCur.ValueSetOID=ehrCodeCur.ValueSetOID;
+				if(retval.ContainsKey(ehrProblemCur.PatNum)) {
+					retval[ehrProblemCur.PatNum].Add(ehrProblemCur);
+				}
+				else {
+					retval.Add(ehrProblemCur.PatNum,new List<EhrCqmProblem>() { ehrProblemCur });
+				}
+			}
+			return retval;
+		}
+
+		///<summary>Get all medication documented procedures that happened in the date range that belong to the value set OIDs.  These 'procedures' are actually in the ehrmeasureevent table and can only possibly be one code (restricted by value set OID), SNOMEDCT - 428191000124101 - Documentation of current medications (procedure).  Ordered by PatNum, DateTEvent DESC for making CQM calc easier, most recent 'procedure' will be the first one found for the patient in list.</summary>
+		private static Dictionary<long,List<EhrCqmMeasEvent>> GetMedDocumentedProcs(List<string> listValueSetOIDs,DateTime dateStart,DateTime dateEnd) {
+			string command="SELECT ehrmeasureevent.*,COALESCE(snomed.Description,'') AS Description "
+				+"FROM ehrmeasureevent "
+				+"LEFT JOIN snomed ON snomed.SnomedCode=ehrmeasureevent.CodeValueEvent AND ehrmeasureevent.CodeSystemEvent='SNOMEDCT' "
+				+"WHERE EventType="+POut.Int((int)EhrMeasureEventType.CurrentMedsDocumented)+" "
+				+"AND DATE(DateTEvent) BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+				+"ORDER BY PatNum,DateTEvent DESC";
+			DataTable tableEvents=Db.GetTable(command);
+			List<EhrCode> listEhrCodes=EhrCodes.GetForValueSetOIDs(listValueSetOIDs);
+			Dictionary<long,EhrCode> dictEhrMeasureEventNumEhrCode=new Dictionary<long,EhrCode>();
+			//remove 'procs' from table of ehrmeasureevents if not in the value set OIDs in listEhrCodes
+			for(int i=tableEvents.Rows.Count-1;i>-1;i--) {
+				bool isValid=false;
+				for(int j=0;j<listEhrCodes.Count;j++) {//currently this can only be one code, SNOMEDCT - 428191000124101, but we will treat it like a list in case that changes
+					if(tableEvents.Rows[i]["CodeValueEvent"].ToString()==listEhrCodes[j].CodeValue && tableEvents.Rows[i]["CodeSystemEvent"].ToString()==listEhrCodes[j].CodeSystem) {
+						dictEhrMeasureEventNumEhrCode.Add(PIn.Long(tableEvents.Rows[i]["EhrMeasureEventNum"].ToString()),listEhrCodes[j]);
+						isValid=true;
+						break;
+					}
+				}
+				if(!isValid) {
+					tableEvents.Rows.RemoveAt(i);
+				}
+			}
+			Dictionary<long,List<EhrCqmMeasEvent>> retval=new Dictionary<long,List<EhrCqmMeasEvent>>();
+			for(int i=0;i<tableEvents.Rows.Count;i++) {
+				EhrCqmMeasEvent ehrProcCur=new EhrCqmMeasEvent();
+				ehrProcCur.EhrCqmMeasEventNum=PIn.Long(tableEvents.Rows[i]["EhrMeasureEventNum"].ToString());
+				ehrProcCur.PatNum=PIn.Long(tableEvents.Rows[i]["PatNum"].ToString());
+				ehrProcCur.CodeValue=tableEvents.Rows[i]["CodeValueEvent"].ToString();
+				ehrProcCur.CodeSystemName=tableEvents.Rows[i]["CodeSystemEvent"].ToString();
+				ehrProcCur.DateTEvent=PIn.DateT(tableEvents.Rows[i]["DateTEvent"].ToString());
+				EhrCode ehrCodeCur=dictEhrMeasureEventNumEhrCode[ehrProcCur.EhrCqmMeasEventNum];
+				ehrProcCur.CodeSystemOID=ehrCodeCur.CodeSystemOID;
+				ehrProcCur.ValueSetName=ehrCodeCur.ValueSetName;
+				ehrProcCur.ValueSetOID=ehrCodeCur.ValueSetOID;
+				ehrProcCur.Description=ehrCodeCur.Description;
+				Snomed sCur=Snomeds.GetByCode(ehrCodeCur.CodeValue);
+				if(sCur!=null) {
+					ehrProcCur.Description=sCur.Description;
+				}
+				if(retval.ContainsKey(ehrProcCur.PatNum)) {
+					retval[ehrProcCur.PatNum].Add(ehrProcCur);
+				}
+				else {
+					retval.Add(ehrProcCur.PatNum,new List<EhrCqmMeasEvent>() { ehrProcCur });
+				}
+			}
+			return retval;
+		}
+
+		///<summary>Using the data in alldata, determine if the patients in alldata.ListEhrPats are in the 'Numerator', 'Exclusion', or 'Exception' category for this measure and enter an explanation if applicable.  All of the patients in ListEhrPats are the initial patient population (almost always equal to the Denominator).</summary>
+		private static void ClassifyPatients(QualityMeasure alldata,QualityType2014 qtype) {
+			switch(qtype) {
+				#region MedicationsEntered
+				case QualityType2014.MedicationsEntered:
+					//alldata.ListEhrPats: All unique patients with necessary reporting data.  This is the initial patient population (Denominator).
+					//alldata.DictPatNumListEncounters:  PatNums linked to a list of all encounters from the eligble value sets for patients 18 or over at the start of the measurement period.
+					//alldata.DictPatNumListMeasureEvents: All Current Meds Documented 'procedures' that occurred during the measurement period
+					//alldata.DictPatNumListNotPerfs: All Current Meds Documented events not performed with valid reasons that occurred during the measurement period
+					//No exclusions for this measure
+					//Strategy: For each patient in ListEhrPats, loop through the encounters in dictionary DictPatNumListEncounters; key=PatNum, value=List<EhrCqmEncounter>
+					//For each encounter, loop through the measure events in DictPatNumListMeasureEvents and try to locate a meds documented 'proc' on the same date.
+					//If one exists for any encounter, Numerator.
+					//If no procedure exists, look for a not performed item for Exception
+					//Otherwise unclassified
+					for(int i=0;i<alldata.ListEhrPats.Count;i++) {
+						long patNumCur=alldata.ListEhrPats[i].EhrCqmPat.PatNum;
+						bool isCategorized=false;
+						//for each enctounter for the patient, look for ehrmeasureevent for procedure
+						List<EhrCqmEncounter> listEncsCur=new List<EhrCqmEncounter>();
+						if(alldata.DictPatNumListEncounters.ContainsKey(patNumCur)) {
+							listEncsCur=alldata.DictPatNumListEncounters[patNumCur];
+						}
+						//loop through EhrCqmMeasEvents for the patient to find one for the same date as the encounter
+						List<EhrCqmMeasEvent> listMeasEventsCur=new List<EhrCqmMeasEvent>();
+						if(alldata.DictPatNumListMeasureEvents.ContainsKey(patNumCur)) {
+							listMeasEventsCur=alldata.DictPatNumListMeasureEvents[patNumCur];
+						}
+						for(int j=0;j<listEncsCur.Count;j++) {
+							for(int k=0;k<listMeasEventsCur.Count;k++) {
+								if(listEncsCur[j].DateEncounter.Date==listMeasEventsCur[k].DateTEvent.Date) {
+									//measure event with same date as encounter, numerator
+									alldata.ListEhrPats[i].IsNumerator=true;
+									alldata.ListEhrPats[i].Explanation="Encounter on "+listEncsCur[j].DateEncounter.ToShortDateString()+" with a current medications documented procedure on the same date.";
+									isCategorized=true;
+									break;
+								}
+							}
+							if(isCategorized) {
+								break;
+							}
+						}
+						if(isCategorized) {
+							continue;
+						}
+						List<EhrCqmNotPerf> listNotPerfsCur=new List<EhrCqmNotPerf>();
+						if(alldata.DictPatNumListNotPerfs.ContainsKey(patNumCur)) {
+							listNotPerfsCur=alldata.DictPatNumListNotPerfs[patNumCur];
+						}
+						//No procedure for current meds documented on any encounter, check for not performed item on one of the encounter dates
+						for(int j=0;j<listEncsCur.Count;j++) {
+							for(int k=0;k<listNotPerfsCur.Count;k++) {
+								if(listEncsCur[j].DateEncounter.Date==listNotPerfsCur[k].DateEntry.Date) {
+									alldata.ListEhrPats[i].IsException=true;
+									alldata.ListEhrPats[i].Explanation="Encounter on "+listEncsCur[j].DateEncounter.ToShortDateString()+" with a current medications documented procedure not done for a valid reason on the same date.";
+									isCategorized=true;
+									break;
+								}
+							}
+							if(isCategorized) {
+								break;
+							}
+						}
+						if(isCategorized) {
+							continue;
+						}
+						alldata.ListEhrPats[i].Explanation="Eligible encounter(s) for this measure occurred with no current medications documented procedure recorded on the same date.";
+					}
+					break;
+				#endregion
+				#region WeightOver65
+				case QualityType2014.WeightOver65:
+					break;
+				#endregion
+				#region WeightAdult
+				case QualityType2014.WeightAdult:
+					break;
+				#endregion
+				#region CariesPrevent
+				case QualityType2014.CariesPrevent:
+					break;
+				#endregion
+				#region CariesPrevent_1
+				case QualityType2014.CariesPrevent_1:
+					break;
+				#endregion
+				#region CariesPrevent_2
+				case QualityType2014.CariesPrevent_2:
+					break;
+				#endregion
+				#region CariesPrevent_3
+				case QualityType2014.CariesPrevent_3:
+					break;
+				#endregion
+				#region ChildCaries
+				case QualityType2014.ChildCaries:
+					break;
+				#endregion
+				#region Pneumonia
+				case QualityType2014.Pneumonia:
+					break;
+				#endregion
+				#region TobaccoCessation
+				case QualityType2014.TobaccoCessation:
+					//alldata.ListEhrPats: All unique patients with necessary reporting data.  This is the initial patient population (Denominator).
+					//alldata.ListEncounters:  All encounters from the eligble value sets for patients 18 or over at the start of the measurement period.
+					//alldata.ListMeasureEvents: All tobacco use assessment ehrmeasureevents with recorded status that occurred within 24 months of the end of the measurement period
+					//alldata.ListInterventions: All eligible interventions performed within 24 months of the end of the measurement period
+					//alldata.ListMedPats: All eligible medications, active or ordered, that started within 24 months of the end of the measurement period
+					//alldata.ListNotPerfs: All tobacco assessment events not performed with valid reasons that occurred during the measurement period
+					//alldata.ListProblems: All eligible problems that were active during any of the measurement period.
+					for(int i=0;i<alldata.ListEhrPats.Count;i++) {
+						long patNumCur=alldata.ListEhrPats[i].EhrCqmPat.PatNum;
+						//No exclusions for this measure
+						//Strategy: Find the most recent tobacco assessment for the patient.
+						//If Non-User, this patient is in the Numerator.
+						//If User, check for intervention, medication active or order, if one exists, then Numerator.
+						//If User and no intervention/med, or no assessment at all, then check notperformed and problems for possible Exception.
+						//Finally, if none of the above, then only fill the Explanation column with the appropriate text.
+						#region Get most recent assessment date and value set OID for patient
+						DateTime mostRecentAssessDate=DateTime.MinValue;
+						string mostRecentAssessValueSetOID="";
+						List<EhrCqmMeasEvent> listMeasEventsCur=new List<EhrCqmMeasEvent>();
+						if(alldata.DictPatNumListMeasureEvents.ContainsKey(patNumCur)) {
+							listMeasEventsCur=alldata.DictPatNumListMeasureEvents[patNumCur];
+						}
+						for(int j=0;j<listMeasEventsCur.Count;j++) {
+							if(listMeasEventsCur[j].DateTEvent>mostRecentAssessDate) {
+								mostRecentAssessDate=listMeasEventsCur[j].DateTEvent;
+								mostRecentAssessValueSetOID=listMeasEventsCur[j].ValueSetOID;
+							}
+						}
+						#endregion
+						//if most recently (all assessments in our list are in the last 24 months prior to the measurement period end date) assessed Non-User, then Numerator
+						#region Most recently assessed Non-User
+						if(mostRecentAssessDate>DateTime.MinValue && mostRecentAssessValueSetOID=="2.16.840.1.113883.3.526.3.1189") {//Non-User
+							alldata.ListEhrPats[i].IsNumerator=true;
+							alldata.ListEhrPats[i].Explanation="Patient categorized as Non-User on "+mostRecentAssessDate.Date.ToShortDateString();
+							continue;
+						}
+						#endregion
+						//if most recently assessed User, check for intervention or medication active/order
+						#region Most recently assessed User
+						if(mostRecentAssessDate>DateTime.MinValue && mostRecentAssessValueSetOID=="2.16.840.1.113883.3.526.3.1170") {//User
+							//check for intervention.  If in the list, it is already guaranteed to be valid and in the date range and order by PatNum and DateEntry, so first one found will be the most recent for the patient
+							List<EhrCqmIntervention> listIntervensCur=new List<EhrCqmIntervention>();
+							if(alldata.DictPatNumListInterventions.ContainsKey(patNumCur)) {
+								listIntervensCur=alldata.DictPatNumListInterventions[patNumCur];
+							}
+							if(listIntervensCur.Count>0) {
+								alldata.ListEhrPats[i].IsNumerator=true;
+								alldata.ListEhrPats[i].Explanation="Patient categorized as User with an intervention on "+listIntervensCur[0].DateEntry.ToShortDateString();
+								continue;
+							}
+							//check for medication.  If there is one in the list, it is guaranteed to be valid for tobacco cessation and in the date range and ordered by PatNum and DateStart, so first found is most recent
+							List<EhrCqmMedicationPat> listMedPatsCur=new List<EhrCqmMedicationPat>();
+							if(alldata.DictPatNumListMedPats.ContainsKey(patNumCur)) {
+								listMedPatsCur=alldata.DictPatNumListMedPats[patNumCur];
+							}
+							if(listMedPatsCur.Count>0) {
+								alldata.ListEhrPats[i].IsNumerator=true;
+								string explain="Patient categorized as User with medication ";
+								string activeOrOrder="active";
+								if(listMedPatsCur[0].PatNote!="") {//PatNote means Medication Order, otherwise Medication Active
+									activeOrOrder="order";
+								}
+								alldata.ListEhrPats[i].Explanation=explain+activeOrOrder+" with start date "+listMedPatsCur[0].DateStart.ToShortDateString();
+								continue;
+							}
+						}
+						#endregion
+						//if we get here, there is either no valid assessment date in the date range or the patient was most recently categorized as User with no intervention or medication
+						//check for valid NotPerformed item, for exception
+						#region Check for not performed
+						//alldata.ListNotPerf is ordered by PatNum, DateEntry DESC so first one found is the most recent for the patient
+						List<EhrCqmNotPerf> listNotPerfsCur=new List<EhrCqmNotPerf>();
+						if(alldata.DictPatNumListNotPerfs.ContainsKey(patNumCur)) {
+							listNotPerfsCur=alldata.DictPatNumListNotPerfs[patNumCur];
+						}
+						if(listNotPerfsCur.Count>0) {
+							alldata.ListEhrPats[i].IsException=true;
+							alldata.ListEhrPats[i].Explanation="Assessment not done for valid medical reason on "+listNotPerfsCur[0].DateEntry.ToShortDateString();
+							continue;
+						}
+						#endregion
+						//last, check for limited life expectancy, for exception
+						#region Check for active diagnosis of limited life expectancy
+						List<EhrCqmProblem> listProbsCur=new List<EhrCqmProblem>();
+						if(alldata.DictPatNumListProblems.ContainsKey(patNumCur)) {
+							listProbsCur=alldata.DictPatNumListProblems[patNumCur];
+						}
+						if(listProbsCur.Count>0) {
+							alldata.ListEhrPats[i].IsException=true;
+							string explain="Assessment not done due to an active limited life expectancy diagnosis";
+							if(listProbsCur[0].DateStart.Year>1880) {
+								explain+=" with start date "+listProbsCur[0].DateStart.ToShortDateString();
+							}
+							alldata.ListEhrPats[i].Explanation=explain;
+							continue;
+						}
+						#endregion
+						//still not categorized, put note in explanation, could be due to no assessment in date range or categorized User with no intervention/medication
+						#region Not met explanation
+						if(mostRecentAssessDate==DateTime.MinValue) {
+							alldata.ListEhrPats[i].Explanation="No tobacco use assessment entered";
+						}
+						else if(mostRecentAssessValueSetOID=="2.16.840.1.113883.3.526.3.1170") {//User
+							alldata.ListEhrPats[i].Explanation="Patient categorized as User on "+mostRecentAssessDate.ToShortDateString()+" without an intervention";
+						}
+						#endregion
+					}
+					break;
+				#endregion
+				#region Influenza
+				case QualityType2014.Influenza:
+					break;
+				#endregion
+				#region WeightChild_1_1
+				case QualityType2014.WeightChild_1_1:
+					break;
+				#endregion
+				#region WeightChild_1_2
+				case QualityType2014.WeightChild_1_2:
+					break;
+				#endregion
+				#region WeightChild_1_3
+				case QualityType2014.WeightChild_1_3:
+					break;
+				#endregion
+				#region WeightChild_2_1
+				case QualityType2014.WeightChild_2_1:
+					break;
+				#endregion
+				#region WeightChild_2_2
+				case QualityType2014.WeightChild_2_2:
+					break;
+				#endregion
+				#region WeightChild_2_3
+				case QualityType2014.WeightChild_2_3:
+					break;
+				#endregion
+				#region WeightChild_3_1
+				case QualityType2014.WeightChild_3_1:
+					break;
+				#endregion
+				#region WeightChild_3_2
+				case QualityType2014.WeightChild_3_2:
+					break;
+				#endregion
+				#region WeightChild_3_3
+				case QualityType2014.WeightChild_3_3:
+					break;
+				#endregion
+				#region BloodPressureManage
+				case QualityType2014.BloodPressureManage:
+					break;
+				#endregion
+				default:
+					throw new ApplicationException("Type not found: "+qtype.ToString());
+			}
 		}
 
 		///<summary>Just counts up the number of rows with an X in the numerator column.  Very simple.</summary>
@@ -2638,6 +3212,17 @@ namespace OpenDentBusiness {
 			return retVal;
 		}
 
+		///<summary>Just counts up the number of EhrPatients with IsNumerator=true.</summary>
+		public static int CalcNumerator2014(List<EhrCqmPatient> listPats) {
+			int retval=0;
+			for(int i=0;i<listPats.Count;i++) {
+				if(listPats[i].IsNumerator) {
+					retval++;
+				}
+			}
+			return retval;
+		}
+
 		///<summary>Just counts up the number of rows with an X in the exclusion column.  Very simple.</summary>
 		public static int CalcExclusions(DataTable table) {
 			//No need to check RemotingRole; no call to db.
@@ -2648,6 +3233,28 @@ namespace OpenDentBusiness {
 				}
 			}
 			return retVal;
+		}
+
+		///<summary>Just counts up the number of EhrPatients with IsException=true.</summary>
+		public static int CalcExceptions2014(List<EhrCqmPatient> listPats) {
+			int retval=0;
+			for(int i=0;i<listPats.Count;i++) {
+				if(listPats[i].IsException) {
+					retval++;
+				}
+			}
+			return retval;
+		}
+
+		///<summary>Just counts up the number of EhrPatients with IsExclusion=true.</summary>
+		public static int CalcExclusions2014(List<EhrCqmPatient> listPats) {
+			int retval=0;
+			for(int i=0;i<listPats.Count;i++) {
+				if(listPats[i].IsExclusion) {
+					retval++;
+				}
+			}
+			return retval;
 		}
 
 		private static string GetDenominatorExplain(QualityType qtype) {
@@ -2832,7 +3439,7 @@ BMI 18.5-25.";
 			//No need to check RemotingRole; no call to db.
 			switch(qtype) {
 				case QualityType2014.MedicationsEntered:
-					return "All encounters occurring during the reporting period for patients age 18+ at the start of the measurement period.";
+					return "All eligible encounters occurring during the reporting period for patients age 18+ at the start of the measurement period.";
 				case QualityType2014.WeightOver65:
 					return "All patients age 65+ at the start of the measurement period with an eligible encounter during the measurement period.  Not including encounters where the patient is receiving palliative care, the patient refuses measurement of height and/or weight, the patient is in an urgent or emergent medical situation, or there is any other qualified reason documenting why BMI measurement was not appropriate.";
 				case QualityType2014.WeightAdult:
@@ -2987,3 +3594,4 @@ BMI 18.5-25.";
 
 	}
 }
+

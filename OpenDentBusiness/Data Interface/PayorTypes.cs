@@ -16,17 +16,25 @@ namespace OpenDentBusiness{
 			return Crud.PayorTypeCrud.SelectMany(command);
 		}
 
-		///<summary>Gets most recent PayorType entry.</summary>
+		
 		public static string GetCurrentDescription(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),patNum);
 			}
-			string command=DbHelper.LimitOrderBy("SELECT * FROM payortype WHERE PatNum = "+POut.Long(patNum)+" ORDER BY DateStart DESC",1);
-			PayorType payorType=Crud.PayorTypeCrud.SelectOne(command);
+			PayorType payorType=GetCurrentType(patNum);
 			if(payorType==null) {
 				return "";
 			}
-			return Sops.GetRecentPayorTypeDescription(payorType.SopCode);
+			return Sops.GetDescriptionFromCode(payorType.SopCode);
+		}
+
+		///<summary>Gets most recent PayorType for a patient.</summary>
+		public static PayorType GetCurrentType(long patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<PayorType>(MethodBase.GetCurrentMethod(),patNum);
+			}
+			string command=DbHelper.LimitOrderBy("SELECT * FROM payortype WHERE PatNum="+POut.Long(patNum)+" ORDER BY DateStart DESC",1);
+			return Crud.PayorTypeCrud.SelectOne(command);
 		}
 
 		///<summary>Gets one PayorType from the db.</summary>
