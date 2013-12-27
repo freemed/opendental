@@ -79,9 +79,9 @@ namespace OpenDental{
 			// 
 			// checkAutocodes
 			// 
-			this.checkAutocodes.Location = new System.Drawing.Point(15,190);
+			this.checkAutocodes.Location = new System.Drawing.Point(15, 190);
 			this.checkAutocodes.Name = "checkAutocodes";
-			this.checkAutocodes.Size = new System.Drawing.Size(646,36);
+			this.checkAutocodes.Size = new System.Drawing.Size(646, 36);
 			this.checkAutocodes.TabIndex = 43;
 			this.checkAutocodes.Text = "Autocodes - Deletes all current autocodes and then adds the default autocodes.  P" +
     "rocedure codes must have already been entered or they cannot be added as an auto" +
@@ -90,9 +90,9 @@ namespace OpenDental{
 			// 
 			// checkTcodes
 			// 
-			this.checkTcodes.Location = new System.Drawing.Point(15,67);
+			this.checkTcodes.Location = new System.Drawing.Point(15, 67);
 			this.checkTcodes.Name = "checkTcodes";
-			this.checkTcodes.Size = new System.Drawing.Size(646,36);
+			this.checkTcodes.Size = new System.Drawing.Size(646, 36);
 			this.checkTcodes.TabIndex = 44;
 			this.checkTcodes.Text = "T codes - Remove temp codes, codes that start with \"T\", which were only needed fo" +
     "r the trial version.  If a T code has already been used, then this moves it to t" +
@@ -103,45 +103,45 @@ namespace OpenDental{
 			// 
 			this.checkDcodes.Checked = true;
 			this.checkDcodes.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkDcodes.Location = new System.Drawing.Point(15,149);
+			this.checkDcodes.Location = new System.Drawing.Point(15, 149);
 			this.checkDcodes.Name = "checkDcodes";
-			this.checkDcodes.Size = new System.Drawing.Size(646,36);
+			this.checkDcodes.Size = new System.Drawing.Size(646, 36);
 			this.checkDcodes.TabIndex = 45;
-			this.checkDcodes.Text = "D codes - Add any missing 2013 ADA codes and fix descriptions of existing codes. " +
+			this.checkDcodes.Text = "D codes - Add any missing 2014 ADA codes and fix descriptions of existing codes. " +
     " This option does not work in the trial version or compiled version.";
 			this.checkDcodes.UseVisualStyleBackColor = true;
 			// 
 			// checkNcodes
 			// 
-			this.checkNcodes.Location = new System.Drawing.Point(15,108);
+			this.checkNcodes.Location = new System.Drawing.Point(15, 108);
 			this.checkNcodes.Name = "checkNcodes";
-			this.checkNcodes.Size = new System.Drawing.Size(646,36);
+			this.checkNcodes.Size = new System.Drawing.Size(646, 36);
 			this.checkNcodes.TabIndex = 46;
 			this.checkNcodes.Text = "N codes - Add any missing no-fee codes.";
 			this.checkNcodes.UseVisualStyleBackColor = true;
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(12,9);
+			this.label5.Location = new System.Drawing.Point(12, 9);
 			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(666,54);
+			this.label5.Size = new System.Drawing.Size(666, 54);
 			this.label5.TabIndex = 48;
 			this.label5.Text = resources.GetString("label5.Text");
 			// 
 			// checkProcButtons
 			// 
-			this.checkProcButtons.Location = new System.Drawing.Point(15,231);
+			this.checkProcButtons.Location = new System.Drawing.Point(15, 231);
 			this.checkProcButtons.Name = "checkProcButtons";
-			this.checkProcButtons.Size = new System.Drawing.Size(646,36);
+			this.checkProcButtons.Size = new System.Drawing.Size(646, 36);
 			this.checkProcButtons.TabIndex = 49;
 			this.checkProcButtons.Text = resources.GetString("checkProcButtons.Text");
 			this.checkProcButtons.UseVisualStyleBackColor = true;
 			// 
 			// checkApptProcsQuickAdd
 			// 
-			this.checkApptProcsQuickAdd.Location = new System.Drawing.Point(15,272);
+			this.checkApptProcsQuickAdd.Location = new System.Drawing.Point(15, 272);
 			this.checkApptProcsQuickAdd.Name = "checkApptProcsQuickAdd";
-			this.checkApptProcsQuickAdd.Size = new System.Drawing.Size(646,36);
+			this.checkApptProcsQuickAdd.Size = new System.Drawing.Size(646, 36);
 			this.checkApptProcsQuickAdd.TabIndex = 51;
 			this.checkApptProcsQuickAdd.Text = "Appt Procs Quick Add - This is the list of procedures that you pick from within t" +
     "he appt edit window.  This resets the list to default.";
@@ -149,9 +149,9 @@ namespace OpenDental{
 			// 
 			// checkRecallTypes
 			// 
-			this.checkRecallTypes.Location = new System.Drawing.Point(15,314);
+			this.checkRecallTypes.Location = new System.Drawing.Point(15, 314);
 			this.checkRecallTypes.Name = "checkRecallTypes";
-			this.checkRecallTypes.Size = new System.Drawing.Size(646,36);
+			this.checkRecallTypes.Size = new System.Drawing.Size(646, 36);
 			this.checkRecallTypes.TabIndex = 52;
 			this.checkRecallTypes.Text = "Recall Types - Resets the recall types and triggers to default.  Replaces any T c" +
     "odes with D codes.";
@@ -159,38 +159,38 @@ namespace OpenDental{
 			// 
 			// butRun
 			// 
-			this.butRun.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butRun.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butRun.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butRun.Autosize = true;
 			this.butRun.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRun.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRun.CornerRadius = 4F;
-			this.butRun.Location = new System.Drawing.Point(477,381);
+			this.butRun.Location = new System.Drawing.Point(477, 381);
 			this.butRun.Name = "butRun";
-			this.butRun.Size = new System.Drawing.Size(82,26);
+			this.butRun.Size = new System.Drawing.Size(82, 26);
 			this.butRun.TabIndex = 50;
 			this.butRun.Text = "Run Now";
 			this.butRun.Click += new System.EventHandler(this.butRun_Click);
 			// 
 			// butClose
 			// 
-			this.butClose.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butClose.Autosize = true;
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(586,381);
+			this.butClose.Location = new System.Drawing.Point(586, 381);
 			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(82,26);
+			this.butClose.Size = new System.Drawing.Size(82, 26);
 			this.butClose.TabIndex = 0;
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
 			// FormProcTools
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(698,431);
+			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+			this.ClientSize = new System.Drawing.Size(698, 431);
 			this.Controls.Add(this.checkRecallTypes);
 			this.Controls.Add(this.checkApptProcsQuickAdd);
 			this.Controls.Add(this.butRun);
