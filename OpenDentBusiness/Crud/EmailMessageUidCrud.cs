@@ -47,7 +47,7 @@ namespace OpenDentBusiness.Crud{
 			for(int i=0;i<table.Rows.Count;i++) {
 				emailMessageUid=new EmailMessageUid();
 				emailMessageUid.EmailMessageUidNum= PIn.Long  (table.Rows[i]["EmailMessageUidNum"].ToString());
-				emailMessageUid.Uid               = PIn.String(table.Rows[i]["Uid"].ToString());
+				emailMessageUid.MsgId               = PIn.String(table.Rows[i]["MsgId"].ToString());
 				emailMessageUid.RecipientAddress  = PIn.String(table.Rows[i]["RecipientAddress"].ToString());
 				retVal.Add(emailMessageUid);
 			}
@@ -89,12 +89,12 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="EmailMessageUidNum,";
 			}
-			command+="Uid,RecipientAddress) VALUES(";
+			command+="MsgId,RecipientAddress) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(emailMessageUid.EmailMessageUidNum)+",";
 			}
 			command+=
-				 "'"+POut.String(emailMessageUid.Uid)+"',"
+				 "'"+POut.String(emailMessageUid.MsgId)+"',"
 				+"'"+POut.String(emailMessageUid.RecipientAddress)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -108,7 +108,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one EmailMessageUid in the database.</summary>
 		public static void Update(EmailMessageUid emailMessageUid){
 			string command="UPDATE emailmessageuid SET "
-				+"Uid               = '"+POut.String(emailMessageUid.Uid)+"', "
+				+"MsgId               = '"+POut.String(emailMessageUid.MsgId)+"', "
 				+"RecipientAddress  = '"+POut.String(emailMessageUid.RecipientAddress)+"' "
 				+"WHERE EmailMessageUidNum = "+POut.Long(emailMessageUid.EmailMessageUidNum);
 			Db.NonQ(command);
@@ -117,9 +117,9 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one EmailMessageUid in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
 		public static void Update(EmailMessageUid emailMessageUid,EmailMessageUid oldEmailMessageUid){
 			string command="";
-			if(emailMessageUid.Uid != oldEmailMessageUid.Uid) {
+			if(emailMessageUid.MsgId != oldEmailMessageUid.MsgId) {
 				if(command!=""){ command+=",";}
-				command+="Uid = '"+POut.String(emailMessageUid.Uid)+"'";
+				command+="MsgId = '"+POut.String(emailMessageUid.MsgId)+"'";
 			}
 			if(emailMessageUid.RecipientAddress != oldEmailMessageUid.RecipientAddress) {
 				if(command!=""){ command+=",";}

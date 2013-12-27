@@ -477,13 +477,13 @@ namespace OpenDentBusiness{
 						OpenPop.Mime.Header.MessageHeader messageHeader=client.GetMessageHeaders(msgIndex);//Takes 1-2 seconds to get this information from the server.  The message, minus body and minus attachments.
 						strMsgUid=messageHeader.DateSent.ToString("yyyyMMddHHmmss")+emailAddressInbox.EmailUsername+messageHeader.From.Address+messageHeader.Subject;
 					}
-					else if(strMsgUid.Length>4000) {//The EmailMessageUid.Uid field is only 4000 characters in size.
+					else if(strMsgUid.Length>4000) {//The EmailMessageUid.MsgId field is only 4000 characters in size.
 						strMsgUid=strMsgUid.Substring(0,4000);
 					}
 					//Skip any email messages matching Uids which have been previously downloaded.
 					bool isDownloaded=false;
 					for(int j=0;j<listDownloadedMsgUids.Count;j++) {
-						if(listDownloadedMsgUids[j].Uid==strMsgUid) {
+						if(listDownloadedMsgUids[j].MsgId==strMsgUid) {
 							isDownloaded=true;
 							break;
 						}
@@ -498,7 +498,7 @@ namespace OpenDentBusiness{
 						EmailMessage emailMessage=ProcessRawEmailMessage(strRawEmail,0,emailAddressInbox);//Inserts to db.
 						EmailMessageUid emailMessageUid=new EmailMessageUid();
 						emailMessageUid.RecipientAddress=emailMessage.RecipientAddress;
-						emailMessageUid.Uid=strMsgUid;
+						emailMessageUid.MsgId=strMsgUid;
 						EmailMessageUids.Insert(emailMessageUid);//Remember Uid was downloaded, to avoid email duplication the next time the inbox is refreshed.
 						retVal.Add(emailMessage);
 						msgDownloadedCount++;

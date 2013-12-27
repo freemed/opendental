@@ -12,7 +12,7 @@ namespace OpenDentBusiness {
 		[CrudColumn(IsPriKey=true)]
 		public long EmailMessageUidNum;
 		///<summary>The unique id for the associated EmailMessage.  </summary>
-		public string Uid;
+		public string MsgId;
 		///<summary>Copied from the EmailAddress.EmailUsername field when a message is received into the inbox.
 		///Similar to the ToAddress of the EmailMessage, except the ToAddress could contain multiple recipient addresses
 		///or group email address instead. The recipient address helps match the EmailMessageUid to a particular EmailAddress.</summary>
