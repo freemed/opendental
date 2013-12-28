@@ -271,6 +271,7 @@ namespace OpenDentBusiness {
 		///<summary>Used only in ClaimProcs.ComputeBaseEst.  Gets a deductible amount from the supplied list of benefits.  Ignores benefits that do not match either the planNum or the patPlanNum.  It figures out how much was already used and reduces the returned value by that amount.  Both individual and family deductibles will reduce the returned value independently.  Works for individual procs, categories, and general.</summary>
 		public static double GetDeductibleByCode(List<Benefit> benList,long planNum,long patPlanNum,DateTime procDate,string procCode,List<ClaimProcHist> histList,List<ClaimProcHist> loopList,InsPlan plan,long patNum) {
 			//No need to check RemotingRole; no call to db.
+			#region filter benList for deductibles
 			//first, create a much shorter list with only relevant benefits in it.
 			List<Benefit> listShort=new List<Benefit>();
 			for(int i=0;i<benList.Count;i++) {
@@ -294,10 +295,12 @@ namespace OpenDentBusiness {
 				}
 				listShort.Add(benList[i]);
 			}
+			#endregion
+			#region get individual deductibles
 			//look for the best matching individual deduct----------------------------------------------------------------
 			Benefit benIndGeneral=null;
 			Benefit benInd=null;
-			//start with no category
+			#region no category
 			for(int i=0;i<listShort.Count;i++){
 				if(listShort[i].CoverageLevel == BenefitCoverageLevel.Family){
 					continue;
@@ -311,7 +314,8 @@ namespace OpenDentBusiness {
 					benIndGeneral=listShort[i];//sum of deductibles should not exceed this amount, even if benInd is less.
 				}
 			}
-			//then, specific category.
+			#endregion
+			#region specific category.
 			CovSpan[] spansForCat;
 			for(int i=0;i<listShort.Count;i++){
 				if(listShort[i].CoverageLevel == BenefitCoverageLevel.Family){
@@ -344,7 +348,8 @@ namespace OpenDentBusiness {
 					}
 				}
 			}
-			//then, specific code
+			#endregion
+			#region specific code
 			for(int i=0;i<listShort.Count;i++){
 				if(listShort[i].CoverageLevel == BenefitCoverageLevel.Family){
 					continue;
@@ -356,9 +361,12 @@ namespace OpenDentBusiness {
 					benInd=listShort[i];
 				}
 			}
+			#endregion
+			#endregion
+			#region get family deductibles
 			//look for the best matching family deduct----------------------------------------------------------------
 			Benefit benFam=null;
-			//start with no category
+			#region no category
 			for(int i=0;i<listShort.Count;i++) {
 				if(listShort[i].CoverageLevel != BenefitCoverageLevel.Family) {
 					continue;
@@ -370,7 +378,8 @@ namespace OpenDentBusiness {
 					benFam=listShort[i];
 				}
 			}
-			//then, specific category.
+			#endregion
+			#region specific category.
 			for(int i=0;i<listShort.Count;i++) {
 				if(listShort[i].CoverageLevel != BenefitCoverageLevel.Family) {
 					continue;
@@ -402,7 +411,8 @@ namespace OpenDentBusiness {
 					}
 				}
 			}
-			//then, specific code
+			#endregion
+			#region specific code
 			for(int i=0;i<listShort.Count;i++) {
 				if(listShort[i].CoverageLevel != BenefitCoverageLevel.Family) {
 					continue;
@@ -414,6 +424,8 @@ namespace OpenDentBusiness {
 					benFam=listShort[i];
 				}
 			}
+			#endregion
+			#endregion
 			//example. $50 individual deduct, $150 family deduct.
 			//Only individual deductibles make sense as the starting point.
 			//Family deductible just limits the sum of individual deductibles.
@@ -422,6 +434,7 @@ namespace OpenDentBusiness {
 				return 0;
 			}
 			double retVal=benInd.MonetaryAmt;
+			#region reduce by amount individual already paid this year
 			//reduce by amount individual already paid this year--------------------------------------------------------------------
 			//establish date range for procedures to consider
 			DateTime dateStart=BenefitLogic.ComputeRenewDate(procDate,plan.MonthRenew);
@@ -465,7 +478,10 @@ namespace OpenDentBusiness {
 				}
 				retVal-=histList[i].Deduct;
 			}
+			#endregion
+			#region reduce by amount individual already paid in loopList
 			//now, do a similar thing with loopList, individ-----------------------------------------------------------------------
+			#region diagnostic/preventive workaround
 			//There is a kludgey workaround in the loop below.
 			//It handles the very specific problem of a single diagnostic/preventive deductible even though we have two separate benefits for it.
 			//The better solution will be benefits with multiple categories or spans.
@@ -495,7 +511,9 @@ namespace OpenDentBusiness {
 					otherSpans=CovSpans.GetForCat(listShort[i].CovCatNum);
 				}
 			}
+			#endregion
 			for(int i=0;i<loopList.Count;i++) {
+				#region filter loopList
 				//no date restriction, since all TP or part of current claim
 				//if(histList[i].ProcDate<dateStart || histList[i].ProcDate>dateEnd) {
 				//	continue;
@@ -538,8 +556,10 @@ namespace OpenDentBusiness {
 				if(loopList[i].Deduct==-1) {
 					continue;
 				}
+				#endregion
 				retVal-=loopList[i].Deduct;
 			}
+			#endregion
 			if(retVal<=0) {
 				return 0;
 			}
@@ -558,6 +578,7 @@ namespace OpenDentBusiness {
 				return retVal;
 			}
 			double famded=benFam.MonetaryAmt;
+			#region reduce by amount family already paid this year
 			//reduce the family deductible by amounts already used----------------------------------------------------------
 			for(int i=0;i<histList.Count;i++) {
 				if(histList[i].ProcDate<dateStart || histList[i].ProcDate>dateEnd) {
@@ -595,6 +616,8 @@ namespace OpenDentBusiness {
 				}
 				famded-=histList[i].Deduct;
 			}
+			#endregion
+			#region reduce by amount family already paid in loopList
 			//reduce family ded by amounts already used in loop---------------------------------------------------------------
 			for(int i=0;i<loopList.Count;i++) {
 				if(loopList[i].PlanNum != planNum) {
@@ -625,6 +648,7 @@ namespace OpenDentBusiness {
 				}
 				famded-=loopList[i].Deduct;
 			}
+			#endregion
 			//if the family deductible has all been used up on other procs
 			if(famded<=0) {
 				return 0;//then no deductible, regardless of what we computed for individual
