@@ -452,11 +452,12 @@ namespace OpenDentBusiness {
 				if(histList[i].PatNum != patNum) {
 					continue;//this is for someone else in the family
 				}
-				if(benInd.CodeNum!=0) {//specific code
-					if(ProcedureCodes.GetStringProcCode(benInd.CodeNum)!=histList[i].StrProcCode) {
-						continue;
-					}
-				}
+				//Procedure specific deductibles need to take all deductibles into consideration, not just deductibles that have been applied towards the specific procedure.
+				//if(benInd.CodeNum!=0) {//specific code
+				//	if(ProcedureCodes.GetStringProcCode(benInd.CodeNum)!=histList[i].StrProcCode) {
+				//		continue;
+				//	}
+				//}
 				else if(benInd.CovCatNum!=0) {//specific category
 					spansForCat=CovSpans.GetForCat(benInd.CovCatNum);
 					bool isMatch=false;
@@ -524,6 +525,7 @@ namespace OpenDentBusiness {
 				if(loopList[i].PatNum != patNum) {
 					continue;//this is for someone else in the family
 				}
+				//Loop list needs to consider procedure specific codes so that deductibles apply to other procedures within a TP if necessary.  E.g. Unit Test 16
 				if(benInd.CodeNum!=0) {//specific code
 					if(ProcedureCodes.GetStringProcCode(benInd.CodeNum)!=loopList[i].StrProcCode) {
 						continue;
@@ -591,11 +593,12 @@ namespace OpenDentBusiness {
 				//if(histList[i].PatNum != patNum) {
 				//	continue;//this is for someone else in the family
 				//}
-				if(benFam.CodeNum!=0) {//specific code
-					if(ProcedureCodes.GetStringProcCode(benFam.CodeNum)!=histList[i].StrProcCode) {
-						continue;
-					}
-				}
+				//Procedure specific deductibles need to take all deductibles into consideration, not just deductibles that have been applied towards the specific procedure.
+				//if(benFam.CodeNum!=0) {//specific code
+				//	if(ProcedureCodes.GetStringProcCode(benFam.CodeNum)!=histList[i].StrProcCode) {
+				//		continue;
+				//	}
+				//}
 				else if(benFam.CovCatNum!=0) {//specific category
 					spansForCat=CovSpans.GetForCat(benFam.CovCatNum);
 					bool isMatch=false;
@@ -623,6 +626,7 @@ namespace OpenDentBusiness {
 				if(loopList[i].PlanNum != planNum) {
 					continue;//different plan
 				}
+				//Loop list needs to consider procedure specific codes so that deductibles apply to other procedures within a TP if necessary.
 				if(benFam.CodeNum!=0) {//specific code
 					if(ProcedureCodes.GetStringProcCode(benFam.CodeNum)!=loopList[i].StrProcCode) {
 						continue;
