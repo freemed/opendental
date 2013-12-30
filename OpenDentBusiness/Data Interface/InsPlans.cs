@@ -1011,8 +1011,8 @@ namespace OpenDentBusiness {
 			//then, check claimprocs
 			command="SELECT PatNum FROM claimproc "
 				+"WHERE PlanNum = "+POut.Long(plan.PlanNum)
-				+" AND Status != 6 "//ignore estimates
-				+DbHelper.LimitAnd(1);
+				+" AND Status != "+POut.Int((int)ClaimProcStatus.Estimate)//ignore estimates
+				+" "+DbHelper.LimitAnd(1);
 			table=Db.GetTable(command);
 			if(table.Rows.Count!=0) {
 				throw new ApplicationException(Lans.g("FormInsPlan","Not allowed to delete a plan attached to procedures."));
@@ -1025,19 +1025,9 @@ namespace OpenDentBusiness {
 			}
 			else if(table.Rows.Count==1) {//if there's only one inssub, delete it.
 				long insSubNum=PIn.Long(table.Rows[0]["InsSubNum"].ToString());
-				//Remove from the patplan table just in case it is still there.
-				command="SELECT PatPlanNum FROM patplan WHERE InsSubNum = "+POut.Long(insSubNum);
-				table=Db.GetTable(command);
-				for(int i=0;i<table.Rows.Count;i++) {
-					//benefits with this PatPlanNum are also deleted here
-					PatPlans.Delete(PIn.Long(table.Rows[i]["PatPlanNum"].ToString()));
-				}
-				//Now remove the inssub entry.  This removes the entry from the Insurance Plans for Family window.
-				InsSubs.Delete(insSubNum);
-			}		
+				InsSubs.Delete(insSubNum);//Checks dependencies first;  If none, deletes the inssub, claimprocs, patplans, and recomputes all estimates.
+			}
 			command="DELETE FROM benefit WHERE PlanNum="+POut.Long(plan.PlanNum);
-			Db.NonQ(command);
-			command="DELETE FROM claimproc WHERE PlanNum="+POut.Long(plan.PlanNum);//just estimates
 			Db.NonQ(command);
 			command="DELETE FROM insplan "
 				+"WHERE PlanNum = '"+plan.PlanNum.ToString()+"'";

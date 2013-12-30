@@ -96,19 +96,29 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Throws exception if dependencies.  Doesn't delete anything else.</summary>
-		public static void Delete(InsSub insSub) {
+		public static void Delete(long insSubNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),insSub);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),insSubNum);
 				return;
 			}
-			long subNum=insSub.InsSubNum;
 			try {
-				ValidateNoKeys(subNum,true);
+				ValidateNoKeys(insSubNum,true);
 			}
-			catch(ApplicationException ex){
+			catch(ApplicationException ex) {
 				throw new ApplicationException(Lans.g("FormInsPlan","Not allowed to delete: ")+ex.Message);
 			}
-			Crud.InsSubCrud.Delete(insSub.InsSubNum);
+			string command;
+			DataTable table;
+			//Remove from the patplan table just in case it is still there.
+			command="SELECT PatPlanNum FROM patplan WHERE InsSubNum = "+POut.Long(insSubNum);
+			table=Db.GetTable(command);
+			for(int i=0;i<table.Rows.Count;i++) {
+				//benefits with this PatPlanNum are also deleted here
+				PatPlans.Delete(PIn.Long(table.Rows[i]["PatPlanNum"].ToString()));
+			}
+			command="DELETE FROM claimproc WHERE InsSubNum = "+POut.Long(insSubNum);
+			Db.NonQ(command);
+			Crud.InsSubCrud.Delete(insSubNum);
 		}
 
 		/// <summary>Will throw an exception if this InsSub is being used anywhere. Set strict true to test against every check.</summary>
@@ -123,43 +133,36 @@ namespace OpenDentBusiness{
 			command="SELECT COUNT(*) FROM claim WHERE InsSubNum = "+POut.Long(subNum);
 			result=Db.GetScalar(command);
 			if(result!="0") {
-				throw new ApplicationException(Lans.g("FormInsPlan","Subscriber has existing claims."));
+				throw new ApplicationException(Lans.g("FormInsPlan","Subscriber has existing claims and so the subscriber cannot be deleted."));
 			}
 			command="SELECT COUNT(*) FROM claim WHERE InsSubNum2 = "+POut.Long(subNum);
 			result=Db.GetScalar(command);
 			if(result!="0") {
-				throw new ApplicationException(Lans.g("FormInsPlan","Subscriber has existing claims."));
+				throw new ApplicationException(Lans.g("FormInsPlan","Subscriber has existing claims and so the subscriber cannot be deleted."));
 			}
 			//claimproc.InsSubNum
 			if(strict) {
-				command="SELECT COUNT(*) FROM claimproc WHERE InsSubNum = "+POut.Long(subNum);
+				command="SELECT COUNT(*) FROM claimproc WHERE InsSubNum = "+POut.Long(subNum)+" AND Status != "+POut.Int((int)ClaimProcStatus.Estimate);//ignore estimates
 				result=Db.GetScalar(command);
 				if(result!="0") {
-					throw new ApplicationException(Lans.g("FormInsPlan","Subscriber has existing claimprocs."));
+					throw new ApplicationException(Lans.g("FormInsPlan","Subscriber has existing claim procedures and so the subscriber cannot be deleted."));
 				}
 			}
 			//etrans.InsSubNum
 			command="SELECT COUNT(*) FROM etrans WHERE InsSubNum = "+POut.Long(subNum);
 			result=Db.GetScalar(command);
 			if(result!="0") {
-				throw new ApplicationException(Lans.g("FormInsPlan","Subscriber has existing etrans entry."));
-			}
-			//patplan.InsSubNum
-			if(strict) {
-				command="SELECT COUNT(*) FROM patplan WHERE InsSubNum = "+POut.Long(subNum);
-				result=Db.GetScalar(command);
-				if(result!="0") {
-					throw new ApplicationException(Lans.g("FormInsPlan","Subscriber has existing patplan entry."));
-				}
+				throw new ApplicationException(Lans.g("FormInsPlan","Subscriber has existing etrans entry and so the subscriber cannot be deleted."));
 			}
 			//payplan.InsSubNum
 			command="SELECT COUNT(*) FROM payplan WHERE InsSubNum = "+POut.Long(subNum);
 			result=Db.GetScalar(command);
 			if(result!="0") {
-				throw new ApplicationException(Lans.g("FormInsPlan","Subscriber has existing payplans."));
+				throw new ApplicationException(Lans.g("FormInsPlan","Subscriber has existing insurance linked payment plans and so the subscriber cannot be deleted."));
 			}
 		}
 
+		/* jsalmon (11/15/2013) Depricated because inssubs should not be blindly deleted.
 		///<summary>A quick delete that is only used when cancelling out of a new edit window.</summary>
 		public static void Delete(long insSubNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -168,6 +171,7 @@ namespace OpenDentBusiness{
 			}
 			Crud.InsSubCrud.Delete(insSubNum);
 		}
+		 */
 
 		///<summary>Used in FormInsSelectSubscr to get a list of insplans for one subscriber directly from the database.</summary>
 		public static List<InsSub> GetListForSubscriber(long subscriber) {

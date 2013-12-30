@@ -3187,17 +3187,25 @@ namespace OpenDental{
 				DialogResult=DialogResult.Cancel;//original plan will get deleted in closing event.
 				return;
 			}
+			//1. Delete Subscriber---------------------------------------------------------------------------------------------------
+			//Can only do this if there are other subscribers present.  If this is the last subscriber, then it attempts to delete the plan itself, down below.
 			if(comboLinked.Items.Count>0) {//Other subscribers are present.  
 				if(SubCur==null) {//viewing from big list
 					MsgBox.Show(this,"Subscribers must be removed individually before deleting plan.");//by dropping, then using this same delete button.
 					return;
 				}
-				else {//Just detach subscriber.
-					if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Remove subscriber from plan?  Plan will not be deleted.")) {
-						return;
+				else {//Came into here through a patient.
+					if(PatPlanCur!=null) {
+						if(!MsgBox.Show(this,true,"All patients attached to this subscription will be dropped and the subscription for this plan will be deleted. Continue?")) {
+							return;
+						}
 					}
+					//drop the plan
+
+
+					//detach subscriber.
 					try {
-						InsSubs.Delete(SubCur);//checks dependencies first.  Doesn't delete anything else.
+						InsSubs.Delete(SubCur.InsSubNum);//Checks dependencies first;  If none, deletes the inssub, claimprocs, patplans, and recomputes all estimates.
 					}
 					catch(ApplicationException ex) {
 						MessageBox.Show(ex.Message);
@@ -3207,13 +3215,15 @@ namespace OpenDental{
 					return;
 				}
 			}
+			//or
+			//2. Delete the plan itself-------------------------------------------------------------------------------------------------
 			//This is the only subscriber, so delete inssub and insplan
 			//Or this is the big list and there are no subscribers, so just delete the insplan.
 			if(!MsgBox.Show(this,true,"Delete Plan?")) {
 				return;
 			}
 			try {
-				InsPlans.Delete(PlanCur);//checks dependencies first. Also deletes benefits,claimprocs,patplan and recomputes all estimates.
+				InsPlans.Delete(PlanCur);//Checks dependencies first;  If none, deletes insplan, inssub, benefits, claimprocs, patplans, and recomputes all estimates.
 			}
 			catch(ApplicationException ex) {
 				MessageBox.Show(ex.Message);
