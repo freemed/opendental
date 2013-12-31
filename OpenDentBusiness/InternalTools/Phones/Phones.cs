@@ -663,22 +663,37 @@ namespace OpenDentBusiness {
 						AND TaskNum NOT IN (SELECT tn.TaskNum FROM tasknote tn)  -- no notes yet 
 					LIMIT 1 
 					) AS TimeOfOldestTaskWithoutNotes 
-				-- time of oldest urgent task (does not matter if it has notes or not)				
-				,(SELECT IFNULL(MIN(DateTimeEntry),'0001-01-01') 
-					FROM task 
-					WHERE  
-						TaskListNum=1697  -- Triage task list. 
-						AND TaskStatus<>2  -- Not done (new or viewed).
-						AND  
-						(  -- COLLATE utf8_bin means case-sesitive search
-							Descript COLLATE utf8_bin LIKE '%CUSTOMER%' 
-							OR Descript COLLATE utf8_bin LIKE '%DOWN%' 
-							OR Descript COLLATE utf8_bin LIKE '%URGENT%' 
-							OR Descript COLLATE utf8_bin LIKE '%CONFERENCE%' 
-							OR Descript COLLATE utf8_bin LIKE '%!!%' 
-						) 
-					LIMIT 1 
-					) AS TimeOfOldestUrgentTask;";
+				-- time of oldest urgent task (gets the time of the most recent note on the oldest task if one exists)
+				,(SELECT IFNULL(MAX(tasknote.DateTimeNote),(SELECT IFNULL(MIN(task.DateTimeEntry),'0001-01-01')
+																											FROM task
+																											WHERE  
+																												TaskListNum=1697  -- Triage task list. 
+																												AND TaskStatus<>2  -- Not done (new or viewed).
+																												AND  
+																												(  -- COLLATE utf8_bin means case-sesitive search
+																													Descript COLLATE utf8_bin LIKE '%CUSTOMER%' 
+																													OR Descript COLLATE utf8_bin LIKE '%DOWN%' 
+																													OR Descript COLLATE utf8_bin LIKE '%URGENT%' 
+																													OR Descript COLLATE utf8_bin LIKE '%CONFERENCE%' 
+																													OR Descript COLLATE utf8_bin LIKE '%!!%' 
+																												) 
+																											LIMIT 1)
+					) -- End of SELECT portion.
+					FROM tasknote 
+					WHERE tasknote.TaskNum=(SELECT TaskNum
+						FROM task
+						WHERE  
+							TaskListNum=1697  -- Triage task list. 
+							AND TaskStatus<>2  -- Not done (new or viewed).
+							AND  
+							(  -- COLLATE utf8_bin means case-sesitive search
+								Descript COLLATE utf8_bin LIKE '%CUSTOMER%' 
+								OR Descript COLLATE utf8_bin LIKE '%DOWN%' 
+								OR Descript COLLATE utf8_bin LIKE '%URGENT%' 
+								OR Descript COLLATE utf8_bin LIKE '%CONFERENCE%' 
+								OR Descript COLLATE utf8_bin LIKE '%!!%' 
+							) 
+						LIMIT 1)) AS TimeOfOldestUrgentTaskNote;";
 			return Db.GetTable(command);
 		}
 

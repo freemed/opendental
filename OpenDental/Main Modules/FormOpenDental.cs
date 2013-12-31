@@ -3069,7 +3069,7 @@ namespace OpenDental{
 			int countTasksWithNotes=PIn.Int(phoneMetrics.Rows[0]["CountTasksWithNotes"].ToString());
 			int countUrgentTasks=PIn.Int(phoneMetrics.Rows[0]["CountUrgentTasks"].ToString());
 			DateTime timeOfOldestTaskWithoutNotes=PIn.Date(phoneMetrics.Rows[0]["TimeOfOldestTaskWithoutNotes"].ToString());
-			DateTime timeOfOldestUrgentTask=PIn.Date(phoneMetrics.Rows[0]["TimeOfOldestUrgentTask"].ToString());
+			DateTime timeOfOldestUrgentTaskNote=PIn.Date(phoneMetrics.Rows[0]["TimeOfOldestUrgentTaskNote"].ToString());
 			TimeSpan triageBehind=new TimeSpan(0);
 			if(timeOfOldestTaskWithoutNotes.Year>1880) {
 				triageBehind=DateTime.Now-timeOfOldestTaskWithoutNotes;
@@ -3090,8 +3090,8 @@ namespace OpenDental{
 			if(formMapHQ!=null && !formMapHQ.IsDisposed) {
 				formMapHQ.SetTriageNormal(countTasksWithNotes,countTasksWithoutNotes,triageBehind);				
 				TimeSpan urgentTriageBehind=new TimeSpan(0);
-				if(timeOfOldestUrgentTask.Year>1880) {
-					urgentTriageBehind=DateTime.Now-timeOfOldestUrgentTask;
+				if(timeOfOldestUrgentTaskNote.Year>1880) {
+					urgentTriageBehind=DateTime.Now-timeOfOldestUrgentTaskNote;
 				}
 				formMapHQ.SetTriageUrgent(countUrgentTasks,urgentTriageBehind);
 			}
