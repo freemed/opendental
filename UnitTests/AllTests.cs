@@ -1851,5 +1851,57 @@ namespace UnitTests {
 			return retVal;
 		}
 
+		///<summary>Validates that procedure specific deductibles take general deductibles into consideration.</summary>
+		public static string TestThirtyFour(int specificTest) {
+			if(specificTest != 0 && specificTest !=34) {
+				return "";
+			}
+			string suffix="34";
+			Patient pat=PatientT.CreatePatient(suffix);
+			Carrier carrier=CarrierT.CreateCarrier(suffix);
+			InsPlan plan=InsPlanT.CreateInsPlan(carrier.CarrierNum);
+			InsSub sub=InsSubT.CreateInsSub(pat.PatNum,plan.PlanNum);
+			long subNum=sub.InsSubNum;
+			BenefitT.CreateAnnualMax(plan.PlanNum,1000);
+			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.Diagnostic,100);
+			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.RoutinePreventive,100);
+			BenefitT.CreateDeductible(plan.PlanNum,EbenefitCategory.RoutinePreventive,0);
+			BenefitT.CreateDeductibleGeneral(plan.PlanNum,BenefitCoverageLevel.Individual,50);
+			BenefitT.CreateDeductible(plan.PlanNum,"D1351",50);
+			PatPlanT.CreatePatPlan(1,pat.PatNum,subNum);
+			//proc1 - PerExam
+			Procedure proc1=ProcedureT.CreateProcedure(pat,"D0120",ProcStat.C,"",45);
+			//proc2 - Sealant
+			Procedure proc2=ProcedureT.CreateProcedure(pat,"D1351",ProcStat.TP,"5",54);
+			//Lists:
+			List<ClaimProc> claimProcs=ClaimProcs.Refresh(pat.PatNum);
+			List<ClaimProc> claimProcListOld=new List<ClaimProc>();
+			Family fam=Patients.GetFamily(pat.PatNum);
+			List<InsSub> subList=InsSubs.RefreshForFam(fam);
+			List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
+			List<PatPlan> patPlans=PatPlans.Refresh(pat.PatNum);
+			List<Benefit> benefitList=Benefits.Refresh(patPlans,subList);
+			List<ClaimProcHist> histList=new List<ClaimProcHist>();
+			List<ClaimProcHist> loopList=new List<ClaimProcHist>();
+			List<Procedure> ProcList=Procedures.Refresh(pat.PatNum);
+			Procedure[] ProcListTP=Procedures.GetListTP(ProcList);//sorted by priority, then toothnum
+			//Attach to claim
+			ClaimProcT.AddInsPaid(pat.PatNum,plan.PlanNum,proc1.ProcNum,0,subNum,45,0);
+			//Validate
+			string retVal="";
+			histList=ClaimProcs.GetHistList(pat.PatNum,benefitList,patPlans,planList,DateTime.Today,subList);
+			Procedures.ComputeEstimates(proc2,pat.PatNum,ref claimProcs,false,planList,patPlans,benefitList,
+				histList,loopList,false,pat.Age,subList);
+			//save changes in the list to the database
+			ClaimProcs.Synch(ref claimProcs,claimProcListOld);
+			claimProcs=ClaimProcs.Refresh(pat.PatNum);
+			ClaimProc claimProc=ClaimProcs.GetEstimate(claimProcs,proc2.ProcNum,plan.PlanNum,subNum);
+			if(claimProc.DedEst!=5) {//Second procedure should show deductible of 5.
+				throw new Exception("Should be 5. \r\n");
+			}
+			retVal+="34: Passed.  General deductibles are taken into consideration when computing procedure specific deductibles.\r\n";
+			return retVal;
+		}
+
 	}
 }
