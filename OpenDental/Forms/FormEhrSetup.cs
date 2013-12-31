@@ -1,17 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using OpenDentBusiness;
-using OpenDental.Forms;
-using System.Xml;
-using System.Threading;
-using System.Net;
-using System.IO;
 using Ionic.Zip;
+using System;
+using System.Drawing;
+using System.IO;
+using System.Net;
+using System.Text;
+using System.Threading;
+using System.Windows.Forms;
+using System.Xml;
+using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class FormEhrSetup:Form {
@@ -29,7 +25,7 @@ namespace OpenDental {
 			}
 			if(!Security.IsAuthorized(Permissions.Setup,true)) {
 				//Hide all the buttons except Emergency Now and Close.
-				butICD9s.Visible=false;
+				//Unhiding all code system buttons since code systems can no longer be edited.
 				butAllergies.Visible=false;
 				//Forumularies will now be checked through New Crop
 				//butFormularies.Visible=false;
@@ -39,9 +35,10 @@ namespace OpenDental {
 				butInboundEmail.Visible=false;
 				butReminderRules.Visible=false;
 				butEducationalResources.Visible=false;
-				butRxNorm.Visible=false;
 				butKeys.Visible=false;
 				menuItemSettings.Enabled=false;
+				butTimeSynch.Visible=false;
+				butEhrTriggers.Visible=false;
 			}
 		}
 
