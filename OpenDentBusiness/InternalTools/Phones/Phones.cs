@@ -663,37 +663,22 @@ namespace OpenDentBusiness {
 						AND TaskNum NOT IN (SELECT tn.TaskNum FROM tasknote tn)  -- no notes yet 
 					LIMIT 1 
 					) AS TimeOfOldestTaskWithoutNotes 
-				-- time of oldest urgent task (gets the time of the most recent note on the oldest task if one exists)
-				,(SELECT IFNULL(MAX(tasknote.DateTimeNote),(SELECT IFNULL(MIN(task.DateTimeEntry),'0001-01-01')
-																											FROM task
-																											WHERE  
-																												TaskListNum=1697  -- Triage task list. 
-																												AND TaskStatus<>2  -- Not done (new or viewed).
-																												AND  
-																												(  -- COLLATE utf8_bin means case-sesitive search
-																													Descript COLLATE utf8_bin LIKE '%CUSTOMER%' 
-																													OR Descript COLLATE utf8_bin LIKE '%DOWN%' 
-																													OR Descript COLLATE utf8_bin LIKE '%URGENT%' 
-																													OR Descript COLLATE utf8_bin LIKE '%CONFERENCE%' 
-																													OR Descript COLLATE utf8_bin LIKE '%!!%' 
-																												) 
-																											LIMIT 1)
-					) -- End of SELECT portion.
-					FROM tasknote 
-					WHERE tasknote.TaskNum=(SELECT TaskNum
+				-- time of oldest urgent task or the oldest tasknote if one exists
+				,(SELECT MIN(DateTimeMax) 
+					FROM
+						(SELECT GREATEST(IFNULL(task.DateTimeEntry,'0001-01-01'), IFNULL((SELECT MAX(DateTimeNote) FROM tasknote WHERE tasknote.tasknum=task.tasknum),'0001-01-01')) AS DateTimeMax
 						FROM task
-						WHERE  
-							TaskListNum=1697  -- Triage task list. 
-							AND TaskStatus<>2  -- Not done (new or viewed).
+						WHERE TaskListNum=1697 /*Triage task list*/
+							AND TaskStatus<>2 /*Not done (new or viewed)*/
 							AND  
-							(  -- COLLATE utf8_bin means case-sesitive search
-								Descript COLLATE utf8_bin LIKE '%CUSTOMER%' 
-								OR Descript COLLATE utf8_bin LIKE '%DOWN%' 
-								OR Descript COLLATE utf8_bin LIKE '%URGENT%' 
-								OR Descript COLLATE utf8_bin LIKE '%CONFERENCE%' 
-								OR Descript COLLATE utf8_bin LIKE '%!!%' 
-							) 
-						LIMIT 1)) AS TimeOfOldestUrgentTaskNote;";
+							( Descript LIKE BINARY '%CUSTOMER%'
+							OR Descript LIKE BINARY '%DOWN%'
+							OR Descript LIKE BINARY '%URGENT%'
+							OR Descript LIKE BINARY '%CONFERENCE%'
+							OR Descript LIKE BINARY '%!!%'
+							)
+						) temp
+					) AS TimeOfOldestUrgentTaskNote;";
 			return Db.GetTable(command);
 		}
 
