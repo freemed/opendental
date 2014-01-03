@@ -33,8 +33,6 @@ namespace OpenDentBusiness {
 		public string FilledCity;
 		///<summary>The state where the vaccine was filled.  This can be different than the practice office state for historical vaccine infromation.  Exported in HL7 ORC-3.</summary>
 		public string FilledST;
-		///<summary>Exported in HL7 PD1-16.  Corresponds to HL7 table 0441 (guide page 232).</summary>
-		public VaccineRegistryStatus RegistryStatus;
 		///<summary>Exported in HL7 RXA-20.  Corresponds to HL7 table 0322 (guide page 225).</summary>
 		public VaccineCompletionStatus CompletionStatus;
 		///<summary>Exported in HL7 RXA-9.  Corresponds to CDC code set NIP001 (http://hl7v2-iz-testing.nist.gov/mu-immunization/).</summary>
@@ -63,22 +61,6 @@ namespace OpenDentBusiness {
 
 	}
 
-	///<summary>Exported in HL7 PD1-16.  Corresponds to HL7 table 0441 (guide page 232).</summary>
-	public enum VaccineRegistryStatus {
-		///<summary>0 - Code A.  Default.</summary>
-		Active,
-		///<summary>1 - Code I</summary>
-		InactiveUnspecified,
-		///<summary>2 - Code L</summary>
-		InactiveCannotContact,
-		///<summary>3 - Code M</summary>
-		InactiveTransferred,
-		///<summary>4 - Code P</summary>
-		InactivePermanent,
-		///<summary>5 - Code U</summary>
-		Unknown,
-	}
-
 	///<summary>Exported in HL7 RXA-20.  Corresponds to HL7 table 0322 (guide page 225).</summary>
 	public enum VaccineCompletionStatus {
 		///<summary>0 - Code CP.  Default.</summary>
@@ -100,17 +82,17 @@ namespace OpenDentBusiness {
 		///<summary>2 - Code 02</summary>
 		HistoricalOtherProvider,
 		///<summary>3 - Code 03</summary>
-		HistrocialParentsWrittenRecord,
+		HistoricalParentsWrittenRecord,
 		///<summary>4 - Code 04</summary>
-		HistrocialParentsRecall,
+		HistoricalParentsRecall,
 		///<summary>5 - Code 05</summary>
-		HistrocialOtherRegistry,
+		HistoricalOtherRegistry,
 		///<summary>6 - Code 06</summary>
-		HistrocialBirthCertificate,
+		HistoricalBirthCertificate,
 		///<summary>7 - Code 07</summary>
-		HistrocialSchoolRecord,
+		HistoricalSchoolRecord,
 		///<summary>8 - Code 08</summary>
-		HistrocialPublicAgency,
+		HistoricalPublicAgency,
 	}
 
 	///<summary>Exported in HL7 RXA-18.  Corresponds to CDC code set NIP002 (http://hl7v2-iz-testing.nist.gov/mu-immunization/).</summary>

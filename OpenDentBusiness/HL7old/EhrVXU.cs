@@ -278,24 +278,25 @@ namespace OpenDentBusiness.HL7 {
 			_seg.SetField(1,"RE");//ORC-1 Order Control.  Required (length 2).  Cardinality [1..1].  Value set HL70119.  The only allowed value is "RE".
 			//ORC-2 Placer Order Number.  Required if known.  Cardinality [0..1].  Type EI (guid page 62).
 			//ORC-3 Filler Order Number.  Required.  Cardinality [0..1].  Type EI (guid page 62).  "Shall be the unique ID of the sending system."  The city and state are used to record the region where the vaccine record was filled.
-			WriteEI(3,vaccine.VaccinePatNum.ToString(),cityWhereEntered,stateWhereEntered);
+			WriteEI(3,vaccine.VaccinePatNum.ToString(),vaccine.FilledCity,vaccine.FilledST);
 			//ORC-4 Placer Group Number.  Optional.
 			//ORC-5 Order Status.  Optional.
 			//ORD-6 Response Flag.  Optional.
 			//ORD-7 Quantity/Timing.  No longer used.
 			//ORD-8 Parent.  Optional.
 			//ORD-9 Date/Time of Transaction.  Optional.
-			//ORD-10 Entered By.  Required if known.  Cardinality [0..1].  Type XCN.  This is the person that entered the immunization record into the system.  TODO: We need UI for user entered by (maintain city/state logic).
-			string fName="";
-			string lName="";
-			string middleI="";
-			if(Security.CurUser.EmployeeNum!=0) {
-				Employee employee=Employees.GetEmp(Security.CurUser.EmployeeNum);
-				fName=employee.FName;
-				lName=employee.LName;
-				middleI=employee.MiddleI;
+			//ORD-10 Entered By.  Required if known.  Cardinality [0..1].  Type XCN.  This is the person that entered the immunization record into the system.
+			Userod userod=Userods.GetUser(vaccine.UserNum);//Can be null if vaccine.UserNum=0.
+			if(userod!=null) {
+				if(userod.EmployeeNum!=0) {
+					Employee employee=Employees.GetEmp(userod.EmployeeNum);
+					WriteXCN(10,employee.FName,employee.LName,employee.MiddleI,vaccine.UserNum.ToString(),cityWhereEntered,stateWhereEntered);
+				}
+				else if(userod.ProvNum!=0) {
+					Provider provEnteredBy=Providers.GetProv(userod.ProvNum);
+					WriteXCN(10,provEnteredBy.FName,provEnteredBy.LName,provEnteredBy.MI,vaccine.UserNum.ToString(),cityWhereEntered,stateWhereEntered);
+				}
 			}
-			WriteXCN(10,fName,lName,middleI,Security.CurUser.UserNum.ToString(),cityWhereEntered,stateWhereEntered);
 			//ORD-11 Verified By.  Optional.
 			//ORD-12 Ordering Provider.  Required if known. Cardinality [0..1].  Type XCN.  This shall be the provider ordering the immunization.  It is expected to be empty if the immunization record is transcribed from a historical record.
 			//TODO: We need provider picker UI for ordering provider.
@@ -357,7 +358,13 @@ namespace OpenDentBusiness.HL7 {
 			//PD1-13 Protection Indicator.  Required if PD1-12 is not blank (length unspecified).  Cardinality [0..1].
 			//PD1-14 Place of Worship.  Optional (length unspecified).  Cardinality [0..1].
 			//PD1-15 Advance Directive Code.  Optional (length unspecified).  Cardinality [0..1].
-			_seg.SetField(16,"A");//PD1-16 Immunization Registry Status.  Required if known (length unspecified).  Cardinality [0..1].  Value set HL70441 (guide page 232).  TODO: May need UI for this field.
+			//PD1-16 Immunization Registry Status.  Required if known (length unspecified).  Cardinality [0..1].  Value set HL70441 (guide page 232).  The word "registry" refers to the EHR.
+			if(_pat.PatStatus==PatientStatus.Patient) {
+				_seg.SetField(16,"A");//Active
+			}
+			else {
+				_seg.SetField(16,"I");//Inactive--Unspecified
+			}
 			//PD1-17 Immunization Registry Status Effective Date.  Required if PD1-16 is not blank.  Cardinality [0..1].
 			_seg.SetField(17,DateTime.Today.ToString("yyyyMMdd"));
 			//PD1-18 Publicity Code Effective Date.  Required if PD1-11 is not blank.
@@ -531,8 +538,36 @@ namespace OpenDentBusiness.HL7 {
 				WriteCE(7,drugUnit.UnitIdentifier,drugUnit.UnitText,"UCUM");//UCUM is not in table HL70396, but it there was a note stating that it was required in the guide and this value was required in the test cases.
 			}
 			//RXA-8 Administered Dosage Form.  Optional.
-			//RXA-9 Administration Notes.  Required if RXA-20 is "CP" or "PA".  Value set NIP 0001.  Type CE.  TODO: We need a UI for Admininstration Note, and the code system NIP 0001 needs to be built in.
-			WriteCE(9,"","","");
+			//RXA-9 Administration Notes.  Required if RXA-20 is "CP" or "PA".  Value set NIP 0001.  Type CE.
+			if(vaccine.CompletionStatus==VaccineCompletionStatus.Complete || vaccine.CompletionStatus==VaccineCompletionStatus.PartiallyAdministered) {
+				if(vaccine.AdministrationNoteCode==VaccineAdministrationNote.NewRecord) {
+					WriteCE(9,"00","New immunization record","NIP001");
+				}
+				else if(vaccine.AdministrationNoteCode==VaccineAdministrationNote.HistoricalSourceUnknown) {
+					WriteCE(9,"01","Historical information - source unspecified","NIP001");
+				}
+				else if(vaccine.AdministrationNoteCode==VaccineAdministrationNote.HistoricalOtherProvider) {
+					WriteCE(9,"02","Historical information - from other provider","NIP001");
+				}
+				else if(vaccine.AdministrationNoteCode==VaccineAdministrationNote.HistoricalParentsWrittenRecord) {
+					WriteCE(9,"03","Historical information - from parent's written record","NIP001");
+				}
+				else if(vaccine.AdministrationNoteCode==VaccineAdministrationNote.HistoricalParentsRecall) {
+					WriteCE(9,"04","Historical information - from parent's recall","NIP001");
+				}
+				else if(vaccine.AdministrationNoteCode==VaccineAdministrationNote.HistoricalOtherRegistry) {
+					WriteCE(9,"05","Historical information - from other registry","NIP001");
+				}
+				else if(vaccine.AdministrationNoteCode==VaccineAdministrationNote.HistoricalBirthCertificate) {
+					WriteCE(9,"06","Historical information - from birth certificate","NIP001");
+				}
+				else if(vaccine.AdministrationNoteCode==VaccineAdministrationNote.HistoricalSchoolRecord) {
+					WriteCE(9,"07","Historical information - from school record","NIP001");
+				}
+				else if(vaccine.AdministrationNoteCode==VaccineAdministrationNote.HistoricalPublicAgency) {
+					WriteCE(9,"08","Historical information - from public agency","NIP001");
+				}
+			}
 			//RXA-10 Administering Provider.  Required if known.  This is the person who gave the administration or the vaccinaton.  It is not the ordering clinician.  TODO: We need a provider picker UI for the administering provider.
 			//RXA-11 Administered-at Location.  Required if known.  Type LA2 (guide page 68).  This is the clinic/site where the vaccine was administered.
 			WriteLA2(11,cityWhereEntered,stateWhereEntered);
@@ -549,7 +584,19 @@ namespace OpenDentBusiness.HL7 {
 			}
 			//RXA-18 Substance/Treatment Refusal Reason.  Required if RXA-20 is "RE".  Cardinality [0..*].  Required when RXA-20 is "RE", otherwise do not send.  Value set NIP002.  Type CE.  TODO: We need UI for refusal reason.
 			//RXA-19 Indication.  Optional.
-			//RXA-20 Completion Status.  Required if known (length 2..2).  Value set HL70322 (guide page 225).  CP=Complete, RE=Refused, NA=Not Administered, PA=Partially Administered.  TODO: We need UI for completion status.
+			//RXA-20 Completion Status.  Required if known (length 2..2).  Value set HL70322 (guide page 225).  CP=Complete, RE=Refused, NA=Not Administered, PA=Partially Administered.
+			if(vaccine.CompletionStatus==VaccineCompletionStatus.Refused) {
+				_seg.SetField(20,"RE");
+			}
+			else if(vaccine.CompletionStatus==VaccineCompletionStatus.NotAdministered) {
+				_seg.SetField(20,"NA");
+			}
+			else if(vaccine.CompletionStatus==VaccineCompletionStatus.PartiallyAdministered) {
+				_seg.SetField(20,"PA");
+			}
+			else {//Complete
+				_seg.SetField(20,"CP");
+			}
 			//RXA-21 Action code.  Required if known (length 2..2).  Value set HL70323 (guide page 225).  A=Add, D=Delete, U=Update.  TODO: We need UI for action code.
 			//RXA-22 System Entry Date/Time.  Optional.
 			//RXA-23 Administered Drug Strength.  Optional.

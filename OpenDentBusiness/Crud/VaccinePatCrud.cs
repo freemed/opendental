@@ -58,7 +58,6 @@ namespace OpenDentBusiness.Crud{
 				vaccinePat.Note                  = PIn.String(table.Rows[i]["Note"].ToString());
 				vaccinePat.FilledCity            = PIn.String(table.Rows[i]["FilledCity"].ToString());
 				vaccinePat.FilledST              = PIn.String(table.Rows[i]["FilledST"].ToString());
-				vaccinePat.RegistryStatus        = (VaccineRegistryStatus)PIn.Int(table.Rows[i]["RegistryStatus"].ToString());
 				vaccinePat.CompletionStatus      = (VaccineCompletionStatus)PIn.Int(table.Rows[i]["CompletionStatus"].ToString());
 				vaccinePat.AdministrationNoteCode= (VaccineAdministrationNote)PIn.Int(table.Rows[i]["AdministrationNoteCode"].ToString());
 				vaccinePat.UserNum               = PIn.Long  (table.Rows[i]["UserNum"].ToString());
@@ -125,7 +124,6 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(vaccinePat.Note)+"',"
 				+"'"+POut.String(vaccinePat.FilledCity)+"',"
 				+"'"+POut.String(vaccinePat.FilledST)+"',"
-				+    POut.Int   ((int)vaccinePat.RegistryStatus)+","
 				+    POut.Int   ((int)vaccinePat.CompletionStatus)+","
 				+    POut.Int   ((int)vaccinePat.AdministrationNoteCode)+","
 				+    POut.Long  (vaccinePat.UserNum)+","
@@ -159,7 +157,6 @@ namespace OpenDentBusiness.Crud{
 				+"Note                  = '"+POut.String(vaccinePat.Note)+"', "
 				+"FilledCity            = '"+POut.String(vaccinePat.FilledCity)+"', "
 				+"FilledST              = '"+POut.String(vaccinePat.FilledST)+"', "
-				+"RegistryStatus        =  "+POut.Int   ((int)vaccinePat.RegistryStatus)+", "
 				+"CompletionStatus      =  "+POut.Int   ((int)vaccinePat.CompletionStatus)+", "
 				+"AdministrationNoteCode=  "+POut.Int   ((int)vaccinePat.AdministrationNoteCode)+", "
 				+"UserNum               =  "+POut.Long  (vaccinePat.UserNum)+", "
@@ -220,10 +217,6 @@ namespace OpenDentBusiness.Crud{
 			if(vaccinePat.FilledST != oldVaccinePat.FilledST) {
 				if(command!=""){ command+=",";}
 				command+="FilledST = '"+POut.String(vaccinePat.FilledST)+"'";
-			}
-			if(vaccinePat.RegistryStatus != oldVaccinePat.RegistryStatus) {
-				if(command!=""){ command+=",";}
-				command+="RegistryStatus = "+POut.Int   ((int)vaccinePat.RegistryStatus)+"";
 			}
 			if(vaccinePat.CompletionStatus != oldVaccinePat.CompletionStatus) {
 				if(command!=""){ command+=",";}

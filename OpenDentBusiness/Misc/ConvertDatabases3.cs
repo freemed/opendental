@@ -3061,18 +3061,6 @@ namespace OpenDentBusiness {
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE vaccinepat ADD RegistryStatus tinyint NOT NULL";
-					Db.NonQ(command);
-				}
-				else {//oracle
-					command="ALTER TABLE vaccinepat ADD RegistryStatus number(3)";
-					Db.NonQ(command);
-					command="UPDATE vaccinepat SET RegistryStatus = 0 WHERE RegistryStatus IS NULL";
-					Db.NonQ(command);
-					command="ALTER TABLE vaccinepat MODIFY RegistryStatus NOT NULL";
-					Db.NonQ(command);
-				}
-				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE vaccinepat ADD CompletionStatus tinyint NOT NULL";
 					Db.NonQ(command);
 				}
