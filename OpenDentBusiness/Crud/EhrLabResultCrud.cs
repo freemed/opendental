@@ -176,7 +176,16 @@ namespace OpenDentBusiness.Crud{
 				ehrLabResult.PerformingOrganizationAddressStreet                        = PIn.String(table.Rows[i]["PerformingOrganizationAddressStreet"].ToString());
 				ehrLabResult.PerformingOrganizationAddressOtherDesignation              = PIn.String(table.Rows[i]["PerformingOrganizationAddressOtherDesignation"].ToString());
 				ehrLabResult.PerformingOrganizationAddressCity                          = PIn.String(table.Rows[i]["PerformingOrganizationAddressCity"].ToString());
-				ehrLabResult.PerformingOrganizationAddressStateOrProvince               = (USPSAlphaStateCode)PIn.Int(table.Rows[i]["PerformingOrganizationAddressStateOrProvince"].ToString());
+				string performingOrganizationAddressStateOrProvince=table.Rows[i]["PerformingOrganizationAddressStateOrProvince"].ToString();
+				if(performingOrganizationAddressStateOrProvince==""){
+					ehrLabResult.PerformingOrganizationAddressStateOrProvince             =(USPSAlphaStateCode)0;
+				}
+				else try{
+					ehrLabResult.PerformingOrganizationAddressStateOrProvince             =(USPSAlphaStateCode)Enum.Parse(typeof(USPSAlphaStateCode),performingOrganizationAddressStateOrProvince);
+				}
+				catch{
+					ehrLabResult.PerformingOrganizationAddressStateOrProvince             =(USPSAlphaStateCode)0;
+				}
 				ehrLabResult.PerformingOrganizationAddressZipOrPostalCode               = PIn.String(table.Rows[i]["PerformingOrganizationAddressZipOrPostalCode"].ToString());
 				ehrLabResult.PerformingOrganizationAddressCountryCode                   = PIn.String(table.Rows[i]["PerformingOrganizationAddressCountryCode"].ToString());
 				string performingOrganizationAddressAddressType=table.Rows[i]["PerformingOrganizationAddressAddressType"].ToString();
@@ -311,7 +320,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(ehrLabResult.PerformingOrganizationAddressStreet)+"',"
 				+"'"+POut.String(ehrLabResult.PerformingOrganizationAddressOtherDesignation)+"',"
 				+"'"+POut.String(ehrLabResult.PerformingOrganizationAddressCity)+"',"
-				+    POut.Int   ((int)ehrLabResult.PerformingOrganizationAddressStateOrProvince)+","
+				+"'"+POut.String(ehrLabResult.PerformingOrganizationAddressStateOrProvince.ToString())+"',"
 				+"'"+POut.String(ehrLabResult.PerformingOrganizationAddressZipOrPostalCode)+"',"
 				+"'"+POut.String(ehrLabResult.PerformingOrganizationAddressCountryCode)+"',"
 				+"'"+POut.String(ehrLabResult.PerformingOrganizationAddressAddressType.ToString())+"',"
@@ -386,7 +395,7 @@ namespace OpenDentBusiness.Crud{
 				+"PerformingOrganizationAddressStreet                        = '"+POut.String(ehrLabResult.PerformingOrganizationAddressStreet)+"', "
 				+"PerformingOrganizationAddressOtherDesignation              = '"+POut.String(ehrLabResult.PerformingOrganizationAddressOtherDesignation)+"', "
 				+"PerformingOrganizationAddressCity                          = '"+POut.String(ehrLabResult.PerformingOrganizationAddressCity)+"', "
-				+"PerformingOrganizationAddressStateOrProvince               =  "+POut.Int   ((int)ehrLabResult.PerformingOrganizationAddressStateOrProvince)+", "
+				+"PerformingOrganizationAddressStateOrProvince               = '"+POut.String(ehrLabResult.PerformingOrganizationAddressStateOrProvince.ToString())+"', "
 				+"PerformingOrganizationAddressZipOrPostalCode               = '"+POut.String(ehrLabResult.PerformingOrganizationAddressZipOrPostalCode)+"', "
 				+"PerformingOrganizationAddressCountryCode                   = '"+POut.String(ehrLabResult.PerformingOrganizationAddressCountryCode)+"', "
 				+"PerformingOrganizationAddressAddressType                   = '"+POut.String(ehrLabResult.PerformingOrganizationAddressAddressType.ToString())+"', "
@@ -599,7 +608,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(ehrLabResult.PerformingOrganizationAddressStateOrProvince != oldEhrLabResult.PerformingOrganizationAddressStateOrProvince) {
 				if(command!=""){ command+=",";}
-				command+="PerformingOrganizationAddressStateOrProvince = "+POut.Int   ((int)ehrLabResult.PerformingOrganizationAddressStateOrProvince)+"";
+				command+="PerformingOrganizationAddressStateOrProvince = '"+POut.String(ehrLabResult.PerformingOrganizationAddressStateOrProvince.ToString())+"'";
 			}
 			if(ehrLabResult.PerformingOrganizationAddressZipOrPostalCode != oldEhrLabResult.PerformingOrganizationAddressZipOrPostalCode) {
 				if(command!=""){ command+=",";}

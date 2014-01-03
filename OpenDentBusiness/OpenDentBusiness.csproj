@@ -287,6 +287,8 @@
     <Compile Include="Crud\MountDefCrud.cs" />
     <Compile Include="Crud\MountItemCrud.cs" />
     <Compile Include="Crud\MountItemDefCrud.cs" />
+    <Compile Include="Crud\OIDExternalCrud.cs" />
+    <Compile Include="Crud\OIDInternalCrud.cs" />
     <Compile Include="Crud\OperatoryCrud.cs" />
     <Compile Include="Crud\OrionProcCrud.cs" />
     <Compile Include="Crud\OrthoChartCrud.cs" />
@@ -439,6 +441,8 @@
     <Compile Include="Data Interface\Interventions.cs" />
     <Compile Include="Data Interface\Loincs.cs" />
     <Compile Include="Data Interface\MapAreas.cs" />
+    <Compile Include="Data Interface\OIDExternals.cs" />
+    <Compile Include="Data Interface\OIDInternals.cs" />
     <Compile Include="Data Interface\PatientRaces.cs" />
     <Compile Include="Data Interface\PayorTypes.cs" />
     <Compile Include="Data Interface\Resellers.cs" />
@@ -835,6 +839,8 @@
     <Compile Include="Plugins\PluginContainer.cs" />
     <Compile Include="Plugins\Plugins.cs" />
     <Compile Include="TableTypes\CDSPermission.cs" />
+    <Compile Include="TableTypes\OIDExternal.cs" />
+    <Compile Include="TableTypes\OIDInternal.cs" />
     <Compile Include="TableTypes\EhrLabSpecimenRejectReason.cs" />
     <Compile Include="TableTypes\EhrLabSpecimenCondition.cs" />
     <Compile Include="TableTypes\EhrLabSpecimen.cs" />

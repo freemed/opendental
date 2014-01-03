@@ -2706,7 +2706,7 @@ namespace OpenDentBusiness {
 						PerformingOrganizationAddressStreet varchar(255) NOT NULL,
 						PerformingOrganizationAddressOtherDesignation varchar(255) NOT NULL,
 						PerformingOrganizationAddressCity varchar(255) NOT NULL,
-						PerformingOrganizationAddressStateOrProvince tinyint NOT NULL,
+						PerformingOrganizationAddressStateOrProvince varchar(255) NOT NULL,
 						PerformingOrganizationAddressZipOrPostalCode varchar(255) NOT NULL,
 						PerformingOrganizationAddressCountryCode varchar(255) NOT NULL,
 						PerformingOrganizationAddressAddressType varchar(255) NOT NULL,
@@ -2779,7 +2779,7 @@ namespace OpenDentBusiness {
 						PerformingOrganizationAddressStreet varchar2(255),
 						PerformingOrganizationAddressOtherDesignation varchar2(255),
 						PerformingOrganizationAddressCity varchar2(255),
-						PerformingOrganizationAddressStateOrProvince number(3) NOT NULL,
+						PerformingOrganizationAddressStateOrProvince varchar2(255),
 						PerformingOrganizationAddressZipOrPostalCode varchar2(255),
 						PerformingOrganizationAddressCountryCode varchar2(255),
 						PerformingOrganizationAddressAddressType varchar2(255),
@@ -2990,7 +2990,61 @@ namespace OpenDentBusiness {
 				//Oracle compatible.
 				command="ALTER TABLE allergydef DROP COLUMN SnomedAllergyTo";
 				Db.NonQ(command);
-
+				//OID External
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS oidexternal";
+					Db.NonQ(command);
+					command=@"CREATE TABLE oidexternal (
+						OIDExternalNum bigint NOT NULL auto_increment PRIMARY KEY,
+						IDType varchar(255) NOT NULL,
+						IDInternal bigint NOT NULL,
+						IDExternal varchar(255) NOT NULL,
+						rootExternal varchar(255) NOT NULL,
+						INDEX(IDType,IDInternal),
+						INDEX(rootExternal(62),IDExternal(62))
+						) DEFAULT CHARSET=utf8";//Index is 1000/8=125/n where n is the number of columns to be indexed together. In this case the result is 62.5=62
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE oidexternal'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE oidexternal (
+						OIDExternalNum number(20) NOT NULL,
+						IDType varchar2(255),
+						IDInternal number(20),
+						IDExternal varchar2(255),
+						rootExternal varchar2(255),
+						CONSTRAINT oidexternal_OIDExternalNum PRIMARY KEY (OIDExternalNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX oidexternal_type_ID ON oidexternal (IDType, IDInternal)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX oidexternal_root_extension ON oidexternal (rootExternal, IDExternal)";
+					Db.NonQ(command);
+				}
+				//OID Internal
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS oidinternal";
+					Db.NonQ(command);
+					command=@"CREATE TABLE oidinternal (
+						EhrOIDNum bigint NOT NULL auto_increment PRIMARY KEY,
+						IDType varchar(255) NOT NULL,
+						IDRoot varchar(255) NOT NULL
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE oidinternal'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE oidinternal (
+						EhrOIDNum number(20) NOT NULL,
+						IDType varchar2(255),
+						IDRoot varchar2(255),
+						CONSTRAINT oidinternal_EhrOIDNum PRIMARY KEY (EhrOIDNum)
+						)";
+					Db.NonQ(command);
+				}
+				
 
 
 
@@ -3009,4 +3063,15 @@ namespace OpenDentBusiness {
 
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
 

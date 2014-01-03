@@ -38,7 +38,7 @@ namespace OpenDentBusiness {
 		public List<EhrLabSpecimenRejectReason> ListEhrLabSpecimenRejectReason;
 		///<summary>[0..*]This is not a data column but is stored in a seperate table named EhrLabSpecimenCondition.  SPM.24</summary>
 		[CrudColumn(IsNotDbColumn=true)]
-		public List<EhrLabSpecimenCondition> ListRelevantClinicalInformation;
+		public List<EhrLabSpecimenCondition> ListEhrLabSpecimenCondition;
 
 
 		///<summary></summary>

@@ -34,6 +34,25 @@ namespace OpenDentBusiness{
 			return fam;
 		}
 
+		/// <summary>Returns a patient, or null, based on an internally defined or externally defined globaly unique identifier.  This can be an OID, GUID, IID, UUID, etc.</summary>
+		/// <param name="IDNumber">The extension portion of the GUID/OID.  Example: 333224444 if using SSN as a the unique identifier</param>
+		/// <param name="OID">root OID that the IDNumber extends.  Example: 2.16.840.1.113883.4.1 is the OID for the Social Security Numbers.</param>
+		public static Patient GetByGUID(string IDNumber, string OID){
+			if(OID==OIDInternals.GetForType(IdentifierType.Patient)) {//OID matches the localy defined patnum OID.
+				return Patients.GetPat(PIn.Long(IDNumber));
+			}
+			else {
+				OIDExternal oidExt=OIDExternals.GetByRootAndExtention(OID,IDNumber);
+				if(oidExt==null || oidExt.IDType!=IdentifierType.Patient) {
+					return null;//OID either not found, or does not represent a patient.
+				}
+				return Patients.GetPat(oidExt.IDInternal);
+			}
+		}
+							//patcur=Patients.GetByGUID(fields[3].Split('~')[i].Split('^')[1],								//ID Number
+							//													fields[3].Split('~')[i].Split('^')[4].Split('&')[2],	//Assigning Authority ID
+							//													fields[3].Split('~')[i].Split('^')[5]);								//Identifier Type Code
+
 		/*
 		public static string GetFamilySelectCommand(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

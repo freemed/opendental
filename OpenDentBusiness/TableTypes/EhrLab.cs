@@ -180,6 +180,9 @@ namespace OpenDentBusiness {
 		///<summary>[0..*] This is not a data column but is stored in a seperate table named EhrLabResult. OBX.*</summary>
 		[CrudColumn(IsNotDbColumn=true)]
 		public List<EhrLabResult> ListEhrLabResults;
+		///<summary>[0..*] This is not a data column but is stored in a seperate table named EhrLabSpecimen. SPM.*</summary>
+		[CrudColumn(IsNotDbColumn=true)]
+		public List<EhrLabSpecimen> ListEhrLabSpecimin;
 
 		///<summary></summary>
 		public EhrLab Copy() {
@@ -533,6 +536,16 @@ namespace EhrLaboratories {
 		WC,
 		///<summary>85 - Workers_ Comp Number</summary>
 		WCN
+	}
+
+	///<summary>Identifier Type.  OID:2.16.840.1.113883...  HL70369 code:HL70361.  Source phinvads.cdc.gov</summary>
+	public enum HL70361 {
+		//Used in ACK messages
+	}
+
+	///<summary>Identifier Type.  OID:2.16.840.1.113883...  HL70369 code:HL70362.  Source phinvads.cdc.gov</summary>
+	public enum HL70362 {
+		//Used in ACK messages
 	}
 
 	///<summary>Coding Systems.  OID:2.16.840.1.113883.12.369  Source phinvads.cdc.gov</summary>

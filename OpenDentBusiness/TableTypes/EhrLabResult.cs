@@ -145,6 +145,7 @@ namespace OpenDentBusiness {
 		///<summary>OBX.24.3</summary>
 		public string PerformingOrganizationAddressCity;
 		///<summary>USPS Alpha State Codes.  OBX.24.4</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public USPSAlphaStateCode PerformingOrganizationAddressStateOrProvince;
 		///<summary>OBX.24.5</summary>
 		public string PerformingOrganizationAddressZipOrPostalCode;

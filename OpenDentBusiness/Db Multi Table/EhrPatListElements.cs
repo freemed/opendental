@@ -31,8 +31,8 @@ namespace OpenDentBusiness {
 						//TODO Units
 						from+=",ehrlab AS ehrlab"+i+",ehrlabresult AS ehrlabresult"+i+" ";
 						where+="AND ehrlab"+i+".PatNum=patient.PatNum AND ehrlab"+i+".EhrLabNum=ehrlabresult"+i+".EhrLabNum ";//join
-						where+="AND ("+elementList[i].CompareString+"=ehrlabresult"+i+".ObservationIdentifierID OR " 
-							+elementList[i].CompareString+"=ehrlabresult"+i+".ObservationIdentifierIDAlt) ";//filter, LOINC of lab observation
+						where+="AND ('"+elementList[i].CompareString+"'=ehrlabresult"+i+".ObservationIdentifierID OR '" 
+							+elementList[i].CompareString+"'=ehrlabresult"+i+".ObservationIdentifierIDAlt) ";//filter, LOINC of lab observation
 						if(elementList[i].StartDate!=null && elementList[i].StartDate.Year>1880) {
 							where+="AND "+DbHelper.DateColumn("ehrlabresult"+i+".ObservationDateTime")+">="+POut.Date(elementList[i].StartDate)+" ";//on or after this date
 						}
@@ -44,39 +44,45 @@ namespace OpenDentBusiness {
 							case HL70125.CE:
 							case HL70125.CWE:
 								select+=",(CASE WHEN ehrlabresult"+i+".ObservationValueCodedElementID='' THEN ehrlabresult"+i+".ObservationValueCodedElementIDAlt ELSE ehrlabresult"+i+".ObservationValueCodedElementID END) AS LabValue";
-								where+="AND (ehrlabresult"+i+".ObservationValueCodedElementID"+GetOperandText(elementList[i].Operand)+"'"+elementList[i].LabValue+"' OR "
-									+"ehrlabresult"+i+".ObservationValueCodedElementIDAlt"+GetOperandText(elementList[i].Operand)+"'"+elementList[i].LabValue+"') ";
+								where+="AND (ehrlabresult"+i+".ObservationValueCodedElementID='"+elementList[i].LabValue+"' OR "
+									+"ehrlabresult"+i+".ObservationValueCodedElementIDAlt='"+elementList[i].LabValue+"') "
+									+"AND (ehrlabresult"+i+".ValueType='CWE' OR ehrlabresult"+i+".ValueType='CE') ";
 								break;
 							//DT is stored as a string in ehrlabresult.ObservationValueDateTime as YYYY[MM[DD]]
 							case HL70125.DT:
-								select+=","+DbHelper.DateFormatColumn("RPAD(ehrlabresult"+i+".ObservationValueDateTime,8,'01')","%m/%d/%Y");
+								select+=",ehrlabresult"+i+".ObservationValueDateTime ";//+DbHelper.DateFormatColumn("RPAD(ehrlabresult"+i+".ObservationValueDateTime,8,'01')","%m/%d/%Y");
 								where+="AND "+DbHelper.DateColumn("RPAD(ehrlabresult"+i+".ObservationValueDateTime,8,'01')")
-									+GetOperandText(elementList[i].Operand)+POut.Date(PIn.Date(elementList[i].LabValue))+" ";
+									+GetOperandText(elementList[i].Operand)+"'"+POut.String(elementList[i].LabValue)+"' "
+									+"AND ehrlabresult"+i+".ValueType='DT' ";
 								break;
 							//TS is YYYYMMDDHHMMSS, string compare
 							case HL70125.TS:
-								select+=","+DbHelper.DateTFormatColumn("ehrlabresult"+i+".ObservationValueDateTime","%m/%d/%Y %H:%i:%s");
-								where+="AND "+POut.DateT(PIn.DateT(DbHelper.DateTFormatColumn("ehrlabresult"+i+".ObservationValueDateTime","%m/%d/%Y %H:%i:%s")))
-									+GetOperandText(elementList[i].Operand)+POut.DateT(PIn.DateT(elementList[i].LabValue))+" ";
+								select+=",ehrlabresult"+i+".ObservationValueDateTime ";//+DbHelper.DateTFormatColumn("ehrlabresult"+i+".ObservationValueDateTime","%m/%d/%Y %H:%i:%s");
+								where+="AND ehrlabresult"+i+".ObservationValueDateTime "//+POut.DateT(PIn.DateT(DbHelper.DateTFormatColumn("ehrlabresult"+i+".ObservationValueDateTime","%m/%d/%Y %H:%i:%s")))
+									+GetOperandText(elementList[i].Operand)+"'"+POut.String(elementList[i].LabValue)+"' "
+									+"AND ehrlabresult"+i+".ValueType='TS' ";
 								break;
 							//00:00:00
 							case HL70125.TM:
 								select+=",ehrlabresult"+i+".ObservationValueTime";
-								where+="AND ehrlabresult"+i+".ObservationValueTime"+GetOperandText(elementList[i].Operand)+POut.TSpan(PIn.TSpan(elementList[i].LabValue))+" ";
+								where+="AND ehrlabresult"+i+".ObservationValueTime"+GetOperandText(elementList[i].Operand)+"'"+POut.TSpan(PIn.TSpan(elementList[i].LabValue))+"' "
+									+"AND ehrlabresult"+i+".ValueType='TM' ";
 								break;
 							case HL70125.SN:
 								select+=",CONCAT(CONCAT(CONCAT(ehrlabresult"+i+".ObservationValueComparator,ehrlabresult"+i+".ObservationValueNumber1),ehrlabresult"+i+".ObservationValueSeparatorOrSuffix),ehrlabresult"+i+".ObservationValueNumber2)";
-								//where+="AND TRUE ";
+								where+="AND ehrlabresult"+i+".ValueType='SN' ";
 								break;
 							case HL70125.NM:
 								select+=",ehrlabresult"+i+".ObservationValueNumeric";
-								where+="AND ehrlabresult"+i+".ObservationValueNumeric"+GetOperandText(elementList[i].Operand)+POut.Double(PIn.Double(elementList[i].LabValue))+" ";
+								where+="AND ehrlabresult"+i+".ObservationValueNumeric"+GetOperandText(elementList[i].Operand)+POut.Double(PIn.Double(elementList[i].LabValue))+" "
+									+"AND ehrlabresult"+i+".ValueType='NM' ";
 								break;
 							case HL70125.FT:
 							case HL70125.ST:
 							case HL70125.TX:
 								select+=",ehrlabresult"+i+".ObservationValueText";
-								where+="AND ehrlabresult"+i+".ObservationValueText"+GetOperandText(elementList[i].Operand)+POut.String(elementList[i].LabValue)+" ";
+								//where+="AND ehrlabresult"+i+".ObservationValueText"+GetOperandText(elementList[i].Operand)+POut.String(elementList[i].LabValue)+" "
+								where+="AND (ehrlabresult"+i+".ValueType='FT' OR ehrlabresult"+i+".ValueType='ST' OR ehrlabresult"+i+".ValueType='TX') ";
 								break;
 						}
 						select+=",ehrlabresult"+i+".ObservationDateTime ";
