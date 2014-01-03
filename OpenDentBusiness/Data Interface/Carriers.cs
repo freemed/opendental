@@ -199,8 +199,9 @@ namespace OpenDentBusiness{
 				//so the edited carrier looks good, but now we need to make sure that the original was allowed to be changed.
 				command="SELECT ElectID,IsCDA FROM carrier WHERE CarrierNum = '"+POut.Long(carrier.CarrierNum)+"'";
 				table=Db.GetTable(command);
-				if(PIn.Bool(table.Rows[0][1].ToString())//if original carrier IsCDA
-					&& PIn.String(table.Rows[0][0].ToString()) !=carrier.ElectID)//and the ElectID was changed
+				if(PIn.Bool(table.Rows[0]["IsCDA"].ToString())//if original carrier IsCDA
+					&& PIn.String(table.Rows[0]["ElectID"].ToString()).Trim()!="" //and the ElectID was already set
+					&& PIn.String(table.Rows[0]["ElectID"].ToString())!=carrier.ElectID)//and the ElectID was changed
 				{
 					command="SELECT COUNT(*) FROM etrans WHERE CarrierNum= "+POut.Long(carrier.CarrierNum)
 						+" OR CarrierNum2="+POut.Long(carrier.CarrierNum);
