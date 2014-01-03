@@ -32,6 +32,7 @@ namespace OpenDentBusiness {
 		public Dictionary<long,List<EhrCqmMedicationPat>> DictPatNumListMedPats;
 		public Dictionary<long,List<EhrCqmNotPerf>> DictPatNumListNotPerfs;
 		public Dictionary<long,List<EhrCqmProc>> DictPatNumListProcs;
+		public Dictionary<long,List<EhrCqmVitalsign>> DictPatNumListVitalsigns;
 	}
 
 	public enum QualityType {
@@ -180,11 +181,11 @@ namespace OpenDentBusiness {
 		public long EhrCqmMeasEventNum;
 		public long PatNum;
 		public string CodeValue;
-		public string CodeSystemOID;
 		public string CodeSystemName;
+		public string CodeSystemOID;
 		public string Description;
-		public string ValueSetOID;
 		public string ValueSetName;
+		public string ValueSetOID;
 		public DateTime DateTEvent;
 	}
 
@@ -193,11 +194,25 @@ namespace OpenDentBusiness {
 		public long PatNum;
 		public long ProvNum;
 		public string ProcCode;
-		public string CodeSystemOID;
 		public string CodeSystemName;
+		public string CodeSystemOID;
 		public string Description;
 		public string ValueSetName;
 		public string ValueSetOID;
 		public DateTime ProcDate;
+	}
+
+	public class EhrCqmVitalsign {
+		public long EhrCqmVitalsignNum;
+		public long PatNum;
+		public decimal BMI;//in kg/m2
+		public string WeightCode;
+		public string CodeValue;
+		public string CodeSystemName;
+		public string CodeSystemOID;
+		public string Description;
+		public string ValueSetName;
+		public string ValueSetOID;
+		public DateTime DateTaken;
 	}
 }

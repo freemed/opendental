@@ -759,6 +759,10 @@ Do you want to remove the pregnancy diagnosis?"))
 				MsgBox.Show(this,"Please fix height first.");
 				return;
 			}
+			if(height<0) {
+				MsgBox.Show(this,"Please fix height first.");
+				return;
+			}
 			//validate weight
 			float weight=0;
 			try {
@@ -767,6 +771,10 @@ Do you want to remove the pregnancy diagnosis?"))
 				}
 			}
 			catch {
+				MsgBox.Show(this,"Please fix weight first.");
+				return;
+			}
+			if(weight<0) {
 				MsgBox.Show(this,"Please fix weight first.");
 				return;
 			}
@@ -782,6 +790,10 @@ Do you want to remove the pregnancy diagnosis?"))
 				}
 			}
 			catch {
+				MsgBox.Show(this,"Please fix BP first.");
+				return;
+			}
+			if(BPsys<0 || BPdia<0) {
 				MsgBox.Show(this,"Please fix BP first.");
 				return;
 			}

@@ -2186,34 +2186,37 @@ namespace OpenDentBusiness {
 			List<string> listTwoOfEncOIDs=new List<string>();
 			//This adultEncQuery is used by several CQMs
 			//All encounters in the date range by the provider (based on ehrkey, so may be list of providers) for patients over 18 at the start of the measurement period
-			string adultEncCommand="SELECT encounter.* FROM encounter "
+			string encounterSelectWhere="SELECT encounter.* FROM encounter "
 				+"INNER JOIN patient ON patient.PatNum=encounter.PatNum "
 				+"WHERE YEAR(patient.Birthdate)>1880 "//valid birthdate
-				+"AND patient.Birthdate<="+POut.Date(dateStart)+"-INTERVAL 18 YEAR "//18 or over at start of measurement period
 				+"AND encounter.ProvNum IN("+POut.String(provs)+") "
-				+"AND DATE(encounter.DateEncounter) BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
-				+"ORDER BY encounter.PatNum,encounter.DateEncounter";
+				+"AND DATE(encounter.DateEncounter) BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" ";
+			string encounterWhereAdults="AND patient.Birthdate<="+POut.Date(dateStart)+"-INTERVAL 18 YEAR ";//18 or over at start of measurement period
+			string encounterOrder="ORDER BY encounter.PatNum,encounter.DateEncounter DESC";
+			string adultEncCommand=encounterSelectWhere+encounterWhereAdults+encounterOrder;
 			switch(qtype) {
 				#region MedicationsEntered
 				case QualityType2014.MedicationsEntered:
 					s.Restart();
-					#region GetValidEncounters
+					#region Get Initial Patient Population
+					#region Get Valid Encounters
 					listOneOfEncOIDs.Add("2.16.840.1.113883.3.600.1.1834");//Medications Encounter Code Set Grouping Value Set
 					//measureCur.ListEncounters will include all encounters that belong to the OneOf and TwoOf lists, so a patient will appear more than once
 					//if they had more than one encounter from those sets in date range
 					measureCur.DictPatNumListEncounters=GetEncountersForInitialPatPop(adultEncCommand,listOneOfEncOIDs,listTwoOfEncOIDs);
 					#endregion
-					#region GetInitialPatientPopulation
+					#region Get Patient Data
 					//Denominator is equal to inital patient population for this measure, no exclusions
 					measureCur.ListEhrPats=GetEhrPatsFromEncounters(measureCur.DictPatNumListEncounters);
 					#endregion
-					#region GetCurrentMedicationsDocumentedProcedures
+					#endregion
+					#region Get Current Medications Documented Procedures
 					//Get procedures from the value set that occurred during measurement period
 					List<string> listProcValueSetOIDs=new List<string>() { "2.16.840.1.113883.3.600.1.462" };//Current Medications Documented SNMD SNOMED-CT Value Set
 					//Only one procedure code in the value set for this measure, SNOMEDCT - 428191000124101 - Documentation of current medications (procedure)
 					measureCur.DictPatNumListMeasureEvents=GetMedDocumentedProcs(listProcValueSetOIDs,dateStart,dateEnd);
 					#endregion
-					#region GetMedProcsNotPerformed
+					#region Get Medication Procs Not Performed
 					//Get a list of all not performed items from the value set that occurred during the measurement period with valid readson
 					List<string> listMedsDocumentedOIDs=new List<string>() { "2.16.840.1.113883.3.600.1.462" };//Current Medications Documented SNMD SNOMED-CT Value Set
 					List<string> listMedicalOtherReasonOIDs=new List<string>() { "2.16.840.1.113883.3.600.1.1502" };//Medical or Other reason not done SNOMED-CT Value Set
@@ -2221,25 +2224,123 @@ namespace OpenDentBusiness {
 					#endregion
 					break;
 				#endregion
-				#region WeightOver65
-				//The two populations are >= 18 and < 64 at start of measurement period and >= 65 at start of measurement period.
+				#region Weight
+				//The two populations are >= 18 and < 64 at the start of the measurement period and >= 65 at the start of the measurement period.
 				//These two populations exclude patients who are 64 at the start of the measurement period apparently on purpose.
+				case QualityType2014.WeightAdult:
 				case QualityType2014.WeightOver65:
-					//Strategy: Get all eligible encounters for patients 18 and over at start of measurement period
-					//Get Not Performed items with valid reason ("Medical or Other" and "Patient" reasons)
-					//Remove from the encounter list any encounters that have a Not Performed item on the same day
+					s.Restart();
+					#region StrategyDescription
+					//Strategy: Get all eligible encounters for patients 65 and over for Over65, >= 18 and < 64 for Adult, at the start of the measurement period
+					//Get Not Performed items for BMI exams with valid reason ("Medical or Other" and "Patient" reasons)
+					//Remove from the encounter list any encounters that have a Not Performed item for a BMI exam on the same day
 					//Get from disease table all palliative care 'procedures' (not likely ever going to be any, but these 'procedure orders' will be stored in the disease table)
 					//Remove from the encounter list any encounters that occurred for patients who have a palliative care order that starts before or during the encounter
-					//Get patient data from the remaining encounters (for reporting).
-					//Remove any patients (and their encounters) who are 64 at the start of the measurement period.
-					//These patients are the initial patient population.  They will be in one of the two groups; group 1: >= 18 and < 64, group 2: >= 65.  Ages are at startDate.
-					s.Restart();
+					//Get patient data from the remaining encounters (for reporting), these patients are the initial patient population.
+					//The problem list will contain pregnancies as well as palliative care problems
+					//If the pregnancy starts before or during measurement period and does not end before start of measurement period, the patient is excluded
+					//Numerator - MOST RECENT physical exam that is within 6 months of the specific encounter with:
+						//1.) BMI >= 23 kg/m2 and < 30 kg/m2 for Over65, >= 18.5 and < 25 for Adult, OR
+						//2.) BMI >= 30 kg/m2 for Over65, >= 25 for Adult, with an intervention or medication order for 'Overweight' within 6 months of the specific encounter
+						//3.) BMI < 23 kg/m2 for Over65, < 18.5 for Adult, with an intervention or medication order for 'Underweight' within 6 months of the specific encounter
+					#endregion
+					#region Get Initial Patient Population
+					#region Get Raw Encounters
 					listOneOfEncOIDs.Add("2.16.840.1.113883.3.600.1.1751");//BMI Encounter Code Set Grouping Value Set
-					break;
-				#endregion
-				#region WeightAdult
-				case QualityType2014.WeightAdult:
-					s.Restart();
+					string encsWhere65="AND patient.Birthdate<="+POut.Date(dateStart)+"-INTERVAL 65 YEAR ";//65 or over at the start of the measurement period
+					string encsWhereLessThan64="AND patient.Birthdate>"+POut.Date(dateStart)+"-INTERVAL 64 YEAR ";//< 64 years old at the start of the measurement period
+					string encCommand="";
+					if(qtype==QualityType2014.WeightOver65) {
+						encCommand=encounterSelectWhere+encsWhere65+encounterOrder;
+					}
+					if(qtype==QualityType2014.WeightAdult) {
+						encCommand=encounterSelectWhere+encounterWhereAdults+encsWhereLessThan64+encounterOrder;
+					}
+					measureCur.DictPatNumListEncounters=GetEncountersForInitialPatPop(encCommand,listOneOfEncOIDs,listTwoOfEncOIDs);
+					#endregion
+					#region Get Pregnancy And Palliative Care Problems
+					List<string> listPalliativeAndPregOIDs=new List<string>() { "2.16.840.1.113883.3.600.1.1579" };//Palliative Care Grouping Value Set
+					listPalliativeAndPregOIDs.Add("2.16.840.1.113883.3.600.1.1623");//Pregnancy Dx Grouping Value Set
+					measureCur.DictPatNumListProblems=GetProblems(listPalliativeAndPregOIDs,dateStart,dateEnd);
+					#endregion
+					#region Get Not Performed
+					List<string> listPhysExamOIDs=new List<string>() { "2.16.840.1.113883.3.600.1.681" };//BMI LOINC Value LOINC Value Set
+					List<string> listMedOtherPatientReasonOIDs=new List<string>() { "2.16.840.1.113883.3.600.1.1502" };//Medical or Other reason not done SNOMED-CT Value Set
+					listMedOtherPatientReasonOIDs.Add("2.16.840.1.113883.3.600.1.1503");//Patient Reason Refused SNOMED-CT Value Set
+					measureCur.DictPatNumListNotPerfs=GetNotPerformeds(listPhysExamOIDs,listMedOtherPatientReasonOIDs,dateStart,dateEnd);
+					#endregion
+					#region Remove If Palliative Care Order Exists Prior To Encounter Date
+					//if the patient with eligible encounter list has a palliative care order that starts before or during the encounter, remove the encounter
+					//if all encounters end up removed, remove the PatNum key from the dictionary
+					foreach(KeyValuePair<long,List<EhrCqmEncounter>> patNumListEncs in measureCur.DictPatNumListEncounters) {//loop through every patient with an encounter list
+						if(!measureCur.DictPatNumListProblems.ContainsKey(patNumListEncs.Key)) {//if no palliative care problem, move to next patient
+							continue;
+						}
+						List<EhrCqmProblem> listProbsCur=measureCur.DictPatNumListProblems[patNumListEncs.Key];
+						for(int i=patNumListEncs.Value.Count-1;i>-1;i--) {//loop through encounter list for this patient
+							for(int j=0;j<listProbsCur.Count;j++) {//loop through palliative care problem list for this patient\
+								if(listProbsCur[j].ValueSetOID!="2.16.840.1.113883.3.600.1.1579") {//if not Palliative Care, move to next problem (problem list for this measure can contain pregnancy dx or palliative care 'procedures')
+									continue;
+								}
+								if(listProbsCur[j].DateStart.Date<=patNumListEncs.Value[i].DateEncounter.Date) {//if palliative care dx starts before or on encounter date
+									patNumListEncs.Value.RemoveAt(i);//remove the encounter
+									break;//break out of problem list loop, move to next encounter
+								}
+							}
+						}
+					}
+					#endregion
+					#region Remove If Not Performed Exists On Encounter Date
+					//if the patient with eligible encounter list also has a not performed on the same day, remove the encounter
+					//this patient will not be in the initial patient population for this encounter but may still be for a different encounter date
+					foreach(KeyValuePair<long,List<EhrCqmEncounter>> patNumListEncs in measureCur.DictPatNumListEncounters) {//loop through every patient with an encounter list
+						if(!measureCur.DictPatNumListNotPerfs.ContainsKey(patNumListEncs.Key)) {//if no not performed items, move to next patient
+							continue;
+						}
+						List<EhrCqmNotPerf> listNotPerfsCur=measureCur.DictPatNumListNotPerfs[patNumListEncs.Key];//the not performed items are guaranteed to have valid reasons
+						for(int i=patNumListEncs.Value.Count-1;i>-1;i--) {//loop through encounters for this patient
+							for(int j=0;j<listNotPerfsCur.Count;j++) {//loop through not performed items for this patient
+								if(listNotPerfsCur[j].DateEntry.Date==patNumListEncs.Value[i].DateEncounter.Date) {//compare encounter date to not perfomed date
+									patNumListEncs.Value.RemoveAt(i);//remove encounter if not performed item on same date
+									break;//break out of not performed loop to move to next encounter
+								}
+							}
+						}
+					}
+					//if all encounters for this patient have been removed, remove the PatNum key
+					List<long> allKeys=new List<long>(measureCur.DictPatNumListEncounters.Keys);
+					for(int i=0;i<allKeys.Count;i++) {
+						if(measureCur.DictPatNumListEncounters[allKeys[i]].Count==0) {
+							measureCur.DictPatNumListEncounters.Remove(allKeys[i]);
+						}
+					}
+					#endregion
+					#region Get Patient Data
+					//encounters are now eligible and only if no palliative care order before or on encounter date and no eligible not perforemed item on same date
+					measureCur.ListEhrPats=GetEhrPatsFromEncounters(measureCur.DictPatNumListEncounters);
+					#endregion
+					#endregion
+					#region Get Vital Sign Exams
+					//get all vitalsign exams with valid height and weight in the date range, we have to subtract 6 months from dateStart, since encounter must be in measurement period, but exam can be before measurement period as long as it is within 6 months of the encounter
+					//each exam will have a calculated BMI, which is (weight*703)/(height*height)
+					measureCur.DictPatNumListVitalsigns=GetVitalsignsForBMI(dateStart.AddMonths(-6),dateEnd);
+					#endregion
+					#region Get Interventions
+					//Get all interventions for eligible value sets that occurred within 6 months of the start of the measurement period up to the end of the measurement period
+					command="SELECT * FROM intervention "
+						+"WHERE DATE(DateEntry) BETWEEN "+POut.Date(dateStart)+"-INTERVAL 6 MONTH AND "+POut.Date(dateEnd)+" "
+						+"ORDER BY PatNum,DateEntry DESC";
+					List<string> listBMIInterventionOIDs=new List<string> { "2.16.840.1.113883.3.600.1.1525" };//Above Normal Follow-up Grouping Value Set
+					listBMIInterventionOIDs.Add("2.16.840.1.113883.3.600.1.1528");//Below Normal Follow up Grouping Value Set
+					listBMIInterventionOIDs.Add("2.16.840.1.113883.3.600.1.1527");//Referrals where weight assessment may occur Grouping Value Set
+					measureCur.DictPatNumListInterventions=GetInterventions(command,listBMIInterventionOIDs);
+					#endregion
+					#region Get MedicationPats
+					//Get all medicationpats (check for start date and instructions when calculating to make sure they are 'Orders') that started within 6 months of start date
+					List<string> listBMIMedOIDs=new List<string>() { "2.16.840.1.113883.3.600.1.1498" };//Above Normal Medications RxNorm Value Set
+					listBMIMedOIDs.Add("2.16.840.1.113883.3.600.1.1499");//Below Normal Medications RxNorm Value Set
+					measureCur.DictPatNumListMedPats=GetMedPats(listBMIMedOIDs,dateStart.AddMonths(-6),dateEnd);
+					#endregion
 					break;
 				#endregion
 				#region CariesPrevent
@@ -2275,7 +2376,7 @@ namespace OpenDentBusiness {
 				#region TobaccoCessation
 				case QualityType2014.TobaccoCessation:
 					s.Restart();
-					#region GetValidEncounters
+					#region Get Valid Encounters
 					//add one of encounter OIDs to list
 					listOneOfEncOIDs.Add("2.16.840.1.113883.3.526.3.1240");//Annual Wellness Visit Grouping Value Set
 					listOneOfEncOIDs.Add("2.16.840.1.113883.3.464.1003.101.12.1023");//Preventive Care Services-Initial Office Visit, 18 and Up Grouping Value Set
@@ -2297,31 +2398,32 @@ namespace OpenDentBusiness {
 					//if they had more than one encounter from those sets in date range
 					measureCur.DictPatNumListEncounters=GetEncountersForInitialPatPop(adultEncCommand,listOneOfEncOIDs,listTwoOfEncOIDs);
 					#endregion
-					#region GetInitialPatientPopulation
+					#region Get Initial Patient Population
 					//Denominator is equal to initial patient population for this measure
 					//the Inital Patient Population will be unique patients in ListEncounters, loop through and count unique patients
 					measureCur.ListEhrPats=GetEhrPatsFromEncounters(measureCur.DictPatNumListEncounters);
 					#endregion
-					#region GetTobaccoCessationInterventions
+					#region Get Tobacco Cessation Interventions
 					//Get all interventions within 24 months of end of measurement period
 					command="SELECT * FROM intervention "
-						+"WHERE intervention.DateEntry>="+POut.Date(dateEnd)+"-INTERVAL 24 MONTH "
-						+"ORDER BY intervention.PatNum,intervention.DateEntry DESC";
+						+"WHERE DATE(DateEntry) BETWEEN "+POut.Date(dateEnd)+"-INTERVAL 24 MONTH AND "+POut.Date(dateEnd)+" "
+						+"ORDER BY PatNum,DateEntry DESC";
 					List<string> tobaccoInterventionOIDs=new List<string>() { "2.16.840.1.113883.3.526.3.509" };//Tobacco Use Cessation Counseling Grouping Value Set
 					measureCur.DictPatNumListInterventions=GetInterventions(command,tobaccoInterventionOIDs);
 					#endregion
 					//Get a list of all tobacco assessment events that happened within 24 of end of measurement period
 					measureCur.DictPatNumListMeasureEvents=GetTobaccoAssessmentEvents(dateEnd);
 					//Get a list of all tobacco cessation meds active/ordered within 24 months of end of measurement period
-					measureCur.DictPatNumListMedPats=GetTobaccoMeds(dateEnd);
-					#region GetTobaccoScreeningsNotPerformed
+					List<string> listTobaccoMedOIDs=new List<string>() { "2.16.840.1.113883.3.526.3.1190" };////Tobacco Use Cessation Pharmacotherapy Grouping Value Set
+					measureCur.DictPatNumListMedPats=GetMedPats(listTobaccoMedOIDs,dateEnd.AddMonths(-24),dateEnd);
+					#region Get Tobacco Screenings Not Performed
 					//Get a list of all tobacco assessment not performed items that happened in the measurement period that belong to the value set
 					//that also have a valid medical reason attached from the above value set
 					List<string> listTobaccoScreenOIDs=new List<string>() { "2.16.840.1.113883.3.526.3.1278" };//Tobacco Use Screening Grouping Value Set
 					List<string> listMedicalReasonOIDs=new List<string>() { "2.16.840.1.113883.3.526.3.1007" };//Medical Reason Grouping Value Set
 					measureCur.DictPatNumListNotPerfs=GetNotPerformeds(listTobaccoScreenOIDs,listMedicalReasonOIDs,dateStart,dateEnd);
 					#endregion
-					#region GetLimitedLifeExpectancyProbs
+					#region Get Limited Life Expectancy Probs
 					List<string> listLimitedLifeExpectOIDs=new List<string>() {"2.16.840.1.113883.3.526.3.1259"};//Limited Life Expectancy Grouping Value Set
 					//Get a list of all limited life expectancy diagnoses in the measurement period that belong to the above value set
 					measureCur.DictPatNumListProblems=GetProblems(listLimitedLifeExpectOIDs,dateStart,dateEnd);
@@ -2681,41 +2783,42 @@ namespace OpenDentBusiness {
 			return retval;
 		}
 
-		///<summary>Get the medication information for medications where the code belongs to the Tobacco Use Cessation Pharmacotherapy Grouping Value Set and the medication start date is within 24 months of the measurement period end date, ordered by PatNum,DateStart so first found for patient is most recent to make calculation easier.  If there is a PatNote, this is a Medication Order so we do not need to check the stop date.  If there is no note and there is either no stop date or the stop date is after the measurement period end date, this is a Medication Active.</summary>
-		private static Dictionary<long,List<EhrCqmMedicationPat>> GetTobaccoMeds(DateTime dateEnd) {
+		///<summary>Get the medication information for medications where the code belongs to one of the value sets in the supplied list and the medication start date is in the supplied date range.  Ordered by PatNum,DateStart so first found for patient is most recent to make calculation easier.  If there is a PatNote, this is a Medication Order.  If there is no note and there is either no stop date or the stop date is after the measurement period end date, this is an active Medication.</summary>
+		private static Dictionary<long,List<EhrCqmMedicationPat>> GetMedPats(List<string> listValueSetOIDs,DateTime dateStart,DateTime dateEnd) {
 			string command="SELECT medicationpat.MedicationPatNum,medicationpat.PatNum,medicationpat.DateStart,medicationpat.DateStop,medicationpat.PatNote,"
 				+"(CASE WHEN medication.RxCui IS NULL THEN medicationpat.RxCui ELSE medication.RxCui END) AS RxCui "
 				+"FROM medicationpat "
 				+"LEFT JOIN medication ON medication.MedicationNum=medicationpat.MedicationNum "
 				+"WHERE (medication.RxCui IS NOT NULL OR medicationpat.RxCui>0) "
-				+"AND DATE(medicationpat.DateStart)>="+POut.Date(dateEnd)+"-INTERVAL 24 MONTH "
-				+"AND (YEAR(medicationpat.DateStop)<1880 OR medicationpat.DateStop>"+POut.Date(dateEnd)+") "//no valid stop date or stop date after measurement period end date
+				+"AND DATE(medicationpat.DateStart) BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+				//not going to check stop date, the measures only specify 'starts before or during' without any reference to whether or not the medication has stopped
+				//+"AND (YEAR(medicationpat.DateStop)<1880 OR medicationpat.DateStop>"+POut.Date(dateEnd)+") "//no valid stop date or stop date after measurement period end date
 				+"ORDER BY medicationpat.PatNum,medicationpat.DateStart DESC";
-			DataTable tableTobaccoCessationMeds=Db.GetTable(command);
-			List<EhrCode> listTobaccoCessationMedCodes=EhrCodes.GetForValueSetOIDs(new List<string>() { "2.16.840.1.113883.3.526.3.1190" },false);//Tobacco Use Cessation Pharmacotherapy Grouping Value Set
+			DataTable tableAllMedPats=Db.GetTable(command);
+			List<EhrCode> listEhrCodes=EhrCodes.GetForValueSetOIDs(listValueSetOIDs,false);
 			Dictionary<long,EhrCode> dictMedicationPatNumEhrCode=new Dictionary<long,EhrCode>();
-			for(int i=tableTobaccoCessationMeds.Rows.Count-1;i>-1;i--) {
+			for(int i=tableAllMedPats.Rows.Count-1;i>-1;i--) {
 				bool isValidMedication=false;
-				for(int j=0;j<listTobaccoCessationMedCodes.Count;j++) {
-					if(tableTobaccoCessationMeds.Rows[i]["RxCui"].ToString()==listTobaccoCessationMedCodes[j].CodeValue) {
-						dictMedicationPatNumEhrCode.Add(PIn.Long(tableTobaccoCessationMeds.Rows[i]["MedicationPatNum"].ToString()),listTobaccoCessationMedCodes[j]);
+				for(int j=0;j<listEhrCodes.Count;j++) {
+					if(tableAllMedPats.Rows[i]["RxCui"].ToString()==listEhrCodes[j].CodeValue) {
+						dictMedicationPatNumEhrCode.Add(PIn.Long(tableAllMedPats.Rows[i]["MedicationPatNum"].ToString()),listEhrCodes[j]);
 						isValidMedication=true;
 						break;
 					}
 				}
 				if(!isValidMedication) {
-					tableTobaccoCessationMeds.Rows.RemoveAt(i);
+					tableAllMedPats.Rows.RemoveAt(i);
 				}
 			}
 			Dictionary<long,List<EhrCqmMedicationPat>> retval=new Dictionary<long,List<EhrCqmMedicationPat>>();
-			for(int i=0;i<tableTobaccoCessationMeds.Rows.Count;i++) {
+			for(int i=0;i<tableAllMedPats.Rows.Count;i++) {
 				EhrCqmMedicationPat ehrMedPatCur=new EhrCqmMedicationPat();
-				ehrMedPatCur.EhrCqmMedicationPatNum=PIn.Long(tableTobaccoCessationMeds.Rows[i]["MedicationPatNum"].ToString());
-				ehrMedPatCur.PatNum=PIn.Long(tableTobaccoCessationMeds.Rows[i]["PatNum"].ToString());
-				ehrMedPatCur.PatNote=tableTobaccoCessationMeds.Rows[i]["PatNote"].ToString();
-				ehrMedPatCur.RxCui=PIn.Long(tableTobaccoCessationMeds.Rows[i]["RxCui"].ToString());
-				ehrMedPatCur.DateStart=PIn.Date(tableTobaccoCessationMeds.Rows[i]["DateStart"].ToString());
-				ehrMedPatCur.DateStop=PIn.Date(tableTobaccoCessationMeds.Rows[i]["DateStop"].ToString());
+				ehrMedPatCur.EhrCqmMedicationPatNum=PIn.Long(tableAllMedPats.Rows[i]["MedicationPatNum"].ToString());
+				ehrMedPatCur.PatNum=PIn.Long(tableAllMedPats.Rows[i]["PatNum"].ToString());
+				ehrMedPatCur.PatNote=tableAllMedPats.Rows[i]["PatNote"].ToString();
+				ehrMedPatCur.RxCui=PIn.Long(tableAllMedPats.Rows[i]["RxCui"].ToString());
+				ehrMedPatCur.DateStart=PIn.Date(tableAllMedPats.Rows[i]["DateStart"].ToString());
+				ehrMedPatCur.DateStop=PIn.Date(tableAllMedPats.Rows[i]["DateStop"].ToString());
 				EhrCode ehrCodeCur=dictMedicationPatNumEhrCode[ehrMedPatCur.EhrCqmMedicationPatNum];
 				ehrMedPatCur.CodeSystemName=ehrCodeCur.CodeSystem;
 				ehrMedPatCur.CodeSystemOID=ehrCodeCur.CodeSystemOID;
@@ -2831,7 +2934,7 @@ namespace OpenDentBusiness {
 			return retval;
 		}
 
-		///<summary>Get all problems that started before or during the date range, that have a code that belong to the value sets in listProbOIDs, that either have no stop date or the stop date is after the start of the measurement period, and the problem is still marked 'Active'.  Ordered by PatNum, DateStart DESC for making calculating CQM easier.</summary>
+		///<summary>Get all problems that started before or during the date range, that have a code that belong to the value sets in listProbOIDs, and that either have no stop date or the stop date is after the start of the measurement period.  Ordered by PatNum, DateStart DESC for making calculating CQM easier.</summary>
 		private static Dictionary<long,List<EhrCqmProblem>> GetProblems(List<string> listProbOIDs,DateTime dateStart,DateTime dateEnd) {
 			string command="SELECT disease.DiseaseNum,disease.PatNum,disease.DateStart,disease.DateStop,"
 				+"diseasedef.SnomedCode,diseasedef.ICD9Code,diseasedef.Icd10Code,"
@@ -2842,7 +2945,6 @@ namespace OpenDentBusiness {
 				+"LEFT JOIN icd10 ON icd10.Icd10Code=diseasedef.Icd10Code "
 				+"WHERE disease.DateStart<="+POut.Date(dateEnd)+" "
 				+"AND (YEAR(disease.DateStop)<1880 OR disease.DateStop>"+POut.Date(dateStart)+") "
-				+"AND disease.ProbStatus="+POut.Int((int)ProblemStatus.Active)+" "
 				+"ORDER BY disease.PatNum,disease.DateStart DESC";
 			DataTable tableAllProbs=Db.GetTable(command);
 			List<EhrCode> listValidProbs=EhrCodes.GetForValueSetOIDs(listProbOIDs,false);
@@ -2895,7 +2997,7 @@ namespace OpenDentBusiness {
 				+"AND DATE(DateTEvent) BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
 				+"ORDER BY PatNum,DateTEvent DESC";
 			DataTable tableEvents=Db.GetTable(command);
-			List<EhrCode> listEhrCodes=EhrCodes.GetForValueSetOIDs(listValueSetOIDs);
+			List<EhrCode> listEhrCodes=EhrCodes.GetForValueSetOIDs(listValueSetOIDs,false);
 			Dictionary<long,EhrCode> dictEhrMeasureEventNumEhrCode=new Dictionary<long,EhrCode>();
 			//remove 'procs' from table of ehrmeasureevents if not in the value set OIDs in listEhrCodes
 			for(int i=tableEvents.Rows.Count-1;i>-1;i--) {
@@ -2938,6 +3040,41 @@ namespace OpenDentBusiness {
 			return retval;
 		}
 
+		///<summary>Used in measure 69, BMI Screening and Follow-up.  Get all vitalsigns with DateTaken in the date range with valid height and weight.  Only one code available for a BMI exam - LOINC 39156-5 Body mass index (BMI) [Ratio].  Any vitalsign object with valid height and weight is assumed to be a LOINC 39156-5, not stored explicitly.  Results ordered by PatNum then DateTaken DESC, so MOST RECENT for each patient will be the first one in the list for that pat (i.e. dict[PatNum][0]).</summary>
+		private static Dictionary<long,List<EhrCqmVitalsign>> GetVitalsignsForBMI(DateTime dateStart,DateTime dateEnd) {
+			string command="SELECT * FROM vitalsign "
+				+"WHERE DATE(DateTaken) BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+				+"AND vitalsign.Height>0 AND vitalsign.Weight>0 "
+				+"ORDER BY vitalsign.PatNum,vitalsign.DateTaken DESC";
+			List<Vitalsign> listVitalsigns=Crud.VitalsignCrud.SelectMany(command);
+			//every row in the table has valid height and weight, so they are all in the value set for BMI LOINC Value LOINC Value Set - 2.16.840.1.113883.3.600.1.681 which is one code: LOINC 39156-5 Body mass index (BMI) [Ratio].  No need to get the data from the ehrcode object inbedded in the EHR.dll.
+			Dictionary<long,List<EhrCqmVitalsign>> retval=new Dictionary<long,List<EhrCqmVitalsign>>();
+			for(int i=0;i<listVitalsigns.Count;i++) {
+				EhrCqmVitalsign ehrVitalsignCur=new EhrCqmVitalsign();
+				ehrVitalsignCur.EhrCqmVitalsignNum=listVitalsigns[i].VitalsignNum;
+				ehrVitalsignCur.PatNum=listVitalsigns[i].PatNum;
+				float h=listVitalsigns[i].Height;
+				float w=listVitalsigns[i].Weight;
+				ehrVitalsignCur.BMI=Math.Round((decimal)((w*703)/(h*h)),2,MidpointRounding.AwayFromZero);
+				ehrVitalsignCur.WeightCode=listVitalsigns[i].WeightCode;
+				//The code for the BMI exam is always the one allowed code that belongs to the BMI LOINC Value set
+				ehrVitalsignCur.CodeValue="39156-5";
+				ehrVitalsignCur.CodeSystemName="LOINC";
+				ehrVitalsignCur.CodeSystemOID="2.16.840.1.113883.6.1";//OID for LOINC code system
+				ehrVitalsignCur.Description="Body mass index (BMI) [Ratio]";
+				ehrVitalsignCur.ValueSetName="BMI LOINC Value";
+				ehrVitalsignCur.ValueSetOID="2.16.840.1.113883.3.600.1.681";
+				ehrVitalsignCur.DateTaken=listVitalsigns[i].DateTaken;
+				if(retval.ContainsKey(ehrVitalsignCur.PatNum)) {
+					retval[ehrVitalsignCur.PatNum].Add(ehrVitalsignCur);
+				}
+				else {
+					retval.Add(ehrVitalsignCur.PatNum,new List<EhrCqmVitalsign>() { ehrVitalsignCur });
+				}
+			}
+			return retval;
+		}
+
 		///<summary>Using the data in alldata, determine if the patients in alldata.ListEhrPats are in the 'Numerator', 'Exclusion', or 'Exception' category for this measure and enter an explanation if applicable.  All of the patients in ListEhrPats are the initial patient population (almost always equal to the Denominator).</summary>
 		private static void ClassifyPatients(QualityMeasure alldata,QualityType2014 qtype) {
 			switch(qtype) {
@@ -2956,7 +3093,7 @@ namespace OpenDentBusiness {
 					for(int i=0;i<alldata.ListEhrPats.Count;i++) {
 						long patNumCur=alldata.ListEhrPats[i].EhrCqmPat.PatNum;
 						bool isCategorized=false;
-						//for each enctounter for the patient, look for ehrmeasureevent for procedure
+						//for each encounter for the patient, look for ehrmeasureevent for procedure
 						List<EhrCqmEncounter> listEncsCur=new List<EhrCqmEncounter>();
 						if(alldata.DictPatNumListEncounters.ContainsKey(patNumCur)) {
 							listEncsCur=alldata.DictPatNumListEncounters[patNumCur];
@@ -3008,12 +3145,146 @@ namespace OpenDentBusiness {
 					}
 					break;
 				#endregion
-				#region WeightOver65
-				case QualityType2014.WeightOver65:
-					break;
-				#endregion
-				#region WeightAdult
+				#region WeightAdultAndOver65
 				case QualityType2014.WeightAdult:
+				case QualityType2014.WeightOver65:
+					//Strategy: All patients in alldata.ListEhrPats are the initial patient population for this measure
+					//Denominator - Inital Patient Population
+					//Exclusions - Pregnant during any of the measurement period
+					//Find the most recent vitalsign exam date such that there is a valid encounter within the 6 months after the exam
+					//If there is more than one encounter within that 6 months, one of them must meet the numerator criteria for the patient to be in the numerator
+					//If that most recent exam found the patient with BMI >= 23 kg/m2 and < 30 kg/m2 for Over65, >= 18.5 and < 25 for Adult, 'Numerator'
+					//If the most recent exam found the patient with BMI < 23 kg/m2 or >= 30 kg/m2 for Over65, < 18.5 or >= 25 for Adult, check for Intervention or Medication Order
+					//The intervention/medication order must be within 6 months of one of the encounters, which are within 6 months of the exam
+					//If order exists for any encounter, 'Numerator'
+					//If no intervention/medication order for any of the encounters for the exam, not classified
+					for(int i=0;i<alldata.ListEhrPats.Count;i++) {
+						long patNumCur=alldata.ListEhrPats[i].EhrCqmPat.PatNum;
+						bool isCategorized=false;
+						//first apply pregnancy exclusion
+						List<EhrCqmProblem> listProbsCur=new List<EhrCqmProblem>();
+						if(alldata.DictPatNumListProblems.ContainsKey(patNumCur)) {
+							listProbsCur=alldata.DictPatNumListProblems[patNumCur];
+						}
+						for(int j=0;j<listProbsCur.Count;j++) {
+							if(listProbsCur[j].ValueSetOID=="2.16.840.1.113883.3.600.1.1623") {//Pregnancy Dx Grouping Value Set
+								alldata.ListEhrPats[i].IsExclusion=true;
+								alldata.ListEhrPats[i].Explanation="The patient had a pregnancy diagnosis that started on "+listProbsCur[j].DateStart.ToShortDateString()+" that is either still active or ended after the start of the measurement period.";
+								isCategorized=true;
+								break;
+							}
+						}
+						if(isCategorized) {
+							continue;
+						}
+						//get vital sign exams that took place in the measurement period for the patient.  Ordered by DateTaken DESC, so index 0 will hold the most recent exam
+						List<EhrCqmVitalsign> listVitalsignsCur=new List<EhrCqmVitalsign>();
+						if(alldata.DictPatNumListVitalsigns.ContainsKey(patNumCur)) {
+							listVitalsignsCur=alldata.DictPatNumListVitalsigns[patNumCur];
+						}
+						if(listVitalsignsCur.Count==0) {//no vitalsign exams within 6 months of start of measurement period, but encounters exist or they would not be in the IPP
+							alldata.ListEhrPats[i].Explanation="Valid encounters exist, but there are no BMI vital sign exams within 6 months of the measurement period.";
+							continue;
+						}
+						//get eligible enounters that took place in the measurement period for the patient.  Ordered by DateEncounter DESC, so index 0 will hold the most recent.
+						List<EhrCqmEncounter> listEncsCur=new List<EhrCqmEncounter>();
+						if(alldata.DictPatNumListEncounters.ContainsKey(patNumCur)) {
+							listEncsCur=alldata.DictPatNumListEncounters[patNumCur];
+						}
+						//Find the most recent exam date such that there is an eligible encounter on that date or within the 6 months after the exam date
+						DateTime dateMostRecentExam=DateTime.MinValue;
+						int indexMostRecentExam=-1;
+						for(int j=0;j<listVitalsignsCur.Count;j++) {
+							if(dateMostRecentExam.Date>listVitalsignsCur[j].DateTaken.Date) {//most recent exam date already set and set to a date more recent than current, continue
+								continue;
+							}
+							for(int k=0;k<listEncsCur.Count;k++) {
+								if(listVitalsignsCur[j].DateTaken.Date<=listEncsCur[k].DateEncounter.Date
+									&& listVitalsignsCur[j].DateTaken.Date>=listEncsCur[k].DateEncounter.AddMonths(-6).Date
+									&& listVitalsignsCur[j].DateTaken.Date>=dateMostRecentExam.Date)
+								{
+									dateMostRecentExam=listVitalsignsCur[j].DateTaken;
+									indexMostRecentExam=j;
+									break;
+								}
+							}
+						}
+						//If there are no exams that occurred within 6 months of an eligible encounter, not classified
+						if(indexMostRecentExam==-1) {
+							alldata.ListEhrPats[i].Explanation="Valid encounters exist and BMI vital sign exams exist, but no BMI exam date is within 6 months of a valid encounter in the measurement period.";
+							continue;
+						}
+						//If WeightOver65 measure AND the most recent BMI was in the allowed range of >=23 and <30 kg/m2, then no intervention required, patient in 'Numerator'
+						if(qtype==QualityType2014.WeightOver65 && listVitalsignsCur[indexMostRecentExam].BMI>=23m && listVitalsignsCur[indexMostRecentExam].BMI<30m) {//'m' converts to decimal
+							alldata.ListEhrPats[i].IsNumerator=true;
+							alldata.ListEhrPats[i].Explanation="BMI in normal range.  Most recent BMI exam date: "+listVitalsignsCur[indexMostRecentExam].DateTaken.ToShortDateString()+".  BMI result: "+listVitalsignsCur[indexMostRecentExam].BMI.ToString();
+							continue;
+						}
+						//If WeightAdult measure AND the most recent BMI was in the allowed range of >=23 and <30 kg/m2, then no intervention required, patient in 'Numerator'
+						if(qtype==QualityType2014.WeightAdult && listVitalsignsCur[indexMostRecentExam].BMI>=18.5m && listVitalsignsCur[indexMostRecentExam].BMI<25m) {//'m' converts to decimal
+							alldata.ListEhrPats[i].IsNumerator=true;
+							alldata.ListEhrPats[i].Explanation="BMI in normal range.  Most recent BMI exam date: "+listVitalsignsCur[indexMostRecentExam].DateTaken.ToShortDateString()+".  BMI result: "+listVitalsignsCur[indexMostRecentExam].BMI.ToString();
+							continue;
+						}
+						//BMI must be out of range, for each encounter of which this exam is within the previous 6 months, look for an intervention/medication order that took place within the 6 months prior to the encounter
+						//If an encounter and intervention/medication order exist for this encounter, 'Numerator'
+						List<EhrCqmIntervention> listInterventionsCur=new List<EhrCqmIntervention>();
+						if(alldata.DictPatNumListInterventions.ContainsKey(patNumCur)) {
+							listInterventionsCur=alldata.DictPatNumListInterventions[patNumCur];
+						}
+						List<EhrCqmMedicationPat> listMedPatsCur=new List<EhrCqmMedicationPat>();
+						if(alldata.DictPatNumListMedPats.ContainsKey(patNumCur)) {
+							listMedPatsCur=alldata.DictPatNumListMedPats[patNumCur];
+						}
+						for(int j=0;j<listEncsCur.Count;j++) {
+							//if encounter is before exam or more than 6 months after the exam, move to next encounter
+							if(listEncsCur[j].DateEncounter.Date<listVitalsignsCur[indexMostRecentExam].DateTaken.Date
+								|| listEncsCur[j].DateEncounter.Date>listVitalsignsCur[indexMostRecentExam].DateTaken.AddMonths(6).Date)
+							{
+								continue;
+							}
+							for(int k=0;k<listInterventionsCur.Count;k++) {
+								//if intervention order is within 6 months of the encounter, classify as 'Numerator'
+								if(listInterventionsCur[k].DateEntry.Date<=listEncsCur[j].DateEncounter.Date
+									&& listInterventionsCur[k].DateEntry.Date>=listEncsCur[j].DateEncounter.AddMonths(-6).Date)
+								{
+									//encounter within 6 months of the most recent exam and intervention within 6 months of encounter, 'Numerator'
+									alldata.ListEhrPats[i].IsNumerator=true;
+									alldata.ListEhrPats[i].Explanation="Most recent exam on "+listVitalsignsCur[indexMostRecentExam].DateTaken.ToShortDateString()+" with encounter on "
+										+listEncsCur[j].DateEncounter.ToShortDateString()+" resulted in a BMI of "+listVitalsignsCur[indexMostRecentExam].BMI.ToString()+" "
+										+"and intervention on "+listInterventionsCur[k].DateEntry.ToShortDateString()+".";
+									isCategorized=true;
+									break;
+								}
+							}
+							if(isCategorized) {
+								break;
+							}
+							for(int k=0;k<listMedPatsCur.Count;k++) {
+								//if medication order is within 6 months of the encounter, classify as 'Numerator'
+								if(listMedPatsCur[k].DateStart.Date<=listEncsCur[j].DateEncounter.Date
+									&& listMedPatsCur[k].DateStart.Date>=listEncsCur[j].DateEncounter.AddMonths(-6).Date)
+								{
+									alldata.ListEhrPats[i].IsNumerator=true;
+									alldata.ListEhrPats[i].Explanation="Most recent exam on "+listVitalsignsCur[indexMostRecentExam].DateTaken.ToShortDateString()+" with encounter on "
+										+listEncsCur[j].DateEncounter.ToShortDateString()+" resulted in a BMI of "+listVitalsignsCur[indexMostRecentExam].BMI.ToString()+" "
+										+"and medication order on "+listMedPatsCur[k].DateStart.ToShortDateString()+".";
+									isCategorized=true;
+									break;
+								}
+							}
+							if(isCategorized) {
+								break;
+							}
+						}
+						if(isCategorized) {
+							continue;
+						}
+						//If we get here, the most recent BMI exam that had eligible encounters on the exam date or within the 6 months after that date resulted in a BMI outside of normal range
+						//but there were no intervention/medication orders entered
+						alldata.ListEhrPats[i].Explanation="Most recent exam on "+listVitalsignsCur[indexMostRecentExam].DateTaken.ToShortDateString()+" with BMI of "
+							+listVitalsignsCur[indexMostRecentExam].BMI.ToString()+" had valid encounters within 6 months of the exam but no valid intervention or medication order.";
+					}
 					break;
 				#endregion
 				#region CariesPrevent
