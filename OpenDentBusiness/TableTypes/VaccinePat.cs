@@ -29,6 +29,32 @@ namespace OpenDentBusiness {
 		public bool NotGiven;
 		///<summary>Documentation sometimes required.</summary>
 		public string Note;
+		///<summary>The city where the vaccine was filled.  This can be different than the practice office city for historical vaccine information.  Exported in HL7 ORC-3.</summary>
+		public string FilledCity;
+		///<summary>The state where the vaccine was filled.  This can be different than the practice office state for historical vaccine infromation.  Exported in HL7 ORC-3.</summary>
+		public string FilledST;
+		///<summary>Exported in HL7 PD1-16.  Corresponds to HL7 table 0441 (guide page 232).</summary>
+		public VaccineRegistryStatus RegistryStatus;
+		///<summary>Exported in HL7 RXA-20.  Corresponds to HL7 table 0322 (guide page 225).</summary>
+		public VaccineCompletionStatus CompletionStatus;
+		///<summary>Exported in HL7 RXA-9.  Corresponds to CDC code set NIP001 (http://hl7v2-iz-testing.nist.gov/mu-immunization/).</summary>
+		public VaccineAdministrationNote AdministrationNoteCode;
+		///<summary>FK to userod.UserNum.  The user that the vaccine was entered by.  May be 0 for vaccines added before this column was created.  Exported in HL7 ORD-10.</summary>
+		public long UserNum;
+		///<summary>FK to provider.ProvNum.  The provider who ordered the vaccine.  Exported in HL7 ORD-12.</summary>
+		public long ProvNumOrdering;
+		///<summary>FK to provider.ProvNum.  The provider who administered the vaccine.  Exported in HL7 RXA-10.</summary>
+		public long ProvNumAdminister;
+		///<summary>The date that the vaccine expires.  Exported in HL7 RXA-16.</summary>
+		public DateTime DateExpire;
+		///<summary>Exported in HL7 RXA-18.  Corresponds to CDC code set NIP002 (http://hl7v2-iz-testing.nist.gov/mu-immunization/).</summary>
+		public VaccineRefusalReason RefusalReason;
+		///<summary>Exported in HL7 RXA-21.  Corresponds to HL7 table 0323 (guide page 225).</summary>
+		public VaccineAction ActionCode;
+		///<summary>Exported in HL7 RXR-1.  Corresponds to HL7 table 0162 (guide page 200).</summary>
+		public VaccineAdministrationRoute AdministrationRoute;
+		///<summary>Exported in HL7 RXR-2.  Corresponds to HL7 table 0163 (guide page 201).</summary>
+		public VaccineAdministrationSite AdministrationSite;
 
 		///<summary></summary>
 		public VaccinePat Copy() {
@@ -36,4 +62,134 @@ namespace OpenDentBusiness {
 		}
 
 	}
+
+	///<summary>Exported in HL7 PD1-16.  Corresponds to HL7 table 0441 (guide page 232).</summary>
+	public enum VaccineRegistryStatus {
+		///<summary>0 - Code A.  Default.</summary>
+		Active,
+		///<summary>1 - Code I</summary>
+		InactiveUnspecified,
+		///<summary>2 - Code L</summary>
+		InactiveCannotContact,
+		///<summary>3 - Code M</summary>
+		InactiveTransferred,
+		///<summary>4 - Code P</summary>
+		InactivePermanent,
+		///<summary>5 - Code U</summary>
+		Unknown,
+	}
+
+	///<summary>Exported in HL7 RXA-20.  Corresponds to HL7 table 0322 (guide page 225).</summary>
+	public enum VaccineCompletionStatus {
+		///<summary>0 - Code CP.  Default.</summary>
+		Complete,
+		///<summary>1 - Code RE</summary>
+		Refused,
+		///<summary>2 - Code NA</summary>
+		NotAdministered,
+		///<summary>3 - Code PA</summary>
+		PartiallyAdministered,
+	}
+
+	///<summary>Exported in HL7 RXA-9.  Corresponds to CDC code set NIP001 (http://hl7v2-iz-testing.nist.gov/mu-immunization/).</summary>
+	public enum VaccineAdministrationNote {
+		///<summary>0 - Code 00.  Default.</summary>
+		NewRecord,
+		///<summary>1 - Code 01</summary>
+		HistoricalSourceUnknown,
+		///<summary>2 - Code 02</summary>
+		HistoricalOtherProvider,
+		///<summary>3 - Code 03</summary>
+		HistrocialParentsWrittenRecord,
+		///<summary>4 - Code 04</summary>
+		HistrocialParentsRecall,
+		///<summary>5 - Code 05</summary>
+		HistrocialOtherRegistry,
+		///<summary>6 - Code 06</summary>
+		HistrocialBirthCertificate,
+		///<summary>7 - Code 07</summary>
+		HistrocialSchoolRecord,
+		///<summary>8 - Code 08</summary>
+		HistrocialPublicAgency,
+	}
+
+	///<summary>Exported in HL7 RXA-18.  Corresponds to CDC code set NIP002 (http://hl7v2-iz-testing.nist.gov/mu-immunization/).</summary>
+	public enum VaccineRefusalReason {
+		///<summary>0 - No code.  Default.  Not sent in HL7 messages.  Only used in UI.</summary>
+		None,
+		///<summary>1 - Code 00</summary>
+		ParentalDecision,
+		///<summary>2 - Code 01</summary>
+		ReligiousExemption,
+		///<summary>3 - Code 02</summary>
+		Other,
+		///<summary>4 - Code 03</summary>
+		PatientDecision,
+	}
+
+	///<summary>Exported in HL7 RXA-21.  Corresponds to HL7 table 0323 (guide page 225).</summary>
+	public enum VaccineAction {
+		///<summary>0 - Code A.  Default.</summary>
+		Add,
+		///<summary>1 - Code D</summary>
+		Delete,
+		///<summary>2 - Code U</summary>
+		Update
+	}
+
+	///<summary>Exported in HL7 RXR-1.  Corresponds to HL7 table 0162 (guide page 200).</summary>
+	public enum VaccineAdministrationRoute {
+		///<summary>0 - No code.  Default.  Not sent in HL7 messages.  Used in UI only.</summary>
+		Unspecified,
+		///<summary>1 - Code C38238</summary>
+		Intradermal,
+		///<summary>2 - Code C28161</summary>
+		Intramuscular,
+		///<summary>3 - Code C38284</summary>
+		Nasal,
+		///<summary>4 - Code C38276</summary>
+		Intravenous,
+		///<summary>5 - Code C38288</summary>
+		Oral,
+		///<summary>6 - No code</summary>
+		Other,
+		///<summary>7 - Code C38676</summary>
+		Percutaneous,
+		///<summary>8 - Code C38299</summary>
+		Subcutaneous,
+		///<summary>9 - Code C38305</summary>
+		Transdermal,
+	}
+
+	///<summary>Exported in HL7 RXR-2.  Corresponds to HL7 table 0163 (guide page 201).</summary>
+	public enum VaccineAdministrationSite {
+		///<summary>0 - No code.  Default.  Not sent in HL7 messages.  Used in UI only.</summary>
+		Unspecified,
+		///<summary>1- Code LT</summary>
+		LeftThigh,
+		///<summary>2 - Code LA</summary>
+		LeftArm,
+		///<summary>3 - Code LD</summary>
+		LeftDeltoid,
+		///<summary>4 - Code LG</summary>
+		LeftGluteousMedius,
+		///<summary>5 - Code LVL</summary>
+		LeftVastusLateralis,
+		///<summary>6 - Code LLFA</summary>
+		LeftLowerForearm,
+		///<summary>7 - Code RA</summary>
+		RightArm,
+		///<summary>8 - Code RT</summary>
+		RightThigh,
+		///<summary>9 - Code RVL</summary>
+		RightVastusLateralis,
+		///<summary>10 - Code RG</summary>
+		RightGluteousMedius,
+		///<summary>11 - Code RD</summary>
+		RightDeltoid,
+		///<summary>12 - Code RLFA</summary>
+		RightLowerForearm,
+
+	}
+
 }

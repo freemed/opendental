@@ -3043,8 +3043,167 @@ namespace OpenDentBusiness {
 						CONSTRAINT oidinternal_EhrOIDNum PRIMARY KEY (EhrOIDNum)
 						)";
 					Db.NonQ(command);
+				}				
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE vaccinepat ADD FilledCity varchar(255) NOT NULL";
+					Db.NonQ(command);
 				}
-				
+				else {//oracle
+					command="ALTER TABLE vaccinepat ADD FilledCity varchar2(255)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE vaccinepat ADD FilledST varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE vaccinepat ADD FilledST varchar2(255)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE vaccinepat ADD RegistryStatus tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE vaccinepat ADD RegistryStatus number(3)";
+					Db.NonQ(command);
+					command="UPDATE vaccinepat SET RegistryStatus = 0 WHERE RegistryStatus IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE vaccinepat MODIFY RegistryStatus NOT NULL";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE vaccinepat ADD CompletionStatus tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE vaccinepat ADD CompletionStatus number(3)";
+					Db.NonQ(command);
+					command="UPDATE vaccinepat SET CompletionStatus = 0 WHERE CompletionStatus IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE vaccinepat MODIFY CompletionStatus NOT NULL";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE vaccinepat ADD AdministrationNoteCode tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE vaccinepat ADD AdministrationNoteCode number(3)";
+					Db.NonQ(command);
+					command="UPDATE vaccinepat SET AdministrationNoteCode = 0 WHERE AdministrationNoteCode IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE vaccinepat MODIFY AdministrationNoteCode NOT NULL";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE vaccinepat ADD UserNum bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE vaccinepat ADD INDEX (UserNum)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE vaccinepat ADD UserNum number(20)";
+					Db.NonQ(command);
+					command="UPDATE vaccinepat SET UserNum = 0 WHERE UserNum IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE vaccinepat MODIFY UserNum NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX vaccinepat_UserNum ON vaccinepat (UserNum)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE vaccinepat ADD ProvNumOrdering bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE vaccinepat ADD INDEX (ProvNumOrdering)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE vaccinepat ADD ProvNumOrdering number(20)";
+					Db.NonQ(command);
+					command="UPDATE vaccinepat SET ProvNumOrdering = 0 WHERE ProvNumOrdering IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE vaccinepat MODIFY ProvNumOrdering NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX vaccinepat_ProvNumOrdering ON vaccinepat (ProvNumOrdering)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE vaccinepat ADD ProvNumAdminister bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE vaccinepat ADD INDEX (ProvNumAdminister)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE vaccinepat ADD ProvNumAdminister number(20)";
+					Db.NonQ(command);
+					command="UPDATE vaccinepat SET ProvNumAdminister = 0 WHERE ProvNumAdminister IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE vaccinepat MODIFY ProvNumAdminister NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX vaccinepat_ProvNumAdminister ON vaccinepat (ProvNumAdminister)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE vaccinepat ADD DateExpire date NOT NULL DEFAULT '0001-01-01'";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE vaccinepat ADD DateExpire date";
+					Db.NonQ(command);
+					command="UPDATE vaccinepat SET DateExpire = TO_DATE('0001-01-01','YYYY-MM-DD') WHERE DateExpire IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE vaccinepat MODIFY DateExpire NOT NULL";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE vaccinepat ADD RefusalReason tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE vaccinepat ADD RefusalReason number(3)";
+					Db.NonQ(command);
+					command="UPDATE vaccinepat SET RefusalReason = 0 WHERE RefusalReason IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE vaccinepat MODIFY RefusalReason NOT NULL";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE vaccinepat ADD ActionCode tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE vaccinepat ADD ActionCode number(3)";
+					Db.NonQ(command);
+					command="UPDATE vaccinepat SET ActionCode = 0 WHERE ActionCode IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE vaccinepat MODIFY ActionCode NOT NULL";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE vaccinepat ADD AdministrationRoute tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE vaccinepat ADD AdministrationRoute number(3)";
+					Db.NonQ(command);
+					command="UPDATE vaccinepat SET AdministrationRoute = 0 WHERE AdministrationRoute IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE vaccinepat MODIFY AdministrationRoute NOT NULL";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE vaccinepat ADD AdministrationSite tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE vaccinepat ADD AdministrationSite number(3)";
+					Db.NonQ(command);
+					command="UPDATE vaccinepat SET AdministrationSite = 0 WHERE AdministrationSite IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE vaccinepat MODIFY AdministrationSite NOT NULL";
+					Db.NonQ(command);
+				}
 
 
 
@@ -3063,6 +3222,7 @@ namespace OpenDentBusiness {
 
 	}
 }
+
 
 
 

@@ -73,11 +73,16 @@ namespace OpenDentBusiness.HL7 {
 		
 		///<summary>Message Segment Header segment.  Required.  Defines intent, source, destination and syntax of the message.  Guide page 104.</summary>
 		private void MSH() {
+			string strSendingFacilityName=PrefC.GetString(PrefName.PracticeTitle);
+			if(_pat.ClinicNum!=0) {
+				Clinic clinic=Clinics.GetClinic(_pat.ClinicNum);
+				strSendingFacilityName=clinic.Description;
+			}
 			_seg=new SegmentHL7("MSH"
 				+"|"//MSH-1 Field Separator (|).  Required (length 1..1).
 				+@"^~\&"//MSH-2 Encoding Characters.  Required (length 4..4).  Component separator (^), then field repetition separator (~), then escape character (\), then Sub-component separator (&).
 				+"|Open Dental"//MSH-3 Sending Application.  Required if known (length unspecified).  Value set HL70361  (guide page 229, "no suggested values defined").  Type HD (guide page 65).
-				+"|"//MSH-4 Sending Facility.  Required if known (length unspecified).  Value set HL70362 (guide page 229, "no suggested values defined").  Type HD (guide page 65). TODO: Need UI in clinic for this field.
+				+"|"+strSendingFacilityName//MSH-4 Sending Facility.  Required if known (length unspecified).  Value set HL70362 (guide page 229, "no suggested values defined").  Type HD (guide page 65).
 				+"|"//MSH-5 Receiving Application.  Required if known (length unspecified).  Value set HL70361 (guide page 229, "no suggested values defined").  Type HD (guide page 65).
 				+"|"//MSH-6 Receiving Facility.  Required if known (length unspecified).  Value set HL70362 (guide page 229, "no suggested values defined").  Type HD (guide page 65).  TODO: We need a UI where user can type this in when sending.
 				+"|"+DateTime.Now.ToString("yyyyMMddHHmmss")//MSH-7 Date/Time of Message.  Required (length 12..19).
@@ -272,7 +277,7 @@ namespace OpenDentBusiness.HL7 {
 			_seg.SetField(0,"ORC");
 			_seg.SetField(1,"RE");//ORC-1 Order Control.  Required (length 2).  Cardinality [1..1].  Value set HL70119.  The only allowed value is "RE".
 			//ORC-2 Placer Order Number.  Required if known.  Cardinality [0..1].  Type EI (guid page 62).
-			//ORC-3 Filler Order Number.  Required.  Cardinality [0..1].  Type EI (guid page 62).  "Shall be the unique ID of the sending system."  The city and state are used to record the region where the vaccine record is filed.
+			//ORC-3 Filler Order Number.  Required.  Cardinality [0..1].  Type EI (guid page 62).  "Shall be the unique ID of the sending system."  The city and state are used to record the region where the vaccine record was filled.
 			WriteEI(3,vaccine.VaccinePatNum.ToString(),cityWhereEntered,stateWhereEntered);
 			//ORC-4 Placer Group Number.  Optional.
 			//ORC-5 Order Status.  Optional.
@@ -488,7 +493,7 @@ namespace OpenDentBusiness.HL7 {
 			//PID-26 Citizenship.  Optional.  Cardinaility [0..1].
 			//PID-27 Veterans Military Status.  Optional.  Cardinaility [0..1].
 			//PID-28 Nationality.  Optional.  Cardinaility [0..1].
-			//PID-29 Patient Death Date and Time.  Required if PID-30 is set to "Y".  Cardinaility [0..1].  TODO: We need a UI for this information as required for EHR.
+			//PID-29 Patient Death Date and Time.  Required if PID-30 is set to "Y".  Cardinaility [0..1].  TODO: We need a UI for this information as required for EHR.  Date is required, time is not.
 			//PID-30 Patient Death Indicator.  Required if known.  Cardinaility [0..1].  Value set HL70136.  TODO: Set this field to "Y" if the death date and time year is greater than 1880, otherwise do not set.
 			//PID-31 Identity Unknown.  Optional.  Cardinaility [0..1].
 			//PID-32 Identity Reliability Code.  Optional.  Cardinaility [0..1].

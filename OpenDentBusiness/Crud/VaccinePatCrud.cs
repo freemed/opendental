@@ -46,16 +46,29 @@ namespace OpenDentBusiness.Crud{
 			VaccinePat vaccinePat;
 			for(int i=0;i<table.Rows.Count;i++) {
 				vaccinePat=new VaccinePat();
-				vaccinePat.VaccinePatNum  = PIn.Long  (table.Rows[i]["VaccinePatNum"].ToString());
-				vaccinePat.VaccineDefNum  = PIn.Long  (table.Rows[i]["VaccineDefNum"].ToString());
-				vaccinePat.DateTimeStart  = PIn.DateT (table.Rows[i]["DateTimeStart"].ToString());
-				vaccinePat.DateTimeEnd    = PIn.DateT (table.Rows[i]["DateTimeEnd"].ToString());
-				vaccinePat.AdministeredAmt= PIn.Float (table.Rows[i]["AdministeredAmt"].ToString());
-				vaccinePat.DrugUnitNum    = PIn.Long  (table.Rows[i]["DrugUnitNum"].ToString());
-				vaccinePat.LotNumber      = PIn.String(table.Rows[i]["LotNumber"].ToString());
-				vaccinePat.PatNum         = PIn.Long  (table.Rows[i]["PatNum"].ToString());
-				vaccinePat.NotGiven       = PIn.Bool  (table.Rows[i]["NotGiven"].ToString());
-				vaccinePat.Note           = PIn.String(table.Rows[i]["Note"].ToString());
+				vaccinePat.VaccinePatNum         = PIn.Long  (table.Rows[i]["VaccinePatNum"].ToString());
+				vaccinePat.VaccineDefNum         = PIn.Long  (table.Rows[i]["VaccineDefNum"].ToString());
+				vaccinePat.DateTimeStart         = PIn.DateT (table.Rows[i]["DateTimeStart"].ToString());
+				vaccinePat.DateTimeEnd           = PIn.DateT (table.Rows[i]["DateTimeEnd"].ToString());
+				vaccinePat.AdministeredAmt       = PIn.Float (table.Rows[i]["AdministeredAmt"].ToString());
+				vaccinePat.DrugUnitNum           = PIn.Long  (table.Rows[i]["DrugUnitNum"].ToString());
+				vaccinePat.LotNumber             = PIn.String(table.Rows[i]["LotNumber"].ToString());
+				vaccinePat.PatNum                = PIn.Long  (table.Rows[i]["PatNum"].ToString());
+				vaccinePat.NotGiven              = PIn.Bool  (table.Rows[i]["NotGiven"].ToString());
+				vaccinePat.Note                  = PIn.String(table.Rows[i]["Note"].ToString());
+				vaccinePat.FilledCity            = PIn.String(table.Rows[i]["FilledCity"].ToString());
+				vaccinePat.FilledST              = PIn.String(table.Rows[i]["FilledST"].ToString());
+				vaccinePat.RegistryStatus        = (VaccineRegistryStatus)PIn.Int(table.Rows[i]["RegistryStatus"].ToString());
+				vaccinePat.CompletionStatus      = (VaccineCompletionStatus)PIn.Int(table.Rows[i]["CompletionStatus"].ToString());
+				vaccinePat.AdministrationNoteCode= (VaccineAdministrationNote)PIn.Int(table.Rows[i]["AdministrationNoteCode"].ToString());
+				vaccinePat.UserNum               = PIn.Long  (table.Rows[i]["UserNum"].ToString());
+				vaccinePat.ProvNumOrdering       = PIn.Long  (table.Rows[i]["ProvNumOrdering"].ToString());
+				vaccinePat.ProvNumAdminister     = PIn.Long  (table.Rows[i]["ProvNumAdminister"].ToString());
+				vaccinePat.DateExpire            = PIn.Date  (table.Rows[i]["DateExpire"].ToString());
+				vaccinePat.RefusalReason         = (VaccineRefusalReason)PIn.Int(table.Rows[i]["RefusalReason"].ToString());
+				vaccinePat.ActionCode            = (VaccineAction)PIn.Int(table.Rows[i]["ActionCode"].ToString());
+				vaccinePat.AdministrationRoute   = (VaccineAdministrationRoute)PIn.Int(table.Rows[i]["AdministrationRoute"].ToString());
+				vaccinePat.AdministrationSite    = (VaccineAdministrationSite)PIn.Int(table.Rows[i]["AdministrationSite"].ToString());
 				retVal.Add(vaccinePat);
 			}
 			return retVal;
@@ -96,7 +109,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="VaccinePatNum,";
 			}
-			command+="VaccineDefNum,DateTimeStart,DateTimeEnd,AdministeredAmt,DrugUnitNum,LotNumber,PatNum,NotGiven,Note) VALUES(";
+			command+="VaccineDefNum,DateTimeStart,DateTimeEnd,AdministeredAmt,DrugUnitNum,LotNumber,PatNum,NotGiven,Note,FilledCity,FilledST,RegistryStatus,CompletionStatus,AdministrationNoteCode,UserNum,ProvNumOrdering,ProvNumAdminister,DateExpire,RefusalReason,ActionCode,AdministrationRoute,AdministrationSite) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(vaccinePat.VaccinePatNum)+",";
 			}
@@ -109,7 +122,20 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(vaccinePat.LotNumber)+"',"
 				+    POut.Long  (vaccinePat.PatNum)+","
 				+    POut.Bool  (vaccinePat.NotGiven)+","
-				+"'"+POut.String(vaccinePat.Note)+"')";
+				+"'"+POut.String(vaccinePat.Note)+"',"
+				+"'"+POut.String(vaccinePat.FilledCity)+"',"
+				+"'"+POut.String(vaccinePat.FilledST)+"',"
+				+    POut.Int   ((int)vaccinePat.RegistryStatus)+","
+				+    POut.Int   ((int)vaccinePat.CompletionStatus)+","
+				+    POut.Int   ((int)vaccinePat.AdministrationNoteCode)+","
+				+    POut.Long  (vaccinePat.UserNum)+","
+				+    POut.Long  (vaccinePat.ProvNumOrdering)+","
+				+    POut.Long  (vaccinePat.ProvNumAdminister)+","
+				+    POut.Date  (vaccinePat.DateExpire)+","
+				+    POut.Int   ((int)vaccinePat.RefusalReason)+","
+				+    POut.Int   ((int)vaccinePat.ActionCode)+","
+				+    POut.Int   ((int)vaccinePat.AdministrationRoute)+","
+				+    POut.Int   ((int)vaccinePat.AdministrationSite)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -122,15 +148,28 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one VaccinePat in the database.</summary>
 		public static void Update(VaccinePat vaccinePat){
 			string command="UPDATE vaccinepat SET "
-				+"VaccineDefNum  =  "+POut.Long  (vaccinePat.VaccineDefNum)+", "
-				+"DateTimeStart  =  "+POut.DateT (vaccinePat.DateTimeStart)+", "
-				+"DateTimeEnd    =  "+POut.DateT (vaccinePat.DateTimeEnd)+", "
-				+"AdministeredAmt=  "+POut.Float (vaccinePat.AdministeredAmt)+", "
-				+"DrugUnitNum    =  "+POut.Long  (vaccinePat.DrugUnitNum)+", "
-				+"LotNumber      = '"+POut.String(vaccinePat.LotNumber)+"', "
-				+"PatNum         =  "+POut.Long  (vaccinePat.PatNum)+", "
-				+"NotGiven       =  "+POut.Bool  (vaccinePat.NotGiven)+", "
-				+"Note           = '"+POut.String(vaccinePat.Note)+"' "
+				+"VaccineDefNum         =  "+POut.Long  (vaccinePat.VaccineDefNum)+", "
+				+"DateTimeStart         =  "+POut.DateT (vaccinePat.DateTimeStart)+", "
+				+"DateTimeEnd           =  "+POut.DateT (vaccinePat.DateTimeEnd)+", "
+				+"AdministeredAmt       =  "+POut.Float (vaccinePat.AdministeredAmt)+", "
+				+"DrugUnitNum           =  "+POut.Long  (vaccinePat.DrugUnitNum)+", "
+				+"LotNumber             = '"+POut.String(vaccinePat.LotNumber)+"', "
+				+"PatNum                =  "+POut.Long  (vaccinePat.PatNum)+", "
+				+"NotGiven              =  "+POut.Bool  (vaccinePat.NotGiven)+", "
+				+"Note                  = '"+POut.String(vaccinePat.Note)+"', "
+				+"FilledCity            = '"+POut.String(vaccinePat.FilledCity)+"', "
+				+"FilledST              = '"+POut.String(vaccinePat.FilledST)+"', "
+				+"RegistryStatus        =  "+POut.Int   ((int)vaccinePat.RegistryStatus)+", "
+				+"CompletionStatus      =  "+POut.Int   ((int)vaccinePat.CompletionStatus)+", "
+				+"AdministrationNoteCode=  "+POut.Int   ((int)vaccinePat.AdministrationNoteCode)+", "
+				+"UserNum               =  "+POut.Long  (vaccinePat.UserNum)+", "
+				+"ProvNumOrdering       =  "+POut.Long  (vaccinePat.ProvNumOrdering)+", "
+				+"ProvNumAdminister     =  "+POut.Long  (vaccinePat.ProvNumAdminister)+", "
+				+"DateExpire            =  "+POut.Date  (vaccinePat.DateExpire)+", "
+				+"RefusalReason         =  "+POut.Int   ((int)vaccinePat.RefusalReason)+", "
+				+"ActionCode            =  "+POut.Int   ((int)vaccinePat.ActionCode)+", "
+				+"AdministrationRoute   =  "+POut.Int   ((int)vaccinePat.AdministrationRoute)+", "
+				+"AdministrationSite    =  "+POut.Int   ((int)vaccinePat.AdministrationSite)+" "
 				+"WHERE VaccinePatNum = "+POut.Long(vaccinePat.VaccinePatNum);
 			Db.NonQ(command);
 		}
@@ -173,6 +212,58 @@ namespace OpenDentBusiness.Crud{
 			if(vaccinePat.Note != oldVaccinePat.Note) {
 				if(command!=""){ command+=",";}
 				command+="Note = '"+POut.String(vaccinePat.Note)+"'";
+			}
+			if(vaccinePat.FilledCity != oldVaccinePat.FilledCity) {
+				if(command!=""){ command+=",";}
+				command+="FilledCity = '"+POut.String(vaccinePat.FilledCity)+"'";
+			}
+			if(vaccinePat.FilledST != oldVaccinePat.FilledST) {
+				if(command!=""){ command+=",";}
+				command+="FilledST = '"+POut.String(vaccinePat.FilledST)+"'";
+			}
+			if(vaccinePat.RegistryStatus != oldVaccinePat.RegistryStatus) {
+				if(command!=""){ command+=",";}
+				command+="RegistryStatus = "+POut.Int   ((int)vaccinePat.RegistryStatus)+"";
+			}
+			if(vaccinePat.CompletionStatus != oldVaccinePat.CompletionStatus) {
+				if(command!=""){ command+=",";}
+				command+="CompletionStatus = "+POut.Int   ((int)vaccinePat.CompletionStatus)+"";
+			}
+			if(vaccinePat.AdministrationNoteCode != oldVaccinePat.AdministrationNoteCode) {
+				if(command!=""){ command+=",";}
+				command+="AdministrationNoteCode = "+POut.Int   ((int)vaccinePat.AdministrationNoteCode)+"";
+			}
+			if(vaccinePat.UserNum != oldVaccinePat.UserNum) {
+				if(command!=""){ command+=",";}
+				command+="UserNum = "+POut.Long(vaccinePat.UserNum)+"";
+			}
+			if(vaccinePat.ProvNumOrdering != oldVaccinePat.ProvNumOrdering) {
+				if(command!=""){ command+=",";}
+				command+="ProvNumOrdering = "+POut.Long(vaccinePat.ProvNumOrdering)+"";
+			}
+			if(vaccinePat.ProvNumAdminister != oldVaccinePat.ProvNumAdminister) {
+				if(command!=""){ command+=",";}
+				command+="ProvNumAdminister = "+POut.Long(vaccinePat.ProvNumAdminister)+"";
+			}
+			if(vaccinePat.DateExpire != oldVaccinePat.DateExpire) {
+				if(command!=""){ command+=",";}
+				command+="DateExpire = "+POut.Date(vaccinePat.DateExpire)+"";
+			}
+			if(vaccinePat.RefusalReason != oldVaccinePat.RefusalReason) {
+				if(command!=""){ command+=",";}
+				command+="RefusalReason = "+POut.Int   ((int)vaccinePat.RefusalReason)+"";
+			}
+			if(vaccinePat.ActionCode != oldVaccinePat.ActionCode) {
+				if(command!=""){ command+=",";}
+				command+="ActionCode = "+POut.Int   ((int)vaccinePat.ActionCode)+"";
+			}
+			if(vaccinePat.AdministrationRoute != oldVaccinePat.AdministrationRoute) {
+				if(command!=""){ command+=",";}
+				command+="AdministrationRoute = "+POut.Int   ((int)vaccinePat.AdministrationRoute)+"";
+			}
+			if(vaccinePat.AdministrationSite != oldVaccinePat.AdministrationSite) {
+				if(command!=""){ command+=",";}
+				command+="AdministrationSite = "+POut.Int   ((int)vaccinePat.AdministrationSite)+"";
 			}
 			if(command==""){
 				return;
