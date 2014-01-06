@@ -22,10 +22,13 @@ namespace OpenDentBusiness.HL7 {
 		///<summary>A variable which is used in multiple places but always has the same value. At class level for convenience.</summary>
 		private string stateWhereEntered="";
 
-		///<summary>Creates the Message object and fills it with data.  Vaccines must all be for the same patient.  A list of vaccines is passed in so the user can select a subset of vaccines to send for the patient.</summary>
+		///<summary>Creates the Message object and fills it with data.  Vaccines must all be for the same patient.
+		///A list of vaccines is passed in so the user can select a subset of vaccines to send for the patient.
+		///Throws an exception if validation fails.</summary>
 		public EhrVXU(Patient pat,List<VaccinePat> vaccines) {
-			if(vaccines.Count==0) {
-				throw new ApplicationException("Must be at least one vaccine.");
+			string errors=Validate(pat,vaccines);
+			if(errors!="") {
+				throw new Exception(errors);
 			}
 			_pat=pat;
 			_vaccines=vaccines;
@@ -278,7 +281,7 @@ namespace OpenDentBusiness.HL7 {
 			_seg.SetField(1,"RE");//ORC-1 Order Control.  Required (length 2).  Cardinality [1..1].  Value set HL70119.  The only allowed value is "RE".
 			//ORC-2 Placer Order Number.  Required if known.  Cardinality [0..1].  Type EI (guid page 62).
 			//ORC-3 Filler Order Number.  Required.  Cardinality [0..1].  Type EI (guid page 62).  "Shall be the unique ID of the sending system."  The city and state are used to record the region where the vaccine record was filled.
-			WriteEI(3,vaccine.VaccinePatNum.ToString(),vaccine.FilledCity,vaccine.FilledST);
+			WriteEI(3,vaccine.VaccinePatNum.ToString(),vaccine.FilledCity.Trim(),vaccine.FilledST.Trim());
 			//ORC-4 Placer Group Number.  Optional.
 			//ORC-5 Order Status.  Optional.
 			//ORD-6 Response Flag.  Optional.
@@ -288,25 +291,20 @@ namespace OpenDentBusiness.HL7 {
 			//ORD-10 Entered By.  Required if known.  Cardinality [0..1].  Type XCN.  This is the person that entered the immunization record into the system.
 			Userod userod=Userods.GetUser(vaccine.UserNum);//Can be null if vaccine.UserNum=0.
 			if(userod!=null) {
-				if(userod.EmployeeNum!=0) {
-					Employee employee=Employees.GetEmp(userod.EmployeeNum);
-					WriteXCN(10,employee.FName,employee.LName,employee.MiddleI,vaccine.UserNum.ToString(),cityWhereEntered,stateWhereEntered);
-				}
-				else if(userod.ProvNum!=0) {
+				if(userod.ProvNum!=0) {
 					Provider provEnteredBy=Providers.GetProv(userod.ProvNum);
 					WriteXCN(10,provEnteredBy.FName,provEnteredBy.LName,provEnteredBy.MI,vaccine.UserNum.ToString(),cityWhereEntered,stateWhereEntered);
+				}
+				else if(userod.EmployeeNum!=0) {
+					Employee employee=Employees.GetEmp(userod.EmployeeNum);
+					WriteXCN(10,employee.FName,employee.LName,employee.MiddleI,vaccine.UserNum.ToString(),cityWhereEntered,stateWhereEntered);
 				}
 			}
 			//ORD-11 Verified By.  Optional.
 			//ORD-12 Ordering Provider.  Required if known. Cardinality [0..1].  Type XCN.  This shall be the provider ordering the immunization.  It is expected to be empty if the immunization record is transcribed from a historical record.
-			//TODO: We need provider picker UI for ordering provider.
-			long provNumOrdering=Security.CurUser.ProvNum;
-			if(provNumOrdering==0) {
-				provNumOrdering=_pat.PriProv;
-			}
-			if(provNumOrdering!=0) {
-				Provider provOrdering=Providers.GetProv(provNumOrdering);
-				WriteXCN(12,provOrdering.FName,provOrdering.LName,provOrdering.MI,provNumOrdering.ToString(),cityWhereEntered,stateWhereEntered);
+			Provider provOrdering=Providers.GetProv(vaccine.ProvNumOrdering);//Can be null if vaccine.ProvNumOrdering is zero.
+			if(provOrdering!=null) {
+				WriteXCN(12,provOrdering.FName,provOrdering.LName,provOrdering.MI,provOrdering.ProvNum.ToString(),cityWhereEntered,stateWhereEntered);
 			}
 			//ORD-13 Enterer's Location.  Optional.
 			//ORD-14 Call Back Phone Number.  Optional.
@@ -500,8 +498,8 @@ namespace OpenDentBusiness.HL7 {
 			//PID-26 Citizenship.  Optional.  Cardinaility [0..1].
 			//PID-27 Veterans Military Status.  Optional.  Cardinaility [0..1].
 			//PID-28 Nationality.  Optional.  Cardinaility [0..1].
-			//PID-29 Patient Death Date and Time.  Required if PID-30 is set to "Y".  Cardinaility [0..1].  TODO: We need a UI for this information as required for EHR.  Date is required, time is not.
-			//PID-30 Patient Death Indicator.  Required if known.  Cardinaility [0..1].  Value set HL70136.  TODO: Set this field to "Y" if the death date and time year is greater than 1880, otherwise do not set.
+			//PID-29 Patient Death Date and Time.  Required if PID-30 is set to "Y".  Cardinaility [0..1].  Date is required, time is not.
+			//PID-30 Patient Death Indicator.  Required if known.  Cardinaility [0..1].  Value set HL70136.  Set this field to "Y" if the death date and time year is greater than 1880, otherwise do not set.
 			//PID-31 Identity Unknown.  Optional.  Cardinaility [0..1].
 			//PID-32 Identity Reliability Code.  Optional.  Cardinaility [0..1].
 			//PID-33 Last Update Date/Time.  Optional.  Cardinaility [0..1].
@@ -522,20 +520,22 @@ namespace OpenDentBusiness.HL7 {
 			_seg.SetField(1,"0");//RXA-1 Give Sub-ID Counter.  Required.  Must be "0".
 			_seg.SetField(2,"1");//RXA-2 Administration Sub-ID Counter.  Required.  Must be "1".
 			_seg.SetField(3,vaccine.DateTimeStart.ToString("yyyyMMddHHmm"));//RXA-3 Date/Time Start of Administration.  Required.  This segment can also be used to planned vaccinations.
-			_seg.SetField(4,vaccine.DateTimeEnd.ToString("yyyyMMddHHmm"));//RXA-4 Date/Time End of Administration.  Required if known.  Must be same as RXA-3 or blank.  UI forces RXA-4 and RXA-3 to be equal.  This would be blank if for a planned vaccine.
+			if(vaccine.DateTimeEnd.Year>1880) {
+				_seg.SetField(4,vaccine.DateTimeEnd.ToString("yyyyMMddHHmm"));//RXA-4 Date/Time End of Administration.  Required if known.  Must be same as RXA-3 or blank.  UI forces RXA-4 and RXA-3 to be equal.  This would be blank if for a planned vaccine.
+			}
 			//RXA-5 Administered Code.  Required.  Cardinality [1..1].  Type CE (guide page 53).  Must be a CVX code.
 			WriteCE(5,vaccineDef.CVXCode,vaccineDef.VaccineName,"CVX");
 			//RXA-6 Administered Amount.  Required (length 1..20).  If amount is not known or not meaningful, then use "999".
 			if(vaccine.AdministeredAmt>0){
-				_seg.SetField(6,"999");//Registries that do not collect administered amount should record the value as "999".
-			}
-			else{
 				_seg.SetField(6,vaccine.AdministeredAmt.ToString());
+			}
+			else {
+				_seg.SetField(6,"999");//Registries that do not collect administered amount should record the value as "999".
 			}
 			//RXA-7 Administered Units.  Required if RXA-6 is not "999".  Cadinality [0..1].  Type CE (guide page 53).  Value set HL70396 (guide page 231).  Must be UCUM coding.
 			if(vaccine.AdministeredAmt>0 && vaccine.DrugUnitNum!=0) {
 				DrugUnit drugUnit=DrugUnits.GetOne(vaccine.DrugUnitNum);
-				WriteCE(7,drugUnit.UnitIdentifier,drugUnit.UnitText,"UCUM");//UCUM is not in table HL70396, but it there was a note stating that it was required in the guide and this value was required in the test cases.
+				WriteCE(7,drugUnit.UnitIdentifier,drugUnit.UnitText,"UCUM");//UCUM is not in table HL70396, but it there was a note stating that it was required in the guide and UCUM was required in the test cases.
 			}
 			//RXA-8 Administered Dosage Form.  Optional.
 			//RXA-9 Administration Notes.  Required if RXA-20 is "CP" or "PA".  Value set NIP 0001.  Type CE.
@@ -568,21 +568,42 @@ namespace OpenDentBusiness.HL7 {
 					WriteCE(9,"08","Historical information - from public agency","NIP001");
 				}
 			}
-			//RXA-10 Administering Provider.  Required if known.  This is the person who gave the administration or the vaccinaton.  It is not the ordering clinician.  TODO: We need a provider picker UI for the administering provider.
+			//RXA-10 Administering Provider.  Required if known.  Type XCN.  This is the person who gave the administration or the vaccinaton.  It is not the ordering clinician.
+			Provider provAdministering=Providers.GetProv(vaccine.ProvNumAdminister);//Can be null when vaccine.ProvNumAdminister is zero.
+			if(provAdministering!=null) {
+				WriteXCN(10,provAdministering.FName,provAdministering.LName,provAdministering.MI,provAdministering.ProvNum.ToString(),cityWhereEntered,stateWhereEntered);
+			}
 			//RXA-11 Administered-at Location.  Required if known.  Type LA2 (guide page 68).  This is the clinic/site where the vaccine was administered.
 			WriteLA2(11,cityWhereEntered,stateWhereEntered);
 			//RXA-12 Administered Per (Time Unit).  Optional.
 			//RXA-13 Administered Strength.  Optional.
 			//RXA-14 Administered Strength Units.  Optional.
 			//RXA-15 Substance Lot Number.  Required if the value in RXA-9.1 is "00".
-			_seg.SetField(15,vaccine.LotNumber);
-			//RXA-16 Substance Expiration Date.  Required if RXA-15 is not blank.  TODO: We need UI for substance expiration date.
-			//RXA-17 Substance Manufacturer Name.  Requred if RXA-9.1 is "00".  Cardinality [0..*].  Value set MVX.  Type CE.  TODO: Consider limiting the UI choices to code set MVX, since only MVX codes are allowed here.
+			if(vaccine.LotNumber.Trim()!="") {
+				_seg.SetField(15,vaccine.LotNumber.Trim());
+			}
+			//RXA-16 Substance Expiration Date.  Required if RXA-15 is not blank.  Must include at least year and month, but day is not required.
+			if(vaccine.DateExpire.Year>1880) {
+				_seg.SetField(16,vaccine.DateExpire.ToString("yyyyMMdd"));
+			}
+			//RXA-17 Substance Manufacturer Name.  Requred if RXA-9.1 is "00".  Cardinality [0..*].  Value set MVX.  Type CE.
 			if(vaccineDef.DrugManufacturerNum!=0) {
 				DrugManufacturer manufacturer=DrugManufacturers.GetOne(vaccineDef.DrugManufacturerNum);
 				WriteCE(17,manufacturer.ManufacturerCode,manufacturer.ManufacturerName,"HL70227");
 			}
-			//RXA-18 Substance/Treatment Refusal Reason.  Required if RXA-20 is "RE".  Cardinality [0..*].  Required when RXA-20 is "RE", otherwise do not send.  Value set NIP002.  Type CE.  TODO: We need UI for refusal reason.
+			//RXA-18 Substance/Treatment Refusal Reason.  Required if RXA-20 is "RE".  Cardinality [0..*].  Required when RXA-20 is "RE", otherwise do not send.  Value set NIP002.
+			if(vaccine.RefusalReason==VaccineRefusalReason.ParentalDecision) {
+				WriteCE(18,"00","Parental decision","NIP002");
+			}
+			else if(vaccine.RefusalReason==VaccineRefusalReason.ReligiousExemption) {
+				WriteCE(18,"01","Religious exemption","NIP002");
+			}
+			else if(vaccine.RefusalReason==VaccineRefusalReason.Other) {
+				WriteCE(18,"02",vaccine.Note,"NIP002");//The reason is required instead of a generic description for this particular situation.
+			}
+			else if(vaccine.RefusalReason==VaccineRefusalReason.PatientDecision) {
+				WriteCE(18,"03","Patient decision","NIP002");
+			}
 			//RXA-19 Indication.  Optional.
 			//RXA-20 Completion Status.  Required if known (length 2..2).  Value set HL70322 (guide page 225).  CP=Complete, RE=Refused, NA=Not Administered, PA=Partially Administered.
 			if(vaccine.CompletionStatus==VaccineCompletionStatus.Refused) {
@@ -597,7 +618,16 @@ namespace OpenDentBusiness.HL7 {
 			else {//Complete
 				_seg.SetField(20,"CP");
 			}
-			//RXA-21 Action code.  Required if known (length 2..2).  Value set HL70323 (guide page 225).  A=Add, D=Delete, U=Update.  TODO: We need UI for action code.
+			//RXA-21 Action code.  Required if known (length 2..2).  Value set HL70323 (guide page 225).  A=Add, D=Delete, U=Update.
+			if(vaccine.ActionCode==VaccineAction.Add) {
+				_seg.SetField(21,"A");
+			}
+			else if(vaccine.ActionCode==VaccineAction.Delete) {
+				_seg.SetField(21,"D");
+			}
+			else if(vaccine.ActionCode==VaccineAction.Update) {
+				_seg.SetField(21,"U");
+			}
 			//RXA-22 System Entry Date/Time.  Optional.
 			//RXA-23 Administered Drug Strength.  Optional.
 			//RXA-24 Administered Drug Strength Volume Units.  Optional.
@@ -606,14 +636,78 @@ namespace OpenDentBusiness.HL7 {
 			_msg.Segments.Add(_seg);
 		}
 
-		///<summary>Pharmacy/Treatment Route segment.  Required if known (no way to enter in UI).  Guide page 158.</summary>
+		///<summary>Pharmacy/Treatment Route segment.  Required if known.  Guide page 158.</summary>
 		private void RXR(VaccinePat vaccine) {
+			if(vaccine.AdministrationRoute==VaccineAdministrationRoute.None) {
+				return;//Unspecified.  Therefore unknown and the entire segment is not required.
+			}
 			_seg=new SegmentHL7(SegmentNameHL7.RXR);
 			_seg.SetField(0,"RXR");
-			//RXR-1 Route.  Required.  Cardinality [1..1].  Value set HL70162 (guide page 200). Type CE (guide page 53).  TODO: Need UI for Administration Route.
-			WriteCE(1,"","","HL70162");
-			//RXR-2 Administration Site.  Required if known.  Cardinality [0..1].  Value set HL70163 (guide page 201, details where the vaccine was physically administered on the patient's body).  Type CE.  TODO: We need UI for this field.
-			WriteCE(2,"","","HL70163");
+			//RXR-1 Route.  Required.  Cardinality [1..1].  Value set HL70162 (guide page 200). Type CE (guide page 53).
+			if(vaccine.AdministrationRoute==VaccineAdministrationRoute.Intradermal) {
+				WriteCE(1,"C38238","Intradermal","HL70162");
+			}
+			else if(vaccine.AdministrationRoute==VaccineAdministrationRoute.Intramuscular) {
+				WriteCE(1,"C28161","Intramuscular","HL70162");
+			}
+			else if(vaccine.AdministrationRoute==VaccineAdministrationRoute.Nasal) {
+				WriteCE(1,"C38284","Nasal","HL70162");
+			}
+			else if(vaccine.AdministrationRoute==VaccineAdministrationRoute.Intravenous) {
+				WriteCE(1,"C38276","Intravenous","HL70162");
+			}
+			else if(vaccine.AdministrationRoute==VaccineAdministrationRoute.Oral) {
+				WriteCE(1,"C38288","Oral","HL70162");
+			}
+			else if(vaccine.AdministrationRoute==VaccineAdministrationRoute.Percutaneous) {
+				WriteCE(1,"C38676","Percutaneous","HL70162");
+			}
+			else if(vaccine.AdministrationRoute==VaccineAdministrationRoute.Subcutaneous) {
+				WriteCE(1,"C38299","Subcutaneous","HL70162");
+			}
+			else if(vaccine.AdministrationRoute==VaccineAdministrationRoute.Transdermal) {
+				WriteCE(1,"C38305","Transdermal","HL70162");
+			}
+			else {//Other
+				WriteCE(1,"","Other","HL70162");//Code must be blank.
+			}
+			//RXR-2 Administration Site.  Required if known.  Cardinality [0..1].  Value set HL70163 (guide page 201, details where the vaccine was physically administered on the patient's body).
+			if(vaccine.AdministrationSite==VaccineAdministrationSite.LeftThigh) {
+				WriteCE(2,"LT","LeftThigh","HL70163");
+			}
+			else if(vaccine.AdministrationSite==VaccineAdministrationSite.LeftArm) {
+				WriteCE(2,"LA","LeftArm","HL70163");
+			}
+			else if(vaccine.AdministrationSite==VaccineAdministrationSite.LeftDeltoid) {
+				WriteCE(2,"LD","LeftDeltoid","HL70163");
+			}
+			else if(vaccine.AdministrationSite==VaccineAdministrationSite.LeftGluteousMedius) {
+				WriteCE(2,"LG","LeftGluteousMedius","HL70163");
+			}
+			else if(vaccine.AdministrationSite==VaccineAdministrationSite.LeftVastusLateralis) {
+				WriteCE(2,"LVL","LeftVastusLateralis","HL70163");
+			}
+			else if(vaccine.AdministrationSite==VaccineAdministrationSite.LeftLowerForearm) {
+				WriteCE(2,"LLFA","LeftLowerForearm","HL70163");
+			}
+			else if(vaccine.AdministrationSite==VaccineAdministrationSite.RightArm) {
+				WriteCE(2,"RA","RightArm","HL70163");
+			}
+			else if(vaccine.AdministrationSite==VaccineAdministrationSite.RightThigh) {
+				WriteCE(2,"RT","RightThigh","HL70163");
+			}
+			else if(vaccine.AdministrationSite==VaccineAdministrationSite.RightVastusLateralis) {
+				WriteCE(2,"RVL","RightVastusLateralis","HL70163");
+			}
+			else if(vaccine.AdministrationSite==VaccineAdministrationSite.RightGluteousMedius) {
+				WriteCE(2,"RG","RightGluteousMedius","HL70163");
+			}
+			else if(vaccine.AdministrationSite==VaccineAdministrationSite.RightDeltoid) {
+				WriteCE(2,"RD","RightDeltoid","HL70163");
+			}
+			else if(vaccine.AdministrationSite==VaccineAdministrationSite.RightLowerForearm) {
+				WriteCE(2,"RLFA","RightLowerForearm","HL70163");
+			}			
 			//RXR-3 Administration Device.  Optional.
 			//RXR-4 Administration Method.  Optional.
 			//RXR-5 Routing Instruction.  Optional.
@@ -650,13 +744,9 @@ namespace OpenDentBusiness.HL7 {
 
 		///<summary>Corresponds to table HL70363 (guide page 229).</summary>
 		private string GetAssigningAuthority(string city,string state) {
-			if(city.Length!=2) {
-				return "";
-			}
-			//TODO: Validate state code somewhere before the export begins.  Same state codes as for NewCrop, except excludes "UM" (U.S. Minor Outlying Islands).
 			string code="";//A value from Value set HL70363 (guide page 229, 3 letter abbreviation for US state, US city, or US territory).
-			string st=state.ToUpper();
-			string c=city.ToUpper().Replace(" ","");
+			string st=state.Trim().ToUpper();
+			string c=city.Trim().ToUpper().Replace(" ","");
 			code=st+"A";//Most of the codes are just the state code followed by an 'A'.  This includes American territories and districts. http://www.itl.nist.gov/fipspubs/fip5-2.htm
 			if(st=="IL" && c=="CHICAGO") { //CHICAGO ILLINOIS
 				code="CHA";//CHICAGO has thier own code.
@@ -843,7 +933,85 @@ namespace OpenDentBusiness.HL7 {
 
 		#endregion Field Helpers
 
-		//The 2 examples below have been edited slightly for our purposes.  They still pass validation.
+		public static string Validate(Patient pat,List<VaccinePat> vaccines) {
+			StringBuilder sb=new StringBuilder();
+			if(vaccines.Count==0) {
+				WriteError(sb,"Must be at least one vaccine.");
+				return sb.ToString();
+			}
+			for(int i=0;i<vaccines.Count;i++) {
+				VaccinePat vaccine=vaccines[i];
+				VaccineDef vaccineDef=VaccineDefs.GetOne(vaccine.VaccineDefNum);
+				if(!Cvxs.CodeExists(vaccineDef.CVXCode)) {
+					WriteError(sb,"Invalid CVX code '"+vaccineDef.CVXCode+"' for vaccine '"+vaccineDef.VaccineName+"'");
+				}
+				if(vaccineDef.DrugManufacturerNum!=0) {
+					DrugManufacturer manufacturer=DrugManufacturers.GetOne(vaccineDef.DrugManufacturerNum);
+					//manufacturer.ManufacturerCode;//TODO: Consider validating MVX codes here. We do not currently store MVX codes.
+				}
+				if(vaccine.AdministeredAmt>0 && vaccine.DrugUnitNum!=0) {
+					DrugUnit drugUnit=DrugUnits.GetOne(vaccine.DrugUnitNum);
+					//drugUnit.UnitIdentifier;//TODO: Validate that this unit is a UCUM.
+				}
+				if(vaccine.AdministrationNoteCode==VaccineAdministrationNote.NewRecord && vaccine.LotNumber.Trim()=="") {
+					WriteError(sb,"Missing lot number.");
+				}
+				if(vaccine.FilledCity.Trim()=="") {
+					WriteError(sb,"Missing filled city.");
+				}
+				List<string> stateCodes=new List<string>(new string[] {
+					//50 States.
+					"AK","AL","AR","AZ","CA","CO","CT","DE","FL","GA",
+					"HI","IA","ID","IL","IN","KS","KY","LA","MA","MD",
+					"ME","MI","MN","MO","MS","MT","NC","ND","NE","NH",
+					"NJ","NM","NV","NY","OH","OK","OR","PA","RI","SC",
+					"SD","TN","TX","UT","VA","VT","WA","WI","WV","WY",
+					//US Districts
+					"DC",
+					//US territories. Reference http://www.itl.nist.gov/fipspubs/fip5-2.htm
+					"AS","FM","GU","MH","MP","PR","VI",//UM and PW are excluded here, because they are not allowed in HL7 table 0363.
+				});
+				if(stateCodes.IndexOf(vaccine.FilledST.Trim().ToUpper())==-1) {
+					WriteError(sb,"Filled state must be 2 letter state or territory code for the United States.");
+				}
+				if(vaccine.LotNumber.Trim()!="" && vaccine.DateExpire.Year<1880) {
+					WriteError(sb,"Missing date expiration.");
+				}
+				if(vaccine.CompletionStatus==VaccineCompletionStatus.Refused && vaccine.RefusalReason==VaccineRefusalReason.None) {
+					WriteError(sb,"Missing refusal reason.");
+				}
+				if(pat.ClinicNum!=0) {
+					Clinic clinic=Clinics.GetClinic(pat.ClinicNum);
+					if(stateCodes.IndexOf(clinic.State.ToUpper())==-1) {
+						WriteError(sb,"Clinic '"+clinic.Description+"' state must be 2 letter state or territory code for the United States.");
+					}
+					if(clinic.City.Trim()=="") {
+						WriteError(sb,"Missing clinic '"+clinic.Description+"' city.");
+					}
+				}
+				else {
+					if(stateCodes.IndexOf(PrefC.GetString(PrefName.PracticeST).ToUpper())==-1) {
+						WriteError(sb,"Practice state must be 2 letter state or territory code for the United States.");
+					}
+					if(PrefC.GetString(PrefName.PracticeCity).Trim()=="") {
+						WriteError(sb,"Missing practice city.");
+					}
+				}
+
+			}
+			return sb.ToString();
+		}
+
+		private static void WriteError(StringBuilder sb,string message) {
+			if(sb.Length>0) {
+				sb.Append("\r\n");
+			}
+			sb.Append(message);
+		}
+
+		#region Examples
+
+		//The following examples are from MU1. The 2 examples below have been edited slightly for our purposes.  They still pass validation.
 
 		//example 1:
 		/*
@@ -862,6 +1030,8 @@ RXA|0|1|201004051600|201004051600|52^Hepatitis A^HL70292|1|ml^milliliter^ISO+|||
 ORC|RE
 RXA|0|1|201007011330|201007011330|03^Measles Mumps Rubella^HL70292|999|||||||||||||||A
 		 */
+
+		#endregion Examples
 
 	}
 }

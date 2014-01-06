@@ -80,7 +80,14 @@ namespace OpenDental {
 			for(int i=0;i<gridVaccine.SelectedIndices.Length;i++) {
 				vaccines.Add(VaccineList[gridVaccine.SelectedIndices[i]]);
 			}
-			OpenDentBusiness.HL7.EhrVXU vxu=new OpenDentBusiness.HL7.EhrVXU(PatCur,vaccines);
+			OpenDentBusiness.HL7.EhrVXU vxu=null;
+			try {
+				vxu=new OpenDentBusiness.HL7.EhrVXU(PatCur,vaccines);
+			}
+			catch(Exception ex) {//Exception happens when validation fails.
+				MessageBox.Show(ex.Message);//Show validation error messages.
+				return;
+			}
 			string outputStr=vxu.GenerateMessage();
 			SaveFileDialog dlg=new SaveFileDialog();
 			dlg.FileName="vxu.txt";
@@ -106,7 +113,14 @@ namespace OpenDental {
 			for(int i=0;i<gridVaccine.SelectedIndices.Length;i++) {
 				vaccines.Add(VaccineList[gridVaccine.SelectedIndices[i]]);
 			}
-			OpenDentBusiness.HL7.EhrVXU vxu=new OpenDentBusiness.HL7.EhrVXU(PatCur,vaccines);
+			OpenDentBusiness.HL7.EhrVXU vxu=null;
+			try {
+				vxu=new OpenDentBusiness.HL7.EhrVXU(PatCur,vaccines);
+			}
+			catch(Exception ex) {//Exception happens when validation fails.
+				MessageBox.Show(ex.Message);//Show validation error messages.
+				return;
+			}
 			string outputStr=vxu.GenerateMessage();
 			Cursor=Cursors.WaitCursor;
 			try {

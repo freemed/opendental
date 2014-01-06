@@ -122,7 +122,7 @@ namespace OpenDentBusiness {
 	///<summary>Exported in HL7 RXR-1.  Corresponds to HL7 table 0162 (guide page 200).</summary>
 	public enum VaccineAdministrationRoute {
 		///<summary>0 - No code.  Default.  Not sent in HL7 messages.  Used in UI only.</summary>
-		Unspecified,
+		None,
 		///<summary>1 - Code C38238</summary>
 		Intradermal,
 		///<summary>2 - Code C28161</summary>
@@ -146,7 +146,7 @@ namespace OpenDentBusiness {
 	///<summary>Exported in HL7 RXR-2.  Corresponds to HL7 table 0163 (guide page 201).</summary>
 	public enum VaccineAdministrationSite {
 		///<summary>0 - No code.  Default.  Not sent in HL7 messages.  Used in UI only.</summary>
-		Unspecified,
+		None,
 		///<summary>1- Code LT</summary>
 		LeftThigh,
 		///<summary>2 - Code LA</summary>
