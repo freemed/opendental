@@ -164,6 +164,7 @@ namespace OpenDental{
 			// 
 			this.textFromAddress.Location = new System.Drawing.Point(278, 41);
 			this.textFromAddress.Name = "textFromAddress";
+			this.textFromAddress.ReadOnly = true;
 			this.textFromAddress.Size = new System.Drawing.Size(328, 20);
 			this.textFromAddress.TabIndex = 4;
 			// 
