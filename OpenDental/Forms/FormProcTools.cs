@@ -245,7 +245,7 @@ namespace OpenDental{
 			else { //USA
 				codeList=CDT.Class1.GetADAcodes();
 			}
-			if(codeList.Count==0){
+			if(codeList==null || codeList.Count==0) {
 				checkDcodes.Checked=false;
 				checkDcodes.Enabled=false;
 			}
