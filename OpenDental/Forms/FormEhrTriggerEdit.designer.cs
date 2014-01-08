@@ -73,7 +73,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(619, 616);
+			this.butCancel.Location = new System.Drawing.Point(652, 616);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 2;
@@ -105,7 +105,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(538, 616);
+			this.butOK.Location = new System.Drawing.Point(571, 616);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75, 24);
 			this.butOK.TabIndex = 121;
@@ -120,7 +120,7 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.butAddProblem);
 			this.groupBox1.Location = new System.Drawing.Point(12, 72);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(87, 132);
+			this.groupBox1.Size = new System.Drawing.Size(114, 132);
 			this.groupBox1.TabIndex = 123;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Problems";
@@ -136,9 +136,9 @@ namespace OpenDental{
 			this.butAddSnomed.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butAddSnomed.Location = new System.Drawing.Point(6, 102);
 			this.butAddSnomed.Name = "butAddSnomed";
-			this.butAddSnomed.Size = new System.Drawing.Size(75, 23);
+			this.butAddSnomed.Size = new System.Drawing.Size(99, 23);
 			this.butAddSnomed.TabIndex = 206;
-			this.butAddSnomed.Text = "Snomed";
+			this.butAddSnomed.Text = "SNOMEDCT";
 			this.butAddSnomed.Click += new System.EventHandler(this.butAddSnomed_Click);
 			// 
 			// butAddIcd10
@@ -152,9 +152,9 @@ namespace OpenDental{
 			this.butAddIcd10.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butAddIcd10.Location = new System.Drawing.Point(6, 73);
 			this.butAddIcd10.Name = "butAddIcd10";
-			this.butAddIcd10.Size = new System.Drawing.Size(75, 23);
+			this.butAddIcd10.Size = new System.Drawing.Size(99, 23);
 			this.butAddIcd10.TabIndex = 205;
-			this.butAddIcd10.Text = "Icd10";
+			this.butAddIcd10.Text = "ICD10";
 			this.butAddIcd10.Click += new System.EventHandler(this.butAddIcd10_Click);
 			// 
 			// butAddIcd9
@@ -168,9 +168,9 @@ namespace OpenDental{
 			this.butAddIcd9.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butAddIcd9.Location = new System.Drawing.Point(6, 44);
 			this.butAddIcd9.Name = "butAddIcd9";
-			this.butAddIcd9.Size = new System.Drawing.Size(75, 23);
+			this.butAddIcd9.Size = new System.Drawing.Size(99, 23);
 			this.butAddIcd9.TabIndex = 204;
-			this.butAddIcd9.Text = "Icd9";
+			this.butAddIcd9.Text = "ICD9";
 			this.butAddIcd9.Click += new System.EventHandler(this.butAddIcd9_Click);
 			// 
 			// butAddProblem
@@ -184,18 +184,16 @@ namespace OpenDental{
 			this.butAddProblem.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butAddProblem.Location = new System.Drawing.Point(6, 15);
 			this.butAddProblem.Name = "butAddProblem";
-			this.butAddProblem.Size = new System.Drawing.Size(75, 23);
+			this.butAddProblem.Size = new System.Drawing.Size(99, 23);
 			this.butAddProblem.TabIndex = 203;
 			this.butAddProblem.Text = "Problem";
 			this.butAddProblem.Click += new System.EventHandler(this.butAddProblem_Click);
 			// 
 			// gridMain
 			// 
-			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(105, 77);
+			this.gridMain.Location = new System.Drawing.Point(138, 77);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.Size = new System.Drawing.Size(589, 392);
@@ -211,7 +209,7 @@ namespace OpenDental{
 			this.groupBox2.Controls.Add(this.butAddMed);
 			this.groupBox2.Location = new System.Drawing.Point(12, 205);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(87, 102);
+			this.groupBox2.Size = new System.Drawing.Size(114, 102);
 			this.groupBox2.TabIndex = 207;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Medications";
@@ -227,7 +225,7 @@ namespace OpenDental{
 			this.butAddCvx.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butAddCvx.Location = new System.Drawing.Point(6, 73);
 			this.butAddCvx.Name = "butAddCvx";
-			this.butAddCvx.Size = new System.Drawing.Size(75, 23);
+			this.butAddCvx.Size = new System.Drawing.Size(99, 23);
 			this.butAddCvx.TabIndex = 205;
 			this.butAddCvx.Text = "Cvx";
 			this.butAddCvx.Click += new System.EventHandler(this.butAddCvx_Click);
@@ -243,7 +241,7 @@ namespace OpenDental{
 			this.butAddRxNorm.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butAddRxNorm.Location = new System.Drawing.Point(6, 44);
 			this.butAddRxNorm.Name = "butAddRxNorm";
-			this.butAddRxNorm.Size = new System.Drawing.Size(75, 23);
+			this.butAddRxNorm.Size = new System.Drawing.Size(99, 23);
 			this.butAddRxNorm.TabIndex = 204;
 			this.butAddRxNorm.Text = "RxNorm";
 			this.butAddRxNorm.Click += new System.EventHandler(this.butAddRxNorm_Click);
@@ -259,7 +257,7 @@ namespace OpenDental{
 			this.butAddMed.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butAddMed.Location = new System.Drawing.Point(6, 15);
 			this.butAddMed.Name = "butAddMed";
-			this.butAddMed.Size = new System.Drawing.Size(75, 23);
+			this.butAddMed.Size = new System.Drawing.Size(99, 23);
 			this.butAddMed.TabIndex = 203;
 			this.butAddMed.Text = "Med";
 			this.butAddMed.Click += new System.EventHandler(this.butAddMed_Click);
@@ -269,7 +267,7 @@ namespace OpenDental{
 			this.groupBox3.Controls.Add(this.butAddAllergy);
 			this.groupBox3.Location = new System.Drawing.Point(12, 309);
 			this.groupBox3.Name = "groupBox3";
-			this.groupBox3.Size = new System.Drawing.Size(87, 45);
+			this.groupBox3.Size = new System.Drawing.Size(114, 45);
 			this.groupBox3.TabIndex = 208;
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "Allergies";
@@ -285,7 +283,7 @@ namespace OpenDental{
 			this.butAddAllergy.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butAddAllergy.Location = new System.Drawing.Point(6, 15);
 			this.butAddAllergy.Name = "butAddAllergy";
-			this.butAddAllergy.Size = new System.Drawing.Size(75, 23);
+			this.butAddAllergy.Size = new System.Drawing.Size(99, 23);
 			this.butAddAllergy.TabIndex = 203;
 			this.butAddAllergy.Text = "Allergy";
 			this.butAddAllergy.Click += new System.EventHandler(this.butAddAllergy_Click);
@@ -296,7 +294,7 @@ namespace OpenDental{
 			this.groupBox4.Controls.Add(this.butAddAge);
 			this.groupBox4.Location = new System.Drawing.Point(12, 356);
 			this.groupBox4.Name = "groupBox4";
-			this.groupBox4.Size = new System.Drawing.Size(87, 73);
+			this.groupBox4.Size = new System.Drawing.Size(114, 73);
 			this.groupBox4.TabIndex = 209;
 			this.groupBox4.TabStop = false;
 			this.groupBox4.Text = "Demographics";
@@ -312,7 +310,7 @@ namespace OpenDental{
 			this.butAddGender.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butAddGender.Location = new System.Drawing.Point(6, 44);
 			this.butAddGender.Name = "butAddGender";
-			this.butAddGender.Size = new System.Drawing.Size(75, 23);
+			this.butAddGender.Size = new System.Drawing.Size(99, 23);
 			this.butAddGender.TabIndex = 204;
 			this.butAddGender.Text = "Gender";
 			this.butAddGender.Click += new System.EventHandler(this.butAddGender_Click);
@@ -328,7 +326,7 @@ namespace OpenDental{
 			this.butAddAge.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butAddAge.Location = new System.Drawing.Point(6, 15);
 			this.butAddAge.Name = "butAddAge";
-			this.butAddAge.Size = new System.Drawing.Size(75, 23);
+			this.butAddAge.Size = new System.Drawing.Size(99, 23);
 			this.butAddAge.TabIndex = 203;
 			this.butAddAge.Text = "Age";
 			this.butAddAge.Click += new System.EventHandler(this.butAddAge_Click);
@@ -338,7 +336,7 @@ namespace OpenDental{
 			this.groupBox5.Controls.Add(this.butAddLab);
 			this.groupBox5.Location = new System.Drawing.Point(12, 431);
 			this.groupBox5.Name = "groupBox5";
-			this.groupBox5.Size = new System.Drawing.Size(87, 45);
+			this.groupBox5.Size = new System.Drawing.Size(114, 45);
 			this.groupBox5.TabIndex = 210;
 			this.groupBox5.TabStop = false;
 			this.groupBox5.Text = "Lab Results";
@@ -354,7 +352,7 @@ namespace OpenDental{
 			this.butAddLab.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butAddLab.Location = new System.Drawing.Point(6, 15);
 			this.butAddLab.Name = "butAddLab";
-			this.butAddLab.Size = new System.Drawing.Size(75, 23);
+			this.butAddLab.Size = new System.Drawing.Size(99, 23);
 			this.butAddLab.TabIndex = 203;
 			this.butAddLab.Text = "Lab";
 			this.butAddLab.Click += new System.EventHandler(this.butAddLab_Click);
@@ -367,7 +365,7 @@ namespace OpenDental{
 			this.groupBox6.Controls.Add(this.butAddHeight);
 			this.groupBox6.Location = new System.Drawing.Point(12, 478);
 			this.groupBox6.Name = "groupBox6";
-			this.groupBox6.Size = new System.Drawing.Size(87, 132);
+			this.groupBox6.Size = new System.Drawing.Size(114, 132);
 			this.groupBox6.TabIndex = 211;
 			this.groupBox6.TabStop = false;
 			this.groupBox6.Text = "Vital Signs";
@@ -383,7 +381,7 @@ namespace OpenDental{
 			this.butAddBMI.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butAddBMI.Location = new System.Drawing.Point(6, 102);
 			this.butAddBMI.Name = "butAddBMI";
-			this.butAddBMI.Size = new System.Drawing.Size(75, 23);
+			this.butAddBMI.Size = new System.Drawing.Size(99, 23);
 			this.butAddBMI.TabIndex = 206;
 			this.butAddBMI.Text = "BMI";
 			this.butAddBMI.Click += new System.EventHandler(this.butAddBMI_Click);
@@ -400,7 +398,7 @@ namespace OpenDental{
 			this.butAddBP.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butAddBP.Location = new System.Drawing.Point(6, 73);
 			this.butAddBP.Name = "butAddBP";
-			this.butAddBP.Size = new System.Drawing.Size(75, 23);
+			this.butAddBP.Size = new System.Drawing.Size(99, 23);
 			this.butAddBP.TabIndex = 205;
 			this.butAddBP.Text = "BP";
 			this.butAddBP.Click += new System.EventHandler(this.butAddBP_Click);
@@ -416,7 +414,7 @@ namespace OpenDental{
 			this.butAddWeight.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butAddWeight.Location = new System.Drawing.Point(6, 44);
 			this.butAddWeight.Name = "butAddWeight";
-			this.butAddWeight.Size = new System.Drawing.Size(75, 23);
+			this.butAddWeight.Size = new System.Drawing.Size(99, 23);
 			this.butAddWeight.TabIndex = 204;
 			this.butAddWeight.Text = "Weight";
 			this.butAddWeight.Click += new System.EventHandler(this.butAddWeight_Click);
@@ -432,7 +430,7 @@ namespace OpenDental{
 			this.butAddHeight.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butAddHeight.Location = new System.Drawing.Point(6, 15);
 			this.butAddHeight.Name = "butAddHeight";
-			this.butAddHeight.Size = new System.Drawing.Size(75, 23);
+			this.butAddHeight.Size = new System.Drawing.Size(99, 23);
 			this.butAddHeight.TabIndex = 203;
 			this.butAddHeight.Text = "Height";
 			this.butAddHeight.Click += new System.EventHandler(this.butAddHeight_Click);
@@ -440,14 +438,14 @@ namespace OpenDental{
 			// textDescription
 			// 
 			this.textDescription.BackColor = System.Drawing.SystemColors.ControlLightLight;
-			this.textDescription.Location = new System.Drawing.Point(105, 12);
+			this.textDescription.Location = new System.Drawing.Point(138, 12);
 			this.textDescription.Name = "textDescription";
 			this.textDescription.Size = new System.Drawing.Size(388, 20);
 			this.textDescription.TabIndex = 213;
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(2, 14);
+			this.label2.Location = new System.Drawing.Point(35, 14);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(100, 17);
 			this.label2.TabIndex = 212;
@@ -457,7 +455,7 @@ namespace OpenDental{
 			// comboCardinality
 			// 
 			this.comboCardinality.FormattingEnabled = true;
-			this.comboCardinality.Location = new System.Drawing.Point(105, 44);
+			this.comboCardinality.Location = new System.Drawing.Point(138, 44);
 			this.comboCardinality.Name = "comboCardinality";
 			this.comboCardinality.Size = new System.Drawing.Size(158, 21);
 			this.comboCardinality.TabIndex = 216;
@@ -465,7 +463,7 @@ namespace OpenDental{
 			// 
 			// labelCardinality
 			// 
-			this.labelCardinality.Location = new System.Drawing.Point(269, 35);
+			this.labelCardinality.Location = new System.Drawing.Point(302, 35);
 			this.labelCardinality.Name = "labelCardinality";
 			this.labelCardinality.Size = new System.Drawing.Size(425, 39);
 			this.labelCardinality.TabIndex = 214;
@@ -476,7 +474,7 @@ namespace OpenDental{
 			// label4
 			// 
 			this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label4.Location = new System.Drawing.Point(12, 46);
+			this.label4.Location = new System.Drawing.Point(45, 46);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(90, 17);
 			this.label4.TabIndex = 215;
@@ -485,16 +483,18 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(105, 478);
+			this.label3.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.label3.Location = new System.Drawing.Point(138, 478);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(93, 17);
+			this.label3.Size = new System.Drawing.Size(89, 17);
 			this.label3.TabIndex = 218;
 			this.label3.Text = "Instructions";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textInstruction
 			// 
-			this.textInstruction.Location = new System.Drawing.Point(200, 478);
+			this.textInstruction.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.textInstruction.Location = new System.Drawing.Point(233, 478);
 			this.textInstruction.Multiline = true;
 			this.textInstruction.Name = "textInstruction";
 			this.textInstruction.Size = new System.Drawing.Size(494, 84);
@@ -502,16 +502,18 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(105, 568);
+			this.label1.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.label1.Location = new System.Drawing.Point(138, 568);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(93, 17);
+			this.label1.Size = new System.Drawing.Size(89, 17);
 			this.label1.TabIndex = 220;
 			this.label1.Text = "Bibliography";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textBibliography
 			// 
-			this.textBibliography.Location = new System.Drawing.Point(200, 568);
+			this.textBibliography.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.textBibliography.Location = new System.Drawing.Point(233, 568);
 			this.textBibliography.Multiline = true;
 			this.textBibliography.Name = "textBibliography";
 			this.textBibliography.Size = new System.Drawing.Size(494, 42);
@@ -520,7 +522,7 @@ namespace OpenDental{
 			// FormEhrTriggerEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(706, 652);
+			this.ClientSize = new System.Drawing.Size(739, 652);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.textBibliography);
 			this.Controls.Add(this.label3);

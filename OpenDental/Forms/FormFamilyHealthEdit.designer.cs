@@ -40,43 +40,43 @@ namespace OpenDental{
 			// listRelationship
 			// 
 			this.listRelationship.FormattingEnabled = true;
-			this.listRelationship.Location = new System.Drawing.Point(110, 29);
+			this.listRelationship.Location = new System.Drawing.Point(129, 29);
 			this.listRelationship.Name = "listRelationship";
 			this.listRelationship.Size = new System.Drawing.Size(145, 43);
 			this.listRelationship.TabIndex = 63;
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(7, 130);
+			this.label3.Location = new System.Drawing.Point(12, 130);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(100, 20);
+			this.label3.Size = new System.Drawing.Size(114, 20);
 			this.label3.TabIndex = 72;
-			this.label3.Text = "Snomed Code";
+			this.label3.Text = "SNOMED CT Code";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(7, 104);
+			this.label1.Location = new System.Drawing.Point(12, 104);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(100, 20);
+			this.label1.Size = new System.Drawing.Size(114, 20);
 			this.label1.TabIndex = 75;
 			this.label1.Text = "Problem";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(7, 78);
+			this.label4.Location = new System.Drawing.Point(12, 78);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(100, 20);
+			this.label4.Size = new System.Drawing.Size(114, 20);
 			this.label4.TabIndex = 76;
 			this.label4.Text = "Name";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(7, 29);
+			this.label2.Location = new System.Drawing.Point(12, 29);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(100, 20);
+			this.label2.Size = new System.Drawing.Size(114, 20);
 			this.label2.TabIndex = 77;
 			this.label2.Text = "Relationship";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -85,7 +85,7 @@ namespace OpenDental{
 			// 
 			this.textName.AcceptsTab = true;
 			this.textName.DetectUrls = false;
-			this.textName.Location = new System.Drawing.Point(110, 78);
+			this.textName.Location = new System.Drawing.Point(129, 78);
 			this.textName.Multiline = false;
 			this.textName.Name = "textName";
 			this.textName.QuickPasteType = OpenDentBusiness.QuickPasteType.MedicationEdit;
@@ -98,7 +98,7 @@ namespace OpenDental{
 			// 
 			this.textSnomed.AcceptsTab = true;
 			this.textSnomed.DetectUrls = false;
-			this.textSnomed.Location = new System.Drawing.Point(110, 130);
+			this.textSnomed.Location = new System.Drawing.Point(129, 130);
 			this.textSnomed.Multiline = false;
 			this.textSnomed.Name = "textSnomed";
 			this.textSnomed.QuickPasteType = OpenDentBusiness.QuickPasteType.MedicationEdit;
@@ -112,7 +112,7 @@ namespace OpenDental{
 			// 
 			this.textProblem.AcceptsTab = true;
 			this.textProblem.DetectUrls = false;
-			this.textProblem.Location = new System.Drawing.Point(110, 104);
+			this.textProblem.Location = new System.Drawing.Point(129, 104);
 			this.textProblem.Multiline = false;
 			this.textProblem.Name = "textProblem";
 			this.textProblem.QuickPasteType = OpenDentBusiness.QuickPasteType.MedicationEdit;
@@ -129,7 +129,7 @@ namespace OpenDental{
 			this.butPick.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butPick.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butPick.CornerRadius = 4F;
-			this.butPick.Location = new System.Drawing.Point(453, 104);
+			this.butPick.Location = new System.Drawing.Point(472, 104);
 			this.butPick.Name = "butPick";
 			this.butPick.Size = new System.Drawing.Size(52, 20);
 			this.butPick.TabIndex = 60;

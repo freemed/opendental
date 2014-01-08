@@ -225,7 +225,7 @@ namespace OpenDental{
 			ODGridColumn col;
 			col=new ODGridColumn(Lan.g(this,"ICD-9"),50);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Snomed Code"),100);
+			col=new ODGridColumn(Lan.g(this,"SNOMED CT"),100);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Description"),250);
 			gridMain.Columns.Add(col);

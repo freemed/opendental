@@ -113,7 +113,7 @@
 			// butDelete
 			// 
 			this.butDelete.Anchor = System.Windows.Forms.AnchorStyles.None;
-			this.butDelete.Location = new System.Drawing.Point(15, 151);
+			this.butDelete.Location = new System.Drawing.Point(15, 163);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(75, 23);
 			this.butDelete.TabIndex = 23;

@@ -54,7 +54,7 @@ namespace OpenDental {
 				col.ImageList=imageListInfoButton;
 				gridMain.Columns.Add(col);
 			}
-			col=new ODGridColumn("SNOMED Code",100);
+			col=new ODGridColumn("SNOMED CT",100);
 			gridMain.Columns.Add(col);
 			//col=new ODGridColumn("Deprecated",75,HorizontalAlignment.Center);
 			//gridMain.Columns.Add(col);
@@ -284,7 +284,7 @@ namespace OpenDental {
 		}
 
 		private void butMapToSnomed_Click(object sender,EventArgs e) {
-			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Will add SNOMED code to existing problems list only if the ICD9 code correlates to exactly one SNOMED code. If there is any ambiguity at all the code will not be added.")) {
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Will add SNOMED CT code to existing problems list only if the ICD9 code correlates to exactly one SNOMED CT code. If there is any ambiguity at all the code will not be added.")) {
 				return;
 			}
 			int changeCount=0;
@@ -302,7 +302,7 @@ namespace OpenDental {
 				DiseaseDefs.Update(def);
 				changeCount++;
 			}
-			MessageBox.Show(Lan.g(this,"SNOMED codes added: ")+changeCount);
+			MessageBox.Show(Lan.g(this,"SNOMED CT codes added: ")+changeCount);
 		}
 
 //		private void butRSIT_Click(object sender,EventArgs e) {//Ryan's Snomed Import Tool

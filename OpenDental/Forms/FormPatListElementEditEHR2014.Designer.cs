@@ -52,7 +52,7 @@
 			// 
 			// labelOperand
 			// 
-			this.labelOperand.Location = new System.Drawing.Point(128, 113);
+			this.labelOperand.Location = new System.Drawing.Point(123, 113);
 			this.labelOperand.Name = "labelOperand";
 			this.labelOperand.Size = new System.Drawing.Size(61, 17);
 			this.labelOperand.TabIndex = 10;
@@ -95,7 +95,7 @@
 			// 
 			// labelRestriction
 			// 
-			this.labelRestriction.Location = new System.Drawing.Point(114, 12);
+			this.labelRestriction.Location = new System.Drawing.Point(109, 12);
 			this.labelRestriction.Name = "labelRestriction";
 			this.labelRestriction.Size = new System.Drawing.Size(75, 17);
 			this.labelRestriction.TabIndex = 13;
@@ -104,7 +104,7 @@
 			// 
 			// labelCompareString
 			// 
-			this.labelCompareString.Location = new System.Drawing.Point(12, 163);
+			this.labelCompareString.Location = new System.Drawing.Point(7, 163);
 			this.labelCompareString.Name = "labelCompareString";
 			this.labelCompareString.Size = new System.Drawing.Size(177, 17);
 			this.labelCompareString.TabIndex = 9;
@@ -113,7 +113,7 @@
 			// 
 			// textCompareString
 			// 
-			this.textCompareString.Location = new System.Drawing.Point(190, 162);
+			this.textCompareString.Location = new System.Drawing.Point(185, 162);
 			this.textCompareString.Name = "textCompareString";
 			this.textCompareString.Size = new System.Drawing.Size(137, 20);
 			this.textCompareString.TabIndex = 1;
@@ -121,7 +121,7 @@
 			// 
 			// labelLabValue
 			// 
-			this.labelLabValue.Location = new System.Drawing.Point(65, 212);
+			this.labelLabValue.Location = new System.Drawing.Point(60, 212);
 			this.labelLabValue.Name = "labelLabValue";
 			this.labelLabValue.Size = new System.Drawing.Size(124, 17);
 			this.labelLabValue.TabIndex = 14;
@@ -131,7 +131,7 @@
 			// 
 			// textLabValue
 			// 
-			this.textLabValue.Location = new System.Drawing.Point(190, 210);
+			this.textLabValue.Location = new System.Drawing.Point(185, 210);
 			this.textLabValue.Name = "textLabValue";
 			this.textLabValue.Size = new System.Drawing.Size(137, 20);
 			this.textLabValue.TabIndex = 2;
@@ -148,7 +148,7 @@
             "Gender",
             "Allergy",
             "Comm Pref"});
-			this.listRestriction.Location = new System.Drawing.Point(190, 12);
+			this.listRestriction.Location = new System.Drawing.Point(185, 12);
 			this.listRestriction.Name = "listRestriction";
 			this.listRestriction.Size = new System.Drawing.Size(75, 95);
 			this.listRestriction.TabIndex = 18;
@@ -161,14 +161,14 @@
             "GreaterThan",
             "LessThan",
             "Equals"});
-			this.listOperand.Location = new System.Drawing.Point(190, 113);
+			this.listOperand.Location = new System.Drawing.Point(185, 113);
 			this.listOperand.Name = "listOperand";
 			this.listOperand.Size = new System.Drawing.Size(75, 43);
 			this.listOperand.TabIndex = 19;
 			// 
 			// labelExample
 			// 
-			this.labelExample.Location = new System.Drawing.Point(367, 163);
+			this.labelExample.Location = new System.Drawing.Point(362, 163);
 			this.labelExample.Name = "labelExample";
 			this.labelExample.Size = new System.Drawing.Size(119, 17);
 			this.labelExample.TabIndex = 20;
@@ -177,7 +177,7 @@
 			// 
 			// labelAfterDate
 			// 
-			this.labelAfterDate.Location = new System.Drawing.Point(12, 267);
+			this.labelAfterDate.Location = new System.Drawing.Point(7, 267);
 			this.labelAfterDate.Name = "labelAfterDate";
 			this.labelAfterDate.Size = new System.Drawing.Size(177, 17);
 			this.labelAfterDate.TabIndex = 22;
@@ -186,7 +186,7 @@
 			// 
 			// labelBeforeDate
 			// 
-			this.labelBeforeDate.Location = new System.Drawing.Point(12, 289);
+			this.labelBeforeDate.Location = new System.Drawing.Point(7, 289);
 			this.labelBeforeDate.Name = "labelBeforeDate";
 			this.labelBeforeDate.Size = new System.Drawing.Size(177, 17);
 			this.labelBeforeDate.TabIndex = 24;
@@ -195,7 +195,7 @@
 			// 
 			// butPicker
 			// 
-			this.butPicker.Location = new System.Drawing.Point(333, 160);
+			this.butPicker.Location = new System.Drawing.Point(328, 160);
 			this.butPicker.Name = "butPicker";
 			this.butPicker.Size = new System.Drawing.Size(28, 23);
 			this.butPicker.TabIndex = 25;
@@ -205,17 +205,17 @@
 			// 
 			// butSNOMED
 			// 
-			this.butSNOMED.Location = new System.Drawing.Point(333, 184);
+			this.butSNOMED.Location = new System.Drawing.Point(328, 184);
 			this.butSNOMED.Name = "butSNOMED";
-			this.butSNOMED.Size = new System.Drawing.Size(70, 23);
+			this.butSNOMED.Size = new System.Drawing.Size(80, 23);
 			this.butSNOMED.TabIndex = 31;
-			this.butSNOMED.Text = "SNOMED";
+			this.butSNOMED.Text = "SNOMED CT";
 			this.butSNOMED.UseVisualStyleBackColor = true;
 			this.butSNOMED.Click += new System.EventHandler(this.butPicker_Click);
 			// 
 			// textSNOMED
 			// 
-			this.textSNOMED.Location = new System.Drawing.Point(190, 186);
+			this.textSNOMED.Location = new System.Drawing.Point(185, 186);
 			this.textSNOMED.Name = "textSNOMED";
 			this.textSNOMED.Size = new System.Drawing.Size(137, 20);
 			this.textSNOMED.TabIndex = 32;
@@ -223,16 +223,16 @@
 			// 
 			// labelSNOMED
 			// 
-			this.labelSNOMED.Location = new System.Drawing.Point(12, 187);
+			this.labelSNOMED.Location = new System.Drawing.Point(7, 187);
 			this.labelSNOMED.Name = "labelSNOMED";
 			this.labelSNOMED.Size = new System.Drawing.Size(177, 17);
 			this.labelSNOMED.TabIndex = 33;
-			this.labelSNOMED.Text = "SNOMED Code";
+			this.labelSNOMED.Text = "SNOMED CT Code";
 			this.labelSNOMED.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// butProblem
 			// 
-			this.butProblem.Location = new System.Drawing.Point(409, 184);
+			this.butProblem.Location = new System.Drawing.Point(414, 184);
 			this.butProblem.Name = "butProblem";
 			this.butProblem.Size = new System.Drawing.Size(70, 23);
 			this.butProblem.TabIndex = 34;
@@ -242,21 +242,21 @@
 			// 
 			// textDateStop
 			// 
-			this.textDateStop.Location = new System.Drawing.Point(190, 288);
+			this.textDateStop.Location = new System.Drawing.Point(185, 288);
 			this.textDateStop.Name = "textDateStop";
 			this.textDateStop.Size = new System.Drawing.Size(137, 20);
 			this.textDateStop.TabIndex = 27;
 			// 
 			// textDateStart
 			// 
-			this.textDateStart.Location = new System.Drawing.Point(190, 264);
+			this.textDateStart.Location = new System.Drawing.Point(185, 264);
 			this.textDateStart.Name = "textDateStart";
 			this.textDateStart.Size = new System.Drawing.Size(137, 20);
 			this.textDateStart.TabIndex = 26;
 			// 
 			// labelProblemSuggest
 			// 
-			this.labelProblemSuggest.Location = new System.Drawing.Point(333, 243);
+			this.labelProblemSuggest.Location = new System.Drawing.Point(328, 243);
 			this.labelProblemSuggest.Name = "labelProblemSuggest";
 			this.labelProblemSuggest.Size = new System.Drawing.Size(146, 65);
 			this.labelProblemSuggest.TabIndex = 35;
@@ -265,7 +265,7 @@
 			// 
 			// labelLabValueType
 			// 
-			this.labelLabValueType.Location = new System.Drawing.Point(65, 238);
+			this.labelLabValueType.Location = new System.Drawing.Point(60, 238);
 			this.labelLabValueType.Name = "labelLabValueType";
 			this.labelLabValueType.Size = new System.Drawing.Size(124, 17);
 			this.labelLabValueType.TabIndex = 37;
@@ -276,15 +276,15 @@
 			// comboUnits
 			// 
 			this.comboUnits.FormattingEnabled = true;
-			this.comboUnits.Location = new System.Drawing.Point(333, 209);
+			this.comboUnits.Location = new System.Drawing.Point(328, 209);
 			this.comboUnits.Name = "comboUnits";
-			this.comboUnits.Size = new System.Drawing.Size(75, 21);
+			this.comboUnits.Size = new System.Drawing.Size(80, 21);
 			this.comboUnits.TabIndex = 226;
 			// 
 			// comboLabValueType
 			// 
 			this.comboLabValueType.FormattingEnabled = true;
-			this.comboLabValueType.Location = new System.Drawing.Point(190, 237);
+			this.comboLabValueType.Location = new System.Drawing.Point(185, 237);
 			this.comboLabValueType.Name = "comboLabValueType";
 			this.comboLabValueType.Size = new System.Drawing.Size(137, 21);
 			this.comboLabValueType.TabIndex = 227;

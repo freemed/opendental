@@ -108,7 +108,7 @@ namespace OpenDental{
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(141, 20);
 			this.label2.TabIndex = 26;
-			this.label2.Text = "SNOMED Reaction";
+			this.label2.Text = "SNOMED CT Reaction";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textSnomedReaction

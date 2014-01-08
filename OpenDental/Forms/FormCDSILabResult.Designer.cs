@@ -187,9 +187,9 @@
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(9, 45);
+			this.label4.Location = new System.Drawing.Point(6, 45);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(93, 17);
+			this.label4.Size = new System.Drawing.Size(96, 17);
 			this.label4.TabIndex = 226;
 			this.label4.Text = "Description";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -222,11 +222,11 @@
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(33, 20);
+			this.label2.Location = new System.Drawing.Point(6, 20);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(70, 17);
+			this.label2.Size = new System.Drawing.Size(97, 17);
 			this.label2.TabIndex = 4;
-			this.label2.Text = "SNOMED";
+			this.label2.Text = "SNOMED CT";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// checkAllResults

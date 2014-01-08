@@ -38,7 +38,7 @@ namespace OpenDental{
 			// 
 			// textSnomedGoal
 			// 
-			this.textSnomedGoal.Location = new System.Drawing.Point(94, 47);
+			this.textSnomedGoal.Location = new System.Drawing.Point(109, 45);
 			this.textSnomedGoal.Name = "textSnomedGoal";
 			this.textSnomedGoal.ReadOnly = true;
 			this.textSnomedGoal.Size = new System.Drawing.Size(276, 20);
@@ -46,16 +46,16 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(0, 47);
+			this.label1.Location = new System.Drawing.Point(2, 45);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(91, 20);
+			this.label1.Size = new System.Drawing.Size(104, 20);
 			this.label1.TabIndex = 26;
-			this.label1.Text = "SNOMED Goal";
+			this.label1.Text = "SNOMED CT Goal";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textInstructions
 			// 
-			this.textInstructions.Location = new System.Drawing.Point(94, 75);
+			this.textInstructions.Location = new System.Drawing.Point(109, 73);
 			this.textInstructions.Multiline = true;
 			this.textInstructions.Name = "textInstructions";
 			this.textInstructions.Size = new System.Drawing.Size(303, 227);
@@ -63,7 +63,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(1, 72);
+			this.label2.Location = new System.Drawing.Point(16, 70);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(90, 20);
 			this.label2.TabIndex = 30;
@@ -72,7 +72,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(0, 22);
+			this.label3.Location = new System.Drawing.Point(15, 20);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(91, 20);
 			this.label3.TabIndex = 32;
@@ -81,7 +81,7 @@ namespace OpenDental{
 			// 
 			// textDate
 			// 
-			this.textDate.Location = new System.Drawing.Point(94, 22);
+			this.textDate.Location = new System.Drawing.Point(109, 20);
 			this.textDate.Name = "textDate";
 			this.textDate.Size = new System.Drawing.Size(94, 20);
 			this.textDate.TabIndex = 33;
@@ -110,7 +110,7 @@ namespace OpenDental{
 			this.butSnomedGoalSelect.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butSnomedGoalSelect.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSnomedGoalSelect.CornerRadius = 4F;
-			this.butSnomedGoalSelect.Location = new System.Drawing.Point(375, 46);
+			this.butSnomedGoalSelect.Location = new System.Drawing.Point(390, 44);
 			this.butSnomedGoalSelect.Name = "butSnomedGoalSelect";
 			this.butSnomedGoalSelect.Size = new System.Drawing.Size(22, 22);
 			this.butSnomedGoalSelect.TabIndex = 27;
@@ -125,7 +125,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(241, 315);
+			this.butOK.Location = new System.Drawing.Point(256, 315);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75, 24);
 			this.butOK.TabIndex = 3;
@@ -140,7 +140,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(322, 315);
+			this.butCancel.Location = new System.Drawing.Point(337, 315);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 2;
@@ -150,7 +150,7 @@ namespace OpenDental{
 			// FormEhrCarePlanEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(412, 355);
+			this.ClientSize = new System.Drawing.Size(427, 355);
 			this.Controls.Add(this.textDate);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.butDelete);

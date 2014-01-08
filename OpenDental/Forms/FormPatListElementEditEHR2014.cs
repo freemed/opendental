@@ -327,7 +327,7 @@ namespace OpenDental {
 					break;
 				case 1: //Disease--------------------------------------------------------------------------------------------------------------
 					if(textCompareString.Text=="" && textSNOMED.Text=="") {
-						MsgBox.Show(this,"Please enter a valid SNOMED or ICD9 code.");
+						MsgBox.Show(this,"Please enter a valid SNOMED CT or ICD9 code.");
 						return false;
 					}
 					if(textCompareString.Text!="") {
@@ -338,7 +338,7 @@ namespace OpenDental {
 					}
 					if(textSNOMED.Text!=""){
 						if(!Snomeds.CodeExists(textSNOMED.Text)) {
-							MsgBox.Show(this,"SNOMED code does not exist in database, pick from list.");
+							MsgBox.Show(this,"SNOMED CT code does not exist in database, pick from list.");
 							return false;
 						}
 					}
@@ -529,10 +529,10 @@ namespace OpenDental {
 			}
 			else if(dis.ICD9Code!="") {
 				textCompareString.Text=dis.ICD9Code;
-				MsgBox.Show(this,"Selected problem does not have a valid SNOMED code.");
+				MsgBox.Show(this,"Selected problem does not have a valid SNOMED CT code.");
 			}
 			else {
-				MsgBox.Show(this,"Selected problem does not have a valid SNOMED code.");
+				MsgBox.Show(this,"Selected problem does not have a valid SNOMED CT code.");
 			}
 		}
 

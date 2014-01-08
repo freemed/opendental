@@ -111,8 +111,8 @@ namespace OpenDental{
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.Size = new System.Drawing.Size(817, 641);
 			this.gridMain.TabIndex = 20;
-			this.gridMain.Title = "SNOMED Codes";
-			this.gridMain.TranslationName = "FormCPTCodes";
+			this.gridMain.Title = "SNOMED CT Codes";
+			this.gridMain.TranslationName = "FormSNOMEDCTCodes";
 			this.gridMain.WrapText = false;
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
@@ -166,7 +166,7 @@ namespace OpenDental{
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "FormSnomeds";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Snomeds";
+			this.Text = "SNOMED CT";
 			this.Load += new System.EventHandler(this.FormSnomeds_Load);
 			this.groupBox1.ResumeLayout(false);
 			this.ResumeLayout(false);

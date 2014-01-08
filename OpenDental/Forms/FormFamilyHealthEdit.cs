@@ -42,7 +42,7 @@ namespace OpenDental {
 			}
 			DiseaseDef disDef=DiseaseDefs.GetItem(FormD.SelectedDiseaseDefNum);
 			if(disDef.SnomedCode=="") {
-				MsgBox.Show(this,"Selection must have a Snomed code associated");
+				MsgBox.Show(this,"Selection must have a SNOMED CT code associated");
 				return;
 			}
 			textProblem.Text=disDef.DiseaseName;

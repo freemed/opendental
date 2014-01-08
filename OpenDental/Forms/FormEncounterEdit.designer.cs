@@ -210,7 +210,7 @@ namespace OpenDental{
 			this.butHcpcs.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butHcpcs.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butHcpcs.CornerRadius = 4F;
-			this.butHcpcs.Location = new System.Drawing.Point(348, 72);
+			this.butHcpcs.Location = new System.Drawing.Point(367, 72);
 			this.butHcpcs.Name = "butHcpcs";
 			this.butHcpcs.Size = new System.Drawing.Size(58, 21);
 			this.butHcpcs.TabIndex = 131;
@@ -226,9 +226,9 @@ namespace OpenDental{
 			this.butSnomed.CornerRadius = 4F;
 			this.butSnomed.Location = new System.Drawing.Point(284, 72);
 			this.butSnomed.Name = "butSnomed";
-			this.butSnomed.Size = new System.Drawing.Size(59, 21);
+			this.butSnomed.Size = new System.Drawing.Size(77, 21);
 			this.butSnomed.TabIndex = 132;
-			this.butSnomed.Text = "SNOMED";
+			this.butSnomed.Text = "SNOMED CT";
 			this.butSnomed.Click += new System.EventHandler(this.butSnomed_Click);
 			// 
 			// butCdt
@@ -238,7 +238,7 @@ namespace OpenDental{
 			this.butCdt.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCdt.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCdt.CornerRadius = 4F;
-			this.butCdt.Location = new System.Drawing.Point(412, 72);
+			this.butCdt.Location = new System.Drawing.Point(431, 72);
 			this.butCdt.Name = "butCdt";
 			this.butCdt.Size = new System.Drawing.Size(58, 21);
 			this.butCdt.TabIndex = 130;
@@ -266,7 +266,7 @@ namespace OpenDental{
 			this.butCpt.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCpt.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCpt.CornerRadius = 4F;
-			this.butCpt.Location = new System.Drawing.Point(476, 72);
+			this.butCpt.Location = new System.Drawing.Point(495, 72);
 			this.butCpt.Name = "butCpt";
 			this.butCpt.Size = new System.Drawing.Size(58, 21);
 			this.butCpt.TabIndex = 133;

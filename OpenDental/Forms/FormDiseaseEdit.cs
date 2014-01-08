@@ -205,7 +205,7 @@ namespace OpenDental{
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(100, 19);
 			this.label6.TabIndex = 88;
-			this.label6.Text = "Snomed";
+			this.label6.Text = "SNOMED CT";
 			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// comboSnomedProblemType

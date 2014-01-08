@@ -47,7 +47,7 @@ namespace OpenDental {
 						row.Cells.Add(_elementList[i].CompareString+" - "+Snomeds.GetByCode(_elementList[i].CompareString).Description);
 					}
 					else {
-						row.Cells.Add(_elementList[i].CompareString+" - NON-SNOMED CODE");
+						row.Cells.Add(_elementList[i].CompareString+" - NON-SNOMED CT CODE");
 					}
 				}
 				else {

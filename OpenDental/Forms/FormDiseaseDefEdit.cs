@@ -180,7 +180,7 @@ namespace OpenDental{
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(100, 23);
 			this.label3.TabIndex = 5;
-			this.label3.Text = "Snomed Code";
+			this.label3.Text = "SNOMED CT Code";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// butSnomed

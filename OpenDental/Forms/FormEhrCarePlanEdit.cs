@@ -56,7 +56,7 @@ namespace OpenDental {
 				return;
 			}
 			if(_snomedGoal==null) {
-				MsgBox.Show(this,"Missing snomed goal");
+				MsgBox.Show(this,"Missing SNOMED CT goal");
 				return;
 			}
 			_ehrCarePlan.DatePlanned=date;

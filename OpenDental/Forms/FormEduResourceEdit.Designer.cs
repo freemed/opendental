@@ -259,11 +259,11 @@
 			// 
 			// label8
 			// 
-			this.label8.Location = new System.Drawing.Point(43, 72);
+			this.label8.Location = new System.Drawing.Point(12, 72);
 			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(100, 17);
+			this.label8.Size = new System.Drawing.Size(131, 17);
 			this.label8.TabIndex = 19;
-			this.label8.Text = "Snomed";
+			this.label8.Text = "SNOMED CT";
 			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// FormEduResourceEdit

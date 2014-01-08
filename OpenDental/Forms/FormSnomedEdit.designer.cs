@@ -96,7 +96,7 @@ namespace OpenDental{
 			this.Controls.Add(this.butClose);
 			this.Name = "FormSnomedEdit";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Snomed Edit";
+			this.Text = "SNOMED CT Edit";
 			this.Load += new System.EventHandler(this.FormSnomedEdit_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();

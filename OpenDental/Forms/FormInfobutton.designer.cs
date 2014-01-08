@@ -30,6 +30,7 @@ namespace OpenDental{
 			this.textOrgName = new System.Windows.Forms.TextBox();
 			this.label10 = new System.Windows.Forms.Label();
 			this.groupBox6 = new System.Windows.Forms.GroupBox();
+			this.butProvSelect = new OpenDental.UI.Button();
 			this.comboProvLang = new System.Windows.Forms.ComboBox();
 			this.label7 = new System.Windows.Forms.Label();
 			this.textProvID = new System.Windows.Forms.TextBox();
@@ -42,6 +43,7 @@ namespace OpenDental{
 			this.comboEncType = new System.Windows.Forms.ComboBox();
 			this.label26 = new System.Windows.Forms.Label();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
+			this.butPatSelect = new OpenDental.UI.Button();
 			this.comboPatLang = new System.Windows.Forms.ComboBox();
 			this.groupBox4 = new System.Windows.Forms.GroupBox();
 			this.radioPatGenUn = new System.Windows.Forms.RadioButton();
@@ -71,10 +73,8 @@ namespace OpenDental{
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butPreviewRequest = new OpenDental.UI.Button();
 			this.butPreview = new OpenDental.UI.Button();
-			this.butPatSelect = new OpenDental.UI.Button();
 			this.butSend = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.butProvSelect = new OpenDental.UI.Button();
 			this.groupBoxContext.SuspendLayout();
 			this.groupBox7.SuspendLayout();
 			this.groupBox6.SuspendLayout();
@@ -169,6 +169,20 @@ namespace OpenDental{
 			this.groupBox6.TabIndex = 164;
 			this.groupBox6.TabStop = false;
 			this.groupBox6.Text = "Provider";
+			// 
+			// butProvSelect
+			// 
+			this.butProvSelect.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butProvSelect.Autosize = true;
+			this.butProvSelect.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butProvSelect.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butProvSelect.CornerRadius = 4F;
+			this.butProvSelect.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butProvSelect.Location = new System.Drawing.Point(9, 19);
+			this.butProvSelect.Name = "butProvSelect";
+			this.butProvSelect.Size = new System.Drawing.Size(29, 25);
+			this.butProvSelect.TabIndex = 174;
+			this.butProvSelect.Text = "...";
 			// 
 			// comboProvLang
 			// 
@@ -289,6 +303,20 @@ namespace OpenDental{
 			this.groupBox3.TabIndex = 163;
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "Patient";
+			// 
+			// butPatSelect
+			// 
+			this.butPatSelect.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butPatSelect.Autosize = true;
+			this.butPatSelect.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPatSelect.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPatSelect.CornerRadius = 4F;
+			this.butPatSelect.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butPatSelect.Location = new System.Drawing.Point(9, 19);
+			this.butPatSelect.Name = "butPatSelect";
+			this.butPatSelect.Size = new System.Drawing.Size(29, 25);
+			this.butPatSelect.TabIndex = 173;
+			this.butPatSelect.Text = "...";
 			// 
 			// comboPatLang
 			// 
@@ -538,7 +566,7 @@ namespace OpenDental{
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(94, 23);
 			this.button1.TabIndex = 203;
-			this.button1.Text = "Snomed";
+			this.button1.Text = "SNOMEDCT";
 			// 
 			// butAddAllergy
 			// 
@@ -630,20 +658,6 @@ namespace OpenDental{
 			this.butPreview.Text = "&Preview XML";
 			this.butPreview.Click += new System.EventHandler(this.butPreview_Click);
 			// 
-			// butPatSelect
-			// 
-			this.butPatSelect.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butPatSelect.Autosize = true;
-			this.butPatSelect.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPatSelect.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butPatSelect.CornerRadius = 4F;
-			this.butPatSelect.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPatSelect.Location = new System.Drawing.Point(9, 19);
-			this.butPatSelect.Name = "butPatSelect";
-			this.butPatSelect.Size = new System.Drawing.Size(29, 25);
-			this.butPatSelect.TabIndex = 173;
-			this.butPatSelect.Text = "...";
-			// 
 			// butSend
 			// 
 			this.butSend.AdjustImageLocation = new System.Drawing.Point(0, 0);
@@ -673,20 +687,6 @@ namespace OpenDental{
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// butProvSelect
-			// 
-			this.butProvSelect.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butProvSelect.Autosize = true;
-			this.butProvSelect.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butProvSelect.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butProvSelect.CornerRadius = 4F;
-			this.butProvSelect.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butProvSelect.Location = new System.Drawing.Point(9, 19);
-			this.butProvSelect.Name = "butProvSelect";
-			this.butProvSelect.Size = new System.Drawing.Size(29, 25);
-			this.butProvSelect.TabIndex = 174;
-			this.butProvSelect.Text = "...";
 			// 
 			// FormInfobutton
 			// 
