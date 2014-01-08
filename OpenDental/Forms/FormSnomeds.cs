@@ -1,12 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
-using System.IO;
 using OpenDental.UI;
 
 namespace OpenDental {
@@ -34,12 +29,15 @@ namespace OpenDental {
 				gridMain.SelectionMode=GridSelectionMode.MultiExtended;
 			}
 			ActiveControl=textCode;
-			if(!FormEHR.QuarterlyKeyIsValid(DateTime.Now.ToString("yy")//year
-				,Math.Ceiling(DateTime.Now.Month/3f).ToString()//quarter
-				,PrefC.GetString(PrefName.PracticeTitle)//practice title
-				,EhrQuarterlyKeys.GetKeyThisQuarter().KeyValue))//key
-			{
-				groupBox1.Visible=false;
+			//This check is here to prevent Snomeds from being used in non-member nations.
+			List<EhrQuarterlyKey> ehrKeys=EhrQuarterlyKeys.GetAllKeys();
+			groupBox1.Visible=false;
+			for(int i=0;i<ehrKeys.Count;i++) {
+				if(FormEHR.QuarterlyKeyIsValid(ehrKeys[i].YearValue.ToString(),ehrKeys[i].QuarterValue.ToString(),ehrKeys[i].PracticeName,ehrKeys[i].KeyValue)) {
+					//EHR has been valid.
+					groupBox1.Visible=true;
+					break;
+				}
 			}
 		}
 		

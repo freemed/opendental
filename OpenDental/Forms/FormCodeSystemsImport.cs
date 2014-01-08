@@ -1,8 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -12,7 +9,6 @@ using System.Xml;
 using System.Net;
 using System.IO;
 using System.Threading;
-using System.Diagnostics;
 using Ionic.Zip;
 
 namespace OpenDental {
@@ -26,16 +22,21 @@ namespace OpenDental {
 		}
 
 		private void FormCodeSystemsImport_Load(object sender,EventArgs e) {
-			if(FormEHR.QuarterlyKeyIsValid(DateTime.Now.ToString("yy")//year
-				,Math.Ceiling(DateTime.Now.Month/3f).ToString()//quarter
-				,PrefC.GetString(PrefName.PracticeTitle)//practice title
-				,EhrQuarterlyKeys.GetKeyThisQuarter().KeyValue))//key
-			{
-				ListCodeSystems=CodeSystems.GetForCurrentVersion();//EHR enabled and valid.
+			bool isMemberNation=false;
+			//This check is here to prevent Snomeds from being available in non-member nations.
+			List<EhrQuarterlyKey> ehrKeys=EhrQuarterlyKeys.GetAllKeys();
+			for(int i=0;i<ehrKeys.Count;i++) {
+				if(FormEHR.QuarterlyKeyIsValid(ehrKeys[i].YearValue.ToString(),ehrKeys[i].QuarterValue.ToString(),ehrKeys[i].PracticeName,ehrKeys[i].KeyValue)) {
+					isMemberNation=true;
+					break;
+				}
 			}
-			else {//No EHR
+			if(isMemberNation) {
+				ListCodeSystems=CodeSystems.GetForCurrentVersion();//EHR has been valid.
+			}
+			else {
 				ListCodeSystems=CodeSystems.GetForCurrentVersionNoSnomed();
-			}
+			}			
 		}
 
 		/// <summary></summary>

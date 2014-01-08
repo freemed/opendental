@@ -140,7 +140,12 @@ namespace OpenDental {
 				listMu=new List<EhrMu>();
 			}
 			else {
-				listMu=EhrMeasures.GetMu(PatCur);
+				if(PrefC.GetBool(PrefName.MeaningfulUseTwo)) {
+					listMu=EhrMeasures.GetMu2(PatCur);
+				}
+				else {
+					listMu=EhrMeasures.GetMu(PatCur);
+				}
 			}
 			gridMu.Rows.Clear();
 			ODGridRow row;
@@ -347,16 +352,6 @@ namespace OpenDental {
 					return;
 				}
 				Type type=AssemblyEHR.GetType("EHR.FormEhrMeasures");//namespace.class
-				//object[] args;
-				EhrQuarterlyKey keyThisQ=EhrQuarterlyKeys.GetKeyThisQuarter();
-				if(keyThisQ==null) {
-					MessageBox.Show("No quarterly key entered for this quarter.");
-					return;
-				}
-				if(!QuarterlyKeyIsValid(DateTime.Today.ToString("yy"),Math.Ceiling(DateTime.Today.Month/3f).ToString(),PrefC.GetString(PrefName.PracticeTitle),keyThisQ.KeyValue)){
-					MessageBox.Show("Invalid quarterly key.");
-					return;
-				}
 				type.InvokeMember("ShowDialog",System.Reflection.BindingFlags.InvokeMethod,null,ObjFormEhrMeasures,null);
 			#endif
 			FillGridMu();
