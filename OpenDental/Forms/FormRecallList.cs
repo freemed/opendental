@@ -728,6 +728,7 @@ namespace OpenDental{
 				comboStatus.Items.Add(DefC.Short[(int)DefCat.RecallUnschedStatus][i].ItemName);
 			}
 			FillMain(null);
+			Plugins.HookAddCode(this,"FormRecallList.Load_End",table);
 		}
 
 		///<summary>OK to pass in null for excludePatNums.</summary>
