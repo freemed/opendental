@@ -399,6 +399,7 @@
     <Compile Include="Crud\UserodCrud.cs" />
     <Compile Include="Crud\UserQueryCrud.cs" />
     <Compile Include="Crud\VaccineDefCrud.cs" />
+    <Compile Include="Crud\VaccineObsCrud.cs" />
     <Compile Include="Crud\VaccinePatCrud.cs" />
     <Compile Include="Crud\VitalsignCrud.cs" />
     <Compile Include="Crud\WikiListHeaderWidthCrud.cs" />
@@ -451,6 +452,7 @@
     <Compile Include="Data Interface\Snomeds.cs" />
     <Compile Include="Data Interface\Sops.cs" />
     <Compile Include="Data Interface\Ucums.cs" />
+    <Compile Include="Data Interface\VaccineObses.cs" />
     <Compile Include="Data Interface\WikiListHeaderWidths.cs" />
     <Compile Include="Data Interface\WikiLists.cs" />
     <Compile Include="Data Interface\CreditCards.cs" />
@@ -884,6 +886,7 @@
     <Compile Include="TableTypes\ResellerService.cs" />
     <Compile Include="TableTypes\Reseller.cs" />
     <Compile Include="TableTypes\Snomed.cs" />
+    <Compile Include="TableTypes\VaccineObs.cs" />
     <Compile Include="TableTypes\WikiListHeaderWidth.cs" />
     <Compile Include="TableTypes\EvaluationCriterion.cs" />
     <Compile Include="TableTypes\GradingScaleItem.cs" />

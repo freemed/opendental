@@ -68,7 +68,7 @@ namespace OpenDentBusiness.HL7 {
 				//TQ2 segment.  Optional.  Cardinality [0..1]. Undefined and may be locally specified.
 				RXA(_vaccines[i]);//RXA segment.  Required.  Cardinality [1..1].
 				RXR(_vaccines[i]);//RXR segment.  Required if known.  Cardinality [0..1].
-				OBX();//OBX segment.  Required if known.  Cardinality [0..*].
+				OBX(_vaccines[i]);//OBX segment.  Required if known.  Cardinality [0..*].
 				NTE();//NTE segment.  Required if known.  Cardinality [0..1].
 			}
 			//End Order group.
@@ -241,36 +241,184 @@ namespace OpenDentBusiness.HL7 {
 		}
 
 		///<summary>Observation Result segment.  Required if known.  The basic format is question and answer.  Guide page 116.</summary>
-		private void OBX() {
-			int i=0;//TODO: Create a loop with variable i, once there is a list to loop through.
-			_seg=new SegmentHL7(SegmentNameHL7.OBX);
-			_seg.SetField(0,"OBX");
-			_seg.SetField(1,i.ToString());//OBX-1 Set ID - OBX.  Required (length 1..4).  Cardinality [1..1].
-			_seg.SetField(2,"CE");//OBX-2 Value Type.  Required (length 2..3).  Cardinality [1..1].  Value Set HL70125 (constrained, not in guide).  CE=Coded Entry,DT=Date,NM=Numberic,ST=String,TS=Time Stamp (Date & Time).  TODO: We need UI for this.
-			//OBX-3 Observation Identifier.  Required.  Cardinality [1..1].  Value set NIP003 (25 items).  Type CE.  Purpose is to pose the question that is answered by OBX-5.  TODO: We need UI for this.
-			WriteCE(3,"","","LN");
-			//OBX-4 Observation Sub-ID.  Required (length 1..20).  Cardinality [1..1].  We need UI for this.
-			//OBX-5 Observation Value.  Required. Cardinality [1..1].  Value set varies, depending on the value of OBX-2 (Use type CE if OBX-2 is "CE", otherwise treat as a string).  Purpose is to answer the quesiton posed by OBX-3.  TODO: UI needed.
-			//OBX-6 Units.  Required if OBX-2 is "NM" or "SN".
-			//OBX-7 References Range.  Optional.
-			//OBX-8 Abnormal Flags.  Optional.
-			//OBX-9 Probability.  Optional.
-			//OBX-10 Nature of Abnormal Test.  Optional.
-			_seg.SetField(11,"F");//OBX-11 Observation Result Status.  Required (length 1..1).  Cardinality [1..1].  Value set HL70085 (constrained, guide page 198).  We are expected to use value F=Final.
-			//OBX-12 Effective Date of Reference Range Values.  Optional.
-			//OBX-13 User Defined Access Checks.  Optional.
-			//OBX-14 Date/Time of the Observation.  Required if known.  Cardinality [0..1].  TODO: UI needed.
-			//OBX-15 Producer's Reference.  Optional.
-			//OBX-16 Responsible Observer.  Optional.
-			//OBX-17 Observation Method.  Required if OBX-3.1 is “64994-7”.  Value set CDCPHINVS. Type CE.  TODO: UI needed.
-			//OBX-18 Equipment Instance Identifier.  Optional.
-			//OBX-19 Date/Time of the Analysis.  Optional.
-			//OBX-20 Reserved for harmonization with V2.6.  Optional.
-			//OBX-21 Reserved for harmonization with V2.6.  Optional.
-			//OBX-22 Reserved for harmonization with V2.6.  Optional.
-			//OBX-23 Performing Organization Name.  Optional.
-			//OBX-24 Performing Organization Address.  Optional.
-			//OBX-25 Performing Organization Medical Director.  Optional.
+		private void OBX(VaccinePat vaccine) {
+			List<VaccineObs> listVaccineObservations=VaccineObses.GetForVaccine(vaccine.VaccinePatNum);
+			for(int i=0;i<listVaccineObservations.Count;i++) {
+				VaccineObs vaccineObs=listVaccineObservations[i];
+				_seg=new SegmentHL7(SegmentNameHL7.OBX);
+				_seg.SetField(0,"OBX");
+				_seg.SetField(1,i.ToString());//OBX-1 Set ID - OBX.  Required (length 1..4).  Cardinality [1..1].
+				//OBX-2 Value Type.  Required (length 2..3).  Cardinality [1..1].  Value Set HL70125 (constrained, not in guide).  CE=Coded Entry,DT=Date,NM=Numberic,ST=String,TS=Time Stamp (Date & Time).
+				if(vaccineObs.ValType==VaccineObsType.Dated) {
+					_seg.SetField(2,"DT");
+				}
+				else if(vaccineObs.ValType==VaccineObsType.Numeric) {
+					_seg.SetField(2,"NM");
+				}
+				else if(vaccineObs.ValType==VaccineObsType.Text) {
+					_seg.SetField(2,"ST");
+				}
+				else if(vaccineObs.ValType==VaccineObsType.DateAndTime) {
+					_seg.SetField(2,"TS");
+				}
+				else { //vaccineObs.ValType==VaccineObsType.Coded
+					_seg.SetField(2,"CE");
+				}
+				//OBX-3 Observation Identifier.  Required.  Cardinality [1..1].  Value set NIP003 (25 items).  Type CE.  Purpose is to pose the question that is answered by OBX-5.
+				if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.DatePublished) {
+					WriteCE(3,"29768-9","Date vaccine information statement published:TmStp:Pt:Patient:Qn:","LN");
+				}
+				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.DatePresented) {
+					WriteCE(3,"29769-7","Date vaccine information statement presented:TmStp:Pt:Patient:Qn:","LN");
+				}
+				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.DatePrecautionExpiration) {
+					WriteCE(3,"30944-3","Date of vaccination temporary contraindication and or precaution expiration:TmStp:Pt:Patient:Qn:","LN");
+				}
+				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.Precaution) {
+					WriteCE(3,"30945-0","Vaccination contraindication and or precaution:Find:Pt:Patient:Nom:","LN");
+				}
+				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.DatePrecautionEffective) {
+					WriteCE(3,"30946-8","Date vaccination contraindication and or precaution effective:TmStp:Pt:Patient:Qn:","LN");
+				}
+				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.TypeOf) {
+					WriteCE(3,"30956-7","Type:ID:Pt:Vaccine:Nom:","LN");
+				}
+				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.FundsPurchasedWith) {
+					WriteCE(3,"30963-3","Funds vaccine purchased with:Find:Pt:Patient:Nom:","LN");
+				}
+				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.DoseNumber) {
+					WriteCE(3,"30973-2","Dose number:Num:Pt:Patient:Qn:","LN");
+				}
+				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.NextDue) {
+					WriteCE(3,"30979-9","Vaccines due next:Cmplx:Pt:Patient:Set:","LN");
+				}
+				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.DateDue) {
+					WriteCE(3,"30980-7","Date vaccine due:TmStp:Pt:Patient:Qn:","LN");
+				}
+				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.DateEarliestAdminister) {
+					WriteCE(3,"30981-5","Earliest date to give:TmStp:Pt:Patient:Qn:","LN");
+				}
+				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.ReasonForcast) {
+					WriteCE(3,"30982-3","Reason applied by forcast logic to project this vaccine:Find:Pt:Patient:Nom:","LN");
+				}
+				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.Reaction) {
+					WriteCE(3,"31044-1","Reaction:Find:Pt:Patient:Nom:","LN");
+				}
+				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.ComponentType) {
+					WriteCE(3,"38890-0","Vaccine component type:ID:Pt:Vaccine:Nom:","LN");
+				}
+				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.TakeResponseType) {
+					WriteCE(3,"46249-9","Vaccination take-response type:Prid:Pt:Patient:Nom:","LN");
+				}
+				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.DateTakeResponse) {
+					WriteCE(3,"46250-7","Vaccination take-response date:TmStp:Pt:Patient:Qn:","LN");
+				}
+				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.ScheduleUsed) {
+					WriteCE(3,"59779-9","Immunization schedule used:Find:Pt:Patient:Nom:","LN");
+				}
+				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.Series) {
+					WriteCE(3,"59780-7","Immunization series:Find:Pt:Patient:Nom:","LN");
+				}
+				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.DoseValidity) {
+					WriteCE(3,"59781-5","Dose validity:Find:Pt:Patient:Ord:","LN");
+				}
+				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.NumDosesPrimary) {
+					WriteCE(3,"59782-3","Number of doses in primary immunization series:Num:Pt:Patient:Qn:","LN");
+				}
+				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.StatusInSeries) {
+					WriteCE(3,"59783-1","Status in immunization series:Find:Pt:Patient:Nom:","LN");
+				}
+				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.DiseaseWithImmunity) {
+					WriteCE(3,"59784-9","Disease with presumed immunity:Find:Pt:Patient:Nom:","LN");
+				}
+				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.Indication) {
+					WriteCE(3,"59785-6","Indication for Immunization:Find:Pt:Patient:Nom:","LN");
+				}
+				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.FundPgmEligCat) {
+					WriteCE(3,"64994-7","Vaccine fund pgm elig cat","LN");
+				}
+				else { //vaccineObs.IdentifyingCode==VaccineObsIdentifier.DocumentType
+					WriteCE(3,"69764-9","Document type","LN");
+				}
+				//OBX-4 Observation Sub-ID.  Required (length 1..20).  Cardinality [1..1].  Type ST.
+				if(vaccineObs.VaccineObsNumGroup!=0) {
+					int subId=0;
+					for(int j=0;j<=i;j++) {
+						if(listVaccineObservations[j].VaccineObsNumGroup==vaccineObs.VaccineObsNumGroup) {
+							subId++;
+						}
+					}
+					_seg.SetField(4,subId.ToString());
+				}
+				//OBX-5 Observation Value.  Required. Cardinality [1..1].  Value set varies, depending on the value of OBX-2 (Use type CE if OBX-2 is "CE", otherwise treat as a string).  Purpose is to answer the quesiton posed by OBX-3.
+				if(vaccineObs.ValType==VaccineObsType.Coded) {
+					string codeDescript="";
+					if(vaccineObs.ValCodeSystem==VaccineObsValCodeSystem.CVX) {
+						Cvx cvx=Cvxs.GetByCode(vaccineObs.ValReported);
+						codeDescript=cvx.Description;
+					}
+					else if(vaccineObs.ValCodeSystem==VaccineObsValCodeSystem.HL70064) {
+						if(vaccineObs.ValReported.ToUpper()=="V01") {
+							codeDescript="Not VFC eligible";
+						}
+						else if(vaccineObs.ValReported.ToUpper()=="V02") {
+							codeDescript="VFC eligible-Medicaid/Medicaid Managed Care";
+						}
+						else if(vaccineObs.ValReported.ToUpper()=="V03") {
+							codeDescript="VFC eligible- Uninsured";
+						}
+						else if(vaccineObs.ValReported.ToUpper()=="V04") {
+							codeDescript="VFC eligible- American Indian/Alaskan Native";
+						}
+						else if(vaccineObs.ValReported.ToUpper()=="V05") {
+							codeDescript="VFC eligible-Federally Qualified Health Center Patient (under-insured)";
+						}
+						else if(vaccineObs.ValReported.ToUpper()=="V06") {
+							codeDescript="Deprecated [VFC eligible- State specific eligibility (e.g. S-CHIP plan)]";
+						}
+						else if(vaccineObs.ValReported.ToUpper()=="V07") {
+							codeDescript="Local-specific eligibility";
+						}
+						else if(vaccineObs.ValReported.ToUpper()=="V08") {
+							codeDescript="Deprecated [Not VFC eligible-underinsured]";
+						}
+					}
+					WriteCE(5,vaccineObs.ValReported.Trim(),codeDescript,vaccineObs.ValCodeSystem.ToString());
+				}
+				else { //Value is not coded (is a string)
+					_seg.SetField(5,vaccineObs.ValReported.Trim());
+				}
+				//OBX-6 Units.  Required if OBX-2 is "NM" or "SN" (SN appears to be missing from definition).
+				if(vaccineObs.ValType==VaccineObsType.Numeric) {
+					Ucum ucum=Ucums.GetByCode(vaccineObs.ValUnit);
+					WriteCE(6,ucum.UcumCode,ucum.Description,"UCUM");
+				}
+				//OBX-7 References Range.  Optional.
+				//OBX-8 Abnormal Flags.  Optional.
+				//OBX-9 Probability.  Optional.
+				//OBX-10 Nature of Abnormal Test.  Optional.
+				_seg.SetField(11,"F");//OBX-11 Observation Result Status.  Required (length 1..1).  Cardinality [1..1].  Value set HL70085 (constrained, guide page 198).  We are expected to use value F=Final.
+				//OBX-12 Effective Date of Reference Range Values.  Optional.
+				//OBX-13 User Defined Access Checks.  Optional.
+				//OBX-14 Date/Time of the Observation.  Required if known.  Cardinality [0..1].
+				if(vaccineObs.DateObs.Year>1880) {
+					_seg.SetField(14,vaccineObs.DateObs.ToString("yyyyMMdd"));
+				}
+				//OBX-15 Producer's Reference.  Optional.
+				//OBX-16 Responsible Observer.  Optional.
+				//OBX-17 Observation Method.  Required if OBX-3.1 is “64994-7”.  Value set CDCPHINVS. Type CE.
+				if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.FundPgmEligCat) {
+					_seg.SetField(17,vaccineObs.MethodCode.Trim());
+				}
+				//OBX-18 Equipment Instance Identifier.  Optional.
+				//OBX-19 Date/Time of the Analysis.  Optional.
+				//OBX-20 Reserved for harmonization with V2.6.  Optional.
+				//OBX-21 Reserved for harmonization with V2.6.  Optional.
+				//OBX-22 Reserved for harmonization with V2.6.  Optional.
+				//OBX-23 Performing Organization Name.  Optional.
+				//OBX-24 Performing Organization Address.  Optional.
+				//OBX-25 Performing Organization Medical Director.  Optional.
+			}
 			_msg.Segments.Add(_seg);
 		}
 		
@@ -393,7 +541,7 @@ namespace OpenDentBusiness.HL7 {
 			);
 			//PID-4 Alternate Patient ID - 00106.  No longer used.
 			WriteXPN(5,_pat.FName,_pat.LName,_pat.MiddleI);//PID-5 Patient Name.  Required (length unspecified).  Cardinality [1..*].  Type XPN.  The first repetition must contain the legal name.
-			//WriteXPN(6,);//PID-6 Mother's Maiden Name.  Required if known (length unspecified).  Cardinality [0..1].  Type XPN.  TODO: We need a textbox in the patient edit window to enter this information.
+			WriteXPN(6,_pat.MotherMaidenFname,_pat.MotherMaidenLname,"");//PID-6 Mother's Maiden Name.  Required if known (length unspecified).  Cardinality [0..1].  Type XPN.
 			//PID-7 Date/Time of Birth.  Required.  Cardinality [1..1].  We must specify "UNK" if unknown.
 			if(_pat.Birthdate.Year<1880) {
 				_seg.SetField(7,"UNK");
@@ -951,7 +1099,10 @@ namespace OpenDentBusiness.HL7 {
 				}
 				if(vaccine.AdministeredAmt>0 && vaccine.DrugUnitNum!=0) {
 					DrugUnit drugUnit=DrugUnits.GetOne(vaccine.DrugUnitNum);
-					//drugUnit.UnitIdentifier;//TODO: Validate that this unit is a UCUM.
+					Ucum ucum=Ucums.GetByCode(drugUnit.UnitIdentifier);
+					if(ucum==null) {
+						WriteError(sb,"Drug unit invalid UCUM code.");
+					}
 				}
 				if(vaccine.AdministrationNoteCode==VaccineAdministrationNote.NewRecord && vaccine.LotNumber.Trim()=="") {
 					WriteError(sb,"Missing lot number.");
@@ -997,7 +1148,20 @@ namespace OpenDentBusiness.HL7 {
 						WriteError(sb,"Missing practice city.");
 					}
 				}
-
+				List<VaccineObs> listVaccineObservations=VaccineObses.GetForVaccine(vaccine.VaccinePatNum);
+				for(int j=0;j<listVaccineObservations.Count;j++) {
+					VaccineObs vaccineObs=listVaccineObservations[j];
+					if(vaccineObs.ValReported.Trim()=="") {
+						WriteError(sb,"Missing value for observation with type '"+vaccineObs.ValType.ToString()+"' attached to vaccine '"+vaccineDef.VaccineName+"'");
+					}
+					Ucum ucum=Ucums.GetByCode(vaccineObs.ValUnit);
+					if(ucum==null) {
+						WriteError(sb,"Invalid unit code (must be UCUM) for observation with type '"+vaccineObs.ValType.ToString()+"' attached to vaccine '"+vaccineDef.VaccineName+"'");
+					}
+					if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.FundPgmEligCat && vaccineObs.MethodCode.Trim()=="") {
+						WriteError(sb,"Missing method code for observation with type '"+vaccineObs.ValType.ToString()+"' attached to vaccine '"+vaccineDef.VaccineName+"'");
+					}
+				}
 			}
 			return sb.ToString();
 		}

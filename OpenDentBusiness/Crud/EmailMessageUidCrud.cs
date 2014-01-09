@@ -47,7 +47,7 @@ namespace OpenDentBusiness.Crud{
 			for(int i=0;i<table.Rows.Count;i++) {
 				emailMessageUid=new EmailMessageUid();
 				emailMessageUid.EmailMessageUidNum= PIn.Long  (table.Rows[i]["EmailMessageUidNum"].ToString());
-				emailMessageUid.MsgId               = PIn.String(table.Rows[i]["MsgId"].ToString());
+				emailMessageUid.MsgId             = PIn.String(table.Rows[i]["MsgId"].ToString());
 				emailMessageUid.RecipientAddress  = PIn.String(table.Rows[i]["RecipientAddress"].ToString());
 				retVal.Add(emailMessageUid);
 			}
@@ -108,7 +108,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one EmailMessageUid in the database.</summary>
 		public static void Update(EmailMessageUid emailMessageUid){
 			string command="UPDATE emailmessageuid SET "
-				+"MsgId               = '"+POut.String(emailMessageUid.MsgId)+"', "
+				+"MsgId             = '"+POut.String(emailMessageUid.MsgId)+"', "
 				+"RecipientAddress  = '"+POut.String(emailMessageUid.RecipientAddress)+"' "
 				+"WHERE EmailMessageUidNum = "+POut.Long(emailMessageUid.EmailMessageUidNum);
 			Db.NonQ(command);

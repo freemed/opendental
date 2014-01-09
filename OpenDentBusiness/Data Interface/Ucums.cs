@@ -76,6 +76,15 @@ namespace OpenDentBusiness{
 			}
 			return retVal;
 		}
+
+		public static Ucum GetByCode(string ucumCode) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Ucum>(MethodBase.GetCurrentMethod());
+			}
+			string command="SELECT * FROM ucum WHERE UcumCode='"+POut.String(ucumCode)+"'";
+			return Crud.UcumCrud.SelectOne(command);
+		}
+
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 

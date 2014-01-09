@@ -122,6 +122,8 @@ namespace OpenDentBusiness.Crud{
 				patient.TxtMsgOk                 = (YN)PIn.Int(table.Rows[i]["TxtMsgOk"].ToString());
 				patient.SmokingSnoMed            = PIn.String(table.Rows[i]["SmokingSnoMed"].ToString());
 				patient.Country                  = PIn.String(table.Rows[i]["Country"].ToString());
+				patient.MotherMaidenFname        = PIn.String(table.Rows[i]["MotherMaidenFname"].ToString());
+				patient.MotherMaidenLname        = PIn.String(table.Rows[i]["MotherMaidenLname"].ToString());
 				retVal.Add(patient);
 			}
 			return retVal;
@@ -162,7 +164,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="PatNum,";
 			}
-			command+="LName,FName,MiddleI,Preferred,PatStatus,Gender,Position,Birthdate,SSN,Address,Address2,City,State,Zip,HmPhone,WkPhone,WirelessPhone,Guarantor,CreditType,Email,Salutation,EstBalance,PriProv,SecProv,FeeSched,BillingType,ImageFolder,AddrNote,FamFinUrgNote,MedUrgNote,ApptModNote,StudentStatus,SchoolName,ChartNumber,MedicaidID,Bal_0_30,Bal_31_60,Bal_61_90,BalOver90,InsEst,BalTotal,EmployerNum,EmploymentNote,Race,County,GradeLevel,Urgency,DateFirstVisit,ClinicNum,HasIns,TrophyFolder,PlannedIsDone,Premed,Ward,PreferConfirmMethod,PreferContactMethod,PreferRecallMethod,SchedBeforeTime,SchedAfterTime,SchedDayOfWeek,Language,AdmitDate,Title,PayPlanDue,SiteNum,ResponsParty,CanadianEligibilityCode,AskToArriveEarly,OnlinePassword,PreferContactConfidential,SuperFamily,TxtMsgOk,SmokingSnoMed,Country) VALUES(";
+			command+="LName,FName,MiddleI,Preferred,PatStatus,Gender,Position,Birthdate,SSN,Address,Address2,City,State,Zip,HmPhone,WkPhone,WirelessPhone,Guarantor,CreditType,Email,Salutation,EstBalance,PriProv,SecProv,FeeSched,BillingType,ImageFolder,AddrNote,FamFinUrgNote,MedUrgNote,ApptModNote,StudentStatus,SchoolName,ChartNumber,MedicaidID,Bal_0_30,Bal_31_60,Bal_61_90,BalOver90,InsEst,BalTotal,EmployerNum,EmploymentNote,Race,County,GradeLevel,Urgency,DateFirstVisit,ClinicNum,HasIns,TrophyFolder,PlannedIsDone,Premed,Ward,PreferConfirmMethod,PreferContactMethod,PreferRecallMethod,SchedBeforeTime,SchedAfterTime,SchedDayOfWeek,Language,AdmitDate,Title,PayPlanDue,SiteNum,ResponsParty,CanadianEligibilityCode,AskToArriveEarly,OnlinePassword,PreferContactConfidential,SuperFamily,TxtMsgOk,SmokingSnoMed,Country,MotherMaidenFname,MotherMaidenLname) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(patient.PatNum)+",";
 			}
@@ -241,7 +243,9 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (patient.SuperFamily)+","
 				+    POut.Int   ((int)patient.TxtMsgOk)+","
 				+"'"+POut.String(patient.SmokingSnoMed)+"',"
-				+"'"+POut.String(patient.Country)+"')";
+				+"'"+POut.String(patient.Country)+"',"
+				+"'"+POut.String(patient.MotherMaidenFname)+"',"
+				+"'"+POut.String(patient.MotherMaidenLname)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -328,7 +332,9 @@ namespace OpenDentBusiness.Crud{
 				+"SuperFamily              =  "+POut.Long  (patient.SuperFamily)+", "
 				+"TxtMsgOk                 =  "+POut.Int   ((int)patient.TxtMsgOk)+", "
 				+"SmokingSnoMed            = '"+POut.String(patient.SmokingSnoMed)+"', "
-				+"Country                  = '"+POut.String(patient.Country)+"' "
+				+"Country                  = '"+POut.String(patient.Country)+"', "
+				+"MotherMaidenFname        = '"+POut.String(patient.MotherMaidenFname)+"', "
+				+"MotherMaidenLname        = '"+POut.String(patient.MotherMaidenLname)+"' "
 				+"WHERE PatNum = "+POut.Long(patient.PatNum);
 			Db.NonQ(command);
 		}
@@ -632,6 +638,14 @@ namespace OpenDentBusiness.Crud{
 			if(patient.Country != oldPatient.Country) {
 				if(command!=""){ command+=",";}
 				command+="Country = '"+POut.String(patient.Country)+"'";
+			}
+			if(patient.MotherMaidenFname != oldPatient.MotherMaidenFname) {
+				if(command!=""){ command+=",";}
+				command+="MotherMaidenFname = '"+POut.String(patient.MotherMaidenFname)+"'";
+			}
+			if(patient.MotherMaidenLname != oldPatient.MotherMaidenLname) {
+				if(command!=""){ command+=",";}
+				command+="MotherMaidenLname = '"+POut.String(patient.MotherMaidenLname)+"'";
 			}
 			if(command==""){
 				return;

@@ -3192,8 +3192,63 @@ namespace OpenDentBusiness {
 					command="ALTER TABLE vaccinepat MODIFY AdministrationSite NOT NULL";
 					Db.NonQ(command);
 				}
-
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE patient ADD MotherMaidenFname varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE patient ADD MotherMaidenFname varchar2(255)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE patient ADD MotherMaidenLname varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE patient ADD MotherMaidenLname varchar2(255)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS vaccineobs";
+					Db.NonQ(command);
+					command=@"CREATE TABLE vaccineobs (
+						VaccineObsNum bigint NOT NULL auto_increment PRIMARY KEY,
+						VaccinePatNum bigint NOT NULL,
+						ValType tinyint NOT NULL,
+						IdentifyingCode tinyint NOT NULL,
+						ValReported varchar(255) NOT NULL,
+						ValCodeSystem varchar(255) NOT NULL,
+						VaccineObsNumGroup bigint NOT NULL,
+						ValUnit varchar(255) NOT NULL,
+						DateObs date NOT NULL DEFAULT '0001-01-01',
+						MethodCode varchar(255) NOT NULL,
+						INDEX(VaccinePatNum),
+						INDEX(VaccineObsNumGroup)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE vaccineobs'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE vaccineobs (
+						VaccineObsNum number(20) NOT NULL,
+						VaccinePatNum number(20) NOT NULL,
+						ValType number(3) NOT NULL,
+						IdentifyingCode number(3) NOT NULL,
+						ValReported varchar2(255),
+						ValCodeSystem varchar2(255),
+						VaccineObsNumGroup number(20) NOT NULL,
+						ValUnit varchar2(255),
+						DateObs date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+						MethodCode varchar2(255),
+						CONSTRAINT vaccineobs_VaccineObsNum PRIMARY KEY (VaccineObsNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX vaccineobs_VaccinePatNum ON vaccineobs (VaccinePatNum)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX vaccineobs_VaccineObsNumGroup ON vaccineobs (VaccineObsNumGroup)";
+					Db.NonQ(command);
+				}
 
 				command="UPDATE preference SET ValueString = '14.1.0.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
@@ -3210,7 +3265,6 @@ namespace OpenDentBusiness {
 
 	}
 }
-
 
 
 
