@@ -14,6 +14,7 @@ namespace OpenDental {
 		public bool IsNew;
 		private long _provNumSelectedOrdering;
 		private long _provNumSelectedAdministering;
+		private List<VaccineObs> _listVaccineObservations;
 
 		public FormEhrVaccinePatEdit() {
 			InitializeComponent();
@@ -154,6 +155,27 @@ namespace OpenDental {
 					listAction.SelectedIndex=i;
 				}
 			}
+			_listVaccineObservations=VaccineObses.GetForVaccine(VaccinePatCur.VaccinePatNum);
+			FillObservations();
+		}
+
+		private void FillObservations() {
+			gridObservations.BeginUpdate();
+			gridObservations.Columns.Clear();
+			gridObservations.Columns.Add(new UI.ODGridColumn("Question",100));
+			gridObservations.Columns.Add(new UI.ODGridColumn("Value",0));
+			gridObservations.EndUpdate();
+			gridObservations.BeginUpdate();
+			gridObservations.Rows.Clear();
+			for(int i=0;i<_listVaccineObservations.Count;i++) {
+				VaccineObs vaccineObs=_listVaccineObservations[i];
+				UI.ODGridRow row=new UI.ODGridRow();
+				row.Tag=vaccineObs;
+				row.Cells.Add(new UI.ODGridCell(vaccineObs.IdentifyingCode.ToString()));
+				row.Cells.Add(new UI.ODGridCell(vaccineObs.ValReported));
+				gridObservations.Rows.Add(row);
+			}
+			gridObservations.EndUpdate();
 		}
 
 		private void comboVaccine_SelectedIndexChanged(object sender,EventArgs e) {
@@ -203,6 +225,28 @@ namespace OpenDental {
 		private void butNoneProvAdministering_Click(object sender,EventArgs e) {
 			_provNumSelectedAdministering=0;
 			comboProvNumAdministering.SelectedIndex=-1;
+		}
+
+		private void gridObservations_CellDoubleClick(object sender,UI.ODGridClickEventArgs e) {
+			VaccineObs vaccineObs=(VaccineObs)gridObservations.Rows[e.Row].Tag;
+			FormVaccineObsEdit form=new FormVaccineObsEdit(vaccineObs);
+			form.ShowDialog();
+			if(vaccineObs.VaccinePatNum==0) {//Was deleted
+				_listVaccineObservations.Remove(vaccineObs);
+			}
+			FillObservations();
+		}
+
+		private void butAddObservation_Click(object sender,EventArgs e) {
+			VaccineObs vaccineObs=new VaccineObs();
+			vaccineObs.IsNew=true;
+			vaccineObs.VaccinePatNum=-1;//Temporary dummy value (cannot be zero). Helps track new observations which have not been deleted.
+			vaccineObs.DateObs=DateTimeOD.Today;
+			FormVaccineObsEdit form=new FormVaccineObsEdit(vaccineObs);
+			if(form.ShowDialog()==DialogResult.OK) {
+				_listVaccineObservations.Add(vaccineObs);
+				FillObservations();
+			}
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
@@ -277,6 +321,13 @@ namespace OpenDental {
 			}
 			else {
 				VaccinePats.Update(VaccinePatCur);
+			}
+			//We must delete then update/insert the observations after we insert the vaccinepat record, in case the vaccinepat is new.
+			VaccineObses.DeleteForVaccinePat(VaccinePatCur.VaccinePatNum);
+			for(int i=0;i<_listVaccineObservations.Count;i++) {
+				VaccineObs vaccineObs=_listVaccineObservations[i];
+				vaccineObs.VaccinePatNum=VaccinePatCur.VaccinePatNum;
+				VaccineObses.Insert(vaccineObs);
 			}
 			DialogResult=DialogResult.OK;
 		}

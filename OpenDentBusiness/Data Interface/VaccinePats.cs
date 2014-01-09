@@ -43,6 +43,8 @@ namespace OpenDentBusiness{
 			}
 			string command= "DELETE FROM vaccinepat WHERE VaccinePatNum = "+POut.Long(vaccinePatNum);
 			Db.NonQ(command);
+			//Delete any attached observations.
+			VaccineObses.DeleteForVaccinePat(vaccinePatNum);
 		}
 
 		/*

@@ -36,11 +36,11 @@ namespace OpenDentBusiness {
 
 	///<summary>Corresponds to HL7 table 0125.</summary>
 	public enum VaccineObsType {
-		///<summary>0 - Code CE.  Coded entry.</summary>
+		///<summary>0 - Code CE.  Coded entry. (default)</summary>
 		Coded,
 		///<summary>1 - Code DT.  Date (no time).</summary>
 		Dated,
-		///<summary>2 - Code NM.  Numberic.</summary>
+		///<summary>2 - Code NM.  Numeric.</summary>
 		Numeric,
 		///<summary>3 - Code ST.  String.</summary>
 		Text,
@@ -51,7 +51,7 @@ namespace OpenDentBusiness {
 	///<summary>Corresponds to HL7 value set NIP003 (http://hl7v2-iz-testing.nist.gov/mu-immunization/).
 	///This code set is a subset of LOINC codes.  Used in HL7 OBX-3.</summary>
 	public enum VaccineObsIdentifier {
-		///<summary>0 - LOINC code 29768-9.  Date vaccine information statement published:TmStp:Pt:Patient:Qn:</summary>
+		///<summary>0 - LOINC code 29768-9.  Date vaccine information statement published:TmStp:Pt:Patient:Qn: (default)</summary>
 		DatePublished,
 		///<summary>1 - LOINC code 29769-7.  Date vaccine information statement presented:TmStp:Pt:Patient:Qn:</summary>
 		DatePresented,
@@ -105,7 +105,7 @@ namespace OpenDentBusiness {
 
 	///<summary>Used in HL7 OBX-5.</summary>
 	public enum VaccineObsValCodeSystem {
-		///<summary>2</summary>
+		///<summary>0 (default)</summary>
 		CVX,
 		///<summary>1</summary>
 		HL70064,

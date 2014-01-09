@@ -73,6 +73,8 @@
 			this.textDateExpiration = new OpenDental.ValidDate();
 			this.butPickProvAdministering = new OpenDental.UI.Button();
 			this.butPickProvOrdering = new OpenDental.UI.Button();
+			this.gridObservations = new OpenDental.UI.ODGrid();
+			this.butAddObservation = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// label5
@@ -438,7 +440,7 @@
 			this.button1.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.button1.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.button1.CornerRadius = 4F;
-			this.button1.Location = new System.Drawing.Point(772, 535);
+			this.button1.Location = new System.Drawing.Point(772, 563);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(92, 24);
 			this.button1.TabIndex = 282;
@@ -453,7 +455,7 @@
 			this.button2.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.button2.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.button2.CornerRadius = 4F;
-			this.button2.Location = new System.Drawing.Point(870, 535);
+			this.button2.Location = new System.Drawing.Point(870, 563);
 			this.button2.Name = "button2";
 			this.button2.Size = new System.Drawing.Size(92, 24);
 			this.button2.TabIndex = 281;
@@ -470,7 +472,7 @@
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(11, 535);
+			this.butDelete.Location = new System.Drawing.Point(11, 563);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(92, 24);
 			this.butDelete.TabIndex = 280;
@@ -540,11 +542,41 @@
 			this.butPickProvOrdering.Text = "...";
 			this.butPickProvOrdering.Click += new System.EventHandler(this.butPickProvOrdering_Click);
 			// 
+			// gridObservations
+			// 
+			this.gridObservations.HScrollVisible = false;
+			this.gridObservations.Location = new System.Drawing.Point(624, 384);
+			this.gridObservations.Name = "gridObservations";
+			this.gridObservations.ScrollValue = 0;
+			this.gridObservations.Size = new System.Drawing.Size(254, 110);
+			this.gridObservations.TabIndex = 284;
+			this.gridObservations.Title = "Observations";
+			this.gridObservations.TranslationName = null;
+			this.gridObservations.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridObservations_CellDoubleClick);
+			// 
+			// butAddObservation
+			// 
+			this.butAddObservation.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butAddObservation.Autosize = true;
+			this.butAddObservation.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddObservation.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddObservation.CornerRadius = 4F;
+			this.butAddObservation.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAddObservation.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAddObservation.Location = new System.Drawing.Point(624, 500);
+			this.butAddObservation.Name = "butAddObservation";
+			this.butAddObservation.Size = new System.Drawing.Size(79, 24);
+			this.butAddObservation.TabIndex = 285;
+			this.butAddObservation.Text = "&Add";
+			this.butAddObservation.Click += new System.EventHandler(this.butAddObservation_Click);
+			// 
 			// FormEhrVaccinePatEdit
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(974, 571);
+			this.ClientSize = new System.Drawing.Size(974, 599);
+			this.Controls.Add(this.butAddObservation);
+			this.Controls.Add(this.gridObservations);
 			this.Controls.Add(this.textUser);
 			this.Controls.Add(this.button1);
 			this.Controls.Add(this.button2);
@@ -594,6 +626,7 @@
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.labelAmount);
 			this.Controls.Add(this.label5);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "FormEhrVaccinePatEdit";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -655,5 +688,7 @@
 		private UI.Button button1;
 		private UI.Button button2;
 		private System.Windows.Forms.TextBox textUser;
+		private UI.ODGrid gridObservations;
+		private UI.Button butAddObservation;
 	}
 }

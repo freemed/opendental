@@ -87,7 +87,7 @@ namespace OpenDentBusiness.HL7 {
 				+"|Open Dental"//MSH-3 Sending Application.  Required if known (length unspecified).  Value set HL70361  (guide page 229, "no suggested values defined").  Type HD (guide page 65).
 				+"|"+strSendingFacilityName//MSH-4 Sending Facility.  Required if known (length unspecified).  Value set HL70362 (guide page 229, "no suggested values defined").  Type HD (guide page 65).
 				+"|"//MSH-5 Receiving Application.  Required if known (length unspecified).  Value set HL70361 (guide page 229, "no suggested values defined").  Type HD (guide page 65).
-				+"|"//MSH-6 Receiving Facility.  Required if known (length unspecified).  Value set HL70362 (guide page 229, "no suggested values defined").  Type HD (guide page 65).  TODO: We need a UI where user can type this in when sending.
+				+"|EHR Facility"//MSH-6 Receiving Facility.  Required if known (length unspecified).  Value set HL70362 (guide page 229, "no suggested values defined").  Type HD (guide page 65).
 				+"|"+DateTime.Now.ToString("yyyyMMddHHmmss")//MSH-7 Date/Time of Message.  Required (length 12..19).
 				+"|"//MSH-8 Security.  Optional (length unspecified).
 				+"|VXU^VO4^VXU_V04"//MSH-9 Message Type. Required (length unspecified).
@@ -248,7 +248,7 @@ namespace OpenDentBusiness.HL7 {
 				_seg=new SegmentHL7(SegmentNameHL7.OBX);
 				_seg.SetField(0,"OBX");
 				_seg.SetField(1,i.ToString());//OBX-1 Set ID - OBX.  Required (length 1..4).  Cardinality [1..1].
-				//OBX-2 Value Type.  Required (length 2..3).  Cardinality [1..1].  Value Set HL70125 (constrained, not in guide).  CE=Coded Entry,DT=Date,NM=Numberic,ST=String,TS=Time Stamp (Date & Time).
+				//OBX-2 Value Type.  Required (length 2..3).  Cardinality [1..1].  Value Set HL70125 (constrained, not in guide).  CE=Coded Entry,DT=Date,NM=Numeric,ST=String,TS=Time Stamp (Date & Time).
 				if(vaccineObs.ValType==VaccineObsType.Dated) {
 					_seg.SetField(2,"DT");
 				}
@@ -385,12 +385,23 @@ namespace OpenDentBusiness.HL7 {
 					}
 					WriteCE(5,vaccineObs.ValReported.Trim(),codeDescript,vaccineObs.ValCodeSystem.ToString());
 				}
-				else { //Value is not coded (is a string)
+				else if(vaccineObs.ValType==VaccineObsType.Dated) {
+					DateTime dateVal=DateTime.Parse(vaccineObs.ValReported.Trim());
+					_seg.SetField(5,dateVal.ToString("yyyyMMdd"));
+				}
+				else if(vaccineObs.ValType==VaccineObsType.Numeric) {
 					_seg.SetField(5,vaccineObs.ValReported.Trim());
+				}
+				else if(vaccineObs.ValType==VaccineObsType.Text) {
+					_seg.SetField(5,vaccineObs.ValReported.Trim());
+				}
+				else { //DateAndTime
+					DateTime dateVal=DateTime.Parse(vaccineObs.ValReported.Trim());
+					_seg.SetField(5,dateVal.ToString("yyyyMMddHHmmss"));
 				}
 				//OBX-6 Units.  Required if OBX-2 is "NM" or "SN" (SN appears to be missing from definition).
 				if(vaccineObs.ValType==VaccineObsType.Numeric) {
-					Ucum ucum=Ucums.GetByCode(vaccineObs.ValUnit);
+					Ucum ucum=Ucums.GetByCode(vaccineObs.ValUnit.Trim());
 					WriteCE(6,ucum.UcumCode,ucum.Description,"UCUM");
 				}
 				//OBX-7 References Range.  Optional.
@@ -1154,12 +1165,42 @@ namespace OpenDentBusiness.HL7 {
 					if(vaccineObs.ValReported.Trim()=="") {
 						WriteError(sb,"Missing value for observation with type '"+vaccineObs.ValType.ToString()+"' attached to vaccine '"+vaccineDef.VaccineName+"'");
 					}
-					Ucum ucum=Ucums.GetByCode(vaccineObs.ValUnit);
+					Ucum ucum=Ucums.GetByCode(vaccineObs.ValUnit.Trim());
 					if(ucum==null) {
 						WriteError(sb,"Invalid unit code (must be UCUM) for observation with type '"+vaccineObs.ValType.ToString()+"' attached to vaccine '"+vaccineDef.VaccineName+"'");
 					}
 					if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.FundPgmEligCat && vaccineObs.MethodCode.Trim()=="") {
 						WriteError(sb,"Missing method code for observation with type '"+vaccineObs.ValType.ToString()+"' attached to vaccine '"+vaccineDef.VaccineName+"'");
+					}
+					if(vaccineObs.ValType==VaccineObsType.Coded) {
+						//Any value is allowed.
+					}
+					else if(vaccineObs.ValType==VaccineObsType.Dated) {
+						try {
+							DateTime.Parse(vaccineObs.ValReported);
+						}
+						catch(Exception) {
+							WriteError(sb,"Value must be a valid date.");
+						}
+					}
+					else if(vaccineObs.ValType==VaccineObsType.Numeric) {
+						try {
+							double.Parse(vaccineObs.ValReported);
+						}
+						catch(Exception) {
+							WriteError(sb,"Value must be a valid number.");
+						}
+					}
+					else if(vaccineObs.ValType==VaccineObsType.Text) {
+						//Any value is allowed.
+					}
+					else { //DateAndTime
+						try {
+							DateTime.Parse(vaccineObs.ValReported);
+						}
+						catch(Exception) {
+							WriteError(sb,"Value must be a valid date and time.");
+						}
 					}
 				}
 			}
