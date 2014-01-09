@@ -90,7 +90,25 @@ namespace OpenDentBusiness {
 		///<summary>18</summary>
 		MedReconcile,
 		///<summary>19- Summary of care record for transition or referral.</summary>
-		SummaryOfCare
+		SummaryOfCare,
+		///<summary>20</summary>
+		CPOE_LabOrdersOnly,
+		///<summary>21</summary>
+		CPOE_RadiologyOrdersOnly,
+		///<summary>22</summary>
+		ElectronicCopyAccess,
+		///<summary>23</summary>
+		SummaryOfCareElectronic,
+		///<summary>24</summary>
+		SummaryOfCareSuccess,
+		///<summary>25</summary>
+		Interventions,
+		///<summary>26</summary>
+		PatientLists,
+		///<summary>27</summary>
+		ImmunizationRegistry,
+		///<summary>28</summary>
+		SecureMessaging
 	}
 
 	///<summary>Helps track whether the current patient has met the measurement objectives.</summary>
