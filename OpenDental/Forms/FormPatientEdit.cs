@@ -2087,6 +2087,7 @@ namespace OpenDental{
 				comboBoxMultiRace.Items.Add(Lan.g("enumPatRace","Multiracial"));//8
 				comboBoxMultiRace.Items.Add(Lan.g("enumPatRace","Other"));//9
 				comboBoxMultiRace.Items.Add(Lan.g("enumPatRace","White"));//10
+				comboBoxMultiRace.Items.Add(Lan.g("enumPatRace","NotHispanic"));//11
 				List<int> listPatRaces=PatientRaces.GetPatRaceList(PatCur.PatNum);
 				for(int i=0;i<listPatRaces.Count;i++) {
 					comboBoxMultiRace.SetSelected(listPatRaces[i]+1,true);//Offset by 1 because of none option at location 0.
