@@ -123,23 +123,21 @@ namespace OpenDentBusiness {
 	public enum VaccineAdministrationRoute {
 		///<summary>0 - No code.  Default.  Not sent in HL7 messages.  Used in UI only.</summary>
 		None,
-		///<summary>1 - Code C38238</summary>
+		///<summary>1 - Code ID.</summary>
 		Intradermal,
-		///<summary>2 - Code C28161</summary>
+		///<summary>2 - Code IM.</summary>
 		Intramuscular,
-		///<summary>3 - Code C38284</summary>
+		///<summary>3 - Code NS.</summary>
 		Nasal,
-		///<summary>4 - Code C38276</summary>
+		///<summary>4 - Code IV.</summary>
 		Intravenous,
-		///<summary>5 - Code C38288</summary>
+		///<summary>5 - Code PO.</summary>
 		Oral,
-		///<summary>6 - No code</summary>
+		///<summary>6 - Code OTH.</summary>
 		Other,
-		///<summary>7 - Code C38676</summary>
-		Percutaneous,
-		///<summary>8 - Code C38299</summary>
+		///<summary>7 - Code SC.</summary>
 		Subcutaneous,
-		///<summary>9 - Code C38305</summary>
+		///<summary>8 - Code TD.</summary>
 		Transdermal,
 	}
 

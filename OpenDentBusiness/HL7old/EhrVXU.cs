@@ -21,6 +21,7 @@ namespace OpenDentBusiness.HL7 {
 		private string cityWhereEntered="";
 		///<summary>A variable which is used in multiple places but always has the same value. At class level for convenience.</summary>
 		private string stateWhereEntered="";
+		private string _sendingFacilityName="";
 
 		///<summary>Creates the Message object and fills it with data.  Vaccines must all be for the same patient.
 		///A list of vaccines is passed in so the user can select a subset of vaccines to send for the patient.
@@ -76,21 +77,21 @@ namespace OpenDentBusiness.HL7 {
 		
 		///<summary>Message Segment Header segment.  Required.  Defines intent, source, destination and syntax of the message.  Guide page 104.</summary>
 		private void MSH() {
-			string strSendingFacilityName=PrefC.GetString(PrefName.PracticeTitle);
+			_sendingFacilityName=PrefC.GetString(PrefName.PracticeTitle);
 			if(_pat.ClinicNum!=0) {
 				Clinic clinic=Clinics.GetClinic(_pat.ClinicNum);
-				strSendingFacilityName=clinic.Description;
+				_sendingFacilityName=clinic.Description;
 			}
 			_seg=new SegmentHL7("MSH"
 				+"|"//MSH-1 Field Separator (|).  Required (length 1..1).
 				+@"^~\&"//MSH-2 Encoding Characters.  Required (length 4..4).  Component separator (^), then field repetition separator (~), then escape character (\), then Sub-component separator (&).
 				+"|Open Dental"//MSH-3 Sending Application.  Required if known (length unspecified).  Value set HL70361  (guide page 229, "no suggested values defined").  Type HD (guide page 65).
-				+"|"+strSendingFacilityName//MSH-4 Sending Facility.  Required if known (length unspecified).  Value set HL70362 (guide page 229, "no suggested values defined").  Type HD (guide page 65).
+				+"|"+_sendingFacilityName//MSH-4 Sending Facility.  Required if known (length unspecified).  Value set HL70362 (guide page 229, "no suggested values defined").  Type HD (guide page 65).
 				+"|"//MSH-5 Receiving Application.  Required if known (length unspecified).  Value set HL70361 (guide page 229, "no suggested values defined").  Type HD (guide page 65).
 				+"|EHR Facility"//MSH-6 Receiving Facility.  Required if known (length unspecified).  Value set HL70362 (guide page 229, "no suggested values defined").  Type HD (guide page 65).
 				+"|"+DateTime.Now.ToString("yyyyMMddHHmmss")//MSH-7 Date/Time of Message.  Required (length 12..19).
 				+"|"//MSH-8 Security.  Optional (length unspecified).
-				+"|VXU^VO4^VXU_V04"//MSH-9 Message Type. Required (length unspecified).
+				+"|VXU^V04^VXU_V04"//MSH-9 Message Type. Required (length unspecified).
 				+"|OD-"+DateTime.Now.ToString("yyyyMMddHHmmss")+"-"+CodeBase.MiscUtils.CreateRandomAlphaNumericString(14)//MSH-10 Message Control ID.  Required (length 1..199).  Our IDs are 32 characters.
 				+"|P"//MSH-11 Processing ID.  Required (length unspecified).  P=production.
 				+"|2.5.1"//MSH-12 Version ID.  Required (length unspecified).  Must be exactly "2.5.1".
@@ -113,10 +114,10 @@ namespace OpenDentBusiness.HL7 {
 			for(int i=0;i<listGuardians.Count;i++) {//One NK1 segment for each relationship.
 				_seg=new SegmentHL7(SegmentNameHL7.NK1);
 				_seg.SetField(0,"NK1");
-				_seg.SetField(1,i.ToString());//NK1-1 Set ID.  Required (length unspecified).  Cardinality [1..1].
+				_seg.SetField(1,(i+1).ToString());//NK1-1 Set ID.  Required (length unspecified).  Cardinality [1..1].
 				//NK-2 Name.  Required (length unspecified).  Type XPN (guide page 82).  Cardinarlity [1..1].
 				Patient patNextOfKin=Patients.GetPat(listGuardians[i].PatNumGuardian);
-				WriteXPN(2,patNextOfKin.FName,patNextOfKin.LName,patNextOfKin.MiddleI);
+				WriteXPN(2,patNextOfKin.FName,patNextOfKin.LName,patNextOfKin.MiddleI,"L");
 				//NK1-3 Relationship.  Required.  Cardinality [1..1].  Value set HL70063 (guide page 196).  Type CE.
 				GuardianRelationship relat=listGuardians[i].Relationship;
 				string strRelatCode="";
@@ -190,7 +191,7 @@ namespace OpenDentBusiness.HL7 {
 					strRelatCode="PAR";//parent
 				}
 				else {
-					continue;//Skip the entire segment if the relationship is not known.
+					continue;//Skip the entire segment if the relationship is not known.  Should not happen.
 				}
 				WriteCE(3,strRelatCode,relat.ToString(),"HL70063");
 				//NK-4 Address.  Required if known (length unspecified).  Cardinality [0..1].  Type XAD (guide page 74).  The first instance must be the primary address.
@@ -247,7 +248,7 @@ namespace OpenDentBusiness.HL7 {
 				VaccineObs vaccineObs=listVaccineObservations[i];
 				_seg=new SegmentHL7(SegmentNameHL7.OBX);
 				_seg.SetField(0,"OBX");
-				_seg.SetField(1,i.ToString());//OBX-1 Set ID - OBX.  Required (length 1..4).  Cardinality [1..1].
+				_seg.SetField(1,(i+1).ToString());//OBX-1 Set ID - OBX.  Required (length 1..4).  Cardinality [1..1].
 				//OBX-2 Value Type.  Required (length 2..3).  Cardinality [1..1].  Value Set HL70125 (constrained, not in guide).  CE=Coded Entry,DT=Date,NM=Numeric,ST=String,TS=Time Stamp (Date & Time).
 				if(vaccineObs.ValType==VaccineObsType.Dated) {
 					_seg.SetField(2,"DT");
@@ -266,89 +267,86 @@ namespace OpenDentBusiness.HL7 {
 				}
 				//OBX-3 Observation Identifier.  Required.  Cardinality [1..1].  Value set NIP003 (25 items).  Type CE.  Purpose is to pose the question that is answered by OBX-5.
 				if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.DatePublished) {
-					WriteCE(3,"29768-9","Date vaccine information statement published:TmStp:Pt:Patient:Qn:","LN");
+					WriteCE(3,"29768-9","Date vaccine information statement published","LN");
 				}
 				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.DatePresented) {
-					WriteCE(3,"29769-7","Date vaccine information statement presented:TmStp:Pt:Patient:Qn:","LN");
+					WriteCE(3,"29769-7","Date vaccine information statement presented","LN");
 				}
 				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.DatePrecautionExpiration) {
-					WriteCE(3,"30944-3","Date of vaccination temporary contraindication and or precaution expiration:TmStp:Pt:Patient:Qn:","LN");
+					WriteCE(3,"30944-3","Date of vaccination temporary contraindication and or precaution expiration","LN");
 				}
 				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.Precaution) {
-					WriteCE(3,"30945-0","Vaccination contraindication and or precaution:Find:Pt:Patient:Nom:","LN");
+					WriteCE(3,"30945-0","Vaccination contraindication and or precaution","LN");
 				}
 				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.DatePrecautionEffective) {
-					WriteCE(3,"30946-8","Date vaccination contraindication and or precaution effective:TmStp:Pt:Patient:Qn:","LN");
+					WriteCE(3,"30946-8","Date vaccination contraindication and or precaution effective","LN");
 				}
 				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.TypeOf) {
-					WriteCE(3,"30956-7","Type:ID:Pt:Vaccine:Nom:","LN");
+					WriteCE(3,"30956-7","Vaccine Type","LN");
 				}
 				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.FundsPurchasedWith) {
-					WriteCE(3,"30963-3","Funds vaccine purchased with:Find:Pt:Patient:Nom:","LN");
+					WriteCE(3,"30963-3","Funds vaccine purchased with","LN");
 				}
 				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.DoseNumber) {
-					WriteCE(3,"30973-2","Dose number:Num:Pt:Patient:Qn:","LN");
+					WriteCE(3,"30973-2","Dose number","LN");
 				}
 				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.NextDue) {
-					WriteCE(3,"30979-9","Vaccines due next:Cmplx:Pt:Patient:Set:","LN");
+					WriteCE(3,"30979-9","Vaccines due next","LN");
 				}
 				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.DateDue) {
-					WriteCE(3,"30980-7","Date vaccine due:TmStp:Pt:Patient:Qn:","LN");
+					WriteCE(3,"30980-7","Date vaccine due","LN");
 				}
 				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.DateEarliestAdminister) {
-					WriteCE(3,"30981-5","Earliest date to give:TmStp:Pt:Patient:Qn:","LN");
+					WriteCE(3,"30981-5","Earliest date to give","LN");
 				}
 				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.ReasonForcast) {
-					WriteCE(3,"30982-3","Reason applied by forcast logic to project this vaccine:Find:Pt:Patient:Nom:","LN");
+					WriteCE(3,"30982-3","Reason applied by forcast logic to project this vaccine","LN");
 				}
 				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.Reaction) {
-					WriteCE(3,"31044-1","Reaction:Find:Pt:Patient:Nom:","LN");
+					WriteCE(3,"31044-1","Reaction","LN");
 				}
 				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.ComponentType) {
-					WriteCE(3,"38890-0","Vaccine component type:ID:Pt:Vaccine:Nom:","LN");
+					WriteCE(3,"38890-0","Vaccine component type","LN");
 				}
 				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.TakeResponseType) {
-					WriteCE(3,"46249-9","Vaccination take-response type:Prid:Pt:Patient:Nom:","LN");
+					WriteCE(3,"46249-9","Vaccination take-response type","LN");
 				}
 				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.DateTakeResponse) {
-					WriteCE(3,"46250-7","Vaccination take-response date:TmStp:Pt:Patient:Qn:","LN");
+					WriteCE(3,"46250-7","Vaccination take-response date","LN");
 				}
 				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.ScheduleUsed) {
-					WriteCE(3,"59779-9","Immunization schedule used:Find:Pt:Patient:Nom:","LN");
+					WriteCE(3,"59779-9","Immunization schedule used","LN");
 				}
 				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.Series) {
-					WriteCE(3,"59780-7","Immunization series:Find:Pt:Patient:Nom:","LN");
+					WriteCE(3,"59780-7","Immunization series","LN");
 				}
 				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.DoseValidity) {
-					WriteCE(3,"59781-5","Dose validity:Find:Pt:Patient:Ord:","LN");
+					WriteCE(3,"59781-5","Dose validity","LN");
 				}
 				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.NumDosesPrimary) {
-					WriteCE(3,"59782-3","Number of doses in primary immunization series:Num:Pt:Patient:Qn:","LN");
+					WriteCE(3,"59782-3","Number of doses in primary immunization series","LN");
 				}
 				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.StatusInSeries) {
-					WriteCE(3,"59783-1","Status in immunization series:Find:Pt:Patient:Nom:","LN");
+					WriteCE(3,"59783-1","Status in immunization series","LN");
 				}
 				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.DiseaseWithImmunity) {
-					WriteCE(3,"59784-9","Disease with presumed immunity:Find:Pt:Patient:Nom:","LN");
+					WriteCE(3,"59784-9","Disease with presumed immunity","LN");
 				}
 				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.Indication) {
-					WriteCE(3,"59785-6","Indication for Immunization:Find:Pt:Patient:Nom:","LN");
+					WriteCE(3,"59785-6","Indication for Immunization","LN");
 				}
 				else if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.FundPgmEligCat) {
-					WriteCE(3,"64994-7","Vaccine fund pgm elig cat","LN");
+					WriteCE(3,"64994-7","Vaccine funding program eligibility category","LN");
 				}
 				else { //vaccineObs.IdentifyingCode==VaccineObsIdentifier.DocumentType
 					WriteCE(3,"69764-9","Document type","LN");
 				}
 				//OBX-4 Observation Sub-ID.  Required (length 1..20).  Cardinality [1..1].  Type ST.
-				if(vaccineObs.VaccineObsNumGroup!=0) {
-					int subId=0;
-					for(int j=0;j<=i;j++) {
-						if(listVaccineObservations[j].VaccineObsNumGroup==vaccineObs.VaccineObsNumGroup) {
-							subId++;
-						}
-					}
-					_seg.SetField(4,subId.ToString());
+				if(vaccineObs.VaccineObsNumGroup==0) {
+					_seg.SetField(4,vaccineObs.VaccineObsNum.ToString());
+				}
+				else {//vaccineObs.VaccineObsNumGroup!=0
+					_seg.SetField(4,vaccineObs.VaccineObsNumGroup.ToString());
 				}
 				//OBX-5 Observation Value.  Required. Cardinality [1..1].  Value set varies, depending on the value of OBX-2 (Use type CE if OBX-2 is "CE", otherwise treat as a string).  Purpose is to answer the quesiton posed by OBX-3.
 				if(vaccineObs.ValType==VaccineObsType.Coded) {
@@ -397,7 +395,18 @@ namespace OpenDentBusiness.HL7 {
 				}
 				else { //DateAndTime
 					DateTime dateVal=DateTime.Parse(vaccineObs.ValReported.Trim());
-					_seg.SetField(5,dateVal.ToString("yyyyMMddHHmmss"));
+					string strDateOut=dateVal.ToString("yyyyMMdd");
+					//The testing tool threw errors when there were trailing zeros, even though technically valid.
+					if(dateVal.Second>0) {
+						strDateOut+=dateVal.ToString("HHmmss");
+					}
+					else if(dateVal.Minute>0) {
+						strDateOut+=dateVal.ToString("HHmm");
+					}
+					else if(dateVal.Hour>0) {
+						strDateOut+=dateVal.ToString("HH");
+					}
+					_seg.SetField(5,strDateOut);
 				}
 				//OBX-6 Units.  Required if OBX-2 is "NM" or "SN" (SN appears to be missing from definition).
 				if(vaccineObs.ValType==VaccineObsType.Numeric) {
@@ -419,7 +428,7 @@ namespace OpenDentBusiness.HL7 {
 				//OBX-16 Responsible Observer.  Optional.
 				//OBX-17 Observation Method.  Required if OBX-3.1 is “64994-7”.  Value set CDCPHINVS. Type CE.
 				if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.FundPgmEligCat) {
-					_seg.SetField(17,vaccineObs.MethodCode.Trim());
+					_seg.SetField(17,vaccineObs.MethodCode.Trim(),"","CDCPHINVS");
 				}
 				//OBX-18 Equipment Instance Identifier.  Optional.
 				//OBX-19 Date/Time of the Analysis.  Optional.
@@ -429,8 +438,8 @@ namespace OpenDentBusiness.HL7 {
 				//OBX-23 Performing Organization Name.  Optional.
 				//OBX-24 Performing Organization Address.  Optional.
 				//OBX-25 Performing Organization Medical Director.  Optional.
+				_msg.Segments.Add(_seg);
 			}
-			_msg.Segments.Add(_seg);
 		}
 		
 		///<summary>Order Request segment.  Required.  Guide page 126.</summary>
@@ -452,18 +461,18 @@ namespace OpenDentBusiness.HL7 {
 			if(userod!=null) {
 				if(userod.ProvNum!=0) {
 					Provider provEnteredBy=Providers.GetProv(userod.ProvNum);
-					WriteXCN(10,provEnteredBy.FName,provEnteredBy.LName,provEnteredBy.MI,vaccine.UserNum.ToString(),cityWhereEntered,stateWhereEntered);
+					WriteXCN(10,provEnteredBy.FName,provEnteredBy.LName,provEnteredBy.MI,vaccine.UserNum.ToString(),cityWhereEntered,stateWhereEntered,"D");
 				}
 				else if(userod.EmployeeNum!=0) {
 					Employee employee=Employees.GetEmp(userod.EmployeeNum);
-					WriteXCN(10,employee.FName,employee.LName,employee.MiddleI,vaccine.UserNum.ToString(),cityWhereEntered,stateWhereEntered);
+					WriteXCN(10,employee.FName,employee.LName,employee.MiddleI,vaccine.UserNum.ToString(),cityWhereEntered,stateWhereEntered,"D");
 				}
 			}
 			//ORD-11 Verified By.  Optional.
 			//ORD-12 Ordering Provider.  Required if known. Cardinality [0..1].  Type XCN.  This shall be the provider ordering the immunization.  It is expected to be empty if the immunization record is transcribed from a historical record.
 			Provider provOrdering=Providers.GetProv(vaccine.ProvNumOrdering);//Can be null if vaccine.ProvNumOrdering is zero.
 			if(provOrdering!=null) {
-				WriteXCN(12,provOrdering.FName,provOrdering.LName,provOrdering.MI,provOrdering.ProvNum.ToString(),cityWhereEntered,stateWhereEntered);
+				WriteXCN(12,provOrdering.FName,provOrdering.LName,provOrdering.MI,provOrdering.ProvNum.ToString(),cityWhereEntered,stateWhereEntered,"L");
 			}
 			//ORD-13 Enterer's Location.  Optional.
 			//ORD-14 Call Back Phone Number.  Optional.
@@ -506,10 +515,10 @@ namespace OpenDentBusiness.HL7 {
 				WriteCE(11,"07","Recall only - no calls","HL70215");
 			}
 			else if(_pat.PreferRecallMethod==ContactMethod.None) {
-				WriteCE(11,"01","No reminder/recall","HL70215");
+				WriteCE(11,"01","No reminder/Recall","HL70215");
 			}
 			else {
-				WriteCE(11,"02","Reminder/recall - any method","HL70215");
+				WriteCE(11,"02","Reminder/Recall - any method","HL70215");
 			}
 			//PD1-12 Protection Indicator.  Required if known (length 1..1).  Cardinality [0..1].  Value set HL70136 (guide page 199).  Allowed values are "Y" for yes, "N" for no, or blank for unknown.
 			//PD1-13 Protection Indicator.  Required if PD1-12 is not blank (length unspecified).  Cardinality [0..1].
@@ -551,8 +560,8 @@ namespace OpenDentBusiness.HL7 {
 				//PID-3.10 Assigning Agency or Department.  Optional (length undefined).
 			);
 			//PID-4 Alternate Patient ID - 00106.  No longer used.
-			WriteXPN(5,_pat.FName,_pat.LName,_pat.MiddleI);//PID-5 Patient Name.  Required (length unspecified).  Cardinality [1..*].  Type XPN.  The first repetition must contain the legal name.
-			WriteXPN(6,_pat.MotherMaidenFname,_pat.MotherMaidenLname,"");//PID-6 Mother's Maiden Name.  Required if known (length unspecified).  Cardinality [0..1].  Type XPN.
+			WriteXPN(5,_pat.FName,_pat.LName,_pat.MiddleI,"L");//PID-5 Patient Name.  Required (length unspecified).  Cardinality [1..*].  Type XPN.  The first repetition must contain the legal name.
+			WriteXPN(6,_pat.MotherMaidenFname,_pat.MotherMaidenLname,"","M");//PID-6 Mother's Maiden Name.  Required if known (length unspecified).  Cardinality [0..1].  Type XPN.
 			//PID-7 Date/Time of Birth.  Required.  Cardinality [1..1].  We must specify "UNK" if unknown.
 			if(_pat.Birthdate.Year<1880) {
 				_seg.SetField(7,"UNK");
@@ -578,7 +587,9 @@ namespace OpenDentBusiness.HL7 {
 					listPatRacesFiltered.Clear();
 					break;
 				}
-				listPatRacesFiltered.Add(patRace);
+				else {
+					listPatRacesFiltered.Add(patRace);
+				}
 			}
 			string hl7Race="";//TODO: Test a patient with multiple races.
 			if(listPatRacesFiltered.Count==0) {//No selection or declined to specify.
@@ -631,7 +642,7 @@ namespace OpenDentBusiness.HL7 {
 			}
 			_seg.SetField(10,hl7Race);
 			//PID-11 Patient Address.  Required if known (length unspecified).  Cardinality [0..*].  Type XAD (guide page 74).  First repetition must be the primary address.
-			WriteXAD(11,_pat.Address,_pat.Address,_pat.City,_pat.State,_pat.Zip);
+			WriteXAD(11,_pat.Address,_pat.Address2,_pat.City,_pat.State,_pat.Zip);
 			//PID-12 County Code.  No longer used.
 			WriteXTN(13,"PRN","PH",_pat.HmPhone,_pat.WirelessPhone,_pat.WkPhone);//PID-13 Phone Number - Home.  Required if known (length unspecified).  Cardinality [0..*].  Type XTN (guide page 84).
 			//PID-14 Phone Number - Business.  Optional.
@@ -683,7 +694,8 @@ namespace OpenDentBusiness.HL7 {
 				_seg.SetField(4,vaccine.DateTimeEnd.ToString("yyyyMMddHHmm"));//RXA-4 Date/Time End of Administration.  Required if known.  Must be same as RXA-3 or blank.  UI forces RXA-4 and RXA-3 to be equal.  This would be blank if for a planned vaccine.
 			}
 			//RXA-5 Administered Code.  Required.  Cardinality [1..1].  Type CE (guide page 53).  Must be a CVX code.
-			WriteCE(5,vaccineDef.CVXCode,vaccineDef.VaccineName,"CVX");
+			Cvx cvx=Cvxs.GetByCode(vaccineDef.CVXCode);
+			WriteCE(5,cvx.CvxCode,cvx.Description,"CVX");
 			//RXA-6 Administered Amount.  Required (length 1..20).  If amount is not known or not meaningful, then use "999".
 			if(vaccine.AdministeredAmt>0){
 				_seg.SetField(6,vaccine.AdministeredAmt.ToString());
@@ -730,10 +742,10 @@ namespace OpenDentBusiness.HL7 {
 			//RXA-10 Administering Provider.  Required if known.  Type XCN.  This is the person who gave the administration or the vaccinaton.  It is not the ordering clinician.
 			Provider provAdministering=Providers.GetProv(vaccine.ProvNumAdminister);//Can be null when vaccine.ProvNumAdminister is zero.
 			if(provAdministering!=null) {
-				WriteXCN(10,provAdministering.FName,provAdministering.LName,provAdministering.MI,provAdministering.ProvNum.ToString(),cityWhereEntered,stateWhereEntered);
+				WriteXCN(10,provAdministering.FName,provAdministering.LName,provAdministering.MI,provAdministering.ProvNum.ToString(),cityWhereEntered,stateWhereEntered,"L");
 			}
 			//RXA-11 Administered-at Location.  Required if known.  Type LA2 (guide page 68).  This is the clinic/site where the vaccine was administered.
-			WriteLA2(11,cityWhereEntered,stateWhereEntered);
+			WriteLA2(11,_sendingFacilityName);
 			//RXA-12 Administered Per (Time Unit).  Optional.
 			//RXA-13 Administered Strength.  Optional.
 			//RXA-14 Administered Strength Units.  Optional.
@@ -748,7 +760,7 @@ namespace OpenDentBusiness.HL7 {
 			//RXA-17 Substance Manufacturer Name.  Requred if RXA-9.1 is "00".  Cardinality [0..*].  Value set MVX.  Type CE.
 			if(vaccineDef.DrugManufacturerNum!=0) {
 				DrugManufacturer manufacturer=DrugManufacturers.GetOne(vaccineDef.DrugManufacturerNum);
-				WriteCE(17,manufacturer.ManufacturerCode,manufacturer.ManufacturerName,"HL70227");
+				WriteCE(17,manufacturer.ManufacturerCode,manufacturer.ManufacturerName,"MVX");
 			}
 			//RXA-18 Substance/Treatment Refusal Reason.  Required if RXA-20 is "RE".  Cardinality [0..*].  Required when RXA-20 is "RE", otherwise do not send.  Value set NIP002.
 			if(vaccine.RefusalReason==VaccineRefusalReason.ParentalDecision) {
@@ -774,7 +786,7 @@ namespace OpenDentBusiness.HL7 {
 			else if(vaccine.CompletionStatus==VaccineCompletionStatus.PartiallyAdministered) {
 				_seg.SetField(20,"PA");
 			}
-			else {//Complete
+			else {//Complete (default)
 				_seg.SetField(20,"CP");
 			}
 			//RXA-21 Action code.  Required if known (length 2..2).  Value set HL70323 (guide page 225).  A=Add, D=Delete, U=Update.
@@ -804,35 +816,38 @@ namespace OpenDentBusiness.HL7 {
 			_seg.SetField(0,"RXR");
 			//RXR-1 Route.  Required.  Cardinality [1..1].  Value set HL70162 (guide page 200). Type CE (guide page 53).
 			if(vaccine.AdministrationRoute==VaccineAdministrationRoute.Intradermal) {
-				WriteCE(1,"C38238","Intradermal","HL70162");
+				WriteCE(1,"ID","Intradermal","HL70162");
 			}
 			else if(vaccine.AdministrationRoute==VaccineAdministrationRoute.Intramuscular) {
-				WriteCE(1,"C28161","Intramuscular","HL70162");
+				WriteCE(1,"IM","Intramuscular","HL70162");
 			}
 			else if(vaccine.AdministrationRoute==VaccineAdministrationRoute.Nasal) {
-				WriteCE(1,"C38284","Nasal","HL70162");
+				WriteCE(1,"NS","Nasal","HL70162");
 			}
 			else if(vaccine.AdministrationRoute==VaccineAdministrationRoute.Intravenous) {
-				WriteCE(1,"C38276","Intravenous","HL70162");
+				WriteCE(1,"IV","Intravenous","HL70162");
 			}
 			else if(vaccine.AdministrationRoute==VaccineAdministrationRoute.Oral) {
-				WriteCE(1,"C38288","Oral","HL70162");
-			}
-			else if(vaccine.AdministrationRoute==VaccineAdministrationRoute.Percutaneous) {
-				WriteCE(1,"C38676","Percutaneous","HL70162");
+				WriteCE(1,"PO","Oral","HL70162");
 			}
 			else if(vaccine.AdministrationRoute==VaccineAdministrationRoute.Subcutaneous) {
-				WriteCE(1,"C38299","Subcutaneous","HL70162");
+				WriteCE(1,"SC","Subcutaneous","HL70162");
 			}
 			else if(vaccine.AdministrationRoute==VaccineAdministrationRoute.Transdermal) {
-				WriteCE(1,"C38305","Transdermal","HL70162");
+				WriteCE(1,"TD","Transdermal","HL70162");
 			}
 			else {//Other
-				WriteCE(1,"","Other","HL70162");//Code must be blank.
+				WriteCE(1,"OTH","Other","HL70162");
 			}
 			//RXR-2 Administration Site.  Required if known.  Cardinality [0..1].  Value set HL70163 (guide page 201, details where the vaccine was physically administered on the patient's body).
 			if(vaccine.AdministrationSite==VaccineAdministrationSite.LeftThigh) {
 				WriteCE(2,"LT","LeftThigh","HL70163");
+			}
+			else if(vaccine.AdministrationSite==VaccineAdministrationSite.LeftVastusLateralis) {
+				WriteCE(2,"LVL","LeftVastusLateralis","HL70163");
+			}
+			else if(vaccine.AdministrationSite==VaccineAdministrationSite.LeftGluteousMedius) {
+				WriteCE(2,"LG","LeftGluteousMedius","HL70163");
 			}
 			else if(vaccine.AdministrationSite==VaccineAdministrationSite.LeftArm) {
 				WriteCE(2,"LA","LeftArm","HL70163");
@@ -840,17 +855,8 @@ namespace OpenDentBusiness.HL7 {
 			else if(vaccine.AdministrationSite==VaccineAdministrationSite.LeftDeltoid) {
 				WriteCE(2,"LD","LeftDeltoid","HL70163");
 			}
-			else if(vaccine.AdministrationSite==VaccineAdministrationSite.LeftGluteousMedius) {
-				WriteCE(2,"LG","LeftGluteousMedius","HL70163");
-			}
-			else if(vaccine.AdministrationSite==VaccineAdministrationSite.LeftVastusLateralis) {
-				WriteCE(2,"LVL","LeftVastusLateralis","HL70163");
-			}
 			else if(vaccine.AdministrationSite==VaccineAdministrationSite.LeftLowerForearm) {
 				WriteCE(2,"LLFA","LeftLowerForearm","HL70163");
-			}
-			else if(vaccine.AdministrationSite==VaccineAdministrationSite.RightArm) {
-				WriteCE(2,"RA","RightArm","HL70163");
 			}
 			else if(vaccine.AdministrationSite==VaccineAdministrationSite.RightThigh) {
 				WriteCE(2,"RT","RightThigh","HL70163");
@@ -861,8 +867,11 @@ namespace OpenDentBusiness.HL7 {
 			else if(vaccine.AdministrationSite==VaccineAdministrationSite.RightGluteousMedius) {
 				WriteCE(2,"RG","RightGluteousMedius","HL70163");
 			}
+			else if(vaccine.AdministrationSite==VaccineAdministrationSite.RightArm) {
+				WriteCE(2,"RA","RightArm","HL70163");
+			}			
 			else if(vaccine.AdministrationSite==VaccineAdministrationSite.RightDeltoid) {
-				WriteCE(2,"RD","RightDeltoid","HL70163");
+				WriteCE(2,"RD","RightArm","HL70163");
 			}
 			else if(vaccine.AdministrationSite==VaccineAdministrationSite.RightLowerForearm) {
 				WriteCE(2,"RLFA","RightLowerForearm","HL70163");
@@ -896,9 +905,9 @@ namespace OpenDentBusiness.HL7 {
 		private void WriteEI(int fieldIndex,string identifier,string city,string state) {
 			_seg.SetField(fieldIndex,
 				identifier,//EI.1 Entity Identifier.  Required (length 1..199).
-				GetAssigningAuthority(city,state),//EI.2 Namespace ID.  Required if EI.3 is blank (length 1..20).  Value set HL70363 (guide page 229, 3 letter abbreviation for US state, US city, or US territory).
-				"",//EI.3 Universal ID.  Required if EI.1 is blank (length 1..199).
-				"");//EI.4 Universal ID Type.  Required if EI.3 is not blank (length 6..6).  Value set HL70301 (guide page 224).  Must be "ISO" or blank.
+				GetAssigningAuthority(city,state)//EI.2 Namespace ID.  Required if EI.3 is blank (length 1..20).  Value set HL70363 (guide page 229, 3 letter abbreviation for US state, US city, or US territory).
+				//EI.3 Universal ID.  Required if EI.1 is blank (length 1..199).
+				);//EI.4 Universal ID Type.  Required if EI.3 is not blank (length 6..6).  Value set HL70301 (guide page 224).  Must be "ISO" or blank.
 		}
 
 		///<summary>Corresponds to table HL70363 (guide page 229).</summary>
@@ -941,13 +950,13 @@ namespace OpenDentBusiness.HL7 {
 		}
 
 		///<summary>Type LA2 (guide page 68).  Writes facility information into the fieldIndex field of the current segment.</summary>
-		private void WriteLA2(int fieldIndex,string city,string state) {
+		private void WriteLA2(int fieldIndex,string facilityName) {
 			_seg.SetField(fieldIndex,
 				"",//LA2.1 Point of Care.  Optional.
 				"",//LA2.2 Room.  Optional.
 				"",//LA2.3 Bed.  Optional.
 				//LA2.4 Facility.  Required.  Type HD (guide page 66).
-				GetAssigningAuthority(city,state)//LA2.4.1 Namespace ID.  Required when LA2.4.2 is blank.  Value sets HL70300 (guide page 224), HL70361 (guide page 229), HL70362 (guide page 229), HL70363 (guide page 229).  Value set used depends on usage.
+				facilityName//LA2.4.1 Namespace ID.  Required when LA2.4.2 is blank.  Value sets HL70300 (guide page 224), HL70361 (guide page 229), HL70362 (guide page 229), HL70363 (guide page 229).  Value set used depends on usage.
 				//LA2.4.2 Universal ID.  Required when LA2.4.1 is blank.
 				//LA2.4.3 Universal ID Type.  Required when LA2.4.2 is not blank.  Value set HL70301 (guide page 224).
 				//LA2.5 Location Status.  Optional.
@@ -986,8 +995,9 @@ namespace OpenDentBusiness.HL7 {
 		}
 
 		///<summary>Type XCN (guide page 77).  Writes user name and id into the fieldIndex field for the current segment.
-		///Either the fName and lName must be specified, or id and city and state must be specified. All fields may be specified.</summary>
-		private void WriteXCN(int fieldIndex,string fName,string lName,string middleI,string id,string city,string state) {
+		///Either the fName and lName must be specified, or id and city and state must be specified. All fields may be specified.
+		///Allowed values for nameTypeCode: A=Alias name,L=Legal name,D=Display name,M=Maiden name,C=Adopted name,B=Name at birth,P=Name of partner/spouse,U=Unspecified.</summary>
+		private void WriteXCN(int fieldIndex,string fName,string lName,string middleI,string id,string city,string state,string nameTypeCode) {
 			bool hasName=false;
 			if(fName!="" && lName!="") {
 				hasName=true;
@@ -1008,12 +1018,12 @@ namespace OpenDentBusiness.HL7 {
 				lName,//XCN.2 Family Name.  Required if known.
 				fName,//XCN.3 Given Name.  Required if known (length 1..30).
 				middleI,//XCN.4 Second and Further Given Names or Initials Thereof.  Required if known (length 1..30).
-				//XCN.5 Suffix.  Optional.
-				//XCN.6 Prefix.  Optional.
-				//XCN.7 Degree.  No longer used.
-				//XCN.8 Source Table.  Optional.
+				"",//XCN.5 Suffix.  Optional.
+				"",//XCN.6 Prefix.  Optional.
+				"",//XCN.7 Degree.  No longer used.
+				"",//XCN.8 Source Table.  Optional.
 				assigningAuthority,//XCN.9 Assigning Authority.  Required if XCN.1 is not blank.  Value set HL70363 (guide page 229).
-				"L"//XCN.10 Name Type Code.  Required if known (length 1..1).  Value set HL70200 (guide page 203).  A=Alias name,L=Legal name,D=Display name,M=Maiden name,C=Adopted name,B=Name at birth,P=Name of partner/spouse,U=Unspecified.
+				nameTypeCode//XCN.10 Name Type Code.  Required if known (length 1..1).  Value set HL70200 (guide page 203).  A=Alias name,L=Legal name,D=Display name,M=Maiden name,C=Adopted name,B=Name at birth,P=Name of partner/spouse,U=Unspecified.
 				//XCN.11 Identifier Check Digit.  Optional.
 				//XCN.12 Check Digit Scheme.  Required if XCN.11 is not blank.
 				//XCN.13 Identifier Type Code.  Optional.
@@ -1070,8 +1080,9 @@ namespace OpenDentBusiness.HL7 {
 
 		///<summary>Type XPN (guide page 82).  Writes an person's name into the fieldIndex field for the current segment.
 		///The fName and lName cannot be blank.
-		///The middleI may be blank.</summary>
-		private void WriteXPN(int fieldIndex,string fName,string lName,string middleI) {
+		///The middleI may be blank.
+		///nameTypeCode can be one of: A=Alias Name,L=Legal Name,D=Display Name,M=Maiden Name,C=Adopted Name,B=Name at birth,P=Name of partner/spouse,U=Unspecified.</summary>
+		private void WriteXPN(int fieldIndex,string fName,string lName,string middleI,string nameTypeCode) {
 			_seg.SetField(fieldIndex,
 				lName,//XPN.1 Family Name.  Required (length 1..50).  Type FN (guide page 64).  Cardinality [1..1].  The FN type only requires the last name field and it is the first field.
 				fName,//XPN.2 Given Name.  Required (length 1..30).  Cardinality [1..1].
@@ -1079,7 +1090,7 @@ namespace OpenDentBusiness.HL7 {
 				"",//XPN.4 Suffix.  Optional.
 				"",//XPN.5 Prefix.  Optional.
 				"",//XPN.6 Degree.  No longer used.
-				"L"//XPN.7 Name Type Code.  Required if known (length 1..1).  Value set HL70200 (guide page 203).  A=Alias Name,L=Legal Name,D=Display Name,M=Maiden Name,C=Adopted Name,B=Name at birth,P=Name of partner/spouse,U=Unspecified.
+				nameTypeCode//XPN.7 Name Type Code.  Required if known (length 1..1).  Value set HL70200 (guide page 203).  A=Alias Name,L=Legal Name,D=Display Name,M=Maiden Name,C=Adopted Name,B=Name at birth,P=Name of partner/spouse,U=Unspecified.
 				//XPN.8 Name Representation Code.  Optional.
 				//XPN.9 Name Context.  Optional.
 				//XPN.10 Name Validity Range.  No longer used.
@@ -1111,9 +1122,9 @@ namespace OpenDentBusiness.HL7 {
 				if(vaccine.AdministeredAmt>0 && vaccine.DrugUnitNum!=0) {
 					DrugUnit drugUnit=DrugUnits.GetOne(vaccine.DrugUnitNum);
 					Ucum ucum=Ucums.GetByCode(drugUnit.UnitIdentifier);
-					if(ucum==null) {
-						WriteError(sb,"Drug unit invalid UCUM code.");
-					}
+					//if(ucum==null) {//TODO: Put check back in once we know if we will include UCUM codes in the database or not.
+					//	WriteError(sb,"Drug unit invalid UCUM code.");
+					//}
 				}
 				if(vaccine.AdministrationNoteCode==VaccineAdministrationNote.NewRecord && vaccine.LotNumber.Trim()=="") {
 					WriteError(sb,"Missing lot number.");
@@ -1159,6 +1170,9 @@ namespace OpenDentBusiness.HL7 {
 						WriteError(sb,"Missing practice city.");
 					}
 				}
+				if(vaccine.DateTimeStart.Year>1880 && vaccine.DateTimeEnd.Year>1880 && vaccine.DateTimeStart!=vaccine.DateTimeEnd) {
+					WriteError(sb,"Stop time must be blank or equal to start time.");
+				}
 				List<VaccineObs> listVaccineObservations=VaccineObses.GetForVaccine(vaccine.VaccinePatNum);
 				for(int j=0;j<listVaccineObservations.Count;j++) {
 					VaccineObs vaccineObs=listVaccineObservations[j];
@@ -1166,7 +1180,7 @@ namespace OpenDentBusiness.HL7 {
 						WriteError(sb,"Missing value for observation with type '"+vaccineObs.ValType.ToString()+"' attached to vaccine '"+vaccineDef.VaccineName+"'");
 					}
 					Ucum ucum=Ucums.GetByCode(vaccineObs.ValUnit.Trim());
-					if(ucum==null) {
+					if(ucum==null && vaccineObs.ValType==VaccineObsType.Numeric) {
 						WriteError(sb,"Invalid unit code (must be UCUM) for observation with type '"+vaccineObs.ValType.ToString()+"' attached to vaccine '"+vaccineDef.VaccineName+"'");
 					}
 					if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.FundPgmEligCat && vaccineObs.MethodCode.Trim()=="") {
