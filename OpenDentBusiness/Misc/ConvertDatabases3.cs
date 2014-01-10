@@ -3546,6 +3546,22 @@ namespace OpenDentBusiness {
 					command=@"CREATE INDEX vaccineobs_VaccineObsNumGroup ON vaccineobs (VaccineObsNumGroup)";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE ehrmeasureevent ADD FKey bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE ehrmeasureevent ADD INDEX (FKey)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE ehrmeasureevent ADD FKey number(20)";
+					Db.NonQ(command);
+					command="UPDATE ehrmeasureevent SET FKey = 0 WHERE FKey IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE ehrmeasureevent MODIFY FKey NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX ehrmeasureevent_FKey ON ehrmeasureevent (FKey)";
+					Db.NonQ(command);
+				}
 
 				command="UPDATE preference SET ValueString = '14.1.0.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);

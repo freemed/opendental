@@ -55,6 +55,7 @@ namespace OpenDentBusiness.Crud{
 				ehrMeasureEvent.CodeSystemEvent   = PIn.String(table.Rows[i]["CodeSystemEvent"].ToString());
 				ehrMeasureEvent.CodeValueResult   = PIn.String(table.Rows[i]["CodeValueResult"].ToString());
 				ehrMeasureEvent.CodeSystemResult  = PIn.String(table.Rows[i]["CodeSystemResult"].ToString());
+				ehrMeasureEvent.FKey              = PIn.Long  (table.Rows[i]["FKey"].ToString());
 				retVal.Add(ehrMeasureEvent);
 			}
 			return retVal;
@@ -95,7 +96,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="EhrMeasureEventNum,";
 			}
-			command+="DateTEvent,EventType,PatNum,MoreInfo,CodeValueEvent,CodeSystemEvent,CodeValueResult,CodeSystemResult) VALUES(";
+			command+="DateTEvent,EventType,PatNum,MoreInfo,CodeValueEvent,CodeSystemEvent,CodeValueResult,CodeSystemResult,FKey) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(ehrMeasureEvent.EhrMeasureEventNum)+",";
 			}
@@ -107,7 +108,8 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(ehrMeasureEvent.CodeValueEvent)+"',"
 				+"'"+POut.String(ehrMeasureEvent.CodeSystemEvent)+"',"
 				+"'"+POut.String(ehrMeasureEvent.CodeValueResult)+"',"
-				+"'"+POut.String(ehrMeasureEvent.CodeSystemResult)+"')";
+				+"'"+POut.String(ehrMeasureEvent.CodeSystemResult)+"',"
+				+    POut.Long  (ehrMeasureEvent.FKey)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -127,7 +129,8 @@ namespace OpenDentBusiness.Crud{
 				+"CodeValueEvent    = '"+POut.String(ehrMeasureEvent.CodeValueEvent)+"', "
 				+"CodeSystemEvent   = '"+POut.String(ehrMeasureEvent.CodeSystemEvent)+"', "
 				+"CodeValueResult   = '"+POut.String(ehrMeasureEvent.CodeValueResult)+"', "
-				+"CodeSystemResult  = '"+POut.String(ehrMeasureEvent.CodeSystemResult)+"' "
+				+"CodeSystemResult  = '"+POut.String(ehrMeasureEvent.CodeSystemResult)+"', "
+				+"FKey              =  "+POut.Long  (ehrMeasureEvent.FKey)+" "
 				+"WHERE EhrMeasureEventNum = "+POut.Long(ehrMeasureEvent.EhrMeasureEventNum);
 			Db.NonQ(command);
 		}
@@ -166,6 +169,10 @@ namespace OpenDentBusiness.Crud{
 			if(ehrMeasureEvent.CodeSystemResult != oldEhrMeasureEvent.CodeSystemResult) {
 				if(command!=""){ command+=",";}
 				command+="CodeSystemResult = '"+POut.String(ehrMeasureEvent.CodeSystemResult)+"'";
+			}
+			if(ehrMeasureEvent.FKey != oldEhrMeasureEvent.FKey) {
+				if(command!=""){ command+=",";}
+				command+="FKey = "+POut.Long(ehrMeasureEvent.FKey)+"";
 			}
 			if(command==""){
 				return;

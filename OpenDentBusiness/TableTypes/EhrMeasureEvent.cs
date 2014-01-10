@@ -26,6 +26,8 @@ namespace OpenDentBusiness {
 		public string CodeValueResult;
 		///<summary>The code system for this event result.  Example: SNOMEDCT, </summary>
 		public string CodeSystemResult;
+		///<summary>A foreign key to a table associated with the EventType.  0 indicates not in use.  Used to properly count denominators for specific measure types.</summary>
+		public long FKey;
 
 
 		///<summary></summary>
