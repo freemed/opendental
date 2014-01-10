@@ -6,7 +6,27 @@ using System.Text;
 
 namespace OpenDentBusiness{
 	///<summary></summary>
-	public class EhrLabSpecimenConditions{
+	public class EhrLabSpecimenConditions {
+
+		///<summary></summary>
+		public static List<EhrLabSpecimenCondition> GetForLab(long ehrLabNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<EhrLabSpecimenCondition>>(MethodBase.GetCurrentMethod(),ehrLabNum);
+			}
+			string command="SELECT * FROM ehrlabspecimencondition WHERE EhrLabNum = "+POut.Long(ehrLabNum);
+			return Crud.EhrLabSpecimenConditionCrud.SelectMany(command);
+		}
+
+		///<summary>Deletes notes for lab results too.</summary>
+		public static void DeleteForLab(long ehrLabNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),ehrLabNum);
+				return;
+			}
+			string command="DELETE FROM ehrlabspecimencondition WHERE EhrLabNum = "+POut.Long(ehrLabNum);
+			Db.NonQ(command);
+		}
+
 		//If this table type will exist as cached data, uncomment the CachePattern region below and edit.
 		/*
 		#region CachePattern

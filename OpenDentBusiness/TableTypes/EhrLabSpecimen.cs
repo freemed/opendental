@@ -35,15 +35,51 @@ namespace OpenDentBusiness {
 		public string CollectionDateTimeEnd;
 		///<summary>[0..*]This is not a data column but is stored in a seperate table named EhrLabSpecimenRejectReason.  SPM.21</summary>
 		[CrudColumn(IsNotDbColumn=true)]
-		public List<EhrLabSpecimenRejectReason> ListEhrLabSpecimenRejectReason;
+		public List<EhrLabSpecimenRejectReason> _listEhrLabSpecimenRejectReason;
 		///<summary>[0..*]This is not a data column but is stored in a seperate table named EhrLabSpecimenCondition.  SPM.24</summary>
 		[CrudColumn(IsNotDbColumn=true)]
-		public List<EhrLabSpecimenCondition> ListEhrLabSpecimenCondition;
+		public List<EhrLabSpecimenCondition> _listEhrLabSpecimenCondition;
 
 
 		///<summary></summary>
 		public EhrLabSpecimen Copy() {
 			return (EhrLabSpecimen)MemberwiseClone();
+		}
+
+		public List<EhrLabSpecimenRejectReason> ListEhrLabSpecimenRejectReason {
+			get {
+				if(_listEhrLabSpecimenRejectReason==null) {
+					if(EhrLabNum==0) {
+						_listEhrLabSpecimenRejectReason=new List<EhrLabSpecimenRejectReason>();
+					}
+					else {
+						_listEhrLabSpecimenRejectReason=EhrLabSpecimenRejectReasons.GetForLab(EhrLabNum);
+					}
+				}
+				return _listEhrLabSpecimenRejectReason;
+			}
+			set {
+				_listEhrLabSpecimenRejectReason=value;
+			}
+		}
+
+
+		///<summary>Only filled with EhrLabNotes when value is used.  To refresh ListEhrLabResults, set it equal to null or explicitly reassign it using EhrLabResults.GetForLab(EhrLabNum).</summary>
+		public List<EhrLabSpecimenCondition> ListEhrLabSpecimenCondition {
+			get {
+				if(_listEhrLabSpecimenCondition==null) {
+					if(EhrLabNum==0) {
+						_listEhrLabSpecimenCondition=new List<EhrLabSpecimenCondition>();
+					}
+					else {
+						_listEhrLabSpecimenCondition=EhrLabSpecimenConditions.GetForLab(EhrLabNum);
+					}
+				}
+				return _listEhrLabSpecimenCondition;
+			}
+			set {
+				_listEhrLabSpecimenCondition=value;
+			}
 		}
 
 	}

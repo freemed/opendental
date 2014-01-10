@@ -6,7 +6,37 @@ using System.Text;
 
 namespace OpenDentBusiness{
 	///<summary></summary>
-	public class EhrLabSpecimens{
+	public class EhrLabSpecimens {
+
+		///<summary></summary>
+		public static List<EhrLabSpecimen> GetForLab(long ehrLabNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<EhrLabSpecimen>>(MethodBase.GetCurrentMethod(),ehrLabNum);
+			}
+			string command="SELECT * FROM ehrlabspecimen WHERE EhrLabNum = "+POut.Long(ehrLabNum);
+			return Crud.EhrLabSpecimenCrud.SelectMany(command);
+		}
+
+		///<summary></summary>
+		public static void DeleteForLab(long ehrLabNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),ehrLabNum);
+				return;
+			}
+			EhrLabSpecimenConditions.DeleteForLab(ehrLabNum);//conditions are attached to the labs, but are 
+			string command="DELETE FROM ehrlabspecimen WHERE EhrLabNum = "+POut.Long(ehrLabNum);
+			Db.NonQ(command);
+		}
+
+		///<summary></summary>
+		public static long Insert(EhrLabSpecimen ehrLabSpecimen) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				ehrLabSpecimen.EhrLabSpecimenNum=Meth.GetLong(MethodBase.GetCurrentMethod(),ehrLabSpecimen);
+				return ehrLabSpecimen.EhrLabSpecimenNum;
+			}
+			return Crud.EhrLabSpecimenCrud.Insert(ehrLabSpecimen);
+		}
+
 		//If this table type will exist as cached data, uncomment the CachePattern region below and edit.
 		/*
 		#region CachePattern

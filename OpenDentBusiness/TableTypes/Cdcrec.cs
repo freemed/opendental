@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections;
-using System.Drawing;
+//using System.Collections;
+//using System.Drawing;
 
 namespace OpenDentBusiness {
 	///<summary>CDC Race and Ethnicity.  About 200 rows.  This table is not used anywhere right now.</summary>

@@ -39,12 +39,13 @@
 			this.label4 = new System.Windows.Forms.Label();
 			this.textInstruction = new System.Windows.Forms.TextBox();
 			this.gridAbnormalFlags = new OpenDental.UI.ODGrid();
+			this.gridNotes = new OpenDental.UI.ODGrid();
 			this.SuspendLayout();
 			// 
 			// butCancel
 			// 
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Location = new System.Drawing.Point(406, 393);
+			this.butCancel.Location = new System.Drawing.Point(406, 478);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 6;
@@ -55,7 +56,7 @@
 			// butOk
 			// 
 			this.butOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOk.Location = new System.Drawing.Point(325, 393);
+			this.butOk.Location = new System.Drawing.Point(325, 478);
 			this.butOk.Name = "butOk";
 			this.butOk.Size = new System.Drawing.Size(75, 24);
 			this.butOk.TabIndex = 5;
@@ -65,7 +66,7 @@
 			// butDelete
 			// 
 			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butDelete.Location = new System.Drawing.Point(12, 393);
+			this.butDelete.Location = new System.Drawing.Point(12, 478);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(75, 24);
 			this.butDelete.TabIndex = 7;
@@ -179,16 +180,31 @@
 			this.gridAbnormalFlags.Location = new System.Drawing.Point(189, 272);
 			this.gridAbnormalFlags.Name = "gridAbnormalFlags";
 			this.gridAbnormalFlags.ScrollValue = 0;
-			this.gridAbnormalFlags.Size = new System.Drawing.Size(281, 103);
+			this.gridAbnormalFlags.Size = new System.Drawing.Size(281, 87);
 			this.gridAbnormalFlags.TabIndex = 231;
 			this.gridAbnormalFlags.Title = "Abnormal Flags";
 			this.gridAbnormalFlags.TranslationName = null;
+			// 
+			// gridNotes
+			// 
+			this.gridNotes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridNotes.HScrollVisible = false;
+			this.gridNotes.Location = new System.Drawing.Point(12, 365);
+			this.gridNotes.Name = "gridNotes";
+			this.gridNotes.ScrollValue = 0;
+			this.gridNotes.Size = new System.Drawing.Size(458, 107);
+			this.gridNotes.TabIndex = 232;
+			this.gridNotes.Title = "Notes";
+			this.gridNotes.TranslationName = null;
 			// 
 			// FormEhrLabResultEdit2014
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(497, 428);
+			this.ClientSize = new System.Drawing.Size(497, 513);
+			this.Controls.Add(this.gridNotes);
 			this.Controls.Add(this.gridAbnormalFlags);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.textInstruction);
@@ -232,5 +248,6 @@
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.TextBox textInstruction;
 		private UI.ODGrid gridAbnormalFlags;
+		private UI.ODGrid gridNotes;
 	}
 }

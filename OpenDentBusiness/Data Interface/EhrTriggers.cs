@@ -57,7 +57,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>This is the first step of automation, this checks to see if the new object matches one of the trigger conditions. </summary>
-		/// <param name="triggerObject">Can be DiseaseDef, ICD9, Icd10, Snomed, Medication, RxNorm, Cvx, AllerfyDef, Patient, or VitalSign.  Later: will accept Lab values.</param>
+		/// <param name="triggerObject">Can be DiseaseDef, ICD9, Icd10, Snomed, Medication, RxNorm, Cvx, AllerfyDef, EHRLabResult, Patient, or VitalSign.</param>
 		/// <param name="PatCur">Triggers and intervention are currently always dependant on current patient. </param>
 		/// <returns>Returns a dictionary keyed on triggers and a list of all the objects that the trigger matched on. Should be used to generate CDS intervention message and later be passed to FormInfobutton for knowledge request.</returns>
 		public static List<CDSIntervention> TriggerMatch(object triggerObject,Patient PatCur) {
@@ -75,6 +75,7 @@ namespace OpenDentBusiness{
 			RxNorm rxNorm;
 			Cvx cvx;
 			AllergyDef allergyDef;
+			EhrLabResult ehrLabResult;
 			Patient pat;
 			Vitalsign vitalsign;
 			string triggerObjectMessage="";
@@ -142,6 +143,13 @@ namespace OpenDentBusiness{
 					command="SELECT * FROM ehrtrigger"
 					+" WHERE AllergyDefNumList LIKE '% "+POut.String(allergyDef.AllergyDefNum.ToString())+" %'";// '% <code> %' so that we can get exact matches.
 					break;
+				case "EHRLabResult"://match loinc only, no longer 
+					ehrLabResult=(EhrLabResult)triggerObject;
+					//TODO: TriggerObjectMessage
+					command="SELECT * FROM ehrtrigger WHERE "
+						+"(LabLoincList LIKE '% "+ehrLabResult.ObservationIdentifierID+" '" //LOINC may be in one of two fields
+						+"OR LabLoincList LIKE '% "+ehrLabResult.ObservationIdentifierIDAlt+" ')"; //LOINC may be in one of two fields
+					break;
 				case "Patient":
 					pat=(Patient)triggerObject;
 					//TODO: TriggerObjectMessage
@@ -191,7 +199,8 @@ namespace OpenDentBusiness{
 			List<Allergy> ListAllergy=Allergies.GetAll(PatCur.PatNum,false);
 			List<Disease> ListDisease=Diseases.Refresh(PatCur.PatNum,true);
 			List<DiseaseDef> ListDiseaseDef=new List<DiseaseDef>();
-			List<LabPanel> ListLabPanel=LabPanels.Refresh(PatCur.PatNum);
+			List<EhrLab> ListEhrLab=EhrLabs.GetAllForPat(PatCur.PatNum);
+			//List<EhrLabResult> ListEhrLabResults=null;//Lab results are stored in a list in the EhrLab object.
 			List<MedicationPat> ListMedicationPat=MedicationPats.Refresh(PatCur.PatNum,false);
 			List<AllergyDef> ListAllergyDef=new List<AllergyDef>();
 			for(int i=0;i<ListAllergy.Count;i++){
@@ -207,7 +216,6 @@ namespace OpenDentBusiness{
 				string triggerMessage=listEhrTriggers[i].Description+":\r\n";
 				triggerMessage+=triggerObjectMessage;
 				List<object> ListObjectMatches=new List<object>();//Allergy, Disease, LabPanels, MedicationPat, Patient, VaccinePat
-				List<string> MatchedCodes=new List<string>();
 				ListObjectMatches.Add(triggerObject);
 				//Allergy-----------------------------------------------------------------------------------------------------------------------
 				//allergy.snomedreaction
@@ -305,7 +313,40 @@ namespace OpenDentBusiness{
 						//Gender
 						//TODO
 						//Lab Result
-						//TODO
+						for(int l=0;l<ListEhrLab.Count;l++) {
+							for(int r=0;r<ListEhrLab[l].ListEhrLabResults.Count;r++) {
+								if(listEhrTriggers[i].LabLoincList.Contains(" "+ListEhrLab[l].ListEhrLabResults[r].ObservationIdentifierID+" ")
+									|| listEhrTriggers[i].LabLoincList.Contains(" "+ListEhrLab[l].ListEhrLabResults[r].ObservationIdentifierIDAlt+" ")) 
+								{
+									ListObjectMatches.Add(ListEhrLab[l].ListEhrLabResults[r]);
+									if (ListEhrLab[l].ListEhrLabResults[r].ObservationIdentifierID!=""){//should almost always be the case.
+										triggerMessage+="  -(LOINC) "+Loincs.GetByCode(ListEhrLab[l].ListEhrLabResults[r].ObservationIdentifierID).NameShort+"\r\n";
+									}
+									else if (ListEhrLab[l].ListEhrLabResults[r].ObservationIdentifierID!="") {
+										triggerMessage+="  -(LOINC) "+Loincs.GetByCode(ListEhrLab[l].ListEhrLabResults[r].ObservationIdentifierIDAlt).NameShort+"\r\n";
+									}
+									else if(ListEhrLab[l].ListEhrLabResults[r].ObservationIdentifierText!="") {
+										triggerMessage+="  -(LOINC) "+ListEhrLab[l].ListEhrLabResults[r].ObservationIdentifierText+"\r\n";
+									}
+									else if(ListEhrLab[l].ListEhrLabResults[r].ObservationIdentifierTextAlt!="") {
+										triggerMessage+="  -(LOINC) "+ListEhrLab[l].ListEhrLabResults[r].ObservationIdentifierTextAlt+"\r\n";
+									}
+									else if(ListEhrLab[l].ListEhrLabResults[r].ObservationIdentifierID!="") {
+										triggerMessage+="  -(LOINC) "+ListEhrLab[l].ListEhrLabResults[r].ObservationIdentifierID+"\r\n";
+									}
+									else if(ListEhrLab[l].ListEhrLabResults[r].ObservationIdentifierIDAlt!="") {
+										triggerMessage+="  -(LOINC) "+ListEhrLab[l].ListEhrLabResults[r].ObservationIdentifierIDAlt+"\r\n";
+									}
+									else if(ListEhrLab[l].ListEhrLabResults[r].ObservationIdentifierTextOriginal!="") {
+										triggerMessage+="  -(LOINC) "+ListEhrLab[l].ListEhrLabResults[r].ObservationIdentifierTextOriginal+"\r\n";
+									}
+									else {
+										triggerMessage+="  -(LOINC) Unknown code.\r\n";//should never happen.
+									}
+									continue;
+								}
+							}
+						}
 						ListObjectMatches=RemoveDuplicateObjectsHelper(ListObjectMatches);
 						if(listEhrTriggers[i].Cardinality==MatchCardinality.TwoOrMore && ListObjectMatches.Count<2) {
 							continue;//next trigger, do not add to retVal
@@ -315,9 +356,10 @@ namespace OpenDentBusiness{
 						}
 						break;
 					case MatchCardinality.All:
+						bool allConditionsMet=true;
+						List<string> MatchedCodes=getCodesFromListHelper(ListObjectMatches);//new List<string>();
 						//Match all Icd9Codes-------------------------------------------------------------------------------------------------------------------------------------------------
 						string[] arrayIcd9Codes=listEhrTriggers[i].ProblemIcd9List.Split(new string[] {" "},StringSplitOptions.RemoveEmptyEntries);
-						bool allConditionsMet=true;
 						for(int c=0;c<arrayIcd9Codes.Length;c++) {
 							if(MatchedCodes.Contains(arrayIcd9Codes[i])){
 								continue;//found required code
@@ -330,9 +372,9 @@ namespace OpenDentBusiness{
 							continue;//next trigger
 						}
 						//Match all Icd10Codes------------------------------------------------------------------------------------------------------------------------------------------------
-						string[] arrayIcd10Codes=listEhrTriggers[i].ProblemIcd10List.Split(new string[] { " " },StringSplitOptions.RemoveEmptyEntries);
+						string[] arrayIcd10Codes=listEhrTriggers[i].ProblemIcd10List.Split(new string[] {" "},StringSplitOptions.RemoveEmptyEntries);
 						for(int c=0;c<arrayIcd10Codes.Length;c++) {
-							if(MatchedCodes.Contains(arrayIcd10Codes[i])) {
+							if(MatchedCodes.Contains(arrayIcd10Codes[i])){
 								continue;//found required code
 							}
 							//required code not found, set allConditionsMet to false and continue to next trigger
@@ -369,6 +411,18 @@ namespace OpenDentBusiness{
 							continue;//next trigger, do not add to retval
 						}
 						//Match all LoincCodes------------------------------------------------------------------------------------------------------------------------------------------------
+						string[] arrayLoincCodes=listEhrTriggers[i].LabLoincList.Split(new string[] { " " },StringSplitOptions.RemoveEmptyEntries);
+						for(int c=0;c<arrayLoincCodes.Length;c++) {
+							if(MatchedCodes.Contains(arrayLoincCodes[i])) {
+								continue;//found required code
+							}
+							//required code not found, set allConditionsMet to false and continue to next trigger
+							allConditionsMet=false;
+							break;
+						}
+						if(!allConditionsMet) {
+							continue;//next trigger, do not add to retval
+						}
 						//TODO:with values
 						//Match all Vitals----------------------------------------------------------------------------------------------------------------------------------------------------
 						//TODO:with values
@@ -398,6 +452,59 @@ namespace OpenDentBusiness{
 				cdsi.TriggerObjects=ListObjectMatches;
 				retVal.Add(cdsi);
 			}//end triggers
+			return retVal;
+		}
+
+		private static List<string> getCodesFromListHelper(List<object> ListObjectMatches) {
+			List<string> retVal=new List<string>();
+			for(int i=0;i<ListObjectMatches.Count;i++) {
+				switch(ListObjectMatches[i].GetType().Name) {
+					case "DiseaseDef":
+						retVal.Add(((DiseaseDef)ListObjectMatches[i]).DiseaseDefNum.ToString());
+						retVal.Add(((DiseaseDef)ListObjectMatches[i]).ICD9Code);
+						retVal.Add(((DiseaseDef)ListObjectMatches[i]).Icd10Code);
+						retVal.Add(((DiseaseDef)ListObjectMatches[i]).SnomedCode);
+						break;
+					case "ICD9":
+						retVal.Add(((ICD9)ListObjectMatches[i]).ICD9Code);
+						break;
+					case "Icd10":
+						retVal.Add(((Icd10)ListObjectMatches[i]).Icd10Code);
+						break;
+					case "Snomed":
+						retVal.Add(((Snomed)ListObjectMatches[i]).SnomedCode);
+						break;
+					case "Medication":
+						retVal.Add(((Medication)ListObjectMatches[i]).MedicationNum.ToString());
+						retVal.Add(((Medication)ListObjectMatches[i]).RxCui.ToString());
+						break;
+					case "RxNorm":
+						retVal.Add(((RxNorm)ListObjectMatches[i]).RxCui);
+						break;
+					case "Cvx":
+						retVal.Add(((Cvx)ListObjectMatches[i]).CvxCode);
+						break;
+					case "AllergyDef":
+						retVal.Add(((AllergyDef)ListObjectMatches[i]).AllergyDefNum.ToString());
+						break;
+					case "EHRLabResult"://match loinc only 
+						retVal.Add(((EhrLabResult)ListObjectMatches[i]).ObservationIdentifierID);
+						retVal.Add(((EhrLabResult)ListObjectMatches[i]).ObservationIdentifierIDAlt);
+						break;
+					case "Patient":
+						retVal.Add(((Patient)ListObjectMatches[i]).Gender.ToString());
+						//Maybe more here?
+						break;
+					case "VitalSign":
+						//retVal.Add(((Vitalsign)ListObjectMatches[i]).???);
+						break;
+					default:
+						#if DEBUG
+							throw new Exception(ListObjectMatches[i].GetType().ToString()+" object not implemented as intervention trigger yet. Add to the list above to handle.");
+						#endif
+						break;
+				}
+			}
 			return retVal;
 		}
 

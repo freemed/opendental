@@ -15,15 +15,15 @@ namespace OpenDentBusiness {
 		///<summary>Description of ClinicalInfoId.  OBR.13.*.2</summary>
 		public string ClinicalInfoText;
 		///<summary>CodeSystem that ClinicalInfoId came from.  OBR.13.*.3</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
-		public HL70369 ClinicalInfoCodeSystemName;
+		//[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		public string ClinicalInfoCodeSystemName;
 		///<summary>OBR.13.*.4</summary>
 		public string ClinicalInfoIDAlt;
 		///<summary>Description of ClinicalInfoIdAlt.  OBR.13.*.5</summary>
 		public string ClinicalInfoTextAlt;
 		///<summary>CodeSystem that ClinicalInfoId came from.  OBR.13.*.6</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
-		public HL70369 ClinicalInfoCodeSystemNameAlt;
+		//[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		public string ClinicalInfoCodeSystemNameAlt;
 		///<summary>Optional text that describes the original text used to encode the values above.  OBR.13.*.7</summary>
 		public string ClinicalInfoTextOriginal;
 

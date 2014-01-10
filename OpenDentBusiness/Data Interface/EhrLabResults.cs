@@ -6,7 +6,36 @@ using System.Text;
 
 namespace OpenDentBusiness{
 	///<summary></summary>
-	public class EhrLabResults{
+	public class EhrLabResults {
+
+		///<summary></summary>
+		public static long Insert(EhrLabResult ehrLabResult) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				ehrLabResult.EhrLabResultNum=Meth.GetLong(MethodBase.GetCurrentMethod(),ehrLabResult);
+				return ehrLabResult.EhrLabResultNum;
+			}
+			return Crud.EhrLabResultCrud.Insert(ehrLabResult);
+		}
+
+		///<summary>Returns all EhrLabResults for a given EhrLab.</summary>
+		public static List<EhrLabResult> GetForLab(long ehrLabNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<EhrLabResult>>(MethodBase.GetCurrentMethod(),ehrLabNum);
+			}
+			string command="SELECT * FROM ehrlabresult WHERE EhrLabNum = "+POut.Long(ehrLabNum);
+			return Crud.EhrLabResultCrud.SelectMany(command);
+		}
+
+		///<summary>Only deletes the notes for the Lab, there may still be notes attached to LabResults, that are attached to the lab.  Those notes are taken care of by DeleteForLabResults().</summary>
+		public static void DeleteForLab(long ehrLabNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),ehrLabNum);
+				return;
+			}
+			string command="DELETE FROM ehrlabnote WHERE EhrLabNum = "+POut.Long(ehrLabNum);
+			Db.NonQ(command);
+		}
+
 		//If this table type will exist as cached data, uncomment the CachePattern region below and edit.
 		/*
 		#region CachePattern
@@ -65,15 +94,6 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<EhrLabResult>(MethodBase.GetCurrentMethod(),ehrLabResultNum);
 			}
 			return Crud.EhrLabResultCrud.SelectOne(ehrLabResultNum);
-		}
-
-		///<summary></summary>
-		public static long Insert(EhrLabResult ehrLabResult){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				ehrLabResult.EhrLabResultNum=Meth.GetLong(MethodBase.GetCurrentMethod(),ehrLabResult);
-				return ehrLabResult.EhrLabResultNum;
-			}
-			return Crud.EhrLabResultCrud.Insert(ehrLabResult);
 		}
 
 		///<summary></summary>

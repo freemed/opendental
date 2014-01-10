@@ -1120,6 +1120,8 @@ namespace OpenDental {
 				}
 				krn = new KnowledgeRequestNotification.KnowledgeRequestNotification();
 				krn.AddObject(gridMain.Rows[i].Tag);
+				krn.performerIsPatient=radioReqPat.Checked;
+				krn.recipientIsPatient=radioRecPat.Checked;
 				try {
 					System.Diagnostics.Process.Start("http://apps.nlm.nih.gov/medlineplus/services/mpconnect.cfm?"+krn.ToUrl());
 					System.Diagnostics.Process.Start("http://apps2.nlm.nih.gov/medlineplus/services/servicedemo.cfm?"+krn.ToUrl());
@@ -1263,6 +1265,16 @@ namespace KnowledgeRequestNotification {
 		public DateTime effectiveTime;					//0..1 "yyyyMMddhhmmss"
 		///<summary>Patient context information. Cardinality [0..1]</summary>
 		public Subject subject1;								//0..1
+		///<summary>Not fully implemented. Implemented enough to work.</summary>
+		public bool performerIsPatient;
+		///<summary>Not fully implemented. Implemented enough to work.</summary>
+		public bool recipientIsPatient;
+
+		//public Performer performer;
+
+		//public InformationRecipient informationRecipient;
+
+
 		///<summary>Task context information. Cardinality [0..1]</summary>
 		public Subject1 subject2;								//0..1
 		///<summary>Sub-topic information. Cardinality [0..1]</summary>
@@ -1392,9 +1404,9 @@ namespace KnowledgeRequestNotification {
 				//severityObservation
 			}
 			//informationRecipient
+			strB.Append("informationRecipient="+(recipientIsPatient?"PAT&":"PROV&"));
 			//performer
-			//informationRecipient
-			//performer
+			strB.Append("performer="+(performerIsPatient?"PAT&":"PROV&"));
 			//encounter
 			//serviceDeliveryLocation
 			return strB.ToString().Replace(" ","%20");
@@ -1423,6 +1435,16 @@ namespace KnowledgeRequestNotification {
 	public class Subject {
 
 	}
+
+	/////<summary>Patient context information. Cardinality [0..1]</summary>
+	//public class Performer {
+	//	public string typeCode;
+	//}
+
+	/////<summary>Patient context information. Cardinality [0..1]</summary>
+	//public class InformationRecipient {
+
+	//}
 
 	///<summary>Task context information. Cardinality [0..1]</summary>
 	public class Subject1 {

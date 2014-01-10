@@ -194,6 +194,12 @@ Use of SNOMED CT in Open Dental "+programVersion+@" is governed by the condition
 						return false;//next selected index
 					}
 					break;
+				case "LOINC"://Main + third party
+					//TODO
+					break;
+				case "UCUM":
+					//TODO
+					break;
 			}
 			return true;
 		}

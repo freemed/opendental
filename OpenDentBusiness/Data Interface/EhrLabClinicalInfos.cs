@@ -6,7 +6,36 @@ using System.Text;
 
 namespace OpenDentBusiness{
 	///<summary></summary>
-	public class EhrLabClinicalInfos{
+	public class EhrLabClinicalInfos {
+
+		///<summary></summary>
+		public static List<EhrLabClinicalInfo> GetForLab(long ehrLabNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<EhrLabClinicalInfo>>(MethodBase.GetCurrentMethod(),ehrLabNum);
+			}
+			string command="SELECT * FROM ehrlabclinicalinfo WHERE EhrLabNum = "+POut.Long(ehrLabNum);
+			return Crud.EhrLabClinicalInfoCrud.SelectMany(command);
+		}
+
+		///<summary>Deletes notes for lab results too.</summary>
+		public static void DeleteForLab(long ehrLabNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),ehrLabNum);
+				return;
+			}
+			string command="DELETE FROM ehrlabclinicalinfo WHERE EhrLabNum = "+POut.Long(ehrLabNum);
+			Db.NonQ(command);
+		}
+
+		///<summary></summary>
+		public static long Insert(EhrLabClinicalInfo ehrLabClinicalInfo) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				ehrLabClinicalInfo.EhrLabClinicalInfoNum=Meth.GetLong(MethodBase.GetCurrentMethod(),ehrLabClinicalInfo);
+				return ehrLabClinicalInfo.EhrLabClinicalInfoNum;
+			}
+			return Crud.EhrLabClinicalInfoCrud.Insert(ehrLabClinicalInfo);
+		}
+
 		//If this table type will exist as cached data, uncomment the CachePattern region below and edit.
 		/*
 		#region CachePattern
@@ -65,15 +94,6 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<EhrLabClinicalInfo>(MethodBase.GetCurrentMethod(),ehrLabClinicalInfoNum);
 			}
 			return Crud.EhrLabClinicalInfoCrud.SelectOne(ehrLabClinicalInfoNum);
-		}
-
-		///<summary></summary>
-		public static long Insert(EhrLabClinicalInfo ehrLabClinicalInfo){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				ehrLabClinicalInfo.EhrLabClinicalInfoNum=Meth.GetLong(MethodBase.GetCurrentMethod(),ehrLabClinicalInfo);
-				return ehrLabClinicalInfo.EhrLabClinicalInfoNum;
-			}
-			return Crud.EhrLabClinicalInfoCrud.Insert(ehrLabClinicalInfo);
 		}
 
 		///<summary></summary>

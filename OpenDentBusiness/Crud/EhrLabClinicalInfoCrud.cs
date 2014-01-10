@@ -51,28 +51,10 @@ namespace OpenDentBusiness.Crud{
 				ehrLabClinicalInfo.EhrLabNum                    = PIn.Long  (table.Rows[i]["EhrLabNum"].ToString());
 				ehrLabClinicalInfo.ClinicalInfoID               = PIn.String(table.Rows[i]["ClinicalInfoID"].ToString());
 				ehrLabClinicalInfo.ClinicalInfoText             = PIn.String(table.Rows[i]["ClinicalInfoText"].ToString());
-				string clinicalInfoCodeSystemName=table.Rows[i]["ClinicalInfoCodeSystemName"].ToString();
-				if(clinicalInfoCodeSystemName==""){
-					ehrLabClinicalInfo.ClinicalInfoCodeSystemName =(HL70369)0;
-				}
-				else try{
-					ehrLabClinicalInfo.ClinicalInfoCodeSystemName =(HL70369)Enum.Parse(typeof(HL70369),clinicalInfoCodeSystemName);
-				}
-				catch{
-					ehrLabClinicalInfo.ClinicalInfoCodeSystemName =(HL70369)0;
-				}
+				ehrLabClinicalInfo.ClinicalInfoCodeSystemName   = PIn.String(table.Rows[i]["ClinicalInfoCodeSystemName"].ToString());
 				ehrLabClinicalInfo.ClinicalInfoIDAlt            = PIn.String(table.Rows[i]["ClinicalInfoIDAlt"].ToString());
 				ehrLabClinicalInfo.ClinicalInfoTextAlt          = PIn.String(table.Rows[i]["ClinicalInfoTextAlt"].ToString());
-				string clinicalInfoCodeSystemNameAlt=table.Rows[i]["ClinicalInfoCodeSystemNameAlt"].ToString();
-				if(clinicalInfoCodeSystemNameAlt==""){
-					ehrLabClinicalInfo.ClinicalInfoCodeSystemNameAlt=(HL70369)0;
-				}
-				else try{
-					ehrLabClinicalInfo.ClinicalInfoCodeSystemNameAlt=(HL70369)Enum.Parse(typeof(HL70369),clinicalInfoCodeSystemNameAlt);
-				}
-				catch{
-					ehrLabClinicalInfo.ClinicalInfoCodeSystemNameAlt=(HL70369)0;
-				}
+				ehrLabClinicalInfo.ClinicalInfoCodeSystemNameAlt= PIn.String(table.Rows[i]["ClinicalInfoCodeSystemNameAlt"].ToString());
 				ehrLabClinicalInfo.ClinicalInfoTextOriginal     = PIn.String(table.Rows[i]["ClinicalInfoTextOriginal"].ToString());
 				retVal.Add(ehrLabClinicalInfo);
 			}
@@ -122,10 +104,10 @@ namespace OpenDentBusiness.Crud{
 				     POut.Long  (ehrLabClinicalInfo.EhrLabNum)+","
 				+"'"+POut.String(ehrLabClinicalInfo.ClinicalInfoID)+"',"
 				+"'"+POut.String(ehrLabClinicalInfo.ClinicalInfoText)+"',"
-				+"'"+POut.String(ehrLabClinicalInfo.ClinicalInfoCodeSystemName.ToString())+"',"
+				+"'"+POut.String(ehrLabClinicalInfo.ClinicalInfoCodeSystemName)+"',"
 				+"'"+POut.String(ehrLabClinicalInfo.ClinicalInfoIDAlt)+"',"
 				+"'"+POut.String(ehrLabClinicalInfo.ClinicalInfoTextAlt)+"',"
-				+"'"+POut.String(ehrLabClinicalInfo.ClinicalInfoCodeSystemNameAlt.ToString())+"',"
+				+"'"+POut.String(ehrLabClinicalInfo.ClinicalInfoCodeSystemNameAlt)+"',"
 				+"'"+POut.String(ehrLabClinicalInfo.ClinicalInfoTextOriginal)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -142,10 +124,10 @@ namespace OpenDentBusiness.Crud{
 				+"EhrLabNum                    =  "+POut.Long  (ehrLabClinicalInfo.EhrLabNum)+", "
 				+"ClinicalInfoID               = '"+POut.String(ehrLabClinicalInfo.ClinicalInfoID)+"', "
 				+"ClinicalInfoText             = '"+POut.String(ehrLabClinicalInfo.ClinicalInfoText)+"', "
-				+"ClinicalInfoCodeSystemName   = '"+POut.String(ehrLabClinicalInfo.ClinicalInfoCodeSystemName.ToString())+"', "
+				+"ClinicalInfoCodeSystemName   = '"+POut.String(ehrLabClinicalInfo.ClinicalInfoCodeSystemName)+"', "
 				+"ClinicalInfoIDAlt            = '"+POut.String(ehrLabClinicalInfo.ClinicalInfoIDAlt)+"', "
 				+"ClinicalInfoTextAlt          = '"+POut.String(ehrLabClinicalInfo.ClinicalInfoTextAlt)+"', "
-				+"ClinicalInfoCodeSystemNameAlt= '"+POut.String(ehrLabClinicalInfo.ClinicalInfoCodeSystemNameAlt.ToString())+"', "
+				+"ClinicalInfoCodeSystemNameAlt= '"+POut.String(ehrLabClinicalInfo.ClinicalInfoCodeSystemNameAlt)+"', "
 				+"ClinicalInfoTextOriginal     = '"+POut.String(ehrLabClinicalInfo.ClinicalInfoTextOriginal)+"' "
 				+"WHERE EhrLabClinicalInfoNum = "+POut.Long(ehrLabClinicalInfo.EhrLabClinicalInfoNum);
 			Db.NonQ(command);
@@ -168,7 +150,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(ehrLabClinicalInfo.ClinicalInfoCodeSystemName != oldEhrLabClinicalInfo.ClinicalInfoCodeSystemName) {
 				if(command!=""){ command+=",";}
-				command+="ClinicalInfoCodeSystemName = '"+POut.String(ehrLabClinicalInfo.ClinicalInfoCodeSystemName.ToString())+"'";
+				command+="ClinicalInfoCodeSystemName = '"+POut.String(ehrLabClinicalInfo.ClinicalInfoCodeSystemName)+"'";
 			}
 			if(ehrLabClinicalInfo.ClinicalInfoIDAlt != oldEhrLabClinicalInfo.ClinicalInfoIDAlt) {
 				if(command!=""){ command+=",";}
@@ -180,7 +162,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(ehrLabClinicalInfo.ClinicalInfoCodeSystemNameAlt != oldEhrLabClinicalInfo.ClinicalInfoCodeSystemNameAlt) {
 				if(command!=""){ command+=",";}
-				command+="ClinicalInfoCodeSystemNameAlt = '"+POut.String(ehrLabClinicalInfo.ClinicalInfoCodeSystemNameAlt.ToString())+"'";
+				command+="ClinicalInfoCodeSystemNameAlt = '"+POut.String(ehrLabClinicalInfo.ClinicalInfoCodeSystemNameAlt)+"'";
 			}
 			if(ehrLabClinicalInfo.ClinicalInfoTextOriginal != oldEhrLabClinicalInfo.ClinicalInfoTextOriginal) {
 				if(command!=""){ command+=",";}

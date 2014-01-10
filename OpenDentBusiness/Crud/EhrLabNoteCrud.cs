@@ -50,7 +50,7 @@ namespace OpenDentBusiness.Crud{
 				ehrLabNote.EhrLabNoteNum  = PIn.Long  (table.Rows[i]["EhrLabNoteNum"].ToString());
 				ehrLabNote.EhrLabNum      = PIn.Long  (table.Rows[i]["EhrLabNum"].ToString());
 				ehrLabNote.EhrLabResultNum= PIn.Long  (table.Rows[i]["EhrLabResultNum"].ToString());
-				ehrLabNote.comments       = PIn.String(table.Rows[i]["comments"].ToString());
+				ehrLabNote.Comments       = PIn.String(table.Rows[i]["Comments"].ToString());
 				retVal.Add(ehrLabNote);
 			}
 			return retVal;
@@ -91,23 +91,23 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="EhrLabNoteNum,";
 			}
-			command+="EhrLabNum,EhrLabResultNum,comments) VALUES(";
+			command+="EhrLabNum,EhrLabResultNum,Comments) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(ehrLabNote.EhrLabNoteNum)+",";
 			}
 			command+=
 				     POut.Long  (ehrLabNote.EhrLabNum)+","
 				+    POut.Long  (ehrLabNote.EhrLabResultNum)+","
-				+DbHelper.ParamChar+"paramcomments)";
-			if(ehrLabNote.comments==null) {
-				ehrLabNote.comments="";
+				+DbHelper.ParamChar+"paramComments)";
+			if(ehrLabNote.Comments==null) {
+				ehrLabNote.Comments="";
 			}
-			OdSqlParameter paramcomments=new OdSqlParameter("paramcomments",OdDbType.Text,ehrLabNote.comments);
+			OdSqlParameter paramComments=new OdSqlParameter("paramComments",OdDbType.Text,ehrLabNote.Comments);
 			if(useExistingPK || PrefC.RandomKeys) {
-				Db.NonQ(command,paramcomments);
+				Db.NonQ(command,paramComments);
 			}
 			else {
-				ehrLabNote.EhrLabNoteNum=Db.NonQ(command,true,paramcomments);
+				ehrLabNote.EhrLabNoteNum=Db.NonQ(command,true,paramComments);
 			}
 			return ehrLabNote.EhrLabNoteNum;
 		}
@@ -117,13 +117,13 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE ehrlabnote SET "
 				+"EhrLabNum      =  "+POut.Long  (ehrLabNote.EhrLabNum)+", "
 				+"EhrLabResultNum=  "+POut.Long  (ehrLabNote.EhrLabResultNum)+", "
-				+"comments       =  "+DbHelper.ParamChar+"paramcomments "
+				+"Comments       =  "+DbHelper.ParamChar+"paramComments "
 				+"WHERE EhrLabNoteNum = "+POut.Long(ehrLabNote.EhrLabNoteNum);
-			if(ehrLabNote.comments==null) {
-				ehrLabNote.comments="";
+			if(ehrLabNote.Comments==null) {
+				ehrLabNote.Comments="";
 			}
-			OdSqlParameter paramcomments=new OdSqlParameter("paramcomments",OdDbType.Text,ehrLabNote.comments);
-			Db.NonQ(command,paramcomments);
+			OdSqlParameter paramComments=new OdSqlParameter("paramComments",OdDbType.Text,ehrLabNote.Comments);
+			Db.NonQ(command,paramComments);
 		}
 
 		///<summary>Updates one EhrLabNote in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
@@ -137,20 +137,20 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="EhrLabResultNum = "+POut.Long(ehrLabNote.EhrLabResultNum)+"";
 			}
-			if(ehrLabNote.comments != oldEhrLabNote.comments) {
+			if(ehrLabNote.Comments != oldEhrLabNote.Comments) {
 				if(command!=""){ command+=",";}
-				command+="comments = "+DbHelper.ParamChar+"paramcomments";
+				command+="Comments = "+DbHelper.ParamChar+"paramComments";
 			}
 			if(command==""){
 				return;
 			}
-			if(ehrLabNote.comments==null) {
-				ehrLabNote.comments="";
+			if(ehrLabNote.Comments==null) {
+				ehrLabNote.Comments="";
 			}
-			OdSqlParameter paramcomments=new OdSqlParameter("paramcomments",OdDbType.Text,ehrLabNote.comments);
+			OdSqlParameter paramComments=new OdSqlParameter("paramComments",OdDbType.Text,ehrLabNote.Comments);
 			command="UPDATE ehrlabnote SET "+command
 				+" WHERE EhrLabNoteNum = "+POut.Long(ehrLabNote.EhrLabNoteNum);
-			Db.NonQ(command,paramcomments);
+			Db.NonQ(command,paramComments);
 		}
 
 		///<summary>Deletes one EhrLabNote from the database.</summary>

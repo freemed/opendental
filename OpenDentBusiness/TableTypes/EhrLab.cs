@@ -87,15 +87,15 @@ namespace OpenDentBusiness {
 		///<summary>Description of UsiId.  OBR.4.2</summary>
 		public string UsiText;
 		///<summary>CodeSystem that UsiId came from.  OBR.4.3</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
-		public HL70369 UsiCodeSystemName;
+		//[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		public string UsiCodeSystemName;
 		///<summary>OBR.4.4</summary>
 		public string UsiIDAlt;
 		///<summary>Description of UsiIdAlt.  OBR.4.5</summary>
 		public string UsiTextAlt;
 		///<summary>CodeSystem that UsiId came from.  OBR.4.6</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
-		public HL70369 UsiCodeSystemNameAlt;
+		//[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		public string UsiCodeSystemNameAlt;
 		///<summary>Optional text that describes the original text used to encode the values above.  OBR.4.9</summary>
 		public string UsiTextOriginal;
 		#endregion
@@ -108,7 +108,7 @@ namespace OpenDentBusiness {
 		public HL70065 SpecimenActionCode;
 		///<summary>[0..*]This is not a data column but is stored in a seperate table named EhrLabClinicalInfo.  OBR.13.*</summary>
 		[CrudColumn(IsNotDbColumn=true)]
-		public List<EhrLabClinicalInfo> ListRelevantClinicalInformation;
+		private List<EhrLabClinicalInfo> _listRelevantClinicalInformation;
 		//OBR.OrderingProvider same as above.
 		///<summary>Date Time that the result was stored or last updated.  Stored in the format YYYYMMDDHHmmss.  Required to be accurate to the second.  OBR.22.1</summary>
 		public string ResultDateTime;
@@ -121,14 +121,14 @@ namespace OpenDentBusiness {
 		///<summary>Description of ParentObservationId.  OBR.26.1.2</summary>
 		public string ParentObservationText;
 		///<summary>CodeSystem that ParentObservationId came from.  OBR.26.1.3</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
-		public HL70369 ParentObservationCodeSystemName;
+		//[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		public string ParentObservationCodeSystemName;
 		///<summary>OBR.26.1.4</summary>
 		public string ParentObservationIDAlt;
 		///<summary>Description of ParentObservationIdAlt.  OBR.26.1.5</summary>
 		public string ParentObservationTextAlt;
 		///<summary>CodeSystem that ParentObservationIdAlt came from.  OBR.26.1.6</summary>
-		public HL70369 ParentObservationCodeSystemNameAlt;
+		public string ParentObservationCodeSystemNameAlt;
 		///<summary>Optional text that describes the original text used to encode the values above.  OBR.26.1.9</summary>
 		public string ParentObservationTextOriginal;
 		///<summary>OBR.26.2</summary>
@@ -136,7 +136,7 @@ namespace OpenDentBusiness {
 		#endregion
 		///<summary>[0..*]This is not a data column but is stored in a seperate table named EhrLabResultsCopyTo. OBR.28.*</summary>
 		[CrudColumn(IsNotDbColumn=true)]
-		public List<EhrLabResultsCopyTo> ListEhrLabResultsCopyTo;
+		private List<EhrLabResultsCopyTo> _listEhrLabResultsCopyTo;
 		#region Parent Document/Order OBR.29
 		#region Parent Placer Order Num OBR.29.1
 		///<summary>Placer order number assigned to this lab order, usually assigned by the dental office.  Not the same as EhrLabNum, but similar.  OBR.29.1.1.</summary>
@@ -167,7 +167,7 @@ namespace OpenDentBusiness {
 		#region NTE segments pertaining to OBR;  NTE.*
 		///<summary>[0..*]This is not a data column but is stored in a seperate table named EhrLabNote. NTE.*</summary>
 		[CrudColumn(IsNotDbColumn=true)]
-		public List<EhrLabNote> ListEhrLabNotes;
+		private List<EhrLabNote> _listEhrLabNotes;
 		#endregion
 		#region TQ1 fields.
 		///<summary>Enumerates the TQ1 segments within a single message starting with 1.  TQ1.1</summary>
@@ -179,14 +179,102 @@ namespace OpenDentBusiness {
 		#endregion
 		///<summary>[0..*] This is not a data column but is stored in a seperate table named EhrLabResult. OBX.*</summary>
 		[CrudColumn(IsNotDbColumn=true)]
-		public List<EhrLabResult> ListEhrLabResults;
+		private List<EhrLabResult> _listEhrLabResults;
 		///<summary>[0..*] This is not a data column but is stored in a seperate table named EhrLabSpecimen. SPM.*</summary>
 		[CrudColumn(IsNotDbColumn=true)]
-		public List<EhrLabSpecimen> ListEhrLabSpecimin;
+		private List<EhrLabSpecimen> _listEhrLabSpecimen;
 
 		///<summary></summary>
 		public EhrLab Copy() {
 			return (EhrLab)MemberwiseClone();
+		}
+
+		///<summary>Only filled with EhrLabNotes when value is used.  To refresh ListEhrLabResults, set it equal to null or explicitly reassign it using EhrLabResults.GetForLab(EhrLabNum).</summary>
+		public List<EhrLabNote> ListEhrLabNotes {
+			get {
+				if(_listEhrLabNotes==null) {
+					if(EhrLabNum==0) {
+						_listEhrLabNotes=new List<EhrLabNote>();
+					}
+					else {
+						_listEhrLabNotes=EhrLabNotes.GetForLab(EhrLabNum);
+					}
+				}
+				return _listEhrLabNotes;
+			}
+			set {
+				_listEhrLabNotes=value;
+			}
+		}
+
+		///<summary>Only filled with EhrLabResults when value is used.  To refresh ListEhrLabResults, set it equal to null or explicitly reassign it using EhrLabResults.GetForLab(EhrLabNum).</summary>
+		public List<EhrLabResult> ListEhrLabResults {
+			get {
+				if(_listEhrLabResults==null) {
+					if(EhrLabNum==0) {
+						_listEhrLabResults=new List<EhrLabResult>();
+					}
+					else {
+						_listEhrLabResults=EhrLabResults.GetForLab(EhrLabNum);
+					}
+				}
+				return _listEhrLabResults;
+			}
+			set {
+				_listEhrLabResults=value;
+			}
+		}
+
+		///<summary>Only filled with EhrLabSpecimens when value is used.  To refresh ListEhrLabSpecimens, set it equal to null or explicitly reassign it using EhrLabSpecimens.GetForLab(EhrLabNum).</summary>
+		public List<EhrLabSpecimen> ListEhrLabSpecimens {
+			get {
+				if(_listEhrLabSpecimen==null) {
+					if(EhrLabNum==0) {
+						_listEhrLabSpecimen=new List<EhrLabSpecimen>();
+					}
+					else {
+						_listEhrLabSpecimen=EhrLabSpecimens.GetForLab(EhrLabNum);
+					}
+				}
+				return _listEhrLabSpecimen;
+			}
+			set {
+				_listEhrLabSpecimen=value;
+			}
+		}
+
+		public List<EhrLabResultsCopyTo> ListEhrLabResultsCopyTo {
+			get {
+				if(_listEhrLabResultsCopyTo==null) {
+					if(EhrLabNum==0) {
+						_listEhrLabResultsCopyTo=new List<EhrLabResultsCopyTo>();
+					}
+					else {
+						_listEhrLabResultsCopyTo=EhrLabResultsCopyTos.GetForLab(EhrLabNum);
+					}
+				}
+				return _listEhrLabResultsCopyTo;
+			}
+			set {
+				_listEhrLabResultsCopyTo=value;
+			}
+		}
+
+		public List<EhrLabClinicalInfo> ListRelevantClinicalInformations{
+			get {
+				if(_listRelevantClinicalInformation==null) {
+					if(EhrLabNum==0) {
+						_listRelevantClinicalInformation=new List<EhrLabClinicalInfo>();
+					}
+					else {
+						_listRelevantClinicalInformation=EhrLabClinicalInfos.GetForLab(EhrLabNum);
+					}
+				}
+				return _listRelevantClinicalInformation;
+			}
+			set {
+				_listRelevantClinicalInformation=value;
+			}
 		}
 
 	}
@@ -548,7 +636,8 @@ namespace EhrLaboratories {
 		//Used in ACK messages
 	}
 
-	///<summary>Coding Systems.  OID:2.16.840.1.113883.12.369  Source phinvads.cdc.gov</summary>
+	///<summary>Coding Systems.  OID:2.16.840.1.113883.12.369  Source phinvads.cdc.gov
+	///<para>This enum is not stored directly in the DB because of variable enum values, instead it is used to fill controls to allow users to pick from, or type their own.</para></summary>
 	public enum HL70369 {
 		///<summary>0 - Local general code (where z is an alphanumeric character). Actual value does not contain an underscore, but enumerations cannot start with a number.
 		///<para>Source:Locally defined codes for purpose of sender or receiver. Local codes can be identified by L (for backward compatibility) or 99zzz (where z is an alphanumeric character).</para>

@@ -6,7 +6,17 @@ using System.Text;
 
 namespace OpenDentBusiness{
 	///<summary></summary>
-	public class EhrLabSpecimenRejectReasons{
+	public class EhrLabSpecimenRejectReasons {
+
+		///<summary></summary>
+		public static List<EhrLabSpecimenRejectReason> GetForLab(long ehrLabNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<EhrLabSpecimenRejectReason>>(MethodBase.GetCurrentMethod(),ehrLabNum);
+			}
+			string command="SELECT * FROM ehrlabspecimenrejectreason WHERE EhrLabNum = "+POut.Long(ehrLabNum);
+			return Crud.EhrLabSpecimenRejectReasonCrud.SelectMany(command);
+		}
+
 		//If this table type will exist as cached data, uncomment the CachePattern region below and edit.
 		/*
 		#region CachePattern

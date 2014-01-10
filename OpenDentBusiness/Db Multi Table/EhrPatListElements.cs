@@ -34,10 +34,10 @@ namespace OpenDentBusiness {
 						where+="AND ('"+elementList[i].CompareString+"'=ehrlabresult"+i+".ObservationIdentifierID OR '" 
 							+elementList[i].CompareString+"'=ehrlabresult"+i+".ObservationIdentifierIDAlt) ";//filter, LOINC of lab observation
 						if(elementList[i].StartDate!=null && elementList[i].StartDate.Year>1880) {
-							where+="AND "+DbHelper.DateColumn("ehrlabresult"+i+".ObservationDateTime")+">="+POut.Date(elementList[i].StartDate)+" ";//on or after this date
+							where+="AND ehrlabresult"+i+".ObservationDateTime >="+POut.Date(elementList[i].StartDate)+" ";//on or after this date
 						}
 						if(elementList[i].EndDate!=null && elementList[i].EndDate.Year>1880) {
-							where+="AND "+DbHelper.DateColumn("ehrlabresult"+i+".ObservationDateTime")+"<="+POut.Date(elementList[i].EndDate)+" ";//on or before this date
+							where+="AND ehrlabresult"+i+".ObservationDateTime <="+POut.Date(elementList[i].EndDate)+" ";//on or before this date
 						}
 						switch(elementList[i].LabValueType) {
 							//CE and CWE should be SNOMEDCT codes, string compare elementList[i].LabValue to ehrlabresult.ObservationValueCodedElementID or ObservationValueCodedElementIDAlt

@@ -104,28 +104,10 @@ namespace OpenDentBusiness.Crud{
 				ehrLab.SetIdOBR                                     = PIn.Long  (table.Rows[i]["SetIdOBR"].ToString());
 				ehrLab.UsiID                                        = PIn.String(table.Rows[i]["UsiID"].ToString());
 				ehrLab.UsiText                                      = PIn.String(table.Rows[i]["UsiText"].ToString());
-				string usiCodeSystemName=table.Rows[i]["UsiCodeSystemName"].ToString();
-				if(usiCodeSystemName==""){
-					ehrLab.UsiCodeSystemName                          =(HL70369)0;
-				}
-				else try{
-					ehrLab.UsiCodeSystemName                          =(HL70369)Enum.Parse(typeof(HL70369),usiCodeSystemName);
-				}
-				catch{
-					ehrLab.UsiCodeSystemName                          =(HL70369)0;
-				}
+				ehrLab.UsiCodeSystemName                            = PIn.String(table.Rows[i]["UsiCodeSystemName"].ToString());
 				ehrLab.UsiIDAlt                                     = PIn.String(table.Rows[i]["UsiIDAlt"].ToString());
 				ehrLab.UsiTextAlt                                   = PIn.String(table.Rows[i]["UsiTextAlt"].ToString());
-				string usiCodeSystemNameAlt=table.Rows[i]["UsiCodeSystemNameAlt"].ToString();
-				if(usiCodeSystemNameAlt==""){
-					ehrLab.UsiCodeSystemNameAlt                       =(HL70369)0;
-				}
-				else try{
-					ehrLab.UsiCodeSystemNameAlt                       =(HL70369)Enum.Parse(typeof(HL70369),usiCodeSystemNameAlt);
-				}
-				catch{
-					ehrLab.UsiCodeSystemNameAlt                       =(HL70369)0;
-				}
+				ehrLab.UsiCodeSystemNameAlt                         = PIn.String(table.Rows[i]["UsiCodeSystemNameAlt"].ToString());
 				ehrLab.UsiTextOriginal                              = PIn.String(table.Rows[i]["UsiTextOriginal"].ToString());
 				ehrLab.ObservationDateTimeStart                     = PIn.String(table.Rows[i]["ObservationDateTimeStart"].ToString());
 				ehrLab.ObservationDateTimeEnd                       = PIn.String(table.Rows[i]["ObservationDateTimeEnd"].ToString());
@@ -152,19 +134,10 @@ namespace OpenDentBusiness.Crud{
 				}
 				ehrLab.ParentObservationID                          = PIn.String(table.Rows[i]["ParentObservationID"].ToString());
 				ehrLab.ParentObservationText                        = PIn.String(table.Rows[i]["ParentObservationText"].ToString());
-				string parentObservationCodeSystemName=table.Rows[i]["ParentObservationCodeSystemName"].ToString();
-				if(parentObservationCodeSystemName==""){
-					ehrLab.ParentObservationCodeSystemName            =(HL70369)0;
-				}
-				else try{
-					ehrLab.ParentObservationCodeSystemName            =(HL70369)Enum.Parse(typeof(HL70369),parentObservationCodeSystemName);
-				}
-				catch{
-					ehrLab.ParentObservationCodeSystemName            =(HL70369)0;
-				}
+				ehrLab.ParentObservationCodeSystemName              = PIn.String(table.Rows[i]["ParentObservationCodeSystemName"].ToString());
 				ehrLab.ParentObservationIDAlt                       = PIn.String(table.Rows[i]["ParentObservationIDAlt"].ToString());
 				ehrLab.ParentObservationTextAlt                     = PIn.String(table.Rows[i]["ParentObservationTextAlt"].ToString());
-				ehrLab.ParentObservationCodeSystemNameAlt           = (HL70369)PIn.Int(table.Rows[i]["ParentObservationCodeSystemNameAlt"].ToString());
+				ehrLab.ParentObservationCodeSystemNameAlt           = PIn.String(table.Rows[i]["ParentObservationCodeSystemNameAlt"].ToString());
 				ehrLab.ParentObservationTextOriginal                = PIn.String(table.Rows[i]["ParentObservationTextOriginal"].ToString());
 				ehrLab.ParentObservationSubID                       = PIn.String(table.Rows[i]["ParentObservationSubID"].ToString());
 				ehrLab.ParentPlacerOrderNum                         = PIn.String(table.Rows[i]["ParentPlacerOrderNum"].ToString());
@@ -254,10 +227,10 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (ehrLab.SetIdOBR)+","
 				+"'"+POut.String(ehrLab.UsiID)+"',"
 				+"'"+POut.String(ehrLab.UsiText)+"',"
-				+"'"+POut.String(ehrLab.UsiCodeSystemName.ToString())+"',"
+				+"'"+POut.String(ehrLab.UsiCodeSystemName)+"',"
 				+"'"+POut.String(ehrLab.UsiIDAlt)+"',"
 				+"'"+POut.String(ehrLab.UsiTextAlt)+"',"
-				+"'"+POut.String(ehrLab.UsiCodeSystemNameAlt.ToString())+"',"
+				+"'"+POut.String(ehrLab.UsiCodeSystemNameAlt)+"',"
 				+"'"+POut.String(ehrLab.UsiTextOriginal)+"',"
 				+"'"+POut.String(ehrLab.ObservationDateTimeStart)+"',"
 				+"'"+POut.String(ehrLab.ObservationDateTimeEnd)+"',"
@@ -266,10 +239,10 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(ehrLab.ResultStatus.ToString())+"',"
 				+"'"+POut.String(ehrLab.ParentObservationID)+"',"
 				+"'"+POut.String(ehrLab.ParentObservationText)+"',"
-				+"'"+POut.String(ehrLab.ParentObservationCodeSystemName.ToString())+"',"
+				+"'"+POut.String(ehrLab.ParentObservationCodeSystemName)+"',"
 				+"'"+POut.String(ehrLab.ParentObservationIDAlt)+"',"
 				+"'"+POut.String(ehrLab.ParentObservationTextAlt)+"',"
-				+    POut.Int   ((int)ehrLab.ParentObservationCodeSystemNameAlt)+","
+				+"'"+POut.String(ehrLab.ParentObservationCodeSystemNameAlt)+"',"
 				+"'"+POut.String(ehrLab.ParentObservationTextOriginal)+"',"
 				+"'"+POut.String(ehrLab.ParentObservationSubID)+"',"
 				+"'"+POut.String(ehrLab.ParentPlacerOrderNum)+"',"
@@ -326,10 +299,10 @@ namespace OpenDentBusiness.Crud{
 				+"SetIdOBR                                     =  "+POut.Long  (ehrLab.SetIdOBR)+", "
 				+"UsiID                                        = '"+POut.String(ehrLab.UsiID)+"', "
 				+"UsiText                                      = '"+POut.String(ehrLab.UsiText)+"', "
-				+"UsiCodeSystemName                            = '"+POut.String(ehrLab.UsiCodeSystemName.ToString())+"', "
+				+"UsiCodeSystemName                            = '"+POut.String(ehrLab.UsiCodeSystemName)+"', "
 				+"UsiIDAlt                                     = '"+POut.String(ehrLab.UsiIDAlt)+"', "
 				+"UsiTextAlt                                   = '"+POut.String(ehrLab.UsiTextAlt)+"', "
-				+"UsiCodeSystemNameAlt                         = '"+POut.String(ehrLab.UsiCodeSystemNameAlt.ToString())+"', "
+				+"UsiCodeSystemNameAlt                         = '"+POut.String(ehrLab.UsiCodeSystemNameAlt)+"', "
 				+"UsiTextOriginal                              = '"+POut.String(ehrLab.UsiTextOriginal)+"', "
 				+"ObservationDateTimeStart                     = '"+POut.String(ehrLab.ObservationDateTimeStart)+"', "
 				+"ObservationDateTimeEnd                       = '"+POut.String(ehrLab.ObservationDateTimeEnd)+"', "
@@ -338,10 +311,10 @@ namespace OpenDentBusiness.Crud{
 				+"ResultStatus                                 = '"+POut.String(ehrLab.ResultStatus.ToString())+"', "
 				+"ParentObservationID                          = '"+POut.String(ehrLab.ParentObservationID)+"', "
 				+"ParentObservationText                        = '"+POut.String(ehrLab.ParentObservationText)+"', "
-				+"ParentObservationCodeSystemName              = '"+POut.String(ehrLab.ParentObservationCodeSystemName.ToString())+"', "
+				+"ParentObservationCodeSystemName              = '"+POut.String(ehrLab.ParentObservationCodeSystemName)+"', "
 				+"ParentObservationIDAlt                       = '"+POut.String(ehrLab.ParentObservationIDAlt)+"', "
 				+"ParentObservationTextAlt                     = '"+POut.String(ehrLab.ParentObservationTextAlt)+"', "
-				+"ParentObservationCodeSystemNameAlt           =  "+POut.Int   ((int)ehrLab.ParentObservationCodeSystemNameAlt)+", "
+				+"ParentObservationCodeSystemNameAlt           = '"+POut.String(ehrLab.ParentObservationCodeSystemNameAlt)+"', "
 				+"ParentObservationTextOriginal                = '"+POut.String(ehrLab.ParentObservationTextOriginal)+"', "
 				+"ParentObservationSubID                       = '"+POut.String(ehrLab.ParentObservationSubID)+"', "
 				+"ParentPlacerOrderNum                         = '"+POut.String(ehrLab.ParentPlacerOrderNum)+"', "
@@ -482,7 +455,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(ehrLab.UsiCodeSystemName != oldEhrLab.UsiCodeSystemName) {
 				if(command!=""){ command+=",";}
-				command+="UsiCodeSystemName = '"+POut.String(ehrLab.UsiCodeSystemName.ToString())+"'";
+				command+="UsiCodeSystemName = '"+POut.String(ehrLab.UsiCodeSystemName)+"'";
 			}
 			if(ehrLab.UsiIDAlt != oldEhrLab.UsiIDAlt) {
 				if(command!=""){ command+=",";}
@@ -494,7 +467,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(ehrLab.UsiCodeSystemNameAlt != oldEhrLab.UsiCodeSystemNameAlt) {
 				if(command!=""){ command+=",";}
-				command+="UsiCodeSystemNameAlt = '"+POut.String(ehrLab.UsiCodeSystemNameAlt.ToString())+"'";
+				command+="UsiCodeSystemNameAlt = '"+POut.String(ehrLab.UsiCodeSystemNameAlt)+"'";
 			}
 			if(ehrLab.UsiTextOriginal != oldEhrLab.UsiTextOriginal) {
 				if(command!=""){ command+=",";}
@@ -530,7 +503,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(ehrLab.ParentObservationCodeSystemName != oldEhrLab.ParentObservationCodeSystemName) {
 				if(command!=""){ command+=",";}
-				command+="ParentObservationCodeSystemName = '"+POut.String(ehrLab.ParentObservationCodeSystemName.ToString())+"'";
+				command+="ParentObservationCodeSystemName = '"+POut.String(ehrLab.ParentObservationCodeSystemName)+"'";
 			}
 			if(ehrLab.ParentObservationIDAlt != oldEhrLab.ParentObservationIDAlt) {
 				if(command!=""){ command+=",";}
@@ -542,7 +515,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(ehrLab.ParentObservationCodeSystemNameAlt != oldEhrLab.ParentObservationCodeSystemNameAlt) {
 				if(command!=""){ command+=",";}
-				command+="ParentObservationCodeSystemNameAlt = "+POut.Int   ((int)ehrLab.ParentObservationCodeSystemNameAlt)+"";
+				command+="ParentObservationCodeSystemNameAlt = '"+POut.String(ehrLab.ParentObservationCodeSystemNameAlt)+"'";
 			}
 			if(ehrLab.ParentObservationTextOriginal != oldEhrLab.ParentObservationTextOriginal) {
 				if(command!=""){ command+=",";}

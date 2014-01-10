@@ -11,6 +11,7 @@ using OpenDental.UI;
 
 namespace OpenDental {
 	public partial class FormEhrLabResultEdit2014:Form {
+		public EhrLabResult EhrLabResultCur;
 
 		public FormEhrLabResultEdit2014() {
 			InitializeComponent();

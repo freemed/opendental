@@ -30,7 +30,8 @@ namespace OpenDentBusiness {
 		public string AllergyDefNumList;
 		///<summary>Age, Gender.  Can be multiple age entries but only one gender entry as coma delimited values.  Example: " age,>18  age&lt;=55  gender,male"</summary>
 		public string DemographicsList;
-		///<summary>Tab delimited list, sub-components separated by semicolon. Loinc;Value;Units\t Example: Cholesterol [Mass/volume] in Serum or Plasma>150mg/dL=="2093-3;>150;mg/dL"</summary>
+		/////<summary>Tab delimited list, sub-components separated by semicolon. Loinc;Value;Units\t Example: Cholesterol [Mass/volume] in Serum or Plasma>150mg/dL=="2093-3;>150;mg/dL"</summary>
+		///<summary>List of loinc codes padded with spaces.</summary>
 		public string LabLoincList;
 		///<summary>Height, Weight, Bp s/d, and BMI</summary>
 		public string VitalLoincList;

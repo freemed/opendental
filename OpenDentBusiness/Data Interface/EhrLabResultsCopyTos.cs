@@ -6,7 +6,36 @@ using System.Text;
 
 namespace OpenDentBusiness{
 	///<summary></summary>
-	public class EhrLabResultsCopyTos{
+	public class EhrLabResultsCopyTos {
+
+		///<summary></summary>
+		public static List<EhrLabResultsCopyTo> GetForLab(long ehrLabNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<EhrLabResultsCopyTo>>(MethodBase.GetCurrentMethod(),ehrLabNum);
+			}
+			string command="SELECT * FROM ehrlabresultscopyto WHERE EhrLabNum = "+POut.Long(ehrLabNum);
+			return Crud.EhrLabResultsCopyToCrud.SelectMany(command);
+		}
+
+		///<summary>Deletes notes for lab results too.</summary>
+		public static void DeleteForLab(long ehrLabNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),ehrLabNum);
+				return;
+			}
+			string command="DELETE FROM ehrlabresultscopyto WHERE EhrLabNum = "+POut.Long(ehrLabNum);
+			Db.NonQ(command);
+		}
+
+		///<summary></summary>
+		public static long Insert(EhrLabResultsCopyTo ehrLabResultsCopyTo) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				ehrLabResultsCopyTo.EhrLabResultsCopyToNum=Meth.GetLong(MethodBase.GetCurrentMethod(),ehrLabResultsCopyTo);
+				return ehrLabResultsCopyTo.EhrLabResultsCopyToNum;
+			}
+			return Crud.EhrLabResultsCopyToCrud.Insert(ehrLabResultsCopyTo);
+		}
+
 		//If this table type will exist as cached data, uncomment the CachePattern region below and edit.
 		/*
 		#region CachePattern
@@ -65,15 +94,6 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<EhrLabResultsCopyTo>(MethodBase.GetCurrentMethod(),ehrLabResultsCopyToNum);
 			}
 			return Crud.EhrLabResultsCopyToCrud.SelectOne(ehrLabResultsCopyToNum);
-		}
-
-		///<summary></summary>
-		public static long Insert(EhrLabResultsCopyTo ehrLabResultsCopyTo){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				ehrLabResultsCopyTo.EhrLabResultsCopyToNum=Meth.GetLong(MethodBase.GetCurrentMethod(),ehrLabResultsCopyTo);
-				return ehrLabResultsCopyTo.EhrLabResultsCopyToNum;
-			}
-			return Crud.EhrLabResultsCopyToCrud.Insert(ehrLabResultsCopyTo);
 		}
 
 		///<summary></summary>

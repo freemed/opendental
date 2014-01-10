@@ -24,15 +24,15 @@ namespace OpenDentBusiness {
 		///<summary>Description of ObservationIdentifierId. OBX.3.2</summary>
 		public string ObservationIdentifierText;
 		///<summary>CodeSystem that ObservationIdentifierId came from. Should be "LN".  OBX.3.3</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
-		public HL70369 ObservationIdentifierCodeSystemName;
+		//[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		public string ObservationIdentifierCodeSystemName;
 		///<summary>Probably a LoincCode or empty.  OBX.3.4</summary>
 		public string ObservationIdentifierIDAlt;
 		///<summary>Description of ObservationIdentifierIdAlt.  OBX.3.5</summary>
 		public string ObservationIdentifierTextAlt;
 		///<summary>CodeSystem that ObservationIdentifierId came from. Should be "LN" or empty.  OBX.3.6</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
-		public HL70369 ObservationIdentifierCodeSystemNameAlt;
+		//[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		public string ObservationIdentifierCodeSystemNameAlt;
 		///<summary>Optional text that describes the original text used to encode the values above.  OBX.3.7</summary>
 		public string ObservationIdentifierTextOriginal;
 		///<summary>OBX.4</summary>
@@ -47,15 +47,15 @@ namespace OpenDentBusiness {
 		///<summary>Description of ObservationValueCodedElementId.  OBX.5.2</summary>
 		public string ObservationValueCodedElementText;
 		///<summary>CodeSystem that ObservationValueCodedElementId came from.  OBX.5.3</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
-		public HL70369 ObservationValueCodedElementCodeSystemName;
+		//[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		public string ObservationValueCodedElementCodeSystemName;
 		///<summary>OBX.5.4</summary>
 		public string ObservationValueCodedElementIDAlt;
 		///<summary>Description of ObservationValueCodedElementIdAlt.  OBX.5.5</summary>
 		public string ObservationValueCodedElementTextAlt;
 		///<summary>CodeSystem that ObservationValueCodedElementId came from.  OBX.5.6</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
-		public HL70369 ObservationValueCodedElementCodeSystemNameAlt;
+		//[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		public string ObservationValueCodedElementCodeSystemNameAlt;
 		///<summary>CWE only.  Optional text that describes the original text used to encode the values above.  OBX.5.7</summary>
 		public string ObservationValueCodedElementTextOriginal;
 		#endregion 
@@ -94,15 +94,15 @@ namespace OpenDentBusiness {
 		///<summary>Description of UnitsId.  OBX.6.2</summary>
 		public string UnitsText;
 		///<summary>CodeSystem that UnitsId came from. Should be "UCUM".  OBX.6.3</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
-		public HL70369 UnitsCodeSystemName;
+		//[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		public string UnitsCodeSystemName;
 		///<summary>OBX.6.4</summary>
 		public string UnitsIDAlt;
 		///<summary>Description of UnitsIdAlt.  OBX.6.5</summary>
 		public string UnitsTextAlt;
 		///<summary>CodeSystem that UnitsId came from.  OBX.6.6</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
-		public HL70369 UnitsCodeSystemNameAlt;
+		//[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		public string UnitsCodeSystemNameAlt;
 		///<summary>Optional text that describes the original text used to encode the values above.  OBX.6.7</summary>
 		public string UnitsTextOriginal;
 		#endregion
