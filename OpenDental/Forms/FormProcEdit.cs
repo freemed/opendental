@@ -4967,6 +4967,10 @@ namespace OpenDental{
 			}
 			//Recall synch--------------------------------------------------------------------------------------------------------------------------------------
 			Recalls.Synch(ProcCur.PatNum);
+			//Auto-insert default encounter ---------------------------------------------------------------------------------------------------------------------------
+			if(ProcOld.ProcStatus!=ProcStat.C && ProcCur.ProcStatus==ProcStat.C) {
+				Encounters.InsertDefaultEncounter(ProcCur.PatNum,ProcCur.ProvNum,ProcCur.ProcDate);
+			}
 			//Security logs------------------------------------------------------------------------------------------------------------------------------------
 			if(ProcOld.ProcStatus!=ProcStat.C && ProcCur.ProcStatus==ProcStat.C){
 				//if status was changed to complete

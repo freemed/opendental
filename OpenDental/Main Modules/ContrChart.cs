@@ -6944,7 +6944,12 @@ namespace OpenDental{
 			}
 			else if(newStatus==ProcStat.C 
 				|| newStatus==ProcStat.EC 
-				|| newStatus==ProcStat.EO) {//only run Recalls for completed, existing current, or existing other
+				|| newStatus==ProcStat.EO) 
+			{//only run Recalls for completed, existing current, or existing other
+				//Auto-insert default encounter for provider.
+				if(newStatus==ProcStat.C) {
+					Encounters.InsertDefaultEncounter(ProcCur.PatNum,ProcCur.ProvNum,ProcCur.ProcDate);
+				}
 				Recalls.Synch(PatCur.PatNum);
 			}
 		}
@@ -7076,7 +7081,12 @@ namespace OpenDental{
 			}
 			else if(newStatus==ProcStat.C 
 				|| newStatus==ProcStat.EC 
-				|| newStatus==ProcStat.EO){//only run Recalls for completed, existing current, or existing other
+				|| newStatus==ProcStat.EO)
+			{//only run Recalls for completed, existing current, or existing other
+				//Auto-insert default encounter
+				if(newStatus==ProcStat.C) {
+					Encounters.InsertDefaultEncounter(ProcCur.PatNum,ProcCur.ProvNum,ProcCur.ProcDate);
+				}
 				Recalls.Synch(PatCur.PatNum);
 			}
 			Procedures.ComputeEstimates(ProcCur,PatCur.PatNum,new List<ClaimProc>(),true,PlanList,PatPlanList,BenefitList,PatCur.Age,SubList);
@@ -9215,7 +9225,7 @@ namespace OpenDental{
 				row=(DataRow)gridProg.Rows[gridProg.SelectedIndices[i]].Tag;
 				apt=null;
 				procCur=Procedures.GetOneProc(PIn.Long(row["ProcNum"].ToString()),true);
-				if(procCur.ProcStatus==ProcStat.C){
+				if(procCur.ProcStatus==ProcStat.C) {
 					continue;//don't allow setting a procedure complete again.  Important for security reasons.
 				}
 				procOld=procCur.Copy();
@@ -9238,7 +9248,7 @@ namespace OpenDental{
 				}
 				procCur.SiteNum=PatCur.SiteNum;
 				Procedures.SetDateFirstVisit(procCur.ProcDate,2,PatCur);
-				if(procCode.PaintType==ToothPaintingType.Extraction){//if an extraction, then mark previous procs hidden
+				if(procCode.PaintType==ToothPaintingType.Extraction) {//if an extraction, then mark previous procs hidden
 					//Procedures.SetHideGraphical(procCur);//might not matter anymore
 					ToothInitials.SetValue(PatCur.PatNum,procCur.ToothNum,ToothInitialType.Missing);
 				}
@@ -9255,6 +9265,10 @@ namespace OpenDental{
 				//Procedures.SetComplete(
 				//	((Procedure)gridProg.Rows[gridProg.SelectedIndices[i]].Tag).ProcNum,PIn.PDate(textDate.Text));
 				Procedures.ComputeEstimates(procCur,procCur.PatNum,ClaimProcList,false,PlanList,PatPlanList,BenefitList,PatCur.Age,SubList);
+				//Auto insert encounter. Have to run this every time because entries might not all be on the same date or provider.
+				if(procOld.ProcStatus!=ProcStat.C && procCur.ProcStatus==ProcStat.C) {
+					Encounters.InsertDefaultEncounter(procCur.PatNum,procCur.ProvNum,procCur.ProcDate);
+				}
 			}
 			AutomationL.Trigger(AutomationTrigger.CompleteProcedure,procCodeList,PatCur.PatNum);
 			Recalls.Synch(PatCur.PatNum);

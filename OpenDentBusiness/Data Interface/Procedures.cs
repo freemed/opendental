@@ -1407,6 +1407,7 @@ namespace OpenDentBusiness {
 			//if(!PrefC.GetBool(PrefName.EasyHidePublicHealth")){
 			//	siteNum=Patients.GetPat(apt.PatNum).SiteNum;
 			//}
+			List<long> encounterProvNums = new List<long>();  //for auto-inserting default encounters
 			for(int i=0;i<ProcList.Count;i++) {
 				if(ProcList[i].AptNum!=apt.AptNum) {
 					continue;
@@ -1470,6 +1471,14 @@ namespace OpenDentBusiness {
 				Procedures.Update(ProcList[i],oldProc);
 				Procedures.ComputeEstimates(ProcList[i],apt.PatNum,ClaimProcList,false,PlanList,patPlans,benefitList,patientAge,subList);
 				ClaimProcs.SetProvForProc(ProcList[i],ClaimProcList);
+				//Add provnum to list to create an encounter later. Done to limit calls to DB from Encounters.InsertDefaultEncounter().
+				if(oldProc.ProcStatus!=ProcStat.C && !encounterProvNums.Contains(ProcList[i].ProvNum)) {
+					encounterProvNums.Add(ProcList[i].ProvNum);
+				}
+			}
+			//Auto-insert default encounters for the providers that did work on this appointment
+			for(int j=0;j<encounterProvNums.Count;j++) {
+				Encounters.InsertDefaultEncounter(apt.PatNum,encounterProvNums[j],apt.AptDateTime);
 			}
 			//if(doResetRecallStatus){
 			//	Recalls.Reset(apt.PatNum);//this also synchs recall
