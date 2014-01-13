@@ -647,7 +647,7 @@ namespace OpenDentBusiness{
 		Other,
 		///<summary>9</summary>
 		Aboriginal,
-		///<summary>10 - Required by EHR, even though it's stupid.</summary>
+		///<summary>10 - Required by EHR.</summary>
 		BlackHispanic
 	}
 
