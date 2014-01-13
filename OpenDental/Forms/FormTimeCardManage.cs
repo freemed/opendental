@@ -918,10 +918,22 @@ namespace OpenDental {
 				else {//pad payrollIDs that are too short. No effect if payroll ID is 6 digits long.
 					fileNum=fileNum.PadLeft(6,'0');
 				}
-				string r1hours	=(PIn.TSpan(MainTable.Rows[i]["rate1Hours"  ].ToString())).TotalHours.ToString("F2").Replace("0.00","");//adp allows 2 digit precision
-				string r1OThours=(PIn.TSpan(MainTable.Rows[i]["rate1OTHours"].ToString())).TotalHours.ToString("F2").Replace("0.00","");//adp allows 2 digit precision
-				string r2hours	=(PIn.TSpan(MainTable.Rows[i]["rate2Hours"  ].ToString())).TotalHours.ToString("F2").Replace("0.00","");//adp allows 2 digit precision
-				string r2OThours=(PIn.TSpan(MainTable.Rows[i]["rate2OTHours"].ToString())).TotalHours.ToString("F2").Replace("0.00","");//adp allows 2 digit precision
+				string r1hours	=(PIn.TSpan(MainTable.Rows[i]["rate1Hours"  ].ToString())).TotalHours.ToString("F2");//adp allows 2 digit precision
+				if(r1hours=="0.00"){//Was changing Exactly 80.00 hours with 8 hours.
+					r1hours="";
+				}
+				string r1OThours=(PIn.TSpan(MainTable.Rows[i]["rate1OTHours"].ToString())).TotalHours.ToString("F2");//adp allows 2 digit precision
+				if(r1OThours=="0.00") {
+					r1OThours="";
+				}
+				string r2hours	=(PIn.TSpan(MainTable.Rows[i]["rate2Hours"].ToString())).TotalHours.ToString("F2");//adp allows 2 digit precision
+				if(r2hours=="0.00") {
+					r2hours="";
+				}
+				string r2OThours=(PIn.TSpan(MainTable.Rows[i]["rate2OTHours"].ToString())).TotalHours.ToString("F2");//adp allows 2 digit precision
+				if(r2OThours=="0.00") {
+					r2OThours="";
+				}
 				string textToAdd="";
 				if(r1hours!="" || r1OThours!="") {//no entry should be made unless there are actually hours for this employee.
 					textToAdd+=coCode+","+batchID+","+fileNum+",,"+r1hours+","+r1OThours+"\r\n";
