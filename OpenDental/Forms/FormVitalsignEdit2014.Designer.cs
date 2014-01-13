@@ -43,8 +43,7 @@
 			this.comboWeightExamCode = new System.Windows.Forms.ComboBox();
 			this.labelHeightExamCode = new System.Windows.Forms.Label();
 			this.labelWeightExamCode = new System.Windows.Forms.Label();
-			this.labelBMIPercentCode = new System.Windows.Forms.Label();
-			this.comboBMIPercentileCode = new System.Windows.Forms.ComboBox();
+			this.labelBMIPercentileCode = new System.Windows.Forms.Label();
 			this.labelBMIExamCode = new System.Windows.Forms.Label();
 			this.textBMIExamCode = new System.Windows.Forms.TextBox();
 			this.labelBPd = new System.Windows.Forms.Label();
@@ -57,17 +56,20 @@
 			this.label6 = new System.Windows.Forms.Label();
 			this.groupExclusion = new System.Windows.Forms.GroupBox();
 			this.butChangeDefault = new System.Windows.Forms.Button();
+			this.textReasonDescript = new OpenDental.ODtextBox();
 			this.label4 = new System.Windows.Forms.Label();
 			this.labelNotPerf = new System.Windows.Forms.Label();
 			this.textReasonCode = new System.Windows.Forms.TextBox();
+			this.textPregCodeDescript = new OpenDental.ODtextBox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.checkNotPerf = new System.Windows.Forms.CheckBox();
 			this.labelPregNotice = new System.Windows.Forms.Label();
 			this.groupInterventions = new System.Windows.Forms.GroupBox();
 			this.gridInterventions = new OpenDental.UI.ODGrid();
 			this.butAdd = new System.Windows.Forms.Button();
-			this.textReasonDescript = new OpenDental.ODtextBox();
-			this.textPregCodeDescript = new OpenDental.ODtextBox();
+			this.textBMIPercentile = new System.Windows.Forms.TextBox();
+			this.labelBMIPercentile = new System.Windows.Forms.Label();
+			this.textBMIPercentileCode = new System.Windows.Forms.TextBox();
 			this.groupExclusion.SuspendLayout();
 			this.groupInterventions.SuspendLayout();
 			this.SuspendLayout();
@@ -83,7 +85,7 @@
 			// 
 			// labelBMI
 			// 
-			this.labelBMI.Location = new System.Drawing.Point(26, 140);
+			this.labelBMI.Location = new System.Drawing.Point(26, 139);
 			this.labelBMI.Name = "labelBMI";
 			this.labelBMI.Size = new System.Drawing.Size(93, 17);
 			this.labelBMI.TabIndex = 2;
@@ -128,7 +130,7 @@
 			// butCancel
 			// 
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Location = new System.Drawing.Point(513, 559);
+			this.butCancel.Location = new System.Drawing.Point(513, 579);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 23);
 			this.butCancel.TabIndex = 6;
@@ -139,7 +141,7 @@
 			// butOK
 			// 
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Location = new System.Drawing.Point(432, 559);
+			this.butOK.Location = new System.Drawing.Point(432, 579);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75, 23);
 			this.butOK.TabIndex = 5;
@@ -150,7 +152,7 @@
 			// butDelete
 			// 
 			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butDelete.Location = new System.Drawing.Point(10, 559);
+			this.butDelete.Location = new System.Drawing.Point(10, 579);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(75, 23);
 			this.butDelete.TabIndex = 10;
@@ -193,7 +195,7 @@
 			// 
 			// textBMI
 			// 
-			this.textBMI.Location = new System.Drawing.Point(122, 138);
+			this.textBMI.Location = new System.Drawing.Point(122, 137);
 			this.textBMI.Name = "textBMI";
 			this.textBMI.ReadOnly = true;
 			this.textBMI.Size = new System.Drawing.Size(40, 20);
@@ -202,7 +204,7 @@
 			// 
 			// labelWeightCode
 			// 
-			this.labelWeightCode.Location = new System.Drawing.Point(168, 140);
+			this.labelWeightCode.Location = new System.Drawing.Point(168, 139);
 			this.labelWeightCode.Name = "labelWeightCode";
 			this.labelWeightCode.Size = new System.Drawing.Size(82, 17);
 			this.labelWeightCode.TabIndex = 24;
@@ -245,27 +247,19 @@
 			this.labelWeightExamCode.Text = "Weight Code";
 			this.labelWeightExamCode.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// labelBMIPercentCode
+			// labelBMIPercentileCode
 			// 
-			this.labelBMIPercentCode.Location = new System.Drawing.Point(301, 140);
-			this.labelBMIPercentCode.Name = "labelBMIPercentCode";
-			this.labelBMIPercentCode.Size = new System.Drawing.Size(130, 17);
-			this.labelBMIPercentCode.TabIndex = 30;
-			this.labelBMIPercentCode.Text = "BMI Percentile Code";
-			this.labelBMIPercentCode.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// comboBMIPercentileCode
-			// 
-			this.comboBMIPercentileCode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBMIPercentileCode.Location = new System.Drawing.Point(434, 137);
-			this.comboBMIPercentileCode.MaxDropDownItems = 30;
-			this.comboBMIPercentileCode.Name = "comboBMIPercentileCode";
-			this.comboBMIPercentileCode.Size = new System.Drawing.Size(158, 21);
-			this.comboBMIPercentileCode.TabIndex = 7;
+			this.labelBMIPercentileCode.Location = new System.Drawing.Point(301, 163);
+			this.labelBMIPercentileCode.Name = "labelBMIPercentileCode";
+			this.labelBMIPercentileCode.Size = new System.Drawing.Size(130, 17);
+			this.labelBMIPercentileCode.TabIndex = 30;
+			this.labelBMIPercentileCode.Text = "BMI Percentile Code";
+			this.labelBMIPercentileCode.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.labelBMIPercentileCode.Visible = false;
 			// 
 			// labelBMIExamCode
 			// 
-			this.labelBMIExamCode.Location = new System.Drawing.Point(301, 20);
+			this.labelBMIExamCode.Location = new System.Drawing.Point(301, 139);
 			this.labelBMIExamCode.Name = "labelBMIExamCode";
 			this.labelBMIExamCode.Size = new System.Drawing.Size(130, 17);
 			this.labelBMIExamCode.TabIndex = 32;
@@ -274,7 +268,7 @@
 			// 
 			// textBMIExamCode
 			// 
-			this.textBMIExamCode.Location = new System.Drawing.Point(434, 18);
+			this.textBMIExamCode.Location = new System.Drawing.Point(434, 137);
 			this.textBMIExamCode.Name = "textBMIExamCode";
 			this.textBMIExamCode.ReadOnly = true;
 			this.textBMIExamCode.Size = new System.Drawing.Size(95, 20);
@@ -368,7 +362,7 @@
 			this.groupExclusion.Controls.Add(this.label6);
 			this.groupExclusion.Controls.Add(this.textPregCode);
 			this.groupExclusion.Controls.Add(this.checkPregnant);
-			this.groupExclusion.Location = new System.Drawing.Point(10, 162);
+			this.groupExclusion.Location = new System.Drawing.Point(10, 186);
 			this.groupExclusion.Name = "groupExclusion";
 			this.groupExclusion.Size = new System.Drawing.Size(578, 180);
 			this.groupExclusion.TabIndex = 23;
@@ -385,6 +379,20 @@
 			this.butChangeDefault.Text = "Change Default";
 			this.butChangeDefault.UseVisualStyleBackColor = true;
 			this.butChangeDefault.Click += new System.EventHandler(this.butChangeDefault_Click);
+			// 
+			// textReasonDescript
+			// 
+			this.textReasonDescript.AcceptsTab = true;
+			this.textReasonDescript.BackColor = System.Drawing.SystemColors.ControlLightLight;
+			this.textReasonDescript.DetectUrls = false;
+			this.textReasonDescript.Location = new System.Drawing.Point(377, 133);
+			this.textReasonDescript.Name = "textReasonDescript";
+			this.textReasonDescript.QuickPasteType = OpenDentBusiness.QuickPasteType.None;
+			this.textReasonDescript.ReadOnly = true;
+			this.textReasonDescript.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+			this.textReasonDescript.Size = new System.Drawing.Size(195, 40);
+			this.textReasonDescript.TabIndex = 141;
+			this.textReasonDescript.Text = "";
 			// 
 			// label4
 			// 
@@ -412,6 +420,20 @@
 			this.textReasonCode.ReadOnly = true;
 			this.textReasonCode.Size = new System.Drawing.Size(100, 20);
 			this.textReasonCode.TabIndex = 139;
+			// 
+			// textPregCodeDescript
+			// 
+			this.textPregCodeDescript.AcceptsTab = true;
+			this.textPregCodeDescript.BackColor = System.Drawing.SystemColors.ControlLightLight;
+			this.textPregCodeDescript.DetectUrls = false;
+			this.textPregCodeDescript.Location = new System.Drawing.Point(377, 40);
+			this.textPregCodeDescript.Name = "textPregCodeDescript";
+			this.textPregCodeDescript.QuickPasteType = OpenDentBusiness.QuickPasteType.None;
+			this.textPregCodeDescript.ReadOnly = true;
+			this.textPregCodeDescript.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+			this.textPregCodeDescript.Size = new System.Drawing.Size(195, 40);
+			this.textPregCodeDescript.TabIndex = 132;
+			this.textPregCodeDescript.Text = "";
 			// 
 			// label3
 			// 
@@ -449,7 +471,7 @@
 			// 
 			this.groupInterventions.Controls.Add(this.gridInterventions);
 			this.groupInterventions.Controls.Add(this.butAdd);
-			this.groupInterventions.Location = new System.Drawing.Point(10, 348);
+			this.groupInterventions.Location = new System.Drawing.Point(10, 372);
 			this.groupInterventions.Name = "groupInterventions";
 			this.groupInterventions.Size = new System.Drawing.Size(578, 198);
 			this.groupInterventions.TabIndex = 161;
@@ -478,39 +500,43 @@
 			this.butAdd.UseVisualStyleBackColor = true;
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
-			// textReasonDescript
+			// textBMIPercentile
 			// 
-			this.textReasonDescript.AcceptsTab = true;
-			this.textReasonDescript.BackColor = System.Drawing.SystemColors.ControlLightLight;
-			this.textReasonDescript.DetectUrls = false;
-			this.textReasonDescript.Location = new System.Drawing.Point(377, 133);
-			this.textReasonDescript.Name = "textReasonDescript";
-			this.textReasonDescript.QuickPasteType = OpenDentBusiness.QuickPasteType.None;
-			this.textReasonDescript.ReadOnly = true;
-			this.textReasonDescript.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-			this.textReasonDescript.Size = new System.Drawing.Size(195, 40);
-			this.textReasonDescript.TabIndex = 141;
-			this.textReasonDescript.Text = "";
+			this.textBMIPercentile.Location = new System.Drawing.Point(122, 161);
+			this.textBMIPercentile.Name = "textBMIPercentile";
+			this.textBMIPercentile.ReadOnly = true;
+			this.textBMIPercentile.Size = new System.Drawing.Size(40, 20);
+			this.textBMIPercentile.TabIndex = 163;
+			this.textBMIPercentile.TabStop = false;
+			this.textBMIPercentile.Visible = false;
 			// 
-			// textPregCodeDescript
+			// labelBMIPercentile
 			// 
-			this.textPregCodeDescript.AcceptsTab = true;
-			this.textPregCodeDescript.BackColor = System.Drawing.SystemColors.ControlLightLight;
-			this.textPregCodeDescript.DetectUrls = false;
-			this.textPregCodeDescript.Location = new System.Drawing.Point(377, 40);
-			this.textPregCodeDescript.Name = "textPregCodeDescript";
-			this.textPregCodeDescript.QuickPasteType = OpenDentBusiness.QuickPasteType.None;
-			this.textPregCodeDescript.ReadOnly = true;
-			this.textPregCodeDescript.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-			this.textPregCodeDescript.Size = new System.Drawing.Size(195, 40);
-			this.textPregCodeDescript.TabIndex = 132;
-			this.textPregCodeDescript.Text = "";
+			this.labelBMIPercentile.Location = new System.Drawing.Point(26, 163);
+			this.labelBMIPercentile.Name = "labelBMIPercentile";
+			this.labelBMIPercentile.Size = new System.Drawing.Size(93, 17);
+			this.labelBMIPercentile.TabIndex = 162;
+			this.labelBMIPercentile.Text = "BMI Percentile";
+			this.labelBMIPercentile.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.labelBMIPercentile.Visible = false;
+			// 
+			// textBMIPercentileCode
+			// 
+			this.textBMIPercentileCode.Location = new System.Drawing.Point(434, 161);
+			this.textBMIPercentileCode.Name = "textBMIPercentileCode";
+			this.textBMIPercentileCode.ReadOnly = true;
+			this.textBMIPercentileCode.Size = new System.Drawing.Size(95, 20);
+			this.textBMIPercentileCode.TabIndex = 164;
+			this.textBMIPercentileCode.Visible = false;
 			// 
 			// FormVitalsignEdit2014
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(602, 594);
+			this.ClientSize = new System.Drawing.Size(602, 614);
+			this.Controls.Add(this.textBMIPercentileCode);
+			this.Controls.Add(this.textBMIPercentile);
+			this.Controls.Add(this.labelBMIPercentile);
 			this.Controls.Add(this.groupInterventions);
 			this.Controls.Add(this.labelBPsExamCode);
 			this.Controls.Add(this.textBPsExamCode);
@@ -519,8 +545,7 @@
 			this.Controls.Add(this.labelBPd);
 			this.Controls.Add(this.labelBMIExamCode);
 			this.Controls.Add(this.textBMIExamCode);
-			this.Controls.Add(this.labelBMIPercentCode);
-			this.Controls.Add(this.comboBMIPercentileCode);
+			this.Controls.Add(this.labelBMIPercentileCode);
 			this.Controls.Add(this.labelHeightExamCode);
 			this.Controls.Add(this.labelWeightExamCode);
 			this.Controls.Add(this.comboWeightExamCode);
@@ -575,8 +600,7 @@
 		private System.Windows.Forms.ComboBox comboWeightExamCode;
 		private System.Windows.Forms.Label labelHeightExamCode;
 		private System.Windows.Forms.Label labelWeightExamCode;
-		private System.Windows.Forms.Label labelBMIPercentCode;
-		private System.Windows.Forms.ComboBox comboBMIPercentileCode;
+		private System.Windows.Forms.Label labelBMIPercentileCode;
 		private System.Windows.Forms.Label labelBMIExamCode;
 		private System.Windows.Forms.TextBox textBMIExamCode;
 		private System.Windows.Forms.Label labelBPd;
@@ -600,5 +624,8 @@
 		private System.Windows.Forms.GroupBox groupInterventions;
 		private OpenDental.UI.ODGrid gridInterventions;
 		private System.Windows.Forms.Button butAdd;
+		private System.Windows.Forms.TextBox textBMIPercentile;
+		private System.Windows.Forms.Label labelBMIPercentile;
+		private System.Windows.Forms.TextBox textBMIPercentileCode;
 	}
 }
