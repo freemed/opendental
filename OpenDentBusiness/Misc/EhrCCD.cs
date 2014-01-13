@@ -405,7 +405,7 @@ Allergies
 			_w.WriteElementString("title","Allergies and Adverse Reactions");
 			Start("text");//The following text will be parsed as html with a style sheet to be human readable.
 			if(listAllergiesFiltered.Count>0 && hasAllergy) {
-				Start("table","width","100%","border","1");
+				Start("table","style","width: 100%;","title","Allergies","border","1");
 				Start("thead");
 				Start("tr");
 				_w.WriteElementString("th","Substance");
@@ -668,7 +668,7 @@ Encounters
 			_w.WriteElementString("title","Encounters");
 			Start("text");//The following text will be parsed as html with a style sheet to be human readable.
 			if(listEncountersFiltered.Count>0 && hasEncounter) {
-				Start("table","width","100%","border","1");
+				Start("table","style","width: 100%;","title","Encounters","border","1");
 				Start("thead");
 				Start("tr");
 				_w.WriteElementString("th","Performer");
@@ -848,7 +848,7 @@ Functional and Cognitive Status
 			_w.WriteElementString("title","Functional Status");
 			Start("text");//The following text will be parsed as html with a style sheet to be human readable.
 			if(listProblemsFiltered.Count>0 && hasFunctionalStatus) {
-				Start("table","width","100%","border","1");
+				Start("table","style","width: 100%;","title","Functional Status","border","1");
 				Start("thead");
 				Start("tr");
 				_w.WriteElementString("th","Condition");
@@ -1067,7 +1067,7 @@ Immunizations
 			_w.WriteElementString("title","Immunizations");
 			Start("text");//The following text will be parsed as html with a style sheet to be human readable.
 			if(listVaccinePatsFiltered.Count>0 && hasImmunization) {
-				Start("table","width","100%","border","1");
+				Start("table","style","width: 100%;","title","Immunizations","border","1");
 				Start("thead");
 				Start("tr");
 				_w.WriteElementString("th","Vaccine");
@@ -1213,7 +1213,7 @@ Medications
 			_w.WriteElementString("title","Medications");
 			Start("text");//The following text will be parsed as html with a style sheet to be human readable.
 			if(listMedPatsFiltered.Count>0 && hasMedication) {
-				Start("table","width","100%","border","1");
+				Start("table","style","width: 100%;","title","Medications","border","1");
 				Start("thead");
 				Start("tr");
 				_w.WriteElementString("th","Medication");
@@ -1348,7 +1348,7 @@ Care Plan
 			_w.WriteElementString("title","Care Plan");
 			Start("text");//The following text will be parsed as html with a style sheet to be human readable.
 			if(listEhrCarePlansFiltered.Count>0 && hasPlanOfCare) {
-				Start("table","width","100%","border","1");
+				Start("table","style","width: 100%;","title","Plan of Care","border","1");
 				Start("thead");
 				Start("tr");
 				_w.WriteElementString("th","Planned Activity");
@@ -1455,7 +1455,7 @@ Problems
 			_w.WriteElementString("title","Problems");
 			Start("text");//The following text will be parsed as html with a style sheet to be human readable.
 			if(listProblemsFiltered.Count>0 && hasProblem) {
-				Start("table","width","100%","border","1");
+				Start("table","style","width: 100%;","title","Problems","border","1");
 				Start("thead");
 				Start("tr");
 				_w.WriteElementString("th","Problem");
@@ -1659,7 +1659,7 @@ Procedures
 			_w.WriteElementString("title","Procedures");
 			Start("text");//The following text will be parsed as html with a style sheet to be human readable.
 			if(listProcsFiltered.Count>0 && hasProcedure) {
-				Start("table","width","100%","border","1");
+				Start("table","style","width: 100%;","title","Procedures","border","1");
 				Start("thead");
 				Start("tr");
 				_w.WriteElementString("th","Procedure");
@@ -1788,7 +1788,7 @@ Laboratory Test Results
 			_w.WriteElementString("title","Diagnostic Results");
 			Start("text");//The following text will be parsed as html with a style sheet to be human readable.
 			if(listLabResultFiltered.Count>0 && hasSectionResult) {
-				Start("table","width","100%","border","1");
+				Start("table","style","width: 100%;","title","Diagnostic Results","border","1");
 				Start("thead");
 				Start("tr");
 				_w.WriteElementString("th","LOINC Code");
@@ -1921,7 +1921,7 @@ Social History
 			_w.WriteElementString("title","Social History");
 			Start("text");//The following text will be parsed as html with a style sheet to be human readable.
 			if(listEhrMeasureEventsFiltered.Count>0 && hasSocialHistory) {
-				Start("table","width","100%","border","1");
+				Start("table","style","width: 100%;","title","Social History","border","1");
 				Start("thead");
 				Start("tr");
 				_w.WriteElementString("th","Social History Element");
@@ -2062,12 +2062,12 @@ Vital Signs
 			Start("component");
 			Start("section");
 			TemplateId("2.16.840.1.113883.10.20.22.2.4.1");//Vital signs section with coded entries required.
-			_w.WriteComment("Problems section template");
+			_w.WriteComment("Vital Signs section template");
 			StartAndEnd("code","code","8716-3","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Vital Signs");
 			_w.WriteElementString("title","Vital Signs");
 			Start("text");//The following text will be parsed as html with a style sheet to be human readable.
 			if(listVitalSignsFiltered.Count>0 && hasVitalSign) {
-				Start("table","width","100%","border","1");
+				Start("table","style","width: 100%;","title","Vital Signs","border","1");
 				Start("thead");
 				Start("tr");
 				_w.WriteElementString("th","Date");
