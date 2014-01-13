@@ -3565,11 +3565,13 @@ namespace OpenDentBusiness {
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE vitalsign ADD BMIPercentile int NOT NULL";
 					Db.NonQ(command);
+					command="UPDATE vitalsign SET BMIPercentile=-1";
+					Db.NonQ(command);
 				}
 				else {//oracle
 					command="ALTER TABLE vitalsign ADD BMIPercentile number(11)";
 					Db.NonQ(command);
-					command="UPDATE vitalsign SET BMIPercentile = 0 WHERE BMIPercentile IS NULL";
+					command="UPDATE vitalsign SET BMIPercentile = -1 WHERE BMIPercentile IS NULL";
 					Db.NonQ(command);
 					command="ALTER TABLE vitalsign MODIFY BMIPercentile NOT NULL";
 					Db.NonQ(command);
