@@ -64,6 +64,7 @@ namespace OpenDentBusiness.Crud{
 				vitalsign.BMIExamCode       = PIn.String(table.Rows[i]["BMIExamCode"].ToString());
 				vitalsign.EhrNotPerformedNum= PIn.Long  (table.Rows[i]["EhrNotPerformedNum"].ToString());
 				vitalsign.PregDiseaseNum    = PIn.Long  (table.Rows[i]["PregDiseaseNum"].ToString());
+				vitalsign.BMIPercentile     = PIn.Int   (table.Rows[i]["BMIPercentile"].ToString());
 				retVal.Add(vitalsign);
 			}
 			return retVal;
@@ -104,7 +105,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="VitalsignNum,";
 			}
-			command+="PatNum,Height,Weight,BpSystolic,BpDiastolic,DateTaken,HasFollowupPlan,IsIneligible,Documentation,ChildGotNutrition,ChildGotPhysCouns,WeightCode,HeightExamCode,WeightExamCode,BMIExamCode,EhrNotPerformedNum,PregDiseaseNum) VALUES(";
+			command+="PatNum,Height,Weight,BpSystolic,BpDiastolic,DateTaken,HasFollowupPlan,IsIneligible,Documentation,ChildGotNutrition,ChildGotPhysCouns,WeightCode,HeightExamCode,WeightExamCode,BMIExamCode,EhrNotPerformedNum,PregDiseaseNum,BMIPercentile) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(vitalsign.VitalsignNum)+",";
 			}
@@ -125,7 +126,8 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(vitalsign.WeightExamCode)+"',"
 				+"'"+POut.String(vitalsign.BMIExamCode)+"',"
 				+    POut.Long  (vitalsign.EhrNotPerformedNum)+","
-				+    POut.Long  (vitalsign.PregDiseaseNum)+")";
+				+    POut.Long  (vitalsign.PregDiseaseNum)+","
+				+    POut.Int   (vitalsign.BMIPercentile)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -154,7 +156,8 @@ namespace OpenDentBusiness.Crud{
 				+"WeightExamCode    = '"+POut.String(vitalsign.WeightExamCode)+"', "
 				+"BMIExamCode       = '"+POut.String(vitalsign.BMIExamCode)+"', "
 				+"EhrNotPerformedNum=  "+POut.Long  (vitalsign.EhrNotPerformedNum)+", "
-				+"PregDiseaseNum    =  "+POut.Long  (vitalsign.PregDiseaseNum)+" "
+				+"PregDiseaseNum    =  "+POut.Long  (vitalsign.PregDiseaseNum)+", "
+				+"BMIPercentile     =  "+POut.Int   (vitalsign.BMIPercentile)+" "
 				+"WHERE VitalsignNum = "+POut.Long(vitalsign.VitalsignNum);
 			Db.NonQ(command);
 		}
@@ -229,6 +232,10 @@ namespace OpenDentBusiness.Crud{
 			if(vitalsign.PregDiseaseNum != oldVitalsign.PregDiseaseNum) {
 				if(command!=""){ command+=",";}
 				command+="PregDiseaseNum = "+POut.Long(vitalsign.PregDiseaseNum)+"";
+			}
+			if(vitalsign.BMIPercentile != oldVitalsign.BMIPercentile) {
+				if(command!=""){ command+=",";}
+				command+="BMIPercentile = "+POut.Int(vitalsign.BMIPercentile)+"";
 			}
 			if(command==""){
 				return;

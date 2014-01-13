@@ -35,12 +35,14 @@ namespace OpenDentBusiness {
 		public string HeightExamCode;
 		///<summary>FK to ehrcode.CodeValue.  Also FK to LOINC.LoincCode.  Used for CQMs.  LOINC code used to describe the weight exam performed.  Examples: Body Weight Measured=3141-9, Body Weight Stated=3142-7, Body Weight --with clothes=8350-1.  We will default to Body Weight=29463-7, but user can choose another from the list of 6 allowed.  Can be blank if BP only.</summary>
 		public string WeightExamCode;
-		///<summary>FK to ehrcode.CodeValue.  Also FK to LOINC.LoincCode.  Used for CQMs.  LOINC code used to describe the BMI percentile calculated.  Examples: BMI Percentile=59574-4, BMI Percentile Per age and gender=59576-9.  We will default to BMI Percentile Per age=59575-1, but user can choose another from the list of 3 allowed.  Can be blank if BP only.</summary>
+		///<summary>FK to ehrcode.CodeValue.  Also FK to LOINC.LoincCode.  Used for CQMs.  LOINC code used to describe the BMI percentile calculated.  We will use LOINC 59576-9 - BMI Percentile Per age and gender.  Can be blank if BP only.</summary>
 		public string BMIExamCode;
 		///<summary>FK to ehrnotperformed.EhrNotPerformedNum.  This will link a vitalsign to the EhrNotPerformed object where the reason not performed will be stored.  The linking will allow us to display the not performed reason directly in the vital sign window and will make CQM queries easier.  Will be 0 if not linked to an EhrNotPerformed object.</summary>
 		public long EhrNotPerformedNum;
 		///<summary>FK to disease.DiseaseNum.  This will link this vitalsign object to a pregnancy diagnosis for this patient.  It will be 0 for non pregnant patients.  The disease it is linked to will be inserted automatically based on the default value set.  In order to change this code for this specific exam it will have to be changed in the problems list.</summary>
 		public long PregDiseaseNum;
+		///<summary>BMI percentile of patient, based on gender and age and the calculated BMI.  We will use the CDC numbers to calculate percentile found here: http://www.cdc.gov/nchs/data/series/sr_11/sr11_246.pdf </summary>
+		public int BMIPercentile;
 
 		///<summary></summary>
 		public Vitalsign Copy() {

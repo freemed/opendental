@@ -3562,6 +3562,18 @@ namespace OpenDentBusiness {
 					command=@"CREATE INDEX ehrmeasureevent_FKey ON ehrmeasureevent (FKey)";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE vitalsign ADD BMIPercentile int NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE vitalsign ADD BMIPercentile number(11)";
+					Db.NonQ(command);
+					command="UPDATE vitalsign SET BMIPercentile = 0 WHERE BMIPercentile IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE vitalsign MODIFY BMIPercentile NOT NULL";
+					Db.NonQ(command);
+				}
 
 				command="UPDATE preference SET ValueString = '14.1.0.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
