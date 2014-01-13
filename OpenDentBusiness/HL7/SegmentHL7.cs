@@ -122,6 +122,10 @@ namespace OpenDentBusiness.HL7 {
 			}
 			Fields[fieldIndex].SetVals(vals);
 			//kind of repetitive to recalc the whole segment again here, but it goes very fast.
+			RefreshFullText();
+		}
+
+		private void RefreshFullText() {
 			fullText="";
 			for(int i=0;i<Fields.Count;i++) {
 				if(i>0) {
@@ -129,6 +133,36 @@ namespace OpenDentBusiness.HL7 {
 				}
 				fullText+=Fields[i].FullText;
 			}
+		}
+
+		///<summary>Not often used.  If RepeatField() is called before SetField(), then the first field instance will be blank.
+		///Some HL7 fields are allowed to "repeat" multiple times.
+		///For example, in immunization messaging export (VXU messages), PID-3 repeats twice, once for patient ID and once for SSN.</summary>
+		public void RepeatField(int fieldIndex,params string[] vals) {
+			if(fieldIndex>Fields.Count-1) {//The field does not exist yet.
+				AddFields(fieldIndex-(Fields.Count-1));
+			}
+			//The field exists and has already been set.  Repeat the field with the new values.
+			Fields[fieldIndex].RepeatVals(vals);
+			//kind of repetitive to recalc the whole segment again here, but it goes very fast.
+			RefreshFullText();
+		}
+
+		///<summary>Sets the field if not yet set, otherwise repeats the field with the new values.
+		///Not often used.  Some HL7 fields are allowed to "repeat" multiple times.
+		///For example, in immunization messaging export (VXU messages), PID-3 repeats twice, once for patient ID and once for SSN.</summary>
+		public void SetOrRepeatField(int fieldIndex,params string[] vals) {
+			if(fieldIndex>Fields.Count-1) {//The field does not exist yet.
+				AddFields(fieldIndex-(Fields.Count-1));
+			}
+			if(Fields[fieldIndex].FullText=="") {//The field exists and has not been set yet.
+				SetField(fieldIndex,vals);
+				return;
+			}
+			//The field exists and has already been set.  Repeat the field with the new values.
+			Fields[fieldIndex].RepeatVals(vals);
+			//kind of repetitive to recalc the whole segment again here, but it goes very fast.
+			RefreshFullText();
 		}
 
 		///<summary>yyyyMMdd[HHmm[ss]].  If not in that format, it returns minVal.</summary>

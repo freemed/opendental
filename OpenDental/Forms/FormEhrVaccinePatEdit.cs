@@ -96,7 +96,9 @@ namespace OpenDental {
 				VaccinePatCur.UserNum=Security.CurUser.UserNum;
 			}
 			Userod user=Userods.GetUser(VaccinePatCur.UserNum);
-			textUser.Text=user.UserName;
+			if(user!=null) {//Will be null for vaccines entered in older versions, before the UserNum column was created.
+				textUser.Text=user.UserName;
+			}
 			_provNumSelectedOrdering=VaccinePatCur.ProvNumOrdering;
 			comboProvNumOrdering.Items.Clear();
 			for(int i=0;i<ProviderC.ListShort.Count;i++) {

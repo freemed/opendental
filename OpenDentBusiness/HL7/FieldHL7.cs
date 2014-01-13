@@ -6,6 +6,8 @@ namespace OpenDentBusiness.HL7 {
 	public class FieldHL7 {
 		///<summary></summary>
 		private string fullText;
+		///<summary>Not often used. Some HL7 fields are allowed to "repeat" multiple times. For example, in immunization messaging export (VXU messages), PID-3 repeats twice, once for patient ID and once for SSN.</summary>
+		private List<FieldHL7> _listRepeatFields=new List<FieldHL7>();
 		public List<ComponentHL7> Components;
 
 		///<summary>Only use this constructor when generating a message instead of parsing a message.</summary>
@@ -29,11 +31,18 @@ namespace OpenDentBusiness.HL7 {
 		///<summary>Setting the FullText resets all the child components to the values passed in here.</summary>
 		public string FullText {
 			get {
-				return fullText;
+				StringBuilder sb=new StringBuilder();
+				sb.Append(fullText);
+				for(int i=0;i<_listRepeatFields.Count;i++) {
+					sb.Append("~");//Field repitition separator.  Always before each repeat field, even if fullText is blank.
+					sb.Append(_listRepeatFields[i].FullText);
+				}
+				return sb.ToString();
 			}
 			set {
 				fullText=value;
 				Components=new List<ComponentHL7>();
+				//In the future, we could first split by ~ to get the repeating fields as needed, then split each field instance by the ^ character.
 				string[] components=fullText.Split(new string[] { "^" },StringSplitOptions.None);//leave empty entries in place
 				ComponentHL7 component;
 				for(int i=0;i<components.Length;i++) {
@@ -70,6 +79,12 @@ namespace OpenDentBusiness.HL7 {
 			}
 		}
 
+		///<summary>Not often used. Some HL7 fields are allowed to "repeat" multiple times. For example, in immunization messaging export (VXU messages), PID-3 repeats twice, once for patient ID and once for SSN.</summary>
+		public void RepeatVals(params string[] values) {
+			FieldHL7 field=new FieldHL7();
+			field.SetVals(values);
+			_listRepeatFields.Add(field);
+		}
 		 
 	}
 }

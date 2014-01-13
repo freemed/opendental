@@ -197,9 +197,9 @@ namespace OpenDentBusiness.HL7 {
 				//NK-4 Address.  Required if known (length unspecified).  Cardinality [0..1].  Type XAD (guide page 74).  The first instance must be the primary address.
 				WriteXAD(4,patNextOfKin.Address,patNextOfKin.Address2,patNextOfKin.City,patNextOfKin.State,patNextOfKin.Zip);
 				//NK-5 Phone Number.  Required if known.  Cardinality [0..*].  Type XTN (guide page 84).  The first instance shall be the primary phone number.
-				WriteXTN(5,"PRN","PH",patNextOfKin.HmPhone,patNextOfKin.WirelessPhone);
+				WriteXTN(5,"PRN","PH","F",patNextOfKin.HmPhone,"PRN","CP","",patNextOfKin.WirelessPhone);
 				//NK-6 Business Phone Number.  Optional.  Type XTN (guide page 84).
-				WriteXTN(6,"PRN","PH",patNextOfKin.WkPhone);
+				WriteXTN(6,"WPN","PH","",patNextOfKin.WkPhone);
 				//NK-7 Contact Role.  Optional.
 				//NK-8 Start Date.  Optional.
 				//NK-9 End Date.  Optional.
@@ -233,8 +233,8 @@ namespace OpenDentBusiness.HL7 {
 				//NK-37 Contact Person Social Security Number.  Optional.
 				//NK-38 Next of Kin Birth Place.  Optional.
 				//NK-39 VIP Indicator.  Optional.
+				_msg.Segments.Add(_seg);
 			}
-			_msg.Segments.Add(_seg);
 		}
 
 		///<summary>Note segment.  Required if known.  Guide page 116.</summary>
@@ -547,8 +547,9 @@ namespace OpenDentBusiness.HL7 {
 			_seg.SetField(0,"PID");
 			_seg.SetField(1,"1");//PID-1 Set ID - PID.  Required if known.  Cardinality [0..1].  Must be "1" for the first occurrence.  Not sure why there would ever be more than one.
 			//PID-2 Patient ID.  No longer used.
-			_seg.SetField(3,//PID-3 Patient Identifier List.  Required.  Cardinality [1..*].  Type CX (see guide page 58 for type definition).
-				_pat.PatNum.ToString(),//PID-3.1 ID Number.  Required (length 1..15).  
+			//PID-3 Patient Identifier List.  Required.  Cardinality [1..*].  Type CX (see guide page 58 for type definition).
+			_seg.SetField(3,
+				_pat.PatNum.ToString(),//PID-3.1 ID Number.  Required (length 1..15).
 				"",//PID-3.2 Check Digit.  Optional (length 1..1).
 				"",//PID-3.3 Check Digit Scheme.  Required if PID-3.2 is specified.  Not required for our purposes.  Value set HL70061.
 				"Open Dental",//PID-3.4 Assigning Authority.  Required.  Value set HL70363.
@@ -559,6 +560,20 @@ namespace OpenDentBusiness.HL7 {
 				//PID-3.9 Assigning Jurisdiction.  Optional (length undefined).
 				//PID-3.10 Assigning Agency or Department.  Optional (length undefined).
 			);
+			if(_pat.SSN.Trim()!="") {
+				_seg.RepeatField(3,
+					_pat.SSN.Trim(),//PID-3.1 ID Number.  Required (length 1..15).
+					"",//PID-3.2 Check Digit.  Optional (length 1..1).
+					"",//PID-3.3 Check Digit Scheme.  Required if PID-3.2 is specified.  Not required for our purposes.  Value set HL70061.
+					"Open Dental",//PID-3.4 Assigning Authority.  Required.  Value set HL70363.
+					"SS"//PID-3.5 Identifier Type Code.  Required (length 2..5).  Value set HL70203.  MR=medical record number.
+						//PID-3.6 Assigning Facility.  Optional (length undefined).
+						//PID-3.7 Effective Date.  Optional (length 4..8).
+						//PID-3.8 Expiration Date.  Optional (length 4..8).
+						//PID-3.9 Assigning Jurisdiction.  Optional (length undefined).
+						//PID-3.10 Assigning Agency or Department.  Optional (length undefined).
+				);
+			}
 			//PID-4 Alternate Patient ID - 00106.  No longer used.
 			WriteXPN(5,_pat.FName,_pat.LName,_pat.MiddleI,"L");//PID-5 Patient Name.  Required (length unspecified).  Cardinality [1..*].  Type XPN.  The first repetition must contain the legal name.
 			WriteXPN(6,_pat.MotherMaidenFname,_pat.MotherMaidenLname,"","M");//PID-6 Mother's Maiden Name.  Required if known (length unspecified).  Cardinality [0..1].  Type XPN.
@@ -591,60 +606,48 @@ namespace OpenDentBusiness.HL7 {
 					listPatRacesFiltered.Add(patRace);
 				}
 			}
-			string hl7Race="";//TODO: Test a patient with multiple races.
-			if(listPatRacesFiltered.Count==0) {//No selection or declined to specify.
-				hl7Race+=""//PID-10.1 Identifier.  Required (length 1..50).  Blank for unknown.
-					+"^Unknown/undetermined"//PID-10.2  Text.  Required if known (length 1..999). Human readable text that is not further used.
-					+"^Race and Ethnicity";//PID-10.3 Name of Coding System.  Required (length 1..20).  The full name is actually "Race &amp; Ethnicity - CDC", but it is more than 20 characters.
+			for(int i=0;i<listPatRacesFiltered.Count;i++) {
+				PatRace patRace=listPatRacesFiltered[i];
+				string strRaceCode="";
+				string strRaceName="";
+				if(patRace==PatRace.AfricanAmerican) {
+					strRaceCode="2054-5";
+					strRaceName="Black or African American";
+				}
+				else if(patRace==PatRace.AmericanIndian) {
+					strRaceCode="1002-5";
+					strRaceName="American Indian or Alaska Native";
+				}
+				else if(patRace==PatRace.Asian) {
+					strRaceCode="2028-9";
+					strRaceName="Asian";
+				}
+				else if(patRace==PatRace.HawaiiOrPacIsland) {
+					strRaceCode="2076-8";
+					strRaceName="Native Hawaiian or Other Pacific Islander";
+				}
+				else if(patRace==PatRace.White) {
+					strRaceCode="2106-3";
+					strRaceName="White";
+				}
+				else {//Aboriginal, Other, Multiracial
+					strRaceCode="2131-1";
+					strRaceName="Other Race";
+				}
+				_seg.SetOrRepeatField(10,
+					strRaceCode,//PID-10.1 Identifier.  Required (length 1..50).
+					strRaceName,//PID-10.2  Text.  Required if known (length 1..999). Human readable text that is not further used.
+					"HL70005"//PID-10.3 Name of Coding System.  Required (length 1..20).
 					//PID-10.4 Alternate Identifier.  Required if known (length 1..50).
 					//PID-10.5 Alternate Text.  Required if known (length 1..999).
 					//PID-10.6 Name of Alternate Coding system.  Required if PID-10.4 is not blank.
+				);
 			}
-			else {
-				for(int i=0;i<listPatRacesFiltered.Count;i++) {
-					if(i>0) {
-						hl7Race+="~";//field repetition separator
-					}
-					PatRace patRace=listPatRacesFiltered[i];
-					string strRaceCode="";
-					string strRaceName="";
-					if(patRace==PatRace.AfricanAmerican) {
-						strRaceCode="2054-5";
-						strRaceName="Black or African American";
-					}
-					else if(patRace==PatRace.AmericanIndian) {
-						strRaceCode="1002-5";
-						strRaceName="American Indian or Alaska Native";
-					}
-					else if(patRace==PatRace.Asian) {
-						strRaceCode="2028-9";
-						strRaceName="Asian";
-					}
-					else if(patRace==PatRace.HawaiiOrPacIsland) {
-						strRaceCode="2076-8";
-						strRaceName="Native Hawaiian or Other Pacific Islander";
-					}
-					else if(patRace==PatRace.White) {
-						strRaceCode="2106-3";
-						strRaceName="White";
-					}
-					else {//Aboriginal, Other, Multiracial
-						strRaceCode="2131-1";
-						strRaceName="Other Race";
-					}
-					hl7Race+=strRaceCode//PID-10.1 Identifier.  Required (length 1..50).
-						+"^"+strRaceName//PID-10.2  Text.  Required if known (length 1..999). Human readable text that is not further used.
-						+"^HL70005";//PID-10.3 Name of Coding System.  Required (length 1..20).
-						//PID-10.4 Alternate Identifier.  Required if known (length 1..50).
-						//PID-10.5 Alternate Text.  Required if known (length 1..999).
-						//PID-10.6 Name of Alternate Coding system.  Required if PID-10.4 is not blank.
-				}
-			}
-			_seg.SetField(10,hl7Race);
 			//PID-11 Patient Address.  Required if known (length unspecified).  Cardinality [0..*].  Type XAD (guide page 74).  First repetition must be the primary address.
 			WriteXAD(11,_pat.Address,_pat.Address2,_pat.City,_pat.State,_pat.Zip);
 			//PID-12 County Code.  No longer used.
-			WriteXTN(13,"PRN","PH",_pat.HmPhone,_pat.WirelessPhone,_pat.WkPhone);//PID-13 Phone Number - Home.  Required if known (length unspecified).  Cardinality [0..*].  Type XTN (guide page 84).
+			//PID-13 Phone Number - Home.  Required if known (length unspecified).  Cardinality [0..*].  Type XTN (guide page 84).  The first number must be the primary number (if email only, then blank phone followed by email).
+			WriteXTN(13,"PRN","PH","F",_pat.HmPhone,"PRN","CP","",_pat.WirelessPhone,"NET","Internet","",_pat.Email);
 			//PID-14 Phone Number - Business.  Optional.
 			//PID-15 Primary Language.  Optional.
 			//PID-16 Marital Status.  Optional.
@@ -1040,42 +1043,115 @@ namespace OpenDentBusiness.HL7 {
 				);
 		}
 
-		///<summary>Type XTN (guide page 84).  Writes a phone number into the fieldIndex field for the current segment.
-		///strTeleUseCode must be from value set HL70201 (guide page 203).
-		///strTeleEquipType must be from value set HL70202 (guide page 203).
-		///Can specify 0 or more phone numbers. The first valid phone number in the list will be written and the other phone numbers will be ignored.</summary>
-		private void WriteXTN(int fieldIndex,string strTeleUseCode,string strTeleEquipType,params string[] arrayPhoneNumbers) {
-			for(int i=0;i<arrayPhoneNumbers.Length;i++) {
-				string phone=arrayPhoneNumbers[i];
-				string digits="";
-				for(int j=0;j<phone.Length;j++) {
-					if(!Char.IsNumber(phone,j)) {
+		///<summary>Type XTN (guide page 84).  Writes a phone number or other contact information (such as email address) into the fieldIndex field for the current segment.
+		///The arrayContactInfo params list must contain 4 parameters for each piece of contact information, in the following order:
+		///1) Telecommunication Use Code from value set HL70201 (guide page 203).
+		///2) Telecommunication Equipment Type from value set HL70202 (guide page 203).
+		///3) The value "F" to force the field to be written in all cases or empty string to only write the field if the contact information is present.
+		///4) The contact infomration (phone number or email address).
+		///Can specify 0 or more contacts. The first valid phone number in the list will be written and the other phone numbers will be ignored.</summary>
+		private void WriteXTN(int fieldIndex,params string[] arrayContactInfo) {
+			int contactCount=0;
+			for(int i=0;i<arrayContactInfo.Length;i+=4) {
+				string strTeleUseCode=arrayContactInfo[i];
+				string strTeleEquipType=arrayContactInfo[i+1];
+				string strForce=arrayContactInfo[i+2];
+				string strContactInfo=arrayContactInfo[i+3].Trim();
+				if(strContactInfo=="" && strForce!="F") {//When the contact info is blank and the information is not forced, then do not output.
+					continue;
+				}
+				contactCount++;
+				if(strTeleUseCode=="NET") {//Email address.
+					if(contactCount==1) {
+						_seg.SetField(fieldIndex,
+							"",//XTN.1 Telephone Number.  No longer used.
+							strTeleUseCode,//XTN.2 Telecommunication Use Code.  Required.  Value set HL70201 (guide page 203).
+							strTeleEquipType,//XTN.3 Telecommunication Equipment Type.  Required if known.  Value set HL70202 (guide page 203).
+							strContactInfo//XTN.4 Email Address.  Required when XTN.2 is set to "NET" (length 1..199).
+							//XTN.5 Country Code.  Optional.
+							//XTN.6 Area/City Code.  Required when XTN.2 is NOT set to "NET" (length 5..5).
+							//XTN.7 Local Number.  Required when XTN.2 is NOT set to "NET" (length 7..7).
+							//XTN.8 Extension.  Optional.
+							//XTN.9 Any Text.  Optional.
+							//XTN.10 Extension Prefix.  Optional.
+							//XTN.11 Speed Dial Code.  Optional.
+							//XTN.12 Unformatted Telephone Number.  Optional.
+						);
+					}
+					else {//At least one contact has already been specified (even if blank).  Repeat the field.  In testing, we were required to make a blank phone number preceed an email address.  This block makes it happen.
+						_seg.RepeatField(fieldIndex,
+							"",//XTN.1 Telephone Number.  No longer used.
+							strTeleUseCode,//XTN.2 Telecommunication Use Code.  Required.  Value set HL70201 (guide page 203).
+							strTeleEquipType,//XTN.3 Telecommunication Equipment Type.  Required if known.  Value set HL70202 (guide page 203).
+							strContactInfo//XTN.4 Email Address.  Required when XTN.2 is set to "NET" (length 1..199).
+							//XTN.5 Country Code.  Optional.
+							//XTN.6 Area/City Code.  Required when XTN.2 is NOT set to "NET" (length 5..5).
+							//XTN.7 Local Number.  Required when XTN.2 is NOT set to "NET" (length 7..7).
+							//XTN.8 Extension.  Optional.
+							//XTN.9 Any Text.  Optional.
+							//XTN.10 Extension Prefix.  Optional.
+							//XTN.11 Speed Dial Code.  Optional.
+							//XTN.12 Unformatted Telephone Number.  Optional.
+						);
+					}
+				}
+				else {//Phone number.
+					string strPhone=TidyPhone(strContactInfo);
+					if(strPhone=="") {//Either forced and empty, or the phone number is invalid.
 						continue;
 					}
-					if(digits=="" && phone.Substring(j,1)=="1") {
-						continue;//skip leading 1.
+					if(contactCount==1) {
+						_seg.SetField(fieldIndex,
+							"",//XTN.1 Telephone Number.  No longer used.
+							strTeleUseCode,//XTN.2 Telecommunication Use Code.  Required.  Value set HL70201 (guide page 203).
+							strTeleEquipType,//XTN.3 Telecommunication Equipment Type.  Required if known.  Value set HL70202 (guide page 203).
+							"",//XTN.4 Email Address.  Required when XTN.2 is set to "NET" (length 1..199).
+							"",//XTN.5 Country Code.  Optional.
+							strPhone.Substring(0,3),//XTN.6 Area/City Code.  Required when XTN.2 is NOT set to "NET" (length 5..5).
+							strPhone.Substring(3)//XTN.7 Local Number.  Required when XTN.2 is NOT set to "NET" (length 7..7).
+							//XTN.8 Extension.  Optional.
+							//XTN.9 Any Text.  Optional.
+							//XTN.10 Extension Prefix.  Optional.
+							//XTN.11 Speed Dial Code.  Optional.
+							//XTN.12 Unformatted Telephone Number.  Optional.
+						);
 					}
-					digits+=phone.Substring(j,1);
+					else {//At least one contact has already been specified (even if blank).  Repeat the field.  In testing, we were required to make a blank phone number preceed an email address.  This block allows a phone number after a blank phone number.
+						_seg.RepeatField(fieldIndex,
+							"",//XTN.1 Telephone Number.  No longer used.
+							strTeleUseCode,//XTN.2 Telecommunication Use Code.  Required.  Value set HL70201 (guide page 203).
+							strTeleEquipType,//XTN.3 Telecommunication Equipment Type.  Required if known.  Value set HL70202 (guide page 203).
+							"",//XTN.4 Email Address.  Required when XTN.2 is set to "NET" (length 1..199).
+							"",//XTN.5 Country Code.  Optional.
+							strPhone.Substring(0,3),//XTN.6 Area/City Code.  Required when XTN.2 is NOT set to "NET" (length 5..5).
+							strPhone.Substring(3)//XTN.7 Local Number.  Required when XTN.2 is NOT set to "NET" (length 7..7).
+							//XTN.8 Extension.  Optional.
+							//XTN.9 Any Text.  Optional.
+							//XTN.10 Extension Prefix.  Optional.
+							//XTN.11 Speed Dial Code.  Optional.
+							//XTN.12 Unformatted Telephone Number.  Optional.
+						);
+					}
 				}
-				if(digits.Length!=10) {
-					continue;//The current phone number is invalid. Skip it and try the next number.
-				}
-				_seg.SetField(fieldIndex,
-					"",//XTN.1 Telephone Number.  No longer used.
-					strTeleUseCode,//XTN.2 Telecommunication Use Code.  Required.  Value set HL70201 (guide page 203).
-					strTeleEquipType,//XTN.3 Telecommunication Equipment Type.  Required if known.  Value set HL70202 (guide page 203).
-					"",//XTN.4 Email Address.  Required when XTN.2 is set to "NET" (length 1..199).
-					"",//XTN.5 Country Code.  Optional.
-					digits.Substring(0,3),//XTN.6 Area/City Code.  Required when XTN.2 is NOT set to "NET" (length 5..5).
-					digits.Substring(3)//XTN.7 Local Number.  Required when XTN.2 is NOT set to "NET" (length 9..9).  I think the length is probably recorded wrong in the documentation.  It should be 7.
-					//XTN.8 Extension.  Optional.
-					//XTN.9 Any Text.  Optional.
-					//XTN.10 Extension Prefix.  Optional.
-					//XTN.11 Speed Dial Code.  Optional.
-					//XTN.12 Unformatted Telephone Number.  Optional.
-					);
-				return;//We can only write one phone number per phone field. We must exist after the first valid phone number is written.
 			}
+		}
+
+		///<summary>Removes any characters from the phone number which are not digits.  Returns empty string if the phone number is invalid.</summary>
+		private string TidyPhone(string phoneRaw) {
+			string strDigits="";
+			for(int j=0;j<phoneRaw.Length;j++) {
+				if(!Char.IsNumber(phoneRaw,j)) {
+					continue;
+				}
+				if(strDigits=="" && phoneRaw.Substring(j,1)=="1") {
+					continue;//skip leading 1.
+				}
+				strDigits+=phoneRaw.Substring(j,1);
+			}
+			if(strDigits.Length!=10) {
+				return "";//The phone number is invalid.
+			}
+			return strDigits;
 		}
 
 		///<summary>Type XPN (guide page 82).  Writes an person's name into the fieldIndex field for the current segment.
@@ -1083,9 +1159,12 @@ namespace OpenDentBusiness.HL7 {
 		///The middleI may be blank.
 		///nameTypeCode can be one of: A=Alias Name,L=Legal Name,D=Display Name,M=Maiden Name,C=Adopted Name,B=Name at birth,P=Name of partner/spouse,U=Unspecified.</summary>
 		private void WriteXPN(int fieldIndex,string fName,string lName,string middleI,string nameTypeCode) {
+			if(fName.Trim()=="" && lName.Trim()=="") {
+				return;
+			}
 			_seg.SetField(fieldIndex,
-				lName,//XPN.1 Family Name.  Required (length 1..50).  Type FN (guide page 64).  Cardinality [1..1].  The FN type only requires the last name field and it is the first field.
-				fName,//XPN.2 Given Name.  Required (length 1..30).  Cardinality [1..1].
+				lName.Trim(),//XPN.1 Family Name.  Required (length 1..50).  Type FN (guide page 64).  Cardinality [1..1].  The FN type only requires the last name field and it is the first field.
+				fName.Trim(),//XPN.2 Given Name.  Required (length 1..30).  Cardinality [1..1].
 				middleI,//XPN.3 Second and Further Given Names or Initials Thereof (middle name).  Required if known (length 1..30). 
 				"",//XPN.4 Suffix.  Optional.
 				"",//XPN.5 Prefix.  Optional.
