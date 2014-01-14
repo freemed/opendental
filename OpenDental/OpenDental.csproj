@@ -242,6 +242,7 @@
     <Compile Include="Bridges\ClioSoft.cs" />
     <Compile Include="Bridges\AaTemplate.cs" />
     <Compile Include="Bridges\ClaimX_Statements.cs" />
+    <Compile Include="Bridges\DentalStudio.cs" />
     <Compile Include="Bridges\DivvyPostcardService.cs" />
     <Compile Include="Bridges\Guru.cs">
       <SubType>Code</SubType>

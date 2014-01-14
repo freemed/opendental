@@ -832,6 +832,91 @@ namespace OpenDentBusiness {
 				command="UPDATE preference SET ValueString = '13.2.22.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To13_2_27();
+		}
+
+		private static void To13_2_27() {
+			if(FromVersion<new Version("13.2.27.0")) {
+				string command;
+				//Insert DentalStudio Bridge
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+				    +") VALUES("
+				    +"'DentalStudio', "
+				    +"'DentalStudio from www.villasm.com', "
+				    +"'0', "
+				    +"'"+POut.String(@"C:\Program Files (x86)\DentalStudioPlus\AutoStartup.exe")+"',"
+				    +"'', "
+				    +"'')";
+					long programNum=Db.NonQ(command,true);
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+				    +") VALUES("
+				    +"'"+POut.Long(programNum)+"', "
+				    +"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
+				    +"'0')";
+					Db.NonQ(command);
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+				    +") VALUES("
+				    +"'"+POut.Long(programNum)+"', "
+				    +"'UserName (clear to use OD username)', "
+				    +"'Admin')";
+					Db.NonQ(command);
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+				    +") VALUES("
+				    +"'"+POut.Long(programNum)+"', "
+				    +"'UserPassword', "
+				    +"'12345678')";
+					Db.NonQ(command);
+					command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
+				    +"VALUES ("
+				    +"'"+POut.Long(programNum)+"', "
+				    +"'"+POut.Int(((int)ToolBarsAvail.ChartModule))+"', "
+				    +"'DentalStudio')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO program (ProgramNum,ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+				    +") VALUES("
+				    +"(SELECT MAX(ProgramNum)+1 FROM program),"
+				    +"'DentalStudio', "
+				    +"'DentalStudio from www.villasm.com', "
+				    +"'0', "
+				    +"'"+POut.String(@"C:\Program Files (x86)\DentalStudioPlus\AutoStartup.exe")+"',"
+				    +"'', "
+				    +"'')";
+					long programNum=Db.NonQ(command,true);
+					command="INSERT INTO programproperty (ProgramPropertyNum,ProgramNum,PropertyDesc,PropertyValue"
+				    +") VALUES("
+				    +"(SELECT MAX(ProgramPropertyNum+1) FROM programproperty),"
+				    +"'"+POut.Long(programNum)+"', "
+				    +"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
+				    +"'0')";
+					Db.NonQ(command);
+					command="INSERT INTO programproperty (ProgramPropertyNum,ProgramNum,PropertyDesc,PropertyValue"
+				    +") VALUES("
+				    +"(SELECT MAX(ProgramPropertyNum+1) FROM programproperty),"
+				    +"'"+POut.Long(programNum)+"', "
+				    +"'UserName (clear to use OD username)', "
+				    +"'Admin')";
+					Db.NonQ(command);
+					command="INSERT INTO programproperty (ProgramPropertyNum,ProgramNum,PropertyDesc,PropertyValue"
+				    +") VALUES("
+				    +"(SELECT MAX(ProgramPropertyNum+1) FROM programproperty),"
+				    +"'"+POut.Long(programNum)+"', "
+				    +"'UserPassword', "
+				    +"'12345678')";
+					Db.NonQ(command);
+					command="INSERT INTO toolbutitem (ToolButItemNum,ProgramNum,ToolBar,ButtonText) "
+				    +"VALUES ("
+				    +"(SELECT MAX(ToolButItemNum)+1 FROM toolbutitem),"
+				    +"'"+POut.Long(programNum)+"', "
+				    +"'"+POut.Int(((int)ToolBarsAvail.ChartModule))+"', "
+				    +"'DentalStudio')";
+					Db.NonQ(command);
+				}//end DentalStudio bridge
+				command="UPDATE preference SET ValueString = '13.2.27.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To13_3_1();
 		}
 

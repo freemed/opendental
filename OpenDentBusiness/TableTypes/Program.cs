@@ -43,6 +43,7 @@ namespace OpenDentBusiness{
 		ClioSoft,
 		DBSWin,
 		DentalEye,
+		DentalStudio,
 		DentForms,
 		DentX,
 		Dexis,

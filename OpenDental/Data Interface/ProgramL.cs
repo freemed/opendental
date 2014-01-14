@@ -72,6 +72,10 @@ namespace OpenDental{
 				DentalEye.SendData(prog,pat);
 				return;
 			}
+			else if(prog.ProgName==ProgramName.DentalStudio.ToString()) {
+				DentalStudio.SendData(prog,pat);
+				return;
+			}
 			else if(prog.ProgName==ProgramName.DentX.ToString()) {
 				DentX.SendData(prog,pat);
 				return;

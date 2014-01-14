@@ -194,6 +194,7 @@ namespace OpenDentBusiness{
 			//DBSWin:
 			ScrubFileForProperty(ProgramName.DBSWin,"Text file path","",true);//C:\patdata.txt
 			//DentalEye: Has no file paths containing outgoing patient data from Open Dental.
+			//DentalStudio: Has no file paths containing outgoing patient data from Open Dental.
 			//DentForms: Has no file paths containing outgoing patient data from Open Dental.
 			//DentX: Has no file paths containing outgoing patient data from Open Dental.
 			//Dexis:
