@@ -143,12 +143,12 @@ namespace OpenDentBusiness{
 					command="SELECT * FROM ehrtrigger"
 					+" WHERE AllergyDefNumList LIKE '% "+POut.String(allergyDef.AllergyDefNum.ToString())+" %'";// '% <code> %' so that we can get exact matches.
 					break;
-				case "EHRLabResult"://match loinc only, no longer 
+				case "EhrLabResult"://match loinc only, no longer 
 					ehrLabResult=(EhrLabResult)triggerObject;
 					//TODO: TriggerObjectMessage
 					command="SELECT * FROM ehrtrigger WHERE "
-						+"(LabLoincList LIKE '% "+ehrLabResult.ObservationIdentifierID+" '" //LOINC may be in one of two fields
-						+"OR LabLoincList LIKE '% "+ehrLabResult.ObservationIdentifierIDAlt+" ')"; //LOINC may be in one of two fields
+						+"(LabLoincList LIKE '% "+ehrLabResult.ObservationIdentifierID+" %'" //LOINC may be in one of two fields
+						+"OR LabLoincList LIKE '% "+ehrLabResult.ObservationIdentifierIDAlt+" %')"; //LOINC may be in one of two fields
 					break;
 				case "Patient":
 					pat=(Patient)triggerObject;

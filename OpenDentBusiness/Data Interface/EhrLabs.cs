@@ -18,6 +18,10 @@ namespace OpenDentBusiness{
 			return null;
 		}
 
+		public static EhrLab ProcessHl7Message(string message) {
+			return ProcessHl7Message(message,null);
+		}
+
 		///<summary>Surround with Try/Catch.  Processes an HL7 message into an EHRLab object.</summary>
 		public static EhrLab ProcessHl7Message(string message, Patient patCur){
 			//Patient patcur;
@@ -55,20 +59,18 @@ namespace OpenDentBusiness{
 					//	break;
 					case "PID":
 						for(int i=0;i<fields[3].Split('~').Length;i++) {
-							//This may not be implemented correctly.  Not sure if Assigning authority should be OID of the ID Number (For example 2.16.840.1.113883.4.1 for Social Security Numbers) 
-							//or if it should be the OID of the organization that assigned the OID (For example 2.16.840.1.113883.3.184 for the Social Security Administration)
-							//I am assuming it is the former (That the OID identifies the number, not the "Assigning Authority" Organization. (As per discussion between Ryan and Jason.)
 							if(patCur==null) {
 								patCur=Patients.GetByGUID(fields[3].Split('~')[i].Split('^')[0],								//ID Number
 																					fields[3].Split('~')[i].Split('^')[3].Split('&')[1]);	//Assigning Authority ID 
 							}
 							if(patCur!=null) {
-								break;//found patient.
+								retVal.PatNum=patCur.PatNum;
 							}
 							else {
-								if(i==fields[3].Split('~').Length) {//we have checked all patient ID's and none of them were a valid patnum in our DB.
-									throw new Exception("PID.3 does not contain a known patient ID.");//we should have an option to manually associate lab results with a patient record, in the UI layer.
-								}
+								retVal.PatNum=0;
+								//if(i==fields[3].Split('~').Length) {//we have checked all patient ID's and none of them were a valid patnum in our DB.
+								//	throw new Exception("PID.3 does not contain a known patient ID.");//we should have an option to manually associate lab results with a patient record, in the UI layer.
+								//}
 							}
 						}
 						//all other PID segments are informative, PID.3 is the only one we need to process.
@@ -571,7 +573,6 @@ namespace OpenDentBusiness{
 				ehrLab.EhrLabNum=Meth.GetLong(MethodBase.GetCurrentMethod(),ehrLab);
 				return ehrLab.EhrLabNum;
 			}
-			//TODO:Insert if new, Update if not; Update/Insert children like labresults and the like.
 			return Crud.EhrLabCrud.Insert(ehrLab);
 		}
 

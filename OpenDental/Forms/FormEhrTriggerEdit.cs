@@ -181,35 +181,36 @@ namespace OpenDental {
 				}
 			}
 			//EhrTriggerCur.LabLoincList
-			arrayString=EhrTriggerCur.LabLoincList.Split(new string[] { "\t" },StringSplitOptions.RemoveEmptyEntries);
+			arrayString=EhrTriggerCur.LabLoincList.Split(new string[] { " " },StringSplitOptions.RemoveEmptyEntries);
 			for(int i=0;i<arrayString.Length;i++) {
 				row=new ODGridRow();
-				Loinc _loincTemp=Loincs.GetByCode(arrayString[i].Split(new string[] { ";" },StringSplitOptions.None)[0]);
+				Loinc _loincTemp=Loincs.GetByCode(arrayString[i]);//.Split(new string[] { ";" },StringSplitOptions.None)[0]);
 				if(_loincTemp==null) {
 					continue;
 				}
 				row.Cells.Add("Laboratory");
 				row.Cells.Add(_loincTemp.LoincCode);
 				row.Cells.Add("LOINC");
-				switch(arrayString[i].Split(new string[] { ";" },StringSplitOptions.RemoveEmptyEntries).Length) {
-					case 1://loinc only comparison
-						row.Cells.Add(_loincTemp.NameShort);
-						break;
-					case 2://microbiology or unitless lab.
-						Snomed _snomedTemp=Snomeds.GetByCode(arrayString[i].Split(new string[] { ";" },StringSplitOptions.None)[1]);
-						row.Cells.Add(_loincTemp.NameShort+", "
-							+(_snomedTemp==null?arrayString[i].Split(new string[] { ";" },StringSplitOptions.None)[1]:_snomedTemp.Description));//Example: Bacteria Identified, Campylobacter jenuni
-						break;
-					case 3://"traditional lab results"
-						row.Cells.Add(_loincTemp.NameShort+" "
-					+arrayString[i].Split(new string[] { ";" },StringSplitOptions.None)[1]+" "//example: >150 or a snomed code if microbiology
-					+arrayString[i].Split(new string[] { ";" },StringSplitOptions.None)[2]    //example: mg/dL or blank
-							);
-						break;
-					default://should never happen. Will display blank.
-						row.Cells.Add("");
-						break;
-				}
+				row.Cells.Add(_loincTemp.NameShort);
+				//switch(arrayString[i].Split(new string[] { ";" },StringSplitOptions.RemoveEmptyEntries).Length) {
+				//	case 1://loinc only comparison
+				//		row.Cells.Add(_loincTemp.NameShort);
+				//		break;
+				//	case 2://microbiology or unitless lab.
+				//		Snomed _snomedTemp=Snomeds.GetByCode(arrayString[i].Split(new string[] { ";" },StringSplitOptions.None)[1]);
+				//		row.Cells.Add(_loincTemp.NameShort+", "
+				//			+(_snomedTemp==null?arrayString[i].Split(new string[] { ";" },StringSplitOptions.None)[1]:_snomedTemp.Description));//Example: Bacteria Identified, Campylobacter jenuni
+				//		break;
+				//	case 3://"traditional lab results"
+				//		row.Cells.Add(_loincTemp.NameShort+" "
+				//	+arrayString[i].Split(new string[] { ";" },StringSplitOptions.None)[1]+" "//example: >150 or a snomed code if microbiology
+				//	+arrayString[i].Split(new string[] { ";" },StringSplitOptions.None)[2]    //example: mg/dL or blank
+				//			);
+				//		break;
+				//	default://should never happen. Will display blank.
+				//		row.Cells.Add("");
+				//		break;
+				//}
 				gridMain.Rows.Add(row);
 			}
 			//EhrTriggerCur.VitalLoincList
@@ -427,7 +428,7 @@ namespace OpenDental {
 			if(FormCLR.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			EhrTriggerCur.LabLoincList+="\t"+FormCLR.ResultCDSITriggerText+"\t";
+			EhrTriggerCur.LabLoincList+=" "+FormCLR.ResultCDSITriggerText+" ";
 			FillGrid();
 		}
 

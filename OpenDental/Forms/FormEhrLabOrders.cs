@@ -77,25 +77,59 @@ SPM|1|||119297000^BLD^SCT^BldSpc^Blood^99USA^^^Blood Specimen|||||||||||||201103
 					if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Lab patient does not match current patient, would you like to import the lab and attach it to current patient?")) {
 						return;
 					}
-				ehrLab.PatNum=PatCur.PatNum;//TODO:this might need enhancing.
+					ehrLab.PatNum=PatCur.PatNum;//TODO:this might need enhancing.
 				}
+				//ehrLab.Patnum already matches current patient.
 			}
 			catch (Exception Ex){
 				MessageBox.Show(this,"Unable to import lab.\r\n"+Ex.Message);
 				return;
 			}
 			ehrLab=EhrLabs.SaveToDB(ehrLab);
+			for(int i=0;i<ehrLab.ListEhrLabResults.Count;i++) {
+				if(Security.IsAuthorized(Permissions.EhrShowCDS,true)) {
+					FormCDSIntervention FormCDSI=new FormCDSIntervention();
+					FormCDSI.ListCDSI=EhrTriggers.TriggerMatch(ehrLab.ListEhrLabResults[i],PatCur);
+					FormCDSI.ShowIfRequired(false);
+				}
+			}
 			FillGrid();
 		}
 
 		private void butAdd_Click(object sender,EventArgs e) {
-			//Todo:
+			FormEhrLabOrderEdit2014 FormLOE=new FormEhrLabOrderEdit2014();
+			FormLOE.EhrLabCur=new EhrLab();
+			FormLOE.EhrLabCur.PatNum=PatCur.PatNum;
+			FormLOE.ShowDialog();
+			//Save from the form??
+			if(FormLOE.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			EhrLabs.SaveToDB(FormLOE.EhrLabCur);
+			for(int i=0;i<FormLOE.EhrLabCur.ListEhrLabResults.Count;i++) {
+				if(Security.IsAuthorized(Permissions.EhrShowCDS,true)) {
+					FormCDSIntervention FormCDSI=new FormCDSIntervention();
+					FormCDSI.ListCDSI=EhrTriggers.TriggerMatch(FormLOE.EhrLabCur.ListEhrLabResults[i],PatCur);
+					FormCDSI.ShowIfRequired(false);
+				}
+			}
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			FormEhrLabOrderEdit2014 FormLOE=new FormEhrLabOrderEdit2014();
 			FormLOE.EhrLabCur=ListEhrLabs[e.Row];
 			FormLOE.ShowDialog();
+			if(FormLOE.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			EhrLabs.SaveToDB(FormLOE.EhrLabCur);
+			for(int i=0;i<FormLOE.EhrLabCur.ListEhrLabResults.Count;i++) {
+				if(Security.IsAuthorized(Permissions.EhrShowCDS,true)) {
+					FormCDSIntervention FormCDSI=new FormCDSIntervention();
+					FormCDSI.ListCDSI=EhrTriggers.TriggerMatch(FormLOE.EhrLabCur.ListEhrLabResults[i],PatCur);
+					FormCDSI.ShowIfRequired(false);
+				}
+			}
 			//TODO:maybe add more code here for when we come back from form... In case we delete a lab from the form.
 		}
 
