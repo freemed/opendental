@@ -164,7 +164,7 @@ namespace OpenDental {
 		private void FillObservations() {
 			gridObservations.BeginUpdate();
 			gridObservations.Columns.Clear();
-			gridObservations.Columns.Add(new UI.ODGridColumn("Question",100));
+			gridObservations.Columns.Add(new UI.ODGridColumn("Question",130));
 			gridObservations.Columns.Add(new UI.ODGridColumn("Value",0));
 			gridObservations.EndUpdate();
 			gridObservations.BeginUpdate();

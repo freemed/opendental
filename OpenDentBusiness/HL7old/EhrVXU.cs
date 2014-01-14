@@ -529,7 +529,7 @@ namespace OpenDentBusiness.HL7 {
 			}
 			//PD1-13 Protection Indicator Date Effective.  Required if PD1-12 is not blank (length unspecified).  Cardinality [0..1].
 			if(_pat.VacShareOk!=YN.Unknown) {
-				_seg.SetField(17,_pat.DateTStamp.ToString("yyyyMMdd"));
+				_seg.SetField(13,_pat.DateTStamp.ToString("yyyyMMdd"));
 			}
 			//PD1-14 Place of Worship.  Optional (length unspecified).  Cardinality [0..1].
 			//PD1-15 Advance Directive Code.  Optional (length unspecified).  Cardinality [0..1].
@@ -1240,6 +1240,9 @@ namespace OpenDentBusiness.HL7 {
 				}
 				if(vaccine.CompletionStatus==VaccineCompletionStatus.Refused && vaccine.RefusalReason==VaccineRefusalReason.None) {
 					WriteError(sb,"Missing refusal reason.");
+				}
+				if(vaccine.CompletionStatus!=VaccineCompletionStatus.Refused && vaccine.RefusalReason!=VaccineRefusalReason.None) {
+					WriteError(sb,"Since a refusal reason was specified, completion status must be Refused.");
 				}
 				if(pat.ClinicNum!=0) {
 					Clinic clinic=Clinics.GetClinic(pat.ClinicNum);

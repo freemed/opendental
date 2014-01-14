@@ -109,6 +109,8 @@ namespace OpenDentBusiness {
 		CVX,
 		///<summary>1</summary>
 		HL70064,
+		///<summary>2</summary>
+		SCT,
 	}
 
 }
