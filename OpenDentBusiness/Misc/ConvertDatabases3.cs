@@ -2743,7 +2743,6 @@ namespace OpenDentBusiness {
 					command=@"CREATE TABLE ehrlab (
 						EhrLabNum bigint NOT NULL auto_increment PRIMARY KEY,
 						PatNum bigint NOT NULL,
-						EhrLabMessageNum bigint NOT NULL,
 						OrderControlCode varchar(255) NOT NULL,
 						PlacerOrderNum varchar(255) NOT NULL,
 						PlacerOrderNamespace varchar(255) NOT NULL,
@@ -2803,7 +2802,6 @@ namespace OpenDentBusiness {
 						TQ1DateTimeStart varchar(255) NOT NULL,
 						TQ1DateTimeEnd varchar(255) NOT NULL,
 						INDEX(PatNum),
-						INDEX(EhrLabMessageNum),
 						INDEX(SetIdOBR),
 						INDEX(TQ1SetId)
 						) DEFAULT CHARSET=utf8";
@@ -2815,7 +2813,6 @@ namespace OpenDentBusiness {
 					command=@"CREATE TABLE ehrlab (
 						EhrLabNum number(20) NOT NULL,
 						PatNum number(20) NOT NULL,
-						EhrLabMessageNum number(20) NOT NULL,
 						OrderControlCode varchar2(255),
 						PlacerOrderNum varchar2(255),
 						PlacerOrderNamespace varchar2(255),
@@ -2878,8 +2875,6 @@ namespace OpenDentBusiness {
 						)";
 					Db.NonQ(command);
 					command=@"CREATE INDEX ehrlab_PatNum ON ehrlab (PatNum)";
-					Db.NonQ(command);
-					command=@"CREATE INDEX ehrlab_EhrLabMessageNum ON ehrlab (EhrLabMessageNum)";
 					Db.NonQ(command);
 					command=@"CREATE INDEX ehrlab_SetIdOBR ON ehrlab (SetIdOBR)";
 					Db.NonQ(command);
@@ -3607,12 +3602,6 @@ namespace OpenDentBusiness {
 
 	}
 }
-
-
-
-
-
-
 
 
 

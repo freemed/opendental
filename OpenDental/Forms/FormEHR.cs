@@ -398,8 +398,9 @@ namespace OpenDental {
 		}
 
 		private void butLabPanelLOINC_Click(object sender,EventArgs e) {
-			//FormLOINCPicker FormLP = new FormLOINCPicker();
-			//FormLP.ShowDialog();
+			FormEhrLabOrders FormEHRLO=new FormEhrLabOrders();
+			FormEHRLO.PatCur=PatCur;
+			FormEHRLO.ShowDialog();
 		}
 
 		private void butAmendments_Click(object sender,EventArgs e) {

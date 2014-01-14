@@ -62,11 +62,6 @@ namespace OpenDentBusiness{
 								patCur=Patients.GetByGUID(fields[3].Split('~')[i].Split('^')[0],								//ID Number
 																					fields[3].Split('~')[i].Split('^')[3].Split('&')[1]);	//Assigning Authority ID 
 							}
-							#if DEBUG
-								if(patCur==null) {//if debugging, just select a patient if none were found.
-									patCur=Patients.GetPat(1);
-								}
-							#endif
 							if(patCur!=null) {
 								break;//found patient.
 							}
@@ -279,7 +274,7 @@ namespace OpenDentBusiness{
 						
 						labResult.referenceRange=fields[7];
 						labResult.AbnormalFlags=fields[8].Replace('~',',');//TODO: may need additional formatting/testing
-						try{labResult.ObservationResultStatus	=(HL70085)Enum.Parse(typeof(HL70085),fields[11]); }	catch { }
+						try{labResult.ObservationResultStatus	=(HL70085)Enum.Parse(typeof(HL70085),fields[11]);}catch { }
 						labResult.ObservationDateTime=fields[14];
 						labResult.AnalysisDateTime=fields[19];
 						//performing organization Name (with additional info)
@@ -337,7 +332,8 @@ namespace OpenDentBusiness{
 						//Collection Date Time
 						ehrLabSpecimen.CollectionDateTimeStart		=fields[17].Split('^')[0];
 						try{ehrLabSpecimen.CollectionDateTimeEnd	=fields[17].Split('^')[1];}catch{}
-						if(fields.Length<19){
+						if(fields.Length<19) {
+							retVal.ListEhrLabSpecimens.Add(ehrLabSpecimen);
 							break;//next segment. This one has no more fields
 						}
 						if(ehrLabSpecimen.ListEhrLabSpecimenRejectReason==null) {
@@ -554,8 +550,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<EhrLab>(MethodBase.GetCurrentMethod(),root, extension);
 			}
-			string command="";
-			//TODO:
+			string command="SELECT * FROM ehrlab WHERE (PlacerOrderNum='"+extension+"' AND PlacerOrderUniversalID='"+root+"') OR (FillerOrderNum='"+extension+"' AND FillerOrderUniversalID='"+root+"')";
 			return Crud.EhrLabCrud.SelectOne(command);
 		}
 

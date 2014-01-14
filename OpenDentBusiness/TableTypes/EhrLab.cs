@@ -11,8 +11,8 @@ namespace OpenDentBusiness {
 		public long EhrLabNum;
 		///<summary>FK to patient.PatNum.  PID-3.1</summary>
 		public long PatNum;
-		///<summary>FK to EhrLabMessage.EhrLabMessageNum.  Internal use.</summary>
-		public long EhrLabMessageNum;
+		/////<summary>FK to EhrLabMessage.EhrLabMessageNum.  Internal use.</summary>
+		//public long EhrLabMessageNum;
 		#region ORC fields
 		///<summary>Always RE unless importing from outside sources.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]

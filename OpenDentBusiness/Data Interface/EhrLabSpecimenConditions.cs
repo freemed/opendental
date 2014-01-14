@@ -23,7 +23,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),ehrLabNum);
 				return;
 			}
-			string command="DELETE FROM ehrlabspecimencondition WHERE EhrLabNum = "+POut.Long(ehrLabNum);
+			string command="DELETE FROM ehrlabspecimencondition WHERE EhrLabSpecimenNum = "+POut.Long(ehrLabNum);
 			Db.NonQ(command);
 		}
 

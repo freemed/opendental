@@ -32,7 +32,6 @@
 			this.gridClinicalInformation = new OpenDental.UI.ODGrid();
 			this.gridNotes = new OpenDental.UI.ODGrid();
 			this.gridSpecimen = new OpenDental.UI.ODGrid();
-			this.gridHL7Messages = new OpenDental.UI.ODGrid();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.groupBox6 = new System.Windows.Forms.GroupBox();
 			this.butProvSelect = new OpenDental.UI.Button();
@@ -141,27 +140,13 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridSpecimen.HScrollVisible = false;
-			this.gridSpecimen.Location = new System.Drawing.Point(620, 498);
+			this.gridSpecimen.Location = new System.Drawing.Point(620, 395);
 			this.gridSpecimen.Name = "gridSpecimen";
 			this.gridSpecimen.ScrollValue = 0;
-			this.gridSpecimen.Size = new System.Drawing.Size(291, 97);
+			this.gridSpecimen.Size = new System.Drawing.Size(291, 200);
 			this.gridSpecimen.TabIndex = 19;
 			this.gridSpecimen.Title = "Specimens";
 			this.gridSpecimen.TranslationName = null;
-			// 
-			// gridHL7Messages
-			// 
-			this.gridHL7Messages.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.gridHL7Messages.HScrollVisible = false;
-			this.gridHL7Messages.Location = new System.Drawing.Point(620, 395);
-			this.gridHL7Messages.Name = "gridHL7Messages";
-			this.gridHL7Messages.ScrollValue = 0;
-			this.gridHL7Messages.Size = new System.Drawing.Size(291, 97);
-			this.gridHL7Messages.TabIndex = 18;
-			this.gridHL7Messages.Title = "HL7 Messages";
-			this.gridHL7Messages.TranslationName = null;
 			// 
 			// gridMain
 			// 
@@ -269,7 +254,6 @@
 			this.Controls.Add(this.gridClinicalInformation);
 			this.Controls.Add(this.gridNotes);
 			this.Controls.Add(this.gridSpecimen);
-			this.Controls.Add(this.gridHL7Messages);
 			this.Controls.Add(this.label5);
 			this.Controls.Add(this.textName);
 			this.Controls.Add(this.butAdd);
@@ -297,7 +281,6 @@
 		private System.Windows.Forms.Button butAdd;
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.TextBox textName;
-		private UI.ODGrid gridHL7Messages;
 		private UI.ODGrid gridSpecimen;
 		private UI.ODGrid gridNotes;
 		private UI.ODGrid gridClinicalInformation;
