@@ -18,7 +18,7 @@ namespace OpenDentBusiness {
 		public VaccineObsIdentifier IdentifyingCode;
 		///<summary>The observation value.  The type of the value depends on the ValType.  Used in HL7 OBX-5.</summary>
 		public string ValReported;
-		///<summary>Enum:ValCodeSystem CVX, HL70064.  The observation value code system when ValType is Coded.  Used in HL7 OBX-5.</summary>
+		///<summary>Enum:VaccineObsValCodeSystem CVX, HL70064.  The observation value code system when ValType is Coded.  Used in HL7 OBX-5.</summary>
 		public VaccineObsValCodeSystem ValCodeSystem;
 		///<summary>FK to vaccineobs.VaccineObsNum.  All vaccineobs records with matching GroupId are in the same group.  Set to 0 if this vaccine observation is not part of a group.  Used in HL7 OBX-4.</summary>
 		public long VaccineObsNumGroup;

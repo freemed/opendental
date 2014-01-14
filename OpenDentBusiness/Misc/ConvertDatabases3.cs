@@ -3514,7 +3514,7 @@ namespace OpenDentBusiness {
 						ValType tinyint NOT NULL,
 						IdentifyingCode tinyint NOT NULL,
 						ValReported varchar(255) NOT NULL,
-						ValCodeSystem varchar(255) NOT NULL,
+						ValCodeSystem tinyint NOT NULL,
 						VaccineObsNumGroup bigint NOT NULL,
 						ValUnit varchar(255) NOT NULL,
 						DateObs date NOT NULL DEFAULT '0001-01-01',
@@ -3533,7 +3533,7 @@ namespace OpenDentBusiness {
 						ValType number(3) NOT NULL,
 						IdentifyingCode number(3) NOT NULL,
 						ValReported varchar2(255),
-						ValCodeSystem varchar2(255),
+						ValCodeSystem number(3) NOT NULL,
 						VaccineObsNumGroup number(20) NOT NULL,
 						ValUnit varchar2(255),
 						DateObs date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
@@ -3576,6 +3576,21 @@ namespace OpenDentBusiness {
 					command="ALTER TABLE vitalsign MODIFY BMIPercentile NOT NULL";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE patient ADD VacShareOk tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE patient ADD VacShareOk number(3)";
+					Db.NonQ(command);
+					command="UPDATE patient SET VacShareOk = 0 WHERE VacShareOk IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE patient MODIFY VacShareOk NOT NULL";
+					Db.NonQ(command);
+				}
+
+
+
 
 				command="UPDATE preference SET ValueString = '14.1.0.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);

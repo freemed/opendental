@@ -26,9 +26,11 @@
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormEhrVaccines));
 			this.butSubmitImmunization = new System.Windows.Forms.Button();
 			this.butAddVaccine = new System.Windows.Forms.Button();
-			this.gridVaccine = new OpenDental.UI.ODGrid();
 			this.butClose = new System.Windows.Forms.Button();
 			this.butExport = new System.Windows.Forms.Button();
+			this.label45 = new System.Windows.Forms.Label();
+			this.gridVaccine = new OpenDental.UI.ODGrid();
+			this.listVacShareOk = new System.Windows.Forms.ListBox();
 			this.SuspendLayout();
 			// 
 			// butSubmitImmunization
@@ -53,22 +55,6 @@
 			this.butAddVaccine.UseVisualStyleBackColor = true;
 			this.butAddVaccine.Click += new System.EventHandler(this.butAddVaccine_Click);
 			// 
-			// gridVaccine
-			// 
-			this.gridVaccine.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.gridVaccine.HScrollVisible = false;
-			this.gridVaccine.Location = new System.Drawing.Point(12, 12);
-			this.gridVaccine.Name = "gridVaccine";
-			this.gridVaccine.ScrollValue = 0;
-			this.gridVaccine.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridVaccine.Size = new System.Drawing.Size(547, 492);
-			this.gridVaccine.TabIndex = 0;
-			this.gridVaccine.Title = "Vaccines";
-			this.gridVaccine.TranslationName = null;
-			this.gridVaccine.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridVaccine_CellDoubleClick);
-			// 
 			// butClose
 			// 
 			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -91,11 +77,52 @@
 			this.butExport.UseVisualStyleBackColor = true;
 			this.butExport.Click += new System.EventHandler(this.butExport_Click);
 			// 
+			// label45
+			// 
+			this.label45.Location = new System.Drawing.Point(13, 487);
+			this.label45.Name = "label45";
+			this.label45.Size = new System.Drawing.Size(255, 17);
+			this.label45.TabIndex = 130;
+			this.label45.Text = "Patient allows exporting to other EHRs";
+			this.label45.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// gridVaccine
+			// 
+			this.gridVaccine.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridVaccine.HScrollVisible = false;
+			this.gridVaccine.Location = new System.Drawing.Point(12, 12);
+			this.gridVaccine.Name = "gridVaccine";
+			this.gridVaccine.ScrollValue = 0;
+			this.gridVaccine.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridVaccine.Size = new System.Drawing.Size(547, 469);
+			this.gridVaccine.TabIndex = 0;
+			this.gridVaccine.Title = "Vaccines";
+			this.gridVaccine.TranslationName = null;
+			this.gridVaccine.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridVaccine_CellDoubleClick);
+			// 
+			// listVacShareOk
+			// 
+			this.listVacShareOk.ColumnWidth = 30;
+			this.listVacShareOk.Items.AddRange(new object[] {
+            "??",
+            "Yes",
+            "No"});
+			this.listVacShareOk.Location = new System.Drawing.Point(269, 487);
+			this.listVacShareOk.MultiColumn = true;
+			this.listVacShareOk.Name = "listVacShareOk";
+			this.listVacShareOk.Size = new System.Drawing.Size(95, 17);
+			this.listVacShareOk.TabIndex = 131;
+			this.listVacShareOk.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listVacShareOk_MouseClick);
+			// 
 			// FormEhrVaccines
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(663, 516);
+			this.Controls.Add(this.listVacShareOk);
+			this.Controls.Add(this.label45);
 			this.Controls.Add(this.butExport);
 			this.Controls.Add(this.butClose);
 			this.Controls.Add(this.butAddVaccine);
@@ -117,5 +144,7 @@
 		private OpenDental.UI.ODGrid gridVaccine;
 		private System.Windows.Forms.Button butClose;
 		private System.Windows.Forms.Button butExport;
+		private System.Windows.Forms.Label label45;
+		private System.Windows.Forms.ListBox listVacShareOk;
 	}
 }

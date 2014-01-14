@@ -20,6 +20,7 @@ namespace OpenDental {
 
 		private void FormVaccines_Load(object sender,EventArgs e) {
 			FillGridVaccine();
+			listVacShareOk.SelectedIndex=(int)PatCur.VacShareOk;
 		}
 
 		private void FillGridVaccine() {
@@ -133,6 +134,12 @@ namespace OpenDental {
 			}
 			Cursor=Cursors.Default;
 			MessageBox.Show("Sent");
+		}
+
+		private void listVacShareOk_MouseClick(object sender,MouseEventArgs e) {
+			Patient patOld=PatCur.Copy();
+			PatCur.VacShareOk=(YN)listVacShareOk.SelectedIndex;
+			Patients.Update(PatCur,patOld);
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {

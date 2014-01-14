@@ -457,7 +457,7 @@ namespace OpenDentBusiness.HL7 {
 			//ORD-8 Parent.  Optional.
 			//ORD-9 Date/Time of Transaction.  Optional.
 			//ORD-10 Entered By.  Required if known.  Cardinality [0..1].  Type XCN.  This is the person that entered the immunization record into the system.
-			Userod userod=Userods.GetUser(vaccine.UserNum);//Can be null if vaccine.UserNum=0.
+			Userod userod=Userods.GetUser(vaccine.UserNum);//Can be null if vaccine.UserNum=0 for older records before the vaccine.UserNum column existed.
 			if(userod!=null) {
 				if(userod.ProvNum!=0) {
 					Provider provEnteredBy=Providers.GetProv(userod.ProvNum);
@@ -521,7 +521,16 @@ namespace OpenDentBusiness.HL7 {
 				WriteCE(11,"02","Reminder/Recall - any method","HL70215");
 			}
 			//PD1-12 Protection Indicator.  Required if known (length 1..1).  Cardinality [0..1].  Value set HL70136 (guide page 199).  Allowed values are "Y" for yes, "N" for no, or blank for unknown.
-			//PD1-13 Protection Indicator.  Required if PD1-12 is not blank (length unspecified).  Cardinality [0..1].
+			if(_pat.VacShareOk==YN.Yes) {
+				_seg.SetField(12,"N");//Do not protect.
+			}
+			else if(_pat.VacShareOk==YN.No) {
+				_seg.SetField(12,"Y");//Protect
+			}
+			//PD1-13 Protection Indicator Date Effective.  Required if PD1-12 is not blank (length unspecified).  Cardinality [0..1].
+			if(_pat.VacShareOk!=YN.Unknown) {
+				_seg.SetField(17,_pat.DateTStamp.ToString("yyyyMMdd"));
+			}
 			//PD1-14 Place of Worship.  Optional (length unspecified).  Cardinality [0..1].
 			//PD1-15 Advance Directive Code.  Optional (length unspecified).  Cardinality [0..1].
 			//PD1-16 Immunization Registry Status.  Required if known (length unspecified).  Cardinality [0..1].  Value set HL70441 (guide page 232).  The word "registry" refers to the EHR.
