@@ -3668,7 +3668,14 @@ namespace OpenDentBusiness {
 					command=@"CREATE INDEX ehrpatient_PatNum ON ehrpatient (PatNum)";
 					Db.NonQ(command);
 				}
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE procedurelog ADD SnomedBodySite varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE procedurelog ADD SnomedBodySite varchar2(255)";
+					Db.NonQ(command);
+				}
 
 
 				command="UPDATE preference SET ValueString = '14.1.0.0' WHERE PrefName = 'DataBaseVersion'";

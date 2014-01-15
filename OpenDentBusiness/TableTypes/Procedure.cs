@@ -130,6 +130,8 @@ namespace OpenDentBusiness {
 		///<summary>Not a database column.</summary>
 		[CrudColumn(IsNotDbColumn=true)]
 		public bool SigIsTopaz;
+		///<summary>Some procedures require a SNOMED code which indicates that site on the body at which this procedure was performed.</summary>
+		public string SnomedBodySite;
 
 		///<summary>Used only for serialization purposes</summary>
 		[XmlElement("ProcTime",typeof(long))]
