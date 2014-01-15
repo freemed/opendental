@@ -3570,22 +3570,6 @@ namespace OpenDentBusiness {
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE patient ADD MotherMaidenFname varchar(255) NOT NULL";
-					Db.NonQ(command);
-				}
-				else {//oracle
-					command="ALTER TABLE patient ADD MotherMaidenFname varchar2(255)";
-					Db.NonQ(command);
-				}
-				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE patient ADD MotherMaidenLname varchar(255) NOT NULL";
-					Db.NonQ(command);
-				}
-				else {//oracle
-					command="ALTER TABLE patient ADD MotherMaidenLname varchar2(255)";
-					Db.NonQ(command);
-				}
-				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS vaccineobs";
 					Db.NonQ(command);
 					command=@"CREATE TABLE vaccineobs (
@@ -3657,18 +3641,33 @@ namespace OpenDentBusiness {
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE patient ADD VacShareOk tinyint NOT NULL";
+					command="DROP TABLE IF EXISTS ehrpatient";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehrpatient (
+						EhrPatientNum bigint NOT NULL auto_increment PRIMARY KEY,
+						PatNum bigint NOT NULL,
+						MotherMaidenFname varchar(255) NOT NULL,
+						MotherMaidenLname varchar(255) NOT NULL,
+						VacShareOk tinyint NOT NULL,
+						INDEX(PatNum)
+						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
 				}
 				else {//oracle
-					command="ALTER TABLE patient ADD VacShareOk number(3)";
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE ehrpatient'; EXCEPTION WHEN OTHERS THEN NULL; END;";
 					Db.NonQ(command);
-					command="UPDATE patient SET VacShareOk = 0 WHERE VacShareOk IS NULL";
+					command=@"CREATE TABLE ehrpatient (
+						EhrPatientNum number(20) NOT NULL,
+						PatNum number(20) NOT NULL,
+						MotherMaidenFname varchar2(255),
+						MotherMaidenLname varchar2(255),
+						VacShareOk number(3) NOT NULL,
+						CONSTRAINT ehrpatient_EhrPatientNum PRIMARY KEY (EhrPatientNum)
+						)";
 					Db.NonQ(command);
-					command="ALTER TABLE patient MODIFY VacShareOk NOT NULL";
+					command=@"CREATE INDEX ehrpatient_PatNum ON ehrpatient (PatNum)";
 					Db.NonQ(command);
 				}
-
 
 
 
