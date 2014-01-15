@@ -1768,18 +1768,18 @@ Reason for Referral
 =====================================================================================================
 Laboratory Test Results
 =====================================================================================================");
-			List<LabResult> listLabResultAll=LabResults.GetAllForPatient(_patOutCcd.PatNum);
-			List<LabResult> listLabResultFiltered=new List<LabResult>();
+			List<EhrLabResult> listLabResultAll=EhrLabResults.GetAllForPatient(_patOutCcd.PatNum);
+			List<EhrLabResult> listLabResultFiltered=new List<EhrLabResult>();
 			for(int i=0;i<listLabResultAll.Count;i++) {
 				if(!hasSectionResult) {
 					continue;
 				}
-				if(listLabResultAll[i].TestID=="") {
+				if(listLabResultAll[i].ObservationIdentifierID=="") {
 					continue;//Blank codes not allowed in format.
 				}
 				listLabResultFiltered.Add(listLabResultAll[i]);
 			}
-			LabPanel labPanel;
+			EhrLab labPanel;
 			Start("component");
 			Start("section");
 			TemplateId("2.16.840.1.113883.10.20.22.2.3.1");//page 309 Results section with coded entries required.
@@ -1800,16 +1800,40 @@ Laboratory Test Results
 				End("thead");
 				Start("tbody");
 				for(int i=0;i<listLabResultFiltered.Count;i++) {
+					string value="";
+					switch(listLabResultFiltered[i].ValueType) {
+						case EhrLaboratories.HL70125.CE:
+							break;
+						case EhrLaboratories.HL70125.CWE:
+							break;
+						case EhrLaboratories.HL70125.DT:
+							break;
+						case EhrLaboratories.HL70125.FT:
+							break;
+						case EhrLaboratories.HL70125.NM:
+							value=listLabResultFiltered[i].ObservationValueNumeric.ToString();
+							break;
+						case EhrLaboratories.HL70125.SN:
+							break;
+						case EhrLaboratories.HL70125.ST:
+							break;
+						case EhrLaboratories.HL70125.TM:
+							break;
+						case EhrLaboratories.HL70125.TS:
+							break;
+						case EhrLaboratories.HL70125.TX:
+							break;
+					}
 					Start("tr");
-					_w.WriteElementString("td",listLabResultFiltered[i].TestID);//LOINC Code
-					_w.WriteElementString("td",listLabResultFiltered[i].TestName);//Test
-					_w.WriteElementString("td",listLabResultFiltered[i].ObsValue+" "+listLabResultFiltered[i].ObsUnits);//Result
-					_w.WriteElementString("td",listLabResultFiltered[i].AbnormalFlag.ToString());//Abnormal Flag
-					if(listLabResultFiltered[i].DateTimeTest.Year<1880) {
+					_w.WriteElementString("td",listLabResultFiltered[i].ObservationIdentifierID);//LOINC Code
+					_w.WriteElementString("td",listLabResultFiltered[i].ObservationIdentifierText);//Test
+					_w.WriteElementString("td",value+" "+listLabResultFiltered[i].UnitsText);//Result
+					_w.WriteElementString("td",listLabResultFiltered[i].AbnormalFlags);//Abnormal Flag
+					if(PIn.Int(listLabResultFiltered[i].ObservationDateTime)<18800000) {
 						_w.WriteElementString("td","");//Test
 					}
 					else {
-						DateText("td",listLabResultFiltered[i].DateTimeTest);
+						_w.WriteElementString("td",listLabResultFiltered[i].ObservationDateTime);
 					}
 					End("tr");
 				}
@@ -1821,26 +1845,50 @@ Laboratory Test Results
 			}
 			End("text");
 			if(listLabResultFiltered.Count==0) {//If there are no entries in the filtered list, then we want to add a dummy entry since at least one is required.
-				LabResult labR=new LabResult();
+				EhrLabResult labR=new EhrLabResult();
 				listLabResultFiltered.Add(labR);
 			}
 			for(int i=0;i<listLabResultFiltered.Count;i++) {
-				if(listLabResultFiltered[i].LabPanelNum==0) {
-					labPanel=new LabPanel();
+				if(listLabResultFiltered[i].EhrLabNum==0) {
+					labPanel=new EhrLab();
 				}
 				else {
-					labPanel=LabPanels.GetOne(listLabResultFiltered[i].LabPanelNum);
+					labPanel=EhrLabs.GetOne(listLabResultFiltered[i].EhrLabNum);
+				}
+				string value="";
+				switch(listLabResultFiltered[i].ValueType) {
+					case EhrLaboratories.HL70125.CE:
+						break;
+					case EhrLaboratories.HL70125.CWE:
+						break;
+					case EhrLaboratories.HL70125.DT:
+						break;
+					case EhrLaboratories.HL70125.FT:
+						break;
+					case EhrLaboratories.HL70125.NM:
+						value=listLabResultFiltered[i].ObservationValueNumeric.ToString();
+						break;
+					case EhrLaboratories.HL70125.SN:
+						break;
+					case EhrLaboratories.HL70125.ST:
+						break;
+					case EhrLaboratories.HL70125.TM:
+						break;
+					case EhrLaboratories.HL70125.TS:
+						break;
+					case EhrLaboratories.HL70125.TX:
+						break;
 				}
 				Start("entry","typeCode","DRIV");
 				Start("organizer","classCode","BATTERY","moodCode","EVN");
 				StartAndEnd("templateId","root","2.16.840.1.113883.10.20.22.4.1");
 				_w.WriteComment("Result organizer template");
 				Guid();
-				if(String.IsNullOrEmpty(labPanel.ServiceId)) {
+				if(String.IsNullOrEmpty(labPanel.UsiID)) {
 					StartAndEnd("code","nullFlavor","NA");//Null allowed for this code.
 				}
 				else {
-					StartAndEnd("code","code",labPanel.ServiceId,"codeSystem",strCodeSystemLoinc,"displayName",labPanel.ServiceName);//Code systems allowed: LOINC, or other "local codes".
+					StartAndEnd("code","code",labPanel.UsiID,"codeSystem",strCodeSystemLoinc,"displayName",labPanel.UsiText);//Code systems allowed: LOINC, or other "local codes".
 				}
 				StartAndEnd("statusCode","code","completed");//page 532 Allowed values: aborted, active, cancelled, completed, held, suspended.
 				Start("component");
@@ -1848,36 +1896,36 @@ Laboratory Test Results
 				TemplateId("2.16.840.1.113883.10.20.22.4.2");
 				_w.WriteComment("Result observation template");
 				Guid();
-				if(String.IsNullOrEmpty(listLabResultFiltered[i].TestID)) {
+				if(String.IsNullOrEmpty(listLabResultFiltered[i].ObservationIdentifierID)) {
 					StartAndEnd("code","nullFlavor","UNK");
 				}
 				else {
-					StartAndEnd("code","code",listLabResultFiltered[i].TestID,"displayName",listLabResultFiltered[i].TestName,"codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc);
+					StartAndEnd("code","code",listLabResultFiltered[i].ObservationIdentifierID,"displayName",listLabResultFiltered[i].ObservationIdentifierText,"codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc);
 				}
 				StartAndEnd("statusCode","code","completed");//Allowed values: aborted, active, cancelled, completed, held, or suspended.
-				if(listLabResultFiltered[i].DateTimeTest.Year<1880) {
+				if(PIn.Int(listLabResultFiltered[i].ObservationDateTime)<18800000) {
 					StartAndEnd("effectiveTime","nullFlavor","UNK");
 				}
 				else {
-					StartAndEnd("effectiveTime","value",listLabResultFiltered[i].DateTimeTest.ToString("yyyyMMddHHmm"));
+					StartAndEnd("effectiveTime","value",listLabResultFiltered[i].ObservationDateTime);
 				}
 				Start("value");
 				_w.WriteAttributeString("xsi","type",null,"PQ");
-				if(listLabResultFiltered[i].ObsValue==null || listLabResultFiltered[i].ObsValue=="") {
+				if(value==null || value=="") {
 					Attribs("nullFlavor","UNK");
 				}
 				else {
-					Attribs("value",listLabResultFiltered[i].ObsValue,"unit",listLabResultFiltered[i].ObsUnits);
+					Attribs("value",value,"unit",listLabResultFiltered[i].UnitsID);
 				}
 				End("value");
 				StartAndEnd("interpretationCode","code","N","codeSystem","2.16.840.1.113883.5.83");
 				Start("referenceRange");
 				Start("observationRange");
-				if(String.IsNullOrEmpty(listLabResultFiltered[i].ObsRange)) {
+				if(String.IsNullOrEmpty(listLabResultFiltered[i].referenceRange)) {
 					StartAndEnd("text","nullFlavor","UNK");
 				}
 				else {
-					_w.WriteElementString("text",listLabResultFiltered[i].ObsRange);
+					_w.WriteElementString("text",listLabResultFiltered[i].referenceRange);
 				}
 				End("observationRange");
 				End("referenceRange");
