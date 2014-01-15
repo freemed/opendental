@@ -70,14 +70,16 @@ SPM|1|||119297000^BLD^SCT^BldSpc^Blood^99USA^^^Blood Specimen|||||||||||||201103
 #endif
 			MBCP.textMain.SelectAll();
 			MBCP.ShowDialog();
-			EhrLab ehrLab;
+			List<EhrLab> listEhrLabs;
 			try {
-				ehrLab=EhrLabs.ProcessHl7Message(MBCP.textMain.Text,PatCur);//Not a typical use of the msg box copy paste
-				if(ehrLab.PatNum!=PatCur.PatNum) {
+				listEhrLabs=EhrLabs.ProcessHl7Message(MBCP.textMain.Text,PatCur);//Not a typical use of the msg box copy paste
+				if(listEhrLabs[0].PatNum!=PatCur.PatNum) {//only need to check the first lab.
 					if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Lab patient does not match current patient, would you like to import the lab and attach it to current patient?")) {
 						return;
 					}
-					ehrLab.PatNum=PatCur.PatNum;//TODO:this might need enhancing.
+					for(int i=0;i<listEhrLabs.Count;i++) {
+						listEhrLabs[i].PatNum=PatCur.PatNum;//TODO:this might need enhancing.
+					}
 				}
 				//ehrLab.Patnum already matches current patient.
 			}
@@ -85,12 +87,14 @@ SPM|1|||119297000^BLD^SCT^BldSpc^Blood^99USA^^^Blood Specimen|||||||||||||201103
 				MessageBox.Show(this,"Unable to import lab.\r\n"+Ex.Message);
 				return;
 			}
-			ehrLab=EhrLabs.SaveToDB(ehrLab);
-			for(int i=0;i<ehrLab.ListEhrLabResults.Count;i++) {
-				if(Security.IsAuthorized(Permissions.EhrShowCDS,true)) {
-					FormCDSIntervention FormCDSI=new FormCDSIntervention();
-					FormCDSI.ListCDSI=EhrTriggers.TriggerMatch(ehrLab.ListEhrLabResults[i],PatCur);
-					FormCDSI.ShowIfRequired(false);
+			for(int i=0;i<listEhrLabs.Count;i++) {
+				listEhrLabs[i]=EhrLabs.SaveToDB(listEhrLabs[i]);//SAVE
+				for(int j=0;j<listEhrLabs[i].ListEhrLabResults.Count;j++) {//EHR TRIGGER
+					if(Security.IsAuthorized(Permissions.EhrShowCDS,true)) {
+						FormCDSIntervention FormCDSI=new FormCDSIntervention();
+						FormCDSI.ListCDSI=EhrTriggers.TriggerMatch(listEhrLabs[i].ListEhrLabResults[j],PatCur);
+						FormCDSI.ShowIfRequired(false);
+					}
 				}
 			}
 			FillGrid();
