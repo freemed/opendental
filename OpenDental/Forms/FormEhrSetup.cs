@@ -407,29 +407,6 @@ namespace OpenDental {
 			DialogResult=DialogResult.Cancel;
 		}
 
-		private void button1_Click(object sender,EventArgs e) {
-			List<EhrLab> listEhrLabs=new List<EhrLab>();
-			List<string> TestMessages=getTestMessagesHelper();
-			foreach(string message in TestMessages) {
-				//try{
-				Patient patCur=EhrLabs.FindAttachedPatient(message);
-				if(patCur==null) {
-					MsgBox.Show(this,"Unable to identify patient from message IDs.  Please select a patient to attach lab results to.");
-					FormPatientSelect FormPS=new FormPatientSelect();
-					FormPS.ShowDialog();
-					if(FormPS.DialogResult!=DialogResult.OK) {
-						continue;//next message
-					}
-					patCur=Patients.GetPat(FormPS.SelectedPatNum);
-				}
-				listEhrLabs.Add(EhrLabs.ProcessHl7Message(message,patCur));
-				//}
-				//catch{
-				//	listEhrLabs.Add(null);
-				//}
-			}//all messages processed.
-		}
-
 		private List<string> getTestMessagesHelper(){
 			List<string> retVal=new List<string>();
 			#region LRI_1.0-GU_Final
