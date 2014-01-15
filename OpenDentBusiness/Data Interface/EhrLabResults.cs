@@ -17,6 +17,15 @@ namespace OpenDentBusiness{
 			return Crud.EhrLabResultCrud.Insert(ehrLabResult);
 		}
 
+		///<summary>Get all lab results for one patient.</summary>
+		public static List<EhrLabResult> GetAllForPatient(long patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<EhrLabResult>>(MethodBase.GetCurrentMethod(),patNum);
+			}
+			string command="SELECT * FROM ehrlabresult WHERE EhrLabNum IN (SELECT EhrLabNum FROM ehrlab WHERE PatNum="+POut.Long(patNum)+")";
+			return Crud.EhrLabResultCrud.SelectMany(command);
+		}
+
 		///<summary>Returns all EhrLabResults for a given EhrLab.</summary>
 		public static List<EhrLabResult> GetForLab(long ehrLabNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
