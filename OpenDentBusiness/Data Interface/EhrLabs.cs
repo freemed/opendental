@@ -1,9 +1,8 @@
-using EhrLaboratories;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Reflection;
 using System.Text;
+using EhrLaboratories;
 
 namespace OpenDentBusiness{
 	///<summary></summary>
@@ -574,6 +573,99 @@ namespace OpenDentBusiness{
 			string command="SELECT * FROM ehrlab WHERE PatNum = "+POut.Long(patNum);
 			List<EhrLab> retVal=Crud.EhrLabCrud.SelectMany(command);
 
+			return retVal;
+		}
+
+		///<summary>Helper function to return a list of descriptions for the HL70203 enumeration.  First item in the list is blank.</summary>
+		public static List<string> GetHL70203Descriptions() {
+			List<string> retVal=new List<string>();
+			retVal.Add("");//Blank
+			retVal.Add("Account number");//AN
+			retVal.Add("Account number creditor");//ANC
+			retVal.Add("Account number debitor");//AND
+			retVal.Add("Advanced practice registered nurse");//APRN
+			retVal.Add("American express");//AM
+			retVal.Add("Anonymous identifier");//ANON
+			retVal.Add("Bank account number");//BA
+			retVal.Add("Bank card number");//BC
+			retVal.Add("Birth registry number");//BR
+			retVal.Add("Breed registry number");//BRN
+			retVal.Add("Cost center number");//CC
+			retVal.Add("County number");//CY
+			retVal.Add("Dentist license number");//DDS
+			retVal.Add("Diner's club card");//DI
+			retVal.Add("Discover card");//DS
+			retVal.Add("Doctor number");//DN
+			retVal.Add("Donor registration number");//DR
+			retVal.Add("Driver's license number");//DL
+			retVal.Add("Drug enforcement administration");//DEA
+			retVal.Add("Drug furnishing number");//DFN
+			retVal.Add("Employee number");//EI
+			retVal.Add("Employer number");//EN
+			retVal.Add("Facility ID");//FI
+			retVal.Add("General ledger number");//GL
+			retVal.Add("Guarantor external identifier");//GN
+			retVal.Add("Guarantor internal identifier");//GI
+			retVal.Add("Health card number");//HC
+			retVal.Add("Indigenous/Aboriginal");//IND
+			retVal.Add("Jurisdictional health number");//JHN
+			retVal.Add("Labor and industries number");//LI
+			retVal.Add("License number");//LN
+			retVal.Add("Living subject enterprise number");//PE
+			retVal.Add("Local registry ID");//LR
+			retVal.Add("MasterCard");//MS
+			retVal.Add("Medical license number");//MD
+			retVal.Add("Medical record number");//MR
+			retVal.Add("Universal physician identification numbers");//UPIN
+			retVal.Add("Member number");//MB
+			retVal.Add("Microchip number");//MCN
+			retVal.Add("Military ID number");//MI
+			retVal.Add("National employer identifier");//NE
+			retVal.Add("National health plan identifier");//NH
+			retVal.Add("National insurance organization identifier");//NII
+			retVal.Add("National insurance payor identifier");//NIIP
+			retVal.Add("National person identifier");//NNxxx
+			retVal.Add("National provider identifier");//NPI
+			retVal.Add("National unique individual identifier");//NI
+			retVal.Add("Nurse practitioner number");//NP
+			retVal.Add("Optometrist license number");//OD
+			retVal.Add("Organization identifier");//XX
+			retVal.Add("Osteopathic license number");//DO
+			retVal.Add("Passport number");//PPN
+			retVal.Add("Patient external identifier");//PT
+			retVal.Add("Patient internal identifier");//PI
+			retVal.Add("Patient Medicaid number");//MA
+			retVal.Add("Patient's Medicare number");//MC
+			retVal.Add("Penitentiary institution number");//PCN
+			retVal.Add("Pension number");//PEN
+			retVal.Add("Permanent resident card number");//PRC
+			retVal.Add("Person number");//PN
+			retVal.Add("Pharmacist license number");//RPH
+			retVal.Add("Physician assistant number");//PA
+			retVal.Add("Podiatrist license number");//DPM
+			retVal.Add("Practitioner Medicaid number");//MCD
+			retVal.Add("Practitioner Medicare number");//MCR
+			retVal.Add("Provider number");//PRN
+			retVal.Add("QA number");//QA
+			retVal.Add("Railroad retirement number");//RR
+			retVal.Add("Regional registry ID");//RRI
+			retVal.Add("Registered nurse number");//RN
+			retVal.Add("Resource identifier");//RI
+			retVal.Add("Social security number");//SS
+			retVal.Add("Specimen identifier");//SID
+			retVal.Add("State license");//SL
+			retVal.Add("State registry ID");//SR
+			retVal.Add("Subscriber number");//SN
+			retVal.Add("Tax ID number");//TAX
+			retVal.Add("Temporary account number");//ANT
+			retVal.Add("Temporary living subject number");//PNT
+			retVal.Add("Temporary medical record number");//MRT
+			retVal.Add("Treaty Number");//TN
+			retVal.Add("Unspecified identifier");//U
+			retVal.Add("VISA");//VS
+			retVal.Add("Visit number");//VN
+			retVal.Add("WIC identifier");//WC
+			retVal.Add("Workers' comp number");//WCN
 			return retVal;
 		}
 

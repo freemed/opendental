@@ -1,6 +1,5 @@
-﻿using EhrLaboratories;
-
-using System;
+﻿using System;
+using EhrLaboratories;
 
 namespace OpenDentBusiness {
 	///<summary>For EHR module, lab result that contains all required fields for HL7 Lab Reporting Interface (LRI).  OBX</summary>

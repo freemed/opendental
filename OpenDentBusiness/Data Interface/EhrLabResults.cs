@@ -1,8 +1,5 @@
-using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Reflection;
-using System.Text;
 
 namespace OpenDentBusiness{
 	///<summary></summary>
@@ -43,6 +40,154 @@ namespace OpenDentBusiness{
 			}
 			string command="DELETE FROM ehrlabresult WHERE EhrLabNum = "+POut.Long(ehrLabNum);
 			Db.NonQ(command);
+		}
+
+		///<summary>Helper function to return a list of descriptions for the HL70085 enumeration.  First item in the list is blank.</summary>
+		public static List<string> GetHL70085Descriptions() {
+			//No need to check RemotingRole;
+			List<string> retVal=new List<string>();
+			retVal.Add("");//Blank
+			retVal.Add("Deletes OBX");//D
+			retVal.Add("Final results");//F
+			retVal.Add("Not asked");//N
+			retVal.Add("Order description only");//O
+			retVal.Add("Partial results");//S
+			retVal.Add("Wrong");//W
+			retVal.Add("Preliminary results");//P
+			retVal.Add("Correction");//C
+			retVal.Add("Cannot be obtained");//X
+			retVal.Add("Results entered (not verified)");//R
+			retVal.Add("Final w/o retransmitting");//U
+			retVal.Add("Specimen in lab");//I
+			return retVal;
+		}
+
+		///<summary>Helper function to return a list of descriptions for the HL70125 enumeration.  First item in the list is blank.</summary>
+		public static List<string> GetHL70125Descriptions() {
+			//No need to check RemotingRole;
+			List<string> retVal=new List<string>();
+			retVal.Add("");//Blank
+			retVal.Add("Coded entry");//CE
+			retVal.Add("Coded with exceptions");//CWE
+			retVal.Add("Date");//DT
+			retVal.Add("Formatted text");//FT
+			retVal.Add("Numeric");//NM
+			retVal.Add("Structured numeric");//SN
+			retVal.Add("String data");//ST
+			retVal.Add("Time");//TM
+			retVal.Add("Time stamp");//TS
+			retVal.Add("Text data");//TX
+			return retVal;
+		}
+
+		///<summary>Helper function to return a list of descriptions for the HL70190 enumeration.  First item in the list is blank.</summary>
+		public static List<string> GetHL70190Descriptions() {
+			//No need to check RemotingRole;
+			List<string> retVal=new List<string>();
+			retVal.Add("");//Blank
+			retVal.Add("Bad address");//BA
+			retVal.Add("Birth address, not otherwise specified");//N
+			retVal.Add("Birth delivery location");//BDL
+			retVal.Add("Country of origin");//F
+			retVal.Add("Current or temporary");//C
+			retVal.Add("Firm/Business");//B
+			retVal.Add("Home");//H
+			retVal.Add("Legal address");//L
+			retVal.Add("Mailing");//M
+			retVal.Add("Office");//O
+			retVal.Add("Permanent");//P
+			retVal.Add("Registry home");//RH
+			retVal.Add("Residence at birth");//BR
+			return retVal;
+		}
+
+		///<summary>Helper function to return a list of descriptions for the HL70200 enumeration.  First item in the list is blank.</summary>
+		public static List<string> GetHL70200Descriptions() {
+			//No need to check RemotingRole;
+			List<string> retVal=new List<string>();
+			retVal.Add("");//Blank
+			retVal.Add("Adopted Name");//C
+			retVal.Add("Alias Name");//A
+			retVal.Add("Coded Pseudo-Name");//S
+			retVal.Add("Display Name");//D
+			retVal.Add("Indigenous/Tribal/Community Name");//T
+			retVal.Add("Legal Name");//L
+			retVal.Add("Licensing Name");//I
+			retVal.Add("Maiden Name");//M
+			retVal.Add("Name at Birth");//B
+			retVal.Add("Name of Partner/Spouse");//P
+			retVal.Add("Nickname");//N
+			retVal.Add("Registered Name");//R
+			retVal.Add("Unspecified");//U
+			return retVal;
+		}
+
+		///<summary>Helper function to return a list of descriptions for the USPSAlphaStateCode enumeration.  First item in the list is blank.</summary>
+		public static List<string> GetUSPSAlphaStateCodeDescriptions() {
+			//No need to check RemotingRole;
+			List<string> retVal=new List<string>();
+			retVal.Add("");//Blank
+			retVal.Add("Alabama");//AL
+			retVal.Add("Alaska");//AK
+			retVal.Add("Arizona");//AZ
+			retVal.Add("Arkansas");//AR
+			retVal.Add("California");//CA
+			retVal.Add("Colorado");//CO
+			retVal.Add("Connecticut");//CT
+			retVal.Add("Delaware");//DE
+			retVal.Add("District of Columbia");//DC
+			retVal.Add("Florida");//FL
+			retVal.Add("Georgia");//GA
+			retVal.Add("Hawaii");//HI
+			retVal.Add("Idaho");//ID
+			retVal.Add("Illinois");//IL
+			retVal.Add("Indiana");//IN
+			retVal.Add("Iowa");//IA
+			retVal.Add("Kansas");//KS
+			retVal.Add("Kentucky");//KY
+			retVal.Add("Louisiana");//LA
+			retVal.Add("Maine");//ME
+			retVal.Add("Maryland");//MD
+			retVal.Add("Massachusetts");//MA
+			retVal.Add("Michigan");//MI
+			retVal.Add("Minnesota");//MN
+			retVal.Add("Mississippi");//MS
+			retVal.Add("Missouri");//MO
+			retVal.Add("Montana");//MT
+			retVal.Add("Nebraska");//NE
+			retVal.Add("Nevada");//NV
+			retVal.Add("New Hampshire");//NH
+			retVal.Add("New Jersey");//NJ
+			retVal.Add("New Mexico");//NM
+			retVal.Add("New York");//NY
+			retVal.Add("North Carolina");//NC
+			retVal.Add("North Dakota");//ND
+			retVal.Add("Ohio");//OH
+			retVal.Add("Oklahoma");//OK
+			retVal.Add("Oregon");//OR
+			retVal.Add("Pennsylvania");//PA
+			retVal.Add("Rhode Island");//RI
+			retVal.Add("South Carolina");//SC
+			retVal.Add("South Dakota");//SD
+			retVal.Add("Tennessee");//TN
+			retVal.Add("Texas");//TX
+			retVal.Add("Utah");//UT
+			retVal.Add("Vermont");//VT
+			retVal.Add("Virginia");//VA
+			retVal.Add("Washington");//WA
+			retVal.Add("West Virginia");//WV
+			retVal.Add("Wisconsin");//WI
+			retVal.Add("Wyoming");//WY
+			retVal.Add("American Samoa");//AS
+			retVal.Add("Federated States of Micronesia");//FM
+			retVal.Add("Guam");//GU
+			retVal.Add("Marshall Islands");//MH
+			retVal.Add("Northern Mariana Islands");//MP
+			retVal.Add("Palau");//PW
+			retVal.Add("Puerto Rico");//PR
+			retVal.Add("U.S. Minor Outlying Islands");//UM
+			retVal.Add("Virgin Islands of the U.S.");//VI
+			return retVal;
 		}
 
 		//If this table type will exist as cached data, uncomment the CachePattern region below and edit.
