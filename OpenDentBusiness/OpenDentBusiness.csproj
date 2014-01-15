@@ -422,6 +422,7 @@
     <Compile Include="Data Interface\EhrLabSpecimenConditions.cs" />
     <Compile Include="Data Interface\EhrLabSpecimenRejectReasons.cs" />
     <Compile Include="Data Interface\EhrLabSpecimens.cs" />
+    <Compile Include="Data Interface\EhrPatients.cs" />
     <Compile Include="Data Interface\EhrTriggers.cs" />
     <Compile Include="Data Interface\Cdcrecs.cs" />
     <Compile Include="Data Interface\CentralConnections.cs" />
@@ -841,6 +842,7 @@
     <Compile Include="Plugins\PluginContainer.cs" />
     <Compile Include="Plugins\Plugins.cs" />
     <Compile Include="TableTypes\CDSPermission.cs" />
+    <Compile Include="TableTypes\EhrPatient.cs" />
     <Compile Include="TableTypes\OIDExternal.cs" />
     <Compile Include="TableTypes\OIDInternal.cs" />
     <Compile Include="TableTypes\EhrLabSpecimenRejectReason.cs" />
