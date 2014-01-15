@@ -41,7 +41,7 @@ namespace OpenDentBusiness {
 		public long EhrNotPerformedNum;
 		///<summary>FK to disease.DiseaseNum.  This will link this vitalsign object to a pregnancy diagnosis for this patient.  It will be 0 for non pregnant patients.  The disease it is linked to will be inserted automatically based on the default value set.  In order to change this code for this specific exam it will have to be changed in the problems list.</summary>
 		public long PregDiseaseNum;
-		///<summary>BMI percentile of patient, based on gender and age and the calculated BMI.  We will use the CDC numbers to calculate percentile found here: http://www.cdc.gov/nchs/data/series/sr_11/sr11_246.pdf </summary>
+		///<summary>BMI percentile of patient, based on gender and age and the calculated BMI.  We will use the CDC numbers to calculate percentile found here: (http://www.cdc.gov/nchs/data/series/sr_11/sr11_246.pdf).</summary>
 		public int BMIPercentile;
 
 		///<summary></summary>

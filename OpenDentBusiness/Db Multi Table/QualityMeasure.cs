@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace OpenDentBusiness {
 	///<summary>Used by ehr.</summary>
+	[Serializable]
 	public class QualityMeasure {
 		public QualityType Type;
 		public QualityType2014 Type2014;
@@ -33,6 +35,16 @@ namespace OpenDentBusiness {
 		public Dictionary<long,List<EhrCqmNotPerf>> DictPatNumListNotPerfs;
 		public Dictionary<long,List<EhrCqmProc>> DictPatNumListProcs;
 		public Dictionary<long,List<EhrCqmVitalsign>> DictPatNumListVitalsigns;
+
+		///<summary></summary>
+		public QualityMeasure Copy() {
+			QualityMeasure qualityMeasure=(QualityMeasure)this.MemberwiseClone();
+			qualityMeasure.ListEhrPats=new List<EhrCqmPatient>();
+			for(int i=0;i<ListEhrPats.Count;i++) {
+				qualityMeasure.ListEhrPats.Add(ListEhrPats[i].Copy());
+			}
+			return qualityMeasure;
+		}
 	}
 
 	public enum QualityType {
@@ -80,14 +92,23 @@ namespace OpenDentBusiness {
 		Pneumonia,
 		TobaccoCessation,
 		Influenza,
+		///<summary>patients 3-16 with height, weight, and BMI recorded</summary>
 		WeightChild_1_1,
+		///<summary>patients 3-16 counseled for nutrition</summary>
 		WeightChild_1_2,
+		///<summary>patients 3-16 counseled for physical activity</summary>
 		WeightChild_1_3,
+		///<summary>patients 3-11 with height, weight, and BMI recorded</summary>
 		WeightChild_2_1,
+		///<summary>patients 3-11 counseled for nutrition</summary>
 		WeightChild_2_2,
+		///<summary>patients 3-11 counseled for physical activity</summary>
 		WeightChild_2_3,
+		///<summary>patients 12-16 with height, weight, and BMI recorded</summary>
 		WeightChild_3_1,
+		///<summary>patients 12-16 counseled for nutrition</summary>
 		WeightChild_3_2,
+		///<summary>patients 12-16 counseled for physical activity</summary>
 		WeightChild_3_3,
 		BloodPressureManage
 	}
@@ -104,6 +125,10 @@ namespace OpenDentBusiness {
 		public bool IsExclusion;
 		public bool IsException;
 		public string Explanation;
+
+		public EhrCqmPatient Copy() {
+			return (EhrCqmPatient)this.MemberwiseClone();
+		}
 	}
 
 	public class EhrCqmEncounter {
@@ -205,14 +230,16 @@ namespace OpenDentBusiness {
 	public class EhrCqmVitalsign {
 		public long EhrCqmVitalsignNum;
 		public long PatNum;
-		public decimal BMI;//in kg/m2
-		public string WeightCode;
-		public string CodeValue;
-		public string CodeSystemName;
-		public string CodeSystemOID;
-		public string Description;
-		public string ValueSetName;
-		public string ValueSetOID;
+		public decimal BMI;//in kg/m2, if valid BMI value: CodeValue=39156-5, CodeSystemName=LOINC, CodeSystemOID=2.16.840.1.113883.6.1, Description=Body mass index (BMI) [Ratio], ValueSetName=BMI LOINC Value, ValueSetOID=2.16.840.1.113883.3.600.1.681
+		public int BpSystolic;//for BP Systolic exam: CodeValue=8480-6, CodeSystemName=LOINC, CodeSystemOID=2.16.840.1.113883.6.1, Description=Systolic blood pressure, ValueSetName=Systolic Blood Pressure, ValueSetOID=2.16.840.1.113883.3.526.3.1032
+		public int BpDiastolic;//for BP Diastolic exam: CodeValue=8462-4, CodeSystemName=LOINC, CodeSystemOID=2.16.840.1.113883.6.1, Description=Diastolic blood pressure, ValueSetName=Diastolic Blood Pressure, ValueSetOID=2.16.840.1.113883.3.526.3.1033
+		public string HeightExamCode;//LOINC codes only
+		public string HeightExamDescript;//from LOINC table
+		public string WeightExamCode;//LOINC codes only
+		public string WeightExamDescript;//from LOINC table
+		public string BMIExamCode;//Percentile code, LOINC codes only
+		public string BMIPercentileDescript;//from LOINC table
+		public int BMIPercentile;//0-99, if -1 then not a valid BMI Percentile
 		public DateTime DateTaken;
 	}
 }
