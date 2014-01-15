@@ -1663,12 +1663,14 @@ Procedures
 				Start("thead");
 				Start("tr");
 				_w.WriteElementString("th","Procedure");
+				_w.WriteElementString("th","Body Site");
 				_w.WriteElementString("th","Date");
 				End("tr");
 				End("thead");
 				Start("tbody");
 				for(int i=0;i<listProcsFiltered.Count;i++) {
 					ProcedureCode procCode;
+					Snomed bodySite=Snomeds.GetByCode(listProcsFiltered[i].SnomedBodySite);
 					if(listProcsFiltered[i].CodeNum==0) {
 						procCode=new ProcedureCode();
 					}
@@ -1681,6 +1683,12 @@ Procedures
 					}
 					else {
 						_w.WriteElementString("td",procCode.MedicalCode+" - "+procCode.Descript);
+					}
+					if(bodySite==null || String.IsNullOrEmpty(bodySite.SnomedCode)) {
+						_w.WriteElementString("td","");
+					}
+					else {
+						_w.WriteElementString("td",bodySite.SnomedCode+" - "+bodySite.Description);
 					}
 					if(listProcsFiltered[i].ProcDate.Year<1880) {
 						_w.WriteElementString("td","");
