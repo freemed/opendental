@@ -64,6 +64,7 @@ namespace OpenDental {
 			KeyCur.YearValue=PIn.Int(textYear.Text);
 			KeyCur.QuarterValue=PIn.Int(textQuarter.Text);
 			KeyCur.KeyValue=textKey.Text;
+			KeyCur.PracticeName=PrefC.GetString(PrefName.PracticeTitle);
 			if(KeyCur.IsNew) {
 				EhrQuarterlyKeys.Insert(KeyCur);
 			}
