@@ -21,6 +21,7 @@ namespace OpenDental {
 		private void FormLabPanelEdit_Load(object sender,EventArgs e) {
 			FillGrid();//LabResults
 			FillGridNotes();
+			FillGridResultsCopyTo();
 			FillGridClinicalInformation();
 			FillGridSpecimen();
 		}
@@ -85,6 +86,26 @@ namespace OpenDental {
 				}
 			}
 			gridNotes.EndUpdate();
+		}
+
+		///<summary>Lab Result Notes. Currently includes notes for results too... TODO: seperate notes for labs and results.</summary>
+		private void FillGridResultsCopyTo() {
+			gridResultsCopyTo.BeginUpdate();
+			gridResultsCopyTo.Columns.Clear();
+			ODGridColumn col=new ODGridColumn("Name",60);
+			gridResultsCopyTo.Columns.Add(col);
+			gridResultsCopyTo.Rows.Clear();
+			ODGridRow row;
+			for(int i=0;i<EhrLabCur.ListEhrLabResultsCopyTo.Count;i++) {
+				row=new ODGridRow();
+				row.Cells.Add(EhrLabCur.ListEhrLabResultsCopyTo[i].CopyToPrefix+" "
+					+EhrLabCur.ListEhrLabResultsCopyTo[i].CopyToFName+" "
+					+EhrLabCur.ListEhrLabResultsCopyTo[i].CopyToLName+" "
+					+EhrLabCur.ListEhrLabResultsCopyTo[i].CopyToSuffix);
+				//TODO: Make this neater. Will display extra spaces if missing prefix suffix or middle names.
+				gridResultsCopyTo.Rows.Add(row);
+			}
+			gridResultsCopyTo.EndUpdate();
 		}
 
 		private void FillGridClinicalInformation() {

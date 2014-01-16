@@ -14,7 +14,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<OIDExternal>(MethodBase.GetCurrentMethod(),root,extension);
 			}
-			string command="SELECT * FROM oidexternals WHERE rootExternal='"+POut.String(root)+"' AND IDExternal='"+POut.String(extension)+"'";
+			string command="SELECT * FROM oidexternal WHERE rootExternal='"+POut.String(root)+"' AND IDExternal='"+POut.String(extension)+"'";
 			return Crud.OIDExternalCrud.SelectOne(command);
 		}
 
