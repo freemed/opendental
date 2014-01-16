@@ -521,14 +521,15 @@ namespace OpenDentBusiness.HL7 {
 				WriteCE(11,"02","Reminder/Recall - any method","HL70215");
 			}
 			//PD1-12 Protection Indicator.  Required if known (length 1..1).  Cardinality [0..1].  Value set HL70136 (guide page 199).  Allowed values are "Y" for yes, "N" for no, or blank for unknown.
-			if(_pat.VacShareOk==YN.Yes) {
+			EhrPatient ehrPatient=EhrPatients.Refresh(_pat.PatNum);
+			if(ehrPatient.VacShareOk==YN.Yes) {
 				_seg.SetField(12,"N");//Do not protect.
 			}
-			else if(_pat.VacShareOk==YN.No) {
+			else if(ehrPatient.VacShareOk==YN.No) {
 				_seg.SetField(12,"Y");//Protect
 			}
 			//PD1-13 Protection Indicator Date Effective.  Required if PD1-12 is not blank (length unspecified).  Cardinality [0..1].
-			if(_pat.VacShareOk!=YN.Unknown) {
+			if(ehrPatient.VacShareOk!=YN.Unknown) {
 				_seg.SetField(13,_pat.DateTStamp.ToString("yyyyMMdd"));
 			}
 			//PD1-14 Place of Worship.  Optional (length unspecified).  Cardinality [0..1].
@@ -585,7 +586,8 @@ namespace OpenDentBusiness.HL7 {
 			}
 			//PID-4 Alternate Patient ID - 00106.  No longer used.
 			WriteXPN(5,_pat.FName,_pat.LName,_pat.MiddleI,"L");//PID-5 Patient Name.  Required (length unspecified).  Cardinality [1..*].  Type XPN.  The first repetition must contain the legal name.
-			WriteXPN(6,_pat.MotherMaidenFname,_pat.MotherMaidenLname,"","M");//PID-6 Mother's Maiden Name.  Required if known (length unspecified).  Cardinality [0..1].  Type XPN.
+			EhrPatient ehrPatient=EhrPatients.Refresh(_pat.PatNum);
+			WriteXPN(6,ehrPatient.MotherMaidenFname,ehrPatient.MotherMaidenLname,"","M");//PID-6 Mother's Maiden Name.  Required if known (length unspecified).  Cardinality [0..1].  Type XPN.
 			//PID-7 Date/Time of Birth.  Required.  Cardinality [1..1].  We must specify "UNK" if unknown.
 			if(_pat.Birthdate.Year<1880) {
 				_seg.SetField(7,"UNK");

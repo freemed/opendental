@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
 using OpenDental.UI;
@@ -13,6 +9,7 @@ namespace OpenDental {
 	public partial class FormEhrVaccines:Form {
 		public Patient PatCur;
 		private List<VaccinePat> VaccineList;
+		private EhrPatient _ehrPatientCur;
 
 		public FormEhrVaccines() {
 			InitializeComponent();
@@ -20,7 +17,8 @@ namespace OpenDental {
 
 		private void FormVaccines_Load(object sender,EventArgs e) {
 			FillGridVaccine();
-			listVacShareOk.SelectedIndex=(int)PatCur.VacShareOk;
+			_ehrPatientCur=EhrPatients.Refresh(PatCur.PatNum);
+			listVacShareOk.SelectedIndex=(int)_ehrPatientCur.VacShareOk;
 		}
 
 		private void FillGridVaccine() {
@@ -137,9 +135,8 @@ namespace OpenDental {
 		}
 
 		private void listVacShareOk_MouseClick(object sender,MouseEventArgs e) {
-			Patient patOld=PatCur.Copy();
-			PatCur.VacShareOk=(YN)listVacShareOk.SelectedIndex;
-			Patients.Update(PatCur,patOld);
+			_ehrPatientCur.VacShareOk=(YN)listVacShareOk.SelectedIndex;
+			EhrPatients.Update(_ehrPatientCur);
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {

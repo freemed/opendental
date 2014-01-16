@@ -4,7 +4,6 @@ See header in FormOpenDental.cs for complete text.  Redistributions must retain 
 ===============================================================================================================*/
 using System;
 using System.Drawing;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
@@ -167,10 +166,11 @@ namespace OpenDental{
 		private Label labelEthnicity;
 		private TextBox textCountry;
 		private TextBox textMotherMaidenFname;
-		private Label label30;
+		private Label labelMotherMaidenFname;
 		private TextBox textMotherMaidenLname;
-		private Label label44;
+		private Label labelMotherMaidenLname;
 		private List<Guardian> GuardianList;
+		private EhrPatient _ehrPatientCur;
 
 		///<summary></summary>
 		public FormPatientEdit(Patient patCur,Family famCur){
@@ -371,9 +371,9 @@ namespace OpenDental{
 			this.label10 = new System.Windows.Forms.Label();
 			this.listTextOk = new System.Windows.Forms.ListBox();
 			this.textMotherMaidenFname = new System.Windows.Forms.TextBox();
-			this.label30 = new System.Windows.Forms.Label();
+			this.labelMotherMaidenFname = new System.Windows.Forms.Label();
 			this.textMotherMaidenLname = new System.Windows.Forms.TextBox();
-			this.label44 = new System.Windows.Forms.Label();
+			this.labelMotherMaidenLname = new System.Windows.Forms.Label();
 			this.groupBox2.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.groupNotes.SuspendLayout();
@@ -1663,15 +1663,17 @@ namespace OpenDental{
 			this.textMotherMaidenFname.Name = "textMotherMaidenFname";
 			this.textMotherMaidenFname.Size = new System.Drawing.Size(228, 20);
 			this.textMotherMaidenFname.TabIndex = 124;
+			this.textMotherMaidenFname.Visible = false;
 			// 
-			// label30
+			// labelMotherMaidenFname
 			// 
-			this.label30.Location = new System.Drawing.Point(5, 161);
-			this.label30.Name = "label30";
-			this.label30.Size = new System.Drawing.Size(154, 16);
-			this.label30.TabIndex = 125;
-			this.label30.Text = "Mother\'s Maiden First Name";
-			this.label30.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.labelMotherMaidenFname.Location = new System.Drawing.Point(5, 161);
+			this.labelMotherMaidenFname.Name = "labelMotherMaidenFname";
+			this.labelMotherMaidenFname.Size = new System.Drawing.Size(154, 16);
+			this.labelMotherMaidenFname.TabIndex = 125;
+			this.labelMotherMaidenFname.Text = "Mother\'s Maiden First Name";
+			this.labelMotherMaidenFname.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.labelMotherMaidenFname.Visible = false;
 			// 
 			// textMotherMaidenLname
 			// 
@@ -1680,15 +1682,17 @@ namespace OpenDental{
 			this.textMotherMaidenLname.Name = "textMotherMaidenLname";
 			this.textMotherMaidenLname.Size = new System.Drawing.Size(228, 20);
 			this.textMotherMaidenLname.TabIndex = 126;
+			this.textMotherMaidenLname.Visible = false;
 			// 
-			// label44
+			// labelMotherMaidenLname
 			// 
-			this.label44.Location = new System.Drawing.Point(5, 182);
-			this.label44.Name = "label44";
-			this.label44.Size = new System.Drawing.Size(154, 16);
-			this.label44.TabIndex = 127;
-			this.label44.Text = "Mother\'s Maiden Last Name";
-			this.label44.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.labelMotherMaidenLname.Location = new System.Drawing.Point(5, 182);
+			this.labelMotherMaidenLname.Name = "labelMotherMaidenLname";
+			this.labelMotherMaidenLname.Size = new System.Drawing.Size(154, 16);
+			this.labelMotherMaidenLname.TabIndex = 127;
+			this.labelMotherMaidenLname.Text = "Mother\'s Maiden Last Name";
+			this.labelMotherMaidenLname.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.labelMotherMaidenLname.Visible = false;
 			// 
 			// FormPatientEdit
 			// 
@@ -1696,9 +1700,9 @@ namespace OpenDental{
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(974, 696);
 			this.Controls.Add(this.textMotherMaidenLname);
-			this.Controls.Add(this.label44);
+			this.Controls.Add(this.labelMotherMaidenLname);
 			this.Controls.Add(this.textMotherMaidenFname);
-			this.Controls.Add(this.label30);
+			this.Controls.Add(this.labelMotherMaidenFname);
 			this.Controls.Add(this.textWirelessPhone);
 			this.Controls.Add(this.listTextOk);
 			this.Controls.Add(this.label10);
@@ -1829,8 +1833,15 @@ namespace OpenDental{
 			textPreferred.Text=PatCur.Preferred;
 			textTitle.Text=PatCur.Title;
 			textSalutation.Text=PatCur.Salutation;
-			textMotherMaidenFname.Text=PatCur.MotherMaidenFname;
-			textMotherMaidenLname.Text=PatCur.MotherMaidenLname;
+			if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {//Show mother's maiden name UI if using EHR.
+				_ehrPatientCur=EhrPatients.Refresh(PatCur.PatNum);
+				labelMotherMaidenFname.Visible=true;
+				textMotherMaidenFname.Visible=true;
+				textMotherMaidenFname.Text=_ehrPatientCur.MotherMaidenFname;
+				labelMotherMaidenLname.Visible=true;
+				textMotherMaidenLname.Visible=true;
+				textMotherMaidenLname.Text=_ehrPatientCur.MotherMaidenLname;
+			}
 			listStatus.Items.Add(Lan.g("enumPatientStatus","Patient"));
 			listStatus.Items.Add(Lan.g("enumPatientStatus","NonPatient"));
 			listStatus.Items.Add(Lan.g("enumPatientStatus","Inactive"));
@@ -2946,8 +2957,11 @@ namespace OpenDental{
 			PatCur.Preferred=textPreferred.Text;
 			PatCur.Title=textTitle.Text;
 			PatCur.Salutation=textSalutation.Text;
-			PatCur.MotherMaidenFname=textMotherMaidenFname.Text;
-			PatCur.MotherMaidenLname=textMotherMaidenLname.Text;
+			if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {//Mother's maiden name UI is only used when EHR is enabled.
+				_ehrPatientCur.MotherMaidenFname=textMotherMaidenFname.Text;
+				_ehrPatientCur.MotherMaidenLname=textMotherMaidenLname.Text;
+				EhrPatients.Update(_ehrPatientCur);
+			}
 			switch(listStatus.SelectedIndex){
 				case 0: PatCur.PatStatus=PatientStatus.Patient; break;
 				case 1: PatCur.PatStatus=PatientStatus.NonPatient; break;

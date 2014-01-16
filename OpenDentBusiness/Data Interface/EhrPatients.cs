@@ -1,52 +1,50 @@
-using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Reflection;
-using System.Text;
 
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class EhrPatients{
-		//If this table type will exist as cached data, uncomment the CachePattern region below and edit.
-		/*
-		#region CachePattern
-		//This region can be eliminated if this is not a table type with cached data.
-		//If leaving this region in place, be sure to add RefreshCache and FillCache 
-		//to the Cache.cs file with all the other Cache types.
 
-		///<summary>A list of all EhrPatients.</summary>
-		private static List<EhrPatient> listt;
-
-		///<summary>A list of all EhrPatients.</summary>
-		public static List<EhrPatient> Listt{
-			get {
-				if(listt==null) {
-					RefreshCache();
-				}
-				return listt;
+		///<summary>Only call when EHR is enabled.  Creates the ehrpatient record for the patient if a record does not already exist.  Always returns a non-null EhrPatient.</summary>
+		public static EhrPatient Refresh(long patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<EhrPatient>(MethodBase.GetCurrentMethod(),patNum);
 			}
-			set {
-				listt=value;
+			string command="SELECT COUNT(*) FROM ehrpatient WHERE patnum='"+POut.Long(patNum)+"'";
+			if(Db.GetCount(command)=="0") {//A record does not exist for this patient yet.
+				Insert(patNum);//Create a new record.
 			}
+			command ="SELECT * FROM ehrpatient WHERE patnum ='"+POut.Long(patNum)+"'";
+			return Crud.EhrPatientCrud.SelectOne(command);
 		}
 
 		///<summary></summary>
-		public static DataTable RefreshCache(){
-			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
-			string command="SELECT * FROM ehrpatient ORDER BY ItemOrder";//stub query probably needs to be changed
-			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
-			table.TableName="EhrPatient";
-			FillCache(table);
-			return table;
+		public static void Update(EhrPatient ehrPatient) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),ehrPatient);
+				return;
+			}
+			Crud.EhrPatientCrud.Update(ehrPatient);
 		}
 
 		///<summary></summary>
-		public static void FillCache(DataTable table){
-			//No need to check RemotingRole; no call to db.
-			listt=Crud.EhrPatientCrud.TableToList(table);
+		private static void Insert(long patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum);
+				return;
+			}
+			//Random keys not necessary to check because of 1:1 patNum.
+			//However, this is a lazy insert, so multiple locations might attempt it.
+			//Just in case, we will have it fail silently.
+			EhrPatient ehrPatient=new EhrPatient();
+			ehrPatient.PatNum=patNum;
+			try {
+				Crud.EhrPatientCrud.Insert(ehrPatient,true);
+			}
+			catch {
+				//Fail Silently.
+			}
 		}
-		#endregion
-		*/
+	
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 
@@ -65,24 +63,6 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<EhrPatient>(MethodBase.GetCurrentMethod(),patNum);
 			}
 			return Crud.EhrPatientCrud.SelectOne(patNum);
-		}
-
-		///<summary></summary>
-		public static long Insert(EhrPatient ehrPatient){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				ehrPatient.PatNum=Meth.GetLong(MethodBase.GetCurrentMethod(),ehrPatient);
-				return ehrPatient.PatNum;
-			}
-			return Crud.EhrPatientCrud.Insert(ehrPatient);
-		}
-
-		///<summary></summary>
-		public static void Update(EhrPatient ehrPatient){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),ehrPatient);
-				return;
-			}
-			Crud.EhrPatientCrud.Update(ehrPatient);
 		}
 
 		///<summary></summary>
