@@ -161,6 +161,22 @@ namespace OpenDental {
 			return "";//Unknown value type.
 		}
 
+		private void butAddAbnormalFlag_Click(object sender,EventArgs e) {
+
+		}
+
+		private void gridAbnormalFlags_MouseDoubleClick(object sender,MouseEventArgs e) {
+
+		}
+
+		private void butAddNote_Click(object sender,EventArgs e) {
+
+		}
+
+		private void gridNotes_CellDoubleClick(object sender,UI.ODGridClickEventArgs e) {
+
+		}
+
 		///<summary></summary>
 		private bool EntriesAreValid() {
 			//TODO: validate the controls

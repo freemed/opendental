@@ -23,6 +23,7 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormEhrLabOrderEdit2014));
 			this.butCancel = new System.Windows.Forms.Button();
 			this.butOk = new System.Windows.Forms.Button();
 			this.butDelete = new System.Windows.Forms.Button();
@@ -33,14 +34,14 @@
 			this.button2 = new System.Windows.Forms.Button();
 			this.button3 = new System.Windows.Forms.Button();
 			this.groupBox4 = new System.Windows.Forms.GroupBox();
+			this.label4 = new System.Windows.Forms.Label();
+			this.textBox2 = new System.Windows.Forms.TextBox();
 			this.textMedDirAssignIdType = new System.Windows.Forms.TextBox();
 			this.label42 = new System.Windows.Forms.Label();
 			this.label21 = new System.Windows.Forms.Label();
 			this.textMedDirNamespaceID = new System.Windows.Forms.TextBox();
 			this.label22 = new System.Windows.Forms.Label();
 			this.textMedDirUniversalID = new System.Windows.Forms.TextBox();
-			this.label4 = new System.Windows.Forms.Label();
-			this.textBox2 = new System.Windows.Forms.TextBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.textBox3 = new System.Windows.Forms.TextBox();
@@ -51,6 +52,7 @@
 			this.label10 = new System.Windows.Forms.Label();
 			this.textBox6 = new System.Windows.Forms.TextBox();
 			this.groupBox5 = new System.Windows.Forms.GroupBox();
+			this.button5 = new OpenDental.UI.Button();
 			this.comboMedDirIdType = new System.Windows.Forms.ComboBox();
 			this.label33 = new System.Windows.Forms.Label();
 			this.comboMedDirNameType = new System.Windows.Forms.ComboBox();
@@ -84,6 +86,7 @@
 			this.label13 = new System.Windows.Forms.Label();
 			this.textBox12 = new System.Windows.Forms.TextBox();
 			this.groupBox6 = new System.Windows.Forms.GroupBox();
+			this.button6 = new OpenDental.UI.Button();
 			this.label44 = new System.Windows.Forms.Label();
 			this.textObsIDCodeSystemNameAlt = new System.Windows.Forms.TextBox();
 			this.label43 = new System.Windows.Forms.Label();
@@ -119,8 +122,6 @@
 			this.label26 = new System.Windows.Forms.Label();
 			this.button8 = new OpenDental.UI.Button();
 			this.gridResultsCopyTo = new OpenDental.UI.ODGrid();
-			this.button6 = new OpenDental.UI.Button();
-			this.button5 = new OpenDental.UI.Button();
 			this.button4 = new OpenDental.UI.Button();
 			this.gridClinicalInformation = new OpenDental.UI.ODGrid();
 			this.gridNotes = new OpenDental.UI.ODGrid();
@@ -241,6 +242,23 @@
 			this.groupBox4.TabStop = false;
 			this.groupBox4.Text = "Placer Order Number";
 			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(13, 16);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(106, 17);
+			this.label4.TabIndex = 245;
+			this.label4.Text = "ID";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textBox2
+			// 
+			this.textBox2.Location = new System.Drawing.Point(119, 14);
+			this.textBox2.Multiline = true;
+			this.textBox2.Name = "textBox2";
+			this.textBox2.Size = new System.Drawing.Size(157, 20);
+			this.textBox2.TabIndex = 244;
+			// 
 			// textMedDirAssignIdType
 			// 
 			this.textMedDirAssignIdType.Location = new System.Drawing.Point(119, 35);
@@ -291,23 +309,6 @@
 			this.textMedDirUniversalID.Name = "textMedDirUniversalID";
 			this.textMedDirUniversalID.Size = new System.Drawing.Size(157, 20);
 			this.textMedDirUniversalID.TabIndex = 237;
-			// 
-			// label4
-			// 
-			this.label4.Location = new System.Drawing.Point(13, 16);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(106, 17);
-			this.label4.TabIndex = 245;
-			this.label4.Text = "ID";
-			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textBox2
-			// 
-			this.textBox2.Location = new System.Drawing.Point(119, 14);
-			this.textBox2.Multiline = true;
-			this.textBox2.Name = "textBox2";
-			this.textBox2.Size = new System.Drawing.Size(157, 20);
-			this.textBox2.TabIndex = 244;
 			// 
 			// groupBox2
 			// 
@@ -420,6 +421,20 @@
 			this.groupBox5.TabIndex = 248;
 			this.groupBox5.TabStop = false;
 			this.groupBox5.Text = "Ordering Provider";
+			// 
+			// button5
+			// 
+			this.button5.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.button5.Autosize = true;
+			this.button5.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.button5.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.button5.CornerRadius = 4F;
+			this.button5.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.button5.Location = new System.Drawing.Point(10, 15);
+			this.button5.Name = "button5";
+			this.button5.Size = new System.Drawing.Size(29, 25);
+			this.button5.TabIndex = 249;
+			this.button5.Text = "...";
 			// 
 			// comboMedDirIdType
 			// 
@@ -704,7 +719,6 @@
 			// 
 			// groupBox6
 			// 
-			this.groupBox6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox6.Controls.Add(this.button6);
 			this.groupBox6.Controls.Add(this.label44);
 			this.groupBox6.Controls.Add(this.textObsIDCodeSystemNameAlt);
@@ -728,6 +742,20 @@
 			this.groupBox6.TabIndex = 254;
 			this.groupBox6.TabStop = false;
 			this.groupBox6.Text = "Service Identifier (LOINC Codes)";
+			// 
+			// button6
+			// 
+			this.button6.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.button6.Autosize = true;
+			this.button6.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.button6.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.button6.CornerRadius = 4F;
+			this.button6.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.button6.Location = new System.Drawing.Point(6, 14);
+			this.button6.Name = "button6";
+			this.button6.Size = new System.Drawing.Size(29, 25);
+			this.button6.TabIndex = 255;
+			this.button6.Text = "...";
 			// 
 			// label44
 			// 
@@ -956,7 +984,6 @@
 			// 
 			// groupBox8
 			// 
-			this.groupBox8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox8.Controls.Add(this.textObsDateTime);
 			this.groupBox8.Controls.Add(this.label17);
 			this.groupBox8.Controls.Add(this.label18);
@@ -987,7 +1014,6 @@
 			// 
 			// textBox14
 			// 
-			this.textBox14.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.textBox14.Location = new System.Drawing.Point(776, 7);
 			this.textBox14.Name = "textBox14";
 			this.textBox14.Size = new System.Drawing.Size(135, 20);
@@ -995,7 +1021,6 @@
 			// 
 			// label20
 			// 
-			this.label20.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label20.Location = new System.Drawing.Point(675, 9);
 			this.label20.Name = "label20";
 			this.label20.Size = new System.Drawing.Size(95, 17);
@@ -1005,7 +1030,6 @@
 			// 
 			// comboBox2
 			// 
-			this.comboBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBox2.FormattingEnabled = true;
 			this.comboBox2.Location = new System.Drawing.Point(776, 317);
 			this.comboBox2.Name = "comboBox2";
@@ -1014,7 +1038,6 @@
 			// 
 			// label26
 			// 
-			this.label26.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label26.Location = new System.Drawing.Point(644, 320);
 			this.label26.Name = "label26";
 			this.label26.Size = new System.Drawing.Size(131, 17);
@@ -1046,34 +1069,6 @@
 			this.gridResultsCopyTo.TabIndex = 255;
 			this.gridResultsCopyTo.Title = "Results Copy To";
 			this.gridResultsCopyTo.TranslationName = null;
-			// 
-			// button6
-			// 
-			this.button6.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.button6.Autosize = true;
-			this.button6.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.button6.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.button6.CornerRadius = 4F;
-			this.button6.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.button6.Location = new System.Drawing.Point(6, 14);
-			this.button6.Name = "button6";
-			this.button6.Size = new System.Drawing.Size(29, 25);
-			this.button6.TabIndex = 255;
-			this.button6.Text = "...";
-			// 
-			// button5
-			// 
-			this.button5.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.button5.Autosize = true;
-			this.button5.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.button5.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.button5.CornerRadius = 4F;
-			this.button5.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.button5.Location = new System.Drawing.Point(10, 15);
-			this.button5.Name = "button5";
-			this.button5.Size = new System.Drawing.Size(29, 25);
-			this.button5.TabIndex = 249;
-			this.button5.Text = "...";
 			// 
 			// button4
 			// 
@@ -1171,9 +1166,11 @@
 			this.Controls.Add(this.butOk);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.gridMain);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.MinimumSize = new System.Drawing.Size(939, 679);
 			this.Name = "FormEhrLabOrderEdit2014";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Lab Order";
+			this.Text = "Lab Order Edit";
 			this.Load += new System.EventHandler(this.FormLabPanelEdit_Load);
 			this.groupBox4.ResumeLayout(false);
 			this.groupBox4.PerformLayout();

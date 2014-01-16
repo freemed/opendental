@@ -154,6 +154,8 @@
 			this.textObsElementText = new System.Windows.Forms.TextBox();
 			this.gridNotes = new OpenDental.UI.ODGrid();
 			this.gridAbnormalFlags = new OpenDental.UI.ODGrid();
+			this.butAddNote = new System.Windows.Forms.Button();
+			this.butAddAbnormalFlag = new System.Windows.Forms.Button();
 			this.groupUnitsOfMeasure.SuspendLayout();
 			this.groupOrganization.SuspendLayout();
 			this.groupBox5.SuspendLayout();
@@ -170,7 +172,7 @@
 			// butCancel
 			// 
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Location = new System.Drawing.Point(927, 671);
+			this.butCancel.Location = new System.Drawing.Point(883, 649);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 6;
@@ -181,7 +183,7 @@
 			// butOk
 			// 
 			this.butOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOk.Location = new System.Drawing.Point(846, 671);
+			this.butOk.Location = new System.Drawing.Point(802, 649);
 			this.butOk.Name = "butOk";
 			this.butOk.Size = new System.Drawing.Size(75, 24);
 			this.butOk.TabIndex = 5;
@@ -192,7 +194,7 @@
 			// butDelete
 			// 
 			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butDelete.Location = new System.Drawing.Point(12, 671);
+			this.butDelete.Location = new System.Drawing.Point(12, 649);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(75, 24);
 			this.butDelete.TabIndex = 7;
@@ -218,32 +220,32 @@
 			// 
 			// textObsID
 			// 
-			this.textObsID.Location = new System.Drawing.Point(134, 38);
+			this.textObsID.Location = new System.Drawing.Point(119, 38);
 			this.textObsID.Name = "textObsID";
 			this.textObsID.Size = new System.Drawing.Size(157, 20);
 			this.textObsID.TabIndex = 0;
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(6, 39);
+			this.label1.Location = new System.Drawing.Point(7, 39);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(127, 17);
+			this.label1.Size = new System.Drawing.Size(111, 17);
 			this.label1.TabIndex = 2;
 			this.label1.Text = "Observation ID";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label10
 			// 
-			this.label10.Location = new System.Drawing.Point(6, 60);
+			this.label10.Location = new System.Drawing.Point(7, 60);
 			this.label10.Name = "label10";
-			this.label10.Size = new System.Drawing.Size(128, 17);
+			this.label10.Size = new System.Drawing.Size(112, 17);
 			this.label10.TabIndex = 228;
 			this.label10.Text = "Observation Text";
 			this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textObsIDText
 			// 
-			this.textObsIDText.Location = new System.Drawing.Point(134, 59);
+			this.textObsIDText.Location = new System.Drawing.Point(119, 59);
 			this.textObsIDText.Multiline = true;
 			this.textObsIDText.Name = "textObsIDText";
 			this.textObsIDText.Size = new System.Drawing.Size(157, 20);
@@ -409,9 +411,9 @@
 			this.groupOrganization.Controls.Add(this.groupBox5);
 			this.groupOrganization.Controls.Add(this.groupBox3);
 			this.groupOrganization.Controls.Add(this.groupBox2);
-			this.groupOrganization.Location = new System.Drawing.Point(652, 2);
+			this.groupOrganization.Location = new System.Drawing.Point(637, 7);
 			this.groupOrganization.Name = "groupOrganization";
-			this.groupOrganization.Size = new System.Drawing.Size(349, 664);
+			this.groupOrganization.Size = new System.Drawing.Size(320, 636);
 			this.groupOrganization.TabIndex = 236;
 			this.groupOrganization.TabStop = false;
 			this.groupOrganization.Text = "Performing Organization";
@@ -435,9 +437,9 @@
 			this.groupBox5.Controls.Add(this.label31);
 			this.groupBox5.Controls.Add(this.textMedDirIdentifier);
 			this.groupBox5.Controls.Add(this.groupBox4);
-			this.groupBox5.Location = new System.Drawing.Point(6, 386);
+			this.groupBox5.Location = new System.Drawing.Point(6, 366);
 			this.groupBox5.Name = "groupBox5";
-			this.groupBox5.Size = new System.Drawing.Size(336, 272);
+			this.groupBox5.Size = new System.Drawing.Size(308, 264);
 			this.groupBox5.TabIndex = 247;
 			this.groupBox5.TabStop = false;
 			this.groupBox5.Text = "Medical Director";
@@ -445,16 +447,16 @@
 			// comboMedDirIdType
 			// 
 			this.comboMedDirIdType.FormattingEnabled = true;
-			this.comboMedDirIdType.Location = new System.Drawing.Point(157, 12);
+			this.comboMedDirIdType.Location = new System.Drawing.Point(137, 12);
 			this.comboMedDirIdType.Name = "comboMedDirIdType";
 			this.comboMedDirIdType.Size = new System.Drawing.Size(157, 21);
 			this.comboMedDirIdType.TabIndex = 261;
 			// 
 			// label33
 			// 
-			this.label33.Location = new System.Drawing.Point(25, 14);
+			this.label33.Location = new System.Drawing.Point(24, 14);
 			this.label33.Name = "label33";
-			this.label33.Size = new System.Drawing.Size(133, 17);
+			this.label33.Size = new System.Drawing.Size(114, 17);
 			this.label33.TabIndex = 260;
 			this.label33.Text = "Identifier Type";
 			this.label33.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -462,112 +464,112 @@
 			// comboMedDirNameType
 			// 
 			this.comboMedDirNameType.FormattingEnabled = true;
-			this.comboMedDirNameType.Location = new System.Drawing.Point(156, 55);
+			this.comboMedDirNameType.Location = new System.Drawing.Point(136, 53);
 			this.comboMedDirNameType.Name = "comboMedDirNameType";
 			this.comboMedDirNameType.Size = new System.Drawing.Size(157, 21);
 			this.comboMedDirNameType.TabIndex = 259;
 			// 
 			// label32
 			// 
-			this.label32.Location = new System.Drawing.Point(24, 57);
+			this.label32.Location = new System.Drawing.Point(23, 55);
 			this.label32.Name = "label32";
-			this.label32.Size = new System.Drawing.Size(133, 17);
+			this.label32.Size = new System.Drawing.Size(114, 17);
 			this.label32.TabIndex = 258;
 			this.label32.Text = "Name Type";
 			this.label32.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label23
 			// 
-			this.label23.Location = new System.Drawing.Point(24, 163);
+			this.label23.Location = new System.Drawing.Point(23, 156);
 			this.label23.Name = "label23";
-			this.label23.Size = new System.Drawing.Size(133, 17);
+			this.label23.Size = new System.Drawing.Size(114, 17);
 			this.label23.TabIndex = 257;
 			this.label23.Text = "Prefix";
 			this.label23.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textMedDirPrefix
 			// 
-			this.textMedDirPrefix.Location = new System.Drawing.Point(157, 161);
+			this.textMedDirPrefix.Location = new System.Drawing.Point(137, 154);
 			this.textMedDirPrefix.Name = "textMedDirPrefix";
 			this.textMedDirPrefix.Size = new System.Drawing.Size(157, 20);
 			this.textMedDirPrefix.TabIndex = 256;
 			// 
 			// label24
 			// 
-			this.label24.Location = new System.Drawing.Point(24, 142);
+			this.label24.Location = new System.Drawing.Point(23, 136);
 			this.label24.Name = "label24";
-			this.label24.Size = new System.Drawing.Size(133, 17);
+			this.label24.Size = new System.Drawing.Size(114, 17);
 			this.label24.TabIndex = 255;
 			this.label24.Text = "Suffix";
 			this.label24.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textMedDirSuffix
 			// 
-			this.textMedDirSuffix.Location = new System.Drawing.Point(157, 140);
+			this.textMedDirSuffix.Location = new System.Drawing.Point(137, 134);
 			this.textMedDirSuffix.Name = "textMedDirSuffix";
 			this.textMedDirSuffix.Size = new System.Drawing.Size(157, 20);
 			this.textMedDirSuffix.TabIndex = 254;
 			// 
 			// label25
 			// 
-			this.label25.Location = new System.Drawing.Point(24, 121);
+			this.label25.Location = new System.Drawing.Point(23, 116);
 			this.label25.Name = "label25";
-			this.label25.Size = new System.Drawing.Size(133, 17);
+			this.label25.Size = new System.Drawing.Size(114, 17);
 			this.label25.TabIndex = 253;
 			this.label25.Text = "Middle Name";
 			this.label25.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textMedDirMiddleName
 			// 
-			this.textMedDirMiddleName.Location = new System.Drawing.Point(157, 119);
+			this.textMedDirMiddleName.Location = new System.Drawing.Point(137, 114);
 			this.textMedDirMiddleName.Name = "textMedDirMiddleName";
 			this.textMedDirMiddleName.Size = new System.Drawing.Size(157, 20);
 			this.textMedDirMiddleName.TabIndex = 252;
 			// 
 			// label29
 			// 
-			this.label29.Location = new System.Drawing.Point(24, 100);
+			this.label29.Location = new System.Drawing.Point(23, 96);
 			this.label29.Name = "label29";
-			this.label29.Size = new System.Drawing.Size(133, 17);
+			this.label29.Size = new System.Drawing.Size(114, 17);
 			this.label29.TabIndex = 251;
 			this.label29.Text = "First Name";
 			this.label29.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textMedDirFirstName
 			// 
-			this.textMedDirFirstName.Location = new System.Drawing.Point(157, 98);
+			this.textMedDirFirstName.Location = new System.Drawing.Point(137, 94);
 			this.textMedDirFirstName.Name = "textMedDirFirstName";
 			this.textMedDirFirstName.Size = new System.Drawing.Size(157, 20);
 			this.textMedDirFirstName.TabIndex = 250;
 			// 
 			// label30
 			// 
-			this.label30.Location = new System.Drawing.Point(23, 79);
+			this.label30.Location = new System.Drawing.Point(22, 76);
 			this.label30.Name = "label30";
-			this.label30.Size = new System.Drawing.Size(133, 17);
+			this.label30.Size = new System.Drawing.Size(114, 17);
 			this.label30.TabIndex = 249;
 			this.label30.Text = "Last Name";
 			this.label30.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textMedDirLastName
 			// 
-			this.textMedDirLastName.Location = new System.Drawing.Point(156, 77);
+			this.textMedDirLastName.Location = new System.Drawing.Point(136, 74);
 			this.textMedDirLastName.Name = "textMedDirLastName";
 			this.textMedDirLastName.Size = new System.Drawing.Size(157, 20);
 			this.textMedDirLastName.TabIndex = 248;
 			// 
 			// label31
 			// 
-			this.label31.Location = new System.Drawing.Point(23, 36);
+			this.label31.Location = new System.Drawing.Point(22, 35);
 			this.label31.Name = "label31";
-			this.label31.Size = new System.Drawing.Size(133, 17);
+			this.label31.Size = new System.Drawing.Size(114, 17);
 			this.label31.TabIndex = 247;
 			this.label31.Text = "Director ID";
 			this.label31.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textMedDirIdentifier
 			// 
-			this.textMedDirIdentifier.Location = new System.Drawing.Point(156, 34);
+			this.textMedDirIdentifier.Location = new System.Drawing.Point(136, 33);
 			this.textMedDirIdentifier.Name = "textMedDirIdentifier";
 			this.textMedDirIdentifier.Size = new System.Drawing.Size(157, 20);
 			this.textMedDirIdentifier.TabIndex = 246;
@@ -580,16 +582,16 @@
 			this.groupBox4.Controls.Add(this.textMedDirNamespaceID);
 			this.groupBox4.Controls.Add(this.label22);
 			this.groupBox4.Controls.Add(this.textMedDirUniversalID);
-			this.groupBox4.Location = new System.Drawing.Point(4, 182);
+			this.groupBox4.Location = new System.Drawing.Point(4, 175);
 			this.groupBox4.Name = "groupBox4";
-			this.groupBox4.Size = new System.Drawing.Size(324, 84);
+			this.groupBox4.Size = new System.Drawing.Size(298, 84);
 			this.groupBox4.TabIndex = 245;
 			this.groupBox4.TabStop = false;
 			this.groupBox4.Text = "Assigning Authority";
 			// 
 			// textMedDirAssignIdType
 			// 
-			this.textMedDirAssignIdType.Location = new System.Drawing.Point(151, 16);
+			this.textMedDirAssignIdType.Location = new System.Drawing.Point(131, 16);
 			this.textMedDirAssignIdType.Multiline = true;
 			this.textMedDirAssignIdType.Name = "textMedDirAssignIdType";
 			this.textMedDirAssignIdType.Size = new System.Drawing.Size(157, 20);
@@ -597,25 +599,25 @@
 			// 
 			// label42
 			// 
-			this.label42.Location = new System.Drawing.Point(45, 18);
+			this.label42.Location = new System.Drawing.Point(5, 18);
 			this.label42.Name = "label42";
-			this.label42.Size = new System.Drawing.Size(106, 17);
+			this.label42.Size = new System.Drawing.Size(126, 17);
 			this.label42.TabIndex = 242;
 			this.label42.Text = "Identifier Type";
 			this.label42.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label21
 			// 
-			this.label21.Location = new System.Drawing.Point(45, 39);
+			this.label21.Location = new System.Drawing.Point(5, 38);
 			this.label21.Name = "label21";
-			this.label21.Size = new System.Drawing.Size(106, 17);
+			this.label21.Size = new System.Drawing.Size(126, 17);
 			this.label21.TabIndex = 236;
 			this.label21.Text = "Namespace ID";
 			this.label21.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textMedDirNamespaceID
 			// 
-			this.textMedDirNamespaceID.Location = new System.Drawing.Point(151, 37);
+			this.textMedDirNamespaceID.Location = new System.Drawing.Point(131, 36);
 			this.textMedDirNamespaceID.Multiline = true;
 			this.textMedDirNamespaceID.Name = "textMedDirNamespaceID";
 			this.textMedDirNamespaceID.Size = new System.Drawing.Size(157, 20);
@@ -623,16 +625,16 @@
 			// 
 			// label22
 			// 
-			this.label22.Location = new System.Drawing.Point(45, 60);
+			this.label22.Location = new System.Drawing.Point(5, 58);
 			this.label22.Name = "label22";
-			this.label22.Size = new System.Drawing.Size(106, 17);
+			this.label22.Size = new System.Drawing.Size(126, 17);
 			this.label22.TabIndex = 238;
 			this.label22.Text = "Universal ID";
 			this.label22.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textMedDirUniversalID
 			// 
-			this.textMedDirUniversalID.Location = new System.Drawing.Point(151, 58);
+			this.textMedDirUniversalID.Location = new System.Drawing.Point(131, 56);
 			this.textMedDirUniversalID.Multiline = true;
 			this.textMedDirUniversalID.Name = "textMedDirUniversalID";
 			this.textMedDirUniversalID.Size = new System.Drawing.Size(157, 20);
@@ -656,9 +658,9 @@
 			this.groupBox3.Controls.Add(this.textPerfOrgOtherDesignation);
 			this.groupBox3.Controls.Add(this.label16);
 			this.groupBox3.Controls.Add(this.textPerfOrgStreet);
-			this.groupBox3.Location = new System.Drawing.Point(6, 195);
+			this.groupBox3.Location = new System.Drawing.Point(6, 183);
 			this.groupBox3.Name = "groupBox3";
-			this.groupBox3.Size = new System.Drawing.Size(336, 189);
+			this.groupBox3.Size = new System.Drawing.Size(308, 182);
 			this.groupBox3.TabIndex = 246;
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "Address";
@@ -666,7 +668,7 @@
 			// comboPerfOrgState
 			// 
 			this.comboPerfOrgState.FormattingEnabled = true;
-			this.comboPerfOrgState.Location = new System.Drawing.Point(158, 100);
+			this.comboPerfOrgState.Location = new System.Drawing.Point(138, 94);
 			this.comboPerfOrgState.Name = "comboPerfOrgState";
 			this.comboPerfOrgState.Size = new System.Drawing.Size(157, 21);
 			this.comboPerfOrgState.TabIndex = 250;
@@ -674,121 +676,121 @@
 			// comboPerfOrgAddressType
 			// 
 			this.comboPerfOrgAddressType.FormattingEnabled = true;
-			this.comboPerfOrgAddressType.Location = new System.Drawing.Point(157, 15);
+			this.comboPerfOrgAddressType.Location = new System.Drawing.Point(137, 13);
 			this.comboPerfOrgAddressType.Name = "comboPerfOrgAddressType";
 			this.comboPerfOrgAddressType.Size = new System.Drawing.Size(157, 21);
 			this.comboPerfOrgAddressType.TabIndex = 249;
 			// 
 			// label20
 			// 
-			this.label20.Location = new System.Drawing.Point(5, 166);
+			this.label20.Location = new System.Drawing.Point(6, 157);
 			this.label20.Name = "label20";
-			this.label20.Size = new System.Drawing.Size(153, 17);
+			this.label20.Size = new System.Drawing.Size(132, 17);
 			this.label20.TabIndex = 248;
 			this.label20.Text = "County or Parish Code";
 			this.label20.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textPerfOrgCounty
 			// 
-			this.textPerfOrgCounty.Location = new System.Drawing.Point(158, 164);
+			this.textPerfOrgCounty.Location = new System.Drawing.Point(138, 155);
 			this.textPerfOrgCounty.Name = "textPerfOrgCounty";
 			this.textPerfOrgCounty.Size = new System.Drawing.Size(157, 20);
 			this.textPerfOrgCounty.TabIndex = 247;
 			// 
 			// label26
 			// 
-			this.label26.Location = new System.Drawing.Point(5, 17);
+			this.label26.Location = new System.Drawing.Point(6, 15);
 			this.label26.Name = "label26";
-			this.label26.Size = new System.Drawing.Size(153, 17);
+			this.label26.Size = new System.Drawing.Size(132, 17);
 			this.label26.TabIndex = 246;
 			this.label26.Text = "Address Type";
 			this.label26.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label27
 			// 
-			this.label27.Location = new System.Drawing.Point(5, 145);
+			this.label27.Location = new System.Drawing.Point(6, 137);
 			this.label27.Name = "label27";
-			this.label27.Size = new System.Drawing.Size(153, 17);
+			this.label27.Size = new System.Drawing.Size(132, 17);
 			this.label27.TabIndex = 244;
 			this.label27.Text = "Country Code";
 			this.label27.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textPerfOrgCountry
 			// 
-			this.textPerfOrgCountry.Location = new System.Drawing.Point(158, 143);
+			this.textPerfOrgCountry.Location = new System.Drawing.Point(138, 135);
 			this.textPerfOrgCountry.Name = "textPerfOrgCountry";
 			this.textPerfOrgCountry.Size = new System.Drawing.Size(157, 20);
 			this.textPerfOrgCountry.TabIndex = 243;
 			// 
 			// label28
 			// 
-			this.label28.Location = new System.Drawing.Point(5, 124);
+			this.label28.Location = new System.Drawing.Point(6, 117);
 			this.label28.Name = "label28";
-			this.label28.Size = new System.Drawing.Size(153, 17);
+			this.label28.Size = new System.Drawing.Size(132, 17);
 			this.label28.TabIndex = 242;
 			this.label28.Text = "Zip or Postal Code";
 			this.label28.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textPerfOrgZip
 			// 
-			this.textPerfOrgZip.Location = new System.Drawing.Point(158, 122);
+			this.textPerfOrgZip.Location = new System.Drawing.Point(138, 115);
 			this.textPerfOrgZip.Name = "textPerfOrgZip";
 			this.textPerfOrgZip.Size = new System.Drawing.Size(157, 20);
 			this.textPerfOrgZip.TabIndex = 241;
 			// 
 			// label19
 			// 
-			this.label19.Location = new System.Drawing.Point(5, 102);
+			this.label19.Location = new System.Drawing.Point(6, 96);
 			this.label19.Name = "label19";
-			this.label19.Size = new System.Drawing.Size(153, 17);
+			this.label19.Size = new System.Drawing.Size(132, 17);
 			this.label19.TabIndex = 240;
 			this.label19.Text = "State or Province";
 			this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label18
 			// 
-			this.label18.Location = new System.Drawing.Point(5, 81);
+			this.label18.Location = new System.Drawing.Point(6, 76);
 			this.label18.Name = "label18";
-			this.label18.Size = new System.Drawing.Size(153, 17);
+			this.label18.Size = new System.Drawing.Size(132, 17);
 			this.label18.TabIndex = 238;
 			this.label18.Text = "City";
 			this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textPerfOrgCity
 			// 
-			this.textPerfOrgCity.Location = new System.Drawing.Point(158, 79);
+			this.textPerfOrgCity.Location = new System.Drawing.Point(138, 74);
 			this.textPerfOrgCity.Name = "textPerfOrgCity";
 			this.textPerfOrgCity.Size = new System.Drawing.Size(157, 20);
 			this.textPerfOrgCity.TabIndex = 237;
 			// 
 			// label17
 			// 
-			this.label17.Location = new System.Drawing.Point(4, 60);
+			this.label17.Location = new System.Drawing.Point(5, 56);
 			this.label17.Name = "label17";
-			this.label17.Size = new System.Drawing.Size(153, 17);
+			this.label17.Size = new System.Drawing.Size(132, 17);
 			this.label17.TabIndex = 236;
 			this.label17.Text = "Other Designation";
 			this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textPerfOrgOtherDesignation
 			// 
-			this.textPerfOrgOtherDesignation.Location = new System.Drawing.Point(157, 58);
+			this.textPerfOrgOtherDesignation.Location = new System.Drawing.Point(137, 54);
 			this.textPerfOrgOtherDesignation.Name = "textPerfOrgOtherDesignation";
 			this.textPerfOrgOtherDesignation.Size = new System.Drawing.Size(157, 20);
 			this.textPerfOrgOtherDesignation.TabIndex = 235;
 			// 
 			// label16
 			// 
-			this.label16.Location = new System.Drawing.Point(4, 39);
+			this.label16.Location = new System.Drawing.Point(5, 36);
 			this.label16.Name = "label16";
-			this.label16.Size = new System.Drawing.Size(153, 17);
+			this.label16.Size = new System.Drawing.Size(132, 17);
 			this.label16.TabIndex = 234;
 			this.label16.Text = "Street";
 			this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textPerfOrgStreet
 			// 
-			this.textPerfOrgStreet.Location = new System.Drawing.Point(157, 37);
+			this.textPerfOrgStreet.Location = new System.Drawing.Point(137, 34);
 			this.textPerfOrgStreet.Name = "textPerfOrgStreet";
 			this.textPerfOrgStreet.Size = new System.Drawing.Size(157, 20);
 			this.textPerfOrgStreet.TabIndex = 233;
@@ -804,14 +806,14 @@
 			this.groupBox2.Controls.Add(this.comboPerfOrgIdType);
 			this.groupBox2.Location = new System.Drawing.Point(6, 15);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(336, 179);
+			this.groupBox2.Size = new System.Drawing.Size(308, 167);
 			this.groupBox2.TabIndex = 245;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Name";
 			// 
 			// label7
 			// 
-			this.label7.Location = new System.Drawing.Point(51, 19);
+			this.label7.Location = new System.Drawing.Point(31, 15);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(106, 17);
 			this.label7.TabIndex = 234;
@@ -826,16 +828,16 @@
 			this.groupBox1.Controls.Add(this.textPerfOrgNamespaceID);
 			this.groupBox1.Controls.Add(this.label13);
 			this.groupBox1.Controls.Add(this.textPerfOrgUniversalID);
-			this.groupBox1.Location = new System.Drawing.Point(6, 81);
+			this.groupBox1.Location = new System.Drawing.Point(6, 75);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(322, 92);
+			this.groupBox1.Size = new System.Drawing.Size(296, 85);
 			this.groupBox1.TabIndex = 244;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Assigning Authority";
 			// 
 			// textPerfOrgAssignIdType
 			// 
-			this.textPerfOrgAssignIdType.Location = new System.Drawing.Point(152, 19);
+			this.textPerfOrgAssignIdType.Location = new System.Drawing.Point(132, 16);
 			this.textPerfOrgAssignIdType.Multiline = true;
 			this.textPerfOrgAssignIdType.Name = "textPerfOrgAssignIdType";
 			this.textPerfOrgAssignIdType.Size = new System.Drawing.Size(157, 20);
@@ -843,7 +845,7 @@
 			// 
 			// label41
 			// 
-			this.label41.Location = new System.Drawing.Point(46, 21);
+			this.label41.Location = new System.Drawing.Point(26, 18);
 			this.label41.Name = "label41";
 			this.label41.Size = new System.Drawing.Size(106, 17);
 			this.label41.TabIndex = 245;
@@ -852,7 +854,7 @@
 			// 
 			// label8
 			// 
-			this.label8.Location = new System.Drawing.Point(46, 42);
+			this.label8.Location = new System.Drawing.Point(26, 38);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(106, 17);
 			this.label8.TabIndex = 236;
@@ -861,7 +863,7 @@
 			// 
 			// textPerfOrgNamespaceID
 			// 
-			this.textPerfOrgNamespaceID.Location = new System.Drawing.Point(152, 40);
+			this.textPerfOrgNamespaceID.Location = new System.Drawing.Point(132, 36);
 			this.textPerfOrgNamespaceID.Multiline = true;
 			this.textPerfOrgNamespaceID.Name = "textPerfOrgNamespaceID";
 			this.textPerfOrgNamespaceID.Size = new System.Drawing.Size(157, 20);
@@ -869,7 +871,7 @@
 			// 
 			// label13
 			// 
-			this.label13.Location = new System.Drawing.Point(46, 63);
+			this.label13.Location = new System.Drawing.Point(26, 58);
 			this.label13.Name = "label13";
 			this.label13.Size = new System.Drawing.Size(106, 17);
 			this.label13.TabIndex = 238;
@@ -878,7 +880,7 @@
 			// 
 			// textPerfOrgUniversalID
 			// 
-			this.textPerfOrgUniversalID.Location = new System.Drawing.Point(152, 61);
+			this.textPerfOrgUniversalID.Location = new System.Drawing.Point(132, 56);
 			this.textPerfOrgUniversalID.Multiline = true;
 			this.textPerfOrgUniversalID.Name = "textPerfOrgUniversalID";
 			this.textPerfOrgUniversalID.Size = new System.Drawing.Size(157, 20);
@@ -886,7 +888,7 @@
 			// 
 			// textPerfOrgIdentifier
 			// 
-			this.textPerfOrgIdentifier.Location = new System.Drawing.Point(157, 60);
+			this.textPerfOrgIdentifier.Location = new System.Drawing.Point(137, 54);
 			this.textPerfOrgIdentifier.Multiline = true;
 			this.textPerfOrgIdentifier.Name = "textPerfOrgIdentifier";
 			this.textPerfOrgIdentifier.Size = new System.Drawing.Size(157, 20);
@@ -894,14 +896,14 @@
 			// 
 			// textPerfOrgName
 			// 
-			this.textPerfOrgName.Location = new System.Drawing.Point(157, 17);
+			this.textPerfOrgName.Location = new System.Drawing.Point(137, 13);
 			this.textPerfOrgName.Name = "textPerfOrgName";
 			this.textPerfOrgName.Size = new System.Drawing.Size(157, 20);
 			this.textPerfOrgName.TabIndex = 233;
 			// 
 			// label14
 			// 
-			this.label14.Location = new System.Drawing.Point(51, 40);
+			this.label14.Location = new System.Drawing.Point(31, 35);
 			this.label14.Name = "label14";
 			this.label14.Size = new System.Drawing.Size(106, 17);
 			this.label14.TabIndex = 240;
@@ -910,7 +912,7 @@
 			// 
 			// label15
 			// 
-			this.label15.Location = new System.Drawing.Point(51, 62);
+			this.label15.Location = new System.Drawing.Point(31, 56);
 			this.label15.Name = "label15";
 			this.label15.Size = new System.Drawing.Size(106, 17);
 			this.label15.TabIndex = 243;
@@ -920,7 +922,7 @@
 			// comboPerfOrgIdType
 			// 
 			this.comboPerfOrgIdType.FormattingEnabled = true;
-			this.comboPerfOrgIdType.Location = new System.Drawing.Point(157, 38);
+			this.comboPerfOrgIdType.Location = new System.Drawing.Point(137, 33);
 			this.comboPerfOrgIdType.Name = "comboPerfOrgIdType";
 			this.comboPerfOrgIdType.Size = new System.Drawing.Size(157, 21);
 			this.comboPerfOrgIdType.TabIndex = 241;
@@ -994,32 +996,32 @@
 			// 
 			// label34
 			// 
-			this.label34.Location = new System.Drawing.Point(6, 102);
+			this.label34.Location = new System.Drawing.Point(7, 102);
 			this.label34.Name = "label34";
-			this.label34.Size = new System.Drawing.Size(127, 17);
+			this.label34.Size = new System.Drawing.Size(111, 17);
 			this.label34.TabIndex = 246;
 			this.label34.Text = "Alt Observation ID";
 			this.label34.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textObsIDAlt
 			// 
-			this.textObsIDAlt.Location = new System.Drawing.Point(134, 101);
+			this.textObsIDAlt.Location = new System.Drawing.Point(119, 101);
 			this.textObsIDAlt.Name = "textObsIDAlt";
 			this.textObsIDAlt.Size = new System.Drawing.Size(157, 20);
 			this.textObsIDAlt.TabIndex = 245;
 			// 
 			// label35
 			// 
-			this.label35.Location = new System.Drawing.Point(5, 123);
+			this.label35.Location = new System.Drawing.Point(4, 123);
 			this.label35.Name = "label35";
-			this.label35.Size = new System.Drawing.Size(128, 17);
+			this.label35.Size = new System.Drawing.Size(114, 17);
 			this.label35.TabIndex = 248;
 			this.label35.Text = "Alt Observation Text";
 			this.label35.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textObsIDTextAlt
 			// 
-			this.textObsIDTextAlt.Location = new System.Drawing.Point(134, 122);
+			this.textObsIDTextAlt.Location = new System.Drawing.Point(119, 122);
 			this.textObsIDTextAlt.Multiline = true;
 			this.textObsIDTextAlt.Name = "textObsIDTextAlt";
 			this.textObsIDTextAlt.Size = new System.Drawing.Size(157, 20);
@@ -1027,16 +1029,16 @@
 			// 
 			// label36
 			// 
-			this.label36.Location = new System.Drawing.Point(6, 145);
+			this.label36.Location = new System.Drawing.Point(7, 145);
 			this.label36.Name = "label36";
-			this.label36.Size = new System.Drawing.Size(128, 17);
+			this.label36.Size = new System.Drawing.Size(112, 17);
 			this.label36.TabIndex = 250;
 			this.label36.Text = "Original Text";
 			this.label36.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textObsIDOrigText
 			// 
-			this.textObsIDOrigText.Location = new System.Drawing.Point(134, 143);
+			this.textObsIDOrigText.Location = new System.Drawing.Point(119, 143);
 			this.textObsIDOrigText.Multiline = true;
 			this.textObsIDOrigText.Name = "textObsIDOrigText";
 			this.textObsIDOrigText.Size = new System.Drawing.Size(157, 20);
@@ -1044,16 +1046,16 @@
 			// 
 			// label37
 			// 
-			this.label37.Location = new System.Drawing.Point(6, 166);
+			this.label37.Location = new System.Drawing.Point(7, 166);
 			this.label37.Name = "label37";
-			this.label37.Size = new System.Drawing.Size(127, 17);
+			this.label37.Size = new System.Drawing.Size(111, 17);
 			this.label37.TabIndex = 252;
 			this.label37.Text = "Observation Sub";
 			this.label37.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textObsSub
 			// 
-			this.textObsSub.Location = new System.Drawing.Point(134, 164);
+			this.textObsSub.Location = new System.Drawing.Point(119, 164);
 			this.textObsSub.Name = "textObsSub";
 			this.textObsSub.Size = new System.Drawing.Size(157, 20);
 			this.textObsSub.TabIndex = 251;
@@ -1076,41 +1078,41 @@
 			this.groupBox6.Controls.Add(this.label34);
 			this.groupBox6.Controls.Add(this.label35);
 			this.groupBox6.Controls.Add(this.textObsIDAlt);
-			this.groupBox6.Location = new System.Drawing.Point(12, 2);
+			this.groupBox6.Location = new System.Drawing.Point(12, 7);
 			this.groupBox6.Name = "groupBox6";
-			this.groupBox6.Size = new System.Drawing.Size(302, 194);
+			this.groupBox6.Size = new System.Drawing.Size(287, 194);
 			this.groupBox6.TabIndex = 253;
 			this.groupBox6.TabStop = false;
 			this.groupBox6.Text = "Observation Identifier (LOINC Codes)";
 			// 
 			// label44
 			// 
-			this.label44.Location = new System.Drawing.Point(6, 81);
+			this.label44.Location = new System.Drawing.Point(7, 81);
 			this.label44.Name = "label44";
-			this.label44.Size = new System.Drawing.Size(127, 17);
+			this.label44.Size = new System.Drawing.Size(111, 17);
 			this.label44.TabIndex = 256;
 			this.label44.Text = "Alt Code System";
 			this.label44.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textObsIDCodeSystemNameAlt
 			// 
-			this.textObsIDCodeSystemNameAlt.Location = new System.Drawing.Point(134, 80);
+			this.textObsIDCodeSystemNameAlt.Location = new System.Drawing.Point(119, 80);
 			this.textObsIDCodeSystemNameAlt.Name = "textObsIDCodeSystemNameAlt";
 			this.textObsIDCodeSystemNameAlt.Size = new System.Drawing.Size(157, 20);
 			this.textObsIDCodeSystemNameAlt.TabIndex = 255;
 			// 
 			// label43
 			// 
-			this.label43.Location = new System.Drawing.Point(6, 18);
+			this.label43.Location = new System.Drawing.Point(7, 18);
 			this.label43.Name = "label43";
-			this.label43.Size = new System.Drawing.Size(127, 17);
+			this.label43.Size = new System.Drawing.Size(111, 17);
 			this.label43.TabIndex = 254;
 			this.label43.Text = "Code System";
 			this.label43.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textObsIDCodeSystemName
 			// 
-			this.textObsIDCodeSystemName.Location = new System.Drawing.Point(134, 17);
+			this.textObsIDCodeSystemName.Location = new System.Drawing.Point(119, 17);
 			this.textObsIDCodeSystemName.Name = "textObsIDCodeSystemName";
 			this.textObsIDCodeSystemName.Size = new System.Drawing.Size(157, 20);
 			this.textObsIDCodeSystemName.TabIndex = 253;
@@ -1132,7 +1134,7 @@
 			this.groupBox7.Controls.Add(this.label2);
 			this.groupBox7.Controls.Add(this.label9);
 			this.groupBox7.Controls.Add(this.groupUnitsOfMeasure);
-			this.groupBox7.Location = new System.Drawing.Point(320, 2);
+			this.groupBox7.Location = new System.Drawing.Point(305, 7);
 			this.groupBox7.Name = "groupBox7";
 			this.groupBox7.Size = new System.Drawing.Size(324, 590);
 			this.groupBox7.TabIndex = 254;
@@ -1361,35 +1363,56 @@
 			// 
 			// gridNotes
 			// 
-			this.gridNotes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridNotes.HScrollVisible = false;
-			this.gridNotes.Location = new System.Drawing.Point(12, 369);
+			this.gridNotes.Location = new System.Drawing.Point(12, 408);
 			this.gridNotes.Name = "gridNotes";
 			this.gridNotes.ScrollValue = 0;
-			this.gridNotes.Size = new System.Drawing.Size(302, 178);
+			this.gridNotes.Size = new System.Drawing.Size(287, 189);
 			this.gridNotes.TabIndex = 232;
 			this.gridNotes.Title = "Notes";
 			this.gridNotes.TranslationName = null;
+			this.gridNotes.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridNotes_CellDoubleClick);
 			// 
 			// gridAbnormalFlags
 			// 
-			this.gridAbnormalFlags.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
 			this.gridAbnormalFlags.HScrollVisible = false;
-			this.gridAbnormalFlags.Location = new System.Drawing.Point(12, 231);
+			this.gridAbnormalFlags.Location = new System.Drawing.Point(12, 238);
 			this.gridAbnormalFlags.Name = "gridAbnormalFlags";
 			this.gridAbnormalFlags.ScrollValue = 0;
-			this.gridAbnormalFlags.Size = new System.Drawing.Size(302, 82);
+			this.gridAbnormalFlags.Size = new System.Drawing.Size(287, 131);
 			this.gridAbnormalFlags.TabIndex = 231;
 			this.gridAbnormalFlags.Title = "Abnormal Flags";
 			this.gridAbnormalFlags.TranslationName = null;
+			this.gridAbnormalFlags.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.gridAbnormalFlags_MouseDoubleClick);
+			// 
+			// butAddNote
+			// 
+			this.butAddNote.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butAddNote.Location = new System.Drawing.Point(12, 380);
+			this.butAddNote.Name = "butAddNote";
+			this.butAddNote.Size = new System.Drawing.Size(75, 24);
+			this.butAddNote.TabIndex = 255;
+			this.butAddNote.Text = "Add Note";
+			this.butAddNote.UseVisualStyleBackColor = true;
+			this.butAddNote.Click += new System.EventHandler(this.butAddNote_Click);
+			// 
+			// butAddAbnormalFlag
+			// 
+			this.butAddAbnormalFlag.Location = new System.Drawing.Point(12, 210);
+			this.butAddAbnormalFlag.Name = "butAddAbnormalFlag";
+			this.butAddAbnormalFlag.Size = new System.Drawing.Size(75, 24);
+			this.butAddAbnormalFlag.TabIndex = 256;
+			this.butAddAbnormalFlag.Text = "Add Flag";
+			this.butAddAbnormalFlag.UseVisualStyleBackColor = true;
+			this.butAddAbnormalFlag.Click += new System.EventHandler(this.butAddAbnormalFlag_Click);
 			// 
 			// FormEhrLabResultEdit2014
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(1018, 706);
+			this.ClientSize = new System.Drawing.Size(974, 684);
+			this.Controls.Add(this.butAddAbnormalFlag);
+			this.Controls.Add(this.butAddNote);
 			this.Controls.Add(this.groupBox7);
 			this.Controls.Add(this.groupBox6);
 			this.Controls.Add(this.groupOrganization);
@@ -1399,6 +1422,7 @@
 			this.Controls.Add(this.butOk);
 			this.Controls.Add(this.butCancel);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.MinimumSize = new System.Drawing.Size(990, 722);
 			this.Name = "FormEhrLabResultEdit2014";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Lab Result Edit";
@@ -1560,5 +1584,7 @@
 		private System.Windows.Forms.TextBox textStructNumFirst;
 		private System.Windows.Forms.Label label60;
 		private System.Windows.Forms.TextBox textStructNumSeparator;
+		private System.Windows.Forms.Button butAddNote;
+		private System.Windows.Forms.Button butAddAbnormalFlag;
 	}
 }
