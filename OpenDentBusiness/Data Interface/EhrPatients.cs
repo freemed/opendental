@@ -60,18 +60,18 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets one EhrPatient from the db.</summary>
-		public static EhrPatient GetOne(long ehrPatientNum){
+		public static EhrPatient GetOne(long patNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				return Meth.GetObject<EhrPatient>(MethodBase.GetCurrentMethod(),ehrPatientNum);
+				return Meth.GetObject<EhrPatient>(MethodBase.GetCurrentMethod(),patNum);
 			}
-			return Crud.EhrPatientCrud.SelectOne(ehrPatientNum);
+			return Crud.EhrPatientCrud.SelectOne(patNum);
 		}
 
 		///<summary></summary>
 		public static long Insert(EhrPatient ehrPatient){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				ehrPatient.EhrPatientNum=Meth.GetLong(MethodBase.GetCurrentMethod(),ehrPatient);
-				return ehrPatient.EhrPatientNum;
+				ehrPatient.PatNum=Meth.GetLong(MethodBase.GetCurrentMethod(),ehrPatient);
+				return ehrPatient.PatNum;
 			}
 			return Crud.EhrPatientCrud.Insert(ehrPatient);
 		}
@@ -86,12 +86,12 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Delete(long ehrPatientNum) {
+		public static void Delete(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),ehrPatientNum);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum);
 				return;
 			}
-			string command= "DELETE FROM ehrpatient WHERE EhrPatientNum = "+POut.Long(ehrPatientNum);
+			string command= "DELETE FROM ehrpatient WHERE PatNum = "+POut.Long(patNum);
 			Db.NonQ(command);
 		}
 		*/

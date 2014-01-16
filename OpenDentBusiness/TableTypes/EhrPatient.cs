@@ -1,13 +1,11 @@
 ﻿using System;
 
 namespace OpenDentBusiness {
-	///<summary>Patient information needed for EHR.  1:1 relation to patient table.  Created to prevent bloating the patient table.</summary>
+	///<summary>Patient information needed for EHR.  1:1 relation to patient table.  They are stored here because we want to try to keep the size of the patient table a bit smaller.</summary>
 	[Serializable]
 	public class EhrPatient:TableBase {
-		///<summary>Primary key.</summary>
+		///<summary>FK to patient.PatNum.  Also the primary key for this table. Always one to one relationship with patient table.  A new patient might not have an entry here until needed.</summary>
 		[CrudColumn(IsPriKey=true)]
-		public long EhrPatientNum;
-		///<summary>FK to patient.PatNum.</summary>
 		public long PatNum;
 		///<summary>Mother's maiden first name.  Exported in HL7 PID-6 for immunization messages.</summary>
 		public string MotherMaidenFname;

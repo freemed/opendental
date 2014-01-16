@@ -178,6 +178,7 @@
     <Compile Include="Crud\EhrLabSpecimenConditionCrud.cs" />
     <Compile Include="Crud\EhrLabSpecimenCrud.cs" />
     <Compile Include="Crud\EhrLabSpecimenRejectReasonCrud.cs" />
+    <Compile Include="Crud\EhrPatientCrud.cs" />
     <Compile Include="Crud\EhrTriggerCrud.cs" />
     <Compile Include="Crud\BenefitCrud.cs" />
     <Compile Include="Crud\CanadianNetworkCrud.cs" />
@@ -422,7 +423,9 @@
     <Compile Include="Data Interface\EhrLabSpecimenConditions.cs" />
     <Compile Include="Data Interface\EhrLabSpecimenRejectReasons.cs" />
     <Compile Include="Data Interface\EhrLabSpecimens.cs" />
-    <Compile Include="Data Interface\EhrPatients.cs" />
+    <Compile Include="Data Interface\EhrPatients.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Data Interface\EhrTriggers.cs" />
     <Compile Include="Data Interface\Cdcrecs.cs" />
     <Compile Include="Data Interface\CentralConnections.cs" />
