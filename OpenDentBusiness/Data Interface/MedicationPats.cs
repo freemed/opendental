@@ -64,8 +64,10 @@ namespace OpenDentBusiness{
 		///<summary>For CPOE.  Used for both manual rx and eRx through NewCrop.  Creates or updates a medical order using the given prescription information.
 		///Since rxCui is not part of the prescription, it must be passed in as a separate parameter.
 		///If isProvOrder is true, then the medical order provNum will be set to the prescription provNum.  If isProvOrder is false, then the medical order provNum will be set to 0.
-		///The MedDescript and NewCropGuid will always be copied from the prescription to the medical order and the medical order MedicationNum will be set to 0.</summary>
-		public static void InsertOrUpdateMedOrderForRx(RxPat rxPat,long rxCui,bool isProvOrder) {
+		///The MedDescript and NewCropGuid will always be copied from the prescription to the medical order and the medical order MedicationNum will be set to 0.
+		///This method return the medOrderNum for the new/updated medicationPat. Unlike most medical orders this does not create an entry in the medical order table.</summary>
+		public static long InsertOrUpdateMedOrderForRx(RxPat rxPat,long rxCui,bool isProvOrder) {
+			long medOrderNum;
 			MedicationPat medOrder=new MedicationPat();//The medication order corresponding to the prescription.
 			medOrder.DateStart=rxPat.RxDate;
 			medOrder.DateStop=rxPat.RxDate.AddDays(7);//Is there a way to easily calculate this information from the prescription information? The medical order will be inactive after this date.
@@ -84,12 +86,14 @@ namespace OpenDentBusiness{
 			}
 			if(medOrderOld==null) {
 				medOrder.IsNew=true;//Might not be necessary, but does not hurt.
-				MedicationPats.Insert(medOrder);
+				medOrderNum=MedicationPats.Insert(medOrder);
 			}
 			else {//The medication order was already in our database. Update it.
 				medOrder.MedicationPatNum=medOrderOld.MedicationPatNum;
 				MedicationPats.Update(medOrder);
+				medOrderNum=medOrder.MedicationPatNum;
 			}
+			return medOrderNum;
 		}
 
 		///<summary></summary>

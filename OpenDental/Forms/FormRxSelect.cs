@@ -18,6 +18,8 @@ namespace OpenDental{
 		private Patient PatCur;
 		private OpenDental.UI.ODGrid gridMain;
 		private RxDef[] RxDefList;
+		/// <summary>This is set for any medical orders that are selected.</summary>
+		public long _medOrderNum;
 
 		///<summary></summary>
 		public FormRxSelect(Patient patCur){
@@ -236,7 +238,14 @@ namespace OpenDental{
 			if(Security.CurUser.ProvNum!=0) {//The user who is currently logged in is a provider.
 				isProvOrder=true;
 			}
-			MedicationPats.InsertOrUpdateMedOrderForRx(RxPatCur,RxDefCur.RxCui,isProvOrder);//RxDefCur.RxCui can be 0.
+			_medOrderNum=MedicationPats.InsertOrUpdateMedOrderForRx(RxPatCur,RxDefCur.RxCui,isProvOrder);//RxDefCur.RxCui can be 0.
+			EhrMeasureEvent newMeasureEvent=new EhrMeasureEvent();
+			newMeasureEvent.DateTEvent=DateTime.Now;
+			newMeasureEvent.EventType=EhrMeasureEventType.CPOE_MedOrdered;
+			newMeasureEvent.PatNum=PatCur.PatNum;
+			newMeasureEvent.MoreInfo="";
+			newMeasureEvent.FKey=_medOrderNum;
+			EhrMeasureEvents.Insert(newMeasureEvent);
 			DialogResult=DialogResult.OK;
 		}
 
