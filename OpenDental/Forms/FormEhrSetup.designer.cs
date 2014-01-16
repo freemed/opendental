@@ -47,6 +47,7 @@ namespace OpenDental{
 			this.butVaccineDef = new OpenDental.UI.Button();
 			this.butAllergies = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
+			this.butOIDs = new OpenDental.UI.Button();
 			this.groupCodeSystems.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -337,10 +338,25 @@ namespace OpenDental{
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
+			// butOIDs
+			// 
+			this.butOIDs.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butOIDs.Autosize = true;
+			this.butOIDs.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOIDs.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOIDs.CornerRadius = 4F;
+			this.butOIDs.Location = new System.Drawing.Point(400, 174);
+			this.butOIDs.Name = "butOIDs";
+			this.butOIDs.Size = new System.Drawing.Size(128, 24);
+			this.butOIDs.TabIndex = 140;
+			this.butOIDs.Text = "OIDs";
+			this.butOIDs.Click += new System.EventHandler(this.butOIDs_Click);
+			// 
 			// FormEhrSetup
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(561, 331);
+			this.Controls.Add(this.butOIDs);
 			this.Controls.Add(this.butCDSSetup);
 			this.Controls.Add(this.butEhrTriggers);
 			this.Controls.Add(this.butTimeSynch);
@@ -392,5 +408,6 @@ namespace OpenDental{
 		private UI.Button butTimeSynch;
 		private UI.Button butEhrTriggers;
 		private UI.Button butCDSSetup;
+		private UI.Button butOIDs;
 	}
 }

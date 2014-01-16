@@ -6,7 +6,7 @@ namespace OpenDentBusiness {
 	public class OIDInternal:TableBase {
 		///<summary>Primary key.</summary>
 		[CrudColumn(IsPriKey=true)]
-		public long EhrOIDNum;
+		public long OIDInternalNum;
 		///<summary>Internal data type to be associated with OIDRoot</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public IdentifierType IDType;
@@ -21,12 +21,15 @@ namespace OpenDentBusiness {
 
 	}
 
+	///<summary>Stored as string. Sorted and displayed in the order they are present in this enum.  Root should always be first.</summary>
 	public enum IdentifierType {
 		///<summary>Will most likely be the root of all other OIDs.  Represents the organization.</summary>
-		root,
-		///<summary>FK to Patient.PatNum</summary>
+		Root,
+		///<summary>FK to EhrLab.EhrLabNum.  root+".1"</summary>
+		LabOrder,
+		///<summary>FK to Patient.PatNum.  root+".2"</summary>
 		Patient,
-		///<summary>FK to Provider.ProvNum</summary>
+		///<summary>FK to Provider.ProvNum.  root+".3"</summary>
 		Provider
 	}
 }

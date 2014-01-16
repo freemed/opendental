@@ -38,7 +38,7 @@ namespace OpenDentBusiness{
 		/// <param name="IDNumber">The extension portion of the GUID/OID.  Example: 333224444 if using SSN as a the unique identifier</param>
 		/// <param name="OID">root OID that the IDNumber extends.  Example: 2.16.840.1.113883.4.1 is the OID for the Social Security Numbers.</param>
 		public static Patient GetByGUID(string IDNumber, string OID){
-			if(OID==OIDInternals.GetForType(IdentifierType.Patient)) {//OID matches the localy defined patnum OID.
+			if(OID==OIDInternals.GetForType(IdentifierType.Patient).IDRoot) {//OID matches the localy defined patnum OID.
 				return Patients.GetPat(PIn.Long(IDNumber));
 			}
 			else {

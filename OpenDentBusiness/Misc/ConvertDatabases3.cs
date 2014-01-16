@@ -3404,7 +3404,7 @@ namespace OpenDentBusiness {
 					command="DROP TABLE IF EXISTS oidinternal";
 					Db.NonQ(command);
 					command=@"CREATE TABLE oidinternal (
-						EhrOIDNum bigint NOT NULL auto_increment PRIMARY KEY,
+						OIDInternalNum bigint NOT NULL auto_increment PRIMARY KEY,
 						IDType varchar(255) NOT NULL,
 						IDRoot varchar(255) NOT NULL
 						) DEFAULT CHARSET=utf8";
@@ -3414,10 +3414,10 @@ namespace OpenDentBusiness {
 					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE oidinternal'; EXCEPTION WHEN OTHERS THEN NULL; END;";
 					Db.NonQ(command);
 					command=@"CREATE TABLE oidinternal (
-						EhrOIDNum number(20) NOT NULL,
+						OIDInternalNum number(20) NOT NULL,
 						IDType varchar2(255),
 						IDRoot varchar2(255),
-						CONSTRAINT oidinternal_EhrOIDNum PRIMARY KEY (EhrOIDNum)
+						CONSTRAINT oidinternal_OIDInternalNum PRIMARY KEY (OIDInternalNum)
 						)";
 					Db.NonQ(command);
 				}				
@@ -3693,11 +3693,5 @@ namespace OpenDentBusiness {
 
 	}
 }
-
-
-
-
-
-
 
 

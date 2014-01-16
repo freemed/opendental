@@ -9,16 +9,64 @@ namespace OpenDentBusiness{
 	public class OIDInternals{
 
 		///<summary>Returns the currently defined OID for a given IndentifierType.  If not defined, returns empty string.</summary>
-		public static string GetForType(IdentifierType IDType) {
+		public static OIDInternal GetForType(IdentifierType IDType) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),IDType);
+				return Meth.GetObject<OIDInternal>(MethodBase.GetCurrentMethod(),IDType);
 			}
 			string command="SELECT * FROM oidinternal WHERE IDType='"+IDType.ToString()+"'";//should only return one row.
-			OIDInternal tempOID=Crud.OIDInternalCrud.SelectOne(command);
-			if(tempOID==null) {
-				return "";//row not in DB for some reason.
+			return Crud.OIDInternalCrud.SelectOne(command);
+		}
+
+		///<summary>There should always be one entry in the DB per IdentifierType enumeration.</summary>
+		public static void InsertMissingValues() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod());
+				return;
 			}
-			return tempOID.IDRoot;
+			//string command= "SELECT COUNT(*) FROM oidinternal";
+			//if(PIn.Long(Db.GetCount(command))==Enum.GetValues(typeof(IdentifierType)).Length) {
+			//	return;//The DB table has the right count. Which means there is probably nothing wrong with the values in it. This may need to be enhanced if customers have any issues.
+			//}
+			string command="SELECT * FROM oidinternal";
+			List<OIDInternal> listOIDInternals=Crud.OIDInternalCrud.SelectMany(command);
+			List<IdentifierType> listIDTypes=new List<IdentifierType>();
+			for(int i=0;i<listOIDInternals.Count;i++) {
+				listIDTypes.Add(listOIDInternals[i].IDType);
+			}
+			for(int i=0;i<Enum.GetValues(typeof(IdentifierType)).Length;i++) {
+				if(listIDTypes.Contains((IdentifierType)i)) {
+					continue;//DB contains a row for this enum value.
+				}
+				//Insert missing row with blank OID.
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+						command="INSERT INTO oidinternal (IDType,IDRoot) "
+						+"VALUES('"+((IdentifierType)i).ToString()+"','')";
+						Db.NonQ32(command);
+				}
+				else {//oracle
+					command="INSERT INTO oidinternal (OIDInternalNum,IDType,IDRoot) "
+						+"VALUES((SELECT MAX(OIDInternalNum)+1 FROM oidinternal),'"+((IdentifierType)i).ToString()+"','')";
+					Db.NonQ32(command);
+				}
+			}
+		}
+
+		///<summary></summary>
+		public static List<OIDInternal> GetAll() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<OIDInternal>>(MethodBase.GetCurrentMethod());
+			}
+			string command="SELECT * FROM oidinternal";
+			return Crud.OIDInternalCrud.SelectMany(command);
+		}
+
+		///<summary></summary>
+		public static void Update(OIDInternal oIDInternal) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),oIDInternal);
+				return;
+			}
+			Crud.OIDInternalCrud.Update(oIDInternal);
 		}
 
 		/*
@@ -48,15 +96,6 @@ namespace OpenDentBusiness{
 				return oIDInternal.EhrOIDNum;
 			}
 			return Crud.OIDInternalCrud.Insert(oIDInternal);
-		}
-
-		///<summary></summary>
-		public static void Update(OIDInternal oIDInternal){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),oIDInternal);
-				return;
-			}
-			Crud.OIDInternalCrud.Update(oIDInternal);
 		}
 
 		///<summary></summary>

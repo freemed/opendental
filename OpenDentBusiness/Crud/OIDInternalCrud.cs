@@ -9,9 +9,9 @@ using System.Drawing;
 namespace OpenDentBusiness.Crud{
 	public class OIDInternalCrud {
 		///<summary>Gets one OIDInternal object from the database using the primary key.  Returns null if not found.</summary>
-		public static OIDInternal SelectOne(long ehrOIDNum){
+		public static OIDInternal SelectOne(long oIDInternalNum){
 			string command="SELECT * FROM oidinternal "
-				+"WHERE EhrOIDNum = "+POut.Long(ehrOIDNum);
+				+"WHERE OIDInternalNum = "+POut.Long(oIDInternalNum);
 			List<OIDInternal> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -46,18 +46,18 @@ namespace OpenDentBusiness.Crud{
 			OIDInternal oIDInternal;
 			for(int i=0;i<table.Rows.Count;i++) {
 				oIDInternal=new OIDInternal();
-				oIDInternal.EhrOIDNum= PIn.Long  (table.Rows[i]["EhrOIDNum"].ToString());
+				oIDInternal.OIDInternalNum= PIn.Long  (table.Rows[i]["OIDInternalNum"].ToString());
 				string iDType=table.Rows[i]["IDType"].ToString();
 				if(iDType==""){
-					oIDInternal.IDType =(IdentifierType)0;
+					oIDInternal.IDType      =(IdentifierType)0;
 				}
 				else try{
-					oIDInternal.IDType =(IdentifierType)Enum.Parse(typeof(IdentifierType),iDType);
+					oIDInternal.IDType      =(IdentifierType)Enum.Parse(typeof(IdentifierType),iDType);
 				}
 				catch{
-					oIDInternal.IDType =(IdentifierType)0;
+					oIDInternal.IDType      =(IdentifierType)0;
 				}
-				oIDInternal.IDRoot   = PIn.String(table.Rows[i]["IDRoot"].ToString());
+				oIDInternal.IDRoot        = PIn.String(table.Rows[i]["IDRoot"].ToString());
 				retVal.Add(oIDInternal);
 			}
 			return retVal;
@@ -66,7 +66,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Inserts one OIDInternal into the database.  Returns the new priKey.</summary>
 		public static long Insert(OIDInternal oIDInternal){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				oIDInternal.EhrOIDNum=DbHelper.GetNextOracleKey("oidinternal","EhrOIDNum");
+				oIDInternal.OIDInternalNum=DbHelper.GetNextOracleKey("oidinternal","OIDInternalNum");
 				int loopcount=0;
 				while(loopcount<100){
 					try {
@@ -74,7 +74,7 @@ namespace OpenDentBusiness.Crud{
 					}
 					catch(Oracle.DataAccess.Client.OracleException ex){
 						if(ex.Number==1 && ex.Message.ToLower().Contains("unique constraint") && ex.Message.ToLower().Contains("violated")){
-							oIDInternal.EhrOIDNum++;
+							oIDInternal.OIDInternalNum++;
 							loopcount++;
 						}
 						else{
@@ -92,15 +92,15 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Inserts one OIDInternal into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(OIDInternal oIDInternal,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
-				oIDInternal.EhrOIDNum=ReplicationServers.GetKey("oidinternal","EhrOIDNum");
+				oIDInternal.OIDInternalNum=ReplicationServers.GetKey("oidinternal","OIDInternalNum");
 			}
 			string command="INSERT INTO oidinternal (";
 			if(useExistingPK || PrefC.RandomKeys) {
-				command+="EhrOIDNum,";
+				command+="OIDInternalNum,";
 			}
 			command+="IDType,IDRoot) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
-				command+=POut.Long(oIDInternal.EhrOIDNum)+",";
+				command+=POut.Long(oIDInternal.OIDInternalNum)+",";
 			}
 			command+=
 				 "'"+POut.String(oIDInternal.IDType.ToString())+"',"
@@ -109,17 +109,17 @@ namespace OpenDentBusiness.Crud{
 				Db.NonQ(command);
 			}
 			else {
-				oIDInternal.EhrOIDNum=Db.NonQ(command,true);
+				oIDInternal.OIDInternalNum=Db.NonQ(command,true);
 			}
-			return oIDInternal.EhrOIDNum;
+			return oIDInternal.OIDInternalNum;
 		}
 
 		///<summary>Updates one OIDInternal in the database.</summary>
 		public static void Update(OIDInternal oIDInternal){
 			string command="UPDATE oidinternal SET "
-				+"IDType   = '"+POut.String(oIDInternal.IDType.ToString())+"', "
-				+"IDRoot   = '"+POut.String(oIDInternal.IDRoot)+"' "
-				+"WHERE EhrOIDNum = "+POut.Long(oIDInternal.EhrOIDNum);
+				+"IDType        = '"+POut.String(oIDInternal.IDType.ToString())+"', "
+				+"IDRoot        = '"+POut.String(oIDInternal.IDRoot)+"' "
+				+"WHERE OIDInternalNum = "+POut.Long(oIDInternal.OIDInternalNum);
 			Db.NonQ(command);
 		}
 
@@ -138,14 +138,14 @@ namespace OpenDentBusiness.Crud{
 				return;
 			}
 			command="UPDATE oidinternal SET "+command
-				+" WHERE EhrOIDNum = "+POut.Long(oIDInternal.EhrOIDNum);
+				+" WHERE OIDInternalNum = "+POut.Long(oIDInternal.OIDInternalNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Deletes one OIDInternal from the database.</summary>
-		public static void Delete(long ehrOIDNum){
+		public static void Delete(long oIDInternalNum){
 			string command="DELETE FROM oidinternal "
-				+"WHERE EhrOIDNum = "+POut.Long(ehrOIDNum);
+				+"WHERE OIDInternalNum = "+POut.Long(oIDInternalNum);
 			Db.NonQ(command);
 		}
 

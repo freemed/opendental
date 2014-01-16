@@ -402,6 +402,11 @@ namespace OpenDental {
 			FormET.ShowDialog();
 		}
 
+		private void butOIDs_Click(object sender,EventArgs e) {
+			FormOIDRegistryInternal FormOIDI=new FormOIDRegistryInternal();
+			FormOIDI.ShowDialog();
+		}
+
 
 		private void butClose_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
