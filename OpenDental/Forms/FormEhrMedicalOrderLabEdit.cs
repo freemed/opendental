@@ -138,6 +138,13 @@ namespace OpenDental {
 			}
 			if(IsNew) {
 				MedicalOrders.Insert(MedOrderCur);
+				EhrMeasureEvent newMeasureEvent=new EhrMeasureEvent();
+				newMeasureEvent.DateTEvent=DateTime.Now;
+				newMeasureEvent.EventType=EhrMeasureEventType.CPOE_LabOrdered;
+				newMeasureEvent.PatNum=MedOrderCur.PatNum;
+				newMeasureEvent.MoreInfo="";
+				newMeasureEvent.FKey=MedOrderCur.MedicalOrderNum;
+				EhrMeasureEvents.Insert(newMeasureEvent);
 			}
 			else {
 				MedicalOrders.Update(MedOrderCur);

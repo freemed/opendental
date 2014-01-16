@@ -27,15 +27,15 @@
 			this.butAddRadOrder = new System.Windows.Forms.Button();
 			this.butClose = new System.Windows.Forms.Button();
 			this.checkBoxShowDiscontinued = new System.Windows.Forms.CheckBox();
-			this.gridMedOrders = new OpenDental.UI.ODGrid();
 			this.labelProv = new System.Windows.Forms.Label();
-			this.labelGenericNotes = new System.Windows.Forms.Label();
+			this.gridMedOrders = new OpenDental.UI.ODGrid();
+			this.butAddMedOrder = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// butAddLabOrder
 			// 
 			this.butAddLabOrder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.butAddLabOrder.Location = new System.Drawing.Point(634, 34);
+			this.butAddLabOrder.Location = new System.Drawing.Point(634, 64);
 			this.butAddLabOrder.Name = "butAddLabOrder";
 			this.butAddLabOrder.Size = new System.Drawing.Size(75, 23);
 			this.butAddLabOrder.TabIndex = 8;
@@ -46,7 +46,7 @@
 			// butAddRadOrder
 			// 
 			this.butAddRadOrder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.butAddRadOrder.Location = new System.Drawing.Point(634, 63);
+			this.butAddRadOrder.Location = new System.Drawing.Point(634, 93);
 			this.butAddRadOrder.Name = "butAddRadOrder";
 			this.butAddRadOrder.Size = new System.Drawing.Size(75, 23);
 			this.butAddRadOrder.TabIndex = 7;
@@ -75,6 +75,17 @@
 			this.checkBoxShowDiscontinued.UseVisualStyleBackColor = true;
 			this.checkBoxShowDiscontinued.Click += new System.EventHandler(this.checkBoxShowDiscontinued_Click);
 			// 
+			// labelProv
+			// 
+			this.labelProv.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelProv.ForeColor = System.Drawing.Color.DarkRed;
+			this.labelProv.Location = new System.Drawing.Point(467, 9);
+			this.labelProv.Name = "labelProv";
+			this.labelProv.Size = new System.Drawing.Size(242, 18);
+			this.labelProv.TabIndex = 32;
+			this.labelProv.Text = "ehr provider not logged on";
+			this.labelProv.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// gridMedOrders
 			// 
 			this.gridMedOrders.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -91,40 +102,30 @@
 			this.gridMedOrders.TranslationName = null;
 			this.gridMedOrders.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMedOrders_CellDoubleClick);
 			// 
-			// labelProv
+			// butAddMedOrder
 			// 
-			this.labelProv.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelProv.ForeColor = System.Drawing.Color.DarkRed;
-			this.labelProv.Location = new System.Drawing.Point(467, 9);
-			this.labelProv.Name = "labelProv";
-			this.labelProv.Size = new System.Drawing.Size(242, 18);
-			this.labelProv.TabIndex = 32;
-			this.labelProv.Text = "ehr provider not logged on";
-			this.labelProv.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.butAddMedOrder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.butAddMedOrder.Location = new System.Drawing.Point(634, 35);
+			this.butAddMedOrder.Name = "butAddMedOrder";
+			this.butAddMedOrder.Size = new System.Drawing.Size(75, 23);
+			this.butAddMedOrder.TabIndex = 33;
+			this.butAddMedOrder.Text = "Add Med";
+			this.butAddMedOrder.UseVisualStyleBackColor = true;
+			this.butAddMedOrder.Click += new System.EventHandler(this.butAddMedOrder_Click);
 			// 
-			// labelGenericNotes
-			// 
-			this.labelGenericNotes.Location = new System.Drawing.Point(622, 98);
-			this.labelGenericNotes.Name = "labelGenericNotes";
-			this.labelGenericNotes.Size = new System.Drawing.Size(101, 85);
-			this.labelGenericNotes.TabIndex = 33;
-			this.labelGenericNotes.Text = "Medical orders are entered by using one of the Rx buttons at the top of the Chart" +
-    "";
-			this.labelGenericNotes.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			// 
-			// FormMedicalOrders
+			// FormEhrMedicalOrders
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(721, 402);
-			this.Controls.Add(this.labelGenericNotes);
+			this.Controls.Add(this.butAddMedOrder);
 			this.Controls.Add(this.labelProv);
 			this.Controls.Add(this.checkBoxShowDiscontinued);
 			this.Controls.Add(this.butClose);
 			this.Controls.Add(this.butAddLabOrder);
 			this.Controls.Add(this.butAddRadOrder);
 			this.Controls.Add(this.gridMedOrders);
-			this.Name = "FormMedicalOrders";
+			this.Name = "FormEhrMedicalOrders";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Computerized Provider Order Entry";
 			this.Load += new System.EventHandler(this.FormMedicalOrders_Load);
@@ -140,6 +141,6 @@
 		private System.Windows.Forms.Button butClose;
 		private System.Windows.Forms.CheckBox checkBoxShowDiscontinued;
 		private System.Windows.Forms.Label labelProv;
-		private System.Windows.Forms.Label labelGenericNotes;
+		private System.Windows.Forms.Button butAddMedOrder;
 	}
 }

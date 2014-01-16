@@ -13,7 +13,7 @@ using CodeBase;
 
 namespace OpenDental {
 	public partial class FormEhrMedicalOrders:Form {
-		public Patient PatCur;
+		public Patient _patCur;
 		private DataTable table;
 		///<summary>If this is true after exiting, then launch MedicationPat dialog.</summary>
 		public bool LaunchMedicationPat;
@@ -38,6 +38,7 @@ namespace OpenDental {
 				}
 			}
 			if(disableButtons) {
+				butAddMedOrder.Enabled=false;
 				butAddLabOrder.Enabled=false;
 				butAddRadOrder.Enabled=false;
 			}
@@ -59,7 +60,7 @@ namespace OpenDental {
 			gridMedOrders.Columns.Add(col);
 			col=new ODGridColumn("Status",100);
 			gridMedOrders.Columns.Add(col);
-			table=MedicalOrders.GetOrderTable(PatCur.PatNum, checkBoxShowDiscontinued.Checked);
+			table=MedicalOrders.GetOrderTable(_patCur.PatNum, checkBoxShowDiscontinued.Checked);
 			gridMedOrders.Rows.Clear();
 			ODGridRow row;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -98,11 +99,21 @@ namespace OpenDental {
 			}
 		}
 
+		private void butAddMedOrder_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.RxCreate)) {
+				return;
+			}
+			FormRxSelect FormRS=new FormRxSelect(_patCur);
+			FormRS.ShowDialog();
+			SecurityLogs.MakeLogEntry(Permissions.RxCreate,_patCur.PatNum,_patCur.GetNameLF());
+			FillGridMedOrders();
+		}
+
 		private void butAddLabOrder_Click(object sender,EventArgs e) {
 			FormEhrMedicalOrderLabEdit FormMlab=new FormEhrMedicalOrderLabEdit();
 			FormMlab.MedOrderCur=new MedicalOrder();
 			FormMlab.MedOrderCur.MedOrderType=MedicalOrderType.Laboratory;
-			FormMlab.MedOrderCur.PatNum=PatCur.PatNum;
+			FormMlab.MedOrderCur.PatNum=_patCur.PatNum;
 			FormMlab.MedOrderCur.DateTimeOrder=DateTime.Now;
 			FormMlab.MedOrderCur.ProvNum=Security.CurUser.ProvNum;
 			FormMlab.IsNew=true;
@@ -114,18 +125,12 @@ namespace OpenDental {
 			FormEhrMedicalOrderRadEdit FormMrad=new FormEhrMedicalOrderRadEdit();
 			FormMrad.MedOrderCur=new MedicalOrder();
 			FormMrad.MedOrderCur.MedOrderType=MedicalOrderType.Radiology;
-			FormMrad.MedOrderCur.PatNum=PatCur.PatNum;
+			FormMrad.MedOrderCur.PatNum=_patCur.PatNum;
 			FormMrad.MedOrderCur.DateTimeOrder=DateTime.Now;
 			FormMrad.MedOrderCur.ProvNum=Security.CurUser.ProvNum;
 			FormMrad.IsNew=true;
 			FormMrad.ShowDialog();
 			FillGridMedOrders();
-		}
-
-		private void butAddMedOrder_Click(object sender,EventArgs e) {
-			LaunchMedicationPat=true;
-			LaunchMedicationPatNum=0;
-			DialogResult=DialogResult.OK;
 		}
 
 		private void checkBoxShowDiscontinued_Click(object sender,EventArgs e) {
@@ -135,6 +140,8 @@ namespace OpenDental {
 		private void butClose_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 

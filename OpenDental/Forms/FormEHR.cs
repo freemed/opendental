@@ -308,7 +308,7 @@ namespace OpenDental {
 		///<summary>This can happen when clicking in the grid, or when the form is Shown.  The latter would happen after user unknowingly exited ehr in order to use FormMedPat.  Popping back to the Orders window makes the experience seamless.  This can be recursive if the user edits a series of medicationpats.</summary>
 		private void LaunchOrdersWindow() {
 			FormEhrMedicalOrders FormOrd = new FormEhrMedicalOrders();
-			FormOrd.PatCur=PatCur;
+			FormOrd._patCur=PatCur;
 			FormOrd.ShowDialog();
 			//if(FormOrd.DialogResult!=DialogResult.OK) {//There is no ok button
 			//	return;
