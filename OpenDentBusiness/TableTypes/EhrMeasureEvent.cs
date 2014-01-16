@@ -41,7 +41,7 @@ namespace OpenDentBusiness {
 		EducationProvided,
 		///<summary>1</summary>
 		OnlineAccessProvided,
-		///<summary>2-not tracked yet.</summary>
+		///<summary>2</summary>
 		ElectronicCopyRequested,
 		///<summary>3</summary>
 		ElectronicCopyProvidedToPt,
@@ -58,7 +58,17 @@ namespace OpenDentBusiness {
 		///<summary>9</summary>
 		TobaccoCessation,
 		///<summary>10</summary>
-		CurrentMedsDocumented
+		CurrentMedsDocumented,
+		///<summary>11</summary>
+		CPOE_MedOrdered,
+		///<summary>12</summary>
+		CPOE_LabOrdered,
+		///<summary>13</summary>
+		CPOE_RadOrdered,
+		///<summary>14</summary>
+		SummaryOfCareProvidedToDrElectronic,
+		///<summary>15</summary>
+		SecureMessageFromPat
 	}
 
 }
