@@ -74,6 +74,29 @@ namespace OpenDental {
 			}
 			if(e.Row==0) {
 				rootOIDString=ipb.textResult.Text;
+				//if(MsgBox.Show(this,MsgBoxButtons.YesNo,"Would you like to use default values for OIDs based of of this root OID?")) {
+				//	for(int i=0;i<ListOIDInternal.Count;i++) {
+				//		switch(ListOIDInternal[i].IDType) {
+				//			case IdentifierType.Root:
+
+				//				break;
+				//			case IdentifierType.LabOrder:
+				//				row.Cells.Add(rootOIDString+".1");
+				//				break;
+				//			case IdentifierType.Patient:
+				//				row.Cells.Add(rootOIDString+".2");
+				//				break;
+				//			case IdentifierType.Provider:
+				//				row.Cells.Add(rootOIDString+".3");
+				//				break;
+				//			default://should never happen
+				//				row.Cells.Add("");
+				//				break;
+				//		}
+				//		row.Cells.Add(ListOIDInternal[i].IDRoot);
+				//		gridMain.Rows.Add(row);
+				//	}
+				//}
 			}
 			ListOIDInternal[e.Row].IDRoot=ipb.textResult.Text;
 			FillGrid();

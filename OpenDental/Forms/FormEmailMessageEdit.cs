@@ -8,6 +8,7 @@ using System.Windows.Forms;
 //using Indy.Sockets.IndyMessage;
 using OpenDentBusiness;
 using CodeBase;
+using System.Collections.Generic;
 
 namespace OpenDental{
 	/// <summary>
@@ -828,6 +829,11 @@ namespace OpenDental{
 						return;
 					}	
 				}
+				else if(detectORU_R01Message(strFilePathAttach)) {
+					FormEhrLabOrderImport FormELOI =new FormEhrLabOrderImport();
+					FormELOI.Hl7LabMessage=File.ReadAllText(strFilePathAttach);
+					FormELOI.ShowDialog();
+				}
 				//We have to create a copy of the file because the name is different.
 				//There is also a high probability that the attachment no longer exists if
 				//the A to Z folders are disabled, since the file will have originally been
@@ -839,6 +845,20 @@ namespace OpenDental{
 			catch(Exception ex){
 				MessageBox.Show(ex.Message);
 			}
+		}
+
+		///<summary>Attempts to parse message and detects if it is an ORU_R01 HL7 message.  Returns false if it fails, or does not detect message type.</summary>
+		private bool detectORU_R01Message(string strFilePathAttach) {
+			try {
+				string[] ArrayMSHFields=File.ReadAllText(strFilePathAttach).Split(new string[] {"\r\n"},StringSplitOptions.RemoveEmptyEntries)[0].Split('|');
+				if(ArrayMSHFields[9]!="ORU^R01^ORU_R01") {
+					return false;
+				}
+			}
+			catch(Exception ex) {
+				return false;
+			}
+			return true;
 		}
 
 		private void listAttachments_MouseDown(object sender,MouseEventArgs e) {

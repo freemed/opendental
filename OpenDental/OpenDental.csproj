@@ -377,6 +377,12 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormEhrLabOrderImport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormEhrLabOrderImport.Designer.cs">
+      <DependentUpon>FormEhrLabOrderImport.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormOIDRegistryInternal.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3321,6 +3327,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormEhrLabOrderImport.resx">
+      <DependentUpon>FormEhrLabOrderImport.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormOIDRegistryInternal.resx">
       <DependentUpon>FormOIDRegistryInternal.cs</DependentUpon>
