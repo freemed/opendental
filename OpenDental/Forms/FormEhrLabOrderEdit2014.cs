@@ -134,16 +134,15 @@ namespace OpenDental {
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			FormEhrLabResultEdit2014 FormLRE=new FormEhrLabResultEdit2014();
-			FormLRE._ehrLabResultCur=EhrLabCur.ListEhrLabResults[e.Row];
+			FormEhrLabResultEdit2014 FormLRE=new FormEhrLabResultEdit2014(EhrLabCur.ListEhrLabResults[e.Row]);
 			FormLRE.ShowDialog();
 			FillGrid();
 		}
 
 		private void butAdd_Click(object sender,EventArgs e) {
-			FormEhrLabResultEdit2014 FormLRE=new FormEhrLabResultEdit2014();
-			FormLRE._ehrLabResultCur=new EhrLabResult();
-			FormLRE._ehrLabResultCur.IsNew=true;
+			EhrLabResult ehrLabResultCur=new EhrLabResult();
+			ehrLabResultCur.IsNew=true;
+			FormEhrLabResultEdit2014 FormLRE=new FormEhrLabResultEdit2014(ehrLabResultCur);
 			if(FormLRE.ShowDialog()!=DialogResult.OK) {
 				return;
 			}

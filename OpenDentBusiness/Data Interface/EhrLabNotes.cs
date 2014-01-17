@@ -1,8 +1,5 @@
-using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Reflection;
-using System.Text;
 
 namespace OpenDentBusiness{
 	///<summary></summary>
@@ -14,6 +11,15 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<EhrLabNote>>(MethodBase.GetCurrentMethod(),ehrLabNum);
 			}
 			string command="SELECT * FROM ehrlabnote WHERE EhrLabNum = "+POut.Long(ehrLabNum)+" AND EhrLabResultNum=0";
+			return Crud.EhrLabNoteCrud.SelectMany(command);
+		}
+
+		///<summary></summary>
+		public static List<EhrLabNote> GetForLabResult(long ehrLabResultNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<EhrLabNote>>(MethodBase.GetCurrentMethod(),ehrLabResultNum);
+			}
+			string command="SELECT * FROM ehrlabnote WHERE EhrLabResultNum="+POut.Long(ehrLabResultNum);
 			return Crud.EhrLabNoteCrud.SelectMany(command);
 		}
 

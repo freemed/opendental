@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using EhrLaboratories;
 
 namespace OpenDentBusiness {
@@ -111,6 +112,9 @@ namespace OpenDentBusiness {
 		public string referenceRange;
 		///<summary>Comma Delimited list of Abnormal Flags using HL70078 enum values.  OBX.8.*</summary>
 		public string AbnormalFlags;
+		///<summary>[0..*] This is not a data column but is stored in a seperate table named EhrLabResult. OBX.*</summary>
+		[CrudColumn(IsNotDbColumn=true)]
+		private List<EhrLabNote> _listEhrLabResultNotes;
 		///<summary>Coded status of result.  OBX.11</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public HL70085 ObservationResultStatus;
@@ -189,6 +193,19 @@ namespace OpenDentBusiness {
 		///<summary></summary>
 		public EhrLabResult Copy() {
 			return (EhrLabResult)MemberwiseClone();
+		}
+
+		///<summary>Only filled with EhrLabResultNotes when value is used.  To refresh ListEhrLabResults, set it equal to null or explicitly reassign it using EhrLabNotes.GetForLabResult(EhrLabResultNum).</summary>
+		public List<EhrLabNote> ListEhrLabResultNotes {
+			get {
+				if(_listEhrLabResultNotes==null) {
+					_listEhrLabResultNotes=EhrLabNotes.GetForLabResult(EhrLabResultNum);
+				}
+				return _listEhrLabResultNotes;
+			}
+			set {
+				_listEhrLabResultNotes=value;
+			}
 		}
 
 	}

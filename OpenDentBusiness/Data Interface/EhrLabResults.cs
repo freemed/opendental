@@ -42,6 +42,32 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
+		///<summary>Helper function to return a list of descriptions for the HL70078 enumeration.</summary>
+		public static List<string> GetHL70078Descriptions() {
+			//No need to check RemotingRole;
+			List<string> retVal=new List<string>();
+			retVal.Add("Abnormal");//A
+			retVal.Add("Above absolute high-off instrument scale");//_gt
+			retVal.Add("Above high normal");//H
+			retVal.Add("Above upper panic limits");//HH
+			retVal.Add("Below absolute low-off instrument scale");//_lt
+			retVal.Add("Below low normal");//L
+			retVal.Add("Below lower panic limits");//LL
+			retVal.Add("Better");//B
+			retVal.Add("Intermediate");//I
+			retVal.Add("Moderately susceptible");//MS
+			retVal.Add("No range defined");//_null
+			retVal.Add("Normal");//N
+			retVal.Add("Resistant");//R
+			retVal.Add("Significant change down");//D
+			retVal.Add("Significant change up");//U
+			retVal.Add("Susceptible");//S
+			retVal.Add("Very abnormal");//AA
+			retVal.Add("Very susceptible");//VS
+			retVal.Add("Worse");//W
+			return retVal;
+		}
+
 		///<summary>Helper function to return a list of descriptions for the HL70085 enumeration.  First item in the list is blank.</summary>
 		public static List<string> GetHL70085Descriptions() {
 			//No need to check RemotingRole;
