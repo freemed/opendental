@@ -15,6 +15,7 @@ namespace OpenDental {
 		private long _provNumSelectedOrdering;
 		private long _provNumSelectedAdministering;
 		private List<VaccineObs> _listVaccineObservations;
+		private List<VaccineObs> _listVaccineObservationGroups;
 
 		public FormEhrVaccinePatEdit() {
 			InitializeComponent();
@@ -164,7 +165,7 @@ namespace OpenDental {
 		private void FillObservations() {
 			gridObservations.BeginUpdate();
 			gridObservations.Columns.Clear();
-			gridObservations.Columns.Add(new UI.ODGridColumn("Question",130));
+			gridObservations.Columns.Add(new UI.ODGridColumn("Question",150));
 			gridObservations.Columns.Add(new UI.ODGridColumn("Value",0));
 			gridObservations.EndUpdate();
 			gridObservations.BeginUpdate();
@@ -176,6 +177,23 @@ namespace OpenDental {
 				row.Cells.Add(new UI.ODGridCell(vaccineObs.IdentifyingCode.ToString()));
 				row.Cells.Add(new UI.ODGridCell(vaccineObs.ValReported));
 				gridObservations.Rows.Add(row);
+			}
+			if(_listVaccineObservationGroups==null) {
+				_listVaccineObservationGroups=new List<VaccineObs>();
+				for(int i=0;i<_listVaccineObservations.Count;i++) {
+					VaccineObs vaccineObs=_listVaccineObservations[i];
+					if(vaccineObs.VaccineObsNumGroup==0 || vaccineObs.VaccineObsNumGroup==vaccineObs.VaccineObsNum) {
+						_listVaccineObservationGroups.Add(vaccineObs);
+					}
+					else {
+						for(int j=0;j<_listVaccineObservations.Count;j++) {
+							if(j!=i && _listVaccineObservations[j].VaccineObsNum==_listVaccineObservations[i].VaccineObsNumGroup) {
+								_listVaccineObservationGroups.Add(_listVaccineObservations[j]);
+								break;
+							}
+						}
+					}
+				}
 			}
 			gridObservations.EndUpdate();
 		}
@@ -229,12 +247,41 @@ namespace OpenDental {
 			comboProvNumAdministering.SelectedIndex=-1;
 		}
 
+		private void gridObservations_CellClick(object sender,UI.ODGridClickEventArgs e) {
+			if(gridObservations.SelectedIndices.Length>1) {
+				return;//Do not select group if the user has selected more than one item (otherwise it would deselect some of the rows the user clicked, which would make using the group button impossible).
+			}
+			//Select all observations which are in the same group.
+			VaccineObs vaccineObsGroup=_listVaccineObservationGroups[e.Row];
+			gridObservations.SetSelected(false);//Deselect all.
+			for(int i=0;i<_listVaccineObservationGroups.Count;i++) {
+				if(_listVaccineObservationGroups[i]==vaccineObsGroup) {
+					gridObservations.SetSelected(i,true);
+				}
+			}
+		}
+
 		private void gridObservations_CellDoubleClick(object sender,UI.ODGridClickEventArgs e) {
 			VaccineObs vaccineObs=(VaccineObs)gridObservations.Rows[e.Row].Tag;
 			FormVaccineObsEdit form=new FormVaccineObsEdit(vaccineObs);
 			form.ShowDialog();
 			if(vaccineObs.VaccinePatNum==0) {//Was deleted
-				_listVaccineObservations.Remove(vaccineObs);
+				//If the observation identifying the group is deleted, then we need to reassign a new group.
+				List<int> listRegroupIndicies=new List<int>();
+				for(int i=0;i<_listVaccineObservations.Count;i++) {
+					if(i!=e.Row && _listVaccineObservationGroups[i]==_listVaccineObservationGroups[e.Row]) {
+						listRegroupIndicies.Add(i);
+					}
+				}
+				if(listRegroupIndicies.Count>0) {
+					VaccineObs vaccineObsGroup=_listVaccineObservations[listRegroupIndicies[0]];
+					for(int i=0;i<listRegroupIndicies.Count;i++) {
+						_listVaccineObservationGroups[listRegroupIndicies[i]]=vaccineObsGroup;
+					}
+				}
+				//Delete the observation and corresponding group reference.
+				_listVaccineObservations.RemoveAt(e.Row);
+				_listVaccineObservationGroups.RemoveAt(e.Row);
 			}
 			FillObservations();
 		}
@@ -247,8 +294,32 @@ namespace OpenDental {
 			FormVaccineObsEdit form=new FormVaccineObsEdit(vaccineObs);
 			if(form.ShowDialog()==DialogResult.OK) {
 				_listVaccineObservations.Add(vaccineObs);
+				_listVaccineObservationGroups.Add(vaccineObs);//In its own group with a single item initially.
 				FillObservations();
 			}
+		}
+
+		private void butGroupObservations_Click(object sender,EventArgs e) {
+			if(gridObservations.SelectedIndices.Length<2) {
+				MsgBox.Show(this,"Two or more observations must be selected.");
+				return;
+			}
+			VaccineObs vaccineObsGroup=(VaccineObs)gridObservations.Rows[gridObservations.SelectedIndices[0]].Tag;
+			for(int i=0;i<gridObservations.SelectedIndices.Length;i++) {
+				_listVaccineObservationGroups[gridObservations.SelectedIndices[i]]=vaccineObsGroup;
+			}
+		}
+
+		private void butUngroupObservations_Click(object sender,EventArgs e) {
+			if(gridObservations.SelectedIndices.Length<1) {
+				MsgBox.Show(this,"At least one observation must be selected.");
+				return;
+			}
+			for(int i=0;i<gridObservations.SelectedIndices.Length;i++) {
+				int index=gridObservations.SelectedIndices[i];
+				_listVaccineObservationGroups[index]=_listVaccineObservations[index];//The vaccine is in its own group with a single item.
+			}
+			gridObservations.SetSelected(false);//Deselect all.
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
@@ -330,6 +401,12 @@ namespace OpenDental {
 				VaccineObs vaccineObs=_listVaccineObservations[i];
 				vaccineObs.VaccinePatNum=VaccinePatCur.VaccinePatNum;
 				VaccineObses.Insert(vaccineObs);
+			}
+			//Update the vaccine observation group ids, now that the vaccine observation records have been inserted.
+			for(int i=0;i<_listVaccineObservations.Count;i++) {
+				VaccineObs vaccineObs=_listVaccineObservations[i];
+				vaccineObs.VaccineObsNumGroup=_listVaccineObservationGroups[i].VaccineObsNum;
+				VaccineObses.Update(vaccineObs);
 			}
 			DialogResult=DialogResult.OK;
 		}

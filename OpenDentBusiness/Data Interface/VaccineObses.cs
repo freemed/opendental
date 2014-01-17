@@ -22,7 +22,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<VaccineObs>>(MethodBase.GetCurrentMethod(),vaccinePatNum);
 			}
-			string command="SELECT * FROM vaccineobs WHERE VaccinePatNum="+POut.Long(vaccinePatNum);
+			string command="SELECT * FROM vaccineobs WHERE VaccinePatNum="+POut.Long(vaccinePatNum)+" ORDER BY VaccineObsNumGroup";
 			return Crud.VaccineObsCrud.SelectMany(command);
 		}
 

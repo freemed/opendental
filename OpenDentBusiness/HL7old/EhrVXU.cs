@@ -1287,7 +1287,7 @@ namespace OpenDentBusiness.HL7 {
 							DateTime.Parse(vaccineObs.ValReported);
 						}
 						catch(Exception) {
-							WriteError(sb,"Value must be a valid date.");
+							WriteError(sb,"Observation value is '"+vaccineObs.ValReported+"'.  Must be a valid date for vaccine '"+vaccineDef.VaccineName+"'");
 						}
 					}
 					else if(vaccineObs.ValType==VaccineObsType.Numeric) {
@@ -1295,7 +1295,7 @@ namespace OpenDentBusiness.HL7 {
 							double.Parse(vaccineObs.ValReported);
 						}
 						catch(Exception) {
-							WriteError(sb,"Value must be a valid number.");
+							WriteError(sb,"Observation value is '"+vaccineObs.ValReported+"'.  Must be a valid number for vaccine '"+vaccineDef.VaccineName+"'");
 						}
 					}
 					else if(vaccineObs.ValType==VaccineObsType.Text) {
@@ -1306,7 +1306,7 @@ namespace OpenDentBusiness.HL7 {
 							DateTime.Parse(vaccineObs.ValReported);
 						}
 						catch(Exception) {
-							WriteError(sb,"Value must be a valid date and time.");
+							WriteError(sb,"Observation value is '"+vaccineObs.ValReported+"'.  Must be a valid date and time for vaccine '"+vaccineDef.VaccineName+"'");
 						}
 					}
 				}

@@ -90,15 +90,15 @@ namespace OpenDental {
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
-			_vaccineObsCur.VaccinePatNum=0;//So the calling code knows that the vaccineobs was deleted.
 			if(_vaccineObsCur.IsNew) {
+				_vaccineObsCur.VaccinePatNum=0;//So the calling code knows that the vaccineobs was deleted.
 				DialogResult=DialogResult.Cancel;
 				return;
 			}
 			if(MessageBox.Show("Delete?","Delete?",MessageBoxButtons.OKCancel)==DialogResult.Cancel) {
 				return;
 			}
-			VaccineObses.Delete(_vaccineObsCur.VaccinePatNum);
+			_vaccineObsCur.VaccinePatNum=0;//So the calling code knows that the vaccineobs was deleted.
 			DialogResult=DialogResult.OK;
 		}
 

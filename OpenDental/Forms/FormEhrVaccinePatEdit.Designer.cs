@@ -65,6 +65,10 @@
 			this.comboAdministrationSite = new System.Windows.Forms.ComboBox();
 			this.label16 = new System.Windows.Forms.Label();
 			this.textUser = new System.Windows.Forms.TextBox();
+			this.gridObservations = new OpenDental.UI.ODGrid();
+			this.butUngroupObservations = new OpenDental.UI.Button();
+			this.butGroupObservations = new OpenDental.UI.Button();
+			this.butAddObservation = new OpenDental.UI.Button();
 			this.button1 = new OpenDental.UI.Button();
 			this.button2 = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
@@ -73,8 +77,6 @@
 			this.textDateExpiration = new OpenDental.ValidDate();
 			this.butPickProvAdministering = new OpenDental.UI.Button();
 			this.butPickProvOrdering = new OpenDental.UI.Button();
-			this.gridObservations = new OpenDental.UI.ODGrid();
-			this.butAddObservation = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// label5
@@ -432,6 +434,66 @@
 			this.textUser.Size = new System.Drawing.Size(151, 20);
 			this.textUser.TabIndex = 283;
 			// 
+			// gridObservations
+			// 
+			this.gridObservations.HScrollVisible = false;
+			this.gridObservations.Location = new System.Drawing.Point(624, 384);
+			this.gridObservations.Name = "gridObservations";
+			this.gridObservations.ScrollValue = 0;
+			this.gridObservations.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridObservations.Size = new System.Drawing.Size(254, 110);
+			this.gridObservations.TabIndex = 284;
+			this.gridObservations.Title = "Observations";
+			this.gridObservations.TranslationName = null;
+			this.gridObservations.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridObservations_CellDoubleClick);
+			this.gridObservations.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridObservations_CellClick);
+			// 
+			// butUngroupObservations
+			// 
+			this.butUngroupObservations.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butUngroupObservations.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butUngroupObservations.Autosize = true;
+			this.butUngroupObservations.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butUngroupObservations.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butUngroupObservations.CornerRadius = 4F;
+			this.butUngroupObservations.Location = new System.Drawing.Point(803, 497);
+			this.butUngroupObservations.Name = "butUngroupObservations";
+			this.butUngroupObservations.Size = new System.Drawing.Size(75, 22);
+			this.butUngroupObservations.TabIndex = 287;
+			this.butUngroupObservations.Text = "Ungroup";
+			this.butUngroupObservations.Click += new System.EventHandler(this.butUngroupObservations_Click);
+			// 
+			// butGroupObservations
+			// 
+			this.butGroupObservations.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butGroupObservations.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butGroupObservations.Autosize = true;
+			this.butGroupObservations.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butGroupObservations.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butGroupObservations.CornerRadius = 4F;
+			this.butGroupObservations.Location = new System.Drawing.Point(725, 497);
+			this.butGroupObservations.Name = "butGroupObservations";
+			this.butGroupObservations.Size = new System.Drawing.Size(75, 22);
+			this.butGroupObservations.TabIndex = 286;
+			this.butGroupObservations.Text = "Group";
+			this.butGroupObservations.Click += new System.EventHandler(this.butGroupObservations_Click);
+			// 
+			// butAddObservation
+			// 
+			this.butAddObservation.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butAddObservation.Autosize = true;
+			this.butAddObservation.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddObservation.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddObservation.CornerRadius = 4F;
+			this.butAddObservation.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAddObservation.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAddObservation.Location = new System.Drawing.Point(624, 497);
+			this.butAddObservation.Name = "butAddObservation";
+			this.butAddObservation.Size = new System.Drawing.Size(75, 22);
+			this.butAddObservation.TabIndex = 285;
+			this.butAddObservation.Text = "&Add";
+			this.butAddObservation.Click += new System.EventHandler(this.butAddObservation_Click);
+			// 
 			// button1
 			// 
 			this.button1.AdjustImageLocation = new System.Drawing.Point(0, 0);
@@ -542,39 +604,13 @@
 			this.butPickProvOrdering.Text = "...";
 			this.butPickProvOrdering.Click += new System.EventHandler(this.butPickProvOrdering_Click);
 			// 
-			// gridObservations
-			// 
-			this.gridObservations.HScrollVisible = false;
-			this.gridObservations.Location = new System.Drawing.Point(624, 384);
-			this.gridObservations.Name = "gridObservations";
-			this.gridObservations.ScrollValue = 0;
-			this.gridObservations.Size = new System.Drawing.Size(254, 110);
-			this.gridObservations.TabIndex = 284;
-			this.gridObservations.Title = "Observations";
-			this.gridObservations.TranslationName = null;
-			this.gridObservations.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridObservations_CellDoubleClick);
-			// 
-			// butAddObservation
-			// 
-			this.butAddObservation.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butAddObservation.Autosize = true;
-			this.butAddObservation.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAddObservation.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAddObservation.CornerRadius = 4F;
-			this.butAddObservation.Image = global::OpenDental.Properties.Resources.Add;
-			this.butAddObservation.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAddObservation.Location = new System.Drawing.Point(624, 500);
-			this.butAddObservation.Name = "butAddObservation";
-			this.butAddObservation.Size = new System.Drawing.Size(79, 24);
-			this.butAddObservation.TabIndex = 285;
-			this.butAddObservation.Text = "&Add";
-			this.butAddObservation.Click += new System.EventHandler(this.butAddObservation_Click);
-			// 
 			// FormEhrVaccinePatEdit
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(974, 599);
+			this.Controls.Add(this.butUngroupObservations);
+			this.Controls.Add(this.butGroupObservations);
 			this.Controls.Add(this.butAddObservation);
 			this.Controls.Add(this.gridObservations);
 			this.Controls.Add(this.textUser);
@@ -690,5 +726,7 @@
 		private System.Windows.Forms.TextBox textUser;
 		private UI.ODGrid gridObservations;
 		private UI.Button butAddObservation;
+		private UI.Button butGroupObservations;
+		private UI.Button butUngroupObservations;
 	}
 }
