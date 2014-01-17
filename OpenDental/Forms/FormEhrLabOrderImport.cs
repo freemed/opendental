@@ -22,9 +22,6 @@ namespace OpenDental {
 		}
 
 		private void FormEhrLabOrders_Load(object sender,EventArgs e) {
-			if(PatCur==null) {
-				butSave.Enabled=false;
-			}
 			ListEhrLabs=EhrLabs.ProcessHl7Message(Hl7LabMessage);
 			AttachPatientHelper();
 			FillPatientPicker();
@@ -47,7 +44,6 @@ namespace OpenDental {
 			else {
 				//I dunno what to put here; maybe a little picture of a dog wearing a fireman costume?
 			}
-			butSave.Enabled=true;
 		}
 
 		private void FillPatientPicker() {
@@ -69,11 +65,13 @@ namespace OpenDental {
 			}
 			//patient name(s)
 			for(int i=0;i<PIDFields[5].Split('~').Length;i++) {
-				listBoxNames.Items.Add(PIDFields[5].Split('~')[i].Split('^')[5]+" "//Prefix
-										+PIDFields[5].Split('~')[i].Split('^')[2]+" "//FName
-										+PIDFields[5].Split('~')[i].Split('^')[3]+" "//Middle Name(s)
-										+PIDFields[5].Split('~')[i].Split('^')[1]+" "//Last Name
-										+PIDFields[5].Split('~')[i].Split('^')[4]);   //Suffix
+				string patName="";
+				try{patName+=PIDFields[5].Split('~')[i].Split('^')[4]+" ";}catch{}//Prefix
+				try{patName+=PIDFields[5].Split('~')[i].Split('^')[1]+" ";}catch{}//FName
+				try{patName+=PIDFields[5].Split('~')[i].Split('^')[2]+" ";}catch{}//Middle Name(s)
+				try{patName+=PIDFields[5].Split('~')[i].Split('^')[0]+" ";}catch{}//Last Name
+				try{patName+=PIDFields[5].Split('~')[i].Split('^')[3]    ;}catch{}//Suffix
+				listBoxNames.Items.Add(patName);
 			}
 			//Birthdate
 			textBirthdate.Text=PIDFields[7];
@@ -81,12 +79,8 @@ namespace OpenDental {
 			textGender.Text=PIDFields[8];
 			//Race(s)
 			for(int i=0;i<PIDFields[10].Split('~').Length;i++) {
-				if(PIDFields[10].Split('~')[i].Split('^')[1]!=""){//Text of 1st triplet
-					listBoxRaces.Items.Add(PIDFields[10].Split('~')[i].Split('^')[1]);
-				}
-				if(PIDFields[10].Split('~')[i].Split('^')[4]!=""){//Text of second triplet
-					listBoxRaces.Items.Add(PIDFields[10].Split('~')[i].Split('^')[4]);
-				}
+				try{listBoxRaces.Items.Add(PIDFields[10].Split('~')[i].Split('^')[1]);}catch{}
+				try{listBoxRaces.Items.Add(PIDFields[10].Split('~')[i].Split('^')[4]);}catch{}
 			}
 		}
 
@@ -103,7 +97,7 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("Results",80);//Or date of latest result? or both?
 			gridMain.Columns.Add(col);
-			ListEhrLabs = EhrLabs.GetAllForPat(PatCur.PatNum);
+			//ListEhrLabs = EhrLabs.GetAllForPat(PatCur.PatNum);//do not update here, all this lab information is cached.
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			for(int i=0;i<ListEhrLabs.Count;i++) {
@@ -150,8 +144,27 @@ namespace OpenDental {
 		private void butSave_Click(object sender,EventArgs e) {
 			if(PatCur==null) {
 				MsgBox.Show(this,"Please attach to patient first.");
+				return;
 			}
+			//Check lab dates to see if these labs already exist.
 			for(int i=0;i<ListEhrLabs.Count;i++) {
+				EhrLab tempLab=null;//lab from DB if it exists.
+				tempLab=EhrLabs.GetByGUID(ListEhrLabs[i].PlacerOrderUniversalID,ListEhrLabs[i].PlacerOrderNum);
+				if(tempLab==null){
+					tempLab=EhrLabs.GetByGUID(ListEhrLabs[i].FillerOrderUniversalID,ListEhrLabs[i].FillerOrderNum);
+				}
+				if(tempLab!=null) {
+					//validate Date of Lab and attached patient.
+					//Date
+					if(tempLab.ResultDateTime.CompareTo(ListEhrLabs[i].ResultDateTime)<=0) {//string compare dates will return 1+ if tempLab Date is greater.
+						MsgBox.Show(this,"This lab already exists in the database and has a more recent timestamp.");
+						continue;
+					}
+					if(PatCur.PatNum!=tempLab.PatNum) {
+						//do nothing. We are importing an updated lab result and the previous lab result was attached to the wrong patient.
+						//or do something. later maybe.
+					}
+				}
 				ListEhrLabs[i].PatNum=PatCur.PatNum;
 				ListEhrLabs[i]=EhrLabs.SaveToDB(ListEhrLabs[i]);//SAVE
 				for(int j=0;j<ListEhrLabs[i].ListEhrLabResults.Count;j++) {//EHR TRIGGER
@@ -162,6 +175,7 @@ namespace OpenDental {
 					}
 				}
 			}
+			DialogResult=DialogResult.OK;
 			//Done!
 		}
 

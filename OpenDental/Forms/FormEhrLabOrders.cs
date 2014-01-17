@@ -89,6 +89,18 @@ namespace OpenDental {
 				return;
 			}
 			for(int i=0;i<listEhrLabs.Count;i++) {
+				EhrLab tempLab=null;//lab from DB if it exists.
+				tempLab=EhrLabs.GetByGUID(ListEhrLabs[i].PlacerOrderUniversalID,ListEhrLabs[i].PlacerOrderNum);
+				if(tempLab==null){
+					tempLab=EhrLabs.GetByGUID(ListEhrLabs[i].FillerOrderUniversalID,ListEhrLabs[i].FillerOrderNum);
+				}
+				if(tempLab!=null) {
+					//Date validation.
+					if(tempLab.ResultDateTime.CompareTo(ListEhrLabs[i].ResultDateTime)<=0) {//string compare dates will return 1+ if tempLab Date is greater.
+						MsgBox.Show(this,"This lab already exists in the database and has a more recent timestamp.");
+						continue;
+					}
+				}
 				listEhrLabs[i]=EhrLabs.SaveToDB(listEhrLabs[i]);//SAVE
 				for(int j=0;j<listEhrLabs[i].ListEhrLabResults.Count;j++) {//EHR TRIGGER
 					if(Security.IsAuthorized(Permissions.EhrShowCDS,true)) {

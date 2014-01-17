@@ -7,17 +7,27 @@ namespace OpenDental {
 	public partial class FormEhrLabOrderEdit2014:Form {
 		public EhrLab EhrLabCur;
 		public bool IsNew;
+		public bool IsImport;
 
 		public FormEhrLabOrderEdit2014() {
 			InitializeComponent();
 		}
 
 		private void FormLabPanelEdit_Load(object sender,EventArgs e) {
+			if(IsImport) {
+				butAdd.Enabled=false;
+				//TODO:hide the rest of the controls that shouldn't show if importing.
+			}
+			FillOrderNums();
 			FillGrid();//LabResults
 			FillGridNotes();
 			FillGridResultsCopyTo();
 			FillGridClinicalInformation();
 			FillGridSpecimen();
+		}
+
+		private void FillOrderNums() {
+			return;
 		}
 	
 		///<summary>Lab Results</summary>

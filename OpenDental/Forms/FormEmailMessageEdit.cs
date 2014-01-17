@@ -833,6 +833,7 @@ namespace OpenDental{
 					FormEhrLabOrderImport FormELOI =new FormEhrLabOrderImport();
 					FormELOI.Hl7LabMessage=File.ReadAllText(strFilePathAttach);
 					FormELOI.ShowDialog();
+					return;
 				}
 				//We have to create a copy of the file because the name is different.
 				//There is also a high probability that the attachment no longer exists if
@@ -851,7 +852,7 @@ namespace OpenDental{
 		private bool detectORU_R01Message(string strFilePathAttach) {
 			try {
 				string[] ArrayMSHFields=File.ReadAllText(strFilePathAttach).Split(new string[] {"\r\n"},StringSplitOptions.RemoveEmptyEntries)[0].Split('|');
-				if(ArrayMSHFields[9]!="ORU^R01^ORU_R01") {
+				if(ArrayMSHFields[8]!="ORU^R01^ORU_R01") {
 					return false;
 				}
 			}

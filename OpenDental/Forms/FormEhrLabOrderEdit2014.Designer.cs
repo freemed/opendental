@@ -35,13 +35,13 @@
 			this.button3 = new System.Windows.Forms.Button();
 			this.groupBox4 = new System.Windows.Forms.GroupBox();
 			this.label4 = new System.Windows.Forms.Label();
-			this.textBox2 = new System.Windows.Forms.TextBox();
-			this.textMedDirAssignIdType = new System.Windows.Forms.TextBox();
+			this.testPlacerOrderNum = new System.Windows.Forms.TextBox();
+			this.textPlacerOrderUniversalIDType = new System.Windows.Forms.TextBox();
 			this.label42 = new System.Windows.Forms.Label();
 			this.label21 = new System.Windows.Forms.Label();
-			this.textMedDirNamespaceID = new System.Windows.Forms.TextBox();
+			this.textPlacerOrderNamespace = new System.Windows.Forms.TextBox();
 			this.label22 = new System.Windows.Forms.Label();
-			this.textMedDirUniversalID = new System.Windows.Forms.TextBox();
+			this.textPlacerOrderUniversalID = new System.Windows.Forms.TextBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.textBox3 = new System.Windows.Forms.TextBox();
@@ -228,13 +228,13 @@
 			// groupBox4
 			// 
 			this.groupBox4.Controls.Add(this.label4);
-			this.groupBox4.Controls.Add(this.textBox2);
-			this.groupBox4.Controls.Add(this.textMedDirAssignIdType);
+			this.groupBox4.Controls.Add(this.testPlacerOrderNum);
+			this.groupBox4.Controls.Add(this.textPlacerOrderUniversalIDType);
 			this.groupBox4.Controls.Add(this.label42);
 			this.groupBox4.Controls.Add(this.label21);
-			this.groupBox4.Controls.Add(this.textMedDirNamespaceID);
+			this.groupBox4.Controls.Add(this.textPlacerOrderNamespace);
 			this.groupBox4.Controls.Add(this.label22);
-			this.groupBox4.Controls.Add(this.textMedDirUniversalID);
+			this.groupBox4.Controls.Add(this.textPlacerOrderUniversalID);
 			this.groupBox4.Location = new System.Drawing.Point(12, 35);
 			this.groupBox4.Name = "groupBox4";
 			this.groupBox4.Size = new System.Drawing.Size(282, 103);
@@ -251,21 +251,21 @@
 			this.label4.Text = "ID";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textBox2
+			// testPlacerOrderNum
 			// 
-			this.textBox2.Location = new System.Drawing.Point(119, 14);
-			this.textBox2.Multiline = true;
-			this.textBox2.Name = "textBox2";
-			this.textBox2.Size = new System.Drawing.Size(157, 20);
-			this.textBox2.TabIndex = 244;
+			this.testPlacerOrderNum.Location = new System.Drawing.Point(119, 14);
+			this.testPlacerOrderNum.Multiline = true;
+			this.testPlacerOrderNum.Name = "testPlacerOrderNum";
+			this.testPlacerOrderNum.Size = new System.Drawing.Size(157, 20);
+			this.testPlacerOrderNum.TabIndex = 244;
 			// 
-			// textMedDirAssignIdType
+			// textPlacerOrderUniversalIDType
 			// 
-			this.textMedDirAssignIdType.Location = new System.Drawing.Point(119, 35);
-			this.textMedDirAssignIdType.Multiline = true;
-			this.textMedDirAssignIdType.Name = "textMedDirAssignIdType";
-			this.textMedDirAssignIdType.Size = new System.Drawing.Size(157, 20);
-			this.textMedDirAssignIdType.TabIndex = 243;
+			this.textPlacerOrderUniversalIDType.Location = new System.Drawing.Point(119, 35);
+			this.textPlacerOrderUniversalIDType.Multiline = true;
+			this.textPlacerOrderUniversalIDType.Name = "textPlacerOrderUniversalIDType";
+			this.textPlacerOrderUniversalIDType.Size = new System.Drawing.Size(157, 20);
+			this.textPlacerOrderUniversalIDType.TabIndex = 243;
 			// 
 			// label42
 			// 
@@ -285,13 +285,13 @@
 			this.label21.Text = "Namespace ID";
 			this.label21.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textMedDirNamespaceID
+			// textPlacerOrderNamespace
 			// 
-			this.textMedDirNamespaceID.Location = new System.Drawing.Point(119, 56);
-			this.textMedDirNamespaceID.Multiline = true;
-			this.textMedDirNamespaceID.Name = "textMedDirNamespaceID";
-			this.textMedDirNamespaceID.Size = new System.Drawing.Size(157, 20);
-			this.textMedDirNamespaceID.TabIndex = 235;
+			this.textPlacerOrderNamespace.Location = new System.Drawing.Point(119, 56);
+			this.textPlacerOrderNamespace.Multiline = true;
+			this.textPlacerOrderNamespace.Name = "textPlacerOrderNamespace";
+			this.textPlacerOrderNamespace.Size = new System.Drawing.Size(157, 20);
+			this.textPlacerOrderNamespace.TabIndex = 235;
 			// 
 			// label22
 			// 
@@ -302,13 +302,13 @@
 			this.label22.Text = "Universal ID";
 			this.label22.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textMedDirUniversalID
+			// textPlacerOrderUniversalID
 			// 
-			this.textMedDirUniversalID.Location = new System.Drawing.Point(119, 77);
-			this.textMedDirUniversalID.Multiline = true;
-			this.textMedDirUniversalID.Name = "textMedDirUniversalID";
-			this.textMedDirUniversalID.Size = new System.Drawing.Size(157, 20);
-			this.textMedDirUniversalID.TabIndex = 237;
+			this.textPlacerOrderUniversalID.Location = new System.Drawing.Point(119, 77);
+			this.textPlacerOrderUniversalID.Multiline = true;
+			this.textPlacerOrderUniversalID.Name = "textPlacerOrderUniversalID";
+			this.textPlacerOrderUniversalID.Size = new System.Drawing.Size(157, 20);
+			this.textPlacerOrderUniversalID.TabIndex = 237;
 			// 
 			// groupBox2
 			// 
@@ -1210,13 +1210,13 @@
 		private UI.Button button4;
 		private System.Windows.Forms.GroupBox groupBox4;
 		private System.Windows.Forms.Label label4;
-		private System.Windows.Forms.TextBox textBox2;
-		private System.Windows.Forms.TextBox textMedDirAssignIdType;
+		private System.Windows.Forms.TextBox testPlacerOrderNum;
+		private System.Windows.Forms.TextBox textPlacerOrderUniversalIDType;
 		private System.Windows.Forms.Label label42;
 		private System.Windows.Forms.Label label21;
-		private System.Windows.Forms.TextBox textMedDirNamespaceID;
+		private System.Windows.Forms.TextBox textPlacerOrderNamespace;
 		private System.Windows.Forms.Label label22;
-		private System.Windows.Forms.TextBox textMedDirUniversalID;
+		private System.Windows.Forms.TextBox textPlacerOrderUniversalID;
 		private System.Windows.Forms.GroupBox groupBox2;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.TextBox textBox3;
