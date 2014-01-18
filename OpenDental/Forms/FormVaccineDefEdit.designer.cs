@@ -24,16 +24,25 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent() {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormVaccineDefEdit));
+			this.comboManufacturer = new System.Windows.Forms.ComboBox();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.label3 = new System.Windows.Forms.Label();
-			this.comboManufacturer = new System.Windows.Forms.ComboBox();
 			this.textVaccineName = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.textCVXCode = new System.Windows.Forms.TextBox();
 			this.labelCVXCode = new System.Windows.Forms.Label();
 			this.butDelete = new OpenDental.UI.Button();
+			this.butCvxSelect = new OpenDental.UI.Button();
 			this.SuspendLayout();
+			// 
+			// comboManufacturer
+			// 
+			this.comboManufacturer.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboManufacturer.Location = new System.Drawing.Point(101, 83);
+			this.comboManufacturer.Name = "comboManufacturer";
+			this.comboManufacturer.Size = new System.Drawing.Size(173, 21);
+			this.comboManufacturer.TabIndex = 3;
 			// 
 			// butOK
 			// 
@@ -43,10 +52,10 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(174, 135);
+			this.butOK.Location = new System.Drawing.Point(202, 135);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75, 24);
-			this.butOK.TabIndex = 3;
+			this.butOK.TabIndex = 4;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
@@ -58,10 +67,10 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(255, 135);
+			this.butCancel.Location = new System.Drawing.Point(283, 135);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
-			this.butCancel.TabIndex = 4;
+			this.butCancel.TabIndex = 5;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
@@ -74,21 +83,12 @@ namespace OpenDental{
 			this.label3.Text = "Manufacturer";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// comboManufacturer
-			// 
-			this.comboManufacturer.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboManufacturer.FormattingEnabled = true;
-			this.comboManufacturer.Location = new System.Drawing.Point(101, 83);
-			this.comboManufacturer.Name = "comboManufacturer";
-			this.comboManufacturer.Size = new System.Drawing.Size(173, 21);
-			this.comboManufacturer.TabIndex = 2;
-			// 
 			// textVaccineName
 			// 
 			this.textVaccineName.Location = new System.Drawing.Point(101, 57);
 			this.textVaccineName.Name = "textVaccineName";
 			this.textVaccineName.Size = new System.Drawing.Size(229, 20);
-			this.textVaccineName.TabIndex = 1;
+			this.textVaccineName.TabIndex = 2;
 			// 
 			// label1
 			// 
@@ -103,8 +103,10 @@ namespace OpenDental{
 			// 
 			this.textCVXCode.Location = new System.Drawing.Point(101, 31);
 			this.textCVXCode.Name = "textCVXCode";
-			this.textCVXCode.Size = new System.Drawing.Size(77, 20);
+			this.textCVXCode.ReadOnly = true;
+			this.textCVXCode.Size = new System.Drawing.Size(229, 20);
 			this.textCVXCode.TabIndex = 0;
+			this.textCVXCode.TabStop = false;
 			// 
 			// labelCVXCode
 			// 
@@ -125,17 +127,32 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(25, 135);
+			this.butDelete.Location = new System.Drawing.Point(12, 135);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(79, 24);
-			this.butDelete.TabIndex = 5;
+			this.butDelete.TabIndex = 6;
 			this.butDelete.Text = "Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
+			// 
+			// butCvxSelect
+			// 
+			this.butCvxSelect.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butCvxSelect.Autosize = true;
+			this.butCvxSelect.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCvxSelect.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCvxSelect.CornerRadius = 4F;
+			this.butCvxSelect.Location = new System.Drawing.Point(336, 30);
+			this.butCvxSelect.Name = "butCvxSelect";
+			this.butCvxSelect.Size = new System.Drawing.Size(22, 22);
+			this.butCvxSelect.TabIndex = 1;
+			this.butCvxSelect.Text = "...";
+			this.butCvxSelect.Click += new System.EventHandler(this.butCvxSelect_Click);
 			// 
 			// FormVaccineDefEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(355, 186);
+			this.ClientSize = new System.Drawing.Size(370, 186);
+			this.Controls.Add(this.butCvxSelect);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.comboManufacturer);
@@ -160,11 +177,12 @@ namespace OpenDental{
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butCancel;
 		private System.Windows.Forms.Label label3;
-		private System.Windows.Forms.ComboBox comboManufacturer;
 		private System.Windows.Forms.TextBox textVaccineName;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.TextBox textCVXCode;
 		private System.Windows.Forms.Label labelCVXCode;
 		private UI.Button butDelete;
+		private UI.Button butCvxSelect;
+		private System.Windows.Forms.ComboBox comboManufacturer;
 	}
 }

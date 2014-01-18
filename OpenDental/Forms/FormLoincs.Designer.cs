@@ -23,6 +23,7 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormLoincs));
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.label1 = new System.Windows.Forms.Label();
 			this.textCode = new System.Windows.Forms.TextBox();
@@ -43,8 +44,8 @@
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.Size = new System.Drawing.Size(901, 612);
 			this.gridMain.TabIndex = 11;
-			this.gridMain.Title = "Loinc Codes";
-			this.gridMain.TranslationName = "FormMedicationPicker";
+			this.gridMain.Title = "LOINC Codes";
+			this.gridMain.TranslationName = "FormLoincCodes";
 			this.gridMain.WrapText = false;
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
@@ -119,9 +120,10 @@
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.textCode);
 			this.Controls.Add(this.gridMain);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "FormLoincs";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Loinc Codes";
+			this.Text = "LOINC";
 			this.Load += new System.EventHandler(this.FormLoincPicker_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();

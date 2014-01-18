@@ -62,7 +62,7 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(851, 641);
 			this.gridMain.TabIndex = 20;
 			this.gridMain.Title = "CPT Codes";
-			this.gridMain.TranslationName = "FormCPTCodes";
+			this.gridMain.TranslationName = "FormCptCodes";
 			this.gridMain.WrapText = false;
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
@@ -124,7 +124,7 @@ namespace OpenDental{
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "FormCpts";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "CPTs";
+			this.Text = "CPT";
 			this.Load += new System.EventHandler(this.FormSnomeds_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();

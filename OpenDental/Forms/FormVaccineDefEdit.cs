@@ -28,6 +28,17 @@ namespace OpenDental {
 			}
 		}
 
+		private void butCvxSelect_Click(object sender,EventArgs e) {
+			FormCvxs FormC=new FormCvxs();
+			FormC.IsSelectionMode=true;
+			FormC.ShowDialog();
+			if(FormC.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			textCVXCode.Text=FormC.SelectedCvx.CvxCode;
+			textVaccineName.Text=FormC.SelectedCvx.Description;
+		}
+
 		private void butDelete_Click(object sender,EventArgs e) {
 			if(IsNew) {
 				DialogResult=DialogResult.Cancel;
@@ -48,7 +59,7 @@ namespace OpenDental {
 
 		private void butOK_Click(object sender,EventArgs e) {
 			if(textCVXCode.Text=="" || textVaccineName.Text=="") {
-				MsgBox.Show(this,"Bank fields are not allowed.");
+				MsgBox.Show(this,"Blank fields are not allowed.");
 				return;
 			}
 			if(comboManufacturer.SelectedIndex==-1) {

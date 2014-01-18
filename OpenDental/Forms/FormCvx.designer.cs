@@ -1,5 +1,5 @@
 namespace OpenDental{
-	partial class FormIcd10s {
+	partial class FormCvxs {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -23,7 +23,7 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormIcd10s));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormCvxs));
 			this.textCode = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.gridMain = new OpenDental.UI.ODGrid();
@@ -61,8 +61,8 @@ namespace OpenDental{
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.Size = new System.Drawing.Size(851, 641);
 			this.gridMain.TabIndex = 20;
-			this.gridMain.Title = "ICD10 Codes";
-			this.gridMain.TranslationName = "FormIcd10Codes";
+			this.gridMain.Title = "CVX Codes";
+			this.gridMain.TranslationName = "FormCvxCodes";
 			this.gridMain.WrapText = false;
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
@@ -111,7 +111,7 @@ namespace OpenDental{
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// FormIcd10s
+			// FormCvxs
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(961, 691);
@@ -122,10 +122,10 @@ namespace OpenDental{
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butClose);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.Name = "FormIcd10s";
+			this.Name = "FormCvxs";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "ICD10";
-			this.Load += new System.EventHandler(this.FormIcd10s_Load);
+			this.Text = "CVX";
+			this.Load += new System.EventHandler(this.FormCvxs_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

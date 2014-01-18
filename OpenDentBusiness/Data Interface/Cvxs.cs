@@ -110,6 +110,18 @@ namespace OpenDentBusiness{
 			return PIn.Long(Db.GetCount(command));
 		}
 
+		public static List<Cvx> GetBySearchText(string searchText) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Cvx>>(MethodBase.GetCurrentMethod(),searchText);
+			}
+			string[] searchTokens=searchText.Split(' ');
+			string command=@"SELECT * FROM cvx ";
+			for(int i=0;i<searchTokens.Length;i++) {
+				command+=(i==0?"WHERE ":"AND ")+"(CvxCode LIKE '%"+POut.String(searchTokens[i])+"%' OR Description LIKE '%"+POut.String(searchTokens[i])+"%') ";
+			}
+			return Crud.CvxCrud.SelectMany(command);
+		}
+
 
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.

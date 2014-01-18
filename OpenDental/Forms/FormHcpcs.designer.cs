@@ -23,6 +23,7 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormHcpcs));
 			this.textCode = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.gridMain = new OpenDental.UI.ODGrid();
@@ -110,7 +111,7 @@ namespace OpenDental{
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// FormHcpcses
+			// FormHcpcs
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(961, 691);
@@ -120,7 +121,8 @@ namespace OpenDental{
 			this.Controls.Add(this.textCode);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butClose);
-			this.Name = "FormHcpcses";
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.Name = "FormHcpcs";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "HCPCS";
 			this.Load += new System.EventHandler(this.FormHcpcs_Load);
