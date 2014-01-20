@@ -54,7 +54,6 @@ namespace OpenDentBusiness.Crud{
 				vaccinePat.DrugUnitNum           = PIn.Long  (table.Rows[i]["DrugUnitNum"].ToString());
 				vaccinePat.LotNumber             = PIn.String(table.Rows[i]["LotNumber"].ToString());
 				vaccinePat.PatNum                = PIn.Long  (table.Rows[i]["PatNum"].ToString());
-				vaccinePat.NotGiven              = PIn.Bool  (table.Rows[i]["NotGiven"].ToString());
 				vaccinePat.Note                  = PIn.String(table.Rows[i]["Note"].ToString());
 				vaccinePat.FilledCity            = PIn.String(table.Rows[i]["FilledCity"].ToString());
 				vaccinePat.FilledST              = PIn.String(table.Rows[i]["FilledST"].ToString());
@@ -108,7 +107,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="VaccinePatNum,";
 			}
-			command+="VaccineDefNum,DateTimeStart,DateTimeEnd,AdministeredAmt,DrugUnitNum,LotNumber,PatNum,NotGiven,Note,FilledCity,FilledST,CompletionStatus,AdministrationNoteCode,UserNum,ProvNumOrdering,ProvNumAdminister,DateExpire,RefusalReason,ActionCode,AdministrationRoute,AdministrationSite) VALUES(";
+			command+="VaccineDefNum,DateTimeStart,DateTimeEnd,AdministeredAmt,DrugUnitNum,LotNumber,PatNum,Note,FilledCity,FilledST,CompletionStatus,AdministrationNoteCode,UserNum,ProvNumOrdering,ProvNumAdminister,DateExpire,RefusalReason,ActionCode,AdministrationRoute,AdministrationSite) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(vaccinePat.VaccinePatNum)+",";
 			}
@@ -120,7 +119,6 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (vaccinePat.DrugUnitNum)+","
 				+"'"+POut.String(vaccinePat.LotNumber)+"',"
 				+    POut.Long  (vaccinePat.PatNum)+","
-				+    POut.Bool  (vaccinePat.NotGiven)+","
 				+"'"+POut.String(vaccinePat.Note)+"',"
 				+"'"+POut.String(vaccinePat.FilledCity)+"',"
 				+"'"+POut.String(vaccinePat.FilledST)+"',"
@@ -153,7 +151,6 @@ namespace OpenDentBusiness.Crud{
 				+"DrugUnitNum           =  "+POut.Long  (vaccinePat.DrugUnitNum)+", "
 				+"LotNumber             = '"+POut.String(vaccinePat.LotNumber)+"', "
 				+"PatNum                =  "+POut.Long  (vaccinePat.PatNum)+", "
-				+"NotGiven              =  "+POut.Bool  (vaccinePat.NotGiven)+", "
 				+"Note                  = '"+POut.String(vaccinePat.Note)+"', "
 				+"FilledCity            = '"+POut.String(vaccinePat.FilledCity)+"', "
 				+"FilledST              = '"+POut.String(vaccinePat.FilledST)+"', "
@@ -201,10 +198,6 @@ namespace OpenDentBusiness.Crud{
 			if(vaccinePat.PatNum != oldVaccinePat.PatNum) {
 				if(command!=""){ command+=",";}
 				command+="PatNum = "+POut.Long(vaccinePat.PatNum)+"";
-			}
-			if(vaccinePat.NotGiven != oldVaccinePat.NotGiven) {
-				if(command!=""){ command+=",";}
-				command+="NotGiven = "+POut.Bool(vaccinePat.NotGiven)+"";
 			}
 			if(vaccinePat.Note != oldVaccinePat.Note) {
 				if(command!=""){ command+=",";}

@@ -37,7 +37,6 @@
 			this.textLotNum = new System.Windows.Forms.TextBox();
 			this.textDateTimeStop = new System.Windows.Forms.TextBox();
 			this.labelDateTimeStop = new System.Windows.Forms.Label();
-			this.checkNotGiven = new System.Windows.Forms.CheckBox();
 			this.labelDocument = new System.Windows.Forms.Label();
 			this.textNote = new System.Windows.Forms.TextBox();
 			this.label3 = new System.Windows.Forms.Label();
@@ -189,22 +188,11 @@
 			this.labelDateTimeStop.Text = "Date Time Stop";
 			this.labelDateTimeStop.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// checkNotGiven
-			// 
-			this.checkNotGiven.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkNotGiven.Location = new System.Drawing.Point(5, 371);
-			this.checkNotGiven.Name = "checkNotGiven";
-			this.checkNotGiven.Size = new System.Drawing.Size(145, 17);
-			this.checkNotGiven.TabIndex = 15;
-			this.checkNotGiven.Text = "Vaccine Not Given";
-			this.checkNotGiven.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkNotGiven.UseVisualStyleBackColor = true;
-			// 
 			// labelDocument
 			// 
-			this.labelDocument.Location = new System.Drawing.Point(156, 371);
+			this.labelDocument.Location = new System.Drawing.Point(136, 371);
 			this.labelDocument.Name = "labelDocument";
-			this.labelDocument.Size = new System.Drawing.Size(316, 45);
+			this.labelDocument.Size = new System.Drawing.Size(336, 45);
 			this.labelDocument.TabIndex = 16;
 			this.labelDocument.Text = "Document reason not given below.  Reason can include a specific allergy, adverse " +
     "effect, intollerance, patient declines, specific disease, etc.";
@@ -648,7 +636,6 @@
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.textNote);
 			this.Controls.Add(this.labelDocument);
-			this.Controls.Add(this.checkNotGiven);
 			this.Controls.Add(this.textDateTimeStop);
 			this.Controls.Add(this.textDateTimeStart);
 			this.Controls.Add(this.labelDateTimeStop);
@@ -688,7 +675,6 @@
 		private System.Windows.Forms.TextBox textLotNum;
 		private System.Windows.Forms.TextBox textDateTimeStop;
 		private System.Windows.Forms.Label labelDateTimeStop;
-		private System.Windows.Forms.CheckBox checkNotGiven;
 		private System.Windows.Forms.Label labelDocument;
 		private System.Windows.Forms.TextBox textNote;
 		private System.Windows.Forms.Label label3;

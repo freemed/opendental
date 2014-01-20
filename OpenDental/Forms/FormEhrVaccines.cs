@@ -39,9 +39,12 @@ namespace OpenDental {
 				else{
 					row.Cells.Add(VaccineList[i].DateTimeStart.ToShortDateString());
 				}
-				string str=VaccineDefs.GetOne(VaccineList[i].VaccineDefNum).VaccineName;
-				if(VaccineList[i].NotGiven) {
-					str+=" (not given: "+VaccineList[i].Note+")";
+				string str="";
+				if(VaccineList[i].VaccineDefNum==0) {
+					str="Not administered: "+VaccineList[i].Note;
+				}
+				else { 				
+					str=VaccineDefs.GetOne(VaccineList[i].VaccineDefNum).VaccineName;
 				}
 				row.Cells.Add(str);
 				gridVaccine.Rows.Add(row);

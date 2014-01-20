@@ -3449,6 +3449,12 @@ namespace OpenDentBusiness {
 					command="ALTER TABLE vaccinepat MODIFY CompletionStatus NOT NULL";
 					Db.NonQ(command);
 				}
+				//MySQL and Oracle
+				command="UPDATE vaccinepat SET CompletionStatus=CASE WHEN NotGiven=1 THEN 2 ELSE 0 END";//If was NotGiven then CompletionStatus=NotAdministered, otherwise CompletionStatus=Complete.
+				Db.NonQ(command);
+				//MySQL and Oracle
+				command="ALTER TABLE vaccinepat DROP COLUMN NotGiven";
+				Db.NonQ(command);
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE vaccinepat ADD AdministrationNoteCode tinyint NOT NULL";
 					Db.NonQ(command);

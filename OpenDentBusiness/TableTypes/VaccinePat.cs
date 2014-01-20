@@ -9,7 +9,7 @@ namespace OpenDentBusiness {
 		///<summary>Primary key.</summary>
 		[CrudColumn(IsPriKey=true)]
 		public long VaccinePatNum;
-		///<summary>FK to vaccinedef.VaccineDefNum.</summary>
+		///<summary>FK to vaccinedef.VaccineDefNum.  Can be 0 if and only if CompletionStatus=NotAdministered, in which case CVX code is assumed to be 998 (not administered) and there is no manufacturer.</summary>
 		public long VaccineDefNum;
 		///<summary>The datetime that the vaccine was administered.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
@@ -21,12 +21,10 @@ namespace OpenDentBusiness {
 		public float AdministeredAmt;
 		///<summary>FK to drugunit.DrugUnitNum. Unit of measurement of the AdministeredAmt.  0 represents null.</summary>
 		public long DrugUnitNum;
-		///<summary>Optional</summary>
+		///<summary>Optional.  Used in HL7 RXA-9.1.</summary>
 		public string LotNumber;
 		///<summary>FK to patient.PatNum.</summary>
 		public long PatNum;
-		///<summary>Set to true if no vaccine given.  Documentation required in the Note.</summary>
-		public bool NotGiven;
 		///<summary>Documentation sometimes required.</summary>
 		public string Note;
 		///<summary>The city where the vaccine was filled.  This can be different than the practice office city for historical vaccine information.  Exported in HL7 ORC-3.</summary>

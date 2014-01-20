@@ -698,7 +698,6 @@ namespace OpenDentBusiness.HL7 {
 
 		///<summary>Pharmacy/Treatment Administration segment.  Required.  Guide page 149.</summary>
 		private void RXA(VaccinePat vaccine) {
-			VaccineDef vaccineDef=VaccineDefs.GetOne(vaccine.VaccineDefNum);
 			_seg=new SegmentHL7(SegmentNameHL7.RXA);
 			_seg.SetField(0,"RXA");
 			_seg.SetField(1,"0");//RXA-1 Give Sub-ID Counter.  Required.  Must be "0".
@@ -708,10 +707,17 @@ namespace OpenDentBusiness.HL7 {
 				_seg.SetField(4,vaccine.DateTimeEnd.ToString("yyyyMMddHHmm"));//RXA-4 Date/Time End of Administration.  Required if known.  Must be same as RXA-3 or blank.  UI forces RXA-4 and RXA-3 to be equal.  This would be blank if for a planned vaccine.
 			}
 			//RXA-5 Administered Code.  Required.  Cardinality [1..1].  Type CE (guide page 53).  Must be a CVX code.
-			Cvx cvx=Cvxs.GetByCode(vaccineDef.CVXCode);
-			WriteCE(5,cvx.CvxCode,cvx.Description,"CVX");
+			VaccineDef vaccineDef=null;
+			if(vaccine.CompletionStatus==VaccineCompletionStatus.NotAdministered) {
+				WriteCE(5,"998","no vaccine administered","CVX");
+			}
+			else {
+				vaccineDef=VaccineDefs.GetOne(vaccine.VaccineDefNum);
+				Cvx cvx=Cvxs.GetByCode(vaccineDef.CVXCode);
+				WriteCE(5,cvx.CvxCode,cvx.Description,"CVX");
+			}
 			//RXA-6 Administered Amount.  Required (length 1..20).  If amount is not known or not meaningful, then use "999".
-			if(vaccine.AdministeredAmt>0){
+			if(vaccine.AdministeredAmt>0) {
 				_seg.SetField(6,vaccine.AdministeredAmt.ToString());
 			}
 			else {
@@ -763,16 +769,16 @@ namespace OpenDentBusiness.HL7 {
 			//RXA-12 Administered Per (Time Unit).  Optional.
 			//RXA-13 Administered Strength.  Optional.
 			//RXA-14 Administered Strength Units.  Optional.
-			//RXA-15 Substance Lot Number.  Required if the value in RXA-9.1 is "00".
-			if(vaccine.LotNumber.Trim()!="") {
+			//RXA-15 Substance Lot Number.  Required if the value in RXA-9.1 is "00".  We decided not to send this field if NotAdministered because we observed such behavior in the testing tool.
+			if(vaccine.CompletionStatus!=VaccineCompletionStatus.NotAdministered && vaccine.LotNumber.Trim()!="") {
 				_seg.SetField(15,vaccine.LotNumber.Trim());
 			}
-			//RXA-16 Substance Expiration Date.  Required if RXA-15 is not blank.  Must include at least year and month, but day is not required.
-			if(vaccine.DateExpire.Year>1880) {
+			//RXA-16 Substance Expiration Date.  Required if RXA-15 is not blank.  Must include at least year and month, but day is not required.  We decided not to send this field if NotAdministered because we observed such behavior in the testing tool.
+			if(vaccine.CompletionStatus!=VaccineCompletionStatus.NotAdministered && vaccine.DateExpire.Year>1880) {
 				_seg.SetField(16,vaccine.DateExpire.ToString("yyyyMMdd"));
 			}
 			//RXA-17 Substance Manufacturer Name.  Requred if RXA-9.1 is "00".  Cardinality [0..*].  Value set MVX.  Type CE.
-			if(vaccineDef.DrugManufacturerNum!=0) {
+			if(vaccine.CompletionStatus!=VaccineCompletionStatus.NotAdministered && vaccineDef.DrugManufacturerNum!=0) {
 				DrugManufacturer manufacturer=DrugManufacturers.GetOne(vaccineDef.DrugManufacturerNum);
 				WriteCE(17,manufacturer.ManufacturerCode,manufacturer.ManufacturerName,"MVX");
 			}
@@ -1201,13 +1207,24 @@ namespace OpenDentBusiness.HL7 {
 			}
 			for(int i=0;i<vaccines.Count;i++) {
 				VaccinePat vaccine=vaccines[i];
-				VaccineDef vaccineDef=VaccineDefs.GetOne(vaccine.VaccineDefNum);
-				if(!Cvxs.CodeExists(vaccineDef.CVXCode)) {
-					WriteError(sb,"Invalid CVX code '"+vaccineDef.CVXCode+"' for vaccine '"+vaccineDef.VaccineName+"'");
-				}
-				if(vaccineDef.DrugManufacturerNum!=0) {
-					DrugManufacturer manufacturer=DrugManufacturers.GetOne(vaccineDef.DrugManufacturerNum);
-					//manufacturer.ManufacturerCode;//TODO: Consider validating MVX codes here. We do not currently store MVX codes.
+				string vaccineName="not administered";
+				VaccineDef vaccineDef=null;
+				if(vaccine.CompletionStatus!=VaccineCompletionStatus.NotAdministered) {//Some fields are not used when the vaccine was not administered.
+					vaccineDef=VaccineDefs.GetOne(vaccine.VaccineDefNum);
+					vaccineName=vaccineDef.VaccineName;
+					if(!Cvxs.CodeExists(vaccineDef.CVXCode)) {
+						WriteError(sb,"Invalid CVX code '"+vaccineDef.CVXCode+"' for vaccine '"+vaccineDef.VaccineName+"'");
+					}
+					if(vaccineDef.DrugManufacturerNum!=0) {
+						DrugManufacturer manufacturer=DrugManufacturers.GetOne(vaccineDef.DrugManufacturerNum);
+						//manufacturer.ManufacturerCode;//TODO: Consider validating MVX codes here. We do not currently store MVX codes.
+					}
+					if(vaccine.AdministrationNoteCode==VaccineAdministrationNote.NewRecord && vaccine.LotNumber.Trim()=="") {
+						WriteError(sb,"Missing lot number.  Required for new records.");
+					}
+					if(vaccine.FilledCity.Trim()=="") {
+						WriteError(sb,"Missing filled city.");
+					}
 				}
 				if(vaccine.AdministeredAmt>0 && vaccine.DrugUnitNum!=0) {
 					DrugUnit drugUnit=DrugUnits.GetOne(vaccine.DrugUnitNum);
@@ -1215,12 +1232,6 @@ namespace OpenDentBusiness.HL7 {
 					//if(ucum==null) {//TODO: Put check back in once we know if we will include UCUM codes in the database or not.
 					//	WriteError(sb,"Drug unit invalid UCUM code.");
 					//}
-				}
-				if(vaccine.AdministrationNoteCode==VaccineAdministrationNote.NewRecord && vaccine.LotNumber.Trim()=="") {
-					WriteError(sb,"Missing lot number.");
-				}
-				if(vaccine.FilledCity.Trim()=="") {
-					WriteError(sb,"Missing filled city.");
 				}
 				List<string> stateCodes=new List<string>(new string[] {
 					//50 States.
@@ -1270,14 +1281,14 @@ namespace OpenDentBusiness.HL7 {
 				for(int j=0;j<listVaccineObservations.Count;j++) {
 					VaccineObs vaccineObs=listVaccineObservations[j];
 					if(vaccineObs.ValReported.Trim()=="") {
-						WriteError(sb,"Missing value for observation with type '"+vaccineObs.ValType.ToString()+"' attached to vaccine '"+vaccineDef.VaccineName+"'");
+						WriteError(sb,"Missing value for observation with type '"+vaccineObs.ValType.ToString()+"' attached to vaccine '"+vaccineName+"'");
 					}
 					Ucum ucum=Ucums.GetByCode(vaccineObs.ValUnit.Trim());
 					if(ucum==null && vaccineObs.ValType==VaccineObsType.Numeric) {
-						WriteError(sb,"Invalid unit code (must be UCUM) for observation with type '"+vaccineObs.ValType.ToString()+"' attached to vaccine '"+vaccineDef.VaccineName+"'");
+						WriteError(sb,"Invalid unit code (must be UCUM) for observation with type '"+vaccineObs.ValType.ToString()+"' attached to vaccine '"+vaccineName+"'");
 					}
 					if(vaccineObs.IdentifyingCode==VaccineObsIdentifier.FundPgmEligCat && vaccineObs.MethodCode.Trim()=="") {
-						WriteError(sb,"Missing method code for observation with type '"+vaccineObs.ValType.ToString()+"' attached to vaccine '"+vaccineDef.VaccineName+"'");
+						WriteError(sb,"Missing method code for observation with type '"+vaccineObs.ValType.ToString()+"' attached to vaccine '"+vaccineName+"'");
 					}
 					if(vaccineObs.ValType==VaccineObsType.Coded) {
 						//Any value is allowed.
@@ -1287,7 +1298,7 @@ namespace OpenDentBusiness.HL7 {
 							DateTime.Parse(vaccineObs.ValReported);
 						}
 						catch(Exception) {
-							WriteError(sb,"Observation value is '"+vaccineObs.ValReported+"'.  Must be a valid date for vaccine '"+vaccineDef.VaccineName+"'");
+							WriteError(sb,"Observation value is '"+vaccineObs.ValReported+"'.  Must be a valid date for vaccine '"+vaccineName+"'");
 						}
 					}
 					else if(vaccineObs.ValType==VaccineObsType.Numeric) {
@@ -1295,7 +1306,7 @@ namespace OpenDentBusiness.HL7 {
 							double.Parse(vaccineObs.ValReported);
 						}
 						catch(Exception) {
-							WriteError(sb,"Observation value is '"+vaccineObs.ValReported+"'.  Must be a valid number for vaccine '"+vaccineDef.VaccineName+"'");
+							WriteError(sb,"Observation value is '"+vaccineObs.ValReported+"'.  Must be a valid number for vaccine '"+vaccineName+"'");
 						}
 					}
 					else if(vaccineObs.ValType==VaccineObsType.Text) {
@@ -1306,7 +1317,7 @@ namespace OpenDentBusiness.HL7 {
 							DateTime.Parse(vaccineObs.ValReported);
 						}
 						catch(Exception) {
-							WriteError(sb,"Observation value is '"+vaccineObs.ValReported+"'.  Must be a valid date and time for vaccine '"+vaccineDef.VaccineName+"'");
+							WriteError(sb,"Observation value is '"+vaccineObs.ValReported+"'.  Must be a valid date and time for vaccine '"+vaccineName+"'");
 						}
 					}
 				}

@@ -71,8 +71,10 @@ namespace OpenDental {
 			VaccineDefCur.DrugManufacturerNum=DrugManufacturers.Listt[comboManufacturer.SelectedIndex].DrugManufacturerNum;
 			if(IsNew) {
 				for(int i=0;i<VaccineDefs.Listt.Count;i++) {
-					if(VaccineDefs.Listt[i].CVXCode==textCVXCode.Text) {
-						MsgBox.Show(this,"CVX Code already exists.");
+					//We used to block creation if the CVX code already existed.
+					//For EHR immunization testing, we had to allow duplicate CVX codes, because some test cases had the same CVX codes but different manufacturers.
+					if(VaccineDefs.Listt[i].CVXCode==textCVXCode.Text && VaccineDefs.Listt[i].DrugManufacturerNum==VaccineDefCur.DrugManufacturerNum) {
+						MsgBox.Show(this,"CVX Code already exists for the chosen manufacturer.");
 						return;
 					}
 				}

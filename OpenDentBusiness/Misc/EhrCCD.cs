@@ -1127,7 +1127,7 @@ Immunizations
 					vaccineDef=VaccineDefs.GetOne(listVaccinePatsFiltered[i].VaccineDefNum);
 				}
 				Start("entry","typeCode","DRIV");
-				Start("substanceAdministration","classCode","SBADM","moodCode","EVN","negationInd",listVaccinePatsFiltered[i].NotGiven?"true":"false");
+				Start("substanceAdministration","classCode","SBADM","moodCode","EVN","negationInd",(listVaccinePatsFiltered[i].CompletionStatus==VaccineCompletionStatus.NotAdministered)?"true":"false");
 				TemplateId("2.16.840.1.113883.10.20.22.4.52");
 				_w.WriteComment("Immunization Activity Template");
 				Guid();

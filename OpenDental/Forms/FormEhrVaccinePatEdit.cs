@@ -33,7 +33,7 @@ namespace OpenDental {
 					comboVaccine.SelectedIndex=i;
 				}
 			}
-			if(!IsNew) {
+			if(!IsNew && VaccinePatCur.VaccineDefNum!=0) {
 				VaccineDef vaccineDef=VaccineDefs.GetOne(VaccinePatCur.VaccineDefNum);//Need vaccine to get manufacturer.
 				DrugManufacturer manufacturer=DrugManufacturers.GetOne(vaccineDef.DrugManufacturerNum);
 				textManufacturer.Text=manufacturer.ManufacturerCode + " - " + manufacturer.ManufacturerName;
@@ -78,7 +78,6 @@ namespace OpenDental {
 					listCompletionStatus.SelectedIndex=i;
 				}
 			}
-			checkNotGiven.Checked=VaccinePatCur.NotGiven;
 			textNote.Text=VaccinePatCur.Note;
 			if(IsNew) {
 				if(pat.ClinicNum==0) {
@@ -339,17 +338,22 @@ namespace OpenDental {
 				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
 				return;
 			}
-			if(comboVaccine.SelectedIndex==-1) {
+			VaccineCompletionStatus vaccineCompletionStatus=(VaccineCompletionStatus)listCompletionStatus.SelectedIndex;
+			if(comboVaccine.SelectedIndex==-1 && vaccineCompletionStatus!=VaccineCompletionStatus.NotAdministered) {
+				//When the vaccine is not administered, the CVX code is automatically assumed to be 998 and there is no manufacturer.  Therefore, no vaccine def is needed.
 				MessageBox.Show(this,"Please select a vaccine.");
 				return;
 			}
-			if(checkNotGiven.Checked) {
+			if(vaccineCompletionStatus==VaccineCompletionStatus.NotAdministered) {
 				if(textNote.Text=="") {
 					MessageBox.Show(this,"Please enter documentation in the note.");
 					return;
 				}
+				VaccinePatCur.VaccineDefNum=0;//Written for clarity
 			}
-			VaccinePatCur.VaccineDefNum=VaccineDefs.Listt[comboVaccine.SelectedIndex].VaccineDefNum;
+			else {
+				VaccinePatCur.VaccineDefNum=VaccineDefs.Listt[comboVaccine.SelectedIndex].VaccineDefNum;
+			}
 			try {
 				VaccinePatCur.DateTimeStart=PIn.DateT(textDateTimeStart.Text);
 				VaccinePatCur.DateTimeEnd=PIn.DateT(textDateTimeStop.Text);
@@ -378,7 +382,6 @@ namespace OpenDental {
 			VaccinePatCur.DateExpire=PIn.Date(textDateExpiration.Text);
 			VaccinePatCur.RefusalReason=(VaccineRefusalReason)listRefusalReason.SelectedIndex;
 			VaccinePatCur.CompletionStatus=(VaccineCompletionStatus)listCompletionStatus.SelectedIndex;
-			VaccinePatCur.NotGiven=checkNotGiven.Checked;
 			VaccinePatCur.Note=textNote.Text;
 			VaccinePatCur.FilledCity=textFilledCity.Text;
 			VaccinePatCur.FilledST=textFilledSt.Text;
