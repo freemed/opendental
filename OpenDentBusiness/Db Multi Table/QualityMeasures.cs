@@ -63,7 +63,13 @@ namespace OpenDentBusiness {
 				measureCur.Id=GetId2014(measureCur.Type2014);
 				measureCur.Descript=GetDescript2014(measureCur.Type2014);
 				if(measureCur.ListEhrPats!=null) {
-					measureCur.Denominator=measureCur.ListEhrPats.Count;
+					if((QualityType2014)i==QualityType2014.Influenza) {
+						//only have to count IsDenominator pats for influenza measure, all other measures will have every patient marked IsDenominator (denom=initial pat population)
+						measureCur.Denominator=CalcDenominator2014(measureCur.ListEhrPats);
+					}
+					else {
+						measureCur.Denominator=measureCur.ListEhrPats.Count;
+					}
 					measureCur.Numerator=CalcNumerator2014(measureCur.ListEhrPats);
 					measureCur.Exclusions=CalcExclusions2014(measureCur.ListEhrPats);
 					measureCur.Exceptions=CalcExceptions2014(measureCur.ListEhrPats);
@@ -2190,6 +2196,9 @@ namespace OpenDentBusiness {
 			System.Diagnostics.Stopwatch s=new System.Diagnostics.Stopwatch();
 			List<string> listOneOfEncOIDs=new List<string>();
 			List<string> listTwoOfEncOIDs=new List<string>();
+			List<string> listValueSetOIDs;
+			List<string> listReasonOIDs;
+			List<long> listEhrPatNums;
 			//This adultEncQuery is used by several CQMs
 			//All encounters in the date range by the provider (based on ehrkey, so may be list of providers) for patients over 18 at the start of the measurement period
 			string encounterSelectWhere="SELECT encounter.* FROM encounter "
@@ -2213,20 +2222,20 @@ namespace OpenDentBusiness {
 					#endregion
 					#region Get Patient Data
 					//Denominator is equal to inital patient population for this measure, no exclusions
-					measureCur.ListEhrPats=GetEhrPatsFromEncounters(measureCur.DictPatNumListEncounters);
+					measureCur.ListEhrPats=GetEhrPatsFromEncsOrProcs(measureCur.DictPatNumListEncounters);
 					#endregion
 					#endregion
 					#region Get Current Medications Documented Procedures
 					//Get procedures from the value set that occurred during measurement period
-					List<string> listProcValueSetOIDs=new List<string>() { "2.16.840.1.113883.3.600.1.462" };//Current Medications Documented SNMD SNOMED-CT Value Set
+					listValueSetOIDs=new List<string>() { "2.16.840.1.113883.3.600.1.462" };//Current Medications Documented SNMD SNOMED-CT Value Set
 					//Only one procedure code in the value set for this measure, SNOMEDCT - 428191000124101 - Documentation of current medications (procedure)
-					measureCur.DictPatNumListMeasureEvents=GetMedDocumentedProcs(listProcValueSetOIDs,dateStart,dateEnd);
+					measureCur.DictPatNumListMeasureEvents=GetMedDocumentedProcs(listValueSetOIDs,dateStart,dateEnd);
 					#endregion
 					#region Get Medication Procs Not Performed
 					//Get a list of all not performed items from the value set that occurred during the measurement period with valid readson
-					List<string> listMedsDocumentedOIDs=new List<string>() { "2.16.840.1.113883.3.600.1.462" };//Current Medications Documented SNMD SNOMED-CT Value Set
-					List<string> listMedicalOtherReasonOIDs=new List<string>() { "2.16.840.1.113883.3.600.1.1502" };//Medical or Other reason not done SNOMED-CT Value Set
-					measureCur.DictPatNumListNotPerfs=GetNotPerformeds(listMedsDocumentedOIDs,listMedicalOtherReasonOIDs,dateStart,dateEnd);
+					listValueSetOIDs=new List<string>() { "2.16.840.1.113883.3.600.1.462" };//Current Medications Documented SNMD SNOMED-CT Value Set
+					listReasonOIDs=new List<string>() { "2.16.840.1.113883.3.600.1.1502" };//Medical or Other reason not done SNOMED-CT Value Set
+					measureCur.DictPatNumListNotPerfs=GetNotPerformeds(listValueSetOIDs,listReasonOIDs,dateStart,dateEnd);
 					#endregion
 					break;
 				#endregion
@@ -2263,15 +2272,15 @@ namespace OpenDentBusiness {
 					measureCur.DictPatNumListEncounters=GetEncountersWithOneOfAndTwoOfOIDs(encCommand,listOneOfEncOIDs,listTwoOfEncOIDs);
 					#endregion
 					#region Get Pregnancy And Palliative Care Problems
-					List<string> listPalliativeAndPregOIDs=new List<string>() { "2.16.840.1.113883.3.600.1.1579" };//Palliative Care Grouping Value Set
-					listPalliativeAndPregOIDs.Add("2.16.840.1.113883.3.600.1.1623");//Pregnancy Dx Grouping Value Set
-					measureCur.DictPatNumListProblems=GetProblems(null,listPalliativeAndPregOIDs,dateStart,dateEnd);
+					listValueSetOIDs=new List<string>() { "2.16.840.1.113883.3.600.1.1579" };//Palliative Care Grouping Value Set
+					listValueSetOIDs.Add("2.16.840.1.113883.3.600.1.1623");//Pregnancy Dx Grouping Value Set
+					measureCur.DictPatNumListProblems=GetProblems(null,listValueSetOIDs,dateStart,dateEnd);
 					#endregion
 					#region Get Not Performed
-					List<string> listPhysExamOIDs=new List<string>() { "2.16.840.1.113883.3.600.1.681" };//BMI LOINC Value LOINC Value Set
-					List<string> listMedOtherPatientReasonOIDs=new List<string>() { "2.16.840.1.113883.3.600.1.1502" };//Medical or Other reason not done SNOMED-CT Value Set
-					listMedOtherPatientReasonOIDs.Add("2.16.840.1.113883.3.600.1.1503");//Patient Reason Refused SNOMED-CT Value Set
-					measureCur.DictPatNumListNotPerfs=GetNotPerformeds(listPhysExamOIDs,listMedOtherPatientReasonOIDs,dateStart,dateEnd);
+					listValueSetOIDs=new List<string>() { "2.16.840.1.113883.3.600.1.681" };//BMI LOINC Value LOINC Value Set
+					listReasonOIDs=new List<string>() { "2.16.840.1.113883.3.600.1.1502" };//Medical or Other reason not done SNOMED-CT Value Set
+					listReasonOIDs.Add("2.16.840.1.113883.3.600.1.1503");//Patient Reason Refused SNOMED-CT Value Set
+					measureCur.DictPatNumListNotPerfs=GetNotPerformeds(listValueSetOIDs,listReasonOIDs,dateStart,dateEnd);
 					#endregion
 					#region Remove If Palliative Care Order Exists Prior To Encounter Date
 					//if the patient with eligible encounter list has a palliative care order that starts before or during the encounter, remove the encounter
@@ -2321,29 +2330,33 @@ namespace OpenDentBusiness {
 					#endregion
 					#region Get Patient Data
 					//encounters are now eligible and only if no palliative care order before or on encounter date and no eligible not perforemed item on same date
-					measureCur.ListEhrPats=GetEhrPatsFromEncounters(measureCur.DictPatNumListEncounters);
+					measureCur.ListEhrPats=GetEhrPatsFromEncsOrProcs(measureCur.DictPatNumListEncounters);
+					listEhrPatNums=GetListPatNums(measureCur.ListEhrPats);
 					#endregion
 					#endregion
 					#region Get Vital Sign Exams
 					//get all vitalsign exams with valid height and weight in the date range, we have to subtract 6 months from dateStart, since encounter must be in measurement period, but exam can be before measurement period as long as it is within 6 months of the encounter
 					//each exam will have a calculated BMI, which is (weight*703)/(height*height)
-					measureCur.DictPatNumListVitalsigns=GetVitalsignsForBMI(GetListPatNums(measureCur.ListEhrPats),dateStart.AddMonths(-6),dateEnd);
+					measureCur.DictPatNumListVitalsigns=GetVitalsignsForBMI(listEhrPatNums,dateStart.AddMonths(-6),dateEnd);
 					#endregion
 					#region Get Interventions
 					//Get all interventions for eligible value sets that occurred within 6 months of the start of the measurement period up to the end of the measurement period
 					command="SELECT * FROM intervention "
-						+"WHERE DATE(DateEntry) BETWEEN "+POut.Date(dateStart)+"-INTERVAL 6 MONTH AND "+POut.Date(dateEnd)+" "
-						+"ORDER BY PatNum,DateEntry DESC";
-					List<string> listBMIInterventionOIDs=new List<string> { "2.16.840.1.113883.3.600.1.1525" };//Above Normal Follow-up Grouping Value Set
-					listBMIInterventionOIDs.Add("2.16.840.1.113883.3.600.1.1528");//Below Normal Follow up Grouping Value Set
-					listBMIInterventionOIDs.Add("2.16.840.1.113883.3.600.1.1527");//Referrals where weight assessment may occur Grouping Value Set
-					measureCur.DictPatNumListInterventions=GetInterventions(command,listBMIInterventionOIDs);
+						+"WHERE DATE(DateEntry) BETWEEN "+POut.Date(dateStart)+"-INTERVAL 6 MONTH AND "+POut.Date(dateEnd)+" ";
+					if(listEhrPatNums!=null && listEhrPatNums.Count>0) {
+						command+="AND intervention.PatNum IN("+string.Join(",",listEhrPatNums)+") ";
+					}
+					command+="ORDER BY PatNum,DateEntry DESC";
+					listValueSetOIDs=new List<string>() { "2.16.840.1.113883.3.600.1.1525" };//Above Normal Follow-up Grouping Value Set
+					listValueSetOIDs.Add("2.16.840.1.113883.3.600.1.1528");//Below Normal Follow up Grouping Value Set
+					listValueSetOIDs.Add("2.16.840.1.113883.3.600.1.1527");//Referrals where weight assessment may occur Grouping Value Set
+					measureCur.DictPatNumListInterventions=GetInterventions(command,listValueSetOIDs);
 					#endregion
 					#region Get MedicationPats
 					//Get all medicationpats (check for start date and instructions when calculating to make sure they are 'Orders') that started within 6 months of start date
-					List<string> listBMIMedOIDs=new List<string>() { "2.16.840.1.113883.3.600.1.1498" };//Above Normal Medications RxNorm Value Set
-					listBMIMedOIDs.Add("2.16.840.1.113883.3.600.1.1499");//Below Normal Medications RxNorm Value Set
-					measureCur.DictPatNumListMedPats=GetMedPats(GetListPatNums(measureCur.ListEhrPats),listBMIMedOIDs,dateStart.AddMonths(-6),dateEnd);
+					listValueSetOIDs=new List<string>() { "2.16.840.1.113883.3.600.1.1498" };//Above Normal Medications RxNorm Value Set
+					listValueSetOIDs.Add("2.16.840.1.113883.3.600.1.1499");//Below Normal Medications RxNorm Value Set
+					measureCur.DictPatNumListMedPats=GetMedPats(listEhrPatNums,listValueSetOIDs,dateStart.AddMonths(-6),dateEnd);
 					#endregion
 					break;
 				#endregion
@@ -2398,12 +2411,13 @@ namespace OpenDentBusiness {
 					}
 					#endregion
 					#region Get Patient Data From Encounters
-					measureCur.ListEhrPats=GetEhrPatsFromEncounters(measureCur.DictPatNumListEncounters);
+					measureCur.ListEhrPats=GetEhrPatsFromEncsOrProcs(measureCur.DictPatNumListEncounters);
+					listEhrPatNums=GetListPatNums(measureCur.ListEhrPats);
 					#endregion
 					#endregion
 					#region Get Flouride Varnish Application Procedures
-					List<string> listFlourideOIDs=new List<string>() { "2.16.840.1.113883.3.464.1003.125.12.1002" };//Fluoride Varnish Application for Children Grouping Value Set
-					measureCur.DictPatNumListProcs=GetProcs(GetListPatNums(measureCur.ListEhrPats),listFlourideOIDs,dateStart,dateEnd);
+					listValueSetOIDs=new List<string>() { "2.16.840.1.113883.3.464.1003.125.12.1002" };//Fluoride Varnish Application for Children Grouping Value Set
+					measureCur.DictPatNumListProcs=GetProcs(listEhrPatNums,listValueSetOIDs,dateStart,dateEnd);
 					#endregion
 					break;
 				#endregion
@@ -2430,16 +2444,16 @@ namespace OpenDentBusiness {
 					measureCur.DictPatNumListEncounters=GetEncountersWithOneOfAndTwoOfOIDs(child0To19Command,listOneOfEncOIDs,listTwoOfEncOIDs);
 					#endregion
 					#region Get Patient Data From Encounters
-					measureCur.ListEhrPats=GetEhrPatsFromEncounters(measureCur.DictPatNumListEncounters);
+					measureCur.ListEhrPats=GetEhrPatsFromEncsOrProcs(measureCur.DictPatNumListEncounters);
+					listEhrPatNums=GetListPatNums(measureCur.ListEhrPats);
 					#endregion
 					#endregion
 					#region Get Dental Caries Diagnoses
-					List<string> listCariesOIDs=new List<string>() { "2.16.840.1.113883.3.464.1003.125.12.1004" };//Dental Caries Grouping Value Set
-					measureCur.DictPatNumListProblems=GetProblems(GetListPatNums(measureCur.ListEhrPats),listCariesOIDs,dateStart,dateEnd);
+					listValueSetOIDs=new List<string>() { "2.16.840.1.113883.3.464.1003.125.12.1004" };//Dental Caries Grouping Value Set
+					measureCur.DictPatNumListProblems=GetProblems(listEhrPatNums,listValueSetOIDs,dateStart,dateEnd);
 					#endregion
 					break;
 				#endregion
-//Todo:
 				#region Pneumonia
 				case QualityType2014.Pneumonia:
 					//Strategy: Get encounters from eligible value sets for patients >= 65 years old before the start of the measurement period
@@ -2462,8 +2476,23 @@ namespace OpenDentBusiness {
 					measureCur.DictPatNumListEncounters=GetEncountersWithOneOfAndTwoOfOIDs(encCommand,listOneOfEncOIDs,listTwoOfEncOIDs);
 					#endregion
 					#region Get Patient Data
-					measureCur.ListEhrPats=GetEhrPatsFromEncounters(measureCur.DictPatNumListEncounters);
+					measureCur.ListEhrPats=GetEhrPatsFromEncsOrProcs(measureCur.DictPatNumListEncounters);
+					listEhrPatNums=GetListPatNums(measureCur.ListEhrPats);//for restricting the following list of procs, problems, and vaccinepats
 					#endregion
+					#endregion
+					#region Get Vaccinepats
+					listValueSetOIDs=new List<string>() { "2.16.840.1.113883.3.464.1003.110.12.1027" };//Pneumococcal Vaccine Grouping Value Set
+					measureCur.DictPatNumListMedPats=GetVaccines(listEhrPatNums,listValueSetOIDs,DateTime.MinValue,dateEnd);
+					#endregion
+					#region Get Procs
+					//Get procs that are Pneumococcal vaccine administered SNOMEDCT - 12866006
+					listValueSetOIDs=new List<string>() { "2.16.840.1.113883.3.464.1003.110.12.1034" };//Pneumococcal Vaccine Administered Grouping Value Set
+					measureCur.DictPatNumListProcs=GetProcs(listEhrPatNums,listValueSetOIDs,DateTime.MinValue,dateEnd);
+					#endregion
+					#region Get Problems
+					//Get problems that are history of pheumococcal vaccine recoreded, one code allowed, SNOMEDCT - 310578008
+					listValueSetOIDs=new List<string>() { "2.16.840.1.113883.3.464.1003.110.12.1028" };//History of Pneumococcal Vaccine Grouping Value Set
+					measureCur.DictPatNumListProblems=GetProblems(listEhrPatNums,listValueSetOIDs,DateTime.MinValue,dateEnd);
 					#endregion
 					s.Restart();
 					break;
@@ -2496,38 +2525,193 @@ namespace OpenDentBusiness {
 					#region Get Initial Patient Population
 					//Denominator is equal to initial patient population for this measure
 					//the Inital Patient Population will be unique patients in ListEncounters, loop through and count unique patients
-					measureCur.ListEhrPats=GetEhrPatsFromEncounters(measureCur.DictPatNumListEncounters);
+					measureCur.ListEhrPats=GetEhrPatsFromEncsOrProcs(measureCur.DictPatNumListEncounters);
+					listEhrPatNums=GetListPatNums(measureCur.ListEhrPats);
+					#endregion
+					#region Get Tobacco Assessments
+					//Get a list of all tobacco assessment events that happened within 24 of end of measurement period
+					measureCur.DictPatNumListMeasureEvents=GetTobaccoAssessmentEvents(dateEnd);
 					#endregion
 					#region Get Tobacco Cessation Interventions
 					//Get all interventions within 24 months of end of measurement period
 					command="SELECT * FROM intervention "
-						+"WHERE DATE(DateEntry) BETWEEN "+POut.Date(dateEnd)+"-INTERVAL 24 MONTH AND "+POut.Date(dateEnd)+" "
-						+"ORDER BY PatNum,DateEntry DESC";
-					List<string> tobaccoInterventionOIDs=new List<string>() { "2.16.840.1.113883.3.526.3.509" };//Tobacco Use Cessation Counseling Grouping Value Set
-					measureCur.DictPatNumListInterventions=GetInterventions(command,tobaccoInterventionOIDs);
+						+"WHERE DATE(DateEntry) BETWEEN "+POut.Date(dateEnd)+"-INTERVAL 24 MONTH AND "+POut.Date(dateEnd)+" ";
+					if(listEhrPatNums!=null && listEhrPatNums.Count>0) {
+						command+="AND intervention.PatNum IN("+string.Join(",",listEhrPatNums)+") ";
+					}
+					command+="ORDER BY PatNum,DateEntry DESC";
+					listValueSetOIDs=new List<string>() { "2.16.840.1.113883.3.526.3.509" };//Tobacco Use Cessation Counseling Grouping Value Set
+					measureCur.DictPatNumListInterventions=GetInterventions(command,listValueSetOIDs);
 					#endregion
-					//Get a list of all tobacco assessment events that happened within 24 of end of measurement period
-					measureCur.DictPatNumListMeasureEvents=GetTobaccoAssessmentEvents(dateEnd);
+					#region Get Tobacco Cessation Meds
 					//Get a list of all tobacco cessation meds active/ordered within 24 months of end of measurement period
-					List<string> listTobaccoMedOIDs=new List<string>() { "2.16.840.1.113883.3.526.3.1190" };////Tobacco Use Cessation Pharmacotherapy Grouping Value Set
-					measureCur.DictPatNumListMedPats=GetMedPats(GetListPatNums(measureCur.ListEhrPats),listTobaccoMedOIDs,dateEnd.AddMonths(-24),dateEnd);
+					listValueSetOIDs=new List<string>() { "2.16.840.1.113883.3.526.3.1190" };////Tobacco Use Cessation Pharmacotherapy Grouping Value Set
+					measureCur.DictPatNumListMedPats=GetMedPats(listEhrPatNums,listValueSetOIDs,dateEnd.AddMonths(-24),dateEnd);
+					#endregion
 					#region Get Tobacco Screenings Not Performed
 					//Get a list of all tobacco assessment not performed items that happened in the measurement period that belong to the value set
 					//that also have a valid medical reason attached from the above value set
-					List<string> listTobaccoScreenOIDs=new List<string>() { "2.16.840.1.113883.3.526.3.1278" };//Tobacco Use Screening Grouping Value Set
-					List<string> listMedicalReasonOIDs=new List<string>() { "2.16.840.1.113883.3.526.3.1007" };//Medical Reason Grouping Value Set
-					measureCur.DictPatNumListNotPerfs=GetNotPerformeds(listTobaccoScreenOIDs,listMedicalReasonOIDs,dateStart,dateEnd);
+					listValueSetOIDs=new List<string>() { "2.16.840.1.113883.3.526.3.1278" };//Tobacco Use Screening Grouping Value Set
+					listReasonOIDs=new List<string>() { "2.16.840.1.113883.3.526.3.1007" };//Medical Reason Grouping Value Set
+					measureCur.DictPatNumListNotPerfs=GetNotPerformeds(listValueSetOIDs,listReasonOIDs,dateStart,dateEnd);
 					#endregion
 					#region Get Limited Life Expectancy Probs
-					List<string> listLimitedLifeExpectOIDs=new List<string>() {"2.16.840.1.113883.3.526.3.1259"};//Limited Life Expectancy Grouping Value Set
+					listValueSetOIDs=new List<string>() {"2.16.840.1.113883.3.526.3.1259"};//Limited Life Expectancy Grouping Value Set
 					//Get a list of all limited life expectancy diagnoses in the measurement period that belong to the above value set
-					measureCur.DictPatNumListProblems=GetProblems(GetListPatNums(measureCur.ListEhrPats),listLimitedLifeExpectOIDs,dateStart,dateEnd);
+					measureCur.DictPatNumListProblems=GetProblems(listEhrPatNums,listValueSetOIDs,dateStart,dateEnd);
 					#endregion
 					break;
 				#endregion
 //Todo:
 				#region Influenza
 				case QualityType2014.Influenza:
+					//Strategy: Get encounters from one of and two of lists for patients >= 6 months before start of measurement period
+					//Denominator: Those in the list of encounters who also had an encounter <= 92 days BEFORE the start of the measurement period from three code sets
+					//OR an encounter from the same three code sets <= 91 days AFTER the start of the measurement period
+					//No exclusions
+					//Numerator: Get all flu vaccine procs and flu vaccine medications (vaccinepats, these will include the communication from patient to provider of previous receipt of vaccine)
+					//that happened during the encounter <= 92 days before start of period or <= 91 days after start of period
+					//Exceptions: 1. communication from patient to prov declining vaccine (vaccinepats with CompletionStatus=1 (refused))
+					//2. procedure or medication NotPerformed for medical, patient, or system reason
+					//Both 1 and 2 have to be during the encounter in the <= 92 before start or <= 91 days after start of period date range
+					//OR active diagnosis of allergy to eggs, allergy to flu vaccine, or intolerance to flu vaccine; medication allergy or intolerance to flu vaccine; procedure intolerance to vaccine
+					//Those have to start before or during the encounter in the date range.
+					#region Get Initial Patient Population
+					#region Get Raw Encounters
+					listOneOfEncOIDs.Add("2.16.840.1.113883.3.526.3.1240");//Annual Wellness Visit Grouping Value Set
+					listOneOfEncOIDs.Add("2.16.840.1.113883.3.464.1003.101.12.1012");//Nursing Facility Visit Grouping Value Set
+					listOneOfEncOIDs.Add("2.16.840.1.113883.3.464.1003.101.12.1013");//Discharge Services - Nursing Facility Grouping Value Set
+					listOneOfEncOIDs.Add("2.16.840.1.113883.3.464.1003.101.12.1022");//Preventive Care- Initial Office Visit, 0 to 17 Grouping Value Set
+					listOneOfEncOIDs.Add("2.16.840.1.113883.3.464.1003.101.12.1023");//Preventive Care Services-Initial Office Visit, 18 and Up Grouping Value Set
+					listOneOfEncOIDs.Add("2.16.840.1.113883.3.464.1003.101.12.1024");//Preventive Care - Established Office Visit, 0 to 17 Grouping Value Set
+					listOneOfEncOIDs.Add("2.16.840.1.113883.3.464.1003.101.12.1025");//Preventive Care Services - Established Office Visit, 18 and Up Grouping Value Set
+					listOneOfEncOIDs.Add("2.16.840.1.113883.3.464.1003.101.12.1026");//Preventive Care Services-Individual Counseling Grouping Value Set
+					listOneOfEncOIDs.Add("2.16.840.1.113883.3.464.1003.101.12.1027");//Preventive Care Services - Group Counseling Grouping Value Set
+					listOneOfEncOIDs.Add("2.16.840.1.113883.3.464.1003.101.12.1030");//Preventive Care Services - Other Grouping Value Set
+					listTwoOfEncOIDs.Add("2.16.840.1.113883.3.526.3.1012");//Patient Provider Interaction Grouping Value Set
+					listTwoOfEncOIDs.Add("2.16.840.1.113883.3.464.1003.101.12.1001");//Office Visit Grouping Value Set
+					listTwoOfEncOIDs.Add("2.16.840.1.113883.3.464.1003.101.12.1008");//Outpatient Consultation Grouping Value Set
+					listTwoOfEncOIDs.Add("2.16.840.1.113883.3.464.1003.101.12.1014");//Care Services in Long-Term Residential Facility Grouping Value Set
+					listTwoOfEncOIDs.Add("2.16.840.1.113883.3.464.1003.101.12.1016");//Home Healthcare Services Grouping Value Set
+					encCommand=encounterSelectWhere
+						+"AND patient.Birthdate<"+POut.Date(dateStart)+"-INTERVAL 6 MONTH "//>= 6 months at start of measurement period
+						+encounterOrder;
+					measureCur.DictPatNumListEncounters=GetEncountersWithOneOfAndTwoOfOIDs(encCommand,listOneOfEncOIDs,listTwoOfEncOIDs);
+					#endregion
+					#region Get Patients Who Had Initial Population Proc
+					listValueSetOIDs=new List<string>() { "2.16.840.1.113883.3.526.3.1083" };//Hemodialysis Grouping Value Set
+					listValueSetOIDs.Add("2.16.840.1.113883.3.526.3.1084");//Peritoneal Dialysis Grouping Value Set
+					measureCur.DictPatNumListProcs=GetProcs(null,listValueSetOIDs,dateStart,dateEnd);
+					#endregion
+					#region Get Patient Data
+					measureCur.ListEhrPats=GetEhrPatsFromEncsOrProcs(measureCur.DictPatNumListEncounters,measureCur.DictPatNumListProcs);
+					listEhrPatNums=GetListPatNums(measureCur.ListEhrPats);//for restricting the following list of procs, problems, and vaccinepats
+					#endregion
+					#endregion
+					#region Apply Additional Denominator Requirements
+					//These are additional requirements for the patient to be in the denominator.
+					//The patient must have one of the eligible encounters/procedures <= 92 days before the start of the period or <= 91 days after the start of the period to be in denominator.
+					listOneOfEncOIDs=new List<string>() { "2.16.840.1.113883.3.526.3.1252" };//Encounter-Influenza Grouping Value Set
+					listTwoOfEncOIDs=new List<string>();
+					encCommand="SELECT encounter.* FROM encounter "
+						+"INNER JOIN patient ON patient.PatNum=encounter.PatNum "
+						+"WHERE YEAR(patient.Birthdate)>1880 "//valid birthdate
+						+"AND encounter.ProvNum IN("+POut.String(provs)+") "
+						+"AND DATE(encounter.DateEncounter) BETWEEN "+POut.Date(dateStart.AddDays(-92))+" AND "+POut.Date(dateStart.AddDays(91))+" ";
+					if(listEhrPatNums!=null && listEhrPatNums.Count>0) {
+						command+="AND encounter.PatNum IN("+string.Join(",",listEhrPatNums)+") ";
+					}
+					command+="ORDER BY encounter.PatNum,encounter.DateEncounter DESC";
+					Dictionary<long,List<EhrCqmEncounter>> dictPatNumListDenomEncs=GetEncountersWithOneOfAndTwoOfOIDs(encCommand,listOneOfEncOIDs,listTwoOfEncOIDs);
+					listValueSetOIDs=new List<string>() { "2.16.840.1.113883.3.526.3.1083" };//Hemodialysis Grouping Value Set
+					listValueSetOIDs.Add("2.16.840.1.113883.3.526.3.1084");//Peritoneal Dialysis Grouping Value Set
+					Dictionary<long,List<EhrCqmProc>> dictPatNumListDenomProcs=GetProcs(listEhrPatNums,listValueSetOIDs,dateStart.AddDays(-92),dateStart.AddDays(91));
+					//for each patient in initial pat population ListEhrPats, make sure they have an encounter in dictPatNumListDenomEncs or a procedure in dictPatNumListDenomProcs
+					//those lists will have the eligible encounters or procedures in the <= 92 days starts before start of period and <= 91 days starts after start of period
+					//i.e. the encounter or procedure took place between October 1st of year prior to measurement period and March 31st of year of measurement period
+					//this date range is their definition of the "influenza season"
+					for(int i=0;i<measureCur.ListEhrPats.Count;i++) {
+						long patNumCur=measureCur.ListEhrPats[i].EhrCqmPat.PatNum;
+						bool isDenom=false;
+						if(dictPatNumListDenomEncs.ContainsKey(patNumCur)) {
+							isDenom=true;
+							if(measureCur.DictPatNumListEncounters.ContainsKey(patNumCur)) {
+								measureCur.DictPatNumListEncounters[patNumCur].AddRange(dictPatNumListDenomEncs[patNumCur]);
+							}
+							else {//no encounters from initial patient population, must be in ipp from procedure, add new list to include these encounters
+								measureCur.DictPatNumListEncounters.Add(patNumCur,dictPatNumListDenomEncs[patNumCur]);
+							}
+						}
+						if(dictPatNumListDenomProcs.ContainsKey(patNumCur)) {
+							isDenom=true;
+							if(measureCur.DictPatNumListProcs.ContainsKey(patNumCur)) {
+								measureCur.DictPatNumListProcs[patNumCur].AddRange(dictPatNumListDenomProcs[patNumCur]);
+							}
+							else {
+								measureCur.DictPatNumListProcs.Add(patNumCur,dictPatNumListDenomProcs[patNumCur]);
+							}
+						}
+						if(!isDenom) {
+							//this is the only place the bool IsDenominator is ever set to false
+							measureCur.ListEhrPats[i].IsDenominator=false;
+						}
+					}
+					#endregion
+					#region Get Numerator Data
+					#region Get Influenza Vaccination Procedures
+					//These will actually be in the procedurelog table, the user will have to manually add the correct code to the proccode table and then chart the procedure
+					//Codes are CPT or SNOMEDCT
+					listValueSetOIDs=new List<string>() { "2.16.840.1.113883.3.526.3.402" };//Influenza Vaccination Grouping Value Set
+					Dictionary<long,List<EhrCqmProc>> dictPatNumListNumeProcs=GetProcs(listEhrPatNums,listValueSetOIDs,dateStart.AddDays(-92),dateStart.AddDays(91));
+					for(int i=0;i<measureCur.ListEhrPats.Count;i++) {
+						long patNumCur=measureCur.ListEhrPats[i].EhrCqmPat.PatNum;
+						if(dictPatNumListNumeProcs.ContainsKey(patNumCur)) {
+							if(measureCur.DictPatNumListProcs.ContainsKey(patNumCur)) {
+								measureCur.DictPatNumListProcs[patNumCur].AddRange(dictPatNumListNumeProcs[patNumCur]);
+							}
+							else {
+								measureCur.DictPatNumListProcs.Add(patNumCur,dictPatNumListNumeProcs[patNumCur]);
+							}
+						}
+					}
+					#endregion
+					#region Get Influenza Vaccination Medications
+					//These will be the CVX codes that will be in the vaccinepat table
+					listValueSetOIDs=new List<string>() { "2.16.840.1.113883.3.526.3.1254" };//Influenza Vaccine Grouping Value Set
+					measureCur.DictPatNumListMedPats=GetVaccines(listEhrPatNums,listValueSetOIDs,dateStart.AddDays(-92),dateStart.AddDays(91));
+					#endregion
+					#region Get Influenza Vaccination Communication of Previous Receipt
+					//These will be in the patient's 'Problem' list, like the Pneumonia vaccine communication of previous receipt, 4 possible SNOMEDCT codes
+					listValueSetOIDs=new List<string>() { "2.16.840.1.113883.3.526.3.1185" };//Previous Receipt of Influenza Vaccine Grouping Value Set
+					//this code is only one eligible SNOMEDCT code used for exceptions, but we will add it to the list here
+					listValueSetOIDs.Add("2.16.840.1.113883.3.526.3.1255");//Influenza Vaccination Declined Grouping Value Set
+					measureCur.DictPatNumListProblems=GetProblems(listEhrPatNums,listValueSetOIDs,dateStart.AddDays(-92),dateStart.AddDays(91));
+					#endregion
+					#endregion
+					#region Get Exceptions
+					#region Get Communication of Patient Declined
+					//These are added with the previous receipt communications above
+					#endregion
+					#region Get Not Performed Items
+					//These will also have to have taken place during the "Occurrence A of" encounter/procedure so limited to Oct 1 of previous year to March 31 of period year
+					listValueSetOIDs=new List<string>() { "2.16.840.1.113883.3.526.3.1254" };//Medication, Administered: Influenza Vaccine Grouping Value Set
+					listValueSetOIDs.Add("2.16.840.1.113883.3.526.3.402");//Procedure, Performed: Influenza Vaccination Grouping Value Set
+					listReasonOIDs=new List<string>() { "2.16.840.1.113883.3.526.3.1007" };//Medical Reason Grouping Value Set
+					listReasonOIDs.Add("2.16.840.1.113883.3.526.3.1008");//Patient Reason Grouping Value Set
+					listReasonOIDs.Add("2.16.840.1.113883.3.526.3.1009");//System Reason Grouping Value Set
+					measureCur.DictPatNumListNotPerfs=GetNotPerformeds(listValueSetOIDs,listReasonOIDs,dateStart.AddDays(-92),dateStart.AddDays(91));
+					#endregion
+					#region Get Eligible Allergies
+					//We might have to enhance the allergydef window to allow for adding allergies/intolerances to CVX codes and CPT/SNOMEDCT procedure codes
+					//We can add them to the pat's problem list if they are SNOMEDCT codes, but not if they are CPT or CVX codes
+					listValueSetOIDs=new List<string>() { "2.16.840.1.113883.3.526.3.1253" };//Diagnosis, Active: Allergy to eggs Grouping Value Set, all SNOMEDCT codes, Problem list?
+					listValueSetOIDs.Add("2.16.840.1.113883.3.526.3.402");//Procedure, Intolerance: Influenza Vaccination Grouping Value Set, CPT and SNOMEDCT codes, Procedurelog? how to mark them as intolerance instead of complete??
+					listValueSetOIDs.Add("2.16.840.1.113883.3.526.3.1254");//Medication, Intolerance OR Medication, Allergy: Influenza Vaccine Grouping Value Set, CVX codes, use the vaccinepat table as NotGiven=1 and CompletionStatus=2 (Not Administered)?? How to identify them as not given due to allergy or intolerance? Add to VaccineRefusalReason enum??
+					listValueSetOIDs.Add("2.16.840.1.113883.3.526.3.1256");//Diagnosis, Active: Allergy to Influenza Vaccine Grouping Value Set, SNOMEDCT codes, Problem list?
+					listValueSetOIDs.Add("2.16.840.1.113883.3.526.3.1257");//Diagnosis, Active: Intolerance to Influenza Vaccine Grouping Value Set, SNOMEDCT codes, Problem list?
+					measureCur.DictPatNumListProblems=GetProblems(listEhrPatNums,listValueSetOIDs,DateTime.MinValue,dateStart.AddDays(91));
+					#endregion
+					#endregion
 					s.Restart();
 					break;
 				#endregion
@@ -2576,25 +2760,30 @@ namespace OpenDentBusiness {
 					}
 					#endregion
 					#region Get Patient Data From Encounters
-					measureCur.ListEhrPats=GetEhrPatsFromEncounters(measureCur.DictPatNumListEncounters);
+					measureCur.ListEhrPats=GetEhrPatsFromEncsOrProcs(measureCur.DictPatNumListEncounters);
+					listEhrPatNums=GetListPatNums(measureCur.ListEhrPats);
 					#endregion
 					#endregion
 					#region Get Pregnancy Diagnoses
-					List<string> listPregOIDs=new List<string>() { "2.16.840.1.113883.3.526.3.378" };//Pregnancy Grouping Value Set
-					measureCur.DictPatNumListProblems=GetProblems(GetListPatNums(measureCur.ListEhrPats),listPregOIDs,dateStart,dateEnd);
+					listValueSetOIDs=new List<string>() { "2.16.840.1.113883.3.526.3.378" };//Pregnancy Grouping Value Set
+					measureCur.DictPatNumListProblems=GetProblems(listEhrPatNums,listValueSetOIDs,dateStart,dateEnd);
 					#endregion
 					#region Get Vitalsign Exams
-					measureCur.DictPatNumListVitalsigns=GetVitalsignsForBMI(GetListPatNums(measureCur.ListEhrPats),dateStart,dateEnd);
+					measureCur.DictPatNumListVitalsigns=GetVitalsignsForBMI(listEhrPatNums,dateStart,dateEnd);
 					#endregion
 					#region Get Interventions
 					//DictPatNumListInterventions will hold the phys activity and Nutrition counseling interventions
 					command="SELECT * FROM intervention "
-						+"WHERE DATE(DateEntry) BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
-						+"ORDER BY PatNum,DateEntry DESC";
-					List<string> nutritionPhyActOIDs=new List<string>() { "2.16.840.1.113883.3.464.1003.195.12.1003" };//Counseling for Nutrition Grouping Value Set
-					nutritionPhyActOIDs.Add("2.16.840.1.113883.3.464.1003.118.12.1035");//Counseling for Physical Activity Grouping Value Set
-					measureCur.DictPatNumListInterventions=GetInterventions(command,nutritionPhyActOIDs);
+						+"WHERE DATE(DateEntry) BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" ";
+					if(listEhrPatNums!=null && listEhrPatNums.Count>0) {
+						command+="AND intervention.PatNum IN("+string.Join(",",listEhrPatNums)+") ";
+					}
+					command+="ORDER BY PatNum,DateEntry DESC";
+					listValueSetOIDs=new List<string>() { "2.16.840.1.113883.3.464.1003.195.12.1003" };//Counseling for Nutrition Grouping Value Set
+					listValueSetOIDs.Add("2.16.840.1.113883.3.464.1003.118.12.1035");//Counseling for Physical Activity Grouping Value Set
+					measureCur.DictPatNumListInterventions=GetInterventions(command,listValueSetOIDs);
 					#endregion
+					#region Make Copies Of MeasureCur Data For WeightChild _2 and _3
 					if(qtype==QualityType2014.WeightChild_1_1) {
 						_measureWeightAssessAll=measureCur.Copy();
 					}
@@ -2604,6 +2793,7 @@ namespace OpenDentBusiness {
 					else if(qtype==QualityType2014.WeightChild_3_1) {
 						_measureWeightAssess12To16=measureCur.Copy();
 					}
+					#endregion
 					break;
 				#endregion
 				#region WeightChild_X_2 and WeightChild_X_3 Nutrition and Physical Activity Counseling
@@ -2645,7 +2835,7 @@ namespace OpenDentBusiness {
 					measureCur.DictPatNumListEncounters=GetEncountersWithOneOfAndTwoOfOIDs(encsWhere18To85,listOneOfEncOIDs,listTwoOfEncOIDs);
 					#endregion
 					#region Get Essential Hypertension Problems
-					List<string> listHypertensionOIDs=new List<string>() { "2.16.840.1.113883.3.464.1003.104.12.1011" };//Essential Hypertension Grouping Value Set
+					listValueSetOIDs=new List<string>() { "2.16.840.1.113883.3.464.1003.104.12.1011" };//Essential Hypertension Grouping Value Set
 					//hypertension problem must start within 6 months of start of measurement period
 					//if measurement period end date is less than 6 months after the start date,
 					//problem start date is limited by end date not 6 months after start date as that would start after the end of the measurement period
@@ -2653,7 +2843,7 @@ namespace OpenDentBusiness {
 					if(dateStart.AddMonths(6)<dateEnd) {
 						probDateEnd=dateStart.AddMonths(6);
 					}
-					Dictionary<long,List<EhrCqmProblem>> dictPatNumListHypertension=GetProblems(null,listHypertensionOIDs,dateStart,probDateEnd);
+					Dictionary<long,List<EhrCqmProblem>> dictPatNumListHypertension=GetProblems(null,listValueSetOIDs,dateStart,probDateEnd);
 					#endregion
 					#region Remove If No Hypertension Diagnosis
 					//if the patient with eligible encounter list has not been diagnosed with hypertension within 6 months of the start of the measurement period, remove from IPP
@@ -2667,45 +2857,52 @@ namespace OpenDentBusiness {
 					#endregion
 					#region Get Patient Data
 					//encounters are now eligible and only if hypertension diagnosis within 6 months of start of measurement period (or before endDate if sooner than 6 months after start date)
-					measureCur.ListEhrPats=GetEhrPatsFromEncounters(measureCur.DictPatNumListEncounters);
+					measureCur.ListEhrPats=GetEhrPatsFromEncsOrProcs(measureCur.DictPatNumListEncounters);
+					listEhrPatNums=GetListPatNums(measureCur.ListEhrPats);
 					#endregion
 					#endregion
 					#region Get Exclusion Items
 					#region Get Exclusion Diagnoses And Hypertension Diagnoses
 					//ListEhrPats is now initial patient population, get hyptertension, pregnancy, end stage renal disease, and chronic kidney disease diagnoses
 					//This time the hypertension diagnoses will be for the entire measurement period, not just within the 6 months after the start date.
-					List<string> listProblemOIDs=new List<string>() { "2.16.840.1.113883.3.464.1003.104.12.1011" };//Essential Hypertension Grouping Value Set
-					listProblemOIDs.Add("2.16.840.1.113883.3.526.3.378");//Pregnancy Grouping Value Set
-					listProblemOIDs.Add("2.16.840.1.113883.3.526.3.353");//End Stage Renal Disease Grouping Value Set
-					listProblemOIDs.Add("2.16.840.1.113883.3.526.3.1002");//Chronic Kidney Disease, Stage 5 Grouping Value Set
-					measureCur.DictPatNumListProblems=GetProblems(GetListPatNums(measureCur.ListEhrPats),listProblemOIDs,dateStart,dateEnd);
+					listValueSetOIDs=new List<string>() { "2.16.840.1.113883.3.464.1003.104.12.1011" };//Essential Hypertension Grouping Value Set
+					listValueSetOIDs.Add("2.16.840.1.113883.3.526.3.378");//Pregnancy Grouping Value Set
+					listValueSetOIDs.Add("2.16.840.1.113883.3.526.3.353");//End Stage Renal Disease Grouping Value Set
+					listValueSetOIDs.Add("2.16.840.1.113883.3.526.3.1002");//Chronic Kidney Disease, Stage 5 Grouping Value Set
+					measureCur.DictPatNumListProblems=GetProblems(listEhrPatNums,listValueSetOIDs,dateStart,dateEnd);
 					#endregion
 					#region Get Interventions For Exclusion
-					List<string> listHyperInterventionOIDs=new List<string>() { "2.16.840.1.113883.3.464.1003.109.12.1015" };//Other Services Related to Dialysis Grouping Value Set
-					listHyperInterventionOIDs.Add("2.16.840.1.113883.3.464.1003.109.12.1016");//Dialysis Education Grouping Value Set
+					listValueSetOIDs=new List<string>() { "2.16.840.1.113883.3.464.1003.109.12.1015" };//Other Services Related to Dialysis Grouping Value Set
+					listValueSetOIDs.Add("2.16.840.1.113883.3.464.1003.109.12.1016");//Dialysis Education Grouping Value Set
 					//Get all interventions for eligible value sets that occurred before or during the measurement period
 					command="SELECT * FROM intervention "
-						+"WHERE DATE(DateEntry)<="+POut.Date(dateEnd)+" "
-						+"ORDER BY PatNum,DateEntry DESC";
-					measureCur.DictPatNumListInterventions=GetInterventions(command,listHyperInterventionOIDs);
+						+"WHERE DATE(DateEntry)<="+POut.Date(dateEnd)+" ";
+					if(listEhrPatNums!=null && listEhrPatNums.Count>0) {
+						command+="AND intervention.PatNum IN("+string.Join(",",listEhrPatNums)+") ";
+					}
+					command+="ORDER BY PatNum,DateEntry DESC";
+					measureCur.DictPatNumListInterventions=GetInterventions(command,listValueSetOIDs);
 					#endregion
 					#region Get Procedures For Exclusion
-					List<string> listHyperProcOIDs=new List<string>() { "2.16.840.1.113883.3.464.1003.109.12.1011" };//Vascular Access for Dialysis Grouping Value Set
-					listHyperProcOIDs.Add("2.16.840.1.113883.3.464.1003.109.12.1012");//Kidney Transplant Grouping Value Set
-					listHyperProcOIDs.Add("2.16.840.1.113883.3.464.1003.109.12.1013");//Dialysis Services Grouping Value Set
-					measureCur.DictPatNumListProcs=GetProcs(GetListPatNums(measureCur.ListEhrPats),listHyperProcOIDs,new DateTime(0001,01,01),dateEnd);
+					listValueSetOIDs=new List<string>() { "2.16.840.1.113883.3.464.1003.109.12.1011" };//Vascular Access for Dialysis Grouping Value Set
+					listValueSetOIDs.Add("2.16.840.1.113883.3.464.1003.109.12.1012");//Kidney Transplant Grouping Value Set
+					listValueSetOIDs.Add("2.16.840.1.113883.3.464.1003.109.12.1013");//Dialysis Services Grouping Value Set
+					measureCur.DictPatNumListProcs=GetProcs(listEhrPatNums,listValueSetOIDs,DateTime.MinValue,dateEnd);
 					#endregion
 					#region Get Encounters For Exclusion
 					//Get encounters that occurred before or during the measurement period that belong to the value set and add them to DictPatNumListEncounters
 					//these encounters will be only for those patients already in the IPP, and will simply be added to the list of encounters for that patient
 					//they will be used for exclusion in the Classify function, if one exists the patient is in the IPP and denominator but excluded from the measure
-					List<string> listHyperExclusEncOIDs=new List<string>() { "2.16.840.1.113883.3.464.1003.109.12.1014" };//ESRD Monthly Outpatient Services Grouping Value Set
+					listValueSetOIDs=new List<string>() { "2.16.840.1.113883.3.464.1003.109.12.1014" };//ESRD Monthly Outpatient Services Grouping Value Set
 					command="SELECT encounter.* FROM encounter "
 						+"INNER JOIN patient ON patient.PatNum=encounter.PatNum "
 						+"WHERE YEAR(patient.Birthdate)>1880 "//valid birthdate
 						+"AND encounter.ProvNum IN("+POut.String(provs)+") "
 						+"AND DATE(encounter.DateEncounter)<="+POut.Date(dateEnd)+" ";
-					Dictionary<long,List<EhrCqmEncounter>> dictPatNumListEncs=GetEncountersWithOneOfAndTwoOfOIDs(command,listHyperExclusEncOIDs,listTwoOfEncOIDs);
+					if(listEhrPatNums!=null && listEhrPatNums.Count>0) {
+						command+="AND encounter.PatNum IN("+string.Join(",",listEhrPatNums)+") ";
+					}
+					Dictionary<long,List<EhrCqmEncounter>> dictPatNumListEncs=GetEncountersWithOneOfAndTwoOfOIDs(command,listValueSetOIDs,listTwoOfEncOIDs);
 					//add to the list of encounters for all patients in the IPP any end stage renal disease encounters
 					allKeys=new List<long>(dictPatNumListEncs.Keys);
 					for(int i=0;i<allKeys.Count;i++) {
@@ -2716,7 +2913,7 @@ namespace OpenDentBusiness {
 					#endregion
 					#endregion
 					#region Get Vitalsign Exams For BP
-					measureCur.DictPatNumListVitalsigns=GetVitalsignsForBP(GetListPatNums(measureCur.ListEhrPats),dateStart,dateEnd);
+					measureCur.DictPatNumListVitalsigns=GetVitalsignsForBP(listEhrPatNums,dateStart,dateEnd);
 					#endregion
 					break;
 				#endregion
@@ -2740,10 +2937,10 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>The string command will retrieve all unique encounters in the date range, for the provider (based on provider.EhrKey, so may be more than one ProvNum), with age limitation or other restrictions applied.  The encounters will then be required to belong to the value sets identified by the oneOf and twoOf lists of OID's (Object Identifiers), and the patient will have to have had one or more of the oneOf encounters or two or more of the two of encounters in the list returned by the string command.  We will return a dictionary with PatNum as the key that links to a list of all EhrCqmEncounter objects for that patient with all of the required elements for creating the QRDA Category I and III documents.</summary>
-		private static Dictionary<long,List<EhrCqmEncounter>> GetEncountersWithOneOfAndTwoOfOIDs(string command,List<string> oneOfEncOIDs,List<string> twoOfEncOIDs) {
+		private static Dictionary<long,List<EhrCqmEncounter>> GetEncountersWithOneOfAndTwoOfOIDs(string command,List<string> listOneOfEncOIDs,List<string> listTwoOfEncOIDs) {
 			List<Encounter> listEncs=Crud.EncounterCrud.SelectMany(command);
-			List<EhrCode> listOneOfEncs=EhrCodes.GetForValueSetOIDs(oneOfEncOIDs,false);
-			List<EhrCode> listTwoOfEncs=EhrCodes.GetForValueSetOIDs(twoOfEncOIDs,false);
+			List<EhrCode> listOneOfEncs=EhrCodes.GetForValueSetOIDs(listOneOfEncOIDs,false);
+			List<EhrCode> listTwoOfEncs=EhrCodes.GetForValueSetOIDs(listTwoOfEncOIDs,false);
 			Dictionary<long,int> dictPatNumAndTwoOfCount=new Dictionary<long,int>();
 			List<long> listPatNums=new List<long>();
 			Dictionary<long,EhrCode> dictEncNumEhrCode=new Dictionary<long,EhrCode>();
@@ -2850,10 +3047,20 @@ namespace OpenDentBusiness {
 			return retval;
 		}
 
+		private static List<EhrCqmPatient> GetEhrPatsFromEncsOrProcs(Dictionary<long,List<EhrCqmEncounter>> dictPatNumListEncounters) {
+			return GetEhrPatsFromEncsOrProcs(dictPatNumListEncounters,null);
+		}
+
 		///<summary>Get relevant demographic and supplemental patient data required for CQM reporting for each unique patient in the list of eligible encounters in the dictionary of PatNums linked to a list of encounters for each PatNum.</summary>
-		private static List<EhrCqmPatient> GetEhrPatsFromEncounters(Dictionary<long,List<EhrCqmEncounter>> dictPatNumListEncounters) {
+		private static List<EhrCqmPatient> GetEhrPatsFromEncsOrProcs(Dictionary<long,List<EhrCqmEncounter>> dictPatNumListEncounters,Dictionary<long,List<EhrCqmProc>> dictPatNumListProcs) {
 			//get list of distinct PatNums from the keys in the incoming dictionary
-			List<long> listPatNums=new List<long>(dictPatNumListEncounters.Keys);
+			List<long> listPatNums=new List<long>();
+			if(dictPatNumListEncounters!=null) {
+				listPatNums.AddRange(dictPatNumListEncounters.Keys);
+			}
+			else if(dictPatNumListProcs!=null) {
+				listPatNums.AddRange(dictPatNumListProcs.Keys);
+			}			
 			List<EhrCqmPatient> retval=new List<EhrCqmPatient>();
 			if(listPatNums.Count==0) {
 				return retval;
@@ -2864,6 +3071,8 @@ namespace OpenDentBusiness {
 			for(int i=0;i<uniquePats.Length;i++) {
 				EhrCqmPatient ehrPatCur=new EhrCqmPatient();
 				ehrPatCur.EhrCqmPat=uniquePats[i];
+				//we will set all patients to denominator.  The only measure where the list of patients (which is the initial patient population) is not the same as the denominator is the influenza vaccine measure, CMS147v2, and we will set those not in the denominator to false after we determine they are in the IPP but not the denominator
+				ehrPatCur.IsDenominator=true;
 				List<PatientRace> listPatRaces=PatientRaces.GetForPatient(ehrPatCur.EhrCqmPat.PatNum);
 				for(int j=0;j<listPatRaces.Count;j++) {
 					if(listPatRaces[j].Race==PatRace.Hispanic || listPatRaces[j].Race==PatRace.NotHispanic) {
@@ -2966,10 +3175,10 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Get all data needed for reporting QRDA's for interventions from the supplied command where the code belongs to the value set(s) sent in.  Command orders interventions by patnum, then date entered so the first one found for patient is most recent intervention when looping through table.</summary>
-		private static Dictionary<long,List<EhrCqmIntervention>> GetInterventions(string command,List<string> valueSetOIDs) {
+		private static Dictionary<long,List<EhrCqmIntervention>> GetInterventions(string command,List<string> listValueSetOIDs) {
 			List<Intervention> listInterventions=Crud.InterventionCrud.SelectMany(command);
 			//remove any interventions that are not in the Tobacco Use Cessation Counseling Grouping Value Set
-			List<EhrCode> listAllInterventionCodes=EhrCodes.GetForValueSetOIDs(valueSetOIDs,false);//Tobacco Use Cessation Counseling Grouping Value Set
+			List<EhrCode> listAllInterventionCodes=EhrCodes.GetForValueSetOIDs(listValueSetOIDs,false);//Tobacco Use Cessation Counseling Grouping Value Set
 			Dictionary<long,EhrCode> dictInterventionNumEhrCode=new Dictionary<long,EhrCode>();
 			for(int i=listInterventions.Count-1;i>-1;i--) {
 				bool isValidIntervention=false;
@@ -3103,7 +3312,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Get all NotPerformed items that belong to one of the ValueSetOIDs in listItemOIDs, with valid reasons that belong to one of the ValueSetOIDs in listReasonOIDs, that were entered between dateStart and dateStop.  For QRDA reporting, the resulting list must include the item not performed, a code for 'reason', and the code for the specific reason.  Example: If not administering a flu vaccine, you would have the code not being done (like CVX 141 "Influenza, seasonal, injectable"), the code for 'reason' (like SNOMEDCT 281000124100 "Patient reason for exclusion from performance measure (observable entity)"), and the code for the specific reason (like SNOMEDCT 105480006 "Refusal of treatment by patient (situation)").  Not fun.</summary>
-		private static Dictionary<long,List<EhrCqmNotPerf>> GetNotPerformeds(List<string> listItemOIDs,List<string> listReasonOIDs,DateTime dateStart,DateTime dateEnd) {			
+		private static Dictionary<long,List<EhrCqmNotPerf>> GetNotPerformeds(List<string> listValueSetOIDs,List<string> listReasonOIDs,DateTime dateStart,DateTime dateEnd) {			
 			//Reasons not done come from these value sets for our 9 CQMs:
 			//Medical Reason Grouping Value Set 2.16.840.1.113883.3.526.3.1007
 			//Patient Reason Grouping Value Set 2.16.840.1.113883.3.526.3.1008
@@ -3123,7 +3332,7 @@ namespace OpenDentBusiness {
 				+"GROUP BY ehrnotperformed.EhrNotPerformedNum "//just in case a code was in one of the code system tables more than once, should never happen
 				+"ORDER BY ehrnotperformed.PatNum,ehrnotperformed.DateEntry DESC";
 			DataTable tableNotPerfs=Db.GetTable(command);
-			List<EhrCode> listItems=EhrCodes.GetForValueSetOIDs(listItemOIDs,false);
+			List<EhrCode> listItems=EhrCodes.GetForValueSetOIDs(listValueSetOIDs,false);
 			List<EhrCode> listReasons=EhrCodes.GetForValueSetOIDs(listReasonOIDs,false);
 			Dictionary<long,EhrCode> dictItemNumEhrCode=new Dictionary<long,EhrCode>();
 			Dictionary<long,EhrCode> dictReasonNumEhrCode=new Dictionary<long,EhrCode>();
@@ -3197,7 +3406,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Get all problems that started before or during the date range, that have a code that belong to the value sets in listProbOIDs, and that either have no stop date or the stop date is after dateStart.</summary>
-		private static Dictionary<long,List<EhrCqmProblem>> GetProblems(List<long> listPatNums,List<string> listProbOIDs,DateTime dateStart,DateTime dateEnd) {
+		private static Dictionary<long,List<EhrCqmProblem>> GetProblems(List<long> listPatNums,List<string> listValueSetOIDs,DateTime dateStart,DateTime dateEnd) {
 			string command="SELECT disease.DiseaseNum,disease.PatNum,disease.DateStart,disease.DateStop,"
 				+"diseasedef.SnomedCode,diseasedef.ICD9Code,diseasedef.Icd10Code,"
 				+"COALESCE(snomed.Description,icd9.Description,icd10.Description,diseasedef.DiseaseName) AS Description "
@@ -3212,7 +3421,7 @@ namespace OpenDentBusiness {
 			}
 			command+="ORDER BY disease.PatNum,disease.DateStart DESC";
 			DataTable tableAllProbs=Db.GetTable(command);
-			List<EhrCode> listValidProbs=EhrCodes.GetForValueSetOIDs(listProbOIDs,false);
+			List<EhrCode> listValidProbs=EhrCodes.GetForValueSetOIDs(listValueSetOIDs,false);
 			Dictionary<long,EhrCode> dictDiseaseNumEhrCode=new Dictionary<long,EhrCode>();
 			for(int i=tableAllProbs.Rows.Count-1;i>-1;i--) {
 				bool isValid=false;
@@ -3390,6 +3599,7 @@ namespace OpenDentBusiness {
 			if(listPatNums!=null && listPatNums.Count>0) {
 				command+="AND procedurelog.PatNum IN ("+string.Join(",",listPatNums)+")";
 			}
+			command+="ORDER BY procedurelog.PatNum,procedurelog.ProcDate DESC";
 			DataTable tableAllProcs=Db.GetTable(command);
 			List<EhrCode> listValidProcs=EhrCodes.GetForValueSetOIDs(listValueSetOIDs,false);
 			Dictionary<long,EhrCode> dictProcNumEhrCode=new Dictionary<long,EhrCode>();
@@ -3425,6 +3635,62 @@ namespace OpenDentBusiness {
 				}
 				else {
 					retval.Add(ehrProcCur.PatNum,new List<EhrCqmProc>() { ehrProcCur });
+				}
+			}
+			return retval;
+		}
+
+		///<summary>Returns all vaccinepat objects for pneumonia and influenza CQMs.  These are basically just medicationpat objects, so we will use the same object with two optional fields to identify them as vaccinepats instead of medicationpats.</summary>
+		private static Dictionary<long,List<EhrCqmMedicationPat>> GetVaccines(List<long> listPatNums,List<string> listValueSetOIDs,DateTime dateStart,DateTime dateEnd) {
+			string command="SELECT vaccinepat.VaccinePatNum,vaccinepat.PatNum,vaccinepat.DateTimeStart,vaccinepat.DateTimeEnd,vaccinedef.CVXCode "
+				+"FROM vaccinepat "
+				+"INNER JOIN vaccinedef ON vaccinepat.VaccineDefNum=vaccinedef.VaccineDefNum "
+				+"WHERE DATE(vaccinepat.DateTimeStart) BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+				+"AND vaccinepat.NotGiven=0 AND vaccinepat.CompletionStatus=0 ";//NotGiven=false and CompletionStatus=0 (complete)
+			if(listPatNums!=null && listPatNums.Count>0) {
+				command+="AND vaccinepat.PatNum IN("+string.Join(",",listPatNums)+") ";
+			}
+			command+="ORDER BY vaccinepat.PatNum,vaccinepat.DateTimeStart DESC";
+			DataTable tableAllVaccinePats=Db.GetTable(command);
+			List<EhrCode> listEhrCodes=EhrCodes.GetForValueSetOIDs(listValueSetOIDs,false);//this list will only contain one code, CVX 33 - pneumococcal polysaccharide vaccine, 23 valent
+			Dictionary<long,EhrCode> dictVaccinePatNumEhrCode=new Dictionary<long,EhrCode>();
+			for(int i=tableAllVaccinePats.Rows.Count-1;i>-1;i--) {
+				bool isValidVaccine=false;
+				for(int j=0;j<listEhrCodes.Count;j++) {
+					if(tableAllVaccinePats.Rows[i]["CVXCode"].ToString()==listEhrCodes[j].CodeValue) {
+						dictVaccinePatNumEhrCode.Add(PIn.Long(tableAllVaccinePats.Rows[i]["VaccinePatNum"].ToString()),listEhrCodes[j]);
+						isValidVaccine=true;
+						break;
+					}
+				}
+				if(!isValidVaccine) {
+					tableAllVaccinePats.Rows.RemoveAt(i);
+				}
+			}
+			Dictionary<long,List<EhrCqmMedicationPat>> retval=new Dictionary<long,List<EhrCqmMedicationPat>>();
+			for(int i=0;i<tableAllVaccinePats.Rows.Count;i++) {
+				EhrCqmMedicationPat ehrVacPatCur=new EhrCqmMedicationPat();
+				ehrVacPatCur.EhrCqmVaccinePatNum=PIn.Long(tableAllVaccinePats.Rows[i]["VaccinePatNum"].ToString());
+				ehrVacPatCur.PatNum=PIn.Long(tableAllVaccinePats.Rows[i]["PatNum"].ToString());
+				ehrVacPatCur.CVXCode=tableAllVaccinePats.Rows[i]["CVXCode"].ToString();
+				ehrVacPatCur.DateStart=PIn.DateT(tableAllVaccinePats.Rows[i]["DateTimeStart"].ToString());
+				ehrVacPatCur.DateStop=PIn.DateT(tableAllVaccinePats.Rows[i]["DateTimeEnd"].ToString());
+				EhrCode ehrCodeCur=dictVaccinePatNumEhrCode[ehrVacPatCur.EhrCqmVaccinePatNum];
+				ehrVacPatCur.CodeSystemName=ehrCodeCur.CodeSystem;
+				ehrVacPatCur.CodeSystemOID=ehrCodeCur.CodeSystemOID;
+				ehrVacPatCur.ValueSetName=ehrCodeCur.ValueSetName;
+				ehrVacPatCur.ValueSetOID=ehrCodeCur.ValueSetOID;
+				string descript=ehrCodeCur.Description;
+				Cvx cvxCur=Cvxs.GetByCode(ehrVacPatCur.CVXCode);
+				if(cvxCur!=null) {
+					descript=cvxCur.Description;
+				}
+				ehrVacPatCur.Description=descript;//description either from cvx table or, if not in table, default to EhrCode object description
+				if(retval.ContainsKey(ehrVacPatCur.PatNum)) {
+					retval[ehrVacPatCur.PatNum].Add(ehrVacPatCur);
+				}
+				else {
+					retval.Add(ehrVacPatCur.PatNum,new List<EhrCqmMedicationPat>() { ehrVacPatCur });
 				}
 			}
 			return retval;
@@ -3682,9 +3948,62 @@ namespace OpenDentBusiness {
 					}
 					break;
 				#endregion
-//TODO:
 				#region Pneumonia
 				case QualityType2014.Pneumonia:
+					//Strategy: alldata.ListEhrPats is IPP and denominator, non exclusions
+					//Numerator: if medicationpat, procedure, or problem exists, numerator
+					//Otherwise: not categorized
+					for(int i=0;i<alldata.ListEhrPats.Count;i++) {
+						long patNumCur=alldata.ListEhrPats[i].EhrCqmPat.PatNum;
+						bool isCategorized=false;
+						//first see if medicationpat exists
+						List<EhrCqmMedicationPat> listMedPatsCur=new List<EhrCqmMedicationPat>();
+						if(alldata.DictPatNumListMedPats.ContainsKey(patNumCur)) {
+							listMedPatsCur=alldata.DictPatNumListMedPats[patNumCur];
+						}
+						for(int j=0;j<listMedPatsCur.Count;j++) {
+							if(listMedPatsCur[j].ValueSetOID=="2.16.840.1.113883.3.464.1003.110.12.1027") {//Pneumococcal Vaccine Grouping Value Set
+								alldata.ListEhrPats[i].IsNumerator=true;
+								alldata.ListEhrPats[i].Explanation="The patient had a Pneumococcal medication administered on "+listMedPatsCur[j].DateStart.ToShortDateString()+".";
+								isCategorized=true;
+								break;
+							}
+						}
+						if(isCategorized) {
+							continue;
+						}
+						List<EhrCqmProc> listProcsCur=new List<EhrCqmProc>();
+						if(alldata.DictPatNumListProcs.ContainsKey(patNumCur)) {
+							listProcsCur=alldata.DictPatNumListProcs[patNumCur];
+						}
+						for(int j=0;j<listProcsCur.Count;j++) {
+							if(listProcsCur[j].ValueSetOID=="2.16.840.1.113883.3.464.1003.110.12.1034") {//Pneumococcal Vaccine Administered Grouping Value Set
+								alldata.ListEhrPats[i].IsNumerator=true;
+								alldata.ListEhrPats[i].Explanation="The patient had a Pneumococcal administered procedure on "+listProcsCur[j].ProcDate.ToShortDateString()+".";
+								isCategorized=true;
+								break;
+							}
+						}
+						if(isCategorized) {
+							continue;
+						}
+						List<EhrCqmProblem> listProbsCur=new List<EhrCqmProblem>();
+						if(alldata.DictPatNumListProblems.ContainsKey(patNumCur)) {
+							listProbsCur=alldata.DictPatNumListProblems[patNumCur];
+						}
+						for(int j=0;j<listProbsCur.Count;j++) {
+							if(listProbsCur[j].ValueSetOID=="2.16.840.1.113883.3.464.1003.110.12.1028") {//History of Pneumococcal Vaccine Grouping Value Set
+								alldata.ListEhrPats[i].IsNumerator=true;
+								alldata.ListEhrPats[i].Explanation="The patient has a history of Pneumococcal vaccination on "+listProbsCur[j].DateStart.ToShortDateString()+".";
+								isCategorized=true;
+								break;
+							}
+						}
+						if(isCategorized) {
+							continue;
+						}
+						alldata.ListEhrPats[i].Explanation="The patient had eligible encounters in the date range but no Pneumococcal vaccine was administered and no history of having had the vaccine was recorded.";
+					}
 					break;
 				#endregion
 				#region TobaccoCessation
@@ -3801,6 +4120,7 @@ namespace OpenDentBusiness {
 //TODO:
 				#region Influenza
 				case QualityType2014.Influenza:
+					//Only classify as numerator, exclusion, or exception if IsDenominator
 					break;
 				#endregion
 				#region WeightChild_X_1
@@ -4084,6 +4404,17 @@ namespace OpenDentBusiness {
 			int retval=0;
 			for(int i=0;i<listPats.Count;i++) {
 				if(listPats[i].IsNumerator) {
+					retval++;
+				}
+			}
+			return retval;
+		}
+
+		///<summary>Just counts up the number of EhrPatients with IsDenominator=true.  The only measure that may have some patients in the initial patient population that are not in the denominator is the influenza vaccine measure, CMS147v2.</summary>
+		public static int CalcDenominator2014(List<EhrCqmPatient> listPats) {
+			int retval=0;
+			for(int i=0;i<listPats.Count;i++) {
+				if(listPats[i].IsDenominator) {
 					retval++;
 				}
 			}

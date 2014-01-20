@@ -78,6 +78,9 @@ namespace OpenDental {
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			for(int i=0;i<MeasureCur.ListEhrPats.Count;i++) {
+				if(!MeasureCur.ListEhrPats[i].IsDenominator) {
+					continue;
+				}
 				row=new ODGridRow();
 				row.Cells.Add(MeasureCur.ListEhrPats[i].EhrCqmPat.PatNum.ToString());
 				row.Cells.Add(MeasureCur.ListEhrPats[i].EhrCqmPat.GetNameLF());

@@ -56,7 +56,7 @@
 			// butClose
 			// 
 			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butClose.Location = new System.Drawing.Point(737, 635);
+			this.butClose.Location = new System.Drawing.Point(770, 635);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75, 23);
 			this.butClose.TabIndex = 1;
@@ -265,7 +265,7 @@
 			this.textNumeratorExplain.Multiline = true;
 			this.textNumeratorExplain.Name = "textNumeratorExplain";
 			this.textNumeratorExplain.ReadOnly = true;
-			this.textNumeratorExplain.Size = new System.Drawing.Size(494, 59);
+			this.textNumeratorExplain.Size = new System.Drawing.Size(527, 59);
 			this.textNumeratorExplain.TabIndex = 34;
 			this.textNumeratorExplain.Text = "Explanation for Numerator";
 			// 
@@ -278,7 +278,7 @@
 			this.textDenominatorExplain.Multiline = true;
 			this.textDenominatorExplain.Name = "textDenominatorExplain";
 			this.textDenominatorExplain.ReadOnly = true;
-			this.textDenominatorExplain.Size = new System.Drawing.Size(494, 59);
+			this.textDenominatorExplain.Size = new System.Drawing.Size(527, 59);
 			this.textDenominatorExplain.TabIndex = 33;
 			this.textDenominatorExplain.Text = "Explanation for Denominator";
 			// 
@@ -301,7 +301,7 @@
 			this.textExclusExceptExplain.Multiline = true;
 			this.textExclusExceptExplain.Name = "textExclusExceptExplain";
 			this.textExclusExceptExplain.ReadOnly = true;
-			this.textExclusExceptExplain.Size = new System.Drawing.Size(494, 59);
+			this.textExclusExceptExplain.Size = new System.Drawing.Size(527, 59);
 			this.textExclusExceptExplain.TabIndex = 35;
 			this.textExclusExceptExplain.Text = "Explanation for Exclusions/Exceptions";
 			// 
@@ -314,7 +314,7 @@
 			this.gridMain.Location = new System.Drawing.Point(12, 62);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(800, 294);
+			this.gridMain.Size = new System.Drawing.Size(833, 294);
 			this.gridMain.TabIndex = 13;
 			this.gridMain.Title = "Audit";
 			this.gridMain.TranslationName = null;
@@ -345,7 +345,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(824, 665);
+			this.ClientSize = new System.Drawing.Size(857, 665);
 			this.Controls.Add(this.textExclusExceptNA);
 			this.Controls.Add(this.labelExclusExceptNA);
 			this.Controls.Add(this.textExclusExceptExplain);

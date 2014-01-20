@@ -124,6 +124,8 @@ namespace OpenDentBusiness {
 		public bool IsNumerator;
 		public bool IsExclusion;
 		public bool IsException;
+		//for all but one measure denominator=initial patient population.  The influenza vaccine measure says denominator is IPP with some additional restrictions that are not exclusions or exceptions.  In this case we will set this bool to false, so patient will be in IPP but not in denominator.  This will almost always be true since the list of EhrCqmPatients for each measure is the IPP and the denominator.
+		public bool IsDenominator;
 		public string Explanation;
 
 		public EhrCqmPatient Copy() {
@@ -171,15 +173,17 @@ namespace OpenDentBusiness {
 	}
 
 	public class EhrCqmMedicationPat {
-		public long EhrCqmMedicationPatNum;
+		public long EhrCqmMedicationPatNum;//will either be a medicationpat or a vaccinepat
+		public long EhrCqmVaccinePatNum;
 		public long PatNum;
-		public long RxCui;
+		public long RxCui;//will either have an RxCui or CVXCode value depending on whether it is a medicationpat or vaccinepat object determined by EhrCqmMedicationPatNum or EhrCqmVaccinePatNum
+		public string CVXCode;
 		public string CodeSystemName;
 		public string CodeSystemOID;
 		public string Description;
 		public string ValueSetName;
 		public string ValueSetOID;
-		public string PatNote;
+		public string PatNote;//will be blank if vaccinepat object
 		public DateTime DateStart;
 		public DateTime DateStop;
 	}
