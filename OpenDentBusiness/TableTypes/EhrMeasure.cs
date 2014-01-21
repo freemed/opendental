@@ -100,15 +100,13 @@ namespace OpenDentBusiness {
 		///<summary>23</summary>
 		SummaryOfCareElectronic,
 		///<summary>24</summary>
-		SummaryOfCareSuccess,
+		SecureMessaging,
 		///<summary>25</summary>
-		Interventions,
+		FamilyHistory,
 		///<summary>26</summary>
-		PatientLists,
+		ElectronicNote,
 		///<summary>27</summary>
-		ImmunizationRegistry,
-		///<summary>28</summary>
-		SecureMessaging
+		LabImages,
 	}
 
 	///<summary>Helps track whether the current patient has met the measurement objectives.</summary>

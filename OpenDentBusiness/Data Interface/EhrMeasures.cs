@@ -14,7 +14,27 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<EhrMeasure>>(MethodBase.GetCurrentMethod(),dateStart,dateEnd,provNum);
 			}
 			string command="SELECT * FROM ehrmeasure "
-			+"WHERE MeasureType IN (0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19) "
+			+"WHERE MeasureType IN ("
+			+POut.Int((int)EhrMeasureType.ProblemList)+","
+			+POut.Int((int)EhrMeasureType.MedicationList)+","
+			+POut.Int((int)EhrMeasureType.AllergyList)+","
+			+POut.Int((int)EhrMeasureType.Demographics)+","
+			+POut.Int((int)EhrMeasureType.Education)+","
+			+POut.Int((int)EhrMeasureType.TimelyAccess)+","
+			+POut.Int((int)EhrMeasureType.ProvOrderEntry)+","
+			+POut.Int((int)EhrMeasureType.CPOE_MedOrdersOnly)+","
+			+POut.Int((int)EhrMeasureType.CPOE_PreviouslyOrdered)+","
+			+POut.Int((int)EhrMeasureType.Rx)+","
+			+POut.Int((int)EhrMeasureType.VitalSigns)+","
+			+POut.Int((int)EhrMeasureType.VitalSignsBMIOnly)+","
+			+POut.Int((int)EhrMeasureType.VitalSignsBPOnly)+","
+			+POut.Int((int)EhrMeasureType.Smoking)+","
+			+POut.Int((int)EhrMeasureType.Lab)+","
+			+POut.Int((int)EhrMeasureType.ElectronicCopy)+","
+			+POut.Int((int)EhrMeasureType.ClinicalSummaries)+","
+			+POut.Int((int)EhrMeasureType.Reminders)+","
+			+POut.Int((int)EhrMeasureType.MedReconcile)+","
+			+POut.Int((int)EhrMeasureType.SummaryOfCare)+") "
 			+"ORDER BY MeasureType";
 			List<EhrMeasure> retVal=Crud.EhrMeasureCrud.SelectMany(command);
 			Stopwatch s=new Stopwatch();
@@ -48,10 +68,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<EhrMeasure>>(MethodBase.GetCurrentMethod(),dateStart,dateEnd,provNum);
 			}
-			string command="SELECT * FROM ehrmeasure "
-			+"WHERE MeasureType IN (3,4,7,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28) "
-			+"ORDER BY MeasureType";
-			List<EhrMeasure> retVal=Crud.EhrMeasureCrud.SelectMany(command);
+			List<EhrMeasure> retVal=GetMU2List();
 			Stopwatch s=new Stopwatch();
 			for(int i=0;i<retVal.Count;i++) {
 				s.Restart();
@@ -64,7 +81,7 @@ namespace OpenDentBusiness{
 					retVal[i].Denominator=-1;
 				}
 				else {
-					retVal[i].Numerator=CalcNumeratorMu2(table);
+					retVal[i].Numerator=CalcNumerator(table);
 					retVal[i].Denominator=table.Rows.Count;
 				}
 				retVal[i].NumeratorExplain=GetNumeratorExplainMu2(retVal[i].MeasureType);
@@ -2120,8 +2137,6 @@ namespace OpenDentBusiness{
 					return "Record and chart changes in the following vital signs: blood pressure (ages 3 and over).";
 				case EhrMeasureType.Smoking:
 					return "Record smoking status for patients 13 years old or older.";
-				case EhrMeasureType.Interventions:
-					return "Use clinical decision support to improve performance on high-priority health conditions.";
 				case EhrMeasureType.ElectronicCopyAccess:
 					return "Provide patients the ability to view online, download and transmit their health information within four business days of the information being available to the EP.";
 				case EhrMeasureType.ElectronicCopy:
@@ -2130,8 +2145,6 @@ namespace OpenDentBusiness{
 					return "Provide clinical summaries for patients for each office visit.";
 				case EhrMeasureType.Lab:
 					return "Incorporate clinical lab-test results into Certified EHR Technology (CEHRT) as structured data.";
-				case EhrMeasureType.PatientLists:
-					return "Generate lists of patients by specific conditions to use for quality improvement, reduction of disparities, research, or outreach.";
 				case EhrMeasureType.Reminders:
 					return "Use clinically relevant information to identify patients who should receive reminders for preventive/follow-up care and send these patients the reminders, per patient preference.";
 				case EhrMeasureType.Education:
@@ -2142,12 +2155,14 @@ namespace OpenDentBusiness{
 					return "The EP who transitions their patient to another setting of care or provider of care or refers their patient to another provider of care should provide summary care record for each transition of care or referral.";
 				case EhrMeasureType.SummaryOfCareElectronic:
 					return "The EP who transitions their patient to another setting of care or provider of care or refers their patient to another provider of care should provide summary care record electronically for each transition of care or referral.";
-				case EhrMeasureType.SummaryOfCareSuccess:
-					return "Validate that electronic summary care records are being successfully sent and received.";
-				case EhrMeasureType.ImmunizationRegistry:
-					return "Capability to submit electronic data to immunization registries or immunization information systems except where prohibited, and in accordance with applicable law and practice.";
 				case EhrMeasureType.SecureMessaging:
 					return "Use secure electronic messaging to communicate with patients on relevant health information.";
+				case EhrMeasureType.FamilyHistory:
+					return "Record patient family health history as structured data.";
+				case EhrMeasureType.ElectronicNote:
+					return "Record electronic notes in patient records.";
+				case EhrMeasureType.LabImages:
+					return "Imaging results consisting of the image itself and any explanation or other accompanying information are accessible through CEHRT.";
 			}
 			return "";
 			//throw new ApplicationException("Type not in use for MU2: "+mtype.ToString());
@@ -2176,8 +2191,6 @@ namespace OpenDentBusiness{
 					return "More than "+thresh+"% of all unique patients seen by the EP have blood pressure (for patients age 3 and over only) and/or height and weight (for all ages) recorded as structured data.";
 				case EhrMeasureType.Smoking:
 					return "More than "+thresh+"% of all unique patients 13 years old or older seen by the EP have smoking status recorded as structured data.";
-				case EhrMeasureType.Interventions:
-					return "Implement 5 clinical decision support interventions related to high-priority health conditions.";
 				case EhrMeasureType.ElectronicCopyAccess:
 					return "More than "+thresh+"% of all unique patients seen by the EP during the EHR reporting period are provided timely (available to the patient within 4 business days after the information is available to the EP) online access to their health information.";
 				case EhrMeasureType.ElectronicCopy:
@@ -2186,8 +2199,6 @@ namespace OpenDentBusiness{
 					return "Clinical summaries provided to patients or patient-authorized representatives within one business day for more than "+thresh+"% of office visits.";
 				case EhrMeasureType.Lab:
 					return "More than "+thresh+"% of all clinical lab tests results ordered by the EP during the EHR reporting period whose results are either in a positive/negative or numerical format are incorporated in Certified EHR Technology as structured data.";
-				case EhrMeasureType.PatientLists:
-					return "Generate lists of patients by specific conditions to use for quality improvement, reduction of disparities, research, or outreach.";
 				case EhrMeasureType.Reminders:
 					return "More than "+thresh+"% of all unique patients who have had 2 or more office visits with the EP within the 24 months before the beginning of the EHR reporting period were sent a reminder, per patient preference when available.";
 				case EhrMeasureType.Education:
@@ -2198,12 +2209,14 @@ namespace OpenDentBusiness{
 					return "The EP who transitions or refers their patient to another setting of care or provider of care provides a summary of care record for more than "+thresh+"% of transitions of care and referrals.";
 				case EhrMeasureType.SummaryOfCareElectronic:
 					return "The EP who transitions or refers their patient to another setting of care or provider of care provides a summary of care record for more than "+thresh+"% of such transitions, and referrals, electronically transmitted using CEHRT to a recipient";
-				case EhrMeasureType.SummaryOfCareSuccess:
-					return "Conducts one or more successful electronic exchanges of a summary of care document with a recipient who has EHR technology that was developed designed by a different EHR technology developer than the sender's EHR technology";
-				case EhrMeasureType.ImmunizationRegistry:
-					return "Successful ongoing submission of electronic immunization data from CEHRT to an immunization registry or immunization information system for the entire EHR reporting period.";
 				case EhrMeasureType.SecureMessaging:
 					return "A secure message was sent using the electronic messaging function of CEHRT by more than "+thresh+"% of unique patients (or their authorized representatives) seen by the EP during the EHR reporting period.";
+				case EhrMeasureType.FamilyHistory:
+					return "More than 20 percent of all unique patients seen by the EP during the EHR reporting period have a structured data entry for one or more first-degree relatives.";
+				case EhrMeasureType.ElectronicNote:
+					return "Enter at least one electronic progress note created, edited and signed by an EP for more than 30 percent of unique patients with at least one office visit during the EHR Measure reporting period. The text of the electronic note must be text searchable and may contain drawings and other content";
+				case EhrMeasureType.LabImages:
+					return "More than 10 percent of all tests whose result is one or more images ordered by the EP during the EHR reporting period are accessible through CEHRT.";
 			}
 			return "";
 			//throw new ApplicationException("Type not in use for MU2: "+mtype.ToString());
@@ -2231,8 +2244,6 @@ namespace OpenDentBusiness{
 					return 80;
 				case EhrMeasureType.Smoking:
 					return 80;
-				case EhrMeasureType.Interventions:
-					return 0;
 				case EhrMeasureType.ElectronicCopyAccess:
 					return 50;
 				case EhrMeasureType.ElectronicCopy:
@@ -2241,8 +2252,6 @@ namespace OpenDentBusiness{
 					return 50;
 				case EhrMeasureType.Lab:
 					return 55;
-				case EhrMeasureType.PatientLists:
-					return 0;
 				case EhrMeasureType.Reminders:
 					return 10;
 				case EhrMeasureType.Education:
@@ -2253,12 +2262,14 @@ namespace OpenDentBusiness{
 					return 50;
 				case EhrMeasureType.SummaryOfCareElectronic:
 					return 10;
-				case EhrMeasureType.SummaryOfCareSuccess:
-					return 0;
-				case EhrMeasureType.ImmunizationRegistry:
-					return 0;
 				case EhrMeasureType.SecureMessaging:
 					return 5;
+				case EhrMeasureType.FamilyHistory:
+					return 20;
+				case EhrMeasureType.ElectronicNote:
+					return 30;
+				case EhrMeasureType.LabImages:
+					return 10;
 			}
 			return 0;
 			//throw new ApplicationException("Type not found: "+mtype.ToString());
@@ -2277,116 +2288,36 @@ namespace OpenDentBusiness{
 			Random rnd=new Random();
 			string rndStr=rnd.Next(1000000).ToString();
 			switch(mtype) {
-				#region Demographics
-				case EhrMeasureType.Demographics:
-					command="SELECT patient.PatNum,LName,FName,Birthdate,Gender,Race,Language "
-						+"FROM patient "
-						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
-						+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
-						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
-						+"GROUP BY patient.PatNum";
-					tableRaw=Db.GetTable(command);
-					break;
-				#endregion
-				#region Education
-				case EhrMeasureType.Education:
-					command="SELECT A.*,COALESCE(edCount.Count,0) AS edCount "
-						+"FROM (SELECT patient.PatNum,LName,FName	FROM patient "
-						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
-						+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
-						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
-						+"GROUP BY patient.PatNum) A "
-						+"LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM ehrmeasureevent "
-						+"WHERE EventType="+POut.Int((int)EhrMeasureEventType.EducationProvided)+" "
-						+"GROUP BY PatNum) edCount ON edCount.PatNum=A.PatNum";
-					tableRaw=Db.GetTable(command);
-					break;
-				#endregion
-				#region TimelyAccess (NEED TO CHANGE THIS TO REFLECT ELECTRONIC ACCESS)
-				case EhrMeasureType.TimelyAccess:
-					//denominator is patients
-					command="DROP TABLE IF EXISTS tempehrmeasure"+rndStr;
-					Db.NonQ(command);
-					command="CREATE TABLE tempehrmeasure"+rndStr+@" (
-						PatNum bigint NOT NULL auto_increment PRIMARY KEY,
-						LName varchar(255) NOT NULL,
-						FName varchar(255) NOT NULL,
-						lastVisitDate date NOT NULL,
-						deadlineDate date NOT NULL,
-						accessProvided tinyint NOT NULL
-						) DEFAULT CHARSET=utf8";
-					Db.NonQ(command);
-					//get all patients who have been seen during the period, along with the most recent visit date during the period
-					command="INSERT INTO tempehrmeasure"+rndStr+" (PatNum,LName,FName,lastVisitDate) SELECT patient.PatNum,LName,FName, "
-						+"MAX(procedurelog.ProcDate) "
-						+"FROM patient,procedurelog "
-						+"WHERE patient.PatNum=procedurelog.PatNum "
-						+"AND procedurelog.ProcStatus=2 "//complete
-						//+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
-						+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
-						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
-						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+" "
-						+"GROUP BY patient.PatNum";
-					tableRaw=Db.GetTable(command);
-					//calculate the deadlineDate
-					command="UPDATE tempehrmeasure"+rndStr+" "
-						+"SET deadlineDate = ADDDATE(lastVisitDate, INTERVAL 4 DAY)";
-					Db.NonQ(command);
-					command="UPDATE tempehrmeasure"+rndStr+" "
-						+"SET deadlineDate = ADDDate(lastVisitDate, INTERVAL 2 DAY) "//add 2 more days for weekend
-						+"WHERE DAYOFWEEK(lastVisitDate) IN(3,4,5,6)";//tues, wed, thur, fri
-					Db.NonQ(command);
-					//date provided could be any date before deadline date if there was more than one visit
-					command="UPDATE tempehrmeasure"+rndStr+",ehrmeasureevent SET accessProvided = 1 "
-						+"WHERE ehrmeasureevent.PatNum=tempehrmeasure"+rndStr+".PatNum "
-						+"AND EventType="+POut.Int((int)EhrMeasureEventType.OnlineAccessProvided)+" "
-						+"AND DATE(ehrmeasureevent.DateTEvent) <= deadlineDate";
-					Db.NonQ(command);
-					command="SELECT * FROM tempehrmeasure"+rndStr;
-					tableRaw=Db.GetTable(command);
-					command="DROP TABLE IF EXISTS tempehrmeasure"+rndStr;
-					Db.NonQ(command);
-					break;
-				#endregion
 				#region CPOE_MedOrdersOnly
 				case EhrMeasureType.CPOE_MedOrdersOnly:
-					//This optional alternate no longer counts patients with meds in med list, instead we will count the orders created by the Provider during the reporting period and what percentage are CPOE (meaning they were entered through NewCrop)
-					command="SELECT patient.PatNum,patient.LName,patient.FName,medicationpat.MedicationPatNum,"
-						+"COALESCE(medication.MedName,medicationpat.MedDescript) AS MedName,medicationpat.DateStart,"
-						+"medicationpat.IsCpoe FROM patient "
-						+"INNER JOIN medicationpat ON medicationpat.PatNum=patient.PatNum "
-						+"AND medicationpat.ProvNum IN("+POut.String(provs)+")	"
-						+"AND medicationpat.PatNote!='' "
+					command="SELECT * "
+						+"FROM medicationpat "
+						+"WHERE medicationpat.ProvNum IN("+POut.String(provs)+")	"
 						+"AND medicationpat.DateStart BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
-						+"LEFT JOIN medication ON medication.MedicationNum=medicationpat.MedicationNum";
+						+"LEFT JOIN ehrmeasureevent ON medicationpat.MedicationPatNum=ehrmeasureevent.FKey  "
+						+"WHERE EventType="+POut.Int((int)EhrMeasureEventType.CPOE_MedOrdered);
 					tableRaw=Db.GetTable(command);
 					break;
 				#endregion
 				#region CPOE_LabOrdersOnly
 				case EhrMeasureType.CPOE_LabOrdersOnly:
-					//TODO: Improve this query for lab orders
-					command="SELECT patient.PatNum,patient.LName,patient.FName,medicationpat.MedicationPatNum,"
-						+"COALESCE(medication.MedName,medicationpat.MedDescript) AS MedName,medicationpat.DateStart,"
-						+"medicationpat.IsCpoe FROM patient "
-						+"INNER JOIN medicationpat ON medicationpat.PatNum=patient.PatNum "
-						+"AND medicationpat.ProvNum IN("+POut.String(provs)+")	"
-						+"AND medicationpat.PatNote!='' "
-						+"AND medicationpat.DateStart BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
-						+"LEFT JOIN medication ON medication.MedicationNum=medicationpat.MedicationNum";
+					command="SELECT * "
+						+"FROM ehrlab "
+						+"WHERE ehrlab.OrderingProviderID IN("+POut.String(provs)+")	"
+						+"AND ehrlab.ObservationDateTimeStart BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+						+"LEFT JOIN ehrmeasureevent ON ehrlab.EhrLabNum=ehrmeasureevent.FKey  "
+						+"WHERE EventType="+POut.Int((int)EhrMeasureEventType.CPOE_LabOrdered);
 					tableRaw=Db.GetTable(command);
 					break;
 				#endregion
 				#region CPOE_RadiologyOrdersOnly
 				case EhrMeasureType.CPOE_RadiologyOrdersOnly:
-					//TODO: Improve this query for radiology orders
-					command="SELECT patient.PatNum,patient.LName,patient.FName,medicationpat.MedicationPatNum,"
-						+"COALESCE(medication.MedName,medicationpat.MedDescript) AS MedName,medicationpat.DateStart,"
-						+"medicationpat.IsCpoe FROM patient "
-						+"INNER JOIN medicationpat ON medicationpat.PatNum=patient.PatNum "
-						+"AND medicationpat.ProvNum IN("+POut.String(provs)+")	"
-						+"AND medicationpat.PatNote!='' "
-						+"AND medicationpat.DateStart BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
-						+"LEFT JOIN medication ON medication.MedicationNum=medicationpat.MedicationNum";
+					command="SELECT * "
+						+"FROM ehrlab "
+						+"WHERE ehrlab.OrderingProviderID IN("+POut.String(provs)+")	"
+						+"AND ehrlab.ObservationDateTimeStart BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+						+"LEFT JOIN ehrmeasureevent ON ehrlab.EhrLabNum=ehrmeasureevent.FKey  "
+						+"WHERE EventType="+POut.Int((int)EhrMeasureEventType.CPOE_RadOrdered);
 					tableRaw=Db.GetTable(command);
 					break;
 				#endregion
@@ -2400,6 +2331,17 @@ namespace OpenDentBusiness{
 						+"AND rxpat.ProvNum IN("+POut.String(provs)+")	"
 						+"AND RxDate >= "+POut.Date(dateStart)+" "
 						+"AND RxDate <= "+POut.Date(dateEnd);
+					tableRaw=Db.GetTable(command);
+					break;
+				#endregion
+				#region Demographics
+				case EhrMeasureType.Demographics:
+					command="SELECT patient.PatNum,LName,FName,Birthdate,Gender,Race,Language "
+						+"FROM patient "
+						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
+						+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
+						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+						+"GROUP BY patient.PatNum";
 					tableRaw=Db.GetTable(command);
 					break;
 				#endregion
@@ -2455,101 +2397,59 @@ namespace OpenDentBusiness{
 					tableRaw=Db.GetTable(command);
 					break;
 				#endregion
-				#region Lab
-				case EhrMeasureType.Lab:
-					command="SELECT patient.PatNum,LName,FName,DateTimeOrder,COALESCE(panelCount.Count,0) AS panelCount FROM patient "
-						+"INNER JOIN medicalorder ON patient.PatNum=medicalorder.PatNum "
-						+"AND MedOrderType="+POut.Int((int)MedicalOrderType.Laboratory)+" "
-						+"AND medicalorder.ProvNum IN("+POut.String(provs)+") "
-						+"AND DATE(DateTimeOrder) BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
-						+"LEFT JOIN (SELECT MedicalOrderNum,COUNT(*) AS 'Count' FROM labpanel GROUP BY MedicalOrderNum) "
-						+"panelCount ON panelCount.MedicalOrderNum=medicalorder.MedicalOrderNum";
+				#region ElectronicCopyAccess
+				case EhrMeasureType.ElectronicCopyAccess:
+					command="(SELECT patient.PatNum, MIN(procedurelog.ProcDate) as leastRecentDate "
+						+"FROM patient "
+						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
+						+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
+						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+						+"GROUP BY patient.PatNum) as UniquePatsAndProcs"
+						+"LEFT JOIN (SELECT ehrmeasureevent.PatNum,COUNT(*) AS HasAccess, MIN(ehrmeasureevent.DateTEvent) as dateProvided FROM ehrmeasureevent "
+						+"WHERE EventType="+POut.Int((int)EhrMeasureEventType.OnlineAccessProvided)+" "
+						+"GROUP BY ehrmeasureevent.PatNum) OnlineAccess ON UniquePatsAndProcs.PatNum=OnlineAccess.PatNum";
 					tableRaw=Db.GetTable(command);
 					break;
 				#endregion
 				#region ElectronicCopy
 				case EhrMeasureType.ElectronicCopy:
-					command="DROP TABLE IF EXISTS tempehrmeasure"+rndStr;
-					Db.NonQ(command);
-					command="CREATE TABLE tempehrmeasure"+rndStr+@" (
-						TempEhrMeasureNum bigint NOT NULL auto_increment PRIMARY KEY,
-						PatNum bigint NOT NULL,
-						LName varchar(255) NOT NULL,
-						FName varchar(255) NOT NULL,
-						dateRequested date NOT NULL,
-						dateDeadline date NOT NULL,
-						copyProvided tinyint NOT NULL,
-						INDEX(PatNum)
-						) DEFAULT CHARSET=utf8";
-					Db.NonQ(command);
-					command="INSERT INTO tempehrmeasure"+rndStr+" (PatNum,LName,FName,dateRequested) SELECT patient.PatNum,LName,FName,DATE(DateTEvent) "
-						+"FROM ehrmeasureevent,patient "
-						+"WHERE patient.PatNum=ehrmeasureevent.PatNum "
-						+"AND EventType="+POut.Int((int)EhrMeasureEventType.ElectronicCopyRequested)+" "
-						+"AND DATE(DateTEvent) >= "+POut.Date(dateStart)+" "
-						+"AND DATE(DateTEvent) <= "+POut.Date(dateEnd)+" "
-						//+"AND patient.PriProv="+POut.Long(provNum);
-						+"AND patient.PriProv IN("+POut.String(provs)+")";
-					Db.NonQ(command);
-					command="UPDATE tempehrmeasure"+rndStr+" "
-						+"SET dateDeadline = ADDDATE(dateRequested, INTERVAL 3 DAY)";
-					Db.NonQ(command);
-					command="UPDATE tempehrmeasure"+rndStr+" "
-						+"SET dateDeadline = ADDDate(dateDeadline, INTERVAL 2 DAY) "//add 2 more days for weekend
-						+"WHERE DAYOFWEEK(dateRequested) IN(4,5,6)";//wed, thur, fri
-					Db.NonQ(command);
-					command="UPDATE tempehrmeasure"+rndStr+",ehrmeasureevent SET copyProvided = 1 "
-						+"WHERE ehrmeasureevent.PatNum=tempehrmeasure"+rndStr+".PatNum AND EventType="+POut.Int((int)EhrMeasureEventType.ElectronicCopyProvidedToPt)+" "
-						+"AND DATE(ehrmeasureevent.DateTEvent) >= dateRequested "
-						+"AND DATE(ehrmeasureevent.DateTEvent) <= dateDeadline";
-					Db.NonQ(command);
-					command="SELECT * FROM tempehrmeasure"+rndStr;
+					command="(SELECT patient.PatNum, MIN(procedurelog.ProcDate) as leastRecentDate "
+						+"FROM patient "
+						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
+						+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
+						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+						+"GROUP BY patient.PatNum) as UniquePatsAndProcs"
+						+"LEFT JOIN (SELECT ehrmeasureevent.PatNum,COUNT(*) AS HasAccess, MIN(ehrmeasureevent.DateTEvent) as dateRequested FROM ehrmeasureevent "
+						+"WHERE EventType="+POut.Int((int)EhrMeasureEventType.ElectronicCopyRequested)+" "
+						+"GROUP BY ehrmeasureevent.PatNum) OnlineAccess ON UniquePatsAndProcs.PatNum=OnlineAccess.PatNum";
 					tableRaw=Db.GetTable(command);
-					command="DROP TABLE IF EXISTS tempehrmeasure"+rndStr;
-					Db.NonQ(command);
 					break;
 				#endregion
 				#region ClinicalSummaries
 				case EhrMeasureType.ClinicalSummaries:
-					command="DROP TABLE IF EXISTS tempehrmeasure"+rndStr;
-					Db.NonQ(command);
-					command="CREATE TABLE tempehrmeasure"+rndStr+@" (
-						TempEhrMeasureNum bigint NOT NULL auto_increment PRIMARY KEY,
-						PatNum bigint NOT NULL,
-						LName varchar(255) NOT NULL,
-						FName varchar(255) NOT NULL,
-						visitDate date NOT NULL,
-						deadlineDate date NOT NULL,
-						summaryProvided tinyint NOT NULL,
-						INDEX(PatNum)
-						) DEFAULT CHARSET=utf8";
-					Db.NonQ(command);
-					command="INSERT INTO tempehrmeasure"+rndStr+" (PatNum,LName,FName,visitDate) SELECT patient.PatNum,LName,FName,ProcDate "
-						+"FROM procedurelog "
-						+"LEFT JOIN patient ON patient.PatNum=procedurelog.PatNum "
-						+"WHERE ProcDate >= "+POut.Date(dateStart)+" "
-						+"AND ProcDate <= "+POut.Date(dateEnd)+" "
-						//+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
-						+"AND procedurelog.ProvNum IN("+POut.String(provs)+") "
-						+"AND procedurelog.ProcStatus="+POut.Int((int)ProcStat.C)+" "
-						+"GROUP BY procedurelog.PatNum,ProcDate";
-					Db.NonQ(command);
-					command="UPDATE tempehrmeasure"+rndStr+" "
-						+"SET deadlineDate = ADDDATE(visitDate, INTERVAL 1 DAY)";
-					Db.NonQ(command);
-					command="UPDATE tempehrmeasure"+rndStr+" "
-						+"SET DeadlineDate = ADDDate(deadlineDate, INTERVAL 2 DAY) "//add 2 more days for weekend
-						+"WHERE DAYOFWEEK(visitDate) IN(6)";//fri
-					Db.NonQ(command);
-					command="UPDATE tempehrmeasure"+rndStr+",ehrmeasureevent SET summaryProvided = 1 "
-						+"WHERE ehrmeasureevent.PatNum=tempehrmeasure"+rndStr+".PatNum AND EventType="+POut.Int((int)EhrMeasureEventType.ClinicalSummaryProvidedToPt)+" "
-						+"AND DATE(ehrmeasureevent.DateTEvent) >= visitDate "
-						+"AND DATE(ehrmeasureevent.DateTEvent) <= deadlineDate";
-					Db.NonQ(command);
-					command="SELECT * FROM tempehrmeasure"+rndStr;
+					command="(SELECT patient.PatNum, procedurelog.ProcDate as procDate "
+						+"FROM patient "
+						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
+						+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
+						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+						+"GROUP BY procedurelog.PatNum,ProcDate AS PatsAndProcs"
+						+"LEFT JOIN (SELECT ehrmeasureevent.PatNum, ehrmeasureevent.DateTEvent as summaryProvided FROM ehrmeasureevent "
+						+"WHERE EventType="+POut.Int((int)EhrMeasureEventType.ClinicalSummaryProvidedToPt)+" "
+						+"GROUP BY ehrmeasureevent.PatNum,ehrmeasureevent.DateTEvent) ClinSum ON PatsAndProcs.PatNum=ClinSum.PatNum";
 					tableRaw=Db.GetTable(command);
-					command="DROP TABLE IF EXISTS tempehrmeasure"+rndStr;
-					Db.NonQ(command);
+					break;
+				#endregion
+				#region Lab
+				case EhrMeasureType.Lab:
+					command="SELECT * "
+						+"FROM ehrlab "
+						+"WHERE ehrlab.OrderingProviderID IN("+POut.String(provs)+")	"
+						+"AND ehrlab.ObservationDateTimeStart BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+						+"LEFT JOIN (SELECT COUNT(ehrLabResultNum) as resultCount FROM ehrlabresult "
+						+"WHERE ehrlabresult.ValueType='NM' "
+						+"GROUP BY ehrLabNum) ON ehrlab.ehrLabNum=ehrlabresult.ehrLabNum "
+						+"";
+					tableRaw=Db.GetTable(command);
 					break;
 				#endregion
 				#region Reminders
@@ -2570,39 +2470,22 @@ namespace OpenDentBusiness{
 					tableRaw=Db.GetTable(command);
 					break;
 				#endregion
+				#region Education
+				case EhrMeasureType.Education:
+					command="SELECT A.*,COALESCE(edCount.Count,0) AS edCount "
+						+"FROM (SELECT patient.PatNum,LName,FName	FROM patient "
+						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
+						+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
+						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+						+"GROUP BY patient.PatNum) A "
+						+"LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM ehrmeasureevent "
+						+"WHERE EventType="+POut.Int((int)EhrMeasureEventType.EducationProvided)+" "
+						+"GROUP BY PatNum) edCount ON edCount.PatNum=A.PatNum";
+					tableRaw=Db.GetTable(command);
+					break;
+				#endregion
 				#region MedReconcile
 				case EhrMeasureType.MedReconcile:
-					//command="DROP TABLE IF EXISTS tempehrmeasure"+rndStr;
-					//Db.NonQ(command);
-					//command="CREATE TABLE tempehrmeasure"+rndStr+@" (
-					//	PatNum bigint NOT NULL PRIMARY KEY,
-					//	LName varchar(255) NOT NULL,
-					//	FName varchar(255) NOT NULL,
-					//	RefCount int NOT NULL,
-					//	ReconcileCount int NOT NULL
-					//	) DEFAULT CHARSET=utf8";
-					//Db.NonQ(command);
-					//command="INSERT INTO tempehrmeasure"+rndStr+" (PatNum,LName,FName,RefCount) SELECT patient.PatNum,LName,FName,COUNT(*) "
-					//	+"FROM refattach,patient "
-					//	+"WHERE patient.PatNum=refattach.PatNum "
-					//	//+"AND patient.PriProv="+POut.Long(provNum)+" "
-					//	+"AND patient.PriProv IN("+POut.String(provs)+") "
-					//	+"AND RefDate >= "+POut.Date(dateStart)+" "
-					//	+"AND RefDate <= "+POut.Date(dateEnd)+" "
-					//	+"AND IsFrom=1 AND IsTransitionOfCare=1 "
-					//	+"GROUP BY refattach.PatNum";
-					//Db.NonQ(command);
-					//command="UPDATE tempehrmeasure"+rndStr+" "
-					//	+"SET ReconcileCount = (SELECT COUNT(*) FROM ehrmeasureevent "
-					//	+"WHERE ehrmeasureevent.PatNum=tempehrmeasure"+rndStr+".PatNum AND EventType="+POut.Int((int)EhrMeasureEventType.MedicationReconcile)+" "
-					//	+"AND DATE(ehrmeasureevent.DateTEvent) >= "+POut.Date(dateStart)+" "
-					//	+"AND DATE(ehrmeasureevent.DateTEvent) <= "+POut.Date(dateEnd)+")";
-					//Db.NonQ(command);
-					//command="SELECT * FROM tempehrmeasure"+rndStr;
-					//tableRaw=Db.GetTable(command);
-					//command="DROP TABLE IF EXISTS tempehrmeasure"+rndStr;
-					//Db.NonQ(command);
-					//Reworked to only count patients seen by this provider in the date range
 					command="SELECT ptsRefCnt.*,COALESCE(RecCount,0) AS ReconcileCount "
 						+"FROM (SELECT ptsSeen.*,COUNT(DISTINCT refattach.RefAttachNum) AS RefCount "
 							+"FROM (SELECT patient.PatNum,LName,FName FROM patient "
@@ -2623,37 +2506,6 @@ namespace OpenDentBusiness{
 				#endregion
 				#region SummaryOfCare
 				case EhrMeasureType.SummaryOfCare:
-					//command="DROP TABLE IF EXISTS tempehrmeasure"+rndStr;
-					//Db.NonQ(command);
-					//command="CREATE TABLE tempehrmeasure"+rndStr+@" (
-					//	PatNum bigint NOT NULL PRIMARY KEY,
-					//	LName varchar(255) NOT NULL,
-					//	FName varchar(255) NOT NULL,
-					//	RefCount int NOT NULL,
-					//	CcdCount int NOT NULL
-					//	) DEFAULT CHARSET=utf8";
-					//Db.NonQ(command);
-					//command="INSERT INTO tempehrmeasure"+rndStr+" (PatNum,LName,FName,RefCount) SELECT patient.PatNum,LName,FName,COUNT(*) "
-					//	+"FROM refattach,patient "
-					//	+"WHERE patient.PatNum=refattach.PatNum "
-					//	//+"AND patient.PriProv="+POut.Long(provNum)+" "
-					//	+"AND patient.PriProv IN("+POut.String(provs)+") "
-					//	+"AND RefDate >= "+POut.Date(dateStart)+" "
-					//	+"AND RefDate <= "+POut.Date(dateEnd)+" "
-					//	+"AND IsFrom=0 AND IsTransitionOfCare=1 "
-					//	+"GROUP BY refattach.PatNum";
-					//Db.NonQ(command);
-					//command="UPDATE tempehrmeasure"+rndStr+" "
-					//	+"SET CcdCount = (SELECT COUNT(*) FROM ehrmeasureevent "
-					//	+"WHERE ehrmeasureevent.PatNum=tempehrmeasure"+rndStr+".PatNum AND EventType="+POut.Int((int)EhrMeasureEventType.SummaryOfCareProvidedToDr)+" "
-					//	+"AND DATE(ehrmeasureevent.DateTEvent) >= "+POut.Date(dateStart)+" "
-					//	+"AND DATE(ehrmeasureevent.DateTEvent) <= "+POut.Date(dateEnd)+")";
-					//Db.NonQ(command);
-					//command="SELECT * FROM tempehrmeasure"+rndStr;
-					//tableRaw=Db.GetTable(command);
-					//command="DROP TABLE IF EXISTS tempehrmeasure"+rndStr;
-					//Db.NonQ(command);
-					//Reworked to only count patients seen by this provider in the date range
 					command="SELECT ptsRefCnt.*,COALESCE(CcdCount,0) AS CcdCount "
 						+"FROM (SELECT ptsSeen.*,COUNT(DISTINCT refattach.RefAttachNum) AS RefCount "
 							+"FROM (SELECT patient.PatNum,LName,FName FROM patient "
@@ -2670,6 +2522,75 @@ namespace OpenDentBusiness{
 							+"AND DATE(ehrmeasureevent.DateTEvent) BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
 							+"GROUP BY ehrmeasureevent.PatNum) ptsCcdCount ON ptsRefCnt.PatNum=ptsCcdCount.PatNum";
 					tableRaw=Db.GetTable(command);
+					break;
+				#endregion
+				#region SummaryOfCareElectronic
+				case EhrMeasureType.SummaryOfCareElectronic:
+					command="SELECT ptsRefCnt.*,COALESCE(CcdCount,0) AS CcdCount, COALESCE(CcdCountElec,0) AS CcdCountElec "
+						+"FROM (SELECT ptsSeen.*,COUNT(DISTINCT refattach.RefAttachNum) AS RefCount "
+							+"FROM (SELECT patient.PatNum,LName,FName FROM patient "
+								+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum "
+								+"AND ProcStatus=2 AND ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+								+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
+								+"GROUP BY patient.PatNum) ptsSeen "
+							+"INNER JOIN refattach ON ptsSeen.PatNum=refattach.PatNum "
+							+"AND RefDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+							+"AND IsFrom=0 AND IsTransitionOfCare=1 "
+							+"GROUP BY ptsSeen.PatNum) ptsRefCnt "
+						+"INNER JOIN (SELECT ehrmeasureevent.PatNum,COUNT(*) AS CcdCount FROM ehrmeasureevent "
+							+"WHERE EventType="+POut.Int((int)EhrMeasureEventType.SummaryOfCareProvidedToDr)+" "
+							+"AND DATE(ehrmeasureevent.DateTEvent) BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+							+"GROUP BY ehrmeasureevent.PatNum) ptsCcdCount ON ptsRefCnt.PatNum=ptsCcdCount.PatNum"
+						+"LEFT JOIN (SELECT ehrmeasureevent.PatNum,COUNT(*) AS CcdCountElec FROM ehrmeasureevent "
+							+"WHERE EventType="+POut.Int((int)EhrMeasureEventType.SummaryOfCareProvidedToDrElectronic)+" "
+							+"AND DATE(ehrmeasureevent.DateTEvent) BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+							+"GROUP BY ehrmeasureevent.PatNum) ptsCcdCountElec ON ptsCcdCount.PatNum=ptsCcdCountElec.PatNum";;
+					tableRaw=Db.GetTable(command);
+					break;
+				#endregion
+				#region SecureMessaging
+				case EhrMeasureType.SecureMessaging:
+					command="(SELECT patient.PatNum, procedurelog.ProcDate as procDate, ehrmeasureevent.DateTEvent "
+						+"FROM patient "
+						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
+						+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
+						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+						+"GROUP BY patient.PatNum AS UniquePatsAndProcs"
+						+"LEFT JOIN (SELECT ehrmeasureevent.PatNum, ehrmeasureevent.DateTEvent as secureMessageRead FROM ehrmeasureevent "
+						+"WHERE EventType="+POut.Int((int)EhrMeasureEventType.SecureMessageFromPat)+" "
+						+"GROUP BY ehrmeasureevent.PatNum,ehrmeasureevent.DateTEvent) SecureMessage ON UniquePatsAndProcs.PatNum=SecureMessage.PatNum";
+					tableRaw=Db.GetTable(command);
+					break;
+				#endregion
+				#region FamilyHistory
+				case EhrMeasureType.FamilyHistory:
+					command="(SELECT patient.PatNum, procedurelog.ProcDate as procDate, FamilyHealthNum  "
+						+"FROM patient "
+						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
+						+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
+						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+						+"GROUP BY patient.PatNum AS UniquePatsAndProcs"
+						+"LEFT JOIN familyhealth ON UniquePatsAndProcs.PatNum=familyhealth.PatNum";
+					tableRaw=Db.GetTable(command);
+					break;
+				#endregion
+				#region ElectricNote
+				case EhrMeasureType.ElectronicNote:
+					command="(SELECT patient.PatNum, procedurelog.ProcDate as procDate, ProcNoteNum  "
+						+"FROM patient "
+						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
+						+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
+						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+						+"GROUP BY patient.PatNum AS UniquePatsAndProcs"
+						+"LEFT JOIN procnote ON UniquePatsAndProcs.PatNum=procnote.PatNum"
+						+" AND UniquePatsAndProcs.ProcNum=procnote.ProcNum"
+						+" AND Signature NOT NULL";
+					tableRaw=Db.GetTable(command);
+					break;
+				#endregion
+				#region LabImages
+				case EhrMeasureType.LabImages:
+					//This is not currently possible in OD so it will always be excluded
 					break;
 				#endregion
 				//default:
@@ -2696,6 +2617,46 @@ namespace OpenDentBusiness{
 				row["met"]="";
 				explanation="";
 				switch(mtype) {
+					#region CPOE_MedOrdersOnly
+					case EhrMeasureType.CPOE_MedOrdersOnly:
+						DateTime medOrderStartDate=PIn.Date(tableRaw.Rows[i]["DateStart"].ToString());
+						explanation="Medication order: "+tableRaw.Rows[i]["MedDescript"].ToString()+", start date: "+medOrderStartDate.ToShortDateString()+".";
+						if(tableRaw.Rows[i]["IsCpoe"].ToString()=="1") {
+							row["met"]="X";
+						}
+						break;
+					#endregion
+					#region CPOE_LabOrdersOnly
+					case EhrMeasureType.CPOE_LabOrdersOnly:
+						DateTime labOrderStartDate=PIn.Date(tableRaw.Rows[i]["DateTimeOrder"].ToString());
+						explanation="Laboratory order: "+tableRaw.Rows[i]["Description"].ToString()+", start date: "+labOrderStartDate.ToShortDateString()+".";
+						if(tableRaw.Rows[i]["FKey"].ToString()!="0") {
+							row["met"]="X";
+						}
+						break;
+					#endregion
+					#region CPOE_RadiologyOrdersOnly
+					case EhrMeasureType.CPOE_RadiologyOrdersOnly:
+						DateTime radOrderStartDate=PIn.Date(tableRaw.Rows[i]["DateTimeOrder"].ToString());
+						explanation="Radiology order: "+tableRaw.Rows[i]["Description"].ToString()+", start date: "+radOrderStartDate.ToShortDateString()+".";
+						if(tableRaw.Rows[i]["FKey"].ToString()!="0") {
+							row["met"]="X";
+						}
+						break;
+					#endregion
+					#region Rx
+					case EhrMeasureType.Rx:
+						RxSendStatus sendStatus=(RxSendStatus)PIn.Int(tableRaw.Rows[i]["SendStatus"].ToString());
+						DateTime rxDate=PIn.Date(tableRaw.Rows[i]["rxDate"].ToString());
+						if(sendStatus==RxSendStatus.SentElect) {
+							explanation=rxDate.ToShortDateString()+" Rx sent electronically.";
+							row["met"]="X";
+						}
+						else {
+							explanation=rxDate.ToShortDateString()+" Rx not sent electronically.";
+						}
+						break;
+					#endregion
 					#region Demographics
 					case EhrMeasureType.Demographics:
 						if(PIn.Date(tableRaw.Rows[i]["Birthdate"].ToString()).Year<1880) {
@@ -2725,64 +2686,6 @@ namespace OpenDentBusiness{
 						}
 						else {
 							explanation="Missing: "+explanation;
-						}
-						break;
-					#endregion
-					#region Education
-					case EhrMeasureType.Education:
-						if(tableRaw.Rows[i]["edCount"].ToString()=="0") {
-							explanation="No education resources";
-						}
-						else {
-							explanation="Education resources provided";
-							row["met"]="X";
-						}
-						break;
-					#endregion
-					#region TimelyAccess
-					case EhrMeasureType.TimelyAccess:
-						DateTime lastVisitDate=PIn.Date(tableRaw.Rows[i]["lastVisitDate"].ToString());
-						DateTime deadlineDate=PIn.Date(tableRaw.Rows[i]["deadlineDate"].ToString());
-						if(tableRaw.Rows[i]["accessProvided"].ToString()=="0") {
-							explanation=lastVisitDate.ToShortDateString()+" no online access provided";
-						}
-						else {
-							explanation="Online access provided before "+deadlineDate.ToShortDateString();
-							row["met"]="X";
-						}
-						break;
-					#endregion
-					#region ProvOrderEntry
-					case EhrMeasureType.ProvOrderEntry:
-					case EhrMeasureType.CPOE_PreviouslyOrdered:
-						if(tableRaw.Rows[i]["countCpoe"].ToString()=="0") {
-							explanation="No medication order through CPOE";
-						}
-						else {
-							explanation="Medication order in CPOE";
-							row["met"]="X";
-						}
-						break;
-					#endregion
-					#region CPOE_MedOrdersOnly
-					case EhrMeasureType.CPOE_MedOrdersOnly:
-						DateTime medOrderStartDate=PIn.Date(tableRaw.Rows[i]["DateStart"].ToString());
-						explanation="Medication order: "+tableRaw.Rows[i]["MedName"].ToString()+", start date: "+medOrderStartDate.ToShortDateString()+".";
-						if(tableRaw.Rows[i]["IsCpoe"].ToString()=="1") {
-							row["met"]="X";
-						}
-						break;
-					#endregion
-					#region Rx
-					case EhrMeasureType.Rx:
-						RxSendStatus sendStatus=(RxSendStatus)PIn.Int(tableRaw.Rows[i]["SendStatus"].ToString());
-						DateTime rxDate=PIn.Date(tableRaw.Rows[i]["rxDate"].ToString());
-						if(sendStatus==RxSendStatus.SentElect) {
-							explanation=rxDate.ToShortDateString()+" Rx sent electronically.";
-							row["met"]="X";
-						}
-						else {
-							explanation=rxDate.ToShortDateString()+" Rx not sent electronically.";
 						}
 						break;
 					#endregion
@@ -2843,39 +2746,63 @@ namespace OpenDentBusiness{
 						}
 						break;
 					#endregion
-					#region Lab
-					case EhrMeasureType.Lab:
-						int panelCount=PIn.Int(tableRaw.Rows[i]["panelCount"].ToString());
-						DateTime dateOrder=PIn.Date(tableRaw.Rows[i]["DateTimeOrder"].ToString());
-						if(panelCount==0) {
-							explanation+=dateOrder.ToShortDateString()+" results not attached.";
+					#region ElectronicCopyAccess
+					case EhrMeasureType.ElectronicCopyAccess:
+						DateTime visitDate=PIn.Date(tableRaw.Rows[i]["leastRecentDate"].ToString());
+						DateTime deadlineDate=PIn.Date(tableRaw.Rows[i]["leastRecentDate"].ToString());
+						DateTime providedDate=PIn.Date(tableRaw.Rows[i]["dateProvided"].ToString());
+						deadlineDate.AddDays(4);
+						if(visitDate.DayOfWeek>DayOfWeek.Tuesday) {
+							deadlineDate.AddDays(2);
+						}
+						if(providedDate<=deadlineDate && providedDate.Year>1880) {
+							explanation="Online access provided before "+deadlineDate.ToShortDateString();
+							row["met"]="X";
 						}
 						else {
-							explanation=dateOrder.ToShortDateString()+" results attached.";
-							row["met"]="X";
+							explanation=visitDate.ToShortDateString()+" no online access provided";
 						}
 						break;
 					#endregion
 					#region ElectronicCopy
 					case EhrMeasureType.ElectronicCopy:
+						DateTime visitDate2=PIn.Date(tableRaw.Rows[i]["leastRecentDate"].ToString());
 						DateTime dateRequested=PIn.Date(tableRaw.Rows[i]["dateRequested"].ToString());
-						if(tableRaw.Rows[i]["copyProvided"].ToString()=="0") {
-							explanation=dateRequested.ToShortDateString()+" no copy provided to patient";
+						if(dateRequested<visitDate2) {
+							explanation=visitDate2.ToShortDateString()+" no requests after this date.";
 						}
 						else {
-							explanation=dateRequested.ToShortDateString()+" copy provided to patient";
+							explanation=visitDate2.ToShortDateString()+" requests after this date";
 							row["met"]="X";
 						}
 						break;
 					#endregion
 					#region ClinicalSummaries
 					case EhrMeasureType.ClinicalSummaries:
-						DateTime visitDate=PIn.Date(tableRaw.Rows[i]["visitDate"].ToString());
-						if(tableRaw.Rows[i]["summaryProvided"].ToString()=="0") {
-							explanation=visitDate.ToShortDateString()+" no summary provided to patient";
+						DateTime procDate=PIn.Date(tableRaw.Rows[i]["procDate"].ToString());
+						DateTime deadlineDateClinSum=procDate.AddDays(1);
+						if(procDate.DayOfWeek==DayOfWeek.Friday) {
+							deadlineDateClinSum=deadlineDateClinSum.AddDays(2);
+						}
+						DateTime summaryProvidedDate=PIn.Date(tableRaw.Rows[i]["summaryProvided"].ToString());
+						if(summaryProvidedDate<=deadlineDateClinSum) {
+							explanation=procDate.ToShortDateString()+" summary provided to patient";
+							row["met"]="X";
 						}
 						else {
-							explanation=visitDate.ToShortDateString()+" summary provided to patient";
+							explanation=procDate.ToShortDateString()+" summary provided to patient";
+						}
+						break;
+					#endregion
+					#region Lab
+					case EhrMeasureType.Lab:
+						int resultCount=PIn.Int(tableRaw.Rows[i]["resultCount"].ToString());
+						DateTime dateOrder=PIn.Date(tableRaw.Rows[i]["ObservationDateTimeStart"].ToString());
+						if(resultCount==0) {
+							explanation+=dateOrder.ToShortDateString()+" results not attached.";
+						}
+						else {
+							explanation=dateOrder.ToShortDateString()+" results attached.";
 							row["met"]="X";
 						}
 						break;
@@ -2887,6 +2814,17 @@ namespace OpenDentBusiness{
 						}
 						else {
 							explanation="Reminders sent";
+							row["met"]="X";
+						}
+						break;
+					#endregion
+					#region Education
+					case EhrMeasureType.Education:
+						if(tableRaw.Rows[i]["edCount"].ToString()=="0") {
+							explanation="No education resources";
+						}
+						else {
+							explanation="Education resources provided";
 							row["met"]="X";
 						}
 						break;
@@ -2917,6 +2855,46 @@ namespace OpenDentBusiness{
 						}
 						break;
 					#endregion
+					#region SummaryOfCareElectronic
+					case EhrMeasureType.SummaryOfCareElectronic:
+						int refCount3=PIn.Int(tableRaw.Rows[i]["RefCount"].ToString());
+						int ccdCountDenom=PIn.Int(tableRaw.Rows[i]["CcdCount"].ToString());
+						int ccdCountElec=PIn.Int(tableRaw.Rows[i]["CcdCountElec"].ToString());
+						if(ccdCountDenom<refCount3 && ccdCountElec<1) {
+							explanation="Transitions of Care:"+refCount3.ToString()+", Summaries provided:"+ccdCountDenom.ToString();
+						}
+						else {
+							explanation="At least one electronic summary per unique customer with a transition of care.";
+							row["met"]="X";
+						}
+						break;
+					#endregion
+					#region SecureMessaging
+					case EhrMeasureType.SecureMessaging:
+						if(PIn.DateT(tableRaw.Rows[i]["secureMessageRead"].ToString()).Year>1880) {
+							row["met"]="X";
+						}
+						break;
+					#endregion
+					#region FamilyHistory
+					case EhrMeasureType.FamilyHistory:
+						if(PIn.Long(tableRaw.Rows[i]["FamilyHealthNum"].ToString())>0) {
+							row["met"]="X";
+						}
+						break;
+					#endregion
+					#region ElectricNote
+					case EhrMeasureType.ElectronicNote:
+						if(PIn.Long(tableRaw.Rows[i]["FamilyHealthNum"].ToString())>0) {
+							row["met"]="X";
+						}
+						break;
+					#endregion
+					#region LabImages
+					case EhrMeasureType.LabImages:
+						//This is currently not possible in OD and is always excluded
+						break;
+					#endregion
 					//default:
 						//throw new ApplicationException("Type not found: "+mtype.ToString());
 				}
@@ -2929,26 +2907,10 @@ namespace OpenDentBusiness{
 			return table;
 		}
 
-		///<summary>Just counts up the number of rows with an X in the met column.  Very simple.</summary>
-		public static int CalcNumeratorMu2(DataTable table) {
-			//No need to check RemotingRole; no call to db.
-			int retVal=0;
-			for(int i=0;i<table.Rows.Count;i++) {
-				if(table.Rows[i]["met"].ToString()=="X") {
-					retVal++;
-				}
-			}
-			return retVal;
-		}
-
 		///<summary>Returns the explanation of the numerator based on the EHR certification documents.</summary>
 		private static string GetNumeratorExplainMu2(EhrMeasureType mtype) {
 			//No need to check RemotingRole; no call to db.
 			switch(mtype) {
-				case EhrMeasureType.Demographics:
-					return "Patients with all required demographic elements recorded as structured data: language, gender, race, ethnicity, and birthdate.";
-				case EhrMeasureType.Education:
-					return "Patients provided patient-specific education resources, not dependent on requests.";
 				case EhrMeasureType.CPOE_MedOrdersOnly:
 					return "The number of medication orders entered by the Provider during the reporting period using CPOE.";
 				case EhrMeasureType.CPOE_LabOrdersOnly:
@@ -2957,6 +2919,8 @@ namespace OpenDentBusiness{
 					return "The number of radiology orders entered by the Provider during the reporting period using CPOE.";
 				case EhrMeasureType.Rx:
 					return "Permissible prescriptions transmitted electronically.";
+				case EhrMeasureType.Demographics:
+					return "Patients with all required demographic elements recorded as structured data: language, gender, race, ethnicity, and birthdate.";
 				case EhrMeasureType.VitalSigns:
 					return "Patients with height, weight, and blood pressure recorded.";
 				case EhrMeasureType.VitalSignsBMIOnly:
@@ -2965,22 +2929,32 @@ namespace OpenDentBusiness{
 					return "Patients with blood pressure recorded.";
 				case EhrMeasureType.Smoking:
 					return "Patients with smoking status recorded.";
-				case EhrMeasureType.Lab:
-					return "Lab results entered.";
 				case EhrMeasureType.ElectronicCopyAccess:
 					return "Electronic copy received within 4 business days.";
 				case EhrMeasureType.ElectronicCopy:
 					return "The number of unique patients in the denominator who have viewed online, downloaded, or transmitted to a third party the patient's health information.";
 				case EhrMeasureType.ClinicalSummaries:
 					return "Number of office visits in the denominator where the patient or a patient-authorized representative is provided a clinical summary of their visit within one business day.";
+				case EhrMeasureType.Lab:
+					return "Lab results entered.";
 				case EhrMeasureType.Reminders:
 					return "Number of patients in the denominator who were sent a reminder per patient preference when available during the EHR reporting period.";
+				case EhrMeasureType.Education:
+					return "Patients provided patient-specific education resources, not dependent on requests.";
 				case EhrMeasureType.MedReconcile:
 					return "Number of transitions of care in the denominator where medication reconciliation was performed.";
 				case EhrMeasureType.SummaryOfCare:
 					return "Number of transitions of care and referrals in the denominator where a summary of care record was provided.";
 				case EhrMeasureType.SummaryOfCareElectronic:
 					return "Number of transitions of care and referrals in the denominator where a summary of care record was electronically transmitted";
+				case EhrMeasureType.SecureMessaging:
+					return "The number of patients in the denominator who send a secure electronic message to the EP that is received using the electronic messaging function of CEHRT during the EHR reporting period.";
+				case EhrMeasureType.FamilyHistory:
+					return "The number of patients in the denominator with a structured data entry for one or more first-degree relatives.";
+				case EhrMeasureType.ElectronicNote:
+					return "The number of unique patients in the denominator who have at least one electronic progress note from an eligible professional recorded as text searchable data.";
+				case EhrMeasureType.LabImages:
+					return "The number of results in the denominator that are accessible through CEHRT.";
 			}
 			return "";
 			//throw new ApplicationException("Type not found: "+mtype.ToString());
@@ -2990,10 +2964,6 @@ namespace OpenDentBusiness{
 		private static string GetDenominatorExplainMu2(EhrMeasureType mtype) {
 			//No need to check RemotingRole; no call to db.
 			switch(mtype) {
-				case EhrMeasureType.Demographics:
-					return "All unique patients with at least one completed procedure by the Provider during the reporting period.";
-				case EhrMeasureType.Education:
-					return "All unique patients with at least one completed procedure by the Provider during the reporting period.";
 				case EhrMeasureType.CPOE_MedOrdersOnly:
 					return "The number of medication orders created by the Provider during the reporting period.";
 				case EhrMeasureType.CPOE_LabOrdersOnly:
@@ -3002,6 +2972,8 @@ namespace OpenDentBusiness{
 					return "The number of radiology orders created by the Provider during the reporting period.";
 				case EhrMeasureType.Rx:
 					return "All permissible prescriptions by the Provider during the reporting period.";
+				case EhrMeasureType.Demographics:
+					return "All unique patients with at least one completed procedure by the Provider during the reporting period.";
 				case EhrMeasureType.VitalSigns:
 					return "All unique patients (age 3 and over for blood pressure) with at least one completed procedure by the Provider during the reporting period.";
 				case EhrMeasureType.VitalSignsBMIOnly:
@@ -3010,23 +2982,32 @@ namespace OpenDentBusiness{
 					return "All unique patients age 3 and over with at least one completed procedure by the Provider during the reporting period.";
 				case EhrMeasureType.Smoking:
 					return "All unique patients 13 years or older with at least one completed procedure by the Provider during the reporting period.";
-				case EhrMeasureType.Lab:
-					return "All lab orders by the Provider during the reporting period.";
 				case EhrMeasureType.ElectronicCopyAccess:
 					return "All unique patients with at least one completed procedure by the Provider during the reporting period.";
 				case EhrMeasureType.ElectronicCopy:
 					return "All unique patients with at least one completed procedure by the Provider during the reporting period.";
 				case EhrMeasureType.ClinicalSummaries:
 					return "All office visits during the reporting period.  An office visit is calculated as any number of completed procedures by the Provider for a given date.";
+				case EhrMeasureType.Lab:
+					return "All lab orders by the Provider during the reporting period.";
 				case EhrMeasureType.Reminders:
-					//return "All unique patients of the Provider 65+ or 5-.  Not restricted to those seen during the reporting period.  Must have status of Patient rather than Inactive, Nonpatient, Deceased, etc.";
 					return "Number of unique patients who have had two or more office visits with the EP in the 24 months prior to the beginning of the EHR reporting period.";
+				case EhrMeasureType.Education:
+					return "All unique patients with at least one completed procedure by the Provider during the reporting period.";
 				case EhrMeasureType.MedReconcile:
 					return "Number of incoming transitions of care from another provider during the reporting period.";
 				case EhrMeasureType.SummaryOfCare:
 					return "Number of outgoing transitions of care and referrals during the reporting period.";
 				case EhrMeasureType.SummaryOfCareElectronic:
 					return "Number of outgoing transitions of care and referrals during the reporting period.";
+				case EhrMeasureType.SecureMessaging:
+					return "Number of unique patients seen by the EP during the EHR reporting period.";
+				case EhrMeasureType.FamilyHistory:
+					return "Number of unique patients seen by the EP during the EHR reporting period.";
+				case EhrMeasureType.ElectronicNote:
+					return "Number of unique patients with at least one office visit during the EHR reporting period for EPs during the EHR reporting period.";
+				case EhrMeasureType.LabImages:
+					return "Number of tests whose result is one or more images ordered by the EP during the EHR reporting period.";
 			}
 			return "";
 			//throw new ApplicationException("Type not found: "+mtype.ToString());
@@ -3036,10 +3017,6 @@ namespace OpenDentBusiness{
 		private static string GetExclusionExplainMu2(EhrMeasureType mtype) {
 			//No need to check RemotingRole; no call to db.
 			switch(mtype) {
-				case EhrMeasureType.Demographics:
-					return "No exclusions.";
-				case EhrMeasureType.Education:
-					return "Any Provider who has no office visits during the EHR reporting period.";
 				case EhrMeasureType.CPOE_MedOrdersOnly:
 				case EhrMeasureType.CPOE_LabOrdersOnly:
 				case EhrMeasureType.CPOE_RadiologyOrdersOnly:
@@ -3047,6 +3024,8 @@ namespace OpenDentBusiness{
 				case EhrMeasureType.Rx:
 					return @"1. Any Provider who writes fewer than 100 prescriptions during the reporting period.
 2. Any Provider who does not have a pharmacy within their organization and there are no pharmacies that accept electronic prescriptions within 10 miles of the practice at the start of the reporting period.";
+				case EhrMeasureType.Demographics:
+					return "No exclusions.";
 				case EhrMeasureType.VitalSigns:
 					return @"1. Any Provider who sees no patients 3 years or older is excluded from recording blood pressure.
 2. Any Provider who believes that all three vital signs of height, weight, and blood pressure have no relevance to their scope of practice is excluded from recording them.
@@ -3059,8 +3038,6 @@ namespace OpenDentBusiness{
 2. Any Provider who believes that blood pressure is not relevant to their scope of practice is excluded from recording it.";
 				case EhrMeasureType.Smoking:
 					return "Any Provider who sees no patients 13 years or older during the reporting period.";
-				case EhrMeasureType.Lab:
-					return "Any Provider who orders no lab tests whose results are either in a positive/negative or numeric format during the reporting period.";
 				case EhrMeasureType.ElectronicCopyAccess:
 					return "Any Provider who neither orders nor creates any of the information listed for inclusion as part of both measures, except for Patient name and Provider's name and office contact information.";
 				case EhrMeasureType.ElectronicCopy:
@@ -3068,16 +3045,26 @@ namespace OpenDentBusiness{
 2. Any Provider who conducts 50% or more of his or her patient encounters in a county that does not have 50% or more of its housing units with 3Mbps broadband availability according to the latest information available from the FCC on the first day of the EHR reporting period.";
 				case EhrMeasureType.ClinicalSummaries:
 					return "Any Provider who has no completed procedures during the reporting period.";
+				case EhrMeasureType.Lab:
+					return "Any Provider who orders no lab tests whose results are either in a positive/negative or numeric format during the reporting period.";
 				case EhrMeasureType.Reminders:
 					return "Any Provider who has had no office visits in the 24 months before the EHR reporting period.";
+				case EhrMeasureType.Education:
+					return "Any Provider who has no office visits during the EHR reporting period.";
 				case EhrMeasureType.MedReconcile:
 					return "Any Provider who was not the recipient of any transitions of care during the EHR reporting period.";
 				case EhrMeasureType.SummaryOfCare:
 					return "Any Provider who transfers a patient to another setting or refers a patient to another provider less than 100 times during the EHR reporting period is excluded from all three measures.";
 				case EhrMeasureType.SummaryOfCareElectronic:
 					return "Any Provider who transfers a patient to another setting or refers a patient to another provider less than 100 times during the EHR reporting period is excluded from all three measures.";
-				case EhrMeasureType.SummaryOfCareSuccess:
-					return "Any Provider who transfers a patient to another setting or refers a patient to another provider less than 100 times during the EHR reporting period is excluded from all three measures.";
+				case EhrMeasureType.SecureMessaging:
+					return "Any EP who has no office visits during the EHR reporting period, or any EP who conducts 50% or more of his or her patient encounters in a county that does not have 50% or more of its housing units with 3Mbps broadband availability according to the latest information available from the FCC on the first day of the EHR reporting period.";
+				case EhrMeasureType.FamilyHistory:
+					return "Any EP who has no office visits during the EHR reporting period.";
+				case EhrMeasureType.ElectronicNote:
+					return "No exclusion.";
+				case EhrMeasureType.LabImages:
+					return "Any EP who orders less than 100 tests whose result is an image during the EHR reporting period; or any EP who has no access to electronic imaging results at the start of the EHR reporting period.";
 			}
 			return "";
 			//throw new ApplicationException("Type not found: "+mtype.ToString());
@@ -3095,54 +3082,8 @@ namespace OpenDentBusiness{
 				+"(SELECT pv.EhrKey FROM provider pv WHERE pv.ProvNum="+POut.Long(provNum)+")";
 			string provs=Db.GetScalar(command);
 			switch(mtype) {
-				case EhrMeasureType.Demographics:
-				case EhrMeasureType.Education:
-				case EhrMeasureType.VitalSignsBMIOnly:
-				case EhrMeasureType.ElectronicCopy:
-				case EhrMeasureType.Lab:
-				case EhrMeasureType.MedReconcile:
-				case EhrMeasureType.SummaryOfCare:
-					return retval=-1;
-				#region TimelyAccess
-				case EhrMeasureType.TimelyAccess:
-					//Exlcuded if no lab tests are ordered or created for patients seen in reporting period
-					command="SELECT COUNT(*) AS 'Count' "
-						+"FROM (SELECT patient.PatNum	FROM patient "
-						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum	AND procedurelog.ProcStatus=2 "
-						+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
-						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
-						+"GROUP BY patient.PatNum) A "
-						+"INNER JOIN medicalorder ON A.PatNum=medicalorder.PatNum "
-						+"AND MedOrderType="+POut.Int((int)MedicalOrderType.Laboratory)+" "
-						+"AND medicalorder.ProvNum IN("+POut.String(provs)+") "
-						+"AND DATE(DateTimeOrder) BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" ";
-					retval+=PIn.Int(Db.GetCount(command));
-					//Excluded if problems, medications, or medication allergy information is not ordered or created for patients seen in the reporting period
-					command="SELECT SUM(COALESCE(allergies.Count,0)+COALESCE(problems.Count,0)+COALESCE(meds.Count,0)) AS 'Count' "
-						+"FROM (SELECT patient.PatNum	FROM patient "
-						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum	AND procedurelog.ProcStatus=2 "
-						+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
-						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
-						+"GROUP BY patient.PatNum) A ";
-					//left join allergies with DateTStamp within reporting period
-					command+="LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM allergy "
-						+"WHERE "+DbHelper.DateColumn("DateTStamp")+" BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
-						+"GROUP BY PatNum) allergies ON allergies.PatNum=A.PatNum ";
-					//left join problems with DateTStamp within reporting period
-					command+="LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM disease "
-						+"WHERE "+DbHelper.DateColumn("DateTStamp")+" BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
-						+"GROUP BY PatNum) problems ON problems.PatNum=A.PatNum ";
-					//left join medications with DateStart or DateTStamp within reporting period
-					command+="LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM medicationpat "
-						+"WHERE DateStart BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
-						+"OR "+DbHelper.DateColumn("DateTStamp")+" BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
-						+"GROUP BY PatNum) meds ON meds.PatNum=A.PatNum";
-					return retval+=PIn.Int(Db.GetScalar(command));
-				#endregion
-				#region CPOE_Rx
+				#region CPOE_MedOrdersOnly
 				case EhrMeasureType.CPOE_MedOrdersOnly:
-				case EhrMeasureType.Rx:
-					//Excluded if Provider writes fewer than 100 Tx's during the reporting period
 					command="SELECT COUNT(DISTINCT rxpat.RxNum) AS 'Count' "
 						+"FROM patient "
 						+"INNER JOIN rxpat ON rxpat.PatNum=patient.PatNum "
@@ -3150,9 +3091,30 @@ namespace OpenDentBusiness{
 						+"AND RxDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd);
 					return retval=PIn.Int(Db.GetScalar(command));
 				#endregion
-				#region CPOE_Labs
-//TODO: Fix this region
+				#region CPOE_LabOrdersOnly
 				case EhrMeasureType.CPOE_LabOrdersOnly:
+					command="SELECT COUNT(DISTINCT ehrlab.EhrLabNum) AS 'Count' "
+						+"FROM patient "
+						+"INNER JOIN ehrlab ON ehrlab.PatNum=patient.PatNum "
+						+"AND ehrlab.OrderingProviderID IN("+POut.String(provs)+")	"
+						+"AND ObservationDateTimeStart BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)
+						+" INNER JOIN loinc on ehrlab.UsiID=loinc.LoincCode"
+						+" AND loinc.ScaleType NOT LIKE '%Qn%'";
+					return retval=PIn.Int(Db.GetScalar(command));
+				#endregion
+				#region CPOE_RadiologyOrdersOnly
+				case EhrMeasureType.CPOE_RadiologyOrdersOnly:
+					command="SELECT COUNT(DISTINCT ehrlab.EhrLabNum) AS 'Count' "
+						+"FROM patient "
+						+"INNER JOIN ehrlab ON ehrlab.PatNum=patient.PatNum "
+						+"AND ehrlab.OrderingProviderID IN("+POut.String(provs)+")	"
+						+"AND ObservationDateTimeStart BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)
+						+" INNER JOIN loinc on ehrlab.UsiID=loinc.LoincCode"
+						+" AND loinc.ScaleType LIKE '%Qn%'";
+					return retval=PIn.Int(Db.GetScalar(command));
+				#endregion
+				#region Rx
+				case EhrMeasureType.Rx:
 					command="SELECT COUNT(DISTINCT rxpat.RxNum) AS 'Count' "
 						+"FROM patient "
 						+"INNER JOIN rxpat ON rxpat.PatNum=patient.PatNum "
@@ -3160,20 +3122,12 @@ namespace OpenDentBusiness{
 						+"AND RxDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd);
 					return retval=PIn.Int(Db.GetScalar(command));
 				#endregion
-				#region CPOE_Radiology
-				case EhrMeasureType.CPOE_RadiologyOrdersOnly:
-				//TODO: Fix this region
-					command="SELECT COUNT(DISTINCT rxpat.RxNum) AS 'Count' "
-						+"FROM patient "
-						+"INNER JOIN rxpat ON rxpat.PatNum=patient.PatNum "
-						+"AND rxpat.ProvNum IN("+POut.String(provs)+")	"
-						+"AND RxDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd);
-					return retval=PIn.Int(Db.GetScalar(command));
+				#region Demographics
+				case EhrMeasureType.Demographics:
+					return retval=-1;
 				#endregion
 				#region VitalSigns
 				case EhrMeasureType.VitalSigns:
-				case EhrMeasureType.VitalSignsBPOnly:
-					//Excluded if Provider sees no patients 3 years or older at the time of their last visit in reporting period.
 					command="SELECT SUM((CASE WHEN A.Birthdate <= (A.LastVisitInDateRange-INTERVAL 3 YEAR) THEN 1 ELSE 0 END)) AS 'Count' "
 						+"FROM (SELECT Birthdate,MAX(procedurelog.ProcDate) AS LastVisitInDateRange "
 						+"FROM patient "
@@ -3183,17 +3137,39 @@ namespace OpenDentBusiness{
 						+"GROUP BY patient.PatNum) A ";
 					return retval=PIn.Int(Db.GetScalar(command));
 				#endregion
-				#region Smoking
-				case EhrMeasureType.Smoking:
-					//Excluded if Provider sees no patients 13 years or older at the time of their last visit in reporting period.
-					command="SELECT SUM((CASE WHEN A.Birthdate <= (A.LastVisitInDateRange-INTERVAL 13 YEAR) THEN 1 ELSE 0 END)) AS 'Count' "
-						+"FROM (SELECT Birthdate,MAX(procedurelog.ProcDate) AS LastVisitInDateRange "
-						+"FROM patient "
+				#region VitalSignsBMIOnly
+				case EhrMeasureType.VitalSignsBMIOnly:
+					return retval=-1;
+				#endregion
+				#region VitalSignsBPOnly
+				case EhrMeasureType.VitalSignsBPOnly:
+					command="SELECT COUNT(patNum) as patsOver3  "
+						+"FROM (SELECT * FROM patient "
 						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
 						+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
 						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
-						+"GROUP BY patient.PatNum) A ";
+						+"GROUP BY patient.PatNum) "
+						+"WHERE birthdate>"+PIn.DateT(DateTime.Now.AddYears(-3).ToShortDateString());
 					return retval=PIn.Int(Db.GetScalar(command));
+				#endregion
+				#region Smoking
+				case EhrMeasureType.Smoking:
+					command="SELECT COUNT(patNum) as patsOver13  "
+						+"FROM (SELECT * FROM patient "
+						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
+						+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
+						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+						+"GROUP BY patient.PatNum) "
+						+"WHERE birthdate>"+PIn.DateT(DateTime.Now.AddYears(-13).ToShortDateString());
+					return retval=PIn.Int(Db.GetScalar(command));
+				#endregion
+				#region ElectronicCopyAccess
+				case EhrMeasureType.ElectronicCopyAccess:
+					return retval=-1;
+				#endregion
+				#region ElectronicCopy
+				case EhrMeasureType.ElectronicCopy:
+					return retval=-1;
 				#endregion
 				#region ClinicalSummaries
 				case EhrMeasureType.ClinicalSummaries:
@@ -3201,6 +3177,18 @@ namespace OpenDentBusiness{
 					command="SELECT COUNT(DISTINCT ProcNum) FROM procedurelog "
 						+"WHERE ProcStatus=2 AND ProvNum IN("+POut.String(provs)+")	"
 						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" ";
+					return retval=PIn.Int(Db.GetScalar(command));
+				#endregion
+				#region Lab
+				case EhrMeasureType.Lab:
+					//TODO: Check if this is right
+					command="SELECT COUNT(DISTINCT ehrlab.EhrLabNum) AS 'Count' "
+						+"FROM patient "
+						+"INNER JOIN ehrlab ON ehrlab.PatNum=patient.PatNum "
+						+"AND ehrlab.OrderingProviderID IN("+POut.String(provs)+")	"
+						+"AND ObservationDateTimeStart BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)
+						+" INNER JOIN loinc on ehrlab.UsiID=loinc.LoincCode"
+						+" AND loinc.ScaleType NOT LIKE '%Qn%'";
 					return retval=PIn.Int(Db.GetScalar(command));
 				#endregion
 				#region Reminders
@@ -3211,6 +3199,61 @@ namespace OpenDentBusiness{
 						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart.AddMonths(-24))+" AND "+POut.Date(dateStart)+" ";
 					return retval=PIn.Int(Db.GetScalar(command));
 				#endregion
+				#region Education
+				case EhrMeasureType.Education:
+					//Excluded if no completed procedures during the reporting period
+					command="SELECT COUNT(DISTINCT ProcNum) FROM procedurelog "
+						+"WHERE ProcStatus=2 AND ProvNum IN("+POut.String(provs)+")	"
+						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" ";
+					return retval=PIn.Int(Db.GetScalar(command));
+				#endregion
+				#region MedReconcile
+				case EhrMeasureType.MedReconcile:
+					return retval=-1;//TODO: Possibly enhance.
+				#endregion
+				#region SummaryOfCare
+				case EhrMeasureType.SummaryOfCare:
+					command="SELECT COUNT(ReferralNum) FROM referral "
+						+"INNER JOIN provider ON provider.NationalProvID=referral.NationalProvID "
+						+"AND provider.ProvNum="+POut.Long(provNum)+" "
+						+"LEFT JOIN refattach ON referral.referralNum=refattach.referralNum "
+						+"AND RefDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd);
+					return retval=PIn.Int(Db.GetScalar(command));
+				#endregion
+				#region SummaryOfCareElectronic
+				case EhrMeasureType.SummaryOfCareElectronic:
+					command="SELECT COUNT(ReferralNum) FROM referral "
+						+"INNER JOIN provider ON provider.NationalProvID=referral.NationalProvID "
+						+"AND provider.ProvNum="+POut.Long(provNum)+" "
+						+"LEFT JOIN refattach ON referral.referralNum=refattach.referralNum "
+						+"AND RefDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd);
+					return retval=PIn.Int(Db.GetScalar(command));
+				#endregion
+				#region SecureMessaging
+				case EhrMeasureType.SecureMessaging:
+					//Excluded if no completed procedures during the reporting period
+					command="SELECT COUNT(DISTINCT ProcNum) FROM procedurelog "
+						+"WHERE ProcStatus=2 AND ProvNum IN("+POut.String(provs)+")	"
+						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" ";
+					return retval=PIn.Int(Db.GetScalar(command));
+				#endregion
+				#region FamilyHistory
+				case EhrMeasureType.FamilyHistory:
+					//Excluded if no completed procedures during the reporting period
+					command="SELECT COUNT(DISTINCT ProcNum) FROM procedurelog "
+						+"WHERE ProcStatus=2 AND ProvNum IN("+POut.String(provs)+")	"
+						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" ";
+					return retval=PIn.Int(Db.GetScalar(command));
+				#endregion
+				#region ElectricNote
+				case EhrMeasureType.ElectronicNote:
+					return retval=-1;
+				#endregion
+				#region LabImages
+				case EhrMeasureType.LabImages:
+					//This is currently not possible in OD and is always excluded
+					return retval=-1;
+				#endregion
 			}
 			return -1;
 			//throw new ApplicationException("Type not found: "+mtype.ToString());
@@ -3219,34 +3262,160 @@ namespace OpenDentBusiness{
 		///<summary>Returns the description of what the count displayed is.  May be count of patients under a certain age or number of Rx's written, this will be the label that describes the number.</summary>
 		private static string GetExclusionCountDescriptMu2(EhrMeasureType mtype) {
 			//No need to check RemotingRole; no call to db.
+			//switch(mtype) {
+			//	case EhrMeasureType.Demographics:
+			//	case EhrMeasureType.Education:
+			//	case EhrMeasureType.VitalSignsBMIOnly:
+			//	case EhrMeasureType.ElectronicCopy:
+			//	case EhrMeasureType.Lab:
+			//	case EhrMeasureType.MedReconcile:
+			//	case EhrMeasureType.SummaryOfCare:
+			//		return "";
+			//	case EhrMeasureType.CPOE_MedOrdersOnly:
+			//	case EhrMeasureType.Rx:
+			//		return "Count of prescriptions entered during the reporting period.";
+			//	case EhrMeasureType.CPOE_LabOrdersOnly:
+			//		return "Count of labs entered during the reporting period.";
+			//	case EhrMeasureType.CPOE_RadiologyOrdersOnly:
+			//		return "Count of radiology labs entered during the reporting period.";
+			//	case EhrMeasureType.VitalSigns:
+			//	case EhrMeasureType.VitalSignsBPOnly:
+			//		return "Count of patients seen who were 3 years or older at the time of their last visit during the reporting period.";
+			//	case EhrMeasureType.Smoking:
+			//		return "Count of patients seen who were 13 years or older at the time of their last visit during the reporting period.";
+			//	case EhrMeasureType.ClinicalSummaries:
+			//		return "Count of procedures completed during the reporting period.";
+			//	case EhrMeasureType.Reminders:
+			//		return "Count of procedures completed during the 24 months prior to the reporting period.";
+			//}
+			//return "";
 			switch(mtype) {
-				case EhrMeasureType.Demographics:
-				case EhrMeasureType.Education:
-				case EhrMeasureType.VitalSignsBMIOnly:
-				case EhrMeasureType.ElectronicCopy:
-				case EhrMeasureType.Lab:
-				case EhrMeasureType.MedReconcile:
-				case EhrMeasureType.SummaryOfCare:
-					return "";
 				case EhrMeasureType.CPOE_MedOrdersOnly:
-				case EhrMeasureType.Rx:
 					return "Count of prescriptions entered during the reporting period.";
 				case EhrMeasureType.CPOE_LabOrdersOnly:
-					return "Count of labs entered during the reporting period.";
+					return "Count of non-radiology labs entered during the reporting period.";
 				case EhrMeasureType.CPOE_RadiologyOrdersOnly:
 					return "Count of radiology labs entered during the reporting period.";
+				case EhrMeasureType.Rx:
+					return "Count of prescriptions entered during the reporting period.";
+				case EhrMeasureType.Demographics:
+					return "";
 				case EhrMeasureType.VitalSigns:
+					return "Count of patients seen who were 3 years or older at the time of their last visit during the reporting period.";
+				case EhrMeasureType.VitalSignsBMIOnly:
+					return "";
 				case EhrMeasureType.VitalSignsBPOnly:
 					return "Count of patients seen who were 3 years or older at the time of their last visit during the reporting period.";
 				case EhrMeasureType.Smoking:
 					return "Count of patients seen who were 13 years or older at the time of their last visit during the reporting period.";
+				case EhrMeasureType.ElectronicCopyAccess:
+					return "";
+				case EhrMeasureType.ElectronicCopy:
+					return "";
 				case EhrMeasureType.ClinicalSummaries:
 					return "Count of procedures completed during the reporting period.";
+				case EhrMeasureType.Lab:
+					return "Count of labs entered during the reporting period.";
 				case EhrMeasureType.Reminders:
 					return "Count of procedures completed during the 24 months prior to the reporting period.";
+				case EhrMeasureType.Education:
+					return "Count of procedures completed during the reporting period.";
+				case EhrMeasureType.MedReconcile:
+					return "";
+				case EhrMeasureType.SummaryOfCare:
+					return "Count of transitions of care completed during the reporting period.";
+				case EhrMeasureType.SummaryOfCareElectronic:
+					return "Count of transitions of care completed during the reporting period.";
+				case EhrMeasureType.SecureMessaging:
+					return "Count of procedures completed during the reporting period.";
+				case EhrMeasureType.FamilyHistory:
+					return "Count of procedures completed during the reporting period.";
+				case EhrMeasureType.ElectronicNote:
+					return "";
+				case EhrMeasureType.LabImages:
+					return "";
 			}
 			return "";
 			//throw new ApplicationException("Type not found: "+mtype.ToString());
+		}
+
+
+		private static List<EhrMeasure> GetMU2List() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<EhrMeasure>>(MethodBase.GetCurrentMethod());
+			}
+			string command="SELECT * FROM ehrmeasure "
+			+"WHERE MeasureType IN ("
+				+POut.Int((int)EhrMeasureType.CPOE_MedOrdersOnly)+","
+				+POut.Int((int)EhrMeasureType.CPOE_LabOrdersOnly)+","
+				+POut.Int((int)EhrMeasureType.CPOE_RadiologyOrdersOnly)+","
+				+POut.Int((int)EhrMeasureType.Rx)+","
+				+POut.Int((int)EhrMeasureType.Demographics)+","
+				+POut.Int((int)EhrMeasureType.VitalSigns)+","
+				+POut.Int((int)EhrMeasureType.VitalSignsBMIOnly)+","
+				+POut.Int((int)EhrMeasureType.VitalSignsBPOnly)+","
+				+POut.Int((int)EhrMeasureType.Smoking)+","
+				+POut.Int((int)EhrMeasureType.ElectronicCopyAccess)+","
+				+POut.Int((int)EhrMeasureType.ElectronicCopy)+","
+				+POut.Int((int)EhrMeasureType.ClinicalSummaries)+","
+				+POut.Int((int)EhrMeasureType.Lab)+","
+				+POut.Int((int)EhrMeasureType.Reminders)+","
+				+POut.Int((int)EhrMeasureType.Education)+","
+				+POut.Int((int)EhrMeasureType.MedReconcile)+","
+				+POut.Int((int)EhrMeasureType.SummaryOfCare)+","
+				+POut.Int((int)EhrMeasureType.SummaryOfCareElectronic)+","
+				+POut.Int((int)EhrMeasureType.SecureMessaging)+","
+				+POut.Int((int)EhrMeasureType.FamilyHistory)+","
+				+POut.Int((int)EhrMeasureType.ElectronicNote)+","
+				+POut.Int((int)EhrMeasureType.LabImages)+") "
+				+"ORDER BY CASE MeasureType"
+				+"WHEN "+POut.Int((int)EhrMeasureType.CPOE_MedOrdersOnly)+" THEN 1 "
+				+"WHEN "+POut.Int((int)EhrMeasureType.CPOE_LabOrdersOnly)+" THEN 2 "
+				+"WHEN "+POut.Int((int)EhrMeasureType.CPOE_RadiologyOrdersOnly)+" THEN 3 "
+				+"WHEN "+POut.Int((int)EhrMeasureType.Rx)+" THEN 4 "
+				+"WHEN "+POut.Int((int)EhrMeasureType.Demographics)+" THEN 5 "
+				+"WHEN "+POut.Int((int)EhrMeasureType.VitalSigns)+" THEN 6 "
+				+"WHEN "+POut.Int((int)EhrMeasureType.VitalSignsBMIOnly)+" THEN 7 "
+				+"WHEN "+POut.Int((int)EhrMeasureType.VitalSignsBPOnly)+" THEN 8 "
+				+"WHEN "+POut.Int((int)EhrMeasureType.Smoking)+" THEN 9 "
+				+"WHEN "+POut.Int((int)EhrMeasureType.ElectronicCopyAccess)+" THEN 10 "
+				+"WHEN "+POut.Int((int)EhrMeasureType.ElectronicCopy)+" THEN 11 "
+				+"WHEN "+POut.Int((int)EhrMeasureType.ClinicalSummaries)+" THEN 12 "
+				+"WHEN "+POut.Int((int)EhrMeasureType.Lab)+" THEN 13 "
+				+"WHEN "+POut.Int((int)EhrMeasureType.Reminders)+" THEN 14 "
+				+"WHEN "+POut.Int((int)EhrMeasureType.Education)+" THEN 15 "
+				+"WHEN "+POut.Int((int)EhrMeasureType.MedReconcile)+" THEN 16 "
+				+"WHEN "+POut.Int((int)EhrMeasureType.SummaryOfCare)+" THEN 17 "
+				+"WHEN "+POut.Int((int)EhrMeasureType.SummaryOfCareElectronic)+" THEN 18 "
+				+"WHEN "+POut.Int((int)EhrMeasureType.SecureMessaging)+" THEN 19 "
+				+"WHEN "+POut.Int((int)EhrMeasureType.FamilyHistory)+" THEN 20 "
+				+"WHEN "+POut.Int((int)EhrMeasureType.ElectronicNote)+" THEN 21 "
+				+"WHEN "+POut.Int((int)EhrMeasureType.LabImages)+" THEN 22 ";
+			//+"ORDER BY FIELD(MeasureType,"
+			//	+POut.Int((int)EhrMeasureType.CPOE_MedOrdersOnly)+","
+			//	+POut.Int((int)EhrMeasureType.CPOE_LabOrdersOnly)+","
+			//	+POut.Int((int)EhrMeasureType.CPOE_RadiologyOrdersOnly)+","
+			//	+POut.Int((int)EhrMeasureType.Rx)+","
+			//	+POut.Int((int)EhrMeasureType.Demographics)+","
+			//	+POut.Int((int)EhrMeasureType.VitalSigns)+","
+			//	+POut.Int((int)EhrMeasureType.VitalSignsBMIOnly)+","
+			//	+POut.Int((int)EhrMeasureType.VitalSignsBPOnly)+","
+			//	+POut.Int((int)EhrMeasureType.Smoking)+","
+			//	+POut.Int((int)EhrMeasureType.ElectronicCopyAccess)+","
+			//	+POut.Int((int)EhrMeasureType.ElectronicCopy)+","
+			//	+POut.Int((int)EhrMeasureType.ClinicalSummaries)+","
+			//	+POut.Int((int)EhrMeasureType.Lab)+","
+			//	+POut.Int((int)EhrMeasureType.Reminders)+","
+			//	+POut.Int((int)EhrMeasureType.Education)+","
+			//	+POut.Int((int)EhrMeasureType.MedReconcile)+","
+			//	+POut.Int((int)EhrMeasureType.SummaryOfCare)+","
+			//	+POut.Int((int)EhrMeasureType.SummaryOfCareElectronic)+","
+			//	+POut.Int((int)EhrMeasureType.SecureMessaging)+","
+			//	+POut.Int((int)EhrMeasureType.FamilyHistory)+","
+			//	+POut.Int((int)EhrMeasureType.ElectronicNote)+","
+			//	+POut.Int((int)EhrMeasureType.LabImages)+") ";//Is always going to be excluded
+			List<EhrMeasure> retVal=Crud.EhrMeasureCrud.SelectMany(command);
+			return retVal;
 		}
 
 		///<summary>Only called from FormEHR to load the patient specific MU data and tell the user what action to take to get closer to meeting MU.</summary>
@@ -3258,10 +3427,11 @@ namespace OpenDentBusiness{
 			//add one of each type
 			EhrMu mu;
 			string explanation;
+			List<EhrMeasure> retVal=GetMU2List();
 			List<MedicationPat> medList=MedicationPats.Refresh(pat.PatNum,true);
 			List<EhrMeasureEvent> listMeasureEvents=EhrMeasureEvents.Refresh(pat.PatNum);
 			List<RefAttach> listRefAttach=RefAttaches.Refresh(pat.PatNum);
-			for(int i=0;i<Enum.GetValues(typeof(EhrMeasureType)).Length;i++) {
+			for(int i=0;i<retVal.Count;i++) {
 				mu=new EhrMu();
 				mu.Met=MuMet.False;
 				mu.MeasureType=(EhrMeasureType)i;
