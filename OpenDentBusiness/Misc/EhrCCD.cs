@@ -130,7 +130,7 @@ namespace OpenDentBusiness {
 				StartAndEnd("languageCode","code","en-US");
 				Start("recordTarget");
 				Start("patientRole");
-				StartAndEnd("id","extension",pat.PatNum.ToString(),"root","2.16.840.1.113883.4.6");//TODO: We might need to assign a global GUID for each office so that the patient can be uniquely identified anywhere in the world.
+				StartAndEnd("id","extension",pat.PatNum.ToString(),"root",OIDInternals.GetForType(IdentifierType.Patient).IDRoot);//TODO: We might need to assign a global GUID for each office so that the patient can be uniquely identified anywhere in the world.
 				if(pat.SSN.Length==9) {
 					StartAndEnd("id","extension",pat.SSN,"root","2.16.840.1.113883.4.1");//TODO: We might need to assign a global GUID for each office so that the patient can be uniquely identified anywhere in the world.
 				}
