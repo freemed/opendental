@@ -122,6 +122,19 @@ namespace OpenDental {
 			if(FormLOE.DialogResult!=DialogResult.OK) {
 				return;
 			}
+			EhrMeasureEvent newMeasureEvent=new EhrMeasureEvent();
+			newMeasureEvent.DateTEvent=DateTime.Now;
+			Loinc loinc=Loincs.GetByCode(FormLOE.EhrLabCur.UsiID);
+			if(loinc.ScaleType.Contains("Qn")) {
+				newMeasureEvent.EventType=EhrMeasureEventType.CPOE_RadOrdered;
+			}
+			else {
+				newMeasureEvent.EventType=EhrMeasureEventType.CPOE_LabOrdered;
+			}
+			newMeasureEvent.PatNum=FormLOE.EhrLabCur.PatNum;
+			newMeasureEvent.MoreInfo="";
+			newMeasureEvent.FKey=FormLOE.EhrLabCur.EhrLabNum;
+			EhrMeasureEvents.Insert(newMeasureEvent);
 			EhrLabs.SaveToDB(FormLOE.EhrLabCur);
 			for(int i=0;i<FormLOE.EhrLabCur.ListEhrLabResults.Count;i++) {
 				if(Security.IsAuthorized(Permissions.EhrShowCDS,true)) {
