@@ -44,6 +44,7 @@ namespace OpenDental{
 			this.textDateObserved = new OpenDental.ValidDate();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.butTodayDateObserved = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// listValueType
@@ -240,10 +241,26 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// butTodayDateObserved
+			// 
+			this.butTodayDateObserved.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butTodayDateObserved.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butTodayDateObserved.Autosize = true;
+			this.butTodayDateObserved.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butTodayDateObserved.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butTodayDateObserved.CornerRadius = 4F;
+			this.butTodayDateObserved.Location = new System.Drawing.Point(260, 216);
+			this.butTodayDateObserved.Name = "butTodayDateObserved";
+			this.butTodayDateObserved.Size = new System.Drawing.Size(51, 20);
+			this.butTodayDateObserved.TabIndex = 283;
+			this.butTodayDateObserved.Text = "Today";
+			this.butTodayDateObserved.Click += new System.EventHandler(this.butTodayDateObserved_Click);
+			// 
 			// FormVaccineObsEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(587, 322);
+			this.Controls.Add(this.butTodayDateObserved);
 			this.Controls.Add(this.comboUnits);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.labelMethodCodeNote);
@@ -298,5 +315,6 @@ namespace OpenDental{
 		private System.Windows.Forms.Label labelMethodCodeNote;
 		private UI.Button butDelete;
 		private System.Windows.Forms.ComboBox comboUnits;
+		private UI.Button butTodayDateObserved;
 	}
 }

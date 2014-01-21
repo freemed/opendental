@@ -89,6 +89,10 @@ namespace OpenDental {
 			}
 		}
 
+		private void butTodayDateObserved_Click(object sender,EventArgs e) {
+			textDateObserved.Text=DateTimeOD.Today.ToShortDateString();
+		}
+
 		private void butDelete_Click(object sender,EventArgs e) {
 			if(_vaccineObsCur.IsNew) {
 				_vaccineObsCur.VaccinePatNum=0;//So the calling code knows that the vaccineobs was deleted.

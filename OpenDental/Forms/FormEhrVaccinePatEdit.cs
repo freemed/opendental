@@ -289,7 +289,6 @@ namespace OpenDental {
 			VaccineObs vaccineObs=new VaccineObs();
 			vaccineObs.IsNew=true;
 			vaccineObs.VaccinePatNum=-1;//Temporary dummy value (cannot be zero). Helps track new observations which have not been deleted.
-			vaccineObs.DateObs=DateTimeOD.Today;
 			FormVaccineObsEdit form=new FormVaccineObsEdit(vaccineObs);
 			if(form.ShowDialog()==DialogResult.OK) {
 				_listVaccineObservations.Add(vaccineObs);
