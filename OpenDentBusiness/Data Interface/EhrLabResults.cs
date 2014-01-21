@@ -148,6 +148,7 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
+
 		///<summary>Helper function to return a list of descriptions for the USPSAlphaStateCode enumeration.  First item in the list is blank.</summary>
 		public static List<string> GetUSPSAlphaStateCodeDescriptions() {
 			//No need to check RemotingRole;

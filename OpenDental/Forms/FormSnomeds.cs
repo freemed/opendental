@@ -211,9 +211,9 @@ namespace OpenDental {
 				DialogResult=DialogResult.OK;
 				return;
 			}
-			changed=true;
-			FormSnomedEdit FormSE=new FormSnomedEdit((Snomed)gridMain.Rows[e.Row].Tag);
-			FormSE.ShowDialog();
+			//changed=true;
+			//FormSnomedEdit FormSE=new FormSnomedEdit((Snomed)gridMain.Rows[e.Row].Tag);
+			//FormSE.ShowDialog();
 			//if(FormSE.DialogResult!=DialogResult.OK) {
 			//	return;
 			//}

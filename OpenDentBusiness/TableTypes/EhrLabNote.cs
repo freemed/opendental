@@ -22,6 +22,10 @@ namespace OpenDentBusiness {
 			return (EhrLabNote)MemberwiseClone();
 		}
 
+		public EhrLabNote() {
+			Comments="";
+		}
+
 	}
 
 }

@@ -195,6 +195,10 @@ namespace OpenDentBusiness {
 			return (EhrLabResult)MemberwiseClone();
 		}
 
+		public EhrLabResult() {
+			AbnormalFlags="";
+		}
+
 		///<summary>Only filled with EhrLabResultNotes when value is used.  To refresh ListEhrLabResults, set it equal to null or explicitly reassign it using EhrLabNotes.GetForLabResult(EhrLabResultNum).</summary>
 		public List<EhrLabNote> ListEhrLabResultNotes {
 			get {

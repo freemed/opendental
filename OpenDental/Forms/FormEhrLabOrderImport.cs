@@ -116,18 +116,19 @@ namespace OpenDental {
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			FormEhrLabOrderEdit2014 FormLOE=new FormEhrLabOrderEdit2014();
 			FormLOE.EhrLabCur=ListEhrLabs[e.Row];
+			FormLOE.IsImport=true;
 			FormLOE.ShowDialog();
-			if(FormLOE.DialogResult!=DialogResult.OK) {
-				return;
-			}
-			EhrLabs.SaveToDB(FormLOE.EhrLabCur);
-			for(int i=0;i<FormLOE.EhrLabCur.ListEhrLabResults.Count;i++) {
-				if(Security.IsAuthorized(Permissions.EhrShowCDS,true)) {
-					FormCDSIntervention FormCDSI=new FormCDSIntervention();
-					FormCDSI.ListCDSI=EhrTriggers.TriggerMatch(FormLOE.EhrLabCur.ListEhrLabResults[i],PatCur);
-					FormCDSI.ShowIfRequired(false);
-				}
-			}
+			//if(FormLOE.DialogResult!=DialogResult.OK) {
+			//	return;
+			//}
+			//EhrLabs.SaveToDB(FormLOE.EhrLabCur);
+			//for(int i=0;i<FormLOE.EhrLabCur.ListEhrLabResults.Count;i++) {
+			//	if(Security.IsAuthorized(Permissions.EhrShowCDS,true)) {
+			//		FormCDSIntervention FormCDSI=new FormCDSIntervention();
+			//		FormCDSI.ListCDSI=EhrTriggers.TriggerMatch(FormLOE.EhrLabCur.ListEhrLabResults[i],PatCur);
+			//		FormCDSI.ShowIfRequired(false);
+			//	}
+			//}
 			//TODO:maybe add more code here for when we come back from form... In case we delete a lab from the form.
 		}
 

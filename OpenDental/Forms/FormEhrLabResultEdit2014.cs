@@ -7,25 +7,40 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class FormEhrLabResultEdit2014:Form {
-		private EhrLabResult _ehrLabResultCur;
+		public EhrLabResult EhrLabResultCur;
+		public bool IsImport;
+		public bool IsViewOnly;
 
-		public FormEhrLabResultEdit2014(EhrLabResult ehrLabResultCur) {
+		public FormEhrLabResultEdit2014() {
 			InitializeComponent();
-			_ehrLabResultCur=ehrLabResultCur;
 		}
 
 		private void FormLabResultEdit_Load(object sender,EventArgs e) {
-			textObsDateTime.Text=_ehrLabResultCur.ObservationDateTime;
-			textAnalysisDateTime.Text=_ehrLabResultCur.AnalysisDateTime;
+			if(IsImport || IsViewOnly) {
+				foreach(Control c in this.Controls) {
+					c.Enabled=false;
+				}
+				butCancel.Enabled=true;
+				butCancel.Text="Close";
+				gridNotes.Enabled=true;
+				//butAddNote.Enabled=false;
+				//butObsIdLoinc.Enabled=false;
+				//butCodedElementSnomed.Enabled=false;
+				//butUnitOfMeasureUCUM.Enabled=false;
+				//butOk.Enabled=false;
+				//combos
+			}
+			textObsDateTime.Text=EhrLabResultCur.ObservationDateTime;
+			textAnalysisDateTime.Text=EhrLabResultCur.AnalysisDateTime;
 			#region Observation Identifier (LOINC Codes)
-			textObsIDCodeSystemName.Text		=_ehrLabResultCur.ObservationIdentifierCodeSystemName;
-			textObsID.Text									=_ehrLabResultCur.ObservationIdentifierID;
-			textObsIDText.Text							=_ehrLabResultCur.ObservationIdentifierText;
-			textObsIDCodeSystemNameAlt.Text	=_ehrLabResultCur.ObservationIdentifierCodeSystemNameAlt;
-			textObsIDAlt.Text								=_ehrLabResultCur.ObservationIdentifierIDAlt;
-			textObsIDTextAlt.Text						=_ehrLabResultCur.ObservationIdentifierTextAlt;
-			textObsIDOrigText.Text					=_ehrLabResultCur.ObservationIdentifierTextOriginal;
-			textObsSub.Text									=_ehrLabResultCur.ObservationIdentifierSub;
+			textObsIDCodeSystemName.Text		=EhrLabResultCur.ObservationIdentifierCodeSystemName;
+			textObsID.Text									=EhrLabResultCur.ObservationIdentifierID;
+			textObsIDText.Text							=EhrLabResultCur.ObservationIdentifierText;
+			textObsIDCodeSystemNameAlt.Text	=EhrLabResultCur.ObservationIdentifierCodeSystemNameAlt;
+			textObsIDAlt.Text								=EhrLabResultCur.ObservationIdentifierIDAlt;
+			textObsIDTextAlt.Text						=EhrLabResultCur.ObservationIdentifierTextAlt;
+			textObsIDOrigText.Text					=EhrLabResultCur.ObservationIdentifierTextOriginal;
+			textObsSub.Text									=EhrLabResultCur.ObservationIdentifierSub;
 			#endregion
 			#region Abnormal Flags
 			listAbnormalFlags.Items.Clear();
@@ -33,14 +48,14 @@ namespace OpenDental {
 			List<string> listAbnormalFlagsStr=EhrLabResults.GetHL70078Descriptions();
 			listAbnormalFlags.Items.AddRange(listAbnormalFlagsStr.ToArray());
 			listAbnormalFlags.EndUpdate();
-			string[] abnormalFlags=_ehrLabResultCur.AbnormalFlags.Split(',');
+			string[] abnormalFlags=EhrLabResultCur.AbnormalFlags.Split(',');
 			for(int i=0;i<abnormalFlags.Length;i++) {
 				listAbnormalFlags.SetSelected((int)Enum.Parse(typeof(HL70078),abnormalFlags[i],true),true);
 			}
 			#endregion
 			#region Observation Value
-			textObsDateTime.Text=_ehrLabResultCur.ObservationValueDateTime;
-			textAnalysisDateTime.Text=_ehrLabResultCur.AnalysisDateTime;
+			textObsDateTime.Text=EhrLabResultCur.ObservationValueDateTime;
+			textAnalysisDateTime.Text=EhrLabResultCur.AnalysisDateTime;
 			#region Observation Status
 			comboObsStatus.Items.Clear();
 			comboObsStatus.BeginUpdate();
@@ -48,7 +63,7 @@ namespace OpenDental {
 			List<string> listObsStatus=EhrLabResults.GetHL70085Descriptions();
 			comboObsStatus.Items.AddRange(listObsStatus.ToArray());
 			comboObsStatus.EndUpdate();
-			comboObsStatus.SelectedIndex=(int)Enum.Parse(typeof(HL70085),_ehrLabResultCur.ObservationResultStatus.ToString(),true)+1;
+			comboObsStatus.SelectedIndex=(int)Enum.Parse(typeof(HL70085),EhrLabResultCur.ObservationResultStatus.ToString(),true)+1;
 			#endregion
 			#region Value Type
 			comboObsValueType.Items.Clear();
@@ -57,37 +72,37 @@ namespace OpenDental {
 			List<string> listObsValueType=EhrLabResults.GetHL70125Descriptions();
 			comboObsValueType.Items.AddRange(listObsValueType.ToArray());
 			comboObsValueType.EndUpdate();
-			comboObsValueType.SelectedIndex=(int)Enum.Parse(typeof(HL70125),_ehrLabResultCur.ValueType.ToString(),true)+1;
+			comboObsValueType.SelectedIndex=(int)Enum.Parse(typeof(HL70125),EhrLabResultCur.ValueType.ToString(),true)+1;
 			#endregion
 			textObsValue.Text=GetObservationText();
 			#region Coded Elements
-			textObsElementCodeSystem.Text		=_ehrLabResultCur.ObservationValueCodedElementCodeSystemName;
-			textObsElementID.Text						=_ehrLabResultCur.ObservationValueCodedElementID;
-			textObsElementText.Text					=_ehrLabResultCur.ObservationValueCodedElementText;
-			textObsElementCodeSystemAlt.Text=_ehrLabResultCur.ObservationValueCodedElementCodeSystemNameAlt;
-			textObsElementIDAlt.Text				=_ehrLabResultCur.ObservationValueCodedElementIDAlt;
-			textObsElementTextAlt.Text			=_ehrLabResultCur.ObservationValueCodedElementTextAlt;
-			textObsElementOrigText.Text			=_ehrLabResultCur.ObservationValueCodedElementTextOriginal;
+			textObsElementCodeSystem.Text		=EhrLabResultCur.ObservationValueCodedElementCodeSystemName;
+			textObsElementID.Text						=EhrLabResultCur.ObservationValueCodedElementID;
+			textObsElementText.Text					=EhrLabResultCur.ObservationValueCodedElementText;
+			textObsElementCodeSystemAlt.Text=EhrLabResultCur.ObservationValueCodedElementCodeSystemNameAlt;
+			textObsElementIDAlt.Text				=EhrLabResultCur.ObservationValueCodedElementIDAlt;
+			textObsElementTextAlt.Text			=EhrLabResultCur.ObservationValueCodedElementTextAlt;
+			textObsElementOrigText.Text			=EhrLabResultCur.ObservationValueCodedElementTextOriginal;
 			#endregion
 			#region Structured Numeric
-			textStructNumComp.Text			=_ehrLabResultCur.ObservationValueComparator;
-			textStructNumFirst.Text			=_ehrLabResultCur.ObservationValueNumber1.ToString();
-			textStructNumSeparator.Text	=_ehrLabResultCur.ObservationValueSeparatorOrSuffix;
-			textStructNumSecond.Text		=_ehrLabResultCur.ObservationValueNumber2.ToString();
+			textStructNumComp.Text			=EhrLabResultCur.ObservationValueComparator;
+			textStructNumFirst.Text			=EhrLabResultCur.ObservationValueNumber1.ToString();
+			textStructNumSeparator.Text	=EhrLabResultCur.ObservationValueSeparatorOrSuffix;
+			textStructNumSecond.Text		=EhrLabResultCur.ObservationValueNumber2.ToString();
 			#endregion
 			#region Unit of Measure
-			textObsCodeSystem.Text		=_ehrLabResultCur.UnitsCodeSystemName;
-			textObsUnitsID.Text				=_ehrLabResultCur.UnitsID;
-			textObsUnitsText.Text			=_ehrLabResultCur.UnitsText;
-			textObsCodeSystemAlt.Text	=_ehrLabResultCur.UnitsCodeSystemNameAlt;
-			textObsUnitsIDAlt.Text		=_ehrLabResultCur.UnitsIDAlt;
-			textObsUnitsTextAlt.Text	=_ehrLabResultCur.UnitsTextAlt;
-			textObsUnitsTextOrig.Text	=_ehrLabResultCur.UnitsTextOriginal;
+			textObsCodeSystem.Text		=EhrLabResultCur.UnitsCodeSystemName;
+			textObsUnitsID.Text				=EhrLabResultCur.UnitsID;
+			textObsUnitsText.Text			=EhrLabResultCur.UnitsText;
+			textObsCodeSystemAlt.Text	=EhrLabResultCur.UnitsCodeSystemNameAlt;
+			textObsUnitsIDAlt.Text		=EhrLabResultCur.UnitsIDAlt;
+			textObsUnitsTextAlt.Text	=EhrLabResultCur.UnitsTextAlt;
+			textObsUnitsTextOrig.Text	=EhrLabResultCur.UnitsTextOriginal;
 			#endregion
 			#endregion
 			#region Performing Organization
 			#region Name
-			textPerfOrgName.Text=_ehrLabResultCur.PerformingOrganizationName;
+			textPerfOrgName.Text=EhrLabResultCur.PerformingOrganizationName;
 			#region Identifier Type
 			comboPerfOrgIdType.Items.Clear();
 			comboPerfOrgIdType.BeginUpdate();
@@ -95,13 +110,13 @@ namespace OpenDental {
 			List<string> listPerfOrgIdType=EhrLabs.GetHL70203Descriptions();
 			comboPerfOrgIdType.Items.AddRange(listPerfOrgIdType.ToArray());
 			comboPerfOrgIdType.EndUpdate();
-			comboPerfOrgIdType.SelectedIndex=(int)Enum.Parse(typeof(HL70203),_ehrLabResultCur.PerformingOrganizationIdentifierTypeCode.ToString(),true)+1;
+			comboPerfOrgIdType.SelectedIndex=(int)Enum.Parse(typeof(HL70203),EhrLabResultCur.PerformingOrganizationIdentifierTypeCode.ToString(),true)+1;
 			#endregion
-			textPerfOrgIdentifier.Text=_ehrLabResultCur.PerformingOrganizationIdentifier;
+			textPerfOrgIdentifier.Text=EhrLabResultCur.PerformingOrganizationIdentifier;
 			#region Assigning Authority
-			textPerfOrgAssignIdType.Text=_ehrLabResultCur.PerformingOrganizationNameAssigningAuthorityUniversalIdType;
-			textPerfOrgNamespaceID.Text=_ehrLabResultCur.PerformingOrganizationNameAssigningAuthorityNamespaceId;
-			textPerfOrgUniversalID.Text=_ehrLabResultCur.PerformingOrganizationNameAssigningAuthorityUniversalId;
+			textPerfOrgAssignIdType.Text=EhrLabResultCur.PerformingOrganizationNameAssigningAuthorityUniversalIdType;
+			textPerfOrgNamespaceID.Text=EhrLabResultCur.PerformingOrganizationNameAssigningAuthorityNamespaceId;
+			textPerfOrgUniversalID.Text=EhrLabResultCur.PerformingOrganizationNameAssigningAuthorityUniversalId;
 			#endregion
 			#endregion
 			#region Address
@@ -112,11 +127,11 @@ namespace OpenDental {
 			List<string> listPerfOrgAddressType=EhrLabResults.GetHL70190Descriptions();
 			comboPerfOrgAddressType.Items.AddRange(listPerfOrgAddressType.ToArray());
 			comboPerfOrgAddressType.EndUpdate();
-			comboPerfOrgAddressType.SelectedIndex=(int)Enum.Parse(typeof(HL70190),_ehrLabResultCur.PerformingOrganizationAddressAddressType.ToString(),true)+1;
+			comboPerfOrgAddressType.SelectedIndex=(int)Enum.Parse(typeof(HL70190),EhrLabResultCur.PerformingOrganizationAddressAddressType.ToString(),true)+1;
 			#endregion
-			textPerfOrgStreet.Text					=_ehrLabResultCur.PerformingOrganizationAddressStreet;
-			textPerfOrgOtherDesignation.Text=_ehrLabResultCur.PerformingOrganizationAddressOtherDesignation;
-			textPerfOrgCity.Text						=_ehrLabResultCur.PerformingOrganizationAddressCity;
+			textPerfOrgStreet.Text					=EhrLabResultCur.PerformingOrganizationAddressStreet;
+			textPerfOrgOtherDesignation.Text=EhrLabResultCur.PerformingOrganizationAddressOtherDesignation;
+			textPerfOrgCity.Text						=EhrLabResultCur.PerformingOrganizationAddressCity;
 			#region State or Province
 			comboPerfOrgState.Items.Clear();
 			comboPerfOrgState.BeginUpdate();
@@ -124,11 +139,11 @@ namespace OpenDental {
 			List<string> listPerfOrgState=EhrLabResults.GetUSPSAlphaStateCodeDescriptions();
 			comboPerfOrgState.Items.AddRange(listPerfOrgState.ToArray());
 			comboPerfOrgState.EndUpdate();
-			comboPerfOrgState.SelectedIndex=(int)Enum.Parse(typeof(USPSAlphaStateCode),_ehrLabResultCur.PerformingOrganizationAddressStateOrProvince.ToString(),true)+1;
+			comboPerfOrgState.SelectedIndex=(int)Enum.Parse(typeof(USPSAlphaStateCode),EhrLabResultCur.PerformingOrganizationAddressStateOrProvince.ToString(),true)+1;
 			#endregion
-			textPerfOrgZip.Text			=_ehrLabResultCur.PerformingOrganizationAddressZipOrPostalCode;
-			textPerfOrgCountry.Text	=_ehrLabResultCur.PerformingOrganizationAddressCountryCode;
-			textPerfOrgCounty.Text	=_ehrLabResultCur.PerformingOrganizationAddressCountyOrParishCode;
+			textPerfOrgZip.Text			=EhrLabResultCur.PerformingOrganizationAddressZipOrPostalCode;
+			textPerfOrgCountry.Text	=EhrLabResultCur.PerformingOrganizationAddressCountryCode;
+			textPerfOrgCounty.Text	=EhrLabResultCur.PerformingOrganizationAddressCountyOrParishCode;
 			#endregion
 			#region Medical Director
 			#region Identifier Type
@@ -138,9 +153,9 @@ namespace OpenDental {
 			List<string> listMedDirIdType=EhrLabs.GetHL70203Descriptions();
 			comboMedDirIdType.Items.AddRange(listMedDirIdType.ToArray());
 			comboMedDirIdType.EndUpdate();
-			comboMedDirIdType.SelectedIndex=(int)Enum.Parse(typeof(HL70203),_ehrLabResultCur.MedicalDirectorIdentifierTypeCode.ToString(),true)+1;
+			comboMedDirIdType.SelectedIndex=(int)Enum.Parse(typeof(HL70203),EhrLabResultCur.MedicalDirectorIdentifierTypeCode.ToString(),true)+1;
 			#endregion
-			textMedDirIdentifier.Text=_ehrLabResultCur.MedicalDirectorID;
+			textMedDirIdentifier.Text=EhrLabResultCur.MedicalDirectorID;
 			#region Name Type
 			comboMedDirNameType.Items.Clear();
 			comboMedDirNameType.BeginUpdate();
@@ -148,48 +163,48 @@ namespace OpenDental {
 			List<string> listMedDirNameType=EhrLabResults.GetHL70200Descriptions();
 			comboMedDirNameType.Items.AddRange(listMedDirIdType.ToArray());
 			comboMedDirNameType.EndUpdate();
-			comboMedDirNameType.SelectedIndex=(int)Enum.Parse(typeof(HL70200),_ehrLabResultCur.MedicalDirectorNameTypeCode.ToString(),true)+1;
+			comboMedDirNameType.SelectedIndex=(int)Enum.Parse(typeof(HL70200),EhrLabResultCur.MedicalDirectorNameTypeCode.ToString(),true)+1;
 			#endregion
-			textMedDirLastName.Text		=_ehrLabResultCur.MedicalDirectorLName;
-			textMedDirFirstName.Text	=_ehrLabResultCur.MedicalDirectorFName;
-			textMedDirMiddleName.Text	=_ehrLabResultCur.MedicalDirectorMiddleNames;
-			textMedDirSuffix.Text			=_ehrLabResultCur.MedicalDirectorSuffix;
-			textMedDirPrefix.Text			=_ehrLabResultCur.MedicalDirectorPrefix;
+			textMedDirLastName.Text		=EhrLabResultCur.MedicalDirectorLName;
+			textMedDirFirstName.Text	=EhrLabResultCur.MedicalDirectorFName;
+			textMedDirMiddleName.Text	=EhrLabResultCur.MedicalDirectorMiddleNames;
+			textMedDirSuffix.Text			=EhrLabResultCur.MedicalDirectorSuffix;
+			textMedDirPrefix.Text			=EhrLabResultCur.MedicalDirectorPrefix;
 			#region Assigning Authority
-			textMedDirAssignIdType.Text=_ehrLabResultCur.MedicalDirectorAssigningAuthorityIDType;
-			textMedDirNamespaceID.Text=_ehrLabResultCur.MedicalDirectorAssigningAuthorityNamespaceID;
-			textMedDirUniversalID.Text=_ehrLabResultCur.MedicalDirectorAssigningAuthorityUniversalID;
+			textMedDirAssignIdType.Text=EhrLabResultCur.MedicalDirectorAssigningAuthorityIDType;
+			textMedDirNamespaceID.Text=EhrLabResultCur.MedicalDirectorAssigningAuthorityNamespaceID;
+			textMedDirUniversalID.Text=EhrLabResultCur.MedicalDirectorAssigningAuthorityUniversalID;
 			#endregion
 			#endregion
 			#endregion
-			textReferenceRange.Text=_ehrLabResultCur.referenceRange;
-			FillNotes();
+			textReferenceRange.Text=EhrLabResultCur.referenceRange;
+			FillGridNotes();
 		}
 
 		///<summary>Gets the observation text dynamically from the result passed in.  Returns empty string if unknown value type.</summary>
 		private string GetObservationText() {
 			//No need to check RemotingRole;
-			switch(_ehrLabResultCur.ValueType) {
+			switch(EhrLabResultCur.ValueType) {
 				case HL70125.CE:
 				case HL70125.CWE:
 				case HL70125.SN:
 					return "";//Handled later in Load.
 				case HL70125.DT:
 				case HL70125.TS:
-					return _ehrLabResultCur.ObservationValueDateTime;
+					return EhrLabResultCur.ObservationValueDateTime;
 				case HL70125.NM:
-					return _ehrLabResultCur.ObservationValueNumeric.ToString();
+					return EhrLabResultCur.ObservationValueNumeric.ToString();
 				case HL70125.FT:
 				case HL70125.ST:
 				case HL70125.TX:
-					return _ehrLabResultCur.ObservationValueText;
+					return EhrLabResultCur.ObservationValueText;
 				case HL70125.TM:
-					return _ehrLabResultCur.ObservationValueTime.ToShortTimeString();
+					return EhrLabResultCur.ObservationValueTime.ToShortTimeString();
 			}
 			return "";//Unknown value type.
 		}
 
-		private void FillNotes() {
+		private void FillGridNotes() {
 			gridNotes.BeginUpdate();
 			gridNotes.Columns.Clear();
 			ODGridColumn col=new ODGridColumn("Note Num",60);
@@ -198,11 +213,11 @@ namespace OpenDental {
 			gridNotes.Columns.Add(col);
 			gridNotes.Rows.Clear();
 			ODGridRow row;
-			for(int i=0;i<_ehrLabResultCur.ListEhrLabResultNotes.Count;i++) {
-				for(int j=0;j<_ehrLabResultCur.ListEhrLabResultNotes[i].Comments.Split('^').Length;j++) {
+			for(int i=0;i<EhrLabResultCur.ListEhrLabResultNotes.Count;i++) {
+				for(int j=0;j<EhrLabResultCur.ListEhrLabResultNotes[i].Comments.Split('^').Length;j++) {
 					row=new ODGridRow();
 					row.Cells.Add((j==0?(i+1).ToString():""));//add note number if this is first comment for the note, otherwise add blank cell.
-					row.Cells.Add(_ehrLabResultCur.ListEhrLabResultNotes[i].Comments.Split('^')[j]);//Add each comment.
+					row.Cells.Add(EhrLabResultCur.ListEhrLabResultNotes[i].Comments.Split('^')[j]);//Add each comment.
 					gridNotes.Rows.Add(row);
 				}
 			}
@@ -218,11 +233,30 @@ namespace OpenDental {
 		}
 
 		private void butAddNote_Click(object sender,EventArgs e) {
-
+			if(IsImport || IsViewOnly) {
+				return;//should never happen. This button shoudl not be enabled if IsImport or IsViewOnly
+			}
+			FormEhrLabNoteEdit FormLNE=new FormEhrLabNoteEdit();
+			FormLNE.LabNoteCur=new EhrLabNote();
+			FormLNE.ShowDialog();
+			if(FormLNE.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			FormLNE.LabNoteCur.EhrLabNum=EhrLabResultCur.EhrLabNum;
+			FormLNE.LabNoteCur.EhrLabResultNum=EhrLabResultCur.EhrLabResultNum;
+			EhrLabResultCur.ListEhrLabResultNotes.Add(FormLNE.LabNoteCur);
+			FillGridNotes();
 		}
 
 		private void gridNotes_CellDoubleClick(object sender,UI.ODGridClickEventArgs e) {
-
+			FormEhrLabNoteEdit FormLNE=new FormEhrLabNoteEdit();
+			FormLNE.LabNoteCur=EhrLabResultCur.ListEhrLabResultNotes[e.Row];
+			FormLNE.ShowDialog();
+			if(IsImport || IsViewOnly || FormLNE.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			EhrLabResultCur.ListEhrLabResultNotes[e.Row]=FormLNE.LabNoteCur;
+			FillGridNotes();
 		}
 
 		private void butObsIdLoinc_Click(object sender,EventArgs e) {
@@ -236,7 +270,7 @@ namespace OpenDental {
 		}
 
 		private void butCodedElementLoinc_Click(object sender,EventArgs e) {
-			FormLoincs FormL=new FormLoincs();
+			FormSnomeds FormL=new FormSnomeds();
 			FormL.IsSelectionMode=true;
 			FormL.ShowDialog();
 			if(FormL.DialogResult!=DialogResult.OK) {
@@ -259,7 +293,77 @@ namespace OpenDental {
 			if(!EntriesAreValid()) {
 				return;
 			}
-			//TODO: Insert the lab result
+			//Saving happens in the parent form
+			EhrLabResultCur.ObservationIdentifierID=textObsID.Text;
+			EhrLabResultCur.ObservationIdentifierText=textObsIDText.Text;
+			EhrLabResultCur.ObservationIdentifierCodeSystemName=textObsIDCodeSystemName.Text;
+			EhrLabResultCur.ObservationIdentifierIDAlt=textObsIDAlt.Text;
+			EhrLabResultCur.ObservationIdentifierTextAlt=textObsIDTextAlt.Text;
+			EhrLabResultCur.ObservationIdentifierCodeSystemNameAlt=textObsIDCodeSystemNameAlt.Text;
+			EhrLabResultCur.ObservationIdentifierTextOriginal=textObsIDOrigText.Text;
+			EhrLabResultCur.ObservationIdentifierSub=textObsSub.Text;
+			EhrLabResultCur.AbnormalFlags="";
+			for(int i=0;i<listAbnormalFlags.SelectedIndices.Count;i++) {
+				if(i>0) {
+					EhrLabResultCur.AbnormalFlags+=",";
+				}
+				EhrLabResultCur.AbnormalFlags+=((HL70078)listAbnormalFlags.SelectedIndices[i]).ToString();
+			}
+			//Observation Value
+			EhrLabResultCur.AnalysisDateTime=textAnalysisDateTime.Text;
+			EhrLabResultCur.ObservationResultStatus=((HL70085)comboObsStatus.SelectedIndex-1);
+			EhrLabResultCur.ValueType=((HL70125)comboObsValueType.SelectedIndex-1);
+			EhrLabResultCur.referenceRange=textReferenceRange.Text;
+			EhrLabResultCur.ObservationValueNumeric=PIn.Double(textObsValue.Text);
+			EhrLabResultCur.ObservationValueDateTime=textObsDateTime.Text;
+				//Coded Element
+			EhrLabResultCur.ObservationValueCodedElementID=textObsElementID.Text;
+			EhrLabResultCur.ObservationValueCodedElementText=textObsElementText.Text;
+			EhrLabResultCur.ObservationValueCodedElementCodeSystemName=textObsElementCodeSystem.Text;
+			EhrLabResultCur.ObservationValueCodedElementIDAlt=textObsElementIDAlt.Text;
+			EhrLabResultCur.ObservationValueCodedElementTextAlt=textObsElementTextAlt.Text;
+			EhrLabResultCur.ObservationValueCodedElementCodeSystemNameAlt=textObsElementCodeSystemAlt.Text;
+			EhrLabResultCur.ObservationValueCodedElementTextOriginal=textObsElementOrigText.Text;
+				//Structured Numeric
+			EhrLabResultCur.ObservationValueComparator=textStructNumComp.Text;
+			EhrLabResultCur.ObservationValueNumber1=PIn.Double(textStructNumFirst.Text);
+			EhrLabResultCur.ObservationValueSeparatorOrSuffix=textStructNumSeparator.Text;
+			EhrLabResultCur.ObservationValueNumber2=PIn.Double(textStructNumSecond.Text);
+				//Units
+			EhrLabResultCur.UnitsID=textObsUnitsID.Text;
+			EhrLabResultCur.UnitsText=textObsUnitsText.Text;
+			EhrLabResultCur.UnitsCodeSystemName=textObsCodeSystem.Text;
+			EhrLabResultCur.UnitsIDAlt=textObsUnitsIDAlt.Text;
+			EhrLabResultCur.UnitsTextAlt=textObsUnitsTextAlt.Text;
+			EhrLabResultCur.UnitsCodeSystemNameAlt=textObsCodeSystemAlt.Text;
+			EhrLabResultCur.UnitsTextOriginal=textObsUnitsTextOrig.Text;
+			//Performing Organization
+			EhrLabResultCur.PerformingOrganizationName=textPerfOrgName.Text;
+			EhrLabResultCur.PerformingOrganizationNameAssigningAuthorityNamespaceId=textPerfOrgNamespaceID.Text;
+			EhrLabResultCur.PerformingOrganizationNameAssigningAuthorityUniversalId=textPerfOrgUniversalID.Text;
+			EhrLabResultCur.PerformingOrganizationNameAssigningAuthorityUniversalIdType=textPerfOrgAssignIdType.Text;
+			EhrLabResultCur.PerformingOrganizationIdentifierTypeCode=((HL70203)comboPerfOrgIdType.SelectedIndex-1);
+			EhrLabResultCur.PerformingOrganizationIdentifier=textPerfOrgIdentifier.Text;
+			EhrLabResultCur.PerformingOrganizationAddressStreet=textPerfOrgStreet.Text;
+			EhrLabResultCur.PerformingOrganizationAddressOtherDesignation=textPerfOrgOtherDesignation.Text;
+			EhrLabResultCur.PerformingOrganizationAddressCity=textPerfOrgCity.Text;
+			EhrLabResultCur.PerformingOrganizationAddressStateOrProvince=((USPSAlphaStateCode)comboPerfOrgState.SelectedIndex-1);
+			EhrLabResultCur.PerformingOrganizationAddressZipOrPostalCode=textPerfOrgZip.Text;
+			EhrLabResultCur.PerformingOrganizationAddressCountryCode=textPerfOrgCountry.Text;
+			EhrLabResultCur.PerformingOrganizationAddressAddressType=((HL70190)comboPerfOrgAddressType.SelectedIndex-1);
+			EhrLabResultCur.PerformingOrganizationAddressCountyOrParishCode=textPerfOrgCounty.Text;
+			EhrLabResultCur.MedicalDirectorID=textMedDirIdentifier.Text;
+			EhrLabResultCur.MedicalDirectorLName=textMedDirLastName.Text;
+			EhrLabResultCur.MedicalDirectorFName=textMedDirFirstName.Text;
+			EhrLabResultCur.MedicalDirectorMiddleNames=textMedDirMiddleName.Text;
+			EhrLabResultCur.MedicalDirectorSuffix=textMedDirSuffix.Text;
+			EhrLabResultCur.MedicalDirectorPrefix=textMedDirPrefix.Text;
+			EhrLabResultCur.MedicalDirectorAssigningAuthorityNamespaceID=textMedDirNamespaceID.Text;
+			EhrLabResultCur.MedicalDirectorAssigningAuthorityUniversalID=textMedDirUniversalID.Text;
+			EhrLabResultCur.MedicalDirectorAssigningAuthorityIDType=textMedDirAssignIdType.Text;
+			EhrLabResultCur.MedicalDirectorNameTypeCode=((HL70200)comboMedDirNameType.SelectedIndex-1);
+			EhrLabResultCur.MedicalDirectorIdentifierTypeCode=((HL70203)comboMedDirIdType.SelectedIndex-1);
+			//Saving happens in parent form.
 			DialogResult=DialogResult.OK;
 		}
 
@@ -268,7 +372,7 @@ namespace OpenDental {
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
-			if(_ehrLabResultCur.IsNew) {
+			if(EhrLabResultCur.IsNew) {
 				DialogResult=DialogResult.Cancel;
 				return;
 			}

@@ -26,7 +26,6 @@
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormEhrLabResultEdit2014));
 			this.butCancel = new System.Windows.Forms.Button();
 			this.butOk = new System.Windows.Forms.Button();
-			this.butDelete = new System.Windows.Forms.Button();
 			this.textAnalysisDateTime = new System.Windows.Forms.TextBox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.textObsID = new System.Windows.Forms.TextBox();
@@ -140,7 +139,7 @@
 			this.label60 = new System.Windows.Forms.Label();
 			this.textStructNumSeparator = new System.Windows.Forms.TextBox();
 			this.groupBox8 = new System.Windows.Forms.GroupBox();
-			this.butCodedElementLoinc = new System.Windows.Forms.Button();
+			this.butCodedElementSnomed = new System.Windows.Forms.Button();
 			this.label47 = new System.Windows.Forms.Label();
 			this.textObsElementCodeSystemAlt = new System.Windows.Forms.TextBox();
 			this.label48 = new System.Windows.Forms.Label();
@@ -159,7 +158,6 @@
 			this.label56 = new System.Windows.Forms.Label();
 			this.listAbnormalFlags = new System.Windows.Forms.ListBox();
 			this.gridNotes = new OpenDental.UI.ODGrid();
-			this.label57 = new System.Windows.Forms.Label();
 			this.groupUnitsOfMeasure.SuspendLayout();
 			this.groupOrganization.SuspendLayout();
 			this.groupBox5.SuspendLayout();
@@ -179,7 +177,7 @@
 			this.butCancel.Location = new System.Drawing.Point(883, 649);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
-			this.butCancel.TabIndex = 6;
+			this.butCancel.TabIndex = 5;
 			this.butCancel.Text = "Cancel";
 			this.butCancel.UseVisualStyleBackColor = true;
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
@@ -190,32 +188,21 @@
 			this.butOk.Location = new System.Drawing.Point(802, 649);
 			this.butOk.Name = "butOk";
 			this.butOk.Size = new System.Drawing.Size(75, 24);
-			this.butOk.TabIndex = 5;
+			this.butOk.TabIndex = 4;
 			this.butOk.Text = "Ok";
 			this.butOk.UseVisualStyleBackColor = true;
 			this.butOk.Click += new System.EventHandler(this.butOk_Click);
 			// 
-			// butDelete
-			// 
-			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butDelete.Location = new System.Drawing.Point(12, 649);
-			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(75, 24);
-			this.butDelete.TabIndex = 7;
-			this.butDelete.Text = "Delete";
-			this.butDelete.UseVisualStyleBackColor = true;
-			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
-			// 
 			// textAnalysisDateTime
 			// 
-			this.textAnalysisDateTime.Location = new System.Drawing.Point(152, 35);
+			this.textAnalysisDateTime.Location = new System.Drawing.Point(153, 13);
 			this.textAnalysisDateTime.Name = "textAnalysisDateTime";
 			this.textAnalysisDateTime.Size = new System.Drawing.Size(157, 20);
 			this.textAnalysisDateTime.TabIndex = 0;
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(8, 37);
+			this.label3.Location = new System.Drawing.Point(9, 15);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(143, 17);
 			this.label3.TabIndex = 8;
@@ -224,14 +211,16 @@
 			// 
 			// textObsID
 			// 
-			this.textObsID.Location = new System.Drawing.Point(119, 63);
+			this.textObsID.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.textObsID.Location = new System.Drawing.Point(124, 32);
 			this.textObsID.Name = "textObsID";
 			this.textObsID.Size = new System.Drawing.Size(157, 20);
-			this.textObsID.TabIndex = 0;
+			this.textObsID.TabIndex = 1;
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(7, 64);
+			this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.label1.Location = new System.Drawing.Point(12, 33);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(111, 17);
 			this.label1.TabIndex = 2;
@@ -240,7 +229,8 @@
 			// 
 			// label10
 			// 
-			this.label10.Location = new System.Drawing.Point(7, 84);
+			this.label10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.label10.Location = new System.Drawing.Point(12, 53);
 			this.label10.Name = "label10";
 			this.label10.Size = new System.Drawing.Size(112, 17);
 			this.label10.TabIndex = 228;
@@ -249,28 +239,29 @@
 			// 
 			// textObsIDText
 			// 
-			this.textObsIDText.Location = new System.Drawing.Point(119, 83);
+			this.textObsIDText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.textObsIDText.Location = new System.Drawing.Point(124, 52);
 			this.textObsIDText.Multiline = true;
 			this.textObsIDText.Name = "textObsIDText";
 			this.textObsIDText.Size = new System.Drawing.Size(157, 20);
-			this.textObsIDText.TabIndex = 227;
+			this.textObsIDText.TabIndex = 2;
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(14, 119);
+			this.label4.Location = new System.Drawing.Point(15, 105);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(137, 17);
 			this.label4.TabIndex = 230;
-			this.label4.Text = "Observation Value";
+			this.label4.Text = "Numeric Value";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textObsValue
 			// 
-			this.textObsValue.Location = new System.Drawing.Point(152, 117);
+			this.textObsValue.Location = new System.Drawing.Point(153, 103);
 			this.textObsValue.Multiline = true;
 			this.textObsValue.Name = "textObsValue";
 			this.textObsValue.Size = new System.Drawing.Size(157, 20);
-			this.textObsValue.TabIndex = 229;
+			this.textObsValue.TabIndex = 4;
 			// 
 			// groupUnitsOfMeasure
 			// 
@@ -289,27 +280,28 @@
 			this.groupUnitsOfMeasure.Controls.Add(this.textObsUnitsID);
 			this.groupUnitsOfMeasure.Controls.Add(this.label6);
 			this.groupUnitsOfMeasure.Controls.Add(this.textObsUnitsText);
-			this.groupUnitsOfMeasure.Location = new System.Drawing.Point(10, 438);
+			this.groupUnitsOfMeasure.Location = new System.Drawing.Point(9, 459);
 			this.groupUnitsOfMeasure.Name = "groupUnitsOfMeasure";
-			this.groupUnitsOfMeasure.Size = new System.Drawing.Size(308, 192);
-			this.groupUnitsOfMeasure.TabIndex = 235;
+			this.groupUnitsOfMeasure.Size = new System.Drawing.Size(308, 171);
+			this.groupUnitsOfMeasure.TabIndex = 8;
 			this.groupUnitsOfMeasure.TabStop = false;
 			this.groupUnitsOfMeasure.Text = "Unit of Measure";
 			// 
 			// butUnitOfMeasureUCUM
 			// 
 			this.butUnitOfMeasureUCUM.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butUnitOfMeasureUCUM.Location = new System.Drawing.Point(224, 14);
+			this.butUnitOfMeasureUCUM.Location = new System.Drawing.Point(8, 15);
 			this.butUnitOfMeasureUCUM.Name = "butUnitOfMeasureUCUM";
-			this.butUnitOfMeasureUCUM.Size = new System.Drawing.Size(75, 24);
+			this.butUnitOfMeasureUCUM.Size = new System.Drawing.Size(27, 24);
 			this.butUnitOfMeasureUCUM.TabIndex = 263;
-			this.butUnitOfMeasureUCUM.Text = "UCUM";
+			this.butUnitOfMeasureUCUM.Text = "...";
 			this.butUnitOfMeasureUCUM.UseVisualStyleBackColor = true;
 			this.butUnitOfMeasureUCUM.Click += new System.EventHandler(this.butUnitOfMeasureUCUM_Click);
 			// 
 			// label46
 			// 
-			this.label46.Location = new System.Drawing.Point(5, 106);
+			this.label46.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.label46.Location = new System.Drawing.Point(5, 81);
 			this.label46.Name = "label46";
 			this.label46.Size = new System.Drawing.Size(137, 17);
 			this.label46.TabIndex = 242;
@@ -318,14 +310,16 @@
 			// 
 			// textObsCodeSystemAlt
 			// 
-			this.textObsCodeSystemAlt.Location = new System.Drawing.Point(143, 104);
+			this.textObsCodeSystemAlt.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.textObsCodeSystemAlt.Location = new System.Drawing.Point(143, 79);
 			this.textObsCodeSystemAlt.Name = "textObsCodeSystemAlt";
 			this.textObsCodeSystemAlt.Size = new System.Drawing.Size(157, 20);
-			this.textObsCodeSystemAlt.TabIndex = 241;
+			this.textObsCodeSystemAlt.TabIndex = 3;
 			// 
 			// label45
 			// 
-			this.label45.Location = new System.Drawing.Point(5, 46);
+			this.label45.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.label45.Location = new System.Drawing.Point(5, 15);
 			this.label45.Name = "label45";
 			this.label45.Size = new System.Drawing.Size(137, 17);
 			this.label45.TabIndex = 240;
@@ -334,14 +328,16 @@
 			// 
 			// textObsCodeSystem
 			// 
-			this.textObsCodeSystem.Location = new System.Drawing.Point(143, 44);
+			this.textObsCodeSystem.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.textObsCodeSystem.Location = new System.Drawing.Point(143, 13);
 			this.textObsCodeSystem.Name = "textObsCodeSystem";
 			this.textObsCodeSystem.Size = new System.Drawing.Size(157, 20);
-			this.textObsCodeSystem.TabIndex = 239;
+			this.textObsCodeSystem.TabIndex = 0;
 			// 
 			// label40
 			// 
-			this.label40.Location = new System.Drawing.Point(5, 166);
+			this.label40.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.label40.Location = new System.Drawing.Point(5, 147);
 			this.label40.Name = "label40";
 			this.label40.Size = new System.Drawing.Size(138, 17);
 			this.label40.TabIndex = 238;
@@ -350,15 +346,17 @@
 			// 
 			// textObsUnitsTextOrig
 			// 
-			this.textObsUnitsTextOrig.Location = new System.Drawing.Point(143, 164);
+			this.textObsUnitsTextOrig.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.textObsUnitsTextOrig.Location = new System.Drawing.Point(143, 145);
 			this.textObsUnitsTextOrig.Multiline = true;
 			this.textObsUnitsTextOrig.Name = "textObsUnitsTextOrig";
 			this.textObsUnitsTextOrig.Size = new System.Drawing.Size(157, 20);
-			this.textObsUnitsTextOrig.TabIndex = 237;
+			this.textObsUnitsTextOrig.TabIndex = 6;
 			// 
 			// label38
 			// 
-			this.label38.Location = new System.Drawing.Point(5, 126);
+			this.label38.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.label38.Location = new System.Drawing.Point(5, 103);
 			this.label38.Name = "label38";
 			this.label38.Size = new System.Drawing.Size(137, 17);
 			this.label38.TabIndex = 234;
@@ -367,14 +365,16 @@
 			// 
 			// textObsUnitsIDAlt
 			// 
-			this.textObsUnitsIDAlt.Location = new System.Drawing.Point(143, 124);
+			this.textObsUnitsIDAlt.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.textObsUnitsIDAlt.Location = new System.Drawing.Point(143, 101);
 			this.textObsUnitsIDAlt.Name = "textObsUnitsIDAlt";
 			this.textObsUnitsIDAlt.Size = new System.Drawing.Size(157, 20);
-			this.textObsUnitsIDAlt.TabIndex = 233;
+			this.textObsUnitsIDAlt.TabIndex = 4;
 			// 
 			// label39
 			// 
-			this.label39.Location = new System.Drawing.Point(5, 146);
+			this.label39.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.label39.Location = new System.Drawing.Point(5, 125);
 			this.label39.Name = "label39";
 			this.label39.Size = new System.Drawing.Size(138, 17);
 			this.label39.TabIndex = 236;
@@ -383,15 +383,17 @@
 			// 
 			// textObsUnitsTextAlt
 			// 
-			this.textObsUnitsTextAlt.Location = new System.Drawing.Point(143, 144);
+			this.textObsUnitsTextAlt.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.textObsUnitsTextAlt.Location = new System.Drawing.Point(143, 123);
 			this.textObsUnitsTextAlt.Multiline = true;
 			this.textObsUnitsTextAlt.Name = "textObsUnitsTextAlt";
 			this.textObsUnitsTextAlt.Size = new System.Drawing.Size(157, 20);
-			this.textObsUnitsTextAlt.TabIndex = 235;
+			this.textObsUnitsTextAlt.TabIndex = 5;
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(5, 66);
+			this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.label5.Location = new System.Drawing.Point(5, 37);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(137, 17);
 			this.label5.TabIndex = 230;
@@ -400,14 +402,16 @@
 			// 
 			// textObsUnitsID
 			// 
-			this.textObsUnitsID.Location = new System.Drawing.Point(143, 64);
+			this.textObsUnitsID.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.textObsUnitsID.Location = new System.Drawing.Point(143, 35);
 			this.textObsUnitsID.Name = "textObsUnitsID";
 			this.textObsUnitsID.Size = new System.Drawing.Size(157, 20);
-			this.textObsUnitsID.TabIndex = 229;
+			this.textObsUnitsID.TabIndex = 1;
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(5, 86);
+			this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.label6.Location = new System.Drawing.Point(5, 59);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(138, 17);
 			this.label6.TabIndex = 232;
@@ -416,11 +420,12 @@
 			// 
 			// textObsUnitsText
 			// 
-			this.textObsUnitsText.Location = new System.Drawing.Point(143, 84);
+			this.textObsUnitsText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.textObsUnitsText.Location = new System.Drawing.Point(143, 57);
 			this.textObsUnitsText.Multiline = true;
 			this.textObsUnitsText.Name = "textObsUnitsText";
 			this.textObsUnitsText.Size = new System.Drawing.Size(157, 20);
-			this.textObsUnitsText.TabIndex = 231;
+			this.textObsUnitsText.TabIndex = 2;
 			// 
 			// groupOrganization
 			// 
@@ -430,7 +435,7 @@
 			this.groupOrganization.Location = new System.Drawing.Point(637, 7);
 			this.groupOrganization.Name = "groupOrganization";
 			this.groupOrganization.Size = new System.Drawing.Size(320, 636);
-			this.groupOrganization.TabIndex = 236;
+			this.groupOrganization.TabIndex = 3;
 			this.groupOrganization.TabStop = false;
 			this.groupOrganization.Text = "Performing Organization";
 			// 
@@ -456,7 +461,7 @@
 			this.groupBox5.Location = new System.Drawing.Point(6, 366);
 			this.groupBox5.Name = "groupBox5";
 			this.groupBox5.Size = new System.Drawing.Size(308, 264);
-			this.groupBox5.TabIndex = 247;
+			this.groupBox5.TabIndex = 2;
 			this.groupBox5.TabStop = false;
 			this.groupBox5.Text = "Medical Director";
 			// 
@@ -466,7 +471,7 @@
 			this.comboMedDirIdType.Location = new System.Drawing.Point(136, 12);
 			this.comboMedDirIdType.Name = "comboMedDirIdType";
 			this.comboMedDirIdType.Size = new System.Drawing.Size(157, 21);
-			this.comboMedDirIdType.TabIndex = 261;
+			this.comboMedDirIdType.TabIndex = 0;
 			// 
 			// label33
 			// 
@@ -483,7 +488,7 @@
 			this.comboMedDirNameType.Location = new System.Drawing.Point(136, 53);
 			this.comboMedDirNameType.Name = "comboMedDirNameType";
 			this.comboMedDirNameType.Size = new System.Drawing.Size(157, 21);
-			this.comboMedDirNameType.TabIndex = 259;
+			this.comboMedDirNameType.TabIndex = 2;
 			// 
 			// label32
 			// 
@@ -517,14 +522,14 @@
 			this.textMedDirSuffix.Location = new System.Drawing.Point(136, 154);
 			this.textMedDirSuffix.Name = "textMedDirSuffix";
 			this.textMedDirSuffix.Size = new System.Drawing.Size(157, 20);
-			this.textMedDirSuffix.TabIndex = 254;
+			this.textMedDirSuffix.TabIndex = 7;
 			// 
 			// textMedDirPrefix
 			// 
 			this.textMedDirPrefix.Location = new System.Drawing.Point(136, 134);
 			this.textMedDirPrefix.Name = "textMedDirPrefix";
 			this.textMedDirPrefix.Size = new System.Drawing.Size(157, 20);
-			this.textMedDirPrefix.TabIndex = 256;
+			this.textMedDirPrefix.TabIndex = 6;
 			// 
 			// label25
 			// 
@@ -540,7 +545,7 @@
 			this.textMedDirMiddleName.Location = new System.Drawing.Point(136, 114);
 			this.textMedDirMiddleName.Name = "textMedDirMiddleName";
 			this.textMedDirMiddleName.Size = new System.Drawing.Size(157, 20);
-			this.textMedDirMiddleName.TabIndex = 252;
+			this.textMedDirMiddleName.TabIndex = 5;
 			// 
 			// label29
 			// 
@@ -556,7 +561,7 @@
 			this.textMedDirFirstName.Location = new System.Drawing.Point(136, 94);
 			this.textMedDirFirstName.Name = "textMedDirFirstName";
 			this.textMedDirFirstName.Size = new System.Drawing.Size(157, 20);
-			this.textMedDirFirstName.TabIndex = 250;
+			this.textMedDirFirstName.TabIndex = 4;
 			// 
 			// label30
 			// 
@@ -572,7 +577,7 @@
 			this.textMedDirLastName.Location = new System.Drawing.Point(136, 74);
 			this.textMedDirLastName.Name = "textMedDirLastName";
 			this.textMedDirLastName.Size = new System.Drawing.Size(157, 20);
-			this.textMedDirLastName.TabIndex = 248;
+			this.textMedDirLastName.TabIndex = 3;
 			// 
 			// label31
 			// 
@@ -588,7 +593,7 @@
 			this.textMedDirIdentifier.Location = new System.Drawing.Point(136, 33);
 			this.textMedDirIdentifier.Name = "textMedDirIdentifier";
 			this.textMedDirIdentifier.Size = new System.Drawing.Size(157, 20);
-			this.textMedDirIdentifier.TabIndex = 246;
+			this.textMedDirIdentifier.TabIndex = 1;
 			// 
 			// groupBox4
 			// 
@@ -611,7 +616,7 @@
 			this.textMedDirAssignIdType.Multiline = true;
 			this.textMedDirAssignIdType.Name = "textMedDirAssignIdType";
 			this.textMedDirAssignIdType.Size = new System.Drawing.Size(157, 20);
-			this.textMedDirAssignIdType.TabIndex = 243;
+			this.textMedDirAssignIdType.TabIndex = 0;
 			// 
 			// label42
 			// 
@@ -637,7 +642,7 @@
 			this.textMedDirNamespaceID.Multiline = true;
 			this.textMedDirNamespaceID.Name = "textMedDirNamespaceID";
 			this.textMedDirNamespaceID.Size = new System.Drawing.Size(157, 20);
-			this.textMedDirNamespaceID.TabIndex = 235;
+			this.textMedDirNamespaceID.TabIndex = 1;
 			// 
 			// label22
 			// 
@@ -654,7 +659,7 @@
 			this.textMedDirUniversalID.Multiline = true;
 			this.textMedDirUniversalID.Name = "textMedDirUniversalID";
 			this.textMedDirUniversalID.Size = new System.Drawing.Size(157, 20);
-			this.textMedDirUniversalID.TabIndex = 237;
+			this.textMedDirUniversalID.TabIndex = 2;
 			// 
 			// groupBox3
 			// 
@@ -677,7 +682,7 @@
 			this.groupBox3.Location = new System.Drawing.Point(6, 183);
 			this.groupBox3.Name = "groupBox3";
 			this.groupBox3.Size = new System.Drawing.Size(308, 182);
-			this.groupBox3.TabIndex = 246;
+			this.groupBox3.TabIndex = 1;
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "Address";
 			// 
@@ -687,7 +692,7 @@
 			this.comboPerfOrgState.Location = new System.Drawing.Point(137, 74);
 			this.comboPerfOrgState.Name = "comboPerfOrgState";
 			this.comboPerfOrgState.Size = new System.Drawing.Size(157, 21);
-			this.comboPerfOrgState.TabIndex = 250;
+			this.comboPerfOrgState.TabIndex = 3;
 			// 
 			// comboPerfOrgAddressType
 			// 
@@ -695,7 +700,7 @@
 			this.comboPerfOrgAddressType.Location = new System.Drawing.Point(137, 13);
 			this.comboPerfOrgAddressType.Name = "comboPerfOrgAddressType";
 			this.comboPerfOrgAddressType.Size = new System.Drawing.Size(157, 21);
-			this.comboPerfOrgAddressType.TabIndex = 249;
+			this.comboPerfOrgAddressType.TabIndex = 0;
 			// 
 			// label20
 			// 
@@ -711,7 +716,7 @@
 			this.textPerfOrgCounty.Location = new System.Drawing.Point(137, 135);
 			this.textPerfOrgCounty.Name = "textPerfOrgCounty";
 			this.textPerfOrgCounty.Size = new System.Drawing.Size(157, 20);
-			this.textPerfOrgCounty.TabIndex = 247;
+			this.textPerfOrgCounty.TabIndex = 6;
 			// 
 			// label26
 			// 
@@ -736,7 +741,7 @@
 			this.textPerfOrgCountry.Location = new System.Drawing.Point(137, 115);
 			this.textPerfOrgCountry.Name = "textPerfOrgCountry";
 			this.textPerfOrgCountry.Size = new System.Drawing.Size(157, 20);
-			this.textPerfOrgCountry.TabIndex = 243;
+			this.textPerfOrgCountry.TabIndex = 5;
 			// 
 			// label28
 			// 
@@ -752,7 +757,7 @@
 			this.textPerfOrgZip.Location = new System.Drawing.Point(137, 95);
 			this.textPerfOrgZip.Name = "textPerfOrgZip";
 			this.textPerfOrgZip.Size = new System.Drawing.Size(157, 20);
-			this.textPerfOrgZip.TabIndex = 241;
+			this.textPerfOrgZip.TabIndex = 4;
 			// 
 			// label19
 			// 
@@ -768,7 +773,7 @@
 			this.textPerfOrgOtherDesignation.Location = new System.Drawing.Point(137, 155);
 			this.textPerfOrgOtherDesignation.Name = "textPerfOrgOtherDesignation";
 			this.textPerfOrgOtherDesignation.Size = new System.Drawing.Size(157, 20);
-			this.textPerfOrgOtherDesignation.TabIndex = 235;
+			this.textPerfOrgOtherDesignation.TabIndex = 7;
 			// 
 			// label17
 			// 
@@ -793,7 +798,7 @@
 			this.textPerfOrgCity.Location = new System.Drawing.Point(137, 54);
 			this.textPerfOrgCity.Name = "textPerfOrgCity";
 			this.textPerfOrgCity.Size = new System.Drawing.Size(157, 20);
-			this.textPerfOrgCity.TabIndex = 237;
+			this.textPerfOrgCity.TabIndex = 2;
 			// 
 			// label16
 			// 
@@ -809,7 +814,7 @@
 			this.textPerfOrgStreet.Location = new System.Drawing.Point(137, 34);
 			this.textPerfOrgStreet.Name = "textPerfOrgStreet";
 			this.textPerfOrgStreet.Size = new System.Drawing.Size(157, 20);
-			this.textPerfOrgStreet.TabIndex = 233;
+			this.textPerfOrgStreet.TabIndex = 1;
 			// 
 			// groupBox2
 			// 
@@ -823,7 +828,7 @@
 			this.groupBox2.Location = new System.Drawing.Point(6, 15);
 			this.groupBox2.Name = "groupBox2";
 			this.groupBox2.Size = new System.Drawing.Size(308, 167);
-			this.groupBox2.TabIndex = 245;
+			this.groupBox2.TabIndex = 0;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Name";
 			// 
@@ -847,7 +852,7 @@
 			this.groupBox1.Location = new System.Drawing.Point(6, 75);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(296, 85);
-			this.groupBox1.TabIndex = 244;
+			this.groupBox1.TabIndex = 3;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Assigning Authority";
 			// 
@@ -857,7 +862,7 @@
 			this.textPerfOrgAssignIdType.Multiline = true;
 			this.textPerfOrgAssignIdType.Name = "textPerfOrgAssignIdType";
 			this.textPerfOrgAssignIdType.Size = new System.Drawing.Size(157, 20);
-			this.textPerfOrgAssignIdType.TabIndex = 246;
+			this.textPerfOrgAssignIdType.TabIndex = 0;
 			// 
 			// label41
 			// 
@@ -883,7 +888,7 @@
 			this.textPerfOrgNamespaceID.Multiline = true;
 			this.textPerfOrgNamespaceID.Name = "textPerfOrgNamespaceID";
 			this.textPerfOrgNamespaceID.Size = new System.Drawing.Size(157, 20);
-			this.textPerfOrgNamespaceID.TabIndex = 235;
+			this.textPerfOrgNamespaceID.TabIndex = 1;
 			// 
 			// label13
 			// 
@@ -900,7 +905,7 @@
 			this.textPerfOrgUniversalID.Multiline = true;
 			this.textPerfOrgUniversalID.Name = "textPerfOrgUniversalID";
 			this.textPerfOrgUniversalID.Size = new System.Drawing.Size(157, 20);
-			this.textPerfOrgUniversalID.TabIndex = 237;
+			this.textPerfOrgUniversalID.TabIndex = 2;
 			// 
 			// textPerfOrgIdentifier
 			// 
@@ -908,14 +913,14 @@
 			this.textPerfOrgIdentifier.Multiline = true;
 			this.textPerfOrgIdentifier.Name = "textPerfOrgIdentifier";
 			this.textPerfOrgIdentifier.Size = new System.Drawing.Size(157, 20);
-			this.textPerfOrgIdentifier.TabIndex = 242;
+			this.textPerfOrgIdentifier.TabIndex = 2;
 			// 
 			// textPerfOrgName
 			// 
 			this.textPerfOrgName.Location = new System.Drawing.Point(137, 13);
 			this.textPerfOrgName.Name = "textPerfOrgName";
 			this.textPerfOrgName.Size = new System.Drawing.Size(157, 20);
-			this.textPerfOrgName.TabIndex = 233;
+			this.textPerfOrgName.TabIndex = 0;
 			// 
 			// label14
 			// 
@@ -941,19 +946,19 @@
 			this.comboPerfOrgIdType.Location = new System.Drawing.Point(137, 33);
 			this.comboPerfOrgIdType.Name = "comboPerfOrgIdType";
 			this.comboPerfOrgIdType.Size = new System.Drawing.Size(157, 21);
-			this.comboPerfOrgIdType.TabIndex = 241;
+			this.comboPerfOrgIdType.TabIndex = 1;
 			// 
 			// comboObsValueType
 			// 
 			this.comboObsValueType.FormattingEnabled = true;
-			this.comboObsValueType.Location = new System.Drawing.Point(152, 76);
+			this.comboObsValueType.Location = new System.Drawing.Point(153, 58);
 			this.comboObsValueType.Name = "comboObsValueType";
 			this.comboObsValueType.Size = new System.Drawing.Size(157, 21);
-			this.comboObsValueType.TabIndex = 0;
+			this.comboObsValueType.TabIndex = 2;
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(5, 78);
+			this.label2.Location = new System.Drawing.Point(6, 60);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(146, 17);
 			this.label2.TabIndex = 237;
@@ -963,14 +968,14 @@
 			// comboObsStatus
 			// 
 			this.comboObsStatus.FormattingEnabled = true;
-			this.comboObsStatus.Location = new System.Drawing.Point(152, 55);
+			this.comboObsStatus.Location = new System.Drawing.Point(153, 35);
 			this.comboObsStatus.Name = "comboObsStatus";
 			this.comboObsStatus.Size = new System.Drawing.Size(157, 21);
-			this.comboObsStatus.TabIndex = 242;
+			this.comboObsStatus.TabIndex = 1;
 			// 
 			// label9
 			// 
-			this.label9.Location = new System.Drawing.Point(5, 57);
+			this.label9.Location = new System.Drawing.Point(6, 37);
 			this.label9.Name = "label9";
 			this.label9.Size = new System.Drawing.Size(146, 17);
 			this.label9.TabIndex = 241;
@@ -979,23 +984,23 @@
 			// 
 			// label11
 			// 
-			this.label11.Location = new System.Drawing.Point(11, 17);
+			this.label11.Location = new System.Drawing.Point(12, 127);
 			this.label11.Name = "label11";
 			this.label11.Size = new System.Drawing.Size(140, 17);
 			this.label11.TabIndex = 244;
-			this.label11.Text = "Observation Date/Time";
+			this.label11.Text = "Date/Time Value";
 			this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textObsDateTime
 			// 
-			this.textObsDateTime.Location = new System.Drawing.Point(152, 15);
+			this.textObsDateTime.Location = new System.Drawing.Point(153, 125);
 			this.textObsDateTime.Name = "textObsDateTime";
 			this.textObsDateTime.Size = new System.Drawing.Size(157, 20);
-			this.textObsDateTime.TabIndex = 243;
+			this.textObsDateTime.TabIndex = 5;
 			// 
 			// label12
 			// 
-			this.label12.Location = new System.Drawing.Point(8, 99);
+			this.label12.Location = new System.Drawing.Point(9, 83);
 			this.label12.Name = "label12";
 			this.label12.Size = new System.Drawing.Size(144, 17);
 			this.label12.TabIndex = 234;
@@ -1004,15 +1009,16 @@
 			// 
 			// textReferenceRange
 			// 
-			this.textReferenceRange.Location = new System.Drawing.Point(152, 97);
+			this.textReferenceRange.Location = new System.Drawing.Point(153, 81);
 			this.textReferenceRange.Multiline = true;
 			this.textReferenceRange.Name = "textReferenceRange";
 			this.textReferenceRange.Size = new System.Drawing.Size(157, 20);
-			this.textReferenceRange.TabIndex = 233;
+			this.textReferenceRange.TabIndex = 3;
 			// 
 			// label34
 			// 
-			this.label34.Location = new System.Drawing.Point(7, 124);
+			this.label34.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.label34.Location = new System.Drawing.Point(12, 93);
 			this.label34.Name = "label34";
 			this.label34.Size = new System.Drawing.Size(111, 17);
 			this.label34.TabIndex = 246;
@@ -1021,14 +1027,16 @@
 			// 
 			// textObsIDAlt
 			// 
-			this.textObsIDAlt.Location = new System.Drawing.Point(119, 123);
+			this.textObsIDAlt.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.textObsIDAlt.Location = new System.Drawing.Point(124, 92);
 			this.textObsIDAlt.Name = "textObsIDAlt";
 			this.textObsIDAlt.Size = new System.Drawing.Size(157, 20);
-			this.textObsIDAlt.TabIndex = 245;
+			this.textObsIDAlt.TabIndex = 4;
 			// 
 			// label35
 			// 
-			this.label35.Location = new System.Drawing.Point(4, 144);
+			this.label35.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.label35.Location = new System.Drawing.Point(9, 113);
 			this.label35.Name = "label35";
 			this.label35.Size = new System.Drawing.Size(114, 17);
 			this.label35.TabIndex = 248;
@@ -1037,15 +1045,17 @@
 			// 
 			// textObsIDTextAlt
 			// 
-			this.textObsIDTextAlt.Location = new System.Drawing.Point(119, 143);
+			this.textObsIDTextAlt.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.textObsIDTextAlt.Location = new System.Drawing.Point(124, 112);
 			this.textObsIDTextAlt.Multiline = true;
 			this.textObsIDTextAlt.Name = "textObsIDTextAlt";
 			this.textObsIDTextAlt.Size = new System.Drawing.Size(157, 20);
-			this.textObsIDTextAlt.TabIndex = 247;
+			this.textObsIDTextAlt.TabIndex = 5;
 			// 
 			// label36
 			// 
-			this.label36.Location = new System.Drawing.Point(7, 165);
+			this.label36.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.label36.Location = new System.Drawing.Point(12, 134);
 			this.label36.Name = "label36";
 			this.label36.Size = new System.Drawing.Size(112, 17);
 			this.label36.TabIndex = 250;
@@ -1054,15 +1064,17 @@
 			// 
 			// textObsIDOrigText
 			// 
-			this.textObsIDOrigText.Location = new System.Drawing.Point(119, 163);
+			this.textObsIDOrigText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.textObsIDOrigText.Location = new System.Drawing.Point(124, 132);
 			this.textObsIDOrigText.Multiline = true;
 			this.textObsIDOrigText.Name = "textObsIDOrigText";
 			this.textObsIDOrigText.Size = new System.Drawing.Size(157, 20);
-			this.textObsIDOrigText.TabIndex = 249;
+			this.textObsIDOrigText.TabIndex = 6;
 			// 
 			// label37
 			// 
-			this.label37.Location = new System.Drawing.Point(7, 185);
+			this.label37.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.label37.Location = new System.Drawing.Point(12, 154);
 			this.label37.Name = "label37";
 			this.label37.Size = new System.Drawing.Size(111, 17);
 			this.label37.TabIndex = 252;
@@ -1071,10 +1083,11 @@
 			// 
 			// textObsSub
 			// 
-			this.textObsSub.Location = new System.Drawing.Point(119, 183);
+			this.textObsSub.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.textObsSub.Location = new System.Drawing.Point(124, 152);
 			this.textObsSub.Name = "textObsSub";
 			this.textObsSub.Size = new System.Drawing.Size(157, 20);
-			this.textObsSub.TabIndex = 251;
+			this.textObsSub.TabIndex = 7;
 			// 
 			// groupBox6
 			// 
@@ -1097,25 +1110,25 @@
 			this.groupBox6.Controls.Add(this.textObsIDAlt);
 			this.groupBox6.Location = new System.Drawing.Point(12, 7);
 			this.groupBox6.Name = "groupBox6";
-			this.groupBox6.Size = new System.Drawing.Size(287, 215);
-			this.groupBox6.TabIndex = 253;
+			this.groupBox6.Size = new System.Drawing.Size(287, 178);
+			this.groupBox6.TabIndex = 0;
 			this.groupBox6.TabStop = false;
 			this.groupBox6.Text = "Observation Identifier";
 			// 
 			// butObsIdLoinc
 			// 
-			this.butObsIdLoinc.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butObsIdLoinc.Location = new System.Drawing.Point(201, 13);
+			this.butObsIdLoinc.Location = new System.Drawing.Point(6, 13);
 			this.butObsIdLoinc.Name = "butObsIdLoinc";
-			this.butObsIdLoinc.Size = new System.Drawing.Size(75, 24);
+			this.butObsIdLoinc.Size = new System.Drawing.Size(27, 24);
 			this.butObsIdLoinc.TabIndex = 257;
-			this.butObsIdLoinc.Text = "LOINC";
+			this.butObsIdLoinc.Text = "...";
 			this.butObsIdLoinc.UseVisualStyleBackColor = true;
 			this.butObsIdLoinc.Click += new System.EventHandler(this.butObsIdLoinc_Click);
 			// 
 			// label44
 			// 
-			this.label44.Location = new System.Drawing.Point(7, 104);
+			this.label44.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.label44.Location = new System.Drawing.Point(12, 73);
 			this.label44.Name = "label44";
 			this.label44.Size = new System.Drawing.Size(111, 17);
 			this.label44.TabIndex = 256;
@@ -1124,14 +1137,16 @@
 			// 
 			// textObsIDCodeSystemNameAlt
 			// 
-			this.textObsIDCodeSystemNameAlt.Location = new System.Drawing.Point(119, 103);
+			this.textObsIDCodeSystemNameAlt.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.textObsIDCodeSystemNameAlt.Location = new System.Drawing.Point(124, 72);
 			this.textObsIDCodeSystemNameAlt.Name = "textObsIDCodeSystemNameAlt";
 			this.textObsIDCodeSystemNameAlt.Size = new System.Drawing.Size(157, 20);
-			this.textObsIDCodeSystemNameAlt.TabIndex = 255;
+			this.textObsIDCodeSystemNameAlt.TabIndex = 3;
 			// 
 			// label43
 			// 
-			this.label43.Location = new System.Drawing.Point(7, 44);
+			this.label43.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.label43.Location = new System.Drawing.Point(12, 13);
 			this.label43.Name = "label43";
 			this.label43.Size = new System.Drawing.Size(111, 17);
 			this.label43.TabIndex = 254;
@@ -1140,10 +1155,11 @@
 			// 
 			// textObsIDCodeSystemName
 			// 
-			this.textObsIDCodeSystemName.Location = new System.Drawing.Point(119, 43);
+			this.textObsIDCodeSystemName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.textObsIDCodeSystemName.Location = new System.Drawing.Point(124, 12);
 			this.textObsIDCodeSystemName.Name = "textObsIDCodeSystemName";
 			this.textObsIDCodeSystemName.Size = new System.Drawing.Size(157, 20);
-			this.textObsIDCodeSystemName.TabIndex = 253;
+			this.textObsIDCodeSystemName.TabIndex = 0;
 			// 
 			// groupBox7
 			// 
@@ -1156,16 +1172,16 @@
 			this.groupBox7.Controls.Add(this.textReferenceRange);
 			this.groupBox7.Controls.Add(this.textObsValue);
 			this.groupBox7.Controls.Add(this.label4);
-			this.groupBox7.Controls.Add(this.textObsDateTime);
 			this.groupBox7.Controls.Add(this.comboObsValueType);
 			this.groupBox7.Controls.Add(this.comboObsStatus);
+			this.groupBox7.Controls.Add(this.textObsDateTime);
 			this.groupBox7.Controls.Add(this.label2);
 			this.groupBox7.Controls.Add(this.label9);
 			this.groupBox7.Controls.Add(this.groupUnitsOfMeasure);
 			this.groupBox7.Location = new System.Drawing.Point(305, 7);
 			this.groupBox7.Name = "groupBox7";
 			this.groupBox7.Size = new System.Drawing.Size(324, 636);
-			this.groupBox7.TabIndex = 254;
+			this.groupBox7.TabIndex = 2;
 			this.groupBox7.TabStop = false;
 			this.groupBox7.Text = "Observation Value";
 			// 
@@ -1179,16 +1195,17 @@
 			this.groupBox9.Controls.Add(this.textStructNumFirst);
 			this.groupBox9.Controls.Add(this.label60);
 			this.groupBox9.Controls.Add(this.textStructNumSeparator);
-			this.groupBox9.Location = new System.Drawing.Point(10, 333);
+			this.groupBox9.Location = new System.Drawing.Point(9, 348);
 			this.groupBox9.Name = "groupBox9";
-			this.groupBox9.Size = new System.Drawing.Size(308, 104);
-			this.groupBox9.TabIndex = 244;
+			this.groupBox9.Size = new System.Drawing.Size(308, 105);
+			this.groupBox9.TabIndex = 7;
 			this.groupBox9.TabStop = false;
 			this.groupBox9.Text = "Structured Numeric";
 			// 
 			// label54
 			// 
-			this.label54.Location = new System.Drawing.Point(5, 76);
+			this.label54.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.label54.Location = new System.Drawing.Point(5, 81);
 			this.label54.Name = "label54";
 			this.label54.Size = new System.Drawing.Size(137, 17);
 			this.label54.TabIndex = 242;
@@ -1197,14 +1214,16 @@
 			// 
 			// textStructNumSecond
 			// 
-			this.textStructNumSecond.Location = new System.Drawing.Point(143, 74);
+			this.textStructNumSecond.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.textStructNumSecond.Location = new System.Drawing.Point(143, 79);
 			this.textStructNumSecond.Name = "textStructNumSecond";
 			this.textStructNumSecond.Size = new System.Drawing.Size(157, 20);
-			this.textStructNumSecond.TabIndex = 241;
+			this.textStructNumSecond.TabIndex = 3;
 			// 
 			// label55
 			// 
-			this.label55.Location = new System.Drawing.Point(5, 16);
+			this.label55.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.label55.Location = new System.Drawing.Point(5, 15);
 			this.label55.Name = "label55";
 			this.label55.Size = new System.Drawing.Size(137, 17);
 			this.label55.TabIndex = 240;
@@ -1213,14 +1232,16 @@
 			// 
 			// textStructNumComp
 			// 
-			this.textStructNumComp.Location = new System.Drawing.Point(143, 14);
+			this.textStructNumComp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.textStructNumComp.Location = new System.Drawing.Point(143, 13);
 			this.textStructNumComp.Name = "textStructNumComp";
 			this.textStructNumComp.Size = new System.Drawing.Size(157, 20);
-			this.textStructNumComp.TabIndex = 239;
+			this.textStructNumComp.TabIndex = 0;
 			// 
 			// label59
 			// 
-			this.label59.Location = new System.Drawing.Point(5, 36);
+			this.label59.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.label59.Location = new System.Drawing.Point(5, 37);
 			this.label59.Name = "label59";
 			this.label59.Size = new System.Drawing.Size(137, 17);
 			this.label59.TabIndex = 230;
@@ -1229,14 +1250,16 @@
 			// 
 			// textStructNumFirst
 			// 
-			this.textStructNumFirst.Location = new System.Drawing.Point(143, 34);
+			this.textStructNumFirst.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.textStructNumFirst.Location = new System.Drawing.Point(143, 35);
 			this.textStructNumFirst.Name = "textStructNumFirst";
 			this.textStructNumFirst.Size = new System.Drawing.Size(157, 20);
-			this.textStructNumFirst.TabIndex = 229;
+			this.textStructNumFirst.TabIndex = 1;
 			// 
 			// label60
 			// 
-			this.label60.Location = new System.Drawing.Point(5, 56);
+			this.label60.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.label60.Location = new System.Drawing.Point(5, 59);
 			this.label60.Name = "label60";
 			this.label60.Size = new System.Drawing.Size(138, 17);
 			this.label60.TabIndex = 232;
@@ -1245,15 +1268,16 @@
 			// 
 			// textStructNumSeparator
 			// 
-			this.textStructNumSeparator.Location = new System.Drawing.Point(143, 54);
+			this.textStructNumSeparator.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.textStructNumSeparator.Location = new System.Drawing.Point(143, 57);
 			this.textStructNumSeparator.Multiline = true;
 			this.textStructNumSeparator.Name = "textStructNumSeparator";
 			this.textStructNumSeparator.Size = new System.Drawing.Size(157, 20);
-			this.textStructNumSeparator.TabIndex = 231;
+			this.textStructNumSeparator.TabIndex = 2;
 			// 
 			// groupBox8
 			// 
-			this.groupBox8.Controls.Add(this.butCodedElementLoinc);
+			this.groupBox8.Controls.Add(this.butCodedElementSnomed);
 			this.groupBox8.Controls.Add(this.label47);
 			this.groupBox8.Controls.Add(this.textObsElementCodeSystemAlt);
 			this.groupBox8.Controls.Add(this.label48);
@@ -1268,27 +1292,27 @@
 			this.groupBox8.Controls.Add(this.textObsElementID);
 			this.groupBox8.Controls.Add(this.label53);
 			this.groupBox8.Controls.Add(this.textObsElementText);
-			this.groupBox8.Location = new System.Drawing.Point(10, 143);
+			this.groupBox8.Location = new System.Drawing.Point(10, 171);
 			this.groupBox8.Name = "groupBox8";
-			this.groupBox8.Size = new System.Drawing.Size(308, 188);
-			this.groupBox8.TabIndex = 243;
+			this.groupBox8.Size = new System.Drawing.Size(308, 171);
+			this.groupBox8.TabIndex = 6;
 			this.groupBox8.TabStop = false;
 			this.groupBox8.Text = "Coded Elements";
 			// 
-			// butCodedElementLoinc
+			// butCodedElementSnomed
 			// 
-			this.butCodedElementLoinc.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCodedElementLoinc.Location = new System.Drawing.Point(224, 15);
-			this.butCodedElementLoinc.Name = "butCodedElementLoinc";
-			this.butCodedElementLoinc.Size = new System.Drawing.Size(75, 24);
-			this.butCodedElementLoinc.TabIndex = 258;
-			this.butCodedElementLoinc.Text = "LOINC";
-			this.butCodedElementLoinc.UseVisualStyleBackColor = true;
-			this.butCodedElementLoinc.Click += new System.EventHandler(this.butCodedElementLoinc_Click);
+			this.butCodedElementSnomed.Location = new System.Drawing.Point(8, 15);
+			this.butCodedElementSnomed.Name = "butCodedElementSnomed";
+			this.butCodedElementSnomed.Size = new System.Drawing.Size(27, 24);
+			this.butCodedElementSnomed.TabIndex = 258;
+			this.butCodedElementSnomed.Text = "...";
+			this.butCodedElementSnomed.UseVisualStyleBackColor = true;
+			this.butCodedElementSnomed.Click += new System.EventHandler(this.butCodedElementLoinc_Click);
 			// 
 			// label47
 			// 
-			this.label47.Location = new System.Drawing.Point(5, 104);
+			this.label47.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.label47.Location = new System.Drawing.Point(4, 81);
 			this.label47.Name = "label47";
 			this.label47.Size = new System.Drawing.Size(137, 17);
 			this.label47.TabIndex = 242;
@@ -1297,14 +1321,16 @@
 			// 
 			// textObsElementCodeSystemAlt
 			// 
-			this.textObsElementCodeSystemAlt.Location = new System.Drawing.Point(143, 102);
+			this.textObsElementCodeSystemAlt.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.textObsElementCodeSystemAlt.Location = new System.Drawing.Point(142, 79);
 			this.textObsElementCodeSystemAlt.Name = "textObsElementCodeSystemAlt";
 			this.textObsElementCodeSystemAlt.Size = new System.Drawing.Size(157, 20);
-			this.textObsElementCodeSystemAlt.TabIndex = 241;
+			this.textObsElementCodeSystemAlt.TabIndex = 3;
 			// 
 			// label48
 			// 
-			this.label48.Location = new System.Drawing.Point(5, 44);
+			this.label48.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.label48.Location = new System.Drawing.Point(4, 15);
 			this.label48.Name = "label48";
 			this.label48.Size = new System.Drawing.Size(137, 17);
 			this.label48.TabIndex = 240;
@@ -1313,14 +1339,16 @@
 			// 
 			// textObsElementCodeSystem
 			// 
-			this.textObsElementCodeSystem.Location = new System.Drawing.Point(143, 42);
+			this.textObsElementCodeSystem.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.textObsElementCodeSystem.Location = new System.Drawing.Point(142, 13);
 			this.textObsElementCodeSystem.Name = "textObsElementCodeSystem";
 			this.textObsElementCodeSystem.Size = new System.Drawing.Size(157, 20);
-			this.textObsElementCodeSystem.TabIndex = 239;
+			this.textObsElementCodeSystem.TabIndex = 0;
 			// 
 			// label49
 			// 
-			this.label49.Location = new System.Drawing.Point(5, 164);
+			this.label49.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.label49.Location = new System.Drawing.Point(4, 147);
 			this.label49.Name = "label49";
 			this.label49.Size = new System.Drawing.Size(138, 17);
 			this.label49.TabIndex = 238;
@@ -1329,15 +1357,17 @@
 			// 
 			// textObsElementOrigText
 			// 
-			this.textObsElementOrigText.Location = new System.Drawing.Point(143, 162);
+			this.textObsElementOrigText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.textObsElementOrigText.Location = new System.Drawing.Point(142, 145);
 			this.textObsElementOrigText.Multiline = true;
 			this.textObsElementOrigText.Name = "textObsElementOrigText";
 			this.textObsElementOrigText.Size = new System.Drawing.Size(157, 20);
-			this.textObsElementOrigText.TabIndex = 237;
+			this.textObsElementOrigText.TabIndex = 6;
 			// 
 			// label50
 			// 
-			this.label50.Location = new System.Drawing.Point(5, 124);
+			this.label50.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.label50.Location = new System.Drawing.Point(4, 103);
 			this.label50.Name = "label50";
 			this.label50.Size = new System.Drawing.Size(137, 17);
 			this.label50.TabIndex = 234;
@@ -1346,14 +1376,16 @@
 			// 
 			// textObsElementIDAlt
 			// 
-			this.textObsElementIDAlt.Location = new System.Drawing.Point(143, 122);
+			this.textObsElementIDAlt.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.textObsElementIDAlt.Location = new System.Drawing.Point(142, 101);
 			this.textObsElementIDAlt.Name = "textObsElementIDAlt";
 			this.textObsElementIDAlt.Size = new System.Drawing.Size(157, 20);
-			this.textObsElementIDAlt.TabIndex = 233;
+			this.textObsElementIDAlt.TabIndex = 4;
 			// 
 			// label51
 			// 
-			this.label51.Location = new System.Drawing.Point(5, 144);
+			this.label51.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.label51.Location = new System.Drawing.Point(4, 125);
 			this.label51.Name = "label51";
 			this.label51.Size = new System.Drawing.Size(138, 17);
 			this.label51.TabIndex = 236;
@@ -1362,15 +1394,17 @@
 			// 
 			// textObsElementTextAlt
 			// 
-			this.textObsElementTextAlt.Location = new System.Drawing.Point(143, 142);
+			this.textObsElementTextAlt.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.textObsElementTextAlt.Location = new System.Drawing.Point(142, 123);
 			this.textObsElementTextAlt.Multiline = true;
 			this.textObsElementTextAlt.Name = "textObsElementTextAlt";
 			this.textObsElementTextAlt.Size = new System.Drawing.Size(157, 20);
-			this.textObsElementTextAlt.TabIndex = 235;
+			this.textObsElementTextAlt.TabIndex = 5;
 			// 
 			// label52
 			// 
-			this.label52.Location = new System.Drawing.Point(5, 64);
+			this.label52.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.label52.Location = new System.Drawing.Point(4, 37);
 			this.label52.Name = "label52";
 			this.label52.Size = new System.Drawing.Size(137, 17);
 			this.label52.TabIndex = 230;
@@ -1379,14 +1413,16 @@
 			// 
 			// textObsElementID
 			// 
-			this.textObsElementID.Location = new System.Drawing.Point(143, 62);
+			this.textObsElementID.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.textObsElementID.Location = new System.Drawing.Point(142, 35);
 			this.textObsElementID.Name = "textObsElementID";
 			this.textObsElementID.Size = new System.Drawing.Size(157, 20);
-			this.textObsElementID.TabIndex = 229;
+			this.textObsElementID.TabIndex = 1;
 			// 
 			// label53
 			// 
-			this.label53.Location = new System.Drawing.Point(5, 84);
+			this.label53.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.label53.Location = new System.Drawing.Point(4, 59);
 			this.label53.Name = "label53";
 			this.label53.Size = new System.Drawing.Size(138, 17);
 			this.label53.TabIndex = 232;
@@ -1395,16 +1431,17 @@
 			// 
 			// textObsElementText
 			// 
-			this.textObsElementText.Location = new System.Drawing.Point(143, 82);
+			this.textObsElementText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.textObsElementText.Location = new System.Drawing.Point(142, 57);
 			this.textObsElementText.Multiline = true;
 			this.textObsElementText.Name = "textObsElementText";
 			this.textObsElementText.Size = new System.Drawing.Size(157, 20);
-			this.textObsElementText.TabIndex = 231;
+			this.textObsElementText.TabIndex = 2;
 			// 
 			// butAddNote
 			// 
 			this.butAddNote.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butAddNote.Location = new System.Drawing.Point(12, 409);
+			this.butAddNote.Location = new System.Drawing.Point(305, 649);
 			this.butAddNote.Name = "butAddNote";
 			this.butAddNote.Size = new System.Drawing.Size(75, 24);
 			this.butAddNote.TabIndex = 255;
@@ -1414,50 +1451,40 @@
 			// 
 			// label56
 			// 
-			this.label56.Location = new System.Drawing.Point(19, 234);
+			this.label56.Location = new System.Drawing.Point(12, 188);
 			this.label56.Name = "label56";
 			this.label56.Size = new System.Drawing.Size(111, 17);
 			this.label56.TabIndex = 256;
 			this.label56.Text = "Abnormal Flags";
-			this.label56.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.label56.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// listAbnormalFlags
 			// 
 			this.listAbnormalFlags.FormattingEnabled = true;
-			this.listAbnormalFlags.Location = new System.Drawing.Point(131, 236);
+			this.listAbnormalFlags.Location = new System.Drawing.Point(12, 208);
 			this.listAbnormalFlags.Name = "listAbnormalFlags";
 			this.listAbnormalFlags.ScrollAlwaysVisible = true;
 			this.listAbnormalFlags.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
-			this.listAbnormalFlags.Size = new System.Drawing.Size(157, 173);
-			this.listAbnormalFlags.TabIndex = 257;
+			this.listAbnormalFlags.Size = new System.Drawing.Size(287, 251);
+			this.listAbnormalFlags.TabIndex = 1;
 			// 
 			// gridNotes
 			// 
 			this.gridNotes.HScrollVisible = false;
-			this.gridNotes.Location = new System.Drawing.Point(12, 439);
+			this.gridNotes.Location = new System.Drawing.Point(12, 465);
 			this.gridNotes.Name = "gridNotes";
 			this.gridNotes.ScrollValue = 0;
-			this.gridNotes.Size = new System.Drawing.Size(276, 204);
+			this.gridNotes.Size = new System.Drawing.Size(287, 208);
 			this.gridNotes.TabIndex = 232;
 			this.gridNotes.Title = "Notes";
 			this.gridNotes.TranslationName = null;
 			this.gridNotes.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridNotes_CellDoubleClick);
-			// 
-			// label57
-			// 
-			this.label57.Location = new System.Drawing.Point(93, 653);
-			this.label57.Name = "label57";
-			this.label57.Size = new System.Drawing.Size(137, 17);
-			this.label57.TabIndex = 258;
-			this.label57.Text = "Deletes the lab result";
-			this.label57.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// FormEhrLabResultEdit2014
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(974, 684);
-			this.Controls.Add(this.label57);
 			this.Controls.Add(this.listAbnormalFlags);
 			this.Controls.Add(this.label56);
 			this.Controls.Add(this.butAddNote);
@@ -1465,7 +1492,6 @@
 			this.Controls.Add(this.groupBox6);
 			this.Controls.Add(this.groupOrganization);
 			this.Controls.Add(this.gridNotes);
-			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.butOk);
 			this.Controls.Add(this.butCancel);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -1503,7 +1529,6 @@
 
 		private System.Windows.Forms.Button butCancel;
 		private System.Windows.Forms.Button butOk;
-		private System.Windows.Forms.Button butDelete;
 		private System.Windows.Forms.TextBox textAnalysisDateTime;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.TextBox textObsID;
@@ -1633,9 +1658,8 @@
 		private System.Windows.Forms.Button butAddNote;
 		private System.Windows.Forms.Label label56;
 		private System.Windows.Forms.ListBox listAbnormalFlags;
-		private System.Windows.Forms.Label label57;
 		private System.Windows.Forms.Button butUnitOfMeasureUCUM;
 		private System.Windows.Forms.Button butObsIdLoinc;
-		private System.Windows.Forms.Button butCodedElementLoinc;
+		private System.Windows.Forms.Button butCodedElementSnomed;
 	}
 }

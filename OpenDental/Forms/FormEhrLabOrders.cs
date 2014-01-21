@@ -28,25 +28,28 @@ namespace OpenDental {
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col;
-			col=new ODGridColumn("Date Time",80);//Formatted yyyyMMdd
+			col=new ODGridColumn("Date Time",80,HorizontalAlignment.Center);//Formatted yyyyMMdd
 			col.SortingStrategy=GridSortingStrategy.DateParse;
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Placer Order Number",180);//Should be PK but might not be. Instead use Placer Order Num.
+			col=new ODGridColumn("Placer Order Number",130,HorizontalAlignment.Center);//Should be PK but might not be. Instead use Placer Order Num.
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Filler Order Number",180);//Should be PK but might not be. Instead use Placer Order Num.
+			col=new ODGridColumn("Filler Order Number",130,HorizontalAlignment.Center);//Should be PK but might not be. Instead use Placer Order Num.
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Results In",80);//Or date of latest result? or both?
+			col=new ODGridColumn("Test Performed",430);//Should be PK but might not be. Instead use Placer Order Num.
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn("Results In",80,HorizontalAlignment.Center);//Or date of latest result? or both?
 			gridMain.Columns.Add(col);
 			ListEhrLabs = EhrLabs.GetAllForPat(PatCur.PatNum);
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			for(int i=0;i<ListEhrLabs.Count;i++) {
 				row=new ODGridRow();
-				string dateSt=ListEhrLabs[i].ObservationDateTimeStart.Substring(0,8);//stored in DB as yyyyMMddhhmmss-zzzz
+				string dateSt=ListEhrLabs[i].ObservationDateTimeStart.PadRight(8,'0').Substring(0,8);//stored in DB as yyyyMMddhhmmss-zzzz
 				DateTime dateT=PIn.Date(dateSt.Substring(4,2)+"/"+dateSt.Substring(6,2)+"/"+dateSt.Substring(0,4));
 				row.Cells.Add(dateT.ToShortDateString());//date only
 				row.Cells.Add(ListEhrLabs[i].PlacerOrderNum);
 				row.Cells.Add(ListEhrLabs[i].FillerOrderNum);
+				row.Cells.Add(ListEhrLabs[i].UsiText);
 				row.Cells.Add(ListEhrLabs[i].ListEhrLabResults.Count.ToString());
 				gridMain.Rows.Add(row);
 			}
@@ -90,16 +93,18 @@ namespace OpenDental {
 			}
 			for(int i=0;i<listEhrLabs.Count;i++) {
 				EhrLab tempLab=null;//lab from DB if it exists.
-				tempLab=EhrLabs.GetByGUID(ListEhrLabs[i].PlacerOrderUniversalID,ListEhrLabs[i].PlacerOrderNum);
+				tempLab=EhrLabs.GetByGUID(listEhrLabs[i].PlacerOrderUniversalID,listEhrLabs[i].PlacerOrderNum);
 				if(tempLab==null){
-					tempLab=EhrLabs.GetByGUID(ListEhrLabs[i].FillerOrderUniversalID,ListEhrLabs[i].FillerOrderNum);
+					tempLab=EhrLabs.GetByGUID(listEhrLabs[i].FillerOrderUniversalID,listEhrLabs[i].FillerOrderNum);
 				}
 				if(tempLab!=null) {
 					//Date validation.
-					if(tempLab.ResultDateTime.CompareTo(ListEhrLabs[i].ResultDateTime)<=0) {//string compare dates will return 1+ if tempLab Date is greater.
-						MsgBox.Show(this,"This lab already exists in the database and has a more recent timestamp.");
-						continue;
-					}
+					//if(tempLab.ResultDateTime.CompareTo(listEhrLabs[i].ResultDateTime)<=0) {//string compare dates will return 1+ if tempLab Date is greater.
+					//	MsgBox.Show(this,"This lab already exists in the database and has a more recent timestamp.");
+					//	continue;
+					//}
+					//TODO: The code above works, but ignores more recent lab results. Although the lab order my be unchanged there may be updated lab results.
+					//It would be better to check for updated results, unfortunately results have no unique identifiers.
 				}
 				listEhrLabs[i]=EhrLabs.SaveToDB(listEhrLabs[i]);//SAVE
 				for(int j=0;j<listEhrLabs[i].ListEhrLabResults.Count;j++) {//EHR TRIGGER
@@ -118,7 +123,6 @@ namespace OpenDental {
 			FormLOE.EhrLabCur=new EhrLab();
 			FormLOE.EhrLabCur.PatNum=PatCur.PatNum;
 			FormLOE.ShowDialog();
-			//Save from the form??
 			if(FormLOE.DialogResult!=DialogResult.OK) {
 				return;
 			}
@@ -143,6 +147,7 @@ namespace OpenDental {
 					FormCDSI.ShowIfRequired(false);
 				}
 			}
+			FillGrid();
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
@@ -152,14 +157,7 @@ namespace OpenDental {
 			if(FormLOE.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			EhrLabs.SaveToDB(FormLOE.EhrLabCur);
-			for(int i=0;i<FormLOE.EhrLabCur.ListEhrLabResults.Count;i++) {
-				if(Security.IsAuthorized(Permissions.EhrShowCDS,true)) {
-					FormCDSIntervention FormCDSI=new FormCDSIntervention();
-					FormCDSI.ListCDSI=EhrTriggers.TriggerMatch(FormLOE.EhrLabCur.ListEhrLabResults[i],PatCur);
-					FormCDSI.ShowIfRequired(false);
-				}
-			}
+			FillGrid();
 			//TODO:maybe add more code here for when we come back from form... In case we delete a lab from the form.
 		}
 

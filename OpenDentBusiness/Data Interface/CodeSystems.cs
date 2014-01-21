@@ -12,7 +12,7 @@ namespace OpenDentBusiness{
 	public class CodeSystems{
 
 		///<summary>Returns a list of code systems in the code system table.  This query will change from version to version depending on what code systems we have available.</summary>
-		public static List<CodeSystem> GetForCurrentVersion() {
+		public static List<CodeSystem> GetForCurrentVersion(bool IsMemberNation) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<CodeSystem>>(MethodBase.GetCurrentMethod());
 			}
@@ -20,20 +20,20 @@ namespace OpenDentBusiness{
 #if DEBUG
 			string command="SELECT * FROM codesystem";// WHERE CodeSystemName IN ('ICD9CM','RXNORM','SNOMEDCT','CPT')";
 #else
-			string command="SELECT * FROM codesystem WHERE CodeSystemName IN ('ICD9CM','RXNORM','SNOMEDCT','CPT','CVX')";
+			string command="SELECT * FROM codesystem WHERE CodeSystemName IN ('ICD9CM','RXNORM','CPT','CVX'"+(IsMemberNation?",'SNOMEDCT'":"")+")";
 #endif
 			return Crud.CodeSystemCrud.SelectMany(command);
 		}
 
-		///<summary>Returns a list of code systems in the code system table.  This query will change from version to version depending on what code systems we have available.</summary>
-		public static List<CodeSystem> GetForCurrentVersionNoSnomed() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<CodeSystem>>(MethodBase.GetCurrentMethod());
-			}
-			//string command="SELECT * FROM codesystem WHERE CodeSystemName!='AdministrativeSex' AND CodeSystemName!='CDT'";
-			string command="SELECT * FROM codesystem WHERE CodeSystemName IN ('ICD9CM','RXNORM','CPT')";
-			return Crud.CodeSystemCrud.SelectMany(command);
-		}
+		/////<summary>Returns a list of code systems in the code system table.  This query will change from version to version depending on what code systems we have available.</summary>
+		//public static List<CodeSystem> GetForCurrentVersionNoSnomed() {
+		//	if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+		//		return Meth.GetObject<List<CodeSystem>>(MethodBase.GetCurrentMethod());
+		//	}
+		//	//string command="SELECT * FROM codesystem WHERE CodeSystemName!='AdministrativeSex' AND CodeSystemName!='CDT'";
+		//	string command="SELECT * FROM codesystem WHERE CodeSystemName IN ('ICD9CM','RXNORM','CPT')";
+		//	return Crud.CodeSystemCrud.SelectMany(command);
+		//}
 
 		///<summary></summary>
 		public static void Update(CodeSystem codeSystem){

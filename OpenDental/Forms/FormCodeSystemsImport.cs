@@ -15,6 +15,7 @@ namespace OpenDental {
 	public partial class FormCodeSystemsImport:Form {
 		///<summary>used to populate lists</summary>
 		private List<CodeSystem> ListCodeSystems;
+		private bool isMemberNation;
 
 		public FormCodeSystemsImport() {
 			InitializeComponent();
@@ -22,7 +23,7 @@ namespace OpenDental {
 		}
 
 		private void FormCodeSystemsImport_Load(object sender,EventArgs e) {
-			bool isMemberNation=false;
+			isMemberNation=false;
 			//This check is here to prevent Snomeds from being available in non-member nations.
 			List<EhrQuarterlyKey> ehrKeys=EhrQuarterlyKeys.GetAllKeys();
 			for(int i=0;i<ehrKeys.Count;i++) {
@@ -31,17 +32,11 @@ namespace OpenDental {
 					break;
 				}
 			}
-			if(isMemberNation) {
-				ListCodeSystems=CodeSystems.GetForCurrentVersion();//EHR has been valid.
-			}
-			else {
-				ListCodeSystems=CodeSystems.GetForCurrentVersionNoSnomed();
-			}			
 		}
 
 		/// <summary></summary>
 		private void FillGrid() {
-			ListCodeSystems=CodeSystems.GetForCurrentVersion();
+			ListCodeSystems=CodeSystems.GetForCurrentVersion(isMemberNation);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col;
@@ -76,7 +71,7 @@ namespace OpenDental {
 			}
 			XmlDocument doc=new XmlDocument();
 			doc.LoadXml(result);
-			List<CodeSystem> listCodeSystemsAvailable=CodeSystems.GetForCurrentVersion();
+			List<CodeSystem> listCodeSystemsAvailable=CodeSystems.GetForCurrentVersion(isMemberNation);
 			for(int i=0;i<listCodeSystemsAvailable.Count;i++) {
 				try {
 					XmlNode node=doc.SelectSingleNode("//"+listCodeSystemsAvailable[i].CodeSystemName);

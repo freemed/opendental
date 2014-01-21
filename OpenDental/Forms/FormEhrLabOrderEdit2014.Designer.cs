@@ -28,14 +28,14 @@
 			this.butOk = new System.Windows.Forms.Button();
 			this.butDelete = new System.Windows.Forms.Button();
 			this.butAdd = new System.Windows.Forms.Button();
-			this.label5 = new System.Windows.Forms.Label();
+			this.labelPatient = new System.Windows.Forms.Label();
 			this.textName = new System.Windows.Forms.TextBox();
-			this.button1 = new System.Windows.Forms.Button();
-			this.button2 = new System.Windows.Forms.Button();
-			this.button3 = new System.Windows.Forms.Button();
+			this.butAddNote = new System.Windows.Forms.Button();
+			this.butAddCopyTo = new System.Windows.Forms.Button();
+			this.butAddSpecimens = new System.Windows.Forms.Button();
 			this.groupBox4 = new System.Windows.Forms.GroupBox();
 			this.label4 = new System.Windows.Forms.Label();
-			this.testPlacerOrderNum = new System.Windows.Forms.TextBox();
+			this.textPlacerOrderNum = new System.Windows.Forms.TextBox();
 			this.textPlacerOrderUniversalIDType = new System.Windows.Forms.TextBox();
 			this.label42 = new System.Windows.Forms.Label();
 			this.label21 = new System.Windows.Forms.Label();
@@ -44,89 +44,88 @@
 			this.textPlacerOrderUniversalID = new System.Windows.Forms.TextBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.label2 = new System.Windows.Forms.Label();
-			this.textBox3 = new System.Windows.Forms.TextBox();
-			this.textBox4 = new System.Windows.Forms.TextBox();
+			this.textPlacerGroupNum = new System.Windows.Forms.TextBox();
+			this.textPlacerGroupUniversalIDType = new System.Windows.Forms.TextBox();
 			this.label8 = new System.Windows.Forms.Label();
 			this.label9 = new System.Windows.Forms.Label();
-			this.textBox5 = new System.Windows.Forms.TextBox();
+			this.textPlacerGroupNamespace = new System.Windows.Forms.TextBox();
 			this.label10 = new System.Windows.Forms.Label();
-			this.textBox6 = new System.Windows.Forms.TextBox();
+			this.textPlacerGroupUniversalID = new System.Windows.Forms.TextBox();
 			this.groupBox5 = new System.Windows.Forms.GroupBox();
-			this.button5 = new OpenDental.UI.Button();
-			this.comboMedDirIdType = new System.Windows.Forms.ComboBox();
+			this.comboOrderingProvIdType = new System.Windows.Forms.ComboBox();
 			this.label33 = new System.Windows.Forms.Label();
-			this.comboMedDirNameType = new System.Windows.Forms.ComboBox();
+			this.comboOrderingProvNameType = new System.Windows.Forms.ComboBox();
 			this.label32 = new System.Windows.Forms.Label();
 			this.label23 = new System.Windows.Forms.Label();
-			this.textMedDirPrefix = new System.Windows.Forms.TextBox();
+			this.textOrderingProvPrefix = new System.Windows.Forms.TextBox();
 			this.label24 = new System.Windows.Forms.Label();
-			this.textMedDirSuffix = new System.Windows.Forms.TextBox();
+			this.textOrderingProvSuffix = new System.Windows.Forms.TextBox();
 			this.label25 = new System.Windows.Forms.Label();
-			this.textMedDirMiddleName = new System.Windows.Forms.TextBox();
+			this.textOrderingProvMiddleName = new System.Windows.Forms.TextBox();
 			this.label29 = new System.Windows.Forms.Label();
-			this.textMedDirFirstName = new System.Windows.Forms.TextBox();
+			this.textOrderingProvFirstName = new System.Windows.Forms.TextBox();
 			this.label30 = new System.Windows.Forms.Label();
-			this.textMedDirLastName = new System.Windows.Forms.TextBox();
+			this.textOrderingProvLastName = new System.Windows.Forms.TextBox();
 			this.label31 = new System.Windows.Forms.Label();
-			this.textMedDirIdentifier = new System.Windows.Forms.TextBox();
+			this.textOrderingProvIdentifier = new System.Windows.Forms.TextBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.textBox1 = new System.Windows.Forms.TextBox();
+			this.textOrderingProvAAUIDType = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
-			this.textBox7 = new System.Windows.Forms.TextBox();
+			this.textOrderingProvAANID = new System.Windows.Forms.TextBox();
 			this.label6 = new System.Windows.Forms.Label();
-			this.textBox8 = new System.Windows.Forms.TextBox();
+			this.textOrderingProvAAUID = new System.Windows.Forms.TextBox();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
 			this.label7 = new System.Windows.Forms.Label();
-			this.textBox9 = new System.Windows.Forms.TextBox();
-			this.textBox10 = new System.Windows.Forms.TextBox();
+			this.textFillerOrderNum = new System.Windows.Forms.TextBox();
+			this.textFillerOrderUniversalIDType = new System.Windows.Forms.TextBox();
 			this.label11 = new System.Windows.Forms.Label();
 			this.label12 = new System.Windows.Forms.Label();
-			this.textBox11 = new System.Windows.Forms.TextBox();
+			this.textFillerOrderNamespace = new System.Windows.Forms.TextBox();
 			this.label13 = new System.Windows.Forms.Label();
-			this.textBox12 = new System.Windows.Forms.TextBox();
+			this.textFillerOrderUniversalID = new System.Windows.Forms.TextBox();
 			this.groupBox6 = new System.Windows.Forms.GroupBox();
-			this.button6 = new OpenDental.UI.Button();
 			this.label44 = new System.Windows.Forms.Label();
-			this.textObsIDCodeSystemNameAlt = new System.Windows.Forms.TextBox();
+			this.textUsiCodeSystemNameAlt = new System.Windows.Forms.TextBox();
 			this.label43 = new System.Windows.Forms.Label();
-			this.textObsIDCodeSystemName = new System.Windows.Forms.TextBox();
+			this.textUsiCodeSystemName = new System.Windows.Forms.TextBox();
 			this.label14 = new System.Windows.Forms.Label();
-			this.label37 = new System.Windows.Forms.Label();
-			this.textObsIDText = new System.Windows.Forms.TextBox();
-			this.textObsSub = new System.Windows.Forms.TextBox();
+			this.textUsiText = new System.Windows.Forms.TextBox();
 			this.label15 = new System.Windows.Forms.Label();
 			this.label36 = new System.Windows.Forms.Label();
-			this.textObsID = new System.Windows.Forms.TextBox();
-			this.textObsIDOrigText = new System.Windows.Forms.TextBox();
-			this.textObsIDTextAlt = new System.Windows.Forms.TextBox();
+			this.textUsiID = new System.Windows.Forms.TextBox();
+			this.textUsiTextOriginal = new System.Windows.Forms.TextBox();
+			this.textUsiTextAlt = new System.Windows.Forms.TextBox();
 			this.label34 = new System.Windows.Forms.Label();
 			this.label35 = new System.Windows.Forms.Label();
-			this.textObsIDAlt = new System.Windows.Forms.TextBox();
-			this.button7 = new System.Windows.Forms.Button();
+			this.textUsiIDAlt = new System.Windows.Forms.TextBox();
+			this.butAddClinicalInfo = new System.Windows.Forms.Button();
 			this.label16 = new System.Windows.Forms.Label();
-			this.textBox13 = new System.Windows.Forms.TextBox();
-			this.checkAlertHighSeverity = new System.Windows.Forms.CheckBox();
-			this.checkMU2 = new System.Windows.Forms.CheckBox();
+			this.textParentOrderNum = new System.Windows.Forms.TextBox();
+			this.checkResultsHandlingN = new System.Windows.Forms.CheckBox();
+			this.checkResultsHandlingF = new System.Windows.Forms.CheckBox();
 			this.groupBox7 = new System.Windows.Forms.GroupBox();
 			this.label17 = new System.Windows.Forms.Label();
-			this.textAnalysisDateTime = new System.Windows.Forms.TextBox();
+			this.textTQ1Stop = new System.Windows.Forms.TextBox();
 			this.label18 = new System.Windows.Forms.Label();
-			this.textObsDateTime = new System.Windows.Forms.TextBox();
+			this.textTQ1Start = new System.Windows.Forms.TextBox();
 			this.groupBox8 = new System.Windows.Forms.GroupBox();
-			this.comboBox1 = new System.Windows.Forms.ComboBox();
+			this.comboSpecimenActionCode = new System.Windows.Forms.ComboBox();
 			this.label19 = new System.Windows.Forms.Label();
-			this.textBox14 = new System.Windows.Forms.TextBox();
+			this.textResultDateTime = new System.Windows.Forms.TextBox();
 			this.label20 = new System.Windows.Forms.Label();
-			this.comboBox2 = new System.Windows.Forms.ComboBox();
+			this.comboResultStatus = new System.Windows.Forms.ComboBox();
 			this.label26 = new System.Windows.Forms.Label();
-			this.button8 = new OpenDental.UI.Button();
 			this.gridResultsCopyTo = new OpenDental.UI.ODGrid();
-			this.button4 = new OpenDental.UI.Button();
 			this.gridClinicalInformation = new OpenDental.UI.ODGrid();
 			this.gridNotes = new OpenDental.UI.ODGrid();
 			this.gridSpecimen = new OpenDental.UI.ODGrid();
 			this.gridMain = new OpenDental.UI.ODGrid();
+			this.butViewParent = new OpenDental.UI.Button();
+			this.butParentPicker = new OpenDental.UI.Button();
+			this.butServicePicker = new OpenDental.UI.Button();
+			this.butProvPicker = new OpenDental.UI.Button();
+			this.butPatientPick = new OpenDental.UI.Button();
 			this.groupBox4.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox5.SuspendLayout();
@@ -140,10 +139,10 @@
 			// butCancel
 			// 
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Location = new System.Drawing.Point(836, 606);
+			this.butCancel.Location = new System.Drawing.Point(887, 661);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
-			this.butCancel.TabIndex = 1;
+			this.butCancel.TabIndex = 10;
 			this.butCancel.Text = "Cancel";
 			this.butCancel.UseVisualStyleBackColor = true;
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
@@ -151,10 +150,10 @@
 			// butOk
 			// 
 			this.butOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOk.Location = new System.Drawing.Point(755, 606);
+			this.butOk.Location = new System.Drawing.Point(806, 661);
 			this.butOk.Name = "butOk";
 			this.butOk.Size = new System.Drawing.Size(75, 24);
-			this.butOk.TabIndex = 2;
+			this.butOk.TabIndex = 9;
 			this.butOk.Text = "OK";
 			this.butOk.UseVisualStyleBackColor = true;
 			this.butOk.Click += new System.EventHandler(this.butOk_Click);
@@ -162,7 +161,7 @@
 			// butDelete
 			// 
 			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butDelete.Location = new System.Drawing.Point(12, 606);
+			this.butDelete.Location = new System.Drawing.Point(12, 661);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(75, 24);
 			this.butDelete.TabIndex = 3;
@@ -172,7 +171,7 @@
 			// 
 			// butAdd
 			// 
-			this.butAdd.Location = new System.Drawing.Point(830, 469);
+			this.butAdd.Location = new System.Drawing.Point(881, 466);
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(81, 24);
 			this.butAdd.TabIndex = 13;
@@ -180,14 +179,14 @@
 			this.butAdd.UseVisualStyleBackColor = true;
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
-			// label5
+			// labelPatient
 			// 
-			this.label5.Location = new System.Drawing.Point(-4, 14);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(96, 17);
-			this.label5.TabIndex = 15;
-			this.label5.Text = "Patient";
-			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.labelPatient.Location = new System.Drawing.Point(-4, 14);
+			this.labelPatient.Name = "labelPatient";
+			this.labelPatient.Size = new System.Drawing.Size(96, 17);
+			this.labelPatient.TabIndex = 15;
+			this.labelPatient.Text = "Patient";
+			this.labelPatient.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textName
 			// 
@@ -198,37 +197,40 @@
 			this.textName.TabIndex = 14;
 			this.textName.WordWrap = false;
 			// 
-			// button1
+			// butAddNote
 			// 
-			this.button1.Location = new System.Drawing.Point(830, 359);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(81, 24);
-			this.button1.TabIndex = 166;
-			this.button1.Text = "Add Result";
-			this.button1.UseVisualStyleBackColor = true;
+			this.butAddNote.Location = new System.Drawing.Point(881, 359);
+			this.butAddNote.Name = "butAddNote";
+			this.butAddNote.Size = new System.Drawing.Size(81, 24);
+			this.butAddNote.TabIndex = 166;
+			this.butAddNote.Text = "Add Notes";
+			this.butAddNote.UseVisualStyleBackColor = true;
+			this.butAddNote.Click += new System.EventHandler(this.butAddNote_Click);
 			// 
-			// button2
+			// butAddCopyTo
 			// 
-			this.button2.Location = new System.Drawing.Point(830, 389);
-			this.button2.Name = "button2";
-			this.button2.Size = new System.Drawing.Size(81, 24);
-			this.button2.TabIndex = 167;
-			this.button2.Text = "Add Result";
-			this.button2.UseVisualStyleBackColor = true;
+			this.butAddCopyTo.Enabled = false;
+			this.butAddCopyTo.Location = new System.Drawing.Point(881, 389);
+			this.butAddCopyTo.Name = "butAddCopyTo";
+			this.butAddCopyTo.Size = new System.Drawing.Size(81, 24);
+			this.butAddCopyTo.TabIndex = 167;
+			this.butAddCopyTo.Text = "Add Copy To";
+			this.butAddCopyTo.UseVisualStyleBackColor = true;
 			// 
-			// button3
+			// butAddSpecimens
 			// 
-			this.button3.Location = new System.Drawing.Point(830, 499);
-			this.button3.Name = "button3";
-			this.button3.Size = new System.Drawing.Size(81, 24);
-			this.button3.TabIndex = 168;
-			this.button3.Text = "Add Result";
-			this.button3.UseVisualStyleBackColor = true;
+			this.butAddSpecimens.Enabled = false;
+			this.butAddSpecimens.Location = new System.Drawing.Point(881, 496);
+			this.butAddSpecimens.Name = "butAddSpecimens";
+			this.butAddSpecimens.Size = new System.Drawing.Size(81, 24);
+			this.butAddSpecimens.TabIndex = 168;
+			this.butAddSpecimens.Text = "Add Spec";
+			this.butAddSpecimens.UseVisualStyleBackColor = true;
 			// 
 			// groupBox4
 			// 
 			this.groupBox4.Controls.Add(this.label4);
-			this.groupBox4.Controls.Add(this.testPlacerOrderNum);
+			this.groupBox4.Controls.Add(this.textPlacerOrderNum);
 			this.groupBox4.Controls.Add(this.textPlacerOrderUniversalIDType);
 			this.groupBox4.Controls.Add(this.label42);
 			this.groupBox4.Controls.Add(this.label21);
@@ -238,7 +240,7 @@
 			this.groupBox4.Location = new System.Drawing.Point(12, 35);
 			this.groupBox4.Name = "groupBox4";
 			this.groupBox4.Size = new System.Drawing.Size(282, 103);
-			this.groupBox4.TabIndex = 246;
+			this.groupBox4.TabIndex = 0;
 			this.groupBox4.TabStop = false;
 			this.groupBox4.Text = "Placer Order Number";
 			// 
@@ -251,13 +253,13 @@
 			this.label4.Text = "ID";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// testPlacerOrderNum
+			// textPlacerOrderNum
 			// 
-			this.testPlacerOrderNum.Location = new System.Drawing.Point(119, 14);
-			this.testPlacerOrderNum.Multiline = true;
-			this.testPlacerOrderNum.Name = "testPlacerOrderNum";
-			this.testPlacerOrderNum.Size = new System.Drawing.Size(157, 20);
-			this.testPlacerOrderNum.TabIndex = 244;
+			this.textPlacerOrderNum.Location = new System.Drawing.Point(119, 14);
+			this.textPlacerOrderNum.Multiline = true;
+			this.textPlacerOrderNum.Name = "textPlacerOrderNum";
+			this.textPlacerOrderNum.Size = new System.Drawing.Size(157, 20);
+			this.textPlacerOrderNum.TabIndex = 0;
 			// 
 			// textPlacerOrderUniversalIDType
 			// 
@@ -265,7 +267,7 @@
 			this.textPlacerOrderUniversalIDType.Multiline = true;
 			this.textPlacerOrderUniversalIDType.Name = "textPlacerOrderUniversalIDType";
 			this.textPlacerOrderUniversalIDType.Size = new System.Drawing.Size(157, 20);
-			this.textPlacerOrderUniversalIDType.TabIndex = 243;
+			this.textPlacerOrderUniversalIDType.TabIndex = 1;
 			// 
 			// label42
 			// 
@@ -291,7 +293,7 @@
 			this.textPlacerOrderNamespace.Multiline = true;
 			this.textPlacerOrderNamespace.Name = "textPlacerOrderNamespace";
 			this.textPlacerOrderNamespace.Size = new System.Drawing.Size(157, 20);
-			this.textPlacerOrderNamespace.TabIndex = 235;
+			this.textPlacerOrderNamespace.TabIndex = 2;
 			// 
 			// label22
 			// 
@@ -308,24 +310,24 @@
 			this.textPlacerOrderUniversalID.Multiline = true;
 			this.textPlacerOrderUniversalID.Name = "textPlacerOrderUniversalID";
 			this.textPlacerOrderUniversalID.Size = new System.Drawing.Size(157, 20);
-			this.textPlacerOrderUniversalID.TabIndex = 237;
+			this.textPlacerOrderUniversalID.TabIndex = 3;
 			// 
 			// groupBox2
 			// 
 			this.groupBox2.Controls.Add(this.label2);
-			this.groupBox2.Controls.Add(this.textBox3);
-			this.groupBox2.Controls.Add(this.textBox4);
+			this.groupBox2.Controls.Add(this.textPlacerGroupNum);
+			this.groupBox2.Controls.Add(this.textPlacerGroupUniversalIDType);
 			this.groupBox2.Controls.Add(this.label8);
 			this.groupBox2.Controls.Add(this.label9);
-			this.groupBox2.Controls.Add(this.textBox5);
+			this.groupBox2.Controls.Add(this.textPlacerGroupNamespace);
 			this.groupBox2.Controls.Add(this.label10);
-			this.groupBox2.Controls.Add(this.textBox6);
-			this.groupBox2.Location = new System.Drawing.Point(12, 243);
+			this.groupBox2.Controls.Add(this.textPlacerGroupUniversalID);
+			this.groupBox2.Location = new System.Drawing.Point(12, 144);
 			this.groupBox2.Name = "groupBox2";
 			this.groupBox2.Size = new System.Drawing.Size(282, 103);
-			this.groupBox2.TabIndex = 247;
+			this.groupBox2.TabIndex = 1;
 			this.groupBox2.TabStop = false;
-			this.groupBox2.Text = "Filler Order Number";
+			this.groupBox2.Text = "Placer Order Group Number";
 			// 
 			// label2
 			// 
@@ -336,21 +338,21 @@
 			this.label2.Text = "ID";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textBox3
+			// textPlacerGroupNum
 			// 
-			this.textBox3.Location = new System.Drawing.Point(119, 13);
-			this.textBox3.Multiline = true;
-			this.textBox3.Name = "textBox3";
-			this.textBox3.Size = new System.Drawing.Size(157, 20);
-			this.textBox3.TabIndex = 244;
+			this.textPlacerGroupNum.Location = new System.Drawing.Point(119, 13);
+			this.textPlacerGroupNum.Multiline = true;
+			this.textPlacerGroupNum.Name = "textPlacerGroupNum";
+			this.textPlacerGroupNum.Size = new System.Drawing.Size(157, 20);
+			this.textPlacerGroupNum.TabIndex = 0;
 			// 
-			// textBox4
+			// textPlacerGroupUniversalIDType
 			// 
-			this.textBox4.Location = new System.Drawing.Point(119, 34);
-			this.textBox4.Multiline = true;
-			this.textBox4.Name = "textBox4";
-			this.textBox4.Size = new System.Drawing.Size(157, 20);
-			this.textBox4.TabIndex = 243;
+			this.textPlacerGroupUniversalIDType.Location = new System.Drawing.Point(119, 34);
+			this.textPlacerGroupUniversalIDType.Multiline = true;
+			this.textPlacerGroupUniversalIDType.Name = "textPlacerGroupUniversalIDType";
+			this.textPlacerGroupUniversalIDType.Size = new System.Drawing.Size(157, 20);
+			this.textPlacerGroupUniversalIDType.TabIndex = 1;
 			// 
 			// label8
 			// 
@@ -370,13 +372,13 @@
 			this.label9.Text = "Namespace ID";
 			this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textBox5
+			// textPlacerGroupNamespace
 			// 
-			this.textBox5.Location = new System.Drawing.Point(119, 55);
-			this.textBox5.Multiline = true;
-			this.textBox5.Name = "textBox5";
-			this.textBox5.Size = new System.Drawing.Size(157, 20);
-			this.textBox5.TabIndex = 235;
+			this.textPlacerGroupNamespace.Location = new System.Drawing.Point(119, 55);
+			this.textPlacerGroupNamespace.Multiline = true;
+			this.textPlacerGroupNamespace.Name = "textPlacerGroupNamespace";
+			this.textPlacerGroupNamespace.Size = new System.Drawing.Size(157, 20);
+			this.textPlacerGroupNamespace.TabIndex = 2;
 			// 
 			// label10
 			// 
@@ -387,79 +389,65 @@
 			this.label10.Text = "Universal ID";
 			this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textBox6
+			// textPlacerGroupUniversalID
 			// 
-			this.textBox6.Location = new System.Drawing.Point(119, 76);
-			this.textBox6.Multiline = true;
-			this.textBox6.Name = "textBox6";
-			this.textBox6.Size = new System.Drawing.Size(157, 20);
-			this.textBox6.TabIndex = 237;
+			this.textPlacerGroupUniversalID.Location = new System.Drawing.Point(119, 76);
+			this.textPlacerGroupUniversalID.Multiline = true;
+			this.textPlacerGroupUniversalID.Name = "textPlacerGroupUniversalID";
+			this.textPlacerGroupUniversalID.Size = new System.Drawing.Size(157, 20);
+			this.textPlacerGroupUniversalID.TabIndex = 3;
 			// 
 			// groupBox5
 			// 
-			this.groupBox5.Controls.Add(this.button5);
-			this.groupBox5.Controls.Add(this.comboMedDirIdType);
+			this.groupBox5.Controls.Add(this.butProvPicker);
+			this.groupBox5.Controls.Add(this.comboOrderingProvIdType);
 			this.groupBox5.Controls.Add(this.label33);
-			this.groupBox5.Controls.Add(this.comboMedDirNameType);
+			this.groupBox5.Controls.Add(this.comboOrderingProvNameType);
 			this.groupBox5.Controls.Add(this.label32);
 			this.groupBox5.Controls.Add(this.label23);
-			this.groupBox5.Controls.Add(this.textMedDirPrefix);
+			this.groupBox5.Controls.Add(this.textOrderingProvPrefix);
 			this.groupBox5.Controls.Add(this.label24);
-			this.groupBox5.Controls.Add(this.textMedDirSuffix);
+			this.groupBox5.Controls.Add(this.textOrderingProvSuffix);
 			this.groupBox5.Controls.Add(this.label25);
-			this.groupBox5.Controls.Add(this.textMedDirMiddleName);
+			this.groupBox5.Controls.Add(this.textOrderingProvMiddleName);
 			this.groupBox5.Controls.Add(this.label29);
-			this.groupBox5.Controls.Add(this.textMedDirFirstName);
+			this.groupBox5.Controls.Add(this.textOrderingProvFirstName);
 			this.groupBox5.Controls.Add(this.label30);
-			this.groupBox5.Controls.Add(this.textMedDirLastName);
+			this.groupBox5.Controls.Add(this.textOrderingProvLastName);
 			this.groupBox5.Controls.Add(this.label31);
-			this.groupBox5.Controls.Add(this.textMedDirIdentifier);
+			this.groupBox5.Controls.Add(this.textOrderingProvIdentifier);
 			this.groupBox5.Controls.Add(this.groupBox1);
-			this.groupBox5.Location = new System.Drawing.Point(300, 35);
+			this.groupBox5.Location = new System.Drawing.Point(327, 35);
 			this.groupBox5.Name = "groupBox5";
 			this.groupBox5.Size = new System.Drawing.Size(336, 267);
-			this.groupBox5.TabIndex = 248;
+			this.groupBox5.TabIndex = 3;
 			this.groupBox5.TabStop = false;
 			this.groupBox5.Text = "Ordering Provider";
 			// 
-			// button5
+			// comboOrderingProvIdType
 			// 
-			this.button5.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.button5.Autosize = true;
-			this.button5.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.button5.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.button5.CornerRadius = 4F;
-			this.button5.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.button5.Location = new System.Drawing.Point(10, 15);
-			this.button5.Name = "button5";
-			this.button5.Size = new System.Drawing.Size(29, 25);
-			this.button5.TabIndex = 249;
-			this.button5.Text = "...";
-			// 
-			// comboMedDirIdType
-			// 
-			this.comboMedDirIdType.FormattingEnabled = true;
-			this.comboMedDirIdType.Location = new System.Drawing.Point(157, 12);
-			this.comboMedDirIdType.Name = "comboMedDirIdType";
-			this.comboMedDirIdType.Size = new System.Drawing.Size(157, 21);
-			this.comboMedDirIdType.TabIndex = 261;
+			this.comboOrderingProvIdType.FormattingEnabled = true;
+			this.comboOrderingProvIdType.Location = new System.Drawing.Point(157, 12);
+			this.comboOrderingProvIdType.Name = "comboOrderingProvIdType";
+			this.comboOrderingProvIdType.Size = new System.Drawing.Size(157, 21);
+			this.comboOrderingProvIdType.TabIndex = 0;
 			// 
 			// label33
 			// 
-			this.label33.Location = new System.Drawing.Point(25, 14);
+			this.label33.Location = new System.Drawing.Point(45, 14);
 			this.label33.Name = "label33";
-			this.label33.Size = new System.Drawing.Size(133, 17);
+			this.label33.Size = new System.Drawing.Size(113, 17);
 			this.label33.TabIndex = 260;
 			this.label33.Text = "Identifier Type";
 			this.label33.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// comboMedDirNameType
+			// comboOrderingProvNameType
 			// 
-			this.comboMedDirNameType.FormattingEnabled = true;
-			this.comboMedDirNameType.Location = new System.Drawing.Point(156, 55);
-			this.comboMedDirNameType.Name = "comboMedDirNameType";
-			this.comboMedDirNameType.Size = new System.Drawing.Size(157, 21);
-			this.comboMedDirNameType.TabIndex = 259;
+			this.comboOrderingProvNameType.FormattingEnabled = true;
+			this.comboOrderingProvNameType.Location = new System.Drawing.Point(156, 55);
+			this.comboOrderingProvNameType.Name = "comboOrderingProvNameType";
+			this.comboOrderingProvNameType.Size = new System.Drawing.Size(157, 21);
+			this.comboOrderingProvNameType.TabIndex = 2;
 			// 
 			// label32
 			// 
@@ -479,12 +467,12 @@
 			this.label23.Text = "Prefix";
 			this.label23.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textMedDirPrefix
+			// textOrderingProvPrefix
 			// 
-			this.textMedDirPrefix.Location = new System.Drawing.Point(157, 161);
-			this.textMedDirPrefix.Name = "textMedDirPrefix";
-			this.textMedDirPrefix.Size = new System.Drawing.Size(157, 20);
-			this.textMedDirPrefix.TabIndex = 256;
+			this.textOrderingProvPrefix.Location = new System.Drawing.Point(157, 161);
+			this.textOrderingProvPrefix.Name = "textOrderingProvPrefix";
+			this.textOrderingProvPrefix.Size = new System.Drawing.Size(157, 20);
+			this.textOrderingProvPrefix.TabIndex = 7;
 			// 
 			// label24
 			// 
@@ -495,12 +483,12 @@
 			this.label24.Text = "Suffix";
 			this.label24.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textMedDirSuffix
+			// textOrderingProvSuffix
 			// 
-			this.textMedDirSuffix.Location = new System.Drawing.Point(157, 140);
-			this.textMedDirSuffix.Name = "textMedDirSuffix";
-			this.textMedDirSuffix.Size = new System.Drawing.Size(157, 20);
-			this.textMedDirSuffix.TabIndex = 254;
+			this.textOrderingProvSuffix.Location = new System.Drawing.Point(157, 140);
+			this.textOrderingProvSuffix.Name = "textOrderingProvSuffix";
+			this.textOrderingProvSuffix.Size = new System.Drawing.Size(157, 20);
+			this.textOrderingProvSuffix.TabIndex = 6;
 			// 
 			// label25
 			// 
@@ -511,12 +499,12 @@
 			this.label25.Text = "Middle Name";
 			this.label25.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textMedDirMiddleName
+			// textOrderingProvMiddleName
 			// 
-			this.textMedDirMiddleName.Location = new System.Drawing.Point(157, 119);
-			this.textMedDirMiddleName.Name = "textMedDirMiddleName";
-			this.textMedDirMiddleName.Size = new System.Drawing.Size(157, 20);
-			this.textMedDirMiddleName.TabIndex = 252;
+			this.textOrderingProvMiddleName.Location = new System.Drawing.Point(157, 119);
+			this.textOrderingProvMiddleName.Name = "textOrderingProvMiddleName";
+			this.textOrderingProvMiddleName.Size = new System.Drawing.Size(157, 20);
+			this.textOrderingProvMiddleName.TabIndex = 5;
 			// 
 			// label29
 			// 
@@ -527,12 +515,12 @@
 			this.label29.Text = "First Name";
 			this.label29.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textMedDirFirstName
+			// textOrderingProvFirstName
 			// 
-			this.textMedDirFirstName.Location = new System.Drawing.Point(157, 98);
-			this.textMedDirFirstName.Name = "textMedDirFirstName";
-			this.textMedDirFirstName.Size = new System.Drawing.Size(157, 20);
-			this.textMedDirFirstName.TabIndex = 250;
+			this.textOrderingProvFirstName.Location = new System.Drawing.Point(157, 98);
+			this.textOrderingProvFirstName.Name = "textOrderingProvFirstName";
+			this.textOrderingProvFirstName.Size = new System.Drawing.Size(157, 20);
+			this.textOrderingProvFirstName.TabIndex = 4;
 			// 
 			// label30
 			// 
@@ -543,12 +531,12 @@
 			this.label30.Text = "Last Name";
 			this.label30.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textMedDirLastName
+			// textOrderingProvLastName
 			// 
-			this.textMedDirLastName.Location = new System.Drawing.Point(156, 77);
-			this.textMedDirLastName.Name = "textMedDirLastName";
-			this.textMedDirLastName.Size = new System.Drawing.Size(157, 20);
-			this.textMedDirLastName.TabIndex = 248;
+			this.textOrderingProvLastName.Location = new System.Drawing.Point(156, 77);
+			this.textOrderingProvLastName.Name = "textOrderingProvLastName";
+			this.textOrderingProvLastName.Size = new System.Drawing.Size(157, 20);
+			this.textOrderingProvLastName.TabIndex = 3;
 			// 
 			// label31
 			// 
@@ -556,24 +544,24 @@
 			this.label31.Name = "label31";
 			this.label31.Size = new System.Drawing.Size(133, 17);
 			this.label31.TabIndex = 247;
-			this.label31.Text = "Director ID";
+			this.label31.Text = "ID";
 			this.label31.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textMedDirIdentifier
+			// textOrderingProvIdentifier
 			// 
-			this.textMedDirIdentifier.Location = new System.Drawing.Point(156, 34);
-			this.textMedDirIdentifier.Name = "textMedDirIdentifier";
-			this.textMedDirIdentifier.Size = new System.Drawing.Size(157, 20);
-			this.textMedDirIdentifier.TabIndex = 246;
+			this.textOrderingProvIdentifier.Location = new System.Drawing.Point(156, 34);
+			this.textOrderingProvIdentifier.Name = "textOrderingProvIdentifier";
+			this.textOrderingProvIdentifier.Size = new System.Drawing.Size(157, 20);
+			this.textOrderingProvIdentifier.TabIndex = 1;
 			// 
 			// groupBox1
 			// 
-			this.groupBox1.Controls.Add(this.textBox1);
+			this.groupBox1.Controls.Add(this.textOrderingProvAAUIDType);
 			this.groupBox1.Controls.Add(this.label1);
 			this.groupBox1.Controls.Add(this.label3);
-			this.groupBox1.Controls.Add(this.textBox7);
+			this.groupBox1.Controls.Add(this.textOrderingProvAANID);
 			this.groupBox1.Controls.Add(this.label6);
-			this.groupBox1.Controls.Add(this.textBox8);
+			this.groupBox1.Controls.Add(this.textOrderingProvAAUID);
 			this.groupBox1.Location = new System.Drawing.Point(4, 178);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(324, 84);
@@ -581,13 +569,13 @@
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Assigning Authority";
 			// 
-			// textBox1
+			// textOrderingProvAAUIDType
 			// 
-			this.textBox1.Location = new System.Drawing.Point(151, 16);
-			this.textBox1.Multiline = true;
-			this.textBox1.Name = "textBox1";
-			this.textBox1.Size = new System.Drawing.Size(157, 20);
-			this.textBox1.TabIndex = 243;
+			this.textOrderingProvAAUIDType.Location = new System.Drawing.Point(151, 16);
+			this.textOrderingProvAAUIDType.Multiline = true;
+			this.textOrderingProvAAUIDType.Name = "textOrderingProvAAUIDType";
+			this.textOrderingProvAAUIDType.Size = new System.Drawing.Size(157, 20);
+			this.textOrderingProvAAUIDType.TabIndex = 0;
 			// 
 			// label1
 			// 
@@ -607,13 +595,13 @@
 			this.label3.Text = "Namespace ID";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textBox7
+			// textOrderingProvAANID
 			// 
-			this.textBox7.Location = new System.Drawing.Point(151, 37);
-			this.textBox7.Multiline = true;
-			this.textBox7.Name = "textBox7";
-			this.textBox7.Size = new System.Drawing.Size(157, 20);
-			this.textBox7.TabIndex = 235;
+			this.textOrderingProvAANID.Location = new System.Drawing.Point(151, 37);
+			this.textOrderingProvAANID.Multiline = true;
+			this.textOrderingProvAANID.Name = "textOrderingProvAANID";
+			this.textOrderingProvAANID.Size = new System.Drawing.Size(157, 20);
+			this.textOrderingProvAANID.TabIndex = 1;
 			// 
 			// label6
 			// 
@@ -624,30 +612,30 @@
 			this.label6.Text = "Universal ID";
 			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textBox8
+			// textOrderingProvAAUID
 			// 
-			this.textBox8.Location = new System.Drawing.Point(151, 58);
-			this.textBox8.Multiline = true;
-			this.textBox8.Name = "textBox8";
-			this.textBox8.Size = new System.Drawing.Size(157, 20);
-			this.textBox8.TabIndex = 237;
+			this.textOrderingProvAAUID.Location = new System.Drawing.Point(151, 58);
+			this.textOrderingProvAAUID.Multiline = true;
+			this.textOrderingProvAAUID.Name = "textOrderingProvAAUID";
+			this.textOrderingProvAAUID.Size = new System.Drawing.Size(157, 20);
+			this.textOrderingProvAAUID.TabIndex = 2;
 			// 
 			// groupBox3
 			// 
 			this.groupBox3.Controls.Add(this.label7);
-			this.groupBox3.Controls.Add(this.textBox9);
-			this.groupBox3.Controls.Add(this.textBox10);
+			this.groupBox3.Controls.Add(this.textFillerOrderNum);
+			this.groupBox3.Controls.Add(this.textFillerOrderUniversalIDType);
 			this.groupBox3.Controls.Add(this.label11);
 			this.groupBox3.Controls.Add(this.label12);
-			this.groupBox3.Controls.Add(this.textBox11);
+			this.groupBox3.Controls.Add(this.textFillerOrderNamespace);
 			this.groupBox3.Controls.Add(this.label13);
-			this.groupBox3.Controls.Add(this.textBox12);
-			this.groupBox3.Location = new System.Drawing.Point(12, 139);
+			this.groupBox3.Controls.Add(this.textFillerOrderUniversalID);
+			this.groupBox3.Location = new System.Drawing.Point(12, 253);
 			this.groupBox3.Name = "groupBox3";
 			this.groupBox3.Size = new System.Drawing.Size(282, 103);
-			this.groupBox3.TabIndex = 247;
+			this.groupBox3.TabIndex = 2;
 			this.groupBox3.TabStop = false;
-			this.groupBox3.Text = "Placer Order Group Number";
+			this.groupBox3.Text = "Filler Order Number";
 			// 
 			// label7
 			// 
@@ -658,21 +646,21 @@
 			this.label7.Text = "ID";
 			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textBox9
+			// textFillerOrderNum
 			// 
-			this.textBox9.Location = new System.Drawing.Point(119, 14);
-			this.textBox9.Multiline = true;
-			this.textBox9.Name = "textBox9";
-			this.textBox9.Size = new System.Drawing.Size(157, 20);
-			this.textBox9.TabIndex = 244;
+			this.textFillerOrderNum.Location = new System.Drawing.Point(119, 14);
+			this.textFillerOrderNum.Multiline = true;
+			this.textFillerOrderNum.Name = "textFillerOrderNum";
+			this.textFillerOrderNum.Size = new System.Drawing.Size(157, 20);
+			this.textFillerOrderNum.TabIndex = 0;
 			// 
-			// textBox10
+			// textFillerOrderUniversalIDType
 			// 
-			this.textBox10.Location = new System.Drawing.Point(119, 35);
-			this.textBox10.Multiline = true;
-			this.textBox10.Name = "textBox10";
-			this.textBox10.Size = new System.Drawing.Size(157, 20);
-			this.textBox10.TabIndex = 243;
+			this.textFillerOrderUniversalIDType.Location = new System.Drawing.Point(119, 35);
+			this.textFillerOrderUniversalIDType.Multiline = true;
+			this.textFillerOrderUniversalIDType.Name = "textFillerOrderUniversalIDType";
+			this.textFillerOrderUniversalIDType.Size = new System.Drawing.Size(157, 20);
+			this.textFillerOrderUniversalIDType.TabIndex = 1;
 			// 
 			// label11
 			// 
@@ -692,13 +680,13 @@
 			this.label12.Text = "Namespace ID";
 			this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textBox11
+			// textFillerOrderNamespace
 			// 
-			this.textBox11.Location = new System.Drawing.Point(119, 56);
-			this.textBox11.Multiline = true;
-			this.textBox11.Name = "textBox11";
-			this.textBox11.Size = new System.Drawing.Size(157, 20);
-			this.textBox11.TabIndex = 235;
+			this.textFillerOrderNamespace.Location = new System.Drawing.Point(119, 56);
+			this.textFillerOrderNamespace.Multiline = true;
+			this.textFillerOrderNamespace.Name = "textFillerOrderNamespace";
+			this.textFillerOrderNamespace.Size = new System.Drawing.Size(157, 20);
+			this.textFillerOrderNamespace.TabIndex = 2;
 			// 
 			// label13
 			// 
@@ -709,53 +697,37 @@
 			this.label13.Text = "Universal ID";
 			this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textBox12
+			// textFillerOrderUniversalID
 			// 
-			this.textBox12.Location = new System.Drawing.Point(119, 77);
-			this.textBox12.Multiline = true;
-			this.textBox12.Name = "textBox12";
-			this.textBox12.Size = new System.Drawing.Size(157, 20);
-			this.textBox12.TabIndex = 237;
+			this.textFillerOrderUniversalID.Location = new System.Drawing.Point(119, 77);
+			this.textFillerOrderUniversalID.Multiline = true;
+			this.textFillerOrderUniversalID.Name = "textFillerOrderUniversalID";
+			this.textFillerOrderUniversalID.Size = new System.Drawing.Size(157, 20);
+			this.textFillerOrderUniversalID.TabIndex = 3;
 			// 
 			// groupBox6
 			// 
-			this.groupBox6.Controls.Add(this.button6);
+			this.groupBox6.Controls.Add(this.butServicePicker);
 			this.groupBox6.Controls.Add(this.label44);
-			this.groupBox6.Controls.Add(this.textObsIDCodeSystemNameAlt);
+			this.groupBox6.Controls.Add(this.textUsiCodeSystemNameAlt);
 			this.groupBox6.Controls.Add(this.label43);
-			this.groupBox6.Controls.Add(this.textObsIDCodeSystemName);
+			this.groupBox6.Controls.Add(this.textUsiCodeSystemName);
 			this.groupBox6.Controls.Add(this.label14);
-			this.groupBox6.Controls.Add(this.label37);
-			this.groupBox6.Controls.Add(this.textObsIDText);
-			this.groupBox6.Controls.Add(this.textObsSub);
+			this.groupBox6.Controls.Add(this.textUsiText);
 			this.groupBox6.Controls.Add(this.label15);
 			this.groupBox6.Controls.Add(this.label36);
-			this.groupBox6.Controls.Add(this.textObsID);
-			this.groupBox6.Controls.Add(this.textObsIDOrigText);
-			this.groupBox6.Controls.Add(this.textObsIDTextAlt);
+			this.groupBox6.Controls.Add(this.textUsiID);
+			this.groupBox6.Controls.Add(this.textUsiTextOriginal);
+			this.groupBox6.Controls.Add(this.textUsiTextAlt);
 			this.groupBox6.Controls.Add(this.label34);
 			this.groupBox6.Controls.Add(this.label35);
-			this.groupBox6.Controls.Add(this.textObsIDAlt);
-			this.groupBox6.Location = new System.Drawing.Point(642, 35);
+			this.groupBox6.Controls.Add(this.textUsiIDAlt);
+			this.groupBox6.Location = new System.Drawing.Point(688, 35);
 			this.groupBox6.Name = "groupBox6";
-			this.groupBox6.Size = new System.Drawing.Size(274, 194);
-			this.groupBox6.TabIndex = 254;
+			this.groupBox6.Size = new System.Drawing.Size(274, 170);
+			this.groupBox6.TabIndex = 5;
 			this.groupBox6.TabStop = false;
 			this.groupBox6.Text = "Service Identifier (LOINC Codes)";
-			// 
-			// button6
-			// 
-			this.button6.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.button6.Autosize = true;
-			this.button6.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.button6.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.button6.CornerRadius = 4F;
-			this.button6.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.button6.Location = new System.Drawing.Point(6, 14);
-			this.button6.Name = "button6";
-			this.button6.Size = new System.Drawing.Size(29, 25);
-			this.button6.TabIndex = 255;
-			this.button6.Text = "...";
 			// 
 			// label44
 			// 
@@ -766,12 +738,12 @@
 			this.label44.Text = "Alt Code System";
 			this.label44.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textObsIDCodeSystemNameAlt
+			// textUsiCodeSystemNameAlt
 			// 
-			this.textObsIDCodeSystemNameAlt.Location = new System.Drawing.Point(134, 80);
-			this.textObsIDCodeSystemNameAlt.Name = "textObsIDCodeSystemNameAlt";
-			this.textObsIDCodeSystemNameAlt.Size = new System.Drawing.Size(135, 20);
-			this.textObsIDCodeSystemNameAlt.TabIndex = 255;
+			this.textUsiCodeSystemNameAlt.Location = new System.Drawing.Point(134, 80);
+			this.textUsiCodeSystemNameAlt.Name = "textUsiCodeSystemNameAlt";
+			this.textUsiCodeSystemNameAlt.Size = new System.Drawing.Size(135, 20);
+			this.textUsiCodeSystemNameAlt.TabIndex = 3;
 			// 
 			// label43
 			// 
@@ -782,12 +754,12 @@
 			this.label43.Text = "Code System";
 			this.label43.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textObsIDCodeSystemName
+			// textUsiCodeSystemName
 			// 
-			this.textObsIDCodeSystemName.Location = new System.Drawing.Point(134, 17);
-			this.textObsIDCodeSystemName.Name = "textObsIDCodeSystemName";
-			this.textObsIDCodeSystemName.Size = new System.Drawing.Size(135, 20);
-			this.textObsIDCodeSystemName.TabIndex = 253;
+			this.textUsiCodeSystemName.Location = new System.Drawing.Point(134, 17);
+			this.textUsiCodeSystemName.Name = "textUsiCodeSystemName";
+			this.textUsiCodeSystemName.Size = new System.Drawing.Size(135, 20);
+			this.textUsiCodeSystemName.TabIndex = 0;
 			// 
 			// label14
 			// 
@@ -798,29 +770,13 @@
 			this.label14.Text = "Observation ID";
 			this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// label37
+			// textUsiText
 			// 
-			this.label37.Location = new System.Drawing.Point(6, 166);
-			this.label37.Name = "label37";
-			this.label37.Size = new System.Drawing.Size(127, 17);
-			this.label37.TabIndex = 252;
-			this.label37.Text = "Observation Sub";
-			this.label37.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textObsIDText
-			// 
-			this.textObsIDText.Location = new System.Drawing.Point(134, 59);
-			this.textObsIDText.Multiline = true;
-			this.textObsIDText.Name = "textObsIDText";
-			this.textObsIDText.Size = new System.Drawing.Size(135, 20);
-			this.textObsIDText.TabIndex = 227;
-			// 
-			// textObsSub
-			// 
-			this.textObsSub.Location = new System.Drawing.Point(134, 164);
-			this.textObsSub.Name = "textObsSub";
-			this.textObsSub.Size = new System.Drawing.Size(135, 20);
-			this.textObsSub.TabIndex = 251;
+			this.textUsiText.Location = new System.Drawing.Point(134, 59);
+			this.textUsiText.Multiline = true;
+			this.textUsiText.Name = "textUsiText";
+			this.textUsiText.Size = new System.Drawing.Size(135, 20);
+			this.textUsiText.TabIndex = 2;
 			// 
 			// label15
 			// 
@@ -840,28 +796,28 @@
 			this.label36.Text = "Original Text";
 			this.label36.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textObsID
+			// textUsiID
 			// 
-			this.textObsID.Location = new System.Drawing.Point(134, 38);
-			this.textObsID.Name = "textObsID";
-			this.textObsID.Size = new System.Drawing.Size(135, 20);
-			this.textObsID.TabIndex = 0;
+			this.textUsiID.Location = new System.Drawing.Point(134, 38);
+			this.textUsiID.Name = "textUsiID";
+			this.textUsiID.Size = new System.Drawing.Size(135, 20);
+			this.textUsiID.TabIndex = 1;
 			// 
-			// textObsIDOrigText
+			// textUsiTextOriginal
 			// 
-			this.textObsIDOrigText.Location = new System.Drawing.Point(134, 143);
-			this.textObsIDOrigText.Multiline = true;
-			this.textObsIDOrigText.Name = "textObsIDOrigText";
-			this.textObsIDOrigText.Size = new System.Drawing.Size(135, 20);
-			this.textObsIDOrigText.TabIndex = 249;
+			this.textUsiTextOriginal.Location = new System.Drawing.Point(134, 143);
+			this.textUsiTextOriginal.Multiline = true;
+			this.textUsiTextOriginal.Name = "textUsiTextOriginal";
+			this.textUsiTextOriginal.Size = new System.Drawing.Size(135, 20);
+			this.textUsiTextOriginal.TabIndex = 6;
 			// 
-			// textObsIDTextAlt
+			// textUsiTextAlt
 			// 
-			this.textObsIDTextAlt.Location = new System.Drawing.Point(134, 122);
-			this.textObsIDTextAlt.Multiline = true;
-			this.textObsIDTextAlt.Name = "textObsIDTextAlt";
-			this.textObsIDTextAlt.Size = new System.Drawing.Size(135, 20);
-			this.textObsIDTextAlt.TabIndex = 247;
+			this.textUsiTextAlt.Location = new System.Drawing.Point(134, 122);
+			this.textUsiTextAlt.Multiline = true;
+			this.textUsiTextAlt.Name = "textUsiTextAlt";
+			this.textUsiTextAlt.Size = new System.Drawing.Size(135, 20);
+			this.textUsiTextAlt.TabIndex = 5;
 			// 
 			// label34
 			// 
@@ -881,72 +837,73 @@
 			this.label35.Text = "Alt Observation Text";
 			this.label35.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textObsIDAlt
+			// textUsiIDAlt
 			// 
-			this.textObsIDAlt.Location = new System.Drawing.Point(134, 101);
-			this.textObsIDAlt.Name = "textObsIDAlt";
-			this.textObsIDAlt.Size = new System.Drawing.Size(135, 20);
-			this.textObsIDAlt.TabIndex = 245;
+			this.textUsiIDAlt.Location = new System.Drawing.Point(134, 101);
+			this.textUsiIDAlt.Name = "textUsiIDAlt";
+			this.textUsiIDAlt.Size = new System.Drawing.Size(135, 20);
+			this.textUsiIDAlt.TabIndex = 4;
 			// 
-			// button7
+			// butAddClinicalInfo
 			// 
-			this.button7.Location = new System.Drawing.Point(830, 419);
-			this.button7.Name = "button7";
-			this.button7.Size = new System.Drawing.Size(81, 24);
-			this.button7.TabIndex = 256;
-			this.button7.Text = "Add Result";
-			this.button7.UseVisualStyleBackColor = true;
+			this.butAddClinicalInfo.Enabled = false;
+			this.butAddClinicalInfo.Location = new System.Drawing.Point(881, 419);
+			this.butAddClinicalInfo.Name = "butAddClinicalInfo";
+			this.butAddClinicalInfo.Size = new System.Drawing.Size(81, 24);
+			this.butAddClinicalInfo.TabIndex = 256;
+			this.butAddClinicalInfo.Text = "Add C. Info";
+			this.butAddClinicalInfo.UseVisualStyleBackColor = true;
 			// 
 			// label16
 			// 
-			this.label16.Location = new System.Drawing.Point(329, 14);
+			this.label16.Location = new System.Drawing.Point(356, 14);
 			this.label16.Name = "label16";
 			this.label16.Size = new System.Drawing.Size(96, 17);
 			this.label16.TabIndex = 258;
 			this.label16.Text = "Parent Result";
 			this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textBox13
+			// textParentOrderNum
 			// 
-			this.textBox13.Location = new System.Drawing.Point(425, 13);
-			this.textBox13.Name = "textBox13";
-			this.textBox13.ReadOnly = true;
-			this.textBox13.Size = new System.Drawing.Size(157, 20);
-			this.textBox13.TabIndex = 257;
-			this.textBox13.WordWrap = false;
+			this.textParentOrderNum.Location = new System.Drawing.Point(452, 13);
+			this.textParentOrderNum.Name = "textParentOrderNum";
+			this.textParentOrderNum.ReadOnly = true;
+			this.textParentOrderNum.Size = new System.Drawing.Size(157, 20);
+			this.textParentOrderNum.TabIndex = 257;
+			this.textParentOrderNum.WordWrap = false;
 			// 
-			// checkAlertHighSeverity
+			// checkResultsHandlingN
 			// 
-			this.checkAlertHighSeverity.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkAlertHighSeverity.Location = new System.Drawing.Point(155, 13);
-			this.checkAlertHighSeverity.Name = "checkAlertHighSeverity";
-			this.checkAlertHighSeverity.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-			this.checkAlertHighSeverity.Size = new System.Drawing.Size(173, 20);
-			this.checkAlertHighSeverity.TabIndex = 261;
-			this.checkAlertHighSeverity.Text = "Notify provider when ready";
-			this.checkAlertHighSeverity.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkAlertHighSeverity.UseVisualStyleBackColor = true;
+			this.checkResultsHandlingN.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkResultsHandlingN.Location = new System.Drawing.Point(155, 13);
+			this.checkResultsHandlingN.Name = "checkResultsHandlingN";
+			this.checkResultsHandlingN.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+			this.checkResultsHandlingN.Size = new System.Drawing.Size(173, 20);
+			this.checkResultsHandlingN.TabIndex = 1;
+			this.checkResultsHandlingN.Text = "Notify provider when ready";
+			this.checkResultsHandlingN.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkResultsHandlingN.UseVisualStyleBackColor = true;
 			// 
-			// checkMU2
+			// checkResultsHandlingF
 			// 
-			this.checkMU2.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkMU2.Location = new System.Drawing.Point(6, 13);
-			this.checkMU2.Name = "checkMU2";
-			this.checkMU2.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-			this.checkMU2.Size = new System.Drawing.Size(143, 20);
-			this.checkMU2.TabIndex = 260;
-			this.checkMU2.Text = "Film results with patient";
-			this.checkMU2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkMU2.UseVisualStyleBackColor = true;
+			this.checkResultsHandlingF.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkResultsHandlingF.Location = new System.Drawing.Point(6, 13);
+			this.checkResultsHandlingF.Name = "checkResultsHandlingF";
+			this.checkResultsHandlingF.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+			this.checkResultsHandlingF.Size = new System.Drawing.Size(143, 20);
+			this.checkResultsHandlingF.TabIndex = 0;
+			this.checkResultsHandlingF.Text = "Film results with patient";
+			this.checkResultsHandlingF.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkResultsHandlingF.UseVisualStyleBackColor = true;
 			// 
 			// groupBox7
 			// 
-			this.groupBox7.Controls.Add(this.checkMU2);
-			this.groupBox7.Controls.Add(this.checkAlertHighSeverity);
-			this.groupBox7.Location = new System.Drawing.Point(300, 308);
+			this.groupBox7.Controls.Add(this.checkResultsHandlingF);
+			this.groupBox7.Controls.Add(this.checkResultsHandlingN);
+			this.groupBox7.Location = new System.Drawing.Point(327, 308);
 			this.groupBox7.Name = "groupBox7";
 			this.groupBox7.Size = new System.Drawing.Size(336, 38);
-			this.groupBox7.TabIndex = 246;
+			this.groupBox7.TabIndex = 4;
 			this.groupBox7.TabStop = false;
 			this.groupBox7.Text = "Results Handling";
 			// 
@@ -959,12 +916,12 @@
 			this.label17.Text = "Date/Time Start";
 			this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textAnalysisDateTime
+			// textTQ1Stop
 			// 
-			this.textAnalysisDateTime.Location = new System.Drawing.Point(134, 34);
-			this.textAnalysisDateTime.Name = "textAnalysisDateTime";
-			this.textAnalysisDateTime.Size = new System.Drawing.Size(135, 20);
-			this.textAnalysisDateTime.TabIndex = 260;
+			this.textTQ1Stop.Location = new System.Drawing.Point(134, 34);
+			this.textTQ1Stop.Name = "textTQ1Stop";
+			this.textTQ1Stop.Size = new System.Drawing.Size(135, 20);
+			this.textTQ1Stop.TabIndex = 1;
 			// 
 			// label18
 			// 
@@ -975,123 +932,95 @@
 			this.label18.Text = "Date/Time Stop";
 			this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textObsDateTime
+			// textTQ1Start
 			// 
-			this.textObsDateTime.Location = new System.Drawing.Point(134, 13);
-			this.textObsDateTime.Name = "textObsDateTime";
-			this.textObsDateTime.Size = new System.Drawing.Size(135, 20);
-			this.textObsDateTime.TabIndex = 262;
+			this.textTQ1Start.Location = new System.Drawing.Point(134, 13);
+			this.textTQ1Start.Name = "textTQ1Start";
+			this.textTQ1Start.Size = new System.Drawing.Size(135, 20);
+			this.textTQ1Start.TabIndex = 0;
 			// 
 			// groupBox8
 			// 
-			this.groupBox8.Controls.Add(this.textObsDateTime);
+			this.groupBox8.Controls.Add(this.textTQ1Start);
 			this.groupBox8.Controls.Add(this.label17);
 			this.groupBox8.Controls.Add(this.label18);
-			this.groupBox8.Controls.Add(this.textAnalysisDateTime);
-			this.groupBox8.Location = new System.Drawing.Point(642, 235);
+			this.groupBox8.Controls.Add(this.textTQ1Stop);
+			this.groupBox8.Location = new System.Drawing.Point(688, 210);
 			this.groupBox8.Name = "groupBox8";
 			this.groupBox8.Size = new System.Drawing.Size(274, 59);
 			this.groupBox8.TabIndex = 262;
 			this.groupBox8.TabStop = false;
 			this.groupBox8.Text = "TQ1";
 			// 
-			// comboBox1
+			// comboSpecimenActionCode
 			// 
-			this.comboBox1.FormattingEnabled = true;
-			this.comboBox1.Location = new System.Drawing.Point(755, 579);
-			this.comboBox1.Name = "comboBox1";
-			this.comboBox1.Size = new System.Drawing.Size(157, 21);
-			this.comboBox1.TabIndex = 263;
+			this.comboSpecimenActionCode.FormattingEnabled = true;
+			this.comboSpecimenActionCode.Location = new System.Drawing.Point(669, 634);
+			this.comboSpecimenActionCode.Name = "comboSpecimenActionCode";
+			this.comboSpecimenActionCode.Size = new System.Drawing.Size(288, 21);
+			this.comboSpecimenActionCode.TabIndex = 8;
 			// 
 			// label19
 			// 
-			this.label19.Location = new System.Drawing.Point(619, 580);
+			this.label19.Location = new System.Drawing.Point(669, 614);
 			this.label19.Name = "label19";
-			this.label19.Size = new System.Drawing.Size(131, 17);
+			this.label19.Size = new System.Drawing.Size(164, 17);
 			this.label19.TabIndex = 262;
-			this.label19.Text = "Specimen Action Code";
-			this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.label19.Text = "Specimen Action Code:";
+			this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// textBox14
+			// textResultDateTime
 			// 
-			this.textBox14.Location = new System.Drawing.Point(776, 7);
-			this.textBox14.Name = "textBox14";
-			this.textBox14.Size = new System.Drawing.Size(135, 20);
-			this.textBox14.TabIndex = 264;
+			this.textResultDateTime.Location = new System.Drawing.Point(822, 7);
+			this.textResultDateTime.Name = "textResultDateTime";
+			this.textResultDateTime.Size = new System.Drawing.Size(135, 20);
+			this.textResultDateTime.TabIndex = 6;
 			// 
 			// label20
 			// 
-			this.label20.Location = new System.Drawing.Point(675, 9);
+			this.label20.Location = new System.Drawing.Point(721, 9);
 			this.label20.Name = "label20";
 			this.label20.Size = new System.Drawing.Size(95, 17);
 			this.label20.TabIndex = 265;
 			this.label20.Text = "Last Update";
 			this.label20.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// comboBox2
+			// comboResultStatus
 			// 
-			this.comboBox2.FormattingEnabled = true;
-			this.comboBox2.Location = new System.Drawing.Point(776, 317);
-			this.comboBox2.Name = "comboBox2";
-			this.comboBox2.Size = new System.Drawing.Size(135, 21);
-			this.comboBox2.TabIndex = 267;
+			this.comboResultStatus.FormattingEnabled = true;
+			this.comboResultStatus.Location = new System.Drawing.Point(131, 634);
+			this.comboResultStatus.Name = "comboResultStatus";
+			this.comboResultStatus.Size = new System.Drawing.Size(532, 21);
+			this.comboResultStatus.TabIndex = 7;
 			// 
 			// label26
 			// 
-			this.label26.Location = new System.Drawing.Point(644, 320);
+			this.label26.Location = new System.Drawing.Point(12, 635);
 			this.label26.Name = "label26";
-			this.label26.Size = new System.Drawing.Size(131, 17);
+			this.label26.Size = new System.Drawing.Size(119, 17);
 			this.label26.TabIndex = 266;
 			this.label26.Text = "Results Status";
 			this.label26.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// button8
-			// 
-			this.button8.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.button8.Autosize = true;
-			this.button8.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.button8.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.button8.CornerRadius = 4F;
-			this.button8.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.button8.Location = new System.Drawing.Point(588, 10);
-			this.button8.Name = "button8";
-			this.button8.Size = new System.Drawing.Size(29, 25);
-			this.button8.TabIndex = 259;
-			this.button8.Text = "...";
-			// 
 			// gridResultsCopyTo
 			// 
 			this.gridResultsCopyTo.HScrollVisible = false;
-			this.gridResultsCopyTo.Location = new System.Drawing.Point(395, 359);
+			this.gridResultsCopyTo.Location = new System.Drawing.Point(446, 359);
 			this.gridResultsCopyTo.Name = "gridResultsCopyTo";
 			this.gridResultsCopyTo.ScrollValue = 0;
-			this.gridResultsCopyTo.Size = new System.Drawing.Size(217, 104);
+			this.gridResultsCopyTo.Size = new System.Drawing.Size(217, 101);
 			this.gridResultsCopyTo.TabIndex = 255;
 			this.gridResultsCopyTo.Title = "Results Copy To";
 			this.gridResultsCopyTo.TranslationName = null;
 			// 
-			// button4
-			// 
-			this.button4.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.button4.Autosize = true;
-			this.button4.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.button4.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.button4.CornerRadius = 4F;
-			this.button4.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.button4.Location = new System.Drawing.Point(294, 9);
-			this.button4.Name = "button4";
-			this.button4.Size = new System.Drawing.Size(29, 25);
-			this.button4.TabIndex = 228;
-			this.button4.Text = "...";
-			// 
 			// gridClinicalInformation
 			// 
 			this.gridClinicalInformation.HScrollVisible = false;
-			this.gridClinicalInformation.Location = new System.Drawing.Point(618, 359);
+			this.gridClinicalInformation.Location = new System.Drawing.Point(669, 359);
 			this.gridClinicalInformation.Name = "gridClinicalInformation";
 			this.gridClinicalInformation.ScrollValue = 0;
-			this.gridClinicalInformation.Size = new System.Drawing.Size(206, 104);
-			this.gridClinicalInformation.TabIndex = 21;
+			this.gridClinicalInformation.Size = new System.Drawing.Size(206, 101);
+			this.gridClinicalInformation.TabIndex = 11;
 			this.gridClinicalInformation.Title = "Clinical Information";
 			this.gridClinicalInformation.TranslationName = null;
 			// 
@@ -1101,18 +1030,19 @@
 			this.gridNotes.Location = new System.Drawing.Point(12, 359);
 			this.gridNotes.Name = "gridNotes";
 			this.gridNotes.ScrollValue = 0;
-			this.gridNotes.Size = new System.Drawing.Size(377, 104);
+			this.gridNotes.Size = new System.Drawing.Size(428, 101);
 			this.gridNotes.TabIndex = 20;
 			this.gridNotes.Title = "Notes";
 			this.gridNotes.TranslationName = null;
+			this.gridNotes.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridNotes_CellDoubleClick);
 			// 
 			// gridSpecimen
 			// 
 			this.gridSpecimen.HScrollVisible = false;
-			this.gridSpecimen.Location = new System.Drawing.Point(618, 469);
+			this.gridSpecimen.Location = new System.Drawing.Point(669, 466);
 			this.gridSpecimen.Name = "gridSpecimen";
 			this.gridSpecimen.ScrollValue = 0;
-			this.gridSpecimen.Size = new System.Drawing.Size(206, 104);
+			this.gridSpecimen.Size = new System.Drawing.Size(206, 145);
 			this.gridSpecimen.TabIndex = 19;
 			this.gridSpecimen.Title = "Specimens";
 			this.gridSpecimen.TranslationName = null;
@@ -1120,46 +1050,118 @@
 			// gridMain
 			// 
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(12, 469);
+			this.gridMain.Location = new System.Drawing.Point(12, 466);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(600, 131);
+			this.gridMain.Size = new System.Drawing.Size(651, 165);
 			this.gridMain.TabIndex = 0;
 			this.gridMain.Title = "Lab Results";
 			this.gridMain.TranslationName = null;
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
+			// butViewParent
+			// 
+			this.butViewParent.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butViewParent.Autosize = true;
+			this.butViewParent.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butViewParent.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butViewParent.CornerRadius = 4F;
+			this.butViewParent.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butViewParent.Location = new System.Drawing.Point(333, 10);
+			this.butViewParent.Name = "butViewParent";
+			this.butViewParent.Size = new System.Drawing.Size(46, 25);
+			this.butViewParent.TabIndex = 268;
+			this.butViewParent.Text = "View";
+			this.butViewParent.Click += new System.EventHandler(this.butViewParent_Click);
+			// 
+			// butParentPicker
+			// 
+			this.butParentPicker.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butParentPicker.Autosize = true;
+			this.butParentPicker.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butParentPicker.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butParentPicker.CornerRadius = 4F;
+			this.butParentPicker.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butParentPicker.Location = new System.Drawing.Point(615, 10);
+			this.butParentPicker.Name = "butParentPicker";
+			this.butParentPicker.Size = new System.Drawing.Size(29, 25);
+			this.butParentPicker.TabIndex = 259;
+			this.butParentPicker.Text = "...";
+			// 
+			// butServicePicker
+			// 
+			this.butServicePicker.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butServicePicker.Autosize = true;
+			this.butServicePicker.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butServicePicker.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butServicePicker.CornerRadius = 4F;
+			this.butServicePicker.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butServicePicker.Location = new System.Drawing.Point(6, 14);
+			this.butServicePicker.Name = "butServicePicker";
+			this.butServicePicker.Size = new System.Drawing.Size(29, 25);
+			this.butServicePicker.TabIndex = 255;
+			this.butServicePicker.Text = "...";
+			// 
+			// butProvPicker
+			// 
+			this.butProvPicker.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butProvPicker.Autosize = true;
+			this.butProvPicker.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butProvPicker.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butProvPicker.CornerRadius = 4F;
+			this.butProvPicker.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butProvPicker.Location = new System.Drawing.Point(10, 15);
+			this.butProvPicker.Name = "butProvPicker";
+			this.butProvPicker.Size = new System.Drawing.Size(29, 25);
+			this.butProvPicker.TabIndex = 249;
+			this.butProvPicker.Text = "...";
+			// 
+			// butPatientPick
+			// 
+			this.butPatientPick.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butPatientPick.Autosize = true;
+			this.butPatientPick.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPatientPick.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPatientPick.CornerRadius = 4F;
+			this.butPatientPick.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butPatientPick.Location = new System.Drawing.Point(294, 9);
+			this.butPatientPick.Name = "butPatientPick";
+			this.butPatientPick.Size = new System.Drawing.Size(29, 25);
+			this.butPatientPick.TabIndex = 228;
+			this.butPatientPick.Text = "...";
+			// 
 			// FormEhrLabOrderEdit2014
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(923, 641);
-			this.Controls.Add(this.comboBox2);
+			this.ClientSize = new System.Drawing.Size(974, 696);
+			this.Controls.Add(this.butViewParent);
+			this.Controls.Add(this.comboResultStatus);
 			this.Controls.Add(this.label26);
-			this.Controls.Add(this.textBox14);
+			this.Controls.Add(this.textResultDateTime);
 			this.Controls.Add(this.label20);
-			this.Controls.Add(this.comboBox1);
+			this.Controls.Add(this.comboSpecimenActionCode);
 			this.Controls.Add(this.label19);
 			this.Controls.Add(this.groupBox8);
 			this.Controls.Add(this.groupBox7);
-			this.Controls.Add(this.button8);
+			this.Controls.Add(this.butParentPicker);
 			this.Controls.Add(this.label16);
-			this.Controls.Add(this.textBox13);
-			this.Controls.Add(this.button7);
+			this.Controls.Add(this.textParentOrderNum);
+			this.Controls.Add(this.butAddClinicalInfo);
 			this.Controls.Add(this.gridResultsCopyTo);
 			this.Controls.Add(this.groupBox6);
 			this.Controls.Add(this.groupBox3);
 			this.Controls.Add(this.groupBox5);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.groupBox4);
-			this.Controls.Add(this.button4);
-			this.Controls.Add(this.button3);
-			this.Controls.Add(this.button2);
-			this.Controls.Add(this.button1);
+			this.Controls.Add(this.butPatientPick);
+			this.Controls.Add(this.butAddSpecimens);
+			this.Controls.Add(this.butAddCopyTo);
+			this.Controls.Add(this.butAddNote);
 			this.Controls.Add(this.gridClinicalInformation);
 			this.Controls.Add(this.gridNotes);
 			this.Controls.Add(this.gridSpecimen);
-			this.Controls.Add(this.label5);
+			this.Controls.Add(this.labelPatient);
 			this.Controls.Add(this.textName);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.butDelete);
@@ -1199,18 +1201,18 @@
 		private System.Windows.Forms.Button butOk;
 		private System.Windows.Forms.Button butDelete;
 		private System.Windows.Forms.Button butAdd;
-		private System.Windows.Forms.Label label5;
+		private System.Windows.Forms.Label labelPatient;
 		private System.Windows.Forms.TextBox textName;
 		private UI.ODGrid gridSpecimen;
 		private UI.ODGrid gridNotes;
 		private UI.ODGrid gridClinicalInformation;
-		private System.Windows.Forms.Button button1;
-		private System.Windows.Forms.Button button2;
-		private System.Windows.Forms.Button button3;
-		private UI.Button button4;
+		private System.Windows.Forms.Button butAddNote;
+		private System.Windows.Forms.Button butAddCopyTo;
+		private System.Windows.Forms.Button butAddSpecimens;
+		private UI.Button butPatientPick;
 		private System.Windows.Forms.GroupBox groupBox4;
 		private System.Windows.Forms.Label label4;
-		private System.Windows.Forms.TextBox testPlacerOrderNum;
+		private System.Windows.Forms.TextBox textPlacerOrderNum;
 		private System.Windows.Forms.TextBox textPlacerOrderUniversalIDType;
 		private System.Windows.Forms.Label label42;
 		private System.Windows.Forms.Label label21;
@@ -1219,84 +1221,83 @@
 		private System.Windows.Forms.TextBox textPlacerOrderUniversalID;
 		private System.Windows.Forms.GroupBox groupBox2;
 		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.TextBox textBox3;
-		private System.Windows.Forms.TextBox textBox4;
+		private System.Windows.Forms.TextBox textPlacerGroupNum;
+		private System.Windows.Forms.TextBox textPlacerGroupUniversalIDType;
 		private System.Windows.Forms.Label label8;
 		private System.Windows.Forms.Label label9;
-		private System.Windows.Forms.TextBox textBox5;
+		private System.Windows.Forms.TextBox textPlacerGroupNamespace;
 		private System.Windows.Forms.Label label10;
-		private System.Windows.Forms.TextBox textBox6;
+		private System.Windows.Forms.TextBox textPlacerGroupUniversalID;
 		private System.Windows.Forms.GroupBox groupBox5;
-		private UI.Button button5;
-		private System.Windows.Forms.ComboBox comboMedDirIdType;
+		private UI.Button butProvPicker;
+		private System.Windows.Forms.ComboBox comboOrderingProvIdType;
 		private System.Windows.Forms.Label label33;
-		private System.Windows.Forms.ComboBox comboMedDirNameType;
+		private System.Windows.Forms.ComboBox comboOrderingProvNameType;
 		private System.Windows.Forms.Label label32;
 		private System.Windows.Forms.Label label23;
-		private System.Windows.Forms.TextBox textMedDirPrefix;
+		private System.Windows.Forms.TextBox textOrderingProvPrefix;
 		private System.Windows.Forms.Label label24;
-		private System.Windows.Forms.TextBox textMedDirSuffix;
+		private System.Windows.Forms.TextBox textOrderingProvSuffix;
 		private System.Windows.Forms.Label label25;
-		private System.Windows.Forms.TextBox textMedDirMiddleName;
+		private System.Windows.Forms.TextBox textOrderingProvMiddleName;
 		private System.Windows.Forms.Label label29;
-		private System.Windows.Forms.TextBox textMedDirFirstName;
+		private System.Windows.Forms.TextBox textOrderingProvFirstName;
 		private System.Windows.Forms.Label label30;
-		private System.Windows.Forms.TextBox textMedDirLastName;
+		private System.Windows.Forms.TextBox textOrderingProvLastName;
 		private System.Windows.Forms.Label label31;
-		private System.Windows.Forms.TextBox textMedDirIdentifier;
+		private System.Windows.Forms.TextBox textOrderingProvIdentifier;
 		private System.Windows.Forms.GroupBox groupBox1;
-		private System.Windows.Forms.TextBox textBox1;
+		private System.Windows.Forms.TextBox textOrderingProvAAUIDType;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label label3;
-		private System.Windows.Forms.TextBox textBox7;
+		private System.Windows.Forms.TextBox textOrderingProvAANID;
 		private System.Windows.Forms.Label label6;
-		private System.Windows.Forms.TextBox textBox8;
+		private System.Windows.Forms.TextBox textOrderingProvAAUID;
 		private System.Windows.Forms.GroupBox groupBox3;
 		private System.Windows.Forms.Label label7;
-		private System.Windows.Forms.TextBox textBox9;
-		private System.Windows.Forms.TextBox textBox10;
+		private System.Windows.Forms.TextBox textFillerOrderNum;
+		private System.Windows.Forms.TextBox textFillerOrderUniversalIDType;
 		private System.Windows.Forms.Label label11;
 		private System.Windows.Forms.Label label12;
-		private System.Windows.Forms.TextBox textBox11;
+		private System.Windows.Forms.TextBox textFillerOrderNamespace;
 		private System.Windows.Forms.Label label13;
-		private System.Windows.Forms.TextBox textBox12;
+		private System.Windows.Forms.TextBox textFillerOrderUniversalID;
 		private System.Windows.Forms.GroupBox groupBox6;
 		private System.Windows.Forms.Label label44;
-		private System.Windows.Forms.TextBox textObsIDCodeSystemNameAlt;
+		private System.Windows.Forms.TextBox textUsiCodeSystemNameAlt;
 		private System.Windows.Forms.Label label43;
-		private System.Windows.Forms.TextBox textObsIDCodeSystemName;
+		private System.Windows.Forms.TextBox textUsiCodeSystemName;
 		private System.Windows.Forms.Label label14;
-		private System.Windows.Forms.Label label37;
-		private System.Windows.Forms.TextBox textObsIDText;
-		private System.Windows.Forms.TextBox textObsSub;
+		private System.Windows.Forms.TextBox textUsiText;
 		private System.Windows.Forms.Label label15;
 		private System.Windows.Forms.Label label36;
-		private System.Windows.Forms.TextBox textObsID;
-		private System.Windows.Forms.TextBox textObsIDOrigText;
-		private System.Windows.Forms.TextBox textObsIDTextAlt;
+		private System.Windows.Forms.TextBox textUsiID;
+		private System.Windows.Forms.TextBox textUsiTextOriginal;
+		private System.Windows.Forms.TextBox textUsiTextAlt;
 		private System.Windows.Forms.Label label34;
 		private System.Windows.Forms.Label label35;
-		private System.Windows.Forms.TextBox textObsIDAlt;
-		private UI.Button button6;
+		private System.Windows.Forms.TextBox textUsiIDAlt;
+		private UI.Button butServicePicker;
 		private UI.ODGrid gridResultsCopyTo;
-		private System.Windows.Forms.Button button7;
-		private UI.Button button8;
+		private System.Windows.Forms.Button butAddClinicalInfo;
+		private UI.Button butParentPicker;
 		private System.Windows.Forms.Label label16;
-		private System.Windows.Forms.TextBox textBox13;
-		private System.Windows.Forms.CheckBox checkAlertHighSeverity;
-		private System.Windows.Forms.CheckBox checkMU2;
+		private System.Windows.Forms.TextBox textParentOrderNum;
+		private System.Windows.Forms.CheckBox checkResultsHandlingN;
+		private System.Windows.Forms.CheckBox checkResultsHandlingF;
 		private System.Windows.Forms.GroupBox groupBox7;
 		private System.Windows.Forms.Label label17;
-		private System.Windows.Forms.TextBox textAnalysisDateTime;
+		private System.Windows.Forms.TextBox textTQ1Stop;
 		private System.Windows.Forms.Label label18;
-		private System.Windows.Forms.TextBox textObsDateTime;
+		private System.Windows.Forms.TextBox textTQ1Start;
 		private System.Windows.Forms.GroupBox groupBox8;
-		private System.Windows.Forms.ComboBox comboBox1;
+		private System.Windows.Forms.ComboBox comboSpecimenActionCode;
 		private System.Windows.Forms.Label label19;
-		private System.Windows.Forms.TextBox textBox14;
+		private System.Windows.Forms.TextBox textResultDateTime;
 		private System.Windows.Forms.Label label20;
-		private System.Windows.Forms.ComboBox comboBox2;
+		private System.Windows.Forms.ComboBox comboResultStatus;
 		private System.Windows.Forms.Label label26;
+		private UI.Button butViewParent;
 
 	}
 }

@@ -32,7 +32,7 @@
 			// butAdd
 			// 
 			this.butAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.butAdd.Location = new System.Drawing.Point(634, 41);
+			this.butAdd.Location = new System.Drawing.Point(887, 41);
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(75, 23);
 			this.butAdd.TabIndex = 8;
@@ -43,7 +43,7 @@
 			// butImport
 			// 
 			this.butImport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.butImport.Location = new System.Drawing.Point(634, 12);
+			this.butImport.Location = new System.Drawing.Point(887, 12);
 			this.butImport.Name = "butImport";
 			this.butImport.Size = new System.Drawing.Size(75, 23);
 			this.butImport.TabIndex = 7;
@@ -54,7 +54,7 @@
 			// butClose
 			// 
 			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butClose.Location = new System.Drawing.Point(634, 367);
+			this.butClose.Location = new System.Drawing.Point(887, 367);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75, 23);
 			this.butClose.TabIndex = 9;
@@ -71,7 +71,7 @@
 			this.gridMain.Location = new System.Drawing.Point(12, 12);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(609, 378);
+			this.gridMain.Size = new System.Drawing.Size(862, 378);
 			this.gridMain.TabIndex = 5;
 			this.gridMain.Title = "Laboratory Orders";
 			this.gridMain.TranslationName = null;
@@ -81,7 +81,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(721, 402);
+			this.ClientSize = new System.Drawing.Size(974, 402);
 			this.Controls.Add(this.butClose);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.butImport);

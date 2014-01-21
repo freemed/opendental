@@ -17,6 +17,8 @@ namespace OpenDentBusiness {
 		///<summary>Always RE unless importing from outside sources.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public HL70119 OrderControlCode;
+
+		#region Order Numbers
 		#region Placer Order Num OCR.2 and OBR.2
 		///<summary>Placer order number assigned to this lab order, usually assigned by the dental office.  Not the same as EhrLabNum, but similar.  OBR.2.1 and ORC.2.1.</summary>
 		public string PlacerOrderNum;
@@ -27,6 +29,7 @@ namespace OpenDentBusiness {
 		///<summary>Always "ISO", unless importing from other sources.  OBR.2.4 and ORC.2.4</summary>
 		public string PlacerOrderUniversalIDType;
 		#endregion
+
 		#region Filler Order Num OCR.3 and OBR.3
 		///<summary>Filler order number assigned to this lab order, usually assigned by the laboratory.  Not the same as EhrLabNum, but similar.  OBR.3.1 and ORC.3.1.</summary>
 		public string FillerOrderNum;
@@ -37,6 +40,7 @@ namespace OpenDentBusiness {
 		///<summary>Always "ISO", unless importing from other sources.  OBR.3.4 and ORC.3.4</summary>
 		public string FillerOrderUniversalIDType;
 		#endregion
+
 		#region Placer Group Num OCR.4
 		///<summary>[0..1] May be empty.  Placer group number assigned to this lab order, usually assigned by the dental office.  ORC.4.1.</summary>
 		public string PlacerGroupNum;
@@ -47,6 +51,8 @@ namespace OpenDentBusiness {
 		///<summary>[0..1] Always "ISO", unless importing from other sources.  ORC.4.4</summary>
 		public string PlacerGroupUniversalIDType;
 		#endregion
+		#endregion
+
 		#region Ordering Provider ORC.12 and OBR.16
 		///<summary>May be provnum or NPI num or any other num, when combined with OrderingProviderIdAssigningAuthority should uniquely identify the provider.  ORC.12.1</summary>
 		public string OrderingProviderID;
@@ -75,12 +81,14 @@ namespace OpenDentBusiness {
 		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public HL70203 OrderingProviderIdentifierTypeCode;
 		#endregion
+
 		#endregion OCR
 		#region OBR fields
 		///<summary>Enumerates the OBR segments within a single message starting with 1.  OBR.1</summary>
 		public long SetIdOBR;
 		//OBR.PlacerOrderNumber same as above. 
 		//OBR.FillerOrderNumber same as above. 
+
 		#region Universal Service Identifier OBR.4
 		///<summary>OBR.4.1</summary>
 		public string UsiID;
@@ -99,6 +107,7 @@ namespace OpenDentBusiness {
 		///<summary>Optional text that describes the original text used to encode the values above.  OBR.4.9</summary>
 		public string UsiTextOriginal;
 		#endregion
+
 		///<summary>Stored as string in the format YYYY[MM[DD[HH[MM[SS]]]]] where bracketed values are optional.  When time is not known will be valued "0000".  OBR.7.1</summary>
 		public string ObservationDateTimeStart;
 		///<summary>May be empty.  Stored as string in the format YYYY[MM[DD[HH[MM[SS]]]]] where bracketed values are optional.  OBR.8.1</summary>

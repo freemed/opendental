@@ -18,11 +18,21 @@ namespace OpenDentBusiness{
 		}
 
 		public static List<EhrLab> ProcessHl7Message(string message) {
-			return ProcessHl7Message(message,null);
+			return ProcessHl7Message(message,null, false);
+		}
+
+		public static List<EhrLab> ProcessHl7Message(string message,Patient patCur) {
+			return ProcessHl7Message(message,patCur,false);
+		}
+
+		///<summary>Allows message to be processed and imported and will initialize empty lists instead of leaving them null.</summary>
+		///<param name="IsImport">Set to true if using for import preview.</param>
+		public static List<EhrLab> ProcessHl7Message(string message,bool IsImport) {
+			return ProcessHl7Message(message,null, IsImport);
 		}
 
 		///<summary>Surround with Try/Catch.  Processes an HL7 message into an EHRLab object.</summary>
-		public static List<EhrLab> ProcessHl7Message(string message, Patient patCur){
+		public static List<EhrLab> ProcessHl7Message(string message, Patient patCur, bool isImport){
 			//Patient patcur;
 			List<EhrLab> listRetVal=new List<EhrLab>();
 			EhrLab ehrLabCur=new EhrLab();
@@ -158,10 +168,9 @@ namespace OpenDentBusiness{
 							ehrLabCur.ObservationDateTimeEnd		=fields[8];
 						}
 						try {ehrLabCur.SpecimenActionCode		=(HL70065)Enum.Parse(typeof(HL70065),	fields[11]);}	catch {	}
-						//Do not need to check if list is null because it is now a Property that will 
-						//if(retVal._listRelevantClinicalInformation==null) {
-						//	retVal._listRelevantClinicalInformation=new List<EhrLabClinicalInfo>();
-						//}
+						if(isImport) {
+							ehrLabCur.ListRelevantClinicalInformations=new List<EhrLabClinicalInfo>();
+						}
 						for(int i=0;i<fields[13].Split('~').Length;i++) {
 							if(fields[13].Length==0) {
 								break;//nothing to process
@@ -179,18 +188,62 @@ namespace OpenDentBusiness{
 						}
 						//OBR 16; Ordering Provider same as OCR. //not validating or checking at this time.
 						ehrLabCur.ResultDateTime=fields[22];
-						//Parent Result
-						if(fields.Length<25) {break;}//likely that fields beyond this are left out.
+						if(fields.Length<=25) {break;}//likely that fields beyond this are left out.
 						try { ehrLabCur.ResultStatus												=(HL70123)Enum.Parse(typeof(HL70123),fields[25]);}	catch { }
+						//Parent Result
+						if(fields.Length<=26) {break;}//likely that fields beyond this are left out.
+						ehrLabCur.ParentObservationID												=fields[26].Split('^')[0].Split('&')[0];
+						try{ehrLabCur.ParentObservationText									=fields[26].Split('^')[0].Split('&')[1];}catch{}
+						try{ehrLabCur.ParentObservationCodeSystemName				=fields[26].Split('^')[0].Split('&')[2];}catch{}
+						try{ehrLabCur.ParentObservationIDAlt								=fields[26].Split('^')[0].Split('&')[3];}catch{}
+						try{ehrLabCur.ParentObservationTextAlt							=fields[26].Split('^')[0].Split('&')[4];}catch{}
+						try{ehrLabCur.ParentObservationCodeSystemNameAlt		=fields[26].Split('^')[0].Split('&')[5];}catch{}
+						try{ehrLabCur.ParentObservationTextOriginal					=fields[26].Split('^')[0].Split('&')[6];}catch{}
+						try{ehrLabCur.ParentObservationSubID								=fields[26].Split('^')[1];}catch{}
+						//Results Copy To
+						if(isImport) {
+							ehrLabCur.ListEhrLabResultsCopyTo=new List<EhrLabResultsCopyTo>();
+						}
+						if(fields.Length<28) {break;}//likely that fields beyond this are left out.
+						for(int i=0;i<fields[28].Split('~').Length;i++) {
+							EhrLabResultsCopyTo tempRCT=new EhrLabResultsCopyTo();
+							string stringRCT=fields[28].Split('~')[i];
+							if(stringRCT.Length==0) {
+								continue;//usually only if nothing was sent, but also if an empty field was sent.
+							}
+							tempRCT.CopyToID															=stringRCT.Split('^')[0];
+							tempRCT.CopyToLName														=stringRCT.Split('^')[1];
+							tempRCT.CopyToFName														=stringRCT.Split('^')[2];
+							tempRCT.CopyToMiddleNames											=stringRCT.Split('^')[3];
+							tempRCT.CopyToSuffix													=stringRCT.Split('^')[4];
+							tempRCT.CopyToPrefix													=stringRCT.Split('^')[5];
+							tempRCT.CopyToAssigningAuthorityUniversalID		=stringRCT.Split('^')[8].Split('&')[0];
+							tempRCT.CopyToAssigningAuthorityNamespaceID		=stringRCT.Split('^')[8].Split('&')[1];
+							tempRCT.CopyToAssigningAuthorityIDType				=stringRCT.Split('^')[8].Split('&')[2];
+							try {
+								tempRCT.CopyToNameTypeCode=(HL70200)Enum.Parse(typeof(HL70200),stringRCT.Split('^')[9]);
+							}
+							catch {
+								throw new Exception("ORC.12.10 does not contain a valid Name Type Code (HL70200 value set).");
+							}
+							try {
+								ehrLabCur.OrderingProviderIdentifierTypeCode	=(HL70203)Enum.Parse(typeof(HL70203),stringRCT.Split('^')[12]);
+							}
+							catch {
+								throw new Exception("ORC.12.13 does not contain a valid Identifier Type Code (HL70203 value set).");
+							}
+							ehrLabCur.ListEhrLabResultsCopyTo.Add(tempRCT);
+						}
+						//Parent Lab
 						if(fields.Length<29) {break;}//likely that fields beyond this are left out.
-						ehrLabCur.ParentObservationID											=fields[29].Split('^')[0].Split('&')[0];
-						try{ehrLabCur.ParentObservationText								=fields[29].Split('^')[0].Split('&')[1];}catch{}
-						try{ehrLabCur.ParentObservationCodeSystemName			=fields[29].Split('^')[0].Split('&')[2];}catch{}
-						try{ehrLabCur.ParentObservationIDAlt								=fields[29].Split('^')[0].Split('&')[3];}catch{}
-						try{ehrLabCur.ParentObservationTextAlt							=fields[29].Split('^')[0].Split('&')[4];}catch{}
-						try{ehrLabCur.ParentObservationCodeSystemNameAlt		=fields[29].Split('^')[0].Split('&')[5];}catch{}
-						try{ehrLabCur.ParentObservationTextOriginal				=fields[29].Split('^')[0].Split('&')[6];}catch{}
-						try{ehrLabCur.ParentObservationSubID								=fields[29].Split('^')[1];}catch{}
+						ehrLabCur.ParentPlacerOrderNum												=fields[29].Split('^')[0].Split('&')[0];
+						try{ehrLabCur.ParentPlacerOrderNamespace							=fields[29].Split('^')[0].Split('&')[1];}catch{}
+						try{ehrLabCur.ParentPlacerOrderUniversalID						=fields[29].Split('^')[0].Split('&')[2];}catch{}
+						try{ehrLabCur.ParentPlacerOrderUniversalIDType				=fields[29].Split('^')[0].Split('&')[3];}catch{}
+						try{ehrLabCur.ParentFillerOrderNum										=fields[29].Split('^')[1].Split('&')[0];}catch{}
+						try{ehrLabCur.ParentFillerOrderNamespace							=fields[29].Split('^')[1].Split('&')[1];}catch{}
+						try{ehrLabCur.ParentFillerOrderUniversalID						=fields[29].Split('^')[1].Split('&')[2];}catch{}
+						try{ehrLabCur.ParentFillerOrderUniversalIDType				=fields[29].Split('^')[1].Split('&')[3];}catch{}
 						if(fields.Length<31) {
 							break;//next segment. all additional fields were omitted from this one.
 						}
@@ -669,6 +722,35 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
+		///<summary>Helper function to return a list of descriptions for the HL70065 enumeration.  First item in the list is blank.</summary>
+		public static List<string> GetHL70065Descriptions() {
+			//No need to check RemotingRole;
+			List<string> retVal=new List<string>();
+			retVal.Add("");//Blank		
+			retVal.Add("Add ordered tests to the existing specimen");//A,
+			retVal.Add("Generated order; reflex order");//G,
+			retVal.Add("Lab to obtain specimen from patient");//L,
+			retVal.Add("Specimen obtained by service other than lab");//O
+			return retVal;
+		}
+
+		///<summary>Helper function to return a list of descriptions for the HL70123 enumeration.  First item in the list is blank.</summary>
+		public static List<string> GetHL70123Descriptions() {
+			//No need to check RemotingRole;
+			List<string> retVal=new List<string>();
+			retVal.Add("");//Blank		
+			retVal.Add("Some but not all results available.");//A,
+			retVal.Add("Correction to results.");//C,
+			retVal.Add("Final Results; results stored and verified. Can only be changed with a corrected result.");//F,
+			retVal.Add("No results available; specimen received, procedure incomplete.");//I,
+			retVal.Add("Order received; specimen not yet received.");//O,
+			retVal.Add("Preliminary: A verified early result is available, final results not yet obtained.");//P,
+			retVal.Add("Results stored; not yet verified.");//R,
+			retVal.Add("No results available; procedure scheduled but not done.");//S,
+			retVal.Add("No results available; Order canceled.");//X
+			return retVal;
+		}
+
 		///<summary></summary>
 		public static long Insert(EhrLab ehrLab) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -685,6 +767,21 @@ namespace OpenDentBusiness{
 				return;
 			}
 			Crud.EhrLabCrud.Update(ehrLab);
+		}
+
+		///<summary>Deletes EhrLab, EhrLabResults, EhrLabResultsCopyTos, EhrLabClinicalInfos, and EhrLabSpecimens.</summary>
+		public static void Delete(long ehrLabNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),ehrLabNum);
+				return;
+			}
+			string command= "DELETE FROM ehrlab WHERE EhrLabNum = "+POut.Long(ehrLabNum);
+			Db.NonQ(command);
+			EhrLabNotes.DeleteForLab(ehrLabNum);
+			EhrLabResults.DeleteForLab(ehrLabNum);
+			EhrLabResultsCopyTos.DeleteForLab(ehrLabNum);
+			EhrLabClinicalInfos.DeleteForLab(ehrLabNum);
+			EhrLabSpecimens.DeleteForLab(ehrLabNum);
 		}
 
 		//If this table type will exist as cached data, uncomment the CachePattern region below and edit.
@@ -746,16 +843,6 @@ namespace OpenDentBusiness{
 				return;
 			}
 			Crud.EhrLabCrud.Update(ehrLab);
-		}
-
-		///<summary></summary>
-		public static void Delete(long ehrLabNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),ehrLabNum);
-				return;
-			}
-			string command= "DELETE FROM ehrlab WHERE EhrLabNum = "+POut.Long(ehrLabNum);
-			Db.NonQ(command);
 		}
 		*/
 
