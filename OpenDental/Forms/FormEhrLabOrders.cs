@@ -69,7 +69,7 @@ namespace OpenDental {
 				else if(listEhrLabs[0].PatNum==0) {
 					if(MessageBox.Show("Lab patient does not match current patient. Lab patient name is "
 						+MBCP.textMain.Text.Split(new string[] { "\r\n" },StringSplitOptions.RemoveEmptyEntries)[1].Split('|')[5].Split('~')[0].Split('^')[1]+" "//first name
-						+MBCP.textMain.Text.Split(new string[] { "\r\n" },StringSplitOptions.RemoveEmptyEntries)[1].Split('|')[5].Split('~')[0].Split('^')[1]+" "//last name
+						+MBCP.textMain.Text.Split(new string[] { "\r\n" },StringSplitOptions.RemoveEmptyEntries)[1].Split('|')[5].Split('~')[0].Split('^')[0]+" "//last name
 						+"\r\nWould you like to import lab for the current patient?","",MessageBoxButtons.OKCancel)!=DialogResult.OK) 
 					{
 						return;
