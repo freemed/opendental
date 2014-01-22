@@ -4266,9 +4266,16 @@ namespace OpenDental{
 			}
 			//Check for changes in the carrier
 			if(PlanCur.CarrierNum!=PlanCurOriginal.CarrierNum) {
-				SecurityLogs.MakeLogEntry(Permissions.InsPlanChangeCarrierName,PatPlanCur.PatNum,Lan.g(this,"Carrier name changed in Edit Insurance Plan window from")+" "
-					+Carriers.GetCarrier(PlanCurOriginal.CarrierNum).CarrierName+" "+Lan.g(this,"to")+" "+Carriers.GetCarrier(PlanCur.CarrierNum).CarrierName,
-					PlanCur.PlanNum);
+				long patNum=0;
+				if(PatPlanCur!=null) {//PatPlanCur will be null if editing insurance plans from Lists > Insurance Plans.
+					patNum=PatPlanCur.PatNum;
+				}
+				string carrierNameOrig=Carriers.GetCarrier(PlanCurOriginal.CarrierNum).CarrierName;
+				string carrierNameNew=Carriers.GetCarrier(PlanCur.CarrierNum).CarrierName;
+				if(carrierNameOrig!=carrierNameNew) {//The CarrierNum could have changed but the CarrierName might not have changed.  Only make an audit entry if the name changed.
+					SecurityLogs.MakeLogEntry(Permissions.InsPlanChangeCarrierName,patNum,Lan.g(this,"Carrier name changed in Edit Insurance Plan window from")+" "
+					+carrierNameOrig+" "+Lan.g(this,"to")+" "+carrierNameNew,PlanCur.PlanNum);
+				}
 			}
 			DialogResult=DialogResult.OK;
 		}
