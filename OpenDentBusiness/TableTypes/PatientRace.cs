@@ -41,7 +41,7 @@ namespace OpenDentBusiness {
 		Hispanic,//should be renamed to HispanicOrLatino
 		///<summary>7 - We had to keep this for backward compatibility.  Hidden for EHR because it's explicitly not allowed.</summary>
 		Multiracial,
-		///<summary>8 - CDCREC:2131-1 Race.  Hidden for EHR because not allowed by the OMB.  It's present in quality measures, but we won't use it.</summary>
+		///<summary>8 - CDCREC:2131-1 Race.</summary>
 		Other,
 		///<summary>9 - CDCREC:2106-3 Race</summary>
 		White,

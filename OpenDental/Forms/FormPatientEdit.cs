@@ -2046,8 +2046,8 @@ namespace OpenDental{
 				comboBoxMultiRace.Items.Add(Lan.g("enumPatRace","HawaiiOrPacIsland"));//5
 				//comboBoxMultiRace.Items.Add(Lan.g("enumPatRace","Hispanic"));//Hidden for EHR. Supplemental to base 'race'. Shows in comboEthnicity instead.
 				//comboBoxMultiRace.Items.Add(Lan.g("enumPatRace","Multiracial"));//Hidden for EHR
-				//comboBoxMultiRace.Items.Add(Lan.g("enumPatRace","Other"));//Hidden for EHR
-				comboBoxMultiRace.Items.Add(Lan.g("enumPatRace","White"));//6
+				comboBoxMultiRace.Items.Add(Lan.g("enumPatRace","Other"));//6
+				comboBoxMultiRace.Items.Add(Lan.g("enumPatRace","White"));//7
 				comboEthnicity.Items.Add(Lan.g(this,"none"));//0 
 				comboEthnicity.Items.Add(Lan.g(this,"DeclinedToSpecify"));//1
 				comboEthnicity.Items.Add(Lan.g(this,"Not Hispanic"));//2
@@ -2076,11 +2076,14 @@ namespace OpenDental{
 					else if(race==PatRace.NotHispanic) {
 						comboEthnicity.SelectedIndex=2;//Not Hispanic
 					}
+					else if(race==PatRace.Other) {
+						comboBoxMultiRace.SetSelected(6,true);//Other
+					}
 					else if(race==PatRace.White) {
-						comboBoxMultiRace.SetSelected(6,true);//White
+						comboBoxMultiRace.SetSelected(7,true);//White
 					}
 				}
-				if(comboBoxMultiRace.SelectedIndices.Count==0) {//No race selected, ethnicity cannot exist without a race
+				if(comboBoxMultiRace.SelectedIndices.Count==0 || listPatRaces.Contains((int)PatRace.Other)) {//No race or Other was selected, ethnicity cannot exist without a race
 					comboEthnicity.SelectedIndex=0;//none
 				}
 				else if(listPatRaces.Contains((int)PatRace.DeclinedToSpecify)) {//DeclinedToSpecify forces both race and ethnicity.
@@ -3089,12 +3092,19 @@ namespace OpenDental{
 					listPatRaces.Add(PatRace.HawaiiOrPacIsland);
 				}
 				else if(selectedIdx==6) {
+					listPatRaces.Add(PatRace.Other);
+				}
+				else if(selectedIdx==7) {
 					listPatRaces.Add(PatRace.White);
 				}
 			}
 			if(listPatRaces.Contains(PatRace.DeclinedToSpecify)) {//If DeclinedToSpecify was chosen, then ensure that no other race information is saved.
 				listPatRaces.Clear();
 				listPatRaces.Add(PatRace.DeclinedToSpecify);
+			}
+			else if(listPatRaces.Contains(PatRace.Other)) {//If Other was chosen, then ensure that no other race information is saved.
+				listPatRaces.Clear();
+				listPatRaces.Add(PatRace.Other);
 			}
 			//Ethnicity of Hispanic/NotHispanic can only be supplemental to a specified race (when neither the none or the DeclinedToSpecify options were chosen for race).
 			else if(listPatRaces.Count>0 && comboEthnicity.SelectedIndex==3) {//Hispanic
