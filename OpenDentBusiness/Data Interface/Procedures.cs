@@ -914,14 +914,14 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Takes the list of all procedures for the patient, and finds any that are attached as lab procs to that proc.</summary>
-		public static List<Procedure> GetCanadianLabFees(long procNum,List<Procedure> procList){
+		public static List<Procedure> GetCanadianLabFees(long procNumLab,List<Procedure> procList){
 			//No need to check RemotingRole; no call to db.
 			List<Procedure> retVal=new List<Procedure>();
-			if(procNum==0) {
+			if(procNumLab==0) {//Ignore regular procedures.
 				return retVal;
 			}
 			for(int i=0;i<procList.Count;i++) {
-				if(procList[i].ProcNumLab==procNum) {
+				if(procList[i].ProcNumLab==procNumLab) {
 					retVal.Add(procList[i]);
 				}
 			}

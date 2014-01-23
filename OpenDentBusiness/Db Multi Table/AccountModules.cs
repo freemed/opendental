@@ -1031,6 +1031,9 @@ namespace OpenDentBusiness {
 					string[] arrayProcNumsForClaim=PIn.ByteArray(rawClaim.Rows[i]["ProcNums_"]).Split(',');
 					for(int j=0;j<arrayProcNumsForClaim.Length;j++) {
 						long procNum=PIn.Long(arrayProcNumsForClaim[j]);
+						if(procNum==0) {//ProcNum will be 0 for Total Payments on claims.
+							continue;
+						}
 						for(int k=0;k<rawProc.Rows.Count;k++) {//For each procedure attached to the claim, add the lab fees into the total amount. The lab fees show in the account because they are complete.
 							long procNumLab=PIn.Long(rawProc.Rows[k]["ProcNumLab"].ToString());
 							if(procNumLab==procNum) {
