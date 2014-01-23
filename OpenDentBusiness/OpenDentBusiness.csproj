@@ -557,6 +557,7 @@
     <Compile Include="Db\SchemaCrudTest.cs" />
     <Compile Include="Erx\ErxXml.cs" />
     <Compile Include="Erx\NCScript.cs" />
+    <Compile Include="HL7old\EhrADT_A03.cs" />
     <Compile Include="HL7old\EhrORU.cs" />
     <Compile Include="HL7old\EhrVXU.cs" />
     <Compile Include="HL7\InternalCentricity.cs" />

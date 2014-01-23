@@ -38,6 +38,11 @@ namespace OpenDentBusiness.HL7 {
 		}
 
 		private void InitializeVariables() {
+			_sendingFacilityName=PrefC.GetString(PrefName.PracticeTitle);
+			if(_pat.ClinicNum!=0) {
+				Clinic clinic=Clinics.GetClinic(_pat.ClinicNum);
+				_sendingFacilityName=clinic.Description;
+			}
 			cityWhereEntered=PrefC.GetString(PrefName.PracticeCity);
 			stateWhereEntered=PrefC.GetString(PrefName.PracticeST);
 			if(_pat.ClinicNum!=0) {
@@ -77,11 +82,6 @@ namespace OpenDentBusiness.HL7 {
 		
 		///<summary>Message Segment Header segment.  Required.  Defines intent, source, destination and syntax of the message.  Guide page 104.</summary>
 		private void MSH() {
-			_sendingFacilityName=PrefC.GetString(PrefName.PracticeTitle);
-			if(_pat.ClinicNum!=0) {
-				Clinic clinic=Clinics.GetClinic(_pat.ClinicNum);
-				_sendingFacilityName=clinic.Description;
-			}
 			_seg=new SegmentHL7("MSH"
 				+"|"//MSH-1 Field Separator (|).  Required (length 1..1).
 				+@"^~\&"//MSH-2 Encoding Characters.  Required (length 4..4).  Component separator (^), then field repetition separator (~), then escape character (\), then Sub-component separator (&).
@@ -576,7 +576,7 @@ namespace OpenDentBusiness.HL7 {
 					"",//PID-3.2 Check Digit.  Optional (length 1..1).
 					"",//PID-3.3 Check Digit Scheme.  Required if PID-3.2 is specified.  Not required for our purposes.  Value set HL70061.
 					"Open Dental",//PID-3.4 Assigning Authority.  Required.  Value set HL70363.
-					"SS"//PID-3.5 Identifier Type Code.  Required (length 2..5).  Value set HL70203.  MR=medical record number.
+					"SS"//PID-3.5 Identifier Type Code.  Required (length 2..5).  Value set HL70203.  SS=Social Security Number.
 						//PID-3.6 Assigning Facility.  Optional (length undefined).
 						//PID-3.7 Effective Date.  Optional (length 4..8).
 						//PID-3.8 Expiration Date.  Optional (length 4..8).
@@ -1203,7 +1203,6 @@ namespace OpenDentBusiness.HL7 {
 			StringBuilder sb=new StringBuilder();
 			if(vaccines.Count==0) {
 				WriteError(sb,"Must be at least one vaccine.");
-				return sb.ToString();
 			}
 			for(int i=0;i<vaccines.Count;i++) {
 				VaccinePat vaccine=vaccines[i];
