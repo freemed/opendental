@@ -48,20 +48,28 @@ namespace OpenDentBusiness {
 		///<summary>NUCC</summary>
 		private const string strCodeSystemNameNucc="NUCC";
 		///<summary>Set each time GenerateCCD() is called. Used by helper functions to avoid sending the patient as a parameter to each helper function.</summary>
-		private static Patient _patOutCcd=null;
+		private Patient _patOutCcd=null;
 		///<summary>Instantiated each time GenerateCCD() is called. Used by helper functions to avoid sending the writer as a parameter to each helper function.</summary>
-		private static XmlWriter _w=null;
+		private XmlWriter _w=null;
 		///<summary>Instantiated each time GenerateCCD() is called. Used to generate unique "id" element "root" attribute identifiers. The Ids in this list are random alpha-numeric and 32 characters in length.</summary>
-		private static HashSet<string> _hashCcdIds;
+		private HashSet<string> _hashCcdIds;
 		///<summary>Instantiated each time GenerateCCD() is called. Used to generate unique "id" element "root" attribute identifiers. The Ids in this list are random GUIDs which are 36 characters in length.</summary>
-		private static HashSet<string> _hashCcdGuids;
+		private HashSet<string> _hashCcdGuids;
+
+		#region Private Constructor		
+		
+		///<summary>Constructor is private to limit instantiation to internal use only. All access to this class is static, however, there are private member variables which are used by each instance for ease of access.</summary>
+		private EhrCCD() { }
+
+		#endregion
 
 		#region CCD Creation
 
 		///<summary>Generates a Clinical Summary XML document with an appropriate referral string. Throws an exception if validation fails.</summary>
 		public static string GenerateClinicalSummary(Patient pat,bool hasAllergy,bool hasEncounter,bool hasFunctionalStatus,bool hasImmunization,bool hasMedication,bool hasPlanOfCare,bool hasProblem,bool hasProcedure,bool hasReferral,bool hasResult,bool hasSocialHistory,bool hasVitalSign,string instructions) {
 			string referralReason="Summary of previous appointment requested.";
-			return GenerateCCD(pat,referralReason,hasAllergy,hasEncounter,hasFunctionalStatus,hasImmunization,hasMedication,hasPlanOfCare,hasProblem,hasProcedure,hasReferral,hasResult,hasSocialHistory,hasVitalSign, instructions);
+			EhrCCD ccd=new EhrCCD();
+			return ccd.GenerateCCD(pat,referralReason,hasAllergy,hasEncounter,hasFunctionalStatus,hasImmunization,hasMedication,hasPlanOfCare,hasProblem,hasProcedure,hasReferral,hasResult,hasSocialHistory,hasVitalSign,instructions);
 		}
 
 		///<summary>Generates a Summary of Care XML document with an appropriate referral string. Throws an exception if validation fails.</summary>
@@ -84,11 +92,12 @@ namespace OpenDentBusiness {
 
 		///<summary>Throws an exception if validation fails.</summary>
 		private static string GenerateCCD(Patient pat,string referralReason) {
-			return GenerateCCD(pat,referralReason,true,true,true,true,true,true,true,true,true,true,true,true,null);
+			EhrCCD ccd=new EhrCCD();			
+			return ccd.GenerateCCD(pat,referralReason,true,true,true,true,true,true,true,true,true,true,true,true,null);
 		}
 
 		///<summary>Throws an exception if validation fails.</summary>
-		private static string GenerateCCD(Patient pat,string referralReason,bool hasAllergy,bool hasEncounter,bool hasFunctionalStatus,bool hasImmunization,bool hasMedication,bool hasPlanOfCare,bool hasProblem,bool hasProcedure,bool hasReferral,bool hasResult,bool hasSocialHistory,bool hasVitalSign,string instructions) {
+		private string GenerateCCD(Patient pat,string referralReason,bool hasAllergy,bool hasEncounter,bool hasFunctionalStatus,bool hasImmunization,bool hasMedication,bool hasPlanOfCare,bool hasProblem,bool hasProcedure,bool hasReferral,bool hasResult,bool hasSocialHistory,bool hasVitalSign,string instructions) {
 			string strErrors=ValidateSettings();
 			if(strErrors!="") {
 				throw new ApplicationException(strErrors);
@@ -129,8 +138,9 @@ namespace OpenDentBusiness {
 				StartAndEnd("confidentialityCode","code","N","codeSystem","2.16.840.1.113883.5.25");//Fixed value.  Confidentiality Code System.  Codes: N=(Normal), R=(Restricted),V=(Very Restricted)
 				StartAndEnd("languageCode","code","en-US");
 				Start("recordTarget");
-				Start("patientRole");
-				StartAndEnd("id","extension",pat.PatNum.ToString(),"root",OIDInternals.GetForType(IdentifierType.Patient).IDRoot);//TODO: We might need to assign a global GUID for each office so that the patient can be uniquely identified anywhere in the world.
+				Start("patientRole");				
+				//TODO: We might need to assign a global GUID for each office so that the patient can be uniquely identified anywhere in the world.
+				StartAndEnd("id","extension",pat.PatNum.ToString(),"root",OIDInternals.GetForType(IdentifierType.Patient).IDRoot);
 				if(pat.SSN.Length==9) {
 					StartAndEnd("id","extension",pat.SSN,"root","2.16.840.1.113883.4.1");//TODO: We might need to assign a global GUID for each office so that the patient can be uniquely identified anywhere in the world.
 				}
@@ -364,7 +374,7 @@ Body
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdSectionAllergies(bool hasAllergy) {
+		private void GenerateCcdSectionAllergies(bool hasAllergy) {
 			_w.WriteComment(@"
 =====================================================================================================
 Allergies
@@ -646,7 +656,7 @@ Allergies
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdSectionEncounters(bool hasEncounter) {
+		private void GenerateCcdSectionEncounters(bool hasEncounter) {
 			_w.WriteComment(@"
 =====================================================================================================
 Encounters
@@ -822,7 +832,7 @@ Encounters
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdSectionFunctionalStatus(bool hasFunctionalStatus) {
+		private void GenerateCcdSectionFunctionalStatus(bool hasFunctionalStatus) {
 			string snomedProblemType="55607006";
 			_w.WriteComment(@"
 =====================================================================================================
@@ -1048,7 +1058,7 @@ Functional and Cognitive Status
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdSectionImmunizations(bool hasImmunization) {
+		private void GenerateCcdSectionImmunizations(bool hasImmunization) {
 			_w.WriteComment(@"
 =====================================================================================================
 Immunizations
@@ -1167,7 +1177,7 @@ Immunizations
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdSectionInstructions(string instructions) {
+		private void GenerateCcdSectionInstructions(string instructions) {
 			if(instructions==null) {
 				return;
 			}
@@ -1194,7 +1204,7 @@ Instructions
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdSectionMedications(bool hasMedication) {
+		private void GenerateCcdSectionMedications(bool hasMedication) {
 			_w.WriteComment(@"
 =====================================================================================================
 Medications
@@ -1328,7 +1338,7 @@ Medications
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdSectionPlanOfCare(bool hasPlanOfCare) {
+		private void GenerateCcdSectionPlanOfCare(bool hasPlanOfCare) {
 			_w.WriteComment(@"
 =====================================================================================================
 Care Plan
@@ -1426,7 +1436,7 @@ Care Plan
 		}
 
 		///<summary>Helper for GenerateCCD().  Problem section.</summary>
-		private static void GenerateCcdSectionProblems(bool hasProblem) {
+		private void GenerateCcdSectionProblems(bool hasProblem) {
 			string snomedProblemType="55607006";
 			_w.WriteComment(@"
 =====================================================================================================
@@ -1630,7 +1640,7 @@ Problems
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdSectionProcedures(bool hasProcedure) {
+		private void GenerateCcdSectionProcedures(bool hasProcedure) {
 			_w.WriteComment(@"
 =====================================================================================================
 Procedures
@@ -1749,7 +1759,7 @@ Procedures
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdSectionReasonForReferral(bool hasReferral,string referralReason) {
+		private void GenerateCcdSectionReasonForReferral(bool hasReferral,string referralReason) {
 			_w.WriteComment(@"
 =====================================================================================================
 Reason for Referral
@@ -1773,7 +1783,7 @@ Reason for Referral
 		}
 
 		///<summary>Helper for GenerateCCD().  Exports Labs.</summary>
-		private static void GenerateCcdSectionResults(bool hasSectionResult) {
+		private void GenerateCcdSectionResults(bool hasSectionResult) {
 			_w.WriteComment(@"
 =====================================================================================================
 Laboratory Test Results
@@ -1949,7 +1959,7 @@ Laboratory Test Results
 		}
 
 		///<summary>Helper for GenerateCCD().  Exports smoking and pregnancy information.</summary>
-		private static void GenerateCcdSectionSocialHistory(bool hasSocialHistory) {
+		private void GenerateCcdSectionSocialHistory(bool hasSocialHistory) {
 			_w.WriteComment(@"
 =====================================================================================================
 Social History
@@ -2087,7 +2097,7 @@ Social History
 		}
 
 		///<summary>Helper for GenerateCcdSectionSocialHistory().  Sort function.  Currently sorts by date ascending.</summary>
-		private static int CompareEhrMeasureEvents(EhrMeasureEvent ehrMeasureEventL,EhrMeasureEvent ehrMeasureEventR) {
+		private int CompareEhrMeasureEvents(EhrMeasureEvent ehrMeasureEventL,EhrMeasureEvent ehrMeasureEventR) {
 			if(ehrMeasureEventL.DateTEvent<ehrMeasureEventR.DateTEvent) {
 				return -1;
 			}
@@ -2098,7 +2108,7 @@ Social History
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void GenerateCcdSectionVitalSigns(bool hasVitalSign) {//Currently just a skeleton
+		private void GenerateCcdSectionVitalSigns(bool hasVitalSign) {//Currently just a skeleton
 			_w.WriteComment(@"
 =====================================================================================================
 Vital Signs
@@ -2223,7 +2233,7 @@ Vital Signs
 		///3141-9		Weight Measured
 		///39156-5	BMI (Body Mass Index)
 		///3140-1 BSA (Body Surface Area)</summary>
-		private static void GenerateCcdVitalSign(string strLoincObservationCode,DateTime dateTimeObservation,float observationValue,string observationUnits) {
+		private void GenerateCcdVitalSign(string strLoincObservationCode,DateTime dateTimeObservation,float observationValue,string observationUnits) {
 			Start("component");
 			Start("observation","classCode","OBS","moodCode","EVN");
 			_w.WriteComment("Vital Sign Observation template");//Vital Sign Observation Section
@@ -2251,7 +2261,7 @@ Vital Signs
 		}
 		
 		///<summary>Helper for GenerateCCD(). Builds an "id" element and writes a random 32 character alpha-numeric string into the "root" attribute.</summary>
-		private static void Id() {
+		private void Id() {
 			string id=MiscUtils.CreateRandomAlphaNumericString(32);
 			while(_hashCcdIds.Contains(id)) {
 				id=MiscUtils.CreateRandomAlphaNumericString(32);
@@ -2262,7 +2272,7 @@ Vital Signs
 
 		///<summary>Helper for GenerateCCD(). Builds an "id" element and writes a 36 character GUID string into the "root" attribute.
 		///An example of how the uid might look: "20cf14fb-B65c-4c8c-A54d-b0cca834C18c"</summary>
-		private static void Guid() {
+		private void Guid() {
 			Guid uuid=System.Guid.NewGuid();
 			while(_hashCcdGuids.Contains(uuid.ToString())) {
 				uuid=System.Guid.NewGuid();
@@ -2272,14 +2282,14 @@ Vital Signs
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void TemplateId(string rootNumber) {
+		private void TemplateId(string rootNumber) {
 			_w.WriteStartElement("templateId");
 			_w.WriteAttributeString("root",rootNumber);
 			_w.WriteEndElement();
 		}
 
 		///<summary>Helper for GenerateCCD().</summary>
-		private static void TemplateId(string rootNumber,string authorityName) {
+		private void TemplateId(string rootNumber,string authorityName) {
 			_w.WriteStartElement("templateId");
 			_w.WriteAttributeString("root",rootNumber);
 			_w.WriteAttributeString("assigningAuthorityName",authorityName);
@@ -2287,7 +2297,7 @@ Vital Signs
 		}
 
 		///<summary>Helper for GenerateCCD().  Performs a WriteStartElement, followed by any attributes.  Attributes must be in pairs: name, value.</summary>
-		private static void Start(string elementName,params string[] attributes) {
+		private void Start(string elementName,params string[] attributes) {
 			_w.WriteStartElement(elementName);
 			for(int i=0;i<attributes.Length;i+=2) {
 				_w.WriteAttributeString(attributes[i],attributes[i+1]);
@@ -2295,12 +2305,12 @@ Vital Signs
 		}
 
 		///<summary>Helper for GenerateCCD().  Performs a WriteEndElement.  The specified elementName is for readability only.</summary>
-		private static void End(string elementName) {
+		private void End(string elementName) {
 			_w.WriteEndElement();
 		}
 
 		///<summary>Helper for GenerateCCD().  Performs a WriteStartElement, followed by any attributes, followed by a WriteEndElement.  Attributes must be in pairs: name, value.</summary>
-		private static void StartAndEnd(string elementName,params string[] attributes) {
+		private void StartAndEnd(string elementName,params string[] attributes) {
 			_w.WriteStartElement(elementName);
 			for(int i=0;i<attributes.Length;i+=2) {
 				_w.WriteAttributeString(attributes[i],attributes[i+1]);
@@ -2309,14 +2319,14 @@ Vital Signs
 		}
 
 		///<summary>Helper for GenerateCCD().  Performs a WriteAttributeString for each attribute.  Attributes must be in pairs: name, value.</summary>
-		private static void Attribs(params string[] attributes) {
+		private void Attribs(params string[] attributes) {
 			for(int i=0;i<attributes.Length;i+=2) {
 				_w.WriteAttributeString(attributes[i],attributes[i+1]);
 			}
 		}
 
 		///<summary>Use for HTML tables. Writes the element strElement name and writes the dateTime string in the required date format.  Will not write if year is before 1880.</summary>
-		private static void DateText(string strElementName,DateTime dateTime) {
+		private void DateText(string strElementName,DateTime dateTime) {
 			Start(strElementName);
 			if(dateTime.Year>1880) {
 				_w.WriteString(dateTime.ToString("yyyyMMdd"));
@@ -2326,7 +2336,7 @@ Vital Signs
 
 		///<summary>Use for XML. Writes the element strElement name and writes the dateTime in the required date format into the value attribute.
 		///Will write nullFlavor="UNK" instead of value if year is before 1880.</summary>
-		private static void DateElement(string strElementName,DateTime dateTime) {
+		private void DateElement(string strElementName,DateTime dateTime) {
 			Start(strElementName);
 			if(dateTime.Year<1880) {
 				Attribs("nullFlavor","UNK");
@@ -2339,7 +2349,7 @@ Vital Signs
 
 		///<summary>Writes the element strElement name and writes the dateTime in the required date format into the value attribute.
 		///Will write nullFlavor="UNK" instead of value if year is before 1880.</summary>
-		private static void TimeElement(string strElementName,DateTime dateTime) {
+		private void TimeElement(string strElementName,DateTime dateTime) {
 			Start(strElementName);
 			if(dateTime.Year<1880) {
 				Attribs("nullFlavor","UNK");
@@ -2350,7 +2360,7 @@ Vital Signs
 			End(strElementName);
 		}
 
-		private static void AddressUnitedStates(string strAddress1,string strAddress2,string strCity,string strState) {
+		private void AddressUnitedStates(string strAddress1,string strAddress2,string strCity,string strState) {
 			Start("addr","use","HP");
 			_w.WriteElementString("streetAddressLine",strAddress1);
 			if(strAddress2!="") {
