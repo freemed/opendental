@@ -18,15 +18,15 @@ namespace OpenDentBusiness {
 		///<summary>Description of SpecimenTypeId.  SPM.2</summary>
 		public string SpecimenTypeText;
 		///<summary>CodeSystem that SpecimenTypeId came from.  SPM.3</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
-		public HL70369 SpecimenTypeCodeSystemName;
+		//[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		public string SpecimenTypeCodeSystemName;
 		///<summary>SPM.4</summary>
 		public string SpecimenTypeIDAlt;
 		///<summary>Description of SpecimenTypeIdAlt.  SPM.5</summary>
 		public string SpecimenTypeTextAlt;
 		///<summary>CodeSystem that SpecimenTypeId came from.  SPM.6</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
-		public HL70369 SpecimenTypeCodeSystemNameAlt;
+		//[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		public string SpecimenTypeCodeSystemNameAlt;
 		///<summary>Optional text that describes the original text used to encode the values above.  SPM.7</summary>
 		public string SpecimenTypeTextOriginal;
 		///<summary>Stored as string in the format YYYYMMDD[HH[MM[SS]]] where bracketed values are optional.  When time is not known will be valued "0000".  SPM.17.1.1</summary>
@@ -35,10 +35,10 @@ namespace OpenDentBusiness {
 		public string CollectionDateTimeEnd;
 		///<summary>[0..*]This is not a data column but is stored in a seperate table named EhrLabSpecimenRejectReason.  SPM.21</summary>
 		[CrudColumn(IsNotDbColumn=true)]
-		public List<EhrLabSpecimenRejectReason> _listEhrLabSpecimenRejectReason;
+		private List<EhrLabSpecimenRejectReason> _listEhrLabSpecimenRejectReason;
 		///<summary>[0..*]This is not a data column but is stored in a seperate table named EhrLabSpecimenCondition.  SPM.24</summary>
 		[CrudColumn(IsNotDbColumn=true)]
-		public List<EhrLabSpecimenCondition> _listEhrLabSpecimenCondition;
+		private List<EhrLabSpecimenCondition> _listEhrLabSpecimenCondition;
 
 
 		///<summary></summary>
@@ -53,7 +53,7 @@ namespace OpenDentBusiness {
 						_listEhrLabSpecimenRejectReason=new List<EhrLabSpecimenRejectReason>();
 					}
 					else {
-						_listEhrLabSpecimenRejectReason=EhrLabSpecimenRejectReasons.GetForLab(EhrLabNum);
+						_listEhrLabSpecimenRejectReason=EhrLabSpecimenRejectReasons.GetForEhrLabSpecimen(EhrLabSpecimenNum);
 					}
 				}
 				return _listEhrLabSpecimenRejectReason;
@@ -72,7 +72,7 @@ namespace OpenDentBusiness {
 						_listEhrLabSpecimenCondition=new List<EhrLabSpecimenCondition>();
 					}
 					else {
-						_listEhrLabSpecimenCondition=EhrLabSpecimenConditions.GetForLab(EhrLabNum);
+						_listEhrLabSpecimenCondition=EhrLabSpecimenConditions.GetForEhrLabSpecimen(EhrLabSpecimenNum);
 					}
 				}
 				return _listEhrLabSpecimenCondition;

@@ -9,22 +9,41 @@ namespace OpenDentBusiness{
 	public class EhrLabSpecimenConditions {
 
 		///<summary></summary>
-		public static List<EhrLabSpecimenCondition> GetForLab(long ehrLabNum) {
+		public static List<EhrLabSpecimenCondition> GetForEhrLabSpecimen(long ehrLabSpecimenNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<EhrLabSpecimenCondition>>(MethodBase.GetCurrentMethod(),ehrLabNum);
+				return Meth.GetObject<List<EhrLabSpecimenCondition>>(MethodBase.GetCurrentMethod(),ehrLabSpecimenNum);
 			}
-			string command="SELECT * FROM ehrlabspecimencondition WHERE EhrLabNum = "+POut.Long(ehrLabNum);
+			string command="SELECT * FROM ehrlabspecimencondition WHERE EhrLabSpecimenNum="+POut.Long(ehrLabSpecimenNum);
 			return Crud.EhrLabSpecimenConditionCrud.SelectMany(command);
 		}
 
-		///<summary>Deletes notes for lab results too.</summary>
+		///<summary></summary>
 		public static void DeleteForLab(long ehrLabNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),ehrLabNum);
 				return;
 			}
-			string command="DELETE FROM ehrlabspecimencondition WHERE EhrLabSpecimenNum = "+POut.Long(ehrLabNum);
+			string command="DELETE FROM ehrlabspecimencondition WHERE EhrLabSpecimenNum IN (SELECT EhrLabSpecimenNum FROM ehrlabspecimen WHERE EhrLabNum="+POut.Long(ehrLabNum)+")";
 			Db.NonQ(command);
+		}
+
+		///<summary></summary>
+		public static void DeleteForLabSpecimen(long ehrLabSpecimenNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),ehrLabSpecimenNum);
+				return;
+			}
+			string command="DELETE FROM ehrlabspecimencondition WHERE EhrLabSpecimenNum="+POut.Long(ehrLabSpecimenNum);
+			Db.NonQ(command);
+		}
+
+		///<summary></summary>
+		public static long Insert(EhrLabSpecimenCondition ehrLabSpecimenCondition) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				ehrLabSpecimenCondition.EhrLabSpecimenConditionNum=Meth.GetLong(MethodBase.GetCurrentMethod(),ehrLabSpecimenCondition);
+				return ehrLabSpecimenCondition.EhrLabSpecimenConditionNum;
+			}
+			return Crud.EhrLabSpecimenConditionCrud.Insert(ehrLabSpecimenCondition);
 		}
 
 		//If this table type will exist as cached data, uncomment the CachePattern region below and edit.

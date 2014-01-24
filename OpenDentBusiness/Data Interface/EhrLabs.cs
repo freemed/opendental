@@ -473,13 +473,13 @@ namespace OpenDentBusiness{
 						ehrLabSpecimen.SpecimenTypeID											= fields[4].Split('^')[0];
 						try { ehrLabSpecimen.SpecimenTypeText								= fields[4].Split('^')[1]; }
 						catch { }
-						try { ehrLabSpecimen.SpecimenTypeCodeSystemName			= (HL70369)Enum.Parse(typeof(HL70369),fields[4].Split('^')[2]); }
+						try { ehrLabSpecimen.SpecimenTypeCodeSystemName			= fields[4].Split('^')[2]; }
 						catch { }
 						try { ehrLabSpecimen.SpecimenTypeIDAlt							= fields[4].Split('^')[3]; }
 						catch { }
 						try { ehrLabSpecimen.SpecimenTypeTextAlt						= fields[4].Split('^')[4]; }
 						catch { }
-						try { ehrLabSpecimen.SpecimenTypeCodeSystemNameAlt	= (HL70369)Enum.Parse(typeof(HL70369),fields[4].Split('^')[5]); }
+						try { ehrLabSpecimen.SpecimenTypeCodeSystemNameAlt	= fields[4].Split('^')[5]; }
 						catch { }
 						try { ehrLabSpecimen.SpecimenTypeTextOriginal				= fields[4].Split('^')[6]; }
 						catch { }
@@ -492,9 +492,9 @@ namespace OpenDentBusiness{
 							ehrLabCur.ListEhrLabSpecimens.Add(ehrLabSpecimen);
 							break;//next segment. This one has no more fields
 						}
-						if(ehrLabSpecimen.ListEhrLabSpecimenRejectReason==null) {
-							ehrLabSpecimen.ListEhrLabSpecimenRejectReason=new List<EhrLabSpecimenRejectReason>();
-						}
+						//if(ehrLabSpecimen.ListEhrLabSpecimenRejectReason==null) {
+						//	ehrLabSpecimen.ListEhrLabSpecimenRejectReason=new List<EhrLabSpecimenRejectReason>();
+						//}
 						//Reject Reason
 						for(int i=0;i<fields[21].Split('~').Length;i++) {
 							if(fields[21].Length==0) {
@@ -504,13 +504,13 @@ namespace OpenDentBusiness{
 							ehrLabRR.SpecimenRejectReasonID											=fields[21].Split('~')[i].Split('^')[0];
 							try { ehrLabRR.SpecimenRejectReasonText								=fields[21].Split('~')[i].Split('^')[1]; }
 							catch { }
-							try { ehrLabRR.SpecimenRejectReasonCodeSystemName			=(HL70369)Enum.Parse(typeof(HL70369),fields[21].Split('~')[i].Split('^')[2]); }
+							try { ehrLabRR.SpecimenRejectReasonCodeSystemName			=fields[21].Split('~')[i].Split('^')[2]; }
 							catch { }
 							try { ehrLabRR.SpecimenRejectReasonIDAlt							=fields[21].Split('~')[i].Split('^')[3]; }
 							catch { }
 							try { ehrLabRR.SpecimenRejectReasonTextAlt						=fields[21].Split('~')[i].Split('^')[4]; }
 							catch { }
-							try { ehrLabRR.SpecimenRejectReasonCodeSystemNameAlt	=(HL70369)Enum.Parse(typeof(HL70369),fields[21].Split('~')[i].Split('^')[5]); }
+							try { ehrLabRR.SpecimenRejectReasonCodeSystemNameAlt	=fields[21].Split('~')[i].Split('^')[5]; }
 							catch { }
 							try { ehrLabRR.SpecimenRejectReasonTextOriginal				=fields[21].Split('~')[i].Split('^')[6]; }
 							catch { }
@@ -526,13 +526,13 @@ namespace OpenDentBusiness{
 							ehrLabSC.SpecimenConditionID											=fields[24].Split('~')[i].Split('^')[0];
 							try { ehrLabSC.SpecimenConditionText								=fields[24].Split('~')[i].Split('^')[1]; }
 							catch { }
-							try { ehrLabSC.SpecimenConditionCodeSystemName			=(HL70369)Enum.Parse(typeof(HL70369),fields[24].Split('~')[i].Split('^')[2]); }
+							try { ehrLabSC.SpecimenConditionCodeSystemName			=fields[24].Split('~')[i].Split('^')[2]; }
 							catch { }
 							try { ehrLabSC.SpecimenConditionIDAlt								=fields[24].Split('~')[i].Split('^')[3]; }
 							catch { }
 							try { ehrLabSC.SpecimenConditionTextAlt							=fields[24].Split('~')[i].Split('^')[4]; }
 							catch { }
-							try { ehrLabSC.SpecimenConditionCodeSystemNameAlt		=(HL70369)Enum.Parse(typeof(HL70369),fields[24].Split('~')[i].Split('^')[5]); }
+							try { ehrLabSC.SpecimenConditionCodeSystemNameAlt		=fields[24].Split('~')[i].Split('^')[5]; }
 							catch { }
 							try { ehrLabSC.SpecimenConditionTextOriginal				=fields[24].Split('~')[i].Split('^')[6]; }
 							catch { }
@@ -678,7 +678,7 @@ namespace OpenDentBusiness{
 			}
 			for(int i=0;i<ehrLab.ListEhrLabSpecimens.Count;i++) {
 				ehrLab.ListEhrLabSpecimens[i].EhrLabNum=ehrLab.EhrLabNum;
-				ehrLab.ListEhrLabSpecimens[i].EhrLabSpecimenNum=EhrLabSpecimens.Insert(ehrLab.ListEhrLabSpecimens[i]);
+				ehrLab.ListEhrLabSpecimens[i]=EhrLabSpecimens.InsertItem(ehrLab.ListEhrLabSpecimens[i]);//Insert item to return the whole object.
 			}
 			for(int i=0;i<ehrLab.ListRelevantClinicalInformations.Count;i++) {
 				ehrLab.ListRelevantClinicalInformations[i].EhrLabNum=ehrLab.EhrLabNum;

@@ -1080,6 +1080,7 @@
 			this.gridSpecimen.TabIndex = 19;
 			this.gridSpecimen.Title = "Specimens";
 			this.gridSpecimen.TranslationName = null;
+			this.gridSpecimen.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridSpecimen_CellDoubleClick);
 			// 
 			// gridMain
 			// 

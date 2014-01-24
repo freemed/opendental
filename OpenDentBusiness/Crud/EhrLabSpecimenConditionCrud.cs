@@ -51,28 +51,10 @@ namespace OpenDentBusiness.Crud{
 				ehrLabSpecimenCondition.EhrLabSpecimenNum                 = PIn.Long  (table.Rows[i]["EhrLabSpecimenNum"].ToString());
 				ehrLabSpecimenCondition.SpecimenConditionID               = PIn.String(table.Rows[i]["SpecimenConditionID"].ToString());
 				ehrLabSpecimenCondition.SpecimenConditionText             = PIn.String(table.Rows[i]["SpecimenConditionText"].ToString());
-				string specimenConditionCodeSystemName=table.Rows[i]["SpecimenConditionCodeSystemName"].ToString();
-				if(specimenConditionCodeSystemName==""){
-					ehrLabSpecimenCondition.SpecimenConditionCodeSystemName =(HL70369)0;
-				}
-				else try{
-					ehrLabSpecimenCondition.SpecimenConditionCodeSystemName =(HL70369)Enum.Parse(typeof(HL70369),specimenConditionCodeSystemName);
-				}
-				catch{
-					ehrLabSpecimenCondition.SpecimenConditionCodeSystemName =(HL70369)0;
-				}
+				ehrLabSpecimenCondition.SpecimenConditionCodeSystemName   = PIn.String(table.Rows[i]["SpecimenConditionCodeSystemName"].ToString());
 				ehrLabSpecimenCondition.SpecimenConditionIDAlt            = PIn.String(table.Rows[i]["SpecimenConditionIDAlt"].ToString());
 				ehrLabSpecimenCondition.SpecimenConditionTextAlt          = PIn.String(table.Rows[i]["SpecimenConditionTextAlt"].ToString());
-				string specimenConditionCodeSystemNameAlt=table.Rows[i]["SpecimenConditionCodeSystemNameAlt"].ToString();
-				if(specimenConditionCodeSystemNameAlt==""){
-					ehrLabSpecimenCondition.SpecimenConditionCodeSystemNameAlt=(HL70369)0;
-				}
-				else try{
-					ehrLabSpecimenCondition.SpecimenConditionCodeSystemNameAlt=(HL70369)Enum.Parse(typeof(HL70369),specimenConditionCodeSystemNameAlt);
-				}
-				catch{
-					ehrLabSpecimenCondition.SpecimenConditionCodeSystemNameAlt=(HL70369)0;
-				}
+				ehrLabSpecimenCondition.SpecimenConditionCodeSystemNameAlt= PIn.String(table.Rows[i]["SpecimenConditionCodeSystemNameAlt"].ToString());
 				ehrLabSpecimenCondition.SpecimenConditionTextOriginal     = PIn.String(table.Rows[i]["SpecimenConditionTextOriginal"].ToString());
 				retVal.Add(ehrLabSpecimenCondition);
 			}
@@ -122,10 +104,10 @@ namespace OpenDentBusiness.Crud{
 				     POut.Long  (ehrLabSpecimenCondition.EhrLabSpecimenNum)+","
 				+"'"+POut.String(ehrLabSpecimenCondition.SpecimenConditionID)+"',"
 				+"'"+POut.String(ehrLabSpecimenCondition.SpecimenConditionText)+"',"
-				+"'"+POut.String(ehrLabSpecimenCondition.SpecimenConditionCodeSystemName.ToString())+"',"
+				+"'"+POut.String(ehrLabSpecimenCondition.SpecimenConditionCodeSystemName)+"',"
 				+"'"+POut.String(ehrLabSpecimenCondition.SpecimenConditionIDAlt)+"',"
 				+"'"+POut.String(ehrLabSpecimenCondition.SpecimenConditionTextAlt)+"',"
-				+"'"+POut.String(ehrLabSpecimenCondition.SpecimenConditionCodeSystemNameAlt.ToString())+"',"
+				+"'"+POut.String(ehrLabSpecimenCondition.SpecimenConditionCodeSystemNameAlt)+"',"
 				+"'"+POut.String(ehrLabSpecimenCondition.SpecimenConditionTextOriginal)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -142,10 +124,10 @@ namespace OpenDentBusiness.Crud{
 				+"EhrLabSpecimenNum                 =  "+POut.Long  (ehrLabSpecimenCondition.EhrLabSpecimenNum)+", "
 				+"SpecimenConditionID               = '"+POut.String(ehrLabSpecimenCondition.SpecimenConditionID)+"', "
 				+"SpecimenConditionText             = '"+POut.String(ehrLabSpecimenCondition.SpecimenConditionText)+"', "
-				+"SpecimenConditionCodeSystemName   = '"+POut.String(ehrLabSpecimenCondition.SpecimenConditionCodeSystemName.ToString())+"', "
+				+"SpecimenConditionCodeSystemName   = '"+POut.String(ehrLabSpecimenCondition.SpecimenConditionCodeSystemName)+"', "
 				+"SpecimenConditionIDAlt            = '"+POut.String(ehrLabSpecimenCondition.SpecimenConditionIDAlt)+"', "
 				+"SpecimenConditionTextAlt          = '"+POut.String(ehrLabSpecimenCondition.SpecimenConditionTextAlt)+"', "
-				+"SpecimenConditionCodeSystemNameAlt= '"+POut.String(ehrLabSpecimenCondition.SpecimenConditionCodeSystemNameAlt.ToString())+"', "
+				+"SpecimenConditionCodeSystemNameAlt= '"+POut.String(ehrLabSpecimenCondition.SpecimenConditionCodeSystemNameAlt)+"', "
 				+"SpecimenConditionTextOriginal     = '"+POut.String(ehrLabSpecimenCondition.SpecimenConditionTextOriginal)+"' "
 				+"WHERE EhrLabSpecimenConditionNum = "+POut.Long(ehrLabSpecimenCondition.EhrLabSpecimenConditionNum);
 			Db.NonQ(command);
@@ -168,7 +150,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(ehrLabSpecimenCondition.SpecimenConditionCodeSystemName != oldEhrLabSpecimenCondition.SpecimenConditionCodeSystemName) {
 				if(command!=""){ command+=",";}
-				command+="SpecimenConditionCodeSystemName = '"+POut.String(ehrLabSpecimenCondition.SpecimenConditionCodeSystemName.ToString())+"'";
+				command+="SpecimenConditionCodeSystemName = '"+POut.String(ehrLabSpecimenCondition.SpecimenConditionCodeSystemName)+"'";
 			}
 			if(ehrLabSpecimenCondition.SpecimenConditionIDAlt != oldEhrLabSpecimenCondition.SpecimenConditionIDAlt) {
 				if(command!=""){ command+=",";}
@@ -180,7 +162,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(ehrLabSpecimenCondition.SpecimenConditionCodeSystemNameAlt != oldEhrLabSpecimenCondition.SpecimenConditionCodeSystemNameAlt) {
 				if(command!=""){ command+=",";}
-				command+="SpecimenConditionCodeSystemNameAlt = '"+POut.String(ehrLabSpecimenCondition.SpecimenConditionCodeSystemNameAlt.ToString())+"'";
+				command+="SpecimenConditionCodeSystemNameAlt = '"+POut.String(ehrLabSpecimenCondition.SpecimenConditionCodeSystemNameAlt)+"'";
 			}
 			if(ehrLabSpecimenCondition.SpecimenConditionTextOriginal != oldEhrLabSpecimenCondition.SpecimenConditionTextOriginal) {
 				if(command!=""){ command+=",";}

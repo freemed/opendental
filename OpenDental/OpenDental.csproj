@@ -377,6 +377,12 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormEhrLabSpecimenEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormEhrLabSpecimenEdit.Designer.cs">
+      <DependentUpon>FormEhrLabSpecimenEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormCvx.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3339,6 +3345,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormEhrLabSpecimenEdit.resx">
+      <DependentUpon>FormEhrLabSpecimenEdit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormCvx.resx">
       <DependentUpon>FormCvx.cs</DependentUpon>

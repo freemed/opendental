@@ -23,18 +23,28 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),ehrLabNum);
 				return;
 			}
-			EhrLabSpecimenConditions.DeleteForLab(ehrLabNum);//conditions are attached to the labs, but are 
+			EhrLabSpecimenConditions.DeleteForLab(ehrLabNum);
+			EhrLabSpecimenRejectReasons.DeleteForLab(ehrLabNum);
 			string command="DELETE FROM ehrlabspecimen WHERE EhrLabNum = "+POut.Long(ehrLabNum);
 			Db.NonQ(command);
 		}
 
 		///<summary></summary>
-		public static long Insert(EhrLabSpecimen ehrLabSpecimen) {
+		public static EhrLabSpecimen InsertItem(EhrLabSpecimen ehrLabSpecimen) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				ehrLabSpecimen.EhrLabSpecimenNum=Meth.GetLong(MethodBase.GetCurrentMethod(),ehrLabSpecimen);
-				return ehrLabSpecimen.EhrLabSpecimenNum;
+				return ehrLabSpecimen;
 			}
-			return Crud.EhrLabSpecimenCrud.Insert(ehrLabSpecimen);
+			ehrLabSpecimen.EhrLabNum=Crud.EhrLabSpecimenCrud.Insert(ehrLabSpecimen);
+			for(int i=0;i<ehrLabSpecimen.ListEhrLabSpecimenCondition.Count;i++) {
+				ehrLabSpecimen.ListEhrLabSpecimenCondition[i].EhrLabSpecimenNum=ehrLabSpecimen.EhrLabSpecimenNum;
+				EhrLabSpecimenConditions.Insert(ehrLabSpecimen.ListEhrLabSpecimenCondition[i]);
+			}
+			for(int i=0;i<ehrLabSpecimen.ListEhrLabSpecimenRejectReason.Count;i++) {
+				ehrLabSpecimen.ListEhrLabSpecimenRejectReason[i].EhrLabSpecimenNum=ehrLabSpecimen.EhrLabSpecimenNum;
+				EhrLabSpecimenRejectReasons.Insert(ehrLabSpecimen.ListEhrLabSpecimenRejectReason[i]);
+			}
+			return ehrLabSpecimen;
 		}
 
 		//If this table type will exist as cached data, uncomment the CachePattern region below and edit.
@@ -87,6 +97,15 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT * FROM ehrlabspecimen WHERE PatNum = "+POut.Long(patNum);
 			return Crud.EhrLabSpecimenCrud.SelectMany(command);
+		}
+
+		///<summary></summary>
+		public static long Insert(EhrLabSpecimen ehrLabSpecimen) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				ehrLabSpecimen.EhrLabSpecimenNum=Meth.GetLong(MethodBase.GetCurrentMethod(),ehrLabSpecimen);
+				return ehrLabSpecimen.EhrLabSpecimenNum;
+			}
+			return Crud.EhrLabSpecimenCrud.Insert(ehrLabSpecimen);
 		}
 
 		///<summary>Gets one EhrLabSpecimen from the db.</summary>

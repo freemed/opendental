@@ -15,15 +15,15 @@ namespace OpenDentBusiness {
 		///<summary>Description of SpecimenConditionId.  SPM.24.2</summary>
 		public string SpecimenConditionText;
 		///<summary>CodeSystem that SpecimenConditionId came from.  SPM.24.3</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
-		public HL70369 SpecimenConditionCodeSystemName;
+		//[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		public string SpecimenConditionCodeSystemName;
 		///<summary>SPM.24.4</summary>
 		public string SpecimenConditionIDAlt;
 		///<summary>Description of SpecimenConditionIdAlt.  SPM.24.5</summary>
 		public string SpecimenConditionTextAlt;
 		///<summary>CodeSystem that SpecimenConditionId came from.  SPM.24.6</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
-		public HL70369 SpecimenConditionCodeSystemNameAlt;
+		//[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		public string SpecimenConditionCodeSystemNameAlt;
 		///<summary>Optional text that describes the original text used to encode the values above.  SPM.24.7</summary>
 		public string SpecimenConditionTextOriginal;
 

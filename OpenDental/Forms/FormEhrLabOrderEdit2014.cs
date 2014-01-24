@@ -26,6 +26,7 @@ namespace OpenDental {
 				butViewParent.Enabled=true;
 				gridMain.Enabled=true;
 				gridNotes.Enabled=true;
+				gridSpecimen.Enabled=true;
 				butCancel.Text="Close";
 				butCancel.Enabled=true;
 				//butAddNote.Enabled=false;
@@ -227,7 +228,7 @@ namespace OpenDental {
 						break;
 				}
 				row.Cells.Add(EhrLabCur.ListEhrLabResults[i].UnitsID);
-				row.Cells.Add(EhrLabCur.ListEhrLabResults[i].AbnormalFlags);
+				row.Cells.Add(EhrLabCur.ListEhrLabResults[i].AbnormalFlags.Replace("N",""));//abnormal flags, show blank if flag is "Normal"
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
@@ -293,12 +294,15 @@ namespace OpenDental {
 		private void FillGridSpecimen() {
 			gridSpecimen.BeginUpdate();
 			gridSpecimen.Columns.Clear();
-			ODGridColumn col=new ODGridColumn("Specimen Type",60);//arbitrary width, only column in grid.
+			ODGridColumn col=new ODGridColumn("Rej",30,HorizontalAlignment.Center);//arbitrary width, only column in grid.
+			gridSpecimen.Columns.Add(col);
+			col=new ODGridColumn("Specimen Type",60);//arbitrary width, only column in grid.
 			gridSpecimen.Columns.Add(col);
 			gridSpecimen.Rows.Clear();
 			ODGridRow row;
 			for(int i=0;i<EhrLabCur.ListEhrLabSpecimens.Count;i++) {
 				row=new ODGridRow();
+				row.Cells.Add((EhrLabCur.ListEhrLabSpecimens[i].ListEhrLabSpecimenRejectReason.Count==0?"":"X"));//X is specimen rejected.
 				row.Cells.Add(EhrLabCur.ListEhrLabSpecimens[i].SpecimenTypeText);//may be blank, if so, check the "alt" text
 				gridSpecimen.Rows.Add(row);
 			}
@@ -398,6 +402,12 @@ namespace OpenDental {
 			}
 			FormIB.ListObjects.Add(EhrLabCur.ListEhrLabResults[e.Row]);
 			FormIB.ShowDialog();
+		}
+
+		private void gridSpecimen_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			FormEhrLabSpecimenEdit FormLSE=new FormEhrLabSpecimenEdit();
+			FormLSE.EhrLabSpecimenCur=EhrLabCur.ListEhrLabSpecimens[e.Row];
+			FormLSE.ShowDialog();
 		}
 
 		private void butOk_Click(object sender,EventArgs e) {

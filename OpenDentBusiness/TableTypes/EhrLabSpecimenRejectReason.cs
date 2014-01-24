@@ -15,15 +15,15 @@ namespace OpenDentBusiness {
 		///<summary>Description of SpecimenRejectReasonId.   SPM.21.2</summary>
 		public string SpecimenRejectReasonText;
 		///<summary>CodeSystem that SpecimenRejectReasonId came from.   SPM.21.3</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
-		public HL70369 SpecimenRejectReasonCodeSystemName;
+		//[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		public string SpecimenRejectReasonCodeSystemName;
 		///<summary> SPM.21.4</summary>
 		public string SpecimenRejectReasonIDAlt;
 		///<summary>Description of SpecimenRejectReasonIdAlt.   SPM.21.5</summary>
 		public string SpecimenRejectReasonTextAlt;
 		///<summary>CodeSystem that SpecimenRejectReasonId came from.   SPM.21.6</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
-		public HL70369 SpecimenRejectReasonCodeSystemNameAlt;
+		//[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		public string SpecimenRejectReasonCodeSystemNameAlt;
 		///<summary>Optional text that describes the original text used to encode the values above.   SPM.21.7</summary>
 		public string SpecimenRejectReasonTextOriginal;
 
