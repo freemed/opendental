@@ -48,6 +48,7 @@ namespace OpenDentBusiness.Crud{
 				ehrAptObs=new EhrAptObs();
 				ehrAptObs.EhrAptObsNum = PIn.Long  (table.Rows[i]["EhrAptObsNum"].ToString());
 				ehrAptObs.AptNum       = PIn.Long  (table.Rows[i]["AptNum"].ToString());
+				ehrAptObs.ValType      = (EhrAptObsType)PIn.Int(table.Rows[i]["ValType"].ToString());
 				ehrAptObs.LoincCode    = PIn.String(table.Rows[i]["LoincCode"].ToString());
 				ehrAptObs.ValReported  = PIn.String(table.Rows[i]["ValReported"].ToString());
 				ehrAptObs.ValUnit      = PIn.String(table.Rows[i]["ValUnit"].ToString());
@@ -92,12 +93,13 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="EhrAptObsNum,";
 			}
-			command+="AptNum,LoincCode,ValReported,ValUnit,ValCodeSystem) VALUES(";
+			command+="AptNum,ValType,LoincCode,ValReported,ValUnit,ValCodeSystem) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(ehrAptObs.EhrAptObsNum)+",";
 			}
 			command+=
 				     POut.Long  (ehrAptObs.AptNum)+","
+				+    POut.Int   ((int)ehrAptObs.ValType)+","
 				+"'"+POut.String(ehrAptObs.LoincCode)+"',"
 				+"'"+POut.String(ehrAptObs.ValReported)+"',"
 				+"'"+POut.String(ehrAptObs.ValUnit)+"',"
@@ -115,6 +117,7 @@ namespace OpenDentBusiness.Crud{
 		public static void Update(EhrAptObs ehrAptObs){
 			string command="UPDATE ehraptobs SET "
 				+"AptNum       =  "+POut.Long  (ehrAptObs.AptNum)+", "
+				+"ValType      =  "+POut.Int   ((int)ehrAptObs.ValType)+", "
 				+"LoincCode    = '"+POut.String(ehrAptObs.LoincCode)+"', "
 				+"ValReported  = '"+POut.String(ehrAptObs.ValReported)+"', "
 				+"ValUnit      = '"+POut.String(ehrAptObs.ValUnit)+"', "
@@ -129,6 +132,10 @@ namespace OpenDentBusiness.Crud{
 			if(ehrAptObs.AptNum != oldEhrAptObs.AptNum) {
 				if(command!=""){ command+=",";}
 				command+="AptNum = "+POut.Long(ehrAptObs.AptNum)+"";
+			}
+			if(ehrAptObs.ValType != oldEhrAptObs.ValType) {
+				if(command!=""){ command+=",";}
+				command+="ValType = "+POut.Int   ((int)ehrAptObs.ValType)+"";
 			}
 			if(ehrAptObs.LoincCode != oldEhrAptObs.LoincCode) {
 				if(command!=""){ command+=",";}

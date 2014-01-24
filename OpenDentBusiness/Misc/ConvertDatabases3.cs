@@ -3683,6 +3683,7 @@ namespace OpenDentBusiness {
 					command=@"CREATE TABLE ehraptobs (
 						EhrAptObsNum bigint NOT NULL auto_increment PRIMARY KEY,
 						AptNum bigint NOT NULL,
+						ValType tinyint NOT NULL,
 						LoincCode varchar(255) NOT NULL,
 						ValReported varchar(255) NOT NULL,
 						ValUnit varchar(255) NOT NULL,
@@ -3697,6 +3698,7 @@ namespace OpenDentBusiness {
 					command=@"CREATE TABLE ehraptobs (
 						EhrAptObsNum number(20) NOT NULL,
 						AptNum number(20) NOT NULL,
+						ValType number(3) NOT NULL,
 						LoincCode varchar2(255),
 						ValReported varchar2(255),
 						ValUnit varchar2(255),
@@ -3724,4 +3726,6 @@ namespace OpenDentBusiness {
 
 	}
 }
+
+
 

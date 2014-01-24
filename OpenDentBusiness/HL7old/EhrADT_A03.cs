@@ -13,6 +13,8 @@ namespace OpenDentBusiness.HL7 {
 	public class EhrADT_A03 {
 
 		///<summary>Set in constructor and must not be modified.</summary>
+		private Appointment _appt;
+		///<summary>Set in constructor and must not be modified.</summary>
 		private Patient _pat;
 		///<summary>The entire message object after it is successfully built.</summary>
 		private MessageHL7 _msg;
@@ -22,12 +24,13 @@ namespace OpenDentBusiness.HL7 {
 		private string _sendingFacilityName;
 
 		///<summary>Creates the Message object and fills it with data.</summary>
-		public EhrADT_A03(Patient pat) {
-			string errors=Validate(pat);
+		public EhrADT_A03(Appointment appt) {
+			string errors=Validate(appt);
 			if(errors!="") {
 				throw new Exception(errors);
 			}
-			_pat=pat;
+			_appt=appt;
+			_pat=Patients.GetPat(appt.PatNum);
 			InitializeVariables();
 			BuildMessage();
 		}
@@ -108,22 +111,80 @@ namespace OpenDentBusiness.HL7 {
 
 		///<summary>Observation/result segment.  Used to transmit observations related to the patient and visit.  Guide page 64.</summary>
 		private void OBX() {
-			List<object> listObservations=new List<object>();//TODO: Use a real object when it is available.
+			List<EhrAptObs> listObservations=EhrAptObses.Refresh(_appt.AptNum);
 			for(int i=0;i<listObservations.Count;i++) {
+				EhrAptObs obs=listObservations[i];
 				_seg=new SegmentHL7(SegmentNameHL7.OBX);
 				_seg.SetField(1,(i+1).ToString());//OBX-1 Set ID - OBX.  Required (length 1..4).  Must start at 1 and increment.
 				//OBX-2 Value Type.  Required (length 1..3).  Cardinality [1..1].  Identifies the structure of data in observation value OBX-5.  Values allowed: TS=Time Stamp (Date and/or Time),TX=Text,NM=Numeric,CWE=Coded with exceptions,XAD=Address.
-				//TODO:
+				if(obs.ValType==EhrAptObsType.Coded) {
+					_seg.SetField(2,"CWE");
+				}
+				else if(obs.ValType==EhrAptObsType.DateAndTime) {
+					_seg.SetField(2,"TS");
+				}
+				else if(obs.ValType==EhrAptObsType.Numeric) {
+					_seg.SetField(2,"NM");
+				}
+				else {//obs.ValType==EhrAptObsType.Text
+					_seg.SetField(2,"TX");
+				}
 				//OBX-3 Observation Identifier.  Required (length up to 478).  Cardinality [1..1].  Value set is HL7 table named "Observation Identifier".  Type CE.  We use LOINC codes because the testing tool used LOINC codes and so do vaccines.
-				WriteCE(3,"","","");//TODO:
+				Loinc loinc=Loincs.GetByCode(obs.LoincCode);
+				WriteCE(3,loinc.LoincCode,loinc.NameShort,"LN");
 				//OBX-4 Observation Sub-ID.  No longer used.
-				//OBX-5 Observation Value.  Required if known (length 1..99999).  Value must match type in OBX-2.  TODO:
+				//OBX-5 Observation Value.  Required if known (length 1..99999).  Value must match type in OBX-2.
+				if(obs.ValType==EhrAptObsType.Coded) {
+					string codeDescript="";
+					if(obs.ValCodeSystem.Trim().ToUpper()=="LOINC") {
+						Loinc loincVal=Loincs.GetByCode(obs.ValReported);
+						codeDescript=loincVal.NameShort;
+					}
+					else if(obs.ValCodeSystem.Trim().ToUpper()=="SNOMEDCT") {
+						Snomed snomedVal=Snomeds.GetByCode(obs.ValReported);
+						codeDescript=snomedVal.Description;
+					}
+					else if(obs.ValCodeSystem.Trim().ToUpper()=="ICD9") {
+						ICD9 icd9Val=ICD9s.GetByCode(obs.ValReported);
+						codeDescript=icd9Val.Description;
+					}
+					else if(obs.ValCodeSystem.Trim().ToUpper()=="ICD10") {
+						Icd10 icd10Val=Icd10s.GetByCode(obs.ValReported);
+						codeDescript=icd10Val.Description;
+					}					
+					WriteCE(5,obs.ValReported.Trim(),codeDescript,obs.ValCodeSystem.ToUpper().Trim());
+				}
+				else if(obs.ValType==EhrAptObsType.DateAndTime) {
+					DateTime dateVal=DateTime.Parse(obs.ValReported.Trim());
+					string strDateOut=dateVal.ToString("yyyyMMdd");
+					//The testing tool threw errors when there were trailing zeros, even though technically valid.
+					if(dateVal.Second>0) {
+						strDateOut+=dateVal.ToString("HHmmss");
+					}
+					else if(dateVal.Minute>0) {
+						strDateOut+=dateVal.ToString("HHmm");
+					}
+					else if(dateVal.Hour>0) {
+						strDateOut+=dateVal.ToString("HH");
+					}
+					_seg.SetField(5,strDateOut);
+				}
+				else if(obs.ValType==EhrAptObsType.Numeric) {
+					_seg.SetField(5,obs.ValReported.Trim());
+				}
+				else { //obs.ValType==EhrAptObsType.Text
+					_seg.SetField(5,obs.ValReported);
+				}
 				//OBX-6 Units.  Required if OBX-2 is NM=Numeric.  Cardinality [0..1].  Type CE.  The guide suggests value sets: Pulse Oximetry Unit, Temperature Unit, or Age Unit.  However, the testing tool used UCUM, so we will use UCUM.
-				//TODO: If units are required but known, we must send a null flavor.  WriteCE(6,"UNK","","NULLFL");
-				//if() {
-				//	Ucum ucum=Ucums.GetByCode(obs.ValUnit.Trim());
-				//	WriteCE(6,ucum.UcumCode,ucum.Description,"UCUM");
-				//}
+				if(obs.ValType==EhrAptObsType.Numeric) {
+					if(String.IsNullOrEmpty(obs.ValUnit)) { //If units are required but known, we must send a null flavor.
+						WriteCE(6,"UNK","","NULLFL");
+					}
+					else {
+						Ucum ucum=Ucums.GetByCode(obs.ValUnit.Trim());
+						WriteCE(6,ucum.UcumCode,ucum.Description,"UCUM");
+					}
+				}
 				//OBX-7 References Range.  No longer used.
 				//OBX-8 Abnormal Flags.  No longer used.
 				//OBX-9 Probability.  No longer used.
@@ -282,8 +343,7 @@ namespace OpenDentBusiness.HL7 {
 			_msg.Segments.Add(_seg);
 		}
 
-		///<summary>Patient Visit segment.  Used by Registration/Patient Administration applications to communicate information on a visit-specific basis.  Guide page 51.
-		///TODO: Only one instance allowed.  Does this mean we need to allow the user to select which appointment to send information regarding?</summary>
+		///<summary>Patient Visit segment.  Used by Registration/Patient Administration applications to communicate information on a visit-specific basis.  Guide page 51.</summary>
 		private void PV1() {
 			_seg=new SegmentHL7(SegmentNameHL7.PV1);
 			_seg.SetField(1,"1");//PV1-1 SET ID - PV1.  Required if known (length 1..4).  Must be set to "1".
@@ -306,11 +366,11 @@ namespace OpenDentBusiness.HL7 {
 			//PV1-18 Patient Type.  No longer used.
 			//PV1-19 Visit Number.  Required (length up to 478).  Cardinality [1..1].
 			_seg.SetField(19,
-				"",//PV1-19.1 ID Number.  Required (length 1..15).  Unique identifier for patient visit.  TODO:
+				_appt.AptNum.ToString(),//PV1-19.1 ID Number.  Required (length 1..15).  Unique identifier for patient visit.
 				"",//PV1-19.2 Check Digit.  No longer used.
 				"",//PV1-19.3 Check Digit Scheme.  No longer used.
 				"",//PV1-19.4 Assigning Authority.  Optional.
-				""//PV1-19.5 Identifier Type Code.  Required (length 1..5).  Identifier type corresponding to the ID number from PV1-19.1.  TODO:
+				"VN"//PV1-19.5 Identifier Type Code.  Required (length 1..5).  Identifier type corresponding to the ID number from PV1-19.1.  VN=Visit Number.
 				//PV1-19.6 Assigning Facility.  Optional.
 				//PV1-19.7 Effective Date.  No longer used.
 				//PV1-19.8 Expiration Date.  No longer used.
@@ -341,7 +401,7 @@ namespace OpenDentBusiness.HL7 {
 			//PV1-41 Account Status.  No longer used.
 			//PV1-42 Pending Location.  No longer used.
 			//PV1-43 Prior Temporary Location.  No longer used.
-			_seg.SetField(44,"");//PV1-44 Admit Date/Time.  Required (length 12..26).  Date and time of the patient presentation.  TODO:
+			_seg.SetField(44,_appt.AptDateTime.ToString("yyyyMMddhhmm"));//PV1-44 Admit Date/Time.  Required (length 12..26).  Date and time of the patient presentation.
 			//PV1-45 Discharge Date/Time.  Optional.
 			//PV1-46 Current Patient Balance.  No longer used.
 			//PV1-47 Total Charges.  No longer used.
@@ -371,42 +431,6 @@ namespace OpenDentBusiness.HL7 {
 			);
 		}
 
-		/////<summary>Type EI (guid page 62).  Writes an Entity Identifier (order number) into the fieldIndex field of the current segment.</summary>
-		//private void WriteEI(int fieldIndex,string identifier,string city,string state) {
-		//	_seg.SetField(fieldIndex,
-		//		identifier,//EI.1 Entity Identifier.  Required (length 1..199).
-		//		GetAssigningAuthority(city,state)//EI.2 Namespace ID.  Required if EI.3 is blank (length 1..20).  Value set HL70363 (guide page 229, 3 letter abbreviation for US state, US city, or US territory).
-		//		//EI.3 Universal ID.  Required if EI.1 is blank (length 1..199).
-		//		);//EI.4 Universal ID Type.  Required if EI.3 is not blank (length 6..6).  Value set HL70301 (guide page 224).  Must be "ISO" or blank.
-		//}
-
-		/////<summary>Corresponds to table HL70363 (guide page 229).</summary>
-		//private string GetAssigningAuthority(string city,string state) {
-		//	string code="";//A value from Value set HL70363 (guide page 229, 3 letter abbreviation for US state, US city, or US territory).
-		//	string st=state.Trim().ToUpper();
-		//	string c=city.Trim().ToUpper().Replace(" ","");
-		//	code=st+"A";//Most of the codes are just the state code followed by an 'A'.  This includes American territories and districts. http://www.itl.nist.gov/fipspubs/fip5-2.htm
-		//	if(st=="IL" && c=="CHICAGO") { //CHICAGO ILLINOIS
-		//		code="CHA";//CHICAGO has thier own code.
-		//	}
-		//	else if(st=="NY" && c=="NEWYORK") { //NEW YORK NEW YORK
-		//		code="BAA";//NEW YORK CITY has their own code.
-		//	}
-		//	else if(st=="PA" && c=="PHILADELPHIA") { //PHILADELPHIA PENNSYLVANIA
-		//		code="PHA";//Philadelphia has their own code.
-		//	}
-		//	else if(st=="PW") { //REPUBLIC PALAU (American territory)
-		//		code="RPA";//This code is one that does not match the pattern for the rest of the codes.
-		//	}
-		//	else if(st=="TX" && c=="SANANTONIO") { //SAN ANTONIO TEXAS
-		//		code="TBA";//SAN ANTONIO has their own code.
-		//	}
-		//	else if(st=="TX" && c=="HOUSTON") { //HOUSTON TEXAS
-		//		code="THA";//HOUSTON has their own code.
-		//	}
-		//	return code;
-		//}
-
 		///<summary>Type IS.  Writes a string corresponding to table HL70001 into the fieldIndex field for the current segment.</summary>
 		private void WriteGender(int fieldIndex,PatientGender gender) {
 			string strGenderCode="U";//unknown
@@ -418,31 +442,6 @@ namespace OpenDentBusiness.HL7 {
 			}
 			_seg.SetField(fieldIndex,strGenderCode);
 		}
-
-		/////<summary>Type LA2 (guide page 68).  Writes facility information into the fieldIndex field of the current segment.</summary>
-		//private void WriteLA2(int fieldIndex,string facilityName) {
-		//	_seg.SetField(fieldIndex,
-		//		"",//LA2.1 Point of Care.  Optional.
-		//		"",//LA2.2 Room.  Optional.
-		//		"",//LA2.3 Bed.  Optional.
-		//		//LA2.4 Facility.  Required.  Type HD (guide page 66).
-		//		facilityName//LA2.4.1 Namespace ID.  Required when LA2.4.2 is blank.  Value sets HL70300 (guide page 224), HL70361 (guide page 229), HL70362 (guide page 229), HL70363 (guide page 229).  Value set used depends on usage.
-		//		//LA2.4.2 Universal ID.  Required when LA2.4.1 is blank.
-		//		//LA2.4.3 Universal ID Type.  Required when LA2.4.2 is not blank.  Value set HL70301 (guide page 224).
-		//		//LA2.5 Location Status.  Optional.
-		//		//LA2.6 Patient Location Type.  Optional.
-		//		//LA2.7 Building.  Optional.
-		//		//LA2.8 Floor.  Optional.
-		//		//LA2.9 Street Address.  Optional.
-		//		//LA2.10 Other Designation.  Optional.
-		//		//LA2.11 City.  Optional.
-		//		//LA2.12 State or Province.  Optional.
-		//		//LA2.13 Zip or Postal Code.  Optional.
-		//		//LA2.14 Country.  Optional.
-		//		//LA2.15 Address Type.  Optional.
-		//		//LA2.16 Other Geographic Designation.  Optional.
-		//		);
-		//}
 
 		///<summary>Type XAD.  Writes an extended address into the fieldIndex field for the current segment.</summary>
 		private void WriteXAD(int fieldIndex,string address1,string address2,string city,string state,string zip) {
@@ -463,163 +462,6 @@ namespace OpenDentBusiness.HL7 {
 				//XAD.14 Expiration Date.  No longer used.
 			);
 		}
-
-		/////<summary>Type XCN (guide page 77).  Writes user name and id into the fieldIndex field for the current segment.
-		/////Either the fName and lName must be specified, or id and city and state must be specified. All fields may be specified.
-		/////Allowed values for nameTypeCode: A=Alias name,L=Legal name,D=Display name,M=Maiden name,C=Adopted name,B=Name at birth,P=Name of partner/spouse,U=Unspecified.</summary>
-		//private void WriteXCN(int fieldIndex,string fName,string lName,string middleI,string id,string city,string state,string nameTypeCode) {
-		//	bool hasName=false;
-		//	if(fName!="" && lName!="") {
-		//		hasName=true;
-		//	}
-		//	bool hasId=false;
-		//	string idModified="";
-		//	string assigningAuthority="";
-		//	if(id!="" && city!="" && state!="") {//All 3 fields must be present, or none of them should be sent.
-		//		hasId=true;
-		//		idModified=id;
-		//		assigningAuthority=GetAssigningAuthority(city,state);
-		//	}
-		//	if(!hasName && !hasId) {
-		//		return;//Nothing valid to write.
-		//	}
-		//	_seg.SetField(fieldIndex,
-		//		idModified,//XCN.1 ID Number.  Required if XCN.2 and XCN.3 are blank.
-		//		lName,//XCN.2 Family Name.  Required if known.
-		//		fName,//XCN.3 Given Name.  Required if known (length 1..30).
-		//		middleI,//XCN.4 Second and Further Given Names or Initials Thereof.  Required if known (length 1..30).
-		//		"",//XCN.5 Suffix.  Optional.
-		//		"",//XCN.6 Prefix.  Optional.
-		//		"",//XCN.7 Degree.  No longer used.
-		//		"",//XCN.8 Source Table.  Optional.
-		//		assigningAuthority,//XCN.9 Assigning Authority.  Required if XCN.1 is not blank.  Value set HL70363 (guide page 229).
-		//		nameTypeCode//XCN.10 Name Type Code.  Required if known (length 1..1).  Value set HL70200 (guide page 203).  A=Alias name,L=Legal name,D=Display name,M=Maiden name,C=Adopted name,B=Name at birth,P=Name of partner/spouse,U=Unspecified.
-		//		//XCN.11 Identifier Check Digit.  Optional.
-		//		//XCN.12 Check Digit Scheme.  Required if XCN.11 is not blank.
-		//		//XCN.13 Identifier Type Code.  Optional.
-		//		//XCN.14 Assigning Facility.  Optional.
-		//		//XCN.15 Name Representation Code.  Optional.
-		//		//XCN.16 Name Context.  Optional.
-		//		//XCN.17 Name Validity Range.  No longer used.
-		//		//XCN.18 Name Assembly Order.  No longer used.
-		//		//XCN.19 Effective Date.  Optional.
-		//		//XCN.20 Expiration Date.  Optional.
-		//		//XCN.21 Professional Suffix.  Optional.
-		//		//XCN.22 Assigning Jurisdiction.  Optional.
-		//		//XCN.23 Assinging Agency or Department.  Optional.
-		//		);
-		//}
-
-		/////<summary>Type XTN (guide page 84).  Writes a phone number or other contact information (such as email address) into the fieldIndex field for the current segment.
-		/////The arrayContactInfo params list must contain 4 parameters for each piece of contact information, in the following order:
-		/////1) Telecommunication Use Code from value set HL70201 (guide page 203).
-		/////2) Telecommunication Equipment Type from value set HL70202 (guide page 203).
-		/////3) The value "F" to force the field to be written in all cases or empty string to only write the field if the contact information is present.
-		/////4) The contact infomration (phone number or email address).
-		/////Can specify 0 or more contacts. The first valid phone number in the list will be written and the other phone numbers will be ignored.</summary>
-		//private void WriteXTN(int fieldIndex,params string[] arrayContactInfo) {
-		//	int contactCount=0;
-		//	for(int i=0;i<arrayContactInfo.Length;i+=4) {
-		//		string strTeleUseCode=arrayContactInfo[i];
-		//		string strTeleEquipType=arrayContactInfo[i+1];
-		//		string strForce=arrayContactInfo[i+2];
-		//		string strContactInfo=arrayContactInfo[i+3].Trim();
-		//		if(strContactInfo=="" && strForce!="F") {//When the contact info is blank and the information is not forced, then do not output.
-		//			continue;
-		//		}
-		//		contactCount++;
-		//		if(strTeleUseCode=="NET") {//Email address.
-		//			if(contactCount==1) {
-		//				_seg.SetField(fieldIndex,
-		//					"",//XTN.1 Telephone Number.  No longer used.
-		//					strTeleUseCode,//XTN.2 Telecommunication Use Code.  Required.  Value set HL70201 (guide page 203).
-		//					strTeleEquipType,//XTN.3 Telecommunication Equipment Type.  Required if known.  Value set HL70202 (guide page 203).
-		//					strContactInfo//XTN.4 Email Address.  Required when XTN.2 is set to "NET" (length 1..199).
-		//					//XTN.5 Country Code.  Optional.
-		//					//XTN.6 Area/City Code.  Required when XTN.2 is NOT set to "NET" (length 5..5).
-		//					//XTN.7 Local Number.  Required when XTN.2 is NOT set to "NET" (length 7..7).
-		//					//XTN.8 Extension.  Optional.
-		//					//XTN.9 Any Text.  Optional.
-		//					//XTN.10 Extension Prefix.  Optional.
-		//					//XTN.11 Speed Dial Code.  Optional.
-		//					//XTN.12 Unformatted Telephone Number.  Optional.
-		//				);
-		//			}
-		//			else {//At least one contact has already been specified (even if blank).  Repeat the field.  In testing, we were required to make a blank phone number preceed an email address.  This block makes it happen.
-		//				_seg.RepeatField(fieldIndex,
-		//					"",//XTN.1 Telephone Number.  No longer used.
-		//					strTeleUseCode,//XTN.2 Telecommunication Use Code.  Required.  Value set HL70201 (guide page 203).
-		//					strTeleEquipType,//XTN.3 Telecommunication Equipment Type.  Required if known.  Value set HL70202 (guide page 203).
-		//					strContactInfo//XTN.4 Email Address.  Required when XTN.2 is set to "NET" (length 1..199).
-		//					//XTN.5 Country Code.  Optional.
-		//					//XTN.6 Area/City Code.  Required when XTN.2 is NOT set to "NET" (length 5..5).
-		//					//XTN.7 Local Number.  Required when XTN.2 is NOT set to "NET" (length 7..7).
-		//					//XTN.8 Extension.  Optional.
-		//					//XTN.9 Any Text.  Optional.
-		//					//XTN.10 Extension Prefix.  Optional.
-		//					//XTN.11 Speed Dial Code.  Optional.
-		//					//XTN.12 Unformatted Telephone Number.  Optional.
-		//				);
-		//			}
-		//		}
-		//		else {//Phone number.
-		//			string strPhone=TidyPhone(strContactInfo);
-		//			if(strPhone=="") {//Either forced and empty, or the phone number is invalid.
-		//				continue;
-		//			}
-		//			if(contactCount==1) {
-		//				_seg.SetField(fieldIndex,
-		//					"",//XTN.1 Telephone Number.  No longer used.
-		//					strTeleUseCode,//XTN.2 Telecommunication Use Code.  Required.  Value set HL70201 (guide page 203).
-		//					strTeleEquipType,//XTN.3 Telecommunication Equipment Type.  Required if known.  Value set HL70202 (guide page 203).
-		//					"",//XTN.4 Email Address.  Required when XTN.2 is set to "NET" (length 1..199).
-		//					"",//XTN.5 Country Code.  Optional.
-		//					strPhone.Substring(0,3),//XTN.6 Area/City Code.  Required when XTN.2 is NOT set to "NET" (length 5..5).
-		//					strPhone.Substring(3)//XTN.7 Local Number.  Required when XTN.2 is NOT set to "NET" (length 7..7).
-		//					//XTN.8 Extension.  Optional.
-		//					//XTN.9 Any Text.  Optional.
-		//					//XTN.10 Extension Prefix.  Optional.
-		//					//XTN.11 Speed Dial Code.  Optional.
-		//					//XTN.12 Unformatted Telephone Number.  Optional.
-		//				);
-		//			}
-		//			else {//At least one contact has already been specified (even if blank).  Repeat the field.  In testing, we were required to make a blank phone number preceed an email address.  This block allows a phone number after a blank phone number.
-		//				_seg.RepeatField(fieldIndex,
-		//					"",//XTN.1 Telephone Number.  No longer used.
-		//					strTeleUseCode,//XTN.2 Telecommunication Use Code.  Required.  Value set HL70201 (guide page 203).
-		//					strTeleEquipType,//XTN.3 Telecommunication Equipment Type.  Required if known.  Value set HL70202 (guide page 203).
-		//					"",//XTN.4 Email Address.  Required when XTN.2 is set to "NET" (length 1..199).
-		//					"",//XTN.5 Country Code.  Optional.
-		//					strPhone.Substring(0,3),//XTN.6 Area/City Code.  Required when XTN.2 is NOT set to "NET" (length 5..5).
-		//					strPhone.Substring(3)//XTN.7 Local Number.  Required when XTN.2 is NOT set to "NET" (length 7..7).
-		//					//XTN.8 Extension.  Optional.
-		//					//XTN.9 Any Text.  Optional.
-		//					//XTN.10 Extension Prefix.  Optional.
-		//					//XTN.11 Speed Dial Code.  Optional.
-		//					//XTN.12 Unformatted Telephone Number.  Optional.
-		//				);
-		//			}
-		//		}
-		//	}
-		//}
-
-		/////<summary>Removes any characters from the phone number which are not digits.  Returns empty string if the phone number is invalid.</summary>
-		//private string TidyPhone(string phoneRaw) {
-		//	string strDigits="";
-		//	for(int j=0;j<phoneRaw.Length;j++) {
-		//		if(!Char.IsNumber(phoneRaw,j)) {
-		//			continue;
-		//		}
-		//		if(strDigits=="" && phoneRaw.Substring(j,1)=="1") {
-		//			continue;//skip leading 1.
-		//		}
-		//		strDigits+=phoneRaw.Substring(j,1);
-		//	}
-		//	if(strDigits.Length!=10) {
-		//		return "";//The phone number is invalid.
-		//	}
-		//	return strDigits;
-		//}
 
 		///<summary>Type XPN (guide page 82).  Writes an person's name into the fieldIndex field for the current segment.
 		///The fName and lName cannot be blank.
@@ -649,11 +491,45 @@ namespace OpenDentBusiness.HL7 {
 
 		#endregion Field Helpers
 
-		public static string Validate(Patient pat) {
+		public static string Validate(Appointment appt) {
 			StringBuilder sb=new StringBuilder();
 			Provider provFacility=Providers.GetProv(PrefC.GetInt(PrefName.PracticeDefaultProv));
 			if(!Regex.IsMatch(provFacility.NationalProvID,"^(80840)?[0-9]{10}$")) {
 				WriteError(sb,"Invalid NPI for provider '"+provFacility.Abbr+"'");
+			}
+			List<EhrAptObs> listObservations=EhrAptObses.Refresh(appt.AptNum);
+			for(int i=0;i<listObservations.Count;i++) {
+				EhrAptObs obs=listObservations[i];
+				Loinc loinc=Loincs.GetByCode(obs.LoincCode);
+				if(loinc==null) {
+					WriteError(sb,"Loinc code not found '"+loinc.LoincCode+"'.  Please add by going to Setup | EHR.");
+				}
+				if(obs.ValType==EhrAptObsType.Coded) {
+					if(obs.ValCodeSystem.Trim().ToUpper()=="LOINC") {
+						Loinc loincVal=Loincs.GetByCode(obs.ValReported);
+						if(loincVal==null) {
+							WriteError(sb,"Loinc code not found '"+loincVal.LoincCode+"'.  Please add by going to Setup | EHR.");
+						}
+					}
+					else if(obs.ValCodeSystem.Trim().ToUpper()=="SNOMEDCT") {
+						Snomed snomedVal=Snomeds.GetByCode(obs.ValReported);
+						if(snomedVal==null) {
+							WriteError(sb,"Snomed code not found '"+snomedVal.SnomedCode+"'.  Please add by going to Setup | EHR.");
+						}
+					}
+					else if(obs.ValCodeSystem.Trim().ToUpper()=="ICD9") {
+						ICD9 icd9Val=ICD9s.GetByCode(obs.ValReported);
+						if(icd9Val==null) {
+							WriteError(sb,"ICD9 code not found '"+icd9Val.ICD9Code+"'.  Please add by going to Setup | EHR.");
+						}
+					}
+					else if(obs.ValCodeSystem.Trim().ToUpper()=="ICD10") {
+						Icd10 icd10Val=Icd10s.GetByCode(obs.ValReported);
+						if(icd10Val==null) {
+							WriteError(sb,"ICD10 code not found '"+icd10Val.Icd10Code+"'.  Please add by going to Setup | EHR.");
+						}
+					}
+				}
 			}
 			return sb.ToString();
 		}

@@ -390,10 +390,7 @@ namespace OpenDentBusiness.HL7 {
 				else if(vaccineObs.ValType==VaccineObsType.Numeric) {
 					_seg.SetField(5,vaccineObs.ValReported.Trim());
 				}
-				else if(vaccineObs.ValType==VaccineObsType.Text) {
-					_seg.SetField(5,vaccineObs.ValReported.Trim());
-				}
-				else { //DateAndTime
+				else if(vaccineObs.ValType==VaccineObsType.DateAndTime) {
 					DateTime dateVal=DateTime.Parse(vaccineObs.ValReported.Trim());
 					string strDateOut=dateVal.ToString("yyyyMMdd");
 					//The testing tool threw errors when there were trailing zeros, even though technically valid.
@@ -407,6 +404,9 @@ namespace OpenDentBusiness.HL7 {
 						strDateOut+=dateVal.ToString("HH");
 					}
 					_seg.SetField(5,strDateOut);
+				}
+				else { //vaccineObs.ValType==VaccineObsType.Text
+					_seg.SetField(5,vaccineObs.ValReported);
 				}
 				//OBX-6 Units.  Required if OBX-2 is "NM" or "SN" (SN appears to be missing from definition).
 				if(vaccineObs.ValType==VaccineObsType.Numeric) {

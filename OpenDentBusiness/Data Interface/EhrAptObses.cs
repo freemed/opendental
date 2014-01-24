@@ -7,57 +7,18 @@ using System.Text;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class EhrAptObses{
-		//If this table type will exist as cached data, uncomment the CachePattern region below and edit.
-		/*
-		#region CachePattern
-		//This region can be eliminated if this is not a table type with cached data.
-		//If leaving this region in place, be sure to add RefreshCache and FillCache 
-		//to the Cache.cs file with all the other Cache types.
-
-		///<summary>A list of all EhrAptObses.</summary>
-		private static List<EhrAptObs> listt;
-
-		///<summary>A list of all EhrAptObses.</summary>
-		public static List<EhrAptObs> Listt{
-			get {
-				if(listt==null) {
-					RefreshCache();
-				}
-				return listt;
-			}
-			set {
-				listt=value;
-			}
-		}
 
 		///<summary></summary>
-		public static DataTable RefreshCache(){
-			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
-			string command="SELECT * FROM ehraptobs ORDER BY ItemOrder";//stub query probably needs to be changed
-			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
-			table.TableName="EhrAptObs";
-			FillCache(table);
-			return table;
-		}
-
-		///<summary></summary>
-		public static void FillCache(DataTable table){
-			//No need to check RemotingRole; no call to db.
-			listt=Crud.EhrAptObsCrud.TableToList(table);
-		}
-		#endregion
-		*/
-		/*
-		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
-
-		///<summary></summary>
-		public static List<EhrAptObs> Refresh(long patNum){
+		public static List<EhrAptObs> Refresh(long aptNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<EhrAptObs>>(MethodBase.GetCurrentMethod(),patNum);
+				return Meth.GetObject<List<EhrAptObs>>(MethodBase.GetCurrentMethod(),aptNum);
 			}
-			string command="SELECT * FROM ehraptobs WHERE PatNum = "+POut.Long(patNum);
+			string command="SELECT * FROM ehraptobs WHERE AptNum = "+POut.Long(aptNum);
 			return Crud.EhrAptObsCrud.SelectMany(command);
 		}
+		
+		/*
+		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 
 		///<summary>Gets one EhrAptObs from the db.</summary>
 		public static EhrAptObs GetOne(long ehrAptObsNum){
