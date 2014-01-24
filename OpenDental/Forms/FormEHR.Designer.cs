@@ -28,7 +28,6 @@
 			this.butMeasures = new System.Windows.Forms.Button();
 			this.butHash = new System.Windows.Forms.Button();
 			this.butEncryption = new System.Windows.Forms.Button();
-			this.butQuality = new System.Windows.Forms.Button();
 			this.groupBox4 = new System.Windows.Forms.GroupBox();
 			this.but2014CQM = new System.Windows.Forms.Button();
 			this.butEhrNotPerformed = new System.Windows.Forms.Button();
@@ -38,17 +37,18 @@
 			this.label2 = new System.Windows.Forms.Label();
 			this.labelProvPat = new System.Windows.Forms.Label();
 			this.labelProvUser = new System.Windows.Forms.Label();
-			this.butPatList = new System.Windows.Forms.Button();
 			this.label3 = new System.Windows.Forms.Label();
 			this.butLabPanelLOINC = new System.Windows.Forms.Button();
 			this.butAmendments = new System.Windows.Forms.Button();
 			this.butEncounters = new System.Windows.Forms.Button();
 			this.butInterventions = new System.Windows.Forms.Button();
-			this.gridMu = new OpenDental.UI.ODGrid();
-			this.button1 = new System.Windows.Forms.Button();
 			this.butCarePlans = new System.Windows.Forms.Button();
+			this.but2011Labs = new System.Windows.Forms.Button();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.gridMu = new OpenDental.UI.ODGrid();
 			this.groupBox4.SuspendLayout();
 			this.groupBox5.SuspendLayout();
+			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// butClose
@@ -92,41 +92,30 @@
 			this.butEncryption.UseVisualStyleBackColor = true;
 			this.butEncryption.Click += new System.EventHandler(this.butEncryption_Click);
 			// 
-			// butQuality
-			// 
-			this.butQuality.Location = new System.Drawing.Point(10, 48);
-			this.butQuality.Name = "butQuality";
-			this.butQuality.Size = new System.Drawing.Size(84, 23);
-			this.butQuality.TabIndex = 20;
-			this.butQuality.Text = "Quality Meas";
-			this.butQuality.UseVisualStyleBackColor = true;
-			this.butQuality.Click += new System.EventHandler(this.butQuality_Click);
-			// 
 			// groupBox4
 			// 
 			this.groupBox4.Controls.Add(this.but2014CQM);
 			this.groupBox4.Controls.Add(this.butMeasures);
-			this.groupBox4.Controls.Add(this.butQuality);
 			this.groupBox4.Location = new System.Drawing.Point(702, 81);
 			this.groupBox4.Name = "groupBox4";
-			this.groupBox4.Size = new System.Drawing.Size(104, 112);
+			this.groupBox4.Size = new System.Drawing.Size(104, 83);
 			this.groupBox4.TabIndex = 25;
 			this.groupBox4.TabStop = false;
 			this.groupBox4.Text = "For All Patients";
 			// 
 			// but2014CQM
 			// 
-			this.but2014CQM.Location = new System.Drawing.Point(10, 77);
+			this.but2014CQM.Location = new System.Drawing.Point(10, 48);
 			this.but2014CQM.Name = "but2014CQM";
 			this.but2014CQM.Size = new System.Drawing.Size(84, 23);
 			this.but2014CQM.TabIndex = 21;
-			this.but2014CQM.Text = "2014 CQM";
+			this.but2014CQM.Text = "Quality Meas";
 			this.but2014CQM.UseVisualStyleBackColor = true;
 			this.but2014CQM.Click += new System.EventHandler(this.but2014CQM_Click);
 			// 
 			// butEhrNotPerformed
 			// 
-			this.butEhrNotPerformed.Location = new System.Drawing.Point(712, 416);
+			this.butEhrNotPerformed.Location = new System.Drawing.Point(712, 346);
 			this.butEhrNotPerformed.Name = "butEhrNotPerformed";
 			this.butEhrNotPerformed.Size = new System.Drawing.Size(84, 23);
 			this.butEhrNotPerformed.TabIndex = 38;
@@ -138,7 +127,7 @@
 			// 
 			this.groupBox5.Controls.Add(this.butHash);
 			this.groupBox5.Controls.Add(this.butEncryption);
-			this.groupBox5.Location = new System.Drawing.Point(702, 208);
+			this.groupBox5.Location = new System.Drawing.Point(702, 170);
 			this.groupBox5.Name = "groupBox5";
 			this.groupBox5.Size = new System.Drawing.Size(104, 83);
 			this.groupBox5.TabIndex = 26;
@@ -147,7 +136,7 @@
 			// 
 			// butVaccines
 			// 
-			this.butVaccines.Location = new System.Drawing.Point(712, 300);
+			this.butVaccines.Location = new System.Drawing.Point(713, 259);
 			this.butVaccines.Name = "butVaccines";
 			this.butVaccines.Size = new System.Drawing.Size(84, 23);
 			this.butVaccines.TabIndex = 27;
@@ -195,16 +184,6 @@
 			this.labelProvUser.Text = "Abbr - ProvLName, ProvFName";
 			this.labelProvUser.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// butPatList
-			// 
-			this.butPatList.Location = new System.Drawing.Point(712, 329);
-			this.butPatList.Name = "butPatList";
-			this.butPatList.Size = new System.Drawing.Size(84, 23);
-			this.butPatList.TabIndex = 32;
-			this.butPatList.Text = "Patient List";
-			this.butPatList.UseVisualStyleBackColor = true;
-			this.butPatList.Click += new System.EventHandler(this.butPatList_Click);
-			// 
 			// label3
 			// 
 			this.label3.Location = new System.Drawing.Point(6, 53);
@@ -215,17 +194,17 @@
 			// 
 			// butLabPanelLOINC
 			// 
-			this.butLabPanelLOINC.Location = new System.Drawing.Point(712, 358);
+			this.butLabPanelLOINC.Location = new System.Drawing.Point(712, 288);
 			this.butLabPanelLOINC.Name = "butLabPanelLOINC";
 			this.butLabPanelLOINC.Size = new System.Drawing.Size(84, 23);
 			this.butLabPanelLOINC.TabIndex = 35;
-			this.butLabPanelLOINC.Text = "LOINC Lab";
+			this.butLabPanelLOINC.Text = "Lab Orders";
 			this.butLabPanelLOINC.UseVisualStyleBackColor = true;
 			this.butLabPanelLOINC.Click += new System.EventHandler(this.butLabPanelLOINC_Click);
 			// 
 			// butAmendments
 			// 
-			this.butAmendments.Location = new System.Drawing.Point(712, 387);
+			this.butAmendments.Location = new System.Drawing.Point(713, 317);
 			this.butAmendments.Name = "butAmendments";
 			this.butAmendments.Size = new System.Drawing.Size(84, 23);
 			this.butAmendments.TabIndex = 36;
@@ -235,7 +214,7 @@
 			// 
 			// butEncounters
 			// 
-			this.butEncounters.Location = new System.Drawing.Point(712, 445);
+			this.butEncounters.Location = new System.Drawing.Point(712, 375);
 			this.butEncounters.Name = "butEncounters";
 			this.butEncounters.Size = new System.Drawing.Size(84, 23);
 			this.butEncounters.TabIndex = 39;
@@ -245,13 +224,43 @@
 			// 
 			// butInterventions
 			// 
-			this.butInterventions.Location = new System.Drawing.Point(712, 474);
+			this.butInterventions.Location = new System.Drawing.Point(712, 404);
 			this.butInterventions.Name = "butInterventions";
 			this.butInterventions.Size = new System.Drawing.Size(84, 23);
 			this.butInterventions.TabIndex = 40;
 			this.butInterventions.Text = "Interventions";
 			this.butInterventions.UseVisualStyleBackColor = true;
 			this.butInterventions.Click += new System.EventHandler(this.butInterventions_Click);
+			// 
+			// butCarePlans
+			// 
+			this.butCarePlans.Location = new System.Drawing.Point(712, 433);
+			this.butCarePlans.Name = "butCarePlans";
+			this.butCarePlans.Size = new System.Drawing.Size(84, 23);
+			this.butCarePlans.TabIndex = 42;
+			this.butCarePlans.Text = "Care Plans";
+			this.butCarePlans.UseVisualStyleBackColor = true;
+			this.butCarePlans.Click += new System.EventHandler(this.butCarePlans_Click);
+			// 
+			// but2011Labs
+			// 
+			this.but2011Labs.Location = new System.Drawing.Point(10, 19);
+			this.but2011Labs.Name = "but2011Labs";
+			this.but2011Labs.Size = new System.Drawing.Size(84, 23);
+			this.but2011Labs.TabIndex = 43;
+			this.but2011Labs.Text = "Labs/Rads";
+			this.but2011Labs.UseVisualStyleBackColor = true;
+			this.but2011Labs.Click += new System.EventHandler(this.but2011Labs_Click);
+			// 
+			// groupBox1
+			// 
+			this.groupBox1.Controls.Add(this.but2011Labs);
+			this.groupBox1.Location = new System.Drawing.Point(702, 495);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(104, 53);
+			this.groupBox1.TabIndex = 26;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "2011 Ed.";
 			// 
 			// gridMu
 			// 
@@ -268,40 +277,19 @@
 			this.gridMu.TranslationName = null;
 			this.gridMu.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMu_CellClick);
 			// 
-			// button1
-			// 
-			this.button1.Location = new System.Drawing.Point(715, 570);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(84, 23);
-			this.button1.TabIndex = 41;
-			this.button1.Text = "CDSTest";
-			this.button1.UseVisualStyleBackColor = true;
-			this.button1.Visible = false;
-			// 
-			// butCarePlans
-			// 
-			this.butCarePlans.Location = new System.Drawing.Point(712, 503);
-			this.butCarePlans.Name = "butCarePlans";
-			this.butCarePlans.Size = new System.Drawing.Size(84, 23);
-			this.butCarePlans.TabIndex = 42;
-			this.butCarePlans.Text = "Care Plans";
-			this.butCarePlans.UseVisualStyleBackColor = true;
-			this.butCarePlans.Click += new System.EventHandler(this.butCarePlans_Click);
-			// 
 			// FormEHR
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(817, 674);
+			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.butCarePlans);
-			this.Controls.Add(this.button1);
 			this.Controls.Add(this.butInterventions);
 			this.Controls.Add(this.butEncounters);
 			this.Controls.Add(this.butEhrNotPerformed);
 			this.Controls.Add(this.butAmendments);
 			this.Controls.Add(this.butLabPanelLOINC);
 			this.Controls.Add(this.label3);
-			this.Controls.Add(this.butPatList);
 			this.Controls.Add(this.labelProvUser);
 			this.Controls.Add(this.labelProvPat);
 			this.Controls.Add(this.label2);
@@ -319,6 +307,7 @@
 			this.Shown += new System.EventHandler(this.FormEHR_Shown);
 			this.groupBox4.ResumeLayout(false);
 			this.groupBox5.ResumeLayout(false);
+			this.groupBox1.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -329,7 +318,6 @@
 		private System.Windows.Forms.Button butMeasures;
 		private System.Windows.Forms.Button butHash;
 		private System.Windows.Forms.Button butEncryption;
-		private System.Windows.Forms.Button butQuality;
 		private OpenDental.UI.ODGrid gridMu;
 		private System.Windows.Forms.GroupBox groupBox4;
 		private System.Windows.Forms.GroupBox groupBox5;
@@ -338,7 +326,6 @@
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Label labelProvPat;
 		private System.Windows.Forms.Label labelProvUser;
-		private System.Windows.Forms.Button butPatList;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Button butLabPanelLOINC;
 		private System.Windows.Forms.Button butAmendments;
@@ -346,7 +333,8 @@
 		private System.Windows.Forms.Button but2014CQM;
 		private System.Windows.Forms.Button butEncounters;
 		private System.Windows.Forms.Button butInterventions;
-		private System.Windows.Forms.Button button1;
 		private System.Windows.Forms.Button butCarePlans;
+		private System.Windows.Forms.Button but2011Labs;
+		private System.Windows.Forms.GroupBox groupBox1;
 	}
 }

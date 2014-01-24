@@ -1,19 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Mail;
-using System.Net.Mime;
-using System.Net.Sockets;
-using System.Text.RegularExpressions;
-using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
-using OpenDental;
 using OpenDental.UI;
 using CodeBase;
 using System.Reflection;
@@ -115,7 +105,7 @@ namespace OpenDental {
 			}
 			FillGridMu();
 			if(OnShowLaunchOrders) {
-				LaunchOrdersWindow();
+				//LaunchOrdersWindow();
 				OnShowLaunchOrders=false;
 			}
 			if(ProvPat.EhrKey=="") {
@@ -220,7 +210,7 @@ namespace OpenDental {
 					case EhrMeasureType.ProvOrderEntry:
 					case EhrMeasureType.CPOE_MedOrdersOnly:
 					case EhrMeasureType.CPOE_PreviouslyOrdered:
-						LaunchOrdersWindow();
+						//LaunchOrdersWindow();
 						break;
 					case EhrMeasureType.Rx:
 						//no action available
@@ -398,6 +388,7 @@ namespace OpenDental {
 		}
 
 		private void butLabPanelLOINC_Click(object sender,EventArgs e) {
+			//TODO: Add this to the Grid instead of the button
 			FormEhrLabOrders FormEHRLO=new FormEhrLabOrders();
 			FormEHRLO.PatCur=PatCur;
 			FormEHRLO.ShowDialog();
@@ -430,6 +421,10 @@ namespace OpenDental {
 		private void butCarePlans_Click(object sender,EventArgs e) {
 			FormEhrCarePlans FormCP=new FormEhrCarePlans(PatCur);
 			FormCP.ShowDialog();
+		}
+
+		private void but2011Labs_Click(object sender,EventArgs e) {
+			LaunchOrdersWindow();
 		}
 
 		public static bool ProvKeyIsValid(string lName,string fName,bool hasReportAccess,string provKey) {
@@ -467,6 +462,8 @@ namespace OpenDental {
 		private void butClose_Click(object sender,EventArgs e) {
 			Close();
 		}
+
+		
 
 
 		

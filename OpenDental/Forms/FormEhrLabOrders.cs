@@ -1,13 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
-using OpenDental;
 using OpenDental.UI;
 using CodeBase;
 
@@ -140,7 +134,7 @@ namespace OpenDental {
 			EhrMeasureEvent newMeasureEvent=new EhrMeasureEvent();
 			newMeasureEvent.DateTEvent=DateTime.Now;
 			Loinc loinc=Loincs.GetByCode(FormLOE.EhrLabCur.UsiID);
-			if(loinc.ScaleType.Contains("Qn")) {
+			if(loinc.ClassType.Contains("rad")) {
 				newMeasureEvent.EventType=EhrMeasureEventType.CPOE_RadOrdered;
 			}
 			else {

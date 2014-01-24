@@ -65,43 +65,44 @@ namespace OpenDentBusiness{
 				row["type"]=medOrderType.ToString();
 				rows.Add(row);
 			}
+			//Medications are deprecated for 2014 edition
 			//MedicationPats
-			command="SELECT DateStart,DateStop,MedicationPatNum,CASE WHEN medication.MedName IS NULL THEN medicationpat.MedDescript ELSE medication.MedName END MedName,PatNote,ProvNum "
-				+"FROM medicationpat "
-				+"LEFT OUTER JOIN medication ON medication.MedicationNum=medicationpat.MedicationNum "
-				+"WHERE PatNum = "+POut.Long(patNum);
-			if(!includeDiscontinued) {//exclude invalid orders
-				command+=" AND DateStart > "+POut.Date(new DateTime(1880,1,1))+" AND PatNote !='' "
-					+"AND (DateStop < "+POut.Date(new DateTime(1880,1,1))+" "//no date stop
-					+"OR DateStop >= "+POut.Date(DateTime.Today)+")";//date stop hasn't happened yet
-			}
-			DataTable rawMed=Db.GetTable(command);
-			DateTime dateStop;
-			for(int i=0;i<rawMed.Rows.Count;i++) {
-				row=table.NewRow();
-				dateT=PIn.DateT(rawMed.Rows[i]["DateStart"].ToString());
-				row["DateTime"]=dateT;
-				if(dateT.Year<1880) {
-					row["date"]="";
-				}
-				else {
-					row["date"]=dateT.ToShortDateString();
-				}
-				row["description"]=PIn.String(rawMed.Rows[i]["MedName"].ToString())+", "
-					+PIn.String(rawMed.Rows[i]["PatNote"].ToString());
-				row["MedicalOrderNum"]="0";
-				row["MedicationPatNum"]=rawMed.Rows[i]["MedicationPatNum"].ToString();
-				row["prov"]=Providers.GetAbbr(PIn.Long(rawMed.Rows[i]["ProvNum"].ToString()));
-				dateStop=PIn.Date(rawMed.Rows[i]["DateStop"].ToString());
-				if(dateStop.Year<1880 || dateStop>DateTime.Today) {//not stopped or in the future
-					row["status"]="Active";
-				}
-				else {
-					row["status"]="Discontinued";
-				}
-				row["type"]="Medication";
-				rows.Add(row);
-			}
+			//command="SELECT DateStart,DateStop,MedicationPatNum,CASE WHEN medication.MedName IS NULL THEN medicationpat.MedDescript ELSE medication.MedName END MedName,PatNote,ProvNum "
+			//	+"FROM medicationpat "
+			//	+"LEFT OUTER JOIN medication ON medication.MedicationNum=medicationpat.MedicationNum "
+			//	+"WHERE PatNum = "+POut.Long(patNum);
+			//if(!includeDiscontinued) {//exclude invalid orders
+			//	command+=" AND DateStart > "+POut.Date(new DateTime(1880,1,1))+" AND PatNote !='' "
+			//		+"AND (DateStop < "+POut.Date(new DateTime(1880,1,1))+" "//no date stop
+			//		+"OR DateStop >= "+POut.Date(DateTime.Today)+")";//date stop hasn't happened yet
+			//}
+			//DataTable rawMed=Db.GetTable(command);
+			//DateTime dateStop;
+			//for(int i=0;i<rawMed.Rows.Count;i++) {
+			//	row=table.NewRow();
+			//	dateT=PIn.DateT(rawMed.Rows[i]["DateStart"].ToString());
+			//	row["DateTime"]=dateT;
+			//	if(dateT.Year<1880) {
+			//		row["date"]="";
+			//	}
+			//	else {
+			//		row["date"]=dateT.ToShortDateString();
+			//	}
+			//	row["description"]=PIn.String(rawMed.Rows[i]["MedName"].ToString())+", "
+			//		+PIn.String(rawMed.Rows[i]["PatNote"].ToString());
+			//	row["MedicalOrderNum"]="0";
+			//	row["MedicationPatNum"]=rawMed.Rows[i]["MedicationPatNum"].ToString();
+			//	row["prov"]=Providers.GetAbbr(PIn.Long(rawMed.Rows[i]["ProvNum"].ToString()));
+			//	dateStop=PIn.Date(rawMed.Rows[i]["DateStop"].ToString());
+			//	if(dateStop.Year<1880 || dateStop>DateTime.Today) {//not stopped or in the future
+			//		row["status"]="Active";
+			//	}
+			//	else {
+			//		row["status"]="Discontinued";
+			//	}
+			//	row["type"]="Medication";
+			//	rows.Add(row);
+			//}
 			//Sorting-----------------------------------------------------------------------------------------
 			rows.Sort(new MedicalOrderLineComparer());
 			for(int i=0;i<rows.Count;i++) {
