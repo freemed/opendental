@@ -27,6 +27,13 @@ namespace OpenDental {
 			FillPatientPicker();
 			FillPatientInfo();
 			FillGrid();
+			for(int i=0;i<ListEhrLabs.Count;i++){//check for existing labs in DB.
+				if(EhrLabs.GetByGUID(ListEhrLabs[i].PlacerOrderUniversalID,ListEhrLabs[i].PlacerOrderNum)!=null
+					|| EhrLabs.GetByGUID(ListEhrLabs[i].FillerOrderUniversalID,ListEhrLabs[i].FillerOrderNum)!=null) {
+					labelExistingLab.Visible=true;
+					break;
+				}
+			}
 		}
 
 		private void AttachPatientHelper() {

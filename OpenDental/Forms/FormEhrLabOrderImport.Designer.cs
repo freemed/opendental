@@ -38,6 +38,7 @@
 			this.listBoxNames = new System.Windows.Forms.ListBox();
 			this.label7 = new System.Windows.Forms.Label();
 			this.label9 = new System.Windows.Forms.Label();
+			this.labelExistingLab = new System.Windows.Forms.Label();
 			this.groupBox5.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -194,11 +195,23 @@
 			this.label9.Text = "Birthdate";
 			this.label9.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
+			// labelExistingLab
+			// 
+			this.labelExistingLab.ForeColor = System.Drawing.Color.Red;
+			this.labelExistingLab.Location = new System.Drawing.Point(154, 360);
+			this.labelExistingLab.Name = "labelExistingLab";
+			this.labelExistingLab.Size = new System.Drawing.Size(386, 17);
+			this.labelExistingLab.TabIndex = 250;
+			this.labelExistingLab.Text = "Saving these results will update one or more existing labs.";
+			this.labelExistingLab.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.labelExistingLab.Visible = false;
+			// 
 			// FormEhrLabOrderImport
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(714, 392);
+			this.Controls.Add(this.labelExistingLab);
 			this.Controls.Add(this.groupBox5);
 			this.Controls.Add(this.butPatSelect);
 			this.Controls.Add(this.label5);
@@ -234,5 +247,6 @@
 		private System.Windows.Forms.ListBox listBoxRaces;
 		private System.Windows.Forms.TextBox textGender;
 		private System.Windows.Forms.TextBox textBirthdate;
+		private System.Windows.Forms.Label labelExistingLab;
 	}
 }

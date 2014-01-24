@@ -19,6 +19,8 @@ namespace OpenDental {
 		}
 
 		private void FormLabPanelEdit_Load(object sender,EventArgs e) {
+			Height=System.Windows.Forms.Screen.GetWorkingArea(this).Height;
+			this.SetDesktopLocation(DesktopLocation.X,0);
 			if(IsImport || IsViewOnly) {
 				foreach(Control c in this.Controls) {
 					c.Enabled=false;

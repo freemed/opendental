@@ -53,7 +53,6 @@
 			this.label10 = new System.Windows.Forms.Label();
 			this.textPlacerGroupUniversalID = new System.Windows.Forms.TextBox();
 			this.groupBox5 = new System.Windows.Forms.GroupBox();
-			this.butProvPicker = new OpenDental.UI.Button();
 			this.comboOrderingProvIdType = new System.Windows.Forms.ComboBox();
 			this.label33 = new System.Windows.Forms.Label();
 			this.comboOrderingProvNameType = new System.Windows.Forms.ComboBox();
@@ -87,7 +86,6 @@
 			this.label13 = new System.Windows.Forms.Label();
 			this.textFillerOrderUniversalID = new System.Windows.Forms.TextBox();
 			this.groupBox6 = new System.Windows.Forms.GroupBox();
-			this.butServicePicker = new OpenDental.UI.Button();
 			this.label44 = new System.Windows.Forms.Label();
 			this.textUsiCodeSystemNameAlt = new System.Windows.Forms.TextBox();
 			this.label43 = new System.Windows.Forms.Label();
@@ -119,6 +117,7 @@
 			this.label20 = new System.Windows.Forms.Label();
 			this.comboResultStatus = new System.Windows.Forms.ComboBox();
 			this.label26 = new System.Windows.Forms.Label();
+			this.imageListInfoButton = new System.Windows.Forms.ImageList(this.components);
 			this.gridResultsCopyTo = new OpenDental.UI.ODGrid();
 			this.gridClinicalInformation = new OpenDental.UI.ODGrid();
 			this.gridNotes = new OpenDental.UI.ODGrid();
@@ -126,8 +125,9 @@
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butViewParent = new OpenDental.UI.Button();
 			this.butParentPicker = new OpenDental.UI.Button();
+			this.butServicePicker = new OpenDental.UI.Button();
+			this.butProvPicker = new OpenDental.UI.Button();
 			this.butPatientPick = new OpenDental.UI.Button();
-			this.imageListInfoButton = new System.Windows.Forms.ImageList(this.components);
 			this.groupBox4.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox5.SuspendLayout();
@@ -173,6 +173,7 @@
 			// 
 			// butAdd
 			// 
+			this.butAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.butAdd.Location = new System.Drawing.Point(881, 466);
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(81, 24);
@@ -203,6 +204,7 @@
 			// 
 			// butAddNote
 			// 
+			this.butAddNote.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.butAddNote.Location = new System.Drawing.Point(881, 359);
 			this.butAddNote.Name = "butAddNote";
 			this.butAddNote.Size = new System.Drawing.Size(81, 24);
@@ -213,6 +215,7 @@
 			// 
 			// butAddCopyTo
 			// 
+			this.butAddCopyTo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.butAddCopyTo.Enabled = false;
 			this.butAddCopyTo.Location = new System.Drawing.Point(881, 389);
 			this.butAddCopyTo.Name = "butAddCopyTo";
@@ -223,6 +226,7 @@
 			// 
 			// butAddSpecimens
 			// 
+			this.butAddSpecimens.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.butAddSpecimens.Enabled = false;
 			this.butAddSpecimens.Location = new System.Drawing.Point(881, 496);
 			this.butAddSpecimens.Name = "butAddSpecimens";
@@ -427,21 +431,6 @@
 			this.groupBox5.TabIndex = 3;
 			this.groupBox5.TabStop = false;
 			this.groupBox5.Text = "Ordering Provider";
-			// 
-			// butProvPicker
-			// 
-			this.butProvPicker.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butProvPicker.Autosize = true;
-			this.butProvPicker.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butProvPicker.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butProvPicker.CornerRadius = 4F;
-			this.butProvPicker.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butProvPicker.Location = new System.Drawing.Point(10, 15);
-			this.butProvPicker.Name = "butProvPicker";
-			this.butProvPicker.Size = new System.Drawing.Size(29, 25);
-			this.butProvPicker.TabIndex = 249;
-			this.butProvPicker.Text = "...";
-			this.butProvPicker.Visible = false;
 			// 
 			// comboOrderingProvIdType
 			// 
@@ -726,6 +715,8 @@
 			// 
 			// groupBox6
 			// 
+			this.groupBox6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox6.Controls.Add(this.butServicePicker);
 			this.groupBox6.Controls.Add(this.label44);
 			this.groupBox6.Controls.Add(this.textUsiCodeSystemNameAlt);
@@ -748,21 +739,6 @@
 			this.groupBox6.TabStop = false;
 			this.groupBox6.Text = "Service Identifier (LOINC Codes)";
 			// 
-			// butServicePicker
-			// 
-			this.butServicePicker.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butServicePicker.Autosize = true;
-			this.butServicePicker.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butServicePicker.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butServicePicker.CornerRadius = 4F;
-			this.butServicePicker.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butServicePicker.Location = new System.Drawing.Point(6, 14);
-			this.butServicePicker.Name = "butServicePicker";
-			this.butServicePicker.Size = new System.Drawing.Size(29, 25);
-			this.butServicePicker.TabIndex = 255;
-			this.butServicePicker.Text = "...";
-			this.butServicePicker.Visible = false;
-			// 
 			// label44
 			// 
 			this.label44.Location = new System.Drawing.Point(6, 81);
@@ -774,6 +750,8 @@
 			// 
 			// textUsiCodeSystemNameAlt
 			// 
+			this.textUsiCodeSystemNameAlt.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.textUsiCodeSystemNameAlt.Location = new System.Drawing.Point(134, 80);
 			this.textUsiCodeSystemNameAlt.Name = "textUsiCodeSystemNameAlt";
 			this.textUsiCodeSystemNameAlt.Size = new System.Drawing.Size(135, 20);
@@ -790,6 +768,8 @@
 			// 
 			// textUsiCodeSystemName
 			// 
+			this.textUsiCodeSystemName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.textUsiCodeSystemName.Location = new System.Drawing.Point(134, 17);
 			this.textUsiCodeSystemName.Name = "textUsiCodeSystemName";
 			this.textUsiCodeSystemName.Size = new System.Drawing.Size(135, 20);
@@ -806,6 +786,8 @@
 			// 
 			// textUsiText
 			// 
+			this.textUsiText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.textUsiText.Location = new System.Drawing.Point(134, 59);
 			this.textUsiText.Multiline = true;
 			this.textUsiText.Name = "textUsiText";
@@ -832,6 +814,8 @@
 			// 
 			// textUsiID
 			// 
+			this.textUsiID.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.textUsiID.Location = new System.Drawing.Point(134, 38);
 			this.textUsiID.Name = "textUsiID";
 			this.textUsiID.Size = new System.Drawing.Size(135, 20);
@@ -839,6 +823,8 @@
 			// 
 			// textUsiTextOriginal
 			// 
+			this.textUsiTextOriginal.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.textUsiTextOriginal.Location = new System.Drawing.Point(134, 143);
 			this.textUsiTextOriginal.Multiline = true;
 			this.textUsiTextOriginal.Name = "textUsiTextOriginal";
@@ -847,6 +833,8 @@
 			// 
 			// textUsiTextAlt
 			// 
+			this.textUsiTextAlt.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.textUsiTextAlt.Location = new System.Drawing.Point(134, 122);
 			this.textUsiTextAlt.Multiline = true;
 			this.textUsiTextAlt.Name = "textUsiTextAlt";
@@ -873,6 +861,8 @@
 			// 
 			// textUsiIDAlt
 			// 
+			this.textUsiIDAlt.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.textUsiIDAlt.Location = new System.Drawing.Point(134, 101);
 			this.textUsiIDAlt.Name = "textUsiIDAlt";
 			this.textUsiIDAlt.Size = new System.Drawing.Size(135, 20);
@@ -880,6 +870,7 @@
 			// 
 			// butAddClinicalInfo
 			// 
+			this.butAddClinicalInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.butAddClinicalInfo.Enabled = false;
 			this.butAddClinicalInfo.Location = new System.Drawing.Point(881, 419);
 			this.butAddClinicalInfo.Name = "butAddClinicalInfo";
@@ -952,6 +943,8 @@
 			// 
 			// textTQ1Stop
 			// 
+			this.textTQ1Stop.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.textTQ1Stop.Location = new System.Drawing.Point(134, 34);
 			this.textTQ1Stop.Name = "textTQ1Stop";
 			this.textTQ1Stop.Size = new System.Drawing.Size(135, 20);
@@ -968,6 +961,8 @@
 			// 
 			// textTQ1Start
 			// 
+			this.textTQ1Start.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.textTQ1Start.Location = new System.Drawing.Point(134, 13);
 			this.textTQ1Start.Name = "textTQ1Start";
 			this.textTQ1Start.Size = new System.Drawing.Size(135, 20);
@@ -975,6 +970,8 @@
 			// 
 			// groupBox8
 			// 
+			this.groupBox8.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox8.Controls.Add(this.textTQ1Start);
 			this.groupBox8.Controls.Add(this.label17);
 			this.groupBox8.Controls.Add(this.label18);
@@ -988,6 +985,7 @@
 			// 
 			// comboSpecimenActionCode
 			// 
+			this.comboSpecimenActionCode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboSpecimenActionCode.FormattingEnabled = true;
 			this.comboSpecimenActionCode.Location = new System.Drawing.Point(669, 634);
 			this.comboSpecimenActionCode.Name = "comboSpecimenActionCode";
@@ -996,6 +994,7 @@
 			// 
 			// label19
 			// 
+			this.label19.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.label19.Location = new System.Drawing.Point(669, 614);
 			this.label19.Name = "label19";
 			this.label19.Size = new System.Drawing.Size(164, 17);
@@ -1005,6 +1004,8 @@
 			// 
 			// textResultDateTime
 			// 
+			this.textResultDateTime.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.textResultDateTime.Location = new System.Drawing.Point(822, 7);
 			this.textResultDateTime.Name = "textResultDateTime";
 			this.textResultDateTime.Size = new System.Drawing.Size(135, 20);
@@ -1021,6 +1022,8 @@
 			// 
 			// comboResultStatus
 			// 
+			this.comboResultStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboResultStatus.FormattingEnabled = true;
 			this.comboResultStatus.Location = new System.Drawing.Point(131, 634);
 			this.comboResultStatus.Name = "comboResultStatus";
@@ -1029,6 +1032,7 @@
 			// 
 			// label26
 			// 
+			this.label26.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label26.Location = new System.Drawing.Point(12, 635);
 			this.label26.Name = "label26";
 			this.label26.Size = new System.Drawing.Size(119, 17);
@@ -1036,8 +1040,15 @@
 			this.label26.Text = "Results Status";
 			this.label26.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// imageListInfoButton
+			// 
+			this.imageListInfoButton.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListInfoButton.ImageStream")));
+			this.imageListInfoButton.TransparentColor = System.Drawing.Color.Transparent;
+			this.imageListInfoButton.Images.SetKeyName(0, "iButton_16px.png");
+			// 
 			// gridResultsCopyTo
 			// 
+			this.gridResultsCopyTo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridResultsCopyTo.HScrollVisible = false;
 			this.gridResultsCopyTo.Location = new System.Drawing.Point(446, 359);
 			this.gridResultsCopyTo.Name = "gridResultsCopyTo";
@@ -1049,6 +1060,7 @@
 			// 
 			// gridClinicalInformation
 			// 
+			this.gridClinicalInformation.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridClinicalInformation.HScrollVisible = false;
 			this.gridClinicalInformation.Location = new System.Drawing.Point(669, 359);
 			this.gridClinicalInformation.Name = "gridClinicalInformation";
@@ -1060,6 +1072,8 @@
 			// 
 			// gridNotes
 			// 
+			this.gridNotes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridNotes.HScrollVisible = false;
 			this.gridNotes.Location = new System.Drawing.Point(12, 359);
 			this.gridNotes.Name = "gridNotes";
@@ -1072,6 +1086,8 @@
 			// 
 			// gridSpecimen
 			// 
+			this.gridSpecimen.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridSpecimen.HScrollVisible = false;
 			this.gridSpecimen.Location = new System.Drawing.Point(669, 466);
 			this.gridSpecimen.Name = "gridSpecimen";
@@ -1084,6 +1100,9 @@
 			// 
 			// gridMain
 			// 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMain.HScrollVisible = false;
 			this.gridMain.Location = new System.Drawing.Point(12, 466);
 			this.gridMain.Name = "gridMain";
@@ -1125,6 +1144,36 @@
 			this.butParentPicker.Text = "...";
 			this.butParentPicker.Visible = false;
 			// 
+			// butServicePicker
+			// 
+			this.butServicePicker.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butServicePicker.Autosize = true;
+			this.butServicePicker.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butServicePicker.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butServicePicker.CornerRadius = 4F;
+			this.butServicePicker.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butServicePicker.Location = new System.Drawing.Point(6, 14);
+			this.butServicePicker.Name = "butServicePicker";
+			this.butServicePicker.Size = new System.Drawing.Size(29, 25);
+			this.butServicePicker.TabIndex = 255;
+			this.butServicePicker.Text = "...";
+			this.butServicePicker.Visible = false;
+			// 
+			// butProvPicker
+			// 
+			this.butProvPicker.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butProvPicker.Autosize = true;
+			this.butProvPicker.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butProvPicker.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butProvPicker.CornerRadius = 4F;
+			this.butProvPicker.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butProvPicker.Location = new System.Drawing.Point(10, 15);
+			this.butProvPicker.Name = "butProvPicker";
+			this.butProvPicker.Size = new System.Drawing.Size(29, 25);
+			this.butProvPicker.TabIndex = 249;
+			this.butProvPicker.Text = "...";
+			this.butProvPicker.Visible = false;
+			// 
 			// butPatientPick
 			// 
 			this.butPatientPick.AdjustImageLocation = new System.Drawing.Point(0, 0);
@@ -1139,12 +1188,6 @@
 			this.butPatientPick.TabIndex = 228;
 			this.butPatientPick.Text = "...";
 			this.butPatientPick.Visible = false;
-			// 
-			// imageListInfoButton
-			// 
-			this.imageListInfoButton.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListInfoButton.ImageStream")));
-			this.imageListInfoButton.TransparentColor = System.Drawing.Color.Transparent;
-			this.imageListInfoButton.Images.SetKeyName(0, "iButton_16px.png");
 			// 
 			// FormEhrLabOrderEdit2014
 			// 
