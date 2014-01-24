@@ -156,7 +156,13 @@ namespace OpenDental {
 		private void FillGrid() {
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn("Test Date",70);
+			ODGridColumn col;
+			if(Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
+				col=new ODGridColumn("",18);//infoButton
+				col.ImageList=imageListInfoButton;
+				gridMain.Columns.Add(col);
+			}
+			col=new ODGridColumn("Test Date",70);
 			col.SortingStrategy=GridSortingStrategy.DateParse;
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("LOINC",60);//LoincCode
@@ -173,6 +179,9 @@ namespace OpenDental {
 			ODGridRow row;
 			for(int i=0;i<EhrLabCur.ListEhrLabResults.Count;i++) {
 				row=new ODGridRow();
+				if(Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
+					row.Cells.Add("0");//index of infobutton
+				}
 				string dateSt=EhrLabCur.ListEhrLabResults[i].ObservationDateTime.Substring(0,8);//stored in DB as yyyyMMdd[hh[mm[ss]]], []==optional components
 				DateTime dateT=PIn.Date(dateSt.Substring(4,2)+"/"+dateSt.Substring(6,2)+"/"+dateSt.Substring(0,4));
 				row.Cells.Add(dateT.ToShortDateString());//date only
@@ -374,6 +383,21 @@ namespace OpenDental {
 		private bool EntriesAreValid() {
 			//TODO: validate the controls
 			return true;
+		}
+
+		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
+			if(!Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
+				return;
+			}
+			if(e.Col!=0) {
+				return;
+			}
+			FormInfobutton FormIB=new FormInfobutton();
+			if(PatCurNum!=null && PatCurNum>0) {
+				FormIB.PatCur=Patients.GetPat(PatCurNum);
+			}
+			FormIB.ListObjects.Add(EhrLabCur.ListEhrLabResults[e.Row]);
+			FormIB.ShowDialog();
 		}
 
 		private void butOk_Click(object sender,EventArgs e) {

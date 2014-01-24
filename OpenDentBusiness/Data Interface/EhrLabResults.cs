@@ -20,6 +20,14 @@ namespace OpenDentBusiness{
 			return ehrLabResult;
 		}
 
+		///<summary>Does not insert lab result notes if attached.  Use InsertItem instead.</summary>
+		public static long Insert(EhrLabResult ehrLabResult) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetLong(MethodBase.GetCurrentMethod(),ehrLabResult);
+			}
+			return Crud.EhrLabResultCrud.Insert(ehrLabResult);
+		}
+
 		///<summary>Get all lab results for one patient.</summary>
 		public static List<EhrLabResult> GetAllForPatient(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

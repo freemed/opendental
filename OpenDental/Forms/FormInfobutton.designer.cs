@@ -72,9 +72,9 @@ namespace OpenDental{
 			this.butAddRxNorm = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butPreviewRequest = new OpenDental.UI.Button();
-			this.butPreview = new OpenDental.UI.Button();
 			this.butSend = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.butPreview = new OpenDental.UI.Button();
 			this.groupBoxContext.SuspendLayout();
 			this.groupBox7.SuspendLayout();
 			this.groupBox6.SuspendLayout();
@@ -500,6 +500,7 @@ namespace OpenDental{
 			this.button5.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.button5.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.button5.CornerRadius = 4F;
+			this.button5.Enabled = false;
 			this.button5.Image = global::OpenDental.Properties.Resources.Add;
 			this.button5.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.button5.Location = new System.Drawing.Point(311, 384);
@@ -515,6 +516,7 @@ namespace OpenDental{
 			this.button4.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.button4.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.button4.CornerRadius = 4F;
+			this.button4.Enabled = false;
 			this.button4.Image = global::OpenDental.Properties.Resources.Add;
 			this.button4.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.button4.Location = new System.Drawing.Point(212, 384);
@@ -530,6 +532,7 @@ namespace OpenDental{
 			this.button3.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.button3.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.button3.CornerRadius = 4F;
+			this.button3.Enabled = false;
 			this.button3.Image = global::OpenDental.Properties.Resources.Add;
 			this.button3.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.button3.Location = new System.Drawing.Point(312, 355);
@@ -545,6 +548,7 @@ namespace OpenDental{
 			this.button2.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.button2.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.button2.CornerRadius = 4F;
+			this.button2.Enabled = false;
 			this.button2.Image = global::OpenDental.Properties.Resources.Add;
 			this.button2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.button2.Location = new System.Drawing.Point(112, 384);
@@ -560,11 +564,12 @@ namespace OpenDental{
 			this.button1.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.button1.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.button1.CornerRadius = 4F;
+			this.button1.Enabled = false;
 			this.button1.Image = global::OpenDental.Properties.Resources.Add;
 			this.button1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.button1.Location = new System.Drawing.Point(12, 384);
 			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(94, 23);
+			this.button1.Size = new System.Drawing.Size(96, 23);
 			this.button1.TabIndex = 203;
 			this.button1.Text = "SNOMEDCT";
 			// 
@@ -575,6 +580,7 @@ namespace OpenDental{
 			this.butAddAllergy.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAddAllergy.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAddAllergy.CornerRadius = 4F;
+			this.butAddAllergy.Enabled = false;
 			this.butAddAllergy.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAddAllergy.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butAddAllergy.Location = new System.Drawing.Point(212, 355);
@@ -590,6 +596,7 @@ namespace OpenDental{
 			this.butAddDisease.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAddDisease.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAddDisease.CornerRadius = 4F;
+			this.butAddDisease.Enabled = false;
 			this.butAddDisease.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAddDisease.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butAddDisease.Location = new System.Drawing.Point(12, 355);
@@ -605,6 +612,7 @@ namespace OpenDental{
 			this.butAddRxNorm.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAddRxNorm.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAddRxNorm.CornerRadius = 4F;
+			this.butAddRxNorm.Enabled = false;
 			this.butAddRxNorm.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAddRxNorm.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butAddRxNorm.Location = new System.Drawing.Point(112, 355);
@@ -643,21 +651,6 @@ namespace OpenDental{
 			this.butPreviewRequest.Text = "Preview Request";
 			this.butPreviewRequest.Click += new System.EventHandler(this.butPreviewRequest_Click);
 			// 
-			// butPreview
-			// 
-			this.butPreview.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butPreview.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butPreview.Autosize = true;
-			this.butPreview.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPreview.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butPreview.CornerRadius = 4F;
-			this.butPreview.Location = new System.Drawing.Point(12, 553);
-			this.butPreview.Name = "butPreview";
-			this.butPreview.Size = new System.Drawing.Size(127, 24);
-			this.butPreview.TabIndex = 8;
-			this.butPreview.Text = "&Preview XML";
-			this.butPreview.Click += new System.EventHandler(this.butPreview_Click);
-			// 
 			// butSend
 			// 
 			this.butSend.AdjustImageLocation = new System.Drawing.Point(0, 0);
@@ -687,6 +680,21 @@ namespace OpenDental{
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+			// 
+			// butPreview
+			// 
+			this.butPreview.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butPreview.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butPreview.Autosize = true;
+			this.butPreview.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPreview.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPreview.CornerRadius = 4F;
+			this.butPreview.Location = new System.Drawing.Point(12, 553);
+			this.butPreview.Name = "butPreview";
+			this.butPreview.Size = new System.Drawing.Size(127, 24);
+			this.butPreview.TabIndex = 8;
+			this.butPreview.Text = "&Preview XML";
+			this.butPreview.Click += new System.EventHandler(this.butPreview_Click);
 			// 
 			// FormInfobutton
 			// 
@@ -731,7 +739,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button butSend;
 		private OpenDental.UI.Button butCancel;
 		private System.Windows.Forms.GroupBox groupBoxContext;
-		private UI.Button butPreview;
 		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.RadioButton radioReqPat;
 		private System.Windows.Forms.RadioButton radioReqProv;
@@ -780,5 +787,6 @@ namespace OpenDental{
 		private UI.Button button4;
 		private UI.Button button5;
 		private UI.Button butProvSelect;
+		private UI.Button butPreview;
 	}
 }

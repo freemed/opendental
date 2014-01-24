@@ -23,6 +23,7 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormEhrLabOrderEdit2014));
 			this.butCancel = new System.Windows.Forms.Button();
 			this.butOk = new System.Windows.Forms.Button();
@@ -126,6 +127,7 @@
 			this.butViewParent = new OpenDental.UI.Button();
 			this.butParentPicker = new OpenDental.UI.Button();
 			this.butPatientPick = new OpenDental.UI.Button();
+			this.imageListInfoButton = new System.Windows.Forms.ImageList(this.components);
 			this.groupBox4.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox5.SuspendLayout();
@@ -1090,6 +1092,7 @@
 			this.gridMain.Title = "Lab Results";
 			this.gridMain.TranslationName = null;
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
 			// 
 			// butViewParent
 			// 
@@ -1135,6 +1138,12 @@
 			this.butPatientPick.TabIndex = 228;
 			this.butPatientPick.Text = "...";
 			this.butPatientPick.Visible = false;
+			// 
+			// imageListInfoButton
+			// 
+			this.imageListInfoButton.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListInfoButton.ImageStream")));
+			this.imageListInfoButton.TransparentColor = System.Drawing.Color.Transparent;
+			this.imageListInfoButton.Images.SetKeyName(0, "iButton_16px.png");
 			// 
 			// FormEhrLabOrderEdit2014
 			// 
@@ -1304,6 +1313,7 @@
 		private System.Windows.Forms.ComboBox comboResultStatus;
 		private System.Windows.Forms.Label label26;
 		private UI.Button butViewParent;
+		private System.Windows.Forms.ImageList imageListInfoButton;
 
 	}
 }
