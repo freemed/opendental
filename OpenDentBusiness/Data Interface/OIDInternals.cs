@@ -8,11 +8,12 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class OIDInternals{
 
-		///<summary>Returns the currently defined OID for a given IndentifierType.  If not defined, returns empty string.</summary>
+		///<summary>Returns the currently defined OID for a given IndentifierType.  If not defined, IDroot will be empty string.</summary>
 		public static OIDInternal GetForType(IdentifierType IDType) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<OIDInternal>(MethodBase.GetCurrentMethod(),IDType);
 			}
+			InsertMissingValues();//
 			string command="SELECT * FROM oidinternal WHERE IDType='"+IDType.ToString()+"'";//should only return one row.
 			return Crud.OIDInternalCrud.SelectOne(command);
 		}

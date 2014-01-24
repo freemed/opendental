@@ -20,7 +20,7 @@ namespace OpenDental {
 		}
 
 		private void FormReminders_Load(object sender,EventArgs e) {
-			OIDInternals.InsertMissingValues();
+			//OIDInternals.InsertMissingValues();
 			ListOIDInternal=OIDInternals.GetAll();
 			ListOIDInternal.Sort(sortOIDsByIDType);
 			rootOIDString=OIDInternals.GetForType(IdentifierType.Root).IDRoot;

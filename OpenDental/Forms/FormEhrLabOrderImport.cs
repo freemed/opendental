@@ -22,7 +22,7 @@ namespace OpenDental {
 		}
 
 		private void FormEhrLabOrders_Load(object sender,EventArgs e) {
-			ListEhrLabs=EhrLabs.ProcessHl7Message(Hl7LabMessage);
+			ListEhrLabs=EhrLabs.ProcessHl7Message(Hl7LabMessage,true);
 			AttachPatientHelper();
 			FillPatientPicker();
 			FillPatientInfo();
@@ -157,7 +157,7 @@ namespace OpenDental {
 				if(tempLab!=null) {
 					//validate Date of Lab and attached patient.
 					//Date
-					if(tempLab.ResultDateTime.CompareTo(ListEhrLabs[i].ResultDateTime)<=0) {//string compare dates will return 1+ if tempLab Date is greater.
+					if(tempLab.ResultDateTime.CompareTo(ListEhrLabs[i].ResultDateTime)<0) {//string compare dates will return 1+ if tempLab Date is greater.
 						MsgBox.Show(this,"This lab already exists in the database and has a more recent timestamp.");
 						continue;
 					}

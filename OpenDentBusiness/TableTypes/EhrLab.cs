@@ -1,6 +1,7 @@
 ﻿using EhrLaboratories;
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace OpenDentBusiness {
 	///<summary>For EHR module, lab request that contains all required fields for HL7 Lab Reporting Interface (LRI).</summary>
@@ -286,11 +287,48 @@ namespace OpenDentBusiness {
 			}
 		}
 
+		public static string formatDateFromHL7(string hl7dt) {//hl7date time yyyyMMDDhhmmssssss-zzzz
+			if(hl7dt==null || hl7dt=="") {
+				return "";
+			}
+			if(!Regex.IsMatch(hl7dt,@"^\d{4}(\d\d(\d\d(\d\d(\d\d(\d\d(\.\d(\d(\d(\d)?)?)?)?)?)?)?)?)?([\+-]\d{4})?$")) {
+			//                         yyyy   MM   dd   hh   mm   ss   .s  s  s  s                     +/- zzzz
+				return hl7dt;///does not conform. Return whatever garbage was input.
+			}
+			string retVal="";
+			string zone="";
+			if(hl7dt.Contains("+") || hl7dt.Contains("-")) {//value contains a time zone.
+				zone=hl7dt.Substring(hl7dt.Length-5);//sign plus 4 digits
+				hl7dt=hl7dt.Replace(zone,"");
+			}
+			if(hl7dt.Length>3)  {retVal+=    hl7dt.Substring( 0,4);}//yyyy
+			if(hl7dt.Length>5)  {retVal+="-"+hl7dt.Substring( 4,2);}//MM				
+			if(hl7dt.Length>7)  {retVal+="-"+hl7dt.Substring( 6,2);}//dd				
+			if(hl7dt.Length>9)  {retVal+=" "+hl7dt.Substring( 8,2);}//hh				
+			if(hl7dt.Length>11) {retVal+=":"+hl7dt.Substring(10,2);}//mm				
+			if(hl7dt.Length>13) {retVal+=":"+hl7dt.Substring(12  );}//ss.ssss	
+			return retVal+" "+zone;
+		}
+
+		public static string formatDateToHL7(string hrdt) {//human readable date time
+			if(!Regex.IsMatch(hrdt,@"^\d{4}(-\d\d(-\d\d(\s\d\d(:\d\d(:\d\d(\.\d(\d(\d(\d)?)?)?)?)?)?)?)?)?(\s[\+-]\d{4})?$")) {
+				//                      yyyy -  MM -  dd    hh :  mm :  ss   .s  s  s  s                       +/- zzzz
+				return hrdt;//does not conform. Return whatever garbage was input.
+			}
+			string zone="";
+			if(hrdt[hrdt.Length-5]=='+' || hrdt[hrdt.Length-5]=='-') {//value contains a time zone.
+				zone=hrdt.Substring(hrdt.Length-5);//sign plus 4 digits
+				hrdt=hrdt.Replace(zone,"");
+			}
+			return hrdt.Replace("-","").Replace(" ","").Replace(":","")+zone;
+		}
+
 	}
 
 }
 
 namespace EhrLaboratories {
+
 	///<summary>Specimine Action Code. Constrained to AGLO. OID:2.16.840.1.113883.12.119  HL70369 code:HL70119.  Source HL7 2.5.1 Labratory Reporting Interface documentation.</summary>
 	public enum HL70065 {
 		///<summary>0 - Add ordered tests to the existing specimen.</summary>

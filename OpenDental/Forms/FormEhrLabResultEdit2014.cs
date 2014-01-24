@@ -30,8 +30,8 @@ namespace OpenDental {
 				//butOk.Enabled=false;
 				//combos
 			}
-			textObsDateTime.Text=EhrLabResultCur.ObservationDateTime;
-			textAnalysisDateTime.Text=EhrLabResultCur.AnalysisDateTime;
+			//textObsDateTime.Text=EhrLab.formatDateFromHL7(EhrLabResultCur.ObservationDateTime);
+			//textAnalysisDateTime.Text=EhrLab.formatDateFromHL7(EhrLabResultCur.AnalysisDateTime);
 			#region Observation Identifier (LOINC Codes)
 			textObsIDCodeSystemName.Text		=EhrLabResultCur.ObservationIdentifierCodeSystemName;
 			textObsID.Text									=EhrLabResultCur.ObservationIdentifierID;
@@ -54,8 +54,8 @@ namespace OpenDental {
 			}
 			#endregion
 			#region Observation Value
-			textObsDateTime.Text=EhrLabResultCur.ObservationValueDateTime;
-			textAnalysisDateTime.Text=EhrLabResultCur.AnalysisDateTime;
+			textObsDateTime.Text=EhrLab.formatDateFromHL7(EhrLabResultCur.ObservationDateTime);
+			textAnalysisDateTime.Text=EhrLab.formatDateFromHL7(EhrLabResultCur.AnalysisDateTime);
 			#region Observation Status
 			comboObsStatus.Items.Clear();
 			comboObsStatus.BeginUpdate();
@@ -250,6 +250,8 @@ namespace OpenDental {
 
 		private void gridNotes_CellDoubleClick(object sender,UI.ODGridClickEventArgs e) {
 			FormEhrLabNoteEdit FormLNE=new FormEhrLabNoteEdit();
+			FormLNE.IsImport=IsImport;
+			FormLNE.IsViewOnly=IsViewOnly;
 			FormLNE.LabNoteCur=EhrLabResultCur.ListEhrLabResultNotes[e.Row];
 			FormLNE.ShowDialog();
 			if(IsImport || IsViewOnly || FormLNE.DialogResult!=DialogResult.OK) {
@@ -280,7 +282,7 @@ namespace OpenDental {
 		}
 
 		private void butUnitOfMeasureUCUM_Click(object sender,EventArgs e) {
-			
+			//TODO:
 		}
 
 		///<summary></summary>
@@ -310,12 +312,12 @@ namespace OpenDental {
 				EhrLabResultCur.AbnormalFlags+=((HL70078)listAbnormalFlags.SelectedIndices[i]).ToString();
 			}
 			//Observation Value
-			EhrLabResultCur.AnalysisDateTime=textAnalysisDateTime.Text;
+			EhrLabResultCur.AnalysisDateTime=EhrLab.formatDateToHL7(textAnalysisDateTime.Text);
 			EhrLabResultCur.ObservationResultStatus=((HL70085)comboObsStatus.SelectedIndex-1);
 			EhrLabResultCur.ValueType=((HL70125)comboObsValueType.SelectedIndex-1);
 			EhrLabResultCur.referenceRange=textReferenceRange.Text;
 			EhrLabResultCur.ObservationValueNumeric=PIn.Double(textObsValue.Text);
-			EhrLabResultCur.ObservationValueDateTime=textObsDateTime.Text;
+			EhrLabResultCur.ObservationValueDateTime=EhrLab.formatDateToHL7(textObsDateTime.Text);
 				//Coded Element
 			EhrLabResultCur.ObservationValueCodedElementID=textObsElementID.Text;
 			EhrLabResultCur.ObservationValueCodedElementText=textObsElementText.Text;

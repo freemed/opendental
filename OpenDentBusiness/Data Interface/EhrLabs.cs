@@ -42,7 +42,9 @@ namespace OpenDentBusiness{
 			}
 			string[] segments=message.Split(new string[] { "\r\n" },StringSplitOptions.None);
 			string[] fields;
-			foreach(string segment in segments) {
+			string noteSegment="";//used to attach notes to the right objects.
+			for(int s=0;s<segments.Length;s++) {
+				string segment=segments[s];
 				fields=segment.Split('|');
 				switch(fields[0]) {//Segment Identifier.
 					case "MSH":
@@ -68,6 +70,7 @@ namespace OpenDentBusiness{
 					//case "SFT": //Software Segment
 					//	break;
 					case "PID":
+						noteSegment="PID";
 						for(int i=0;i<fields[3].Split('~').Length;i++) {
 							if(patCur==null) {
 								patCur=Patients.GetByGUID(fields[3].Split('~')[i].Split('^')[0],								//ID Number
@@ -95,7 +98,7 @@ namespace OpenDentBusiness{
 					//	break;
 					case "ORC":
 						//Each new ORC segment designates a new EhrLabOrder attached to the same patient.
-						if(ehrLabCur.PlacerOrderNum!=null || ehrLabCur.FillerOrderNum!=null){//these fields are filled by the ORC segment, if they are blank, this is the first ORC segment encountered.
+						if(ehrLabCur.PlacerOrderNum!=null || ehrLabCur.FillerOrderNum!=null) {//these fields are filled by the ORC segment, if they are blank, this is the first ORC segment encountered.
 							listRetVal.Add(ehrLabCur);
 							ehrLabCur=new EhrLab();
 							ehrLabCur.PatNum=listRetVal[0].PatNum;
@@ -149,25 +152,35 @@ namespace OpenDentBusiness{
 						}
 						break;
 					case "OBR":
+						noteSegment="OBR";
 						ehrLabCur.SetIdOBR=PIn.Long(fields[1]);
+						if(isImport) {
+							ehrLabCur.ListEhrLabNotes=new List<EhrLabNote>();
+						}
 						//OBR order num should always be identical to OCR order number//Not true.
 						if(ehrLabCur.FillerOrderNum!=fields[3].Split('^')[0]) {
 							throw new Exception("Filler order numbers in OCR.3 and OBR.3 segments do not match.");
 						}
 						//Universal Service ID
-						ehrLabCur.UsiID											=																			fields[4].Split('^')[0] ;
-						ehrLabCur.UsiText										=																			fields[4].Split('^')[1] ;
-						try {ehrLabCur.UsiCodeSystemName			=																			fields[4].Split('^')[2] ;}	catch {	}
-						try {ehrLabCur.UsiIDAlt							=																			fields[4].Split('^')[3] ;}	catch {	}
-						try {ehrLabCur.UsiTextAlt						=																			fields[4].Split('^')[4] ;}	catch {	}
-						try {ehrLabCur.UsiCodeSystemNameAlt	=																			fields[4].Split('^')[5] ;}	catch {	}
-						try {ehrLabCur.UsiTextOriginal				=																			fields[4].Split('^')[6] ;}	catch {	}
+						ehrLabCur.UsiID											=																			fields[4].Split('^')[0];
+						ehrLabCur.UsiText										=																			fields[4].Split('^')[1];
+						try { ehrLabCur.UsiCodeSystemName			=																			fields[4].Split('^')[2]; }
+						catch { }
+						try { ehrLabCur.UsiIDAlt							=																			fields[4].Split('^')[3]; }
+						catch { }
+						try { ehrLabCur.UsiTextAlt						=																			fields[4].Split('^')[4]; }
+						catch { }
+						try { ehrLabCur.UsiCodeSystemNameAlt	=																			fields[4].Split('^')[5]; }
+						catch { }
+						try { ehrLabCur.UsiTextOriginal				=																			fields[4].Split('^')[6]; }
+						catch { }
 						//Observation Date Time
 						ehrLabCur.ObservationDateTimeStart		=fields[7];
 						if(fields[8].Length!=0) {
 							ehrLabCur.ObservationDateTimeEnd		=fields[8];
 						}
-						try {ehrLabCur.SpecimenActionCode		=(HL70065)Enum.Parse(typeof(HL70065),	fields[11]);}	catch {	}
+						try { ehrLabCur.SpecimenActionCode		=(HL70065)Enum.Parse(typeof(HL70065),fields[11]); }
+						catch { }
 						if(isImport) {
 							ehrLabCur.ListRelevantClinicalInformations=new List<EhrLabClinicalInfo>();
 						}
@@ -178,33 +191,47 @@ namespace OpenDentBusiness{
 							string tempClinInfo=fields[13].Split('~')[i];
 							EhrLabClinicalInfo ehrLabClinicalInfo=new EhrLabClinicalInfo();
 							ehrLabClinicalInfo.ClinicalInfoID											=tempClinInfo.Split('^')[0];
-							try{ehrLabClinicalInfo.ClinicalInfoText										=tempClinInfo.Split('^')[1];}catch{}
-							try{ehrLabClinicalInfo.ClinicalInfoCodeSystemName					=tempClinInfo.Split('^')[2];}catch{}
-							try{ehrLabClinicalInfo.ClinicalInfoIDAlt									=tempClinInfo.Split('^')[3];}catch{}
-							try{ehrLabClinicalInfo.ClinicalInfoTextAlt								=tempClinInfo.Split('^')[4];}catch{}
-							try{ehrLabClinicalInfo.ClinicalInfoCodeSystemNameAlt			=tempClinInfo.Split('^')[5];}catch{}
-							try{ehrLabClinicalInfo.ClinicalInfoTextOriginal						=tempClinInfo.Split('^')[6];}catch{}
+							try { ehrLabClinicalInfo.ClinicalInfoText										=tempClinInfo.Split('^')[1]; }
+							catch { }
+							try { ehrLabClinicalInfo.ClinicalInfoCodeSystemName					=tempClinInfo.Split('^')[2]; }
+							catch { }
+							try { ehrLabClinicalInfo.ClinicalInfoIDAlt									=tempClinInfo.Split('^')[3]; }
+							catch { }
+							try { ehrLabClinicalInfo.ClinicalInfoTextAlt								=tempClinInfo.Split('^')[4]; }
+							catch { }
+							try { ehrLabClinicalInfo.ClinicalInfoCodeSystemNameAlt			=tempClinInfo.Split('^')[5]; }
+							catch { }
+							try { ehrLabClinicalInfo.ClinicalInfoTextOriginal						=tempClinInfo.Split('^')[6]; }
+							catch { }
 							ehrLabCur.ListRelevantClinicalInformations.Add(ehrLabClinicalInfo);
 						}
 						//OBR 16; Ordering Provider same as OCR. //not validating or checking at this time.
 						ehrLabCur.ResultDateTime=fields[22];
-						if(fields.Length<=25) {break;}//likely that fields beyond this are left out.
-						try { ehrLabCur.ResultStatus												=(HL70123)Enum.Parse(typeof(HL70123),fields[25]);}	catch { }
+						if(fields.Length<=25) { break; }//likely that fields beyond this are left out.
+						try { ehrLabCur.ResultStatus												=(HL70123)Enum.Parse(typeof(HL70123),fields[25]); }
+						catch { }
 						//Parent Result
-						if(fields.Length<=26) {break;}//likely that fields beyond this are left out.
+						if(fields.Length<=26) { break; }//likely that fields beyond this are left out.
 						ehrLabCur.ParentObservationID												=fields[26].Split('^')[0].Split('&')[0];
-						try{ehrLabCur.ParentObservationText									=fields[26].Split('^')[0].Split('&')[1];}catch{}
-						try{ehrLabCur.ParentObservationCodeSystemName				=fields[26].Split('^')[0].Split('&')[2];}catch{}
-						try{ehrLabCur.ParentObservationIDAlt								=fields[26].Split('^')[0].Split('&')[3];}catch{}
-						try{ehrLabCur.ParentObservationTextAlt							=fields[26].Split('^')[0].Split('&')[4];}catch{}
-						try{ehrLabCur.ParentObservationCodeSystemNameAlt		=fields[26].Split('^')[0].Split('&')[5];}catch{}
-						try{ehrLabCur.ParentObservationTextOriginal					=fields[26].Split('^')[0].Split('&')[6];}catch{}
-						try{ehrLabCur.ParentObservationSubID								=fields[26].Split('^')[1];}catch{}
+						try { ehrLabCur.ParentObservationText									=fields[26].Split('^')[0].Split('&')[1]; }
+						catch { }
+						try { ehrLabCur.ParentObservationCodeSystemName				=fields[26].Split('^')[0].Split('&')[2]; }
+						catch { }
+						try { ehrLabCur.ParentObservationIDAlt								=fields[26].Split('^')[0].Split('&')[3]; }
+						catch { }
+						try { ehrLabCur.ParentObservationTextAlt							=fields[26].Split('^')[0].Split('&')[4]; }
+						catch { }
+						try { ehrLabCur.ParentObservationCodeSystemNameAlt		=fields[26].Split('^')[0].Split('&')[5]; }
+						catch { }
+						try { ehrLabCur.ParentObservationTextOriginal					=fields[26].Split('^')[0].Split('&')[6]; }
+						catch { }
+						try { ehrLabCur.ParentObservationSubID								=fields[26].Split('^')[1]; }
+						catch { }
 						//Results Copy To
 						if(isImport) {
 							ehrLabCur.ListEhrLabResultsCopyTo=new List<EhrLabResultsCopyTo>();
 						}
-						if(fields.Length<28) {break;}//likely that fields beyond this are left out.
+						if(fields.Length<28) { break; }//likely that fields beyond this are left out.
 						for(int i=0;i<fields[28].Split('~').Length;i++) {
 							EhrLabResultsCopyTo tempRCT=new EhrLabResultsCopyTo();
 							string stringRCT=fields[28].Split('~')[i];
@@ -235,19 +262,26 @@ namespace OpenDentBusiness{
 							ehrLabCur.ListEhrLabResultsCopyTo.Add(tempRCT);
 						}
 						//Parent Lab
-						if(fields.Length<29) {break;}//likely that fields beyond this are left out.
+						if(fields.Length<29) { break; }//likely that fields beyond this are left out.
 						ehrLabCur.ParentPlacerOrderNum												=fields[29].Split('^')[0].Split('&')[0];
-						try{ehrLabCur.ParentPlacerOrderNamespace							=fields[29].Split('^')[0].Split('&')[1];}catch{}
-						try{ehrLabCur.ParentPlacerOrderUniversalID						=fields[29].Split('^')[0].Split('&')[2];}catch{}
-						try{ehrLabCur.ParentPlacerOrderUniversalIDType				=fields[29].Split('^')[0].Split('&')[3];}catch{}
-						try{ehrLabCur.ParentFillerOrderNum										=fields[29].Split('^')[1].Split('&')[0];}catch{}
-						try{ehrLabCur.ParentFillerOrderNamespace							=fields[29].Split('^')[1].Split('&')[1];}catch{}
-						try{ehrLabCur.ParentFillerOrderUniversalID						=fields[29].Split('^')[1].Split('&')[2];}catch{}
-						try{ehrLabCur.ParentFillerOrderUniversalIDType				=fields[29].Split('^')[1].Split('&')[3];}catch{}
+						try { ehrLabCur.ParentPlacerOrderNamespace							=fields[29].Split('^')[0].Split('&')[1]; }
+						catch { }
+						try { ehrLabCur.ParentPlacerOrderUniversalID						=fields[29].Split('^')[0].Split('&')[2]; }
+						catch { }
+						try { ehrLabCur.ParentPlacerOrderUniversalIDType				=fields[29].Split('^')[0].Split('&')[3]; }
+						catch { }
+						try { ehrLabCur.ParentFillerOrderNum										=fields[29].Split('^')[1].Split('&')[0]; }
+						catch { }
+						try { ehrLabCur.ParentFillerOrderNamespace							=fields[29].Split('^')[1].Split('&')[1]; }
+						catch { }
+						try { ehrLabCur.ParentFillerOrderUniversalID						=fields[29].Split('^')[1].Split('&')[2]; }
+						catch { }
+						try { ehrLabCur.ParentFillerOrderUniversalIDType				=fields[29].Split('^')[1].Split('&')[3]; }
+						catch { }
 						if(fields.Length<31) {
 							break;//next segment. all additional fields were omitted from this one.
 						}
-						if(fields.Length<49) {break;}//likely that fields beyond this are left out.
+						if(fields.Length<49) { break; }//likely that fields beyond this are left out.
 						//result Handling
 						ehrLabCur.ListEhrLabResultsHandlingF										=fields[49].Contains("F");
 						ehrLabCur.ListEhrLabResultsHandlingN										=fields[49].Contains("N");
@@ -257,7 +291,18 @@ namespace OpenDentBusiness{
 						EhrLabNote ehrNote=new EhrLabNote();
 						//todo:No SetIDNTE?
 						ehrNote.Comments=fields[3];
-						ehrLabCur.ListEhrLabNotes.Add(ehrNote);
+						switch(noteSegment) {
+							case "OBX":
+								//Attach note to observation.
+								ehrLabCur.ListEhrLabResults[ehrLabCur.ListEhrLabResults.Count-1].ListEhrLabResultNotes.Add(ehrNote);
+								break;
+							case "PID":
+							case "OBR":
+							default:
+								//if PID, OBR, or Other just attach note to the lab.
+								ehrLabCur.ListEhrLabNotes.Add(ehrNote);
+								break;
+						}
 						break;
 					case "TQ1":
 						ehrLabCur.TQ1SetId=PIn.Long(fields[1]);
@@ -269,19 +314,29 @@ namespace OpenDentBusiness{
 					//case "CTD": //Contact Data
 					//	break;
 					case "OBX":
+						noteSegment="OBX";
 						if(ehrLabCur.ListEhrLabResults==null) {
 							ehrLabCur.ListEhrLabResults=new List<EhrLabResult>();
 						}
 						EhrLabResult labResult=new EhrLabResult();
+						if(isImport) {
+							labResult.ListEhrLabResultNotes=new List<EhrLabNote>();
+						}
 						labResult.SetIdOBX=PIn.Long(fields[1]);
-						try { labResult.ValueType=(HL70125)Enum.Parse(typeof(HL70125),fields[2]); }	catch { }
+						try { labResult.ValueType=(HL70125)Enum.Parse(typeof(HL70125),fields[2]); }
+						catch { }
 						//Lab Result Observation Identifier (LOINC)
 						labResult.ObservationIdentifierID									=fields[3].Split('^')[0];
-						try{labResult.ObservationIdentifierText								=fields[3].Split('^')[1];}catch{}
-						try{labResult.ObservationIdentifierCodeSystemName			=fields[3].Split('^')[2];}catch{}
-						try{labResult.ObservationIdentifierIDAlt							=fields[3].Split('^')[3];}catch{}
-						try{labResult.ObservationIdentifierTextAlt						=fields[3].Split('^')[4];}catch{}
-						try{labResult.ObservationIdentifierCodeSystemNameAlt	=fields[3].Split('^')[5];}catch{}
+						try { labResult.ObservationIdentifierText								=fields[3].Split('^')[1]; }
+						catch { }
+						try { labResult.ObservationIdentifierCodeSystemName			=fields[3].Split('^')[2]; }
+						catch { }
+						try { labResult.ObservationIdentifierIDAlt							=fields[3].Split('^')[3]; }
+						catch { }
+						try { labResult.ObservationIdentifierTextAlt						=fields[3].Split('^')[4]; }
+						catch { }
+						try { labResult.ObservationIdentifierCodeSystemNameAlt	=fields[3].Split('^')[5]; }
+						catch { }
 						if(fields[3].Split('^').Length>6) {
 							labResult.ObservationIdentifierTextOriginal							=fields[3].Split('^')[6];
 						}
@@ -291,11 +346,16 @@ namespace OpenDentBusiness{
 							case HL70125.CE:
 							case HL70125.CWE:
 								labResult.ObservationValueCodedElementID										=fields[5].Split('^')[0];
-								try{labResult.ObservationValueCodedElementText									=fields[5].Split('^')[1];}catch{}
-								try{labResult.ObservationValueCodedElementCodeSystemName				=fields[5].Split('^')[2];}catch{}
-								try{labResult.ObservationValueCodedElementIDAlt									=fields[5].Split('^')[3];}catch{}
-								try{labResult.ObservationValueCodedElementTextAlt								=fields[5].Split('^')[4];}catch{}
-								try{labResult.ObservationValueCodedElementCodeSystemNameAlt			=fields[5].Split('^')[5];}catch{}
+								try { labResult.ObservationValueCodedElementText									=fields[5].Split('^')[1]; }
+								catch { }
+								try { labResult.ObservationValueCodedElementCodeSystemName				=fields[5].Split('^')[2]; }
+								catch { }
+								try { labResult.ObservationValueCodedElementIDAlt									=fields[5].Split('^')[3]; }
+								catch { }
+								try { labResult.ObservationValueCodedElementTextAlt								=fields[5].Split('^')[4]; }
+								catch { }
+								try { labResult.ObservationValueCodedElementCodeSystemNameAlt			=fields[5].Split('^')[5]; }
+								catch { }
 								if(labResult.ValueType==HL70125.CWE) {
 									labResult.ObservationValueCodedElementTextOriginal=fields[5].Split('^')[6];
 								}
@@ -315,28 +375,37 @@ namespace OpenDentBusiness{
 								break;
 							case HL70125.SN:
 								labResult.ObservationValueComparator						=						fields[5].Split('^')[0];
-								try{labResult.ObservationValueNumber1						=PIn.Double(fields[5].Split('^')[1]); }catch{}//optional, may be a null reference
-								try{labResult.ObservationValueSeparatorOrSuffix	=						fields[5].Split('^')[2];	}catch{}//optional, may be a null reference
-								try{labResult.ObservationValueNumber2						=PIn.Double(fields[5].Split('^')[3]); }catch{}//optional, may be a null reference
+								try { labResult.ObservationValueNumber1						=PIn.Double(fields[5].Split('^')[1]); }
+								catch { }//optional, may be a null reference
+								try { labResult.ObservationValueSeparatorOrSuffix	=						fields[5].Split('^')[2]; }
+								catch { }//optional, may be a null reference
+								try { labResult.ObservationValueNumber2						=PIn.Double(fields[5].Split('^')[3]); }
+								catch { }//optional, may be a null reference
 								break;
 							case HL70125.TM:
 								labResult.ObservationValueTime=PIn.Time(fields[5]);
 								break;
 						}
 						//Units
-						if(fields[6].Length!=0){
+						if(fields[6].Length!=0) {
 							labResult.UnitsID											=fields[6].Split('^')[0];
 							labResult.UnitsText										=fields[6].Split('^')[1];
-							try{labResult.UnitsCodeSystemName			=fields[6].Split('^')[2];}	catch { }
-							try{labResult.UnitsIDAlt							=fields[6].Split('^')[3];}	catch { }
-							try{labResult.UnitsTextAlt						=fields[6].Split('^')[4];}	catch { }
-							try{labResult.UnitsCodeSystemNameAlt	=fields[6].Split('^')[5];}	catch { }
-							try{labResult.UnitsTextOriginal				=fields[6].Split('^')[6];}	catch { }
+							try { labResult.UnitsCodeSystemName			=fields[6].Split('^')[2]; }
+							catch { }
+							try { labResult.UnitsIDAlt							=fields[6].Split('^')[3]; }
+							catch { }
+							try { labResult.UnitsTextAlt						=fields[6].Split('^')[4]; }
+							catch { }
+							try { labResult.UnitsCodeSystemNameAlt	=fields[6].Split('^')[5]; }
+							catch { }
+							try { labResult.UnitsTextOriginal				=fields[6].Split('^')[6]; }
+							catch { }
 						}
-						
+
 						labResult.referenceRange=fields[7];
 						labResult.AbnormalFlags=fields[8].Replace('~',',');//TODO: may need additional formatting/testing
-						try{labResult.ObservationResultStatus	=(HL70085)Enum.Parse(typeof(HL70085),fields[11]);}catch { }
+						try { labResult.ObservationResultStatus	=(HL70085)Enum.Parse(typeof(HL70085),fields[11]); }
+						catch { }
 						labResult.ObservationDateTime=fields[14];
 						labResult.AnalysisDateTime=fields[19];
 						//performing organization Name (with additional info)
@@ -344,32 +413,50 @@ namespace OpenDentBusiness{
 						labResult.PerformingOrganizationNameAssigningAuthorityNamespaceId			=fields[23].Split('^')[5].Split('&')[0];
 						labResult.PerformingOrganizationNameAssigningAuthorityUniversalId			=fields[23].Split('^')[5].Split('&')[1];
 						labResult.PerformingOrganizationNameAssigningAuthorityUniversalIdType	=fields[23].Split('^')[5].Split('&')[2];
-						try{labResult.PerformingOrganizationIdentifierTypeCode	=(HL70203)Enum.Parse(typeof(HL70203),fields[23].Split('^')[7]); }	catch { }
+						try { labResult.PerformingOrganizationIdentifierTypeCode	=(HL70203)Enum.Parse(typeof(HL70203),fields[23].Split('^')[7]); }
+						catch { }
 						labResult.PerformingOrganizationIdentifier=fields[23].Split('^')[9];
 						//Performing Organization Address
 						labResult.PerformingOrganizationAddressStreet									=fields[24].Split('^')[0].Split('&')[0];
-						try{labResult.PerformingOrganizationAddressOtherDesignation		=fields[24].Split('^')[1];}catch{}
-						try{labResult.PerformingOrganizationAddressCity								=fields[24].Split('^')[2];}catch{}
-						try{labResult.PerformingOrganizationAddressStateOrProvince		=(USPSAlphaStateCode)Enum.Parse(typeof(USPSAlphaStateCode),fields[24].Split('^')[3]); }	catch { }
-						try{labResult.PerformingOrganizationAddressZipOrPostalCode		=fields[24].Split('^')[4];}catch{}
-						try{labResult.PerformingOrganizationAddressCountryCode				=fields[24].Split('^')[5];}catch{}
-						try{labResult.PerformingOrganizationAddressAddressType				=(HL70190)Enum.Parse(typeof(HL70190),fields[24].Split('^')[6]); }	catch { }
-						try{labResult.PerformingOrganizationAddressCountyOrParishCode	=fields[24].Split('^')[7];}catch{}
+						try { labResult.PerformingOrganizationAddressOtherDesignation		=fields[24].Split('^')[1]; }
+						catch { }
+						try { labResult.PerformingOrganizationAddressCity								=fields[24].Split('^')[2]; }
+						catch { }
+						try { labResult.PerformingOrganizationAddressStateOrProvince		=(USPSAlphaStateCode)Enum.Parse(typeof(USPSAlphaStateCode),fields[24].Split('^')[3]); }
+						catch { }
+						try { labResult.PerformingOrganizationAddressZipOrPostalCode		=fields[24].Split('^')[4]; }
+						catch { }
+						try { labResult.PerformingOrganizationAddressCountryCode				=fields[24].Split('^')[5]; }
+						catch { }
+						try { labResult.PerformingOrganizationAddressAddressType				=(HL70190)Enum.Parse(typeof(HL70190),fields[24].Split('^')[6]); }
+						catch { }
+						try { labResult.PerformingOrganizationAddressCountyOrParishCode	=fields[24].Split('^')[7]; }
+						catch { }
 						//Performing Organization Medical Director
 						if(fields.Length<=25) {
 							break;//next segment. this one is finished.
 						}
 						labResult.MedicalDirectorID										=fields[25].Split('^')[0];
-						try{labResult.MedicalDirectorFName						=fields[25].Split('^')[1];															} catch{}
-						try{labResult.MedicalDirectorLName						=fields[25].Split('^')[2];															} catch{}
-						try{labResult.MedicalDirectorMiddleNames			=fields[25].Split('^')[3];															} catch{}
-						try{labResult.MedicalDirectorSuffix						=fields[25].Split('^')[4];															} catch{}
-						try{labResult.MedicalDirectorPrefix						=fields[25].Split('^')[5];															} catch{}
-						try{labResult.MedicalDirectorAssigningAuthorityNamespaceID		=fields[25].Split('^')[8].Split('&')[0];} catch{}
-						try{labResult.MedicalDirectorAssigningAuthorityUniversalID		=fields[25].Split('^')[8].Split('&')[1];} catch{}
-						try{labResult.MedicalDirectorAssigningAuthorityIDType					=fields[25].Split('^')[8].Split('&')[2];} catch{}
-						try{labResult.MedicalDirectorNameTypeCode						=(HL70200)Enum.Parse(typeof(HL70200),fields[25].Split('^')[9]); }	catch { }
-						try{labResult.MedicalDirectorIdentifierTypeCode			=(HL70203)Enum.Parse(typeof(HL70203),fields[25].Split('^')[12]); }	catch { }
+						try { labResult.MedicalDirectorFName						=fields[25].Split('^')[1]; }
+						catch { }
+						try { labResult.MedicalDirectorLName						=fields[25].Split('^')[2]; }
+						catch { }
+						try { labResult.MedicalDirectorMiddleNames			=fields[25].Split('^')[3]; }
+						catch { }
+						try { labResult.MedicalDirectorSuffix						=fields[25].Split('^')[4]; }
+						catch { }
+						try { labResult.MedicalDirectorPrefix						=fields[25].Split('^')[5]; }
+						catch { }
+						try { labResult.MedicalDirectorAssigningAuthorityNamespaceID		=fields[25].Split('^')[8].Split('&')[0]; }
+						catch { }
+						try { labResult.MedicalDirectorAssigningAuthorityUniversalID		=fields[25].Split('^')[8].Split('&')[1]; }
+						catch { }
+						try { labResult.MedicalDirectorAssigningAuthorityIDType					=fields[25].Split('^')[8].Split('&')[2]; }
+						catch { }
+						try { labResult.MedicalDirectorNameTypeCode						=(HL70200)Enum.Parse(typeof(HL70200),fields[25].Split('^')[9]); }
+						catch { }
+						try { labResult.MedicalDirectorIdentifierTypeCode			=(HL70203)Enum.Parse(typeof(HL70203),fields[25].Split('^')[12]); }
+						catch { }
 						ehrLabCur.ListEhrLabResults.Add(labResult);
 						break;
 					//case "FTI": //Financial Transaction
@@ -383,17 +470,24 @@ namespace OpenDentBusiness{
 						EhrLabSpecimen ehrLabSpecimen=new EhrLabSpecimen();
 						ehrLabSpecimen.SetIdSPM=PIn.Long(fields[1]);
 						//Specimen Type
-						ehrLabSpecimen.SpecimenTypeID											= fields[4].Split('^')[0];		
-						try{ehrLabSpecimen.SpecimenTypeText								= fields[4].Split('^')[1];		}catch{}
-						try{ehrLabSpecimen.SpecimenTypeCodeSystemName			= (HL70369)Enum.Parse(typeof(HL70369),fields[4].Split('^')[2]); }	catch { }
-						try{ehrLabSpecimen.SpecimenTypeIDAlt							= fields[4].Split('^')[3];		}catch{}
-						try{ehrLabSpecimen.SpecimenTypeTextAlt						= fields[4].Split('^')[4];		}catch{}
-						try{ehrLabSpecimen.SpecimenTypeCodeSystemNameAlt	= (HL70369)Enum.Parse(typeof(HL70369),fields[4].Split('^')[5]); }	catch { }
-						try{ehrLabSpecimen.SpecimenTypeTextOriginal				= fields[4].Split('^')[6];		}catch{}
+						ehrLabSpecimen.SpecimenTypeID											= fields[4].Split('^')[0];
+						try { ehrLabSpecimen.SpecimenTypeText								= fields[4].Split('^')[1]; }
+						catch { }
+						try { ehrLabSpecimen.SpecimenTypeCodeSystemName			= (HL70369)Enum.Parse(typeof(HL70369),fields[4].Split('^')[2]); }
+						catch { }
+						try { ehrLabSpecimen.SpecimenTypeIDAlt							= fields[4].Split('^')[3]; }
+						catch { }
+						try { ehrLabSpecimen.SpecimenTypeTextAlt						= fields[4].Split('^')[4]; }
+						catch { }
+						try { ehrLabSpecimen.SpecimenTypeCodeSystemNameAlt	= (HL70369)Enum.Parse(typeof(HL70369),fields[4].Split('^')[5]); }
+						catch { }
+						try { ehrLabSpecimen.SpecimenTypeTextOriginal				= fields[4].Split('^')[6]; }
+						catch { }
 						//TODO:? check to see if either triplet contained a valid code.
 						//Collection Date Time
 						ehrLabSpecimen.CollectionDateTimeStart		=fields[17].Split('^')[0];
-						try{ehrLabSpecimen.CollectionDateTimeEnd	=fields[17].Split('^')[1];}catch{}
+						try { ehrLabSpecimen.CollectionDateTimeEnd	=fields[17].Split('^')[1]; }
+						catch { }
 						if(fields.Length<19) {
 							ehrLabCur.ListEhrLabSpecimens.Add(ehrLabSpecimen);
 							break;//next segment. This one has no more fields
@@ -408,13 +502,19 @@ namespace OpenDentBusiness{
 							}
 							EhrLabSpecimenRejectReason ehrLabRR=new EhrLabSpecimenRejectReason();
 							ehrLabRR.SpecimenRejectReasonID											=fields[21].Split('~')[i].Split('^')[0];
-							try{ehrLabRR.SpecimenRejectReasonText								=fields[21].Split('~')[i].Split('^')[1];}catch{}
-							try{ehrLabRR.SpecimenRejectReasonCodeSystemName			=(HL70369)Enum.Parse(typeof(HL70369),fields[21].Split('~')[i].Split('^')[2]); }	catch { }
-							try{ehrLabRR.SpecimenRejectReasonIDAlt							=fields[21].Split('~')[i].Split('^')[3];}catch{}
-							try{ehrLabRR.SpecimenRejectReasonTextAlt						=fields[21].Split('~')[i].Split('^')[4];}catch{}
-							try{ehrLabRR.SpecimenRejectReasonCodeSystemNameAlt	=(HL70369)Enum.Parse(typeof(HL70369),fields[21].Split('~')[i].Split('^')[5]); }	catch { }
-							try{ehrLabRR.SpecimenRejectReasonTextOriginal				=fields[21].Split('~')[i].Split('^')[6];}catch{}
-						//TODO:? check to see if either triplet contained a valid code.
+							try { ehrLabRR.SpecimenRejectReasonText								=fields[21].Split('~')[i].Split('^')[1]; }
+							catch { }
+							try { ehrLabRR.SpecimenRejectReasonCodeSystemName			=(HL70369)Enum.Parse(typeof(HL70369),fields[21].Split('~')[i].Split('^')[2]); }
+							catch { }
+							try { ehrLabRR.SpecimenRejectReasonIDAlt							=fields[21].Split('~')[i].Split('^')[3]; }
+							catch { }
+							try { ehrLabRR.SpecimenRejectReasonTextAlt						=fields[21].Split('~')[i].Split('^')[4]; }
+							catch { }
+							try { ehrLabRR.SpecimenRejectReasonCodeSystemNameAlt	=(HL70369)Enum.Parse(typeof(HL70369),fields[21].Split('~')[i].Split('^')[5]); }
+							catch { }
+							try { ehrLabRR.SpecimenRejectReasonTextOriginal				=fields[21].Split('~')[i].Split('^')[6]; }
+							catch { }
+							//TODO:? check to see if either triplet contained a valid code.
 							ehrLabSpecimen.ListEhrLabSpecimenRejectReason.Add(ehrLabRR);
 						}
 						//Specimen Condition
@@ -424,12 +524,18 @@ namespace OpenDentBusiness{
 							}
 							EhrLabSpecimenCondition ehrLabSC=new EhrLabSpecimenCondition();
 							ehrLabSC.SpecimenConditionID											=fields[24].Split('~')[i].Split('^')[0];
-							try{ehrLabSC.SpecimenConditionText								=fields[24].Split('~')[i].Split('^')[1];}catch{}
-							try{ehrLabSC.SpecimenConditionCodeSystemName			=(HL70369)Enum.Parse(typeof(HL70369),fields[24].Split('~')[i].Split('^')[2]); }	catch { }
-							try{ehrLabSC.SpecimenConditionIDAlt								=fields[24].Split('~')[i].Split('^')[3];}catch{}
-							try{ehrLabSC.SpecimenConditionTextAlt							=fields[24].Split('~')[i].Split('^')[4];}catch{}
-							try{ehrLabSC.SpecimenConditionCodeSystemNameAlt		=(HL70369)Enum.Parse(typeof(HL70369),fields[24].Split('~')[i].Split('^')[5]); }	catch { }
-							try{ehrLabSC.SpecimenConditionTextOriginal				=fields[24].Split('~')[i].Split('^')[6];}catch{}
+							try { ehrLabSC.SpecimenConditionText								=fields[24].Split('~')[i].Split('^')[1]; }
+							catch { }
+							try { ehrLabSC.SpecimenConditionCodeSystemName			=(HL70369)Enum.Parse(typeof(HL70369),fields[24].Split('~')[i].Split('^')[2]); }
+							catch { }
+							try { ehrLabSC.SpecimenConditionIDAlt								=fields[24].Split('~')[i].Split('^')[3]; }
+							catch { }
+							try { ehrLabSC.SpecimenConditionTextAlt							=fields[24].Split('~')[i].Split('^')[4]; }
+							catch { }
+							try { ehrLabSC.SpecimenConditionCodeSystemNameAlt		=(HL70369)Enum.Parse(typeof(HL70369),fields[24].Split('~')[i].Split('^')[5]); }
+							catch { }
+							try { ehrLabSC.SpecimenConditionTextOriginal				=fields[24].Split('~')[i].Split('^')[6]; }
+							catch { }
 							ehrLabSpecimen.ListEhrLabSpecimenCondition.Add(ehrLabSC);
 						}
 						ehrLabCur.ListEhrLabSpecimens.Add(ehrLabSpecimen);
@@ -440,7 +546,7 @@ namespace OpenDentBusiness{
 				}//end switch
 			}//end foreach segment
 			//TODO:Message has been processed into an EHR Lab... Now we can do other things if we want to...
-			listRetVal.Add(ehrLabCur);
+			listRetVal.Add(ehrLabCur);//other labs may have already been added to retval in the code above.
 			return listRetVal;
 		}
 
@@ -558,13 +664,13 @@ namespace OpenDentBusiness{
 				EhrLabSpecimens.DeleteForLab(ehrLab.EhrLabNum);
 			}
 			//Insert new child elements
-			for(int i=0;i<ehrLab.ListEhrLabNotes.Count;i++) {
+			for(int i=0;i<ehrLab.ListEhrLabNotes.Count;i++) {//must be before lab results.
 				ehrLab.ListEhrLabNotes[i].EhrLabNum=ehrLab.EhrLabNum;
 				ehrLab.ListEhrLabNotes[i].EhrLabNoteNum=EhrLabNotes.Insert(ehrLab.ListEhrLabNotes[i]);
 			}
 			for(int i=0;i<ehrLab.ListEhrLabResults.Count;i++) {
 				ehrLab.ListEhrLabResults[i].EhrLabNum=ehrLab.EhrLabNum;
-				ehrLab.ListEhrLabResults[i].EhrLabResultNum=EhrLabResults.Insert(ehrLab.ListEhrLabResults[i]);
+				ehrLab.ListEhrLabResults[i]=EhrLabResults.InsertItem(ehrLab.ListEhrLabResults[i]);//insert/return entire object so that child objects are also updated.
 			}
 			for(int i=0;i<ehrLab.ListEhrLabResultsCopyTo.Count;i++) {
 				ehrLab.ListEhrLabResultsCopyTo[i].EhrLabNum=ehrLab.EhrLabNum;

@@ -59,12 +59,12 @@ namespace OpenDental {
 			checkResultsHandlingF.Checked=EhrLabCur.ListEhrLabResultsHandlingF;
 			checkResultsHandlingN.Checked=EhrLabCur.ListEhrLabResultsHandlingN;
 			//UpdateTime
-			textResultDateTime.Text=EhrLabCur.ResultDateTime;
+			textResultDateTime.Text=EhrLab.formatDateFromHL7(EhrLabCur.ResultDateTime);
 			FillUsi();//Service Identifier
 			FillGrid();//LabResults
 			//TQ1
-			textTQ1Start.Text=EhrLabCur.TQ1DateTimeStart;
-			textTQ1Stop.Text=EhrLabCur.TQ1DateTimeEnd;
+			textTQ1Start.Text=EhrLab.formatDateFromHL7(EhrLabCur.TQ1DateTimeStart);
+			textTQ1Stop.Text=EhrLab.formatDateFromHL7(EhrLabCur.TQ1DateTimeEnd);
 			FillGridNotes();
 			FillGridResultsCopyTo();
 			FillGridClinicalInformation();
@@ -156,16 +156,18 @@ namespace OpenDental {
 		private void FillGrid() {
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn("Test Date",80);
+			ODGridColumn col=new ODGridColumn("Test Date",70);
 			col.SortingStrategy=GridSortingStrategy.DateParse;
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("LOINC",65);//LoincCode
+			col=new ODGridColumn("LOINC",60);//LoincCode
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Test Performed",250);//ShortDescription
+			col=new ODGridColumn("Test Performed",230);//ShortDescription
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("Result Value",160);//Complicated
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Units",45);
+			col=new ODGridColumn("Units",60);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn("Flags",40);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
@@ -216,6 +218,7 @@ namespace OpenDental {
 						break;
 				}
 				row.Cells.Add(EhrLabCur.ListEhrLabResults[i].UnitsID);
+				row.Cells.Add(EhrLabCur.ListEhrLabResults[i].AbnormalFlags);
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
@@ -332,6 +335,8 @@ namespace OpenDental {
 
 		private void gridNotes_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			FormEhrLabNoteEdit FormLNE=new FormEhrLabNoteEdit();
+			FormLNE.IsViewOnly=IsViewOnly;
+			FormLNE.IsImport=IsImport;
 			FormLNE.LabNoteCur=EhrLabCur.ListEhrLabNotes[e.Row];
 			FormLNE.ShowDialog();
 			if(FormLNE.DialogResult!=DialogResult.OK) {
@@ -417,7 +422,7 @@ namespace OpenDental {
 			//EhrLabCur.ObservationDateTimeStart=;//TODO: UI and Save
 			//EhrLabCur.ObservationDateTimeEnd=//TODO: UI and Save
 			EhrLabCur.SpecimenActionCode=((HL70065)comboSpecimenActionCode.SelectedIndex-1);
-			EhrLabCur.ResultDateTime=textResultDateTime.Text;//upper right hand corner of form.
+			EhrLabCur.ResultDateTime=EhrLab.formatDateToHL7(textResultDateTime.Text);//upper right hand corner of form.
 			EhrLabCur.ResultStatus=((HL70123)comboResultStatus.SelectedIndex-1);
 			//TODO: parent result.
 			/*
@@ -441,8 +446,8 @@ namespace OpenDental {
 			EhrLabCur.ListEhrLabResultsHandlingF=checkResultsHandlingF.Checked;
 			EhrLabCur.ListEhrLabResultsHandlingN=checkResultsHandlingN.Checked;
 			//EhrLabCur.TQ1SetId=//TODO:this
-			EhrLabCur.TQ1DateTimeStart=textTQ1Start.Text;
-			EhrLabCur.TQ1DateTimeEnd=textTQ1Stop.Text;
+			EhrLabCur.TQ1DateTimeStart=EhrLab.formatDateToHL7(textTQ1Start.Text);
+			EhrLabCur.TQ1DateTimeEnd=EhrLab.formatDateToHL7(textTQ1Stop.Text);
 			EhrLabs.SaveToDB(EhrLabCur);
 			Patient patCur=Patients.GetPat(EhrLabCur.PatNum);
 			for(int i=0;i<EhrLabCur.ListEhrLabResults.Count;i++) {

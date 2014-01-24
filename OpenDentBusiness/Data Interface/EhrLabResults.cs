@@ -6,12 +6,18 @@ namespace OpenDentBusiness{
 	public class EhrLabResults {
 
 		///<summary></summary>
-		public static long Insert(EhrLabResult ehrLabResult) {
+		public static EhrLabResult InsertItem(EhrLabResult ehrLabResult) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				ehrLabResult.EhrLabResultNum=Meth.GetLong(MethodBase.GetCurrentMethod(),ehrLabResult);
-				return ehrLabResult.EhrLabResultNum;
+				return ehrLabResult;
 			}
-			return Crud.EhrLabResultCrud.Insert(ehrLabResult);
+			ehrLabResult.EhrLabResultNum=Crud.EhrLabResultCrud.Insert(ehrLabResult);
+			for(int i=0;i<ehrLabResult.ListEhrLabResultNotes.Count;i++) {//save attached notes.
+				ehrLabResult.ListEhrLabResultNotes[i].EhrLabNum=ehrLabResult.EhrLabNum;
+				ehrLabResult.ListEhrLabResultNotes[i].EhrLabResultNum=ehrLabResult.EhrLabResultNum;
+				EhrLabNotes.Insert(ehrLabResult.ListEhrLabResultNotes[i]);
+			}
+			return ehrLabResult;
 		}
 
 		///<summary>Get all lab results for one patient.</summary>

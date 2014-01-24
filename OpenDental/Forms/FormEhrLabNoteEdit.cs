@@ -14,12 +14,21 @@ using CodeBase;
 namespace OpenDental {
 	public partial class FormEhrLabNoteEdit:Form {
 		public EhrLabNote LabNoteCur;
+		public bool IsImport;
+		public bool IsViewOnly;
 
 		public FormEhrLabNoteEdit() {
 			InitializeComponent();
 		}
 
 		private void FormEhrLabOrders_Load(object sender,EventArgs e) {
+			if(IsImport || IsViewOnly) {
+				foreach(Control c in Controls) {
+					c.Enabled=false;
+				}
+				butCancel.Text="Close";
+				butCancel.Enabled=true;
+			}
 			FillGrid();
 		}
 

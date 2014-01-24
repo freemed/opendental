@@ -60,32 +60,43 @@ namespace OpenDental {
 			MsgBoxCopyPaste MBCP = new MsgBoxCopyPaste("Paste HL7 Lab Message Text Here.");
 			MBCP.textMain.SelectAll();
 			MBCP.ShowDialog();
+			if(MBCP.DialogResult!=DialogResult.OK) {
+				return;
+			}
 			List<EhrLab> listEhrLabs;
 			try {
 				listEhrLabs=EhrLabs.ProcessHl7Message(MBCP.textMain.Text);//Not a typical use of the msg box copy paste
 				if(listEhrLabs[0].PatNum==PatCur.PatNum) {//only need to check the first lab.
 					//nothing to do here. Imported lab matches the current patient.
 				}
-				else if(listEhrLabs[0].PatNum==0) {
-					if(MessageBox.Show("Lab patient does not match current patient. Lab patient name is "
-						+MBCP.textMain.Text.Split(new string[] { "\r\n" },StringSplitOptions.RemoveEmptyEntries)[1].Split('|')[5].Split('~')[0].Split('^')[1]+" "//first name
-						+MBCP.textMain.Text.Split(new string[] { "\r\n" },StringSplitOptions.RemoveEmptyEntries)[1].Split('|')[5].Split('~')[0].Split('^')[0]+" "//last name
-						+"\r\nWould you like to import lab for the current patient?","",MessageBoxButtons.OKCancel)!=DialogResult.OK) 
-					{
-						return;
-					}
-					//User agreed to import current lab(s) for current patient.
-					for(int i=0;i<listEhrLabs.Count;i++) {
-						listEhrLabs[i].PatNum=PatCur.PatNum;
-						//TODO: Import external OIDs and PatIDs so that we can identify this patient next time.
-					}
-				}
-				else {//Patnum is already associated with another patient.
-					MessageBox.Show("This lab contains patient information for a different patient. Lab patient name is "
-						+MBCP.textMain.Text.Split(new string[] { "\r\n" },StringSplitOptions.RemoveEmptyEntries)[1].Split('|')[5].Split('~')[0].Split('^')[1]+" "//first name
-						+MBCP.textMain.Text.Split(new string[] { "\r\n" },StringSplitOptions.RemoveEmptyEntries)[1].Split('|')[5].Split('~')[0].Split('^')[1]);
+				else{//does not match current patient, redirect to import form which displays patient information and is build for importing.
+					FormEhrLabOrderImport FormLOI=new FormEhrLabOrderImport();
+					FormLOI.PatCur=PatCur;
+					FormLOI.Hl7LabMessage=MBCP.textMain.Text;
+					FormLOI.ShowDialog();
+					FillGrid();
 					return;
 				}
+				//else if(listEhrLabs[0].PatNum==0) {
+				//	if(MessageBox.Show("Lab patient does not match current patient. Lab patient name is "
+				//		+MBCP.textMain.Text.Split(new string[] { "\r\n" },StringSplitOptions.RemoveEmptyEntries)[1].Split('|')[5].Split('~')[0].Split('^')[1]+" "//first name
+				//		+MBCP.textMain.Text.Split(new string[] { "\r\n" },StringSplitOptions.RemoveEmptyEntries)[1].Split('|')[5].Split('~')[0].Split('^')[1]+" "//last name
+				//		+"\r\nWould you like to import lab for the current patient?","",MessageBoxButtons.OKCancel)!=DialogResult.OK) 
+				//	{
+				//		return;
+				//	}
+				//	//User agreed to import current lab(s) for current patient.
+				//	for(int i=0;i<listEhrLabs.Count;i++) {
+				//		listEhrLabs[i].PatNum=PatCur.PatNum;
+				//		//TODO: Import external OIDs and PatIDs so that we can identify this patient next time.
+				//	}
+				//}
+				//else {//Patnum is already associated with another patient.
+				//	MessageBox.Show("This lab contains patient information for a different patient. Lab patient name is "
+				//		+MBCP.textMain.Text.Split(new string[] { "\r\n" },StringSplitOptions.RemoveEmptyEntries)[1].Split('|')[5].Split('~')[0].Split('^')[1]+" "//first name
+				//		+MBCP.textMain.Text.Split(new string[] { "\r\n" },StringSplitOptions.RemoveEmptyEntries)[1].Split('|')[5].Split('~')[0].Split('^')[1]);
+				//	return;
+				//}
 			}
 			catch (Exception Ex){
 				MessageBox.Show(this,"Unable to import lab.\r\n"+Ex.Message);

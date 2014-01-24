@@ -195,14 +195,14 @@
 			// 
 			// textAnalysisDateTime
 			// 
-			this.textAnalysisDateTime.Location = new System.Drawing.Point(153, 13);
+			this.textAnalysisDateTime.Location = new System.Drawing.Point(152, 33);
 			this.textAnalysisDateTime.Name = "textAnalysisDateTime";
 			this.textAnalysisDateTime.Size = new System.Drawing.Size(157, 20);
 			this.textAnalysisDateTime.TabIndex = 0;
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(9, 15);
+			this.label3.Location = new System.Drawing.Point(8, 35);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(143, 17);
 			this.label3.TabIndex = 8;
@@ -248,16 +248,16 @@
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(15, 105);
+			this.label4.Location = new System.Drawing.Point(14, 125);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(137, 17);
 			this.label4.TabIndex = 230;
-			this.label4.Text = "Numeric Value";
+			this.label4.Text = "Observation Value";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textObsValue
 			// 
-			this.textObsValue.Location = new System.Drawing.Point(153, 103);
+			this.textObsValue.Location = new System.Drawing.Point(152, 123);
 			this.textObsValue.Multiline = true;
 			this.textObsValue.Name = "textObsValue";
 			this.textObsValue.Size = new System.Drawing.Size(157, 20);
@@ -296,6 +296,7 @@
 			this.butUnitOfMeasureUCUM.TabIndex = 263;
 			this.butUnitOfMeasureUCUM.Text = "...";
 			this.butUnitOfMeasureUCUM.UseVisualStyleBackColor = true;
+			this.butUnitOfMeasureUCUM.Visible = false;
 			this.butUnitOfMeasureUCUM.Click += new System.EventHandler(this.butUnitOfMeasureUCUM_Click);
 			// 
 			// label46
@@ -951,14 +952,14 @@
 			// comboObsValueType
 			// 
 			this.comboObsValueType.FormattingEnabled = true;
-			this.comboObsValueType.Location = new System.Drawing.Point(153, 58);
+			this.comboObsValueType.Location = new System.Drawing.Point(152, 78);
 			this.comboObsValueType.Name = "comboObsValueType";
 			this.comboObsValueType.Size = new System.Drawing.Size(157, 21);
 			this.comboObsValueType.TabIndex = 2;
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(6, 60);
+			this.label2.Location = new System.Drawing.Point(5, 80);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(146, 17);
 			this.label2.TabIndex = 237;
@@ -968,14 +969,14 @@
 			// comboObsStatus
 			// 
 			this.comboObsStatus.FormattingEnabled = true;
-			this.comboObsStatus.Location = new System.Drawing.Point(153, 35);
+			this.comboObsStatus.Location = new System.Drawing.Point(152, 55);
 			this.comboObsStatus.Name = "comboObsStatus";
 			this.comboObsStatus.Size = new System.Drawing.Size(157, 21);
 			this.comboObsStatus.TabIndex = 1;
 			// 
 			// label9
 			// 
-			this.label9.Location = new System.Drawing.Point(6, 37);
+			this.label9.Location = new System.Drawing.Point(5, 57);
 			this.label9.Name = "label9";
 			this.label9.Size = new System.Drawing.Size(146, 17);
 			this.label9.TabIndex = 241;
@@ -984,23 +985,23 @@
 			// 
 			// label11
 			// 
-			this.label11.Location = new System.Drawing.Point(12, 127);
+			this.label11.Location = new System.Drawing.Point(11, 14);
 			this.label11.Name = "label11";
 			this.label11.Size = new System.Drawing.Size(140, 17);
 			this.label11.TabIndex = 244;
-			this.label11.Text = "Date/Time Value";
+			this.label11.Text = "Observation Date/Time";
 			this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textObsDateTime
 			// 
-			this.textObsDateTime.Location = new System.Drawing.Point(153, 125);
+			this.textObsDateTime.Location = new System.Drawing.Point(152, 12);
 			this.textObsDateTime.Name = "textObsDateTime";
 			this.textObsDateTime.Size = new System.Drawing.Size(157, 20);
 			this.textObsDateTime.TabIndex = 5;
 			// 
 			// label12
 			// 
-			this.label12.Location = new System.Drawing.Point(9, 83);
+			this.label12.Location = new System.Drawing.Point(8, 103);
 			this.label12.Name = "label12";
 			this.label12.Size = new System.Drawing.Size(144, 17);
 			this.label12.TabIndex = 234;
@@ -1009,7 +1010,7 @@
 			// 
 			// textReferenceRange
 			// 
-			this.textReferenceRange.Location = new System.Drawing.Point(153, 81);
+			this.textReferenceRange.Location = new System.Drawing.Point(152, 101);
 			this.textReferenceRange.Multiline = true;
 			this.textReferenceRange.Name = "textReferenceRange";
 			this.textReferenceRange.Size = new System.Drawing.Size(157, 20);
@@ -1123,6 +1124,7 @@
 			this.butObsIdLoinc.TabIndex = 257;
 			this.butObsIdLoinc.Text = "...";
 			this.butObsIdLoinc.UseVisualStyleBackColor = true;
+			this.butObsIdLoinc.Visible = false;
 			this.butObsIdLoinc.Click += new System.EventHandler(this.butObsIdLoinc_Click);
 			// 
 			// label44
@@ -1307,6 +1309,7 @@
 			this.butCodedElementSnomed.TabIndex = 258;
 			this.butCodedElementSnomed.Text = "...";
 			this.butCodedElementSnomed.UseVisualStyleBackColor = true;
+			this.butCodedElementSnomed.Visible = false;
 			this.butCodedElementSnomed.Click += new System.EventHandler(this.butCodedElementLoinc_Click);
 			// 
 			// label47
@@ -1463,7 +1466,6 @@
 			this.listAbnormalFlags.FormattingEnabled = true;
 			this.listAbnormalFlags.Location = new System.Drawing.Point(12, 208);
 			this.listAbnormalFlags.Name = "listAbnormalFlags";
-			this.listAbnormalFlags.ScrollAlwaysVisible = true;
 			this.listAbnormalFlags.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
 			this.listAbnormalFlags.Size = new System.Drawing.Size(287, 251);
 			this.listAbnormalFlags.TabIndex = 1;
