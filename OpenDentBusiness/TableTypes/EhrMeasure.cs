@@ -106,7 +106,9 @@ namespace OpenDentBusiness {
 		///<summary>26</summary>
 		ElectronicNote,
 		///<summary>27</summary>
-		LabImages
+		LabImages,
+		///<summary>28</summary>
+		VitalSigns2014
 	}
 
 	///<summary>Helps track whether the current patient has met the measurement objectives.</summary>
