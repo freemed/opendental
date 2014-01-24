@@ -3677,6 +3677,36 @@ namespace OpenDentBusiness {
 						)";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS ehraptobs";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehraptobs (
+						EhrAptObsNum bigint NOT NULL auto_increment PRIMARY KEY,
+						AptNum bigint NOT NULL,
+						LoincCode varchar(255) NOT NULL,
+						ValReported varchar(255) NOT NULL,
+						ValUnit varchar(255) NOT NULL,
+						ValCodeSystem varchar(255) NOT NULL,
+						INDEX(AptNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE ehraptobs'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehraptobs (
+						EhrAptObsNum number(20) NOT NULL,
+						AptNum number(20) NOT NULL,
+						LoincCode varchar2(255),
+						ValReported varchar2(255),
+						ValUnit varchar2(255),
+						ValCodeSystem varchar2(255),
+						CONSTRAINT ehraptobs_EhrAptObsNum PRIMARY KEY (EhrAptObsNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX ehraptobs_AptNum ON ehraptobs (AptNum)";
+					Db.NonQ(command);
+				}
 
 
 				command="UPDATE preference SET ValueString = '14.1.0.0' WHERE PrefName = 'DataBaseVersion'";
@@ -3694,5 +3724,4 @@ namespace OpenDentBusiness {
 
 	}
 }
-
 
