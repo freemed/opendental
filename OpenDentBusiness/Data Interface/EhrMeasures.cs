@@ -2455,12 +2455,13 @@ namespace OpenDentBusiness{
 			switch(mtype) {
 				#region CPOE_MedOrdersOnly
 				case EhrMeasureType.CPOE_MedOrdersOnly:
-					command="SELECT * "
+					command="SELECT patient.LName, patient.FName, medPat.* "
 						+"FROM medicationpat as medPat "
-						+"LEFT JOIN ehrmeasureevent as eme ON medPat.MedicationPatNum=eme.FKey  "
+						+"INNER JOIN patient ON patient.PatNum=medPat.PatNum "
+						+"LEFT JOIN ehrmeasureevent as eme ON medPat.MedicationPatNum=eme.FKey "
+						+"AND eme.EventType="+POut.Int((int)EhrMeasureEventType.CPOE_MedOrdered)+" "
 						+"WHERE medPat.ProvNum IN("+POut.String(provs)+") "
-						+"AND medPat.DateStart BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
-						+"AND eme.EventType="+POut.Int((int)EhrMeasureEventType.CPOE_MedOrdered);
+						+"AND medPat.DateStart BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd);
 					tableRaw=Db.GetTable(command);
 					break;
 				#endregion
@@ -2606,13 +2607,20 @@ namespace OpenDentBusiness{
 				#endregion
 				#region Lab
 				case EhrMeasureType.Lab:
-					command="SELECT * "
-						+"FROM patient "
+					command="SELECT 1 AS IsOldLab,patient.PatNum,LName,FName,DateTimeOrder,COALESCE(panels.Count,0) AS ResultCount FROM patient "
+						+"INNER JOIN medicalorder ON patient.PatNum=medicalorder.PatNum "
+						+"AND MedOrderType="+POut.Int((int)MedicalOrderType.Laboratory)+" "
+						+"AND medicalorder.ProvNum IN("+POut.String(provs)+") "
+						+"AND DATE(DateTimeOrder) BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+						+"LEFT JOIN (SELECT MedicalOrderNum,COUNT(*) AS 'Count' FROM labpanel GROUP BY MedicalOrderNum) "
+						+"panels ON panels.MedicalOrderNum=medicalorder.MedicalOrderNum "
+						+"UNION ALL "
+						+"SELECT 0 AS IsOldLab,patient.PatNum,LName,FName,STR_TO_DATE(ObservationDateTimeStart,'%Y%m%d') AS DateTimeOrder,COALESCE(ehrlabs.Count,0) AS ResultCount FROM patient "
 						+"INNER JOIN ehrlab ON patient.PatNum=ehrlab.PatNum "
-						+"LEFT JOIN (SELECT ehrLabResultNum as results, ehrLabNum FROM ehrlabresult "
-						+"WHERE ehrlabresult.ValueType='NM') ehrlabs ON ehrlab.ehrLabNum=ehrlabs.ehrLabNum "
+						+"LEFT JOIN (SELECT EhrLabNum, COUNT(*) AS 'Count' FROM ehrlabresult "
+						+"WHERE ehrlabresult.ValueType='NM' GROUP BY EhrLabNum) ehrlabs ON ehrlab.EhrLabNum=ehrlabs.EhrLabNum "
 						+"WHERE ehrlab.OrderingProviderID IN("+POut.String(provs)+")	"
-						+"AND ehrlab.ObservationDateTimeStart BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" ";
+						+"AND ehrlab.ObservationDateTimeStart BETWEEN DATE_FORMAT("+POut.Date(dateStart)+",'%Y%m%d') AND DATE_FORMAT("+POut.Date(dateEnd)+",'%Y%m%d') ";
 					tableRaw=Db.GetTable(command);
 					break;
 				#endregion
@@ -2962,13 +2970,16 @@ namespace OpenDentBusiness{
 					#endregion
 					#region Lab
 					case EhrMeasureType.Lab:
-						int resultCount=PIn.Int(tableRaw.Rows[i]["results"].ToString());
-						DateTime dateOrder=PIn.Date(tableRaw.Rows[i]["ObservationDateTimeStart"].ToString());
+						int resultCount=PIn.Int(tableRaw.Rows[i]["ResultCount"].ToString());
+						bool isOldLab=PIn.Bool(tableRaw.Rows[i]["IsOldLab"].ToString());
+						DateTime dateOrder=PIn.Date(tableRaw.Rows[i]["DateTimeOrder"].ToString());
 						if(resultCount==0) {
 							explanation+=dateOrder.ToShortDateString()+" results not attached.";
+							explanation+=isOldLab?" (2011 edition)":"";
 						}
 						else {
 							explanation=dateOrder.ToShortDateString()+" results attached.";
+							explanation+=isOldLab?" (2011 edition)":"";
 							row["met"]="X";
 						}
 						break;
