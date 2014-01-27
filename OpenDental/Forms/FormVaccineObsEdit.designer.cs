@@ -244,7 +244,6 @@ namespace OpenDental{
 			// butTodayDateObserved
 			// 
 			this.butTodayDateObserved.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butTodayDateObserved.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butTodayDateObserved.Autosize = true;
 			this.butTodayDateObserved.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butTodayDateObserved.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
