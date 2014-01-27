@@ -713,7 +713,7 @@ namespace OpenDental{
 						}
 						break;
 					case "Age":
-						row.Cells.Add(PatientLogic.DateToAgeString(PatCur.Birthdate));
+						row.Cells.Add(PatientLogic.DateToAgeString(PatCur.Birthdate,PatCur.DateTimeDeceased));
 						break;
 					case "SS#":
 						if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="US" 

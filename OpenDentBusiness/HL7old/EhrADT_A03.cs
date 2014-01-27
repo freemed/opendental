@@ -78,11 +78,6 @@ namespace OpenDentBusiness.HL7 {
 		
 		///<summary>Message Segment Header segment.  Required.  Defines intent, source, destination and syntax of the message.  Guide page 33.</summary>
 		private void MSH() {
-			_sendingFacilityNpi=PrefC.GetString(PrefName.PracticeTitle);
-			if(_pat.ClinicNum!=0) {
-				Clinic clinic=Clinics.GetClinic(_pat.ClinicNum);
-				_sendingFacilityNpi=clinic.Description;
-			}
 			_seg=new SegmentHL7("MSH"
 				+"|"//MSH-1 Field Separator (|).  Required (length 1..1).
 				+@"^~\&"//MSH-2 Encoding Characters.  Required (length 4..4).  Component separator (^), then field repetition separator (~), then escape character (\), then Sub-component separator (&).
@@ -329,8 +324,14 @@ namespace OpenDentBusiness.HL7 {
 			//PID-26 Citizenship.  No longer used.
 			//PID-27 Veterans Military Status.  No longer used.
 			//PID-28 Nationality.  No longer used.
-			//PID-29 Patient Death Date and Time.  Required if PID-30 is set to "Y".  Cardinaility [0..1].  //TODO: We should probably implement to ensure that we pass testing.
-			//PID-30 Patient Death Indicator.  Required if known.  Cardinaility [0..1].  Value set HL70136.  Set this field to "Y" if the death date and time year is greater than 1880, otherwise do not set.
+			//PID-29 Patient Death Date and Time.  Required if PID-30 is set to "Y" (length 12..26).  Cardinaility [0..1].
+			if(_pat.DateTimeDeceased.Year>1880) {
+				_seg.SetField(29,_pat.DateTimeDeceased.ToString("yyyyMMddhhmmss"));
+			}
+			//PID-30 Patient Death Indicator.  Required if known.  Cardinaility [0..1].  Value set HL70136.
+			if(_pat.DateTimeDeceased.Year>1880) {
+				_seg.SetField(30,"Y");
+			}
 			//PID-31 Identity Unknown.  No longer used.
 			//PID-32 Identity Reliability Code.  No longer used.
 			//PID-33 Last Update Date/Time.  Optional.  Cardinaility [0..1].
@@ -497,6 +498,10 @@ namespace OpenDentBusiness.HL7 {
 			if(!Regex.IsMatch(provFacility.NationalProvID,"^(80840)?[0-9]{10}$")) {
 				WriteError(sb,"Invalid NPI for provider '"+provFacility.Abbr+"'");
 			}
+			Patient pat=Patients.GetPat(appt.PatNum);
+			if(pat.PatStatus==PatientStatus.Deceased && pat.DateTimeDeceased.Year<1880) {
+				WriteError(sb,"Missing date time deceased.");
+			}			
 			List<EhrAptObs> listObservations=EhrAptObses.Refresh(appt.AptNum);
 			for(int i=0;i<listObservations.Count;i++) {
 				EhrAptObs obs=listObservations[i];
@@ -540,30 +545,6 @@ namespace OpenDentBusiness.HL7 {
 			}
 			sb.Append(message);
 		}
-
-		#region Examples
-
-		//The following examples are from MU1. The 2 examples below have been edited slightly for our purposes.  They still pass validation.
-
-		//example 1:
-		/*
-MSH|^~\&|Open Dental||||20110316102457||VXU^V04^VXU_V04|OD-110316102457117|P|2.5.1
-PID|||9817566735^^^MPI&2.16.840.1.113883.19.3.2.1&ISO^MR||Johnson^Philip||20070526|M||2106-3^White^HL70005|3345 Elm Street^^Aurora^CO^80011^^M||^PRN^^^^303^5548889|||||||||N^Not Hispanic or Latino^HL70189
-ORC|RE
-RXA|0|1|201004051600|201004051600|33^Pneumococcal Polysaccharide^CVX|0.5|ml^milliliter^ISO+||||||||1039A||MSD^Merck^HL70227||||A
-		 */
-
-		//example7 has two vaccines:
-		/*
-MSH|^~\&|EHR Application|EHR Facility|PH Application|PH Facility|20110316102838||VXU^V04^VXU_V04|NIST-110316102838387|P|2.5.1
-PID|||787478017^^^MPI&2.16.840.1.113883.19.3.2.1&ISO^MR||James^Wanda||19810430|F||2106-3^White^HL70005|574 Wilkins Road^^Shawville^Pennsylvania^16873^^M||^PRN^^^^814^5752819|||||||||N^Not Hispanic or Latino^HL70189
-ORC|RE
-RXA|0|1|201004051600|201004051600|52^Hepatitis A^HL70292|1|ml^milliliter^ISO+||||||||HAB9678V1||SKB^GLAXOSMITHKLINE^HL70227||||A
-ORC|RE
-RXA|0|1|201007011330|201007011330|03^Measles Mumps Rubella^HL70292|999|||||||||||||||A
-		 */
-
-		#endregion Examples
 
 	}
 }

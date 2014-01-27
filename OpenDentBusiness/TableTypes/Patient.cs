@@ -166,6 +166,9 @@ namespace OpenDentBusiness{
 		public string SmokingSnoMed;
 		///<summary>Country name.  Only used by HQ to add country names to statements.</summary>
 		public string Country;
+		///<summary>Needed for EHR syndromic surveillance messaging.  Used in HL7 PID-29.  Also for feature request #3040.  Date and time because we need precision to the minute in syndromic surveillence messging.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		public DateTime DateTimeDeceased;
 
 		//<summary>Decided not to add since this data is already available and synchronizing would take too much time.  Will add later.  Not editable. If the patient happens to have a future appointment, this will contain the date of that appointment.  Once appointment is set complete, this date is deleted.  If there is more than one appointment scheduled, this will only contain the earliest one.  Used mostly to exclude patients from recall lists.  If you want all future appointments, use Appointments.GetForPat() instead. You can loop through that list and exclude appointments with dates earlier than today.</summary>
 		//public DateTime DateScheduled;

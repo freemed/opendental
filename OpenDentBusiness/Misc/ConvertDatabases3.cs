@@ -3709,6 +3709,18 @@ namespace OpenDentBusiness {
 					command=@"CREATE INDEX ehraptobs_AptNum ON ehraptobs (AptNum)";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE patient ADD DateTimeDeceased datetime DEFAULT '0001-01-01' NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE patient ADD DateTimeDeceased date";
+					Db.NonQ(command);
+					command="UPDATE patient SET DateTimeDeceased = TO_DATE('0001-01-01','YYYY-MM-DD') WHERE DateTimeDeceased IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE patient MODIFY DateTimeDeceased NOT NULL";
+					Db.NonQ(command);
+				}
 
 
 				command="UPDATE preference SET ValueString = '14.1.0.0' WHERE PrefName = 'DataBaseVersion'";

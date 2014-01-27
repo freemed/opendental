@@ -4954,7 +4954,7 @@ namespace OpenDental{
 				int ordinal=0;
 				switch(fields[f].InternalName) {
 					case "Age":
-						row.Cells.Add(PatientLogic.DateToAgeString(PatCur.Birthdate));
+						row.Cells.Add(PatientLogic.DateToAgeString(PatCur.Birthdate,PatCur.DateTimeDeceased));
 						break;
 					case "ABC0":
 						row.Cells.Add(PatCur.CreditType);

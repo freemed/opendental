@@ -719,7 +719,7 @@ namespace OpenDentBusiness{
 			table.Columns.Add("writeoffPPO");
 			string command="SELECT p1.Abbr ProvAbbr,p2.Abbr HygAbbr,patient.Address,patient.Address2,patient.AddrNote,"
 				+"patient.ApptModNote,AptDateTime,appointment.AptNum,AptStatus,Assistant,"
-				+"patient.BillingType,patient.BirthDate,"
+				+"patient.BillingType,patient.BirthDate,patient.DateTimeDeceased,"
 				+"carrier1.CarrierName carrierName1,carrier2.CarrierName carrierName2,"
 				+"patient.ChartNumber,patient.City,appointment.ColorOverride,Confirmed,patient.CreditType,DateTimeChecked,"
 				+"DateTimeDue,DateTimeRecd,DateTimeSent,DateTimeAskedToArrive,"
@@ -909,12 +909,17 @@ namespace OpenDentBusiness{
 				aptDate=PIn.DateT(raw.Rows[i]["AptDateTime"].ToString());
 				row["AptDateTime"]=aptDate;
 				birthdate=PIn.Date(raw.Rows[i]["Birthdate"].ToString());
+				DateTime dateTimeDeceased=PIn.Date(raw.Rows[i]["DateTimeDeceased"].ToString());
+				DateTime dateTimeTo=DateTime.Now;
+				if(dateTimeDeceased.Year>1880) {
+					dateTimeTo=dateTimeDeceased;
+				}
 				row["age"]="";
-				if(birthdate.AddYears(18)<DateTime.Today) {
+				if(birthdate.AddYears(18)<dateTimeTo) {
 					row["age"]=Lans.g("Appointments","Age: ");//only show if older than 18
 				}
 				if(birthdate.Year>1880){
-					row["age"]+=PatientLogic.DateToAgeString(birthdate);
+					row["age"]+=PatientLogic.DateToAgeString(birthdate,dateTimeTo);
 				}
 				else{
 					row["age"]+="?";
