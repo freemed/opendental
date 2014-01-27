@@ -23,9 +23,12 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+			this.components = new System.ComponentModel.Container();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butAddTrigger = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
+			this.menuItemSettings = new System.Windows.Forms.MenuItem();
 			this.SuspendLayout();
 			// 
 			// gridMain
@@ -76,6 +79,17 @@ namespace OpenDental{
 			this.butCancel.Text = "&Close";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// mainMenu1
+			// 
+			this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItemSettings});
+			// 
+			// menuItemSettings
+			// 
+			this.menuItemSettings.Index = 0;
+			this.menuItemSettings.Text = "Setup";
+			this.menuItemSettings.Click += new System.EventHandler(this.menuItemSettings_Click);
+			// 
 			// FormEhrTriggers
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -83,6 +97,7 @@ namespace OpenDental{
 			this.Controls.Add(this.butAddTrigger);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butCancel);
+			this.Menu = this.mainMenu1;
 			this.Name = "FormEhrTriggers";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "EHR Triggers";
@@ -96,5 +111,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butCancel;
 		private UI.ODGrid gridMain;
 		private UI.Button butAddTrigger;
+		private System.Windows.Forms.MainMenu mainMenu1;
+		private System.Windows.Forms.MenuItem menuItemSettings;
 	}
 }

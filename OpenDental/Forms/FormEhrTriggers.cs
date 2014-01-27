@@ -23,6 +23,14 @@ namespace OpenDental {
 		}
 
 		private void FormEhrTriggers_Load(object sender,EventArgs e) {
+			mainMenu1.MenuItems[0].Enabled=false;
+			butAddTrigger.Enabled=false;
+			gridMain.Enabled=false;
+			if(CDSPermissions.GetForUser(Security.CurUser.UserNum).SetupCDS || Security.IsAuthorized(Permissions.SecurityAdmin,true)) {
+				mainMenu1.MenuItems[0].Enabled=true;
+				butAddTrigger.Enabled=true;
+				gridMain.Enabled=true;
+			}
 			FillGrid();
 		}
 
@@ -69,6 +77,11 @@ namespace OpenDental {
 			}
 			ListEhrTriggers=EhrTriggers.GetAll();
 			FillGrid();
+		}
+
+		private void menuItemSettings_Click(object sender,EventArgs e) {
+			FormCDSSetup FormCS=new FormCDSSetup();
+			FormCS.ShowDialog();
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {

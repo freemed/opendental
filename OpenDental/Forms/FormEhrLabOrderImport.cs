@@ -130,7 +130,7 @@ namespace OpenDental {
 			//}
 			//EhrLabs.SaveToDB(FormLOE.EhrLabCur);
 			//for(int i=0;i<FormLOE.EhrLabCur.ListEhrLabResults.Count;i++) {
-			//	if(Security.IsAuthorized(Permissions.EhrShowCDS,true)) {
+			//	if(CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowCDS && CDSPermissions.GetForUser(Security.CurUser.UserNum).LabTestCDS){
 			//		FormCDSIntervention FormCDSI=new FormCDSIntervention();
 			//		FormCDSI.ListCDSI=EhrTriggers.TriggerMatch(FormLOE.EhrLabCur.ListEhrLabResults[i],PatCur);
 			//		FormCDSI.ShowIfRequired(false);
@@ -176,7 +176,7 @@ namespace OpenDental {
 				ListEhrLabs[i].PatNum=PatCur.PatNum;
 				ListEhrLabs[i]=EhrLabs.SaveToDB(ListEhrLabs[i]);//SAVE
 				for(int j=0;j<ListEhrLabs[i].ListEhrLabResults.Count;j++) {//EHR TRIGGER
-					if(Security.IsAuthorized(Permissions.EhrShowCDS,true)) {
+					if(CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowCDS && CDSPermissions.GetForUser(Security.CurUser.UserNum).LabTestCDS) {
 						FormCDSIntervention FormCDSI=new FormCDSIntervention();
 						FormCDSI.ListCDSI=EhrTriggers.TriggerMatch(ListEhrLabs[i].ListEhrLabResults[j],PatCur);
 						FormCDSI.ShowIfRequired(false);

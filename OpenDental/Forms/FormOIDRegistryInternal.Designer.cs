@@ -75,7 +75,7 @@
 			this.Controls.Add(this.gridMain);
 			this.Name = "FormOIDRegistryInternal";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Internal OID Registry";
+			this.Text = "formcds";
 			this.Load += new System.EventHandler(this.FormReminders_Load);
 			this.ResumeLayout(false);
 

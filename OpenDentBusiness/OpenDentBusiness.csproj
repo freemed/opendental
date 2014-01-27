@@ -169,6 +169,7 @@
     <Compile Include="Crud\AutomationCrud.cs" />
     <Compile Include="Crud\AutoNoteControlCrud.cs" />
     <Compile Include="Crud\AutoNoteCrud.cs" />
+    <Compile Include="Crud\CDSPermissionCrud.cs" />
     <Compile Include="Crud\EhrAptObsCrud.cs" />
     <Compile Include="Crud\EhrCarePlanCrud.cs" />
     <Compile Include="Crud\EhrLabClinicalInfoCrud.cs" />
@@ -415,6 +416,7 @@
     <Compile Include="Data Interface\ApptFields.cs" />
     <Compile Include="Data Interface\AutomationConditions.cs" />
     <Compile Include="Data Interface\Automations.cs" />
+    <Compile Include="Data Interface\CDSPermissions.cs" />
     <Compile Include="Data Interface\EhrAptObses.cs" />
     <Compile Include="Data Interface\EhrCarePlans.cs" />
     <Compile Include="Data Interface\EhrLabClinicalInfos.cs" />

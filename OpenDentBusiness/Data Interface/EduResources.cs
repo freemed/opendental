@@ -15,6 +15,7 @@ namespace OpenDentBusiness{
 			List<Disease> diseaseList = Diseases.Refresh(patNum);
 			List<MedicationPat> medicationPatList = MedicationPats.Refresh(patNum,false);
 			List<LabResult> labResultList = LabResults.GetAllForPatient(patNum);
+			List<EhrLabResult> listEhrLabResults= EhrLabResults.GetAllForPatient(patNum);
 			List<EduResource> eduResourceListAll = Crud.EduResourceCrud.SelectMany("SELECT * FROM eduresource");
 			List<EduResource> retVal = new List<EduResource>();
 			for(int i=0;i<eduResourceListAll.Count;i++) {
@@ -66,7 +67,16 @@ namespace OpenDentBusiness{
 								//This could only happen if the validation in either input didn't work.
 							}
 						}
-					}
+					}//end LabResultList
+					for(int j=0;j<listEhrLabResults.Count;j++) {//matches loinc only.
+						if(listEhrLabResults[j].ObservationIdentifierID!=eduResourceListAll[i].LabResultID) {
+							continue;
+						}
+						if(retVal.Contains(eduResourceListAll[i])){
+							continue;//already added from loop above.
+						}
+						retVal.Add(eduResourceListAll[i]);
+					}//end EhrLabResults
 				}
 			}
 			return retVal;

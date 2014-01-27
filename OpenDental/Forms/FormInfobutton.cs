@@ -12,6 +12,7 @@ using System.Globalization;
 using System.Xml.XPath;
 using System.IO;
 using OpenDental.UI;
+using System.Net;
 
 namespace OpenDental {
 	public partial class FormInfobutton:Form {
@@ -204,6 +205,27 @@ namespace OpenDental {
 							row.Cells.Add("none");
 							row.Cells.Add("none");
 							row.Cells.Add(((Medication)ListObjects[i]).MedName);
+							row.Tag=ListObjects[i];
+							gridMain.Rows.Add(row);
+						}
+						continue;
+					case "MedicationPat":
+						if(((MedicationPat)ListObjects[i]).RxCui!=0) {
+							row=new ODGridRow();//just in case
+							row.Cells.Add("Medication");
+							RxNorm rxNorm=RxNorms.GetByRxCUI(((MedicationPat)ListObjects[i]).RxCui.ToString());
+							row.Cells.Add(rxNorm.RxCui);
+							row.Cells.Add("RxNorm");
+							row.Cells.Add(rxNorm.Description);
+							row.Tag=rxNorm;
+							gridMain.Rows.Add(row);
+						}
+						if(((MedicationPat)ListObjects[i]).MedDescript!="") {
+							row=new ODGridRow();//just in case
+							row.Cells.Add("Medication");
+							row.Cells.Add("none");
+							row.Cells.Add("none");
+							row.Cells.Add(((MedicationPat)ListObjects[i]).MedDescript);
 							row.Tag=ListObjects[i];
 							gridMain.Rows.Add(row);
 						}
@@ -432,7 +454,7 @@ namespace OpenDental {
 					w.WriteAttributeString("moodCode","DEF");
 					w.WriteStartElement("id");
 						w.WriteAttributeString("value",knowledgeRequestIDHelper());
-						w.WriteAttributeString("assigningAuthority",knowledgeRequestIDAAHelper());
+						w.WriteAttributeString("assigningAuthority",OIDInternals.GetForType(IdentifierType.Root).IDRoot);
 					w.WriteEndElement();//id
 					w.WriteStartElement("effectiveTime");
 						w.WriteAttributeString("value",DateTime.Now.ToString("yyyyMMddhhmmss"));
@@ -648,12 +670,12 @@ namespace OpenDental {
 								w.WriteAttributeString("codeSystemName","ActCode");
 								w.WriteAttributeString("displayName","knowledge subtopic");
 							w.WriteEndElement();//code
-							w.WriteStartElement("value");
-								w.WriteAttributeString("code","TODO");
-								w.WriteAttributeString("codeSytem","2.16.840.1.113883.6.177");
-								w.WriteAttributeString("codeSystemName","MSH");
-								w.WriteAttributeString("displayName","TODO");
-							w.WriteEndElement();//value
+							//w.WriteStartElement("value");
+							//	w.WriteAttributeString("code","TODO");
+							//	w.WriteAttributeString("codeSytem","2.16.840.1.113883.6.177");
+							//	w.WriteAttributeString("codeSystemName","MSH");
+							//	w.WriteAttributeString("displayName","TODO");
+							//w.WriteEndElement();//value
 						w.WriteEndElement();//subTopic
 					w.WriteEndElement();//subject3
 					w.WriteStartElement("subject4");
@@ -1125,8 +1147,8 @@ namespace OpenDental {
 				krn.AddObject(gridMain.Rows[i].Tag);
 				MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste("http://apps.nlm.nih.gov/medlineplus/services/mpconnect.cfm?"+krn.ToUrl());
 				msgbox.ShowDialog();
-				msgbox=new MsgBoxCopyPaste("http://apps2.nlm.nih.gov/medlineplus/services/servicedemo.cfm?"+krn.ToUrl());
-				msgbox.ShowDialog();
+				//msgbox=new MsgBoxCopyPaste("http://apps2.nlm.nih.gov/medlineplus/services/servicedemo.cfm?"+krn.ToUrl());
+				//msgbox.ShowDialog();
 			}//end gridMain.Rows
 
 		}
@@ -1142,13 +1164,39 @@ namespace OpenDental {
 				krn.AddObject(gridMain.Rows[i].Tag);
 				krn.performerIsPatient=radioReqPat.Checked;
 				krn.recipientIsPatient=radioRecPat.Checked;
+				//FormInfobuttonResponse FormIR = new FormInfobuttonResponse();
+				//FormIR.RawResponse=getWebResponse("http://apps2.nlm.nih.gov/medlineplus/services/mpconnect_service.cfm?"+krn.ToUrl());
+				//FormIR.ShowDialog();
+				//The lines commented out here launch the infobutton in the default browser.
 				try {
 					System.Diagnostics.Process.Start("http://apps.nlm.nih.gov/medlineplus/services/mpconnect.cfm?"+krn.ToUrl());
-					System.Diagnostics.Process.Start("http://apps2.nlm.nih.gov/medlineplus/services/servicedemo.cfm?"+krn.ToUrl());
+					//System.Diagnostics.Process.Start("http://apps2.nlm.nih.gov/medlineplus/services/servicedemo.cfm?"+krn.ToUrl());
 				}
 				catch(Exception ex) { }
 			}//end gridMain.Rows
 
+		}
+
+		///<summary>For More info goto: http://msdn.microsoft.com/en-us/library/456dfw4f(v=vs.110).aspx </summary>
+		private static string getWebResponse(string url) {
+			// Create a request for the URL. 
+			WebRequest request = WebRequest.Create(url);
+			// If required by the server, set the credentials.
+			//request.Credentials = CredentialCache.DefaultCredentials;
+			// Get the response.
+			WebResponse response = request.GetResponse();
+			// Display the status.
+			Console.WriteLine(((HttpWebResponse)response).StatusDescription);
+			// Get the stream containing content returned by the server.
+			Stream dataStream = response.GetResponseStream();
+			// Open the stream using a StreamReader for easy access.
+			StreamReader reader = new StreamReader(dataStream);
+			// Read the content.
+			string responseFromServer = reader.ReadToEnd();
+			// Clean up the streams and the response.
+			reader.Close();
+			response.Close();
+			return responseFromServer;
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {

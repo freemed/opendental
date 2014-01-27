@@ -487,7 +487,7 @@ namespace OpenDental {
 			EhrLabs.SaveToDB(EhrLabCur);
 			Patient patCur=Patients.GetPat(EhrLabCur.PatNum);
 			for(int i=0;i<EhrLabCur.ListEhrLabResults.Count;i++) {
-				if(Security.IsAuthorized(Permissions.EhrShowCDS,true)) {
+				if(CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowCDS && CDSPermissions.GetForUser(Security.CurUser.UserNum).LabTestCDS) {
 					FormCDSIntervention FormCDSI=new FormCDSIntervention();
 					FormCDSI.ListCDSI=EhrTriggers.TriggerMatch(EhrLabCur.ListEhrLabResults[i],patCur);
 					FormCDSI.ShowIfRequired(false);

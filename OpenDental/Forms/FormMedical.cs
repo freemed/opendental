@@ -624,7 +624,8 @@ namespace OpenDental{
 			FormInfobutton FormIB = new FormInfobutton();
 			FormIB.PatCur=PatCur;
 			//FormInfoButton allows MedicationCur to be null, so this will still work for medication orders returned from NewCrop (because MedicationNum will be 0).
-			FormIB.ListObjects.Add(Medications.GetMedicationFromDb(medList[e.Row].MedicationNum));//TODO: verify that this is what we need to get.
+			FormIB.ListObjects.Add(medList[e.Row]);//TODO: verify that this is what we need to get.
+			//FormIB.ListObjects.Add(Medications.GetMedicationFromDb(medList[e.Row].MedicationNum));//TODO: verify that this is what we need to get.
 			FormIB.ShowDialog();
 			//Nothing to do with Dialog Result yet.
 		}
@@ -644,7 +645,7 @@ namespace OpenDental{
 			if(FormM.DialogResult!=DialogResult.OK){
 				return;
 			}
-			if(Security.IsAuthorized(Permissions.EhrShowCDS,true)) {
+			if(CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowCDS && CDSPermissions.GetForUser(Security.CurUser.UserNum).MedicationCDS) {
 				FormCDSIntervention FormCDSI=new FormCDSIntervention();
 				FormCDSI.ListCDSI=EhrTriggers.TriggerMatch(Medications.GetMedication(FormM.SelectedMedicationNum),PatCur);
 				FormCDSI.ShowIfRequired();
@@ -1072,7 +1073,7 @@ namespace OpenDental{
 				return;
 			}
 
-			if(Security.IsAuthorized(Permissions.EhrShowCDS,true)) {
+			if(CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowCDS && CDSPermissions.GetForUser(Security.CurUser.UserNum).AllergyCDS) {
 				FormCDSIntervention FormCDSI=new FormCDSIntervention();
 				FormCDSI.ListCDSI=EhrTriggers.TriggerMatch(AllergyDefs.GetOne(formA.AllergyCur.AllergyDefNum),PatCur);
 				FormCDSI.ShowIfRequired(false);

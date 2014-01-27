@@ -24,26 +24,12 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent() {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormCDSSetup));
-			this.butClose = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.radioGroup = new System.Windows.Forms.RadioButton();
 			this.radioUser = new System.Windows.Forms.RadioButton();
+			this.butOk = new System.Windows.Forms.Button();
+			this.butCancel = new System.Windows.Forms.Button();
 			this.SuspendLayout();
-			// 
-			// butClose
-			// 
-			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butClose.Autosize = true;
-			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(647, 493);
-			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(75, 24);
-			this.butClose.TabIndex = 16;
-			this.butClose.Text = "&Close";
-			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
 			// gridMain
 			// 
@@ -58,10 +44,12 @@ namespace OpenDental{
 			this.gridMain.TabIndex = 60;
 			this.gridMain.Title = "Users";
 			this.gridMain.TranslationName = "TableSecurity";
+			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
 			// 
 			// radioGroup
 			// 
 			this.radioGroup.AutoCheck = false;
+			this.radioGroup.Enabled = false;
 			this.radioGroup.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.radioGroup.Location = new System.Drawing.Point(12, 30);
 			this.radioGroup.Name = "radioGroup";
@@ -73,6 +61,7 @@ namespace OpenDental{
 			// radioUser
 			// 
 			this.radioUser.AutoCheck = false;
+			this.radioUser.Enabled = false;
 			this.radioUser.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.radioUser.Location = new System.Drawing.Point(12, 8);
 			this.radioUser.Name = "radioUser";
@@ -80,27 +69,52 @@ namespace OpenDental{
 			this.radioUser.TabIndex = 61;
 			this.radioUser.Text = "by User";
 			// 
+			// butOk
+			// 
+			this.butOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butOk.Location = new System.Drawing.Point(566, 493);
+			this.butOk.Name = "butOk";
+			this.butOk.Size = new System.Drawing.Size(75, 24);
+			this.butOk.TabIndex = 63;
+			this.butOk.Text = "Save";
+			this.butOk.UseVisualStyleBackColor = true;
+			this.butOk.Click += new System.EventHandler(this.butOk_Click);
+			// 
+			// butCancel
+			// 
+			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butCancel.Location = new System.Drawing.Point(647, 493);
+			this.butCancel.Name = "butCancel";
+			this.butCancel.Size = new System.Drawing.Size(75, 24);
+			this.butCancel.TabIndex = 64;
+			this.butCancel.Text = "Cancel";
+			this.butCancel.UseVisualStyleBackColor = true;
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+			// 
 			// FormCDSSetup
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(734, 529);
+			this.Controls.Add(this.butOk);
+			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.radioGroup);
 			this.Controls.Add(this.radioUser);
 			this.Controls.Add(this.gridMain);
-			this.Controls.Add(this.butClose);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "FormCDSSetup";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Clinical Decision Support Setup";
+			this.Load += new System.EventHandler(this.FormCDSSetup_Load);
 			this.ResumeLayout(false);
 
 		}
 
 		#endregion
 
-		private OpenDental.UI.Button butClose;
 		private UI.ODGrid gridMain;
 		private System.Windows.Forms.RadioButton radioGroup;
 		private System.Windows.Forms.RadioButton radioUser;
+		private System.Windows.Forms.Button butOk;
+		private System.Windows.Forms.Button butCancel;
 	}
 }
