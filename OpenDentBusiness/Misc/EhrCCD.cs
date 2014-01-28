@@ -1381,7 +1381,7 @@ Care Plan
 						}
 					}
 					else {
-						_w.WriteElementString("td","Goal: "+snomedEducation.Description+"; Instructions: "+listEhrCarePlansFiltered[i].Instructions);//Planned Activity
+						_w.WriteElementString("td","Goal: "+snomedEducation.SnomedCode+" - "+snomedEducation.Description+"; Instructions: "+listEhrCarePlansFiltered[i].Instructions);//Planned Activity
 					}
 					if(listEhrCarePlansFiltered[i].DatePlanned.Year<1880) {
 						_w.WriteElementString("td","");
@@ -2166,7 +2166,7 @@ Vital Signs
 					}
 					float bmi=Vitalsigns.CalcBMI(vitalsign.Weight,vitalsign.Height);//will be 0 if either wight is 0 or height is 0.
 					if(bmi>0) {
-						_w.WriteElementString("td",bmi.ToString("f0")+" lbs/in");
+						_w.WriteElementString("td",bmi.ToString("f1")+" lbs/in");
 					}
 					else {
 						_w.WriteElementString("td","");
