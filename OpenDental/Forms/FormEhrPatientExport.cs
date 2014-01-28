@@ -154,16 +154,24 @@ namespace OpenDental {
 				MessageBox.Show("Error, Could not create folder");
 				return;
 			}
+			this.Cursor=Cursors.WaitCursor;
 			Patient patCur;
 			string fileName;
-			int numSkipped=0;
+			int numSkipped=0;  //Number of patients skipped. Set to -1 if only one patient was selected and had CcdValidationErrors.
+			string patientsSkipped="";  //Names of the patients that were skipped, so we can tell the user which ones didn't export correctly.
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
 				patCur=Patients.GetPat((long)gridMain.Rows[gridMain.SelectedIndices[i]].Tag);//Cannot use GetLim because more information is needed in the CCD message generation below.
 				strCcdValidationErrors=EhrCCD.ValidatePatient(patCur);
 				if(strCcdValidationErrors!="") {
+					if(gridMain.SelectedIndices.Length==1) {
+						numSkipped=-1; //Set to -1 so we know below to not show the "exported" message.
+						MessageBox.Show(Lan.g(this,"Patient not exported due to the following errors")+":\r\n"+strCcdValidationErrors);
+						continue;
+					}
 					//If one patient is missing the required information for export, then simply skip the patient. We do not want to popup a message,
 					//because it would be hard to get through the export if many patients were missing required information.
 					numSkipped++;
+					patientsSkipped+="\r\n"+patCur.LName+", "+patCur.FName;
 					continue;
 				}
 				fileName="";
@@ -187,15 +195,24 @@ namespace OpenDental {
 				}
 				catch {
 					MessageBox.Show("Error, Could not create xml file");
+					this.Cursor=Cursors.Default;
 					return;
 				}
-				//File.WriteAllText(Path.Combine(folderpath,filename+".xsl"),FormEHR.GetEhrResource("CCD"));
+			}
+			if(numSkipped==-1) {	//Will be -1 if only one patient was selected, and it did not export correctly.
+				this.Cursor=Cursors.Default;
+				return;//Don't display "Exported" to the user because the CCD was not exported.
 			}
 			string strMsg=Lan.g(this,"Exported");
 			if(numSkipped>0) {
-				strMsg+=". "+Lan.g(this,"Number of patinets skipped due to missing information")+": "+numSkipped;
+				strMsg+=". "+Lan.g(this,"Patients skipped due to missing information")+": "+numSkipped+patientsSkipped;
+				MsgBoxCopyPaste msgCP=new MsgBoxCopyPaste(strMsg);
+				msgCP.Show();
 			}
-			MessageBox.Show(strMsg);
+			else {
+				MessageBox.Show(strMsg);
+			}
+			this.Cursor=Cursors.Default;
 		}
 
 		private void butExportAll_Click(object sender,EventArgs e) {

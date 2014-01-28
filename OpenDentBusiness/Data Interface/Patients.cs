@@ -2254,6 +2254,7 @@ FROM insplan";
 			if(siteNum>0) {
 				command+="AND site.SiteNum = "+POut.Long(siteNum)+" ";
 			}
+			command+="ORDER BY patient.LName,patient.FName ";
 			return (Db.GetTable(command));
 		}
 
