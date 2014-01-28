@@ -1680,18 +1680,27 @@ Procedures
 				for(int i=0;i<listProcsFiltered.Count;i++) {
 					ProcedureCode procCode;
 					Snomed bodySite=Snomeds.GetByCode(listProcsFiltered[i].SnomedBodySite);
+					Snomed procCodeSnomed;
 					if(listProcsFiltered[i].CodeNum==0) {
 						procCode=new ProcedureCode();
+						procCodeSnomed=new Snomed();
 					}
 					else {
 						procCode=ProcedureCodes.GetProcCode(listProcsFiltered[i].CodeNum);
+						procCodeSnomed=Snomeds.GetByCode(procCode.ProcCode);
+					}
+					if(procCodeSnomed==null) {
+						procCodeSnomed=new Snomed();
 					}
 					Start("tr");
-					if(String.IsNullOrEmpty(procCode.MedicalCode)) {
-						_w.WriteElementString("td","");
+					if(!String.IsNullOrEmpty(procCodeSnomed.SnomedCode)) {
+						_w.WriteElementString("td",procCodeSnomed.SnomedCode+" - "+procCode.Descript);
+					}
+					else if(!String.IsNullOrEmpty(procCode.MedicalCode)) {
+						_w.WriteElementString("td",procCode.MedicalCode+" - "+procCode.Descript);
 					}
 					else {
-						_w.WriteElementString("td",procCode.MedicalCode+" - "+procCode.Descript);
+						_w.WriteElementString("td","");
 					}
 					if(bodySite==null || String.IsNullOrEmpty(bodySite.SnomedCode)) {
 						_w.WriteElementString("td","");
@@ -1720,11 +1729,17 @@ Procedures
 			}
 			for(int i=0;i<listProcsFiltered.Count;i++) {
 				ProcedureCode procCode;
+				Snomed procCodeSnomed;
 				if(listProcsFiltered[i].CodeNum==0) {
 					procCode=new ProcedureCode();
+					procCodeSnomed=new Snomed();
 				}
 				else {
 					procCode=ProcedureCodes.GetProcCode(listProcsFiltered[i].CodeNum);
+					procCodeSnomed=Snomeds.GetByCode(procCode.ProcCode);
+				}
+				if(procCodeSnomed==null) {
+					procCodeSnomed=new Snomed();
 				}
 				Start("entry","typeCode","DRIV");
 				Start("procedure","classCode","PROC","moodCode","EVN");
@@ -1735,11 +1750,14 @@ Procedures
 				//and MAY be selected from CPT-4 (CodeSystem: 2.16.840.1.113883.6.12), ICD9 Procedures (CodeSystem: 2.16.840.1.113883.6.104),
 				//ICD10 Procedure Coding System (CodeSystem: 2.16.840.1.113883.6.4) (CONF:7657)."
 				//We already have a place for CPT codes, and that is ProcedureCode.MedicalCode. We will simply use this field for now.
-				if(String.IsNullOrEmpty(procCode.MedicalCode)) {
-					StartAndEnd("code","nullFlavor","UNK");
+				if(!String.IsNullOrEmpty(procCodeSnomed.SnomedCode)) {
+					StartAndEnd("code","code",procCodeSnomed.SnomedCode,"codeSystem",strCodeSystemSnomed,"displayName",procCode.Descript,"codeSystemName",strCodeSystemNameSnomed);
+				}
+				else if(!String.IsNullOrEmpty(procCode.MedicalCode)) {
+					StartAndEnd("code","code",procCode.MedicalCode,"codeSystem",strCodeSystemCpt4,"displayName",procCode.Descript,"codeSystemName",strCodeSystemNameCpt4);
 				}
 				else {
-					StartAndEnd("code","code",procCode.MedicalCode,"codeSystem",strCodeSystemCpt4,"displayName",procCode.Descript,"codeSystemName",strCodeSystemNameCpt4);
+					StartAndEnd("code","nullFlavor","UNK");
 				}
 				StartAndEnd("statusCode","code","completed");//Allowed values: completed, active, aborted, cancelled.
 				if(listProcsFiltered[i].ProcDate.Year<1880) {
