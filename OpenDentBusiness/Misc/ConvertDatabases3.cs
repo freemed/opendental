@@ -3721,6 +3721,59 @@ namespace OpenDentBusiness {
 					command="ALTER TABLE patient MODIFY DateTimeDeceased NOT NULL";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE ehrlab ADD IsCpoe tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE ehrlab ADD IsCpoe number(3)";
+					Db.NonQ(command);
+					command="UPDATE ehrlab SET IsCpoe = 0 WHERE IsCpoe IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE ehrlab MODIFY IsCpoe NOT NULL";
+					Db.NonQ(command);
+				}
+				//Add additional EHR Measures to DB
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO ehrmeasure(MeasureType,Numerator,Denominator) VALUES(20,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(MeasureType,Numerator,Denominator) VALUES(21,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(MeasureType,Numerator,Denominator) VALUES(22,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(MeasureType,Numerator,Denominator) VALUES(23,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(MeasureType,Numerator,Denominator) VALUES(24,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(MeasureType,Numerator,Denominator) VALUES(25,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(MeasureType,Numerator,Denominator) VALUES(26,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(MeasureType,Numerator,Denominator) VALUES(27,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(MeasureType,Numerator,Denominator) VALUES(28,-1,-1)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM ehrmeasure),20,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM ehrmeasure),21,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM ehrmeasure),22,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM ehrmeasure),23,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM ehrmeasure),24,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM ehrmeasure),25,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM ehrmeasure),26,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM ehrmeasure),27,-1,-1)";
+					Db.NonQ(command);
+					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM ehrmeasure),28,-1,-1)";
+					Db.NonQ(command);
+				}
 
 
 				command="UPDATE preference SET ValueString = '14.1.0.0' WHERE PrefName = 'DataBaseVersion'";
@@ -3740,7 +3793,3 @@ namespace OpenDentBusiness {
 }
 
 
-
-
-
-				

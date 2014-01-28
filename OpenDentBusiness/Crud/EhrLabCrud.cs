@@ -152,6 +152,7 @@ namespace OpenDentBusiness.Crud{
 				ehrLab.TQ1SetId                                     = PIn.Long  (table.Rows[i]["TQ1SetId"].ToString());
 				ehrLab.TQ1DateTimeStart                             = PIn.String(table.Rows[i]["TQ1DateTimeStart"].ToString());
 				ehrLab.TQ1DateTimeEnd                               = PIn.String(table.Rows[i]["TQ1DateTimeEnd"].ToString());
+				ehrLab.IsCpoe                                       = PIn.Bool  (table.Rows[i]["IsCpoe"].ToString());
 				retVal.Add(ehrLab);
 			}
 			return retVal;
@@ -192,7 +193,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="EhrLabNum,";
 			}
-			command+="PatNum,OrderControlCode,PlacerOrderNum,PlacerOrderNamespace,PlacerOrderUniversalID,PlacerOrderUniversalIDType,FillerOrderNum,FillerOrderNamespace,FillerOrderUniversalID,FillerOrderUniversalIDType,PlacerGroupNum,PlacerGroupNamespace,PlacerGroupUniversalID,PlacerGroupUniversalIDType,OrderingProviderID,OrderingProviderLName,OrderingProviderFName,OrderingProviderMiddleNames,OrderingProviderSuffix,OrderingProviderPrefix,OrderingProviderAssigningAuthorityNamespaceID,OrderingProviderAssigningAuthorityUniversalID,OrderingProviderAssigningAuthorityIDType,OrderingProviderNameTypeCode,OrderingProviderIdentifierTypeCode,SetIdOBR,UsiID,UsiText,UsiCodeSystemName,UsiIDAlt,UsiTextAlt,UsiCodeSystemNameAlt,UsiTextOriginal,ObservationDateTimeStart,ObservationDateTimeEnd,SpecimenActionCode,ResultDateTime,ResultStatus,ParentObservationID,ParentObservationText,ParentObservationCodeSystemName,ParentObservationIDAlt,ParentObservationTextAlt,ParentObservationCodeSystemNameAlt,ParentObservationTextOriginal,ParentObservationSubID,ParentPlacerOrderNum,ParentPlacerOrderNamespace,ParentPlacerOrderUniversalID,ParentPlacerOrderUniversalIDType,ParentFillerOrderNum,ParentFillerOrderNamespace,ParentFillerOrderUniversalID,ParentFillerOrderUniversalIDType,ListEhrLabResultsHandlingF,ListEhrLabResultsHandlingN,TQ1SetId,TQ1DateTimeStart,TQ1DateTimeEnd) VALUES(";
+			command+="PatNum,OrderControlCode,PlacerOrderNum,PlacerOrderNamespace,PlacerOrderUniversalID,PlacerOrderUniversalIDType,FillerOrderNum,FillerOrderNamespace,FillerOrderUniversalID,FillerOrderUniversalIDType,PlacerGroupNum,PlacerGroupNamespace,PlacerGroupUniversalID,PlacerGroupUniversalIDType,OrderingProviderID,OrderingProviderLName,OrderingProviderFName,OrderingProviderMiddleNames,OrderingProviderSuffix,OrderingProviderPrefix,OrderingProviderAssigningAuthorityNamespaceID,OrderingProviderAssigningAuthorityUniversalID,OrderingProviderAssigningAuthorityIDType,OrderingProviderNameTypeCode,OrderingProviderIdentifierTypeCode,SetIdOBR,UsiID,UsiText,UsiCodeSystemName,UsiIDAlt,UsiTextAlt,UsiCodeSystemNameAlt,UsiTextOriginal,ObservationDateTimeStart,ObservationDateTimeEnd,SpecimenActionCode,ResultDateTime,ResultStatus,ParentObservationID,ParentObservationText,ParentObservationCodeSystemName,ParentObservationIDAlt,ParentObservationTextAlt,ParentObservationCodeSystemNameAlt,ParentObservationTextOriginal,ParentObservationSubID,ParentPlacerOrderNum,ParentPlacerOrderNamespace,ParentPlacerOrderUniversalID,ParentPlacerOrderUniversalIDType,ParentFillerOrderNum,ParentFillerOrderNamespace,ParentFillerOrderUniversalID,ParentFillerOrderUniversalIDType,ListEhrLabResultsHandlingF,ListEhrLabResultsHandlingN,TQ1SetId,TQ1DateTimeStart,TQ1DateTimeEnd,IsCpoe) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(ehrLab.EhrLabNum)+",";
 			}
@@ -255,7 +256,8 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Bool  (ehrLab.ListEhrLabResultsHandlingN)+","
 				+    POut.Long  (ehrLab.TQ1SetId)+","
 				+"'"+POut.String(ehrLab.TQ1DateTimeStart)+"',"
-				+"'"+POut.String(ehrLab.TQ1DateTimeEnd)+"')";
+				+"'"+POut.String(ehrLab.TQ1DateTimeEnd)+"',"
+				+    POut.Bool  (ehrLab.IsCpoe)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -326,7 +328,8 @@ namespace OpenDentBusiness.Crud{
 				+"ListEhrLabResultsHandlingN                   =  "+POut.Bool  (ehrLab.ListEhrLabResultsHandlingN)+", "
 				+"TQ1SetId                                     =  "+POut.Long  (ehrLab.TQ1SetId)+", "
 				+"TQ1DateTimeStart                             = '"+POut.String(ehrLab.TQ1DateTimeStart)+"', "
-				+"TQ1DateTimeEnd                               = '"+POut.String(ehrLab.TQ1DateTimeEnd)+"' "
+				+"TQ1DateTimeEnd                               = '"+POut.String(ehrLab.TQ1DateTimeEnd)+"', "
+				+"IsCpoe                                       =  "+POut.Bool  (ehrLab.IsCpoe)+" "
 				+"WHERE EhrLabNum = "+POut.Long(ehrLab.EhrLabNum);
 			Db.NonQ(command);
 		}
@@ -569,6 +572,10 @@ namespace OpenDentBusiness.Crud{
 			if(ehrLab.TQ1DateTimeEnd != oldEhrLab.TQ1DateTimeEnd) {
 				if(command!=""){ command+=",";}
 				command+="TQ1DateTimeEnd = '"+POut.String(ehrLab.TQ1DateTimeEnd)+"'";
+			}
+			if(ehrLab.IsCpoe != oldEhrLab.IsCpoe) {
+				if(command!=""){ command+=",";}
+				command+="IsCpoe = "+POut.Bool(ehrLab.IsCpoe)+"";
 			}
 			if(command==""){
 				return;

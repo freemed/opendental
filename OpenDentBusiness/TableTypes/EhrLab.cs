@@ -187,6 +187,8 @@ namespace OpenDentBusiness {
 		///<summary>Stored as string in the format YYYY[MM[DD[HH[MM[SS]]]]] where bracketed values are optional.  TQ1.8</summary>
 		public string TQ1DateTimeEnd;
 		#endregion
+		///<summary>This gets set when a provider is logged in with a valid EHR key and then creates a lab.</summary>
+		public bool IsCpoe;
 		///<summary>[0..*] This is not a data column but is stored in a seperate table named EhrLabResult. OBX.*</summary>
 		[CrudColumn(IsNotDbColumn=true)]
 		private List<EhrLabResult> _listEhrLabResults;
