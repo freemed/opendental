@@ -386,9 +386,6 @@ Allergies
 				if(!hasAllergy) {
 					continue;
 				}
-				if(!IsReactionSnomed(listAllergiesAll[i])) {
-					continue;
-				}
 				allergyDef=AllergyDefs.GetOne(listAllergiesAll[i].AllergyDefNum);
 				bool isMedAllergy=false;
 				if(allergyDef.MedicationNum!=0) {
@@ -2935,55 +2932,6 @@ Vital Signs
 		#endregion CCD Reading
 
 		#region Helpers
-
-		public static bool IsReactionSnomed(Allergy al) {
-			if(al.SnomedReaction=="57676002") {
-				return true;
-			}
-			if(al.SnomedReaction=="43724002") {
-				return true;
-			}
-			if(al.SnomedReaction=="49727002") {
-				return true;
-			}
-			if(al.SnomedReaction=="386661006") {
-				return true;
-			}
-			if(al.SnomedReaction=="25064002") {
-				return true;
-			}
-			if(al.SnomedReaction=="247472004") {
-				return true;
-			}
-			if(al.SnomedReaction=="271795006") {
-				return true;
-			}
-			if(al.SnomedReaction=="68962001") {
-				return true;
-			}
-			if(al.SnomedReaction=="68235000") {
-				return true;
-			}
-			if(al.SnomedReaction=="95388000") {
-				return true;
-			}
-			if(al.SnomedReaction=="271807003") {
-				return true;
-			}
-			if(al.SnomedReaction=="64531003") {
-				return true;
-			}
-			if(al.SnomedReaction=="267036007") {
-				return true;
-			}
-			if(al.SnomedReaction=="162397003") {
-				return true;
-			}
-			if(al.SnomedReaction=="65124004") {
-				return true;
-			}
-			return false;
-		}
 
 		public static bool IsCCD(string strXml) {
 			XmlDocument doc=new XmlDocument();
