@@ -2451,7 +2451,7 @@ namespace OpenDentBusiness
 					Comma(strb);
 					strb.Append("Billing Prov LName may contain letters spaces and apostrophes only");
 				}
-				if(!billProv.IsNotPerson && !Regex.IsMatch(billProv.MI,"^[A-Za-z ']+$")) {//If not a person, then X12 generation will leave this blank, regardless of what user entered.
+				if(!billProv.IsNotPerson && !Regex.IsMatch(billProv.MI,"^[A-Za-z ']*$")) {//If not a person, then X12 generation will leave this blank, regardless of what user entered.
 					Comma(strb);
 					strb.Append("Billing Prov Middle Name may contain letters spaces and apostrophes only");
 				}
