@@ -203,6 +203,12 @@ namespace OpenDental {
 				this.Cursor=Cursors.Default;
 				return;//Don't display "Exported" to the user because the CCD was not exported.
 			}
+			try {
+				File.WriteAllText(ODFileUtils.CombinePaths(folderPath,"CCD.xsl"),FormEHR.GetEhrResource("CCD"));
+			}
+			catch {
+				MessageBox.Show("Error, Could not create stylesheet file");
+			}
 			string strMsg=Lan.g(this,"Exported");
 			if(numSkipped>0) {
 				strMsg+=". "+Lan.g(this,"Patients skipped due to missing information")+": "+numSkipped+patientsSkipped;
