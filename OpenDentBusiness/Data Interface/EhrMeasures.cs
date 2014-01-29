@@ -33,7 +33,8 @@ namespace OpenDentBusiness{
 			+POut.Int((int)EhrMeasureType.ClinicalSummaries)+","
 			+POut.Int((int)EhrMeasureType.Reminders)+","
 			+POut.Int((int)EhrMeasureType.MedReconcile)+","
-			+POut.Int((int)EhrMeasureType.SummaryOfCare)+") "
+			+POut.Int((int)EhrMeasureType.SummaryOfCare)+", "
+			+POut.Int((int)EhrMeasureType.VitalSigns2014)+") "
 			+"ORDER BY MeasureType";
 			List<EhrMeasure> retVal=Crud.EhrMeasureCrud.SelectMany(command);
 			Stopwatch s=new Stopwatch();
@@ -367,11 +368,35 @@ namespace OpenDentBusiness{
 					//  +"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
 					//  +"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+")";
 					//Query optimized to be faster by Cameron
-					command="SELECT patient.PatNum,LName,FName,Birthdate,Gender,Race,Language "
+					//command="SELECT patient.PatNum,LName,FName,Birthdate,Gender,Race,Language "
+					//	+"FROM patient "
+					//	+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
+					//	+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
+					//	+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+					//	+"GROUP BY patient.PatNum";
+					command="SELECT patient.PatNum,LName,FName,Birthdate,Gender,Language,COALESCE(race.HasRace,0) AS HasRace,COALESCE(ethnicity.HasEthnicity,0) AS HasEthnicity "
 						+"FROM patient "
 						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
 						+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
 						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+						+"LEFT JOIN(SELECT PatNum, 1 AS HasRace FROM patientrace "
+						+"WHERE patientrace.Race IN( "
+						+POut.Int((int)PatRace.AfricanAmerican)+","
+						+POut.Int((int)PatRace.AmericanIndian)+","
+						+POut.Int((int)PatRace.Asian)+","
+						+POut.Int((int)PatRace.DeclinedToSpecifyRace)+","
+						+POut.Int((int)PatRace.HawaiiOrPacIsland)+","
+						+POut.Int((int)PatRace.Other)+","
+						+POut.Int((int)PatRace.White)+" "
+						+") GROUP BY PatNum "
+						+") AS race ON race.PatNum=patient.PatNum "
+						+"LEFT JOIN(SELECT PatNum, 1 AS HasEthnicity FROM patientrace "
+						+"WHERE patientrace.Race IN( "
+						+POut.Int((int)PatRace.Hispanic)+","
+						+POut.Int((int)PatRace.NotHispanic)+","
+						+POut.Int((int)PatRace.DeclinedToSpecifyEthnicity)+" "
+						+") GROUP BY PatNum "
+						+") AS ethnicity ON ethnicity.PatNum=patient.PatNum "
 						+"GROUP BY patient.PatNum";
 					tableRaw=Db.GetTable(command);
 					break;
@@ -882,7 +907,7 @@ namespace OpenDentBusiness{
 							+"AND IsFrom=0 AND IsTransitionOfCare=1 "
 							+"GROUP BY ptsSeen.PatNum) ptsRefCnt "
 						+"LEFT JOIN (SELECT ehrmeasureevent.PatNum,COUNT(*) AS CcdCount FROM ehrmeasureevent "
-							+"WHERE EventType="+POut.Int((int)EhrMeasureEventType.SummaryOfCareProvidedToDr)+" "
+							+"WHERE EventType IN("+POut.Int((int)EhrMeasureEventType.SummaryOfCareProvidedToDr)+", "+POut.Int((int)EhrMeasureEventType.SummaryOfCareProvidedToDrElectronic)+") "
 							+"AND DATE(ehrmeasureevent.DateTEvent) BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
 							+"GROUP BY ehrmeasureevent.PatNum) ptsCcdCount ON ptsRefCnt.PatNum=ptsCcdCount.PatNum";
 					tableRaw=Db.GetTable(command);
@@ -975,11 +1000,23 @@ namespace OpenDentBusiness{
 							}
 							explanation+="gender";
 						}
-						if(PatientRaces.GetForPatient(PIn.Long(row["PatNum"].ToString())).Count==0) {
+						//if(PatientRaces.GetForPatient(PIn.Long(row["PatNum"].ToString())).Count==0) {
+						//	if(explanation!="") {
+						//		explanation+=", ";
+						//	}
+						//	explanation+="race, ethnicity";
+						//}
+						if(PIn.Int(tableRaw.Rows[i]["HasRace"].ToString())==0) {
 							if(explanation!="") {
 								explanation+=", ";
 							}
-							explanation+="race, ethnicity";
+							explanation+="race";
+						}
+						if(PIn.Int(tableRaw.Rows[i]["HasEthnicity"].ToString())==0) {
+							if(explanation!="") {
+								explanation+=", ";
+							}
+							explanation+="ethnicity";
 						}
 						if(explanation=="") {
 							explanation="All demographic elements recorded";
@@ -2502,11 +2539,36 @@ namespace OpenDentBusiness{
 				#endregion
 				#region Demographics
 				case EhrMeasureType.Demographics:
-					command="SELECT patient.PatNum,LName,FName,Birthdate,Gender,Race,Language "
+					//command="SELECT patient.PatNum,LName,FName,Birthdate,Gender,Race,Language "
+					//	+"FROM patient "
+					//	+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
+					//	+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
+					//	+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+					//	+"GROUP BY patient.PatNum";
+					//tableRaw=Db.GetTable(command);
+					command="SELECT patient.PatNum,LName,FName,Birthdate,Gender,Language,COALESCE(race.HasRace,0) AS HasRace,COALESCE(ethnicity.HasEthnicity,0) AS HasEthnicity "
 						+"FROM patient "
 						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
 						+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
 						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+						+"LEFT JOIN(SELECT PatNum, 1 AS HasRace FROM patientrace "
+						+"WHERE patientrace.Race IN( "
+						+POut.Int((int)PatRace.AfricanAmerican)+","
+						+POut.Int((int)PatRace.AmericanIndian)+","
+						+POut.Int((int)PatRace.Asian)+","
+						+POut.Int((int)PatRace.DeclinedToSpecifyRace)+","
+						+POut.Int((int)PatRace.HawaiiOrPacIsland)+","
+						+POut.Int((int)PatRace.Other)+","
+						+POut.Int((int)PatRace.White)+" "
+						+") GROUP BY PatNum "
+						+") AS race ON race.PatNum=patient.PatNum "
+						+"LEFT JOIN(SELECT PatNum, 1 AS HasEthnicity FROM patientrace "
+						+"WHERE patientrace.Race IN( "
+						+POut.Int((int)PatRace.Hispanic)+","
+						+POut.Int((int)PatRace.NotHispanic)+","
+						+POut.Int((int)PatRace.DeclinedToSpecifyEthnicity)+" "
+						+") GROUP BY PatNum "
+						+") AS ethnicity ON ethnicity.PatNum=patient.PatNum "
 						+"GROUP BY patient.PatNum";
 					tableRaw=Db.GetTable(command);
 					break;
@@ -2627,8 +2689,11 @@ namespace OpenDentBusiness{
 				#region Reminders
 				case EhrMeasureType.Reminders:
 					command="SELECT patient.PatNum,LName,FName,COALESCE(reminderCount.Count,0) AS reminderCount FROM patient "
-						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum "
-						+"AND ProcStatus=2 AND ProcDate>"+POut.Date(dateStart)+"-INTERVAL 3 YEAR "
+						+"INNER JOIN(SELECT PatNum FROM ( "
+						+"SELECT PatNum, ProcDate FROM procedurelog WHERE ProcStatus=2 "
+						+"AND ProcDate>"+POut.Date(dateStart)+"-INTERVAL 2 YEAR "
+						+"AND ProcDate<"+POut.Date(dateStart)+" GROUP BY PatNum,ProcDate) uniqueprocdates "
+						+"GROUP BY uniqueprocdates.PatNum HAVING COUNT(*)>1) procscomplete ON procscomplete.PatNum=patient.PatNum "
 						+"LEFT JOIN (SELECT ehrmeasureevent.PatNum,COUNT(*) AS 'Count' FROM ehrmeasureevent "
 						+"WHERE EventType="+POut.Int((int)EhrMeasureEventType.ReminderSent)+" "
 						+"AND DATE(ehrmeasureevent.DateTEvent) BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
@@ -2688,7 +2753,7 @@ namespace OpenDentBusiness{
 							+"AND IsFrom=0 AND IsTransitionOfCare=1 "
 							+"GROUP BY ptsSeen.PatNum) ptsRefCnt "
 						+"LEFT JOIN (SELECT ehrmeasureevent.PatNum,COUNT(*) AS CcdCount FROM ehrmeasureevent "
-							+"WHERE EventType="+POut.Int((int)EhrMeasureEventType.SummaryOfCareProvidedToDr)+" "
+							+"WHERE EventType IN("+POut.Int((int)EhrMeasureEventType.SummaryOfCareProvidedToDr)+", "+POut.Int((int)EhrMeasureEventType.SummaryOfCareProvidedToDrElectronic)+") "
 							+"AND DATE(ehrmeasureevent.DateTEvent) BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
 							+"GROUP BY ehrmeasureevent.PatNum) ptsCcdCount ON ptsRefCnt.PatNum=ptsCcdCount.PatNum";
 					tableRaw=Db.GetTable(command);
@@ -2848,11 +2913,23 @@ namespace OpenDentBusiness{
 							}
 							explanation+="gender";
 						}
-						if(PatientRaces.GetForPatient(PIn.Long(row["PatNum"].ToString())).Count==0) {
+						//if(PatientRaces.GetForPatient(PIn.Long(row["PatNum"].ToString())).Count==0) {
+						//	if(explanation!="") {
+						//		explanation+=", ";
+						//	}
+						//	explanation+="race, ethnicity";
+						//}
+						if(PIn.Int(tableRaw.Rows[i]["HasRace"].ToString())==0) {
 							if(explanation!="") {
 								explanation+=", ";
 							}
-							explanation+="race, ethnicity";
+							explanation+="race";
+						}
+						if(PIn.Int(tableRaw.Rows[i]["HasEthnicity"].ToString())==0) {
+							if(explanation!="") {
+								explanation+=", ";
+							}
+							explanation+="ethnicity";
 						}
 						if(explanation=="") {
 							explanation="All demographic elements recorded";
@@ -2959,12 +3036,15 @@ namespace OpenDentBusiness{
 							deadlineDateClinSum=deadlineDateClinSum.AddDays(2);
 						}
 						DateTime summaryProvidedDate=PIn.Date(tableRaw.Rows[i]["summaryProvided"].ToString());
-						if(summaryProvidedDate<=deadlineDateClinSum) {
+						if(summaryProvidedDate==DateTime.MinValue) {
+							explanation=procDate.ToShortDateString()+" no summary provided to patient";
+						}
+						else if(summaryProvidedDate<=deadlineDateClinSum) {
 							explanation=procDate.ToShortDateString()+" summary provided to patient";
 							row["met"]="X";
 						}
 						else {
-							explanation=procDate.ToShortDateString()+" summary provided to patient";
+							explanation=procDate.ToShortDateString()+" summary provided to patient after more than one buisness day";
 						}
 						break;
 					#endregion
