@@ -3154,12 +3154,9 @@ namespace OpenDentBusiness {
 				//we will set all patients to denominator.  The only measure where the list of patients (which is the initial patient population) is not the same as the denominator is the influenza vaccine measure, CMS147v2, and we will set those not in the denominator to false after we determine they are in the IPP but not the denominator
 				ehrPatCur.IsDenominator=true;
 				List<PatientRace> listPatRaces=PatientRaces.GetForPatient(ehrPatCur.EhrCqmPat.PatNum);
-				ehrPatCur.Ethnicity=new PatientRace();
-				ehrPatCur.Ethnicity.Race=PatRace.NotHispanic;//default to ethnicity NotHispanic
-				ehrPatCur.Ethnicity.CdcrecCode="2186-5";//CDCREC code for "NOT HISPANIC OR LATINO"
 				for(int j=0;j<listPatRaces.Count;j++) {
-					if(listPatRaces[j].Race==PatRace.Hispanic || listPatRaces[j].Race==PatRace.NotHispanic) {
-						ehrPatCur.Ethnicity=listPatRaces[j];//if race is entered, either one or the other ethnicity
+					if(listPatRaces[j].Race==PatRace.Hispanic || listPatRaces[j].Race==PatRace.NotHispanic || listPatRaces[j].Race==PatRace.DeclinedToSpecifyEthnicity) {
+						ehrPatCur.Ethnicity=listPatRaces[j];
 						continue;
 					}
 					ehrPatCur.ListPatientRaces.Add(listPatRaces[j]);
@@ -5390,7 +5387,7 @@ BMI 18.5-25.";
 								strRaceDescript="Native Hawaiian or Other Pacific Islander";
 								strRaceCode=ehrPatCur.ListPatientRaces[0].CdcrecCode;
 								break;
-							case PatRace.DeclinedToSpecify:
+							case PatRace.DeclinedToSpecifyRace:
 								isRaceNull=true;
 								strRaceDescript="ASKU";
 								break;
@@ -5414,16 +5411,28 @@ BMI 18.5-25.";
 					#region ethnicityGroupCode
 					string strEthnicityCode="";
 					string strEthnicityDescript="";
+					bool isDeclinedEthnicity=false;
 					if(ehrPatCur.Ethnicity!=null) {
-						strEthnicityCode=ehrPatCur.Ethnicity.CdcrecCode;
 						if(ehrPatCur.Ethnicity.Race==PatRace.Hispanic) {
 							strEthnicityDescript="Hispanic";
+							strEthnicityCode=ehrPatCur.Ethnicity.CdcrecCode;
 						}
 						else if(ehrPatCur.Ethnicity.Race==PatRace.NotHispanic) {
 							strEthnicityDescript="Not Hispanic or Latino";
+							strEthnicityCode=ehrPatCur.Ethnicity.CdcrecCode;
+						}
+						else {
+							strEthnicityDescript="ASKU";
+							isDeclinedEthnicity=true;
 						}
 					}
-					if(strEthnicityDescript!="") {
+					else {
+						StartAndEnd("ethnicGroupCode","nullFlavor","UNK");
+					}
+					if(isDeclinedEthnicity) {
+						StartAndEnd("ethnicGroupCode","nullFlavor","ASKU");
+					}
+					else {
 						StartAndEnd("ethnicGroupCode","code",strEthnicityCode,"displayName",strEthnicityDescript,"codeSystem","2.16.840.1.113883.6.238","codeSystemName","CDC Race and Ethnicity");
 					}
 					#endregion ethnicityGroupCode
@@ -6251,7 +6260,11 @@ BMI 18.5-25.";
 		private static void GenerateMedPatsEntry(EhrCqmMedicationPat mPatCur) {
 			_isWriterW=false;
 			Start("entry");
-
+			Start("act","classCode","ACT","moodCode","EVN");
+			_x.WriteComment("Medication, Administered template");
+			TemplateId("2.16.840.1.113883.10.20.24.3.42");
+			StartAndEnd("id","root",_strOIDInternalCQMRoot,"extension",CqmItemAbbreviation.MedPat.ToString()+mPatCur.EhrCqmMedicationPatNum.ToString());
+			End("act");
 			End("entry");
 			_isWriterW=true;			
 		}
