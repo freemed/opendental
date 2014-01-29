@@ -189,7 +189,7 @@ namespace OpenDentBusiness {
 					StartAndEnd("maritalStatusCode","code","S","displayName","Never Married","codeSystem","2.16.840.1.113883.5.2","codeSystemName","MaritalStatusCode");
 				}
 				bool isRaceFound=true;
-				PatRace patRace=PatRace.DeclinedToSpecify;
+				PatRace patRace=PatRace.DeclinedToSpecifyRace;
 				bool isHispanicOrLatino=false;
 				List<PatientRace> listPatientRaces=PatientRaces.GetForPatient(pat.PatNum);
 				for(int i=0;i<listPatientRaces.Count;i++) {
@@ -199,10 +199,10 @@ namespace OpenDentBusiness {
 					else if(listPatientRaces[i].Race==PatRace.NotHispanic) {
 						//Nothing to do. Flag is set to false by default.
 					}
-					else if(listPatientRaces[i].Race==PatRace.DeclinedToSpecify) {
+					else if(listPatientRaces[i].Race==PatRace.DeclinedToSpecifyRace) {
 						isRaceFound=false;
 					}
-					else if(patRace==PatRace.DeclinedToSpecify) {//Only once race can be specified in the CCD document.
+					else if(patRace==PatRace.DeclinedToSpecifyRace) {//Only once race can be specified in the CCD document.
 						patRace=listPatientRaces[i].Race;
 					}
 				}

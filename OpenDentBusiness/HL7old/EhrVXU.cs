@@ -609,7 +609,7 @@ namespace OpenDentBusiness.HL7 {
 				else if(patRace==PatRace.NotHispanic) {
 					//Nothing to do. Flag is set to false by default.
 				}
-				else if(patRace==PatRace.DeclinedToSpecify) {
+				else if(patRace==PatRace.DeclinedToSpecifyRace) {
 					listPatRacesFiltered.Clear();
 					break;
 				}

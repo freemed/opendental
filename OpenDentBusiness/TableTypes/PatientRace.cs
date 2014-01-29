@@ -33,8 +33,8 @@ namespace OpenDentBusiness {
 		AmericanIndian,
 		///<summary>3 - CDCREC:2028-9 Race</summary>
 		Asian,
-		///<summary>4 - Our hard-coded option for EHR reporting.  One entry represents Declined for both race and ethnicity.</summary>
-		DeclinedToSpecify,
+		///<summary>4 - Our hard-coded option for EHR reporting.</summary>
+		DeclinedToSpecifyRace,
 		///<summary>5 - CDCREC:2076-8 Race</summary>
 		HawaiiOrPacIsland,
 		///<summary>6 - CDCREC:2135-2 Ethnicicty.  If EHR is turned on, our UI will force this to be supplemental to a base 'race'.</summary>
@@ -46,6 +46,8 @@ namespace OpenDentBusiness {
 		///<summary>9 - CDCREC:2106-3 Race</summary>
 		White,
 		///<summary>10 - CDCREC:2186-5 Ethnicity.  We originally used the lack of Hispanic to indicate NonHispanic.  Now we are going to explicitly store NonHispanic to make queries for ClinicalQualityMeasures easier.</summary>
-		NotHispanic
+		NotHispanic,
+		///<summary>11 - Our hard-coded option for EHR reporting.</summary>
+		DeclinedToSpecifyEthnicity
 	}
 }

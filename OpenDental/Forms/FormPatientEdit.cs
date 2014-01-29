@@ -2090,6 +2090,7 @@ namespace OpenDental{
 				comboEthnicity.Items.Add(Lan.g(this,"Not Hispanic"));//2
 				comboEthnicity.Items.Add(Lan.g(this,"Hispanic"));//3
 				List<int> listPatRaces=PatientRaces.GetPatRaceList(PatCur.PatNum);
+				comboEthnicity.SelectedIndex=0;//none
 				for(int i=0;i<listPatRaces.Count;i++) {
 					PatRace race=(PatRace)listPatRaces[i];
 					if(race==PatRace.AfricanAmerican) {
@@ -2101,7 +2102,7 @@ namespace OpenDental{
 					else if(race==PatRace.Asian) {
 						comboBoxMultiRace.SetSelected(3,true);//Asian
 					}
-					else if(race==PatRace.DeclinedToSpecify) {
+					else if(race==PatRace.DeclinedToSpecifyRace) {
 						comboBoxMultiRace.SetSelected(4,true);//DeclinedToSpecify
 					}
 					else if(race==PatRace.HawaiiOrPacIsland) {
@@ -2119,12 +2120,9 @@ namespace OpenDental{
 					else if(race==PatRace.White) {
 						comboBoxMultiRace.SetSelected(7,true);//White
 					}
-				}
-				if(comboBoxMultiRace.SelectedIndices.Count==0) {//No race was selected, ethnicity cannot exist without a race
-					comboEthnicity.SelectedIndex=0;//none
-				}
-				else if(listPatRaces.Contains((int)PatRace.DeclinedToSpecify)) {//DeclinedToSpecify forces both race and ethnicity.
-					comboEthnicity.SelectedIndex=1;
+					else if(race==PatRace.DeclinedToSpecifyEthnicity) {
+						comboEthnicity.SelectedIndex=1;//DeclinedToSpecify
+					}
 				}
 			}
 			else {//EHR not enabled
@@ -3151,7 +3149,7 @@ namespace OpenDental{
 					listPatRaces.Add(PatRace.Asian);
 				}
 				else if(selectedIdx==4) {
-					listPatRaces.Add(PatRace.DeclinedToSpecify);
+					listPatRaces.Add(PatRace.DeclinedToSpecifyRace);
 				}
 				else if(selectedIdx==5) {
 					listPatRaces.Add(PatRace.HawaiiOrPacIsland);
@@ -3163,26 +3161,24 @@ namespace OpenDental{
 					listPatRaces.Add(PatRace.White);
 				}
 			}
-			if(listPatRaces.Contains(PatRace.DeclinedToSpecify) || comboEthnicity.SelectedIndex==1) {//If DeclinedToSpecify was chosen, then ensure that no other race information is saved.
+			if(listPatRaces.Contains(PatRace.DeclinedToSpecifyRace)) {//If DeclinedToSpecify was chosen, then ensure that no other races are saved.
 				listPatRaces.Clear();
-				listPatRaces.Add(PatRace.DeclinedToSpecify);
+				listPatRaces.Add(PatRace.DeclinedToSpecifyRace);
 			}
-			else if(listPatRaces.Contains(PatRace.Other)) {//If Other was chosen, then ensure that no other race information is saved.
+			else if(listPatRaces.Contains(PatRace.Other)) {//If Other was chosen, then ensure that no other races are saved.
 				listPatRaces.Clear();
 				listPatRaces.Add(PatRace.Other);
-				if(comboEthnicity.SelectedIndex==3) {//Hispanic
-					listPatRaces.Add(PatRace.Hispanic);
-				}
-				else {
-					listPatRaces.Add(PatRace.NotHispanic);
-				}
 			}
-			//Ethnicity of Hispanic/NotHispanic can only be supplemental to a specified race (when neither the none or the DeclinedToSpecify options were chosen for race).
-			else if(listPatRaces.Count>0 && comboEthnicity.SelectedIndex==3) {//Hispanic
-				listPatRaces.Add(PatRace.Hispanic);
+			//In order to pass EHR G2 MU testing you must be able to have an ethnicity without a race, or a race without an ethnicity.  This will mean that patients will not count towards
+			//  meaningfull use demographic calculations.  If we have time in the future we should probably alert EHR users when a race is chosen but no ethnicity, or a ethnicity but no race.
+			if(comboEthnicity.SelectedIndex==1) {
+				listPatRaces.Add(PatRace.DeclinedToSpecifyEthnicity);
 			}
-			else if(listPatRaces.Count>0) {//NotHispanic, this will be set if they have selected a race that is not DeclinedToSpecify or 'none', and they either choose NotHispanic, or do not chose any ethnicity
+			else if(comboEthnicity.SelectedIndex==2){
 				listPatRaces.Add(PatRace.NotHispanic);
+			}
+			else if(comboEthnicity.SelectedIndex==3) {
+				listPatRaces.Add(PatRace.Hispanic);
 			}
 			PatientRaces.Reconcile(PatCur.PatNum,listPatRaces);//Insert, Update, Delete if needed.
 			PatCur.County=textCounty.Text;

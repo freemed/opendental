@@ -3774,7 +3774,19 @@ namespace OpenDentBusiness {
 					command="INSERT INTO ehrmeasure(EhrMeasureNum,MeasureType,Numerator,Denominator) VALUES((SELECT MAX(EhrMeasureNum)+1 FROM ehrmeasure),28,-1,-1)";
 					Db.NonQ(command);
 				}
-
+				//Split patientrace DeclinedToSpecify into DeclinedToSpecifyRace and DeclinedToSpecifyEthnicity.
+				command="SELECT PatNum FROM patientrace WHERE Race=4";//DeclinedToSpecifyRace
+				DataTable table=Db.GetTable(command);
+				for(int i=0;i<table.Rows.Count;i++) {
+					string patNum=table.Rows[i]["PatNum"].ToString();
+					if(DataConnection.DBtype==DatabaseType.MySql) {
+						command="INSERT INTO patientrace (PatNum,Race) VALUES ("+patNum+",11)";//DeclinedToSpecifyEthnicity
+					}
+					else {//oracle
+						command="INSERT INTO patientrace (PatientRaceNum,PatNum,Race,CdcrecCode) VALUES ((SELECT MAX(PatientRaceNum+1) FROM patientrace),"+patNum+",11,'')";
+					}
+					Db.NonQ(command);
+				}
 
 				command="UPDATE preference SET ValueString = '14.1.0.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
