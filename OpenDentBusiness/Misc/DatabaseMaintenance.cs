@@ -566,7 +566,7 @@ namespace OpenDentBusiness {
 					Signalods.SetInvalid(InvalidType.AutoCodes);
 				}
 				if(numFixed!=0 || verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","Auto codes created due to invlaid auto code items")+": "+numFixed.ToString()+"\r\n";
+					log+=Lans.g("FormDatabaseMaintenance","Auto codes created due to invalid auto code items")+": "+numFixed.ToString()+"\r\n";
 				}
 			}
 			return log;
