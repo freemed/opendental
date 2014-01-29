@@ -3586,7 +3586,7 @@ namespace OpenDentBusiness {
 						ValReported varchar(255) NOT NULL,
 						ValCodeSystem tinyint NOT NULL,
 						VaccineObsNumGroup bigint NOT NULL,
-						ValUnit varchar(255) NOT NULL,
+						UcumCode varchar(255) NOT NULL,
 						DateObs date NOT NULL DEFAULT '0001-01-01',
 						MethodCode varchar(255) NOT NULL,
 						INDEX(VaccinePatNum),
@@ -3605,7 +3605,7 @@ namespace OpenDentBusiness {
 						ValReported varchar2(255),
 						ValCodeSystem number(3) NOT NULL,
 						VaccineObsNumGroup number(20) NOT NULL,
-						ValUnit varchar2(255),
+						UcumCode varchar2(255),
 						DateObs date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
 						MethodCode varchar2(255),
 						CONSTRAINT vaccineobs_VaccineObsNum PRIMARY KEY (VaccineObsNum)
@@ -3683,10 +3683,10 @@ namespace OpenDentBusiness {
 					command=@"CREATE TABLE ehraptobs (
 						EhrAptObsNum bigint NOT NULL auto_increment PRIMARY KEY,
 						AptNum bigint NOT NULL,
+						IdentifyingCode tinyint NOT NULL,
 						ValType tinyint NOT NULL,
-						LoincCode varchar(255) NOT NULL,
 						ValReported varchar(255) NOT NULL,
-						ValUnit varchar(255) NOT NULL,
+						UcumCode varchar(255) NOT NULL,
 						ValCodeSystem varchar(255) NOT NULL,
 						INDEX(AptNum)
 						) DEFAULT CHARSET=utf8";
@@ -3698,10 +3698,10 @@ namespace OpenDentBusiness {
 					command=@"CREATE TABLE ehraptobs (
 						EhrAptObsNum number(20) NOT NULL,
 						AptNum number(20) NOT NULL,
+						IdentifyingCode number(3) NOT NULL,
 						ValType number(3) NOT NULL,
-						LoincCode varchar2(255),
 						ValReported varchar2(255),
-						ValUnit varchar2(255),
+						UcumCode varchar2(255),
 						ValCodeSystem varchar2(255),
 						CONSTRAINT ehraptobs_EhrAptObsNum PRIMARY KEY (EhrAptObsNum)
 						)";

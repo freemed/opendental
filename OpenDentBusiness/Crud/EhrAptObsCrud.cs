@@ -46,13 +46,13 @@ namespace OpenDentBusiness.Crud{
 			EhrAptObs ehrAptObs;
 			for(int i=0;i<table.Rows.Count;i++) {
 				ehrAptObs=new EhrAptObs();
-				ehrAptObs.EhrAptObsNum = PIn.Long  (table.Rows[i]["EhrAptObsNum"].ToString());
-				ehrAptObs.AptNum       = PIn.Long  (table.Rows[i]["AptNum"].ToString());
-				ehrAptObs.ValType      = (EhrAptObsType)PIn.Int(table.Rows[i]["ValType"].ToString());
-				ehrAptObs.LoincCode    = PIn.String(table.Rows[i]["LoincCode"].ToString());
-				ehrAptObs.ValReported  = PIn.String(table.Rows[i]["ValReported"].ToString());
-				ehrAptObs.ValUnit      = PIn.String(table.Rows[i]["ValUnit"].ToString());
-				ehrAptObs.ValCodeSystem= PIn.String(table.Rows[i]["ValCodeSystem"].ToString());
+				ehrAptObs.EhrAptObsNum   = PIn.Long  (table.Rows[i]["EhrAptObsNum"].ToString());
+				ehrAptObs.AptNum         = PIn.Long  (table.Rows[i]["AptNum"].ToString());
+				ehrAptObs.IdentifyingCode= (EhrAptObsIdentifier)PIn.Int(table.Rows[i]["IdentifyingCode"].ToString());
+				ehrAptObs.ValType        = (EhrAptObsType)PIn.Int(table.Rows[i]["ValType"].ToString());
+				ehrAptObs.ValReported    = PIn.String(table.Rows[i]["ValReported"].ToString());
+				ehrAptObs.UcumCode       = PIn.String(table.Rows[i]["UcumCode"].ToString());
+				ehrAptObs.ValCodeSystem  = PIn.String(table.Rows[i]["ValCodeSystem"].ToString());
 				retVal.Add(ehrAptObs);
 			}
 			return retVal;
@@ -93,16 +93,16 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="EhrAptObsNum,";
 			}
-			command+="AptNum,ValType,LoincCode,ValReported,ValUnit,ValCodeSystem) VALUES(";
+			command+="AptNum,IdentifyingCode,ValType,ValReported,UcumCode,ValCodeSystem) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(ehrAptObs.EhrAptObsNum)+",";
 			}
 			command+=
 				     POut.Long  (ehrAptObs.AptNum)+","
+				+    POut.Int   ((int)ehrAptObs.IdentifyingCode)+","
 				+    POut.Int   ((int)ehrAptObs.ValType)+","
-				+"'"+POut.String(ehrAptObs.LoincCode)+"',"
 				+"'"+POut.String(ehrAptObs.ValReported)+"',"
-				+"'"+POut.String(ehrAptObs.ValUnit)+"',"
+				+"'"+POut.String(ehrAptObs.UcumCode)+"',"
 				+"'"+POut.String(ehrAptObs.ValCodeSystem)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -116,12 +116,12 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one EhrAptObs in the database.</summary>
 		public static void Update(EhrAptObs ehrAptObs){
 			string command="UPDATE ehraptobs SET "
-				+"AptNum       =  "+POut.Long  (ehrAptObs.AptNum)+", "
-				+"ValType      =  "+POut.Int   ((int)ehrAptObs.ValType)+", "
-				+"LoincCode    = '"+POut.String(ehrAptObs.LoincCode)+"', "
-				+"ValReported  = '"+POut.String(ehrAptObs.ValReported)+"', "
-				+"ValUnit      = '"+POut.String(ehrAptObs.ValUnit)+"', "
-				+"ValCodeSystem= '"+POut.String(ehrAptObs.ValCodeSystem)+"' "
+				+"AptNum         =  "+POut.Long  (ehrAptObs.AptNum)+", "
+				+"IdentifyingCode=  "+POut.Int   ((int)ehrAptObs.IdentifyingCode)+", "
+				+"ValType        =  "+POut.Int   ((int)ehrAptObs.ValType)+", "
+				+"ValReported    = '"+POut.String(ehrAptObs.ValReported)+"', "
+				+"UcumCode       = '"+POut.String(ehrAptObs.UcumCode)+"', "
+				+"ValCodeSystem  = '"+POut.String(ehrAptObs.ValCodeSystem)+"' "
 				+"WHERE EhrAptObsNum = "+POut.Long(ehrAptObs.EhrAptObsNum);
 			Db.NonQ(command);
 		}
@@ -133,21 +133,21 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="AptNum = "+POut.Long(ehrAptObs.AptNum)+"";
 			}
+			if(ehrAptObs.IdentifyingCode != oldEhrAptObs.IdentifyingCode) {
+				if(command!=""){ command+=",";}
+				command+="IdentifyingCode = "+POut.Int   ((int)ehrAptObs.IdentifyingCode)+"";
+			}
 			if(ehrAptObs.ValType != oldEhrAptObs.ValType) {
 				if(command!=""){ command+=",";}
 				command+="ValType = "+POut.Int   ((int)ehrAptObs.ValType)+"";
-			}
-			if(ehrAptObs.LoincCode != oldEhrAptObs.LoincCode) {
-				if(command!=""){ command+=",";}
-				command+="LoincCode = '"+POut.String(ehrAptObs.LoincCode)+"'";
 			}
 			if(ehrAptObs.ValReported != oldEhrAptObs.ValReported) {
 				if(command!=""){ command+=",";}
 				command+="ValReported = '"+POut.String(ehrAptObs.ValReported)+"'";
 			}
-			if(ehrAptObs.ValUnit != oldEhrAptObs.ValUnit) {
+			if(ehrAptObs.UcumCode != oldEhrAptObs.UcumCode) {
 				if(command!=""){ command+=",";}
-				command+="ValUnit = '"+POut.String(ehrAptObs.ValUnit)+"'";
+				command+="UcumCode = '"+POut.String(ehrAptObs.UcumCode)+"'";
 			}
 			if(ehrAptObs.ValCodeSystem != oldEhrAptObs.ValCodeSystem) {
 				if(command!=""){ command+=",";}

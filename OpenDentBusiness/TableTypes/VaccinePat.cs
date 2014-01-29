@@ -19,7 +19,8 @@ namespace OpenDentBusiness {
 		public DateTime DateTimeEnd;
 		///<summary>Size of the dose of the vaccine.  0 indicates unknown and gets converted to 999 on HL7 output.</summary>
 		public float AdministeredAmt;
-		///<summary>FK to drugunit.DrugUnitNum. Unit of measurement of the AdministeredAmt.  0 represents null.</summary>
+		///<summary>FK to drugunit.DrugUnitNum. Unit of measurement of the AdministeredAmt.  0 represents null.  When going out in HL7 RXA-7, the units must be valid UCUM or the export will be blocked.
+		///Sometime in the future, we may want to convert this column to a string and name it "UcumCode".  For now left alone for backwards compatibility.</summary>
 		public long DrugUnitNum;
 		///<summary>Optional.  Used in HL7 RXA-9.1.</summary>
 		public string LotNumber;

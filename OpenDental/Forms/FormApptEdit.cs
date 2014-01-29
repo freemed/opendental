@@ -2302,7 +2302,7 @@ namespace OpenDental{
 		}
 
 		private void butSyndromicObservations_Click(object sender,EventArgs e) {
-			FormEhrAptObses formE=new FormEhrAptObses(AptCur.AptNum);
+			FormEhrAptObses formE=new FormEhrAptObses(AptCur);
 			formE.ShowDialog();
 		}
 

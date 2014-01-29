@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using OpenDentBusiness;
 
@@ -45,9 +46,11 @@ namespace OpenDental {
 			comboUnits.Items.Clear();
 			comboUnits.Items.Add("none");
 			comboUnits.SelectedIndex=0;
-			for(int i=0;i<DrugUnits.Listt.Count;i++) {
-				comboUnits.Items.Add(DrugUnits.Listt[i].UnitIdentifier);
-				if(DrugUnits.Listt[i].UnitIdentifier==_vaccineObsCur.ValUnit) {
+			List<string> listUcumCodes=Ucums.GetAllCodes();
+			for(int i=0;i<listUcumCodes.Count;i++) {
+				string ucumCode=listUcumCodes[i];
+				comboUnits.Items.Add(ucumCode);
+				if(ucumCode==_vaccineObsCur.UcumCode) {
 					comboUnits.SelectedIndex=i+1;
 				}
 			}
@@ -161,7 +164,10 @@ namespace OpenDental {
 			_vaccineObsCur.ValType=(VaccineObsType)listValueType.SelectedIndex;
 			_vaccineObsCur.ValCodeSystem=(VaccineObsValCodeSystem)listCodeSystem.SelectedIndex;
 			_vaccineObsCur.ValReported=textValue.Text;
-			_vaccineObsCur.ValUnit=comboUnits.Items[comboUnits.SelectedIndex].ToString();
+			_vaccineObsCur.UcumCode="";
+			if(comboUnits.Enabled) {
+				_vaccineObsCur.UcumCode=comboUnits.Items[comboUnits.SelectedIndex].ToString();
+			}
 			_vaccineObsCur.DateObs=DateTime.MinValue;
 			if(textDateObserved.Text!="") {
 				_vaccineObsCur.DateObs=PIn.Date(textDateObserved.Text);

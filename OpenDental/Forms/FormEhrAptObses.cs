@@ -2,19 +2,21 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using OpenDentBusiness.HL7;
 
 namespace OpenDental {
 	public partial class FormEhrAptObses:Form {
 
-		private long _aptNum=0;
+		private Appointment _appt=null;
 
-		public FormEhrAptObses(long AptNum) {
+		public FormEhrAptObses(Appointment appt) {
 			InitializeComponent();
 			Lan.F(this);
-			_aptNum=AptNum;
+			_appt=appt;
 		}
 
 		private void FormEhrAptObses_Load(object sender,EventArgs e) {
@@ -24,17 +26,16 @@ namespace OpenDental {
 		private void FillGridObservations() {
 			gridObservations.BeginUpdate();
 			gridObservations.Columns.Clear();
-			gridObservations.Columns.Add(new UI.ODGridColumn("Description",200));//0
+			gridObservations.Columns.Add(new UI.ODGridColumn("Observation",200));//0
 			gridObservations.Columns.Add(new UI.ODGridColumn("Value Type",200));//1
 			gridObservations.Columns.Add(new UI.ODGridColumn("Value",0));//2
 			gridObservations.Rows.Clear();
-			List<EhrAptObs> listEhrAptObses=EhrAptObses.Refresh(_aptNum);
+			List<EhrAptObs> listEhrAptObses=EhrAptObses.Refresh(_appt.AptNum);
 			for(int i=0;i<listEhrAptObses.Count;i++) {
 				EhrAptObs obs=listEhrAptObses[i];
 				UI.ODGridRow row=new UI.ODGridRow();
 				row.Tag=obs;
-				Loinc loinc=Loincs.GetByCode(obs.LoincCode);
-				row.Cells.Add(loinc.NameShort);//0 Description
+				row.Cells.Add(obs.IdentifyingCode.ToString());//0 Observation
 				if(obs.ValType==EhrAptObsType.Coded) {
 					row.Cells.Add(obs.ValType.ToString()+" - "+obs.ValCodeSystem);//1 Value Type
 					if(obs.ValCodeSystem=="LOINC") {
@@ -77,12 +78,37 @@ namespace OpenDental {
 		private void butAdd_Click(object sender,EventArgs e) {
 			EhrAptObs obs=new EhrAptObs();
 			obs.IsNew=true;
-			obs.AptNum=_aptNum;
+			obs.AptNum=_appt.AptNum;
 			FormEhrAptObsEdit formE=new FormEhrAptObsEdit(obs);
 			if(formE.ShowDialog()==DialogResult.OK) {
 				EhrAptObses.Insert(obs);
 				FillGridObservations();
 			}
+		}
+
+		private void butExportHL7_Click(object sender,EventArgs e) {
+			EhrADT_A01 adt_a03=null;
+			try {
+				adt_a03=new EhrADT_A01(_appt);
+			}
+			catch(Exception ex) {//Exception happens when validation fails.
+				MessageBox.Show(ex.Message);//Show validation error messages.
+				return;
+			}
+			string outputStr=adt_a03.GenerateMessage();
+			SaveFileDialog dlg=new SaveFileDialog();
+			dlg.FileName="adt.txt";
+			DialogResult result=dlg.ShowDialog();
+			if(result!=DialogResult.OK) {
+				return;
+			}
+			if(File.Exists(dlg.FileName)) {
+				if(MessageBox.Show("Overwrite existing file?","",MessageBoxButtons.OKCancel)!=DialogResult.OK) {
+					return;
+				}
+			}
+			File.WriteAllText(dlg.FileName,outputStr);
+			MessageBox.Show("Saved");
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {

@@ -410,7 +410,7 @@ namespace OpenDentBusiness.HL7 {
 				}
 				//OBX-6 Units.  Required if OBX-2 is "NM" or "SN" (SN appears to be missing from definition).
 				if(vaccineObs.ValType==VaccineObsType.Numeric) {
-					Ucum ucum=Ucums.GetByCode(vaccineObs.ValUnit.Trim());
+					Ucum ucum=Ucums.GetByCode(vaccineObs.UcumCode);
 					WriteCE(6,ucum.UcumCode,ucum.Description,"UCUM");
 				}
 				//OBX-7 References Range.  Optional.
@@ -726,7 +726,8 @@ namespace OpenDentBusiness.HL7 {
 			//RXA-7 Administered Units.  Required if RXA-6 is not "999".  Cadinality [0..1].  Type CE (guide page 53).  Value set HL70396 (guide page 231).  Must be UCUM coding.
 			if(vaccine.AdministeredAmt>0 && vaccine.DrugUnitNum!=0) {
 				DrugUnit drugUnit=DrugUnits.GetOne(vaccine.DrugUnitNum);
-				WriteCE(7,drugUnit.UnitIdentifier,drugUnit.UnitText,"UCUM");//UCUM is not in table HL70396, but it there was a note stating that it was required in the guide and UCUM was required in the test cases.
+				Ucum ucum=Ucums.GetByCode(drugUnit.UnitIdentifier);
+				WriteCE(7,ucum.UcumCode,ucum.Description,"UCUM");//UCUM is not in table HL70396, but it there was a note stating that it was required in the guide and UCUM was required in the test cases.
 			}
 			//RXA-8 Administered Dosage Form.  Optional.
 			//RXA-9 Administration Notes.  Required if RXA-20 is "CP" or "PA".  Value set NIP 0001.  Type CE.
@@ -1228,9 +1229,9 @@ namespace OpenDentBusiness.HL7 {
 				if(vaccine.AdministeredAmt>0 && vaccine.DrugUnitNum!=0) {
 					DrugUnit drugUnit=DrugUnits.GetOne(vaccine.DrugUnitNum);
 					Ucum ucum=Ucums.GetByCode(drugUnit.UnitIdentifier);
-					//if(ucum==null) {//TODO: Put check back in once we know if we will include UCUM codes in the database or not.
-					//	WriteError(sb,"Drug unit invalid UCUM code.");
-					//}
+					if(ucum==null) {
+						WriteError(sb,"Drug unit invalid UCUM code.");
+					}
 				}
 				List<string> stateCodes=new List<string>(new string[] {
 					//50 States.
@@ -1282,7 +1283,7 @@ namespace OpenDentBusiness.HL7 {
 					if(vaccineObs.ValReported.Trim()=="") {
 						WriteError(sb,"Missing value for observation with type '"+vaccineObs.ValType.ToString()+"' attached to vaccine '"+vaccineName+"'");
 					}
-					Ucum ucum=Ucums.GetByCode(vaccineObs.ValUnit.Trim());
+					Ucum ucum=Ucums.GetByCode(vaccineObs.UcumCode);
 					if(ucum==null && vaccineObs.ValType==VaccineObsType.Numeric) {
 						WriteError(sb,"Invalid unit code (must be UCUM) for observation with type '"+vaccineObs.ValType.ToString()+"' attached to vaccine '"+vaccineName+"'");
 					}

@@ -53,7 +53,7 @@ namespace OpenDentBusiness.Crud{
 				vaccineObs.ValReported       = PIn.String(table.Rows[i]["ValReported"].ToString());
 				vaccineObs.ValCodeSystem     = (VaccineObsValCodeSystem)PIn.Int(table.Rows[i]["ValCodeSystem"].ToString());
 				vaccineObs.VaccineObsNumGroup= PIn.Long  (table.Rows[i]["VaccineObsNumGroup"].ToString());
-				vaccineObs.ValUnit           = PIn.String(table.Rows[i]["ValUnit"].ToString());
+				vaccineObs.UcumCode          = PIn.String(table.Rows[i]["UcumCode"].ToString());
 				vaccineObs.DateObs           = PIn.Date  (table.Rows[i]["DateObs"].ToString());
 				vaccineObs.MethodCode        = PIn.String(table.Rows[i]["MethodCode"].ToString());
 				retVal.Add(vaccineObs);
@@ -96,7 +96,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="VaccineObsNum,";
 			}
-			command+="VaccinePatNum,ValType,IdentifyingCode,ValReported,ValCodeSystem,VaccineObsNumGroup,ValUnit,DateObs,MethodCode) VALUES(";
+			command+="VaccinePatNum,ValType,IdentifyingCode,ValReported,ValCodeSystem,VaccineObsNumGroup,UcumCode,DateObs,MethodCode) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(vaccineObs.VaccineObsNum)+",";
 			}
@@ -107,7 +107,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(vaccineObs.ValReported)+"',"
 				+    POut.Int   ((int)vaccineObs.ValCodeSystem)+","
 				+    POut.Long  (vaccineObs.VaccineObsNumGroup)+","
-				+"'"+POut.String(vaccineObs.ValUnit)+"',"
+				+"'"+POut.String(vaccineObs.UcumCode)+"',"
 				+    POut.Date  (vaccineObs.DateObs)+","
 				+"'"+POut.String(vaccineObs.MethodCode)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
@@ -128,7 +128,7 @@ namespace OpenDentBusiness.Crud{
 				+"ValReported       = '"+POut.String(vaccineObs.ValReported)+"', "
 				+"ValCodeSystem     =  "+POut.Int   ((int)vaccineObs.ValCodeSystem)+", "
 				+"VaccineObsNumGroup=  "+POut.Long  (vaccineObs.VaccineObsNumGroup)+", "
-				+"ValUnit           = '"+POut.String(vaccineObs.ValUnit)+"', "
+				+"UcumCode          = '"+POut.String(vaccineObs.UcumCode)+"', "
 				+"DateObs           =  "+POut.Date  (vaccineObs.DateObs)+", "
 				+"MethodCode        = '"+POut.String(vaccineObs.MethodCode)+"' "
 				+"WHERE VaccineObsNum = "+POut.Long(vaccineObs.VaccineObsNum);
@@ -162,9 +162,9 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="VaccineObsNumGroup = "+POut.Long(vaccineObs.VaccineObsNumGroup)+"";
 			}
-			if(vaccineObs.ValUnit != oldVaccineObs.ValUnit) {
+			if(vaccineObs.UcumCode != oldVaccineObs.UcumCode) {
 				if(command!=""){ command+=",";}
-				command+="ValUnit = '"+POut.String(vaccineObs.ValUnit)+"'";
+				command+="UcumCode = '"+POut.String(vaccineObs.UcumCode)+"'";
 			}
 			if(vaccineObs.DateObs != oldVaccineObs.DateObs) {
 				if(command!=""){ command+=",";}

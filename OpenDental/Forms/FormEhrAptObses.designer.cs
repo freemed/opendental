@@ -27,6 +27,7 @@ namespace OpenDental{
 			this.butCancel = new OpenDental.UI.Button();
 			this.gridObservations = new OpenDental.UI.ODGrid();
 			this.butAdd = new OpenDental.UI.Button();
+			this.butExportHL7 = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -76,10 +77,26 @@ namespace OpenDental{
 			this.butAdd.Text = "&Add";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
+			// butExportHL7
+			// 
+			this.butExportHL7.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butExportHL7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butExportHL7.Autosize = true;
+			this.butExportHL7.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butExportHL7.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butExportHL7.CornerRadius = 4F;
+			this.butExportHL7.Location = new System.Drawing.Point(286, 447);
+			this.butExportHL7.Name = "butExportHL7";
+			this.butExportHL7.Size = new System.Drawing.Size(75, 24);
+			this.butExportHL7.TabIndex = 74;
+			this.butExportHL7.Text = "Export HL7";
+			this.butExportHL7.Click += new System.EventHandler(this.butExportHL7_Click);
+			// 
 			// FormEhrAptObses
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(645, 483);
+			this.Controls.Add(this.butExportHL7);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.gridObservations);
 			this.Controls.Add(this.butCancel);
@@ -99,5 +116,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button butCancel;
 		private UI.ODGrid gridObservations;
 		private UI.Button butAdd;
+		private UI.Button butExportHL7;
 	}
 }

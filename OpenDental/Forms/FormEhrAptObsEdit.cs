@@ -9,8 +9,7 @@ using OpenDentBusiness;
 namespace OpenDental {
 	public partial class FormEhrAptObsEdit:Form {
 
-		private EhrAptObs _ehrAptObs=null;
-		private Loinc _loincCur=null;
+		private EhrAptObs _ehrAptObsCur=null;
 		private string _strValCodeSystem="";
 		private Loinc _loincValue=null;
 		private Snomed _snomedValue=null;
@@ -20,52 +19,58 @@ namespace OpenDental {
 		public FormEhrAptObsEdit(EhrAptObs ehrAptObs) {
 			InitializeComponent();
 			Lan.F(this);
-			_ehrAptObs=ehrAptObs;
+			_ehrAptObsCur=ehrAptObs;
 		}
 
 		private void FormEhrAptObsEdit_Load(object sender,EventArgs e) {
-			_loincCur=Loincs.GetByCode(_ehrAptObs.LoincCode);
-			textLoinc.Text="";
-			if(_loincCur!=null) {
-				textLoinc.Text=_loincCur.NameShort;
+			comboObservationQuestion.Items.Clear();
+			string[] arrayQuestionNames=Enum.GetNames(typeof(EhrAptObsIdentifier));
+			for(int i=0;i<arrayQuestionNames.Length;i++) {
+				comboObservationQuestion.Items.Add(arrayQuestionNames[i]);
+				EhrAptObsIdentifier ehrAptObsIdentifier=(EhrAptObsIdentifier)i;
+				if(_ehrAptObsCur.IdentifyingCode==ehrAptObsIdentifier) {
+					comboObservationQuestion.SelectedIndex=i;
+				}
 			}
 			listValueType.Items.Clear();
 			string[] arrayValueTypeNames=Enum.GetNames(typeof(EhrAptObsType));
 			for(int i=0;i<arrayValueTypeNames.Length;i++) {
 				listValueType.Items.Add(arrayValueTypeNames[i]);
 				EhrAptObsType ehrAptObsType=(EhrAptObsType)i;
-				if(_ehrAptObs.ValType==ehrAptObsType) {
+				if(_ehrAptObsCur.ValType==ehrAptObsType) {
 					listValueType.SelectedIndex=i;
 				}
 			}
-			if(_ehrAptObs.ValType==EhrAptObsType.Coded) {
-				_strValCodeSystem=_ehrAptObs.ValCodeSystem;
-				if(_ehrAptObs.ValCodeSystem=="LOINC") {
-					_loincValue=Loincs.GetByCode(_ehrAptObs.ValReported);
+			if(_ehrAptObsCur.ValType==EhrAptObsType.Coded) {
+				_strValCodeSystem=_ehrAptObsCur.ValCodeSystem;
+				if(_ehrAptObsCur.ValCodeSystem=="LOINC") {
+					_loincValue=Loincs.GetByCode(_ehrAptObsCur.ValReported);
 					textValue.Text=_loincValue.NameShort;
 				}
-				else if(_ehrAptObs.ValCodeSystem=="SNOMEDCT") {
-					_snomedValue=Snomeds.GetByCode(_ehrAptObs.ValReported);
+				else if(_ehrAptObsCur.ValCodeSystem=="SNOMEDCT") {
+					_snomedValue=Snomeds.GetByCode(_ehrAptObsCur.ValReported);
 					textValue.Text=_snomedValue.Description;
 				}
-				else if(_ehrAptObs.ValCodeSystem=="ICD9") {
-					_icd9Value=ICD9s.GetByCode(_ehrAptObs.ValReported);
+				else if(_ehrAptObsCur.ValCodeSystem=="ICD9") {
+					_icd9Value=ICD9s.GetByCode(_ehrAptObsCur.ValReported);
 					textValue.Text=_icd9Value.Description;
 				}
-				else if(_ehrAptObs.ValCodeSystem=="ICD10") {
-					_icd10Value=Icd10s.GetByCode(_ehrAptObs.ValReported);
+				else if(_ehrAptObsCur.ValCodeSystem=="ICD10") {
+					_icd10Value=Icd10s.GetByCode(_ehrAptObsCur.ValReported);
 					textValue.Text=_icd10Value.Description;
 				}
 			}
 			else {
-				textValue.Text=_ehrAptObs.ValReported;
+				textValue.Text=_ehrAptObsCur.ValReported;
 			}
 			comboUnits.Items.Clear();
 			comboUnits.Items.Add("none");
 			comboUnits.SelectedIndex=0;
-			for(int i=0;i<DrugUnits.Listt.Count;i++) {
-				comboUnits.Items.Add(DrugUnits.Listt[i].UnitIdentifier);
-				if(DrugUnits.Listt[i].UnitIdentifier==_ehrAptObs.ValUnit) {
+			List<string> listUcumCodes=Ucums.GetAllCodes();
+			for(int i=0;i<listUcumCodes.Count;i++) {
+				string ucumCode=listUcumCodes[i];
+				comboUnits.Items.Add(ucumCode);
+				if(ucumCode==_ehrAptObsCur.UcumCode) {
 					comboUnits.SelectedIndex=i+1;
 				}
 			}
@@ -101,15 +106,6 @@ namespace OpenDental {
 			}
 			else {
 				comboUnits.Enabled=false;
-			}
-		}
-
-		private void butPickLoinc_Click(object sender,EventArgs e) {
-			FormLoincs formL=new FormLoincs();
-			formL.IsSelectionMode=true;
-			if(formL.ShowDialog()==DialogResult.OK) {
-				_loincCur=formL.SelectedLoinc;
-				textLoinc.Text=_loincCur.NameShort;
 			}
 		}
 
@@ -158,21 +154,17 @@ namespace OpenDental {
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
-			if(_ehrAptObs.IsNew) {
+			if(_ehrAptObsCur.IsNew) {
 				DialogResult=DialogResult.Cancel;
 			}
 			else {
-				EhrAptObses.Delete(_ehrAptObs.EhrAptObsNum);
-				_ehrAptObs.EhrAptObsNum=0;//Signal to the calling code that the object has been deleted.
+				EhrAptObses.Delete(_ehrAptObsCur.EhrAptObsNum);
+				_ehrAptObsCur.EhrAptObsNum=0;//Signal to the calling code that the object has been deleted.
 				DialogResult=DialogResult.OK;
 			}
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			if(_loincCur==null) {
-				MsgBox.Show(this,"Missing LOINC.");
-				return;
-			}
 			if(comboUnits.Enabled && comboUnits.SelectedIndex==0) {
 				MsgBox.Show(this,"Missing units.");
 				return;
@@ -185,28 +177,31 @@ namespace OpenDental {
 				MsgBox.Show(this,"Missing value.");
 				return;
 			}
-			_ehrAptObs.LoincCode=_loincCur.LoincCode;
-			_ehrAptObs.ValType=(EhrAptObsType)listValueType.SelectedIndex;
-			if(_ehrAptObs.ValType==EhrAptObsType.Coded) {
-				_ehrAptObs.ValCodeSystem=_strValCodeSystem;
+			_ehrAptObsCur.IdentifyingCode=(EhrAptObsIdentifier)comboObservationQuestion.SelectedIndex;
+			_ehrAptObsCur.ValType=(EhrAptObsType)listValueType.SelectedIndex;
+			if(_ehrAptObsCur.ValType==EhrAptObsType.Coded) {
+				_ehrAptObsCur.ValCodeSystem=_strValCodeSystem;
 				if(_strValCodeSystem=="LOINC") {
-					_ehrAptObs.ValReported=_loincValue.LoincCode;
+					_ehrAptObsCur.ValReported=_loincValue.LoincCode;
 				}
 				else if(_strValCodeSystem=="SNOMEDCT") {
-					_ehrAptObs.ValReported=_snomedValue.SnomedCode;
+					_ehrAptObsCur.ValReported=_snomedValue.SnomedCode;
 				}
 				else if(_strValCodeSystem=="ICD9") {
-					_ehrAptObs.ValReported=_icd9Value.ICD9Code;
+					_ehrAptObsCur.ValReported=_icd9Value.ICD9Code;
 				}
 				else if(_strValCodeSystem=="ICD10") {
-					_ehrAptObs.ValReported=_icd10Value.Icd10Code;
+					_ehrAptObsCur.ValReported=_icd10Value.Icd10Code;
 				}
 			}
 			else {
-				_ehrAptObs.ValCodeSystem="";
-				_ehrAptObs.ValReported=textValue.Text;
+				_ehrAptObsCur.ValCodeSystem="";
+				_ehrAptObsCur.ValReported=textValue.Text;
 			}
-			_ehrAptObs.ValUnit=comboUnits.Items[comboUnits.SelectedIndex].ToString();
+			_ehrAptObsCur.UcumCode="";
+			if(comboUnits.Enabled) {
+				_ehrAptObsCur.UcumCode=comboUnits.Items[comboUnits.SelectedIndex].ToString();
+			}
 			DialogResult=DialogResult.OK;
 		}
 

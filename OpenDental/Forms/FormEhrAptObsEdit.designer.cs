@@ -31,30 +31,29 @@ namespace OpenDental{
 			this.labelValue = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
 			this.listValueType = new System.Windows.Forms.ListBox();
-			this.textLoinc = new System.Windows.Forms.TextBox();
-			this.label2 = new System.Windows.Forms.Label();
 			this.butPickValueIcd10 = new OpenDental.UI.Button();
 			this.butPickValueIcd9 = new OpenDental.UI.Button();
 			this.butPickValueSnomedct = new OpenDental.UI.Button();
 			this.butPickValueLoinc = new OpenDental.UI.Button();
-			this.butPickLoinc = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.comboObservationQuestion = new System.Windows.Forms.ComboBox();
+			this.label2 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// comboUnits
 			// 
 			this.comboUnits.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboUnits.FormattingEnabled = true;
-			this.comboUnits.Location = new System.Drawing.Point(102, 135);
+			this.comboUnits.Location = new System.Drawing.Point(143, 152);
 			this.comboUnits.Name = "comboUnits";
 			this.comboUnits.Size = new System.Drawing.Size(113, 21);
 			this.comboUnits.TabIndex = 303;
 			// 
 			// labelValueUnitsNote
 			// 
-			this.labelValueUnitsNote.Location = new System.Drawing.Point(221, 135);
+			this.labelValueUnitsNote.Location = new System.Drawing.Point(262, 152);
 			this.labelValueUnitsNote.Name = "labelValueUnitsNote";
 			this.labelValueUnitsNote.Size = new System.Drawing.Size(260, 17);
 			this.labelValueUnitsNote.TabIndex = 298;
@@ -63,34 +62,34 @@ namespace OpenDental{
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(1, 135);
+			this.label5.Location = new System.Drawing.Point(11, 152);
 			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(100, 17);
+			this.label5.Size = new System.Drawing.Size(131, 17);
 			this.label5.TabIndex = 294;
 			this.label5.Text = "Value Units";
 			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textValue
 			// 
-			this.textValue.Location = new System.Drawing.Point(102, 109);
+			this.textValue.Location = new System.Drawing.Point(143, 126);
 			this.textValue.Name = "textValue";
 			this.textValue.Size = new System.Drawing.Size(309, 20);
 			this.textValue.TabIndex = 291;
 			// 
 			// labelValue
 			// 
-			this.labelValue.Location = new System.Drawing.Point(1, 109);
+			this.labelValue.Location = new System.Drawing.Point(8, 126);
 			this.labelValue.Name = "labelValue";
-			this.labelValue.Size = new System.Drawing.Size(100, 17);
+			this.labelValue.Size = new System.Drawing.Size(134, 17);
 			this.labelValue.TabIndex = 290;
 			this.labelValue.Text = "Value";
 			this.labelValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(1, 47);
+			this.label1.Location = new System.Drawing.Point(5, 64);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(100, 17);
+			this.label1.Size = new System.Drawing.Size(137, 17);
 			this.label1.TabIndex = 287;
 			this.label1.Text = "Value Type";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -98,28 +97,11 @@ namespace OpenDental{
 			// listValueType
 			// 
 			this.listValueType.FormattingEnabled = true;
-			this.listValueType.Location = new System.Drawing.Point(102, 47);
+			this.listValueType.Location = new System.Drawing.Point(143, 64);
 			this.listValueType.Name = "listValueType";
 			this.listValueType.Size = new System.Drawing.Size(113, 56);
 			this.listValueType.TabIndex = 286;
 			this.listValueType.SelectedIndexChanged += new System.EventHandler(this.listValueType_SelectedIndexChanged);
-			// 
-			// textLoinc
-			// 
-			this.textLoinc.Location = new System.Drawing.Point(102, 21);
-			this.textLoinc.Name = "textLoinc";
-			this.textLoinc.ReadOnly = true;
-			this.textLoinc.Size = new System.Drawing.Size(309, 20);
-			this.textLoinc.TabIndex = 305;
-			// 
-			// label2
-			// 
-			this.label2.Location = new System.Drawing.Point(1, 21);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(100, 17);
-			this.label2.TabIndex = 306;
-			this.label2.Text = "LOINC";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// butPickValueIcd10
 			// 
@@ -128,7 +110,7 @@ namespace OpenDental{
 			this.butPickValueIcd10.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butPickValueIcd10.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butPickValueIcd10.CornerRadius = 4F;
-			this.butPickValueIcd10.Location = new System.Drawing.Point(298, 77);
+			this.butPickValueIcd10.Location = new System.Drawing.Point(339, 94);
 			this.butPickValueIcd10.Name = "butPickValueIcd10";
 			this.butPickValueIcd10.Size = new System.Drawing.Size(48, 20);
 			this.butPickValueIcd10.TabIndex = 312;
@@ -142,7 +124,7 @@ namespace OpenDental{
 			this.butPickValueIcd9.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butPickValueIcd9.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butPickValueIcd9.CornerRadius = 4F;
-			this.butPickValueIcd9.Location = new System.Drawing.Point(298, 51);
+			this.butPickValueIcd9.Location = new System.Drawing.Point(339, 68);
 			this.butPickValueIcd9.Name = "butPickValueIcd9";
 			this.butPickValueIcd9.Size = new System.Drawing.Size(48, 20);
 			this.butPickValueIcd9.TabIndex = 311;
@@ -156,7 +138,7 @@ namespace OpenDental{
 			this.butPickValueSnomedct.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butPickValueSnomedct.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butPickValueSnomedct.CornerRadius = 4F;
-			this.butPickValueSnomedct.Location = new System.Drawing.Point(218, 77);
+			this.butPickValueSnomedct.Location = new System.Drawing.Point(259, 94);
 			this.butPickValueSnomedct.Name = "butPickValueSnomedct";
 			this.butPickValueSnomedct.Size = new System.Drawing.Size(74, 20);
 			this.butPickValueSnomedct.TabIndex = 310;
@@ -170,26 +152,12 @@ namespace OpenDental{
 			this.butPickValueLoinc.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butPickValueLoinc.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butPickValueLoinc.CornerRadius = 4F;
-			this.butPickValueLoinc.Location = new System.Drawing.Point(218, 51);
+			this.butPickValueLoinc.Location = new System.Drawing.Point(259, 68);
 			this.butPickValueLoinc.Name = "butPickValueLoinc";
 			this.butPickValueLoinc.Size = new System.Drawing.Size(74, 20);
 			this.butPickValueLoinc.TabIndex = 309;
 			this.butPickValueLoinc.Text = "LOINC";
 			this.butPickValueLoinc.Click += new System.EventHandler(this.butPickValueLoinc_Click);
-			// 
-			// butPickLoinc
-			// 
-			this.butPickLoinc.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butPickLoinc.Autosize = true;
-			this.butPickLoinc.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPickLoinc.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butPickLoinc.CornerRadius = 4F;
-			this.butPickLoinc.Location = new System.Drawing.Point(414, 21);
-			this.butPickLoinc.Name = "butPickLoinc";
-			this.butPickLoinc.Size = new System.Drawing.Size(21, 20);
-			this.butPickLoinc.TabIndex = 308;
-			this.butPickLoinc.Text = "...";
-			this.butPickLoinc.Click += new System.EventHandler(this.butPickLoinc_Click);
 			// 
 			// butDelete
 			// 
@@ -201,7 +169,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(16, 205);
+			this.butDelete.Location = new System.Drawing.Point(5, 236);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(92, 24);
 			this.butDelete.TabIndex = 302;
@@ -216,7 +184,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(318, 205);
+			this.butOK.Location = new System.Drawing.Point(362, 234);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75, 24);
 			this.butOK.TabIndex = 285;
@@ -231,24 +199,41 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(399, 205);
+			this.butCancel.Location = new System.Drawing.Point(443, 234);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 284;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// comboObservationQuestion
+			// 
+			this.comboObservationQuestion.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboObservationQuestion.FormattingEnabled = true;
+			this.comboObservationQuestion.Location = new System.Drawing.Point(143, 37);
+			this.comboObservationQuestion.Name = "comboObservationQuestion";
+			this.comboObservationQuestion.Size = new System.Drawing.Size(244, 21);
+			this.comboObservationQuestion.TabIndex = 314;
+			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(2, 37);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(140, 17);
+			this.label2.TabIndex = 313;
+			this.label2.Text = "Observation Question";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormEhrAptObsEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(482, 243);
+			this.ClientSize = new System.Drawing.Size(526, 272);
+			this.Controls.Add(this.comboObservationQuestion);
+			this.Controls.Add(this.label2);
 			this.Controls.Add(this.butPickValueIcd10);
 			this.Controls.Add(this.butPickValueIcd9);
 			this.Controls.Add(this.butPickValueSnomedct);
 			this.Controls.Add(this.butPickValueLoinc);
-			this.Controls.Add(this.butPickLoinc);
-			this.Controls.Add(this.textLoinc);
-			this.Controls.Add(this.label2);
 			this.Controls.Add(this.comboUnits);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.labelValueUnitsNote);
@@ -283,13 +268,12 @@ namespace OpenDental{
 		private System.Windows.Forms.ListBox listValueType;
 		private UI.Button butOK;
 		private UI.Button butCancel;
-		private System.Windows.Forms.TextBox textLoinc;
-		private System.Windows.Forms.Label label2;
-		private UI.Button butPickLoinc;
 		private UI.Button butPickValueLoinc;
 		private UI.Button butPickValueSnomedct;
 		private UI.Button butPickValueIcd9;
 		private UI.Button butPickValueIcd10;
+		private System.Windows.Forms.ComboBox comboObservationQuestion;
+		private System.Windows.Forms.Label label2;
 
 	}
 }

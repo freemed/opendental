@@ -22,8 +22,8 @@ namespace OpenDentBusiness {
 		public VaccineObsValCodeSystem ValCodeSystem;
 		///<summary>FK to vaccineobs.VaccineObsNum.  All vaccineobs records with matching GroupId are in the same group.  Set to 0 if this vaccine observation is not part of a group.  Used in HL7 OBX-4.</summary>
 		public long VaccineObsNumGroup;
-		///<summary>UCUM code.  Used in HL7 OBX-6.</summary>
-		public string ValUnit;
+		///<summary>Used in HL7 OBX-6.</summary>
+		public string UcumCode;
 		///<summary>Date of observation.  Used in HL7 OBX-14.</summary>
 		public DateTime DateObs;
 		///<summary>Code from code set CDCPHINVS (this code system is not yet fully defined, so user has to enter manually).  Used in HL7 OBX-17.  Only required when IdentifyingCode is FundPgmEligCat.</summary>

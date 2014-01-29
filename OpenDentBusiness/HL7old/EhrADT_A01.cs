@@ -10,7 +10,7 @@ namespace OpenDentBusiness.HL7 {
 	///Ambulatory implementations must fill all required fields, but can ignore all "required if known" fields and can also ignore all optional fields.
 	///Inpatient implementations must fill all required fields and all "required if known" fields, but are allowed to skip optional fields.
 	///For inpatient, if a field is required if known, then UI would be needed if there was no way to enter the data.  Basically required if known fields become required fields if implementing inpatient.</summary>
-	public class EhrADT_A03 {
+	public class EhrADT_A01 {
 
 		///<summary>Set in constructor and must not be modified.</summary>
 		private Appointment _appt;
@@ -24,7 +24,7 @@ namespace OpenDentBusiness.HL7 {
 		private string _sendingFacilityName;
 
 		///<summary>Creates the Message object and fills it with data.</summary>
-		public EhrADT_A03(Appointment appt) {
+		public EhrADT_A01(Appointment appt) {
 			string errors=Validate(appt);
 			if(errors!="") {
 				throw new Exception(errors);
@@ -46,7 +46,7 @@ namespace OpenDentBusiness.HL7 {
 		}
 		
 		private void BuildMessage() {
-			_msg=new MessageHL7(MessageTypeHL7.ADT);//Message format for VXU is on guide page 160.
+			_msg=new MessageHL7(MessageTypeHL7.ADT);
 			MSH();//MSH segment. Required.  Cardinality [1..1].
 			EVN();//EVN segment.  Required.  Cardinality [1..1].
 			PID();//PID segment.  Required.  Cardinality [1..1].
@@ -61,6 +61,7 @@ namespace OpenDentBusiness.HL7 {
 		///<summary>Event Type segment.  Used to communicate trigger event information to receiving applications.  Guide page 38.</summary>
 		private void EVN() {
 			_seg=new SegmentHL7(SegmentNameHL7.EVN);
+			_seg.SetField(0,"EVN");
 			//EVN-1 Event Type Code.  No longer used.
 			_seg.SetField(2,DateTime.Now.ToString("yyyyMMddHHmmss"));//EVN-2 Recorded Date/Time.  Required (length 12..26).
 			//EVN-3 Date/Time Planned Event.  No longer used.
@@ -82,24 +83,24 @@ namespace OpenDentBusiness.HL7 {
 				+"|"//MSH-1 Field Separator (|).  Required (length 1..1).
 				+@"^~\&"//MSH-2 Encoding Characters.  Required (length 4..4).  Component separator (^), then field repetition separator (~), then escape character (\), then Sub-component separator (&).
 				+"|Open Dental"//MSH-3 Sending Application.  Optional (length 1..227).
-				+"|"+_sendingFacilityNpi//MSH-4 Sending Facility.  Required (length 1..227).  NPI is suggested, but not required.
+				+"|"+_sendingFacilityName+"^"+_sendingFacilityNpi+"^NPI"//MSH-4 Sending Facility.  Required (length 1..227).  NPI is suggested, but not required.
 				+"|"//MSH-5 Receiving Application.  Optional (length 1..227).  Value set HL70361.
 				+"|EHR Facility"//MSH-6 Receiving Facility.  Optional (length 1..227).  Value set HL70362.
 				+"|"+DateTime.Now.ToString("yyyyMMddHHmmss")//MSH-7 Date/Time of Message.  Required (length 12..26).
-				+"|"//MSH-8 Security.  No longer used.				
-				+"|ADT^A03^ADT_A03"//MSH-9 Message Type.  Required (1..15).
+				+"|"//MSH-8 Security.  No longer used.
+				+"|ADT^A01^ADT_A01"//MSH-9 Message Type.  Required (1..15).  The guide suggests that the format is ADT_A03, but the testing tool requires ADT_A01.
 				+"|OD-"+DateTime.Now.ToString("yyyyMMddHHmmss")+"-"+CodeBase.MiscUtils.CreateRandomAlphaNumericString(14)//MSH-10 Message Control ID.  Required (length 1..199).  Our IDs are 32 characters.
 				+"|P"//MSH-11 Processing ID.  Required (1..3).  P=production.
 				+"|2.5.1"//MSH-12 Version ID.  Required (1..5).  Must be exactly "2.5.1".
-				//MSH-13 Sequence Number.  No longer used.
-				//MSH-14 Continuation Pointer.  No longer used.
-				//MSH-15 Accept Acknowledgement Type.  No longer used.
-				//MSH-16 Application Acknowledgement Type.  No longer used.
-				//MSH-17 Country Code.  No longer used.
-				//MSH-18 Character Set.  No longer used.
-				//MSH-19 Principal Language Of Message.  No longer used.
-				//MSH-20 Alternate Character Set Handling Scheme.  No longer used.
-				//MSH-21 Message Profile Identifier.  Optional.
+				+"|"//MSH-13 Sequence Number.  No longer used.
+				+"|"//MSH-14 Continuation Pointer.  No longer used.
+				+"|"//MSH-15 Accept Acknowledgement Type.  No longer used.
+				+"|"//MSH-16 Application Acknowledgement Type.  No longer used.
+				+"|"//MSH-17 Country Code.  No longer used.
+				+"|"//MSH-18 Character Set.  No longer used.
+				+"|"//MSH-19 Principal Language Of Message.  No longer used.
+				+"|"//MSH-20 Alternate Character Set Handling Scheme.  No longer used.
+				+"|PH_SS-NoAck^SS Sender^2.16.840.1.114222.4.10.3^ISO"//MSH-21 Message Profile Identifier.  Optional in guide, but required by testing tool.
 			);
 			_msg.Segments.Add(_seg);
 		}
@@ -110,6 +111,7 @@ namespace OpenDentBusiness.HL7 {
 			for(int i=0;i<listObservations.Count;i++) {
 				EhrAptObs obs=listObservations[i];
 				_seg=new SegmentHL7(SegmentNameHL7.OBX);
+				_seg.SetField(0,"OBX");
 				_seg.SetField(1,(i+1).ToString());//OBX-1 Set ID - OBX.  Required (length 1..4).  Must start at 1 and increment.
 				//OBX-2 Value Type.  Required (length 1..3).  Cardinality [1..1].  Identifies the structure of data in observation value OBX-5.  Values allowed: TS=Time Stamp (Date and/or Time),TX=Text,NM=Numeric,CWE=Coded with exceptions,XAD=Address.
 				if(obs.ValType==EhrAptObsType.Coded) {
@@ -125,7 +127,38 @@ namespace OpenDentBusiness.HL7 {
 					_seg.SetField(2,"TX");
 				}
 				//OBX-3 Observation Identifier.  Required (length up to 478).  Cardinality [1..1].  Value set is HL7 table named "Observation Identifier".  Type CE.  We use LOINC codes because the testing tool used LOINC codes and so do vaccines.
-				Loinc loinc=Loincs.GetByCode(obs.LoincCode);
+				string loincCode="";
+				if(obs.IdentifyingCode==EhrAptObsIdentifier.BodyTemp) {
+					loincCode="11289-6";
+				}
+				else if(obs.IdentifyingCode==EhrAptObsIdentifier.CheifComplaint) {
+					loincCode="8661-1";
+				}
+				else if(obs.IdentifyingCode==EhrAptObsIdentifier.DateIllnessOrInjury) {
+					loincCode="11368-8";
+				}
+				else if(obs.IdentifyingCode==EhrAptObsIdentifier.OxygenSaturation) {
+					loincCode="59408-5";
+				}
+				else if(obs.IdentifyingCode==EhrAptObsIdentifier.PatientAge) {
+					loincCode="21612-7";
+				}
+				else if(obs.IdentifyingCode==EhrAptObsIdentifier.PrelimDiag) {
+					loincCode="44833-2";
+				}
+				else if(obs.IdentifyingCode==EhrAptObsIdentifier.TreatFacilityID) {
+					loincCode="SS001";
+				}
+				else if(obs.IdentifyingCode==EhrAptObsIdentifier.TreatFacilityLocation) {
+					loincCode="SS002";
+				}
+				else if(obs.IdentifyingCode==EhrAptObsIdentifier.TriageNote) {
+					loincCode="54094-8";
+				}
+				else if(obs.IdentifyingCode==EhrAptObsIdentifier.VisitType) {
+					loincCode="SS003";
+				}
+				Loinc loinc=Loincs.GetByCode(loincCode);
 				WriteCE(3,loinc.LoincCode,loinc.NameShort,"LN");
 				//OBX-4 Observation Sub-ID.  No longer used.
 				//OBX-5 Observation Value.  Required if known (length 1..99999).  Value must match type in OBX-2.
@@ -172,11 +205,11 @@ namespace OpenDentBusiness.HL7 {
 				}
 				//OBX-6 Units.  Required if OBX-2 is NM=Numeric.  Cardinality [0..1].  Type CE.  The guide suggests value sets: Pulse Oximetry Unit, Temperature Unit, or Age Unit.  However, the testing tool used UCUM, so we will use UCUM.
 				if(obs.ValType==EhrAptObsType.Numeric) {
-					if(String.IsNullOrEmpty(obs.ValUnit)) { //If units are required but known, we must send a null flavor.
+					if(String.IsNullOrEmpty(obs.UcumCode)) { //If units are required but known, we must send a null flavor.
 						WriteCE(6,"UNK","","NULLFL");
 					}
 					else {
-						Ucum ucum=Ucums.GetByCode(obs.ValUnit.Trim());
+						Ucum ucum=Ucums.GetByCode(obs.UcumCode);
 						WriteCE(6,ucum.UcumCode,ucum.Description,"UCUM");
 					}
 				}
@@ -347,6 +380,7 @@ namespace OpenDentBusiness.HL7 {
 		///<summary>Patient Visit segment.  Used by Registration/Patient Administration applications to communicate information on a visit-specific basis.  Guide page 51.</summary>
 		private void PV1() {
 			_seg=new SegmentHL7(SegmentNameHL7.PV1);
+			_seg.SetField(0,"PV1");
 			_seg.SetField(1,"1");//PV1-1 SET ID - PV1.  Required if known (length 1..4).  Must be set to "1".
 			//PV1-2 Patient Class.  Optional.
 			//PV1-3 Assigned Patient Location.  Optional.
@@ -505,10 +539,6 @@ namespace OpenDentBusiness.HL7 {
 			List<EhrAptObs> listObservations=EhrAptObses.Refresh(appt.AptNum);
 			for(int i=0;i<listObservations.Count;i++) {
 				EhrAptObs obs=listObservations[i];
-				Loinc loinc=Loincs.GetByCode(obs.LoincCode);
-				if(loinc==null) {
-					WriteError(sb,"Loinc code not found '"+loinc.LoincCode+"'.  Please add by going to Setup | EHR.");
-				}
 				if(obs.ValType==EhrAptObsType.Coded) {
 					if(obs.ValCodeSystem.Trim().ToUpper()=="LOINC") {
 						Loinc loincVal=Loincs.GetByCode(obs.ValReported);
@@ -533,6 +563,12 @@ namespace OpenDentBusiness.HL7 {
 						if(icd10Val==null) {
 							WriteError(sb,"ICD10 code not found '"+icd10Val.Icd10Code+"'.  Please add by going to Setup | EHR.");
 						}
+					}
+				}
+				else if(obs.ValType==EhrAptObsType.Numeric) {
+					Ucum ucum=Ucums.GetByCode(obs.UcumCode);
+					if(ucum==null) {
+						WriteError(sb,"Invalid unit code '"+obs.UcumCode+"' for observation (must be UCUM code).");
 					}
 				}
 			}
