@@ -13,7 +13,7 @@ namespace OpenDentBusiness{
 		public string FieldName;
 		///<summary>Enum:ApptFieldType Text=0,PickList=1</summary>
 		public ApptFieldType FieldType;
-		/// <summary>The text that contains pick list values.</summary>
+		///<summary>The text that contains pick list values.  Length 4000.</summary>
 		public string PickList;
 	
 		///<summary></summary>

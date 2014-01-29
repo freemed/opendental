@@ -152,6 +152,7 @@ namespace OpenDental{
 			// 
 			this.textPickList.AcceptsReturn = true;
 			this.textPickList.Location = new System.Drawing.Point(20, 96);
+			this.textPickList.MaxLength = 4000;
 			this.textPickList.Multiline = true;
 			this.textPickList.Name = "textPickList";
 			this.textPickList.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;

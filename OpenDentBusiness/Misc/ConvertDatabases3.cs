@@ -3814,6 +3814,18 @@ namespace OpenDentBusiness {
 					command=@"CREATE INDEX ehrlabimage_DocNum ON ehrlabimage (DocNum)";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE apptfielddef CHANGE PickList PickList TEXT NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE apptfielddef MODIFY (PickList varchar2(4000) NOT NULL)";
+					Db.NonQ(command);
+				}
+
+
+
+
 
 				command="UPDATE preference SET ValueString = '14.1.0.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
