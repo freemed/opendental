@@ -39,14 +39,11 @@ namespace OpenDentBusiness.HL7 {
 
 		private void InitializeVariables() {
 			_sendingFacilityName=PrefC.GetString(PrefName.PracticeTitle);
-			if(_pat.ClinicNum!=0) {
-				Clinic clinic=Clinics.GetClinic(_pat.ClinicNum);
-				_sendingFacilityName=clinic.Description;
-			}
 			cityWhereEntered=PrefC.GetString(PrefName.PracticeCity);
 			stateWhereEntered=PrefC.GetString(PrefName.PracticeST);
-			if(_pat.ClinicNum!=0) {
+			if(!PrefC.GetBool(PrefName.EasyNoClinics) && _pat.ClinicNum!=0) {//Using clinics and a clinic is assigned.
 				Clinic clinic=Clinics.GetClinic(_pat.ClinicNum);
+				_sendingFacilityName=clinic.Description;
 				cityWhereEntered=clinic.City;
 				stateWhereEntered=clinic.State;
 			}
@@ -1257,7 +1254,7 @@ namespace OpenDentBusiness.HL7 {
 				if(vaccine.CompletionStatus!=VaccineCompletionStatus.Refused && vaccine.RefusalReason!=VaccineRefusalReason.None) {
 					WriteError(sb,"Since a refusal reason was specified, completion status must be Refused.");
 				}
-				if(pat.ClinicNum!=0) {
+				if(!PrefC.GetBool(PrefName.EasyNoClinics) && pat.ClinicNum!=0) {//Using clinics and a clinic is assigned.
 					Clinic clinic=Clinics.GetClinic(pat.ClinicNum);
 					if(stateCodes.IndexOf(clinic.State.ToUpper())==-1) {
 						WriteError(sb,"Clinic '"+clinic.Description+"' state must be 2 letter state or territory code for the United States.");

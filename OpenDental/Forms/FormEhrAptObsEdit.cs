@@ -10,6 +10,7 @@ namespace OpenDental {
 	public partial class FormEhrAptObsEdit:Form {
 
 		private EhrAptObs _ehrAptObsCur=null;
+		private Appointment _appt=null;
 		private string _strValCodeSystem="";
 		private Loinc _loincValue=null;
 		private Snomed _snomedValue=null;
@@ -23,6 +24,7 @@ namespace OpenDental {
 		}
 
 		private void FormEhrAptObsEdit_Load(object sender,EventArgs e) {
+			_appt=Appointments.GetOneApt(_ehrAptObsCur.AptNum);
 			comboObservationQuestion.Items.Clear();
 			string[] arrayQuestionNames=Enum.GetNames(typeof(EhrAptObsIdentifier));
 			for(int i=0;i<arrayQuestionNames.Length;i++) {
@@ -107,6 +109,26 @@ namespace OpenDental {
 			else {
 				comboUnits.Enabled=false;
 			}
+			if(listValueType.SelectedIndex==(int)EhrAptObsType.Address) {
+				labelValue.Text="Facility Address";
+				textValue.ReadOnly=true;
+				string sendingFacilityName=PrefC.GetString(PrefName.PracticeTitle);
+				string sendingFacilityAddress1=PrefC.GetString(PrefName.PracticeAddress);
+				string sendingFacilityAddress2=PrefC.GetString(PrefName.PracticeAddress2);
+				string sendingFacilityCity=PrefC.GetString(PrefName.PracticeCity);
+				string sendingFacilityState=PrefC.GetString(PrefName.PracticeST);
+				string sendingFacilityZip=PrefC.GetString(PrefName.PracticeZip);
+				if(!PrefC.GetBool(PrefName.EasyNoClinics) && _appt.ClinicNum!=0) {//Using clinics and a clinic is assigned.
+					Clinic clinic=Clinics.GetClinic(_appt.ClinicNum);
+					sendingFacilityName=clinic.Description;
+					sendingFacilityAddress1=clinic.Address;
+					sendingFacilityAddress2=clinic.Address2;
+					sendingFacilityCity=clinic.City;
+					sendingFacilityState=clinic.State;
+					sendingFacilityZip=clinic.Zip;
+				}
+				textValue.Text=sendingFacilityAddress1+" "+sendingFacilityAddress2+" "+sendingFacilityCity+" "+sendingFacilityState+" "+sendingFacilityZip;
+			}
 		}
 
 		private void butPickValueLoinc_Click(object sender,EventArgs e) {
@@ -165,8 +187,10 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			if(comboUnits.Enabled && comboUnits.SelectedIndex==0) {
-				MsgBox.Show(this,"Missing units.");
+			EhrAptObsIdentifier ehrAptObsId=(EhrAptObsIdentifier)comboObservationQuestion.SelectedIndex;
+			if(listValueType.SelectedIndex==(int)EhrAptObsType.Address && ehrAptObsId!=EhrAptObsIdentifier.TreatFacilityLocation ||
+				listValueType.SelectedIndex!=(int)EhrAptObsType.Address && ehrAptObsId==EhrAptObsIdentifier.TreatFacilityLocation) {
+				MsgBox.Show(this,"Value type Address must be used with question TreatFacilityLocation.");
 				return;
 			}
 			if(listValueType.SelectedIndex==(int)EhrAptObsType.Coded && _loincValue==null && _snomedValue==null && _icd9Value==null && _icd10Value==null) {
@@ -177,7 +201,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Missing value.");
 				return;
 			}
-			_ehrAptObsCur.IdentifyingCode=(EhrAptObsIdentifier)comboObservationQuestion.SelectedIndex;
+			_ehrAptObsCur.IdentifyingCode=ehrAptObsId;
 			_ehrAptObsCur.ValType=(EhrAptObsType)listValueType.SelectedIndex;
 			if(_ehrAptObsCur.ValType==EhrAptObsType.Coded) {
 				_ehrAptObsCur.ValCodeSystem=_strValCodeSystem;
@@ -193,6 +217,10 @@ namespace OpenDental {
 				else if(_strValCodeSystem=="ICD10") {
 					_ehrAptObsCur.ValReported=_icd10Value.Icd10Code;
 				}
+			}
+			else if(_ehrAptObsCur.ValType==EhrAptObsType.Address) {
+				_ehrAptObsCur.ValCodeSystem="";
+				_ehrAptObsCur.ValReported="";
 			}
 			else {
 				_ehrAptObsCur.ValCodeSystem="";

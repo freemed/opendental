@@ -54,14 +54,15 @@ namespace OpenDentBusiness {
 	}
 
 	public enum EhrAptObsType {
-		//Address,//This is also an allowed type in syndromic messaging, but we don't know why we would ever need it.
-		///<summary>0</summary>
-		Coded,
+		///<summary>0 - This should only be used with EhrAptObsIdentifier.TreatFacilityLocation.</summary>
+		Address,
 		///<summary>1</summary>
-		DateAndTime,
+		Coded,
 		///<summary>2</summary>
-		Numeric,
+		DateAndTime,
 		///<summary>3</summary>
+		Numeric,
+		///<summary>4</summary>
 		Text,
 	}
 

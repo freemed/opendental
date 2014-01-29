@@ -22,6 +22,11 @@ namespace OpenDentBusiness.HL7 {
 		private SegmentHL7 _seg;
 		private string _sendingFacilityNpi;
 		private string _sendingFacilityName;
+		private string _sendingFacilityAddress1;
+		private string _sendingFacilityAddress2;
+		private string _sendingFacilityCity;
+		private string _sendingFacilityState;
+		private string _sendingFacilityZip;
 
 		///<summary>Creates the Message object and fills it with data.</summary>
 		public EhrADT_A01(Appointment appt) {
@@ -39,9 +44,19 @@ namespace OpenDentBusiness.HL7 {
 			Provider provFacility=Providers.GetProv(PrefC.GetInt(PrefName.PracticeDefaultProv));
 			_sendingFacilityNpi=provFacility.NationalProvID;
 			_sendingFacilityName=PrefC.GetString(PrefName.PracticeTitle);
-			if(_pat.ClinicNum!=0) {
-				Clinic clinic=Clinics.GetClinic(_pat.ClinicNum);
+			_sendingFacilityAddress1=PrefC.GetString(PrefName.PracticeAddress);
+			_sendingFacilityAddress2=PrefC.GetString(PrefName.PracticeAddress2);
+			_sendingFacilityCity=PrefC.GetString(PrefName.PracticeCity);
+			_sendingFacilityState=PrefC.GetString(PrefName.PracticeST);
+			_sendingFacilityZip=PrefC.GetString(PrefName.PracticeZip);
+			if(!PrefC.GetBool(PrefName.EasyNoClinics) && _appt.ClinicNum!=0) {//Using clinics and a clinic is assigned.
+				Clinic clinic=Clinics.GetClinic(_appt.ClinicNum);
 				_sendingFacilityName=clinic.Description;
+				_sendingFacilityAddress1=clinic.Address;
+				_sendingFacilityAddress2=clinic.Address2;
+				_sendingFacilityCity=clinic.City;
+				_sendingFacilityState=clinic.State;
+				_sendingFacilityZip=clinic.Zip;
 			}
 		}
 		
@@ -127,60 +142,82 @@ namespace OpenDentBusiness.HL7 {
 					_seg.SetField(2,"TX");
 				}
 				//OBX-3 Observation Identifier.  Required (length up to 478).  Cardinality [1..1].  Value set is HL7 table named "Observation Identifier".  Type CE.  We use LOINC codes because the testing tool used LOINC codes and so do vaccines.
-				string loincCode="";
+				string obsIdCode="";
+				string obsIdCodeDescript="";
+				string obsIdCodeSystem="LN";
 				if(obs.IdentifyingCode==EhrAptObsIdentifier.BodyTemp) {
-					loincCode="11289-6";
+					obsIdCode="11289-6";
+					obsIdCodeDescript="Body temperature:Temp:Enctrfrst:Patient:Qn:";
 				}
 				else if(obs.IdentifyingCode==EhrAptObsIdentifier.CheifComplaint) {
-					loincCode="8661-1";
+					obsIdCode="8661-1";
+					obsIdCodeDescript="Chief complaint:Find:Pt:Patient:Nom:Reported";
 				}
 				else if(obs.IdentifyingCode==EhrAptObsIdentifier.DateIllnessOrInjury) {
-					loincCode="11368-8";
+					obsIdCode="11368-8";
+					obsIdCodeDescript="Illness or injury onset date and time:TmStp:Pt:Patient:Qn:";
 				}
 				else if(obs.IdentifyingCode==EhrAptObsIdentifier.OxygenSaturation) {
-					loincCode="59408-5";
+					obsIdCode="59408-5";
+					obsIdCodeDescript="Oxygen saturation:MFr:Pt:BldA:Qn:Pulse oximetry";
 				}
 				else if(obs.IdentifyingCode==EhrAptObsIdentifier.PatientAge) {
-					loincCode="21612-7";
+					obsIdCode="21612-7";
+					obsIdCodeDescript="Age Time Patient Reported";
 				}
 				else if(obs.IdentifyingCode==EhrAptObsIdentifier.PrelimDiag) {
-					loincCode="44833-2";
+					obsIdCode="44833-2";
+					obsIdCodeDescript="Diagnosis.preliminary:Imp:Pt:Patient:Nom:";
 				}
 				else if(obs.IdentifyingCode==EhrAptObsIdentifier.TreatFacilityID) {
-					loincCode="SS001";
+					obsIdCode="SS001";
+					obsIdCodeDescript="Treating Facility Identifier";
+					obsIdCodeSystem="PHINQUESTION";
 				}
 				else if(obs.IdentifyingCode==EhrAptObsIdentifier.TreatFacilityLocation) {
-					loincCode="SS002";
+					obsIdCode="SS002";
+					obsIdCodeDescript="Treating Facility Location";
+					obsIdCodeSystem="PHINQUESTION";
 				}
 				else if(obs.IdentifyingCode==EhrAptObsIdentifier.TriageNote) {
-					loincCode="54094-8";
+					obsIdCode="54094-8";
+					obsIdCodeDescript="Triage note:Find:Pt:Emergency department:Doc:";
 				}
 				else if(obs.IdentifyingCode==EhrAptObsIdentifier.VisitType) {
-					loincCode="SS003";
+					obsIdCode="SS003";
+					obsIdCodeDescript="Facility / Visit Type";
+					obsIdCodeSystem="PHINQUESTION";
 				}
-				Loinc loinc=Loincs.GetByCode(loincCode);
-				WriteCE(3,loinc.LoincCode,loinc.NameShort,"LN");
+				WriteCE(3,obsIdCode,obsIdCodeDescript,obsIdCodeSystem);
 				//OBX-4 Observation Sub-ID.  No longer used.
 				//OBX-5 Observation Value.  Required if known (length 1..99999).  Value must match type in OBX-2.
-				if(obs.ValType==EhrAptObsType.Coded) {
+				if(obs.ValType==EhrAptObsType.Address) {
+					WriteXAD(5,_sendingFacilityAddress1,_sendingFacilityAddress2,_sendingFacilityCity,_sendingFacilityState,_sendingFacilityZip);
+				}
+				else if(obs.ValType==EhrAptObsType.Coded) {
 					string codeDescript="";
+					string codeSystemAbbrev="";
 					if(obs.ValCodeSystem.Trim().ToUpper()=="LOINC") {
 						Loinc loincVal=Loincs.GetByCode(obs.ValReported);
 						codeDescript=loincVal.NameShort;
+						codeSystemAbbrev="LN";
 					}
 					else if(obs.ValCodeSystem.Trim().ToUpper()=="SNOMEDCT") {
 						Snomed snomedVal=Snomeds.GetByCode(obs.ValReported);
 						codeDescript=snomedVal.Description;
+						codeSystemAbbrev="SCT";
 					}
 					else if(obs.ValCodeSystem.Trim().ToUpper()=="ICD9") {
 						ICD9 icd9Val=ICD9s.GetByCode(obs.ValReported);
 						codeDescript=icd9Val.Description;
+						codeSystemAbbrev="I9";
 					}
 					else if(obs.ValCodeSystem.Trim().ToUpper()=="ICD10") {
 						Icd10 icd10Val=Icd10s.GetByCode(obs.ValReported);
 						codeDescript=icd10Val.Description;
-					}					
-					WriteCE(5,obs.ValReported.Trim(),codeDescript,obs.ValCodeSystem.ToUpper().Trim());
+						codeSystemAbbrev="I10";
+					}
+					WriteCE(5,obs.ValReported.Trim(),codeDescript,codeSystemAbbrev);
 				}
 				else if(obs.ValType==EhrAptObsType.DateAndTime) {
 					DateTime dateVal=DateTime.Parse(obs.ValReported.Trim());
@@ -324,7 +361,7 @@ namespace OpenDentBusiness.HL7 {
 				_seg.SetOrRepeatField(10,
 					strRaceCode,//PID-10.1 Identifier.  Required (length 1..50).
 					strRaceName,//PID-10.2  Text.  Required if known (length 1..999). Human readable text that is not further used.
-					"HL70005"//PID-10.3 Name of Coding System.  Required (length 1..20).
+					"CDCREC"//PID-10.3 Name of Coding System.  Required (length 1..20).
 					//PID-10.4 Alternate Identifier.  Required if known (length 1..50).
 					//PID-10.5 Alternate Text.  Required if known (length 1..999).
 					//PID-10.6 Name of Alternate Coding system.  Required if PID-10.4 is not blank.
@@ -532,6 +569,17 @@ namespace OpenDentBusiness.HL7 {
 			if(!Regex.IsMatch(provFacility.NationalProvID,"^(80840)?[0-9]{10}$")) {
 				WriteError(sb,"Invalid NPI for provider '"+provFacility.Abbr+"'");
 			}
+			if(!PrefC.GetBool(PrefName.EasyNoClinics) && appt.ClinicNum!=0) {//Using clinics and a clinic is assigned.
+				Clinic clinic=Clinics.GetClinic(appt.ClinicNum);
+				if(clinic.Description=="") {
+					WriteError(sb,"Missing clinic description for clinic attached to appointment.");
+				}
+			}
+			else {//Not using clinics for this patient
+				if(PrefC.GetString(PrefName.PracticeTitle)=="") {
+					WriteError(sb,"Missing practice title.");
+				}
+			}
 			Patient pat=Patients.GetPat(appt.PatNum);
 			if(pat.PatStatus==PatientStatus.Deceased && pat.DateTimeDeceased.Year<1880) {
 				WriteError(sb,"Missing date time deceased.");
@@ -565,7 +613,7 @@ namespace OpenDentBusiness.HL7 {
 						}
 					}
 				}
-				else if(obs.ValType==EhrAptObsType.Numeric) {
+				else if(obs.ValType==EhrAptObsType.Numeric && obs.UcumCode!="") {//We only validate the ucum code if it will be sent out.  Blank units allowed.
 					Ucum ucum=Ucums.GetByCode(obs.UcumCode);
 					if(ucum==null) {
 						WriteError(sb,"Invalid unit code '"+obs.UcumCode+"' for observation (must be UCUM code).");

@@ -48,12 +48,29 @@ namespace OpenDental {
 					}
 					else if(obs.ValCodeSystem=="ICD9") {
 						ICD9 icd9Value=ICD9s.GetByCode(obs.ValReported);
-						row.Cells.Add(icd9Value.ICD9Code);//2 Value
+						row.Cells.Add(icd9Value.Description);//2 Value
 					}
 					else if(obs.ValCodeSystem=="ICD10") {
 						Icd10 icd10Value=Icd10s.GetByCode(obs.ValReported);
-						row.Cells.Add(icd10Value.Icd10Code);//2 Value
+						row.Cells.Add(icd10Value.Description);//2 Value
 					}
+				}
+				else if(obs.ValType==EhrAptObsType.Address) {
+					string sendingFacilityAddress1=PrefC.GetString(PrefName.PracticeAddress);
+					string sendingFacilityAddress2=PrefC.GetString(PrefName.PracticeAddress2);
+					string sendingFacilityCity=PrefC.GetString(PrefName.PracticeCity);
+					string sendingFacilityState=PrefC.GetString(PrefName.PracticeST);
+					string sendingFacilityZip=PrefC.GetString(PrefName.PracticeZip);
+					if(!PrefC.GetBool(PrefName.EasyNoClinics) && _appt.ClinicNum!=0) {//Using clinics and a clinic is assigned.
+						Clinic clinic=Clinics.GetClinic(_appt.ClinicNum);
+						sendingFacilityAddress1=clinic.Address;
+						sendingFacilityAddress2=clinic.Address2;
+						sendingFacilityCity=clinic.City;
+						sendingFacilityState=clinic.State;
+						sendingFacilityZip=clinic.Zip;
+					}
+					row.Cells.Add(obs.ValType.ToString());//1 Value Type
+					row.Cells.Add(sendingFacilityAddress1+" "+sendingFacilityAddress2+" "+sendingFacilityCity+" "+sendingFacilityState+" "+sendingFacilityZip);//2 Value
 				}
 				else {
 					row.Cells.Add(obs.ValType.ToString());//1 Value Type
