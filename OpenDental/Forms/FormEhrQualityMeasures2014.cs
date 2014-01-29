@@ -11,6 +11,7 @@ using OpenDental.UI;
 using System.Xml;
 using System.Xml.XPath;
 using CodeBase;
+using System.IO;
 #if EHRTEST
 using EHR;
 #endif
@@ -19,6 +20,9 @@ namespace OpenDental {
 	public partial class FormEhrQualityMeasures2014:Form {
 		private List<QualityMeasure> listQ;
 		private List<Provider> listProvsKeyed;
+		private long _provNum;
+		private DateTime _dateStart;
+		private DateTime _dateEnd;
 
 		public FormEhrQualityMeasures2014() {
 			InitializeComponent();
@@ -34,7 +38,7 @@ namespace OpenDental {
 			}
 			if(listProvsKeyed.Count==0) {
 				Cursor=Cursors.Default;
-				MessageBox.Show("No providers found with ehr keys.");
+				MsgBox.Show(this,"No providers found with ehr keys.");
 				return;
 			}
 			for(int i=0;i<listProvsKeyed.Count;i++) {
@@ -51,19 +55,18 @@ namespace OpenDental {
 
 		private void FillGrid() {
 			if(comboProv.SelectedIndex==-1) {
-				return;
-			}
-			try {
-				DateTime.Parse(textDateStart.Text);
-				DateTime.Parse(textDateEnd.Text);
-			}
-			catch {
-				MessageBox.Show(this,"Fix date format and try again.");
+				MsgBox.Show(this,"Please select a provider first.");
 				return;
 			}
 			DateTime dateStart=PIn.Date(textDateStart.Text);
 			DateTime dateEnd=PIn.Date(textDateEnd.Text);
-			long provNum=listProvsKeyed[comboProv.SelectedIndex].ProvNum;
+			if(dateStart==DateTime.MinValue || dateEnd==DateTime.MinValue) {
+				MsgBox.Show(this,"Fix date format and try again.");
+				return;
+			}
+			_dateStart=dateStart;
+			_dateEnd=dateEnd;
+			_provNum=listProvsKeyed[comboProv.SelectedIndex].ProvNum;
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn("Id",80);
@@ -82,7 +85,7 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("PerformanceRate",100,HorizontalAlignment.Center);
 			gridMain.Columns.Add(col);
-			listQ=QualityMeasures.GetAll2014(dateStart,dateEnd,provNum);
+			listQ=QualityMeasures.GetAll2014(dateStart,dateEnd,_provNum);
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			for(int i=0;i<listQ.Count;i++) {
@@ -100,11 +103,6 @@ namespace OpenDental {
 			}
 			gridMain.EndUpdate();
 		}
-		
-		public string GenerateQRDA_xml() {
-			
-			return "";
-		}
 
 		///<summary>Launches edit window for double clicked item.</summary>
 		private void gridMain_CellDoubleClick(object sender,OpenDental.UI.ODGridClickEventArgs e) {
@@ -114,50 +112,69 @@ namespace OpenDental {
 		}
 
 		private void butRefresh_Click(object sender,EventArgs e) {
+			Cursor=Cursors.WaitCursor;
 			FillGrid();
+			Cursor=Cursors.Default;
 		}
 
 		private void butShow_Click(object sender,EventArgs e) {
 			if(comboProv.SelectedIndex==-1) {
-				MessageBox.Show("Please select a provider first.");
-				return;
-			}
-			try {
-				DateTime.Parse(textDateStart.Text);
-				DateTime.Parse(textDateEnd.Text);
-			}
-			catch {
-				MessageBox.Show("Invalid dates.");
+				MsgBox.Show(this,"Please select a provider first.");
 				return;
 			}
 			if(listQ==null) {
-				MessageBox.Show("Click Refresh first.");
+				MsgBox.Show(this,"Click Refresh first.");
 				return;
 			}
-			MsgBoxCopyPaste MsgBoxCP = new MsgBoxCopyPaste(GenerateQRDA_xml());
+			long provSelected=listProvsKeyed[comboProv.SelectedIndex].ProvNum;
+			if(_provNum!=provSelected) {
+				MsgBox.Show(this,"The values in the grid do not apply to the provider selected.  Click Refresh first.");
+				return;
+			}
+			string qrda="";
+			Cursor=Cursors.WaitCursor;
+			try {
+				qrda=QualityMeasures.GenerateQRDA(listQ,_provNum,_dateStart,_dateEnd);
+			}
+			catch(Exception ex) {
+				Cursor=Cursors.Default;
+				MessageBox.Show(ex.Message);
+				return;
+			}
+			MsgBoxCopyPaste MsgBoxCP = new MsgBoxCopyPaste(qrda);
+			Cursor=Cursors.Default;
 			MsgBoxCP.ShowDialog();
 		}
 
 		private void butSubmit_Click(object sender,EventArgs e) {
-			if(comboProv.SelectedIndex==-1) {
-				MessageBox.Show("Please select a provider first.");
-				return;
-			}
-			try {
-				DateTime.Parse(textDateStart.Text);
-				DateTime.Parse(textDateEnd.Text);
-			}
-			catch {
-				MessageBox.Show("Invalid dates.");
-				return;
-			}
 			if(listQ==null) {
-				MessageBox.Show("Click Refresh first.");
+				MsgBox.Show(this,"Click Refresh first.");
 				return;
 			}
 			Cursor=Cursors.WaitCursor;
 			try {
-				//EmailMessages.SendTestUnsecure("QRDA","qrda.xml",GenerateQRDA_xml());
+				//EmailMessages.SendTestUnsecure("QRDA","qrda.xml",GenerateQRDA());
+				//code to export will need to include the cda.xsl style sheet as well as the cda.xsd
+				//FolderBrowserDialog dlg=new FolderBrowserDialog();
+				//dlg.SelectedPath=ImageStore.GetPatientFolder(PatCur,ImageStore.GetPreferredAtoZpath());//Default to patient image folder.
+				//DialogResult result=dlg.ShowDialog();
+				//if(result!=DialogResult.OK) {
+				//	return;
+				//}
+				//if(File.Exists(Path.Combine(dlg.SelectedPath,"ccd.xml"))) {
+				//	if(MessageBox.Show("Overwrite existing ccd.xml?","",MessageBoxButtons.OKCancel)!=DialogResult.OK) {
+				//		return;
+				//	}
+				//}
+				//File.WriteAllText(Path.Combine(dlg.SelectedPath,"ccd.xml"),ccd);
+				//File.WriteAllText(Path.Combine(dlg.SelectedPath,"ccd.xsl"),FormEHR.GetEhrResource("CCD"));
+				//EhrMeasureEvent newMeasureEvent = new EhrMeasureEvent();
+				//newMeasureEvent.DateTEvent = DateTime.Now;
+				//newMeasureEvent.EventType = EhrMeasureEventType.ClinicalSummaryProvidedToPt;
+				//newMeasureEvent.PatNum = PatCur.PatNum;
+				//EhrMeasureEvents.Insert(newMeasureEvent);
+				//FillGridEHRMeasureEvents();
+				//MessageBox.Show("Exported");	
 			}
 			catch(Exception ex) {
 				Cursor=Cursors.Default;
@@ -165,7 +182,7 @@ namespace OpenDental {
 				return;
 			}
 			Cursor=Cursors.Default;
-			MessageBox.Show("Sent");
+			MsgBox.Show(this,"Sent");
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {

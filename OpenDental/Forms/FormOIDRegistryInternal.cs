@@ -55,6 +55,9 @@ namespace OpenDental {
 					case IdentifierType.Provider:
 						row.Cells.Add(rootOIDString+".3");
 						break;
+					case IdentifierType.CqmItem:
+						row.Cells.Add(rootOIDString+".4");
+						break;
 					default://should never happen
 						row.Cells.Add("");
 						break;

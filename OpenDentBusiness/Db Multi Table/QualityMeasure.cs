@@ -28,12 +28,12 @@ namespace OpenDentBusiness {
 		public string ExceptionsExplain;
 		public List<EhrCqmPatient> ListEhrPats;
 		public Dictionary<long,List<EhrCqmEncounter>> DictPatNumListEncounters;
-		public Dictionary<long,List<EhrCqmMeasEvent>> DictPatNumListMeasureEvents;
+		public Dictionary<long,List<EhrCqmProc>> DictPatNumListProcs;
 		public Dictionary<long,List<EhrCqmIntervention>> DictPatNumListInterventions;
-		public Dictionary<long,List<EhrCqmProblem>> DictPatNumListProblems;
+		public Dictionary<long,List<EhrCqmMeasEvent>> DictPatNumListMeasureEvents;
 		public Dictionary<long,List<EhrCqmMedicationPat>> DictPatNumListMedPats;
 		public Dictionary<long,List<EhrCqmNotPerf>> DictPatNumListNotPerfs;
-		public Dictionary<long,List<EhrCqmProc>> DictPatNumListProcs;
+		public Dictionary<long,List<EhrCqmProblem>> DictPatNumListProblems;
 		public Dictionary<long,List<EhrCqmVitalsign>> DictPatNumListVitalsigns;
 
 		///<summary></summary>
@@ -44,6 +44,18 @@ namespace OpenDentBusiness {
 				qualityMeasure.ListEhrPats.Add(ListEhrPats[i].Copy());
 			}
 			return qualityMeasure;
+		}
+
+		public QualityMeasure() {
+			ListEhrPats=new List<EhrCqmPatient>();
+			DictPatNumListEncounters=new Dictionary<long,List<EhrCqmEncounter>>();
+			DictPatNumListProcs=new Dictionary<long,List<EhrCqmProc>>();
+			DictPatNumListInterventions=new Dictionary<long,List<EhrCqmIntervention>>();
+			DictPatNumListMeasureEvents=new Dictionary<long,List<EhrCqmMeasEvent>>();
+			DictPatNumListMedPats=new Dictionary<long,List<EhrCqmMedicationPat>>();
+			DictPatNumListNotPerfs=new Dictionary<long,List<EhrCqmNotPerf>>();
+			DictPatNumListProblems=new Dictionary<long,List<EhrCqmProblem>>();
+			DictPatNumListVitalsigns=new Dictionary<long,List<EhrCqmVitalsign>>();
 		}
 	}
 
@@ -113,6 +125,26 @@ namespace OpenDentBusiness {
 		BloodPressureManage
 	}
 
+	public enum CqmItemAbbreviation {
+		///<summary>Encounter Performed</summary>
+		Enc,
+		///<summary>Procedure Performed</summary>
+		Proc,
+		///<summary>Intervention Order/Performed</summary>
+		Ivn,
+		///<summary>EhrMeasureEvents, used for Current Medications Documented 'procedures' and Tobacco Assessment Events</summary>
+		MeasEvn,
+		///<summary>Medication Active/Order/Administered</summary>
+		MedPat,
+		///<summary>EhrNotPerformed</summary>
+		NotPerf,
+		///<summary>Problem (Diagnosis)</summary>
+		Prob,
+		///<summary>Vitalsign</summary>
+		Vital,
+		
+	}
+
 	///<summary>This is all of the patient data required for QRDA category 1 reporting (in the patient recordTarget section).  If the patient is in ListEhrPats for this EhrCqmData object, the patient is part of the initial patient population.  The patient will also be placed into the 'Numerator', 'Exclusion', or 'Exception' category, for counting up results for the QRDA category 3 report for this measure.  A short explanation will be provided if the patient is not in the 'Numerator' to help the user improve their percentage.</summary>
 	public class EhrCqmPatient {
 		public Patient EhrCqmPat;
@@ -130,6 +162,10 @@ namespace OpenDentBusiness {
 
 		public EhrCqmPatient Copy() {
 			return (EhrCqmPatient)this.MemberwiseClone();
+		}
+
+		public EhrCqmPatient() {
+			ListPatientRaces=new List<PatientRace>();
 		}
 	}
 
@@ -173,10 +209,10 @@ namespace OpenDentBusiness {
 	}
 
 	public class EhrCqmMedicationPat {
-		public long EhrCqmMedicationPatNum;//will either be a medicationpat or a vaccinepat
+		public long EhrCqmMedicationPatNum;//will either be a medicationpat or a vaccinepat, the other num will be set to 0
 		public long EhrCqmVaccinePatNum;
 		public long PatNum;
-		public long RxCui;//will either have an RxCui or CVXCode value depending on whether it is a medicationpat or vaccinepat object determined by EhrCqmMedicationPatNum or EhrCqmVaccinePatNum
+		public long RxCui;
 		public string CVXCode;
 		public string CodeSystemName;
 		public string CodeSystemOID;
@@ -184,6 +220,7 @@ namespace OpenDentBusiness {
 		public string ValueSetName;
 		public string ValueSetOID;
 		public string PatNote;//will be blank if vaccinepat object
+		public bool NotGiven;
 		public DateTime DateStart;
 		public DateTime DateStop;
 	}
@@ -208,6 +245,7 @@ namespace OpenDentBusiness {
 
 	public class EhrCqmMeasEvent {
 		public long EhrCqmMeasEventNum;
+		public EhrMeasureEventType EventType;
 		public long PatNum;
 		public string CodeValue;
 		public string CodeSystemName;
@@ -234,8 +272,13 @@ namespace OpenDentBusiness {
 	public class EhrCqmVitalsign {
 		public long EhrCqmVitalsignNum;
 		public long PatNum;
+		public float Height;
+		public float Weight;
+		///<summary>BMI=-1 if it is a Physical Exam, Finding: Diastolic/Systolic BP</summary>
 		public decimal BMI;//in kg/m2, if valid BMI value: CodeValue=39156-5, CodeSystemName=LOINC, CodeSystemOID=2.16.840.1.113883.6.1, Description=Body mass index (BMI) [Ratio], ValueSetName=BMI LOINC Value, ValueSetOID=2.16.840.1.113883.3.600.1.681
+		///<summary>BpSystolic=-1 if it is a Physical Exam, Finding: BMI</summary>
 		public int BpSystolic;//for BP Systolic exam: CodeValue=8480-6, CodeSystemName=LOINC, CodeSystemOID=2.16.840.1.113883.6.1, Description=Systolic blood pressure, ValueSetName=Systolic Blood Pressure, ValueSetOID=2.16.840.1.113883.3.526.3.1032
+		///<summary>BpDiastolic=-1 if it is a Physical Exam, Finding: BMI</summary>
 		public int BpDiastolic;//for BP Diastolic exam: CodeValue=8462-4, CodeSystemName=LOINC, CodeSystemOID=2.16.840.1.113883.6.1, Description=Diastolic blood pressure, ValueSetName=Diastolic Blood Pressure, ValueSetOID=2.16.840.1.113883.3.526.3.1033
 		public string HeightExamCode;//LOINC codes only
 		public string HeightExamDescript;//from LOINC table

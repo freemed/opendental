@@ -30,6 +30,8 @@ namespace OpenDentBusiness {
 		///<summary>FK to Patient.PatNum.  root+".2"</summary>
 		Patient,
 		///<summary>FK to Provider.ProvNum.  root+".3"</summary>
-		Provider
+		Provider,
+		///<summary>This will be the root for all CQM reported items, like encounters, procedures, problems, etc.  root+".4"  The extension will be abbreviated name concatenated with the primary key of the object.  Examples: pat5231 or medpat197432 or proc231782 or notperf38291.  This is only used for generating QRDA documents and requires that the encounter, procedure, etc. is uniquely identified in the reports.  The root+".4" makes it unique to this office, the abbreviated name plus primary key makes it unique within the office.</summary>
+		CqmItem
 	}
 }
