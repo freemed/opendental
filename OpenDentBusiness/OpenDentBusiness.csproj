@@ -420,6 +420,7 @@
     <Compile Include="Data Interface\EhrAptObses.cs" />
     <Compile Include="Data Interface\EhrCarePlans.cs" />
     <Compile Include="Data Interface\EhrLabClinicalInfos.cs" />
+    <Compile Include="Data Interface\EhrLabImages.cs" />
     <Compile Include="Data Interface\EhrLabNotes.cs" />
     <Compile Include="Data Interface\EhrLabResults.cs" />
     <Compile Include="Data Interface\EhrLabResultsCopyTos.cs" />
@@ -851,6 +852,7 @@
     <Compile Include="Plugins\Plugins.cs" />
     <Compile Include="TableTypes\CDSPermission.cs" />
     <Compile Include="TableTypes\EhrAptObs.cs" />
+    <Compile Include="TableTypes\EhrLabImage.cs" />
     <Compile Include="TableTypes\EhrPatient.cs" />
     <Compile Include="TableTypes\OIDExternal.cs" />
     <Compile Include="TableTypes\OIDInternal.cs" />

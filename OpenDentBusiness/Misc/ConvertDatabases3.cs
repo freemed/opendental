@@ -3787,6 +3787,33 @@ namespace OpenDentBusiness {
 					}
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS ehrlabimage";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehrlabimage (
+						EhrLabImageNum bigint NOT NULL auto_increment PRIMARY KEY,
+						EhrLabNum bigint NOT NULL,
+						DocNum bigint NOT NULL,
+						INDEX(EhrLabNum),
+						INDEX(DocNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE ehrlabimage'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE ehrlabimage (
+						EhrLabImageNum number(20) NOT NULL,
+						EhrLabNum number(20) NOT NULL,
+						DocNum number(20) NOT NULL,
+						CONSTRAINT ehrlabimage_EhrLabImageNum PRIMARY KEY (EhrLabImageNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX ehrlabimage_EhrLabNum ON ehrlabimage (EhrLabNum)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX ehrlabimage_DocNum ON ehrlabimage (DocNum)";
+					Db.NonQ(command);
+				}
 
 				command="UPDATE preference SET ValueString = '14.1.0.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
