@@ -1757,7 +1757,7 @@ namespace OpenDentBusiness{
 							mu.Details="Medications entered in CPOE: "+medOrderCpoeCount.ToString();
 							mu.Met=MuMet.True;
 						}
-						mu.Action="CPOE - Provider Order Entry";
+						mu.Action="(edit Rxs from Chart)";
 						break;
 					#endregion
 					#region CPOE_MedOrdersOnly
@@ -1783,7 +1783,7 @@ namespace OpenDentBusiness{
 							mu.Details="Medications entered in CPOE: "+medOrderCount.ToString();
 							mu.Met=MuMet.True;
 						}
-						mu.Action="CPOE - Provider Order Entry";
+						mu.Action="(edit Rxs from Chart)";
 						break;
 					#endregion
 					#region CPOE_PreviouslyOrdered
@@ -1818,7 +1818,7 @@ namespace OpenDentBusiness{
 							mu.Details="Medications entered in CPOE: "+medOrderCpoeCount.ToString();
 							mu.Met=MuMet.True;
 						}
-						mu.Action="CPOE - Provider Order Entry";
+						mu.Action="(edit Rxs from Chart)";
 						break;
 					#endregion
 					#region Rx
@@ -2024,31 +2024,31 @@ namespace OpenDentBusiness{
 						break;
 					#endregion
 					#region Lab
-						//TODO: Change this to EhrLabs
 					case EhrMeasureType.Lab:
-						List<MedicalOrder> listLabOrders=MedicalOrders.GetLabsByDate(pat.PatNum,DateTime.Today.AddYears(-1),DateTime.Today);
+						List<EhrLab> listLabOrders=EhrLabs.GetAllForPatInDateRange(pat.PatNum,DateTime.Today.AddYears(-1),DateTime.Today);
 						if(listLabOrders.Count==0) {
 							mu.Details="No lab orders";
 							mu.Met=MuMet.NA;
 						}
 						else {
-							int labPanelCount=0;
+							int labResultCount=0;
 							for(int lo=0;lo<listLabOrders.Count;lo++) {
-								List<LabPanel> listLabPanels=LabPanels.GetPanelsForOrder(listLabOrders[lo].MedicalOrderNum);
-								if(listLabPanels.Count>0) {
-									labPanelCount++;
+								List<EhrLabResult> listLabResults=EhrLabResults.GetForLab(listLabOrders[lo].EhrLabNum);
+								if(listLabResults.Count>0) {
+									labResultCount++;
+									continue;//Only need one per lab order
 								}
 							}
-							if(labPanelCount<listLabOrders.Count) {
-								mu.Details="Lab orders missing results: "+(listLabOrders.Count-labPanelCount).ToString();
+							if(labResultCount<listLabOrders.Count) {
+								mu.Met=MuMet.False;
+								mu.Details="Lab orders missing results: "+(listLabOrders.Count-labResultCount).ToString();
 							}
 							else {
 								mu.Details="Lab results entered for each lab order.";
 								mu.Met=MuMet.True;
 							}
 						}
-						mu.Action="Edit lab panels";
-						mu.Action2="Import lab results";
+						mu.Action="Edit labs";
 						break;
 					#endregion
 					#region ElectronicCopy
@@ -2100,7 +2100,7 @@ namespace OpenDentBusiness{
 								mu.Details="Electronic copies not provided to Pt within 3 business days of a request:"+countMissingCopies.ToString();
 							}
 						}
-						mu.Action="Provide elect copy to Pt";
+						mu.Action="Provide elect copy to Pt";//If this text ever changes then FormEHR grid will need to change for MU1
 						break;
 					#endregion
 					#region ClinicalSummaries
@@ -2221,7 +2221,7 @@ namespace OpenDentBusiness{
 								mu.Met=MuMet.True;
 							}
 						}
-						mu.Action="Reconcile medications";
+						mu.Action="Reconcile from received CCD";
 						mu.Action2="Enter Referrals";
 						break;
 					#endregion
@@ -2635,7 +2635,7 @@ namespace OpenDentBusiness{
 						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
 						+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
 						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
-						+"LEFT JOIN (SELECT ehrmeasureevent.PatNum, MIN(ehrmeasureevent.DateTEvent) as dateProvided FROM ehrmeasureevent "
+						+"LEFT JOIN (SELECT ehrmeasureevent.PatNum, ehrmeasureevent.DateTEvent as dateProvided FROM ehrmeasureevent "
 						+"WHERE EventType="+POut.Int((int)EhrMeasureEventType.OnlineAccessProvided)+") "
 						+"OnlineAccess ON patient.PatNum=OnlineAccess.PatNum "
 						+"GROUP BY patient.PatNum";
@@ -2775,7 +2775,7 @@ namespace OpenDentBusiness{
 							+"AND RefDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
 							+"AND IsFrom=0 AND IsTransitionOfCare=1 "
 							+"GROUP BY ptsSeen.PatNum) ptsRefCnt "
-						+"INNER JOIN (SELECT ehrmeasureevent.PatNum,COUNT(*) AS CcdCount FROM ehrmeasureevent "
+						+"LEFT JOIN (SELECT ehrmeasureevent.PatNum,COUNT(*) AS CcdCount FROM ehrmeasureevent "
 							+"WHERE EventType="+POut.Int((int)EhrMeasureEventType.SummaryOfCareProvidedToDr)+" "
 							+"AND DATE(ehrmeasureevent.DateTEvent) BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
 							+"GROUP BY ehrmeasureevent.PatNum) ptsCcdCount ON ptsRefCnt.PatNum=ptsCcdCount.PatNum "
@@ -3789,10 +3789,10 @@ namespace OpenDentBusiness{
 							mu.Details="Medications entered in CPOE: "+medOrderCount.ToString();
 							mu.Met=MuMet.True;
 						}
-						mu.Action="CPOE - Provider Order Entry";
+						mu.Action="(edit Rxs from Chart)";
 						break;
 					#endregion
-					#region CPOE_LabOrdersOnly
+					#region CPOE_LabOrdersOnly (NEED TO WORK)
 					case EhrMeasureType.CPOE_LabOrdersOnly:
 						int labOrderCount=0;
 						int labOrderCpoeCount=0;
@@ -3813,10 +3813,10 @@ namespace OpenDentBusiness{
 							mu.Details="Labs entered in CPOE: "+labOrderCount.ToString();
 							mu.Met=MuMet.True;
 						}
-						mu.Action="CPOE - Lab Order Entry";
+						mu.Action="Use the Edit Labs action below";
 						break;
 					#endregion
-					#region CPOE_RadiologyOrdersOnly
+					#region CPOE_RadiologyOrdersOnly (NEED TO WORK ON)
 					case EhrMeasureType.CPOE_RadiologyOrdersOnly:
 						int radOrderCount=0;
 						int radOrderCpoeCount=0;
@@ -3837,7 +3837,7 @@ namespace OpenDentBusiness{
 							mu.Details="Rads entered in CPOE: "+radOrderCount.ToString();
 							mu.Met=MuMet.True;
 						}
-						mu.Action="CPOE - Rad Order Entry";
+						mu.Action="Use the Edit Labs action below";
 						break;
 					#endregion
 					#region Rx
@@ -4016,58 +4016,27 @@ namespace OpenDentBusiness{
 							}
 						}
 						mu.Action="Edit labs";
-						mu.Action2="Import lab results";
 						break;
 					#endregion
-					#region ElectronicCopy
+					#region ElectronicCopy (NEED TO WORK ON)
 					case EhrMeasureType.ElectronicCopy:
 						List<EhrMeasureEvent> listRequests=EhrMeasureEvents.GetByType(listMeasureEvents,EhrMeasureEventType.ElectronicCopyRequested);
 						List<EhrMeasureEvent> listRequestsPeriod=new List<EhrMeasureEvent>();
 						for(int r=0;r<listRequests.Count;r++) {
-							if(listRequests[r].DateTEvent < DateTime.Now.AddYears(-1)) {//not within the last year
+							if(listRequests[r].DateTEvent<DateTime.Now.AddYears(-1) || listRequests[r].PatNum!=pat.PatNum) {//not within the last year
 								continue;
 							}
 							listRequestsPeriod.Add(listRequests[r]);
 						}
 						if(listRequestsPeriod.Count==0) {
-							mu.Met=MuMet.NA;
-							mu.Details="No requests within the last year.";
+							mu.Met=MuMet.False;
+							mu.Details="Patient has not viewed/downloaded/transmitted their health info";
 						}
 						else {
-							int countMissingCopies=0;
-							bool copyProvidedinTime;
-							List<EhrMeasureEvent> listCopiesProvided=EhrMeasureEvents.GetByType(listMeasureEvents,EhrMeasureEventType.ElectronicCopyProvidedToPt);
-							for(int rp=0;rp<listRequestsPeriod.Count;rp++) {
-								copyProvidedinTime=false;
-								DateTime deadlineDateCopy=listRequestsPeriod[rp].DateTEvent.Date.AddDays(3);
-								if(listRequestsPeriod[rp].DateTEvent.DayOfWeek==DayOfWeek.Wednesday 
-									|| listRequestsPeriod[rp].DateTEvent.DayOfWeek==DayOfWeek.Thursday 
-									|| listRequestsPeriod[rp].DateTEvent.DayOfWeek==DayOfWeek.Friday) {
-									deadlineDateCopy.AddDays(2);//add two days for the weekend
-								}
-								for(int cp=0;cp<listCopiesProvided.Count;cp++) {
-									if(listCopiesProvided[cp].DateTEvent.Date > deadlineDateCopy) {
-										continue;
-									}
-									if(listCopiesProvided[cp].DateTEvent.Date < listRequestsPeriod[rp].DateTEvent.Date) {
-										continue;
-									}
-									copyProvidedinTime=true;
-								}
-								if(!copyProvidedinTime) {
-									countMissingCopies++;
-								}
-							}
-							if(countMissingCopies==0) {
-								mu.Met=MuMet.True;
-								mu.Details="Electronic copy provided to Pt within 3 business days of each request.";
-							}
-							else {
-								mu.Met=MuMet.False;
-								mu.Details="Electronic copies not provided to Pt within 3 business days of a request:"+countMissingCopies.ToString();
-							}
+							mu.Met=MuMet.True;
+							mu.Details="Patient has viewed/downloaded/transmitted their health info";
 						}
-						mu.Action="Provide elect copy to Pt";
+						mu.Action="Patient must use the Patient Portal";
 						break;
 					#endregion
 					#region ClinicalSummaries
@@ -4092,8 +4061,8 @@ namespace OpenDentBusiness{
 							List<EhrMeasureEvent> listClinSum=EhrMeasureEvents.GetByType(listMeasureEvents,EhrMeasureEventType.ClinicalSummaryProvidedToPt);
 							for(int p=0;p<listVisits.Count;p++) {
 								summaryProvidedinTime=false;
-								DateTime deadlineDate=listVisits[p].AddDays(3);
-								if(listVisits[p].DayOfWeek==DayOfWeek.Wednesday || listVisits[p].DayOfWeek==DayOfWeek.Thursday || listVisits[p].DayOfWeek==DayOfWeek.Friday) {
+								DateTime deadlineDate=listVisits[p].AddDays(1);
+								if(listVisits[p].DayOfWeek==DayOfWeek.Friday) {
 									deadlineDate=deadlineDate.AddDays(2);//add two days for the weekend
 								}
 								for(int r=0;r<listClinSum.Count;r++) {
@@ -4111,11 +4080,11 @@ namespace OpenDentBusiness{
 							}
 							if(countMissing==0) {
 								mu.Met=MuMet.True;
-								mu.Details="Clinical summary provided to Pt within 3 business days of each visit.";
+								mu.Details="Clinical summary provided to Pt within 1 business day of each visit.";
 							}
 							else {
 								mu.Met=MuMet.False;
-								mu.Details="Clinical summaries not provided to Pt within 3 business days of a visit:"+countMissing.ToString();
+								mu.Details="Clinical summaries not provided to Pt within 1 business day of a visit:"+countMissing.ToString();
 							}
 						}
 						mu.Action="Send clinical summary to Pt";
@@ -4123,8 +4092,21 @@ namespace OpenDentBusiness{
 					#endregion
 					#region Reminders
 					case EhrMeasureType.Reminders:
-						List<Appointment> listAppointment=Appointments.GetListForPat(pat.PatNum);
-						if(pat.PatStatus!=PatientStatus.Patient) {
+						List<DateTime> listVisitsRem=new List<DateTime>();//for this year
+						List<Procedure> listProcsRem=Procedures.Refresh(pat.PatNum);
+						for(int p=0;p<listProcsRem.Count;p++) {
+							if(listProcsRem[p].ProcDate < DateTime.Now.AddYears(-2) || listProcsRem[p].ProcStatus!=ProcStat.C) {//not within the last year or not a completed procedure
+								continue;
+							}
+							if(!listVisitsRem.Contains(listProcsRem[p].ProcDate)) {
+								listVisitsRem.Add(listProcsRem[p].ProcDate);
+							}
+						}
+						if(listVisitsRem.Count<=1) {
+							mu.Met=MuMet.NA;
+							mu.Details="No two visits within the last two years.";
+						}
+						else if(pat.PatStatus!=PatientStatus.Patient) {
 							mu.Met=MuMet.NA;
 							mu.Details="Status not patient.";
 						}
@@ -4142,7 +4124,7 @@ namespace OpenDentBusiness{
 								mu.Met=MuMet.True;
 							}
 							else {
-								mu.Details="No reminders sent within the last year for patient.";
+								mu.Details="No reminders sent within the last year.";
 							}
 						}
 						mu.Action="Send reminders";
@@ -4181,8 +4163,8 @@ namespace OpenDentBusiness{
 								mu.Met=MuMet.True;
 							}
 						}
-						mu.Action="Medications can only be reconciled through a Summary of Care.";
-						mu.Action2="Receive Summary of Care";
+						mu.Action="Reconcile from received CCD";
+						mu.Action2="Enter Referrals";
 						break;
 					#endregion
 					#region SummaryOfCare
@@ -4243,101 +4225,78 @@ namespace OpenDentBusiness{
 								mu.Met=MuMet.True;
 							}
 						}
-						mu.Action="Send/Receive summary of care";
+						mu.Action="Send/Receive summary of care via email";
 						mu.Action2="Enter Referrals";
 						break;
 					#endregion
-					#region SecureMessaging (NEED TO WORK ON)
+					#region SecureMessaging
 					case EhrMeasureType.SecureMessaging:
-						countToRefPeriod=0;
-						for(int c=0;c<listRefAttach.Count;c++) {
-							if(!listRefAttach[c].IsFrom && listRefAttach[c].IsTransitionOfCare) {
-								if(listRefAttach[c].RefDate > DateTime.Now.AddYears(-1)) {//within the last year
-									countToRefPeriod++;
-								}
+						List<EhrMeasureEvent> listMsg=EhrMeasureEvents.GetByType(listMeasureEvents,EhrMeasureEventType.SecureMessageFromPat);
+						List<DateTime> listVisitsMsg=new List<DateTime>();//for this year
+						List<Procedure> listProcsMsg=Procedures.Refresh(pat.PatNum);
+						int msgCount=0;
+						for(int p=0;p<listProcsMsg.Count;p++) {
+							if(listProcsMsg[p].ProcDate < DateTime.Now.AddYears(-1) || listProcsMsg[p].ProcStatus!=ProcStat.C) {//not within the last year or not a completed procedure
+								continue;
+							}
+							if(!listVisitsMsg.Contains(listProcsMsg[p].ProcDate)) {
+								listVisitsMsg.Add(listProcsMsg[p].ProcDate);
 							}
 						}
-						if(countToRefPeriod==0) {
+						for(int p=0;p<listMsg.Count;p++) {
+							if(listMsg[p].PatNum==pat.PatNum) {
+								msgCount++;
+							}
+						}
+						if(listVisitsMsg.Count==0) {
 							mu.Met=MuMet.NA;
-							mu.Details="No outgoing transitions of care within the last year.";
+							mu.Details="No visits within the last year.";
+						}
+						else if(msgCount==0) {
+							mu.Met=MuMet.False;
+							mu.Details="No patient web mail messages.";
 						}
 						else {// > 0
-							List<EhrMeasureEvent> listCcds=EhrMeasureEvents.GetByType(listMeasureEvents,EhrMeasureEventType.SummaryOfCareProvidedToDr);
-							int countCcds=0;//during reporting period.
-							for(int r=0;r<listCcds.Count;r++) {
-								if(listCcds[r].DateTEvent > DateTime.Now.AddYears(-1)) {//within the same period as the count for referrals.
-									countCcds++;
-								}
-							}
-							mu.Details="Referrals:"+countToRefPeriod.ToString()+", Summaries:"+countCcds.ToString();
-							if(countCcds>=countToRefPeriod) {
-								mu.Met=MuMet.True;
-							}
+							mu.Met=MuMet.True;
+							mu.Details="Web mail message has been received.";
 						}
-						mu.Action="Send/Receive summary of care";
-						mu.Action2="Enter Referrals";
+						mu.Action="Patient must send a web mail message via the Patient Portal.";
 						break;
 					#endregion
-					#region FamilyHistory (NEED TO WORK ON)
+					#region FamilyHistory
 					case EhrMeasureType.FamilyHistory:
-						countToRefPeriod=0;
-						for(int c=0;c<listRefAttach.Count;c++) {
-							if(!listRefAttach[c].IsFrom && listRefAttach[c].IsTransitionOfCare) {
-								if(listRefAttach[c].RefDate > DateTime.Now.AddYears(-1)) {//within the last year
-									countToRefPeriod++;
-								}
-							}
-						}
-						if(countToRefPeriod==0) {
-							mu.Met=MuMet.NA;
-							mu.Details="No outgoing transitions of care within the last year.";
+						List<FamilyHealth> listFamilyHealth=FamilyHealths.GetFamilyHealthForPat(pat.PatNum);
+						if(listFamilyHealth.Count==0) {
+							mu.Met=MuMet.False;
+							mu.Details="No family members entered";
 						}
 						else {// > 0
-							List<EhrMeasureEvent> listCcds=EhrMeasureEvents.GetByType(listMeasureEvents,EhrMeasureEventType.SummaryOfCareProvidedToDr);
-							int countCcds=0;//during reporting period.
-							for(int r=0;r<listCcds.Count;r++) {
-								if(listCcds[r].DateTEvent > DateTime.Now.AddYears(-1)) {//within the same period as the count for referrals.
-									countCcds++;
-								}
-							}
-							mu.Details="Referrals:"+countToRefPeriod.ToString()+", Summaries:"+countCcds.ToString();
-							if(countCcds>=countToRefPeriod) {
-								mu.Met=MuMet.True;
-							}
+							mu.Met=MuMet.True;
+							mu.Details="Family Members: "+listFamilyHealth.Count;
 						}
-						mu.Action="Send/Receive summary of care";
-						mu.Action2="Enter Referrals";
+						mu.Action="Enter family history";
 						break;
 					#endregion
-					#region ElectronicNote (NEED TO WORK ON)
+					#region ElectronicNote
 					case EhrMeasureType.ElectronicNote:
-						countToRefPeriod=0;
-						for(int c=0;c<listRefAttach.Count;c++) {
-							if(!listRefAttach[c].IsFrom && listRefAttach[c].IsTransitionOfCare) {
-								if(listRefAttach[c].RefDate > DateTime.Now.AddYears(-1)) {//within the last year
-									countToRefPeriod++;
-								}
+						//TODO: Max dated notes with signature, during period, status not deleted.
+						List<ProcNote> procNotes=ProcNotes.GetProcNotesForPat(pat.PatNum);
+						int notesSigned=0;
+						for(int p=0;p<procNotes.Count;p++) {
+							if(procNotes[p].Signature!="" && procNotes[p].Note!="") {
+								notesSigned++;
+								break;//As of 2014, only unique patients are considered.
 							}
 						}
-						if(countToRefPeriod==0) {
-							mu.Met=MuMet.NA;
-							mu.Details="No outgoing transitions of care within the last year.";
+						if(notesSigned==0) {
+							mu.Met=MuMet.False;
+							mu.Details="No signed procedure notes";
 						}
 						else {// > 0
-							List<EhrMeasureEvent> listCcds=EhrMeasureEvents.GetByType(listMeasureEvents,EhrMeasureEventType.SummaryOfCareProvidedToDr);
-							int countCcds=0;//during reporting period.
-							for(int r=0;r<listCcds.Count;r++) {
-								if(listCcds[r].DateTEvent > DateTime.Now.AddYears(-1)) {//within the same period as the count for referrals.
-									countCcds++;
-								}
-							}
-							mu.Details="Referrals:"+countToRefPeriod.ToString()+", Summaries:"+countCcds.ToString();
-							if(countCcds>=countToRefPeriod) {
-								mu.Met=MuMet.True;
-							}
+							mu.Met=MuMet.True;
+							mu.Details="Signed procedure note is present";
 						}
-						mu.Action="Send/Receive summary of care";
-						mu.Action2="Enter Referrals";
+						mu.Action="Sign all procedure notes";
 						break;
 					#endregion
 					#region LabImages (NEED TO WORK ON)
@@ -4367,8 +4326,7 @@ namespace OpenDentBusiness{
 								mu.Met=MuMet.True;
 							}
 						}
-						mu.Action="Send/Receive summary of care";
-						mu.Action2="Enter Referrals";
+						mu.Action="Manage Lab Images";
 						break;
 					#endregion
 				}

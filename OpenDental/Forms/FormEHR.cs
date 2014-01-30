@@ -218,6 +218,7 @@ namespace OpenDental {
 					case EhrMeasureType.VitalSigns:
 					case EhrMeasureType.VitalSignsBMIOnly:
 					case EhrMeasureType.VitalSignsBPOnly:
+					case EhrMeasureType.VitalSigns2014:
 						FormVitalsigns FormVital=new FormVitalsigns();
 						FormVital.PatNum=PatNum;
 						FormVital.ShowDialog();
@@ -231,16 +232,18 @@ namespace OpenDental {
 						FillGridMu();
 						break;
 					case EhrMeasureType.Lab:
-						FormEhrLabPanels FormLP=new FormEhrLabPanels();
+						FormEhrLabOrders FormLP=new FormEhrLabOrders();
 						FormLP.PatCur=PatCur;
 						FormLP.ShowDialog();
 						FillGridMu();
 						break;
 					case EhrMeasureType.ElectronicCopy:
-						FormEhrElectronicCopy FormE=new FormEhrElectronicCopy();
-						FormE.PatCur=PatCur;
-						FormE.ShowDialog();
-						FillGridMu();
+						if(listMu[e.Row].Action=="Provide elect copy to Pt") {
+							FormEhrElectronicCopy FormE=new FormEhrElectronicCopy();
+							FormE.PatCur=PatCur;
+							FormE.ShowDialog();
+							FillGridMu();
+						}
 						break;
 					case EhrMeasureType.ClinicalSummaries:
 						FormEhrClinicalSummary FormCS=new FormEhrClinicalSummary();
@@ -255,7 +258,7 @@ namespace OpenDental {
 						FillGridMu();
 						break;
 					case EhrMeasureType.MedReconcile:
-						FormMedicationReconcile FormMedRec=new FormMedicationReconcile();
+						FormEhrSummaryOfCare FormMedRec=new FormEhrSummaryOfCare();
 						FormMedRec.PatCur=PatCur;
 						FormMedRec.ShowDialog();
 						FillGridMu();
@@ -266,6 +269,35 @@ namespace OpenDental {
 						FormEhrSummaryOfCare FormSoC=new FormEhrSummaryOfCare();
 						FormSoC.PatCur=PatCur;
 						FormSoC.ShowDialog();
+						FillGridMu();
+						break;
+					case EhrMeasureType.SummaryOfCareElectronic:
+						FormEhrSummaryOfCare FormSoCE=new FormEhrSummaryOfCare();
+						FormSoCE.PatCur=PatCur;
+						FormSoCE.ShowDialog();
+						FillGridMu();
+						break;
+					case EhrMeasureType.SecureMessaging:
+						//Patient Sent
+						break;
+					case EhrMeasureType.FamilyHistory:
+						FormMed=new FormMedical(PatNotCur,PatCur);
+						FormMed.ShowDialog();
+						FillGridMu();
+						break;
+					case EhrMeasureType.ElectronicNote:
+						//Sign a Note
+						break;
+					case EhrMeasureType.CPOE_LabOrdersOnly:
+						//Click on Lab Edit
+						break;
+					case EhrMeasureType.CPOE_RadiologyOrdersOnly:
+						//Click on Lab Edit
+						break;
+					case EhrMeasureType.LabImages:
+						FormEhrLabOrders FormLO=new FormEhrLabOrders();
+						FormLO.PatCur=PatCur;
+						FormLO.ShowDialog();
 						FillGridMu();
 						break;
 				}
@@ -289,9 +321,7 @@ namespace OpenDental {
 						//Close();
 						break;
 					case EhrMeasureType.Lab:
-						FormEhrLabPanelImport FormLPI=new FormEhrLabPanelImport();
-						FormLPI.ShowDialog();
-						FillGridMu();
+						//Redundant now that everything is done from one window
 						break;
 				}
 			}

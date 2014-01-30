@@ -38,7 +38,6 @@
 			this.labelProvPat = new System.Windows.Forms.Label();
 			this.labelProvUser = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
-			this.butLabPanelLOINC = new System.Windows.Forms.Button();
 			this.butAmendments = new System.Windows.Forms.Button();
 			this.butEncounters = new System.Windows.Forms.Button();
 			this.butInterventions = new System.Windows.Forms.Button();
@@ -115,7 +114,7 @@
 			// 
 			// butEhrNotPerformed
 			// 
-			this.butEhrNotPerformed.Location = new System.Drawing.Point(712, 346);
+			this.butEhrNotPerformed.Location = new System.Drawing.Point(712, 317);
 			this.butEhrNotPerformed.Name = "butEhrNotPerformed";
 			this.butEhrNotPerformed.Size = new System.Drawing.Size(84, 23);
 			this.butEhrNotPerformed.TabIndex = 38;
@@ -192,19 +191,9 @@
 			this.label3.TabIndex = 33;
 			this.label3.Text = resources.GetString("label3.Text");
 			// 
-			// butLabPanelLOINC
-			// 
-			this.butLabPanelLOINC.Location = new System.Drawing.Point(712, 288);
-			this.butLabPanelLOINC.Name = "butLabPanelLOINC";
-			this.butLabPanelLOINC.Size = new System.Drawing.Size(84, 23);
-			this.butLabPanelLOINC.TabIndex = 35;
-			this.butLabPanelLOINC.Text = "Lab Orders";
-			this.butLabPanelLOINC.UseVisualStyleBackColor = true;
-			this.butLabPanelLOINC.Click += new System.EventHandler(this.butLabPanelLOINC_Click);
-			// 
 			// butAmendments
 			// 
-			this.butAmendments.Location = new System.Drawing.Point(713, 317);
+			this.butAmendments.Location = new System.Drawing.Point(712, 288);
 			this.butAmendments.Name = "butAmendments";
 			this.butAmendments.Size = new System.Drawing.Size(84, 23);
 			this.butAmendments.TabIndex = 36;
@@ -214,7 +203,7 @@
 			// 
 			// butEncounters
 			// 
-			this.butEncounters.Location = new System.Drawing.Point(712, 375);
+			this.butEncounters.Location = new System.Drawing.Point(712, 346);
 			this.butEncounters.Name = "butEncounters";
 			this.butEncounters.Size = new System.Drawing.Size(84, 23);
 			this.butEncounters.TabIndex = 39;
@@ -224,7 +213,7 @@
 			// 
 			// butInterventions
 			// 
-			this.butInterventions.Location = new System.Drawing.Point(712, 404);
+			this.butInterventions.Location = new System.Drawing.Point(712, 375);
 			this.butInterventions.Name = "butInterventions";
 			this.butInterventions.Size = new System.Drawing.Size(84, 23);
 			this.butInterventions.TabIndex = 40;
@@ -234,7 +223,7 @@
 			// 
 			// butCarePlans
 			// 
-			this.butCarePlans.Location = new System.Drawing.Point(712, 433);
+			this.butCarePlans.Location = new System.Drawing.Point(712, 404);
 			this.butCarePlans.Name = "butCarePlans";
 			this.butCarePlans.Size = new System.Drawing.Size(84, 23);
 			this.butCarePlans.TabIndex = 42;
@@ -288,7 +277,6 @@
 			this.Controls.Add(this.butEncounters);
 			this.Controls.Add(this.butEhrNotPerformed);
 			this.Controls.Add(this.butAmendments);
-			this.Controls.Add(this.butLabPanelLOINC);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.labelProvUser);
 			this.Controls.Add(this.labelProvPat);
@@ -327,7 +315,6 @@
 		private System.Windows.Forms.Label labelProvPat;
 		private System.Windows.Forms.Label labelProvUser;
 		private System.Windows.Forms.Label label3;
-		private System.Windows.Forms.Button butLabPanelLOINC;
 		private System.Windows.Forms.Button butAmendments;
 		private System.Windows.Forms.Button butEhrNotPerformed;
 		private System.Windows.Forms.Button but2014CQM;

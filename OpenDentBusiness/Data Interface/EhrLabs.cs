@@ -735,6 +735,18 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
+		///<summary></summary>
+		public static List<EhrLab> GetAllForPatInDateRange(long patNum, DateTime dateStart, DateTime dateEnd) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<EhrLab>>(MethodBase.GetCurrentMethod(),patNum);
+			}
+			//TODO: Finish this with Travis' Stuff
+			string command="SELECT * FROM ehrlab WHERE PatNum = "+POut.Long(patNum);
+			List<EhrLab> retVal=Crud.EhrLabCrud.SelectMany(command);
+
+			return retVal;
+		}
+
 		///<summary>Helper function to return a list of descriptions for the HL70203 enumeration.  First item in the list is blank.</summary>
 		public static List<string> GetHL70203Descriptions() {
 			List<string> retVal=new List<string>();
@@ -888,7 +900,6 @@ namespace OpenDentBusiness{
 			EhrLabResultsCopyTos.DeleteForLab(ehrLabNum);
 			EhrLabClinicalInfos.DeleteForLab(ehrLabNum);
 			EhrLabSpecimens.DeleteForLab(ehrLabNum);
-			EhrLabImages.DeleteForLab(ehrLabNum);			
 		}
 
 		//If this table type will exist as cached data, uncomment the CachePattern region below and edit.

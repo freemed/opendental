@@ -15,6 +15,14 @@ namespace OpenDentBusiness {
 			}
 			return Crud.ProcNoteCrud.Insert(procNote);
 		}
+
+		public static List<ProcNote> GetProcNotesForPat(long patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<ProcNote>>(MethodBase.GetCurrentMethod(),patNum);
+			}
+			string command="SELECT * FROM procnote WHERE procnote.PatNum="+POut.Long(patNum);
+			return Crud.ProcNoteCrud.SelectMany(command);
+		}
 		
 		/*
 		///<summary></summary>
