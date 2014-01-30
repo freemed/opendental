@@ -420,6 +420,9 @@ namespace OpenDental {
 			if(!EntriesAreValid()) {
 				return;
 			}
+			if(Security.CurUser.ProvNum!=0 && Providers.GetProv(Security.CurUser.ProvNum).EhrKey!="") {//The user who is currently logged in is a provider and has a valid EHR key.
+				EhrLabCur.IsCpoe=true;
+			}
 			if(EhrLabCur.PatNum==0 && PatCurNum!=null) {
 				EhrLabCur.PatNum=PatCurNum;
 			}

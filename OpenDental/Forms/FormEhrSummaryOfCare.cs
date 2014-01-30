@@ -66,7 +66,7 @@ namespace OpenDental {
 		}
 
 		public static bool DisplayCCD(string strXmlCCD,Patient patCur) {
-			return DisplayCCD(strXmlCCD,null,"");
+			return DisplayCCD(strXmlCCD,patCur,"");
 		}
 
 		///<summary>Returns true if user performed a print job on the CCD.  Cannot be moved to OpenDentBusiness/Misc/EhrCCD.cs, because this function uses windows UI components. 

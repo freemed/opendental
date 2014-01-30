@@ -274,6 +274,7 @@ namespace OpenDental {
 				switch(listMu[e.Row].MeasureType) {
 					case EhrMeasureType.MedReconcile:
 						FormReferralsPatient FormRefMed=new FormReferralsPatient();
+						FormRefMed.PatNum=PatCur.PatNum;
 						FormRefMed.ShowDialog();
 						FillGridMu();
 						//ResultOnClosing=EhrFormResult.Referrals;
@@ -281,6 +282,7 @@ namespace OpenDental {
 						break;
 					case EhrMeasureType.SummaryOfCare:
 						FormReferralsPatient FormRefSum=new FormReferralsPatient();
+						FormRefSum.PatNum=PatCur.PatNum;
 						FormRefSum.ShowDialog();
 						FillGridMu();
 						//ResultOnClosing=EhrFormResult.Referrals;

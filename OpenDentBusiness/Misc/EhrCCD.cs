@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using CodeBase;
 using System.Xml;
 using System.Xml.XPath;
+using System.Text.RegularExpressions;
 
 namespace OpenDentBusiness {
 	public class EhrCCD {
@@ -1894,7 +1895,7 @@ Laboratory Test Results
 					_w.WriteElementString("td",listLabResultFiltered[i].ObservationIdentifierText);//Test
 					_w.WriteElementString("td",value+" "+listLabResultFiltered[i].UnitsText);//Result
 					_w.WriteElementString("td",listLabResultFiltered[i].AbnormalFlags);//Abnormal Flag
-					if(PIn.Int(listLabResultFiltered[i].ObservationDateTime)<18800000) {
+					if(String.Compare(Regex.Match("input string",@"^\d{0,4}").Value.PadLeft(4,'0'),"1880")!=-1) {
 						_w.WriteElementString("td","");//Test
 					}
 					else {
@@ -1968,7 +1969,7 @@ Laboratory Test Results
 					StartAndEnd("code","code",listLabResultFiltered[i].ObservationIdentifierID,"displayName",listLabResultFiltered[i].ObservationIdentifierText,"codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc);
 				}
 				StartAndEnd("statusCode","code","completed");//Allowed values: aborted, active, cancelled, completed, held, or suspended.
-				if(PIn.Int(listLabResultFiltered[i].ObservationDateTime)<18800000) {
+				if(String.Compare(Regex.Match("input string",@"^\d{0,4}").Value.PadLeft(4,'0'),"1880")!=-1) {
 					StartAndEnd("effectiveTime","nullFlavor","UNK");
 				}
 				else {

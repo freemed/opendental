@@ -25,6 +25,7 @@ namespace OpenDentBusiness{
 			+POut.Int((int)EhrMeasureType.CPOE_PreviouslyOrdered)+","
 			+POut.Int((int)EhrMeasureType.Rx)+","
 			+POut.Int((int)EhrMeasureType.VitalSigns)+","
+			+POut.Int((int)EhrMeasureType.VitalSigns2014)+","
 			+POut.Int((int)EhrMeasureType.VitalSignsBMIOnly)+","
 			+POut.Int((int)EhrMeasureType.VitalSignsBPOnly)+","
 			+POut.Int((int)EhrMeasureType.Smoking)+","
@@ -2504,9 +2505,10 @@ namespace OpenDentBusiness{
 				#endregion
 				#region CPOE_LabOrdersOnly
 				case EhrMeasureType.CPOE_LabOrdersOnly:
-					command="SELECT ehrlab.*,loinc.ClassType "
+					command="SELECT patient.LName,patient.FName,ehrlab.*,loinc.ClassType "
 						+"FROM ehrlab "						
-						+"LEFT JOIN loinc ON ehrlab.UsiID=loinc.LoincCode  "
+						+"LEFT JOIN loinc ON ehrlab.UsiID=loinc.LoincCode "
+						+"LEFT JOIN patient ON ehrlab.PatNum=Patient.PatNum "
 						+"WHERE ehrlab.OrderingProviderID IN("+POut.String(provs)+")	"
 						+"AND ehrlab.ObservationDateTimeStart BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
 						+"AND loinc.ClassType not like '%rad%'";
@@ -2515,9 +2517,10 @@ namespace OpenDentBusiness{
 				#endregion
 				#region CPOE_RadiologyOrdersOnly
 				case EhrMeasureType.CPOE_RadiologyOrdersOnly:
-					command="SELECT ehrlab.*,loinc.ClassType "
+					command="SELECT patient.LName,patient.FName,ehrlab.*,loinc.ClassType "
 						+"FROM ehrlab "						
-						+"LEFT JOIN loinc ON ehrlab.UsiID=loinc.LoincCode  "
+						+"LEFT JOIN loinc ON ehrlab.UsiID=loinc.LoincCode "
+						+"LEFT JOIN patient ON ehrlab.PatNum=Patient.PatNum "
 						+"WHERE ehrlab.OrderingProviderID IN("+POut.String(provs)+")	"
 						+"AND ehrlab.ObservationDateTimeStart BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
 						+"AND loinc.ClassType like '%rad%'";
@@ -2883,9 +2886,10 @@ namespace OpenDentBusiness{
 					#endregion
 					#region CPOE_LabOrdersOnly
 					case EhrMeasureType.CPOE_LabOrdersOnly:
-						DateTime labOrderStartDate=PIn.Date(tableRaw.Rows[i]["DateTimeOrder"].ToString());
+						string labOrderStartDate=tableRaw.Rows[i]["ObservationDateTimeStart"].ToString().Substring(0,8);
+						DateTime dateT=PIn.Date(labOrderStartDate.Substring(4,2)+"/"+labOrderStartDate.Substring(6,2)+"/"+labOrderStartDate.Substring(0,4));
 						string classType=tableRaw.Rows[i]["ClassType"].ToString();
-						explanation="Laboratory order: "+tableRaw.Rows[i]["Description"].ToString()+", start date: "+labOrderStartDate.ToShortDateString()+".";
+						explanation="Laboratory order: "+tableRaw.Rows[i]["ParentObservationText"].ToString()+", start date: "+dateT.ToShortDateString()+".";
 						if(!classType.Contains("rad")) {
 							row["met"]="X";
 						}
@@ -2893,9 +2897,10 @@ namespace OpenDentBusiness{
 					#endregion
 					#region CPOE_RadiologyOrdersOnly
 					case EhrMeasureType.CPOE_RadiologyOrdersOnly:
-						DateTime radOrderStartDate=PIn.Date(tableRaw.Rows[i]["DateTimeOrder"].ToString());
+						string radOrderStartDate=tableRaw.Rows[i]["ObservationDateTimeStart"].ToString().Substring(0,8);
+						DateTime dateTRad=PIn.Date(radOrderStartDate.Substring(4,2)+"/"+radOrderStartDate.Substring(6,2)+"/"+radOrderStartDate.Substring(0,4));
 						string classTypeRad=tableRaw.Rows[i]["ClassType"].ToString();
-						explanation="Radiology order: "+tableRaw.Rows[i]["Description"].ToString()+", start date: "+radOrderStartDate.ToShortDateString()+".";
+						explanation="Radiology order: "+tableRaw.Rows[i]["ParentObservationText"].ToString()+", start date: "+dateTRad.ToShortDateString()+".";
 						if(classTypeRad.Contains("rad")) {
 							row["met"]="X";
 						}
