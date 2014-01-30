@@ -2812,16 +2812,34 @@ namespace OpenDentBusiness{
 				#endregion
 				#region ElectricNote
 				case EhrMeasureType.ElectronicNote:
-					command="SELECT UniquePatsAndProcs.*,ProcNoteNum FROM (SELECT patient.PatNum,LName,FName, procedurelog.ProcDate as procDate, procedurelog.ProcNUM "
-						+"FROM patient "
-						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
-						+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
-						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
-						+"GROUP BY patient.PatNum) AS UniquePatsAndProcs "
-						+"LEFT JOIN procnote ON UniquePatsAndProcs.PatNum=procnote.PatNum"
-						+" AND UniquePatsAndProcs.ProcNum=procnote.ProcNum"
-						+" AND Signature!=''"
-						+" AND Note!=''";
+					command="SELECT uniquepatseen.*,notes.NumNotes "
+						+"FROM ( "
+							+"SELECT patient.PatNum,LName,FName "
+							+"FROM patient "
+							+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum "
+								+"AND procedurelog.ProcStatus=2 "
+								+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
+								+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+							+"GROUP BY patient.PatNum "
+						+") AS uniquepatseen "
+						+"LEFT JOIN ( "
+							+"SELECT procedurelog.PatNum, SUM((CASE WHEN ISNULL(procnotesigned.ProcNoteNum) THEN 0 ELSE 1 END)) AS NumNotes "
+							+"FROM procedurelog "
+							+"LEFT JOIN ( "
+								+"SELECT procnote.PatNum,procnote.ProcNum, procnote.ProcNoteNum "
+								+"FROM procnote "
+								+"INNER JOIN ( "
+									+"SELECT ProcNum,MAX(EntryDateTime) AS NewestNoteDateTime "
+									+"FROM procnote "
+									+"GROUP BY ProcNum "
+								+") newestnote ON newestnote.ProcNum=procNote.ProcNum AND newestnote.NewestNoteDateTime=procnote.EntryDateTime "
+								+"WHERE Signature!='' AND Note!='' "
+								+"GROUP BY PatNum,ProcNum,EntryDateTime "
+							+") procnotesigned ON procedurelog.PatNum=procnotesigned.PatNum "
+							+"WHERE procedurelog.ProcStatus!="+POut.Int((int)ProcStat.D)+" "
+							+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+							+"GROUP BY procedurelog.PatNum "
+						+") notes ON notes.PatNum=uniquepatseen.PatNum";
 					tableRaw=Db.GetTable(command);
 					break;
 				#endregion
@@ -3142,7 +3160,7 @@ namespace OpenDentBusiness{
 					#endregion
 					#region ElectricNote
 					case EhrMeasureType.ElectronicNote:
-						if(PIn.Long(tableRaw.Rows[i]["ProcNoteNum"].ToString())>0) {
+						if(PIn.Long(tableRaw.Rows[i]["NumNotes"].ToString())>0) {
 							row["met"]="X";
 						}
 						break;
