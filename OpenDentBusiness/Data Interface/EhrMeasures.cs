@@ -2848,7 +2848,14 @@ namespace OpenDentBusiness{
 				#endregion
 				#region LabImages
 				case EhrMeasureType.LabImages:
-					//This is not currently possible in OD so it will always be excluded
+					command="SELECT labsTable.LName,labsTable.FName,labImage.DocNum,labsTable.ObservationDateTimeStart,labsTable.ParentObservationText FROM (SELECT patient.LName,patient.FName,ehrlab.*"
+						+"FROM ehrlab "						
+						+"LEFT JOIN loinc ON ehrlab.UsiID=loinc.LoincCode "
+						+"LEFT JOIN patient ON ehrlab.PatNum=Patient.PatNum "
+						+"WHERE ehrlab.OrderingProviderID IN("+POut.String(provs)+")	"
+						+"AND ehrlab.ObservationDateTimeStart BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+") as labsTable "
+						+"INNER JOIN (SELECT DISTINCT EhrLabNum,DocNum FROM ehrlabimage) AS labImage ON labsTable.EhrLabNum=labImage.EhrLabNum";
+					tableRaw=Db.GetTable(command);
 					break;
 				#endregion
 				//default:
@@ -3172,7 +3179,13 @@ namespace OpenDentBusiness{
 					#endregion
 					#region LabImages
 					case EhrMeasureType.LabImages:
-						//This is currently not possible in OD and is always excluded
+						string labImageStartDate=tableRaw.Rows[i]["ObservationDateTimeStart"].ToString().Substring(0,8);
+						DateTime dateTImg=PIn.Date(labImageStartDate.Substring(4,2)+"/"+labImageStartDate.Substring(6,2)+"/"+labImageStartDate.Substring(0,4));
+						long docNum=PIn.Long(tableRaw.Rows[i]["DocNum"].ToString());
+						explanation="Laboratory order: "+tableRaw.Rows[i]["ParentObservationText"].ToString()+", start date: "+dateTImg.ToShortDateString()+".";
+						if(docNum>=1) {
+							row["met"]="X";
+						}
 						break;
 					#endregion
 					//default:
