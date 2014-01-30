@@ -7,59 +7,106 @@ using System.Text;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class EhrLabImages{
-		//If this table type will exist as cached data, uncomment the CachePattern region below and edit.
-		/*
-		#region CachePattern
-		//This region can be eliminated if this is not a table type with cached data.
-		//If leaving this region in place, be sure to add RefreshCache and FillCache 
-		//to the Cache.cs file with all the other Cache types.
-
-		///<summary>A list of all EhrLabImages.</summary>
-		private static List<EhrLabImage> listt;
-
-		///<summary>A list of all EhrLabImages.</summary>
-		public static List<EhrLabImage> Listt{
-			get {
-				if(listt==null) {
-					RefreshCache();
-				}
-				return listt;
-			}
-			set {
-				listt=value;
-			}
-		}
 
 		///<summary></summary>
-		public static DataTable RefreshCache(){
-			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
-			string command="SELECT * FROM ehrlabimage ORDER BY ItemOrder";//stub query probably needs to be changed
-			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
-			table.TableName="EhrLabImage";
-			FillCache(table);
-			return table;
-		}
-
-		///<summary></summary>
-		public static void FillCache(DataTable table){
-			//No need to check RemotingRole; no call to db.
-			listt=Crud.EhrLabImageCrud.TableToList(table);
-		}
-		#endregion
-		*/
-		/*
-		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
-
-		///<summary></summary>
-		public static List<EhrLabImage> Refresh(long patNum){
+		public static List<EhrLabImage> Refresh(long ehrLabNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<EhrLabImage>>(MethodBase.GetCurrentMethod(),patNum);
+				return Meth.GetObject<List<EhrLabImage>>(MethodBase.GetCurrentMethod(),ehrLabNum);
 			}
-			string command="SELECT * FROM ehrlabimage WHERE PatNum = "+POut.Long(patNum);
+			string command="SELECT * FROM ehrlabimage WHERE EhrLabNum = "+POut.Long(ehrLabNum)+" AND DocNum > 0";
 			return Crud.EhrLabImageCrud.SelectMany(command);
 		}
 
-		///<summary>Gets one EhrLabImage from the db.</summary>
+		///<summary>Returns true if a row containing the given EhrLabNum and DocNum==-1 is found.  Otherwise returns false.</summary>
+		public static bool IsWaitingForImages(long ehrLabNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),ehrLabNum);
+			}
+			string command="SELECT * FROM ehrlabimage WHERE EhrLabNum = "+POut.Long(ehrLabNum)+" AND DocNum = -1";
+			return Crud.EhrLabImageCrud.SelectOne(command)!=null;
+		}
+
+		///<summary>EhrLab first EhrLab which this docNum is attached to. Or returns null if docNum is not attached to any EhrLabs.</summary>
+		public static EhrLab GetFirstLabForDocNum(long docNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<EhrLab>(MethodBase.GetCurrentMethod(),docNum);
+			}
+			//Get first EhrLabImage that has this docNum attached.
+			string command="SELECT * FROM ehrlabimage WHERE DocNum = "+POut.Long(docNum)+" LIMIT 1";
+			EhrLabImage labImage=Crud.EhrLabImageCrud.SelectOne(command);
+			if(labImage==null) { //Not found so return
+				return null;
+			}
+			//Get the EhrLab which this labImage is attached to
+			command="SELECT * FROM ehrlab WHERE EhrLabNum = "+POut.Long(labImage.EhrLabNum);
+			return Crud.EhrLabCrud.SelectOne(labImage.EhrLabNum);
+		}
+
+		///<summary>Create an entry per each docNum in the list. If setting isWaiting flag to true then create a row containing the given EhrLabNum and DocNum==-1.  Otherwise omit such a row.</summary>
+		public static void InsertAllForLabNum(long ehrLabNum,bool isWaiting,List<long> docNums) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),ehrLabNum,isWaiting,docNums);
+				return;
+			}
+			//Delete existing rows for this EhrLabNum.
+			DeleteForLab(ehrLabNum);
+			//Create the waiting flag if necessary
+			if(isWaiting) {
+				EhrLabImage labImage=new EhrLabImage();
+				labImage.EhrLabNum=ehrLabNum;
+				labImage.DocNum=-1;
+				Insert(labImage);
+			}
+			//Create the rest of the links
+			for(int i=0;i<docNums.Count;i++) {
+				EhrLabImage labImage=new EhrLabImage();
+				labImage.EhrLabNum=ehrLabNum;
+				labImage.DocNum=docNums[i];
+				Insert(labImage);
+			}
+		}
+
+		///<summary>Delete all rows for a given EhrLabNum.</summary>
+		public static void DeleteForLab(long ehrLabNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),ehrLabNum);
+				return;
+			}
+			//Delete existing rows for this EhrLabNum.
+			string cmd="DELETE FROM ehrlabimage WHERE EhrLabNum = "+POut.Long(ehrLabNum);
+			Db.NonQ(cmd);			
+		}
+
+		///<summary>From local list. Returns true if EhrLabImage is found. Otherwise returns false.</summary>
+		public static bool GetDocNumExistsInList(long ehrLabNum,long docNum,List<EhrLabImage> listImages) {
+			//No need to check RemotingRole; no call to db.
+			return GetFromList(ehrLabNum,docNum,listImages)!=null;
+		}
+
+		///<summary>From local list. Returns EhrLabImage if found. Returns null if not found.</summary>
+		public static EhrLabImage GetFromList(long ehrLabNum,long docNum,List<EhrLabImage> listImages) {
+			//No need to check RemotingRole; no call to db.
+			for(int i=0;i<listImages.Count;i++) {
+				if(listImages[i].DocNum==docNum && listImages[i].EhrLabNum==ehrLabNum) {
+					return listImages[i];
+				}
+			}
+			return null;
+		}
+
+		///<summary></summary>
+		public static long Insert(EhrLabImage ehrLabImage) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				ehrLabImage.EhrLabImageNum=Meth.GetLong(MethodBase.GetCurrentMethod(),ehrLabImage);
+				return ehrLabImage.EhrLabImageNum;
+			}
+			return Crud.EhrLabImageCrud.Insert(ehrLabImage);
+		}
+
+		/*
+		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
+
+		 * ///<summary>Gets one EhrLabImage from the db.</summary>
 		public static EhrLabImage GetOne(long ehrLabImageNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
 				return Meth.GetObject<EhrLabImage>(MethodBase.GetCurrentMethod(),ehrLabImageNum);
@@ -67,14 +114,7 @@ namespace OpenDentBusiness{
 			return Crud.EhrLabImageCrud.SelectOne(ehrLabImageNum);
 		}
 
-		///<summary></summary>
-		public static long Insert(EhrLabImage ehrLabImage){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				ehrLabImage.EhrLabImageNum=Meth.GetLong(MethodBase.GetCurrentMethod(),ehrLabImage);
-				return ehrLabImage.EhrLabImageNum;
-			}
-			return Crud.EhrLabImageCrud.Insert(ehrLabImage);
-		}
+
 
 		///<summary></summary>
 		public static void Update(EhrLabImage ehrLabImage){
@@ -85,15 +125,7 @@ namespace OpenDentBusiness{
 			Crud.EhrLabImageCrud.Update(ehrLabImage);
 		}
 
-		///<summary></summary>
-		public static void Delete(long ehrLabImageNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),ehrLabImageNum);
-				return;
-			}
-			string command= "DELETE FROM ehrlabimage WHERE EhrLabImageNum = "+POut.Long(ehrLabImageNum);
-			Db.NonQ(command);
-		}
+
 		*/
 
 

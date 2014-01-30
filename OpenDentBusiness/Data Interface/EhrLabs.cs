@@ -888,6 +888,7 @@ namespace OpenDentBusiness{
 			EhrLabResultsCopyTos.DeleteForLab(ehrLabNum);
 			EhrLabClinicalInfos.DeleteForLab(ehrLabNum);
 			EhrLabSpecimens.DeleteForLab(ehrLabNum);
+			EhrLabImages.DeleteForLab(ehrLabNum);			
 		}
 
 		//If this table type will exist as cached data, uncomment the CachePattern region below and edit.

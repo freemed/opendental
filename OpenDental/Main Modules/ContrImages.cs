@@ -1365,6 +1365,13 @@ namespace OpenDental {
 						return;
 					}
 				}
+				EhrLab lab=EhrLabImages.GetFirstLabForDocNum(doc.DocNum);
+				if(lab!=null) {
+					string dateSt=lab.ObservationDateTimeStart.PadRight(8,'0').Substring(0,8);//stored in DB as yyyyMMddhhmmss-zzzz
+					DateTime dateT=PIn.Date(dateSt.Substring(4,2)+"/"+dateSt.Substring(6,2)+"/"+dateSt.Substring(0,4));
+					MessageBox.Show(Lan.g(this,"This image is attached to a lab order for this patient on "+dateT.ToShortDateString()+". "+Lan.g(this,"Detach image from this lab order before deleting the image.")));
+					return;
+				}
 			}
 			else if(nodeId.NodeType==ImageNodeType.Mount) {
 				//no security yet for mounts.
@@ -1442,7 +1449,7 @@ namespace OpenDental {
 			}
 			if(nodeId.NodeType==ImageNodeType.Doc || nodeId.NodeType==ImageNodeType.Mount) {
 				//Delete all documents involved in deleting this object.
-				//ImageStoreBase.verbose=verbose;
+				//ImageStoreBase.verbose=verbose;				
 				try {
 					ImageStore.DeleteDocuments(docs,PatFolder);
 				}

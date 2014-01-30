@@ -118,11 +118,13 @@
 			this.comboResultStatus = new System.Windows.Forms.ComboBox();
 			this.label26 = new System.Windows.Forms.Label();
 			this.imageListInfoButton = new System.Windows.Forms.ImageList(this.components);
+			this.butManageImages = new System.Windows.Forms.Button();
 			this.gridResultsCopyTo = new OpenDental.UI.ODGrid();
 			this.gridClinicalInformation = new OpenDental.UI.ODGrid();
 			this.gridNotes = new OpenDental.UI.ODGrid();
 			this.gridSpecimen = new OpenDental.UI.ODGrid();
 			this.gridMain = new OpenDental.UI.ODGrid();
+			this.labelManageImages = new System.Windows.Forms.Label();
 			this.butViewParent = new OpenDental.UI.Button();
 			this.butParentPicker = new OpenDental.UI.Button();
 			this.butServicePicker = new OpenDental.UI.Button();
@@ -1046,6 +1048,17 @@
 			this.imageListInfoButton.TransparentColor = System.Drawing.Color.Transparent;
 			this.imageListInfoButton.Images.SetKeyName(0, "iButton_16px.png");
 			// 
+			// butManageImages
+			// 
+			this.butManageImages.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butManageImages.Location = new System.Drawing.Point(95, 661);
+			this.butManageImages.Name = "butManageImages";
+			this.butManageImages.Size = new System.Drawing.Size(93, 24);
+			this.butManageImages.TabIndex = 264;
+			this.butManageImages.Text = "Manage Images";
+			this.butManageImages.UseVisualStyleBackColor = true;
+			this.butManageImages.Click += new System.EventHandler(this.butManageImages_Click);
+			// 
 			// gridResultsCopyTo
 			// 
 			this.gridResultsCopyTo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -1113,6 +1126,16 @@
 			this.gridMain.TranslationName = null;
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
+			// 
+			// labelManageImages
+			// 
+			this.labelManageImages.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.labelManageImages.Location = new System.Drawing.Point(194, 665);
+			this.labelManageImages.Name = "labelManageImages";
+			this.labelManageImages.Size = new System.Drawing.Size(321, 17);
+			this.labelManageImages.TabIndex = 269;
+			this.labelManageImages.Text = "Must save lab order one time before managing images";
+			this.labelManageImages.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// butViewParent
 			// 
@@ -1194,6 +1217,8 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(974, 696);
+			this.Controls.Add(this.labelManageImages);
+			this.Controls.Add(this.butManageImages);
 			this.Controls.Add(this.butViewParent);
 			this.Controls.Add(this.comboResultStatus);
 			this.Controls.Add(this.label26);
@@ -1358,6 +1383,8 @@
 		private System.Windows.Forms.Label label26;
 		private UI.Button butViewParent;
 		private System.Windows.Forms.ImageList imageListInfoButton;
+		private System.Windows.Forms.Button butManageImages;
+		private System.Windows.Forms.Label labelManageImages;
 
 	}
 }

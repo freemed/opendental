@@ -76,6 +76,15 @@ namespace OpenDental {
 			FillComboSpecimenActionCode();
 			//Result Status
 			FillComboResultStatus();
+			//Only allow image editing on existing labs
+			if(EhrLabCur==null || EhrLabCur.EhrLabNum<=0 || EhrLabCur.PatNum <=0) {
+				butManageImages.Enabled=false;
+				labelManageImages.Visible=true;
+			}
+			else {
+				butManageImages.Enabled=true;
+				labelManageImages.Visible=false;
+			}
 		}
 
 		private void FillComboSpecimenActionCode() {
@@ -346,6 +355,11 @@ namespace OpenDental {
 			FormLNE.LabNoteCur.EhrLabNum=EhrLabCur.EhrLabNum;
 			EhrLabCur.ListEhrLabNotes.Add(FormLNE.LabNoteCur);
 			FillGridNotes();
+		}
+
+		private void butManageImages_Click(object sender,EventArgs e) {
+			//EhrLabCur was verifed as valid on the form's load event. No need for validation here.
+			new FormEhrLabImageEdit(EhrLabCur.PatNum,EhrLabCur.EhrLabNum).ShowDialog();
 		}
 
 		private void gridNotes_CellDoubleClick(object sender,ODGridClickEventArgs e) {
