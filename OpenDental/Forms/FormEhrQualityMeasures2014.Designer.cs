@@ -30,10 +30,9 @@
 			this.textDateStart = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
-			this.butSubmit = new System.Windows.Forms.Button();
 			this.comboProv = new System.Windows.Forms.ComboBox();
 			this.label2 = new System.Windows.Forms.Label();
-			this.butShow = new System.Windows.Forms.Button();
+			this.butCreateQRDAs = new System.Windows.Forms.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.SuspendLayout();
 			// 
@@ -90,17 +89,6 @@
 			this.label5.Text = "Period";
 			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// butSubmit
-			// 
-			this.butSubmit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butSubmit.Location = new System.Drawing.Point(246, 408);
-			this.butSubmit.Name = "butSubmit";
-			this.butSubmit.Size = new System.Drawing.Size(84, 23);
-			this.butSubmit.TabIndex = 22;
-			this.butSubmit.Text = "Submit QRDA";
-			this.butSubmit.UseVisualStyleBackColor = true;
-			this.butSubmit.Click += new System.EventHandler(this.butSubmit_Click);
-			// 
 			// comboProv
 			// 
 			this.comboProv.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -119,16 +107,16 @@
 			this.label2.Text = "Provider";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// butShow
+			// butCreateQRDAs
 			// 
-			this.butShow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butShow.Location = new System.Drawing.Point(140, 408);
-			this.butShow.Name = "butShow";
-			this.butShow.Size = new System.Drawing.Size(84, 23);
-			this.butShow.TabIndex = 25;
-			this.butShow.Text = "Show QRDA";
-			this.butShow.UseVisualStyleBackColor = true;
-			this.butShow.Click += new System.EventHandler(this.butShow_Click);
+			this.butCreateQRDAs.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butCreateQRDAs.Location = new System.Drawing.Point(183, 408);
+			this.butCreateQRDAs.Name = "butCreateQRDAs";
+			this.butCreateQRDAs.Size = new System.Drawing.Size(93, 23);
+			this.butCreateQRDAs.TabIndex = 25;
+			this.butCreateQRDAs.Text = "Create QRDAs";
+			this.butCreateQRDAs.UseVisualStyleBackColor = true;
+			this.butCreateQRDAs.Click += new System.EventHandler(this.butCreateQRDAs_Click);
 			// 
 			// gridMain
 			// 
@@ -150,11 +138,10 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(745, 438);
-			this.Controls.Add(this.butShow);
+			this.Controls.Add(this.butCreateQRDAs);
 			this.Controls.Add(this.textDateEnd);
 			this.Controls.Add(this.comboProv);
 			this.Controls.Add(this.label2);
-			this.Controls.Add(this.butSubmit);
 			this.Controls.Add(this.butRefresh);
 			this.Controls.Add(this.textDateStart);
 			this.Controls.Add(this.label1);
@@ -180,9 +167,8 @@
 		private System.Windows.Forms.TextBox textDateStart;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label label5;
-		private System.Windows.Forms.Button butSubmit;
 		private System.Windows.Forms.ComboBox comboProv;
 		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.Button butShow;
+		private System.Windows.Forms.Button butCreateQRDAs;
 	}
 }

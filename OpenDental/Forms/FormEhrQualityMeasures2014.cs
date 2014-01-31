@@ -47,8 +47,10 @@ namespace OpenDental {
 					comboProv.SelectedIndex=i;
 				}
 			}
-			textDateStart.Text=(new DateTime(DateTime.Now.Year,1,1)).ToShortDateString();
-			textDateEnd.Text=(new DateTime(DateTime.Now.Year,12,31)).ToShortDateString();
+			//textDateStart.Text=(new DateTime(DateTime.Now.Year,1,1)).ToShortDateString();
+			//textDateEnd.Text=(new DateTime(DateTime.Now.Year,12,31)).ToShortDateString();
+			textDateStart.Text=(new DateTime(2013,1,1)).ToShortDateString();
+			textDateEnd.Text=(new DateTime(2013,12,31)).ToShortDateString();
 			FillGrid();
 			Cursor=Cursors.Default;
 		}
@@ -69,7 +71,7 @@ namespace OpenDental {
 			_provNum=listProvsKeyed[comboProv.SelectedIndex].ProvNum;
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn("Id",80);
+			ODGridColumn col=new ODGridColumn("Id",100);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("Description",200);
 			gridMain.Columns.Add(col);
@@ -117,7 +119,7 @@ namespace OpenDental {
 			Cursor=Cursors.Default;
 		}
 
-		private void butShow_Click(object sender,EventArgs e) {
+		private void butCreateQRDAs_Click(object sender,EventArgs e) {
 			if(comboProv.SelectedIndex==-1) {
 				MsgBox.Show(this,"Please select a provider first.");
 				return;
@@ -131,19 +133,42 @@ namespace OpenDental {
 				MsgBox.Show(this,"The values in the grid do not apply to the provider selected.  Click Refresh first.");
 				return;
 			}
-			string qrda="";
+			FolderBrowserDialog fbd = new FolderBrowserDialog();
+			if(fbd.ShowDialog()!=DialogResult.OK) {
+				return;
+			}
+			string folderPath=fbd.SelectedPath+"\\"+"CQMs_"+DateTime.Today.ToString("MM_dd_yyyy");
+			if(System.IO.Directory.Exists(folderPath)) {//if the folder already exists
+				//find a unique folder name
+				int uniqueID=1;
+				string originalPath=folderPath;
+				do {
+					folderPath=originalPath+"_"+uniqueID.ToString();
+					uniqueID++;
+				}
+				while(System.IO.Directory.Exists(folderPath));
+			}
+			try {
+				System.IO.Directory.CreateDirectory(folderPath);
+				for(int i=0;i<listQ.Count;i++) {
+					System.IO.Directory.CreateDirectory(folderPath+"\\Measure_"+listQ[i].Id);
+				}
+			}
+			catch(Exception ex) {
+				MessageBox.Show("Folder was not created: "+ex.Message);
+				return;
+			}
 			Cursor=Cursors.WaitCursor;
 			try {
-				qrda=QualityMeasures.GenerateQRDA(listQ,_provNum,_dateStart,_dateEnd);
+				QualityMeasures.GenerateQRDA(listQ,_provNum,_dateStart,_dateEnd,folderPath);//folderPath is a new directory created within the chosen directory
 			}
 			catch(Exception ex) {
 				Cursor=Cursors.Default;
 				MessageBox.Show(ex.Message);
 				return;
 			}
-			MsgBoxCopyPaste MsgBoxCP = new MsgBoxCopyPaste(qrda);
 			Cursor=Cursors.Default;
-			MsgBoxCP.ShowDialog();
+			MsgBox.Show(this,"QRDA files have been created within the selected directory.");
 		}
 
 		private void butSubmit_Click(object sender,EventArgs e) {

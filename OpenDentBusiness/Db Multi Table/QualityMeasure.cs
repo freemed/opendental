@@ -26,6 +26,11 @@ namespace OpenDentBusiness {
 		public string NumeratorExplain;
 		public string ExclusionsExplain;
 		public string ExceptionsExplain;
+		public string eMeasureTitle;
+		public string eMeasureVNeutralId;
+		public string eMeasureVSpecificId;
+		public string eMeasureVersion;
+		public string eMeasureNum;
 		public List<EhrCqmPatient> ListEhrPats;
 		public Dictionary<long,List<EhrCqmEncounter>> DictPatNumListEncounters;
 		public Dictionary<long,List<EhrCqmProc>> DictPatNumListProcs;
@@ -161,7 +166,11 @@ namespace OpenDentBusiness {
 		public string Explanation;
 
 		public EhrCqmPatient Copy() {
-			return (EhrCqmPatient)this.MemberwiseClone();
+			EhrCqmPatient ehrCqmPatient=(EhrCqmPatient)this.MemberwiseClone();
+			for(int i=0;i<ListPatientRaces.Count;i++) {
+				ehrCqmPatient.ListPatientRaces.Add(ListPatientRaces[i].Clone());
+			}
+			return ehrCqmPatient;
 		}
 
 		public EhrCqmPatient() {
@@ -220,7 +229,7 @@ namespace OpenDentBusiness {
 		public string ValueSetName;
 		public string ValueSetOID;
 		public string PatNote;//will be blank if vaccinepat object
-		public bool NotGiven;
+		public VaccineCompletionStatus CompletionStatus;
 		public DateTime DateStart;
 		public DateTime DateStop;
 	}

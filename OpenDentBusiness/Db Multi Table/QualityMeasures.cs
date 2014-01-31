@@ -31,8 +31,12 @@ namespace OpenDentBusiness {
 		private static XmlWriter _x=null;
 		///<summary>This global variable tells the helper functions which of the above XmlWriters to use.  If true, then the _w writer is modified, false=_x.</summary>
 		private static bool _isWriterW=true;
+		//These are the internal OID roots used for "id" entries in GenerateQrda_xml().
+		private static string _strOIDInternalRoot;
 		private static string _strOIDInternalCQMRoot;
-		///<summary>Instantiated each time GenerateQrda_xml() is called. Used to generate unique "id" element "root" attribute identifiers. The Ids in this list are random GUIDs which are 36 characters in length.</summary>
+		private static string _strOIDInternalPatRoot;
+		private static string _strOIDInternalProvRoot;
+		///<summary>Instantiated each time GenerateQrda_xml() is called. Used to generate unique "id" element "root" attribute identifiers. The Ids in this list are random GUIDs which are 36 characters in length.  They are used to uniquely identify the QRDA documents.</summary>
 		private static HashSet<string> _hashQrdaGuids;
 
 		///<summary>Generates a list of all the quality measures for 2011.  Performs all calculations and manipulations.  Returns list for viewing/output.</summary>
@@ -79,12 +83,16 @@ namespace OpenDentBusiness {
 			_measureWeightAssessAll=new QualityMeasure();
 			_measureWeightAssess3To11=new QualityMeasure();
 			_measureWeightAssess12To16=new QualityMeasure();
+#if DEBUG
 			System.Diagnostics.Stopwatch s=new System.Diagnostics.Stopwatch();
 			System.Diagnostics.Stopwatch stot=new System.Diagnostics.Stopwatch();
 			_elapsedtimetext="Elapsed time for each measure.\r\n";
 			stot.Restart();
+#endif
 			for(int i=0;i<Enum.GetValues(typeof(QualityType2014)).Length;i++) {
+#if DEBUG
 				s.Restart();
+#endif
 				measureCur=GetEhrCqmData((QualityType2014)i,dateStart,dateEnd,provNum);
 				measureCur.Type2014=(QualityType2014)i;
 				measureCur.Id=GetId2014(measureCur.Type2014);
@@ -116,14 +124,23 @@ namespace OpenDentBusiness {
 					measureCur.NumeratorExplain=GetNumeratorExplain2014(measureCur.Type2014);
 					measureCur.ExclusionsExplain=GetExclusionsExplain2014(measureCur.Type2014);
 					measureCur.ExceptionsExplain=GetExceptionsExplain2014(measureCur.Type2014);
+					measureCur.eMeasureNum=GetEMeasureNum(measureCur.Type2014);
+					measureCur.eMeasureTitle=GetEMeasureTitle(measureCur.Type2014);
+					measureCur.eMeasureVersion=GetEMeasureVersion(measureCur.Type2014);
+					measureCur.eMeasureVNeutralId=GetEMeasureVNeutralId(measureCur.Type2014);
+					measureCur.eMeasureVSpecificId=GetEMeasureVSpecificId(measureCur.Type2014);
 				}
 				list.Add(measureCur);
+#if DEBUG
 				s.Stop();
 				_elapsedtimetext+=((QualityType2014)i).ToString()+": "+s.Elapsed.ToString()+"\r\n";
+#endif
 			}
+#if DEBUG
 			stot.Stop();
 			_elapsedtimetext+="Total elapsed time: "+stot.Elapsed.ToString();
-			System.Windows.Forms.MessageBox.Show(_elapsedtimetext);
+			//System.Windows.Forms.MessageBox.Show(_elapsedtimetext);
+#endif
 			return list;
 		}
 
@@ -199,17 +216,17 @@ namespace OpenDentBusiness {
 				case QualityType2014.MedicationsEntered:
 					return "68";
 				case QualityType2014.WeightOver65:
-					return "69 Pop. 1";
+					return "69AgeOver64";
 				case QualityType2014.WeightAdult:
-					return "69 Pop. 2";
+					return "69Age18To64";
 				case QualityType2014.CariesPrevent:
-					return "74 Pop. All";
+					return "74All";
 				case QualityType2014.CariesPrevent_1:
-					return "74 Pop. 1";
+					return "74Age0To5";
 				case QualityType2014.CariesPrevent_2:
-					return "74 Pop. 2";
+					return "74Age6To12";
 				case QualityType2014.CariesPrevent_3:
-					return "74 Pop. 3";
+					return "74Age13To20";
 				case QualityType2014.ChildCaries:
 					return "75";
 				case QualityType2014.Pneumonia:
@@ -219,23 +236,23 @@ namespace OpenDentBusiness {
 				case QualityType2014.Influenza:
 					return "147";
 				case QualityType2014.WeightChild_1_1:
-					return "155-1 Pop. All";
+					return "155_1All";
 				case QualityType2014.WeightChild_1_2:
-					return "155-2 Pop. All";
+					return "155_2All";
 				case QualityType2014.WeightChild_1_3:
-					return "155-3 Pop. All";
+					return "155_3All";
 				case QualityType2014.WeightChild_2_1:
-					return "155-1 Pop. 1";
+					return "155_1Age3To11";
 				case QualityType2014.WeightChild_2_2:
-					return "155-2 Pop. 1";
+					return "155_2Age3To11";
 				case QualityType2014.WeightChild_2_3:
-					return "155-3 Pop. 1";
+					return "155_3Age3To11";
 				case QualityType2014.WeightChild_3_1:
-					return "155-1 Pop. 2";
+					return "155_1Age12To17";
 				case QualityType2014.WeightChild_3_2:
-					return "155-2 Pop. 2";
+					return "155_2Age12To17";
 				case QualityType2014.WeightChild_3_3:
-					return "155-3 Pop. 2";
+					return "155_3Age12To17";
 				case QualityType2014.BloodPressureManage:
 					return "165";
 				default:
@@ -3843,19 +3860,22 @@ namespace OpenDentBusiness {
 			return retval;
 		}
 
-		///<summary>Returns all vaccinepat objects for pneumonia and influenza CQMs.  These are basically just medicationpat objects, so we will use the same object with two optional fields to identify them as vaccinepats instead of medicationpats.  The isGiven bool set to true will return only those with the Not Given box unchecked.  If isGiven=false, all will be returned and the logic to determine whether it was given or not will take place in calculation.  The only time not given vaccines will be checked will be in the influenza vaccine measure.</summary>
+		///<summary>Returns all vaccinepat objects for pneumonia and influenza CQMs.  These are basically just medicationpat objects, so we will use the same object with two optional fields to identify them as vaccinepats instead of medicationpats.  The isGiven bool set to true will return only those with the CompletionStatus=0 (complete).  If isGiven=false, all will be returned and the logic to determine whether it was given or not will take place in calculation.  The only time we want vaccines with a status other than complete is when we are looking for vaccines NotAdministered in the influenza vaccine measure.  These NotAdministered vaccines will be due to an intolerance or allergy and entered as such.</summary>
 		private static Dictionary<long,List<EhrCqmMedicationPat>> GetVaccines(List<long> listPatNums,List<string> listValueSetOIDs,DateTime dateStart,DateTime dateEnd,bool isGiven) {
 			Dictionary<long,List<EhrCqmMedicationPat>> retval=new Dictionary<long,List<EhrCqmMedicationPat>>();
 			//if no patients, return a new empty dictionary
 			if(listPatNums!=null && listPatNums.Count==0) {
 				return retval;
 			}
-			string command="SELECT vaccinepat.VaccinePatNum,vaccinepat.PatNum,vaccinepat.DateTimeStart,vaccinepat.DateTimeEnd,vaccinedef.CVXCode,vaccinepat.NotGiven "
+			string command="SELECT vaccinepat.VaccinePatNum,vaccinepat.PatNum,vaccinepat.DateTimeStart,vaccinepat.DateTimeEnd,vaccinedef.CVXCode,vaccinepat.CompletionStatus "
 				+"FROM vaccinepat "
 				+"INNER JOIN vaccinedef ON vaccinepat.VaccineDefNum=vaccinedef.VaccineDefNum "
 				+"WHERE DATE(vaccinepat.DateTimeStart) BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" ";
 			if(isGiven) {
-				command+="AND vaccinepat.NotGiven=0 AND vaccinepat.CompletionStatus=0 ";//NotGiven=false and CompletionStatus=0 (complete)
+				command+="AND vaccinepat.CompletionStatus=0 ";//CompletionStatus=0 (complete)
+			}
+			else {
+				command+="AND vaccinepat.CompletionStatus IN(0,2) ";//CompletionStatus=0 (complete) or 2 (NotAdministered), we do not care about refused or partially administered for our measures
 			}
 			if(listPatNums!=null && listPatNums.Count>0) {
 				command+="AND vaccinepat.PatNum IN("+string.Join(",",listPatNums)+") ";
@@ -3886,7 +3906,7 @@ namespace OpenDentBusiness {
 				ehrVacPatCur.EhrCqmVaccinePatNum=PIn.Long(tableAllVaccinePats.Rows[i]["VaccinePatNum"].ToString());
 				ehrVacPatCur.PatNum=PIn.Long(tableAllVaccinePats.Rows[i]["PatNum"].ToString());
 				ehrVacPatCur.CVXCode=tableAllVaccinePats.Rows[i]["CVXCode"].ToString();
-				ehrVacPatCur.NotGiven=PIn.Bool(tableAllVaccinePats.Rows[i]["NotGiven"].ToString());
+				ehrVacPatCur.CompletionStatus=(VaccineCompletionStatus)PIn.Int(tableAllVaccinePats.Rows[i]["CompletionStatus"].ToString());
 				ehrVacPatCur.DateStart=PIn.DateT(tableAllVaccinePats.Rows[i]["DateTimeStart"].ToString());
 				ehrVacPatCur.DateStop=PIn.DateT(tableAllVaccinePats.Rows[i]["DateTimeEnd"].ToString());
 				EhrCode ehrCodeCur=dictVaccinePatNumEhrCode[ehrVacPatCur.EhrCqmVaccinePatNum];
@@ -4359,8 +4379,8 @@ namespace OpenDentBusiness {
 						}
 						//The list of medicationpats will contain only meds from the value set 2.16.840.1.113883.3.526.3.1254 - Influenza Vaccine Grouping Value Set
 						//But will be for any date in date range 0001-01-01 through 91 days after measurement period start date
-						//Those with NotGiven=false, and took place <= 92 days before start through <= 91 days after start date range and during "Occurrence A of.." event will be used for numerator
-						//Those with NotGiven=true will be considered allergy or intolerance and used in exceptions
+						//Those with CompletionStatus=Complete, and took place <= 92 days before start through <= 91 days after start date range and during "Occurrence A of.." event will be used for numerator
+						//Those with CompletionStatus=NotAdministered will be considered allergy or intolerance and used in exceptions
 						List<EhrCqmMedicationPat> listAllMedPatsCur=new List<EhrCqmMedicationPat>();
 						if(alldata.DictPatNumListMedPats.ContainsKey(patNumCur)) {
 							listAllMedPatsCur=alldata.DictPatNumListMedPats[patNumCur];
@@ -4418,7 +4438,7 @@ namespace OpenDentBusiness {
 						}
 						//apply numerator meds
 						for(int j=0;j<listAllMedPatsCur.Count;j++) {//already only consists of meds from value set 2.16.840.1.113883.3.526.3.1254 - Influenza Vaccine Grouping Value Set
-							if(listAllMedPatsCur[j].NotGiven) {
+							if(listAllMedPatsCur[j].CompletionStatus==VaccineCompletionStatus.NotAdministered) {//status other than complete, skip
 								continue;
 							}
 							for(int k=0;k<listOccurrenceADates.Count;k++) {
@@ -4522,7 +4542,7 @@ namespace OpenDentBusiness {
 							continue;
 						}
 						for(int j=0;j<listAllMedPatsCur.Count;j++) {
-							if(!listAllMedPatsCur[j].NotGiven) {//if given, not an allergy or intolerance entry
+							if(listAllMedPatsCur[j].CompletionStatus==VaccineCompletionStatus.Complete) {//Only looking for NotAdministered, if status=Complete, skip
 								continue;
 							}
 							for(int k=0;k<listOccurrenceADates.Count;k++) {
@@ -5212,8 +5232,263 @@ BMI 18.5-25.";
 			}
 		}
 
+		private static string GetEMeasureTitle(QualityType2014 qtype) {
+			//No need to check RemotingRole; no call to db.
+			switch(qtype) {
+				case QualityType2014.MedicationsEntered:
+					return "Documentation of Current Medications in the Medical Record";
+				case QualityType2014.WeightOver65:
+					return "Preventive Care and Screening: Body Mass Index (BMI) Screening and Follow-Up: age 65 and over";
+				case QualityType2014.WeightAdult:
+					return "Preventive Care and Screening: Body Mass Index (BMI) Screening and Follow-Up: age 18 to 64";
+				case QualityType2014.CariesPrevent:
+					return "Primary Caries Prevention Intervention as Offered by Primary Care Providers, including Dentists";
+				case QualityType2014.CariesPrevent_1:
+					return "Primary Caries Prevention Intervention as Offered by Primary Care Providers, including Dentists: age 0 to 5";
+				case QualityType2014.CariesPrevent_2:
+					return "Primary Caries Prevention Intervention as Offered by Primary Care Providers, including Dentists: age 6 to 12";
+				case QualityType2014.CariesPrevent_3:
+					return "Primary Caries Prevention Intervention as Offered by Primary Care Providers, including Dentists: age 13 to 20";
+				case QualityType2014.ChildCaries:
+					return "Children Who Have Dental Decay or Cavities";
+				case QualityType2014.Pneumonia:
+					return "Pneumonia Vaccination Status for Older Adults";
+				case QualityType2014.TobaccoCessation:
+					return "Preventive Care and Screening: Tobacco Use: Screening and Cessation Intervention";
+				case QualityType2014.Influenza:
+					return "Preventive Care and Screening: Influenza Immunization";
+				case QualityType2014.WeightChild_1_1:
+					return "Weight Assessment and Counseling for Nutrition and Physical Activity for Children and Adolescents: Height, Weight, and BMI: age 3 to 16";
+				case QualityType2014.WeightChild_2_1:
+					return "Weight Assessment and Counseling for Nutrition and Physical Activity for Children and Adolescents: Height, Weight, and BMI: age 3 to 11";
+				case QualityType2014.WeightChild_3_1:
+					return "Weight Assessment and Counseling for Nutrition and Physical Activity for Children and Adolescents: Height, Weight, and BMI: age 12 to 16";
+				case QualityType2014.WeightChild_1_2:
+					return "Weight Assessment and Counseling for Nutrition and Physical Activity for Children and Adolescents: Counseled for Nutrition: age 3 to 16";
+				case QualityType2014.WeightChild_2_2:
+					return "Weight Assessment and Counseling for Nutrition and Physical Activity for Children and Adolescents: Counseled for Nutrition: age 3 to 11";
+				case QualityType2014.WeightChild_3_2:
+					return "Weight Assessment and Counseling for Nutrition and Physical Activity for Children and Adolescents: Counseled for Nutrition: age 12 to 16";
+				case QualityType2014.WeightChild_1_3:
+					return "Weight Assessment and Counseling for Nutrition and Physical Activity for Children and Adolescents: Counseled for Physical Activity: age 3 to 16";
+				case QualityType2014.WeightChild_2_3:
+					return "Weight Assessment and Counseling for Nutrition and Physical Activity for Children and Adolescents: Counseled for Physical Activity: age 3 to 11";
+				case QualityType2014.WeightChild_3_3:
+					return "Weight Assessment and Counseling for Nutrition and Physical Activity for Children and Adolescents: Counseled for Physical Activity: age 12 to 16";
+				case QualityType2014.BloodPressureManage:
+					return "Controlling High Blood Pressure";
+				default:
+					throw new ApplicationException("Type not found: "+qtype.ToString());
+			}
+		}
+
+		private static string GetEMeasureNum(QualityType2014 qtype) {
+			//No need to check RemotingRole; no call to db.
+			switch(qtype) {
+				case QualityType2014.MedicationsEntered:
+					return "68";
+				case QualityType2014.WeightOver65:
+				case QualityType2014.WeightAdult:
+					return "69";
+				case QualityType2014.CariesPrevent:
+				case QualityType2014.CariesPrevent_1:
+				case QualityType2014.CariesPrevent_2:
+				case QualityType2014.CariesPrevent_3:
+					return "74";
+				case QualityType2014.ChildCaries:
+					return "75";
+				case QualityType2014.Pneumonia:
+					return "127";
+				case QualityType2014.TobaccoCessation:
+					return "138";
+				case QualityType2014.Influenza:
+					return "147";
+				case QualityType2014.WeightChild_1_1:
+				case QualityType2014.WeightChild_2_1:
+				case QualityType2014.WeightChild_3_1:
+				case QualityType2014.WeightChild_1_2:
+				case QualityType2014.WeightChild_2_2:
+				case QualityType2014.WeightChild_3_2:
+				case QualityType2014.WeightChild_1_3:
+				case QualityType2014.WeightChild_2_3:
+				case QualityType2014.WeightChild_3_3:
+					return "155";
+				case QualityType2014.BloodPressureManage:
+					return "165";
+				default:
+					throw new ApplicationException("Type not found: "+qtype.ToString());
+			}
+		}
+
+		private static string GetEMeasureVSpecificId(QualityType2014 qtype) {
+			//No need to check RemotingRole; no call to db.
+			switch(qtype) {
+				case QualityType2014.MedicationsEntered:
+					return "40280381-3E93-D1AF-013E-A36090B72CC8";
+				case QualityType2014.WeightOver65:
+				case QualityType2014.WeightAdult:
+					return "40280381-3E93-D1AF-013E-D6E2B772150D";
+				case QualityType2014.CariesPrevent:
+				case QualityType2014.CariesPrevent_1:
+				case QualityType2014.CariesPrevent_2:
+				case QualityType2014.CariesPrevent_3:
+					return "40280381-3D61-56A7-013E-8ACBFE873BCB";
+				case QualityType2014.ChildCaries:
+					return "40280381-3D61-56A7-013E-8F2F5AD054E2";
+				case QualityType2014.Pneumonia:
+					return "40280381-3D61-56A7-013E-66A79D4A4A23";
+				case QualityType2014.TobaccoCessation:
+					return "40280381-3D61-56A7-013E-5CD94A4D64FA";
+				case QualityType2014.Influenza:
+					return "40280381-3D61-56A7-013E-57F49972361A";
+				case QualityType2014.WeightChild_1_1:
+				case QualityType2014.WeightChild_2_1:
+				case QualityType2014.WeightChild_3_1:
+				case QualityType2014.WeightChild_1_2:
+				case QualityType2014.WeightChild_2_2:
+				case QualityType2014.WeightChild_3_2:
+				case QualityType2014.WeightChild_1_3:
+				case QualityType2014.WeightChild_2_3:
+				case QualityType2014.WeightChild_3_3:
+					return "40280381-3D61-56A7-013E-5D530FD26D47";
+				case QualityType2014.BloodPressureManage:
+					return "40280381-3D61-56A7-013E-66BC02DA4DEE";
+				default:
+					throw new ApplicationException("Type not found: "+qtype.ToString());
+			}
+		}
+
+		private static string GetEMeasureVNeutralId(QualityType2014 qtype) {
+			//No need to check RemotingRole; no call to db.
+			switch(qtype) {
+				case QualityType2014.MedicationsEntered:
+					return "9a032d9c-3d9b-11e1-8634-00237d5bf174";
+				case QualityType2014.WeightOver65:
+				case QualityType2014.WeightAdult:
+					return "9a031bb8-3d9b-11e1-8634-00237d5bf174";
+				case QualityType2014.CariesPrevent:
+				case QualityType2014.CariesPrevent_1:
+				case QualityType2014.CariesPrevent_2:
+				case QualityType2014.CariesPrevent_3:
+					return "0b81b6ba-3b30-41bf-a2f3-95bdc9f558f2";
+				case QualityType2014.ChildCaries:
+					return "61947125-4376-4a7b-ab7a-ac2be9bd9138";
+				case QualityType2014.Pneumonia:
+					return "59657b9b-01bf-4979-a090-8534da1d0516";
+				case QualityType2014.TobaccoCessation:
+					return "e35791df-5b25-41bb-b260-673337bc44a8";
+				case QualityType2014.Influenza:
+					return "a244aa29-7d11-4616-888a-86e376bfcc6f";
+				case QualityType2014.WeightChild_1_1:
+				case QualityType2014.WeightChild_2_1:
+				case QualityType2014.WeightChild_3_1:
+				case QualityType2014.WeightChild_1_2:
+				case QualityType2014.WeightChild_2_2:
+				case QualityType2014.WeightChild_3_2:
+				case QualityType2014.WeightChild_1_3:
+				case QualityType2014.WeightChild_2_3:
+				case QualityType2014.WeightChild_3_3:
+					return "0b63f730-25d6-4248-b11f-8c09c66a04eb";
+				case QualityType2014.BloodPressureManage:
+					return "abdc37cc-bac6-4156-9b91-d1be2c8b7268";
+				default:
+					throw new ApplicationException("Type not found: "+qtype.ToString());
+			}
+		}
+
+		private static string GetEMeasureVersion(QualityType2014 qtype) {
+			//No need to check RemotingRole; no call to db.
+			switch(qtype) {
+				case QualityType2014.MedicationsEntered:
+				case QualityType2014.CariesPrevent:
+				case QualityType2014.CariesPrevent_1:
+				case QualityType2014.CariesPrevent_2:
+				case QualityType2014.CariesPrevent_3:
+					return "3";
+				case QualityType2014.WeightOver65:
+				case QualityType2014.WeightAdult:
+				case QualityType2014.ChildCaries:
+				case QualityType2014.Pneumonia:
+				case QualityType2014.TobaccoCessation:
+				case QualityType2014.Influenza:
+				case QualityType2014.WeightChild_1_1:
+				case QualityType2014.WeightChild_2_1:
+				case QualityType2014.WeightChild_3_1:
+				case QualityType2014.WeightChild_1_2:
+				case QualityType2014.WeightChild_2_2:
+				case QualityType2014.WeightChild_3_2:
+				case QualityType2014.WeightChild_1_3:
+				case QualityType2014.WeightChild_2_3:
+				case QualityType2014.WeightChild_3_3:
+				case QualityType2014.BloodPressureManage:
+					return "2";
+				default:
+					throw new ApplicationException("Type not found: "+qtype.ToString());
+			}
+		}
+
+		///<summary>Gets count of gender, race, ethnicity, and payer type.</summary>
+		private static Dictionary<string,int> GetSupplementalCounts(List<EhrCqmPatient> listPats) {
+			Dictionary<string,int> dictCategoryCount=new Dictionary<string,int>();
+			//add races, ethnicities, and genders to the dictionary with starting counts of 0
+			dictCategoryCount.Add(PatRace.AfricanAmerican.ToString(),0);
+			dictCategoryCount.Add(PatRace.AmericanIndian.ToString(),0);
+			dictCategoryCount.Add(PatRace.Asian.ToString(),0);
+			dictCategoryCount.Add(PatRace.White.ToString(),0);
+			dictCategoryCount.Add(PatRace.HawaiiOrPacIsland.ToString(),0);
+			dictCategoryCount.Add(PatRace.DeclinedToSpecifyRace.ToString(),0);
+			dictCategoryCount.Add(PatRace.Other.ToString(),0);
+			dictCategoryCount.Add(PatRace.Hispanic.ToString(),0);
+			dictCategoryCount.Add(PatRace.NotHispanic.ToString(),0);
+			dictCategoryCount.Add(PatRace.DeclinedToSpecifyEthnicity.ToString(),0);
+			dictCategoryCount.Add(PatientGender.Male.ToString(),0);
+			dictCategoryCount.Add(PatientGender.Female.ToString(),0);
+			dictCategoryCount.Add(PatientGender.Unknown.ToString(),0);
+			dictCategoryCount.Add("Medicare",0);
+			dictCategoryCount.Add("Medicaid",0);
+			dictCategoryCount.Add("Other Insurance",0);
+			dictCategoryCount.Add("Self-pay",0);
+			for(int i=0;i<listPats.Count;i++) {
+				if(listPats[i].ListPatientRaces.Count==1) {
+					if(dictCategoryCount.ContainsKey(listPats[i].ListPatientRaces[0].Race.ToString())) {
+						dictCategoryCount[listPats[i].ListPatientRaces[0].Race.ToString()]++;
+					}
+				}
+				else if(listPats[i].ListPatientRaces.Count>1) {
+					dictCategoryCount[PatRace.Other.ToString()]++;
+				}
+				if(listPats[i].Ethnicity!=null) {
+					if(dictCategoryCount.ContainsKey(listPats[i].Ethnicity.ToString())) {
+						dictCategoryCount[listPats[i].Ethnicity.ToString()]++;
+					}
+				}
+				dictCategoryCount[listPats[i].EhrCqmPat.Gender.ToString()]++;
+				if(listPats[i].PayorSopCode==null || listPats[i].PayorSopCode=="") {
+					//no payer type set, Self-pay
+					dictCategoryCount["Self-pay"]++;
+				}
+				else {
+					switch(listPats[i].PayorSopCode.Substring(0,1)) {//Get hierarchical code representing payer type main category, first character is type
+						case "1":
+							dictCategoryCount["Medicare"]++;
+							break;
+						case "2":
+							dictCategoryCount["Medicaid"]++;
+							break;
+						case "8":
+							dictCategoryCount["Self-pay"]++;
+							break;
+						default:
+							dictCategoryCount["Other"]++;
+							break;
+					}
+				}
+			}
+			return dictCategoryCount;
+		}
+
 		///<summary>listQMs will be a list of 9 QualityMeasure objects for the selected CQMs.  Those objects will have every encounter, procedure, problem, etc. required for creating the category I and category III QRDA documents.  Category I is the patient level documents, and will be one document for every patient in the initial patient population for the specific measure.  We will group the category I documents in one folder for each measure, and either zip each folder or simply zip the folders manually after they have been created.  The Category III documents can either be one per measure, or one document containing the aggregate information for each of the selected measures.  Each encounter, procedure, etc. may appear in the Category I document multiple times if, for instance, the encounter falls into more than one value set and qualifies the patient for the initial patient population for more than one measure.  This means we will create one Cat I patient level document per patient and have a copy of it in every folder for every measure where the patient is in the initial patient population.  The Cat I document will also reference all 9 of our CQMs.</summary>
-		public static string GenerateQRDA(List<QualityMeasure> listQMs,long provNum,DateTime dateStart,DateTime dateEnd) {
+		public static void GenerateQRDA(List<QualityMeasure> listQMs,long provNum,DateTime dateStart,DateTime dateEnd,string folderRoot) {
 			if(listQMs==null || listQMs.Count==0) {//this should never happen
 				throw new ApplicationException("No measures to report on.");
 			}
@@ -5225,7 +5500,19 @@ BMI 18.5-25.";
 			if(_provOutQrda==null) {
 				throw new ApplicationException("Invalid provider selected.");
 			}
+			_strOIDInternalRoot=OIDInternals.GetForType(IdentifierType.Root).IDRoot;
 			_strOIDInternalCQMRoot=OIDInternals.GetForType(IdentifierType.CqmItem).IDRoot;
+			if(_strOIDInternalCQMRoot=="") {
+				throw new ApplicationException("Internal CQM item OID root is missing.  Go to Setup | EHR and add OIDs.");
+			}
+			_strOIDInternalProvRoot=OIDInternals.GetForType(IdentifierType.Provider).IDRoot;
+			if(_strOIDInternalProvRoot=="") {
+				throw new ApplicationException("Internal Provider OID root is missing.  Go to Setup | EHR and add OIDs.");
+			}
+			_strOIDInternalPatRoot=OIDInternals.GetForType(IdentifierType.Patient).IDRoot;
+			if(_strOIDInternalPatRoot=="") {
+				throw new ApplicationException("Internal Patient OID root is missing.  Go to Setup | EHR and add OIDs.");
+			}
 			//create a list of all unique patients who belong to the initial patient population for any of the 9 CQMs
 			List<EhrCqmPatient> listAllEhrPats=new List<EhrCqmPatient>();
 			//create a dictionary linking a patient to the measures to which they belong
@@ -5242,21 +5529,23 @@ BMI 18.5-25.";
 				}
 			}
 			//listAllPats contains every unique patient who belongs to one of the initial patient population for any of the 9 CQMs
-			//for(int i=0;i<listAllEhrPats.Count;i++) {
 			StringBuilder strBuilder=new StringBuilder();
 			StringBuilder strBuilderPatDataEntries=new StringBuilder();
-			for(int i=0;i<1;i++) {
+			Dictionary<long,string> dictPatNumXml=new Dictionary<long,string>();
+			_hashQrdaGuids=new HashSet<string>();//The GUIDs are only used to uniquely identify the documents themselves, for other IDs we are using the OIDInternal root and extension
+			XmlWriterSettings xmlSettings;
+			#region Cateogry I QRDA Documents
+			for(int i=0;i<listAllEhrPats.Count;i++) {
 				strBuilder=new StringBuilder();
 				strBuilderPatDataEntries=new StringBuilder();
 				EhrCqmPatient ehrPatCur=listAllEhrPats[i];
 				Patient patCur=ehrPatCur.EhrCqmPat;//just to make referencing easier
 				long patNumCur=ehrPatCur.EhrCqmPat.PatNum;//just to make referencing easier
-				_hashQrdaGuids=new HashSet<string>();//The GUIDs only need to be unique within each QRDA document.
-				XmlWriterSettings xmlSettings=new XmlWriterSettings();
+				xmlSettings=new XmlWriterSettings();
 				xmlSettings.Encoding=Encoding.UTF8;
 				xmlSettings.OmitXmlDeclaration=true;
 				xmlSettings.Indent=true;
-				xmlSettings.IndentChars="\t";
+				xmlSettings.IndentChars="   ";
 				xmlSettings.ConformanceLevel=ConformanceLevel.Fragment;
 				using(_w=XmlWriter.Create(strBuilder,xmlSettings)) {
 					//Begin Clinical Document
@@ -5274,9 +5563,9 @@ BMI 18.5-25.";
 					StartAndEnd("typeId","root","2.16.840.1.113883.1.3","extension","POCD_HD000040");//template id to assert use of the CDA standard
 					_w.WriteComment("US General Header Template");
 					TemplateId("2.16.840.1.113883.10.20.22.1.1");
-					_w.WriteComment("QRDA templateId");
+					_w.WriteComment("QRDA Template");
 					TemplateId("2.16.840.1.113883.10.20.24.1.1");
-					_w.WriteComment("QDM-based QRDA templateId");
+					_w.WriteComment("QDM-based QRDA Template");
 					TemplateId("2.16.840.1.113883.10.20.24.1.2");
 					_w.WriteComment("This is the globally unique identifier for this QRDA document");
 					Guid();
@@ -5294,15 +5583,15 @@ BMI 18.5-25.";
 					#region patientRole
 					Start("patientRole");
 					_w.WriteComment("The extension is the patient's Open Dental number, the root is the assigning authority");
-					StartAndEnd("id","extension",patNumCur.ToString(),"root",OIDInternals.GetForType(IdentifierType.Patient).IDRoot);
+					StartAndEnd("id","root",_strOIDInternalPatRoot,"extension",patNumCur.ToString());
 					if(patCur.SSN.Trim().Length==9) {
 						_w.WriteComment("This is the patient's SSN using the HL7 SSN OID");
-						StartAndEnd("id","extension",patCur.SSN.Trim(),"root","2.16.840.1.113883.4.1");//HL7 SSN OID root with patient's SSN if they have a valid one
+						StartAndEnd("id","root","2.16.840.1.113883.4.1","extension",patCur.SSN.Trim());//HL7 SSN OID root with patient's SSN if they have a valid one
 					}
 					string strHICNum=ValidateMedicaidID(patCur.MedicaidID);
 					if(strHICNum!="") {
 						_w.WriteComment("This is the patient's Medicare HIC (Health Insurance Claim) number");
-						StartAndEnd("id","extenstion",strHICNum,"root","2.16.840.1.113883.4.572");
+						StartAndEnd("id","root","2.16.840.1.113883.4.572","extension",strHICNum);
 					}
 					AddressUnitedStates(patCur.Address,patCur.Address2,patCur.City,patCur.State,patCur.Zip,"HP");//Validated
 					if(patCur.WirelessPhone.Trim()!="") {//There is at least one phone, due to validation.
@@ -5422,17 +5711,16 @@ BMI 18.5-25.";
 							strEthnicityCode=ehrPatCur.Ethnicity.CdcrecCode;
 						}
 						else {
-							strEthnicityDescript="ASKU";
 							isDeclinedEthnicity=true;
 						}
 					}
-					else {
+					if(ehrPatCur.Ethnicity==null) {
 						StartAndEnd("ethnicGroupCode","nullFlavor","UNK");
 					}
-					if(isDeclinedEthnicity) {
+					else if(isDeclinedEthnicity) {
 						StartAndEnd("ethnicGroupCode","nullFlavor","ASKU");
 					}
-					else {
+					else if(strEthnicityCode!="" && strEthnicityDescript!=""){
 						StartAndEnd("ethnicGroupCode","code",strEthnicityCode,"displayName",strEthnicityDescript,"codeSystem","2.16.840.1.113883.6.238","codeSystemName","CDC Race and Ethnicity");
 					}
 					#endregion ethnicityGroupCode
@@ -5442,6 +5730,7 @@ BMI 18.5-25.";
 					#endregion patientRole
 					End("recordTarget");
 					#endregion recordTarget
+					#region comments
 					//The author element represents the creator of the clinical document.  The author may be a device, or a person.  Section 4.1.2, page 69.
 					//Participant Scenarios in a QRDA Category I Document (section 5.1.5.3, page 94)
 					//Three possible scenarios given, the first sounds like it applies to us
@@ -5453,13 +5742,14 @@ BMI 18.5-25.";
 					//2.) QRDA is partially constructed automatically by device, partially constructed by quality manager
 					//3.) QRDA is constructed manually (e.g. by an organization that doesn't have an EHR)
 					//We will generate a device author element, a practice custodian element, no informant element, and a Legal Authenticator element using the practice default provider
+					#endregion
 					#region author
 					Start("author");
 					TimeElement("time",DateTime.Now);
 					Start("assignedAuthor");
-					StartAndEnd("id","extension","Open Dental Software","root","2.16.840.1.113883.3.4337");
+					StartAndEnd("id","root","2.16.840.1.113883.3.4337","assigningAuthorityName","HL7 OID Registry");
 					Start("addr");
-					AddressUnitedStates("3995 Fairview Industrial Dr. SE","Suite 110","Salem","OR","97302-1288","WP");
+					AddressUnitedStates("3995 Fairview Industrial Dr. SE","Suite 110","Salem","OR","97302","WP");
 					End("addr");
 					StartAndEnd("telecom","use","WP","value","tel:(503)363-5432");
 					Start("assignedAuthoringDevice");
@@ -5472,11 +5762,10 @@ BMI 18.5-25.";
 					#region custodian
 					//"Represents the organization in charge of maintaining the document." Section 4.1.5, page 77
 					//The custodian is the steward that is entrusted with the care of the document. Every CDA document has exactly one custodian.
-					Provider provCustodian=Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv));
 					Start("custodian");
 					Start("assignedCustodian");
 					Start("representedCustodianOrganization");
-					StartAndEnd("id","root",OIDInternals.GetForType(IdentifierType.Root).IDRoot);//This is the root assigned to the practice, based on the OD root 2.16.840.1.113883.3.4337
+					StartAndEnd("id","root",_strOIDInternalRoot);//This is the root assigned to the practice, based on the OD root 2.16.840.1.113883.3.4337
 					_w.WriteElementString("name",PrefC.GetString(PrefName.PracticeTitle));//Validated
 					string strPracticePhone=PrefC.GetString(PrefName.PracticePhone);//Validated
 					strPracticePhone="("+strPracticePhone.Substring(0,3)+")"+strPracticePhone.Substring(3,3)+"-"+strPracticePhone.Substring(6);
@@ -5493,7 +5782,7 @@ BMI 18.5-25.";
 					StartAndEnd("signatureCode","code","S");
 					Start("assignedEntity");
 					Provider provLegal=Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv));
-					StartAndEnd("id","root","2.16.840.1.113883.4.6","extension",provLegal.NationalProvID);//Validated NPI
+					StartAndEnd("id","root","2.16.840.1.113883.4.6","extension",provLegal.NationalProvID,"assigningAuthorityName","NPI");//Validated NPI
 					AddressUnitedStates(PrefC.GetString(PrefName.PracticeAddress),PrefC.GetString(PrefName.PracticeAddress2),PrefC.GetString(PrefName.PracticeCity),PrefC.GetString(PrefName.PracticeST),PrefC.GetString(PrefName.PracticeZip),"WP");//Validated
 					StartAndEnd("telecom","use","WP","value","tel:"+strPracticePhone);//Validated
 					Start("assignedPerson");
@@ -5516,13 +5805,22 @@ BMI 18.5-25.";
 					#region performer
 					Start("performer","typeCode","PRF");
 					Start("assignedEntity");
-					_w.WriteComment("This is the provider NPI");
-					StartAndEnd("id","root","2.16.840.1.113883.4.6","extension",_provOutQrda.NationalProvID);//Validated NPI.
+					if(_provOutQrda.NationalProvID!="") {
+						_w.WriteComment("This is the provider NPI");
+						StartAndEnd("id","root","2.16.840.1.113883.4.6","extension",_provOutQrda.NationalProvID);
+					}
+					if(_provOutQrda.UsingTIN && _provOutQrda.SSN!="") {
+						_w.WriteComment("This is the provider TIN");
+						StartAndEnd("id","root","2.16.840.1.113883.4.2","extension",_provOutQrda.SSN);
+					}
+					_w.WriteComment("This is the practice OID provider root and Open Dental assigned ProvNum extension");
+					StartAndEnd("id","root",_strOIDInternalProvRoot,"extension",_provOutQrda.ProvNum.ToString());
 					Start("representedOrganization");
-					//we don't currently have an organization level TIN or an organization Facility CMS Certification Number (CCN) so this required element is currently empty
-					//both id's are identified as "SHOULD" elements, so we are not required to have anything in this element
+					//we don't currently have an organization level TIN or an organization Facility CMS Certification Number (CCN)
+					//both id's are identified as "SHOULD" elements.  We will include the practice name
 					//_w.WriteComment("This is the organization TIN");
 					//_w.WriteComment("This is the organization CCN");
+					_w.WriteElementString("name",PrefC.GetString(PrefName.PracticeTitle));//Validated
 					End("representedOrganization");
 					End("assignedEntity");
 					End("performer");
@@ -5534,6 +5832,37 @@ BMI 18.5-25.";
 					_w.WriteComment("QRDA Body");
 					Start("component");
 					Start("structuredBody");
+					#region Reporting Parameters
+					Start("component");
+					Start("section");
+					_w.WriteComment(@"
+					  *****************************************************************
+					  Reporting Parameters Section
+					  *****************************************************************
+					  ");
+					_w.WriteComment("Reporting Parameters Section Template");
+					TemplateId("2.16.840.1.113883.10.20.17.2.1");
+					StartAndEnd("code","code","55187-9","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Reporting Parameters");
+					_w.WriteElementString("title","Reporting Parameters");
+					Start("text");
+					Start("list");
+					_w.WriteElementString("item","Reporting period: "+dateStart.ToString("MMMM dd, yyyy")+" 00:00 - "+dateEnd.ToString("MMMM dd, yyyy")+" 23:59");
+					End("list");
+					End("text");
+					Start("entry","typeCode","DRIV");
+					Start("act","classCode","ACT","moodCode","EVN");
+					_w.WriteComment("Reporting Parameteres Act Template");
+					TemplateId("2.16.840.1.113883.10.20.17.3.8");
+					StartAndEnd("code","code","252116004","codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed,"displayName","Observation Parameters");
+					Start("effectiveTime");
+					StartAndEnd("low","value",dateStart.ToString("yyyyMMdd")+"000000");
+					StartAndEnd("high","value",dateEnd.ToString("yyyyMMdd")+"235959");
+					End("effectiveTime");
+					End("act");
+					End("entry");
+					End("section");
+					End("component");
+					#endregion Reporting Parameters
 					#region Measure Section
 					Start("component");
 					Start("section");
@@ -5542,9 +5871,9 @@ BMI 18.5-25.";
 					  Measure Section
 					  *****************************************************************
 					  ");
-					_w.WriteComment("This is the templateId for Measure Section");
+					_w.WriteComment("Measure Section Template");
 					TemplateId("2.16.840.1.113883.10.20.24.2.2");
-					_w.WriteComment("This is the templateId for Measure Section QDM");
+					_w.WriteComment("Measure Section QDM Template");
 					TemplateId("2.16.840.1.113883.10.20.24.2.3");
 					_w.WriteComment("This is the LOINC code for \"Measure document\". This stays the same for all measure sections required by QRDA standard");
 					StartAndEnd("code","code","55186-1","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Measure Document");
@@ -5562,74 +5891,22 @@ BMI 18.5-25.";
 					End("tr");
 					End("thead");
 					Start("tbody");
-					MeasureTextTableRow("Documentation of Current Medications in the Medical Record","9a032d9c-3d9b-11e1-8634-00237d5bf174","68","3","40280381-3E93-D1AF-013E-A36090B72CC8");
-					MeasureTextTableRow("Preventive Care and Screening: Body Mass Index (BMI) Screening and Follow-Up","9a031bb8-3d9b-11e1-8634-00237d5bf174","69","2","40280381-3E93-D1AF-013E-D6E2B772150D");
-					MeasureTextTableRow("Primary Caries Prevention Intervention as Offered by Primary Care Providers, including Dentists","0b81b6ba-3b30-41bf-a2f3-95bdc9f558f2","74","3","40280381-3D61-56A7-013E-8ACBFE873BCB");
-					MeasureTextTableRow("Children Who Have Dental Decay or Cavities","61947125-4376-4a7b-ab7a-ac2be9bd9138","75","2","40280381-3D61-56A7-013E-8F2F5AD054E2");
-					MeasureTextTableRow("Pneumonia Vaccination Status for Older Adults","59657b9b-01bf-4979-a090-8534da1d0516","127","2","40280381-3D61-56A7-013E-66A79D4A4A23");
-					MeasureTextTableRow("Preventive Care and Screening: Tobacco Use: Screening and Cessation Intervention","e35791df-5b25-41bb-b260-673337bc44a8","138","2","40280381-3D61-56A7-013E-5CD94A4D64FA");
-					MeasureTextTableRow("Preventive Care and Screening: Influenza Immunization","a244aa29-7d11-4616-888a-86e376bfcc6f","147","2","40280381-3D61-56A7-013E-57F49972361A");
-					MeasureTextTableRow("Weight Assessment and Counseling for Nutrition and Physical Activity for Children and Adolescents","0b63f730-25d6-4248-b11f-8c09c66a04eb","155","2","40280381-3D61-56A7-013E-5D530FD26D47");
-					MeasureTextTableRow("Controlling High Blood Pressure","abdc37cc-bac6-4156-9b91-d1be2c8b7268","165","2","40280381-3D61-56A7-013E-66BC02DA4DEE");
+					for(int j=0;j<listQMs.Count;j++) {
+						MeasureTextTableRow(listQMs[j].eMeasureTitle,listQMs[j].eMeasureVNeutralId,listQMs[j].eMeasureNum,listQMs[j].eMeasureVersion,listQMs[j].eMeasureVSpecificId);
+					}
 					End("tbody");
 					End("table");
 					End("text");
 					#endregion text version of eMeasures as table
 					#region eMeasure entries
 					_w.WriteComment("1..* Organizers, each containing a reference to an eMeasure");
-					//measure 68 - Documentation of Current Medications in the Medical Record
-					MeasureEntry("40280381-3E93-D1AF-013E-A36090B72CC8","Documentation of Current Medications in the Medical Record","9a032d9c-3d9b-11e1-8634-00237d5bf174","3");
-					//measure 69 - Preventive Care and Screening: Body Mass Index (BMI) Screening and Follow-Up
-					MeasureEntry("40280381-3E93-D1AF-013E-D6E2B772150D","Preventive Care and Screening: Body Mass Index (BMI) Screening and Follow-Up","9a031bb8-3d9b-11e1-8634-00237d5bf174","2");
-					//measure 74 - Primary Caries Prevention Intervention as Offered by Primary Care Providers, including Dentists
-					MeasureEntry("40280381-3D61-56A7-013E-8ACBFE873BCB","Primary Caries Prevention Intervention as Offered by Primary Care Providers, including Dentists","0b81b6ba-3b30-41bf-a2f3-95bdc9f558f2","3");
-					//measure 75 - Children Who Have Dental Decay or Cavities
-					MeasureEntry("40280381-3D61-56A7-013E-8F2F5AD054E2","Children Who Have Dental Decay or Cavities","61947125-4376-4a7b-ab7a-ac2be9bd9138","2");
-					//measure 127 - Pneumonia Vaccination Status for Older Adults
-					MeasureEntry("40280381-3D61-56A7-013E-66A79D4A4A23","Pneumonia Vaccination Status for Older Adults","59657b9b-01bf-4979-a090-8534da1d0516","2");
-					//measure 138 - Preventive Care and Screening: Tobacco Use: Screening and Cessation Intervention
-					MeasureEntry("40280381-3D61-56A7-013E-5CD94A4D64FA","Preventive Care and Screening: Tobacco Use: Screening and Cessation Intervention","e35791df-5b25-41bb-b260-673337bc44a8","2");
-					//measure 147 - Preventive Care and Screening: Influenza Immunization
-					MeasureEntry("40280381-3D61-56A7-013E-57F49972361A","Preventive Care and Screening: Influenza Immunization","a244aa29-7d11-4616-888a-86e376bfcc6f","2");
-					//measure 155 - Weight Assessment and Counseling for Nutrition and Physical Activity for Children and Adolescents
-					MeasureEntry("40280381-3D61-56A7-013E-5D530FD26D47","Weight Assessment and Counseling for Nutrition and Physical Activity for Children and Adolescents","0b63f730-25d6-4248-b11f-8c09c66a04eb","2");
-					//measure 165 - Controlling High Blood Pressure
-					MeasureEntry("40280381-3D61-56A7-013E-66BC02DA4DEE","Controlling High Blood Pressure","abdc37cc-bac6-4156-9b91-d1be2c8b7268","2");
+					for(int j=0;j<listQMs.Count;j++) {
+						MeasureEntry(listQMs[j].eMeasureVSpecificId,listQMs[j].eMeasureTitle,listQMs[j].eMeasureVNeutralId,listQMs[j].eMeasureVersion);
+					}
 					#endregion eMeasure entries
 					End("section");
 					End("component");
 					#endregion Measure Section
-					#region Reporting Parameters
-					Start("component");
-					Start("section");
-					_w.WriteComment(@"
-					  *****************************************************************
-					  Reporting Parameters Section
-					  *****************************************************************
-					  ");
-					_w.WriteComment("This is the templateId for Reporting Parameters section");
-					TemplateId("2.16.840.1.113883.10.20.17.2.1");
-					StartAndEnd("code","code","55187-9","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemLoinc,"displayName","Reporting Parameters");
-					_w.WriteElementString("title","Reporting Parameters");
-					Start("text");
-					Start("list");
-					_w.WriteElementString("item","Reporting period: "+dateStart.ToString("MMMM dd, yyyy")+" 00:00 - "+dateEnd.ToString("MMMM dd, yyyy")+" 23:59");
-					End("list");
-					End("text");
-					Start("entry","typeCode","DRIV");
-					Start("act","classCode","ACT","moodCode","EVN");
-					_w.WriteComment("This is the templateId for Reporting Parameteres Act");
-					TemplateId("2.16.840.1.113883.10.20.17.3.8");
-					StartAndEnd("code","code","252116004","codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemSnomed,"displayName","Observation Parameters");
-					Start("effectiveTime");
-					StartAndEnd("low","value",dateStart.ToString("yyyyMMdd")+"000000");
-					StartAndEnd("high","value",dateEnd.ToString("yyyyMMdd")+"235959");
-					End("effectiveTime");
-					End("act");
-					End("entry");
-					End("section");
-					End("component");
-					#endregion Reporting Parameters
 					#region Patient Data
 					Start("component");
 					Start("section");
@@ -5638,9 +5915,9 @@ BMI 18.5-25.";
 					  Patient Data Section
 					  *****************************************************************
 					  ");
-					_w.WriteComment("This is the templateId for Patient Data section");
+					_w.WriteComment("Patient Data Section Template");
 					TemplateId("2.16.840.1.113883.10.20.17.2.4");
-					_w.WriteComment("This is the templateId for Patient Data QDM section");
+					_w.WriteComment("Patient Data QDM Section Template");
 					TemplateId("2.16.840.1.113883.10.20.24.2.1");
 					StartAndEnd("code","code","55188-7","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Patient Data");
 					_w.WriteElementString("title","Patient Data");
@@ -5653,98 +5930,129 @@ BMI 18.5-25.";
 					End("thead");
 					Start("tbody");
 					using(_x=XmlWriter.Create(strBuilderPatDataEntries,xmlSettings)) {
+					_x.WriteStartElement("ClinicalDocument","urn:hl7-org:v3");
+					_x.WriteAttributeString("xmlns","xsi",null,"http://www.w3.org/2001/XMLSchema-instance");
+					_x.WriteAttributeString("xsi","schemaLocation",null,"urn:./CDA.xsd");
+					_x.WriteAttributeString("xmlns","voc",null,"urn:hl7-org:v3/voc");
+					_x.WriteAttributeString("xmlns","sdtc",null,"urn:hl7-org:sdtc");
 						List<QualityMeasure> listQMsCur=dictPatNumListQualityMeasures[patNumCur];
 						List<string> listUniqueItemExtensions=new List<string>();
+						//create encounter entries for each measure for this patient
 						for(int j=0;j<listQMsCur.Count;j++) {
-							//create encounter entries for this measure for this patient
-							if(listQMsCur[j].DictPatNumListEncounters.ContainsKey(patNumCur)) {
-								for(int k=0;k<listQMsCur[j].DictPatNumListEncounters[patNumCur].Count;k++) {
-									EhrCqmEncounter encCur=listQMsCur[j].DictPatNumListEncounters[patNumCur][k];
-									if(!listUniqueItemExtensions.Contains(CqmItemAbbreviation.Enc.ToString()+encCur.EhrCqmEncounterNum.ToString())) {
-										listUniqueItemExtensions.Add(CqmItemAbbreviation.Enc.ToString()+encCur.EhrCqmEncounterNum.ToString());
-										Start("tr");
-										_w.WriteElementString("td","Encounter, Performed: "+encCur.ValueSetName+" - "+encCur.DateEncounter.ToShortDateString());
-										End("tr");
-									}
-									GenerateEncounterEntry(encCur);
+							if(!listQMsCur[j].DictPatNumListEncounters.ContainsKey(patNumCur)) {
+								continue;
+							}
+							for(int k=0;k<listQMsCur[j].DictPatNumListEncounters[patNumCur].Count;k++) {
+								EhrCqmEncounter encCur=listQMsCur[j].DictPatNumListEncounters[patNumCur][k];
+								GenerateEncounterEntry(encCur);
+								if(listUniqueItemExtensions.Contains(CqmItemAbbreviation.Enc.ToString()+encCur.EhrCqmEncounterNum.ToString())) {
+									continue;
 								}
+								listUniqueItemExtensions.Add(CqmItemAbbreviation.Enc.ToString()+encCur.EhrCqmEncounterNum.ToString());
+								#region BuildPlainTextVersion
+								Start("tr");
+								_w.WriteElementString("td","Encounter, Performed: "+encCur.ValueSetName+" - "+encCur.DateEncounter.ToShortDateString());
+								End("tr");
+								#endregion BuildPlainTextVersion
 							}
 						}
+						//create intervention entries for each measure for this patient
 						for(int j=0;j<listQMsCur.Count;j++) {
-							//create intervention entries for this measure for this patient
-							if(listQMsCur[j].DictPatNumListInterventions.ContainsKey(patNumCur)) {
-								for(int k=0;k<listQMsCur[j].DictPatNumListInterventions[patNumCur].Count;k++) {
-									EhrCqmIntervention iCur=listQMsCur[j].DictPatNumListInterventions[patNumCur][k];
-									if(!listUniqueItemExtensions.Contains(CqmItemAbbreviation.Ivn.ToString()+iCur.EhrCqmInterventionNum.ToString())) {
-										listUniqueItemExtensions.Add(CqmItemAbbreviation.Ivn.ToString()+iCur.EhrCqmInterventionNum.ToString());
-										Start("tr");
-										_w.WriteElementString("td","Intervention, Performed: "+iCur.ValueSetName);
-										End("tr");
-									}
-									GenerateInterventionEntry(iCur);
-								}
+							if(!listQMsCur[j].DictPatNumListInterventions.ContainsKey(patNumCur)) {
+								continue;
 							}
-							//create ehrmeasureevents for this measure for this patient
-							if(listQMsCur[j].DictPatNumListMeasureEvents.ContainsKey(patNumCur)) {
-								for(int k=0;k<listQMsCur[j].DictPatNumListMeasureEvents[patNumCur].Count;k++) {
-									EhrCqmMeasEvent mCur=listQMsCur[j].DictPatNumListMeasureEvents[patNumCur][k];
-									if(!listUniqueItemExtensions.Contains(CqmItemAbbreviation.MeasEvn.ToString()+mCur.EhrCqmMeasEventNum.ToString())) {
-										listUniqueItemExtensions.Add(CqmItemAbbreviation.Enc.ToString()+mCur.EhrCqmMeasEventNum.ToString());
-										Start("tr");
-										if(mCur.EventType==EhrMeasureEventType.TobaccoUseAssessed) {
-											_w.WriteElementString("td","Patient Characteristic: "+mCur.Description);
-										}
-										else if(mCur.EventType==EhrMeasureEventType.CurrentMedsDocumented) {
-											_w.WriteElementString("td","Procedure, Performed: "+mCur.Description);
-										}
-										End("tr");
-									}
-									GenerateMeasEventEntry(mCur);
+							for(int k=0;k<listQMsCur[j].DictPatNumListInterventions[patNumCur].Count;k++) {
+								EhrCqmIntervention iCur=listQMsCur[j].DictPatNumListInterventions[patNumCur][k];
+								GenerateInterventionEntry(iCur);
+								if(listUniqueItemExtensions.Contains(CqmItemAbbreviation.Ivn.ToString()+iCur.EhrCqmInterventionNum.ToString())) {
+									continue;
 								}
+								listUniqueItemExtensions.Add(CqmItemAbbreviation.Ivn.ToString()+iCur.EhrCqmInterventionNum.ToString());
+								#region BuildPlainTextVersion
+								Start("tr");
+								if(listQMsCur[j].Type2014==QualityType2014.WeightAdult || listQMsCur[j].Type2014==QualityType2014.WeightOver65) {//interventions in these two measures are ordered
+									_w.WriteElementString("td","Intervention, Order: "+iCur.ValueSetName);
+								}
+								else {
+									_w.WriteElementString("td","Intervention, Performed: "+iCur.ValueSetName);
+								}
+								End("tr");
+								#endregion BuildPlainTextVersion
 							}
 						}
+						//create ehrmeasureevents for each measure for this patient
 						for(int j=0;j<listQMsCur.Count;j++) {
-							//create medicationpats for this measure for this patient
-							//have to check for NotGiven if vaccine, vaccines given are procedures performed, not given are communication of previous receipt or history of vaccine??
-							if(listQMsCur[j].DictPatNumListMedPats.ContainsKey(patNumCur)) {
-								for(int k=0;k<listQMsCur[j].DictPatNumListMedPats[patNumCur].Count;k++) {
-									EhrCqmMedicationPat mPatCur=listQMsCur[j].DictPatNumListMedPats[patNumCur][k];
-									string strDescript="";
-									if(mPatCur.EhrCqmMedicationPatNum!=0 && !listUniqueItemExtensions.Contains(CqmItemAbbreviation.MedPat.ToString()+mPatCur.EhrCqmMedicationPatNum.ToString())) {
-										listUniqueItemExtensions.Add(CqmItemAbbreviation.MedPat.ToString()+mPatCur.EhrCqmMedicationPatNum.ToString());
-										//EhrCqmMedicationPatNum will be 0 if this is a vaccine.  Used by tobacco cessation or above/below normal weight meds
-										//Will be Medication, Active/Order
-										Start("tr");
-										if(mPatCur.PatNote!="") {//PatNote means an order
-											strDescript="Medication, Ordered: ";
-										}
-										else {
-											strDescript="Medication, Active: ";
-										}
-										_w.WriteElementString("td",strDescript+mPatCur.ValueSetName+" - "+mPatCur.Description);
-										End("tr");
-									}
-									else if(mPatCur.EhrCqmVaccinePatNum!=0 && !listUniqueItemExtensions.Contains(CqmItemAbbreviation.MedPat.ToString()+mPatCur.EhrCqmVaccinePatNum.ToString())) {
-										listUniqueItemExtensions.Add(CqmItemAbbreviation.MedPat.ToString()+mPatCur.EhrCqmVaccinePatNum.ToString());
-										//EhrCqmVaccinePatNum will only be set to something other than 0 if pneumonia or influenza measure
-										//if NotGiven=true, this is a Medication, Intolerance/Allergy
-										//otherwise it is a Medication, Administered
-										Start("tr");
-										if(mPatCur.NotGiven) {
-											strDescript="Medication, Allergy: ";
-										}
-										else {
-											strDescript="Medication, Administered; ";
-										}
-										_w.WriteElementString("td",strDescript+mPatCur.ValueSetName+" - "+mPatCur.Description);
-										End("tr");
-									}
-									GenerateMedPatsEntry(mPatCur);
+							if(!listQMsCur[j].DictPatNumListMeasureEvents.ContainsKey(patNumCur)) {
+								continue;
+							}
+							for(int k=0;k<listQMsCur[j].DictPatNumListMeasureEvents[patNumCur].Count;k++) {
+								EhrCqmMeasEvent mCur=listQMsCur[j].DictPatNumListMeasureEvents[patNumCur][k];
+								GenerateMeasEventEntry(mCur);
+								if(listUniqueItemExtensions.Contains(CqmItemAbbreviation.MeasEvn.ToString()+mCur.EhrCqmMeasEventNum.ToString())) {
+									continue;
 								}
+								listUniqueItemExtensions.Add(CqmItemAbbreviation.Enc.ToString()+mCur.EhrCqmMeasEventNum.ToString());
+								#region BuildPlainTextVersion
+								Start("tr");
+								if(mCur.EventType==EhrMeasureEventType.TobaccoUseAssessed) {
+									_w.WriteElementString("td","Patient Characteristic: "+mCur.Description);
+								}
+								else if(mCur.EventType==EhrMeasureEventType.CurrentMedsDocumented) {
+									_w.WriteElementString("td","Procedure, Performed: "+mCur.Description);
+								}
+								End("tr");
+								#endregion BuildPlainTextVersion
 							}
 						}
+						//create medicationpats for each measure for this patient
 						for(int j=0;j<listQMsCur.Count;j++) {
-							//create ehrnotperformeds for this measure for this patient
+							//have to check for CompletionStatus=NotAdministered if vaccine, vaccines given are procedures performed, not given are medication allergy or intolerance
+							if(!listQMsCur[j].DictPatNumListMedPats.ContainsKey(patNumCur)) {
+								continue;
+							}
+							for(int k=0;k<listQMsCur[j].DictPatNumListMedPats[patNumCur].Count;k++) {
+								EhrCqmMedicationPat mPatCur=listQMsCur[j].DictPatNumListMedPats[patNumCur][k];
+								GenerateMedPatsEntry(mPatCur);
+								string extensCur=CqmItemAbbreviation.MedPat.ToString();
+								if(mPatCur.EhrCqmMedicationPatNum!=0) {
+									extensCur+=mPatCur.EhrCqmMedicationPatNum.ToString();
+								}
+								else {
+									extensCur+=mPatCur.EhrCqmVaccinePatNum.ToString();
+								}
+								if(listUniqueItemExtensions.Contains(extensCur)) {
+									continue;
+								}
+								listUniqueItemExtensions.Add(extensCur);
+								#region BuildPlainTextVersion
+								Start("tr");
+								string strDescript="";
+								//represents a medication.  Used by tobacco cessation or above/below normal weight meds
+								if(mPatCur.EhrCqmMedicationPatNum!=0) {
+									//Will be Medication, Active/Order
+									if(mPatCur.PatNote!="") {//PatNote means an order
+										strDescript="Medication, Ordered: ";
+									}
+									else {
+										strDescript="Medication, Active: ";
+									}
+								}
+								//EhrCqmVaccinePatNum will only be set if pneumonia or influenza measure and it represents a vaccine
+								else {
+									if(mPatCur.CompletionStatus==VaccineCompletionStatus.NotAdministered) {//NotAdministered is due to an allergy or intolerance
+										strDescript="Medication, Allergy: ";
+									}
+									else {//only getting CompletionStatus=Complete or NotAdministered, the else is for Complete
+										strDescript="Medication, Administered; ";
+									}
+								}
+								_w.WriteElementString("td",strDescript+mPatCur.ValueSetName+" - "+mPatCur.Description);
+								End("tr");
+								#endregion BuildPlainTextVersion
+							}
+						}
+						//create ehrnotperformeds for each measure for this patient
+						for(int j=0;j<listQMsCur.Count;j++) {
 							//have to determine what is not being performed, Procedure (flu vaccine, current meds documented), Medication (flu vaccine), Physical Exam, Tobacco screening
 							//if ValueSetOID=2.16.840.1.113883.3.526.3.1254, then Medication, Administered not done: Medical/Patient/System Reason (flu vaccine med)
 							//if ValueSetOID=2.16.840.1.113883.3.526.3.402, then Procedure, Performed not done: Medical/Patient/System Reason (flu vaccine proc)
@@ -5752,142 +6060,170 @@ BMI 18.5-25.";
 							//if ValueSetOID=2.16.840.1.113883.3.600.1.681, then Physical Exam, Performed not done: Medical or Other reason not done/Patient Reason Refused (vitalsign exam)
 							//if ValueSetOID=2.16.840.1.113883.3.526.3.1278, then Risk Category Assessment not done: Medical Reason (tobacco assessment)
 							//Then use the negationInd="true" attribute to indicate that it was not performed
-							if(listQMsCur[j].DictPatNumListNotPerfs.ContainsKey(patNumCur)) {
-								for(int k=0;k<listQMsCur[j].DictPatNumListNotPerfs[patNumCur].Count;k++) {
-									EhrCqmNotPerf npCur=listQMsCur[j].DictPatNumListNotPerfs[patNumCur][k];
-									if(!listUniqueItemExtensions.Contains(CqmItemAbbreviation.NotPerf.ToString()+npCur.EhrCqmNotPerfNum.ToString())) {
-										listUniqueItemExtensions.Add(CqmItemAbbreviation.NotPerf.ToString()+npCur.EhrCqmNotPerfNum.ToString());
-										Start("tr");
-										if(npCur.ValueSetOID=="2.16.840.1.113883.3.526.3.1254") {
-											_w.WriteElementString("td","Medication, Administered not done: "+npCur.ValueSetName+" - "+npCur.DescriptionReason);
-										}
-										else if(npCur.ValueSetOID=="2.16.840.1.113883.3.526.3.402" || npCur.ValueSetOID=="2.16.840.1.113883.3.600.1.462") {
-											_w.WriteElementString("td","Procedure, Performed not done: "+npCur.ValueSetName+" - "+npCur.DescriptionReason);
-										}
-										else if(npCur.ValueSetOID=="2.16.840.1.113883.3.600.1.681") {
-											_w.WriteElementString("td","Physical Exam, Performed not done: "+npCur.ValueSetName+" - "+npCur.DescriptionReason);
-										}
-										else {//must be a 2.16.840.1.113883.3.526.3.1278, not performed items restricted to one of these 5 value sets
-											_w.WriteElementString("td","Risk Category Assessment not done: "+npCur.ValueSetName+" - "+npCur.DescriptionReason);
-										}
-										End("tr");
-									}
-									GenerateNotPerfEntry(npCur);
+							if(!listQMsCur[j].DictPatNumListNotPerfs.ContainsKey(patNumCur)) {
+								continue;
+							}
+							for(int k=0;k<listQMsCur[j].DictPatNumListNotPerfs[patNumCur].Count;k++) {
+								EhrCqmNotPerf npCur=listQMsCur[j].DictPatNumListNotPerfs[patNumCur][k];
+								GenerateNotPerfEntry(npCur);
+								if(listUniqueItemExtensions.Contains(CqmItemAbbreviation.NotPerf.ToString()+npCur.EhrCqmNotPerfNum.ToString())) {
+									continue;
 								}
+								listUniqueItemExtensions.Add(CqmItemAbbreviation.NotPerf.ToString()+npCur.EhrCqmNotPerfNum.ToString());
+								#region BuildPlainTextVersion
+								Start("tr");
+								if(npCur.ValueSetOID=="2.16.840.1.113883.3.526.3.1254") {
+									_w.WriteElementString("td","Medication, Administered not done: "+npCur.ValueSetName+" - "+npCur.DescriptionReason);
+								}
+								else if(npCur.ValueSetOID=="2.16.840.1.113883.3.526.3.402" || npCur.ValueSetOID=="2.16.840.1.113883.3.600.1.462") {
+									_w.WriteElementString("td","Procedure, Performed not done: "+npCur.ValueSetName+" - "+npCur.DescriptionReason);
+								}
+								else if(npCur.ValueSetOID=="2.16.840.1.113883.3.600.1.681") {
+									_w.WriteElementString("td","Physical Exam, Performed not done: "+npCur.ValueSetName+" - "+npCur.DescriptionReason);
+								}
+								else {//must be a 2.16.840.1.113883.3.526.3.1278, not performed items restricted to one of these 5 value sets
+									_w.WriteElementString("td","Risk Category Assessment not done: "+npCur.ValueSetName+" - "+npCur.DescriptionReason);
+								}
+								End("tr");
+								#endregion BuildPlainTextVersion
 							}
 						}
+						//create problems for each measure for this patient
 						for(int j=0;j<listQMsCur.Count;j++) {
-							//create problems for this measure for this patient
 							//if ValueSetOID = 2.16.840.1.113883.3.526.3.1255, SNOMEDCT - 315640000 - Influenza vaccination declined (situation), then it is a Communication, From patient to provider:
 							//if ValueSetOID = 2.16.840.1.113883.3.464.1003.110.12.1028, SNOMEDCT - 310578008 - Pneumococcal vaccination given (finding), then it is a Risk Category Assessment:
 							//if ValueSetOID = 2.16.840.1.113883.3.600.1.1579 - Palliative Care, then it is a Procedure, Order:
 							//Otherwise it is a Diagnosis, Active:
-							if(listQMsCur[j].DictPatNumListProblems.ContainsKey(patNumCur)) {
-								string strDescript="";
-								for(int k=0;k<listQMsCur[j].DictPatNumListProblems[patNumCur].Count;k++) {
-									EhrCqmProblem probCur=listQMsCur[j].DictPatNumListProblems[patNumCur][k];
-									if(!listUniqueItemExtensions.Contains(CqmItemAbbreviation.Prob.ToString()+probCur.EhrCqmProblemNum.ToString())) {
-										listUniqueItemExtensions.Add(CqmItemAbbreviation.Prob.ToString()+probCur.EhrCqmProblemNum.ToString());
-										Start("tr");
-										switch(probCur.ValueSetOID) {
-											case "2.16.840.1.113883.3.526.3.1255":
-												strDescript="Communication, From patient to provider: ";
-												break;
-											case "2.16.840.1.113883.3.464.1003.110.12.1028":
-												strDescript="Risk Category Assessment: ";
-												break;
-											case "2.16.840.1.113883.3.600.1.1579":
-												strDescript="Procedure, Order: ";
-												break;
-											default:
-												strDescript="Diagnosis, Active: ";
-												break;
-										}
-										_w.WriteElementString("td",strDescript+probCur.ValueSetName+" - "+probCur.Description);
-										End("tr");
-									}
+							if(!listQMsCur[j].DictPatNumListProblems.ContainsKey(patNumCur)) {
+								continue;
+							}
+							string strDescript="";
+							for(int k=0;k<listQMsCur[j].DictPatNumListProblems[patNumCur].Count;k++) {
+								EhrCqmProblem probCur=listQMsCur[j].DictPatNumListProblems[patNumCur][k];
+								switch(probCur.ValueSetOID) {
+									case "2.16.840.1.113883.3.526.3.1255":
+										GenerateCommunicationEntry(probCur);
+										break;
+									case "2.16.840.1.113883.3.464.1003.110.12.1028":
+										GenerateRiskAssessEntry(probCur);
+										break;
+									case "2.16.840.1.113883.3.600.1.1579":
+										GenerateProcedureEntry(null,probCur);
+										break;
+									default:
+										GenerateDiagnosisEntry(probCur);
+										break;
+								}
+								if(listUniqueItemExtensions.Contains(CqmItemAbbreviation.Prob.ToString()+probCur.EhrCqmProblemNum.ToString())) {
+									continue;
+								}
+								listUniqueItemExtensions.Add(CqmItemAbbreviation.Prob.ToString()+probCur.EhrCqmProblemNum.ToString());
+								#region BuildPlainTextVersion
+									Start("tr");
 									switch(probCur.ValueSetOID) {
 										case "2.16.840.1.113883.3.526.3.1255":
-											GenerateCommunicationEntry(probCur);
+											strDescript="Communication, From patient to provider: ";
 											break;
 										case "2.16.840.1.113883.3.464.1003.110.12.1028":
-											GenerateRiskAssessEntry(probCur);
+											strDescript="Risk Category Assessment: ";
 											break;
 										case "2.16.840.1.113883.3.600.1.1579":
-											GenerateProcedureEntry(null,probCur);
+											strDescript="Procedure, Order: ";
 											break;
 										default:
-											GenerateDiagnosisEntry(probCur);
+											strDescript="Diagnosis, Active: ";
 											break;
 									}
-								}
+									_w.WriteElementString("td",strDescript+probCur.ValueSetName+" - "+probCur.Description);
+									End("tr");
+									#endregion BuildPlainTextVersion
 							}
 						}
+						//create procs for each measure for this patient
 						for(int j=0;j<listQMsCur.Count;j++) {
-							//create procs for this measure for this patient
-							if(listQMsCur[j].DictPatNumListProcs.ContainsKey(patNumCur)) {
-								for(int k=0;k<listQMsCur[j].DictPatNumListProcs[patNumCur].Count;k++) {
-									EhrCqmProc procCur=listQMsCur[j].DictPatNumListProcs[patNumCur][k];
-									if(!listUniqueItemExtensions.Contains(CqmItemAbbreviation.Proc.ToString()+procCur.EhrCqmProcNum.ToString())) {
-										listUniqueItemExtensions.Add(CqmItemAbbreviation.Proc.ToString()+procCur.EhrCqmProcNum.ToString());
-										Start("tr");
-										_w.WriteElementString("td","Procedure, Performed: "+procCur.ValueSetName+" - "+procCur.Description);
-										End("tr");
-									}
-									GenerateProcedureEntry(procCur,null);
+							if(!listQMsCur[j].DictPatNumListProcs.ContainsKey(patNumCur)) {
+								continue;
+							}
+							for(int k=0;k<listQMsCur[j].DictPatNumListProcs[patNumCur].Count;k++) {
+								EhrCqmProc procCur=listQMsCur[j].DictPatNumListProcs[patNumCur][k];
+								if(listUniqueItemExtensions.Contains(CqmItemAbbreviation.Proc.ToString()+procCur.EhrCqmProcNum.ToString())) {
+									continue;
 								}
+								GenerateProcedureEntry(procCur,null);
+								listUniqueItemExtensions.Add(CqmItemAbbreviation.Proc.ToString()+procCur.EhrCqmProcNum.ToString());
+								#region BuildPlainTextVersion
+								Start("tr");
+								_w.WriteElementString("td","Procedure, Performed: "+procCur.ValueSetName+" - "+procCur.Description);
+								End("tr");
+								#endregion BuildPlainTextVersion
 							}
 						}
+						//create vitalsigns for each measure for this patient
 						for(int j=0;j<listQMsCur.Count;j++) {
-							//create vitalsigns for this measure for this patient
-							if(listQMsCur[j].DictPatNumListVitalsigns.ContainsKey(patNumCur)) {
-								for(int k=0;k<listQMsCur[j].DictPatNumListVitalsigns[patNumCur].Count;k++) {
-									EhrCqmVitalsign vCur=listQMsCur[j].DictPatNumListVitalsigns[patNumCur][k];
-									if(!listUniqueItemExtensions.Contains(CqmItemAbbreviation.Vital.ToString()+vCur.EhrCqmVitalsignNum.ToString())) {
-										listUniqueItemExtensions.Add(CqmItemAbbreviation.Vital.ToString()+vCur.EhrCqmVitalsignNum.ToString());
-										Start("tr");
-										if(vCur.BMI==-1) {
-											if(vCur.BpDiastolic>0) {
-												_w.WriteElementString("td","Physical Exam, Finding: Diastolic Blood Pressure - "+vCur.BpDiastolic.ToString());
-												GenerateVitalsignEntry(vCur,"BPd");
-											}
-											if(vCur.BpSystolic>0) {
-												End("tr");
-												Start("tr");
-												_w.WriteElementString("td","Physical Exam, Finding: Systolic Blood Pressure - "+vCur.BpSystolic.ToString());
-												GenerateVitalsignEntry(vCur,"BPs");
-											}
-										}
-										else {//BMI>-1 so it is a BMI exam
-											if(vCur.BMI>0) {
-												_w.WriteElementString("td","Physical Exam, Finding: Height - "+vCur.Height.ToString());
-												GenerateVitalsignEntry(vCur,"Ht");
-												End("tr");
-												Start("tr");
-												_w.WriteElementString("td","Physical Exam, Finding: Weight - "+vCur.Weight.ToString());
-												GenerateVitalsignEntry(vCur,"Wt");
-												End("tr");
-												Start("tr");
-												_w.WriteElementString("td","Physical Exam, Finding: BMI LOINC Value - "+vCur.BMI.ToString());
-												GenerateVitalsignEntry(vCur,"BMI");
-											}
-											if(vCur.BMIPercentile>-1) {
-												End("tr");
-												Start("tr");
-												_w.WriteElementString("td","Physical Exam, Finding: BMI Percentile - "+vCur.BMIPercentile.ToString());
-												GenerateVitalsignEntry(vCur,"BMIp");
-											}
-										}
-										End("tr");
-									}
+							if(!listQMsCur[j].DictPatNumListVitalsigns.ContainsKey(patNumCur)) {
+								continue;
+							}
+							for(int k=0;k<listQMsCur[j].DictPatNumListVitalsigns[patNumCur].Count;k++) {
+								EhrCqmVitalsign vCur=listQMsCur[j].DictPatNumListVitalsigns[patNumCur][k];
+								if(vCur.BpDiastolic>0) {
+									GenerateVitalsignEntry(vCur,"BPd");
 								}
+								if(vCur.BpSystolic>0) {
+									GenerateVitalsignEntry(vCur,"BPs");
+								}
+								if(vCur.BMI>0) {
+									GenerateVitalsignEntry(vCur,"Ht");
+									GenerateVitalsignEntry(vCur,"Wt");
+									GenerateVitalsignEntry(vCur,"BMI");
+								}
+								if(vCur.BMIPercentile>-1) {
+									GenerateVitalsignEntry(vCur,"BMIp");
+								}
+								if(listUniqueItemExtensions.Contains(CqmItemAbbreviation.Vital.ToString()+vCur.EhrCqmVitalsignNum.ToString())) {
+									continue;
+								}
+								listUniqueItemExtensions.Add(CqmItemAbbreviation.Vital.ToString()+vCur.EhrCqmVitalsignNum.ToString());
+								#region BuildPlainTextVersion
+								if(vCur.BpDiastolic>0) {
+									Start("tr");
+									_w.WriteElementString("td","Physical Exam, Finding: Diastolic Blood Pressure - "+vCur.BpDiastolic.ToString());
+									End("tr");
+								}
+								if(vCur.BpSystolic>0) {
+									Start("tr");
+									_w.WriteElementString("td","Physical Exam, Finding: Systolic Blood Pressure - "+vCur.BpSystolic.ToString());
+									End("tr");
+								}
+								if(vCur.BMI>0) {
+									Start("tr");
+									_w.WriteElementString("td","Physical Exam, Finding: Height - "+vCur.Height.ToString());
+									End("tr");
+									Start("tr");
+									_w.WriteElementString("td","Physical Exam, Finding: Weight - "+vCur.Weight.ToString());
+									End("tr");
+									Start("tr");
+									_w.WriteElementString("td","Physical Exam, Finding: BMI LOINC Value - "+vCur.BMI.ToString());
+									End("tr");
+								}
+								if(vCur.BMIPercentile>-1) {
+									Start("tr");
+									_w.WriteElementString("td","Physical Exam, Finding: BMI Percentile - "+vCur.BMIPercentile.ToString());
+									End("tr");
+								}
+								#endregion BuildPlainTextVersion
 							}
 						}
+						_x.WriteEndElement();
 					}
 					End("tbody");
 					End("table");
 					End("text");
-					_w.WriteRaw(strBuilderPatDataEntries.ToString());
+					XmlDocument doc=new XmlDocument();
+					doc.LoadXml(strBuilderPatDataEntries.ToString());
+					XmlElement elementClinicalDocument=doc.DocumentElement;
+					for(int n=0;n<elementClinicalDocument.ChildNodes.Count;n++) {
+						elementClinicalDocument.ChildNodes[n].WriteTo(_w);
+					}
 					End("section");
 					End("component");
 					#endregion Patient Data
@@ -5897,23 +6233,494 @@ BMI 18.5-25.";
 					End("ClinicalDocument");
 					SecurityLogs.MakeLogEntry(Permissions.Copy,patNumCur,"QRDA Category I generated");//Create audit log entry.
 				}
+				string xmlResult=strBuilder.ToString();
+				dictPatNumXml.Add(patNumCur,xmlResult);
 			}
-			return strBuilder.ToString();
-			//StringBuilder strBuilderCat3=new StringBuilder();
-			//return strBuilderCat3.ToString();
+			for(int i=0;i<listAllEhrPats.Count;i++) {
+				Patient patCur=listAllEhrPats[i].EhrCqmPat;
+				if(!dictPatNumListQualityMeasures.ContainsKey(patCur.PatNum)) {//every patient will be in the dictionary, this is just in case
+					continue;
+				}
+				List<QualityMeasure> listPatQMs=dictPatNumListQualityMeasures[patCur.PatNum];
+				for(int j=0;j<listPatQMs.Count;j++) {
+					System.IO.File.WriteAllText(folderRoot+"\\Measure_"+listPatQMs[j].Id.ToString()+"\\"+patCur.PatNum+"_"+patCur.LName+"_"+patCur.FName+".xml",dictPatNumXml[patCur.PatNum]);
+				}
+			}
+			_w.Flush();
+			_w.Close();
+			#endregion Cateogry I QRDA Documents
+			#region Category III QRDA Document
+			xmlSettings=new XmlWriterSettings();
+			xmlSettings.Encoding=Encoding.UTF8;
+			xmlSettings.OmitXmlDeclaration=true;
+			xmlSettings.Indent=true;
+			xmlSettings.IndentChars="   ";
+			using(_w=XmlWriter.Create(folderRoot+"\\QRDA_Category_III"+".xml")) {
+				//Begin Clinical Document
+				_w.WriteProcessingInstruction("xml-stylesheet","type=\"text/xsl\" href=\"qrda.xsl\"");
+				_w.WriteWhitespace("\r\n");
+				_w.WriteStartElement("ClinicalDocument","urn:hl7-org:v3");
+				_w.WriteAttributeString("xmlns","xsi",null,"http://www.w3.org/2001/XMLSchema-instance");
+				_w.WriteAttributeString("xsi","schemaLocation",null,"urn:./CDA.xsd");
+				_w.WriteAttributeString("xmlns","voc",null,"urn:hl7-org:v3/voc");
+				#region QRDA III Header
+				_w.WriteComment("QRDA III Header");
+				StartAndEnd("realmCode","code","US");
+				StartAndEnd("typeId","root","2.16.840.1.113883.1.3","extension","POCD_HD000040");//template id to assert use of the CDA standard
+				_w.WriteComment("QRDA Category III Release 1 Template");
+				TemplateId("2.16.840.1.113883.10.20.27.1.1");
+				_w.WriteComment("This is the globally unique identifier for this QRDA III document");
+				Guid();
+				_w.WriteComment("QRDA III document type code");
+				StartAndEnd("code","code","55184-6","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc,"displayName","Quality Reporting Document Architecture Calculated Summary Report");
+				_w.WriteElementString("title","QRDA Calculated Summary Report for CMS Measures 68, 69, 74, 75, 127, 138, 147, 155, and 165");
+				_w.WriteComment("This is the document creation time");
+				TimeElement("effectiveTime",DateTime.Now);
+				StartAndEnd("confidentialityCode","code","N","codeSystem","2.16.840.1.113883.5.25");//Fixed value.  Confidentiality Code System.  Codes: N=(Normal), R=(Restricted),V=(Very Restricted)
+				StartAndEnd("languageCode","code","en-US");
+				#region recordTarget
+				_w.WriteComment("Record Target and ID - but ID is nulled to NA. This is an aggregate summary report. Therefore CDA's required patient identifier is nulled.");
+				Start("recordTarget");
+				Start("patientRole");
+				StartAndEnd("id","nullFlavor","NA");
+				End("patientRole");
+				End("recordTarget");
+				#endregion recordTarget
+				#region comments
+				//The author element represents the creator of the clinical document.  The author may be a device, or a person.
+				//Participant Scenarios in a QRDA Category III Document (section 2.3, page 29)
+				//Several possible scenarios given, the first sounds like it applies to us
+				//Scenario - QRDA is wholly constructed automatically by device
+				//Author - Device
+				//Custodian - Organization that owns and reports the data (e.g. hospital, dental practice)
+				//Legal Authenticator - A designated person in the organization (may be assigned to the report automatically)
+				//We will generate a device author element, a practice custodian element, and a Legal Authenticator element using the practice default provider
+				#endregion comments
+				#region author
+				Start("author");
+				TimeElement("time",DateTime.Now);
+				Start("assignedAuthor");
+				StartAndEnd("id","root","2.16.840.1.113883.3.4337","assigningAuthorityName","HL7 OID Registry");
+				Start("assignedAuthoringDevice");
+				_w.WriteElementString("softwareName","Open Dental version "+PrefC.GetString(PrefName.ProgramVersion));
+				End("assignedAuthoringDevice");
+				Start("representedOrganization");
+				_w.WriteElementString("name",PrefC.GetString(PrefName.PracticeTitle));//Validated
+				End("representedOrganizaion");
+				End("assignedAuthor");
+				End("author");
+				#endregion author
+				#region custodian
+				//Represents the organization in charge of maintaining the document.
+				//The custodian is the steward that is entrusted with the care of the document. Every CDA document has exactly one custodian.
+				Start("custodian");
+				Start("assignedCustodian");
+				Start("representedCustodianOrganization");
+				StartAndEnd("id","root",_strOIDInternalRoot);//This is the root assigned to the practice, based on the OD root 2.16.840.1.113883.3.4337
+				_w.WriteElementString("name",PrefC.GetString(PrefName.PracticeTitle));//Validated
+				End("representedCustodianOrganization");
+				End("assignedCustodian");
+				End("custodian");
+				#endregion custodian
+				#region legalAuthenticator
+				//This element identifies the single person legally responsible for the document and must be present if the document has been legally authenticated.
+				Start("legalAuthenticator");
+				TimeElement("time",DateTime.Now);
+				StartAndEnd("signatureCode","code","S");
+				Start("assignedEntity");
+				Provider provLegal=Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv));
+				StartAndEnd("id","root","2.16.840.1.113883.4.6","extension",provLegal.NationalProvID,"assigningAuthorityName","NPI");//Validated NPI
+				Start("representedOrganization");
+				StartAndEnd("id","root",_strOIDInternalRoot);//This is the root assigned to the practice, based on the OD root 2.16.840.1.113883.3.4337
+				_w.WriteElementString("name",PrefC.GetString(PrefName.PracticeTitle));//Validated
+				End("representedOrganization");
+				End("assignedEntity");
+				End("legalAuthenticator");
+				#endregion legalAuthenticator
+				#region documentationOf
+				//The documentationOf service event can contain identifiers for all of the (one or more) providers involved, using the serviceEvent/performer elements.
+				//A serviceEvent/performer element must be present for each performer reporting data to a quality organization.
+				Start("documentationOf","typeCode","DOC");
+				Start("serviceEvent","classCode","PCPR");//PCPR is HL7ActClass code for Care Provision
+				_w.WriteComment("Care Provision");
+				Start("effectiveTime");
+				DateElement("low",dateStart);
+				DateElement("high",dateEnd);
+				End("effectiveTime");
+				Start("performer","typeCode","PRF");
+				Start("time");
+				StartAndEnd("low","value",dateStart.ToString("yyyyMMdd")+"000000");
+				StartAndEnd("high","value",dateEnd.ToString("yyyyMMdd")+"235959");
+				End("time");
+				Start("assignedEntity");
+				if(_provOutQrda.NationalProvID!="") {
+					_w.WriteComment("This is the provider NPI");
+					StartAndEnd("id","root","2.16.840.1.113883.4.6","extension",_provOutQrda.NationalProvID);
+				}
+				if(_provOutQrda.UsingTIN && _provOutQrda.SSN!="") {
+					_w.WriteComment("This is the provider TIN");
+					StartAndEnd("id","root","2.16.840.1.113883.4.2","extension",_provOutQrda.SSN);
+				}
+				_w.WriteComment("This is the practice OID provider root and Open Dental assigned ProvNum extension");
+				StartAndEnd("id","root",_strOIDInternalProvRoot,"extension",_provOutQrda.ProvNum.ToString());
+				Start("representedOrganization");
+				//we don't currently have an organization level TIN or an organization Facility CMS Certification Number (CCN)
+				//both id's are identified as "SHOULD" elements.  We will include the practice name
+				_w.WriteElementString("name",PrefC.GetString(PrefName.PracticeTitle));//Validated
+				End("representedOrganization");
+				End("assignedEntity");
+				End("performer");
+				End("serviceEvent");
+				End("documentationOf");
+				#endregion participant
+				#endregion QRDA III Header
+				#region QRDA III Body
+				Start("component");
+				Start("structuredBody");
+				#region reportingParameters component
+				Start("component");
+				Start("section");
+				_w.WriteComment("Reporting Parameters Section Template");
+				TemplateId("2.16.840.1.113883.10.20.17.2.1");
+				_w.WriteComment("QRDA Category III Reporting Parameters Section Template");
+				TemplateId("2.16.840.1.113883.10.20.27.2.2");
+				StartAndEnd("code","code","55187-9","displayName","Reporting Parameters","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc);
+				_w.WriteElementString("title","Reporting Parameters");
+				Start("text");
+				Start("list");
+				_w.WriteElementString("item","Reporting period: "+dateStart.ToString("MMMM dd, yyyy")+" 00:00 - "+dateEnd.ToString("MMMM dd, yyyy")+" 23:59");
+				End("list");
+				End("text");
+				Start("entry","typeCode","DRIV");
+				Start("act","classCode","ACT","moodCode","EVN");
+				_w.WriteComment("Reporting Parameters Act Template");
+				TemplateId("2.16.840.1.113883.10.20.17.3.8");
+				StartAndEnd("code","code","252116004","displayName","Observation Parameters","codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed);
+				Start("effectiveTime");
+				_w.WriteComment("The first day of the reporting period");
+				DateElement("low",dateStart);
+				_w.WriteComment("The last day of the reporting period");
+				DateElement("high",dateEnd);
+				End("effectiveTime");
+				End("act");
+				End("entry");
+				End("section");
+				End("component");
+				#endregion reportingParameters component
+				#region measure component
+				Start("component");
+				Start("section");
+				_w.WriteComment("Measure Section Template");
+				TemplateId("2.16.840.1.113883.10.20.24.2.2");
+				_w.WriteComment("QRDA Category III Measure Section Template");
+				TemplateId("2.16.840.1.113883.10.20.27.2.1");
+				StartAndEnd("code","code","55186-1","displayName","Measure Section","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc);
+				_w.WriteElementString("title","Measure Section");
+				for(int i=0;i<listQMs.Count;i++) {
+					Start("text");
+						Start("table","border","1","width","100%");
+						Start("thead");
+							Start("tr");
+							_w.WriteElementString("th","eMeasure Title");
+							_w.WriteElementString("th","Version neutral identifier");
+							_w.WriteElementString("th","eMeasure Identifier (MAT)");
+							_w.WriteElementString("th","eMeasure Version Number");
+							_w.WriteElementString("th","Version specific identifier");
+							End("tr");
+						End("thead");
+						Start("tbody");
+							MeasureTextTableRow(listQMs[i].eMeasureTitle,listQMs[i].eMeasureVNeutralId,listQMs[i].eMeasureNum,listQMs[i].eMeasureVersion,listQMs[i].eMeasureVSpecificId);
+						End("tbody");
+						End("table");
+						if(listQMs[i].eMeasureNum=="68") {
+							Start("content","styleCode","Bold");
+							_w.WriteString("Member of Measure Set: Clinical Quality Measure Set 2014 - 680ffd36-c4e4-4145-b6c3-92418b037069");
+							End("content");
+						}
+						Start("list");
+						Start("item");
+							Start("content","styleCode","Bold");
+							_w.WriteString("Performance Rate");
+							End("content");
+							_w.WriteString(": "+listQMs[i].PerformanceRate.ToString("0.00")+"%");
+						End("item");
+						Start("item");
+							Start("content","styleCode","Bold");
+							_w.WriteString("Reporting Rate");
+							End("content");
+							_w.WriteString(": "+listQMs[i].ReportingRate.ToString("0.00")+"%");
+						End("item");
+					//Start Initial Patient Population text
+						Start("item");
+							Start("content","styleCode","Bold");
+							_w.WriteString("Initial Patient Population");
+							End("content");
+							_w.WriteString(": "+listQMs[i].ListEhrPats.Count.ToString());
+							if(listQMs[i].ListEhrPats.Count>0) {
+								Start("list");
+								Dictionary<string,int> dictIPPCounts=GetSupplementalCounts(listQMs[i].ListEhrPats);
+								foreach(KeyValuePair<string,int> kvpair in dictIPPCounts) {
+									if(kvpair.Value==0) {
+										continue;
+									}
+									Start("item");
+									Start("content","styleCode","Bold");
+									_w.WriteString(GetSupplementDataPrintString(kvpair.Key));
+									End("content");
+									_w.WriteString(": "+kvpair.Value.ToString());
+									End("item");
+								}
+								End("list");
+							}
+						End("item");
+					//Start Denominator text
+						Start("item");
+							Start("content","styleCode","Bold");
+							_w.WriteString("Denominator");
+							End("content");
+							List<EhrCqmPatient> listDenom=new List<EhrCqmPatient>();
+							for(int j=0;j<listQMs[i].ListEhrPats.Count;j++) {
+								if(listQMs[i].ListEhrPats[j].IsDenominator) {
+									listDenom.Add(listQMs[i].ListEhrPats[j]);
+								}
+							}
+							_w.WriteString(": "+listDenom.Count.ToString());
+							if(listDenom.Count>0) {
+								Start("list");
+								Dictionary<string,int> dictDenomCounts=GetSupplementalCounts(listDenom);
+								foreach(KeyValuePair<string,int> kvpair in dictDenomCounts) {
+									if(kvpair.Value==0) {
+										continue;
+									}
+									Start("item");
+									Start("content","styleCode","Bold");
+									_w.WriteString(GetSupplementDataPrintString(kvpair.Key));
+									End("content");
+									_w.WriteString(": "+kvpair.Value.ToString());
+									End("item");
+								}
+								End("list");
+							}
+						End("item");
+					//Start Denominator Exclusion text
+						Start("item");
+							Start("content","styleCode","Bold");
+							_w.WriteString("Denominator Exclusion");
+							End("content");
+							List<EhrCqmPatient> listDenomExclus=new List<EhrCqmPatient>();
+							for(int j=0;j<listQMs[i].ListEhrPats.Count;j++) {
+								if(listQMs[i].ListEhrPats[j].IsExclusion) {
+									listDenomExclus.Add(listQMs[i].ListEhrPats[j]);
+								}
+							}
+							_w.WriteString(": "+listDenomExclus.Count.ToString());
+							if(listDenomExclus.Count>0) {
+								Start("list");
+								Dictionary<string,int> dictDenomExclusCounts=GetSupplementalCounts(listDenomExclus);
+								foreach(KeyValuePair<string,int> kvpair in dictDenomExclusCounts) {
+									if(kvpair.Value==0) {
+										continue;
+									}
+									Start("item");
+									Start("content","styleCode","Bold");
+									_w.WriteString(GetSupplementDataPrintString(kvpair.Key));
+									End("content");
+									_w.WriteString(": "+kvpair.Value.ToString());
+									End("item");
+								}
+								End("list");
+							}							
+						End("item");
+					//Start Numerator text
+						Start("item");
+							Start("content","styleCode","Bold");
+							_w.WriteString("Numerator");
+							End("content");
+							List<EhrCqmPatient> listNumerator=new List<EhrCqmPatient>();
+							for(int j=0;j<listQMs[i].ListEhrPats.Count;j++) {
+								if(listQMs[i].ListEhrPats[j].IsNumerator) {
+									listNumerator.Add(listQMs[i].ListEhrPats[j]);
+								}
+							}
+							_w.WriteString(": "+listNumerator.Count.ToString());
+							if(listNumerator.Count>0) {
+								Start("list");
+								Dictionary<string,int> dictNumeCounts=GetSupplementalCounts(listNumerator);
+								foreach(KeyValuePair<string,int> kvpair in dictNumeCounts) {
+									if(kvpair.Value==0) {
+										continue;
+									}
+									Start("item");
+									Start("content","styleCode","Bold");
+									_w.WriteString(GetSupplementDataPrintString(kvpair.Key));
+									End("content");
+									_w.WriteString(": "+kvpair.Value.ToString());
+									End("item");
+								}
+								End("list");
+							}							
+						End("item");
+					//Start Denominator Exception text
+						Start("item");
+							Start("content","styleCode","Bold");
+							_w.WriteString("Denominator Exception");
+							End("content");
+							List<EhrCqmPatient> listDenomExcept=new List<EhrCqmPatient>();
+							for(int j=0;j<listQMs[i].ListEhrPats.Count;j++) {
+								if(listQMs[i].ListEhrPats[j].IsException) {
+									listDenomExcept.Add(listQMs[i].ListEhrPats[j]);
+								}
+							}
+							_w.WriteString(": "+listDenomExcept.Count.ToString());
+							if(listDenomExcept.Count>0) {
+								Start("list");
+								Dictionary<string,int> dictDenomExceptCounts=GetSupplementalCounts(listDenomExcept);
+								foreach(KeyValuePair<string,int> kvpair in dictDenomExceptCounts) {
+									if(kvpair.Value==0) {
+										continue;
+									}
+									Start("item");
+									Start("content","styleCode","Bold");
+									_w.WriteString(GetSupplementDataPrintString(kvpair.Key));
+									End("content");
+									_w.WriteString(": "+kvpair.Value.ToString());
+									End("item");
+								}
+								End("list");
+							}							
+						End("item");
+						End("list");
+					End("text");
+				}
+				for(int i=0;i<listQMs.Count;i++) {
+					Start("entry");
+					Start("organizer","classCode","CLUSTER","moodCode","EVN");
+					_w.WriteComment("Measure Reference Template");
+					TemplateId("2.16.840.1.113883.10.20.24.3.98");
+					_w.WriteComment("Measure Reference and Results Template");
+					TemplateId("2.16.840.1.113883.10.20.27.3.1");
+					StartAndEnd("statusCode","code","completed");
+					Start("reference","typeCode","REFR");
+					Start("externalDocument","classCode","DOC","moodCode","EVN");
+					StartAndEnd("id","root",listQMs[i].eMeasureVSpecificId);//version specific id
+					StartAndEnd("code","code","57024-2","displayName","Health Quality Measure Document","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc);
+					_w.WriteElementString("text",listQMs[i].eMeasureTitle);
+					StartAndEnd("setId","root",listQMs[i].eMeasureVNeutralId);//version neutral id
+					StartAndEnd("versionNumber","value",listQMs[i].eMeasureVersion);
+					End("externalDocument");
+					End("reference");
+					if(listQMs[i].eMeasureNum=="68") {
+						Start("reference","typeCode","REFR");
+						Start("externalObservation");
+						StartAndEnd("id","root","680ffd36-c4e4-4145-b6c3-92418b037069");
+						StartAndEnd("code","code","55185-3","displayName","measure set","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc);
+						_w.WriteElementString("text","CLINICAL QUALITY MEASURE SET 2014");
+						End("externalObservation");
+						End("reference");
+					}
+					Start("component");
+					//Performance rate=Numerator/(Denominator-Exclusions-Exceptions)
+					Start("observation","classCode","OBS","moodCode","EVN");
+					_w.WriteComment("Performance Rate for Proportion Measure Template");
+					TemplateId("2.16.840.1.113883.10.20.27.3.14");
+					StartAndEnd("code","code","72510-1","displayName","Performance Rate","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc);
+					StartAndEnd("statusCode","code","completed");
+					Start("value");
+					_w.WriteAttributeString("xsi","type",null,"REAL");
+					Attribs("value",listQMs[i].PerformanceRate.ToString("0.00"));
+					End("value");
+					End("observation");
+					End("component");
+					Start("component");
+					//Reporting rate=(Numerator+Exclusions+Exceptions)/Denominator
+					Start("observation","classCode","OBS","moodCode","EVN");
+					_w.WriteComment("Reporting Rate for Proportion Measure Template");
+					TemplateId("2.16.840.1.113883.10.20.27.3.15");
+					StartAndEnd("code","code","72509-3","displayName","Reporting Rate","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc);
+					StartAndEnd("statusCode","code","completed");
+					Start("value");
+					_w.WriteAttributeString("xsi","type",null,"REAL");
+					Attribs("value",listQMs[i].ReportingRate.ToString("0.00"));
+					End("value");
+					End("observation");
+					End("component");
+					Start("component");
+					Start("observation","classCode","OBS","moodCode","EVN");
+					_w.WriteComment("Measure Data Template");
+					TemplateId("2.16.840.1.113883.10.20.27.3.5");
+					StartAndEnd("code","code","ASSERTION","displayName","Assertion","codeSystem","2.16.840.1.113883.5.4","codeSystemName","ActCode");
+					StartAndEnd("statusCode","code","completed");
+					Start("value");
+					_w.WriteAttributeString("xsi","type",null,"CD");
+					Attribs("code","IPP","displayName","Initial Patient Population","codeSystem","2.16.840.1.113883.5.1063","codeSystemName","ObservationValue");
+					End("value");
+					Start("entryRelationship","typeCode","SUBJ","inversionInd","true");
+					Start("observation","classCode","OBS","moodCode","EVN");
+					_w.WriteComment("Aggregate Count Template");
+					TemplateId("2.16.840.1.113883.10.20.27.3.3");
+					StartAndEnd("code","code","MSRAGG","displayName","rate aggregation","codeSystem","2.16.840.1.113883.5.4","codeSystemName","ActCode");
+					Start("value");
+					_w.WriteAttributeString("xsi","type",null,"INT");
+					Attribs("value",listQMs[i].ListEhrPats.Count.ToString());
+					End("value");
+					StartAndEnd("methodCode","code","COUNT","displayName","Count","codeSystem","2.16.840.1.113883.5.84","codeSystemName","ObservationMethod");
+					End("observation");
+					End("entryRelationship");
+					End("observation");
+					End("component");
+					End("organizer");
+					End("entry");
+				}
+				End("section");
+				End("component");
+				#endregion measure component
+				End("structuredBody");
+				End("component");
+				#endregion QRDA III Body
+				End("ClinicalDocument");
+				_w.Close();
+				//System.IO.File.WriteAllText(folderRoot+"\\QRDA_Category_III"+".xml",strBuilder.ToString());
+			}
+			#endregion Category III QRDA Document
+		}
+
+		private static string GetSupplementDataPrintString(string s) {
+			switch(s) {
+				case "AfricanAmerican":
+					return "Black";
+				case "AmericanIndian":
+					return "American Indian";
+				case "HawaiiOrPacIsland":
+					return "Hawwian or Pacific Islander";
+				case "DeclinedToSpecifyRace":
+					return "Declined to Specify Race";
+				case "Other":
+					return "Other Race";
+				case "Hispanic":
+					return "Hispanic or Latino";
+				case "NotHispanic":
+					return "Not Hispanic or Latino";
+				case "DeclinedToSpecifyEthnicity":
+					return "Declined to Specify Ethnicity";
+				case "Unknown":
+					return "Unknown Gender";
+				default:
+					return s;
+			}
 		}
 
 		///<summary>Generates one encounter xml entry and uses the global writer _x instead of the main writer _w.</summary>
 		private static void GenerateEncounterEntry(EhrCqmEncounter encCur) {
 			_isWriterW=false;
 			Start("entry","typeCode","DRIV");
-			Start("encounter","classCode","ENC","moodCode","ENV");
-			_x.WriteComment("Encounter activities template");
+			Start("encounter","classCode","ENC","moodCode","EVN");
+			_x.WriteComment("Encounter Activities Template");
 			TemplateId("2.16.840.1.113883.10.20.22.4.49");
-			_x.WriteComment("Encounter performed template");
+			_x.WriteComment("Encounter Performed Template");
 			TemplateId("2.16.840.1.113883.10.20.24.3.23");
 			StartAndEnd("id","root",_strOIDInternalCQMRoot,"extension",CqmItemAbbreviation.Enc.ToString()+encCur.EhrCqmEncounterNum.ToString());
-			Start("code","code",encCur.CodeValue,"disaplayName",encCur.Description,"codeSystem",encCur.CodeSystemOID,"codeSystemName",encCur.CodeSystemName);
+			Start("code");
+			Attribs("code",encCur.CodeValue,"displayName",encCur.Description,"codeSystem",encCur.CodeSystemOID,"codeSystemName",encCur.CodeSystemName);
 			_x.WriteAttributeString("sdtc","valueSet",null,encCur.ValueSetOID);
 			End("code");
 			_x.WriteElementString("text","Encounter, Performed: "+encCur.ValueSetName);
@@ -5931,11 +6738,10 @@ BMI 18.5-25.";
 		private static void GenerateVitalsignEntry(EhrCqmVitalsign vCur,string vType) {
 			_isWriterW=false;
 			Start("entry","typeCode","DRIV");
-			_x.WriteComment("Physical Exam Finding");
 			Start("observation","classCode","OBS","moodCode","EVN");
-			_x.WriteComment("Result observation template");
+			_x.WriteComment("Result Observation Template");
 			TemplateId("2.16.840.1.113883.10.20.22.4.2");
-			_x.WriteComment("Physical Exam, Finding template");
+			_x.WriteComment("Physical Exam Finding Template");
 			TemplateId("2.16.840.1.113883.10.20.24.3.57");
 			StartAndEnd("id","root",_strOIDInternalCQMRoot,"extension",CqmItemAbbreviation.Vital.ToString()+vType+vCur.EhrCqmVitalsignNum.ToString());
 			switch(vType) {
@@ -6043,15 +6849,15 @@ BMI 18.5-25.";
 
 		private static void GenerateDiagnosisEntry(EhrCqmProblem probCur) {
 			_isWriterW=false;
-			Start("entry");
-			Start("observation");
-			_x.WriteComment("Problem observation template");
+			Start("entry","typeCode","DRIV");
+			Start("observation","classCode","OBS","moodCode","EVN");
+			_x.WriteComment("Problem Observation Template");
 			TemplateId("2.16.840.1.113883.10.20.22.4.4");
-			_x.WriteComment("Diagnosis, active template");
+			_x.WriteComment("Diagnosis Active Template");
 			TemplateId("2.16.840.1.113883.10.20.24.3.11");
 			StartAndEnd("id","root",_strOIDInternalCQMRoot,"extension",CqmItemAbbreviation.Prob.ToString()+probCur.EhrCqmProblemNum.ToString());
 			StartAndEnd("code","code","282291009","displayName","diagnosis","codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed);
-			_x.WriteElementString("text","Diagnosis Active: "+probCur.ValueSetName+" - "+probCur.Description);
+			_x.WriteElementString("text","Diagnosis Active: "+probCur.ValueSetName);
 			StartAndEnd("statusCode","code","completed");
 			Start("effectiveTime");
 			_x.WriteComment("Attribute: Start Datetime");
@@ -6067,9 +6873,9 @@ BMI 18.5-25.";
 			_x.WriteComment("Status");
 			Start("entryRelationship","typeCode","REFR");
 			Start("observation","classCode","OBS","moodCode","EVN");
-			_x.WriteComment("Problem Status template");
+			_x.WriteComment("Problem Status Template");
 			TemplateId("2.16.840.1.113883.10.20.22.4.6");
-			_x.WriteComment("Problem Status, Active template");
+			_x.WriteComment("Problem Status Active Template");
 			TemplateId("2.16.840.1.113883.10.20.24.3.94");
 			StartAndEnd("code","code","33999-4","displayName","Status","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc);
 			StartAndEnd("statusCode","code","completed");
@@ -6087,18 +6893,18 @@ BMI 18.5-25.";
 		///<summary>Either a proc or a problem will be sent in, the other will be null.  If probCur then Procedure, Order: item, if procCur then Procedure, Perforemed: item.</summary>
 		private static void GenerateProcedureEntry(EhrCqmProc procCur,EhrCqmProblem probCur) {
 			_isWriterW=false;
-			Start("entry");
+			Start("entry","typeCode","DRIV");
 			if(probCur!=null) {
 				Start("procedure","classCode","PROC","moodCode","RQO");
-				_x.WriteComment("Plan of Care Activity Procedure template");
+				_x.WriteComment("Plan of Care Activity Procedure Template");
 				TemplateId("2.16.840.1.113883.10.20.22.4.41");
-				_x.WriteComment("QRDA Procedure, Order TemplateId");
+				_x.WriteComment("QRDA Procedure Order Template");
 				TemplateId("2.16.840.1.113883.10.20.24.3.63");
 				StartAndEnd("id","root",_strOIDInternalCQMRoot,"extension",CqmItemAbbreviation.Prob.ToString()+probCur.EhrCqmProblemNum.ToString());
 				Start("code","code",probCur.CodeValue,"displayName",probCur.Description,"codeSystem",probCur.CodeSystemOID,"codeSystemName",probCur.CodeSystemName);
 				_x.WriteAttributeString("sdtc","valueSet",null,probCur.ValueSetOID);
 				End("code");
-				_x.WriteElementString("text","Procedure, Order: "+probCur.ValueSetName+" - "+probCur.Description);
+				_x.WriteElementString("text","Procedure, Order: "+probCur.ValueSetName);
 				StartAndEnd("statusCode","code","completed");
 				_x.WriteComment("Attribute: datetime");
 				Start("author");
@@ -6111,15 +6917,15 @@ BMI 18.5-25.";
 			}
 			if(procCur!=null) {
 				Start("procedure","classCode","PROC","moodCode","EVN");
-				_x.WriteComment("Procedure activity procedure template");
+				_x.WriteComment("Procedure Activity Procedure Template");
 				TemplateId("2.16.840.1.113883.10.20.22.4.14");
-				_x.WriteComment("Procedure, Performed TemplateId");
+				_x.WriteComment("Procedure Performed Template");
 				TemplateId("2.16.840.1.113883.10.20.24.3.64");
 				StartAndEnd("id","root",_strOIDInternalCQMRoot,"extension",CqmItemAbbreviation.Proc.ToString()+procCur.EhrCqmProcNum.ToString());
 				Start("code","code",procCur.ProcCode,"displayName",procCur.Description,"codeSystem",procCur.CodeSystemOID,"codeSystemName",procCur.CodeSystemName);
 				_x.WriteAttributeString("sdtc","valueSet",null,procCur.ValueSetOID);
 				End("code");
-				_x.WriteElementString("text","Procedure, Performed: "+procCur.ValueSetName+" - "+procCur.Description);
+				_x.WriteElementString("text","Procedure, Performed: "+procCur.ValueSetName);
 				StartAndEnd("statusCode","code","completed");
 				Start("effectiveTime");
 				_x.WriteComment("Attribute: Start Datetime");
@@ -6135,17 +6941,17 @@ BMI 18.5-25.";
 
 		private static void GenerateRiskAssessEntry(EhrCqmProblem probCur) {
 			_isWriterW=false;
-			Start("entry");
+			Start("entry","typeCode","DRIV");
 			Start("observation","classCode","OBS","moodCode","EVN");
-			_x.WriteComment("Assessment Scale Observation templateId");
+			_x.WriteComment("Assessment Scale Observation Template");
 			TemplateId("2.16.840.1.113883.10.20.22.4.69");
-			_x.WriteComment("Risk Category Assessment");
+			_x.WriteComment("Risk Category Assessment Template");
 			TemplateId("2.16.840.1.113883.10.20.24.3.69");
 			StartAndEnd("id","root",_strOIDInternalCQMRoot,"extension",CqmItemAbbreviation.Prob.ToString()+probCur.EhrCqmProblemNum.ToString());
 			Start("code","code",probCur.CodeValue,"displayName",probCur.Description,"codeSystem",probCur.CodeSystemOID,"codeSystemName",probCur.CodeSystemName);
 			_x.WriteAttributeString("sdtc","valueSet",null,probCur.ValueSetOID);
 			End("code");
-			_x.WriteElementString("text","Risk Category Assessment: "+probCur.ValueSetName+" - "+probCur.Description);
+			_x.WriteElementString("text","Risk Category Assessment: "+probCur.ValueSetName);
 			StartAndEnd("statusCode","code","completed");
 			Start("effectiveTime");
 			_x.WriteComment("Attribute: Start Datetime");
@@ -6160,15 +6966,15 @@ BMI 18.5-25.";
 
 		private static void GenerateCommunicationEntry(EhrCqmProblem probCur) {
 			_isWriterW=false;
-			Start("entry");
+			Start("entry","typeCode","DRIV");
 			Start("act","classCode","ACT","moodCode","EVN");
-			_x.WriteComment("Communication from Patient to Provider templateId");
+			_x.WriteComment("Communication from Patient to Provider Template");
 			TemplateId("2.16.840.1.113883.10.20.24.3.2");
 			StartAndEnd("id","root",_strOIDInternalCQMRoot,"extension",CqmItemAbbreviation.Prob.ToString()+probCur.EhrCqmProblemNum.ToString());
 			Start("code","code",probCur.CodeValue,"displayName",probCur.Description,"codeSystem",probCur.CodeSystemOID,"codeSystemName",probCur.CodeSystemName);
 			_x.WriteAttributeString("sdtc","valueSet",null,probCur.ValueSetOID);
 			End("code");
-			_x.WriteElementString("text","Communication, From patient to provider: "+probCur.ValueSetName+" - "+probCur.Description);
+			_x.WriteElementString("text","Communication, From patient to provider: "+probCur.ValueSetName);
 			StartAndEnd("statusCode","code","completed");
 			Start("effectiveTime");
 			DateElement("low",probCur.DateStart);
@@ -6197,29 +7003,30 @@ BMI 18.5-25.";
 		///<para>Then use the negationInd="true" attribute to indicate that it was not performed</para></summary>
 		private static void GenerateNotPerfEntry(EhrCqmNotPerf npCur) {
 			_isWriterW=false;
-			Start("entry");
+			Start("entry","typeCode","DRIV");
 			if(npCur.ValueSetOID=="2.16.840.1.113883.3.526.3.1254") {//flu vaccine medication administered not done
 				Start("act","classCode","ACT","moodCode","EVN");
-				_x.WriteComment("Medication, Administered template");
+				_x.WriteComment("Medication Administered Template");
 				TemplateId("2.16.840.1.113883.10.20.24.3.42");
 				StartAndEnd("id","root",_strOIDInternalCQMRoot,"extension",CqmItemAbbreviation.NotPerf.ToString()+npCur.EhrCqmNotPerfNum.ToString());
 				StartAndEnd("code","code","416118004","displayName","Administration","codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed);
-				StartAndEnd("statusCode","code","compeleted");
+				StartAndEnd("statusCode","code","completed");
 				StartAndEnd("effectiveTime","nullFlavor","NI");
 				Start("entryRelationship","typeCode","COMP");
 				Start("substanceAdministration","classCode","SBADM","moodCode","EVN","negationInd","true");
-				_x.WriteComment("Medication Activity template");
+				_x.WriteComment("Medication Activity Template");
 				TemplateId("2.16.840.1.113883.10.20.22.4.16");
-				StartAndEnd("id","root","");//not sure what this id should be??
-				StartAndEnd("statusCode","code","compeleted");
+				StartAndEnd("id","root",_strOIDInternalCQMRoot,"extension",CqmItemAbbreviation.NotPerf.ToString()+npCur.EhrCqmNotPerfNum.ToString()+npCur.PatNum.ToString());
+				_x.WriteElementString("text","Medication Administered, not done: "+npCur.ValueSetName);
+				StartAndEnd("statusCode","code","completed");
 				Start("effectiveTime");
 				DateElement("low",npCur.DateEntry);
-				DateElement("high",npCur.DateEntry);
 				End("effectiveTime");
 				Start("consumable");
 				Start("manufacturedProduct","classCode","MANU");
-				_x.WriteComment("Medication Information template");
+				_x.WriteComment("Medication Information Template");
 				TemplateId("2.16.840.1.113883.10.20.22.4.23");
+				StartAndEnd("id","root",_strOIDInternalCQMRoot,"extension",CqmItemAbbreviation.NotPerf.ToString()+npCur.EhrCqmNotPerfNum.ToString()+npCur.CodeValue.ToString());
 				Start("manufacturedMaterial");
 				Start("code","code",npCur.CodeValue,"displayName",npCur.Description,"codeSystem",npCur.CodeSystemOID,"codeSystemName",npCur.CodeSystemName);
 				_x.WriteAttributeString("sdtc","valueSet",null,npCur.ValueSetOID);
@@ -6229,7 +7036,7 @@ BMI 18.5-25.";
 				End("consumable");
 				Start("entryRelationship","typeCode","RSON");
 				Start("observation","classCode","OBS","moodCode","EVN");
-				_x.WriteComment("Reason observation template");
+				_x.WriteComment("Reason Observation Template");
 				TemplateId("2.16.840.1.113883.10.20.24.3.88");
 				StartAndEnd("code","code","410666004","displayName","reason","codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed);
 				Start("value");
@@ -6242,16 +7049,108 @@ BMI 18.5-25.";
 				End("substanceAdministration");
 				End("entryRelationship");
 				End("act");
-				_w.WriteElementString("td","Medication, Administered not done: "+npCur.ValueSetName+" - "+npCur.DescriptionReason);
 			}
 			else if(npCur.ValueSetOID=="2.16.840.1.113883.3.526.3.402" || npCur.ValueSetOID=="2.16.840.1.113883.3.600.1.462") {//flu vaccine proc or current meds documented proc performed not done
-				_w.WriteElementString("td","Procedure, Performed not done: "+npCur.ValueSetName+" - "+npCur.DescriptionReason);
+				Start("procedure","classCode","PROC","moodCode","EVN","negationInd","true");
+				_x.WriteComment("Procedure Activity Procedure Template");
+				TemplateId("2.16.840.1.113883.10.20.22.4.14");
+				_x.WriteComment("Procedure Performed Template");
+				TemplateId("2.16.840.1.113883.10.20.24.3.64");
+				StartAndEnd("id","root",_strOIDInternalCQMRoot,"extension",CqmItemAbbreviation.Proc.ToString()+npCur.EhrCqmNotPerfNum.ToString());
+				_x.WriteElementString("text","Procedure Performed, not done: "+npCur.Description);
+				Start("code","code",npCur.CodeValue,"displayName",npCur.Description,"codeSystem",npCur.CodeSystemOID,"codeSystemName",npCur.CodeSystemName);
+				_x.WriteAttributeString("sdtc","valueSet",null,npCur.ValueSetOID);
+				End("code");
+				StartAndEnd("statusCode","code","completed");
+				Start("effectiveTime");
+				DateElement("low",npCur.DateEntry);
+				End("effectiveTime");
+				Start("entryRelationship","typeCode","RSON");
+				Start("observation","classCode","OBS","moodCode","EVN");
+				_x.WriteComment("Reason Template");
+				TemplateId("2.16.840.1.113883.10.20.24.3.88");
+				StartAndEnd("code","code","410666004","displayName","reason","codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed);
+				StartAndEnd("statusCode","code","completed");
+				Start("effectiveTime");
+				DateElement("low",npCur.DateEntry);
+				End("effectiveTime");
+				Start("value");
+				_x.WriteAttributeString("xsi","type",null,"CD");
+				Attribs("code",npCur.CodeValueReason,"displayName",npCur.DescriptionReason,"codeSystem",npCur.CodeSystemOIDReason,"codeSystemName",npCur.CodeSystemNameReason);
+				_x.WriteAttributeString("sdtc","valueSet",null,npCur.ValueSetOIDReason);
+				End("value");
+				End("observation");
+				End("entryRelationship");
+				End("procedure");
 			}
 			else if(npCur.ValueSetOID=="2.16.840.1.113883.3.600.1.681") {//BMI exam performed not done
-				_w.WriteElementString("td","Physical Exam, Performed not done: "+npCur.ValueSetName+" - "+npCur.DescriptionReason);
+				_x.WriteComment("Physical Exam Finding");
+				Start("observation","classCode","OBS","moodCode","EVN","negationInd","true");
+				_x.WriteComment("Result Observation Template");
+				TemplateId("2.16.840.1.113883.10.20.22.4.2");
+				_x.WriteComment("Physical Exam Finding Template");
+				TemplateId("2.16.840.1.113883.10.20.24.3.57");
+				StartAndEnd("id","root",_strOIDInternalCQMRoot,"extension",CqmItemAbbreviation.Vital.ToString()+npCur.EhrCqmNotPerfNum.ToString());
+				Start("code","code","39156-5","displayName","Body mass index (BMI) [Ratio]","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc);
+				_x.WriteAttributeString("sdtc","valueSet",null,"2.16.840.1.113883.3.600.1.681");
+				End("code");
+				_x.WriteElementString("text","Physical Exam Performed, not done: BMI LOINC Value");
+				StartAndEnd("statusCode","code","completed");
+				Start("effectiveTime");
+				DateElement("low",npCur.DateEntry);
+				End("effectiveTime");
+				StartAndEnd("value","nullFlavor","NI");
+				Start("entryRelationship","typeCode","RSON");
+				Start("observation","classCode","OBS","moodCode","EVN");
+				_x.WriteComment("Reason Template");
+				TemplateId("2.16.840.1.113883.10.20.24.3.88");
+				StartAndEnd("code","code","410666004","displayName","reason","codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed);
+				StartAndEnd("statusCode","code","completed");
+				Start("effectiveTime");
+				DateElement("low",npCur.DateEntry);
+				End("effectiveTime");
+				Start("value");
+				_x.WriteAttributeString("xsi","type",null,"CD");
+				Attribs("code",npCur.CodeValueReason,"displayName",npCur.DescriptionReason,"codeSystem",npCur.CodeSystemOIDReason,"codeSystemName",npCur.CodeSystemNameReason);
+				_x.WriteAttributeString("sdtc","valueSet",null,npCur.ValueSetOIDReason);
+				End("value");
+				End("observation");
+				End("entryRelationship");
+				End("observation");
 			}
 			else {//must be a tobacco assessment not done
-				_w.WriteElementString("td","Risk Category Assessment not done: "+npCur.ValueSetName+" - "+npCur.DescriptionReason);
+				Start("observation","classCode","OBS","moodCode","EVN","negationInd","true");
+				_x.WriteComment("Tobacco Use Template");
+				TemplateId("2.16.840.1.113883.10.20.22.4.85");
+				StartAndEnd("id","root",_strOIDInternalCQMRoot,"extension",CqmItemAbbreviation.MeasEvn.ToString()+npCur.EhrCqmNotPerfNum.ToString());
+				StartAndEnd("code","code","ASSERTION","displayName","Assertion","codeSystem","2.16.840.1.113883.5.4","codeSystemName","ActCode");
+				_x.WriteElementString("text","Risk Category Assessment, not done: "+npCur.Description);
+				StartAndEnd("statusCode","code","completed");
+				Start("effectiveTime");
+				DateElement("low",npCur.DateEntry);
+				End("effectiveTime");
+				Start("value");
+				_x.WriteAttributeString("xsi","type",null,"CD");
+				Attribs("code",npCur.CodeValue,"displayName",npCur.Description,"codeSystem",npCur.CodeSystemOID,"codeSystemName",npCur.CodeSystemName);
+				_x.WriteAttributeString("sdtc","valueSet",null,npCur.ValueSetOID);
+				End("value");
+				Start("entryRelationship","typeCode","RSON");
+				Start("observation","classCode","OBS","moodCode","EVN");
+				_x.WriteComment("Reason Template");
+				TemplateId("2.16.840.1.113883.10.20.24.3.88");
+				StartAndEnd("code","code","410666004","displayName","reason","codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed);
+				StartAndEnd("statusCode","code","completed");
+				Start("effectiveTime");
+				DateElement("low",npCur.DateEntry);
+				End("effectiveTime");
+				Start("value");
+				_x.WriteAttributeString("xsi","type",null,"CD");
+				Attribs("code",npCur.CodeValueReason,"displayName",npCur.DescriptionReason,"codeSystem",npCur.CodeSystemOIDReason,"codeSystemName",npCur.CodeSystemNameReason);
+				_x.WriteAttributeString("sdtc","valueSet",null,npCur.ValueSetOIDReason);
+				End("value");
+				End("observation");
+				End("entryRelationship");				
+				End("observation");
 			}
 			End("entry");
 			_isWriterW=true;			
@@ -6259,21 +7158,126 @@ BMI 18.5-25.";
 
 		private static void GenerateMedPatsEntry(EhrCqmMedicationPat mPatCur) {
 			_isWriterW=false;
-			Start("entry");
-			Start("act","classCode","ACT","moodCode","EVN");
-			_x.WriteComment("Medication, Administered template");
-			TemplateId("2.16.840.1.113883.10.20.24.3.42");
-			StartAndEnd("id","root",_strOIDInternalCQMRoot,"extension",CqmItemAbbreviation.MedPat.ToString()+mPatCur.EhrCqmMedicationPatNum.ToString());
-			End("act");
+			Start("entry","typeCode","DRIV");
+			if(mPatCur.EhrCqmMedicationPatNum!=0) {//either Medication, Active: or Medication, Ordered:
+				if(mPatCur.PatNote=="") {//Medication, Order:
+					Start("substanceAdministration","classCode","SBADM","moodCode","RQO");
+					_x.WriteComment("Plan of Care Activity Substance Administration Template");
+					TemplateId("2.16.840.1.113883.10.20.22.4.42");
+					_x.WriteComment("Medication Order Template");
+					TemplateId("2.16.840.1.113883.10.20.24.3.47");
+					StartAndEnd("id","root",_strOIDInternalCQMRoot,"extension",CqmItemAbbreviation.MedPat.ToString()+mPatCur.EhrCqmMedicationPatNum.ToString());
+					_x.WriteElementString("text","Medication Order: "+mPatCur.ValueSetName);
+					StartAndEnd("statusCode","code","new");
+				}
+				else {//Medication, Active:
+					Start("substanceAdministration","classCode","SBADM","moodCode","EVN");
+					_x.WriteComment("Medication Activity Template");
+					TemplateId("2.16.840.1.113883.10.20.22.4.16");
+					StartAndEnd("id","root",_strOIDInternalCQMRoot,"extension",CqmItemAbbreviation.MedPat.ToString()+mPatCur.EhrCqmMedicationPatNum.ToString());
+					_x.WriteElementString("text","Medication Active: "+mPatCur.ValueSetName);
+					StartAndEnd("statusCode","code","completed");
+				}
+				Start("effectiveTime");
+				DateElement("low",mPatCur.DateStart);
+				DateElement("high",mPatCur.DateStop);
+				End("effectiveTime");
+				Start("consumable");
+				Start("manufacturedProduct","classCode","MANU");
+				_x.WriteComment("Medication Information Template");
+				TemplateId("2.16.840.1.113883.10.20.22.4.23");
+				StartAndEnd("id","root",_strOIDInternalCQMRoot,"extension",CqmItemAbbreviation.MedPat.ToString()+mPatCur.EhrCqmMedicationPatNum.ToString()+mPatCur.CVXCode);
+				Start("manufacturedMaterial");
+				Start("code","code",mPatCur.RxCui.ToString(),"displayName",mPatCur.Description,"codeSystem",mPatCur.CodeSystemOID,"codeSystemName",mPatCur.CodeSystemName);
+				_x.WriteAttributeString("sdtc","valueSet",null,mPatCur.ValueSetOID);
+				End("code");
+				End("manufacturedMaterial");
+				End("manufacturedProduct");
+				End("consumable");
+				End("substanceAdministration");
+			}
+			else {//if EhrCqmMedicationPat==0 then it is a vaccine, so EhrCqmVaccinePatNum!=0
+				//if NotAdministered then it is a Medication Allergy/Intolerance
+				if(mPatCur.CompletionStatus==VaccineCompletionStatus.NotAdministered) {
+					Start("observation","classCode","OBS","moodCode","EVN");
+					_x.WriteComment("Substance or Device Allergy - Intolerance Observation");
+					TemplateId("2.16.840.1.113883.10.20.24.3.90");
+					_x.WriteComment("Allergy - Intolerance Observation Template");
+					TemplateId("2.16.840.1.113883.10.20.22.4.7");
+					_x.WriteComment("Medication Allergy Template");
+					TemplateId("2.16.840.1.113883.10.20.24.3.44");
+					StartAndEnd("id","root",_strOIDInternalCQMRoot,"extension",CqmItemAbbreviation.MedPat.ToString()+mPatCur.EhrCqmVaccinePatNum.ToString());
+					StartAndEnd("code","code","ASSERTION","displayName","Assertion","codeSystem","2.16.840.1.113883.5.4","codeSystemName","ActCode");
+					StartAndEnd("statusCode","code","completed");
+					Start("effectiveTime");
+					DateElement("low",mPatCur.DateStart);
+					DateElement("high",mPatCur.DateStop);
+					End("effectiveTime");
+					Start("value");
+					_x.WriteAttributeString("xsi","type",null,"CD");
+					Attribs("code","416098002","displayName","Drug allergy","codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed);
+					End("value");
+					Start("participant","typeCode","CSM");
+					Start("participantRole","classCode","MANU");
+					Start("playingEntity","classCode","MMAT");
+					Start("code","code",mPatCur.CVXCode,"displayName",mPatCur.Description,"codeSystem",mPatCur.CodeSystemOID,"codeSystemName",mPatCur.CodeSystemName);
+					_x.WriteAttributeString("sdtc","valueSet",null,mPatCur.ValueSetOID);
+					End("code");
+					_x.WriteElementString("text","Medication Allergy: "+mPatCur.ValueSetName);
+					End("playingEntity");
+					End("participantRole");
+					End("participant");
+					End("observation");
+				}
+				else {//otherwise it is a Medication Administered
+					Start("act","classCode","ACT","moodCode","EVN");
+					_x.WriteComment("Medication Administered Template");
+					TemplateId("2.16.840.1.113883.10.20.24.3.42");
+					StartAndEnd("id","root",_strOIDInternalCQMRoot,"extension",CqmItemAbbreviation.MedPat.ToString()+mPatCur.EhrCqmVaccinePatNum.ToString());
+					StartAndEnd("code","code","416118004","displayName","Administration","codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed);
+					StartAndEnd("statusCode","code","completed");
+					Start("effectiveTime");
+					DateElement("low",mPatCur.DateStart);
+					DateElement("high",mPatCur.DateStop);
+					End("effectiveTime");
+					Start("entryRelationship","typeCode","COMP");
+					_x.WriteComment("Medication Activity");
+					TemplateId("2.16.840.1.113883.10.20.22.4.16");
+					Start("substanceAdministration","classCode","SBADM","moodCode","EVN");
+					StartAndEnd("id","root",_strOIDInternalCQMRoot,"extension",CqmItemAbbreviation.MedPat.ToString()+mPatCur.EhrCqmVaccinePatNum.ToString()+mPatCur.PatNum.ToString());
+					_x.WriteElementString("text","Medication Administered: "+mPatCur.ValueSetName);
+					StartAndEnd("statusCode","code","completed");
+					Start("effectiveTime");
+					DateElement("low",mPatCur.DateStart);
+					DateElement("high",mPatCur.DateStop);
+					End("effectiveTime");
+					Start("consumable");
+					Start("manufacturedProduct","classCode","MANU");
+					_x.WriteComment("Medication Information Template");
+					TemplateId("2.16.840.1.113883.10.20.22.4.23");
+					StartAndEnd("id","root",_strOIDInternalCQMRoot,"extension",CqmItemAbbreviation.MedPat.ToString()+mPatCur.EhrCqmMedicationPatNum.ToString()+mPatCur.CVXCode);
+					Start("manufacturedMaterial");
+					Start("code","code",mPatCur.RxCui.ToString(),"displayName",mPatCur.Description,"codeSystem",mPatCur.CodeSystemOID,"codeSystemName",mPatCur.CodeSystemName);
+					_x.WriteAttributeString("sdtc","valueSet",null,mPatCur.ValueSetOID);
+					End("code");
+					End("manufacturedMaterial");
+					End("manufacturedProduct");
+					End("consumable");
+					End("substanceAdministration");
+					End("entryRelationship");
+					End("act");
+				}
+			}
 			End("entry");
 			_isWriterW=true;			
 		}
 
 		private static void GenerateMeasEventEntry(EhrCqmMeasEvent mCur) {
 			_isWriterW=false;
-			Start("entry");
+			Start("entry","typeCode","DRIV");
 			if(mCur.EventType==EhrMeasureEventType.TobaccoUseAssessed) {
 				Start("observation","classCode","OBS","moodCode","EVN");
+				_x.WriteComment("Tobacco Use Template");
 				TemplateId("2.16.840.1.113883.10.20.22.4.85");
 				StartAndEnd("id","root",_strOIDInternalCQMRoot,"extension",CqmItemAbbreviation.MeasEvn.ToString()+mCur.EhrCqmMeasEventNum.ToString());
 				StartAndEnd("code","code","ASSERTION","displayName","Assertion","codeSystem","2.16.840.1.113883.5.4","codeSystemName","ActCode");
@@ -6291,9 +7295,9 @@ BMI 18.5-25.";
 			}
 			else if(mCur.EventType==EhrMeasureEventType.CurrentMedsDocumented) {
 				Start("procedure","classCode","PROC","moodCode","EVN");
-				_x.WriteComment("Procedure activity procedure template");
+				_x.WriteComment("Procedure Activity Procedure Template");
 				TemplateId("2.16.840.1.113883.10.20.22.4.14");
-				_x.WriteComment("Procedure, Performed TemplateId");
+				_x.WriteComment("Procedure Performed Template");
 				TemplateId("2.16.840.1.113883.10.20.24.3.64");
 				StartAndEnd("id","root",_strOIDInternalCQMRoot,"extension",CqmItemAbbreviation.MeasEvn.ToString()+mCur.EhrCqmMeasEventNum.ToString());
 				Start("code","code",mCur.CodeValue,"displayName",mCur.Description,"codeSystem",mCur.CodeSystemOID,"codeSystemName",mCur.CodeSystemName);
@@ -6315,8 +7319,50 @@ BMI 18.5-25.";
 
 		private static void GenerateInterventionEntry(EhrCqmIntervention iCur) {
 			_isWriterW=false;
-			Start("entry");
-
+			Start("entry","typeCode","DRIV");
+			//these are the value sets used by BMI for adults, interventions for above/below weight follow up or referrals for weight assessment
+			//these are Intervention, Order
+			if(iCur.ValueSetOID=="2.16.840.1.113883.3.600.1.1525" || iCur.ValueSetOID=="2.16.840.1.113883.3.600.1.1527" || iCur.ValueSetOID=="2.16.840.1.113883.3.600.1.1528") {
+				Start("act","classCode","ACT","moodCode","RQO");
+				_x.WriteComment("Plan of Care Activity Act Template");
+				TemplateId("2.16.840.1.113883.10.20.22.4.39");
+				_x.WriteComment("Intervention Order Template");
+				TemplateId("2.16.840.1.113883.10.20.24.3.63");
+				StartAndEnd("id","root",_strOIDInternalCQMRoot,"extension",CqmItemAbbreviation.Ivn.ToString()+iCur.EhrCqmInterventionNum.ToString());
+				Start("code","code",iCur.CodeValue,"displayName",iCur.Description,"codeSystem",iCur.CodeSystemOID,"codeSystemName",iCur.CodeSystemName);
+				_x.WriteAttributeString("sdtc","valueSet",null,iCur.ValueSetOID);
+				End("code");
+				_x.WriteElementString("text","Intervention Order: "+iCur.ValueSetName);
+				StartAndEnd("statusCode","code","completed");
+				Start("effectiveTime");
+				DateElement("low",iCur.DateEntry);
+				End("effectiveTime");
+				Start("author");
+				DateElement("time",iCur.DateEntry);
+				Start("assignedAuthor");
+				StartAndEnd("id","root",_strOIDInternalProvRoot,"extension",iCur.ProvNum.ToString());
+				End("assignedAuthor");
+				End("author");
+				End("act");
+			}
+			//all others are Intervention, Performed
+			else {
+				Start("act","classCode","ACT","moodCode","EVN");
+				_x.WriteComment("Procedure Activity Act Template");
+				TemplateId("2.16.840.1.113883.10.20.22.4.12");
+				_x.WriteComment("Intervention Performed Template");
+				TemplateId("2.16.840.1.113883.10.20.24.3.32");
+				StartAndEnd("id","root",_strOIDInternalCQMRoot,"extension",CqmItemAbbreviation.Ivn.ToString()+iCur.EhrCqmInterventionNum.ToString());
+				Start("code","code",iCur.CodeValue,"displayName",iCur.Description,"codeSystem",iCur.CodeSystemOID,"codeSystemName",iCur.CodeSystemName);
+				_x.WriteAttributeString("sdtc","valueSet",null,iCur.ValueSetOID);
+				End("code");
+				_x.WriteElementString("text","Intervention Performed: "+iCur.ValueSetName);
+				StartAndEnd("statusCode","code","completed");
+				Start("effectiveTime");
+				DateElement("low",iCur.DateEntry);
+				End("effectiveTime");
+				End("act");
+			}
 			End("entry");
 			_isWriterW=true;			
 		}
@@ -6467,7 +7513,9 @@ BMI 18.5-25.";
 			}
 			_w.WriteElementString("city",strCity);
 			_w.WriteElementString("state",strState);
-			_w.WriteElementString("postalCode",strZip);//postalCode is required if the country is US.  If country is not specified, it's assumed to be US. If country is something other than US, the postalCode MAY be present but MAY be bound to different vocabularies
+			if(strZip.Length>4) {
+				_w.WriteElementString("postalCode",strZip.Substring(0,5));//postalCode is required if the country is US.  If country is not specified, it's assumed to be US. If country is something other than US, the postalCode MAY be present but MAY be bound to different vocabularies. Validated to be at least 5 characters long.
+			}
 			_w.WriteElementString("country","US");
 			End("addr");
 		}
@@ -6475,9 +7523,9 @@ BMI 18.5-25.";
 		private static void MeasureEntry(string versionSpecificId,string measureTitle,string versionNeutralId,string versionNum) {
 			Start("entry");
 			Start("organizer","classCode","CLUSTER","moodCode","EVN");
-			_w.WriteComment("This is the templateId for Measure Reference");
+			_w.WriteComment("Measure Reference Template");
 			TemplateId("2.16.840.1.113883.10.20.24.3.98");
-			_w.WriteComment("This is the templateId for eMeasure Reference QDM");
+			_w.WriteComment("eMeasure Reference QDM Template");
 			TemplateId("2.16.840.1.113883.10.20.24.3.97");
 			StartAndEnd("statusCode","code","completed");
 			Start("reference","typeCode","REFR");
@@ -6539,6 +7587,12 @@ BMI 18.5-25.";
 					strErrors+="\r\n";
 				}
 				strErrors+="Invalid practice state.  Must be two letters.";
+			}
+			if(PrefC.GetString(PrefName.PracticeZip).Trim().Length<5) {
+				if(strErrors!="") {
+					strErrors+="\r\n";
+				}
+				strErrors+="Invalid practice zip.  Must be at least 5 digits long.";
 			}
 			Provider provDefault=Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv));
 			if(provDefault.FName.Trim()=="") {
