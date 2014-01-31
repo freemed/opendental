@@ -919,7 +919,7 @@ namespace OpenDentBusiness{
 							+"AND IsFrom=0 AND IsTransitionOfCare=1 "
 							+"GROUP BY ptsSeen.PatNum) ptsRefCnt "
 						+"LEFT JOIN (SELECT ehrmeasureevent.PatNum,COUNT(*) AS CcdCount FROM ehrmeasureevent "
-							+"WHERE EventType IN("+POut.Int((int)EhrMeasureEventType.SummaryOfCareProvidedToDr)+", "+POut.Int((int)EhrMeasureEventType.SummaryOfCareProvidedToDrElectronic)+") "
+							+"WHERE EventType IN("+POut.Int((int)EhrMeasureEventType.SummaryOfCareProvidedToDr)+") "
 							+"AND DATE(ehrmeasureevent.DateTEvent) BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
 							+"GROUP BY ehrmeasureevent.PatNum) ptsCcdCount ON ptsRefCnt.PatNum=ptsCcdCount.PatNum";
 					tableRaw=Db.GetTable(command);
@@ -2722,11 +2722,11 @@ namespace OpenDentBusiness{
 							+"WHEN ehrlab.OrderingProviderIdentifierTypeCode='PRN' THEN ( " //When the lab is using provider number to determine provider.
 								+"CASE WHEN ehrlab.OrderingProviderAssigningAuthorityUniversalID=( " //If the AssigningAuthority is OpenDental.
 									+"SELECT IDRoot FROM oidinternal WHERE IDType='Provider' GROUP BY IDType "
-								+") THEN ehrlab.OrderingProviderID IN("+POut.String(provs)+") END) " //Use the ProvNum to determine provider.
+								+") THEN ehrlab.OrderingProviderID IN('"+POut.String(provOID)+"') END) " //Use the ProvNum to determine provider.
 							+"ELSE FALSE END) " //If the AssigningAuthority is not OpenDental, we have no way to tell who the provider is.
 						+"AND ehrlab.ObservationDateTimeStart BETWEEN DATE_FORMAT("+POut.Date(dateStart)+",'%Y%m%d') AND DATE_FORMAT("+POut.Date(dateEnd)+",'%Y%m%d') "
-						+"AND (CASE WHEN ehrlab.UsiCodeSystemName='LN' THEN ehrlab.UsiID WHEN ehrlab.UsiCodeSystemNameAlt='LN' THEN ehrlab.UsiIDAlt ELSE '' END) "
-							+"NOT IN (SELECT LoincCode FROM loinc WHERE loinc.ClassType LIKE '%rad%')";
+						+"AND (CASE WHEN ehrlab.UsiCodeSystemName='LN' THEN ehrlab.UsiID WHEN ehrlab.UsiCodeSystemNameAlt='LN' THEN ehrlab.UsiIDAlt ELSE '' END) ";
+							//+"NOT IN (SELECT LoincCode FROM loinc WHERE loinc.ClassType LIKE '%rad%')"; //Not sure if we need this since rad labs shouldnt be set to numeric results
 					tableRaw=Db.GetTable(command);
 					break;
 				#endregion
@@ -2797,7 +2797,7 @@ namespace OpenDentBusiness{
 							+"AND IsFrom=0 AND IsTransitionOfCare=1 "
 							+"GROUP BY ptsSeen.PatNum) ptsRefCnt "
 						+"LEFT JOIN (SELECT ehrmeasureevent.PatNum,COUNT(*) AS CcdCount FROM ehrmeasureevent "
-							+"WHERE EventType IN("+POut.Int((int)EhrMeasureEventType.SummaryOfCareProvidedToDr)+", "+POut.Int((int)EhrMeasureEventType.SummaryOfCareProvidedToDrElectronic)+") "
+							+"WHERE EventType IN("+POut.Int((int)EhrMeasureEventType.SummaryOfCareProvidedToDr)+") "
 							+"AND DATE(ehrmeasureevent.DateTEvent) BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
 							+"GROUP BY ehrmeasureevent.PatNum) ptsCcdCount ON ptsRefCnt.PatNum=ptsCcdCount.PatNum";
 					tableRaw=Db.GetTable(command);
@@ -2816,10 +2816,6 @@ namespace OpenDentBusiness{
 							+"AND RefDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
 							+"AND IsFrom=0 AND IsTransitionOfCare=1 "
 							+"GROUP BY ptsSeen.PatNum) ptsRefCnt "
-						+"LEFT JOIN (SELECT ehrmeasureevent.PatNum,COUNT(*) AS CcdCount FROM ehrmeasureevent "
-							+"WHERE EventType="+POut.Int((int)EhrMeasureEventType.SummaryOfCareProvidedToDr)+" "
-							+"AND DATE(ehrmeasureevent.DateTEvent) BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
-							+"GROUP BY ehrmeasureevent.PatNum) ptsCcdCount ON ptsRefCnt.PatNum=ptsCcdCount.PatNum "
 						+"LEFT JOIN (SELECT ehrmeasureevent.PatNum,COUNT(*) AS CcdCountElec FROM ehrmeasureevent "
 							+"WHERE EventType="+POut.Int((int)EhrMeasureEventType.SummaryOfCareProvidedToDrElectronic)+" "
 							+"AND DATE(ehrmeasureevent.DateTEvent) BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "

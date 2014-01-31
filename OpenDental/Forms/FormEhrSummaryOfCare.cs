@@ -193,9 +193,10 @@ namespace OpenDental {
 				newMeasureEvent.DateTEvent=DateTime.Now;
 				newMeasureEvent.EventType=EhrMeasureEventType.SummaryOfCareProvidedToDr;
 				newMeasureEvent.PatNum=PatCur.PatNum;
-				EhrMeasureEvents.Insert(newMeasureEvent);
+				long fkey=EhrMeasureEvents.Insert(newMeasureEvent);
 				newMeasureEvent=new EhrMeasureEvent();
 				newMeasureEvent.DateTEvent=DateTime.Now;
+				newMeasureEvent.FKey=fkey;
 				newMeasureEvent.EventType=EhrMeasureEventType.SummaryOfCareProvidedToDrElectronic;
 				newMeasureEvent.PatNum=PatCur.PatNum;
 				EhrMeasureEvents.Insert(newMeasureEvent);
