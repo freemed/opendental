@@ -2498,6 +2498,14 @@ namespace OpenDentBusiness{
 			command="SELECT GROUP_CONCAT(provider.ProvNum) FROM provider WHERE provider.EhrKey="
 				+"(SELECT pv.EhrKey FROM provider pv WHERE pv.ProvNum="+POut.Long(provNum)+")";
 			string provs=Db.GetScalar(command);
+			string[] tempProv=provs.Split(',');
+			string provOID="";
+			for(int oi=0;oi<tempProv.Length;oi++) {
+				provOID=provOID+OIDInternals.GetForType(IdentifierType.Provider).IDRoot+"."+tempProv[oi];
+				if(oi<tempProv.Length-1) {
+					provOID+=",";
+				}
+			}	
 			command="SELECT GROUP_CONCAT(provider.NationalProvID) FROM provider WHERE provider.EhrKey="
 				+"(SELECT pv.EhrKey FROM provider pv WHERE pv.ProvNum="+POut.Long(provNum)+")";
 			string provNPIs=Db.GetScalar(command);
@@ -2526,7 +2534,7 @@ namespace OpenDentBusiness{
 							+"WHEN ehrlab.OrderingProviderIdentifierTypeCode='PRN' THEN ( " //When the lab is using provider number to determine provider.
 								+"CASE WHEN ehrlab.OrderingProviderAssigningAuthorityUniversalID=( " //If the AssigningAuthority is OpenDental.
 									+"SELECT IDRoot FROM oidinternal WHERE IDType='Provider' GROUP BY IDType "
-								+") THEN ehrlab.OrderingProviderID IN("+POut.String(provs)+") END) " //Use the ProvNum to determine provider.
+								+") THEN ehrlab.OrderingProviderID IN('"+POut.String(provOID)+"') END) " //Use the ProvNum to determine provider.
 							+"ELSE FALSE END) " //If the AssigningAuthority is not OpenDental, we have no way to tell who the provider is.
 						+"AND ehrlab.ObservationDateTimeStart BETWEEN DATE_FORMAT("+POut.Date(dateStart)+",'%Y%m%d') AND DATE_FORMAT("+POut.Date(dateEnd)+",'%Y%m%d') "
 						+"AND (CASE WHEN ehrlab.UsiCodeSystemName='LN' THEN ehrlab.UsiID WHEN ehrlab.UsiCodeSystemNameAlt='LN' THEN ehrlab.UsiIDAlt ELSE '' END) "
@@ -2544,7 +2552,7 @@ namespace OpenDentBusiness{
 							+"WHEN ehrlab.OrderingProviderIdentifierTypeCode='PRN' THEN ( " //When the lab is using provider number to determine provider.
 								+"CASE WHEN ehrlab.OrderingProviderAssigningAuthorityUniversalID=( " //If the AssigningAuthority is OpenDental.
 									+"SELECT IDRoot FROM oidinternal WHERE IDType='Provider' GROUP BY IDType "
-								+") THEN ehrlab.OrderingProviderID IN("+POut.String(provs)+") END) " //Use the ProvNum to determine provider.
+								+") THEN ehrlab.OrderingProviderID IN('"+POut.String(provOID)+"') END) " //Use the ProvNum to determine provider.
 							+"ELSE FALSE END) " //If the AssigningAuthority is not OpenDental, we have no way to tell who the provider is.
 						+"AND ehrlab.ObservationDateTimeStart BETWEEN DATE_FORMAT("+POut.Date(dateStart)+",'%Y%m%d') AND DATE_FORMAT("+POut.Date(dateEnd)+",'%Y%m%d') "
 						+"AND (CASE WHEN ehrlab.UsiCodeSystemName='LN' THEN ehrlab.UsiID WHEN ehrlab.UsiCodeSystemNameAlt='LN' THEN ehrlab.UsiIDAlt ELSE '' END) "
@@ -2815,7 +2823,7 @@ namespace OpenDentBusiness{
 						+"LEFT JOIN (SELECT ehrmeasureevent.PatNum,COUNT(*) AS CcdCountElec FROM ehrmeasureevent "
 							+"WHERE EventType="+POut.Int((int)EhrMeasureEventType.SummaryOfCareProvidedToDrElectronic)+" "
 							+"AND DATE(ehrmeasureevent.DateTEvent) BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
-							+"GROUP BY ehrmeasureevent.PatNum) ptsCcdCountElec ON ptsCcdCount.PatNum=ptsCcdCountElec.PatNum";;
+							+"GROUP BY ehrmeasureevent.PatNum) ptsCcdCountElec ON ptsCcdCount.PatNum=ptsCcdCountElec.PatNum";
 					tableRaw=Db.GetTable(command);
 					break;
 				#endregion
@@ -2889,7 +2897,7 @@ namespace OpenDentBusiness{
 								+"WHEN ehrlab.OrderingProviderIdentifierTypeCode='PRN' THEN ( " //When the lab is using provider number to determine provider.
 								+"CASE WHEN ehrlab.OrderingProviderAssigningAuthorityUniversalID=( " //If the AssigningAuthority is OpenDental.
 									+"SELECT IDRoot FROM oidinternal WHERE IDType='Provider' GROUP BY IDType "
-								+") THEN ehrlab.OrderingProviderID IN("+POut.String(provs)+") END) " //Use the ProvNum to determine provider.
+								+") THEN ehrlab.OrderingProviderID IN('"+POut.String(provOID)+"') END) " //Use the ProvNum to determine provider.
 							+"ELSE FALSE END) " //If the AssigningAuthority is not OpenDental, we have no way to tell who the provider is.
 							+"AND ehrlab.ObservationDateTimeStart BETWEEN DATE_FORMAT("+POut.Date(dateStart)+",'%Y%m%d') AND DATE_FORMAT("+POut.Date(dateEnd)+",'%Y%m%d') "
 						+") as labsTable "
@@ -3549,7 +3557,7 @@ namespace OpenDentBusiness{
 				#endregion
 				#region MedReconcile
 				case EhrMeasureType.MedReconcile:
-					return retval=-1;//TODO: Possibly enhance.
+					return retval=-1;
 				#endregion
 				#region SummaryOfCare
 				case EhrMeasureType.SummaryOfCare:
@@ -3840,16 +3848,21 @@ namespace OpenDentBusiness{
 						mu.Action="(edit Rxs from Chart)";
 						break;
 					#endregion
-					#region CPOE_LabOrdersOnly (NEED TO WORK)
+					#region CPOE_LabOrdersOnly
 					case EhrMeasureType.CPOE_LabOrdersOnly:
 						int labOrderCount=0;
 						int labOrderCpoeCount=0;
 						for(int m=0;m<ehrLabList.Count;m++) {
 							//Using the last year as the reporting period, following pattern in ElectronicCopy, ClinicalSummaries, Reminders...
-							if(PIn.DateT(ehrLabList[m].ObservationDateTimeStart)<DateTime.Now.AddYears(-1)) {//either no start date so not an order, or not within the last year so not during the reporting period
+							Loinc loinc=Loincs.GetByCode(ehrLabList[m].UsiID);
+							string dateSt=ehrLabList[m].ObservationDateTimeStart.PadRight(8,'0').Substring(0,8);//stored in DB as yyyyMMddhhmmss-zzzz
+							DateTime dateT=PIn.Date(dateSt.Substring(4,2)+"/"+dateSt.Substring(6,2)+"/"+dateSt.Substring(0,4));
+							if(dateT<DateTime.Now.AddYears(-1)) {//either no start date so not an order, or not within the last year so not during the reporting period
 								continue;
 							}
-							else if(PIn.Long(ehrLabList[m].OrderingProviderID)==pat.PriProv) {//if there's a note and it was created by the patient's PriProv, then count as order created by this provider and would count toward the denominator for MU
+							else if((ehrLabList[m].OrderingProviderID==OIDInternals.GetForType(IdentifierType.Provider).IDRoot+"."+pat.PriProv
+								|| ehrLabList[m].OrderingProviderID==Providers.GetProv(pat.PriProv).NationalProvID)
+								&& !loinc.ClassType.Contains("%rad%")) {//if there's a note and it was created by the patient's PriProv, then count as order created by this provider and would count toward the denominator for MU
 								labOrderCount++;
 								labOrderCpoeCount++;
 							}
@@ -3861,19 +3874,24 @@ namespace OpenDentBusiness{
 							mu.Details="Labs entered in CPOE: "+labOrderCount.ToString();
 							mu.Met=MuMet.True;
 						}
-						mu.Action="Use the Edit Labs action below";
+						mu.Action="Edit labs";
 						break;
 					#endregion
-					#region CPOE_RadiologyOrdersOnly (NEED TO WORK ON)
+					#region CPOE_RadiologyOrdersOnly
 					case EhrMeasureType.CPOE_RadiologyOrdersOnly:
 						int radOrderCount=0;
 						int radOrderCpoeCount=0;
 						for(int m=0;m<ehrLabList.Count;m++) {
 							//Using the last year as the reporting period, following pattern in ElectronicCopy, ClinicalSummaries, Reminders...
-							if(PIn.DateT(ehrLabList[m].ObservationDateTimeStart)<DateTime.Now.AddYears(-1)) {//either no start date so not an order, or not within the last year so not during the reporting period
+							Loinc loinc=Loincs.GetByCode(ehrLabList[m].UsiID);
+							string dateSt=ehrLabList[m].ObservationDateTimeStart.PadRight(8,'0').Substring(0,8);//stored in DB as yyyyMMddhhmmss-zzzz
+							DateTime dateT=PIn.Date(dateSt.Substring(4,2)+"/"+dateSt.Substring(6,2)+"/"+dateSt.Substring(0,4));
+							if(dateT<DateTime.Now.AddYears(-1)) {//either no start date so not an order, or not within the last year so not during the reporting period
 								continue;
 							}
-							else if(PIn.Long(ehrLabList[m].OrderingProviderID)==pat.PriProv) {//if there's a note and it was created by the patient's PriProv, then count as order created by this provider and would count toward the denominator for MU
+							else if((ehrLabList[m].OrderingProviderID==OIDInternals.GetForType(IdentifierType.Provider).IDRoot+"."+pat.PriProv 
+								|| ehrLabList[m].OrderingProviderID==Providers.GetProv(pat.PriProv).NationalProvID)
+								&& loinc.ClassType.Contains("%rad%")) {//if there's a note and it was created by the patient's PriProv, then count as order created by this provider and would count toward the denominator for MU
 								radOrderCount++;
 								radOrderCpoeCount++;
 							}
@@ -3885,7 +3903,7 @@ namespace OpenDentBusiness{
 							mu.Details="Rads entered in CPOE: "+radOrderCount.ToString();
 							mu.Met=MuMet.True;
 						}
-						mu.Action="Use the Edit Labs action below";
+						mu.Action="Edit labs";
 						break;
 					#endregion
 					#region Rx
@@ -4066,7 +4084,7 @@ namespace OpenDentBusiness{
 						mu.Action="Edit labs";
 						break;
 					#endregion
-					#region ElectronicCopy (NEED TO WORK ON)
+					#region ElectronicCopy
 					case EhrMeasureType.ElectronicCopy:
 						List<EhrMeasureEvent> listRequests=EhrMeasureEvents.GetByType(listMeasureEvents,EhrMeasureEventType.ElectronicCopyRequested);
 						List<EhrMeasureEvent> listRequestsPeriod=new List<EhrMeasureEvent>();
@@ -4327,18 +4345,18 @@ namespace OpenDentBusiness{
 					#endregion
 					#region ElectronicNote
 					case EhrMeasureType.ElectronicNote:
-						//TODO: Max dated notes with signature, during period, status not deleted.
-						List<ProcNote> procNotes=ProcNotes.GetProcNotesForPat(pat.PatNum);
+						ProcNote procNote=ProcNotes.GetProcNotesForPat(pat.PatNum, DateTime.Now.AddYears(-1), DateTime.Now.AddDays(1));
 						int notesSigned=0;
-						for(int p=0;p<procNotes.Count;p++) {
-							if(procNotes[p].Signature!="" && procNotes[p].Note!="") {
-								notesSigned++;
-								break;//As of 2014, only unique patients are considered.
-							}
+						if(procNote==null) {
+							mu.Met=MuMet.NA;
+							mu.Details="No procedure notes";
+						}
+						else if(procNote.Signature!="" && procNote.Note!="") {
+							notesSigned++;
 						}
 						if(notesSigned==0) {
 							mu.Met=MuMet.False;
-							mu.Details="No signed procedure notes";
+							mu.Details="Unsigned procedure notes";
 						}
 						else {// > 0
 							mu.Met=MuMet.True;
@@ -4347,32 +4365,31 @@ namespace OpenDentBusiness{
 						mu.Action="Sign all procedure notes";
 						break;
 					#endregion
-					#region LabImages (NEED TO WORK ON)
+					#region LabImages
 					case EhrMeasureType.LabImages:
-						countToRefPeriod=0;
-						for(int c=0;c<listRefAttach.Count;c++) {
-							if(!listRefAttach[c].IsFrom && listRefAttach[c].IsTransitionOfCare) {
-								if(listRefAttach[c].RefDate > DateTime.Now.AddYears(-1)) {//within the last year
-									countToRefPeriod++;
-								}
+						int labCount=0;
+						int labCountImages=0;
+						List<EhrLab> listEhrLabs=EhrLabs.GetAllForPatInDateRange(pat.PatNum,DateTime.Now.AddYears(-1),DateTime.Now.AddDays(1));
+						for(int img=0;img<listEhrLabs.Count;img++) {
+							if(EhrLabImages.IsWaitingForImages(listEhrLabs[img].EhrLabNum)) {
+								labCount++;
+							}
+							else if(EhrLabImages.Refresh(listEhrLabs[img].EhrLabNum).Count>0) {
+								labCount++;
+								labCountImages++;
 							}
 						}
-						if(countToRefPeriod==0) {
+						if(labCount==0) {
 							mu.Met=MuMet.NA;
-							mu.Details="No outgoing transitions of care within the last year.";
+							mu.Details="No labs are waiting for images";
 						}
-						else {// > 0
-							List<EhrMeasureEvent> listCcds=EhrMeasureEvents.GetByType(listMeasureEvents,EhrMeasureEventType.SummaryOfCareProvidedToDr);
-							int countCcds=0;//during reporting period.
-							for(int r=0;r<listCcds.Count;r++) {
-								if(listCcds[r].DateTEvent > DateTime.Now.AddYears(-1)) {//within the same period as the count for referrals.
-									countCcds++;
-								}
-							}
-							mu.Details="Referrals:"+countToRefPeriod.ToString()+", Summaries:"+countCcds.ToString();
-							if(countCcds>=countToRefPeriod) {
-								mu.Met=MuMet.True;
-							}
+						else if(labCount>labCountImages) {
+							mu.Met=MuMet.False;
+							mu.Details="Labs currently waiting on images";
+						}
+						else if(labCount==labCountImages) {
+							mu.Met=MuMet.True;
+							mu.Details="All labs have images attached";
 						}
 						mu.Action="Manage Lab Images";
 						break;

@@ -1128,7 +1128,7 @@
 			// butManageImages
 			// 
 			this.butManageImages.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butManageImages.Location = new System.Drawing.Point(95, 661);
+			this.butManageImages.Location = new System.Drawing.Point(327, 661);
 			this.butManageImages.Name = "butManageImages";
 			this.butManageImages.Size = new System.Drawing.Size(93, 24);
 			this.butManageImages.TabIndex = 264;
@@ -1207,9 +1207,9 @@
 			// labelManageImages
 			// 
 			this.labelManageImages.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.labelManageImages.Location = new System.Drawing.Point(194, 665);
+			this.labelManageImages.Location = new System.Drawing.Point(426, 665);
 			this.labelManageImages.Name = "labelManageImages";
-			this.labelManageImages.Size = new System.Drawing.Size(321, 17);
+			this.labelManageImages.Size = new System.Drawing.Size(374, 17);
 			this.labelManageImages.TabIndex = 269;
 			this.labelManageImages.Text = "Must save lab order one time before managing images";
 			this.labelManageImages.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;

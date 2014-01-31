@@ -289,10 +289,16 @@ namespace OpenDental {
 						//Sign a Note
 						break;
 					case EhrMeasureType.CPOE_LabOrdersOnly:
-						//Click on Lab Edit
+						FormEhrLabOrders FormLab=new FormEhrLabOrders();
+						FormLab.PatCur=PatCur;
+						FormLab.ShowDialog();
+						FillGridMu();
 						break;
 					case EhrMeasureType.CPOE_RadiologyOrdersOnly:
-						//Click on Lab Edit
+						FormEhrLabOrders FormRad=new FormEhrLabOrders();
+						FormRad.PatCur=PatCur;
+						FormRad.ShowDialog();
+						FillGridMu();
 						break;
 					case EhrMeasureType.LabImages:
 						FormEhrLabOrders FormLO=new FormEhrLabOrders();
