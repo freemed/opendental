@@ -24,6 +24,9 @@ namespace OpenDental{
 		private Label label3;
 		private UI.Button butSnomed;
 		private UI.Button butIcd9;
+		private UI.Button butIcd10;
+		private Label label4;
+		private TextBox textIcd10;
 		public DiseaseDef DiseaseDefCur;
 
 		///<summary></summary>
@@ -72,6 +75,9 @@ namespace OpenDental{
 			this.label3 = new System.Windows.Forms.Label();
 			this.butSnomed = new OpenDental.UI.Button();
 			this.butIcd9 = new OpenDental.UI.Button();
+			this.butIcd10 = new OpenDental.UI.Button();
+			this.label4 = new System.Windows.Forms.Label();
+			this.textIcd10 = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -107,7 +113,7 @@ namespace OpenDental{
 			// 
 			// textName
 			// 
-			this.textName.Location = new System.Drawing.Point(116, 77);
+			this.textName.Location = new System.Drawing.Point(118, 98);
 			this.textName.Name = "textName";
 			this.textName.Size = new System.Drawing.Size(308, 20);
 			this.textName.TabIndex = 2;
@@ -132,7 +138,7 @@ namespace OpenDental{
 			// checkIsHidden
 			// 
 			this.checkIsHidden.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkIsHidden.Location = new System.Drawing.Point(26, 111);
+			this.checkIsHidden.Location = new System.Drawing.Point(28, 132);
 			this.checkIsHidden.Name = "checkIsHidden";
 			this.checkIsHidden.Size = new System.Drawing.Size(104, 24);
 			this.checkIsHidden.TabIndex = 4;
@@ -142,7 +148,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(12, 75);
+			this.label1.Location = new System.Drawing.Point(14, 96);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(100, 23);
 			this.label1.TabIndex = 5;
@@ -151,7 +157,7 @@ namespace OpenDental{
 			// 
 			// textICD9
 			// 
-			this.textICD9.Location = new System.Drawing.Point(116, 25);
+			this.textICD9.Location = new System.Drawing.Point(118, 20);
 			this.textICD9.Name = "textICD9";
 			this.textICD9.ReadOnly = true;
 			this.textICD9.Size = new System.Drawing.Size(273, 20);
@@ -159,7 +165,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(12, 23);
+			this.label2.Location = new System.Drawing.Point(14, 18);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(100, 23);
 			this.label2.TabIndex = 5;
@@ -168,7 +174,7 @@ namespace OpenDental{
 			// 
 			// textSnomed
 			// 
-			this.textSnomed.Location = new System.Drawing.Point(116, 51);
+			this.textSnomed.Location = new System.Drawing.Point(118, 72);
 			this.textSnomed.Name = "textSnomed";
 			this.textSnomed.ReadOnly = true;
 			this.textSnomed.Size = new System.Drawing.Size(273, 20);
@@ -176,7 +182,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(12, 49);
+			this.label3.Location = new System.Drawing.Point(14, 70);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(100, 23);
 			this.label3.TabIndex = 5;
@@ -191,7 +197,7 @@ namespace OpenDental{
 			this.butSnomed.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSnomed.CornerRadius = 4F;
 			this.butSnomed.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butSnomed.Location = new System.Drawing.Point(395, 49);
+			this.butSnomed.Location = new System.Drawing.Point(397, 70);
 			this.butSnomed.Name = "butSnomed";
 			this.butSnomed.Size = new System.Drawing.Size(29, 25);
 			this.butSnomed.TabIndex = 8;
@@ -206,12 +212,44 @@ namespace OpenDental{
 			this.butIcd9.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butIcd9.CornerRadius = 4F;
 			this.butIcd9.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butIcd9.Location = new System.Drawing.Point(395, 22);
+			this.butIcd9.Location = new System.Drawing.Point(397, 17);
 			this.butIcd9.Name = "butIcd9";
 			this.butIcd9.Size = new System.Drawing.Size(29, 25);
 			this.butIcd9.TabIndex = 9;
 			this.butIcd9.Text = "...";
 			this.butIcd9.Click += new System.EventHandler(this.butIcd9_Click);
+			// 
+			// butIcd10
+			// 
+			this.butIcd10.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butIcd10.Autosize = true;
+			this.butIcd10.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butIcd10.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butIcd10.CornerRadius = 4F;
+			this.butIcd10.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butIcd10.Location = new System.Drawing.Point(397, 43);
+			this.butIcd10.Name = "butIcd10";
+			this.butIcd10.Size = new System.Drawing.Size(29, 25);
+			this.butIcd10.TabIndex = 12;
+			this.butIcd10.Text = "...";
+			this.butIcd10.Click += new System.EventHandler(this.butIcd10_Click);
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(14, 44);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(100, 23);
+			this.label4.TabIndex = 11;
+			this.label4.Text = "ICD-10 Code";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textIcd10
+			// 
+			this.textIcd10.Location = new System.Drawing.Point(118, 46);
+			this.textIcd10.Name = "textIcd10";
+			this.textIcd10.ReadOnly = true;
+			this.textIcd10.Size = new System.Drawing.Size(273, 20);
+			this.textIcd10.TabIndex = 10;
 			// 
 			// FormDiseaseDefEdit
 			// 
@@ -219,6 +257,9 @@ namespace OpenDental{
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(460, 208);
+			this.Controls.Add(this.butIcd10);
+			this.Controls.Add(this.label4);
+			this.Controls.Add(this.textIcd10);
 			this.Controls.Add(this.butIcd9);
 			this.Controls.Add(this.butSnomed);
 			this.Controls.Add(this.label3);
@@ -304,6 +345,21 @@ namespace OpenDental{
 			else {
 				textICD9.Text=i9descript;
 			}
+		}
+
+		private void butIcd10_Click(object sender,EventArgs e) {
+			FormIcd10s FormI=new FormIcd10s();
+			FormI.IsSelectionMode=true;
+			FormI.ShowDialog();
+			if(FormI.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			if(DiseaseDefs.ContainsIcd10(FormI.SelectedIcd10.Icd10Code,DiseaseDefCur.DiseaseDefNum)) {
+				MsgBox.Show(this,"ICD-10 code already exists in the problems list.");
+				return;
+			}
+			DiseaseDefCur.Icd10Code=FormI.SelectedIcd10.Icd10Code;
+			textIcd10.Text=FormI.SelectedIcd10.Icd10Code+"-"+FormI.SelectedIcd10.Description;
 		}
 
 		private void buttonDelete_Click(object sender,EventArgs e) {

@@ -351,7 +351,7 @@ namespace OpenDentBusiness {
 			return false;
 		}
 
-		public static bool ContainsICD10(string icd10Code,long excludeDefNum) {
+		public static bool ContainsIcd10(string icd10Code,long excludeDefNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<ListLong.Length;i++) {
 				if(ListLong[i].Icd10Code==icd10Code && ListLong[i].DiseaseDefNum!=excludeDefNum) {

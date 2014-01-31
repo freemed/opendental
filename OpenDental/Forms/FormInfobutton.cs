@@ -170,7 +170,7 @@ namespace OpenDental {
 							row.Cells.Add("Problem");
 							Icd10 icd10=Icd10s.GetByCode(((DiseaseDef)ListObjects[i]).Icd10Code);
 							row.Cells.Add(icd10.Icd10Code);
-							row.Cells.Add("SNOMED CT");
+							row.Cells.Add("ICD10");
 							row.Cells.Add(icd10.Description);
 							row.Tag=icd10;
 							gridMain.Rows.Add(row);

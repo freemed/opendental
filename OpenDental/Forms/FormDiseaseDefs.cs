@@ -92,7 +92,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(18, 35);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(467, 628);
+			this.gridMain.Size = new System.Drawing.Size(559, 628);
 			this.gridMain.TabIndex = 16;
 			this.gridMain.Title = null;
 			this.gridMain.TranslationName = null;
@@ -106,7 +106,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(503, 605);
+			this.butOK.Location = new System.Drawing.Point(595, 605);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(79, 26);
 			this.butOK.TabIndex = 15;
@@ -123,7 +123,7 @@ namespace OpenDental{
 			this.butDown.CornerRadius = 4F;
 			this.butDown.Image = global::OpenDental.Properties.Resources.down;
 			this.butDown.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDown.Location = new System.Drawing.Point(503, 464);
+			this.butDown.Location = new System.Drawing.Point(595, 464);
 			this.butDown.Name = "butDown";
 			this.butDown.Size = new System.Drawing.Size(79, 26);
 			this.butDown.TabIndex = 14;
@@ -140,7 +140,7 @@ namespace OpenDental{
 			this.butUp.CornerRadius = 4F;
 			this.butUp.Image = global::OpenDental.Properties.Resources.up;
 			this.butUp.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butUp.Location = new System.Drawing.Point(503, 432);
+			this.butUp.Location = new System.Drawing.Point(595, 432);
 			this.butUp.Name = "butUp";
 			this.butUp.Size = new System.Drawing.Size(79, 26);
 			this.butUp.TabIndex = 13;
@@ -155,7 +155,7 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(503, 637);
+			this.butClose.Location = new System.Drawing.Point(595, 637);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(79, 26);
 			this.butClose.TabIndex = 1;
@@ -172,7 +172,7 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(503, 265);
+			this.butAdd.Location = new System.Drawing.Point(595, 265);
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(79, 26);
 			this.butAdd.TabIndex = 7;
@@ -182,7 +182,7 @@ namespace OpenDental{
 			// FormDiseaseDefs
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(601, 675);
+			this.ClientSize = new System.Drawing.Size(693, 675);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butDown);
@@ -225,6 +225,8 @@ namespace OpenDental{
 			ODGridColumn col;
 			col=new ODGridColumn(Lan.g(this,"ICD-9"),50);
 			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"ICD-10"),50);
+			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"SNOMED CT"),100);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Description"),250);
@@ -239,6 +241,7 @@ namespace OpenDental{
 				for(int i=0;i<DiseaseDefs.List.Length;i++) {
 					row=new ODGridRow();
 					row.Cells.Add(DiseaseDefs.List[i].ICD9Code);
+					row.Cells.Add(DiseaseDefs.List[i].Icd10Code);
 					row.Cells.Add(DiseaseDefs.List[i].SnomedCode);
 					row.Cells.Add(DiseaseDefs.List[i].DiseaseName);
 					gridMain.Rows.Add(row);
@@ -248,6 +251,7 @@ namespace OpenDental{
 				for(int i=0;i<DiseaseDefs.ListLong.Length;i++) {
 					row=new ODGridRow();
 					row.Cells.Add(DiseaseDefs.ListLong[i].ICD9Code);
+					row.Cells.Add(DiseaseDefs.List[i].Icd10Code);
 					row.Cells.Add(DiseaseDefs.ListLong[i].SnomedCode);
 					row.Cells.Add(DiseaseDefs.ListLong[i].DiseaseName);
 					row.Cells.Add(DiseaseDefs.ListLong[i].IsHidden?"X":"");
