@@ -267,6 +267,9 @@ namespace OpenDentBusiness{
 			command="SELECT GROUP_CONCAT(provider.ProvNum) FROM provider WHERE provider.EhrKey="
 				+"(SELECT pv.EhrKey FROM provider pv WHERE pv.ProvNum="+POut.Long(provNum)+")";
 			string provs=Db.GetScalar(command);
+			command="SELECT GROUP_CONCAT(provider.NationalProvID) FROM provider WHERE provider.EhrKey="
+				+"(SELECT pv.EhrKey FROM provider pv WHERE pv.ProvNum="+POut.Long(provNum)+")";
+			string provNPIs=Db.GetScalar(command);
 			//Some measures use a temp table.  Create a random number to tack onto the end of the temp table name to avoid possible table collisions.
 			Random rnd=new Random();
 			string rndStr=rnd.Next(1000000).ToString();
@@ -670,18 +673,26 @@ namespace OpenDentBusiness{
 					//TODO: Combine these queries to get old and new lab data
 					command="SELECT 1 AS IsOldLab,patient.PatNum,LName,FName,DateTimeOrder,COALESCE(panels.Count,0) AS ResultCount FROM patient "
 						+"INNER JOIN medicalorder ON patient.PatNum=medicalorder.PatNum "
-						+"AND MedOrderType="+POut.Int((int)MedicalOrderType.Laboratory)+" "
-						+"AND medicalorder.ProvNum IN("+POut.String(provs)+") "
-						+"AND DATE(DateTimeOrder) BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
-						+"LEFT JOIN (SELECT MedicalOrderNum,COUNT(*) AS 'Count' FROM labpanel GROUP BY MedicalOrderNum) "
-						+"panels ON panels.MedicalOrderNum=medicalorder.MedicalOrderNum "
+							+"AND MedOrderType="+POut.Int((int)MedicalOrderType.Laboratory)+" "
+							+"AND medicalorder.ProvNum IN("+POut.String(provs)+") "
+							+"AND DATE(DateTimeOrder) BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+						+"LEFT JOIN (SELECT MedicalOrderNum,COUNT(*) AS 'Count' FROM labpanel GROUP BY MedicalOrderNum "
+						+") panels ON panels.MedicalOrderNum=medicalorder.MedicalOrderNum "
 						+"UNION ALL "
 						+"SELECT 0 AS IsOldLab,patient.PatNum,LName,FName,STR_TO_DATE(ObservationDateTimeStart,'%Y%m%d') AS DateTimeOrder,COALESCE(ehrlabs.Count,0) AS ResultCount FROM patient "
 						+"INNER JOIN ehrlab ON patient.PatNum=ehrlab.PatNum "
 						+"LEFT JOIN (SELECT EhrLabNum, COUNT(*) AS 'Count' FROM ehrlabresult "
-						+"WHERE ehrlabresult.ValueType='NM' GROUP BY EhrLabNum) ehrlabs ON ehrlab.EhrLabNum=ehrlabs.EhrLabNum "
-						+"WHERE ehrlab.OrderingProviderID IN("+POut.String(provs)+")	"
-						+"AND ehrlab.ObservationDateTimeStart BETWEEN DATE_FORMAT("+POut.Date(dateStart)+",'%Y%m%d') AND DATE_FORMAT("+POut.Date(dateEnd)+",'%Y%m%d') ";
+							+"WHERE ehrlabresult.ValueType='NM' GROUP BY EhrLabNum "
+						+") ehrlabs ON ehrlab.EhrLabNum=ehrlabs.EhrLabNum "
+						+"WHERE (CASE WHEN ehrlab.OrderingProviderIdentifierTypeCode='NPI' THEN ehrlab.OrderingProviderID IN("+POut.String(provNPIs)+") " //When the lab is using a NPI number to determine provider.
+							+"WHEN ehrlab.OrderingProviderIdentifierTypeCode='PRN' THEN ( " //When the lab is using provider number to determine provider.
+								+"CASE WHEN ehrlab.OrderingProviderAssigningAuthorityUniversalID=( " //If the AssigningAuthority is OpenDental.
+									+"SELECT IDRoot FROM oidinternal WHERE IDType='Provider' GROUP BY IDType "
+								+") THEN ehrlab.OrderingProviderID IN("+POut.String(provs)+") END) " //Use the ProvNum to determine provider.
+							+"ELSE FALSE END) " //If the AssigningAuthority is not OpenDental, we have no way to tell who the provider is.
+						+"AND ehrlab.ObservationDateTimeStart BETWEEN DATE_FORMAT("+POut.Date(dateStart)+",'%Y%m%d') AND DATE_FORMAT("+POut.Date(dateEnd)+",'%Y%m%d') "
+						+"AND (CASE WHEN ehrlab.UsiCodeSystemName='LN' THEN ehrlab.UsiID WHEN ehrlab.UsiCodeSystemNameAlt='LN' THEN ehrlab.UsiIDAlt ELSE '' END) "
+							+"NOT IN (SELECT LoincCode FROM loinc WHERE loinc.ClassType LIKE '%rad%')";
 					tableRaw=Db.GetTable(command);
 					break;
 				#endregion
@@ -2487,6 +2498,9 @@ namespace OpenDentBusiness{
 			command="SELECT GROUP_CONCAT(provider.ProvNum) FROM provider WHERE provider.EhrKey="
 				+"(SELECT pv.EhrKey FROM provider pv WHERE pv.ProvNum="+POut.Long(provNum)+")";
 			string provs=Db.GetScalar(command);
+			command="SELECT GROUP_CONCAT(provider.NationalProvID) FROM provider WHERE provider.EhrKey="
+				+"(SELECT pv.EhrKey FROM provider pv WHERE pv.ProvNum="+POut.Long(provNum)+")";
+			string provNPIs=Db.GetScalar(command);
 			//Some measures use a temp table.  Create a random number to tack onto the end of the temp table name to avoid possible table collisions.
 			Random rnd=new Random();
 			string rndStr=rnd.Next(1000000).ToString();
@@ -2505,25 +2519,36 @@ namespace OpenDentBusiness{
 				#endregion
 				#region CPOE_LabOrdersOnly
 				case EhrMeasureType.CPOE_LabOrdersOnly:
-					command="SELECT patient.LName,patient.FName,ehrlab.*,loinc.ClassType "
-						+"FROM ehrlab "						
-						+"LEFT JOIN loinc ON ehrlab.UsiID=loinc.LoincCode "
-						+"LEFT JOIN patient ON ehrlab.PatNum=Patient.PatNum "
-						+"WHERE ehrlab.OrderingProviderID IN("+POut.String(provs)+")	"
-						+"AND ehrlab.ObservationDateTimeStart BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
-						+"AND loinc.ClassType not like '%rad%'";
+					command="SELECT patient.PatNum,patient.LName,patient.FName,ehrlab.IsCpoe,STR_TO_DATE(ehrlab.ObservationDateTimeStart,'%Y%m%d') AS ObservationDateTimeStart "
+						+"FROM ehrlab "
+						+"INNER JOIN patient ON ehrlab.PatNum=patient.PatNum "
+						+"WHERE (CASE WHEN ehrlab.OrderingProviderIdentifierTypeCode='NPI' THEN ehrlab.OrderingProviderID IN("+POut.String(provNPIs)+") " //When the lab is using a NPI number to determine provider.
+							+"WHEN ehrlab.OrderingProviderIdentifierTypeCode='PRN' THEN ( " //When the lab is using provider number to determine provider.
+								+"CASE WHEN ehrlab.OrderingProviderAssigningAuthorityUniversalID=( " //If the AssigningAuthority is OpenDental.
+									+"SELECT IDRoot FROM oidinternal WHERE IDType='Provider' GROUP BY IDType "
+								+") THEN ehrlab.OrderingProviderID IN("+POut.String(provs)+") END) " //Use the ProvNum to determine provider.
+							+"ELSE FALSE END) " //If the AssigningAuthority is not OpenDental, we have no way to tell who the provider is.
+						+"AND ehrlab.ObservationDateTimeStart BETWEEN DATE_FORMAT("+POut.Date(dateStart)+",'%Y%m%d') AND DATE_FORMAT("+POut.Date(dateEnd)+",'%Y%m%d') "
+						+"AND (CASE WHEN ehrlab.UsiCodeSystemName='LN' THEN ehrlab.UsiID WHEN ehrlab.UsiCodeSystemNameAlt='LN' THEN ehrlab.UsiIDAlt ELSE '' END) "
+							+"NOT IN (SELECT LoincCode FROM loinc WHERE loinc.ClassType LIKE '%rad%')";
 					tableRaw=Db.GetTable(command);
 					break;
 				#endregion
 				#region CPOE_RadiologyOrdersOnly
 				case EhrMeasureType.CPOE_RadiologyOrdersOnly:
-					command="SELECT patient.LName,patient.FName,ehrlab.*,loinc.ClassType "
-						+"FROM ehrlab "						
-						+"LEFT JOIN loinc ON ehrlab.UsiID=loinc.LoincCode "
-						+"LEFT JOIN patient ON ehrlab.PatNum=Patient.PatNum "
-						+"WHERE ehrlab.OrderingProviderID IN("+POut.String(provs)+")	"
-						+"AND ehrlab.ObservationDateTimeStart BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
-						+"AND loinc.ClassType like '%rad%'";
+					command="SELECT patient.PatNum,patient.LName,patient.FName,ehrlab.IsCpoe,STR_TO_DATE(ehrlab.ObservationDateTimeStart,'%Y%m%d') AS ObservationDateTimeStart, "
+						+"(CASE WHEN ehrlab.UsiCodeSystemName='LN' THEN ehrlab.UsiID WHEN ehrlab.UsiCodeSystemNameAlt='LN' THEN ehrlab.UsiIDAlt ELSE '' END) AS LoincCode "
+						+"FROM ehrlab "
+						+"INNER JOIN patient ON ehrlab.PatNum=patient.PatNum "
+						+"WHERE (CASE WHEN ehrlab.OrderingProviderIdentifierTypeCode='NPI' THEN ehrlab.OrderingProviderID IN("+POut.String(provNPIs)+") " //When the lab is using a NPI number to determine provider.
+							+"WHEN ehrlab.OrderingProviderIdentifierTypeCode='PRN' THEN ( " //When the lab is using provider number to determine provider.
+								+"CASE WHEN ehrlab.OrderingProviderAssigningAuthorityUniversalID=( " //If the AssigningAuthority is OpenDental.
+									+"SELECT IDRoot FROM oidinternal WHERE IDType='Provider' GROUP BY IDType "
+								+") THEN ehrlab.OrderingProviderID IN("+POut.String(provs)+") END) " //Use the ProvNum to determine provider.
+							+"ELSE FALSE END) " //If the AssigningAuthority is not OpenDental, we have no way to tell who the provider is.
+						+"AND ehrlab.ObservationDateTimeStart BETWEEN DATE_FORMAT("+POut.Date(dateStart)+",'%Y%m%d') AND DATE_FORMAT("+POut.Date(dateEnd)+",'%Y%m%d') "
+						+"AND (CASE WHEN ehrlab.UsiCodeSystemName='LN' THEN ehrlab.UsiID WHEN ehrlab.UsiCodeSystemNameAlt='LN' THEN ehrlab.UsiIDAlt ELSE '' END) "
+							+"IN (SELECT LoincCode FROM loinc WHERE loinc.ClassType LIKE '%rad%')";
 					tableRaw=Db.GetTable(command);
 					break;
 				#endregion
@@ -2674,18 +2699,26 @@ namespace OpenDentBusiness{
 				case EhrMeasureType.Lab:
 					command="SELECT 1 AS IsOldLab,patient.PatNum,LName,FName,DateTimeOrder,COALESCE(panels.Count,0) AS ResultCount FROM patient "
 						+"INNER JOIN medicalorder ON patient.PatNum=medicalorder.PatNum "
-						+"AND MedOrderType="+POut.Int((int)MedicalOrderType.Laboratory)+" "
-						+"AND medicalorder.ProvNum IN("+POut.String(provs)+") "
-						+"AND DATE(DateTimeOrder) BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
-						+"LEFT JOIN (SELECT MedicalOrderNum,COUNT(*) AS 'Count' FROM labpanel GROUP BY MedicalOrderNum) "
-						+"panels ON panels.MedicalOrderNum=medicalorder.MedicalOrderNum "
+							+"AND MedOrderType="+POut.Int((int)MedicalOrderType.Laboratory)+" "
+							+"AND medicalorder.ProvNum IN("+POut.String(provs)+") "
+							+"AND DATE(DateTimeOrder) BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+						+"LEFT JOIN (SELECT MedicalOrderNum,COUNT(*) AS 'Count' FROM labpanel GROUP BY MedicalOrderNum "
+						+") panels ON panels.MedicalOrderNum=medicalorder.MedicalOrderNum "
 						+"UNION ALL "
 						+"SELECT 0 AS IsOldLab,patient.PatNum,LName,FName,STR_TO_DATE(ObservationDateTimeStart,'%Y%m%d') AS DateTimeOrder,COALESCE(ehrlabs.Count,0) AS ResultCount FROM patient "
 						+"INNER JOIN ehrlab ON patient.PatNum=ehrlab.PatNum "
 						+"LEFT JOIN (SELECT EhrLabNum, COUNT(*) AS 'Count' FROM ehrlabresult "
-						+"WHERE ehrlabresult.ValueType='NM' GROUP BY EhrLabNum) ehrlabs ON ehrlab.EhrLabNum=ehrlabs.EhrLabNum "
-						+"WHERE ehrlab.OrderingProviderID IN("+POut.String(provs)+")	"
-						+"AND ehrlab.ObservationDateTimeStart BETWEEN DATE_FORMAT("+POut.Date(dateStart)+",'%Y%m%d') AND DATE_FORMAT("+POut.Date(dateEnd)+",'%Y%m%d') ";
+							+"WHERE ehrlabresult.ValueType='NM' GROUP BY EhrLabNum "
+						+") ehrlabs ON ehrlab.EhrLabNum=ehrlabs.EhrLabNum "
+						+"WHERE (CASE WHEN ehrlab.OrderingProviderIdentifierTypeCode='NPI' THEN ehrlab.OrderingProviderID IN("+POut.String(provNPIs)+") " //When the lab is using a NPI number to determine provider.
+							+"WHEN ehrlab.OrderingProviderIdentifierTypeCode='PRN' THEN ( " //When the lab is using provider number to determine provider.
+								+"CASE WHEN ehrlab.OrderingProviderAssigningAuthorityUniversalID=( " //If the AssigningAuthority is OpenDental.
+									+"SELECT IDRoot FROM oidinternal WHERE IDType='Provider' GROUP BY IDType "
+								+") THEN ehrlab.OrderingProviderID IN("+POut.String(provs)+") END) " //Use the ProvNum to determine provider.
+							+"ELSE FALSE END) " //If the AssigningAuthority is not OpenDental, we have no way to tell who the provider is.
+						+"AND ehrlab.ObservationDateTimeStart BETWEEN DATE_FORMAT("+POut.Date(dateStart)+",'%Y%m%d') AND DATE_FORMAT("+POut.Date(dateEnd)+",'%Y%m%d') "
+						+"AND (CASE WHEN ehrlab.UsiCodeSystemName='LN' THEN ehrlab.UsiID WHEN ehrlab.UsiCodeSystemNameAlt='LN' THEN ehrlab.UsiIDAlt ELSE '' END) "
+							+"NOT IN (SELECT LoincCode FROM loinc WHERE loinc.ClassType LIKE '%rad%')";
 					tableRaw=Db.GetTable(command);
 					break;
 				#endregion
@@ -2848,12 +2881,18 @@ namespace OpenDentBusiness{
 				#endregion
 				#region LabImages
 				case EhrMeasureType.LabImages:
-					command="SELECT labsTable.LName,labsTable.FName,labImage.DocNum,labsTable.ObservationDateTimeStart,labsTable.ParentObservationText FROM (SELECT patient.LName,patient.FName,ehrlab.*"
-						+"FROM ehrlab "						
-						+"LEFT JOIN loinc ON ehrlab.UsiID=loinc.LoincCode "
-						+"LEFT JOIN patient ON ehrlab.PatNum=Patient.PatNum "
-						+"WHERE ehrlab.OrderingProviderID IN("+POut.String(provs)+")	"
-						+"AND ehrlab.ObservationDateTimeStart BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+") as labsTable "
+					command="SELECT labsTable.PatNum,labsTable.LName,labsTable.FName,labImage.DocNum,STR_TO_DATE(ObservationDateTimeStart,'%Y%m%d') AS ObservationDateTimeStart FROM ( "
+							+"SELECT patient.PatNum,patient.LName,patient.FName,ehrlab.ObservationDateTimeStart,ehrlab.EhrLabNum "
+							+"FROM ehrlab "						
+							+"INNER JOIN patient ON ehrlab.PatNum=Patient.PatNum "
+							+"WHERE (CASE WHEN ehrlab.OrderingProviderIdentifierTypeCode='NPI' THEN ehrlab.OrderingProviderID IN("+POut.String(provNPIs)+") " //When the lab is using a NPI number to determine provider.
+								+"WHEN ehrlab.OrderingProviderIdentifierTypeCode='PRN' THEN ( " //When the lab is using provider number to determine provider.
+								+"CASE WHEN ehrlab.OrderingProviderAssigningAuthorityUniversalID=( " //If the AssigningAuthority is OpenDental.
+									+"SELECT IDRoot FROM oidinternal WHERE IDType='Provider' GROUP BY IDType "
+								+") THEN ehrlab.OrderingProviderID IN("+POut.String(provs)+") END) " //Use the ProvNum to determine provider.
+							+"ELSE FALSE END) " //If the AssigningAuthority is not OpenDental, we have no way to tell who the provider is.
+							+"AND ehrlab.ObservationDateTimeStart BETWEEN DATE_FORMAT("+POut.Date(dateStart)+",'%Y%m%d') AND DATE_FORMAT("+POut.Date(dateEnd)+",'%Y%m%d') "
+						+") as labsTable "
 						+"INNER JOIN (SELECT DISTINCT EhrLabNum,DocNum FROM ehrlabimage) AS labImage ON labsTable.EhrLabNum=labImage.EhrLabNum";
 					tableRaw=Db.GetTable(command);
 					break;
@@ -2893,23 +2932,29 @@ namespace OpenDentBusiness{
 					#endregion
 					#region CPOE_LabOrdersOnly
 					case EhrMeasureType.CPOE_LabOrdersOnly:
-						string labOrderStartDate=tableRaw.Rows[i]["ObservationDateTimeStart"].ToString().Substring(0,8);
-						DateTime dateT=PIn.Date(labOrderStartDate.Substring(4,2)+"/"+labOrderStartDate.Substring(6,2)+"/"+labOrderStartDate.Substring(0,4));
-						string classType=tableRaw.Rows[i]["ClassType"].ToString();
-						explanation="Laboratory order: "+tableRaw.Rows[i]["ParentObservationText"].ToString()+", start date: "+dateT.ToShortDateString()+".";
-						if(!classType.Contains("rad")) {
+						DateTime labOrderStartDate=PIn.DateT(tableRaw.Rows[i]["ObservationDateTimeStart"].ToString());
+						bool labIsCpoe=PIn.Bool(tableRaw.Rows[i]["IsCpoe"].ToString());
+						explanation="Laboratory order: "+labOrderStartDate.ToShortDateString()+" ";
+						if(labIsCpoe) {
 							row["met"]="X";
+							explanation+=" is Cpoe";
+						}
+						else {
+							explanation+=" is not Cpoe";
 						}
 						break;
 					#endregion
 					#region CPOE_RadiologyOrdersOnly
 					case EhrMeasureType.CPOE_RadiologyOrdersOnly:
-						string radOrderStartDate=tableRaw.Rows[i]["ObservationDateTimeStart"].ToString().Substring(0,8);
-						DateTime dateTRad=PIn.Date(radOrderStartDate.Substring(4,2)+"/"+radOrderStartDate.Substring(6,2)+"/"+radOrderStartDate.Substring(0,4));
-						string classTypeRad=tableRaw.Rows[i]["ClassType"].ToString();
-						explanation="Radiology order: "+tableRaw.Rows[i]["ParentObservationText"].ToString()+", start date: "+dateTRad.ToShortDateString()+".";
-						if(classTypeRad.Contains("rad")) {
+						DateTime radOrderStartDate=PIn.DateT(tableRaw.Rows[i]["ObservationDateTimeStart"].ToString());
+						bool radIsCpoe=PIn.Bool(tableRaw.Rows[i]["IsCpoe"].ToString());
+						explanation="Radiology order: "+radOrderStartDate.ToShortDateString()+" ";
+						if(radIsCpoe) {
 							row["met"]="X";
+							explanation+=" is Cpoe";
+						}
+						else {
+							explanation+=" is not Cpoe";
 						}
 						break;
 					#endregion
@@ -3179,12 +3224,15 @@ namespace OpenDentBusiness{
 					#endregion
 					#region LabImages
 					case EhrMeasureType.LabImages:
-						string labImageStartDate=tableRaw.Rows[i]["ObservationDateTimeStart"].ToString().Substring(0,8);
-						DateTime dateTImg=PIn.Date(labImageStartDate.Substring(4,2)+"/"+labImageStartDate.Substring(6,2)+"/"+labImageStartDate.Substring(0,4));
+						DateTime labImageStartDate=PIn.Date(tableRaw.Rows[i]["ObservationDateTimeStart"].ToString());
 						long docNum=PIn.Long(tableRaw.Rows[i]["DocNum"].ToString());
-						explanation="Laboratory order: "+tableRaw.Rows[i]["ParentObservationText"].ToString()+", start date: "+dateTImg.ToShortDateString()+".";
-						if(docNum>=1) {
+						explanation="Laboratory order: "+labImageStartDate.ToShortDateString()+" ";
+						if(docNum>0) {
 							row["met"]="X";
+							explanation+=" image attached.";
+						}
+						else {
+							explanation+=" image not attached.";
 						}
 						break;
 					#endregion
