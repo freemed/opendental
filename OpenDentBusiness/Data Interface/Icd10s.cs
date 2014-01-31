@@ -105,6 +105,14 @@ namespace OpenDentBusiness{
 			return Crud.Icd10Crud.SelectMany(command);
 		}
 
+		///<summary>Gets one Icd10 from the db.</summary>
+		public static Icd10 GetOne(long icd10Num){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				return Meth.GetObject<Icd10>(MethodBase.GetCurrentMethod(),icd10Num);
+			}
+			return Crud.Icd10Crud.SelectOne(icd10Num);
+		}
+
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 
@@ -115,14 +123,6 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT * FROM icd10 WHERE PatNum = "+POut.Long(patNum);
 			return Crud.Icd10Crud.SelectMany(command);
-		}
-
-		///<summary>Gets one Icd10 from the db.</summary>
-		public static Icd10 GetOne(long icd10Num){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				return Meth.GetObject<Icd10>(MethodBase.GetCurrentMethod(),icd10Num);
-			}
-			return Crud.Icd10Crud.SelectOne(icd10Num);
 		}
 
 		///<summary></summary>

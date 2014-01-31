@@ -62,11 +62,11 @@ namespace OpenDental{
 			this.radioReqProv = new System.Windows.Forms.RadioButton();
 			this.comboTask = new System.Windows.Forms.ComboBox();
 			this.label17 = new System.Windows.Forms.Label();
-			this.button5 = new OpenDental.UI.Button();
-			this.button4 = new OpenDental.UI.Button();
+			this.butAddLoinc = new OpenDental.UI.Button();
+			this.butAddIcd10 = new OpenDental.UI.Button();
 			this.button3 = new OpenDental.UI.Button();
-			this.button2 = new OpenDental.UI.Button();
-			this.button1 = new OpenDental.UI.Button();
+			this.butAddIcd9 = new OpenDental.UI.Button();
+			this.butAddSnomed = new OpenDental.UI.Button();
 			this.butAddAllergy = new OpenDental.UI.Button();
 			this.butAddDisease = new OpenDental.UI.Button();
 			this.butAddRxNorm = new OpenDental.UI.Button();
@@ -493,35 +493,37 @@ namespace OpenDental{
 			this.label17.Text = "Task Code";
 			this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// button5
+			// butAddLoinc
 			// 
-			this.button5.AdjustImageLocation = new System.Drawing.Point(0, 1);
-			this.button5.Autosize = true;
-			this.button5.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.button5.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.button5.CornerRadius = 4F;
-			this.button5.Image = global::OpenDental.Properties.Resources.Add;
-			this.button5.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.button5.Location = new System.Drawing.Point(311, 384);
-			this.button5.Name = "button5";
-			this.button5.Size = new System.Drawing.Size(94, 23);
-			this.button5.TabIndex = 207;
-			this.button5.Text = "Loinc";
+			this.butAddLoinc.AdjustImageLocation = new System.Drawing.Point(0, 1);
+			this.butAddLoinc.Autosize = true;
+			this.butAddLoinc.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddLoinc.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddLoinc.CornerRadius = 4F;
+			this.butAddLoinc.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAddLoinc.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAddLoinc.Location = new System.Drawing.Point(311, 384);
+			this.butAddLoinc.Name = "butAddLoinc";
+			this.butAddLoinc.Size = new System.Drawing.Size(94, 23);
+			this.butAddLoinc.TabIndex = 207;
+			this.butAddLoinc.Text = "Loinc";
+			this.butAddLoinc.Click += new System.EventHandler(this.butAddLoinc_Click);
 			// 
-			// button4
+			// butAddIcd10
 			// 
-			this.button4.AdjustImageLocation = new System.Drawing.Point(0, 1);
-			this.button4.Autosize = true;
-			this.button4.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.button4.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.button4.CornerRadius = 4F;
-			this.button4.Image = global::OpenDental.Properties.Resources.Add;
-			this.button4.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.button4.Location = new System.Drawing.Point(212, 384);
-			this.button4.Name = "button4";
-			this.button4.Size = new System.Drawing.Size(94, 23);
-			this.button4.TabIndex = 206;
-			this.button4.Text = "Icd10";
+			this.butAddIcd10.AdjustImageLocation = new System.Drawing.Point(0, 1);
+			this.butAddIcd10.Autosize = true;
+			this.butAddIcd10.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddIcd10.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddIcd10.CornerRadius = 4F;
+			this.butAddIcd10.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAddIcd10.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAddIcd10.Location = new System.Drawing.Point(212, 384);
+			this.butAddIcd10.Name = "butAddIcd10";
+			this.butAddIcd10.Size = new System.Drawing.Size(94, 23);
+			this.butAddIcd10.TabIndex = 206;
+			this.butAddIcd10.Text = "Icd10";
+			this.butAddIcd10.Click += new System.EventHandler(this.butAddIcd10_Click);
 			// 
 			// button3
 			// 
@@ -539,35 +541,37 @@ namespace OpenDental{
 			this.button3.Text = "Lab Result";
 			this.button3.Visible = false;
 			// 
-			// button2
+			// butAddIcd9
 			// 
-			this.button2.AdjustImageLocation = new System.Drawing.Point(0, 1);
-			this.button2.Autosize = true;
-			this.button2.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.button2.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.button2.CornerRadius = 4F;
-			this.button2.Image = global::OpenDental.Properties.Resources.Add;
-			this.button2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.button2.Location = new System.Drawing.Point(112, 384);
-			this.button2.Name = "button2";
-			this.button2.Size = new System.Drawing.Size(94, 23);
-			this.button2.TabIndex = 204;
-			this.button2.Text = "Icd9";
+			this.butAddIcd9.AdjustImageLocation = new System.Drawing.Point(0, 1);
+			this.butAddIcd9.Autosize = true;
+			this.butAddIcd9.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddIcd9.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddIcd9.CornerRadius = 4F;
+			this.butAddIcd9.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAddIcd9.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAddIcd9.Location = new System.Drawing.Point(112, 384);
+			this.butAddIcd9.Name = "butAddIcd9";
+			this.butAddIcd9.Size = new System.Drawing.Size(94, 23);
+			this.butAddIcd9.TabIndex = 204;
+			this.butAddIcd9.Text = "Icd9";
+			this.butAddIcd9.Click += new System.EventHandler(this.butAddIcd9_Click);
 			// 
-			// button1
+			// butAddSnomed
 			// 
-			this.button1.AdjustImageLocation = new System.Drawing.Point(0, 1);
-			this.button1.Autosize = true;
-			this.button1.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.button1.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.button1.CornerRadius = 4F;
-			this.button1.Image = global::OpenDental.Properties.Resources.Add;
-			this.button1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.button1.Location = new System.Drawing.Point(12, 384);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(96, 23);
-			this.button1.TabIndex = 203;
-			this.button1.Text = "SNOMEDCT";
+			this.butAddSnomed.AdjustImageLocation = new System.Drawing.Point(0, 1);
+			this.butAddSnomed.Autosize = true;
+			this.butAddSnomed.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddSnomed.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddSnomed.CornerRadius = 4F;
+			this.butAddSnomed.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAddSnomed.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAddSnomed.Location = new System.Drawing.Point(12, 384);
+			this.butAddSnomed.Name = "butAddSnomed";
+			this.butAddSnomed.Size = new System.Drawing.Size(96, 23);
+			this.butAddSnomed.TabIndex = 203;
+			this.butAddSnomed.Text = "SNOMEDCT";
+			this.butAddSnomed.Click += new System.EventHandler(this.butAddSnomed_Click);
 			// 
 			// butAddAllergy
 			// 
@@ -583,6 +587,7 @@ namespace OpenDental{
 			this.butAddAllergy.Size = new System.Drawing.Size(94, 23);
 			this.butAddAllergy.TabIndex = 202;
 			this.butAddAllergy.Text = "Allergy";
+			this.butAddAllergy.Click += new System.EventHandler(this.butAddAllergy_Click);
 			// 
 			// butAddDisease
 			// 
@@ -598,6 +603,7 @@ namespace OpenDental{
 			this.butAddDisease.Size = new System.Drawing.Size(94, 23);
 			this.butAddDisease.TabIndex = 200;
 			this.butAddDisease.Text = "Problem";
+			this.butAddDisease.Click += new System.EventHandler(this.butAddDisease_Click);
 			// 
 			// butAddRxNorm
 			// 
@@ -612,7 +618,8 @@ namespace OpenDental{
 			this.butAddRxNorm.Name = "butAddRxNorm";
 			this.butAddRxNorm.Size = new System.Drawing.Size(94, 23);
 			this.butAddRxNorm.TabIndex = 201;
-			this.butAddRxNorm.Text = "Medication";
+			this.butAddRxNorm.Text = "RxNorm";
+			this.butAddRxNorm.Click += new System.EventHandler(this.butAddRxNorm_Click);
 			// 
 			// gridMain
 			// 
@@ -693,11 +700,11 @@ namespace OpenDental{
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(588, 584);
-			this.Controls.Add(this.button5);
-			this.Controls.Add(this.button4);
+			this.Controls.Add(this.butAddLoinc);
+			this.Controls.Add(this.butAddIcd10);
 			this.Controls.Add(this.button3);
-			this.Controls.Add(this.button2);
-			this.Controls.Add(this.button1);
+			this.Controls.Add(this.butAddIcd9);
+			this.Controls.Add(this.butAddSnomed);
 			this.Controls.Add(this.butAddAllergy);
 			this.Controls.Add(this.butAddDisease);
 			this.Controls.Add(this.butAddRxNorm);
@@ -774,11 +781,11 @@ namespace OpenDental{
 		private UI.Button butAddRxNorm;
 		private UI.Button butAddAllergy;
 		private UI.Button butPatSelect;
-		private UI.Button button1;
-		private UI.Button button2;
+		private UI.Button butAddSnomed;
+		private UI.Button butAddIcd9;
 		private UI.Button button3;
-		private UI.Button button4;
-		private UI.Button button5;
+		private UI.Button butAddIcd10;
+		private UI.Button butAddLoinc;
 		private UI.Button butProvSelect;
 		private UI.Button butPreview;
 	}

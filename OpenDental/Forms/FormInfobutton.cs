@@ -1125,15 +1125,96 @@ namespace OpenDental {
 			ActTC=(ActTaskCode)comboTask.SelectedIndex;
 		}
 
-		private void butProbPick_Click(object sender,EventArgs e) {
+		//private void butProbPick_Click(object sender,EventArgs e) {
+		//	FormDiseaseDefs FormDD = new FormDiseaseDefs();
+		//	FormDD.IsSelectionMode=true;
+		//	FormDD.ShowDialog();
+		//	if(FormDD.DialogResult!=DialogResult.OK) {
+		//		return;
+		//	}
+		//	//ProblemCur=DiseaseDefs.GetItem(FormDD.SelectedDiseaseDefNum);
+		//	//fillProblem();
+		//}
+
+		private void butAddDisease_Click(object sender,EventArgs e) {
 			FormDiseaseDefs FormDD = new FormDiseaseDefs();
 			FormDD.IsSelectionMode=true;
 			FormDD.ShowDialog();
 			if(FormDD.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			//ProblemCur=DiseaseDefs.GetItem(FormDD.SelectedDiseaseDefNum);
-			//fillProblem();
+			ListObjects.Add(DiseaseDefs.GetItem(FormDD.SelectedDiseaseDefNum));
+			fillKnowledgeRequestitems();
+		}
+
+		private void butAddSnomed_Click(object sender,EventArgs e) {
+			FormSnomeds FormS = new FormSnomeds();
+			FormS.IsMultiSelectMode=true;
+			FormS.ShowDialog();
+			if(FormS.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			for(int i=0;i<FormS.ListSelectedSnomeds.Count;i++) {
+				ListObjects.Add(FormS.ListSelectedSnomeds[i]);
+			}
+			fillKnowledgeRequestitems();
+		}
+
+		private void butAddRxNorm_Click(object sender,EventArgs e) {
+			FormRxNorms FormRXN=new FormRxNorms();
+			FormRXN.IsMultiSelectMode=true;
+			FormRXN.ShowDialog();
+			if(FormRXN.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			for(int i=0;i<FormRXN.ListSelectedRxNorms.Count;i++) {
+				ListObjects.Add(FormRXN.ListSelectedRxNorms[i]);
+			}
+			fillKnowledgeRequestitems();
+		}
+
+		private void butAddIcd9_Click(object sender,EventArgs e) {
+			FormIcd9s FormI9=new FormIcd9s();
+			FormI9.IsSelectionMode=true;
+			FormI9.ShowDialog();
+			if(FormI9.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			ListObjects.Add(FormI9.SelectedIcd9);
+			fillKnowledgeRequestitems();
+		}
+
+		private void butAddAllergy_Click(object sender,EventArgs e) {
+			FormAllergySetup FormA=new FormAllergySetup();
+			FormA.IsSelectionMode=true;
+			FormA.ShowDialog();
+			if(FormA.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			ListObjects.Add(AllergyDefs.GetOne(FormA.SelectedAllergyDefNum));
+			fillKnowledgeRequestitems();
+		}
+
+		private void butAddIcd10_Click(object sender,EventArgs e) {
+			FormIcd10s FormI10=new FormIcd10s();
+			FormI10.IsSelectionMode=true;
+			FormI10.ShowDialog();
+			if(FormI10.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			ListObjects.Add(FormI10.SelectedIcd10);
+			fillKnowledgeRequestitems();
+		}
+
+		private void butAddLoinc_Click(object sender,EventArgs e) {
+			FormLoincs FormL=new FormLoincs();
+			FormL.IsSelectionMode=true;
+			FormL.ShowDialog();
+			if(FormL.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			ListObjects.Add(FormL.SelectedLoinc);
+			fillKnowledgeRequestitems();
 		}
 
 		private void butPreviewRequest_Click(object sender,EventArgs e) {
