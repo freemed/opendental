@@ -114,6 +114,8 @@ namespace OpenDentBusiness{
 		public static string GetMeasureIdsForCode(string codeValue,string codeSystem) {
 			//No need to check RemotingRole; no call to db.
 			string retval="";
+			//System.Diagnostics.Stopwatch sw=new System.Diagnostics.Stopwatch();
+			//sw.Start();
 			for(int i=0;i<Listt.Count;i++) {
 				if(Listt[i].CodeValue==codeValue && Listt[i].CodeSystem==codeSystem) {
 					if(retval.Contains(Listt[i].MeasureIds)) {
@@ -125,6 +127,7 @@ namespace OpenDentBusiness{
 					retval+=Listt[i].MeasureIds;
 				}
 			}
+			//sw.Stop();
 			return retval;
 		}
 

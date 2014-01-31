@@ -136,12 +136,10 @@ namespace OpenDental {
 			}
 			EhrMeasureEvent newMeasureEvent=new EhrMeasureEvent();
 			newMeasureEvent.DateTEvent=DateTime.Now;
+			newMeasureEvent.EventType=EhrMeasureEventType.CPOE_LabOrdered;//default
 			Loinc loinc=Loincs.GetByCode(FormLOE.EhrLabCur.UsiID);
-			if(loinc.ClassType.Contains("rad")) {
+			if(loinc!=null && loinc.ClassType=="RAD") {//short circuit logic
 				newMeasureEvent.EventType=EhrMeasureEventType.CPOE_RadOrdered;
-			}
-			else {
-				newMeasureEvent.EventType=EhrMeasureEventType.CPOE_LabOrdered;
 			}
 			newMeasureEvent.PatNum=FormLOE.EhrLabCur.PatNum;
 			newMeasureEvent.MoreInfo="";

@@ -153,10 +153,10 @@ namespace OpenDentBusiness{
 					return Lans.g("enumPermissions","Deposit Slips");
 				case Permissions.EhrEmergencyAccess:
 					return Lans.g("enumPermissions","EHR Emergency Access");
-				case Permissions.EhrInfoButton:
-					return Lans.g("enumPermissions","EHR Access Info Button");
-				case Permissions.EhrShowCDS:
-					return Lans.g("enumPermissions","EHR Show Clinical Decision Support");
+				//case Permissions.EhrInfoButton:
+				//	return Lans.g("enumPermissions","EHR Access Info Button");
+				//case Permissions.EhrShowCDS:
+				//	return Lans.g("enumPermissions","EHR Show Clinical Decision Support");
 				case Permissions.EquipmentDelete:
 					return Lans.g("enumPermissions","Equipment Delete");
 				case Permissions.EquipmentSetup:

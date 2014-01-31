@@ -29,6 +29,7 @@ namespace OpenDental{
 			this.radioUser = new System.Windows.Forms.RadioButton();
 			this.butOk = new System.Windows.Forms.Button();
 			this.butCancel = new System.Windows.Forms.Button();
+			this.label6 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// gridMain
@@ -91,10 +92,21 @@ namespace OpenDental{
 			this.butCancel.UseVisualStyleBackColor = true;
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// label6
+			// 
+			this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.label6.Location = new System.Drawing.Point(301, 26);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(421, 18);
+			this.label6.TabIndex = 65;
+			this.label6.Text = "Click the cells to grant or revoke permissions.";
+			this.label6.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+			// 
 			// FormCDSSetup
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(734, 529);
+			this.Controls.Add(this.label6);
 			this.Controls.Add(this.butOk);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.radioGroup);
@@ -116,5 +128,6 @@ namespace OpenDental{
 		private System.Windows.Forms.RadioButton radioUser;
 		private System.Windows.Forms.Button butOk;
 		private System.Windows.Forms.Button butCancel;
+		private System.Windows.Forms.Label label6;
 	}
 }

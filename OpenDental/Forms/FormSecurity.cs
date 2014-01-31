@@ -597,10 +597,10 @@ namespace OpenDental{
 			node=SetNode("EHR");
 				node2=SetNode(Permissions.EhrEmergencyAccess);
 					node.Nodes.Add(node2);
-				node2=SetNode(Permissions.EhrInfoButton);
-					node.Nodes.Add(node2);
-				node2=SetNode(Permissions.EhrShowCDS);
-					node.Nodes.Add(node2);
+				//node2=SetNode(Permissions.EhrInfoButton);
+				//	node.Nodes.Add(node2);
+				//node2=SetNode(Permissions.EhrShowCDS);
+				//	node.Nodes.Add(node2);
 				treePermissions.Nodes.Add(node);
 			treePermissions.ExpandAll();
 		}

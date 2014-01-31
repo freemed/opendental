@@ -364,6 +364,14 @@ namespace OpenDental {
 				if(!isActive) {//Update current medications.
 					_listMedicationPatCur[i].DateStop=DateTime.Now;//Set the current DateStop to today (to set the medication as discontinued)
 					MedicationPats.Update(_listMedicationPatCur[i]);
+					if(CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowCDS && CDSPermissions.GetForUser(Security.CurUser.UserNum).MedicationCDS) {
+						FormCDSIntervention FormCDSI=new FormCDSIntervention();
+						FormCDSI.ListCDSI=EhrTriggers.TriggerMatch(_listMedicationPatCur[i].MedicationNum,_patCur);
+						FormCDSI.ShowIfRequired();
+						if(FormCDSI.DialogResult==DialogResult.Abort) {
+							continue;//cancel 
+						}
+					}
 				}
 			}
 			//Always update every current medication for the patient so that DateTStamp reflects the last reconcile date.

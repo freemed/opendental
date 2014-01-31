@@ -2491,7 +2491,8 @@ namespace OpenDentBusiness {
 						UserNum bigint NOT NULL,
 						SetupCDS tinyint NOT NULL,
 						ShowCDS tinyint NOT NULL,
-						AccessBibliography tinyint NOT NULL,
+						ShowInfobutton tinyint NOT NULL,
+						EditBibliography tinyint NOT NULL,
 						ProblemCDS tinyint NOT NULL,
 						MedicationCDS tinyint NOT NULL,
 						AllergyCDS tinyint NOT NULL,
@@ -2510,7 +2511,8 @@ namespace OpenDentBusiness {
 						UserNum number(20) NOT NULL,
 						SetupCDS number(3) NOT NULL,
 						ShowCDS number(3) NOT NULL,
-						AccessBibliography number(3) NOT NULL,
+						ShowInfobutton number(3) NOT NULL,
+						EditBibliography number(3) NOT NULL,
 						ProblemCDS number(3) NOT NULL,
 						MedicationCDS number(3) NOT NULL,
 						AllergyCDS number(3) NOT NULL,
@@ -3842,5 +3844,6 @@ namespace OpenDentBusiness {
 
 	}
 }
+
 
 

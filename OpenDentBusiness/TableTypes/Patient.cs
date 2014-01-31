@@ -48,7 +48,7 @@ namespace OpenDentBusiness{
 		public long Guarantor;
 		/// <summary>Derived from Birthdate.  Not in the database table.</summary>
 		[CrudColumn(IsNotDbColumn=true)]
-		public int Age;
+		private int _age;
 		/// <summary>Single char. Shows at upper right corner of appointments.  Suggested use is A,B,or C to designate creditworthiness, but it can actually be used for any purpose.</summary>
 		public string CreditType;
 		/// <summary>.</summary>
@@ -198,6 +198,17 @@ namespace OpenDentBusiness{
 		///<summary>Returns a copy of this Patient.</summary>
 		public Patient Copy(){
 			return (Patient)this.MemberwiseClone();
+		}
+
+		///<summary>Calculated from birthdate.</summary>
+		public int Age {
+			get {
+				_age=Patients.DateToAge(Birthdate);
+				return _age;
+			}
+			set {//for backwards cvompatibility
+				_age=value;
+			}
 		}
 
 		public override string ToString() {

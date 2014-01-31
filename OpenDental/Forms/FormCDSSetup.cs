@@ -17,6 +17,7 @@ using OpenDental.UI;
 namespace OpenDental {
 	public partial class FormCDSSetup:Form {
 		private List<CDSPermission> _listCdsPermissions;
+		private List<CDSPermission> _listCdsPermissionsOld;
 
 		public FormCDSSetup() {
 			InitializeComponent();
@@ -25,6 +26,7 @@ namespace OpenDental {
 
 		private void FormCDSSetup_Load(object sender,EventArgs e) {
 			_listCdsPermissions=CDSPermissions.GetAll();
+			_listCdsPermissionsOld=CDSPermissions.GetAll();
 			FillGrid();
 		}
 
@@ -48,24 +50,27 @@ namespace OpenDental {
 						_listCdsPermissions[i].SetupCDS=!_listCdsPermissions[i].SetupCDS;
 						break;
 					case 4:
-						_listCdsPermissions[i].AccessBibliography=!_listCdsPermissions[i].AccessBibliography;
+						_listCdsPermissions[i].ShowInfobutton=!_listCdsPermissions[i].ShowInfobutton;
 						break;
 					case 5:
-						_listCdsPermissions[i].ProblemCDS=!_listCdsPermissions[i].ProblemCDS;
+						_listCdsPermissions[i].EditBibliography=!_listCdsPermissions[i].EditBibliography;
 						break;
 					case 6:
-						_listCdsPermissions[i].MedicationCDS=!_listCdsPermissions[i].MedicationCDS;
+						_listCdsPermissions[i].ProblemCDS=!_listCdsPermissions[i].ProblemCDS;
 						break;
 					case 7:
-						_listCdsPermissions[i].AllergyCDS=!_listCdsPermissions[i].AllergyCDS;
+						_listCdsPermissions[i].MedicationCDS=!_listCdsPermissions[i].MedicationCDS;
 						break;
 					case 8:
-						_listCdsPermissions[i].DemographicCDS=!_listCdsPermissions[i].DemographicCDS;
+						_listCdsPermissions[i].AllergyCDS=!_listCdsPermissions[i].AllergyCDS;
 						break;
 					case 9:
-						_listCdsPermissions[i].LabTestCDS=!_listCdsPermissions[i].LabTestCDS;
+						_listCdsPermissions[i].DemographicCDS=!_listCdsPermissions[i].DemographicCDS;
 						break;
 					case 10:
+						_listCdsPermissions[i].LabTestCDS=!_listCdsPermissions[i].LabTestCDS;
+						break;
+					case 11:
 						_listCdsPermissions[i].VitalCDS=!_listCdsPermissions[i].VitalCDS;
 						break;
 					default:
@@ -86,6 +91,8 @@ namespace OpenDental {
 			col=new ODGridColumn("Group Name",120);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("Show CDS",80,HorizontalAlignment.Center);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn("Show i",80,HorizontalAlignment.Center);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("Edit CDS",80,HorizontalAlignment.Center);
 			gridMain.Columns.Add(col);
@@ -124,7 +131,8 @@ namespace OpenDental {
 					}
 					row.Cells.Add((_listCdsPermissions[p].ShowCDS						?"X":""));//"X" if user has permission
 					row.Cells.Add((_listCdsPermissions[p].SetupCDS					?"X":""));//"X" if user has permission
-					row.Cells.Add((_listCdsPermissions[p].AccessBibliography?"X":""));//"X" if user has permission
+					row.Cells.Add((_listCdsPermissions[p].ShowInfobutton		?"X":""));//"X" if user has permission
+					row.Cells.Add((_listCdsPermissions[p].EditBibliography	?"X":""));//"X" if user has permission
 					row.Cells.Add((_listCdsPermissions[p].ProblemCDS				?"X":""));//"X" if user has permission
 					row.Cells.Add((_listCdsPermissions[p].MedicationCDS			?"X":""));//"X" if user has permission
 					row.Cells.Add((_listCdsPermissions[p].AllergyCDS				?"X":""));//"X" if user has permission
@@ -152,7 +160,40 @@ namespace OpenDental {
 		private void butOk_Click(object sender,EventArgs e) {
 			for(int i=0;i<_listCdsPermissions.Count;i++) {
 				//TODO:instead of updating all permissions. Update only the permissions neccesary.
+				if(_listCdsPermissions[i].UserNum!=_listCdsPermissionsOld[i].UserNum) {
+					#if DEBUG
+						throw new Exception("If this ever happens, something went wrong. We can explicitly loop through both lists and match patnums.");
+					#endif
+					continue;//should never happen, but userNums were mismatched.
+				}
+				if(_listCdsPermissions[i].SetupCDS==_listCdsPermissionsOld[i].SetupCDS
+					&& _listCdsPermissions[i].ShowCDS==_listCdsPermissionsOld[i].ShowCDS
+					&& _listCdsPermissions[i].ShowInfobutton==_listCdsPermissionsOld[i].ShowInfobutton
+					&& _listCdsPermissions[i].EditBibliography==_listCdsPermissionsOld[i].EditBibliography
+					&& _listCdsPermissions[i].ProblemCDS==_listCdsPermissionsOld[i].ProblemCDS
+					&& _listCdsPermissions[i].MedicationCDS==_listCdsPermissionsOld[i].MedicationCDS
+					&& _listCdsPermissions[i].AllergyCDS==_listCdsPermissionsOld[i].AllergyCDS
+					&& _listCdsPermissions[i].DemographicCDS==_listCdsPermissionsOld[i].DemographicCDS
+					&& _listCdsPermissions[i].LabTestCDS==_listCdsPermissionsOld[i].LabTestCDS
+					&& _listCdsPermissions[i].VitalCDS==_listCdsPermissionsOld[i].VitalCDS) 
+				{
+					continue;//nothing to change.
+				}
 				CDSPermissions.Update(_listCdsPermissions[i]);
+				//The following line of code should never be re-ordered, only added to if needed.  Otherwise historical security logs may not be enterpreted correctly.
+				string cdsLog="CDSPermChanged,U:"+_listCdsPermissions[i].UserNum+","
+					+(_listCdsPermissions[i].SetupCDS						?"T":"F")
+					+(_listCdsPermissions[i].ShowCDS						?"T":"F")
+					+(_listCdsPermissions[i].ShowInfobutton			?"T":"F")
+					+(_listCdsPermissions[i].EditBibliography		?"T":"F")
+					+(_listCdsPermissions[i].ProblemCDS					?"T":"F")
+					+(_listCdsPermissions[i].MedicationCDS			?"T":"F")
+					+(_listCdsPermissions[i].AllergyCDS					?"T":"F")
+					+(_listCdsPermissions[i].DemographicCDS			?"T":"F")
+					+(_listCdsPermissions[i].LabTestCDS					?"T":"F")
+					+(_listCdsPermissions[i].VitalCDS						?"T":"F")
+					;
+				SecurityLogs.MakeLogEntry(Permissions.SecurityAdmin,0,cdsLog);//Log entry example: CDSPermChanged,33,TTTFFFFFF
 			}
 			DialogResult=DialogResult.OK;
 		}

@@ -27,6 +27,10 @@ namespace OpenDental {
 		}
 
 		private void FormEhrTriggerEdit_Load(object sender,EventArgs e) {
+			if(!CDSPermissions.GetForUser(Security.CurUser.UserNum).EditBibliography) {
+				textBibliography.Enabled=false;
+				textInstruction.Enabled=false;
+			}
 			textDescription.Text=EhrTriggerCur.Description;
 			textBibliography.Text=EhrTriggerCur.Bibliography;
 			textInstruction.Text=EhrTriggerCur.Instructions;

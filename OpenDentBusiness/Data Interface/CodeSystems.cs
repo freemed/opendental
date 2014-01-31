@@ -21,7 +21,7 @@ namespace OpenDentBusiness{
 			string command="SELECT * FROM codesystem";// WHERE CodeSystemName IN ('ICD9CM','RXNORM','SNOMEDCT','CPT')";
 #else
 			//string command="SELECT * FROM codesystem WHERE CodeSystemName IN ('ICD9CM','ICD10','RXNORM','CPT','CVX','UCUM'"+(IsMemberNation?",'SNOMEDCT'":"")+")";
-			string command="SELECT * FROM codesystem WHERE CodeSystemName NOT IN (''"+(!IsMemberNation?",'SNOMEDCT'":"")+")";
+			string command="SELECT * FROM codesystem WHERE CodeSystemName NOT IN ('AdministrativeSex','CDT'"+(!IsMemberNation?",'SNOMEDCT'":"")+")";
 #endif
 			return Crud.CodeSystemCrud.SelectMany(command);
 		}

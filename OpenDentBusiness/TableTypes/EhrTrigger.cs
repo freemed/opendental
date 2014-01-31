@@ -28,12 +28,12 @@ namespace OpenDentBusiness {
 		public string CvxList;
 		///<summary></summary>
 		public string AllergyDefNumList;
-		///<summary>Age, Gender.  Can be multiple age entries but only one gender entry as coma delimited values.  Example: " age,>18  age&lt;=55  gender,male"</summary>
+		///<summary>Age, Gender.  Can be multiple age entries but only one gender entry as coma delimited values.  Example: " age,>18  age,&lt;=55  gender,male"</summary>
 		public string DemographicsList;
 		/////<summary>Tab delimited list, sub-components separated by semicolon. Loinc;Value;Units\t Example: Cholesterol [Mass/volume] in Serum or Plasma>150mg/dL=="2093-3;>150;mg/dL"</summary>
 		///<summary>List of loinc codes padded with spaces.</summary>
 		public string LabLoincList;
-		///<summary>Height, Weight, Bp s/d, and BMI</summary>
+		///<summary>Examples:  Height,>=72  Weight&lt;,100  BMI=  (BP currently not implemented.)</summary>
 		public string VitalLoincList;
 		///<summary>The reccomended course of action for this intervention.  </summary>
 		public string Instructions;

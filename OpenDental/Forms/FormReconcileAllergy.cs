@@ -493,6 +493,11 @@ namespace OpenDental {
 				if(!isActive) {
 					_listAllergyCur[i].StatusIsActive=isActive;
 					Allergies.Update(_listAllergyCur[i]);
+					if(CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowCDS && CDSPermissions.GetForUser(Security.CurUser.UserNum).AllergyCDS) {
+						FormCDSIntervention FormCDSI=new FormCDSIntervention();
+						FormCDSI.ListCDSI=EhrTriggers.TriggerMatch(alD,_patCur);
+						FormCDSI.ShowIfRequired(false);
+					}
 				}
 			}
 			//Always update every current allergy for the patient so that DateTStamp reflects the last reconcile date.

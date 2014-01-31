@@ -12,6 +12,8 @@ namespace OpenDental {
 		public List<Snomed> ListSelectedSnomeds;
 		private List<Snomed> SnomedList;
 		private bool changed;
+		private bool _showingInfoButton;//used when filling grid. for increased speed.
+		private int _showingInfobuttonShift;//used when sorting grid rows. 1 if showing, 0 if hidden
 
 		public FormSnomeds() {
 			InitializeComponent();
@@ -19,6 +21,8 @@ namespace OpenDental {
 		}
 
 		private void FormSnomeds_Load(object sender,EventArgs e) {
+			_showingInfoButton=CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowInfobutton;
+			_showingInfobuttonShift=(_showingInfoButton?1:0);
 			if(IsSelectionMode || IsMultiSelectMode) {
 				butClose.Text=Lan.g(this,"Cancel");
 			}
@@ -49,7 +53,7 @@ namespace OpenDental {
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col;
-			if(Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
+			if(_showingInfoButton) {//Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
 				col=new ODGridColumn("",18);//infoButton
 				col.ImageList=imageListInfoButton;
 				gridMain.Columns.Add(col);
@@ -78,7 +82,7 @@ namespace OpenDental {
 			List<ODGridRow> listAll=new List<ODGridRow>();
 			for(int i=0;i<SnomedList.Count;i++) {
 				row=new ODGridRow();
-				if(Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
+				if(_showingInfoButton) {//Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
 					row.Cells.Add("0");//index of infobutton
 				}
 				row.Cells.Add(SnomedList[i].SnomedCode);
@@ -97,7 +101,7 @@ namespace OpenDental {
 		}
 
 		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
-			if(!Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
+			if(!CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowInfobutton) {//Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
 				return;
 			}
 			if(e.Col!=0) {
@@ -110,15 +114,18 @@ namespace OpenDental {
 
 		///<summary>Sort function to put the codes that apply to the most number of CQM's at the top so the user can see which codes they should select.</summary>
 		private int SortMeasuresMet(ODGridRow row1,ODGridRow row2) {
-			int i=(Security.IsAuthorized(Permissions.EhrInfoButton,true)?1:0);//used to accomodate infobutton column.
+			//int i=(CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowInfobutton?1:0);//used to accomodate infobutton column.
 			//First sort by the number of measures the codes apply to in a comma delimited list
-			int diff=row2.Cells[2+i].Text.Split(new string[] { "," },StringSplitOptions.RemoveEmptyEntries).Length-row1.Cells[2+i].Text.Split(new string[] { "," },StringSplitOptions.RemoveEmptyEntries).Length;
+			int diff=row2.Cells[2+_showingInfobuttonShift].Text.Split(new string[] { "," },StringSplitOptions.RemoveEmptyEntries).Length
+				-row1.Cells[2+_showingInfobuttonShift].Text.Split(new string[] { "," },StringSplitOptions.RemoveEmptyEntries).Length;
 			if(diff!=0) {
 				return diff;
 			}
 			try {
 				//if the codes apply to the same number of CQMs, order by the code values
-				return PIn.Long(row1.Cells[2+i].Text).CompareTo(PIn.Long(row2.Cells[2+i].Text));
+				//return PIn.Long(row1.Cells[2+_showingInfobuttonShift].Text).CompareTo(PIn.Long(row2.Cells[2+_showingInfobuttonShift].Text));
+				//Just string compare
+				return row1.Cells[2+_showingInfobuttonShift].Text.CompareTo(row2.Cells[2+_showingInfobuttonShift].Text);
 			}
 			catch(Exception ex) {
 				return 0;

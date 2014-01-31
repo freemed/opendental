@@ -156,6 +156,7 @@ namespace OpenDentBusiness{
 						ehrLabCur.SetIdOBR=PIn.Long(fields[1]);
 						if(isImport) {
 							ehrLabCur.ListEhrLabNotes=new List<EhrLabNote>();
+							ehrLabCur.ListEhrLabResults=new List<EhrLabResult>();
 						}
 						//OBR order num should always be identical to OCR order number//Not true.
 						if(ehrLabCur.FillerOrderNum!=fields[3].Split('^')[0]) {
@@ -315,13 +316,10 @@ namespace OpenDentBusiness{
 					//	break;
 					case "OBX":
 						noteSegment="OBX";
-						if(ehrLabCur.ListEhrLabResults==null) {
-							ehrLabCur.ListEhrLabResults=new List<EhrLabResult>();
-						}
+						//if(ehrLabCur.ListEhrLabResults==null) {
+						//	ehrLabCur.ListEhrLabResults=new List<EhrLabResult>();
+						//}
 						EhrLabResult labResult=new EhrLabResult();
-						if(isImport) {
-							labResult.ListEhrLabResultNotes=new List<EhrLabNote>();
-						}
 						labResult.SetIdOBX=PIn.Long(fields[1]);
 						try { labResult.ValueType=(HL70125)Enum.Parse(typeof(HL70125),fields[2]); }
 						catch { }

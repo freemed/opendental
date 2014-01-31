@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace OpenDentBusiness{
 	///<summary></summary>
@@ -152,21 +153,129 @@ namespace OpenDentBusiness{
 					break;
 				case "Patient":
 					pat=(Patient)triggerObject;
+					List<string> triggerNums=new List<string>();
 					//TODO: TriggerObjectMessage
-					//command="SELECT * FROM ehrtrigger"
-					//Age todo
-					//+" WHERE SnomedList LIKE '% "+POut.String(snomed.SnomedCode)+" %'";// '% <code> %' so that we can get exact matches.
-					//Gender todo
+					command="SELECT * FROM ehrtrigger WHERE DemographicsList !=''";
+					List<EhrTrigger> triggers=Crud.EhrTriggerCrud.SelectMany(command);
+					for(int i=0;i<triggers.Count;i++) {
+						string[] arrayDemoItems=triggers[i].DemographicsList.Split(new string[] { " " },StringSplitOptions.RemoveEmptyEntries);
+						for(int j=0;j<arrayDemoItems.Length;j++) {
+							switch(arrayDemoItems[j].Split(',')[0]) {
+								case "age":
+									int val=PIn.Int(Regex.Match(arrayDemoItems[j],@"\d+").Value);
+									if(arrayDemoItems[j].Contains("=")) {//=, >=, or <=
+										if(val==pat.Age) {
+											triggerNums.Add(triggers[i].EhrTriggerNum.ToString());
+											break;
+										}
+									}
+									if(arrayDemoItems[j].Contains("<")){
+										if(pat.Age<val){
+											triggerNums.Add(triggers[i].EhrTriggerNum.ToString());
+											break;
+										}
+									}
+									if(arrayDemoItems[j].Contains(">")) {
+										if(pat.Age>val) {
+											triggerNums.Add(triggers[i].EhrTriggerNum.ToString());
+											break;
+										}
+									}
+									//should never happen, age element didn't contain a comparator
+										break;
+								case "gender":
+										if(arrayDemoItems[j].Split(',')[0].StartsWith(pat.Gender.ToString())) {
+											triggerNums.Add(triggers[i].EhrTriggerNum.ToString());
+										}
+									break;
+								default:
+									break;//should never happen
+							}
+						}
+					}
+					triggerNums.Add("-1");//to ensure the querry is valid.
+					command="SELECT * FROM ehrTrigger WHERE EhrTriggerNum IN ("+String.Join(",",triggerNums)+")";
 					break;
-				case "VitalSign":
+				case "Vitalsign":
+					List<string> trigNums=new List<string>();
 					vitalsign=(Vitalsign)triggerObject;
-					//TODO: TriggerObjectMessage
-					//command="SELECT * FROM ehrtrigger"
-						//Height
-						//Weight
-						//BP
-						//BMI
-					//+" WHERE SnomedList LIKE '% "+POut.String(snomed.SnomedCode)+" %'";// '% <code> %' so that we can get exact matches.
+					command="SELECT * FROM ehrtrigger WHERE VitalLoincList !=''";
+					List<EhrTrigger> triggersVit=Crud.EhrTriggerCrud.SelectMany(command);
+					for(int i=0;i<triggersVit.Count;i++) {
+						string[] arrayVitalItems=triggersVit[i].VitalLoincList.Split(new string[] { " " },StringSplitOptions.RemoveEmptyEntries);
+						for(int j=0;j<arrayVitalItems.Length;j++) {
+							double val=PIn.Double(Regex.Match(arrayVitalItems[j],@"\d+(.(\d+))*").Value);//decimal value w or w/o decimal.
+							switch(arrayVitalItems[j].Split(',')[0]) {
+								case "height":
+									if(arrayVitalItems[j].Contains("=")) {//=, >=, or <=
+										if(vitalsign.Height==val) {
+											trigNums.Add(triggersVit[i].EhrTriggerNum.ToString());
+											break;
+										}
+									}
+									if(arrayVitalItems[j].Contains("<")) {
+										if(vitalsign.Height<val) {
+											trigNums.Add(triggersVit[i].EhrTriggerNum.ToString());
+											break;
+										}
+									}
+									if(arrayVitalItems[j].Contains(">")) {
+										if(vitalsign.Height>val) {
+											trigNums.Add(triggersVit[i].EhrTriggerNum.ToString());
+											break;
+										}
+									}
+									//should never happen, Height element didn't contain a comparator
+									break;
+								case "weight":
+									if(arrayVitalItems[j].Contains("=")) {//=, >=, or <=
+										if(vitalsign.Weight==val) {
+											trigNums.Add(triggersVit[i].EhrTriggerNum.ToString());
+											break;
+										}
+									}
+									if(arrayVitalItems[j].Contains("<")) {
+										if(vitalsign.Weight<val) {
+											trigNums.Add(triggersVit[i].EhrTriggerNum.ToString());
+											break;
+										}
+									}
+									if(arrayVitalItems[j].Contains(">")) {
+										if(vitalsign.Weight>val) {
+											trigNums.Add(triggersVit[i].EhrTriggerNum.ToString());
+											break;
+										}
+									}
+									break;
+								case "BMI":
+									float BMI=Vitalsigns.CalcBMI(vitalsign.Weight,vitalsign.Height);
+									if(arrayVitalItems[j].Contains("=")) {//=, >=, or <=
+										if(BMI==val) {
+											trigNums.Add(triggersVit[i].EhrTriggerNum.ToString());
+											break;
+										}
+									}
+									if(arrayVitalItems[j].Contains("<")) {
+										if(BMI<val) {
+											trigNums.Add(triggersVit[i].EhrTriggerNum.ToString());
+											break;
+										}
+									}
+									if(arrayVitalItems[j].Contains(">")) {
+										if(BMI>val) {
+											trigNums.Add(triggersVit[i].EhrTriggerNum.ToString());
+											break;
+										}
+									}
+									break;
+								case "BP":
+									//TODO
+									break;
+							}//end switch
+						}
+					}//End Triggers Vit
+					trigNums.Add("-1");//to ensure the querry is valid.
+					command="SELECT * FROM ehrTrigger WHERE EhrTriggerNum IN ("+String.Join(",",trigNums)+")";
 					break;
 				default:
 					//command="SELECT * FROM ehrtrigger WHERE false";//should not return any results.

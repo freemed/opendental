@@ -2946,6 +2946,7 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
+			bool CDSinterventionCheckRequired=false;//checks selected values
 			if(  textBirthdate.errorProvider1.GetError(textBirthdate)!=""
 				|| textDateFirstVisit.errorProvider1.GetError(textDateFirstVisit)!=""
 				|| textAdmitDate.errorProvider1.GetError(textAdmitDate)!=""
@@ -3201,6 +3202,14 @@ namespace OpenDental{
 				PatCur.Guarantor=PatCur.PatNum;
 			}
 			Patients.Update(PatCur,PatOld);
+			if(PatCur.Birthdate!=PatOld.Birthdate || PatCur.Gender!=PatOld.Gender) {
+					CDSinterventionCheckRequired=true;
+			}
+			if(CDSinterventionCheckRequired && CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowCDS && CDSPermissions.GetForUser(Security.CurUser.UserNum).LabTestCDS) {
+				FormCDSIntervention FormCDSI=new FormCDSIntervention();
+				FormCDSI.ListCDSI=EhrTriggers.TriggerMatch(PatCur,PatCur);//both should be patCur.
+				FormCDSI.ShowIfRequired(false);
+			}
 			if(checkArriveEarlySame.Checked){
 				Patients.UpdateArriveEarlyForFam(PatCur);
 			}

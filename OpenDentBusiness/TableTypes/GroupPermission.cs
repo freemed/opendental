@@ -177,11 +177,11 @@ namespace OpenDentBusiness{
 		PatAllergyListEdit,
 		///<summary>74- There is no user interface in the security window for this permission.  It is only used for tracking.  Tracks creation and editing of patient family health history.</summary>
 		PatFamilyHealthEdit,
-		///<summary>75- TODO description and verify name.  This is more like a user level preference than a permission.</summary>
-		EhrShowCDS,
-		///<summary>76- TODO description and verify name.  This is more like a user level preference than a permission.</summary>
-		EhrInfoButton,
-		///<summary>77- There is no user interface in the security window for this permission.  It is only used for tracking.  Patient Portal access of patient information.  Required by EHR.</summary>
+		/////<summary>75- TODO description and verify name.  This is more like a user level preference than a permission.</summary>
+		//EhrShowCDS,
+		/////<summary>76- TODO description and verify name.  This is more like a user level preference than a permission.</summary>
+		//EhrInfoButton,
+		///<summary>75- There is no user interface in the security window for this permission.  It is only used for tracking.  Patient Portal access of patient information.  Required by EHR.</summary>
 		PatientPortal
 	}
 

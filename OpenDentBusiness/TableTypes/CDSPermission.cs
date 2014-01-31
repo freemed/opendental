@@ -15,8 +15,10 @@ namespace OpenDentBusiness {
 		public bool SetupCDS;
 		///<summary>True if user should see EHR triggers that are enabled.  If false, no CDS interventions will show.</summary>
 		public bool ShowCDS;
-		///<summary>True if user can link to bibliographic information.</summary>
-		public bool AccessBibliography;
+		///<summary>True if user can see Infobutton.</summary>
+		public bool ShowInfobutton;
+		///<summary>True if user can edit to bibliographic information.</summary>
+		public bool EditBibliography;
 		///<summary>True to enable Problem based CDS interventions for this user.</summary>
 		public bool ProblemCDS;
 		///<summary>True to enable Medication based CDS interventions for this user.</summary>

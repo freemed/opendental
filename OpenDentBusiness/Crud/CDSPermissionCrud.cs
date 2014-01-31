@@ -46,17 +46,18 @@ namespace OpenDentBusiness.Crud{
 			CDSPermission cDSPermission;
 			for(int i=0;i<table.Rows.Count;i++) {
 				cDSPermission=new CDSPermission();
-				cDSPermission.CDSPermissionNum  = PIn.Long  (table.Rows[i]["CDSPermissionNum"].ToString());
-				cDSPermission.UserNum           = PIn.Long  (table.Rows[i]["UserNum"].ToString());
-				cDSPermission.SetupCDS          = PIn.Bool  (table.Rows[i]["SetupCDS"].ToString());
-				cDSPermission.ShowCDS           = PIn.Bool  (table.Rows[i]["ShowCDS"].ToString());
-				cDSPermission.AccessBibliography= PIn.Bool  (table.Rows[i]["AccessBibliography"].ToString());
-				cDSPermission.ProblemCDS        = PIn.Bool  (table.Rows[i]["ProblemCDS"].ToString());
-				cDSPermission.MedicationCDS     = PIn.Bool  (table.Rows[i]["MedicationCDS"].ToString());
-				cDSPermission.AllergyCDS        = PIn.Bool  (table.Rows[i]["AllergyCDS"].ToString());
-				cDSPermission.DemographicCDS    = PIn.Bool  (table.Rows[i]["DemographicCDS"].ToString());
-				cDSPermission.LabTestCDS        = PIn.Bool  (table.Rows[i]["LabTestCDS"].ToString());
-				cDSPermission.VitalCDS          = PIn.Bool  (table.Rows[i]["VitalCDS"].ToString());
+				cDSPermission.CDSPermissionNum= PIn.Long  (table.Rows[i]["CDSPermissionNum"].ToString());
+				cDSPermission.UserNum         = PIn.Long  (table.Rows[i]["UserNum"].ToString());
+				cDSPermission.SetupCDS        = PIn.Bool  (table.Rows[i]["SetupCDS"].ToString());
+				cDSPermission.ShowCDS         = PIn.Bool  (table.Rows[i]["ShowCDS"].ToString());
+				cDSPermission.ShowInfobutton  = PIn.Bool  (table.Rows[i]["ShowInfobutton"].ToString());
+				cDSPermission.EditBibliography= PIn.Bool  (table.Rows[i]["EditBibliography"].ToString());
+				cDSPermission.ProblemCDS      = PIn.Bool  (table.Rows[i]["ProblemCDS"].ToString());
+				cDSPermission.MedicationCDS   = PIn.Bool  (table.Rows[i]["MedicationCDS"].ToString());
+				cDSPermission.AllergyCDS      = PIn.Bool  (table.Rows[i]["AllergyCDS"].ToString());
+				cDSPermission.DemographicCDS  = PIn.Bool  (table.Rows[i]["DemographicCDS"].ToString());
+				cDSPermission.LabTestCDS      = PIn.Bool  (table.Rows[i]["LabTestCDS"].ToString());
+				cDSPermission.VitalCDS        = PIn.Bool  (table.Rows[i]["VitalCDS"].ToString());
 				retVal.Add(cDSPermission);
 			}
 			return retVal;
@@ -97,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="CDSPermissionNum,";
 			}
-			command+="UserNum,SetupCDS,ShowCDS,AccessBibliography,ProblemCDS,MedicationCDS,AllergyCDS,DemographicCDS,LabTestCDS,VitalCDS) VALUES(";
+			command+="UserNum,SetupCDS,ShowCDS,ShowInfobutton,EditBibliography,ProblemCDS,MedicationCDS,AllergyCDS,DemographicCDS,LabTestCDS,VitalCDS) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(cDSPermission.CDSPermissionNum)+",";
 			}
@@ -105,7 +106,8 @@ namespace OpenDentBusiness.Crud{
 				     POut.Long  (cDSPermission.UserNum)+","
 				+    POut.Bool  (cDSPermission.SetupCDS)+","
 				+    POut.Bool  (cDSPermission.ShowCDS)+","
-				+    POut.Bool  (cDSPermission.AccessBibliography)+","
+				+    POut.Bool  (cDSPermission.ShowInfobutton)+","
+				+    POut.Bool  (cDSPermission.EditBibliography)+","
 				+    POut.Bool  (cDSPermission.ProblemCDS)+","
 				+    POut.Bool  (cDSPermission.MedicationCDS)+","
 				+    POut.Bool  (cDSPermission.AllergyCDS)+","
@@ -124,16 +126,17 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one CDSPermission in the database.</summary>
 		public static void Update(CDSPermission cDSPermission){
 			string command="UPDATE cdspermission SET "
-				+"UserNum           =  "+POut.Long  (cDSPermission.UserNum)+", "
-				+"SetupCDS          =  "+POut.Bool  (cDSPermission.SetupCDS)+", "
-				+"ShowCDS           =  "+POut.Bool  (cDSPermission.ShowCDS)+", "
-				+"AccessBibliography=  "+POut.Bool  (cDSPermission.AccessBibliography)+", "
-				+"ProblemCDS        =  "+POut.Bool  (cDSPermission.ProblemCDS)+", "
-				+"MedicationCDS     =  "+POut.Bool  (cDSPermission.MedicationCDS)+", "
-				+"AllergyCDS        =  "+POut.Bool  (cDSPermission.AllergyCDS)+", "
-				+"DemographicCDS    =  "+POut.Bool  (cDSPermission.DemographicCDS)+", "
-				+"LabTestCDS        =  "+POut.Bool  (cDSPermission.LabTestCDS)+", "
-				+"VitalCDS          =  "+POut.Bool  (cDSPermission.VitalCDS)+" "
+				+"UserNum         =  "+POut.Long  (cDSPermission.UserNum)+", "
+				+"SetupCDS        =  "+POut.Bool  (cDSPermission.SetupCDS)+", "
+				+"ShowCDS         =  "+POut.Bool  (cDSPermission.ShowCDS)+", "
+				+"ShowInfobutton  =  "+POut.Bool  (cDSPermission.ShowInfobutton)+", "
+				+"EditBibliography=  "+POut.Bool  (cDSPermission.EditBibliography)+", "
+				+"ProblemCDS      =  "+POut.Bool  (cDSPermission.ProblemCDS)+", "
+				+"MedicationCDS   =  "+POut.Bool  (cDSPermission.MedicationCDS)+", "
+				+"AllergyCDS      =  "+POut.Bool  (cDSPermission.AllergyCDS)+", "
+				+"DemographicCDS  =  "+POut.Bool  (cDSPermission.DemographicCDS)+", "
+				+"LabTestCDS      =  "+POut.Bool  (cDSPermission.LabTestCDS)+", "
+				+"VitalCDS        =  "+POut.Bool  (cDSPermission.VitalCDS)+" "
 				+"WHERE CDSPermissionNum = "+POut.Long(cDSPermission.CDSPermissionNum);
 			Db.NonQ(command);
 		}
@@ -153,9 +156,13 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="ShowCDS = "+POut.Bool(cDSPermission.ShowCDS)+"";
 			}
-			if(cDSPermission.AccessBibliography != oldCDSPermission.AccessBibliography) {
+			if(cDSPermission.ShowInfobutton != oldCDSPermission.ShowInfobutton) {
 				if(command!=""){ command+=",";}
-				command+="AccessBibliography = "+POut.Bool(cDSPermission.AccessBibliography)+"";
+				command+="ShowInfobutton = "+POut.Bool(cDSPermission.ShowInfobutton)+"";
+			}
+			if(cDSPermission.EditBibliography != oldCDSPermission.EditBibliography) {
+				if(command!=""){ command+=",";}
+				command+="EditBibliography = "+POut.Bool(cDSPermission.EditBibliography)+"";
 			}
 			if(cDSPermission.ProblemCDS != oldCDSPermission.ProblemCDS) {
 				if(command!=""){ command+=",";}

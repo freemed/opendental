@@ -4,6 +4,7 @@ using OpenDentBusiness;
 using OpenDental.UI;
 using System.Collections.Generic;
 using EhrLaboratories;
+using System.Text;
 
 namespace OpenDental {
 	public partial class FormEhrLabOrderEdit2014:Form {
@@ -169,7 +170,7 @@ namespace OpenDental {
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col;
-			if(Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
+			if(CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowInfobutton) {//Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
 				col=new ODGridColumn("",18);//infoButton
 				col.ImageList=imageListInfoButton;
 				gridMain.Columns.Add(col);
@@ -191,12 +192,17 @@ namespace OpenDental {
 			ODGridRow row;
 			for(int i=0;i<EhrLabCur.ListEhrLabResults.Count;i++) {
 				row=new ODGridRow();
-				if(Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
+				if(CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowInfobutton) {//Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
 					row.Cells.Add("0");//index of infobutton
 				}
-				string dateSt=EhrLabCur.ListEhrLabResults[i].ObservationDateTime.Substring(0,8);//stored in DB as yyyyMMdd[hh[mm[ss]]], []==optional components
-				DateTime dateT=PIn.Date(dateSt.Substring(4,2)+"/"+dateSt.Substring(6,2)+"/"+dateSt.Substring(0,4));
-				row.Cells.Add(dateT.ToShortDateString());//date only
+				if(EhrLabCur.ListEhrLabResults[i].ObservationDateTime==null || EhrLabCur.ListEhrLabResults[i].ObservationDateTime=="") {
+					row.Cells.Add("");//null date
+				}
+				else {
+					string dateSt=EhrLabCur.ListEhrLabResults[i].ObservationDateTime.Substring(0,8);//stored in DB as yyyyMMdd[hh[mm[ss]]], []==optional components
+					DateTime dateT=PIn.Date(dateSt.Substring(4,2)+"/"+dateSt.Substring(6,2)+"/"+dateSt.Substring(0,4));
+					row.Cells.Add(dateT.ToShortDateString());//date only
+				}
 				if(EhrLabCur.ListEhrLabResults[i].ObservationIdentifierID!="") {
 					row.Cells.Add(EhrLabCur.ListEhrLabResults[i].ObservationIdentifierID);
 					row.Cells.Add(EhrLabCur.ListEhrLabResults[i].ObservationIdentifierText);
@@ -401,12 +407,26 @@ namespace OpenDental {
 
 		///<summary></summary>
 		private bool EntriesAreValid() {
+			StringBuilder errorMessage=new StringBuilder();
+			if((textPlacerOrderNum.Text=="" || (textPlacerOrderNum.Text!="" && textPlacerOrderUniversalID.Text==""))//Blank placerOrderNum OR OrderNum w/ blank OID
+				&& (textFillerOrderNum.Text=="" || (textFillerOrderNum.Text!="" && textFillerOrderUniversalID.Text==""))) //Blank fillerOrderNum OR OrderNum w/blank OID
+			{
+			//if( (textPlacerOrderNum.Text=="" || && textPlacerOrderUniversalID.Text=="") //invalid placer order num
+			//	|| (textFillerOrderNum.Text=="" && textFillerOrderUniversalID.Text=="") )//invalid filler order num
+			//{
+				errorMessage.AppendLine("  Order must have valid placer or filler order number with universal ID.");
+			}
 			//TODO: validate the controls
+			if(errorMessage.ToString()!="") {
+				errorMessage.Insert(0,"Unable to save current Lab Order for the following reasons:\r\n");
+				MessageBox.Show(this,errorMessage.ToString());
+				return false;
+			}
 			return true;
 		}
 
 		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
-			if(!Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
+			if(!CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowInfobutton) {//Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
 				return;
 			}
 			if(e.Col!=0) {

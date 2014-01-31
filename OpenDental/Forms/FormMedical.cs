@@ -569,7 +569,7 @@ namespace OpenDental{
 			gridMeds.BeginUpdate();
 			gridMeds.Columns.Clear();
 			ODGridColumn col;
-			if(Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
+			if(CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowInfobutton){//Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
 				col=new ODGridColumn("",18);//infoButton
 				col.ImageList=imageListInfoButton;
 				gridMeds.Columns.Add(col);
@@ -586,7 +586,7 @@ namespace OpenDental{
 			ODGridRow row;
 			for(int i=0;i<medList.Count;i++) {
 				row=new ODGridRow();
-				if(Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
+				if(CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowInfobutton) {//Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
 					row.Cells.Add("0");//index of infobutton
 				}
 				if(medList[i].MedicationNum==0) {
@@ -615,7 +615,7 @@ namespace OpenDental{
 		}
 
 		private void gridMeds_CellClick(object sender,ODGridClickEventArgs e) {
-			if(!Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
+			if(!CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowInfobutton) {//Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
 				return;
 			}
 			if(e.Col!=0) {
@@ -634,6 +634,14 @@ namespace OpenDental{
 			FormMedPat FormMP=new FormMedPat();
 			FormMP.MedicationPatCur=medList[e.Row];
 			FormMP.ShowDialog();
+			if(FormMP.DialogResult==DialogResult.OK 
+				&& CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowCDS 
+				&& CDSPermissions.GetForUser(Security.CurUser.UserNum).MedicationCDS) 
+			{
+				FormCDSIntervention FormCDSI=new FormCDSIntervention();
+				FormCDSI.ListCDSI=EhrTriggers.TriggerMatch(Medications.GetMedication(FormMP.MedicationPatCur.MedicationNum),PatCur);
+				FormCDSI.ShowIfRequired(false);
+			}
 			FillMeds();
 		}
 
@@ -644,7 +652,7 @@ namespace OpenDental{
 			FormM.ShowDialog();
 			if(FormM.DialogResult!=DialogResult.OK){
 				return;
-			}
+			} 
 			if(CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowCDS && CDSPermissions.GetForUser(Security.CurUser.UserNum).MedicationCDS) {
 				FormCDSIntervention FormCDSI=new FormCDSIntervention();
 				FormCDSI.ListCDSI=EhrTriggers.TriggerMatch(Medications.GetMedication(FormM.SelectedMedicationNum),PatCur);
@@ -852,7 +860,7 @@ namespace OpenDental{
 			gridDiseases.BeginUpdate();
 			gridDiseases.Columns.Clear();
 			ODGridColumn col;
-			if(Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
+			if(CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowInfobutton) {//Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
 				col=new ODGridColumn("",18);//infoButton
 				col.ImageList=imageListInfoButton;
 				gridDiseases.Columns.Add(col);
@@ -867,7 +875,7 @@ namespace OpenDental{
 			ODGridRow row;
 			for(int i=0;i<DiseaseList.Count;i++){
 				row=new ODGridRow();
-				if(Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
+				if(CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowInfobutton) {//Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
 					row.Cells.Add("0");//index of infobutton
 				}
 				if(DiseaseList[i].DiseaseDefNum!=0) {
@@ -888,7 +896,7 @@ namespace OpenDental{
 			gridAllergies.BeginUpdate();
 			gridAllergies.Columns.Clear();
 			ODGridColumn col;
-			if(Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
+			if(CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowInfobutton) {//Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
 				col=new ODGridColumn("",18);//infoButton
 				col.ImageList=imageListInfoButton;
 				gridAllergies.Columns.Add(col);
@@ -903,7 +911,7 @@ namespace OpenDental{
 			ODGridRow row;
 			for(int i=0;i<allergyList.Count;i++){
 				row=new ODGridRow();
-				if(Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
+				if(CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowInfobutton) {//Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
 					row.Cells.Add("0");//index of infobutton
 				}
 				AllergyDef allergyDef=AllergyDefs.GetOne(allergyList[i].AllergyDefNum);
@@ -934,7 +942,7 @@ namespace OpenDental{
 				return;
 			}
 			for(int i=0;i<formDD.SelectedDiseaseDefNums.Count;i++) {
-				if(Security.IsAuthorized(Permissions.EhrShowCDS,true)){
+				if(CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowCDS && CDSPermissions.GetForUser(Security.CurUser.UserNum).ProblemCDS){
 					FormCDSIntervention FormCDSI=new FormCDSIntervention();
 					FormCDSI.ListCDSI=EhrTriggers.TriggerMatch(DiseaseDefs.GetItem(formDD.SelectedDiseaseDefNums[i]),PatCur);
 					FormCDSI.ShowIfRequired();
@@ -966,7 +974,7 @@ namespace OpenDental{
 		}*/
 
 		private void gridDiseases_CellClick(object sender,ODGridClickEventArgs e) {
-			if(!Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
+			if(!CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowInfobutton) {//Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
 				return;
 			}
 			if(e.Col!=0) {
@@ -982,6 +990,14 @@ namespace OpenDental{
 		private void gridDiseases_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			FormDiseaseEdit FormD=new FormDiseaseEdit(DiseaseList[e.Row]);
 			FormD.ShowDialog();
+			if(FormD.DialogResult==DialogResult.OK 
+				&& CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowCDS 
+				&& CDSPermissions.GetForUser(Security.CurUser.UserNum).ProblemCDS) 
+			{
+				FormCDSIntervention FormCDSI=new FormCDSIntervention();
+				FormCDSI.ListCDSI=EhrTriggers.TriggerMatch(DiseaseDefs.GetItem(DiseaseList[e.Row].DiseaseDefNum),PatCur);
+				FormCDSI.ShowIfRequired(false);
+			}
 			FillProblems();
 		}
 
@@ -1010,7 +1026,7 @@ namespace OpenDental{
 		}
 
 		private void gridAllergies_CellClick(object sender,ODGridClickEventArgs e) {
-			if(!Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
+			if(!CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowInfobutton) {//Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
 				return;
 			}
 			if(e.Col!=0) {
@@ -1028,6 +1044,14 @@ namespace OpenDental{
 			FormAllergyEdit FAE=new FormAllergyEdit();
 			FAE.AllergyCur=allergyList[gridAllergies.GetSelectedIndex()];
 			FAE.ShowDialog();
+			if(FAE.DialogResult==DialogResult.OK 
+				&& CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowCDS 
+				&& CDSPermissions.GetForUser(Security.CurUser.UserNum).AllergyCDS) 
+			{
+				FormCDSIntervention FormCDSI=new FormCDSIntervention();
+				FormCDSI.ListCDSI=EhrTriggers.TriggerMatch(AllergyDefs.GetOne(FAE.AllergyCur.AllergyDefNum),PatCur);
+				FormCDSI.ShowIfRequired(false);
+			}
 			FillAllergies();
 		}
 		
@@ -1072,7 +1096,6 @@ namespace OpenDental{
 			if(formA.DialogResult!=DialogResult.OK) {
 				return;
 			}
-
 			if(CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowCDS && CDSPermissions.GetForUser(Security.CurUser.UserNum).AllergyCDS) {
 				FormCDSIntervention FormCDSI=new FormCDSIntervention();
 				FormCDSI.ListCDSI=EhrTriggers.TriggerMatch(AllergyDefs.GetOne(formA.AllergyCur.AllergyDefNum),PatCur);
