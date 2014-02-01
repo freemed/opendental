@@ -57,6 +57,7 @@ namespace OpenDentBusiness.Crud{
 				refAttach.IsTransitionOfCare= PIn.Bool  (table.Rows[i]["IsTransitionOfCare"].ToString());
 				refAttach.ProcNum           = PIn.Long  (table.Rows[i]["ProcNum"].ToString());
 				refAttach.DateProcComplete  = PIn.Date  (table.Rows[i]["DateProcComplete"].ToString());
+				refAttach.ProvNum           = PIn.Long  (table.Rows[i]["ProvNum"].ToString());
 				retVal.Add(refAttach);
 			}
 			return retVal;
@@ -97,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="RefAttachNum,";
 			}
-			command+="ReferralNum,PatNum,ItemOrder,RefDate,IsFrom,RefToStatus,Note,IsTransitionOfCare,ProcNum,DateProcComplete) VALUES(";
+			command+="ReferralNum,PatNum,ItemOrder,RefDate,IsFrom,RefToStatus,Note,IsTransitionOfCare,ProcNum,DateProcComplete,ProvNum) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(refAttach.RefAttachNum)+",";
 			}
@@ -111,7 +112,8 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(refAttach.Note)+"',"
 				+    POut.Bool  (refAttach.IsTransitionOfCare)+","
 				+    POut.Long  (refAttach.ProcNum)+","
-				+    POut.Date  (refAttach.DateProcComplete)+")";
+				+    POut.Date  (refAttach.DateProcComplete)+","
+				+    POut.Long  (refAttach.ProvNum)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -133,7 +135,8 @@ namespace OpenDentBusiness.Crud{
 				+"Note              = '"+POut.String(refAttach.Note)+"', "
 				+"IsTransitionOfCare=  "+POut.Bool  (refAttach.IsTransitionOfCare)+", "
 				+"ProcNum           =  "+POut.Long  (refAttach.ProcNum)+", "
-				+"DateProcComplete  =  "+POut.Date  (refAttach.DateProcComplete)+" "
+				+"DateProcComplete  =  "+POut.Date  (refAttach.DateProcComplete)+", "
+				+"ProvNum           =  "+POut.Long  (refAttach.ProvNum)+" "
 				+"WHERE RefAttachNum = "+POut.Long(refAttach.RefAttachNum);
 			Db.NonQ(command);
 		}
@@ -180,6 +183,10 @@ namespace OpenDentBusiness.Crud{
 			if(refAttach.DateProcComplete != oldRefAttach.DateProcComplete) {
 				if(command!=""){ command+=",";}
 				command+="DateProcComplete = "+POut.Date(refAttach.DateProcComplete)+"";
+			}
+			if(refAttach.ProvNum != oldRefAttach.ProvNum) {
+				if(command!=""){ command+=",";}
+				command+="ProvNum = "+POut.Long(refAttach.ProvNum)+"";
 			}
 			if(command==""){
 				return;

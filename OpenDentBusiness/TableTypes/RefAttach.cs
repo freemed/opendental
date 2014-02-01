@@ -28,6 +28,8 @@ namespace OpenDentBusiness{
 		public long ProcNum;
 		///<summary>.</summary>
 		public DateTime DateProcComplete;
+		///<summary>FK to provider.ProvNum.  Used when refering out a patient to track the reffering provider for EHR meaningfull use.</summary>
+		public long ProvNum;
 
 		///<summary>Returns a copy of this RefAttach.</summary>
 		public RefAttach Copy(){
