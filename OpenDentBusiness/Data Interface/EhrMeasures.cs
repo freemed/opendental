@@ -7,6 +7,9 @@ using System.Diagnostics;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class EhrMeasures{
+				///<summary>Positive/Negative Snomed indicators for lab results.</summary>
+		private static string _snomedLabResult=@"'393474000','394424008','10828004','393476003','394426005','260385009','61620004','90213003','260408008','272069004','4173002','61707005','272068007','85696000'";
+
 		///<summary>Select All EHRMeasures from combination of db, static data, and complex calculations.</summary>
 		public static List<EhrMeasure> SelectAll(DateTime dateStart, DateTime dateEnd,long provNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -690,7 +693,10 @@ namespace OpenDentBusiness{
 						+"SELECT 0 AS IsOldLab,patient.PatNum,LName,FName,STR_TO_DATE(ObservationDateTimeStart,'%Y%m%d') AS DateTimeOrder,COALESCE(ehrlabs.Count,0) AS ResultCount FROM patient "
 						+"INNER JOIN ehrlab ON patient.PatNum=ehrlab.PatNum "
 						+"LEFT JOIN (SELECT EhrLabNum, COUNT(*) AS 'Count' FROM ehrlabresult "
-							+"WHERE ehrlabresult.ValueType='NM' GROUP BY EhrLabNum "
+							+"WHERE ehrlabresult.ValueType='NM' OR ehrlabresult.ValueType='SN' "
+							+"OR ehrlabresult.ObservationValueCodedElementID IN ("+_snomedLabResult+") "
+							+"OR ehrlabresult.ObservationValueCodedElementIDAlt IN ("+_snomedLabResult+") "
+							+"GROUP BY EhrLabNum "
 						+") ehrlabs ON ehrlab.EhrLabNum=ehrlabs.EhrLabNum "
 						+"WHERE (CASE WHEN ehrlab.OrderingProviderIdentifierTypeCode='NPI' THEN ehrlab.OrderingProviderID IN("+POut.String(provNPIs)+") " //When the lab is using a NPI number to determine provider.
 							+"WHEN ehrlab.OrderingProviderIdentifierTypeCode='PRN' THEN ( " //When the lab is using provider number to determine provider.
@@ -2693,7 +2699,8 @@ namespace OpenDentBusiness{
 						+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
 						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
 						+"LEFT JOIN (SELECT ehrmeasureevent.PatNum, MIN(ehrmeasureevent.DateTEvent) as dateRequested FROM ehrmeasureevent "
-						+"WHERE EventType="+POut.Int((int)EhrMeasureEventType.ElectronicCopyRequested)+") "
+						+"WHERE EventType="+POut.Int((int)EhrMeasureEventType.ElectronicCopyRequested)+" "
+						+"GROUP BY patnum) "
 						+"OnlineAccess ON patient.PatNum=OnlineAccess.PatNum "
 						+"GROUP BY patient.PatNum";
 					tableRaw=Db.GetTable(command);
@@ -2726,7 +2733,10 @@ namespace OpenDentBusiness{
 						+"SELECT 0 AS IsOldLab,patient.PatNum,LName,FName,STR_TO_DATE(ObservationDateTimeStart,'%Y%m%d') AS DateTimeOrder,COALESCE(ehrlabs.Count,0) AS ResultCount FROM patient "
 						+"INNER JOIN ehrlab ON patient.PatNum=ehrlab.PatNum "
 						+"LEFT JOIN (SELECT EhrLabNum, COUNT(*) AS 'Count' FROM ehrlabresult "
-							+"WHERE ehrlabresult.ValueType='NM' GROUP BY EhrLabNum "
+							+"WHERE ehrlabresult.ValueType='NM' OR ehrlabresult.ValueType='SN' "
+							+"OR ehrlabresult.ObservationValueCodedElementID IN ("+_snomedLabResult+") "
+							+"OR ehrlabresult.ObservationValueCodedElementIDAlt IN ("+_snomedLabResult+") "
+							+"GROUP BY EhrLabNum "
 						+") ehrlabs ON ehrlab.EhrLabNum=ehrlabs.EhrLabNum "
 						+"WHERE (CASE WHEN ehrlab.OrderingProviderIdentifierTypeCode='NPI' THEN ehrlab.OrderingProviderID IN("+POut.String(provNPIs)+") " //When the lab is using a NPI number to determine provider.
 							+"WHEN ehrlab.OrderingProviderIdentifierTypeCode='PRN' THEN ( " //When the lab is using provider number to determine provider.
@@ -2735,8 +2745,8 @@ namespace OpenDentBusiness{
 								+") THEN ehrlab.OrderingProviderID IN('"+POut.String(provOID)+"') END) " //Use the ProvNum to determine provider.
 							+"ELSE FALSE END) " //If the AssigningAuthority is not OpenDental, we have no way to tell who the provider is.
 						+"AND ehrlab.ObservationDateTimeStart BETWEEN DATE_FORMAT("+POut.Date(dateStart)+",'%Y%m%d') AND DATE_FORMAT("+POut.Date(dateEnd)+",'%Y%m%d') "
-						+"AND (CASE WHEN ehrlab.UsiCodeSystemName='LN' THEN ehrlab.UsiID WHEN ehrlab.UsiCodeSystemNameAlt='LN' THEN ehrlab.UsiIDAlt ELSE '' END) ";
-							//+"NOT IN (SELECT LoincCode FROM loinc WHERE loinc.ClassType LIKE '%rad%')"; //Not sure if we need this since rad labs shouldnt be set to numeric results
+						+"AND (CASE WHEN ehrlab.UsiCodeSystemName='LN' THEN ehrlab.UsiID WHEN ehrlab.UsiCodeSystemNameAlt='LN' THEN ehrlab.UsiIDAlt ELSE '' END) "
+							+"NOT IN (SELECT LoincCode FROM loinc WHERE loinc.ClassType LIKE '%rad%')"; //Not sure if we need this since rad labs shouldnt be set to numeric results
 					tableRaw=Db.GetTable(command);
 					break;
 				#endregion
