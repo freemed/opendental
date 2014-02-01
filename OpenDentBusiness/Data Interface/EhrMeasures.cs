@@ -267,6 +267,14 @@ namespace OpenDentBusiness{
 			command="SELECT GROUP_CONCAT(provider.ProvNum) FROM provider WHERE provider.EhrKey="
 				+"(SELECT pv.EhrKey FROM provider pv WHERE pv.ProvNum="+POut.Long(provNum)+")";
 			string provs=Db.GetScalar(command);
+			string[] tempProv=provs.Split(',');
+			string provOID="";
+			for(int oi=0;oi<tempProv.Length;oi++) {
+				provOID=provOID+OIDInternals.GetForType(IdentifierType.Provider).IDRoot+"."+tempProv[oi];
+				if(oi<tempProv.Length-1) {
+					provOID+=",";
+				}
+			}
 			command="SELECT GROUP_CONCAT(provider.NationalProvID) FROM provider WHERE provider.EhrKey="
 				+"(SELECT pv.EhrKey FROM provider pv WHERE pv.ProvNum="+POut.Long(provNum)+")";
 			string provNPIs=Db.GetScalar(command);
@@ -688,7 +696,7 @@ namespace OpenDentBusiness{
 							+"WHEN ehrlab.OrderingProviderIdentifierTypeCode='PRN' THEN ( " //When the lab is using provider number to determine provider.
 								+"CASE WHEN ehrlab.OrderingProviderAssigningAuthorityUniversalID=( " //If the AssigningAuthority is OpenDental.
 									+"SELECT IDRoot FROM oidinternal WHERE IDType='Provider' GROUP BY IDType "
-								+") THEN ehrlab.OrderingProviderID IN("+POut.String(provs)+") END) " //Use the ProvNum to determine provider.
+								+") THEN ehrlab.OrderingProviderID IN('"+POut.String(provOID)+"') END) " //Use the ProvNum to determine provider.
 							+"ELSE FALSE END) " //If the AssigningAuthority is not OpenDental, we have no way to tell who the provider is.
 						+"AND ehrlab.ObservationDateTimeStart BETWEEN DATE_FORMAT("+POut.Date(dateStart)+",'%Y%m%d') AND DATE_FORMAT("+POut.Date(dateEnd)+",'%Y%m%d') "
 						+"AND (CASE WHEN ehrlab.UsiCodeSystemName='LN' THEN ehrlab.UsiID WHEN ehrlab.UsiCodeSystemNameAlt='LN' THEN ehrlab.UsiIDAlt ELSE '' END) "
@@ -907,21 +915,21 @@ namespace OpenDentBusiness{
 					//command="DROP TABLE IF EXISTS tempehrmeasure"+rndStr;
 					//Db.NonQ(command);
 					//Reworked to only count patients seen by this provider in the date range
-					command="SELECT ptsRefCnt.*,COALESCE(CcdCount,0) AS CcdCount "
-						+"FROM (SELECT ptsSeen.*,COUNT(DISTINCT refattach.RefAttachNum) AS RefCount "
-							+"FROM (SELECT patient.PatNum,LName,FName FROM patient "
-								+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum "
-								+"AND ProcStatus=2 AND ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
-								+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
-								+"GROUP BY patient.PatNum) ptsSeen "
-							+"INNER JOIN refattach ON ptsSeen.PatNum=refattach.PatNum "
-							+"AND RefDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
-							+"AND IsFrom=0 AND IsTransitionOfCare=1 "
-							+"GROUP BY ptsSeen.PatNum) ptsRefCnt "
-						+"LEFT JOIN (SELECT ehrmeasureevent.PatNum,COUNT(*) AS CcdCount FROM ehrmeasureevent "
-							+"WHERE EventType IN("+POut.Int((int)EhrMeasureEventType.SummaryOfCareProvidedToDr)+") "
+					command="SELECT patient.PatNum,patient.LName,patient.FName,refattach.RefDate, "
+						+"referral.FName AS RefFName,referral.LName AS RefLName,SUM(CASE WHEN ISNULL(socevent.FKey) THEN 0 ELSE 1 END) AS SOCSent "
+						+"FROM refattach "
+						+"INNER JOIN referral ON referral.ReferralNum=refattach.ReferralNum "
+						+"INNER JOIN patient ON patient.PatNum=refattach.PatNum "
+						+"LEFT JOIN ( "
+							+"SELECT ehrmeasureevent.FKey "
+							+"FROM ehrmeasureevent "
+							+"WHERE EventType="+POut.Int((int)EhrMeasureEventType.SummaryOfCareProvidedToDr)+" "
 							+"AND DATE(ehrmeasureevent.DateTEvent) BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
-							+"GROUP BY ehrmeasureevent.PatNum) ptsCcdCount ON ptsRefCnt.PatNum=ptsCcdCount.PatNum";
+						+") socevent ON socevent.FKey=refattach.RefAttachNum "
+						+"WHERE RefDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+						+"AND IsFrom=0 AND IsTransitionOfCare=1 "
+						+"AND refattach.ProvNum IN("+POut.String(provs)+") "
+						+"GROUP BY refattach.RefAttachNum";
 					tableRaw=Db.GetTable(command);
 					break;
 				#endregion
@@ -1240,13 +1248,15 @@ namespace OpenDentBusiness{
 					#endregion
 					#region SummaryOfCare
 					case EhrMeasureType.SummaryOfCare:
-						int refCount2=PIn.Int(tableRaw.Rows[i]["RefCount"].ToString());//this will always be greater than zero
-						int ccdCount=PIn.Int(tableRaw.Rows[i]["CcdCount"].ToString());
-						if(ccdCount<refCount2) {
-							explanation="Transitions of Care:"+refCount2.ToString()+", Summaries provided:"+ccdCount.ToString();
+						int socSent=PIn.Int(tableRaw.Rows[i]["SOCSent"].ToString());
+						DateTime refDate=PIn.DateT(tableRaw.Rows[i]["RefDate"].ToString());
+						string refLName=PIn.String(tableRaw.Rows[i]["RefLName"].ToString());
+						string refFName=PIn.String(tableRaw.Rows[i]["RefFName"].ToString());
+						if(socSent<1) {
+							explanation="Referral on: "+refDate.ToShortDateString()+" to "+refLName+", "+refFName+" not sent summary of care.";
 						}
 						else {
-							explanation="Summaries provided for each transition of care.";
+							explanation="Referral on: "+refDate.ToShortDateString()+" to "+refLName+", "+refFName+" sent summary of care.";
 							row["met"]="X";
 						}
 						break;
@@ -2785,41 +2795,41 @@ namespace OpenDentBusiness{
 				#endregion
 				#region SummaryOfCare
 				case EhrMeasureType.SummaryOfCare:
-					command="SELECT ptsRefCnt.*,COALESCE(CcdCount,0) AS CcdCount "
-						+"FROM (SELECT ptsSeen.*,COUNT(DISTINCT refattach.RefAttachNum) AS RefCount "
-							+"FROM (SELECT patient.PatNum,LName,FName FROM patient "
-								+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum "
-								+"AND ProcStatus=2 AND ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
-								+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
-								+"GROUP BY patient.PatNum) ptsSeen "
-							+"INNER JOIN refattach ON ptsSeen.PatNum=refattach.PatNum "
-							+"AND RefDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
-							+"AND IsFrom=0 AND IsTransitionOfCare=1 "
-							+"GROUP BY ptsSeen.PatNum) ptsRefCnt "
-						+"LEFT JOIN (SELECT ehrmeasureevent.PatNum,COUNT(*) AS CcdCount FROM ehrmeasureevent "
-							+"WHERE EventType IN("+POut.Int((int)EhrMeasureEventType.SummaryOfCareProvidedToDr)+") "
+					command="SELECT patient.PatNum,patient.LName,patient.FName,refattach.RefDate, "
+						+"referral.FName AS RefFName,referral.LName AS RefLName,SUM(CASE WHEN ISNULL(socevent.FKey) THEN 0 ELSE 1 END) AS SOCSent "
+						+"FROM refattach "
+						+"INNER JOIN referral ON referral.ReferralNum=refattach.ReferralNum "
+						+"INNER JOIN patient ON patient.PatNum=refattach.PatNum "
+						+"LEFT JOIN ( "
+							+"SELECT ehrmeasureevent.FKey "
+							+"FROM ehrmeasureevent "
+							+"WHERE EventType="+POut.Int((int)EhrMeasureEventType.SummaryOfCareProvidedToDr)+" "
 							+"AND DATE(ehrmeasureevent.DateTEvent) BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
-							+"GROUP BY ehrmeasureevent.PatNum) ptsCcdCount ON ptsRefCnt.PatNum=ptsCcdCount.PatNum";
+						+") socevent ON socevent.FKey=refattach.RefAttachNum "
+						+"WHERE RefDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+						+"AND IsFrom=0 AND IsTransitionOfCare=1 "
+						+"AND refattach.ProvNum IN("+POut.String(provs)+") "
+						+"GROUP BY refattach.RefAttachNum";
 					tableRaw=Db.GetTable(command);
 					break;
 				#endregion
 				#region SummaryOfCareElectronic
 				case EhrMeasureType.SummaryOfCareElectronic:
-					command="SELECT ptsRefCnt.*,COALESCE(CcdCount,0) AS CcdCount, COALESCE(CcdCountElec,0) AS CcdCountElec "
-						+"FROM (SELECT ptsSeen.*,COUNT(DISTINCT refattach.RefAttachNum) AS RefCount "
-							+"FROM (SELECT patient.PatNum,LName,FName FROM patient "
-								+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum "
-								+"AND ProcStatus=2 AND ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
-								+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
-								+"GROUP BY patient.PatNum) ptsSeen "
-							+"INNER JOIN refattach ON ptsSeen.PatNum=refattach.PatNum "
-							+"AND RefDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
-							+"AND IsFrom=0 AND IsTransitionOfCare=1 "
-							+"GROUP BY ptsSeen.PatNum) ptsRefCnt "
-						+"LEFT JOIN (SELECT ehrmeasureevent.PatNum,COUNT(*) AS CcdCountElec FROM ehrmeasureevent "
+					command="SELECT patient.PatNum,patient.LName,patient.FName,refattach.RefDate, "
+						+"referral.FName AS RefFName,referral.LName AS RefLName,SUM(CASE WHEN ISNULL(socevent.FKey) THEN 0 ELSE 1 END) AS ElecSOCSent "
+						+"FROM refattach "
+						+"INNER JOIN referral ON referral.ReferralNum=refattach.ReferralNum "
+						+"INNER JOIN patient ON patient.PatNum=refattach.PatNum "
+						+"LEFT JOIN ( "
+							+"SELECT ehrmeasureevent.FKey "
+							+"FROM ehrmeasureevent "
 							+"WHERE EventType="+POut.Int((int)EhrMeasureEventType.SummaryOfCareProvidedToDrElectronic)+" "
 							+"AND DATE(ehrmeasureevent.DateTEvent) BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
-							+"GROUP BY ehrmeasureevent.PatNum) ptsCcdCountElec ON ptsCcdCount.PatNum=ptsCcdCountElec.PatNum";
+						+") socevent ON socevent.FKey=refattach.RefAttachNum "
+						+"WHERE RefDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+						+"AND IsFrom=0 AND IsTransitionOfCare=1 "
+						+"AND refattach.ProvNum IN("+POut.String(provs)+") "
+						+"GROUP BY refattach.RefAttachNum";
 					tableRaw=Db.GetTable(command);
 					break;
 				#endregion
@@ -3180,27 +3190,30 @@ namespace OpenDentBusiness{
 					#endregion
 					#region SummaryOfCare
 					case EhrMeasureType.SummaryOfCare:
-						int refCount2=PIn.Int(tableRaw.Rows[i]["RefCount"].ToString());//this will always be greater than zero
-						int ccdCount=PIn.Int(tableRaw.Rows[i]["CcdCount"].ToString());
-						if(ccdCount<refCount2) {
-							explanation="Transitions of Care:"+refCount2.ToString()+", Summaries provided:"+ccdCount.ToString();
+						int socSent=PIn.Int(tableRaw.Rows[i]["SOCSent"].ToString());
+						DateTime refDate=PIn.DateT(tableRaw.Rows[i]["RefDate"].ToString());
+						string refLName=PIn.String(tableRaw.Rows[i]["RefLName"].ToString());
+						string refFName=PIn.String(tableRaw.Rows[i]["RefFName"].ToString());
+						if(socSent<1) {
+							explanation="Referral on: "+refDate.ToShortDateString()+" to "+refLName+", "+refFName+" not sent summary of care.";
 						}
 						else {
-							explanation="Summaries provided for each transition of care.";
+							explanation="Referral on: "+refDate.ToShortDateString()+" to "+refLName+", "+refFName+" sent summary of care.";
 							row["met"]="X";
 						}
 						break;
 					#endregion
 					#region SummaryOfCareElectronic
 					case EhrMeasureType.SummaryOfCareElectronic:
-						int refCount3=PIn.Int(tableRaw.Rows[i]["RefCount"].ToString());
-						int ccdCountDenom=PIn.Int(tableRaw.Rows[i]["CcdCount"].ToString());
-						int ccdCountElec=PIn.Int(tableRaw.Rows[i]["CcdCountElec"].ToString());
-						if(ccdCountDenom<refCount3 && ccdCountElec<1) {
-							explanation="Transitions of Care:"+refCount3.ToString()+", Summaries provided:"+ccdCountDenom.ToString();
+						int elecSOCSent=PIn.Int(tableRaw.Rows[i]["ElecSOCSent"].ToString());
+						DateTime elecRefDate=PIn.DateT(tableRaw.Rows[i]["RefDate"].ToString());
+						string elecRefLName=PIn.String(tableRaw.Rows[i]["RefLName"].ToString());
+						string elecRefFName=PIn.String(tableRaw.Rows[i]["RefFName"].ToString());
+						if(elecSOCSent<1) {
+							explanation="Referral on: "+elecRefDate.ToShortDateString()+" to "+elecRefLName+", "+elecRefFName+" not sent electronic summary of care.";
 						}
 						else {
-							explanation="At least one electronic summary per unique customer with a transition of care.";
+							explanation="Referral on: "+elecRefDate.ToShortDateString()+" to "+elecRefLName+", "+elecRefFName+" sent electronic summary of care.";
 							row["met"]="X";
 						}
 						break;
@@ -3858,7 +3871,7 @@ namespace OpenDentBusiness{
 							}
 							else if((ehrLabList[m].OrderingProviderID==OIDInternals.GetForType(IdentifierType.Provider).IDRoot+"."+pat.PriProv
 								|| ehrLabList[m].OrderingProviderID==Providers.GetProv(pat.PriProv).NationalProvID)
-								&& !loinc.ClassType.Contains("%rad%")) {//if there's a note and it was created by the patient's PriProv, then count as order created by this provider and would count toward the denominator for MU
+								&& (loinc==null || !loinc.ClassType.Contains("%rad%"))) {//if there's a note and it was created by the patient's PriProv, then count as order created by this provider and would count toward the denominator for MU
 								labOrderCount++;
 								labOrderCpoeCount++;
 							}
@@ -3880,6 +3893,9 @@ namespace OpenDentBusiness{
 						for(int m=0;m<ehrLabList.Count;m++) {
 							//Using the last year as the reporting period, following pattern in ElectronicCopy, ClinicalSummaries, Reminders...
 							Loinc loinc=Loincs.GetByCode(ehrLabList[m].UsiID);
+							if(loinc==null) {
+								continue;
+							}
 							string dateSt=ehrLabList[m].ObservationDateTimeStart.PadRight(8,'0').Substring(0,8);//stored in DB as yyyyMMddhhmmss-zzzz
 							DateTime dateT=PIn.Date(dateSt.Substring(4,2)+"/"+dateSt.Substring(6,2)+"/"+dateSt.Substring(0,4));
 							if(dateT<DateTime.Now.AddYears(-1)) {//either no start date so not an order, or not within the last year so not during the reporting period
