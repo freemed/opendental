@@ -286,19 +286,21 @@ namespace OpenDentBusiness{
 					}
 					EmailMessage emailMessage=ConvertMessageToEmailMessage(outMsgDirect.Message,false);
 					emailMessage.PatNum=patNum;
-					strErrors=SendEmailDirect(outMsgDirect,emailAddressFrom);//encryption is performed in this step
-					if(strErrors=="") {
-						emailMessage.SentOrReceived=EmailSentOrReceived.AckDirectProcessed;
-					}
-					else {
-						emailMessage.SentOrReceived=EmailSentOrReceived.AckDirectNotSent;
-						MemoryStream ms=new MemoryStream();
-						notificationMsg.Save(ms);
-						byte[] arrayMdnMessageBytes=ms.ToArray();
-						emailMessage.BodyText=Encoding.UTF8.GetString(arrayMdnMessageBytes);
-						ms.Dispose();
-					}
+					//First save the ack message to the database in case their is a failure sending the email below. This way we can remember to try and send it again later, based on SentOrRecieved.
+					emailMessage.SentOrReceived=EmailSentOrReceived.AckDirectNotSent;
+					MemoryStream ms=new MemoryStream();
+					notificationMsg.Save(ms);
+					byte[] arrayMdnMessageBytes=ms.ToArray();
+					emailMessage.BodyText=Encoding.UTF8.GetString(arrayMdnMessageBytes);
+					ms.Dispose();
 					Insert(emailMessage);
+					//Now that the message has been saved for safe keeping, try to send the email.
+					strErrors=SendEmailDirect(outMsgDirect,emailAddressFrom);//Encryption is performed in this step. An exception will be thrown if the email fails to send for any reason (i.e. internet down).
+					if(strErrors=="") {
+						//The email was sent sucessfully, so we update the ack in the database to show that it has been sent.
+						emailMessage.SentOrReceived=EmailSentOrReceived.AckDirectProcessed;
+						Update(emailMessage);
+					}					
 				}
 				catch(Exception ex) {
 					strErrors=ex.Message;
@@ -318,17 +320,22 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod());
 				return;
 			}
-			string command="SELECT * FROM emailmessage WHERE SentOrReceived="+POut.Long((int)EmailSentOrReceived.AckDirectNotSent);
+			string command="SELECT * FROM emailmessage WHERE FromAddress='"+POut.String(emailAddressFrom.EmailUsername)+"' AND SentOrReceived="+POut.Long((int)EmailSentOrReceived.AckDirectNotSent);
 			List <EmailMessage> listEmailMessageUnsentMdns=Crud.EmailMessageCrud.SelectMany(command);
 			for(int i=0;i<listEmailMessageUnsentMdns.Count;i++) {
 				EmailMessage emailMessage=listEmailMessageUnsentMdns[i];
 				string strRawEmailMdn=emailMessage.BodyText;
 				Health.Direct.Agent.MessageEnvelope messageEnvelopeMdn=new Health.Direct.Agent.MessageEnvelope(strRawEmailMdn);
 				Health.Direct.Agent.OutgoingMessage outMsgDirect=new Health.Direct.Agent.OutgoingMessage(messageEnvelopeMdn);
-				string strErrors=SendEmailDirect(outMsgDirect,emailAddressFrom);//encryption is performed in this step
-				if(strErrors=="") {
-					emailMessage.SentOrReceived=EmailSentOrReceived.AckDirectProcessed;
-					Update(emailMessage);
+				string strErrors="";
+				try {
+					strErrors=SendEmailDirect(outMsgDirect,emailAddressFrom);//Encryption is performed in this step. Throws an exception if unable to send (i.e. when internet down).
+					if(strErrors=="") {
+						emailMessage.SentOrReceived=EmailSentOrReceived.AckDirectProcessed;
+						Update(emailMessage);
+					}
+				}
+				catch {
 				}
 			}
 		}
