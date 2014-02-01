@@ -251,9 +251,9 @@ namespace OpenDentBusiness{
 			return strErrors;
 		}
 
-		///<summary>Used for sending encrypted Message Disposition Notification (MDN) ack messages for Direct.
-		///An ack must be sent when a message is received, and other acks are supposed be sent when other events occur.
-		///For example, when the user reads a decrypted message we must send an ack with notification type of Displayed.</summary>
+		///<summary>Used for creating encrypted Message Disposition Notification (MDN) ack messages for Direct.
+		///An ack must be sent when a message is received/processed, and other acks are supposed be sent when other events occur (but are not required).
+		///For example, when the user reads a decrypted message we must send an ack with notification type of Displayed (not required).</summary>
 		private static string SendAckDirect(Health.Direct.Agent.IncomingMessage inMsg,EmailAddress emailAddressFrom,long patNum) {
 			//No need to check RemotingRole; no call to db.
 			//The CreateAcks() function handles the case where the incoming message is an MDN, in which case we do not reply with anything.
@@ -286,21 +286,14 @@ namespace OpenDentBusiness{
 					}
 					EmailMessage emailMessage=ConvertMessageToEmailMessage(outMsgDirect.Message,false);
 					emailMessage.PatNum=patNum;
-					//First save the ack message to the database in case their is a failure sending the email below. This way we can remember to try and send it again later, based on SentOrRecieved.
+					//First save the ack message to the database in case their is a failure sending the email. This way we can remember to try and send it again later, based on SentOrRecieved.
 					emailMessage.SentOrReceived=EmailSentOrReceived.AckDirectNotSent;
 					MemoryStream ms=new MemoryStream();
 					notificationMsg.Save(ms);
 					byte[] arrayMdnMessageBytes=ms.ToArray();
 					emailMessage.BodyText=Encoding.UTF8.GetString(arrayMdnMessageBytes);
 					ms.Dispose();
-					Insert(emailMessage);
-					//Now that the message has been saved for safe keeping, try to send the email.
-					strErrors=SendEmailDirect(outMsgDirect,emailAddressFrom);//Encryption is performed in this step. An exception will be thrown if the email fails to send for any reason (i.e. internet down).
-					if(strErrors=="") {
-						//The email was sent sucessfully, so we update the ack in the database to show that it has been sent.
-						emailMessage.SentOrReceived=EmailSentOrReceived.AckDirectProcessed;
-						Update(emailMessage);
-					}					
+					Insert(emailMessage);				
 				}
 				catch(Exception ex) {
 					strErrors=ex.Message;
@@ -310,33 +303,59 @@ namespace OpenDentBusiness{
 				}
 				strErrorsAll+=strErrors;
 			}
+			try {
+				SendOldestUnsentAck(emailAddressFrom);//Send the ack(s) we created above.
+			}
+			catch {
+				//Not critical to send the acks here, because they will be sent later if they failed now.
+			}
 			return strErrorsAll;
 		}
 
-		///<summary>Gets all MDN email messages from the database for the given emailAddressFrom which have not been sent yet and
-		///tries to send them using from the emailAddressFrom.  Throws exceptions.</summary>
-		public static void ResendAcks(EmailAddress emailAddressFrom) {
+		///<summary>Gets the oldest Direct Ack (MDN) from the db which has not been sent yet and attempts to send it.
+		///If the Ack fails to send, then it remains in the database with status AckDirectNotSent, so that another attempt will be made when this function is called again.
+		///This function throttles the Ack responses to prevent the email host from flagging the emailAddressFrom as a spam account.  The throttle speed is one Ack per 60 seconds (to mimic human behavior).
+		///Throws exceptions.</summary>
+		public static void SendOldestUnsentAck(EmailAddress emailAddressFrom) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod());
 				return;
 			}
-			string command="SELECT * FROM emailmessage WHERE FromAddress='"+POut.String(emailAddressFrom.EmailUsername)+"' AND SentOrReceived="+POut.Long((int)EmailSentOrReceived.AckDirectNotSent);
-			List <EmailMessage> listEmailMessageUnsentMdns=Crud.EmailMessageCrud.SelectMany(command);
-			for(int i=0;i<listEmailMessageUnsentMdns.Count;i++) {
-				EmailMessage emailMessage=listEmailMessageUnsentMdns[i];
-				string strRawEmailMdn=emailMessage.BodyText;
-				Health.Direct.Agent.MessageEnvelope messageEnvelopeMdn=new Health.Direct.Agent.MessageEnvelope(strRawEmailMdn);
-				Health.Direct.Agent.OutgoingMessage outMsgDirect=new Health.Direct.Agent.OutgoingMessage(messageEnvelopeMdn);
-				string strErrors="";
-				try {
-					strErrors=SendEmailDirect(outMsgDirect,emailAddressFrom);//Encryption is performed in this step. Throws an exception if unable to send (i.e. when internet down).
-					if(strErrors=="") {
-						emailMessage.SentOrReceived=EmailSentOrReceived.AckDirectProcessed;
-						Update(emailMessage);
-					}
+			string command;
+			//Get the time that the last Direct Ack was sent for the From address.
+			command=DbHelper.LimitOrderBy(
+				"SELECT MsgDateTime FROM emailmessage "
+					+"WHERE FromAddress='"+POut.String(emailAddressFrom.EmailUsername)+"' AND SentOrReceived="+POut.Long((int)EmailSentOrReceived.AckDirectProcessed)+" "
+					+"ORDER BY MsgDateTime DESC",
+				1);
+			DateTime dateTimeLastAck=PIn.DateT(Db.GetScalar(command));//dateTimeLastAck will be 0001-01-01 if there is not yet any sent Acks.
+			if((DateTime.Now-dateTimeLastAck).TotalSeconds<60) {
+				//Our last Ack sent was less than 15 seconds ago.  Abort sending Acks right now.
+				return;
+			}
+			//Get the oldest Ack for the From address which has not been sent yet.
+			command=DbHelper.LimitOrderBy(
+				"SELECT * FROM emailmessage "
+					+"WHERE FromAddress='"+POut.String(emailAddressFrom.EmailUsername)+"' AND SentOrReceived="+POut.Long((int)EmailSentOrReceived.AckDirectNotSent)+" "
+					+"ORDER BY EmailMessageNum",//The oldest Ack is the one that was recorded first.  EmailMessageNum is better than using MsgDateTime, because MsgDateTime is only accurate down to the second.
+				1);
+			List <EmailMessage> listEmailMessageUnsentAcks=Crud.EmailMessageCrud.SelectMany(command);
+			if(listEmailMessageUnsentAcks.Count<1) {
+				return;//No Acks to send.
+			}
+			EmailMessage emailMessageAck=listEmailMessageUnsentAcks[0];
+			string strRawEmailAck=emailMessageAck.BodyText;//Not really body text.  The entire raw Ack is saved here, and we use it to reconstruct the Ack email completely.
+			Health.Direct.Agent.MessageEnvelope messageEnvelopeMdn=new Health.Direct.Agent.MessageEnvelope(strRawEmailAck);
+			Health.Direct.Agent.OutgoingMessage outMsgDirect=new Health.Direct.Agent.OutgoingMessage(messageEnvelopeMdn);
+			try {
+				string strErrors=SendEmailDirect(outMsgDirect,emailAddressFrom);//Encryption is performed in this step. Throws an exception if unable to send (i.e. when internet down).
+				if(strErrors=="") {
+					emailMessageAck.SentOrReceived=EmailSentOrReceived.AckDirectProcessed;
+					emailMessageAck.MsgDateTime=DateTime.Now;//Update the time, otherwise the throttle will not work properly.
+					Update(emailMessageAck);
 				}
-				catch {
-				}
+			}
+			catch {
 			}
 		}
 
@@ -522,8 +541,11 @@ namespace OpenDentBusiness{
 						break;
 					}
 				}
-				return retVal;
 			}
+			//Since this function is fired automatically based on the inbox check interval, we also try to send the oldest unsent Ack.
+			//The goal is to keep trying to send the Acks at a reasonable interval until they are successfully delivered.
+			SendOldestUnsentAck(emailAddressInbox);
+			return retVal;
 		}
 
 		#endregion Receiving
