@@ -1,8 +1,5 @@
 using System;
-using System.Drawing;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDental.UI;
 using OpenDentBusiness;
@@ -11,6 +8,8 @@ namespace OpenDental{
 	/// <summary></summary>
 	public class FormReferralsPatient : System.Windows.Forms.Form{
 		private OpenDental.UI.Button butClose;
+		private UI.Button butOK;
+		private UI.Button butNone;
 		private OpenDental.UI.Button butAddFrom;
 		private OpenDental.UI.ODGrid gridMain;
 		/// <summary>
@@ -24,6 +23,10 @@ namespace OpenDental{
 		private CheckBox checkShowAll;
 		///<summary>This number is normally zero.  If this number is set externally before opening this form, then this will behave differently.</summary>
 		public long ProcNum;
+		///<summary>Selection mode is currently only used for transitions of care.  Changes text of butClose to Cancel and shows OK and None buttons.</summary>
+		public bool IsSelectionMode;
+		///<summary>This number is normally zero.  If in selection mode, this will be the PK of the selected refattach.</summary>
+		public long RefAttachNum;
 
 		///<summary></summary>
 		public FormReferralsPatient()
@@ -64,6 +67,8 @@ namespace OpenDental{
 			this.butSlip = new OpenDental.UI.Button();
 			this.butAddFrom = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
+			this.butOK = new OpenDental.UI.Button();
+			this.butNone = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// gridMain
@@ -155,10 +160,44 @@ namespace OpenDental{
 			this.butClose.Text = "Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
+			// butOK
+			// 
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butOK.Autosize = true;
+			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.CornerRadius = 4F;
+			this.butOK.Location = new System.Drawing.Point(695, 316);
+			this.butOK.Name = "butOK";
+			this.butOK.Size = new System.Drawing.Size(75, 24);
+			this.butOK.TabIndex = 93;
+			this.butOK.Text = "OK";
+			this.butOK.Visible = false;
+			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			// 
+			// butNone
+			// 
+			this.butNone.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butNone.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butNone.Autosize = true;
+			this.butNone.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butNone.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butNone.CornerRadius = 4F;
+			this.butNone.Location = new System.Drawing.Point(394, 317);
+			this.butNone.Name = "butNone";
+			this.butNone.Size = new System.Drawing.Size(75, 24);
+			this.butNone.TabIndex = 94;
+			this.butNone.Text = "None";
+			this.butNone.Visible = false;
+			this.butNone.Click += new System.EventHandler(this.butNone_Click);
+			// 
 			// FormReferralsPatient
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.ClientSize = new System.Drawing.Size(863, 352);
+			this.Controls.Add(this.butNone);
+			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.checkShowAll);
 			this.Controls.Add(this.butAddTo);
 			this.Controls.Add(this.butSlip);
@@ -180,6 +219,12 @@ namespace OpenDental{
 		#endregion
 
 		private void FormReferralsPatient_Load(object sender,EventArgs e) {
+			if(IsSelectionMode) {
+				gridMain.SelectionMode=GridSelectionMode.One;
+				butClose.Text="Cancel";
+				butOK.Visible=true;
+				butNone.Visible=true;
+			}
 			if(ProcNum!=0) {
 				Text=Lan.g(this,"Referrals");
 				butAddFrom.Visible=false;
@@ -188,7 +233,7 @@ namespace OpenDental{
 				checkShowAll.Visible=false;//we will always show all
 			}
 			FillGrid();
-			if(RefAttachList.Count>0){
+			if(RefAttachList.Count>0 && !IsSelectionMode) {
 				gridMain.SetSelected(0,true);
 			}
 		}
@@ -252,6 +297,7 @@ namespace OpenDental{
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			//This does not automatically select a retattch when in selection mode; it just lets user edit.
 			FormRefAttachEdit FormRAE2=new FormRefAttachEdit();
 			RefAttach refattach=RefAttachList[e.Row].Copy();
 			FormRAE2.RefAttachCur=refattach;
@@ -362,7 +408,23 @@ namespace OpenDental{
 			//grid will not be refilled, so no need to reselect.
 		}
 
+		private void butNone_Click(object sender,EventArgs e) {
+			DialogResult=DialogResult.OK;
+		}
+
+		private void butOK_Click(object sender,EventArgs e) {
+			if(gridMain.GetSelectedIndex() < 0) {
+				MsgBox.Show(this,"Please select a referral first");
+				return;
+			}
+			RefAttachNum=RefAttachList[gridMain.GetSelectedIndex()].RefAttachNum;
+			DialogResult=DialogResult.OK;
+		}
+
 		private void butClose_Click(object sender, System.EventArgs e) {
+			if(IsSelectionMode) {//Allows us to know that the user wants to cancel out of picking a refattach.  They should click None if no refattach is needed.
+				DialogResult=DialogResult.Cancel;
+			}
 			Close();
 		}
 

@@ -128,6 +128,13 @@ namespace OpenDental {
 		}
 
 		private void butExport_Click(object sender,EventArgs e) {
+			FormReferralsPatient FormRP=new FormReferralsPatient();
+			FormRP.PatNum=PatCur.PatNum;
+			FormRP.IsSelectionMode=true;
+			if(FormRP.ShowDialog()==DialogResult.Cancel) {
+				MessageBox.Show("Summary of Care not exported.");
+				return;
+			}
 			string ccd="";
 			try {
 				ccd=EhrCCD.GenerateSummaryOfCare(PatCur);
@@ -153,12 +160,20 @@ namespace OpenDental {
 			newMeasureEvent.DateTEvent = DateTime.Now;
 			newMeasureEvent.EventType = EhrMeasureEventType.SummaryOfCareProvidedToDr;
 			newMeasureEvent.PatNum = PatCur.PatNum;
+			newMeasureEvent.FKey=FormRP.RefAttachNum;//Can be 0 if user didn't pick a referral for some reason.
 			EhrMeasureEvents.Insert(newMeasureEvent);
 			FillGridSent();
 			MessageBox.Show("Exported");
 		}
 
 		private void butSendEmail_Click(object sender,EventArgs e) {
+			FormReferralsPatient FormRP=new FormReferralsPatient();
+			FormRP.PatNum=PatCur.PatNum;
+			FormRP.IsSelectionMode=true;
+			if(FormRP.ShowDialog()==DialogResult.Cancel) {
+				MessageBox.Show("Summary of Care not exported.");
+				return;
+			}
 			string ccd="";
 			try {
 				ccd=EhrCCD.GenerateSummaryOfCare(PatCur);
@@ -199,6 +214,7 @@ namespace OpenDental {
 				newMeasureEvent.FKey=fkey;
 				newMeasureEvent.EventType=EhrMeasureEventType.SummaryOfCareProvidedToDrElectronic;
 				newMeasureEvent.PatNum=PatCur.PatNum;
+				newMeasureEvent.FKey=FormRP.RefAttachNum;//Can be 0 if user didn't pick a referral for some reason.
 				EhrMeasureEvents.Insert(newMeasureEvent);
 				FillGridSent();
 			}
