@@ -31,6 +31,12 @@ namespace OpenDentBusiness {
 		public string eMeasureVSpecificId;
 		public string eMeasureVersion;
 		public string eMeasureNum;
+		public string eMeasureSetId;
+		public string eMeasureDenomId;
+		public string eMeasureNumerId;
+		public string eMeasureDenexId;
+		public string eMeasureDenexcepId;
+		public string eMeasureIppId;
 		public List<EhrCqmPatient> ListEhrPats;
 		public Dictionary<long,List<EhrCqmEncounter>> DictPatNumListEncounters;
 		public Dictionary<long,List<EhrCqmProc>> DictPatNumListProcs;
@@ -99,33 +105,38 @@ namespace OpenDentBusiness {
 
 	public enum QualityType2014 {
 		MedicationsEntered,
+		///<summary>Considered Population 1</summary>
 		WeightOver65,
+		///<summary>Considered Population 2</summary>
 		WeightAdult,
 		CariesPrevent,
+		///<summary>age 0-5.  Considered Stratification 1</summary>
 		CariesPrevent_1,
+		///<summary>age 6-12.  Considered Stratification 2</summary>
 		CariesPrevent_2,
+		///<summary>age 13-20.  Considered Stratification 3</summary>
 		CariesPrevent_3,
 		ChildCaries,
 		Pneumonia,
 		TobaccoCessation,
 		Influenza,
-		///<summary>patients 3-16 with height, weight, and BMI recorded</summary>
+		///<summary>patients 3-16 with height, weight, and BMI recorded.  Considered Numerator 1 All</summary>
 		WeightChild_1_1,
-		///<summary>patients 3-16 counseled for nutrition</summary>
+		///<summary>patients 3-16 counseled for nutrition.  Considered Numerator 2 All</summary>
 		WeightChild_1_2,
-		///<summary>patients 3-16 counseled for physical activity</summary>
+		///<summary>patients 3-16 counseled for physical activity.  Considered Numerator 3 All</summary>
 		WeightChild_1_3,
-		///<summary>patients 3-11 with height, weight, and BMI recorded</summary>
+		///<summary>patients 3-11 with height, weight, and BMI recorded.  Considered Numerator 1 Stratification 1</summary>
 		WeightChild_2_1,
-		///<summary>patients 3-11 counseled for nutrition</summary>
+		///<summary>patients 3-11 counseled for nutrition.  Considered Numerator 2 Stratification 1</summary>
 		WeightChild_2_2,
-		///<summary>patients 3-11 counseled for physical activity</summary>
+		///<summary>patients 3-11 counseled for physical activity.  Considered Numerator 3 Stratification 1</summary>
 		WeightChild_2_3,
-		///<summary>patients 12-16 with height, weight, and BMI recorded</summary>
+		///<summary>patients 12-16 with height, weight, and BMI recorded.  Considered Numerator 1 Stratification 2</summary>
 		WeightChild_3_1,
-		///<summary>patients 12-16 counseled for nutrition</summary>
+		///<summary>patients 12-16 counseled for nutrition.  Considered Numerator 2 Stratification 2</summary>
 		WeightChild_3_2,
-		///<summary>patients 12-16 counseled for physical activity</summary>
+		///<summary>patients 12-16 counseled for physical activity.  Considered Numerator 3 Stratification 2</summary>
 		WeightChild_3_3,
 		BloodPressureManage
 	}
@@ -167,6 +178,7 @@ namespace OpenDentBusiness {
 
 		public EhrCqmPatient Copy() {
 			EhrCqmPatient ehrCqmPatient=(EhrCqmPatient)this.MemberwiseClone();
+			ehrCqmPatient.ListPatientRaces=new List<PatientRace>();
 			for(int i=0;i<ListPatientRaces.Count;i++) {
 				ehrCqmPatient.ListPatientRaces.Add(ListPatientRaces[i].Clone());
 			}

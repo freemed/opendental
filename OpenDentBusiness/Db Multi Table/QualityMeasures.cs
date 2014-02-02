@@ -129,6 +129,12 @@ namespace OpenDentBusiness {
 					measureCur.eMeasureVersion=GetEMeasureVersion(measureCur.Type2014);
 					measureCur.eMeasureVNeutralId=GetEMeasureVNeutralId(measureCur.Type2014);
 					measureCur.eMeasureVSpecificId=GetEMeasureVSpecificId(measureCur.Type2014);
+					measureCur.eMeasureSetId=GetEMeasureSetId(measureCur.Type2014);
+					measureCur.eMeasureIppId=GetEMeasureIppId(measureCur.Type2014);
+					measureCur.eMeasureDenomId=GetEMeasureDenomId(measureCur.Type2014);
+					measureCur.eMeasureDenexId=GetEMeasureDenexId(measureCur.Type2014);
+					measureCur.eMeasureDenexcepId=GetEMeasureDenexcepId(measureCur.Type2014);
+					measureCur.eMeasureNumerId=GetEMeasureNumerId(measureCur.Type2014);
 				}
 				list.Add(measureCur);
 #if DEBUG
@@ -5427,64 +5433,243 @@ BMI 18.5-25.";
 			}
 		}
 
-		///<summary>Gets count of gender, race, ethnicity, and payer type.</summary>
-		private static Dictionary<string,int> GetSupplementalCounts(List<EhrCqmPatient> listPats) {
-			Dictionary<string,int> dictCategoryCount=new Dictionary<string,int>();
-			//add races, ethnicities, and genders to the dictionary with starting counts of 0
-			dictCategoryCount.Add(PatRace.AfricanAmerican.ToString(),0);
-			dictCategoryCount.Add(PatRace.AmericanIndian.ToString(),0);
-			dictCategoryCount.Add(PatRace.Asian.ToString(),0);
-			dictCategoryCount.Add(PatRace.White.ToString(),0);
-			dictCategoryCount.Add(PatRace.HawaiiOrPacIsland.ToString(),0);
-			dictCategoryCount.Add(PatRace.DeclinedToSpecifyRace.ToString(),0);
-			dictCategoryCount.Add(PatRace.Other.ToString(),0);
-			dictCategoryCount.Add(PatRace.Hispanic.ToString(),0);
-			dictCategoryCount.Add(PatRace.NotHispanic.ToString(),0);
-			dictCategoryCount.Add(PatRace.DeclinedToSpecifyEthnicity.ToString(),0);
-			dictCategoryCount.Add(PatientGender.Male.ToString(),0);
-			dictCategoryCount.Add(PatientGender.Female.ToString(),0);
-			dictCategoryCount.Add(PatientGender.Unknown.ToString(),0);
-			dictCategoryCount.Add("Medicare",0);
-			dictCategoryCount.Add("Medicaid",0);
-			dictCategoryCount.Add("Other Insurance",0);
-			dictCategoryCount.Add("Self-pay",0);
-			for(int i=0;i<listPats.Count;i++) {
-				if(listPats[i].ListPatientRaces.Count==1) {
-					if(dictCategoryCount.ContainsKey(listPats[i].ListPatientRaces[0].Race.ToString())) {
-						dictCategoryCount[listPats[i].ListPatientRaces[0].Race.ToString()]++;
-					}
-				}
-				else if(listPats[i].ListPatientRaces.Count>1) {
-					dictCategoryCount[PatRace.Other.ToString()]++;
-				}
-				if(listPats[i].Ethnicity!=null) {
-					if(dictCategoryCount.ContainsKey(listPats[i].Ethnicity.ToString())) {
-						dictCategoryCount[listPats[i].Ethnicity.ToString()]++;
-					}
-				}
-				dictCategoryCount[listPats[i].EhrCqmPat.Gender.ToString()]++;
-				if(listPats[i].PayorSopCode==null || listPats[i].PayorSopCode=="") {
-					//no payer type set, Self-pay
-					dictCategoryCount["Self-pay"]++;
-				}
-				else {
-					switch(listPats[i].PayorSopCode.Substring(0,1)) {//Get hierarchical code representing payer type main category, first character is type
-						case "1":
-							dictCategoryCount["Medicare"]++;
-							break;
-						case "2":
-							dictCategoryCount["Medicaid"]++;
-							break;
-						case "8":
-							dictCategoryCount["Self-pay"]++;
-							break;
-						default:
-							dictCategoryCount["Other"]++;
-							break;
-					}
-				}
+		private static string GetEMeasureSetId(QualityType2014 qtype) {
+			//No need to check RemotingRole; no call to db.
+			switch(qtype) {
+				case QualityType2014.MedicationsEntered:
+					return "680ffd36-c4e4-4145-b6c3-92418b037069";
+				case QualityType2014.CariesPrevent:
+				case QualityType2014.CariesPrevent_1:
+				case QualityType2014.CariesPrevent_2:
+				case QualityType2014.CariesPrevent_3:
+					return "75d957a0-bdaf-49ad-b592-0e8fbb69d619";
+				case QualityType2014.WeightOver65:
+				case QualityType2014.WeightAdult:
+					return "ffd4afd7-4981-48c2-92dd-73b764987409";
+				case QualityType2014.ChildCaries:
+					return "c4951021-42c7-4eb1-b1f3-55f2f0952b13";
+				case QualityType2014.Pneumonia:
+					return "097e91e6-bb8d-4f16-9acf-f7d9dce26799";
+				case QualityType2014.TobaccoCessation:
+					return "b2bef869-23a1-42e2-ba8f-44819daedf4e";
+				case QualityType2014.Influenza:
+					return "40d83c98-aaa9-4436-9c12-54b0896b0b2c";
+				case QualityType2014.WeightChild_1_1:
+				case QualityType2014.WeightChild_2_1:
+				case QualityType2014.WeightChild_3_1:
+				case QualityType2014.WeightChild_1_2:
+				case QualityType2014.WeightChild_2_2:
+				case QualityType2014.WeightChild_3_2:
+				case QualityType2014.WeightChild_1_3:
+				case QualityType2014.WeightChild_2_3:
+				case QualityType2014.WeightChild_3_3:
+					return "2b59c988-1e6a-44d7-a39d-aab90ad3a33a";
+				case QualityType2014.BloodPressureManage:
+					return "9d6d8dd1-120d-4f21-aecd-f447cc78171d";
+				default:
+					throw new ApplicationException("Type not found: "+qtype.ToString());
 			}
-			return dictCategoryCount;
+		}
+
+		private static string GetEMeasureIppId(QualityType2014 qtype) {
+			//No need to check RemotingRole; no call to db.
+			switch(qtype) {
+				case QualityType2014.MedicationsEntered:
+					return "FED9910E-07EF-40E1-B8F0-8B4331CBE8F0";
+				case QualityType2014.WeightOver65:
+					return "3FA95131-7882-49C0-9830-2ACB82E914D8";
+				case QualityType2014.WeightAdult:
+					return "95D45B98-C6A1-42F4-A0F5-617DF414A2AE";
+				case QualityType2014.CariesPrevent:
+					return "E91779A3-28D7-44F9-A150-6C8504809B1F";
+				case QualityType2014.CariesPrevent_1:
+					return "2C028996-D897-4162-ADBE-8619EDBE4E7D";
+				case QualityType2014.CariesPrevent_2:
+					return "59140979-7876-4A93-85EB-1276E2ED7584";
+				case QualityType2014.CariesPrevent_3:
+					return "154FFAC4-61BF-49CE-87C4-4FC415465F68";
+				case QualityType2014.ChildCaries:
+					return "35814E51-399D-4DA3-AC4F-67EA95140F9B";
+				case QualityType2014.Pneumonia:
+					return "8719C1EE-81BB-45B1-B05C-2CB6593E12F1";
+				case QualityType2014.TobaccoCessation:
+					return "F130623A-0505-466B-A2B7-996AC6D9C05A";
+				case QualityType2014.Influenza:
+					return "34F4027D-C59C-4DC5-834B-89B1E34C219D";
+				case QualityType2014.WeightChild_1_1:
+				case QualityType2014.WeightChild_1_2:
+				case QualityType2014.WeightChild_1_3:
+					return "A75126FB-5455-476C-AD34-68AE645535F1";
+				case QualityType2014.WeightChild_2_1:
+				case QualityType2014.WeightChild_2_2:
+				case QualityType2014.WeightChild_2_3:
+					return "445A44EE-98BC-4614-B8B6-7A9521CD0794";
+				case QualityType2014.WeightChild_3_1:
+				case QualityType2014.WeightChild_3_2:
+				case QualityType2014.WeightChild_3_3:
+					return "AA764699-1039-4E99-817C-6ED6E9E93735";
+				case QualityType2014.BloodPressureManage:
+					return "B936D6B5-151F-47FB-97D8-A5AB9AB00656";
+				default:
+					throw new ApplicationException("Type not found: "+qtype.ToString());
+			}
+		}
+
+		private static string GetEMeasureDenomId(QualityType2014 qtype) {
+			//No need to check RemotingRole; no call to db.
+			switch(qtype) {
+				case QualityType2014.MedicationsEntered:
+					return "E7F35F6D-6963-48F5-8F73-8ECE4B7F8F50";
+				case QualityType2014.WeightOver65:
+					return "47F98343-B180-4CD6-9622-1D913DE255B2";
+				case QualityType2014.WeightAdult:
+					return "73F6ACC4-B252-42CA-8C3B-330EC37F1294";
+				case QualityType2014.CariesPrevent:
+					return "81DE4056-93B1-43ED-BD3E-0A93CCC70828";
+				case QualityType2014.CariesPrevent_1:
+					return "2C028996-D897-4162-ADBE-8619EDBE4E7D";
+				case QualityType2014.CariesPrevent_2:
+					return "59140979-7876-4A93-85EB-1276E2ED7584";
+				case QualityType2014.CariesPrevent_3:
+					return "154FFAC4-61BF-49CE-87C4-4FC415465F68";
+				case QualityType2014.ChildCaries:
+					return "EE53E909-57C7-4B9E-A751-DED6F4DBD53E";
+				case QualityType2014.Pneumonia:
+					return "32BF25B7-7448-4B88-8CBC-AEFA213F84ED";
+				case QualityType2014.TobaccoCessation:
+					return "4A7D841F-0C3A-43DB-8220-ED6B1A971AC9";
+				case QualityType2014.Influenza:
+					return "2F7CF599-3DD4-43C0-BF34-622DAE9617AE";
+				case QualityType2014.WeightChild_1_1:
+				case QualityType2014.WeightChild_1_2:
+				case QualityType2014.WeightChild_1_3:
+					return "2E95A790-B16B-4679-AAC0-B70B46932304";
+				case QualityType2014.WeightChild_2_1:
+				case QualityType2014.WeightChild_2_2:
+				case QualityType2014.WeightChild_2_3:
+					return "445A44EE-98BC-4614-B8B6-7A9521CD0794";
+				case QualityType2014.WeightChild_3_1:
+				case QualityType2014.WeightChild_3_2:
+				case QualityType2014.WeightChild_3_3:
+					return "AA764699-1039-4E99-817C-6ED6E9E93735";
+				case QualityType2014.BloodPressureManage:
+					return "2A53CBF0-510A-429D-814D-CBCA4DC0E2A8";
+				default:
+					throw new ApplicationException("Type not found: "+qtype.ToString());
+			}
+		}
+
+		private static string GetEMeasureDenexId(QualityType2014 qtype) {
+			//No need to check RemotingRole; no call to db.
+			switch(qtype) {
+				case QualityType2014.MedicationsEntered:
+				case QualityType2014.CariesPrevent:
+				case QualityType2014.CariesPrevent_1:
+				case QualityType2014.CariesPrevent_2:
+				case QualityType2014.CariesPrevent_3:
+				case QualityType2014.ChildCaries:
+				case QualityType2014.Pneumonia:
+				case QualityType2014.TobaccoCessation:
+				case QualityType2014.Influenza:
+					return "";
+				case QualityType2014.WeightOver65:
+					return "6f3694a9-6ae2-4fed-923a-198489ab47b8";
+				case QualityType2014.WeightAdult:
+					return "d98c4592-bdce-4bdf-8466-2339a98ad00b";
+				case QualityType2014.WeightChild_1_1:
+				case QualityType2014.WeightChild_2_1:
+				case QualityType2014.WeightChild_3_1:
+				case QualityType2014.WeightChild_1_2:
+				case QualityType2014.WeightChild_2_2:
+				case QualityType2014.WeightChild_3_2:
+				case QualityType2014.WeightChild_1_3:
+				case QualityType2014.WeightChild_2_3:
+				case QualityType2014.WeightChild_3_3:
+					return "6A98DA9A-C352-4A4D-8B69-B2D08619E8A8";
+				case QualityType2014.BloodPressureManage:
+					return "57F3D1D7-F9FA-437F-A2B9-406A1498E8C0";
+				default:
+					throw new ApplicationException("Type not found: "+qtype.ToString());
+			}
+		}
+
+		private static string GetEMeasureDenexcepId(QualityType2014 qtype) {
+			//No need to check RemotingRole; no call to db.
+			switch(qtype) {
+				case QualityType2014.MedicationsEntered:
+					return "171D644F-3B45-4EBA-9A8C-31D3BA193088";
+				case QualityType2014.TobaccoCessation:
+					return "F8B92E13-AEC3-4B52-B381-E1BD98164F84";
+				case QualityType2014.Influenza:
+					return "D3C49689-06FB-4702-8079-F09C074B42B7";
+				case QualityType2014.WeightOver65:
+				case QualityType2014.WeightAdult:
+				case QualityType2014.CariesPrevent:
+				case QualityType2014.CariesPrevent_1:
+				case QualityType2014.CariesPrevent_2:
+				case QualityType2014.CariesPrevent_3:
+				case QualityType2014.ChildCaries:
+				case QualityType2014.Pneumonia:
+				case QualityType2014.WeightChild_1_1:
+				case QualityType2014.WeightChild_1_2:
+				case QualityType2014.WeightChild_1_3:
+				case QualityType2014.WeightChild_2_1:
+				case QualityType2014.WeightChild_2_2:
+				case QualityType2014.WeightChild_2_3:
+				case QualityType2014.WeightChild_3_1:
+				case QualityType2014.WeightChild_3_2:
+				case QualityType2014.WeightChild_3_3:
+				case QualityType2014.BloodPressureManage:
+					return "";
+				default:
+					throw new ApplicationException("Type not found: "+qtype.ToString());
+			}
+		}
+
+		private static string GetEMeasureNumerId(QualityType2014 qtype) {
+			//No need to check RemotingRole; no call to db.
+			switch(qtype) {
+				case QualityType2014.MedicationsEntered:
+					return "C54E0789-B833-438D-A2A0-63BBB60C13E6";
+				case QualityType2014.WeightOver65:
+					return "22aab4cb-4452-4ba0-8a45-b340a318092d";
+				case QualityType2014.WeightAdult:
+					return "875d8e62-44e5-4249-803d-1b36b57dc2da";
+				case QualityType2014.CariesPrevent:
+					return "25DAB30B-E300-43BE-9558-B76B71B6E3A9";
+				case QualityType2014.CariesPrevent_1:
+					return "2C028996-D897-4162-ADBE-8619EDBE4E7D";
+				case QualityType2014.CariesPrevent_2:
+					return "59140979-7876-4A93-85EB-1276E2ED7584";
+				case QualityType2014.CariesPrevent_3:
+					return "154FFAC4-61BF-49CE-87C4-4FC415465F68";
+				case QualityType2014.ChildCaries:
+					return "F0D11476-E49B-4C70-B557-F9A5E670248A";
+				case QualityType2014.Pneumonia:
+					return "43479DAE-01AD-4540-AB02-C02B78D26810";
+				case QualityType2014.TobaccoCessation:
+					return "FB081A01-4184-43CB-9ADE-0698C1B82082";
+				case QualityType2014.Influenza:
+					return "9C2D94BD-12B7-4918-9EE5-8C4DEF3AF212";
+				case QualityType2014.WeightChild_1_1:
+					return "2D775CD0-CAC4-44D1-9185-9E6AB12835FA";
+				case QualityType2014.WeightChild_1_2:
+					return "36B4858A-821C-40EE-90F1-007A164CD93E";
+				case QualityType2014.WeightChild_1_3:
+					return "B11C09BA-C864-430D-9DEC-16647793774C";
+				case QualityType2014.WeightChild_2_1:
+				case QualityType2014.WeightChild_2_2:
+				case QualityType2014.WeightChild_2_3:
+					return "445A44EE-98BC-4614-B8B6-7A9521CD0794";
+				case QualityType2014.WeightChild_3_1:
+				case QualityType2014.WeightChild_3_2:
+				case QualityType2014.WeightChild_3_3:
+					return "AA764699-1039-4E99-817C-6ED6E9E93735";
+				case QualityType2014.BloodPressureManage:
+					return "5EE417A9-32DB-452F-BAA0-74C5831A4457";
+				default:
+					throw new ApplicationException("Type not found: "+qtype.ToString());
+			}
 		}
 
 		///<summary>listQMs will be a list of 9 QualityMeasure objects for the selected CQMs.  Those objects will have every encounter, procedure, problem, etc. required for creating the category I and category III QRDA documents.  Category I is the patient level documents, and will be one document for every patient in the initial patient population for the specific measure.  We will group the category I documents in one folder for each measure, and either zip each folder or simply zip the folders manually after they have been created.  The Category III documents can either be one per measure, or one document containing the aggregate information for each of the selected measures.  Each encounter, procedure, etc. may appear in the Category I document multiple times if, for instance, the encounter falls into more than one value set and qualifies the patient for the initial patient population for more than one measure.  This means we will create one Cat I patient level document per patient and have a copy of it in every folder for every measure where the patient is in the initial patient population.  The Cat I document will also reference all 9 of our CQMs.</summary>
@@ -6250,12 +6435,12 @@ BMI 18.5-25.";
 			_w.Close();
 			#endregion Cateogry I QRDA Documents
 			#region Category III QRDA Document
-			xmlSettings=new XmlWriterSettings();
-			xmlSettings.Encoding=Encoding.UTF8;
-			xmlSettings.OmitXmlDeclaration=true;
-			xmlSettings.Indent=true;
-			xmlSettings.IndentChars="   ";
-			using(_w=XmlWriter.Create(folderRoot+"\\QRDA_Category_III"+".xml")) {
+			using(_w=XmlWriter.Create(folderRoot+"\\QRDA_Category_III.xml")) {
+				xmlSettings=new XmlWriterSettings();
+				xmlSettings.Encoding=Encoding.UTF8;
+				xmlSettings.OmitXmlDeclaration=true;
+				xmlSettings.Indent=true;
+				xmlSettings.IndentChars="   ";
 				//Begin Clinical Document
 				_w.WriteProcessingInstruction("xml-stylesheet","type=\"text/xsl\" href=\"qrda.xsl\"");
 				_w.WriteWhitespace("\r\n");
@@ -6378,6 +6563,7 @@ BMI 18.5-25.";
 				Start("component");
 				Start("structuredBody");
 				#region reportingParameters component
+				_w.WriteComment("Reporting Parameters Component");
 				Start("component");
 				Start("section");
 				_w.WriteComment("Reporting Parameters Section Template");
@@ -6408,305 +6594,1255 @@ BMI 18.5-25.";
 				End("component");
 				#endregion reportingParameters component
 				#region measure component
+				_w.WriteComment("Measures Component");
 				Start("component");
 				Start("section");
+				//structuredBody[component[section(reportingParameters)]][component2[section(measureSection)]]]
 				_w.WriteComment("Measure Section Template");
 				TemplateId("2.16.840.1.113883.10.20.24.2.2");
 				_w.WriteComment("QRDA Category III Measure Section Template");
 				TemplateId("2.16.840.1.113883.10.20.27.2.1");
 				StartAndEnd("code","code","55186-1","displayName","Measure Section","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc);
 				_w.WriteElementString("title","Measure Section");
+				//***************************************************TEXT VERSION**********************************************************
+				#region TEXT VERSION
+				Start("text");
+				List<Dictionary<string,int>> listPopCountDicts=new List<Dictionary<string,int>>();
 				for(int i=0;i<listQMs.Count;i++) {
-					Start("text");
-						Start("table","border","1","width","100%");
-						Start("thead");
-							Start("tr");
-							_w.WriteElementString("th","eMeasure Title");
-							_w.WriteElementString("th","Version neutral identifier");
-							_w.WriteElementString("th","eMeasure Identifier (MAT)");
-							_w.WriteElementString("th","eMeasure Version Number");
-							_w.WriteElementString("th","Version specific identifier");
-							End("tr");
-						End("thead");
-						Start("tbody");
-							MeasureTextTableRow(listQMs[i].eMeasureTitle,listQMs[i].eMeasureVNeutralId,listQMs[i].eMeasureNum,listQMs[i].eMeasureVersion,listQMs[i].eMeasureVSpecificId);
-						End("tbody");
-						End("table");
-						if(listQMs[i].eMeasureNum=="68") {
+					#region Get indexes of stratifications and other populations
+					//these are used to get stratifications of a measure, we have them as separate QualityMeasure objects in the list, the int is the index in listQMs of the object
+					int s1Indx=-1;//1st stratification index
+					int s2Indx=-1;//2nd stratification index
+					int s3Indx=-1;//3rd stratification index
+					int pop2Indx=-1;//additional population index
+					int numer2=-1;//numerator 2 index
+					int numer3=-1;//numerator 3 index
+					int s1numer2Indx=-1;//1st stratification numerator 2 index
+					int s1numer3Indx=-1;//1st stratification numerator 3 index
+					int s2numer2Indx=-1;//2nd stratification numerator 2 index
+					int s2numer3Indx=-1;//3rd stratification numerator 3 index
+					int numPops=1;//if set to two, this will generate another set of population data for the second population (only used by measure 69, weight adult)
+					switch(listQMs[i].Type2014) {
+						//these are stratifications/other populations of other measures, they will be included with the other measure, continue in for loop
+						case QualityType2014.CariesPrevent_1:
+						case QualityType2014.CariesPrevent_2:
+						case QualityType2014.CariesPrevent_3:
+						case QualityType2014.WeightAdult:
+						case QualityType2014.WeightChild_1_2:
+						case QualityType2014.WeightChild_1_3:
+						case QualityType2014.WeightChild_2_1:
+						case QualityType2014.WeightChild_2_2:
+						case QualityType2014.WeightChild_2_3:
+						case QualityType2014.WeightChild_3_1:
+						case QualityType2014.WeightChild_3_2:
+						case QualityType2014.WeightChild_3_3:
+							continue;
+						case QualityType2014.CariesPrevent:
+							//get the indexes of the three stratifications
+							for(int j=0;j<listQMs.Count;j++) {
+								if(listQMs[j].Type2014==QualityType2014.CariesPrevent_1) {
+									s1Indx=j;
+									continue;
+								}
+								if(listQMs[j].Type2014==QualityType2014.CariesPrevent_2) {
+									s2Indx=j;
+									continue;
+								}
+								if(listQMs[j].Type2014==QualityType2014.CariesPrevent_3) {
+									s3Indx=j;
+									continue;
+								}
+							}
+							break;
+						case QualityType2014.WeightOver65:
+							//get the index of the WeightAdult (population 2)
+							for(int j=0;j<listQMs.Count;j++) {
+								if(listQMs[j].Type2014==QualityType2014.WeightAdult) {
+									pop2Indx=j;
+									numPops=2;
+									break;
+								}
+							}
+							break;
+						case QualityType2014.WeightChild_1_1:
+							//this will create 3 data sections, one for each numerator
+							//We will have Numerator 1 with ipp,denom,except,exclus,numer data, Numerator 2 data, and Numerator 3 data, each with their own stratifications
+							numPops=3;
+							//get the indexes of the additional two numerators and 2 stratifications
+							for(int j=0;j<listQMs.Count;j++) {
+								if(listQMs[j].Type2014==QualityType2014.WeightChild_1_2) {
+									numer2=j;
+									continue;
+								}
+								if(listQMs[j].Type2014==QualityType2014.WeightChild_1_3) {
+									numer3=j;
+									continue;
+								}
+								if(listQMs[j].Type2014==QualityType2014.WeightChild_2_1) {
+									s1Indx=j;
+									continue;
+								}
+								if(listQMs[j].Type2014==QualityType2014.WeightChild_2_2) {
+									s1numer2Indx=j;
+									continue;
+								}
+								if(listQMs[j].Type2014==QualityType2014.WeightChild_2_3) {
+									s1numer3Indx=j;
+									continue;
+								}
+								if(listQMs[j].Type2014==QualityType2014.WeightChild_3_1) {
+									s2Indx=j;
+									continue;
+								}
+								if(listQMs[j].Type2014==QualityType2014.WeightChild_3_2) {
+									s2numer2Indx=j;
+									continue;
+								}
+								if(listQMs[j].Type2014==QualityType2014.WeightChild_3_3) {
+									s2numer3Indx=j;
+									continue;
+								}
+							}
+							break;
+					}
+					#endregion					
+					listPopCountDicts=FillDictPopCounts(listQMs[i].ListEhrPats);
+					Start("table","border","1","width","100%");
+					Start("thead");
+					Start("tr");
+					_w.WriteElementString("th","eMeasure Title");
+					_w.WriteElementString("th","Version neutral identifier");
+					_w.WriteElementString("th","eMeasure Identifier (MAT)");
+					_w.WriteElementString("th","eMeasure Version Number");
+					_w.WriteElementString("th","Version specific identifier");
+					End("tr");
+					End("thead");
+					Start("tbody");
+					MeasureTextTableRow(listQMs[i].eMeasureTitle,listQMs[i].eMeasureVNeutralId,listQMs[i].eMeasureNum,listQMs[i].eMeasureVersion,listQMs[i].eMeasureVSpecificId);
+					End("tbody");
+					End("table");
+					if(listQMs[i].eMeasureSetId!=null) {
+						Start("content","styleCode","Bold");
+						_w.WriteString("Member of Measure Set: "+listQMs[i].eMeasureSetId);
+						End("content");
+					}
+					for(int p=0;p<numPops;p++) {//usually only runs 1 loop, measure 69 has two populations, and measure 155 has 3 numerators, in which case it will run more than once
+						int measureIndx=i;
+						if(numPops==2) {
 							Start("content","styleCode","Bold");
-							_w.WriteString("Member of Measure Set: Clinical Quality Measure Set 2014 - 680ffd36-c4e4-4145-b6c3-92418b037069");
+							_w.WriteString("Population "+(p+1).ToString()+":");
 							End("content");
+							if(p>0) {//fill stratification data with supplemental data from other population (only used by measure 69)
+								measureIndx=pop2Indx;
+								listPopCountDicts=FillDictPopCounts(listQMs[measureIndx].ListEhrPats);
+							}
+						}
+						else if(numPops==3) {
+							Start("content","styleCode","Bold");
+							_w.WriteString("Numerator "+(p+1).ToString()+":");
+							End("content");
+							if(p==1) {//second iteration, fill dictionaries with numerator 2 data for stratifications
+								measureIndx=numer2;
+								listPopCountDicts=FillDictPopCounts(listQMs[measureIndx].ListEhrPats);
+							}
+							if(p==2) {//third iteration, fill dictionaries with numerator 3 data for stratifications
+								measureIndx=numer3;
+								listPopCountDicts=FillDictPopCounts(listQMs[measureIndx].ListEhrPats);
+							}
 						}
 						Start("list");
+						#region Performeance and Reporting Rate TEXT VERSION
 						Start("item");
-							Start("content","styleCode","Bold");
-							_w.WriteString("Performance Rate");
-							End("content");
-							_w.WriteString(": "+listQMs[i].PerformanceRate.ToString("0.00")+"%");
+						Start("content","styleCode","Bold");
+						_w.WriteString("Performance Rate");
+						End("content");
+						if(listQMs[measureIndx].ListEhrPats.Count==0) {
+							_w.WriteString(": NA");
+						}
+						else {
+							_w.WriteString(": "+listQMs[measureIndx].PerformanceRate.ToString("0.00")+"%");
+						}
 						End("item");
 						Start("item");
-							Start("content","styleCode","Bold");
-							_w.WriteString("Reporting Rate");
-							End("content");
-							_w.WriteString(": "+listQMs[i].ReportingRate.ToString("0.00")+"%");
+						Start("content","styleCode","Bold");
+						_w.WriteString("Reporting Rate");
+						End("content");
+						if(listQMs[measureIndx].ListEhrPats.Count==0) {
+							_w.WriteString(": NA");
+						}
+						else {
+							_w.WriteString(": "+listQMs[measureIndx].ReportingRate.ToString("0.00")+"%");
+						}
 						End("item");
-					//Start Initial Patient Population text
+						#endregion Performeance and Reporting Rate TEXT VERSION
+						#region IPP TEXT VERSION
+						//Start Initial Patient Population text
 						Start("item");
-							Start("content","styleCode","Bold");
-							_w.WriteString("Initial Patient Population");
-							End("content");
-							_w.WriteString(": "+listQMs[i].ListEhrPats.Count.ToString());
-							if(listQMs[i].ListEhrPats.Count>0) {
-								Start("list");
-								Dictionary<string,int> dictIPPCounts=GetSupplementalCounts(listQMs[i].ListEhrPats);
-								foreach(KeyValuePair<string,int> kvpair in dictIPPCounts) {
-									if(kvpair.Value==0) {
-										continue;
-									}
-									Start("item");
-									Start("content","styleCode","Bold");
-									_w.WriteString(GetSupplementDataPrintString(kvpair.Key));
-									End("content");
-									_w.WriteString(": "+kvpair.Value.ToString());
-									End("item");
+						Start("content","styleCode","Bold");
+						_w.WriteString("Initial Patient Population");
+						End("content");
+						_w.WriteString(": "+listPopCountDicts[0]["All"].ToString());
+						if(listPopCountDicts[0]["All"]>0) {
+							Start("list");
+							#region Stratification
+							if((p==0 && s1Indx>-1) || (p==1 && s1numer2Indx>-1) || (p==2 && s1numer3Indx>-1)) {
+								Start("item");
+								Start("content","styleCode","Bold");
+								_w.WriteString("Reporting Stratum 1");
+								End("content");
+								if(p==0) {
+									_w.WriteString(": "+listQMs[s1Indx].ListEhrPats.Count.ToString());
 								}
-								End("list");
+								else if(p==1) {
+									_w.WriteString(": "+listQMs[s1numer2Indx].ListEhrPats.Count.ToString());
+								}
+								else if(p==2) {
+									_w.WriteString(": "+listQMs[s1numer3Indx].ListEhrPats.Count.ToString());
+								}
+								End("item");
 							}
+							if((p==0 && s2Indx>-1) || (p==1 && s2numer2Indx>-1) || (p==2 && s2numer3Indx>-1)) {
+								Start("item");
+								Start("content","styleCode","Bold");
+								_w.WriteString("Reporting Stratum 2");
+								End("content");
+								if(p==0) {
+									_w.WriteString(": "+listQMs[s2Indx].ListEhrPats.Count.ToString());
+								}
+								else if(p==1) {
+									_w.WriteString(": "+listQMs[s2numer2Indx].ListEhrPats.Count.ToString());
+								}
+								else if(p==2) {
+									_w.WriteString(": "+listQMs[s2numer3Indx].ListEhrPats.Count.ToString());
+								}
+								End("item");
+							}
+							if(p==0 && s3Indx>-1) {
+								Start("item");
+								Start("content","styleCode","Bold");
+								_w.WriteString("Reporting Stratum 3");
+								End("content");
+								_w.WriteString(": "+listQMs[s3Indx].ListEhrPats.Count.ToString());
+								End("item");
+							}
+							#endregion
+							foreach(KeyValuePair<string,int> kvpair in listPopCountDicts[0]) {
+								if(kvpair.Value==0 || kvpair.Key=="All") {
+									continue;
+								}
+								Start("item");
+								Start("content","styleCode","Bold");
+								_w.WriteString(GetSupplementDataPrintString(kvpair.Key));
+								End("content");
+								_w.WriteString(": "+kvpair.Value.ToString());
+								End("item");
+							}
+							End("list");
+						}
 						End("item");
-					//Start Denominator text
+						#endregion IPP TEXT VERSION
+						#region DENOM TEXT VERSION
+						//Start Denominator text
 						Start("item");
-							Start("content","styleCode","Bold");
-							_w.WriteString("Denominator");
-							End("content");
-							List<EhrCqmPatient> listDenom=new List<EhrCqmPatient>();
-							for(int j=0;j<listQMs[i].ListEhrPats.Count;j++) {
-								if(listQMs[i].ListEhrPats[j].IsDenominator) {
-									listDenom.Add(listQMs[i].ListEhrPats[j]);
+						Start("content","styleCode","Bold");
+						_w.WriteString("Denominator");
+						End("content");
+						_w.WriteString(": "+listPopCountDicts[1]["All"]);
+						if(listPopCountDicts[1]["All"]>0) {
+							Start("list");
+							#region Stratification
+							if((p==0 && s1Indx>-1) || (p==1 && s1numer2Indx>-1) || (p==2 && s1numer3Indx>-1)) {
+								Start("item");
+								Start("content","styleCode","Bold");
+								_w.WriteString("Reporting Stratum 1");
+								End("content");
+								if(p==0) {
+									_w.WriteString(": "+listQMs[s1Indx].Denominator.ToString());
 								}
-							}
-							_w.WriteString(": "+listDenom.Count.ToString());
-							if(listDenom.Count>0) {
-								Start("list");
-								Dictionary<string,int> dictDenomCounts=GetSupplementalCounts(listDenom);
-								foreach(KeyValuePair<string,int> kvpair in dictDenomCounts) {
-									if(kvpair.Value==0) {
-										continue;
-									}
-									Start("item");
-									Start("content","styleCode","Bold");
-									_w.WriteString(GetSupplementDataPrintString(kvpair.Key));
-									End("content");
-									_w.WriteString(": "+kvpair.Value.ToString());
-									End("item");
+								else if(p==1) {
+									_w.WriteString(": "+listQMs[s1numer2Indx].Denominator.ToString());
 								}
-								End("list");
+								else if(p==2) {
+									_w.WriteString(": "+listQMs[s1numer3Indx].Denominator.ToString());
+								}
+								End("item");
 							}
+							if((p==0 && s2Indx>-1) || (p==1 && s2numer2Indx>-1) || (p==2 && s2numer3Indx>-1)) {
+								Start("item");
+								Start("content","styleCode","Bold");
+								_w.WriteString("Reporting Stratum 2");
+								End("content");
+								if(p==0) {
+									_w.WriteString(": "+listQMs[s2Indx].Denominator.ToString());
+								}
+								else if(p==1) {
+									_w.WriteString(": "+listQMs[s2numer2Indx].Denominator.ToString());
+								}
+								else if(p==2) {
+									_w.WriteString(": "+listQMs[s2numer3Indx].Denominator.ToString());
+								}
+								End("item");
+							}
+							if(p==0 && s3Indx>-1) {
+								Start("item");
+								Start("content","styleCode","Bold");
+								_w.WriteString("Reporting Stratum 3");
+								End("content");
+								_w.WriteString(": "+listQMs[s3Indx].Denominator.ToString());
+								End("item");
+							}
+							#endregion
+							foreach(KeyValuePair<string,int> kvpair in listPopCountDicts[1]) {
+								if(kvpair.Value==0 || kvpair.Key=="All") {
+									continue;
+								}
+								Start("item");
+								Start("content","styleCode","Bold");
+								_w.WriteString(GetSupplementDataPrintString(kvpair.Key));
+								End("content");
+								_w.WriteString(": "+kvpair.Value.ToString());
+								End("item");
+							}
+							End("list");
+						}
 						End("item");
-					//Start Denominator Exclusion text
+						#endregion DENOM TEXT VERSION
+						#region DENEXCL TEXT VERSION
+						//Start Denominator Exclusion text
 						Start("item");
-							Start("content","styleCode","Bold");
-							_w.WriteString("Denominator Exclusion");
-							End("content");
-							List<EhrCqmPatient> listDenomExclus=new List<EhrCqmPatient>();
-							for(int j=0;j<listQMs[i].ListEhrPats.Count;j++) {
-								if(listQMs[i].ListEhrPats[j].IsExclusion) {
-									listDenomExclus.Add(listQMs[i].ListEhrPats[j]);
+						Start("content","styleCode","Bold");
+						_w.WriteString("Denominator Exclusion");
+						End("content");
+						_w.WriteString(": "+listPopCountDicts[2]["All"].ToString());
+						if(listPopCountDicts[2]["All"]>0) {
+							Start("list");
+							#region Stratification
+							if((p==0 && s1Indx>-1) || (p==1 && s1numer2Indx>-1) || (p==2 && s1numer3Indx>-1)) {
+								Start("item");
+								Start("content","styleCode","Bold");
+								_w.WriteString("Reporting Stratum 1");
+								End("content");
+								if(p==0) {
+									_w.WriteString(": "+listQMs[s1Indx].Exclusions.ToString());
 								}
+								else if(p==1) {
+									_w.WriteString(": "+listQMs[s1numer2Indx].Exclusions.ToString());
+								}
+								else if(p==2) {
+									_w.WriteString(": "+listQMs[s1numer3Indx].Exclusions.ToString());
+								}
+								End("item");
 							}
-							_w.WriteString(": "+listDenomExclus.Count.ToString());
-							if(listDenomExclus.Count>0) {
-								Start("list");
-								Dictionary<string,int> dictDenomExclusCounts=GetSupplementalCounts(listDenomExclus);
-								foreach(KeyValuePair<string,int> kvpair in dictDenomExclusCounts) {
-									if(kvpair.Value==0) {
-										continue;
-									}
-									Start("item");
-									Start("content","styleCode","Bold");
-									_w.WriteString(GetSupplementDataPrintString(kvpair.Key));
-									End("content");
-									_w.WriteString(": "+kvpair.Value.ToString());
-									End("item");
+							if((p==0 && s2Indx>-1) || (p==1 && s2numer2Indx>-1) || (p==2 && s2numer3Indx>-1)) {
+								Start("item");
+								Start("content","styleCode","Bold");
+								_w.WriteString("Reporting Stratum 2");
+								End("content");
+								if(p==0) {
+									_w.WriteString(": "+listQMs[s2Indx].Exclusions.ToString());
 								}
-								End("list");
-							}							
+								else if(p==1) {
+									_w.WriteString(": "+listQMs[s2numer2Indx].Exclusions.ToString());
+								}
+								else if(p==2) {
+									_w.WriteString(": "+listQMs[s2numer3Indx].Exclusions.ToString());
+								}
+								End("item");
+							}
+							if(p==0 && s3Indx>-1) {
+								Start("item");
+								Start("content","styleCode","Bold");
+								_w.WriteString("Reporting Stratum 3");
+								End("content");
+								_w.WriteString(": "+listQMs[s3Indx].Exclusions.ToString());
+								End("item");
+							}
+							#endregion
+							foreach(KeyValuePair<string,int> kvpair in listPopCountDicts[2]) {
+								if(kvpair.Value==0 || kvpair.Key=="All") {
+									continue;
+								}
+								Start("item");
+								Start("content","styleCode","Bold");
+								_w.WriteString(GetSupplementDataPrintString(kvpair.Key));
+								End("content");
+								_w.WriteString(": "+kvpair.Value.ToString());
+								End("item");
+							}
+							End("list");
+						}
 						End("item");
-					//Start Numerator text
+						#endregion DENEXCL TEXT VERSION
+						#region NUMER TEXT VERSION
+						//Start Numerator text
 						Start("item");
-							Start("content","styleCode","Bold");
-							_w.WriteString("Numerator");
-							End("content");
-							List<EhrCqmPatient> listNumerator=new List<EhrCqmPatient>();
-							for(int j=0;j<listQMs[i].ListEhrPats.Count;j++) {
-								if(listQMs[i].ListEhrPats[j].IsNumerator) {
-									listNumerator.Add(listQMs[i].ListEhrPats[j]);
+						Start("content","styleCode","Bold");
+						_w.WriteString("Numerator");
+						End("content");
+						_w.WriteString(": "+listPopCountDicts[3]["All"].ToString());
+						if(listPopCountDicts[3]["All"]>0) {
+							Start("list");
+							#region Stratification
+							if((p==0 && s1Indx>-1) || (p==1 && s1numer2Indx>-1) || (p==2 && s1numer3Indx>-1)) {
+								Start("item");
+								Start("content","styleCode","Bold");
+								_w.WriteString("Reporting Stratum 1");
+								End("content");
+								if(p==0) {
+									_w.WriteString(": "+listQMs[s1Indx].Numerator.ToString());
 								}
+								else if(p==1) {
+									_w.WriteString(": "+listQMs[s1numer2Indx].Numerator.ToString());
+								}
+								else if(p==2) {
+									_w.WriteString(": "+listQMs[s1numer3Indx].Numerator.ToString());
+								}
+								End("item");
 							}
-							_w.WriteString(": "+listNumerator.Count.ToString());
-							if(listNumerator.Count>0) {
-								Start("list");
-								Dictionary<string,int> dictNumeCounts=GetSupplementalCounts(listNumerator);
-								foreach(KeyValuePair<string,int> kvpair in dictNumeCounts) {
-									if(kvpair.Value==0) {
-										continue;
-									}
-									Start("item");
-									Start("content","styleCode","Bold");
-									_w.WriteString(GetSupplementDataPrintString(kvpair.Key));
-									End("content");
-									_w.WriteString(": "+kvpair.Value.ToString());
-									End("item");
+							if((p==0 && s2Indx>-1) || (p==1 && s2numer2Indx>-1) || (p==2 && s2numer3Indx>-1)) {
+								Start("item");
+								Start("content","styleCode","Bold");
+								_w.WriteString("Reporting Stratum 2");
+								End("content");
+								if(p==0) {
+									_w.WriteString(": "+listQMs[s2Indx].Numerator.ToString());
 								}
-								End("list");
-							}							
+								else if(p==1) {
+									_w.WriteString(": "+listQMs[s2numer2Indx].Numerator.ToString());
+								}
+								else if(p==2) {
+									_w.WriteString(": "+listQMs[s2numer3Indx].Numerator.ToString());
+								}
+								End("item");
+							}
+							if(p==0 && s3Indx>-1) {
+								Start("item");
+								Start("content","styleCode","Bold");
+								_w.WriteString("Reporting Stratum 3");
+								End("content");
+								_w.WriteString(": "+listQMs[s3Indx].Numerator.ToString());
+								End("item");
+							}
+							#endregion
+							foreach(KeyValuePair<string,int> kvpair in listPopCountDicts[3]) {
+								if(kvpair.Value==0 || kvpair.Key=="All") {
+									continue;
+								}
+								Start("item");
+								Start("content","styleCode","Bold");
+								_w.WriteString(GetSupplementDataPrintString(kvpair.Key));
+								End("content");
+								_w.WriteString(": "+kvpair.Value.ToString());
+								End("item");
+							}
+							End("list");
+						}
 						End("item");
-					//Start Denominator Exception text
+						#endregion NUMER TEXT VERSION
+						#region DENEXCEP TEXT VERSION
+						//Start Denominator Exception text
 						Start("item");
-							Start("content","styleCode","Bold");
-							_w.WriteString("Denominator Exception");
-							End("content");
-							List<EhrCqmPatient> listDenomExcept=new List<EhrCqmPatient>();
-							for(int j=0;j<listQMs[i].ListEhrPats.Count;j++) {
-								if(listQMs[i].ListEhrPats[j].IsException) {
-									listDenomExcept.Add(listQMs[i].ListEhrPats[j]);
+						Start("content","styleCode","Bold");
+						_w.WriteString("Denominator Exception");
+						End("content");
+						_w.WriteString(": "+listPopCountDicts[4]["All"].ToString());
+						if(listPopCountDicts[4]["All"]>0) {
+							Start("list");
+							#region Stratification
+							if((p==0 && s1Indx>-1) || (p==1 && s1numer2Indx>-1) || (p==2 && s1numer3Indx>-1)) {
+								Start("item");
+								Start("content","styleCode","Bold");
+								_w.WriteString("Reporting Stratum 1");
+								End("content");
+								if(p==0) {
+									_w.WriteString(": "+listQMs[s1Indx].Exceptions.ToString());
 								}
+								else if(p==1) {
+									_w.WriteString(": "+listQMs[s1numer2Indx].Exceptions.ToString());
+								}
+								else if(p==2) {
+									_w.WriteString(": "+listQMs[s1numer3Indx].Exceptions.ToString());
+								}
+								End("item");
 							}
-							_w.WriteString(": "+listDenomExcept.Count.ToString());
-							if(listDenomExcept.Count>0) {
-								Start("list");
-								Dictionary<string,int> dictDenomExceptCounts=GetSupplementalCounts(listDenomExcept);
-								foreach(KeyValuePair<string,int> kvpair in dictDenomExceptCounts) {
-									if(kvpair.Value==0) {
-										continue;
-									}
-									Start("item");
-									Start("content","styleCode","Bold");
-									_w.WriteString(GetSupplementDataPrintString(kvpair.Key));
-									End("content");
-									_w.WriteString(": "+kvpair.Value.ToString());
-									End("item");
+							if((p==0 && s2Indx>-1) || (p==1 && s2numer2Indx>-1) || (p==2 && s2numer3Indx>-1)) {
+								Start("item");
+								Start("content","styleCode","Bold");
+								_w.WriteString("Reporting Stratum 2");
+								End("content");
+								if(p==0) {
+									_w.WriteString(": "+listQMs[s2Indx].Exceptions.ToString());
 								}
-								End("list");
-							}							
+								else if(p==1) {
+									_w.WriteString(": "+listQMs[s2numer2Indx].Exceptions.ToString());
+								}
+								else if(p==2) {
+									_w.WriteString(": "+listQMs[s2numer3Indx].Exceptions.ToString());
+								}
+								End("item");
+							}
+							if(p==0 && s3Indx>-1) {
+								Start("item");
+								Start("content","styleCode","Bold");
+								_w.WriteString("Reporting Stratum 3");
+								End("content");
+								_w.WriteString(": "+listQMs[s3Indx].Exceptions.ToString());
+								End("item");
+							}
+							#endregion
+							foreach(KeyValuePair<string,int> kvpair in listPopCountDicts[4]) {
+								if(kvpair.Value==0 || kvpair.Key=="All") {
+									continue;
+								}
+								Start("item");
+								Start("content","styleCode","Bold");
+								_w.WriteString(GetSupplementDataPrintString(kvpair.Key));
+								End("content");
+								_w.WriteString(": "+kvpair.Value.ToString());
+								End("item");
+							}
+							End("list");
+						}
 						End("item");
+						#endregion DENEXCEP TEXT VERSION
 						End("list");
-					End("text");
+					}
 				}
+				End("text");
+				#endregion TEXT VERSION
+				//************************************************END OF TEXT VERSION******************************************************
+				//**********************************************START OF ENTRY SECTION*********************************************
 				for(int i=0;i<listQMs.Count;i++) {
-					Start("entry");
-					Start("organizer","classCode","CLUSTER","moodCode","EVN");
-					_w.WriteComment("Measure Reference Template");
-					TemplateId("2.16.840.1.113883.10.20.24.3.98");
-					_w.WriteComment("Measure Reference and Results Template");
-					TemplateId("2.16.840.1.113883.10.20.27.3.1");
-					StartAndEnd("statusCode","code","completed");
-					Start("reference","typeCode","REFR");
-					Start("externalDocument","classCode","DOC","moodCode","EVN");
-					StartAndEnd("id","root",listQMs[i].eMeasureVSpecificId);//version specific id
-					StartAndEnd("code","code","57024-2","displayName","Health Quality Measure Document","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc);
-					_w.WriteElementString("text",listQMs[i].eMeasureTitle);
-					StartAndEnd("setId","root",listQMs[i].eMeasureVNeutralId);//version neutral id
-					StartAndEnd("versionNumber","value",listQMs[i].eMeasureVersion);
-					End("externalDocument");
-					End("reference");
-					if(listQMs[i].eMeasureNum=="68") {
+					#region Get indexes of stratifications and other populations
+					//these are used to get stratifications of a measure, we have them as separate QualityMeasure objects in the list, the int is the index in listQMs of the object
+					int s1Indx=-1;//1st stratification index
+					int s2Indx=-1;//2nd stratification index
+					int s3Indx=-1;//3rd stratification index
+					int pop2Indx=-1;//additional population index
+					int numer2=-1;//numerator 2 index
+					int numer3=-1;//numerator 3 index
+					int s1numer2Indx=-1;//1st stratification numerator 2 index
+					int s1numer3Indx=-1;//1st stratification numerator 3 index
+					int s2numer2Indx=-1;//2nd stratification numerator 2 index
+					int s2numer3Indx=-1;//3rd stratification numerator 3 index
+					int numPops=1;//if set to two, this will generate another set of population data for the second population (only used by measure 69, weight adult)
+					switch(listQMs[i].Type2014) {
+						//these are stratifications/other populations of other measures, they will be included with the other measure, continue in for loop
+						case QualityType2014.CariesPrevent_1:
+						case QualityType2014.CariesPrevent_2:
+						case QualityType2014.CariesPrevent_3:
+						case QualityType2014.WeightAdult:
+						case QualityType2014.WeightChild_1_2:
+						case QualityType2014.WeightChild_1_3:
+						case QualityType2014.WeightChild_2_1:
+						case QualityType2014.WeightChild_2_2:
+						case QualityType2014.WeightChild_2_3:
+						case QualityType2014.WeightChild_3_1:
+						case QualityType2014.WeightChild_3_2:
+						case QualityType2014.WeightChild_3_3:
+							continue;
+						case QualityType2014.CariesPrevent:
+							//get the indexes of the three stratifications
+							for(int j=0;j<listQMs.Count;j++) {
+								if(listQMs[j].Type2014==QualityType2014.CariesPrevent_1) {
+									s1Indx=j;
+									continue;
+								}
+								if(listQMs[j].Type2014==QualityType2014.CariesPrevent_2) {
+									s2Indx=j;
+									continue;
+								}
+								if(listQMs[j].Type2014==QualityType2014.CariesPrevent_3) {
+									s3Indx=j;
+									continue;
+								}
+							}
+							break;
+						case QualityType2014.WeightOver65:
+							//get the index of WeightAdult (population 2)
+							for(int j=0;j<listQMs.Count;j++) {
+								if(listQMs[j].Type2014==QualityType2014.WeightAdult) {
+									pop2Indx=j;
+									numPops=2;
+									break;
+								}
+							}
+							break;
+						case QualityType2014.WeightChild_1_1:
+							//this will create 3 data sections, one for each numerator
+							//We will have Numerator 1 with ipp,denom,except,exclus,numer data, Numerator 2 data, and Numerator 3 data, each with their own stratifications
+							numPops=3;
+							//get the indexes of the additional two numerators and 2 stratifications
+							for(int j=0;j<listQMs.Count;j++) {
+								if(listQMs[j].Type2014==QualityType2014.WeightChild_1_2) {
+									numer2=j;
+									continue;
+								}
+								if(listQMs[j].Type2014==QualityType2014.WeightChild_1_3) {
+									numer3=j;
+									continue;
+								}
+								if(listQMs[j].Type2014==QualityType2014.WeightChild_2_1) {
+									s1Indx=j;
+									continue;
+								}
+								if(listQMs[j].Type2014==QualityType2014.WeightChild_2_2) {
+									s1numer2Indx=j;
+									continue;
+								}
+								if(listQMs[j].Type2014==QualityType2014.WeightChild_2_3) {
+									s1numer3Indx=j;
+									continue;
+								}
+								if(listQMs[j].Type2014==QualityType2014.WeightChild_3_1) {
+									s2Indx=j;
+									continue;
+								}
+								if(listQMs[j].Type2014==QualityType2014.WeightChild_3_2) {
+									s2numer2Indx=j;
+									continue;
+								}
+								if(listQMs[j].Type2014==QualityType2014.WeightChild_3_3) {
+									s2numer3Indx=j;
+									continue;
+								}
+							}
+							break;
+					}
+					#endregion					
+					listPopCountDicts=FillDictPopCounts(listQMs[i].ListEhrPats);
+					#region ENTRY SECTION
+					_w.WriteComment("***************PROPORTION MEASURE ENTRIES (1 entry per population per measure)***************");
+					for(int p=0;p<numPops;p++) {//usually only runs 1 loop, measure 69 has two populations, and measure 155 has 3 numerators, in which case it will run more than once
+						int measureIndx=i;
+						if(numPops==2 && p>0) {//fill stratification data with supplemental data from other population
+							measureIndx=pop2Indx;
+							listPopCountDicts=FillDictPopCounts(listQMs[measureIndx].ListEhrPats);
+						}
+						if(numPops==3 && p>0) {//only 3 populations for measure 155, Numerators 1-3
+							if(p==1) {//second iteration, fill dictionaries with numerator 2 data for stratifications
+								measureIndx=numer2;
+								listPopCountDicts=FillDictPopCounts(listQMs[measureIndx].ListEhrPats);
+							}
+							if(p==2) {//third iteration, fill dictionaries with numerator 3 data for stratifications
+								measureIndx=numer3;
+								listPopCountDicts=FillDictPopCounts(listQMs[measureIndx].ListEhrPats);
+							}
+						}
+						Start("entry");
+						#region Measure Reference
+						//start of Measure Reference and Results entries (measureSection)section[entry 1..*]
+						Start("organizer","classCode","CLUSTER","moodCode","EVN");
+						_w.WriteComment("Measure Reference Template");
+						TemplateId("2.16.840.1.113883.10.20.24.3.98");
+						_w.WriteComment("Measure Reference and Results Template");
+						TemplateId("2.16.840.1.113883.10.20.27.3.1");
+						StartAndEnd("statusCode","code","completed");
+						Start("reference","typeCode","REFR");
+						Start("externalDocument","classCode","DOC","moodCode","EVN");
+						StartAndEnd("id","root",listQMs[measureIndx].eMeasureVSpecificId);//version specific id
+						StartAndEnd("code","code","57024-2","displayName","Health Quality Measure Document","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc);
+						_w.WriteElementString("text",listQMs[measureIndx].eMeasureTitle);
+						StartAndEnd("setId","root",listQMs[measureIndx].eMeasureVNeutralId);//version neutral id
+						StartAndEnd("versionNumber","value",listQMs[measureIndx].eMeasureVersion);
+						End("externalDocument");
+						End("reference");
 						Start("reference","typeCode","REFR");
 						Start("externalObservation");
-						StartAndEnd("id","root","680ffd36-c4e4-4145-b6c3-92418b037069");
+						StartAndEnd("id","root",listQMs[measureIndx].eMeasureSetId);
 						StartAndEnd("code","code","55185-3","displayName","measure set","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc);
-						_w.WriteElementString("text","CLINICAL QUALITY MEASURE SET 2014");
+						if(listQMs[measureIndx].Type2014==QualityType2014.MedicationsEntered) {//Measure 68 is the only one with a title that is not "None" or "NA"
+							_w.WriteElementString("text","CLINICAL QUALITY MEASURE SET 2014");
+						}
+						else if(listQMs[measureIndx].Type2014==QualityType2014.CariesPrevent || listQMs[measureIndx].Type2014==QualityType2014.ChildCaries) {
+							_w.WriteElementString("text","Not Applicable");
+						}
+						else {
+							_w.WriteElementString("text","None");
+						}
 						End("externalObservation");
 						End("reference");
-					}
-					Start("component");
-					//Performance rate=Numerator/(Denominator-Exclusions-Exceptions)
-					Start("observation","classCode","OBS","moodCode","EVN");
-					_w.WriteComment("Performance Rate for Proportion Measure Template");
-					TemplateId("2.16.840.1.113883.10.20.27.3.14");
-					StartAndEnd("code","code","72510-1","displayName","Performance Rate","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc);
-					StartAndEnd("statusCode","code","completed");
-					Start("value");
-					_w.WriteAttributeString("xsi","type",null,"REAL");
-					Attribs("value",listQMs[i].PerformanceRate.ToString("0.00"));
-					End("value");
-					End("observation");
-					End("component");
-					Start("component");
-					//Reporting rate=(Numerator+Exclusions+Exceptions)/Denominator
-					Start("observation","classCode","OBS","moodCode","EVN");
-					_w.WriteComment("Reporting Rate for Proportion Measure Template");
-					TemplateId("2.16.840.1.113883.10.20.27.3.15");
-					StartAndEnd("code","code","72509-3","displayName","Reporting Rate","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc);
-					StartAndEnd("statusCode","code","completed");
-					Start("value");
-					_w.WriteAttributeString("xsi","type",null,"REAL");
-					Attribs("value",listQMs[i].ReportingRate.ToString("0.00"));
-					End("value");
-					End("observation");
-					End("component");
-					Start("component");
-					Start("observation","classCode","OBS","moodCode","EVN");
-					_w.WriteComment("Measure Data Template");
-					TemplateId("2.16.840.1.113883.10.20.27.3.5");
-					StartAndEnd("code","code","ASSERTION","displayName","Assertion","codeSystem","2.16.840.1.113883.5.4","codeSystemName","ActCode");
-					StartAndEnd("statusCode","code","completed");
-					Start("value");
-					_w.WriteAttributeString("xsi","type",null,"CD");
-					Attribs("code","IPP","displayName","Initial Patient Population","codeSystem","2.16.840.1.113883.5.1063","codeSystemName","ObservationValue");
-					End("value");
-					Start("entryRelationship","typeCode","SUBJ","inversionInd","true");
-					Start("observation","classCode","OBS","moodCode","EVN");
-					_w.WriteComment("Aggregate Count Template");
-					TemplateId("2.16.840.1.113883.10.20.27.3.3");
-					StartAndEnd("code","code","MSRAGG","displayName","rate aggregation","codeSystem","2.16.840.1.113883.5.4","codeSystemName","ActCode");
-					Start("value");
-					_w.WriteAttributeString("xsi","type",null,"INT");
-					Attribs("value",listQMs[i].ListEhrPats.Count.ToString());
-					End("value");
-					StartAndEnd("methodCode","code","COUNT","displayName","Count","codeSystem","2.16.840.1.113883.5.84","codeSystemName","ObservationMethod");
-					End("observation");
-					End("entryRelationship");
-					End("observation");
-					End("component");
+						#endregion Measure Reference
+						#region Performance Rate Component
+						_w.WriteComment("***************Performance Rate 1 per entry (entry=Measure or Population within a measure)***************");
+						Start("component");
+						//Performance rate=Numerator/(Denominator-Exclusions-Exceptions)
+						Start("observation","classCode","OBS","moodCode","EVN");
+						_w.WriteComment("Performance Rate for Proportion Measure Template");
+						TemplateId("2.16.840.1.113883.10.20.27.3.14");
+						StartAndEnd("code","code","72510-1","displayName","Performance Rate","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc);
+						StartAndEnd("statusCode","code","completed");
+						Start("value");
+						if(listQMs[measureIndx].PerformanceRate==0) {
+							Attribs("nullFlavor","NA");//if no patients in denominator, then performance rate is null
+						}
+						else {
+							_w.WriteAttributeString("xsi","type",null,"REAL");
+							Attribs("value",listQMs[measureIndx].PerformanceRate.ToString("0.00"));
+						}
+						End("value");
+						End("observation");
+						End("component");
+						#endregion Performance Rate Component
+						#region Reporting Rate Component
+						_w.WriteComment("***************Reporting Rate 1 per entry (entry=Measure or Population within a measure)***************");
+						Start("component");
+						//Reporting rate=(Numerator+Exclusions+Exceptions)/Denominator
+						Start("observation","classCode","OBS","moodCode","EVN");
+						_w.WriteComment("Reporting Rate for Proportion Measure Template");
+						TemplateId("2.16.840.1.113883.10.20.27.3.15");
+						StartAndEnd("code","code","72509-3","displayName","Reporting Rate","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc);
+						StartAndEnd("statusCode","code","completed");
+						Start("value");
+						if(listQMs[measureIndx].PerformanceRate==0) {
+							Attribs("nullFlavor","NA");//if no patients in denominator, then reporting rate is null
+						}
+						else {
+							_w.WriteAttributeString("xsi","type",null,"REAL");
+							Attribs("value",listQMs[measureIndx].ReportingRate.ToString("0.00"));
+						}
+						End("value");
+						End("observation");
+						End("component");
+						#endregion Reporting Rate Component
+						//***************************************MEASURE DATA COMPONENTS*******************************
+						_w.WriteComment("***************Measure Data component entries (1..*) represent aggregate counts IPP,DENOM,DENEX,DENEXCEP,NUMER***************");
+						#region Measure Data
+						for(int j=0;j<listPopCountDicts.Count;j++) {
+							switch(j) {
+								case 0:
+									_w.WriteComment("Initial Patient Population component");
+									break;
+								case 1:
+									_w.WriteComment("Denominator component");
+									break;
+								case 2:
+									if(listQMs[measureIndx].eMeasureDenexId=="") {//if no exclusions defined for this measure, continue
+										continue;
+									}
+									_w.WriteComment("Denominator Exclusion component");
+									break;
+								case 3:
+									_w.WriteComment("Numerator component");
+									break;
+								case 4:
+									if(listQMs[measureIndx].eMeasureDenexcepId=="") {//if no exceptions defined for this measure, continue
+										continue;
+									}
+									_w.WriteComment("Denominator Exception component");
+									break;
+								default:
+									throw new ApplicationException("Error in creating QRDA Category III in Measure Data Components section.");
+							}
+							Start("component");
+							Start("observation","classCode","OBS","moodCode","EVN");
+							_w.WriteComment("Measure Data Template");
+							TemplateId("2.16.840.1.113883.10.20.27.3.5");
+							StartAndEnd("code","code","ASSERTION","displayName","Assertion","codeSystem","2.16.840.1.113883.5.4","codeSystemName","ActCode");
+							StartAndEnd("statusCode","code","completed");
+							Start("value");
+							_w.WriteAttributeString("xsi","type",null,"CD");
+							switch(j) {
+								case 0:
+									Attribs("code","IPP","displayName","Initial Patient Population");
+									break;
+								case 1:
+									Attribs("code","DENOM","displayName","Denominator");
+									break;
+								case 2:
+									Attribs("code","DENEX","displayName","Denominator Exclusions");
+									break;
+								case 3:
+									Attribs("code","NUMER","displayName","Numerator");
+									break;
+								case 4:
+									Attribs("code","DENEXCEP","displayName","Denominator Exceptions");
+									break;
+								default:
+									throw new ApplicationException("Error in creating QRDA Category III in Measure Data Components section.");
+							}
+							Attribs("codeSystem","2.16.840.1.113883.5.1063","codeSystemName","ObservationValue");
+							End("value");
+							#region Measure Count entry
+							//*************Aggregate count entry**************
+							_w.WriteComment("Aggregate Count entryRelationship");
+							Start("entryRelationship","typeCode","SUBJ","inversionInd","true");
+							Start("observation","classCode","OBS","moodCode","EVN");
+							_w.WriteComment("Aggregate Count Template");
+							TemplateId("2.16.840.1.113883.10.20.27.3.3");
+							StartAndEnd("code","code","MSRAGG","displayName","rate aggregation","codeSystem","2.16.840.1.113883.5.4","codeSystemName","ActCode");
+							Start("value");
+							_w.WriteAttributeString("xsi","type",null,"INT");
+							Attribs("value",listPopCountDicts[j]["All"].ToString());
+							End("value");
+							StartAndEnd("methodCode","code","COUNT","displayName","Count","codeSystem","2.16.840.1.113883.5.84","codeSystemName","ObservationMethod");
+							End("observation");
+							End("entryRelationship");
+							#endregion Measure Count entry
+							#region Stratification entries
+							//**************Reporting Stratum entryRelationship**************
+							//Measure 155 (wight counseling child) has two Strata, Measure 74 (primary caries prevention) has three Strata
+							int iterations=0;
+							if(p==0) {
+								if(s1Indx>-1) {
+									iterations++;
+								}
+								if(s2Indx>-1) {
+									iterations++;
+								}
+								if(s3Indx>-1) {
+									iterations++;
+								}
+							}
+							else if(p==1) {
+								if(s1numer2Indx>-1) {
+									iterations++;
+								}
+								if(s2numer2Indx>-1) {
+									iterations++;
+								}
+							}
+							else if(p==2) {
+								if(s1numer3Indx>-1) {
+									iterations++;
+								}
+								if(s2numer3Indx>-1) {
+									iterations++;
+								}
+							}
+							//most measures do not have strata, so these entryRelationships will not usually be created.  Only Measure 155 and 74 have stratification items.
+							for(int s=0;s<iterations;s++) {
+								_w.WriteComment("***************Reporting Stratum entry***************");
+								Start("entryRelationship","typeCode","COMP");
+								Start("observation","classCode","OBS","moodCode","EVN");
+								_w.WriteComment("Reporting Stratum Template");
+								TemplateId("2.16.840.1.113883.10.20.27.3.4");
+								StartAndEnd("code","code","ASSERTION","displayName","Assertion","codeSystem","2.16.840.1.113883.5.4","codeSystemName","ActCode");
+								StartAndEnd("statusCode","code","completed");
+								Start("value");
+								_w.WriteAttributeString("xsi","type",null,"CD");
+								Attribs("nullFlavor","OTH");
+								_w.WriteElementString("originalText","Stratum");
+								End("value");
+								Start("entryRelationship","typeCode","SUBJ","inverstionInd","true");
+								Start("observation","classCode","OBS","moodCode","EVN");
+								_w.WriteComment("Aggregate Count Template");
+								TemplateId("2.16.840.1.113883.10.20.27.3.3");
+								StartAndEnd("code","code","MSRAGG","displayName","rate aggregation","codeSystem","2.16.840.1.113883.5.4","codeSystemName","ActCode");
+								Start("value");
+								_w.WriteAttributeString("xsi","type",null,"INT");
+								int stratIndx=0;
+								if(p==0) {
+									if(s==0) {//first strata
+										stratIndx=s1Indx;
+									}
+									if(s==1) {//second strata
+										stratIndx=s2Indx;
+									}
+									if(s==2) {//third strata
+										stratIndx=s3Indx;
+									}
+								}
+								else if(p==1) {
+									if(s==0) {//first strata, second population
+										stratIndx=s1numer2Indx;
+									}
+									if(s==1) {//second strata, second population
+										stratIndx=s2numer2Indx;
+									}
+								}
+								else {
+									if(s==0) {//first strata, third population
+										stratIndx=s1numer3Indx;
+									}
+									if(s==1) {//second strata, third population
+										stratIndx=s2numer3Indx;
+									}
+								}
+								switch(j) {
+									case 0:
+										Attribs("value",listQMs[stratIndx].ListEhrPats.Count.ToString());
+										break;
+									case 1:
+										Attribs("value",listQMs[stratIndx].Denominator.ToString());
+										break;
+									case 2:
+										Attribs("value",listQMs[stratIndx].Exclusions.ToString());
+										break;
+									case 3:
+										Attribs("value",listQMs[stratIndx].Numerator.ToString());
+										break;
+									case 4:
+										Attribs("value",listQMs[stratIndx].Exceptions.ToString());
+										break;
+								}
+								End("value");
+								StartAndEnd("methodCode","code","COUNT","displayName","Count","codeSystem","2.16.840.1.113883.5.84","codeSystemName","ObservationMethod");
+								End("observation");
+								End("entryRelationship");
+								//end of aggregate count
+								//Start reference to strata in eMeasure
+								Start("reference","typeCode","REFR");
+								_w.WriteComment("Reference to the relevalnt strata in the eMeasure");
+								Start("externalObservation","classCode","OBS","moodCode","EVN");
+								switch(j) {
+									case 0:
+										StartAndEnd("id","root",listQMs[stratIndx].eMeasureIppId);
+										break;
+									case 1:
+										StartAndEnd("id","root",listQMs[stratIndx].eMeasureDenomId);
+										break;
+									case 2:
+										StartAndEnd("id","root",listQMs[stratIndx].eMeasureDenexId);
+										break;
+									case 3:
+										StartAndEnd("id","root",listQMs[stratIndx].eMeasureNumerId);
+										break;
+									case 4:
+										StartAndEnd("id","root",listQMs[stratIndx].eMeasureDenexcepId);
+										break;
+								}								
+								End("externalObservation");
+								End("reference");
+								//end of reference to eMeasure
+								End("observation");								
+								End("entryRelationship");
+							}
+							#endregion Stratification entries
+							#region SUPPLEMENTAL DATA STRATUM
+							//loop through each of the population counts for this population and generate relevant supplemental data entries
+							foreach(KeyValuePair<string,int> kvpair in listPopCountDicts[j]) {
+								if(kvpair.Key=="All" && kvpair.Value==0) {//do not need to have these supplemental data entries if no initial patient population, break out of loop
+									break;
+								}
+								if(kvpair.Value==0 || kvpair.Key=="All") {
+									continue;
+								}
+								switch(kvpair.Key) {
+									case "Male":
+									case "Female":
+									case "Unknown":
+										//**************Sex Supplemental Data entry**************
+										#region Sex Supplemental Data Entry
+										_w.WriteComment("Sex Supplemental Data entryRelationship");
+										Start("entryRelationship","typeCode","COMP");
+										Start("observation","classCode","OBS","moodCode","EVN");
+										_w.WriteComment("Sex Supplemental Data Element Template");
+										TemplateId("2.16.840.1.113883.10.20.27.3.6");
+										StartAndEnd("code","code","184100006","displayName","Patient sex","codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed);
+										StartAndEnd("statusCode","code","completed");
+										Start("value");
+										_w.WriteAttributeString("xsi","type",null,"CD");
+										if(kvpair.Key==PatientGender.Male.ToString()) {
+											Attribs("code","M","displayName","Male");
+										}
+										else if(kvpair.Key==PatientGender.Female.ToString()) {
+											Attribs("code","F","displayName","Female");
+										}
+										else {
+											Attribs("code","UN","displayName","Undifferentiated");
+										}
+										Attribs("codeSystem","2.16.840.1.113883.5.1","codeSystemName","AdministrativeGender");
+										End("value");
+										#endregion Sex Supplemental Data Entry
+										break;
+									case "Hispanic":
+									case "NotHispanic":
+										//**************Ethnicity Supplemental Data**************
+										#region Ethnicity Supplemental Data Entry
+										_w.WriteComment("Ethnicity Supplemental Data entryRelationship");
+										Start("entryRelationship","typeCode","COMP");
+										Start("observation","classCode","OBS","moodCode","EVN");
+										_w.WriteComment("Ethnicity Supplemental Data Element Template");
+										TemplateId("2.16.840.1.113883.10.20.27.3.7");
+										StartAndEnd("code","code","364699009","displayName","Ethnic Group","codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed);
+										StartAndEnd("statusCode","code","completed");
+										Start("value");
+										_w.WriteAttributeString("xsi","type",null,"CD");
+										if(kvpair.Key==PatRace.Hispanic.ToString()) {
+											Attribs("code","2135-2","displayName","Hispanic or Latino");
+										}
+										else if(kvpair.Key==PatRace.NotHispanic.ToString()) {
+											Attribs("code","2186-5","displayName","Not Hispanic or Latino");
+										}
+										Attribs("codeSystem","2.16.840.1.113883.6.238","codeSystemName","Race &amp; Ethnicity - CDC");
+										End("value");
+										#endregion Ethnicity Supplemental Data Entry
+										break;
+									case "AfricanAmerican":
+									case "AmericanIndian":
+									case "Asian":
+									case "White":
+									case "HawaiiOrPacIsland":
+									case "Other":
+										//**************Race Supplemental Data**************
+										#region Race Supplemental Data Entry
+										_w.WriteComment("Race Supplemental Data entryRelationship");
+										Start("entryRelationship","typeCode","COMP");
+										Start("observation","classCode","OBS","moodCode","EVN");
+										_w.WriteComment("Race Supplemental Data Element Template");
+										TemplateId("2.16.840.1.113883.10.20.27.3.8");
+										StartAndEnd("code","code","103579009","displayName","Race","codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed);
+										StartAndEnd("statusCode","code","completed");
+										Start("value");
+										_w.WriteAttributeString("xsi","type",null,"CD");
+										if(kvpair.Key==PatRace.AfricanAmerican.ToString()) {
+											Attribs("code","2054-5","displayName","Black or African American");
+										}
+										else if(kvpair.Key==PatRace.AmericanIndian.ToString()) {
+											Attribs("code","1002-5","displayName","American Indian or Alaska Native");
+										}
+										else if(kvpair.Key==PatRace.Asian.ToString()) {
+											Attribs("code","2028-9","displayName","Asian");
+										}
+										else if(kvpair.Key==PatRace.White.ToString()) {
+											Attribs("code","2131-1","displayName","White");
+										}
+										else if(kvpair.Key==PatRace.HawaiiOrPacIsland.ToString()) {
+											Attribs("code","2076-8","displayName","Native Hawaiian or Other Pacific Islander");
+										}
+										else if(kvpair.Key==PatRace.Other.ToString()) {
+											Attribs("code","2106-3","displayName","Other Race");
+										}
+										Attribs("codeSystem","2.16.840.1.113883.6.238","codeSystemName","Race &amp; Ethnicity - CDC");
+										End("value");
+										#endregion Race Supplemental Data Entry
+										break;
+									case "Medicare":
+									case "Medicaid":
+									case "Other Gvmt":
+									case "Private":
+									case "Self-pay":
+										//**************Payer Supplemental Data**************
+										#region Payer Supplemental Data Entry
+										_w.WriteComment("Payer Supplemental Data entryRelationship");
+										Start("entryRelationship","typeCode","COMP");
+										Start("observation","classCode","OBS","moodCode","EVN");
+										_w.WriteComment("Patient Characteristic Payer Template");
+										TemplateId("2.16.840.1.113883.10.20.24.3.55");
+										_w.WriteComment("Payer Supplemental Data Element Template");
+										TemplateId("2.16.840.1.113883.10.20.27.3.9");
+										StartAndEnd("code","code","48768-6","displayName","Payment source","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc);
+										StartAndEnd("statusCode","code","completed");
+										Start("value");
+										_w.WriteAttributeString("xsi","type",null,"CD");
+										if(kvpair.Key=="Medicare") {
+											Attribs("code","1","displayName","Medicare");
+										}
+										else if(kvpair.Key=="Medicaid") {
+											Attribs("code","2","displayName","Medicaid");
+										}
+										else if(kvpair.Key=="Other Gvmt") {
+											Attribs("code","3","displayName","Other Government (Federal/State/Local) (excluding Department of Corrections)");
+										}
+										else if(kvpair.Key=="Private") {
+											Attribs("code","5","displayName","Private Health Insurance");
+										}
+										else {
+											Attribs("code","8","displayName","No Payment from an Organization/Agency/Program/Private Payer Listed");
+										}
+										Attribs("codeSystem","","codeSystemName","");
+										End("value");
+										#endregion Payer Supplemental Data Entry
+										break;
+									default:
+										throw new ApplicationException("Error in creating QRDA Category III in Measure Data Components section.");
+								}
+								_w.WriteComment("Aggregate Count entryRelationship");
+								Start("entryRelationship","typeCode","SUBJ","inversionInd","true");
+								_w.WriteComment("Aggregate Count Template");
+								Start("observation","classCode","OBS","moodCode","EVN");
+								TemplateId("2.16.840.1.113883.10.20.27.3.3");
+								StartAndEnd("code","code","MSRAGG","displayName","rate aggregation","codeSystem","2.16.840.1.113883.5.4","codeSystemName","ActCode");
+								Start("value");
+								_w.WriteAttributeString("xsi","type",null,"INT");
+								Attribs("value",kvpair.Value.ToString());
+								End("value");
+								StartAndEnd("methodCode","code","COUNT","displayName","Count","codeSystem","2.16.840.1.113883.5.84","codeSystemName","ObservationMethod");
+								End("observation");
+								End("entryRelationship");
+								End("observation");
+								End("entryRelationship");
+							}
+							#endregion SUPPLEMENTAL DATA STRATUM
+							//*************eMeasure Reference**************
+							_w.WriteComment("eMeasure reference");
+							Start("reference","typeCode","REFR");
+							Start("externalObservation","classCode","OBS","moodCode","EVN");
+							switch(j) {
+								case 0:
+									StartAndEnd("id","root",listQMs[measureIndx].eMeasureIppId);
+									break;
+								case 1:
+									StartAndEnd("id","root",listQMs[measureIndx].eMeasureDenomId);
+									break;
+								case 2:
+									StartAndEnd("id","root",listQMs[measureIndx].eMeasureDenexId);
+									break;
+								case 3:
+									StartAndEnd("id","root",listQMs[measureIndx].eMeasureNumerId);
+									break;
+								case 4:
+									StartAndEnd("id","root",listQMs[measureIndx].eMeasureDenexcepId);
+									break;
+							}
+							End("externalObservation");
+							End("reference");
+							End("observation");
+							End("component");
+						}
+					#endregion Measure Data
 					End("organizer");
 					End("entry");
+					}
 				}
+				#endregion ENTRY SECTION
 				End("section");
+				//**********************************************END OF ENTRY SECTION*********************************************
 				End("component");
 				#endregion measure component
 				End("structuredBody");
 				End("component");
 				#endregion QRDA III Body
 				End("ClinicalDocument");
+				_w.Flush();
 				_w.Close();
-				//System.IO.File.WriteAllText(folderRoot+"\\QRDA_Category_III"+".xml",strBuilder.ToString());
 			}
 			#endregion Category III QRDA Document
+		}
+
+		///<summary>List of dictionaries that hold the count of supplemental data for each population.
+		///<para>Send in the measure IPP, which may be 0, and the list will be filled with supplemental counts for each population.</para>
+		///<para>Use the index of the dictionary to get the counts desired.</para>
+		///<para>0=IPP, 1=Denominator, 2=Denominator Exclusions, 3=Numerator, 4=Denominator Exceptions.</para>
+		///<para>Example, for counts of supplemental data for the denominator, get the dict[1].  dict[1] will have relevant counts for race, gender, ethnicity, and payer.</para></summary>
+		private static List<Dictionary<string,int>> FillDictPopCounts(List<EhrCqmPatient> listPats) {
+			List<Dictionary<string,int>> listDicts=new List<Dictionary<string,int>>();
+			Dictionary<string,int> dictIPPCounts=new Dictionary<string,int>();
+			Dictionary<string,int> dictDenomCounts=new Dictionary<string,int>();
+			Dictionary<string,int> dictDenomExclusCounts=new Dictionary<string,int>();
+			Dictionary<string,int> dictNumeCounts=new Dictionary<string,int>();
+			Dictionary<string,int> dictDenomExceptCounts=new Dictionary<string,int>();
+			List<EhrCqmPatient> listDenom=new List<EhrCqmPatient>();
+			List<EhrCqmPatient> listDenomExclus=new List<EhrCqmPatient>();
+			List<EhrCqmPatient> listNumerator=new List<EhrCqmPatient>();
+			List<EhrCqmPatient> listDenomExcept=new List<EhrCqmPatient>();
+			for(int j=0;j<listPats.Count;j++) {
+				if(listPats[j].IsDenominator) {
+					listDenom.Add(listPats[j].Copy());
+				}
+				if(listPats[j].IsExclusion) {
+					listDenomExclus.Add(listPats[j].Copy());
+				}
+				if(listPats[j].IsNumerator) {
+					listNumerator.Add(listPats[j].Copy());
+				}
+				if(listPats[j].IsException) {
+					listDenomExcept.Add(listPats[j].Copy());
+				}
+			}
+			dictIPPCounts=GetSupplementalCounts(listPats);
+			dictDenomCounts=GetSupplementalCounts(listDenom);
+			dictDenomExclusCounts=GetSupplementalCounts(listDenomExclus);
+			dictNumeCounts=GetSupplementalCounts(listNumerator);
+			dictDenomExceptCounts=GetSupplementalCounts(listDenomExcept);
+			listDicts.Add(dictIPPCounts);
+			listDicts.Add(dictDenomCounts);
+			listDicts.Add(dictDenomExclusCounts);
+			listDicts.Add(dictNumeCounts);
+			listDicts.Add(dictDenomExceptCounts);
+			return listDicts;
 		}
 
 		private static string GetSupplementDataPrintString(string s) {
 			switch(s) {
 				case "AfricanAmerican":
-					return "Black";
+					return "Black or African American";
 				case "AmericanIndian":
-					return "American Indian";
+					return "American Indian or Alaska Native";
 				case "HawaiiOrPacIsland":
-					return "Hawwian or Pacific Islander";
-				case "DeclinedToSpecifyRace":
-					return "Declined to Specify Race";
+					return "Native Hawaiian or Other Pacific Islander";
 				case "Other":
 					return "Other Race";
 				case "Hispanic":
 					return "Hispanic or Latino";
 				case "NotHispanic":
 					return "Not Hispanic or Latino";
-				case "DeclinedToSpecifyEthnicity":
-					return "Declined to Specify Ethnicity";
 				case "Unknown":
-					return "Unknown Gender";
+					return "Undifferentiated";
+				case "Other Gvmt":
+					return "Other Government (Federal/State/Local) (excluding Department of Corrections)";
+				case "Private":
+					return "Private Insurance";
 				default:
 					return s;
 			}
+		}
+
+		///<summary>Gets count of gender, race, ethnicity, and payer type.</summary>
+		private static Dictionary<string,int> GetSupplementalCounts(List<EhrCqmPatient> listPats) {
+			Dictionary<string,int> dictCategoryCount=new Dictionary<string,int>();
+			//add races, ethnicities, and genders to the dictionary with starting counts of 0
+			dictCategoryCount.Add("All",listPats.Count);
+			dictCategoryCount.Add(PatientGender.Male.ToString(),0);
+			dictCategoryCount.Add(PatientGender.Female.ToString(),0);
+			dictCategoryCount.Add(PatientGender.Unknown.ToString(),0);
+			dictCategoryCount.Add(PatRace.Hispanic.ToString(),0);
+			dictCategoryCount.Add(PatRace.NotHispanic.ToString(),0);
+			dictCategoryCount.Add(PatRace.AfricanAmerican.ToString(),0);
+			dictCategoryCount.Add(PatRace.AmericanIndian.ToString(),0);
+			dictCategoryCount.Add(PatRace.Asian.ToString(),0);
+			dictCategoryCount.Add(PatRace.White.ToString(),0);
+			dictCategoryCount.Add(PatRace.HawaiiOrPacIsland.ToString(),0);
+			dictCategoryCount.Add(PatRace.Other.ToString(),0);
+			dictCategoryCount.Add("Medicare",0);
+			dictCategoryCount.Add("Medicaid",0);
+			dictCategoryCount.Add("Other Gvmt",0);
+			dictCategoryCount.Add("Private",0);
+			dictCategoryCount.Add("Self-pay",0);
+			for(int i=0;i<listPats.Count;i++) {
+				if(listPats[i].ListPatientRaces.Count==1) {
+					if(dictCategoryCount.ContainsKey(listPats[i].ListPatientRaces[0].Race.ToString())) {
+						dictCategoryCount[listPats[i].ListPatientRaces[0].Race.ToString()]++;
+					}
+				}
+				else if(listPats[i].ListPatientRaces.Count>1) {
+					dictCategoryCount[PatRace.Other.ToString()]++;
+				}
+				if(listPats[i].Ethnicity!=null) {
+					if(dictCategoryCount.ContainsKey(listPats[i].Ethnicity.ToString())) {
+						dictCategoryCount[listPats[i].Ethnicity.ToString()]++;
+					}
+				}
+				dictCategoryCount[listPats[i].EhrCqmPat.Gender.ToString()]++;
+				if(listPats[i].PayorSopCode==null || listPats[i].PayorSopCode=="") {
+					//no payer type set, Self-pay
+					dictCategoryCount["Self-pay"]++;
+				}
+				else {
+					switch(listPats[i].PayorSopCode.Substring(0,1)) {//Get hierarchical code representing payer type main category, first character is type
+						case "1":
+							dictCategoryCount["Medicare"]++;
+							break;
+						case "2":
+							dictCategoryCount["Medicaid"]++;
+							break;
+						case "3":
+							dictCategoryCount["Other Gvmt"]++;
+							break;
+						case "5":
+							dictCategoryCount["Private"]++;
+							break;
+						case "8":
+							dictCategoryCount["Self-pay"]++;
+							break;
+						default:
+							dictCategoryCount["Self-pay"]++;
+							break;
+					}
+				}
+			}
+			return dictCategoryCount;
 		}
 
 		///<summary>Generates one encounter xml entry and uses the global writer _x instead of the main writer _w.</summary>
