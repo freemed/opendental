@@ -122,18 +122,20 @@ namespace OpenDental {
 			gridMu.Columns.Add(col);
 			col=new ODGridColumn("Details",170);
 			gridMu.Columns.Add(col);
-			col=new ODGridColumn("click to take action",168);
+			col=new ODGridColumn("Click to Take Action",168);
 			gridMu.Columns.Add(col);
-			col=new ODGridColumn("related actions",142);
+			col=new ODGridColumn("Related Actions",142);
 			gridMu.Columns.Add(col);
 			if(ProvPat.EhrKey=="") {
 				listMu=new List<EhrMu>();
 			}
 			else {
 				if(PrefC.GetBool(PrefName.MeaningfulUseTwo)) {
+					gridMu.Title="Stage 2 Meaningful Use for this patient";
 					listMu=EhrMeasures.GetMu2(PatCur);
 				}
 				else {
+					gridMu.Title="Stage 1 Meaningful Use for this patient";
 					listMu=EhrMeasures.GetMu(PatCur);
 				}
 			}
@@ -200,6 +202,7 @@ namespace OpenDental {
 						FillGridMu();
 						break;
 					case EhrMeasureType.TimelyAccess:
+					case EhrMeasureType.ElectronicCopyAccess:
 						FormPatientPortal FormPatPort=new FormPatientPortal();
 						FormPatPort.PatCur=PatCur;
 						FormPatPort.ShowDialog();
@@ -319,6 +322,7 @@ namespace OpenDental {
 						//Close();
 						break;
 					case EhrMeasureType.SummaryOfCare:
+					case EhrMeasureType.SummaryOfCareElectronic:
 						FormReferralsPatient FormRefSum=new FormReferralsPatient();
 						FormRefSum.PatNum=PatCur.PatNum;
 						FormRefSum.ShowDialog();
