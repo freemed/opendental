@@ -98,7 +98,11 @@ namespace OpenDental {
 			newMeasureEvent.DateTEvent=DateTime.Now;
 			newMeasureEvent.EventType=EhrMeasureEventType.ReminderSent;
 			newMeasureEvent.PatNum=PatCur.PatNum;
-			newMeasureEvent.MoreInfo="";
+			string moreInfo="";
+			if(gridMain.GetSelectedIndex() > -1) {
+				moreInfo=gridMain.Rows[gridMain.GetSelectedIndex()].Cells[1].Text;
+			}
+			newMeasureEvent.MoreInfo=moreInfo;
 			EhrMeasureEvents.Insert(newMeasureEvent);
 			FillGridProvided();
 		}
