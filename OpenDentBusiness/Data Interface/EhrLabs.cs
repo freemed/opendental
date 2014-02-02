@@ -698,12 +698,12 @@ namespace OpenDentBusiness{
 				return Meth.GetLong(MethodBase.GetCurrentMethod());
 			}
 			string command="SELECT MAX(EhrLabNum) FROM ehrlab";
-			long retval=0;
+			long retVal=0;
 			try {
-				PIn.Long(Db.GetScalar(command));//can be null if table is empty.
+				retVal=PIn.Long(Db.GetScalar(command));//can be null if table is empty.
 			}
 			catch { }
-			return retval+1;
+			return retVal+1;
 		}
 
 		/////<summary>Gets one EhrLab from the db.</summary>
