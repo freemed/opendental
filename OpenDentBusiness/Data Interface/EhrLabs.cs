@@ -693,6 +693,19 @@ namespace OpenDentBusiness{
 			return Crud.EhrLabCrud.SelectOne(ehrLabNum);
 		}
 
+		public static long GetNextOrderNum() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetLong(MethodBase.GetCurrentMethod());
+			}
+			string command="SELECT MAX(EhrLabNum) FROM ehrlab";
+			long retval=0;
+			try {
+				PIn.Long(Db.GetScalar(command));//can be null if table is empty.
+			}
+			catch { }
+			return retval+1;
+		}
+
 		/////<summary>Gets one EhrLab from the db.</summary>
 		//public static long GetNumFromMessage(string message) {
 		//	if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

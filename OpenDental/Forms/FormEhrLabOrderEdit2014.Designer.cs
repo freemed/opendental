@@ -35,6 +35,7 @@
 			this.butAddCopyTo = new System.Windows.Forms.Button();
 			this.butAddSpecimens = new System.Windows.Forms.Button();
 			this.groupBox4 = new System.Windows.Forms.GroupBox();
+			this.checkAutoID = new System.Windows.Forms.CheckBox();
 			this.label4 = new System.Windows.Forms.Label();
 			this.textPlacerOrderNum = new System.Windows.Forms.TextBox();
 			this.textPlacerOrderUniversalIDType = new System.Windows.Forms.TextBox();
@@ -53,7 +54,6 @@
 			this.label10 = new System.Windows.Forms.Label();
 			this.textPlacerGroupUniversalID = new System.Windows.Forms.TextBox();
 			this.groupBox5 = new System.Windows.Forms.GroupBox();
-			this.butProvPicker = new OpenDental.UI.Button();
 			this.comboOrderingProvIdType = new System.Windows.Forms.ComboBox();
 			this.label33 = new System.Windows.Forms.Label();
 			this.comboOrderingProvNameType = new System.Windows.Forms.ComboBox();
@@ -87,7 +87,6 @@
 			this.label13 = new System.Windows.Forms.Label();
 			this.textFillerOrderUniversalID = new System.Windows.Forms.TextBox();
 			this.groupBox6 = new System.Windows.Forms.GroupBox();
-			this.butServicePicker = new OpenDental.UI.Button();
 			this.label44 = new System.Windows.Forms.Label();
 			this.textUsiCodeSystemNameAlt = new System.Windows.Forms.TextBox();
 			this.label43 = new System.Windows.Forms.Label();
@@ -121,14 +120,16 @@
 			this.label26 = new System.Windows.Forms.Label();
 			this.imageListInfoButton = new System.Windows.Forms.ImageList(this.components);
 			this.butManageImages = new System.Windows.Forms.Button();
+			this.labelManageImages = new System.Windows.Forms.Label();
 			this.gridResultsCopyTo = new OpenDental.UI.ODGrid();
 			this.gridClinicalInformation = new OpenDental.UI.ODGrid();
 			this.gridNotes = new OpenDental.UI.ODGrid();
 			this.gridSpecimen = new OpenDental.UI.ODGrid();
 			this.gridMain = new OpenDental.UI.ODGrid();
-			this.labelManageImages = new System.Windows.Forms.Label();
 			this.butViewParent = new OpenDental.UI.Button();
 			this.butParentPicker = new OpenDental.UI.Button();
+			this.butServicePicker = new OpenDental.UI.Button();
+			this.butProvPicker = new OpenDental.UI.Button();
 			this.butPatientPick = new OpenDental.UI.Button();
 			this.groupBox4.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -238,6 +239,7 @@
 			// 
 			// groupBox4
 			// 
+			this.groupBox4.Controls.Add(this.checkAutoID);
 			this.groupBox4.Controls.Add(this.label4);
 			this.groupBox4.Controls.Add(this.textPlacerOrderNum);
 			this.groupBox4.Controls.Add(this.textPlacerOrderUniversalIDType);
@@ -253,11 +255,25 @@
 			this.groupBox4.TabStop = false;
 			this.groupBox4.Text = "Placer Order Number";
 			// 
+			// checkAutoID
+			// 
+			this.checkAutoID.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkAutoID.Location = new System.Drawing.Point(6, 14);
+			this.checkAutoID.Name = "checkAutoID";
+			this.checkAutoID.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+			this.checkAutoID.Size = new System.Drawing.Size(69, 20);
+			this.checkAutoID.TabIndex = 2;
+			this.checkAutoID.Text = "Auto";
+			this.checkAutoID.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkAutoID.UseVisualStyleBackColor = true;
+			this.checkAutoID.Visible = false;
+			this.checkAutoID.CheckedChanged += new System.EventHandler(this.checkAutoID_CheckedChanged);
+			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(13, 16);
+			this.label4.Location = new System.Drawing.Point(52, 16);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(106, 17);
+			this.label4.Size = new System.Drawing.Size(67, 17);
 			this.label4.TabIndex = 245;
 			this.label4.Text = "ID";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -448,21 +464,6 @@
 			this.groupBox5.TabIndex = 3;
 			this.groupBox5.TabStop = false;
 			this.groupBox5.Text = "Ordering Provider";
-			// 
-			// butProvPicker
-			// 
-			this.butProvPicker.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butProvPicker.Autosize = true;
-			this.butProvPicker.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butProvPicker.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butProvPicker.CornerRadius = 4F;
-			this.butProvPicker.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butProvPicker.Location = new System.Drawing.Point(10, 15);
-			this.butProvPicker.Name = "butProvPicker";
-			this.butProvPicker.Size = new System.Drawing.Size(29, 25);
-			this.butProvPicker.TabIndex = 249;
-			this.butProvPicker.Text = "...";
-			this.butProvPicker.Visible = false;
 			// 
 			// comboOrderingProvIdType
 			// 
@@ -803,21 +804,6 @@
 			this.groupBox6.TabStop = false;
 			this.groupBox6.Text = "Service Identifier (LOINC Codes)";
 			// 
-			// butServicePicker
-			// 
-			this.butServicePicker.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butServicePicker.Autosize = true;
-			this.butServicePicker.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butServicePicker.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butServicePicker.CornerRadius = 4F;
-			this.butServicePicker.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butServicePicker.Location = new System.Drawing.Point(6, 14);
-			this.butServicePicker.Name = "butServicePicker";
-			this.butServicePicker.Size = new System.Drawing.Size(29, 25);
-			this.butServicePicker.TabIndex = 255;
-			this.butServicePicker.Text = "...";
-			this.butServicePicker.Visible = false;
-			// 
 			// label44
 			// 
 			this.label44.Location = new System.Drawing.Point(6, 81);
@@ -1136,6 +1122,16 @@
 			this.butManageImages.UseVisualStyleBackColor = true;
 			this.butManageImages.Click += new System.EventHandler(this.butManageImages_Click);
 			// 
+			// labelManageImages
+			// 
+			this.labelManageImages.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.labelManageImages.Location = new System.Drawing.Point(426, 665);
+			this.labelManageImages.Name = "labelManageImages";
+			this.labelManageImages.Size = new System.Drawing.Size(374, 17);
+			this.labelManageImages.TabIndex = 269;
+			this.labelManageImages.Text = "Must save lab order one time before managing images";
+			this.labelManageImages.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// gridResultsCopyTo
 			// 
 			this.gridResultsCopyTo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -1204,16 +1200,6 @@
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
 			// 
-			// labelManageImages
-			// 
-			this.labelManageImages.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.labelManageImages.Location = new System.Drawing.Point(426, 665);
-			this.labelManageImages.Name = "labelManageImages";
-			this.labelManageImages.Size = new System.Drawing.Size(374, 17);
-			this.labelManageImages.TabIndex = 269;
-			this.labelManageImages.Text = "Must save lab order one time before managing images";
-			this.labelManageImages.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
 			// butViewParent
 			// 
 			this.butViewParent.AdjustImageLocation = new System.Drawing.Point(0, 0);
@@ -1243,6 +1229,36 @@
 			this.butParentPicker.TabIndex = 259;
 			this.butParentPicker.Text = "...";
 			this.butParentPicker.Visible = false;
+			// 
+			// butServicePicker
+			// 
+			this.butServicePicker.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butServicePicker.Autosize = true;
+			this.butServicePicker.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butServicePicker.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butServicePicker.CornerRadius = 4F;
+			this.butServicePicker.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butServicePicker.Location = new System.Drawing.Point(6, 14);
+			this.butServicePicker.Name = "butServicePicker";
+			this.butServicePicker.Size = new System.Drawing.Size(29, 25);
+			this.butServicePicker.TabIndex = 255;
+			this.butServicePicker.Text = "...";
+			this.butServicePicker.Click += new System.EventHandler(this.butServicePicker_Click);
+			// 
+			// butProvPicker
+			// 
+			this.butProvPicker.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butProvPicker.Autosize = true;
+			this.butProvPicker.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butProvPicker.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butProvPicker.CornerRadius = 4F;
+			this.butProvPicker.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butProvPicker.Location = new System.Drawing.Point(10, 15);
+			this.butProvPicker.Name = "butProvPicker";
+			this.butProvPicker.Size = new System.Drawing.Size(29, 25);
+			this.butProvPicker.TabIndex = 249;
+			this.butProvPicker.Text = "...";
+			this.butProvPicker.Click += new System.EventHandler(this.butProvPicker_Click);
 			// 
 			// butPatientPick
 			// 
@@ -1432,6 +1448,7 @@
 		private System.Windows.Forms.ImageList imageListInfoButton;
 		private System.Windows.Forms.Button butManageImages;
 		private System.Windows.Forms.Label labelManageImages;
+		private System.Windows.Forms.CheckBox checkAutoID;
 
 	}
 }

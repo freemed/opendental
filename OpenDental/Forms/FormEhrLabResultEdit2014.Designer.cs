@@ -1124,7 +1124,6 @@
 			this.butObsIdLoinc.TabIndex = 257;
 			this.butObsIdLoinc.Text = "...";
 			this.butObsIdLoinc.UseVisualStyleBackColor = true;
-			this.butObsIdLoinc.Visible = false;
 			this.butObsIdLoinc.Click += new System.EventHandler(this.butObsIdLoinc_Click);
 			// 
 			// label44

@@ -22,6 +22,10 @@ namespace OpenDental {
 		private void FormLabPanelEdit_Load(object sender,EventArgs e) {
 			Height=System.Windows.Forms.Screen.GetWorkingArea(this).Height;
 			this.SetDesktopLocation(DesktopLocation.X,0);
+			if(IsNew) {
+				checkAutoID.Checked=true;
+				checkAutoID.Visible=true;
+			}
 			if(IsImport || IsViewOnly) {
 				foreach(Control c in this.Controls) {
 					c.Enabled=false;
@@ -163,6 +167,13 @@ namespace OpenDental {
 			textFillerOrderUniversalID.Text=EhrLabCur.FillerOrderUniversalID;
 			textFillerOrderUniversalIDType.Text=EhrLabCur.FillerOrderUniversalIDType;
 			return;
+		}
+
+		private void checkAutoID_CheckedChanged(object sender,EventArgs e) {
+			textPlacerOrderNum.Enabled=!checkAutoID.Checked;
+			textPlacerOrderUniversalID.Enabled=!checkAutoID.Checked;
+			textPlacerOrderUniversalIDType.Enabled=!checkAutoID.Checked;
+			textPlacerOrderNamespace.Enabled=!checkAutoID.Checked;
 		}
 	
 		///<summary>Lab Results</summary>
@@ -408,7 +419,13 @@ namespace OpenDental {
 		///<summary></summary>
 		private bool EntriesAreValid() {
 			StringBuilder errorMessage=new StringBuilder();
-			if((textPlacerOrderNum.Text=="" || (textPlacerOrderNum.Text!="" && textPlacerOrderUniversalID.Text==""))//Blank placerOrderNum OR OrderNum w/ blank OID
+			if(checkAutoID.Checked) {
+				if(OIDInternals.GetForType(IdentifierType.LabOrder).IDRoot=="") {
+					errorMessage.AppendLine("  OID registry must be configured in order to use Automatic Lab Order IDs.");
+				}
+				//don't validate order numbers... it will be automatically generated when saved.
+			}
+			else if((textPlacerOrderNum.Text=="" || (textPlacerOrderNum.Text!="" && textPlacerOrderUniversalID.Text==""))//Blank placerOrderNum OR OrderNum w/ blank OID
 				&& (textFillerOrderNum.Text=="" || (textFillerOrderNum.Text!="" && textFillerOrderUniversalID.Text==""))) //Blank fillerOrderNum OR OrderNum w/blank OID
 			{
 			//if( (textPlacerOrderNum.Text=="" || && textPlacerOrderUniversalID.Text=="") //invalid placer order num
@@ -446,6 +463,46 @@ namespace OpenDental {
 			FormLSE.ShowDialog();
 		}
 
+		private void butProvPicker_Click(object sender,EventArgs e) {
+			FormProviderPick FormPP=new FormProviderPick();
+			FormPP.ShowDialog();
+			if(FormPP.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			Provider prov=Providers.GetProv(FormPP.SelectedProvNum);
+			if(prov.NationalProvID!="") {
+				textOrderingProvIdentifier.Text=prov.NationalProvID;
+				comboOrderingProvIdType.SelectedIndex=(int)HL70203.NPI+1;
+				textOrderingProvAANID.Text="";
+				textOrderingProvAAUID.Text="2.16.840.1.113883.4.6";//NPI OID
+				textOrderingProvAAUIDType.Text="ISO";
+			}
+			else {
+				textOrderingProvIdentifier.Text=prov.ProvNum.ToString();
+				comboOrderingProvIdType.SelectedIndex=(int)HL70203.PRN+1;
+				textOrderingProvAANID.Text="";
+				textOrderingProvAAUID.Text=OIDInternals.GetForType(IdentifierType.Provider).IDRoot;//Internal OID
+				textOrderingProvAAUIDType.Text="ISO";
+			}
+			comboOrderingProvNameType.SelectedIndex=(int)HL70200.L+1;
+			textOrderingProvFirstName.Text=prov.FName;
+			textOrderingProvLastName.Text=prov.LName;
+			textOrderingProvMiddleName.Text=prov.MI;
+		}
+
+		private void butServicePicker_Click(object sender,EventArgs e) {
+			FormLoincs FormL=new FormLoincs();
+			FormL.IsSelectionMode=true;
+			FormL.ShowDialog();
+			if(FormL.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			textUsiID.Text=FormL.SelectedLoinc.LoincCode;
+			textUsiCodeSystemName.Text="LN";
+			textUsiText.Text=FormL.SelectedLoinc.NameShort;
+			textUsiTextOriginal.Text=FormL.SelectedLoinc.NameLongCommon;
+		}
+
 		private void butOk_Click(object sender,EventArgs e) {
 			if(IsImport || IsViewOnly) {
 				DialogResult=DialogResult.OK;
@@ -461,10 +518,18 @@ namespace OpenDental {
 				EhrLabCur.PatNum=PatCurNum;
 			}
 			//EhrLabCur.OrderControlCode=((HL70119)comb);//TODO:UI and this value.
-			EhrLabCur.PlacerOrderNum=textPlacerOrderNum.Text;
-			EhrLabCur.PlacerOrderNamespace=textPlacerOrderNamespace.Text;
-			EhrLabCur.PlacerOrderUniversalID=textPlacerOrderUniversalID.Text;
-			EhrLabCur.PlacerOrderUniversalIDType=textPlacerOrderUniversalIDType.Text;
+			if(checkAutoID.Checked) {
+				EhrLabCur.PlacerOrderNum=EhrLabs.GetNextOrderNum().ToString();
+				EhrLabCur.PlacerOrderNamespace="";
+				EhrLabCur.PlacerOrderUniversalID=OIDInternals.GetForType(IdentifierType.LabOrder).IDRoot;
+				EhrLabCur.PlacerOrderUniversalIDType="ISO";
+			}
+			else{
+				EhrLabCur.PlacerOrderNum=textPlacerOrderNum.Text;
+				EhrLabCur.PlacerOrderNamespace=textPlacerOrderNamespace.Text;
+				EhrLabCur.PlacerOrderUniversalID=textPlacerOrderUniversalID.Text;
+				EhrLabCur.PlacerOrderUniversalIDType=textPlacerOrderUniversalIDType.Text;
+			}
 			EhrLabCur.FillerOrderNum=textFillerOrderNum.Text;
 			EhrLabCur.FillerOrderNamespace=textFillerOrderNamespace.Text;
 			EhrLabCur.FillerOrderUniversalID=textFillerOrderUniversalID.Text;

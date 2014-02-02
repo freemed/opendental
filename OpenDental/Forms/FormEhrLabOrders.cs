@@ -130,6 +130,7 @@ namespace OpenDental {
 			FormEhrLabOrderEdit2014 FormLOE=new FormEhrLabOrderEdit2014();
 			FormLOE.EhrLabCur=new EhrLab();
 			FormLOE.EhrLabCur.PatNum=PatCur.PatNum;
+			FormLOE.IsNew=true;
 			FormLOE.ShowDialog();
 			if(FormLOE.DialogResult!=DialogResult.OK) {
 				return;

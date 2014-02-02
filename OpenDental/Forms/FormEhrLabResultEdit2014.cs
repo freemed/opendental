@@ -268,7 +268,10 @@ namespace OpenDental {
 			if(FormL.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			//fill observation boxes.
+			textObsID.Text=FormL.SelectedLoinc.LoincCode;
+			textObsIDCodeSystemName.Text="LN";
+			textObsIDText.Text=FormL.SelectedLoinc.NameShort;
+			textObsIDOrigText.Text=FormL.SelectedLoinc.NameLongCommon;
 		}
 
 		private void butCodedElementLoinc_Click(object sender,EventArgs e) {

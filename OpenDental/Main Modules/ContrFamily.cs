@@ -810,7 +810,8 @@ namespace OpenDental{
 						}
 						else{
 							try {
-								row.Cells.Add(CultureInfo.GetCultureInfo(PatCur.Language).DisplayName);
+								row.Cells.Add(CodeBase.MiscUtils.GetCultureFromThreeLetter(PatCur.Language).DisplayName);
+								//row.Cells.Add(CultureInfo.GetCultureInfo(PatCur.Language).DisplayName);
 							}
 							catch {
 								row.Cells.Add(PatCur.Language);
