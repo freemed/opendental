@@ -50,6 +50,9 @@ namespace OpenDental {
 			listAbnormalFlags.EndUpdate();
 			string[] abnormalFlags=EhrLabResultCur.AbnormalFlags.Split(',');
 			for(int i=0;i<abnormalFlags.Length;i++) {
+				if(abnormalFlags[i]=="") {
+					continue;
+				}
 				listAbnormalFlags.SetSelected((int)Enum.Parse(typeof(HL70078),abnormalFlags[i],true),true);
 			}
 			#endregion
