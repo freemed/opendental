@@ -347,7 +347,7 @@ namespace OpenDentBusiness.HL7 {
 				}
 				//OBX-5 Observation Value.  Required. Cardinality [1..1].  Value set varies, depending on the value of OBX-2 (Use type CE if OBX-2 is "CE", otherwise treat as a string).  Purpose is to answer the quesiton posed by OBX-3.
 				if(vaccineObs.ValType==VaccineObsType.Coded) {
-					string codeDescript="";
+					string codeDescript=vaccineObs.ValReported.Trim();//If we do not know the description, then the code will also be placed into the description. The testing tool required non-empty entries.
 					if(vaccineObs.ValCodeSystem==VaccineObsValCodeSystem.CVX) {
 						Cvx cvx=Cvxs.GetByCode(vaccineObs.ValReported);
 						codeDescript=cvx.Description;
