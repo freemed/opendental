@@ -473,14 +473,6 @@ namespace OpenDental {
 				if(!isActive) {//Update current problems.
 					dis.ProbStatus=ProblemStatus.Inactive;
 					Diseases.Update(_listProblemCur[i]);
-					if(CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowCDS && CDSPermissions.GetForUser(Security.CurUser.UserNum).ProblemCDS) {
-						FormCDSIntervention FormCDSI=new FormCDSIntervention();
-						FormCDSI.ListCDSI=EhrTriggers.TriggerMatch(disD,_patCur);
-						FormCDSI.ShowIfRequired();
-						if(FormCDSI.DialogResult==DialogResult.Abort) {
-							continue;//cancel 
-						}
-					}
 				}
 			}
 			//Always update every current problem for the patient so that DateTStamp reflects the last reconcile date.
@@ -512,6 +504,14 @@ namespace OpenDental {
 			//newMeasureEvent.PatNum=PatCur.PatNum;
 			//newMeasureEvent.MoreInfo="";
 			//EhrMeasureEvents.Insert(newMeasureEvent);
+			for(int inter=0;inter<_listProblemReconcile.Count;inter++) {
+				if(CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowCDS && CDSPermissions.GetForUser(Security.CurUser.UserNum).ProblemCDS) {
+					DiseaseDef disDInter=DiseaseDefs.GetItem(_listProblemReconcile[inter].DiseaseDefNum);
+					FormCDSIntervention FormCDSI=new FormCDSIntervention();
+					FormCDSI.ListCDSI=EhrTriggers.TriggerMatch(disDInter,_patCur);
+					FormCDSI.ShowIfRequired(false);
+				}
+			}
 			DialogResult=DialogResult.OK;
 		}
 

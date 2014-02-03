@@ -493,11 +493,6 @@ namespace OpenDental {
 				if(!isActive) {
 					_listAllergyCur[i].StatusIsActive=isActive;
 					Allergies.Update(_listAllergyCur[i]);
-					if(CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowCDS && CDSPermissions.GetForUser(Security.CurUser.UserNum).AllergyCDS) {
-						FormCDSIntervention FormCDSI=new FormCDSIntervention();
-						FormCDSI.ListCDSI=EhrTriggers.TriggerMatch(alD,_patCur);
-						FormCDSI.ShowIfRequired(false);
-					}
 				}
 			}
 			//Always update every current allergy for the patient so that DateTStamp reflects the last reconcile date.
@@ -530,13 +525,21 @@ namespace OpenDental {
 				}
 				Allergies.Insert(ListAllergyNew[index]);
 			}
-			//TODO: Make an allergy measure event if one is needed for MU.
+			//TODO: Make an allergy measure event if one is needed for MU3.
 			//EhrMeasureEvent newMeasureEvent = new EhrMeasureEvent();
 			//newMeasureEvent.DateTEvent=DateTime.Now;
 			//newMeasureEvent.EventType=EhrMeasureEventType.AllergyReconcile;
 			//newMeasureEvent.PatNum=PatCur.PatNum;
 			//newMeasureEvent.MoreInfo="";
 			//EhrMeasureEvents.Insert(newMeasureEvent);
+			for(int inter=0;inter<_listAllergyReconcile.Count;inter++) {
+				if(CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowCDS && CDSPermissions.GetForUser(Security.CurUser.UserNum).AllergyCDS) {
+					AllergyDef alDInter=AllergyDefs.GetOne(_listAllergyReconcile[inter].AllergyDefNum);
+					FormCDSIntervention FormCDSI=new FormCDSIntervention();
+					FormCDSI.ListCDSI=EhrTriggers.TriggerMatch(alDInter,_patCur);
+					FormCDSI.ShowIfRequired(false);
+				}
+			}
 			DialogResult=DialogResult.OK;
 		}
 
