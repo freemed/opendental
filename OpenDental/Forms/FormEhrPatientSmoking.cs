@@ -78,7 +78,10 @@ namespace OpenDental {
 				}
 			}
 			#endregion
+			//This takes a while the first time the window loads due to Code Systems.
+			Cursor=Cursors.WaitCursor;
 			FillGrid();
+			Cursor=Cursors.Default;
 			#region ComboAssessmentType
 			_ListAssessmentCodes=EhrCodes.GetForValueSetOIDs(new List<string> { "2.16.840.1.113883.3.526.3.1278" },true);//'Tobacco Use Screening' value set
 			if(_ListAssessmentCodes.Count==0) {//This should only happen if the EHR.dll does not exist or if the codes in the ehrcode list do not exist in the corresponding table
