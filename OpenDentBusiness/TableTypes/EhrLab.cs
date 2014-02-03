@@ -189,6 +189,8 @@ namespace OpenDentBusiness {
 		#endregion
 		///<summary>This gets set when a provider is logged in with a valid EHR key and then creates a lab.</summary>
 		public bool IsCpoe;
+		///<summary>The PID Segment from the HL7 message used to generate or update the lab order.</summary>
+		public string OriginalPIDSegment;
 		///<summary>[0..*] This is not a data column but is stored in a seperate table named EhrLabResult. OBX.*</summary>
 		[CrudColumn(IsNotDbColumn=true)]
 		private List<EhrLabResult> _listEhrLabResults;
@@ -313,6 +315,7 @@ namespace OpenDentBusiness {
 		}
 
 		public static string formatDateToHL7(string hrdt) {//human readable date time
+			hrdt=hrdt.Trim();
 			if(!Regex.IsMatch(hrdt,@"^\d{4}(-\d\d(-\d\d(\s\d\d(:\d\d(:\d\d(\.\d(\d(\d(\d)?)?)?)?)?)?)?)?)?(\s[\+-]\d{4})?$")) {
 				//                      yyyy -  MM -  dd    hh :  mm :  ss   .s  s  s  s                       +/- zzzz
 				return hrdt;//does not conform. Return whatever garbage was input.

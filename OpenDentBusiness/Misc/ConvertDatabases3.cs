@@ -3839,6 +3839,14 @@ namespace OpenDentBusiness {
 					Db.NonQ(command);
 					command=@"CREATE INDEX refattach_ProvNum ON refattach (ProvNum)";
 					Db.NonQ(command);
+				} 
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE ehrlab ADD OriginalPIDSegment text NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE ehrlab ADD OriginalPIDSegment varchar2(4000)";
+					Db.NonQ(command);
 				}
 
 
@@ -3865,20 +3873,16 @@ namespace OpenDentBusiness {
 
 
 
-				/*				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE refattach ADD ProvNum bigint NOT NULL";
-					Db.NonQ(command);
-					command="ALTER TABLE refattach ADD INDEX (ProvNum)";
-					Db.NonQ(command);
-				}
-				else {//oracle
-					command="ALTER TABLE refattach ADD ProvNum number(20)";
-					Db.NonQ(command);
-					command="UPDATE refattach SET ProvNum = 0 WHERE ProvNum IS NULL";
-					Db.NonQ(command);
-					command="ALTER TABLE refattach MODIFY ProvNum NOT NULL";
-					Db.NonQ(command);
-					command=@"CREATE INDEX refattach_ProvNum ON refattach (ProvNum)";
-					Db.NonQ(command);
-				}
-				*/
+
+
+
+
+
+
+
+
+
+
+
+
+

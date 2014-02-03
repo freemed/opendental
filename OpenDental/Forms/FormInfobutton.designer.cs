@@ -694,6 +694,7 @@ namespace OpenDental{
 			this.butPreview.Size = new System.Drawing.Size(127, 24);
 			this.butPreview.TabIndex = 8;
 			this.butPreview.Text = "&Preview XML";
+			this.butPreview.Visible = false;
 			this.butPreview.Click += new System.EventHandler(this.butPreview_Click);
 			// 
 			// FormInfobutton

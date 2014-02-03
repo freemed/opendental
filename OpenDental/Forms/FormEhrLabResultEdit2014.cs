@@ -318,12 +318,20 @@ namespace OpenDental {
 				EhrLabResultCur.AbnormalFlags+=((HL70078)listAbnormalFlags.SelectedIndices[i]).ToString();
 			}
 			//Observation Value
+			EhrLabResultCur.ObservationDateTime=EhrLab.formatDateToHL7(textObsDateTime.Text);
 			EhrLabResultCur.AnalysisDateTime=EhrLab.formatDateToHL7(textAnalysisDateTime.Text);
 			EhrLabResultCur.ObservationResultStatus=((HL70085)comboObsStatus.SelectedIndex-1);
 			EhrLabResultCur.ValueType=((HL70125)comboObsValueType.SelectedIndex-1);
 			EhrLabResultCur.referenceRange=textReferenceRange.Text;
-			EhrLabResultCur.ObservationValueNumeric=PIn.Double(textObsValue.Text);
-			EhrLabResultCur.ObservationValueDateTime=EhrLab.formatDateToHL7(textObsDateTime.Text);
+			if(((HL70125)comboObsValueType.SelectedIndex-1)==HL70125.DT
+				|| ((HL70125)comboObsValueType.SelectedIndex-1)==HL70125.TS
+				|| ((HL70125)comboObsValueType.SelectedIndex-1)==HL70125.TM) 
+			{
+				EhrLabResultCur.ObservationValueDateTime=EhrLab.formatDateToHL7(textObsValue.Text);
+			}
+			else {
+				EhrLabResultCur.ObservationValueNumeric=PIn.Double(textObsValue.Text);
+			}
 				//Coded Element
 			EhrLabResultCur.ObservationValueCodedElementID=textObsElementID.Text;
 			EhrLabResultCur.ObservationValueCodedElementText=textObsElementText.Text;

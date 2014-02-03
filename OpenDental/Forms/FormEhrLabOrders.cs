@@ -38,7 +38,7 @@ namespace OpenDental {
 			ODGridRow row;
 			for(int i=0;i<ListEhrLabs.Count;i++) {
 				row=new ODGridRow();
-				string dateSt=ListEhrLabs[i].ObservationDateTimeStart.PadRight(8,'0').Substring(0,8);//stored in DB as yyyyMMddhhmmss-zzzz
+				string dateSt=ListEhrLabs[i].ResultDateTime.PadRight(8,'0').Substring(0,8);//stored in DB as yyyyMMddhhmmss-zzzz
 				DateTime dateT=PIn.Date(dateSt.Substring(4,2)+"/"+dateSt.Substring(6,2)+"/"+dateSt.Substring(0,4));
 				row.Cells.Add(dateT.ToShortDateString());//date only
 				row.Cells.Add(ListEhrLabs[i].PlacerOrderNum);

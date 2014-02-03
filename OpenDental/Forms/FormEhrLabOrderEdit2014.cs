@@ -503,6 +503,10 @@ namespace OpenDental {
 			textUsiTextOriginal.Text=FormL.SelectedLoinc.NameLongCommon;
 		}
 
+		private void butLastUpdate_Click(object sender,EventArgs e) {
+
+		}
+
 		private void butOk_Click(object sender,EventArgs e) {
 			if(IsImport || IsViewOnly) {
 				DialogResult=DialogResult.OK;
@@ -560,7 +564,7 @@ namespace OpenDental {
 			//EhrLabCur.ObservationDateTimeStart=;//TODO: UI and Save
 			//EhrLabCur.ObservationDateTimeEnd=//TODO: UI and Save
 			EhrLabCur.SpecimenActionCode=((HL70065)comboSpecimenActionCode.SelectedIndex-1);
-			EhrLabCur.ResultDateTime=EhrLab.formatDateToHL7(textResultDateTime.Text);//upper right hand corner of form.
+			EhrLabCur.ResultDateTime=EhrLab.formatDateToHL7(textResultDateTime.Text.Trim());//upper right hand corner of form.
 			EhrLabCur.ResultStatus=((HL70123)comboResultStatus.SelectedIndex-1);
 			//TODO: parent result.
 			/*
