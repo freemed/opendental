@@ -158,6 +158,8 @@ namespace OpenDentBusiness {
 		Prob,
 		///<summary>Vitalsign</summary>
 		Vital,
+		///<summary>Payer</summary>
+		Payer
 		
 	}
 
@@ -201,6 +203,10 @@ namespace OpenDentBusiness {
 		public string ValueSetName;
 		public string ValueSetOID;
 		public DateTime DateEncounter;
+		//these fields are used by measure 68, meds documented, which is encounter based, not patient based
+		public bool IsNumerator;
+		public bool IsException;
+		public string Explanation;
 	}
 
 	public class EhrCqmIntervention {

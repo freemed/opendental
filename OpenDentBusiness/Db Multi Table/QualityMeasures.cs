@@ -103,12 +103,23 @@ namespace OpenDentBusiness {
 						//influenza measure applies additional restriction to initial pat population, but ListEhrPats will still have IPP in it, but only some will be in denominator
 						measureCur.Denominator=CalcDenominator2014(measureCur.ListEhrPats);
 					}
+					else if((QualityType2014)i==QualityType2014.MedicationsEntered) {
+						//we have to count the number of encounters, not the number of patients, for the denominator count
+						measureCur.Denominator=CalcDenominator2014_Encs(measureCur.DictPatNumListEncounters);
+					}
 					else {
 						measureCur.Denominator=measureCur.ListEhrPats.Count;
 					}
-					measureCur.Numerator=CalcNumerator2014(measureCur.ListEhrPats);
-					measureCur.Exclusions=CalcExclusions2014(measureCur.ListEhrPats);
-					measureCur.Exceptions=CalcExceptions2014(measureCur.ListEhrPats);
+					if((QualityType2014)i==QualityType2014.MedicationsEntered) {
+						measureCur.Numerator=CalcNumerator2014_Encs(measureCur.DictPatNumListEncounters);
+						measureCur.Exceptions=CalcException2014_Encs(measureCur.DictPatNumListEncounters);
+						measureCur.Exclusions=0;
+					}
+					else {
+						measureCur.Numerator=CalcNumerator2014(measureCur.ListEhrPats);
+						measureCur.Exclusions=CalcExclusions2014(measureCur.ListEhrPats);
+						measureCur.Exceptions=CalcExceptions2014(measureCur.ListEhrPats);
+					}
 					measureCur.NotMet=measureCur.Denominator-measureCur.Exclusions-measureCur.Numerator-measureCur.Exceptions;
 					//Reporting rate is (Numerator+Exclusions+Exceptions)/Denominator.  Percentage of qualifying pats classified in one of the three groups Numerator, Exception, Exclusion.
 					measureCur.ReportingRate=0;
@@ -2265,6 +2276,8 @@ namespace OpenDentBusiness {
 			string adultEncCommand=encounterSelectWhere+encounterWhereAdults+encounterOrder;
 			switch(qtype) {
 				#region MedicationsEntered
+				//this is our only measure that is not patient based, but episode of care based
+				//denominator is all encounters that match the criteria in the date range, not all patients with those encounters
 				case QualityType2014.MedicationsEntered:
 					#region Get Initial Patient Population
 					#region Get Valid Encounters
@@ -3788,6 +3801,7 @@ namespace OpenDentBusiness {
 			for(int i=0;i<listVitalsigns.Count;i++) {
 				EhrCqmVitalsign ehrVitalsignCur=new EhrCqmVitalsign();
 				ehrVitalsignCur.BMI=-1;
+				ehrVitalsignCur.BMIPercentile=listVitalsigns[i].BMIPercentile;
 				ehrVitalsignCur.EhrCqmVitalsignNum=listVitalsigns[i].VitalsignNum;
 				ehrVitalsignCur.PatNum=listVitalsigns[i].PatNum;
 				ehrVitalsignCur.BpSystolic=listVitalsigns[i].BpSystolic;//LOINC 8480-6
@@ -3816,7 +3830,7 @@ namespace OpenDentBusiness {
 				if(i>0) {
 					codeList+=",";
 				}
-				codeList+=listValidProcs[i].CodeValue;
+				codeList+="'"+listValidProcs[i].CodeValue+"'";
 			}
 			string command="SELECT procedurelog.ProcNum,procedurelog.PatNum,procedurelog.ProvNum,procedurelog.ProcDate,"
 				+"procedurecode.ProcCode,procedurecode.Descript FROM procedurelog "
@@ -3827,7 +3841,7 @@ namespace OpenDentBusiness {
 				command+="AND procedurelog.PatNum IN ("+string.Join(",",listPatNums)+")";
 			}
 			if(codeList!="") {
-				command+="AND procedurecode.ProcCode IN('"+codeList+"') ";
+				command+="AND procedurecode.ProcCode IN("+codeList+") ";
 			}
 			command+="ORDER BY procedurelog.PatNum,procedurelog.ProcDate DESC";
 			DataTable tableAllProcs=Db.GetTable(command);
@@ -3941,6 +3955,7 @@ namespace OpenDentBusiness {
 			switch(qtype) {
 				#region MedicationsEntered
 				case QualityType2014.MedicationsEntered:
+					//THIS IS ENCOUNTER BASED, NOT PATIENT BASED
 					//alldata.ListEhrPats: All unique patients with necessary reporting data.  This is the initial patient population (Denominator).
 					//alldata.DictPatNumListEncounters:  PatNums linked to a list of all encounters from the eligble value sets for patients 18 or over at the start of the measurement period.
 					//alldata.DictPatNumListMeasureEvents: All Current Meds Documented 'procedures' that occurred during the measurement period
@@ -3948,61 +3963,47 @@ namespace OpenDentBusiness {
 					//No exclusions for this measure
 					//Strategy: For each patient in ListEhrPats, loop through the encounters in dictionary DictPatNumListEncounters; key=PatNum, value=List<EhrCqmEncounter>
 					//For each encounter, loop through the measure events in DictPatNumListMeasureEvents and try to locate a meds documented 'proc' on the same date.
-					//If one exists for any encounter, Numerator.
+					//If one exists for that encounter, mark the encounter as being in the numerator
 					//If no procedure exists, look for a not performed item for Exception
 					//Otherwise unclassified
-					for(int i=0;i<alldata.ListEhrPats.Count;i++) {
-						long patNumCur=alldata.ListEhrPats[i].EhrCqmPat.PatNum;
-						bool isCategorized=false;
-						//for each encounter for the patient, look for ehrmeasureevent for procedure
-						List<EhrCqmEncounter> listEncsCur=new List<EhrCqmEncounter>();
-						if(alldata.DictPatNumListEncounters.ContainsKey(patNumCur)) {
-							listEncsCur=alldata.DictPatNumListEncounters[patNumCur];
+					bool isClassified=false;//used to indicate that the encounter has been included in the numerator, so do not try to apply exception
+					foreach(KeyValuePair<long,List<EhrCqmEncounter>> kvpair in alldata.DictPatNumListEncounters) {
+						List<EhrCqmMeasEvent> listMedsDocProcsCur=new List<EhrCqmMeasEvent>();
+						if(alldata.DictPatNumListMeasureEvents.ContainsKey(kvpair.Key)) {
+							listMedsDocProcsCur=alldata.DictPatNumListMeasureEvents[kvpair.Key];
 						}
-						//loop through EhrCqmMeasEvents for the patient to find one for the same date as the encounter
-						List<EhrCqmMeasEvent> listMeasEventsCur=new List<EhrCqmMeasEvent>();
-						if(alldata.DictPatNumListMeasureEvents.ContainsKey(patNumCur)) {
-							listMeasEventsCur=alldata.DictPatNumListMeasureEvents[patNumCur];
+						List<EhrCqmNotPerf> listNotPerfCur=new List<EhrCqmNotPerf>();
+						if(alldata.DictPatNumListNotPerfs.ContainsKey(kvpair.Key)) {
+							listNotPerfCur=alldata.DictPatNumListNotPerfs[kvpair.Key];
 						}
-						for(int j=0;j<listEncsCur.Count;j++) {
-							for(int k=0;k<listMeasEventsCur.Count;k++) {
-								if(listEncsCur[j].DateEncounter.Date==listMeasEventsCur[k].DateTEvent.Date) {
-									//measure event with same date as encounter, numerator
-									alldata.ListEhrPats[i].IsNumerator=true;
-									alldata.ListEhrPats[i].Explanation="Encounter on "+listEncsCur[j].DateEncounter.ToShortDateString()+" with a current medications documented procedure on the same date.";
-									isCategorized=true;
+						//first try to apply the numerator criteria to the encounters, if there is no ehrmeasureevent on the same day, try to apply the exception criteria
+						for(int i=0;i<kvpair.Value.Count;i++) {//for every encounter for this patient
+							isClassified=false;
+							for(int j=0;j<listMedsDocProcsCur.Count;j++) {//this might be an empty list if no meds documented procs for this patient
+								if(kvpair.Value[i].DateEncounter.Date==listMedsDocProcsCur[j].DateTEvent.Date) {//if meds documented proc on the same day as the encounter, then numerator
+									isClassified=true;
+									kvpair.Value[i].IsNumerator=true;
+									kvpair.Value[i].Explanation="There is an encounter on "+kvpair.Value[i].DateEncounter.ToShortDateString()+" with a current medications documented procedure on the same date.";
 									break;
 								}
 							}
-							if(isCategorized) {
-								break;
+							if(isClassified) {//don't try to apply exception criteria if already in the numerator
+								continue;
 							}
-						}
-						if(isCategorized) {
-							continue;
-						}
-						List<EhrCqmNotPerf> listNotPerfsCur=new List<EhrCqmNotPerf>();
-						if(alldata.DictPatNumListNotPerfs.ContainsKey(patNumCur)) {
-							listNotPerfsCur=alldata.DictPatNumListNotPerfs[patNumCur];
-						}
-						//No procedure for current meds documented on any encounter, check for not performed item on one of the encounter dates
-						for(int j=0;j<listEncsCur.Count;j++) {
-							for(int k=0;k<listNotPerfsCur.Count;k++) {
-								if(listEncsCur[j].DateEncounter.Date==listNotPerfsCur[k].DateEntry.Date) {
-									alldata.ListEhrPats[i].IsException=true;
-									alldata.ListEhrPats[i].Explanation="Encounter on "+listEncsCur[j].DateEncounter.ToShortDateString()+" with a current medications documented procedure not done for a valid reason on the same date.";
-									isCategorized=true;
+							for(int j=0;j<listNotPerfCur.Count;j++) {//if encounter is not in the numerator, try to apply the exception criteria
+								if(kvpair.Value[i].DateEncounter.Date==listNotPerfCur[j].DateEntry.Date) {
+									kvpair.Value[i].IsException=true;
+									kvpair.Value[i].Explanation="There is an encounter on "+kvpair.Value[i].DateEncounter.ToShortDateString()+" with a not performed item with valid reason on the same date.";
+									isClassified=true;
 									break;
 								}
 							}
-							if(isCategorized) {
-								break;
+							if(isClassified) {//it is an exception encounter, move to next encounter
+								continue;
 							}
+							//otherwise the encounter is NotMet
+							kvpair.Value[i].Explanation="There is an encounter on "+kvpair.Value[i].DateEncounter.ToShortDateString()+" but no current medications documented procedure or not performed item on the same date.";
 						}
-						if(isCategorized) {
-							continue;
-						}
-						alldata.ListEhrPats[i].Explanation="Eligible encounter(s) for this measure occurred with no current medications documented procedure recorded on the same date.";
 					}
 					break;
 				#endregion
@@ -4812,7 +4813,7 @@ namespace OpenDentBusiness {
 								recentDiastolic=listVitalsignsCur[j].BpDiastolic;
 							}
 						}
-						if(recentSystolic>0 && recentSystolic<90 && recentDiastolic>0 && recentDiastolic<140) {
+						if(recentSystolic>0 && recentSystolic<140 && recentDiastolic>0 && recentDiastolic<90) {
 							alldata.ListEhrPats[i].IsNumerator=true;
 							alldata.ListEhrPats[i].Explanation="The patient had a vitalsign exam on "+dateMostRecentEnc.ToShortDateString()
 								+" with systolic blood pressure "+recentSystolic.ToString()+" mmHg and diastolic blood pressure "+recentDiastolic.ToString()+" mmHg.";
@@ -4869,6 +4870,17 @@ namespace OpenDentBusiness {
 			return retval;
 		}
 
+		///<summary>This is only used by measure 68, current meds documented.  This is the only measure that is not patient based, but encounter based.  So every eligible encounter is the denominator/ipp.  We will have to handle this case carefully.</summary>
+		private static int CalcDenominator2014_Encs(Dictionary<long,List<EhrCqmEncounter>> dictPatNumListEncs) {
+			int retval=0;
+			foreach(KeyValuePair<long,List<EhrCqmEncounter>> kvpair in dictPatNumListEncs) {
+				for(int i=0;i<kvpair.Value.Count;i++) {
+					retval++;
+				}
+			}
+			return retval;
+		}
+
 		///<summary>Just counts up the number of rows with an X in the exclusion column.  Very simple.</summary>
 		public static int CalcExclusions(DataTable table) {
 			//No need to check RemotingRole; no call to db.
@@ -4887,6 +4899,32 @@ namespace OpenDentBusiness {
 			for(int i=0;i<listPats.Count;i++) {
 				if(listPats[i].IsException) {
 					retval++;
+				}
+			}
+			return retval;
+		}
+
+		///<summary>This is only used by measure 68, current meds documented.  This is the only measure that is not patient based, but encounter based.  Simply loop through all encounters for all patients in the dictionary and count up the encounters with IsNumerator=true.</summary>
+		private static int CalcNumerator2014_Encs(Dictionary<long,List<EhrCqmEncounter>> dictPatNumListEncs) {
+			int retval=0;
+			foreach(KeyValuePair<long,List<EhrCqmEncounter>> kvpair in dictPatNumListEncs) {
+				for(int i=0;i<kvpair.Value.Count;i++) {
+					if(kvpair.Value[i].IsNumerator) {
+						retval++;
+					}
+				}
+			}
+			return retval;
+		}
+
+		///<summary>This is only used by measure 68, current meds documented.  This is the only measure that is not patient based, but encounter based.  Simply loop through all encounters for all patients in the dictionary and count up the encounters with IsException=true.</summary>
+		private static int CalcException2014_Encs(Dictionary<long,List<EhrCqmEncounter>> dictPatNumListEncs) {
+			int retval=0;
+			foreach(KeyValuePair<long,List<EhrCqmEncounter>> kvpair in dictPatNumListEncs) {
+				for(int i=0;i<kvpair.Value.Count;i++) {
+					if(kvpair.Value[i].IsException) {
+						retval++;
+					}
 				}
 			}
 			return retval;
@@ -5243,18 +5281,14 @@ BMI 18.5-25.";
 			switch(qtype) {
 				case QualityType2014.MedicationsEntered:
 					return "Documentation of Current Medications in the Medical Record";
-				case QualityType2014.WeightOver65:
-					return "Preventive Care and Screening: Body Mass Index (BMI) Screening and Follow-Up: age 65 and over";
+				case QualityType2014.WeightOver65://: age 65 and over//: age 18 to 64
 				case QualityType2014.WeightAdult:
-					return "Preventive Care and Screening: Body Mass Index (BMI) Screening and Follow-Up: age 18 to 64";
+					return "Preventive Care and Screening: Body Mass Index (BMI) Screening and Follow-Up";
 				case QualityType2014.CariesPrevent:
+				case QualityType2014.CariesPrevent_1://: age 0 to 5
+				case QualityType2014.CariesPrevent_2://: age 6 to 12
+				case QualityType2014.CariesPrevent_3://: age 13 to 20
 					return "Primary Caries Prevention Intervention as Offered by Primary Care Providers, including Dentists";
-				case QualityType2014.CariesPrevent_1:
-					return "Primary Caries Prevention Intervention as Offered by Primary Care Providers, including Dentists: age 0 to 5";
-				case QualityType2014.CariesPrevent_2:
-					return "Primary Caries Prevention Intervention as Offered by Primary Care Providers, including Dentists: age 6 to 12";
-				case QualityType2014.CariesPrevent_3:
-					return "Primary Caries Prevention Intervention as Offered by Primary Care Providers, including Dentists: age 13 to 20";
 				case QualityType2014.ChildCaries:
 					return "Children Who Have Dental Decay or Cavities";
 				case QualityType2014.Pneumonia:
@@ -5263,24 +5297,16 @@ BMI 18.5-25.";
 					return "Preventive Care and Screening: Tobacco Use: Screening and Cessation Intervention";
 				case QualityType2014.Influenza:
 					return "Preventive Care and Screening: Influenza Immunization";
-				case QualityType2014.WeightChild_1_1:
-					return "Weight Assessment and Counseling for Nutrition and Physical Activity for Children and Adolescents: Height, Weight, and BMI: age 3 to 16";
-				case QualityType2014.WeightChild_2_1:
-					return "Weight Assessment and Counseling for Nutrition and Physical Activity for Children and Adolescents: Height, Weight, and BMI: age 3 to 11";
-				case QualityType2014.WeightChild_3_1:
-					return "Weight Assessment and Counseling for Nutrition and Physical Activity for Children and Adolescents: Height, Weight, and BMI: age 12 to 16";
-				case QualityType2014.WeightChild_1_2:
-					return "Weight Assessment and Counseling for Nutrition and Physical Activity for Children and Adolescents: Counseled for Nutrition: age 3 to 16";
-				case QualityType2014.WeightChild_2_2:
-					return "Weight Assessment and Counseling for Nutrition and Physical Activity for Children and Adolescents: Counseled for Nutrition: age 3 to 11";
-				case QualityType2014.WeightChild_3_2:
-					return "Weight Assessment and Counseling for Nutrition and Physical Activity for Children and Adolescents: Counseled for Nutrition: age 12 to 16";
-				case QualityType2014.WeightChild_1_3:
-					return "Weight Assessment and Counseling for Nutrition and Physical Activity for Children and Adolescents: Counseled for Physical Activity: age 3 to 16";
-				case QualityType2014.WeightChild_2_3:
-					return "Weight Assessment and Counseling for Nutrition and Physical Activity for Children and Adolescents: Counseled for Physical Activity: age 3 to 11";
-				case QualityType2014.WeightChild_3_3:
-					return "Weight Assessment and Counseling for Nutrition and Physical Activity for Children and Adolescents: Counseled for Physical Activity: age 12 to 16";
+				case QualityType2014.WeightChild_1_1://: Height, Weight, and BMI: age 3 to 16
+				case QualityType2014.WeightChild_2_1://: Height, Weight, and BMI: age 3 to 11
+				case QualityType2014.WeightChild_3_1://: Height, Weight, and BMI: age 12 to 16
+				case QualityType2014.WeightChild_1_2://: Counseled for Nutrition: age 3 to 16
+				case QualityType2014.WeightChild_2_2://: Counseled for Nutrition: age 3 to 11
+				case QualityType2014.WeightChild_3_2://: Counseled for Nutrition: age 12 to 16
+				case QualityType2014.WeightChild_1_3://: Counseled for Physical Activity: age 3 to 16
+				case QualityType2014.WeightChild_2_3://: Counseled for Physical Activity: age 3 to 11
+				case QualityType2014.WeightChild_3_3://: Counseled for Physical Activity: age 12 to 16
+					return "Weight Assessment and Counseling for Nutrition and Physical Activity for Children and Adolescents";
 				case QualityType2014.BloodPressureManage:
 					return "Controlling High Blood Pressure";
 				default:
@@ -5577,15 +5603,17 @@ BMI 18.5-25.";
 				case QualityType2014.WeightAdult:
 					return "d98c4592-bdce-4bdf-8466-2339a98ad00b";
 				case QualityType2014.WeightChild_1_1:
-				case QualityType2014.WeightChild_2_1:
-				case QualityType2014.WeightChild_3_1:
 				case QualityType2014.WeightChild_1_2:
-				case QualityType2014.WeightChild_2_2:
-				case QualityType2014.WeightChild_3_2:
 				case QualityType2014.WeightChild_1_3:
-				case QualityType2014.WeightChild_2_3:
-				case QualityType2014.WeightChild_3_3:
 					return "6A98DA9A-C352-4A4D-8B69-B2D08619E8A8";
+				case QualityType2014.WeightChild_2_1:
+				case QualityType2014.WeightChild_2_2:
+				case QualityType2014.WeightChild_2_3:
+					return "445A44EE-98BC-4614-B8B6-7A9521CD0794";
+				case QualityType2014.WeightChild_3_1:
+				case QualityType2014.WeightChild_3_2:
+				case QualityType2014.WeightChild_3_3:
+					return "AA764699-1039-4E99-817C-6ED6E9E93735";
 				case QualityType2014.BloodPressureManage:
 					return "57F3D1D7-F9FA-437F-A2B9-406A1498E8C0";
 				default:
@@ -5698,22 +5726,38 @@ BMI 18.5-25.";
 			if(_strOIDInternalPatRoot=="") {
 				throw new ApplicationException("Internal Patient OID root is missing.  Go to Setup | EHR and add OIDs.");
 			}
+			//create a list of all CQMs that are considered stratifications or additional populations of a measure
+			//these will be skipped for certain circumstances, like when listing all of the eMeasures or creating certain sections of the QRDA
+			List<QualityType2014> listStratOrAdlPopQMTypes=new List<QualityType2014>();
+			listStratOrAdlPopQMTypes.Add(QualityType2014.CariesPrevent_1);
+			listStratOrAdlPopQMTypes.Add(QualityType2014.CariesPrevent_2);
+			listStratOrAdlPopQMTypes.Add(QualityType2014.CariesPrevent_3);
+			listStratOrAdlPopQMTypes.Add(QualityType2014.WeightAdult);
+			listStratOrAdlPopQMTypes.Add(QualityType2014.WeightChild_1_2);
+			listStratOrAdlPopQMTypes.Add(QualityType2014.WeightChild_1_3);
+			listStratOrAdlPopQMTypes.Add(QualityType2014.WeightChild_2_1);
+			listStratOrAdlPopQMTypes.Add(QualityType2014.WeightChild_2_2);
+			listStratOrAdlPopQMTypes.Add(QualityType2014.WeightChild_2_3);
+			listStratOrAdlPopQMTypes.Add(QualityType2014.WeightChild_3_1);
+			listStratOrAdlPopQMTypes.Add(QualityType2014.WeightChild_3_2);
+			listStratOrAdlPopQMTypes.Add(QualityType2014.WeightChild_3_3);
 			//create a list of all unique patients who belong to the initial patient population for any of the 9 CQMs
 			List<EhrCqmPatient> listAllEhrPats=new List<EhrCqmPatient>();
 			//create a dictionary linking a patient to the measures to which they belong
-			Dictionary<long,List<QualityMeasure>> dictPatNumListQualityMeasures=new Dictionary<long,List<QualityMeasure>>();
+			Dictionary<long,List<QualityMeasure>> dictPatNumListQMs=new Dictionary<long,List<QualityMeasure>>();
 			for(int i=0;i<listQMs.Count;i++) {
 				for(int j=0;j<listQMs[i].ListEhrPats.Count;j++) {
-					if(!dictPatNumListQualityMeasures.ContainsKey(listQMs[i].ListEhrPats[j].EhrCqmPat.PatNum)) {
-						dictPatNumListQualityMeasures.Add(listQMs[i].ListEhrPats[j].EhrCqmPat.PatNum,new List<QualityMeasure>() { listQMs[i] });
+					if(!dictPatNumListQMs.ContainsKey(listQMs[i].ListEhrPats[j].EhrCqmPat.PatNum)) {
+						dictPatNumListQMs.Add(listQMs[i].ListEhrPats[j].EhrCqmPat.PatNum,new List<QualityMeasure>() { listQMs[i] });
 						listAllEhrPats.Add(listQMs[i].ListEhrPats[j]);
 					}
 					else {
-						dictPatNumListQualityMeasures[listQMs[i].ListEhrPats[j].EhrCqmPat.PatNum].Add(listQMs[i]);
+						dictPatNumListQMs[listQMs[i].ListEhrPats[j].EhrCqmPat.PatNum].Add(listQMs[i]);
 					}
 				}
 			}
 			//listAllPats contains every unique patient who belongs to one of the initial patient population for any of the 9 CQMs
+			//dictPatNumListQMs is a dictionary linking a patient to a list of measure for which they are in the initial patient population
 			StringBuilder strBuilder=new StringBuilder();
 			StringBuilder strBuilderPatDataEntries=new StringBuilder();
 			Dictionary<long,string> dictPatNumXml=new Dictionary<long,string>();
@@ -5767,16 +5811,16 @@ BMI 18.5-25.";
 					Start("recordTarget");
 					#region patientRole
 					Start("patientRole");
-					_w.WriteComment("The extension is the patient's Open Dental number, the root is the assigning authority");
-					StartAndEnd("id","root",_strOIDInternalPatRoot,"extension",patNumCur.ToString());
-					if(patCur.SSN.Trim().Length==9) {
-						_w.WriteComment("This is the patient's SSN using the HL7 SSN OID");
-						StartAndEnd("id","root","2.16.840.1.113883.4.1","extension",patCur.SSN.Trim());//HL7 SSN OID root with patient's SSN if they have a valid one
-					}
 					string strHICNum=ValidateMedicaidID(patCur.MedicaidID);
 					if(strHICNum!="") {
 						_w.WriteComment("This is the patient's Medicare HIC (Health Insurance Claim) number");
 						StartAndEnd("id","root","2.16.840.1.113883.4.572","extension",strHICNum);
+					}
+					//_w.WriteComment("The extension is the patient's Open Dental number, the root is the assigning authority");
+					//StartAndEnd("id","root",_strOIDInternalPatRoot,"extension",patNumCur.ToString());
+					if(patCur.SSN.Trim().Length==9) {
+						_w.WriteComment("This is the patient's SSN using the HL7 SSN OID");
+						StartAndEnd("id","root","2.16.840.1.113883.4.1","extension",patCur.SSN.Trim());//HL7 SSN OID root with patient's SSN if they have a valid one
 					}
 					AddressUnitedStates(patCur.Address,patCur.Address2,patCur.City,patCur.State,patCur.Zip,"HP");//Validated
 					if(patCur.WirelessPhone.Trim()!="") {//There is at least one phone, due to validation.
@@ -5933,9 +5977,7 @@ BMI 18.5-25.";
 					TimeElement("time",DateTime.Now);
 					Start("assignedAuthor");
 					StartAndEnd("id","root","2.16.840.1.113883.3.4337","assigningAuthorityName","HL7 OID Registry");
-					Start("addr");
 					AddressUnitedStates("3995 Fairview Industrial Dr. SE","Suite 110","Salem","OR","97302","WP");
-					End("addr");
 					StartAndEnd("telecom","use","WP","value","tel:(503)363-5432");
 					Start("assignedAuthoringDevice");
 					_w.WriteElementString("manufacturerModelName","Open Dental version "+PrefC.GetString(PrefName.ProgramVersion));
@@ -6068,16 +6110,20 @@ BMI 18.5-25.";
 					Start("table","border","1","width","100%");
 					Start("thead");
 					Start("tr");
+					_w.WriteElementString("th","eMeasure Identifier (MAT)");
 					_w.WriteElementString("th","eMeasure Title");
 					_w.WriteElementString("th","Version neutral identifier");
-					_w.WriteElementString("th","eMeasure Identifier (MAT)");
 					_w.WriteElementString("th","eMeasure Version Number");
 					_w.WriteElementString("th","Version specific identifier");
 					End("tr");
 					End("thead");
 					Start("tbody");
 					for(int j=0;j<listQMs.Count;j++) {
-						MeasureTextTableRow(listQMs[j].eMeasureTitle,listQMs[j].eMeasureVNeutralId,listQMs[j].eMeasureNum,listQMs[j].eMeasureVersion,listQMs[j].eMeasureVSpecificId);
+						//if the type is a stratification or additional population of a measure, continue to avoid duplication
+						if(listStratOrAdlPopQMTypes.Contains(listQMs[j].Type2014)) {
+							continue;
+						}
+						MeasureTextTableRow(listQMs[j].eMeasureTitle,listQMs[j].eMeasureNum,listQMs[j].eMeasureVNeutralId,listQMs[j].eMeasureVersion,listQMs[j].eMeasureVSpecificId);
 					}
 					End("tbody");
 					End("table");
@@ -6086,6 +6132,10 @@ BMI 18.5-25.";
 					#region eMeasure entries
 					_w.WriteComment("1..* Organizers, each containing a reference to an eMeasure");
 					for(int j=0;j<listQMs.Count;j++) {
+						//the following types are entered once, so skip for these to avoid duplication
+						if(listStratOrAdlPopQMTypes.Contains(listQMs[j].Type2014)) {
+							continue;
+						}
 						MeasureEntry(listQMs[j].eMeasureVSpecificId,listQMs[j].eMeasureTitle,listQMs[j].eMeasureVNeutralId,listQMs[j].eMeasureVersion);
 					}
 					#endregion eMeasure entries
@@ -6110,7 +6160,11 @@ BMI 18.5-25.";
 					Start("table","border","1","width","100%");
 					Start("thead");
 					Start("tr");
-					_w.WriteElementString("th","Data Element - Value");
+					_w.WriteElementString("th","Description");
+					_w.WriteElementString("th","Value Set");
+					_w.WriteElementString("th","Code");
+					_w.WriteElementString("th","Date/Time");
+					_w.WriteElementString("th","Results");
 					End("tr");
 					End("thead");
 					Start("tbody");
@@ -6120,9 +6174,13 @@ BMI 18.5-25.";
 					_x.WriteAttributeString("xsi","schemaLocation",null,"urn:./CDA.xsd");
 					_x.WriteAttributeString("xmlns","voc",null,"urn:hl7-org:v3/voc");
 					_x.WriteAttributeString("xmlns","sdtc",null,"urn:hl7-org:sdtc");
-						List<QualityMeasure> listQMsCur=dictPatNumListQualityMeasures[patNumCur];
+						List<QualityMeasure> listQMsCur=dictPatNumListQMs[patNumCur];
+						//this list of unique item ids is used when building the plain text version so that the encounter/procedure/item will only be in the plain text version once
+						//we will add the item to the entries multiple times since the item can belong to different value sets
+						//and must have the value set specific to the measure for which it qualifies the patient
 						List<string> listUniqueItemExtensions=new List<string>();
 						//create encounter entries for each measure for this patient
+						#region encounters
 						for(int j=0;j<listQMsCur.Count;j++) {
 							if(!listQMsCur[j].DictPatNumListEncounters.ContainsKey(patNumCur)) {
 								continue;
@@ -6135,13 +6193,14 @@ BMI 18.5-25.";
 								}
 								listUniqueItemExtensions.Add(CqmItemAbbreviation.Enc.ToString()+encCur.EhrCqmEncounterNum.ToString());
 								#region BuildPlainTextVersion
-								Start("tr");
-								_w.WriteElementString("td","Encounter, Performed: "+encCur.ValueSetName+" - "+encCur.DateEncounter.ToShortDateString());
-								End("tr");
+								string descript="Encounter, Performed: "+encCur.ValueSetName;
+								PatientDataTextTableRow(descript,encCur.ValueSetOID,encCur.CodeSystemName,encCur.CodeValue,encCur.DateEncounter,encCur.DateEncounter,"");
 								#endregion BuildPlainTextVersion
 							}
 						}
+						#endregion encounters
 						//create intervention entries for each measure for this patient
+						#region interventions
 						for(int j=0;j<listQMsCur.Count;j++) {
 							if(!listQMsCur[j].DictPatNumListInterventions.ContainsKey(patNumCur)) {
 								continue;
@@ -6154,18 +6213,21 @@ BMI 18.5-25.";
 								}
 								listUniqueItemExtensions.Add(CqmItemAbbreviation.Ivn.ToString()+iCur.EhrCqmInterventionNum.ToString());
 								#region BuildPlainTextVersion
-								Start("tr");
+								string descript="";
 								if(listQMsCur[j].Type2014==QualityType2014.WeightAdult || listQMsCur[j].Type2014==QualityType2014.WeightOver65) {//interventions in these two measures are ordered
-									_w.WriteElementString("td","Intervention, Order: "+iCur.ValueSetName);
+									descript="Intervention, Order: ";
 								}
 								else {
-									_w.WriteElementString("td","Intervention, Performed: "+iCur.ValueSetName);
+									descript="Intervention, Performed: ";
 								}
-								End("tr");
+								descript+=iCur.ValueSetName;
+								PatientDataTextTableRow(descript,iCur.ValueSetOID,iCur.CodeSystemName,iCur.CodeValue,iCur.DateEntry,iCur.DateEntry,"");
 								#endregion BuildPlainTextVersion
 							}
 						}
+						#endregion interventions
 						//create ehrmeasureevents for each measure for this patient
+						#region ehrmeasureevents
 						for(int j=0;j<listQMsCur.Count;j++) {
 							if(!listQMsCur[j].DictPatNumListMeasureEvents.ContainsKey(patNumCur)) {
 								continue;
@@ -6178,18 +6240,21 @@ BMI 18.5-25.";
 								}
 								listUniqueItemExtensions.Add(CqmItemAbbreviation.Enc.ToString()+mCur.EhrCqmMeasEventNum.ToString());
 								#region BuildPlainTextVersion
-								Start("tr");
+								string descript="";
 								if(mCur.EventType==EhrMeasureEventType.TobaccoUseAssessed) {
-									_w.WriteElementString("td","Patient Characteristic: "+mCur.Description);
+									descript="Patient Characteristic: ";
 								}
 								else if(mCur.EventType==EhrMeasureEventType.CurrentMedsDocumented) {
-									_w.WriteElementString("td","Procedure, Performed: "+mCur.Description);
+									descript="Procedure, Performed: ";
 								}
-								End("tr");
+								descript+=mCur.ValueSetName+" - "+mCur.Description;
+								PatientDataTextTableRow(descript,mCur.ValueSetOID,mCur.CodeSystemName,mCur.CodeValue,mCur.DateTEvent,mCur.DateTEvent,"");
 								#endregion BuildPlainTextVersion
 							}
 						}
+						#endregion ehrmeasureevents
 						//create medicationpats for each measure for this patient
+						#region medicationpats
 						for(int j=0;j<listQMsCur.Count;j++) {
 							//have to check for CompletionStatus=NotAdministered if vaccine, vaccines given are procedures performed, not given are medication allergy or intolerance
 							if(!listQMsCur[j].DictPatNumListMedPats.ContainsKey(patNumCur)) {
@@ -6210,33 +6275,37 @@ BMI 18.5-25.";
 								}
 								listUniqueItemExtensions.Add(extensCur);
 								#region BuildPlainTextVersion
-								Start("tr");
-								string strDescript="";
+								string descript="";
+								string codeValue="";
 								//represents a medication.  Used by tobacco cessation or above/below normal weight meds
 								if(mPatCur.EhrCqmMedicationPatNum!=0) {
+									codeValue=mPatCur.RxCui.ToString();
 									//Will be Medication, Active/Order
 									if(mPatCur.PatNote!="") {//PatNote means an order
-										strDescript="Medication, Ordered: ";
+										descript="Medication, Ordered: ";
 									}
 									else {
-										strDescript="Medication, Active: ";
+										descript="Medication, Active: ";
 									}
 								}
 								//EhrCqmVaccinePatNum will only be set if pneumonia or influenza measure and it represents a vaccine
 								else {
+									codeValue=mPatCur.CVXCode;
 									if(mPatCur.CompletionStatus==VaccineCompletionStatus.NotAdministered) {//NotAdministered is due to an allergy or intolerance
-										strDescript="Medication, Allergy: ";
+										descript="Medication, Allergy: ";
 									}
 									else {//only getting CompletionStatus=Complete or NotAdministered, the else is for Complete
-										strDescript="Medication, Administered; ";
+										descript="Medication, Administered: ";
 									}
 								}
-								_w.WriteElementString("td",strDescript+mPatCur.ValueSetName+" - "+mPatCur.Description);
-								End("tr");
+								descript+=mPatCur.ValueSetName+" - "+mPatCur.Description;
+								PatientDataTextTableRow(descript,mPatCur.ValueSetOID,mPatCur.CodeSystemName,codeValue,mPatCur.DateStart,mPatCur.DateStop,"");
 								#endregion BuildPlainTextVersion
 							}
 						}
+						#endregion medicationpats
 						//create ehrnotperformeds for each measure for this patient
+						#region ehrnotperformeds
 						for(int j=0;j<listQMsCur.Count;j++) {
 							//have to determine what is not being performed, Procedure (flu vaccine, current meds documented), Medication (flu vaccine), Physical Exam, Tobacco screening
 							//if ValueSetOID=2.16.840.1.113883.3.526.3.1254, then Medication, Administered not done: Medical/Patient/System Reason (flu vaccine med)
@@ -6256,24 +6325,27 @@ BMI 18.5-25.";
 								}
 								listUniqueItemExtensions.Add(CqmItemAbbreviation.NotPerf.ToString()+npCur.EhrCqmNotPerfNum.ToString());
 								#region BuildPlainTextVersion
-								Start("tr");
+								string descript="";
 								if(npCur.ValueSetOID=="2.16.840.1.113883.3.526.3.1254") {
-									_w.WriteElementString("td","Medication, Administered not done: "+npCur.ValueSetName+" - "+npCur.DescriptionReason);
+									descript="Medication, Administered not done: ";
 								}
 								else if(npCur.ValueSetOID=="2.16.840.1.113883.3.526.3.402" || npCur.ValueSetOID=="2.16.840.1.113883.3.600.1.462") {
-									_w.WriteElementString("td","Procedure, Performed not done: "+npCur.ValueSetName+" - "+npCur.DescriptionReason);
+									descript="Procedure, Performed not done: ";
 								}
 								else if(npCur.ValueSetOID=="2.16.840.1.113883.3.600.1.681") {
-									_w.WriteElementString("td","Physical Exam, Performed not done: "+npCur.ValueSetName+" - "+npCur.DescriptionReason);
+									descript="Physical Exam, Performed not done: ";
 								}
 								else {//must be a 2.16.840.1.113883.3.526.3.1278, not performed items restricted to one of these 5 value sets
-									_w.WriteElementString("td","Risk Category Assessment not done: "+npCur.ValueSetName+" - "+npCur.DescriptionReason);
+									descript="Risk Category Assessment not done: ";
 								}
-								End("tr");
+								descript+=npCur.ValueSetName+" - "+npCur.DescriptionReason;
+								PatientDataTextTableRow(descript,npCur.ValueSetOID,npCur.CodeSystemName,npCur.CodeValue,npCur.DateEntry,npCur.DateEntry,"");
 								#endregion BuildPlainTextVersion
 							}
 						}
+						#endregion ehrnotperformeds
 						//create problems for each measure for this patient
+						#region problems
 						for(int j=0;j<listQMsCur.Count;j++) {
 							//if ValueSetOID = 2.16.840.1.113883.3.526.3.1255, SNOMEDCT - 315640000 - Influenza vaccination declined (situation), then it is a Communication, From patient to provider:
 							//if ValueSetOID = 2.16.840.1.113883.3.464.1003.110.12.1028, SNOMEDCT - 310578008 - Pneumococcal vaccination given (finding), then it is a Risk Category Assessment:
@@ -6282,7 +6354,6 @@ BMI 18.5-25.";
 							if(!listQMsCur[j].DictPatNumListProblems.ContainsKey(patNumCur)) {
 								continue;
 							}
-							string strDescript="";
 							for(int k=0;k<listQMsCur[j].DictPatNumListProblems[patNumCur].Count;k++) {
 								EhrCqmProblem probCur=listQMsCur[j].DictPatNumListProblems[patNumCur][k];
 								switch(probCur.ValueSetOID) {
@@ -6304,46 +6375,49 @@ BMI 18.5-25.";
 								}
 								listUniqueItemExtensions.Add(CqmItemAbbreviation.Prob.ToString()+probCur.EhrCqmProblemNum.ToString());
 								#region BuildPlainTextVersion
-									Start("tr");
-									switch(probCur.ValueSetOID) {
-										case "2.16.840.1.113883.3.526.3.1255":
-											strDescript="Communication, From patient to provider: ";
-											break;
-										case "2.16.840.1.113883.3.464.1003.110.12.1028":
-											strDescript="Risk Category Assessment: ";
-											break;
-										case "2.16.840.1.113883.3.600.1.1579":
-											strDescript="Procedure, Order: ";
-											break;
-										default:
-											strDescript="Diagnosis, Active: ";
-											break;
-									}
-									_w.WriteElementString("td",strDescript+probCur.ValueSetName+" - "+probCur.Description);
-									End("tr");
-									#endregion BuildPlainTextVersion
+								string descript="";
+								switch(probCur.ValueSetOID) {
+									case "2.16.840.1.113883.3.526.3.1255":
+										descript="Communication, From patient to provider: ";
+										break;
+									case "2.16.840.1.113883.3.464.1003.110.12.1028":
+										descript="Risk Category Assessment: ";
+										break;
+									case "2.16.840.1.113883.3.600.1.1579":
+										descript="Procedure, Order: ";
+										break;
+									default:
+										descript="Diagnosis, Active: ";
+										break;
+								}
+								descript+=probCur.ValueSetName+" - "+probCur.Description;
+								PatientDataTextTableRow(descript,probCur.ValueSetOID,probCur.CodeSystemName,probCur.CodeValue,probCur.DateStart,probCur.DateStop,"");
+								#endregion BuildPlainTextVersion
 							}
 						}
+						#endregion problems
 						//create procs for each measure for this patient
+						#region procs
 						for(int j=0;j<listQMsCur.Count;j++) {
 							if(!listQMsCur[j].DictPatNumListProcs.ContainsKey(patNumCur)) {
 								continue;
 							}
 							for(int k=0;k<listQMsCur[j].DictPatNumListProcs[patNumCur].Count;k++) {
 								EhrCqmProc procCur=listQMsCur[j].DictPatNumListProcs[patNumCur][k];
+								GenerateProcedureEntry(procCur,null);
 								if(listUniqueItemExtensions.Contains(CqmItemAbbreviation.Proc.ToString()+procCur.EhrCqmProcNum.ToString())) {
 									continue;
 								}
-								GenerateProcedureEntry(procCur,null);
 								listUniqueItemExtensions.Add(CqmItemAbbreviation.Proc.ToString()+procCur.EhrCqmProcNum.ToString());
 								#region BuildPlainTextVersion
-								Start("tr");
-								_w.WriteElementString("td","Procedure, Performed: "+procCur.ValueSetName+" - "+procCur.Description);
-								End("tr");
+								string descript="Procedure, Performed: "+procCur.ValueSetName+" - "+procCur.Description;
+								PatientDataTextTableRow(descript,procCur.ValueSetOID,procCur.CodeSystemName,procCur.ProcCode,procCur.ProcDate,procCur.ProcDate,"");
 								#endregion BuildPlainTextVersion
 							}
 						}
+						#endregion procs
 						//create vitalsigns for each measure for this patient
+						#region vitalsigns
 						for(int j=0;j<listQMsCur.Count;j++) {
 							if(!listQMsCur[j].DictPatNumListVitalsigns.ContainsKey(patNumCur)) {
 								continue;
@@ -6361,43 +6435,39 @@ BMI 18.5-25.";
 									GenerateVitalsignEntry(vCur,"Wt");
 									GenerateVitalsignEntry(vCur,"BMI");
 								}
-								if(vCur.BMIPercentile>-1) {
-									GenerateVitalsignEntry(vCur,"BMIp");
-								}
+								//if(vCur.BMIPercentile>-1) {
+								//	GenerateVitalsignEntry(vCur,"BMIp");
+								//}
 								if(listUniqueItemExtensions.Contains(CqmItemAbbreviation.Vital.ToString()+vCur.EhrCqmVitalsignNum.ToString())) {
 									continue;
 								}
 								listUniqueItemExtensions.Add(CqmItemAbbreviation.Vital.ToString()+vCur.EhrCqmVitalsignNum.ToString());
 								#region BuildPlainTextVersion
+								string descript="";
 								if(vCur.BpDiastolic>0) {
-									Start("tr");
-									_w.WriteElementString("td","Physical Exam, Finding: Diastolic Blood Pressure - "+vCur.BpDiastolic.ToString());
-									End("tr");
+									descript="Physical Exam, Finding: Diastolic Blood Pressure";
+									PatientDataTextTableRow(descript,"2.16.840.1.113883.3.526.3.1033","LOINC","8462-4",vCur.DateTaken,vCur.DateTaken,vCur.BpDiastolic.ToString()+" mmHg");
 								}
 								if(vCur.BpSystolic>0) {
-									Start("tr");
-									_w.WriteElementString("td","Physical Exam, Finding: Systolic Blood Pressure - "+vCur.BpSystolic.ToString());
-									End("tr");
+									descript="Physical Exam, Finding: Systolic Blood Pressure";
+									PatientDataTextTableRow(descript,"2.16.840.1.113883.3.526.3.1032","LOINC","8480-6",vCur.DateTaken,vCur.DateTaken,vCur.BpSystolic.ToString()+" mmHg");
 								}
 								if(vCur.BMI>0) {
-									Start("tr");
-									_w.WriteElementString("td","Physical Exam, Finding: Height - "+vCur.Height.ToString());
-									End("tr");
-									Start("tr");
-									_w.WriteElementString("td","Physical Exam, Finding: Weight - "+vCur.Weight.ToString());
-									End("tr");
-									Start("tr");
-									_w.WriteElementString("td","Physical Exam, Finding: BMI LOINC Value - "+vCur.BMI.ToString());
-									End("tr");
+									descript="Physical Exam, Finding: Height";
+									PatientDataTextTableRow(descript,"2.16.840.1.113883.3.464.1003.121.12.1014","LOINC",vCur.HeightExamCode,vCur.DateTaken,vCur.DateTaken,vCur.Height.ToString()+" in");
+									descript="Physical Exam, Finding: Weight";
+									PatientDataTextTableRow(descript,"2.16.840.1.113883.3.464.1003.121.12.1015","LOINC",vCur.WeightExamCode,vCur.DateTaken,vCur.DateTaken,vCur.Weight.ToString()+" lb");
+									descript="Physical Exam, Finding: BMI LOINC Value";
+									PatientDataTextTableRow(descript,"2.16.840.1.113883.3.600.1.681","LOINC","39156-5",vCur.DateTaken,vCur.DateTaken,vCur.BMI.ToString("0.00")+" kg/m2");
 								}
-								if(vCur.BMIPercentile>-1) {
-									Start("tr");
-									_w.WriteElementString("td","Physical Exam, Finding: BMI Percentile - "+vCur.BMIPercentile.ToString());
-									End("tr");
-								}
+								//if(vCur.BMIPercentile>-1) {
+								//	descript="Physical Exam, Finding: BMI Percentile";
+								//	PatientDataTextTableRow(descript,"2.16.840.1.113883.3.464.1003.121.12.1012","LOINC",vCur.BMIExamCode,vCur.DateTaken,vCur.DateTaken,vCur.BMIPercentile.ToString());
+								//}
 								#endregion BuildPlainTextVersion
 							}
 						}
+						#endregion vitalsigns
 						_x.WriteEndElement();
 					}
 					End("tbody");
@@ -6409,6 +6479,20 @@ BMI 18.5-25.";
 					for(int n=0;n<elementClinicalDocument.ChildNodes.Count;n++) {
 						elementClinicalDocument.ChildNodes[n].WriteTo(_w);
 					}
+					Start("entry");
+					Start("observation","classCode","OBS","moodCode","EVN");
+					_w.WriteComment("Patient Characteristic Payer Template");
+					TemplateId("2.16.840.1.113883.10.20.24.3.55");
+					StartAndEnd("id","root",_strOIDInternalCQMRoot,"extension",CqmItemAbbreviation.Payer.ToString()+patCur.PatNum.ToString());
+					StartAndEnd("code","code","48768-6","displayName","Payment source","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc);
+					StartAndEnd("statusCode","code","completed");
+					Start("value");
+					_w.WriteAttributeString("xsi","type",null,"CD");
+					Attribs("code",ehrPatCur.PayorSopCode,"displayName",ehrPatCur.PayorDescription,"codeSystem","2.16.840.1.113883.3.221.5","codeSystemName","Source of Payment Typology");
+					_w.WriteAttributeString("sdtc","valueSet",null,ehrPatCur.PayorValueSetOID);
+					End("value");
+					End("observation");
+					End("entry");
 					End("section");
 					End("component");
 					#endregion Patient Data
@@ -6416,20 +6500,17 @@ BMI 18.5-25.";
 					#endregion QRDA Body
 					End("component");
 					End("ClinicalDocument");
-					SecurityLogs.MakeLogEntry(Permissions.Copy,patNumCur,"QRDA Category I generated");//Create audit log entry.
 				}
 				string xmlResult=strBuilder.ToString();
 				dictPatNumXml.Add(patNumCur,xmlResult);
+				SecurityLogs.MakeLogEntry(Permissions.Copy,patNumCur,"QRDA Category I generated");//Create audit log entry.
 			}
 			for(int i=0;i<listAllEhrPats.Count;i++) {
 				Patient patCur=listAllEhrPats[i].EhrCqmPat;
-				if(!dictPatNumListQualityMeasures.ContainsKey(patCur.PatNum)) {//every patient will be in the dictionary, this is just in case
+				if(!dictPatNumXml.ContainsKey(patCur.PatNum)) {//every patient will be in the dictionary, this is just in case
 					continue;
 				}
-				List<QualityMeasure> listPatQMs=dictPatNumListQualityMeasures[patCur.PatNum];
-				for(int j=0;j<listPatQMs.Count;j++) {
-					System.IO.File.WriteAllText(folderRoot+"\\Measure_"+listPatQMs[j].Id.ToString()+"\\"+patCur.PatNum+"_"+patCur.LName+"_"+patCur.FName+".xml",dictPatNumXml[patCur.PatNum]);
-				}
+				System.IO.File.WriteAllText(folderRoot+"\\"+patCur.PatNum+"_"+patCur.LName+"_"+patCur.FName+".xml",dictPatNumXml[patCur.PatNum]);
 			}
 			_w.Flush();
 			_w.Close();
@@ -6609,6 +6690,9 @@ BMI 18.5-25.";
 				Start("text");
 				List<Dictionary<string,int>> listPopCountDicts=new List<Dictionary<string,int>>();
 				for(int i=0;i<listQMs.Count;i++) {
+					if(listStratOrAdlPopQMTypes.Contains(listQMs[i].Type2014)) {
+						continue;
+					}
 					#region Get indexes of stratifications and other populations
 					//these are used to get stratifications of a measure, we have them as separate QualityMeasure objects in the list, the int is the index in listQMs of the object
 					int s1Indx=-1;//1st stratification index
@@ -6623,20 +6707,6 @@ BMI 18.5-25.";
 					int s2numer3Indx=-1;//3rd stratification numerator 3 index
 					int numPops=1;//if set to two, this will generate another set of population data for the second population (only used by measure 69, weight adult)
 					switch(listQMs[i].Type2014) {
-						//these are stratifications/other populations of other measures, they will be included with the other measure, continue in for loop
-						case QualityType2014.CariesPrevent_1:
-						case QualityType2014.CariesPrevent_2:
-						case QualityType2014.CariesPrevent_3:
-						case QualityType2014.WeightAdult:
-						case QualityType2014.WeightChild_1_2:
-						case QualityType2014.WeightChild_1_3:
-						case QualityType2014.WeightChild_2_1:
-						case QualityType2014.WeightChild_2_2:
-						case QualityType2014.WeightChild_2_3:
-						case QualityType2014.WeightChild_3_1:
-						case QualityType2014.WeightChild_3_2:
-						case QualityType2014.WeightChild_3_3:
-							continue;
 						case QualityType2014.CariesPrevent:
 							//get the indexes of the three stratifications
 							for(int j=0;j<listQMs.Count;j++) {
@@ -6705,20 +6775,25 @@ BMI 18.5-25.";
 							}
 							break;
 					}
-					#endregion					
-					listPopCountDicts=FillDictPopCounts(listQMs[i].ListEhrPats);
+					#endregion Get indexes of stratifications and other populations
+					if(listQMs[i].Type2014==QualityType2014.MedicationsEntered) {
+						listPopCountDicts=FillDictPopCounts(listQMs[i].ListEhrPats,listQMs[i].DictPatNumListEncounters);
+					}
+					else {
+						listPopCountDicts=FillDictPopCounts(listQMs[i].ListEhrPats,null);
+					}
 					Start("table","border","1","width","100%");
 					Start("thead");
 					Start("tr");
+					_w.WriteElementString("th","eMeasure Identifier (MAT)");
 					_w.WriteElementString("th","eMeasure Title");
 					_w.WriteElementString("th","Version neutral identifier");
-					_w.WriteElementString("th","eMeasure Identifier (MAT)");
 					_w.WriteElementString("th","eMeasure Version Number");
 					_w.WriteElementString("th","Version specific identifier");
 					End("tr");
 					End("thead");
 					Start("tbody");
-					MeasureTextTableRow(listQMs[i].eMeasureTitle,listQMs[i].eMeasureVNeutralId,listQMs[i].eMeasureNum,listQMs[i].eMeasureVersion,listQMs[i].eMeasureVSpecificId);
+					MeasureTextTableRow(listQMs[i].eMeasureTitle,listQMs[i].eMeasureNum,listQMs[i].eMeasureVNeutralId,listQMs[i].eMeasureVersion,listQMs[i].eMeasureVSpecificId);
 					End("tbody");
 					End("table");
 					if(listQMs[i].eMeasureSetId!=null) {
@@ -6734,7 +6809,7 @@ BMI 18.5-25.";
 							End("content");
 							if(p>0) {//fill stratification data with supplemental data from other population (only used by measure 69)
 								measureIndx=pop2Indx;
-								listPopCountDicts=FillDictPopCounts(listQMs[measureIndx].ListEhrPats);
+								listPopCountDicts=FillDictPopCounts(listQMs[measureIndx].ListEhrPats,null);
 							}
 						}
 						else if(numPops==3) {
@@ -6743,11 +6818,11 @@ BMI 18.5-25.";
 							End("content");
 							if(p==1) {//second iteration, fill dictionaries with numerator 2 data for stratifications
 								measureIndx=numer2;
-								listPopCountDicts=FillDictPopCounts(listQMs[measureIndx].ListEhrPats);
+								listPopCountDicts=FillDictPopCounts(listQMs[measureIndx].ListEhrPats,null);
 							}
 							if(p==2) {//third iteration, fill dictionaries with numerator 3 data for stratifications
 								measureIndx=numer3;
-								listPopCountDicts=FillDictPopCounts(listQMs[measureIndx].ListEhrPats);
+								listPopCountDicts=FillDictPopCounts(listQMs[measureIndx].ListEhrPats,null);
 							}
 						}
 						Start("list");
@@ -7113,6 +7188,9 @@ BMI 18.5-25.";
 				//************************************************END OF TEXT VERSION******************************************************
 				//**********************************************START OF ENTRY SECTION*********************************************
 				for(int i=0;i<listQMs.Count;i++) {
+					if(listStratOrAdlPopQMTypes.Contains(listQMs[i].Type2014)) {
+						continue;
+					}
 					#region Get indexes of stratifications and other populations
 					//these are used to get stratifications of a measure, we have them as separate QualityMeasure objects in the list, the int is the index in listQMs of the object
 					int s1Indx=-1;//1st stratification index
@@ -7127,20 +7205,6 @@ BMI 18.5-25.";
 					int s2numer3Indx=-1;//3rd stratification numerator 3 index
 					int numPops=1;//if set to two, this will generate another set of population data for the second population (only used by measure 69, weight adult)
 					switch(listQMs[i].Type2014) {
-						//these are stratifications/other populations of other measures, they will be included with the other measure, continue in for loop
-						case QualityType2014.CariesPrevent_1:
-						case QualityType2014.CariesPrevent_2:
-						case QualityType2014.CariesPrevent_3:
-						case QualityType2014.WeightAdult:
-						case QualityType2014.WeightChild_1_2:
-						case QualityType2014.WeightChild_1_3:
-						case QualityType2014.WeightChild_2_1:
-						case QualityType2014.WeightChild_2_2:
-						case QualityType2014.WeightChild_2_3:
-						case QualityType2014.WeightChild_3_1:
-						case QualityType2014.WeightChild_3_2:
-						case QualityType2014.WeightChild_3_3:
-							continue;
 						case QualityType2014.CariesPrevent:
 							//get the indexes of the three stratifications
 							for(int j=0;j<listQMs.Count;j++) {
@@ -7209,24 +7273,29 @@ BMI 18.5-25.";
 							}
 							break;
 					}
-					#endregion					
-					listPopCountDicts=FillDictPopCounts(listQMs[i].ListEhrPats);
+					#endregion Get indexes of stratifications and other populations
+					if(listQMs[i].Type2014==QualityType2014.MedicationsEntered) {
+						listPopCountDicts=FillDictPopCounts(listQMs[i].ListEhrPats,listQMs[i].DictPatNumListEncounters);
+					}
+					else {
+						listPopCountDicts=FillDictPopCounts(listQMs[i].ListEhrPats,null);
+					}
 					#region ENTRY SECTION
 					_w.WriteComment("***************PROPORTION MEASURE ENTRIES (1 entry per population per measure)***************");
 					for(int p=0;p<numPops;p++) {//usually only runs 1 loop, measure 69 has two populations, and measure 155 has 3 numerators, in which case it will run more than once
 						int measureIndx=i;
 						if(numPops==2 && p>0) {//fill stratification data with supplemental data from other population
 							measureIndx=pop2Indx;
-							listPopCountDicts=FillDictPopCounts(listQMs[measureIndx].ListEhrPats);
+							listPopCountDicts=FillDictPopCounts(listQMs[measureIndx].ListEhrPats,null);
 						}
 						if(numPops==3 && p>0) {//only 3 populations for measure 155, Numerators 1-3
 							if(p==1) {//second iteration, fill dictionaries with numerator 2 data for stratifications
 								measureIndx=numer2;
-								listPopCountDicts=FillDictPopCounts(listQMs[measureIndx].ListEhrPats);
+								listPopCountDicts=FillDictPopCounts(listQMs[measureIndx].ListEhrPats,null);
 							}
 							if(p==2) {//third iteration, fill dictionaries with numerator 3 data for stratifications
 								measureIndx=numer3;
-								listPopCountDicts=FillDictPopCounts(listQMs[measureIndx].ListEhrPats);
+								listPopCountDicts=FillDictPopCounts(listQMs[measureIndx].ListEhrPats,null);
 							}
 						}
 						Start("entry");
@@ -7273,11 +7342,11 @@ BMI 18.5-25.";
 						StartAndEnd("code","code","72510-1","displayName","Performance Rate","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc);
 						StartAndEnd("statusCode","code","completed");
 						Start("value");
+						_w.WriteAttributeString("xsi","type",null,"REAL");
 						if(listQMs[measureIndx].PerformanceRate==0) {
 							Attribs("nullFlavor","NA");//if no patients in denominator, then performance rate is null
 						}
 						else {
-							_w.WriteAttributeString("xsi","type",null,"REAL");
 							Attribs("value",listQMs[measureIndx].PerformanceRate.ToString("0.00"));
 						}
 						End("value");
@@ -7294,11 +7363,11 @@ BMI 18.5-25.";
 						StartAndEnd("code","code","72509-3","displayName","Reporting Rate","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc);
 						StartAndEnd("statusCode","code","completed");
 						Start("value");
+						_w.WriteAttributeString("xsi","type",null,"REAL");
 						if(listQMs[measureIndx].PerformanceRate==0) {
 							Attribs("nullFlavor","NA");//if no patients in denominator, then reporting rate is null
 						}
 						else {
-							_w.WriteAttributeString("xsi","type",null,"REAL");
 							Attribs("value",listQMs[measureIndx].ReportingRate.ToString("0.00"));
 						}
 						End("value");
@@ -7422,9 +7491,9 @@ BMI 18.5-25.";
 								Start("value");
 								_w.WriteAttributeString("xsi","type",null,"CD");
 								Attribs("nullFlavor","OTH");
-								_w.WriteElementString("originalText","Stratum");
 								End("value");
-								Start("entryRelationship","typeCode","SUBJ","inverstionInd","true");
+								_w.WriteComment("Stratum");
+								Start("entryRelationship","typeCode","SUBJ","inversionInd","true");
 								Start("observation","classCode","OBS","moodCode","EVN");
 								_w.WriteComment("Aggregate Count Template");
 								TemplateId("2.16.840.1.113883.10.20.27.3.3");
@@ -7483,7 +7552,7 @@ BMI 18.5-25.";
 								//end of aggregate count
 								//Start reference to strata in eMeasure
 								Start("reference","typeCode","REFR");
-								_w.WriteComment("Reference to the relevalnt strata in the eMeasure");
+								_w.WriteComment("Reference to the relevant strata in the eMeasure");
 								Start("externalObservation","classCode","OBS","moodCode","EVN");
 								switch(j) {
 									case 0:
@@ -7622,6 +7691,7 @@ BMI 18.5-25.";
 										TemplateId("2.16.840.1.113883.10.20.24.3.55");
 										_w.WriteComment("Payer Supplemental Data Element Template");
 										TemplateId("2.16.840.1.113883.10.20.27.3.9");
+										Guid();
 										StartAndEnd("code","code","48768-6","displayName","Payment source","codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc);
 										StartAndEnd("statusCode","code","completed");
 										Start("value");
@@ -7633,7 +7703,7 @@ BMI 18.5-25.";
 											Attribs("code","2","displayName","Medicaid");
 										}
 										else if(kvpair.Key=="Other Gvmt") {
-											Attribs("code","3","displayName","Other Government (Federal/State/Local) (excluding Department of Corrections)");
+											Attribs("code","349","displayName","Other Government (Federal/State/Local) (excluding Department of Corrections)");
 										}
 										else if(kvpair.Key=="Private") {
 											Attribs("code","5","displayName","Private Health Insurance");
@@ -7641,7 +7711,7 @@ BMI 18.5-25.";
 										else {
 											Attribs("code","8","displayName","No Payment from an Organization/Agency/Program/Private Payer Listed");
 										}
-										Attribs("codeSystem","","codeSystemName","");
+										Attribs("codeSystem","2.16.840.1.113883.3.221.5","codeSystemName","Source of Payment Typology");
 										End("value");
 										#endregion Payer Supplemental Data Entry
 										break;
@@ -7716,7 +7786,7 @@ BMI 18.5-25.";
 		///<para>Use the index of the dictionary to get the counts desired.</para>
 		///<para>0=IPP, 1=Denominator, 2=Denominator Exclusions, 3=Numerator, 4=Denominator Exceptions.</para>
 		///<para>Example, for counts of supplemental data for the denominator, get the dict[1].  dict[1] will have relevant counts for race, gender, ethnicity, and payer.</para></summary>
-		private static List<Dictionary<string,int>> FillDictPopCounts(List<EhrCqmPatient> listPats) {
+		private static List<Dictionary<string,int>> FillDictPopCounts(List<EhrCqmPatient> listPats,Dictionary<long,List<EhrCqmEncounter>> dictPatNumListEncs) {
 			List<Dictionary<string,int>> listDicts=new List<Dictionary<string,int>>();
 			Dictionary<string,int> dictIPPCounts=new Dictionary<string,int>();
 			Dictionary<string,int> dictDenomCounts=new Dictionary<string,int>();
@@ -7727,21 +7797,43 @@ BMI 18.5-25.";
 			List<EhrCqmPatient> listDenomExclus=new List<EhrCqmPatient>();
 			List<EhrCqmPatient> listNumerator=new List<EhrCqmPatient>();
 			List<EhrCqmPatient> listDenomExcept=new List<EhrCqmPatient>();
-			for(int j=0;j<listPats.Count;j++) {
-				if(listPats[j].IsDenominator) {
-					listDenom.Add(listPats[j].Copy());
-				}
-				if(listPats[j].IsExclusion) {
-					listDenomExclus.Add(listPats[j].Copy());
-				}
-				if(listPats[j].IsNumerator) {
-					listNumerator.Add(listPats[j].Copy());
-				}
-				if(listPats[j].IsException) {
-					listDenomExcept.Add(listPats[j].Copy());
+			if(dictPatNumListEncs!=null) {//this will only be sent in for measure 68, current meds documented, since it is encounter based not patient based
+				for(int i=0;i<listPats.Count;i++) {
+					List<EhrCqmEncounter> listEncsCur=dictPatNumListEncs[listPats[i].EhrCqmPat.PatNum];
+					for(int j=0;j<listEncsCur.Count;j++) {
+						listDenom.Add(listPats[i].Copy());
+						if(listEncsCur[j].IsException) {
+							listDenomExcept.Add(listPats[i].Copy());
+						}
+						if(listEncsCur[j].IsNumerator) {
+							listNumerator.Add(listPats[i].Copy());
+						}
+						//no exclusions for measure 68
+					}
 				}
 			}
-			dictIPPCounts=GetSupplementalCounts(listPats);
+			else {
+				for(int j=0;j<listPats.Count;j++) {
+					if(listPats[j].IsDenominator) {
+						listDenom.Add(listPats[j].Copy());
+					}
+					if(listPats[j].IsExclusion) {
+						listDenomExclus.Add(listPats[j].Copy());
+					}
+					if(listPats[j].IsNumerator) {
+						listNumerator.Add(listPats[j].Copy());
+					}
+					if(listPats[j].IsException) {
+						listDenomExcept.Add(listPats[j].Copy());
+					}
+				}
+			}
+			if(dictPatNumListEncs!=null) {
+				dictIPPCounts=GetSupplementalCounts(listDenom);
+			}
+			else {
+				dictIPPCounts=GetSupplementalCounts(listPats);
+			}
 			dictDenomCounts=GetSupplementalCounts(listDenom);
 			dictDenomExclusCounts=GetSupplementalCounts(listDenomExclus);
 			dictNumeCounts=GetSupplementalCounts(listNumerator);
@@ -7800,7 +7892,14 @@ BMI 18.5-25.";
 			dictCategoryCount.Add("Other Gvmt",0);
 			dictCategoryCount.Add("Private",0);
 			dictCategoryCount.Add("Self-pay",0);
+			List<long> listPatNumsCounted=new List<long>();
 			for(int i=0;i<listPats.Count;i++) {
+				if(listPatNumsCounted.Contains(listPats[i].EhrCqmPat.PatNum)) {//for measure 68, where listPats can contain the same patient multiple times for each encounter
+					continue;
+				}
+				else {
+					listPatNumsCounted.Add(listPats[i].EhrCqmPat.PatNum);
+				}
 				if(listPats[i].ListPatientRaces.Count==1) {
 					if(dictCategoryCount.ContainsKey(listPats[i].ListPatientRaces[0].Race.ToString())) {
 						dictCategoryCount[listPats[i].ListPatientRaces[0].Race.ToString()]++;
@@ -7810,8 +7909,8 @@ BMI 18.5-25.";
 					dictCategoryCount[PatRace.Other.ToString()]++;
 				}
 				if(listPats[i].Ethnicity!=null) {
-					if(dictCategoryCount.ContainsKey(listPats[i].Ethnicity.ToString())) {
-						dictCategoryCount[listPats[i].Ethnicity.ToString()]++;
+					if(dictCategoryCount.ContainsKey(listPats[i].Ethnicity.Race.ToString())) {
+						dictCategoryCount[listPats[i].Ethnicity.Race.ToString()]++;
 					}
 				}
 				dictCategoryCount[listPats[i].EhrCqmPat.Gender.ToString()]++;
@@ -8193,13 +8292,14 @@ BMI 18.5-25.";
 				_x.WriteComment("Procedure Performed Template");
 				TemplateId("2.16.840.1.113883.10.20.24.3.64");
 				StartAndEnd("id","root",_strOIDInternalCQMRoot,"extension",CqmItemAbbreviation.Proc.ToString()+npCur.EhrCqmNotPerfNum.ToString());
-				_x.WriteElementString("text","Procedure Performed, not done: "+npCur.Description);
 				Start("code","code",npCur.CodeValue,"displayName",npCur.Description,"codeSystem",npCur.CodeSystemOID,"codeSystemName",npCur.CodeSystemName);
 				_x.WriteAttributeString("sdtc","valueSet",null,npCur.ValueSetOID);
 				End("code");
+				_x.WriteElementString("text","Procedure Performed, not done: "+npCur.Description);
 				StartAndEnd("statusCode","code","completed");
 				Start("effectiveTime");
 				DateElement("low",npCur.DateEntry);
+				DateElement("high",npCur.DateEntry);
 				End("effectiveTime");
 				Start("entryRelationship","typeCode","RSON");
 				Start("observation","classCode","OBS","moodCode","EVN");
@@ -8296,7 +8396,7 @@ BMI 18.5-25.";
 			_isWriterW=false;
 			Start("entry","typeCode","DRIV");
 			if(mPatCur.EhrCqmMedicationPatNum!=0) {//either Medication, Active: or Medication, Ordered:
-				if(mPatCur.PatNote=="") {//Medication, Order:
+				if(mPatCur.PatNote!="") {//Medication, Order:
 					Start("substanceAdministration","classCode","SBADM","moodCode","RQO");
 					_x.WriteComment("Plan of Care Activity Substance Administration Template");
 					TemplateId("2.16.840.1.113883.10.20.22.4.42");
@@ -8315,6 +8415,7 @@ BMI 18.5-25.";
 					StartAndEnd("statusCode","code","completed");
 				}
 				Start("effectiveTime");
+				_x.WriteAttributeString("xsi","type",null,"IVL_TS");
 				DateElement("low",mPatCur.DateStart);
 				DateElement("high",mPatCur.DateStop);
 				End("effectiveTime");
@@ -8373,17 +8474,19 @@ BMI 18.5-25.";
 					StartAndEnd("code","code","416118004","displayName","Administration","codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed);
 					StartAndEnd("statusCode","code","completed");
 					Start("effectiveTime");
+					_x.WriteAttributeString("xsi","type",null,"IVL_TS");
 					DateElement("low",mPatCur.DateStart);
 					DateElement("high",mPatCur.DateStop);
 					End("effectiveTime");
 					Start("entryRelationship","typeCode","COMP");
+					Start("substanceAdministration","classCode","SBADM","moodCode","EVN");
 					_x.WriteComment("Medication Activity");
 					TemplateId("2.16.840.1.113883.10.20.22.4.16");
-					Start("substanceAdministration","classCode","SBADM","moodCode","EVN");
 					StartAndEnd("id","root",_strOIDInternalCQMRoot,"extension",CqmItemAbbreviation.MedPat.ToString()+mPatCur.EhrCqmVaccinePatNum.ToString()+mPatCur.PatNum.ToString());
 					_x.WriteElementString("text","Medication Administered: "+mPatCur.ValueSetName);
 					StartAndEnd("statusCode","code","completed");
 					Start("effectiveTime");
+					_x.WriteAttributeString("xsi","type",null,"IVL_TS");
 					DateElement("low",mPatCur.DateStart);
 					DateElement("high",mPatCur.DateStop);
 					End("effectiveTime");
@@ -8393,7 +8496,7 @@ BMI 18.5-25.";
 					TemplateId("2.16.840.1.113883.10.20.22.4.23");
 					StartAndEnd("id","root",_strOIDInternalCQMRoot,"extension",CqmItemAbbreviation.MedPat.ToString()+mPatCur.EhrCqmMedicationPatNum.ToString()+mPatCur.CVXCode);
 					Start("manufacturedMaterial");
-					Start("code","code",mPatCur.RxCui.ToString(),"displayName",mPatCur.Description,"codeSystem",mPatCur.CodeSystemOID,"codeSystemName",mPatCur.CodeSystemName);
+					Start("code","code",mPatCur.CVXCode,"displayName",mPatCur.Description,"codeSystem",mPatCur.CodeSystemOID,"codeSystemName",mPatCur.CodeSystemName);
 					_x.WriteAttributeString("sdtc","valueSet",null,mPatCur.ValueSetOID);
 					End("code");
 					End("manufacturedMaterial");
@@ -8472,6 +8575,7 @@ BMI 18.5-25.";
 				StartAndEnd("statusCode","code","completed");
 				Start("effectiveTime");
 				DateElement("low",iCur.DateEntry);
+				DateElement("high",iCur.DateEntry);
 				End("effectiveTime");
 				Start("author");
 				DateElement("time",iCur.DateEntry);
@@ -8496,6 +8600,7 @@ BMI 18.5-25.";
 				StartAndEnd("statusCode","code","completed");
 				Start("effectiveTime");
 				DateElement("low",iCur.DateEntry);
+				DateElement("high",iCur.DateEntry);
 				End("effectiveTime");
 				End("act");
 			}
@@ -8680,13 +8785,34 @@ BMI 18.5-25.";
 			End("entry");
 		}
 
-		private static void MeasureTextTableRow(string measureTitle,string versionNeutralId,string cmsId,string versionNum,string versionSpecificId) {
+		private static void MeasureTextTableRow(string measureTitle,string cmsId,string versionNeutralId,string versionNum,string versionSpecificId) {
 			Start("tr");
+			_w.WriteElementString("td",cmsId);
 			_w.WriteElementString("td",measureTitle);
 			_w.WriteElementString("td",versionNeutralId);
-			_w.WriteElementString("td",cmsId);
 			_w.WriteElementString("td",versionNum);
 			_w.WriteElementString("td",versionSpecificId);
+			End("tr");
+		}
+
+		private static void PatientDataTextTableRow(string description,string valueSetOID,string codeSystemName,string codeValue,DateTime dateStart,DateTime dateEnd,string result) {
+			Start("tr");
+			_w.WriteElementString("td",description);
+			_w.WriteElementString("td",valueSetOID);
+			_w.WriteElementString("td",codeSystemName+": "+codeValue);
+			if(dateEnd.Date.Year>1880) {
+				//if start and end date the same, we will not bother with date range, simply one date
+				if(dateEnd.Date==dateStart.Date) {
+					_w.WriteElementString("td",dateStart.ToString("MMMM dd, yyyy"));
+				}
+				else {
+					_w.WriteElementString("td",dateStart.ToString("MMMM dd, yyyy")+" - "+dateEnd.ToString("MMMM dd, yyyy"));
+				}
+			}
+			else {//no end date, considered currently still 'active'
+				_w.WriteElementString("td",dateStart.ToString("MMMM dd, yyyy")+" - present");
+			}
+			_w.WriteElementString("td",result);
 			End("tr");
 		}
 

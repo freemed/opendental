@@ -47,10 +47,8 @@ namespace OpenDental {
 					comboProv.SelectedIndex=i;
 				}
 			}
-			//textDateStart.Text=(new DateTime(DateTime.Now.Year,1,1)).ToShortDateString();
-			//textDateEnd.Text=(new DateTime(DateTime.Now.Year,12,31)).ToShortDateString();
-			textDateStart.Text=(new DateTime(2013,1,1)).ToShortDateString();
-			textDateEnd.Text=(new DateTime(2013,12,31)).ToShortDateString();
+			textDateStart.Text=(new DateTime(DateTime.Now.Year,1,1)).ToShortDateString();
+			textDateEnd.Text=(new DateTime(DateTime.Now.Year,12,31)).ToShortDateString();
 			FillGrid();
 			Cursor=Cursors.Default;
 		}
@@ -150,9 +148,6 @@ namespace OpenDental {
 			}
 			try {
 				System.IO.Directory.CreateDirectory(folderPath);
-				for(int i=0;i<listQ.Count;i++) {
-					System.IO.Directory.CreateDirectory(folderPath+"\\Measure_"+listQ[i].Id);
-				}
 			}
 			catch(Exception ex) {
 				MessageBox.Show("Folder was not created: "+ex.Message);

@@ -407,7 +407,7 @@ namespace OpenDental {
 
 		private void but2014CQM_Click(object sender,EventArgs e) {
 			FormEhrQualityMeasures2014 FormQ=new FormEhrQualityMeasures2014();
-	FormQ.ShowDialog();
+			FormQ.ShowDialog();
 			FillGridMu();
 		}
 

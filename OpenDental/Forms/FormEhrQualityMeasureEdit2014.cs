@@ -77,30 +77,54 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			for(int i=0;i<MeasureCur.ListEhrPats.Count;i++) {
-				if(!MeasureCur.ListEhrPats[i].IsDenominator) {
-					continue;
+			if(MeasureCur.Type2014==QualityType2014.MedicationsEntered) {
+				foreach(KeyValuePair<long,List<EhrCqmEncounter>> kvpair in MeasureCur.DictPatNumListEncounters) {
+					for(int i=0;i<kvpair.Value.Count;i++) {
+						row=new ODGridRow();
+						row.Cells.Add(kvpair.Key.ToString());
+						row.Cells.Add(Patients.GetPat(kvpair.Key).GetNameLF());
+						string categoryCur="";
+						if(kvpair.Value[i].IsNumerator) {
+							categoryCur="X";
+						}
+						row.Cells.Add(categoryCur);
+						categoryCur="";
+						row.Cells.Add(categoryCur);//no exclusions for this measure
+						if(kvpair.Value[i].IsException) {
+							categoryCur="X";
+						}
+						row.Cells.Add(categoryCur);
+						row.Cells.Add(kvpair.Value[i].Explanation);
+						gridMain.Rows.Add(row);
+					}
 				}
-				row=new ODGridRow();
-				row.Cells.Add(MeasureCur.ListEhrPats[i].EhrCqmPat.PatNum.ToString());
-				row.Cells.Add(MeasureCur.ListEhrPats[i].EhrCqmPat.GetNameLF());
-				string categoryCur="";
-				if(MeasureCur.ListEhrPats[i].IsNumerator) {
-					categoryCur="X";
+			}
+			else {
+				for(int i=0;i<MeasureCur.ListEhrPats.Count;i++) {
+					if(!MeasureCur.ListEhrPats[i].IsDenominator) {
+						continue;
+					}
+					row=new ODGridRow();
+					row.Cells.Add(MeasureCur.ListEhrPats[i].EhrCqmPat.PatNum.ToString());
+					row.Cells.Add(MeasureCur.ListEhrPats[i].EhrCqmPat.GetNameLF());
+					string categoryCur="";
+					if(MeasureCur.ListEhrPats[i].IsNumerator) {
+						categoryCur="X";
+					}
+					row.Cells.Add(categoryCur);
+					categoryCur="";
+					if(MeasureCur.ListEhrPats[i].IsExclusion) {
+						categoryCur="X";
+					}
+					row.Cells.Add(categoryCur);
+					categoryCur="";
+					if(MeasureCur.ListEhrPats[i].IsException) {
+						categoryCur="X";
+					}
+					row.Cells.Add(categoryCur);
+					row.Cells.Add(MeasureCur.ListEhrPats[i].Explanation);
+					gridMain.Rows.Add(row);
 				}
-				row.Cells.Add(categoryCur);
-				categoryCur="";
-				if(MeasureCur.ListEhrPats[i].IsExclusion) {
-					categoryCur="X";
-				}
-				row.Cells.Add(categoryCur);
-				categoryCur="";
-				if(MeasureCur.ListEhrPats[i].IsException) {
-					categoryCur="X";
-				}
-				row.Cells.Add(categoryCur);
-				row.Cells.Add(MeasureCur.ListEhrPats[i].Explanation);
-				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
 		}
