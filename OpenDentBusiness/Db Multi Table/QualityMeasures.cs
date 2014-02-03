@@ -6800,7 +6800,7 @@ BMI 18.5-25.";
 						Start("content","styleCode","Bold");
 						_w.WriteString("Member of Measure Set: "+listQMs[i].eMeasureSetId);
 						End("content");
-						StartAndEnd("list");
+						//StartAndEnd("list");
 					}
 					for(int p=0;p<numPops;p++) {//usually only runs 1 loop, measure 69 has two populations, and measure 155 has 3 numerators, in which case it will run more than once
 						int measureIndx=i;
