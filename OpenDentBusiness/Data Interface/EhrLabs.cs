@@ -104,8 +104,8 @@ namespace OpenDentBusiness{
 							listRetVal.Add(ehrLabCur);
 							ehrLabCur=new EhrLab();
 							ehrLabCur.PatNum=listRetVal[0].PatNum;
-							ehrLabCur.OriginalPIDSegment=PIDSegment;//may not match actual PatNum/Patient information.
 						}
+						ehrLabCur.OriginalPIDSegment=PIDSegment;//may not match actual PatNum/Patient information.
 						try {
 							ehrLabCur.OrderControlCode=(HL70119)Enum.Parse(typeof(HL70119),fields[1]);
 						}
