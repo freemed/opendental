@@ -2866,7 +2866,8 @@ namespace OpenDentBusiness{
 						+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
 						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
 						+"GROUP BY patient.PatNum) AS UniquePatsAndProcs "
-						+"LEFT JOIN familyhealth ON UniquePatsAndProcs.PatNum=familyhealth.PatNum";
+						+"LEFT JOIN familyhealth ON UniquePatsAndProcs.PatNum=familyhealth.PatNum "
+						+"GROUP BY UniquePatsAndProcs.PatNum";
 					tableRaw=Db.GetTable(command);
 					break;
 				#endregion
