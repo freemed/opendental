@@ -44,7 +44,12 @@ namespace OpenDental {
 				UI.ODGridRow row=new UI.ODGridRow();
 				row.Cells.Add(_listCarePlans[i].DatePlanned.ToShortDateString());//Date
 				Snomed snomedEducation=Snomeds.GetByCode(_listCarePlans[i].SnomedEducation);
-				row.Cells.Add(snomedEducation.Description);//GoalDescript
+				if(snomedEducation==null) {
+					row.Cells.Add("");//We allow blank or "NullFlavor" SNOMEDCT codes when exporting CCDAs, so we allow them to be blank when displaying here as well.
+				}
+				else {
+					row.Cells.Add(snomedEducation.Description);//GoalDescript
+				}
 				row.Cells.Add(_listCarePlans[i].Instructions);//Instructions
 				gridCarePlans.Rows.Add(row);
 			}
