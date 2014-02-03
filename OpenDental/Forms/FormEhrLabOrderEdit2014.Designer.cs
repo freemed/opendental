@@ -54,6 +54,7 @@
 			this.label10 = new System.Windows.Forms.Label();
 			this.textPlacerGroupUniversalID = new System.Windows.Forms.TextBox();
 			this.groupBox5 = new System.Windows.Forms.GroupBox();
+			this.butProvPicker = new OpenDental.UI.Button();
 			this.comboOrderingProvIdType = new System.Windows.Forms.ComboBox();
 			this.label33 = new System.Windows.Forms.Label();
 			this.comboOrderingProvNameType = new System.Windows.Forms.ComboBox();
@@ -87,6 +88,7 @@
 			this.label13 = new System.Windows.Forms.Label();
 			this.textFillerOrderUniversalID = new System.Windows.Forms.TextBox();
 			this.groupBox6 = new System.Windows.Forms.GroupBox();
+			this.butServicePicker = new OpenDental.UI.Button();
 			this.label44 = new System.Windows.Forms.Label();
 			this.textUsiCodeSystemNameAlt = new System.Windows.Forms.TextBox();
 			this.label43 = new System.Windows.Forms.Label();
@@ -124,13 +126,15 @@
 			this.butViewParent = new OpenDental.UI.Button();
 			this.butParentPicker = new OpenDental.UI.Button();
 			this.gridResultsCopyTo = new OpenDental.UI.ODGrid();
-			this.butServicePicker = new OpenDental.UI.Button();
-			this.butProvPicker = new OpenDental.UI.Button();
 			this.butPatientPick = new OpenDental.UI.Button();
 			this.gridClinicalInformation = new OpenDental.UI.ODGrid();
 			this.gridNotes = new OpenDental.UI.ODGrid();
 			this.gridSpecimen = new OpenDental.UI.ODGrid();
 			this.gridMain = new OpenDental.UI.ODGrid();
+			this.textObservationDateTimeStart = new System.Windows.Forms.TextBox();
+			this.label5 = new System.Windows.Forms.Label();
+			this.label27 = new System.Windows.Forms.Label();
+			this.textObservationDateTimeEnd = new System.Windows.Forms.TextBox();
 			this.groupBox4.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox5.SuspendLayout();
@@ -465,6 +469,21 @@
 			this.groupBox5.TabStop = false;
 			this.groupBox5.Text = "Ordering Provider";
 			// 
+			// butProvPicker
+			// 
+			this.butProvPicker.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butProvPicker.Autosize = true;
+			this.butProvPicker.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butProvPicker.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butProvPicker.CornerRadius = 4F;
+			this.butProvPicker.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butProvPicker.Location = new System.Drawing.Point(10, 15);
+			this.butProvPicker.Name = "butProvPicker";
+			this.butProvPicker.Size = new System.Drawing.Size(29, 25);
+			this.butProvPicker.TabIndex = 249;
+			this.butProvPicker.Text = "...";
+			this.butProvPicker.Click += new System.EventHandler(this.butProvPicker_Click);
+			// 
 			// comboOrderingProvIdType
 			// 
 			this.comboOrderingProvIdType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -782,6 +801,10 @@
 			// 
 			this.groupBox6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox6.Controls.Add(this.textObservationDateTimeStart);
+			this.groupBox6.Controls.Add(this.label5);
+			this.groupBox6.Controls.Add(this.label27);
+			this.groupBox6.Controls.Add(this.textObservationDateTimeEnd);
 			this.groupBox6.Controls.Add(this.butServicePicker);
 			this.groupBox6.Controls.Add(this.label44);
 			this.groupBox6.Controls.Add(this.textUsiCodeSystemNameAlt);
@@ -799,10 +822,25 @@
 			this.groupBox6.Controls.Add(this.textUsiIDAlt);
 			this.groupBox6.Location = new System.Drawing.Point(688, 35);
 			this.groupBox6.Name = "groupBox6";
-			this.groupBox6.Size = new System.Drawing.Size(274, 170);
+			this.groupBox6.Size = new System.Drawing.Size(274, 212);
 			this.groupBox6.TabIndex = 5;
 			this.groupBox6.TabStop = false;
 			this.groupBox6.Text = "Service Identifier (LOINC Codes)";
+			// 
+			// butServicePicker
+			// 
+			this.butServicePicker.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butServicePicker.Autosize = true;
+			this.butServicePicker.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butServicePicker.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butServicePicker.CornerRadius = 4F;
+			this.butServicePicker.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butServicePicker.Location = new System.Drawing.Point(6, 14);
+			this.butServicePicker.Name = "butServicePicker";
+			this.butServicePicker.Size = new System.Drawing.Size(29, 25);
+			this.butServicePicker.TabIndex = 255;
+			this.butServicePicker.Text = "...";
+			this.butServicePicker.Click += new System.EventHandler(this.butServicePicker_Click);
 			// 
 			// label44
 			// 
@@ -1041,7 +1079,7 @@
 			this.groupBox8.Controls.Add(this.label17);
 			this.groupBox8.Controls.Add(this.label18);
 			this.groupBox8.Controls.Add(this.textTQ1Stop);
-			this.groupBox8.Location = new System.Drawing.Point(688, 210);
+			this.groupBox8.Location = new System.Drawing.Point(688, 252);
 			this.groupBox8.Name = "groupBox8";
 			this.groupBox8.Size = new System.Drawing.Size(274, 59);
 			this.groupBox8.TabIndex = 262;
@@ -1174,36 +1212,6 @@
 			this.gridResultsCopyTo.Title = "Results Copy To";
 			this.gridResultsCopyTo.TranslationName = null;
 			// 
-			// butServicePicker
-			// 
-			this.butServicePicker.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butServicePicker.Autosize = true;
-			this.butServicePicker.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butServicePicker.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butServicePicker.CornerRadius = 4F;
-			this.butServicePicker.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butServicePicker.Location = new System.Drawing.Point(6, 14);
-			this.butServicePicker.Name = "butServicePicker";
-			this.butServicePicker.Size = new System.Drawing.Size(29, 25);
-			this.butServicePicker.TabIndex = 255;
-			this.butServicePicker.Text = "...";
-			this.butServicePicker.Click += new System.EventHandler(this.butServicePicker_Click);
-			// 
-			// butProvPicker
-			// 
-			this.butProvPicker.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butProvPicker.Autosize = true;
-			this.butProvPicker.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butProvPicker.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butProvPicker.CornerRadius = 4F;
-			this.butProvPicker.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butProvPicker.Location = new System.Drawing.Point(10, 15);
-			this.butProvPicker.Name = "butProvPicker";
-			this.butProvPicker.Size = new System.Drawing.Size(29, 25);
-			this.butProvPicker.TabIndex = 249;
-			this.butProvPicker.Text = "...";
-			this.butProvPicker.Click += new System.EventHandler(this.butProvPicker_Click);
-			// 
 			// butPatientPick
 			// 
 			this.butPatientPick.AdjustImageLocation = new System.Drawing.Point(0, 0);
@@ -1274,6 +1282,42 @@
 			this.gridMain.TranslationName = null;
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
+			// 
+			// textObservationDateTimeStart
+			// 
+			this.textObservationDateTimeStart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.textObservationDateTimeStart.Location = new System.Drawing.Point(134, 164);
+			this.textObservationDateTimeStart.Name = "textObservationDateTimeStart";
+			this.textObservationDateTimeStart.Size = new System.Drawing.Size(135, 20);
+			this.textObservationDateTimeStart.TabIndex = 264;
+			// 
+			// label5
+			// 
+			this.label5.Location = new System.Drawing.Point(6, 166);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(127, 17);
+			this.label5.TabIndex = 267;
+			this.label5.Text = "Date/Time Start";
+			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label27
+			// 
+			this.label27.Location = new System.Drawing.Point(6, 187);
+			this.label27.Name = "label27";
+			this.label27.Size = new System.Drawing.Size(127, 17);
+			this.label27.TabIndex = 266;
+			this.label27.Text = "Date/Time Stop";
+			this.label27.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textObservationDateTimeEnd
+			// 
+			this.textObservationDateTimeEnd.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.textObservationDateTimeEnd.Location = new System.Drawing.Point(134, 185);
+			this.textObservationDateTimeEnd.Name = "textObservationDateTimeEnd";
+			this.textObservationDateTimeEnd.Size = new System.Drawing.Size(135, 20);
+			this.textObservationDateTimeEnd.TabIndex = 265;
 			// 
 			// FormEhrLabOrderEdit2014
 			// 
@@ -1449,6 +1493,10 @@
 		private System.Windows.Forms.Button butManageImages;
 		private System.Windows.Forms.Label labelManageImages;
 		private System.Windows.Forms.CheckBox checkAutoID;
+		private System.Windows.Forms.TextBox textObservationDateTimeStart;
+		private System.Windows.Forms.Label label5;
+		private System.Windows.Forms.Label label27;
+		private System.Windows.Forms.TextBox textObservationDateTimeEnd;
 
 	}
 }

@@ -70,6 +70,8 @@ namespace OpenDental {
 			textResultDateTime.Text=EhrLab.formatDateFromHL7(EhrLabCur.ResultDateTime);
 			FillUsi();//Service Identifier
 			FillGrid();//LabResults
+			textObservationDateTimeStart.Text=EhrLab.formatDateFromHL7(EhrLabCur.ObservationDateTimeStart);
+			textObservationDateTimeEnd.Text=EhrLab.formatDateFromHL7(EhrLabCur.ObservationDateTimeEnd);
 			//TQ1
 			textTQ1Start.Text=EhrLab.formatDateFromHL7(EhrLabCur.TQ1DateTimeStart);
 			textTQ1Stop.Text=EhrLab.formatDateFromHL7(EhrLabCur.TQ1DateTimeEnd);
@@ -561,8 +563,8 @@ namespace OpenDental {
 			EhrLabCur.UsiTextAlt=textUsiTextAlt.Text;
 			EhrLabCur.UsiCodeSystemNameAlt=textUsiCodeSystemNameAlt.Text;
 			EhrLabCur.UsiTextOriginal=textUsiTextOriginal.Text;
-			//EhrLabCur.ObservationDateTimeStart=;//TODO: UI and Save
-			//EhrLabCur.ObservationDateTimeEnd=//TODO: UI and Save
+			EhrLabCur.ObservationDateTimeStart=EhrLab.formatDateToHL7(textObservationDateTimeStart.Text.Trim());
+			EhrLabCur.ObservationDateTimeEnd=EhrLab.formatDateToHL7(textObservationDateTimeEnd.Text.Trim());
 			EhrLabCur.SpecimenActionCode=((HL70065)comboSpecimenActionCode.SelectedIndex-1);
 			EhrLabCur.ResultDateTime=EhrLab.formatDateToHL7(textResultDateTime.Text.Trim());//upper right hand corner of form.
 			EhrLabCur.ResultStatus=((HL70123)comboResultStatus.SelectedIndex-1);
