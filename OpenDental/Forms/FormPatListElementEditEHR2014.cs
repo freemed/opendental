@@ -62,6 +62,7 @@ namespace OpenDental {
 			if(_listUCUM.Count==0) {
 				MsgBox.Show(this,"Units of measure have not been imported. Go to the code system importer window to import UCUM codes to continue.");
 				DialogResult=DialogResult.Cancel;
+				return;
 			}
 			int _tempSelectedIndex=0;
 			for(int i=0;i<_listUCUM.Count;i++) {
