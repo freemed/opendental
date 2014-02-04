@@ -2708,7 +2708,7 @@ namespace OpenDentBusiness{
 				#endregion
 				#region ClinicalSummaries
 				case EhrMeasureType.ClinicalSummaries:
-					command="SELECT patient.PatNum,LName,FName,ClinSum.summaryProvided,procedurelog.ProcDate as procDate "
+					command="SELECT patient.PatNum,LName,FName,MIN(ClinSum.summaryProvided) as summaryProvided,procedurelog.ProcDate as procDate "
 						+"FROM patient "
 						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
 						+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
@@ -2716,7 +2716,7 @@ namespace OpenDentBusiness{
 						+"LEFT JOIN (SELECT ehrmeasureevent.PatNum, ehrmeasureevent.DateTEvent as summaryProvided FROM ehrmeasureevent "
 						+"WHERE EventType="+POut.Int((int)EhrMeasureEventType.ClinicalSummaryProvidedToPt)+") "
 					  +"ClinSum ON patient.PatNum=ClinSum.PatNum "
-						+"GROUP BY patient.PatNum";
+						+"GROUP BY procedurelog.ProcNum";
 					tableRaw=Db.GetTable(command);
 					break;
 				#endregion

@@ -21,7 +21,7 @@ namespace OpenDental {
 		private void FormEhrCarePlanEdit_Load(object sender,EventArgs e) {
 			textDate.Text=_ehrCarePlan.DatePlanned.ToShortDateString();
 			_snomedGoal=null;
-			if(_ehrCarePlan.SnomedEducation!="") {//Blank if new
+			if(!String.IsNullOrEmpty(_ehrCarePlan.SnomedEducation)) {//Blank if new
 				_snomedGoal=Snomeds.GetByCode(_ehrCarePlan.SnomedEducation);
 				textSnomedGoal.Text=_snomedGoal.Description;
 			}
