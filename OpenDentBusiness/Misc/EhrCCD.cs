@@ -718,11 +718,8 @@ Encounters
 				End("tr");
 				End("thead");
 				Start("tbody");
-				Start("tr");
 				for(int i=0;i<listEncountersFiltered.Count;i++) {
-					if(i>0) {
-						Start("tr");
-					}
+					Start("tr");
 					if(listEncountersFiltered[i].ProvNum==0) {
 						_w.WriteElementString("td","");
 					}
@@ -741,11 +738,8 @@ Encounters
 						DateText("td",listEncountersFiltered[i].DateEncounter);
 					}
 					_w.WriteElementString("td",listEncountersFiltered[i].Note);
-					if(i>0) {
-						End("tr");
-					}
+					End("tr");
 				}
-				End("tr");
 				End("tbody");
 				End("table");
 			}
@@ -1969,7 +1963,8 @@ Laboratory Test Results
 					StartAndEnd("code","code",listLabResultFiltered[i].ObservationIdentifierID,"displayName",listLabResultFiltered[i].ObservationIdentifierText,"codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc);
 				}
 				StartAndEnd("statusCode","code","completed");//Allowed values: aborted, active, cancelled, completed, held, or suspended.
-				if(String.Compare(Regex.Match("input string",@"^\d{0,4}").Value.PadLeft(4,'0'),"1880")!=-1) {
+				DateTime dateTimeEffective=DateTimeFromString(listLabResultFiltered[i].ObservationDateTime);
+				if(dateTimeEffective.Year<1880) {
 					StartAndEnd("effectiveTime","nullFlavor","UNK");
 				}
 				else {
@@ -2260,6 +2255,8 @@ Vital Signs
 				GenerateCcdVitalSign("39156-5",vitalsign.DateTaken,bmi,"lbs/in");//BMI
 				GenerateCcdVitalSign("8480-6",vitalsign.DateTaken,vitalsign.BpSystolic,"mmHg");//Blood Pressure Systolic
 				GenerateCcdVitalSign("8462-4",vitalsign.DateTaken,vitalsign.BpDiastolic,"mmHg");//Blood Pressure Diastolic
+				End("organizer");
+				End("entry");
 			}
 			End("section");
 			End("component");
@@ -2717,6 +2714,9 @@ Vital Signs
 		}
 
 		private static DateTime DateTimeFromString(string strDateTime) {
+			if(strDateTime==null) {
+				return DateTime.MinValue;
+			}
 			string strDateTimeFormat="";
 			if(strDateTime.Length==19) {
 				strDateTimeFormat="yyyyMMddHHmmsszzz";
