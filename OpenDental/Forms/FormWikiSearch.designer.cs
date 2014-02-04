@@ -23,6 +23,7 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+			this.components = new System.ComponentModel.Container();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.label1 = new System.Windows.Forms.Label();
 			this.textSearch = new System.Windows.Forms.TextBox();
@@ -32,6 +33,7 @@ namespace OpenDental{
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butRestore = new OpenDental.UI.Button();
+			this.timer1 = new System.Windows.Forms.Timer(this.components);
 			this.SuspendLayout();
 			// 
 			// gridMain
@@ -148,6 +150,11 @@ namespace OpenDental{
 			this.butRestore.Text = "Restore";
 			this.butRestore.Click += new System.EventHandler(this.butRestore_Click);
 			// 
+			// timer1
+			// 
+			this.timer1.Interval = 500;
+			this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+			// 
 			// FormWikiSearch
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -181,5 +188,6 @@ namespace OpenDental{
 		private System.Windows.Forms.CheckBox checkIgnoreContent;
 		private System.Windows.Forms.CheckBox checkDeletedOnly;
 		private UI.Button butRestore;
+		private System.Windows.Forms.Timer timer1;
 	}
 }

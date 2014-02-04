@@ -79,7 +79,9 @@ namespace OpenDental {
 		}
 
 		private void textSearch_TextChanged(object sender,EventArgs e) {
-			FillGrid();
+			//FillGrid();
+			timer1.Stop();
+			timer1.Start();
 		}
 
 		private void checkIgnoreContent_CheckedChanged(object sender,EventArgs e) {
@@ -108,6 +110,11 @@ namespace OpenDental {
 			wikiPageRestored.UserNum=Security.CurUser.UserNum;
 			WikiPages.InsertAndArchive(wikiPageRestored);
 			DialogResult=DialogResult.OK;
+		}
+
+		private void timer1_Tick(object sender,EventArgs e) {
+			timer1.Stop();
+			FillGrid();
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
