@@ -43,6 +43,7 @@ namespace OpenDentBusiness{
 
 		/// <summary>If the CodeValue of the EhrCode exists in its respective code table (I.e. Snomed, Loinc, Cpt, etc.) this will set IsInDb=true otherwise false.</summary>
 		private static void updateCodeExistsHelper() {
+			//No need to check RemotingRole; no call to db.
 			if(listt.Count==0){
 				return;
 			}

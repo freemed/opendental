@@ -1789,7 +1789,7 @@ namespace OpenDental{
 				ContrChart2.InitializeOnStartup();
 				//MsgBox.Show(this,"Done optimizing tooth chart graphics.");
 			}
-			if(ODEnvironment.IsRunningOnDbServer(DataConnection.GetServerName()) && PrefC.GetBool(PrefName.ShowFeatureEhr)) {//OpenDental has EHR enabled and is running on the same machine as the mysql server it is connected to.*/
+			if(ODEnvironment.IsRunningOnDbServer(MiscData.GetODServer()) && PrefC.GetBool(PrefName.ShowFeatureEhr)) {//OpenDental has EHR enabled and is running on the same machine as the mysql server it is connected to.*/
 				_threadTimeSynch=new Thread(new ThreadStart(ThreadTimeSynch_Synch));
 				_threadTimeSynch.Start();
 			}

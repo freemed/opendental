@@ -8,13 +8,15 @@ using System.Text;
 using CodeBase;
 
 namespace OpenDentBusiness{
-	///<summary></summary>
+	///<summary>Import functions in this class should typically be called from a worker thread.</summary>
 	public class CodeSystems{
+
+		public delegate void ProgressArgs(int numTotal,int numDone);
 
 		///<summary>Returns a list of code systems in the code system table.  This query will change from version to version depending on what code systems we have available.</summary>
 		public static List<CodeSystem> GetForCurrentVersion(bool IsMemberNation) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<CodeSystem>>(MethodBase.GetCurrentMethod());
+				return Meth.GetObject<List<CodeSystem>>(MethodBase.GetCurrentMethod(),IsMemberNation);
 			}
 			//string command="SELECT * FROM codesystem WHERE CodeSystemName!='AdministrativeSex' AND CodeSystemName!='CDT'";
 #if DEBUG
@@ -58,8 +60,8 @@ namespace OpenDentBusiness{
 		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
 	//public static void ImportAdministrativeSex(string tempFileName) ... not necessary.
 
-		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
-		public static void ImportCdcrec(string tempFileName) {
+		///<summary>Called after file is downloaded.  Throws exceptions.  It is assumed that this is called from a worker thread.  Progress delegate will be called every 100th iteration to inform thread of current progress. Quit flag can be set at any time in order to quit importing prematurely.</summary>
+		public static void ImportCdcrec(string tempFileName,ProgressArgs progress,ref bool quit) {
 			if(tempFileName==null) {
 				return;
 			}
@@ -68,6 +70,12 @@ namespace OpenDentBusiness{
 			string[] arrayCDCREC;
 			Cdcrec cdcrec=new Cdcrec();
 			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
+				if(quit) {
+					return;
+				}
+				if(i%100==0) {
+					progress(i+1,lines.Length);
+				}
 				arrayCDCREC=lines[i].Split('\t');
 				if(codeHash.Contains(arrayCDCREC[0])) {//code already existed
 					continue;
@@ -77,14 +85,13 @@ namespace OpenDentBusiness{
 				cdcrec.Description			=arrayCDCREC[2];
 				Cdcrecs.Insert(cdcrec);
 			}
-			File.Delete(tempFileName);
 		}
 
 		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
 	//public static void ImportCDT(string tempFileName) ... not necessary.
 
-		///<summary>Called after user provides resource file.  Throws exceptions.</summary>
-		public static void ImportCpt(string tempFileName) {
+		///<summary>Called after user provides resource file.  Throws exceptions.  It is assumed that this is called from a worker thread.  Progress delegate will be called every 100th iteration to inform thread of current progress. Quit flag can be set at any time in order to quit importing prematurely.</summary>
+		public static void ImportCpt(string tempFileName,ProgressArgs progress,ref bool quit) {
 			if(tempFileName==null) {
 				return;
 			}
@@ -94,6 +101,12 @@ namespace OpenDentBusiness{
 			bool isHeader=true;
 			Cpt cpt=new Cpt();
 			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
+				if(quit) {
+					return;
+				}
+				if(i%100==0) {
+					progress(i+1,lines.Length);
+				}
 				if(isHeader) {
 					if(!lines[i].Contains("\t")) {
 						continue;//Copyright info is present at the head of the file.
@@ -108,11 +121,10 @@ namespace OpenDentBusiness{
 				cpt.Description	=arrayCpt[1];
 				Cpts.Insert(cpt);
 			}
-			//File.Delete(tempFileName);
 		}
 
-		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
-		public static void ImportCvx(string tempFileName) {
+		///<summary>Called after file is downloaded.  Throws exceptions.  It is assumed that this is called from a worker thread.  Progress delegate will be called every 100th iteration to inform thread of current progress. Quit flag can be set at any time in order to quit importing prematurely.</summary>
+		public static void ImportCvx(string tempFileName,ProgressArgs progress,ref bool quit) {
 			if(tempFileName==null) {
 				return;
 			}
@@ -121,6 +133,12 @@ namespace OpenDentBusiness{
 			string[] arrayCvx;
 			Cvx cvx=new Cvx();
 			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
+				if(quit) {
+					return;
+				}
+				if(i%100==0) {
+					progress(i+1,lines.Length);
+				}
 				arrayCvx=lines[i].Split('\t');
 				if(codeHash.Contains(arrayCvx[0])) {//code already exists
 					continue;
@@ -129,11 +147,10 @@ namespace OpenDentBusiness{
 				cvx.Description	=arrayCvx[1];
 				Cvxs.Insert(cvx);
 			}
-			File.Delete(tempFileName);
 		}
 
-		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
-		public static void ImportHcpcs(string tempFileName) {
+		///<summary>Called after file is downloaded.  Throws exceptions.  It is assumed that this is called from a worker thread.  Progress delegate will be called every 100th iteration to inform thread of current progress. Quit flag can be set at any time in order to quit importing prematurely.</summary>
+		public static void ImportHcpcs(string tempFileName,ProgressArgs progress,ref bool quit) {
 			if(tempFileName==null) {
 				return;
 			}
@@ -142,6 +159,12 @@ namespace OpenDentBusiness{
 			string[] arrayHCPCS;
 			Hcpcs hcpcs=new Hcpcs();
 			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
+				if(quit) {
+					return;
+				}
+				if(i%100==0) {
+					progress(i+1,lines.Length);
+				}
 				arrayHCPCS=lines[i].Split('\t');
 				if(codeHash.Contains(arrayHCPCS[0])) {//code already exists
 					continue;
@@ -150,11 +173,10 @@ namespace OpenDentBusiness{
 				hcpcs.DescriptionShort	=arrayHCPCS[1];
 				Hcpcses.Insert(hcpcs);
 			}
-			File.Delete(tempFileName);
 		}
 
-		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
-		public static void ImportIcd10(string tempFileName) {
+		///<summary>Called after file is downloaded.  Throws exceptions.  It is assumed that this is called from a worker thread.  Progress delegate will be called every 100th iteration to inform thread of current progress. Quit flag can be set at any time in order to quit importing prematurely.</summary>
+		public static void ImportIcd10(string tempFileName,ProgressArgs progress,ref bool quit) {
 			if(tempFileName==null) {
 				return;
 			}
@@ -163,6 +185,12 @@ namespace OpenDentBusiness{
 			string[] arrayICD10;
 			Icd10 icd10=new Icd10();
 			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
+				if(quit) {
+					return;
+				}
+				if(i%100==0) {
+					progress(i+1,lines.Length);
+				}
 				arrayICD10=lines[i].Split('\t');
 				if(codeHash.Contains(arrayICD10[0])) {//code already exists
 					continue;
@@ -172,11 +200,10 @@ namespace OpenDentBusiness{
 				icd10.IsCode			=arrayICD10[2];
 				Icd10s.Insert(icd10);
 			}
-			File.Delete(tempFileName);
 		}
 
-		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
-		public static void ImportIcd9(string tempFileName) {
+		///<summary>Called after file is downloaded.  Throws exceptions.  It is assumed that this is called from a worker thread.  Progress delegate will be called every 100th iteration to inform thread of current progress. Quit flag can be set at any time in order to quit importing prematurely.</summary>
+		public static void ImportIcd9(string tempFileName,ProgressArgs progress,ref bool quit) {
 			if(tempFileName==null) {
 				return;
 			}
@@ -187,6 +214,12 @@ namespace OpenDentBusiness{
 			string[] arrayICD9;
 			ICD9 icd9=new ICD9();
 			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
+				if(quit) {
+					return;
+				}
+				if(i%100==0) {
+					progress(i+1,lines.Length);
+				}
 				arrayICD9=lines[i].Split('\t');
 				if(codeHash.Contains(arrayICD9[0])) {//code already exists
 					if(!IsOldDescriptions) {
@@ -200,11 +233,10 @@ namespace OpenDentBusiness{
 				icd9.Description=arrayICD9[1];
 				ICD9s.Insert(icd9);
 			}
-			File.Delete(tempFileName);
 		}
 
-		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
-		public static void ImportLoinc(string tempFileName) {
+		///<summary>Called after file is downloaded.  Throws exceptions.  It is assumed that this is called from a worker thread.  Progress delegate will be called every 100th iteration to inform thread of current progress. Quit flag can be set at any time in order to quit importing prematurely.</summary>
+		public static void ImportLoinc(string tempFileName,ProgressArgs progress,ref bool quit) {
 			if(tempFileName==null) {
 				return;
 			}
@@ -213,6 +245,12 @@ namespace OpenDentBusiness{
 			string[] arrayLoinc;
 			Loinc loinc=new Loinc();
 			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
+				if(quit) {
+					return;
+				}
+				if(i%100==0) {
+					progress(i+1,lines.Length);
+				}
 				arrayLoinc=lines[i].Split('\t');
 				if(codeHash.Contains(arrayLoinc[0])) {//code already exists
 					continue;
@@ -237,11 +275,10 @@ namespace OpenDentBusiness{
 				loinc.RankCommonOrders				=PIn.Int(arrayLoinc[17]);
 				Loincs.Insert(loinc);
 			}
-			File.Delete(tempFileName);
 		}
 
-		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
-		public static void ImportRxNorm(string tempFileName) {
+		///<summary>Called after file is downloaded.  Throws exceptions.  It is assumed that this is called from a worker thread.  Progress delegate will be called every 100th iteration to inform thread of current progress. Quit flag can be set at any time in order to quit importing prematurely.</summary>
+		public static void ImportRxNorm(string tempFileName,ProgressArgs progress,ref bool quit) {
 			if(tempFileName==null) {
 				return;
 			}
@@ -250,6 +287,12 @@ namespace OpenDentBusiness{
 			string[] arrayRxNorm;
 			RxNorm rxNorm=new RxNorm();
 			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
+				if(quit) {
+					return;
+				}
+				if(i%100==0) {
+					progress(i+1,lines.Length);
+				}
 				arrayRxNorm=lines[i].Split('\t');
 				if(codeHash.Contains(arrayRxNorm[0])) {//code already exists
 					continue;
@@ -259,11 +302,10 @@ namespace OpenDentBusiness{
 				rxNorm.Description	=arrayRxNorm[2];
 				RxNorms.Insert(rxNorm);
 			}
-			File.Delete(tempFileName);
 		}
 
-		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
-		public static void ImportSnomed(string tempFileName) {
+		///<summary>Called after file is downloaded.  Throws exceptions.  It is assumed that this is called from a worker thread.  Progress delegate will be called every 100th iteration to inform thread of current progress. Quit flag can be set at any time in order to quit importing prematurely.</summary>
+		public static void ImportSnomed(string tempFileName,ProgressArgs progress,ref bool quit) {
 			if(tempFileName==null) {
 				return;
 			}
@@ -272,6 +314,12 @@ namespace OpenDentBusiness{
 			string[] arraySnomed;
 			Snomed snomed=new Snomed();
 			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
+				if(quit) {
+					return;
+				}
+				if(i%100==0) {
+					progress(i+1,lines.Length);
+				}
 				arraySnomed=lines[i].Split('\t');
 				if(codeHash.Contains(arraySnomed[0])) {//code already exists
 					continue;
@@ -280,11 +328,10 @@ namespace OpenDentBusiness{
 				snomed.Description	=arraySnomed[1];
 				Snomeds.Insert(snomed);
 			}
-			File.Delete(tempFileName);
 		}
 
-		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
-		public static void ImportSop(string tempFileName) {
+		///<summary>Called after file is downloaded.  Throws exceptions.  It is assumed that this is called from a worker thread.  Progress delegate will be called every 100th iteration to inform thread of current progress. Quit flag can be set at any time in order to quit importing prematurely.</summary>
+		public static void ImportSop(string tempFileName,ProgressArgs progress,ref bool quit) {
 			if(tempFileName==null) {
 				return;
 			}
@@ -293,6 +340,12 @@ namespace OpenDentBusiness{
 			string[] arraySop;
 			Sop sop=new Sop();
 			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
+				if(quit) {
+					return;
+				}
+				if(i%100==0) {
+					progress(i+1,lines.Length);
+				}
 				arraySop=lines[i].Split('\t');
 				if(codeHash.Contains(arraySop[0])) {//code already exists
 					continue;
@@ -301,11 +354,10 @@ namespace OpenDentBusiness{
 				sop.Description	=arraySop[1];
 				Sops.Insert(sop);
 			}
-			File.Delete(tempFileName);
 		}
 
-		///<summary>Called after file is downloaded.  Throws exceptions.</summary>
-		public static void ImportUcum(string tempFileName) {
+		///<summary>Called after file is downloaded.  Throws exceptions.  It is assumed that this is called from a worker thread.  Progress delegate will be called every 100th iteration to inform thread of current progress. Quit flag can be set at any time in order to quit importing prematurely.</summary>
+		public static void ImportUcum(string tempFileName,ProgressArgs progress,ref bool quit) {
 			if(tempFileName==null) {
 				return;
 			}
@@ -314,6 +366,12 @@ namespace OpenDentBusiness{
 			string[] arrayUcum;
 			Ucum ucum=new Ucum();
 			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
+				if(quit) {
+					return;
+				}
+				if(i%100==0) {
+					progress(i+1,lines.Length);
+				}
 				arrayUcum=lines[i].Split('\t');
 				if(codeHash.Contains(arrayUcum[0])) {//code already exists
 					continue;
@@ -323,7 +381,6 @@ namespace OpenDentBusiness{
 				ucum.IsInUse			=false;
 				Ucums.Insert(ucum);
 			}
-			File.Delete(tempFileName);
 		}
 
 		///<summary>Returns number of codes imported.</summary>
@@ -389,7 +446,6 @@ namespace OpenDentBusiness{
 //				EhrCodes.Insert(ehrc);
 //				newCodeCount++;//return value
 //			}
-//			File.Delete(tempFile);
 //			totalCodeCount=ehrCodeHash.Count+newCodeCount;//return value
 //			availableCodeCount=lines.Length;//return value
 //		}
