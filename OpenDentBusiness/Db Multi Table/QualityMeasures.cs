@@ -6178,6 +6178,7 @@ BMI 18.5-25.";
 						//this list of unique item ids is used when building the plain text version so that the encounter/procedure/item will only be in the plain text version once
 						//we will add the item to the entries multiple times since the item can belong to different value sets
 						//and must have the value set specific to the measure for which it qualifies the patient
+						List<string> listUniqueItemExtensionsWithValueSetOIDs=new List<string>();
 						List<string> listUniqueItemExtensions=new List<string>();
 						//create encounter entries for each measure for this patient
 						#region encounters
@@ -6187,11 +6188,17 @@ BMI 18.5-25.";
 							}
 							for(int k=0;k<listQMsCur[j].DictPatNumListEncounters[patNumCur].Count;k++) {
 								EhrCqmEncounter encCur=listQMsCur[j].DictPatNumListEncounters[patNumCur][k];
-								GenerateEncounterEntry(encCur);
-								if(listUniqueItemExtensions.Contains(CqmItemAbbreviation.Enc.ToString()+encCur.EhrCqmEncounterNum.ToString())) {
+								//if in this list with ValueSetOID, then it must be in the non-ValueSetOID list, so just continue
+								string extensCur=CqmItemAbbreviation.Enc.ToString()+encCur.ValueSetOID+"Num"+encCur.EhrCqmEncounterNum.ToString();
+								if(!listUniqueItemExtensionsWithValueSetOIDs.Contains(extensCur)) {
+									listUniqueItemExtensionsWithValueSetOIDs.Add(extensCur);
+									GenerateEncounterEntry(encCur);
+								}
+								extensCur=CqmItemAbbreviation.Enc.ToString()+encCur.EhrCqmEncounterNum.ToString();
+								if(listUniqueItemExtensions.Contains(extensCur)) {
 									continue;
 								}
-								listUniqueItemExtensions.Add(CqmItemAbbreviation.Enc.ToString()+encCur.EhrCqmEncounterNum.ToString());
+								listUniqueItemExtensions.Add(extensCur);
 								#region BuildPlainTextVersion
 								string descript="Encounter, Performed: "+encCur.ValueSetName;
 								PatientDataTextTableRow(descript,encCur.ValueSetOID,encCur.CodeSystemName,encCur.CodeValue,encCur.DateEncounter,encCur.DateEncounter,"");
@@ -6207,11 +6214,16 @@ BMI 18.5-25.";
 							}
 							for(int k=0;k<listQMsCur[j].DictPatNumListInterventions[patNumCur].Count;k++) {
 								EhrCqmIntervention iCur=listQMsCur[j].DictPatNumListInterventions[patNumCur][k];
-								GenerateInterventionEntry(iCur);
-								if(listUniqueItemExtensions.Contains(CqmItemAbbreviation.Ivn.ToString()+iCur.EhrCqmInterventionNum.ToString())) {
+								string extensCur=CqmItemAbbreviation.Ivn.ToString()+iCur.ValueSetOID+"Num"+iCur.EhrCqmInterventionNum.ToString();
+								if(!listUniqueItemExtensionsWithValueSetOIDs.Contains(extensCur)) {
+									listUniqueItemExtensionsWithValueSetOIDs.Add(extensCur);
+									GenerateInterventionEntry(iCur);
+								}
+								extensCur=CqmItemAbbreviation.Ivn.ToString()+iCur.EhrCqmInterventionNum.ToString();
+								if(listUniqueItemExtensions.Contains(extensCur)) {
 									continue;
 								}
-								listUniqueItemExtensions.Add(CqmItemAbbreviation.Ivn.ToString()+iCur.EhrCqmInterventionNum.ToString());
+								listUniqueItemExtensions.Add(extensCur);
 								#region BuildPlainTextVersion
 								string descript="";
 								if(listQMsCur[j].Type2014==QualityType2014.WeightAdult || listQMsCur[j].Type2014==QualityType2014.WeightOver65) {//interventions in these two measures are ordered
@@ -6234,11 +6246,16 @@ BMI 18.5-25.";
 							}
 							for(int k=0;k<listQMsCur[j].DictPatNumListMeasureEvents[patNumCur].Count;k++) {
 								EhrCqmMeasEvent mCur=listQMsCur[j].DictPatNumListMeasureEvents[patNumCur][k];
-								GenerateMeasEventEntry(mCur);
-								if(listUniqueItemExtensions.Contains(CqmItemAbbreviation.MeasEvn.ToString()+mCur.EhrCqmMeasEventNum.ToString())) {
+								string extensCur=CqmItemAbbreviation.MeasEvn.ToString()+mCur.ValueSetOID+"Num"+mCur.EhrCqmMeasEventNum.ToString();
+								if(!listUniqueItemExtensionsWithValueSetOIDs.Contains(extensCur)) {
+									listUniqueItemExtensionsWithValueSetOIDs.Add(extensCur);
+									GenerateMeasEventEntry(mCur);
+								}
+								extensCur=CqmItemAbbreviation.MeasEvn.ToString()+mCur.EhrCqmMeasEventNum.ToString();
+								if(listUniqueItemExtensions.Contains(extensCur)) {
 									continue;
 								}
-								listUniqueItemExtensions.Add(CqmItemAbbreviation.Enc.ToString()+mCur.EhrCqmMeasEventNum.ToString());
+								listUniqueItemExtensions.Add(extensCur);
 								#region BuildPlainTextVersion
 								string descript="";
 								if(mCur.EventType==EhrMeasureEventType.TobaccoUseAssessed) {
@@ -6262,8 +6279,18 @@ BMI 18.5-25.";
 							}
 							for(int k=0;k<listQMsCur[j].DictPatNumListMedPats[patNumCur].Count;k++) {
 								EhrCqmMedicationPat mPatCur=listQMsCur[j].DictPatNumListMedPats[patNumCur][k];
-								GenerateMedPatsEntry(mPatCur);
-								string extensCur=CqmItemAbbreviation.MedPat.ToString();
+								string extensCur=CqmItemAbbreviation.MedPat.ToString()+mPatCur.ValueSetOID+"Num";								
+								if(mPatCur.EhrCqmMedicationPatNum!=0) {
+									extensCur+=mPatCur.EhrCqmMedicationPatNum.ToString();
+								}
+								else {
+									extensCur+=mPatCur.EhrCqmVaccinePatNum.ToString();
+								}
+								if(!listUniqueItemExtensionsWithValueSetOIDs.Contains(extensCur)) {
+									listUniqueItemExtensionsWithValueSetOIDs.Add(extensCur);
+									GenerateMedPatsEntry(mPatCur);
+								}
+								extensCur=CqmItemAbbreviation.MedPat.ToString();	
 								if(mPatCur.EhrCqmMedicationPatNum!=0) {
 									extensCur+=mPatCur.EhrCqmMedicationPatNum.ToString();
 								}
@@ -6319,11 +6346,16 @@ BMI 18.5-25.";
 							}
 							for(int k=0;k<listQMsCur[j].DictPatNumListNotPerfs[patNumCur].Count;k++) {
 								EhrCqmNotPerf npCur=listQMsCur[j].DictPatNumListNotPerfs[patNumCur][k];
-								GenerateNotPerfEntry(npCur);
-								if(listUniqueItemExtensions.Contains(CqmItemAbbreviation.NotPerf.ToString()+npCur.EhrCqmNotPerfNum.ToString())) {
+								string extensCur=CqmItemAbbreviation.NotPerf.ToString()+npCur.ValueSetOID+"Num"+npCur.EhrCqmNotPerfNum.ToString();
+								if(!listUniqueItemExtensionsWithValueSetOIDs.Contains(extensCur)) {
+									listUniqueItemExtensionsWithValueSetOIDs.Add(extensCur);
+									GenerateNotPerfEntry(npCur);
+								}
+								extensCur=CqmItemAbbreviation.NotPerf.ToString()+npCur.EhrCqmNotPerfNum.ToString();
+								if(listUniqueItemExtensions.Contains(extensCur)) {
 									continue;
 								}
-								listUniqueItemExtensions.Add(CqmItemAbbreviation.NotPerf.ToString()+npCur.EhrCqmNotPerfNum.ToString());
+								listUniqueItemExtensionsWithValueSetOIDs.Add(extensCur);
 								#region BuildPlainTextVersion
 								string descript="";
 								if(npCur.ValueSetOID=="2.16.840.1.113883.3.526.3.1254") {
@@ -6356,24 +6388,29 @@ BMI 18.5-25.";
 							}
 							for(int k=0;k<listQMsCur[j].DictPatNumListProblems[patNumCur].Count;k++) {
 								EhrCqmProblem probCur=listQMsCur[j].DictPatNumListProblems[patNumCur][k];
-								switch(probCur.ValueSetOID) {
-									case "2.16.840.1.113883.3.526.3.1255":
-										GenerateCommunicationEntry(probCur);
-										break;
-									case "2.16.840.1.113883.3.464.1003.110.12.1028":
-										GenerateRiskAssessEntry(probCur);
-										break;
-									case "2.16.840.1.113883.3.600.1.1579":
-										GenerateProcedureEntry(null,probCur);
-										break;
-									default:
-										GenerateDiagnosisEntry(probCur);
-										break;
+								string extensCur=CqmItemAbbreviation.Prob.ToString()+probCur.ValueSetOID+"Num"+probCur.EhrCqmProblemNum.ToString();
+								if(!listUniqueItemExtensionsWithValueSetOIDs.Contains(extensCur)) {
+									listUniqueItemExtensionsWithValueSetOIDs.Add(extensCur);
+									switch(probCur.ValueSetOID) {
+										case "2.16.840.1.113883.3.526.3.1255":
+											GenerateCommunicationEntry(probCur);
+											break;
+										case "2.16.840.1.113883.3.464.1003.110.12.1028":
+											GenerateRiskAssessEntry(probCur);
+											break;
+										case "2.16.840.1.113883.3.600.1.1579":
+											GenerateProcedureEntry(null,probCur);
+											break;
+										default:
+											GenerateDiagnosisEntry(probCur);
+											break;
+									}
 								}
-								if(listUniqueItemExtensions.Contains(CqmItemAbbreviation.Prob.ToString()+probCur.EhrCqmProblemNum.ToString())) {
+								extensCur=CqmItemAbbreviation.Prob.ToString()+probCur.EhrCqmProblemNum.ToString();
+								if(listUniqueItemExtensions.Contains(extensCur)) {
 									continue;
 								}
-								listUniqueItemExtensions.Add(CqmItemAbbreviation.Prob.ToString()+probCur.EhrCqmProblemNum.ToString());
+								listUniqueItemExtensions.Add(extensCur);
 								#region BuildPlainTextVersion
 								string descript="";
 								switch(probCur.ValueSetOID) {
@@ -6404,11 +6441,16 @@ BMI 18.5-25.";
 							}
 							for(int k=0;k<listQMsCur[j].DictPatNumListProcs[patNumCur].Count;k++) {
 								EhrCqmProc procCur=listQMsCur[j].DictPatNumListProcs[patNumCur][k];
-								GenerateProcedureEntry(procCur,null);
-								if(listUniqueItemExtensions.Contains(CqmItemAbbreviation.Proc.ToString()+procCur.EhrCqmProcNum.ToString())) {
+								string extensCur=CqmItemAbbreviation.Proc.ToString()+procCur.ValueSetOID+"Num"+procCur.EhrCqmProcNum.ToString();
+								if(!listUniqueItemExtensionsWithValueSetOIDs.Contains(extensCur)) {
+									listUniqueItemExtensionsWithValueSetOIDs.Add(extensCur);
+									GenerateProcedureEntry(procCur,null);
+								}
+								extensCur=CqmItemAbbreviation.Proc.ToString()+procCur.EhrCqmProcNum.ToString();
+								if(listUniqueItemExtensions.Contains(extensCur)) {
 									continue;
 								}
-								listUniqueItemExtensions.Add(CqmItemAbbreviation.Proc.ToString()+procCur.EhrCqmProcNum.ToString());
+								listUniqueItemExtensions.Add(extensCur);
 								#region BuildPlainTextVersion
 								string descript="Procedure, Performed: "+procCur.ValueSetName+" - "+procCur.Description;
 								PatientDataTextTableRow(descript,procCur.ValueSetOID,procCur.CodeSystemName,procCur.ProcCode,procCur.ProcDate,procCur.ProcDate,"");
@@ -6424,24 +6466,46 @@ BMI 18.5-25.";
 							}
 							for(int k=0;k<listQMsCur[j].DictPatNumListVitalsigns[patNumCur].Count;k++) {
 								EhrCqmVitalsign vCur=listQMsCur[j].DictPatNumListVitalsigns[patNumCur][k];
+								string extensCur="";
 								if(vCur.BpDiastolic>0) {
-									GenerateVitalsignEntry(vCur,"BPd");
+									extensCur=CqmItemAbbreviation.Vital.ToString()+"2.16.840.1.113883.3.526.3.1033"+"Num"+vCur.EhrCqmVitalsignNum.ToString();
+									if(!listUniqueItemExtensionsWithValueSetOIDs.Contains(extensCur)) {
+										listUniqueItemExtensionsWithValueSetOIDs.Add(extensCur);
+										GenerateVitalsignEntry(vCur,"BPd");
+									}
 								}
 								if(vCur.BpSystolic>0) {
-									GenerateVitalsignEntry(vCur,"BPs");
+									extensCur=CqmItemAbbreviation.Vital.ToString()+"2.16.840.1.113883.3.526.3.1032"+"Num"+vCur.EhrCqmVitalsignNum.ToString();
+									if(!listUniqueItemExtensionsWithValueSetOIDs.Contains(extensCur)) {
+										listUniqueItemExtensionsWithValueSetOIDs.Add(extensCur);
+										GenerateVitalsignEntry(vCur,"BPs");
+									}
 								}
 								if(vCur.BMI>0) {
-									GenerateVitalsignEntry(vCur,"Ht");
-									GenerateVitalsignEntry(vCur,"Wt");
-									GenerateVitalsignEntry(vCur,"BMI");
+									extensCur=CqmItemAbbreviation.Vital.ToString()+"2.16.840.1.113883.3.464.1003.121.12.1014"+"Num"+vCur.EhrCqmVitalsignNum.ToString();
+									if(!listUniqueItemExtensionsWithValueSetOIDs.Contains(extensCur)) {
+										listUniqueItemExtensionsWithValueSetOIDs.Add(extensCur);
+										GenerateVitalsignEntry(vCur,"Ht");
+									}
+									extensCur=CqmItemAbbreviation.Vital.ToString()+"2.16.840.1.113883.3.464.1003.121.12.1015"+"Num"+vCur.EhrCqmVitalsignNum.ToString();
+									if(!listUniqueItemExtensionsWithValueSetOIDs.Contains(extensCur)) {
+										listUniqueItemExtensionsWithValueSetOIDs.Add(extensCur);
+										GenerateVitalsignEntry(vCur,"Wt");
+									}
+									extensCur=CqmItemAbbreviation.Vital.ToString()+"2.16.840.1.113883.3.600.1.681"+vCur.EhrCqmVitalsignNum.ToString();
+									if(!listUniqueItemExtensionsWithValueSetOIDs.Contains(extensCur)) {
+										listUniqueItemExtensionsWithValueSetOIDs.Add(extensCur);
+										GenerateVitalsignEntry(vCur,"BMI");
+									}
 								}
 								//if(vCur.BMIPercentile>-1) {
 								//	GenerateVitalsignEntry(vCur,"BMIp");
 								//}
-								if(listUniqueItemExtensions.Contains(CqmItemAbbreviation.Vital.ToString()+vCur.EhrCqmVitalsignNum.ToString())) {
+								extensCur=CqmItemAbbreviation.Vital.ToString()+vCur.EhrCqmVitalsignNum.ToString();
+								if(listUniqueItemExtensions.Contains(extensCur)) {
 									continue;
 								}
-								listUniqueItemExtensions.Add(CqmItemAbbreviation.Vital.ToString()+vCur.EhrCqmVitalsignNum.ToString());
+								listUniqueItemExtensions.Add(extensCur);
 								#region BuildPlainTextVersion
 								string descript="";
 								if(vCur.BpDiastolic>0) {
