@@ -1298,6 +1298,14 @@ namespace OpenDentBusiness.HL7 {
 							WriteError(sb,"Observation value is '"+vaccineObs.ValReported+"'.  Must be a valid date for vaccine '"+vaccineName+"'");
 						}
 					}
+					else if(vaccineObs.ValType==VaccineObsType.DateAndTime) {
+						try {
+							DateTime.Parse(vaccineObs.ValReported);
+						}
+						catch(Exception) {
+							WriteError(sb,"Observation value is '"+vaccineObs.ValReported+"'.  Must be a valid date and time for vaccine '"+vaccineName+"'");
+						}
+					}
 					else if(vaccineObs.ValType==VaccineObsType.Numeric) {
 						try {
 							double.Parse(vaccineObs.ValReported);
