@@ -94,10 +94,10 @@ namespace OpenDental {
 			textStructNumSecond.Text		=EhrLabResultCur.ObservationValueNumber2.ToString();
 			#endregion
 			#region Unit of Measure
-			textObsCodeSystem.Text		=EhrLabResultCur.UnitsCodeSystemName;
+			textObsUnitsCodeSystem.Text		=EhrLabResultCur.UnitsCodeSystemName;
 			textObsUnitsID.Text				=EhrLabResultCur.UnitsID;
 			textObsUnitsText.Text			=EhrLabResultCur.UnitsText;
-			textObsCodeSystemAlt.Text	=EhrLabResultCur.UnitsCodeSystemNameAlt;
+			textObsUnitsCodeSystemAlt.Text	=EhrLabResultCur.UnitsCodeSystemNameAlt;
 			textObsUnitsIDAlt.Text		=EhrLabResultCur.UnitsIDAlt;
 			textObsUnitsTextAlt.Text	=EhrLabResultCur.UnitsTextAlt;
 			textObsUnitsTextOrig.Text	=EhrLabResultCur.UnitsTextOriginal;
@@ -278,17 +278,29 @@ namespace OpenDental {
 		}
 
 		private void butCodedElementLoinc_Click(object sender,EventArgs e) {
-			FormSnomeds FormL=new FormSnomeds();
-			FormL.IsSelectionMode=true;
-			FormL.ShowDialog();
-			if(FormL.DialogResult!=DialogResult.OK) {
+			FormSnomeds FormS=new FormSnomeds();
+			FormS.IsSelectionMode=true;
+			FormS.ShowDialog();
+			if(FormS.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			//fill coded element boxes.
+			textObsElementID.Text=FormS.SelectedSnomed.SnomedCode;
+			textObsElementText.Text=FormS.SelectedSnomed.Description;
+			textObsElementCodeSystem.Text="SCT";
+			textObsElementOrigText.Text=FormS.SelectedSnomed.Description;
 		}
 
 		private void butUnitOfMeasureUCUM_Click(object sender,EventArgs e) {
-			//TODO:
+			FormUcums FormU=new FormUcums();
+			FormU.IsSelectionMode=true;
+			FormU.ShowDialog();
+			if(FormU.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			textObsUnitsID.Text=FormU.SelectedUcum.UcumCode;
+			textObsUnitsCodeSystem.Text="UCUM";
+			textObsUnitsText.Text=FormU.SelectedUcum.Description;
+			textObsUnitsTextOrig.Text=FormU.SelectedUcum.Description;
 		}
 
 		///<summary></summary>
@@ -323,15 +335,37 @@ namespace OpenDental {
 			EhrLabResultCur.ObservationResultStatus=((HL70085)comboObsStatus.SelectedIndex-1);
 			EhrLabResultCur.ValueType=((HL70125)comboObsValueType.SelectedIndex-1);
 			EhrLabResultCur.referenceRange=textReferenceRange.Text;
-			if(((HL70125)comboObsValueType.SelectedIndex-1)==HL70125.DT
-				|| ((HL70125)comboObsValueType.SelectedIndex-1)==HL70125.TS
-				|| ((HL70125)comboObsValueType.SelectedIndex-1)==HL70125.TM) 
-			{
-				EhrLabResultCur.ObservationValueDateTime=EhrLab.formatDateToHL7(textObsValue.Text);
+			switch(((HL70125)comboObsValueType.SelectedIndex-1)) {
+				case HL70125.CE:
+				case HL70125.CWE:
+					break;//nothing to do here. yet.
+				case HL70125.DT:
+				case HL70125.TS:
+					EhrLabResultCur.ObservationValueDateTime=EhrLab.formatDateToHL7(textObsValue.Text);
+					break;
+				case HL70125.NM:
+					EhrLabResultCur.ObservationValueNumeric=PIn.Double(textObsValue.Text);
+					break;
+				case HL70125.FT:
+				case HL70125.ST:
+				case HL70125.TX:
+					EhrLabResultCur.ObservationValueText=textObsValue.Text;//should not contain |~^&# characters
+					break;
+				case HL70125.TM:
+					EhrLabResultCur.ObservationValueTime=PIn.Time(textObsValue.Text);
+					break;
+				case HL70125.SN:
+					break;//nothing to do here yet.
 			}
-			else {
-				EhrLabResultCur.ObservationValueNumeric=PIn.Double(textObsValue.Text);
-			}
+			//if(((HL70125)comboObsValueType.SelectedIndex-1)==HL70125.DT
+			//	|| ((HL70125)comboObsValueType.SelectedIndex-1)==HL70125.TS
+			//	|| ((HL70125)comboObsValueType.SelectedIndex-1)==HL70125.TM) 
+			//{
+			//	EhrLabResultCur.ObservationValueDateTime=EhrLab.formatDateToHL7(textObsValue.Text);
+			//}
+			//else {
+			//	EhrLabResultCur.ObservationValueNumeric=PIn.Double(textObsValue.Text);
+			//}
 				//Coded Element
 			EhrLabResultCur.ObservationValueCodedElementID=textObsElementID.Text;
 			EhrLabResultCur.ObservationValueCodedElementText=textObsElementText.Text;
@@ -348,10 +382,10 @@ namespace OpenDental {
 				//Units
 			EhrLabResultCur.UnitsID=textObsUnitsID.Text;
 			EhrLabResultCur.UnitsText=textObsUnitsText.Text;
-			EhrLabResultCur.UnitsCodeSystemName=textObsCodeSystem.Text;
+			EhrLabResultCur.UnitsCodeSystemName=textObsUnitsCodeSystem.Text;
 			EhrLabResultCur.UnitsIDAlt=textObsUnitsIDAlt.Text;
 			EhrLabResultCur.UnitsTextAlt=textObsUnitsTextAlt.Text;
-			EhrLabResultCur.UnitsCodeSystemNameAlt=textObsCodeSystemAlt.Text;
+			EhrLabResultCur.UnitsCodeSystemNameAlt=textObsUnitsCodeSystemAlt.Text;
 			EhrLabResultCur.UnitsTextOriginal=textObsUnitsTextOrig.Text;
 			//Performing Organization
 			EhrLabResultCur.PerformingOrganizationName=textPerfOrgName.Text;
@@ -381,6 +415,43 @@ namespace OpenDental {
 			EhrLabResultCur.MedicalDirectorIdentifierTypeCode=((HL70203)comboMedDirIdType.SelectedIndex-1);
 			//Saving happens in parent form.
 			DialogResult=DialogResult.OK;
+		}
+
+		private void comboObsValueType_SelectedIndexChanged(object sender,EventArgs e) {
+			textObsValue.Enabled=false;
+			groupCE.Enabled=false;
+			groupSN.Enabled=false;
+			groupUnitsOfMeasure.Enabled=false; 
+			textObsValue.Height=20;
+			switch(((HL70125)comboObsValueType.SelectedIndex-1)) {
+				case HL70125.CE:
+				case HL70125.CWE:
+					groupCE.Enabled=true;
+					break;
+				case HL70125.DT:
+				case HL70125.TS:
+					textObsValue.Enabled=true;
+					break;
+				case HL70125.NM:
+					textObsValue.Enabled=true;
+					groupUnitsOfMeasure.Enabled=true;
+					break;
+				case HL70125.FT:
+				case HL70125.ST:
+				case HL70125.TX:
+					textObsValue.Height=48;
+					textObsValue.Enabled=true;
+					break;
+				case HL70125.TM:
+					textObsValue.Enabled=true;
+					break;
+				case HL70125.SN:
+					groupSN.Enabled=true;
+					groupUnitsOfMeasure.Enabled=true;
+					break;
+				default:
+					break;
+			}
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {

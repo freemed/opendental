@@ -377,6 +377,12 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormUcums.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormUcums.designer.cs">
+      <DependentUpon>FormUcums.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormEhrLabImageEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3363,6 +3369,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormUcums.resx">
+      <DependentUpon>FormUcums.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormEhrLabImageEdit.resx">
       <DependentUpon>FormEhrLabImageEdit.cs</DependentUpon>

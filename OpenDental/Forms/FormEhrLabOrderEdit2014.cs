@@ -5,6 +5,7 @@ using OpenDental.UI;
 using System.Collections.Generic;
 using EhrLaboratories;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace OpenDental {
 	public partial class FormEhrLabOrderEdit2014:Form {
@@ -421,6 +422,7 @@ namespace OpenDental {
 		///<summary></summary>
 		private bool EntriesAreValid() {
 			StringBuilder errorMessage=new StringBuilder();
+			//Order Numbers
 			if(checkAutoID.Checked) {
 				if(OIDInternals.GetForType(IdentifierType.LabOrder).IDRoot=="") {
 					errorMessage.AppendLine("  OID registry must be configured in order to use Automatic Lab Order IDs.");
@@ -430,10 +432,23 @@ namespace OpenDental {
 			else if((textPlacerOrderNum.Text=="" || (textPlacerOrderNum.Text!="" && textPlacerOrderUniversalID.Text==""))//Blank placerOrderNum OR OrderNum w/ blank OID
 				&& (textFillerOrderNum.Text=="" || (textFillerOrderNum.Text!="" && textFillerOrderUniversalID.Text==""))) //Blank fillerOrderNum OR OrderNum w/blank OID
 			{
-			//if( (textPlacerOrderNum.Text=="" || && textPlacerOrderUniversalID.Text=="") //invalid placer order num
-			//	|| (textFillerOrderNum.Text=="" && textFillerOrderUniversalID.Text=="") )//invalid filler order num
-			//{
 				errorMessage.AppendLine("  Order must have valid placer or filler order number with universal ID.");
+			}
+			//Prov Numbers
+			if(textOrderingProvAAUID.Text==OIDInternals.GetForType(IdentifierType.Provider).IDRoot) {
+				Provider prov=null;
+				try {
+					prov=Providers.GetProv(PIn.Long(textOrderingProvIdentifier.Text));
+				}
+				catch { }
+				if(prov==null) {
+					errorMessage.AppendLine("  Ordering provider identifier or assigning authority is invalid.");
+				}
+			}
+			else {
+				if(!Regex.IsMatch(textOrderingProvIdentifier.Text,@"^(\d|\w)+$")){
+					errorMessage.AppendLine("  Ordering Provider identifier must only contain numbers and letters.");
+				}
 			}
 			//TODO: validate the controls
 			if(errorMessage.ToString()!="") {

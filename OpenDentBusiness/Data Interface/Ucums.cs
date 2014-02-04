@@ -85,6 +85,18 @@ namespace OpenDentBusiness{
 			return Crud.UcumCrud.SelectOne(command);
 		}
 
+		public static List<Ucum> GetBySearchText(string searchText) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Ucum>>(MethodBase.GetCurrentMethod(),searchText);
+			}
+			string[] searchTokens=searchText.Split(' ');
+			string command=@"SELECT * FROM ucum ";
+			for(int i=0;i<searchTokens.Length;i++) {
+				command+=(i==0?"WHERE ":"AND ")+"(UcumCode LIKE '%"+POut.String(searchTokens[i])+"%' OR Description LIKE '%"+POut.String(searchTokens[i])+"%') ";
+			}
+			return Crud.UcumCrud.SelectMany(command);
+		}
+
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 

@@ -37,9 +37,9 @@
 			this.groupUnitsOfMeasure = new System.Windows.Forms.GroupBox();
 			this.butUnitOfMeasureUCUM = new System.Windows.Forms.Button();
 			this.label46 = new System.Windows.Forms.Label();
-			this.textObsCodeSystemAlt = new System.Windows.Forms.TextBox();
+			this.textObsUnitsCodeSystemAlt = new System.Windows.Forms.TextBox();
 			this.label45 = new System.Windows.Forms.Label();
-			this.textObsCodeSystem = new System.Windows.Forms.TextBox();
+			this.textObsUnitsCodeSystem = new System.Windows.Forms.TextBox();
 			this.label40 = new System.Windows.Forms.Label();
 			this.textObsUnitsTextOrig = new System.Windows.Forms.TextBox();
 			this.label38 = new System.Windows.Forms.Label();
@@ -129,7 +129,7 @@
 			this.label43 = new System.Windows.Forms.Label();
 			this.textObsIDCodeSystemName = new System.Windows.Forms.TextBox();
 			this.groupBox7 = new System.Windows.Forms.GroupBox();
-			this.groupBox9 = new System.Windows.Forms.GroupBox();
+			this.groupSN = new System.Windows.Forms.GroupBox();
 			this.label54 = new System.Windows.Forms.Label();
 			this.textStructNumSecond = new System.Windows.Forms.TextBox();
 			this.label55 = new System.Windows.Forms.Label();
@@ -138,7 +138,7 @@
 			this.textStructNumFirst = new System.Windows.Forms.TextBox();
 			this.label60 = new System.Windows.Forms.Label();
 			this.textStructNumSeparator = new System.Windows.Forms.TextBox();
-			this.groupBox8 = new System.Windows.Forms.GroupBox();
+			this.groupCE = new System.Windows.Forms.GroupBox();
 			this.butCodedElementSnomed = new System.Windows.Forms.Button();
 			this.label47 = new System.Windows.Forms.Label();
 			this.textObsElementCodeSystemAlt = new System.Windows.Forms.TextBox();
@@ -167,8 +167,8 @@
 			this.groupBox1.SuspendLayout();
 			this.groupBox6.SuspendLayout();
 			this.groupBox7.SuspendLayout();
-			this.groupBox9.SuspendLayout();
-			this.groupBox8.SuspendLayout();
+			this.groupSN.SuspendLayout();
+			this.groupCE.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -260,16 +260,16 @@
 			this.textObsValue.Location = new System.Drawing.Point(152, 123);
 			this.textObsValue.Multiline = true;
 			this.textObsValue.Name = "textObsValue";
-			this.textObsValue.Size = new System.Drawing.Size(157, 20);
+			this.textObsValue.Size = new System.Drawing.Size(157, 48);
 			this.textObsValue.TabIndex = 4;
 			// 
 			// groupUnitsOfMeasure
 			// 
 			this.groupUnitsOfMeasure.Controls.Add(this.butUnitOfMeasureUCUM);
 			this.groupUnitsOfMeasure.Controls.Add(this.label46);
-			this.groupUnitsOfMeasure.Controls.Add(this.textObsCodeSystemAlt);
+			this.groupUnitsOfMeasure.Controls.Add(this.textObsUnitsCodeSystemAlt);
 			this.groupUnitsOfMeasure.Controls.Add(this.label45);
-			this.groupUnitsOfMeasure.Controls.Add(this.textObsCodeSystem);
+			this.groupUnitsOfMeasure.Controls.Add(this.textObsUnitsCodeSystem);
 			this.groupUnitsOfMeasure.Controls.Add(this.label40);
 			this.groupUnitsOfMeasure.Controls.Add(this.textObsUnitsTextOrig);
 			this.groupUnitsOfMeasure.Controls.Add(this.label38);
@@ -296,7 +296,6 @@
 			this.butUnitOfMeasureUCUM.TabIndex = 263;
 			this.butUnitOfMeasureUCUM.Text = "...";
 			this.butUnitOfMeasureUCUM.UseVisualStyleBackColor = true;
-			this.butUnitOfMeasureUCUM.Visible = false;
 			this.butUnitOfMeasureUCUM.Click += new System.EventHandler(this.butUnitOfMeasureUCUM_Click);
 			// 
 			// label46
@@ -309,13 +308,13 @@
 			this.label46.Text = "Alt Code System";
 			this.label46.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textObsCodeSystemAlt
+			// textObsUnitsCodeSystemAlt
 			// 
-			this.textObsCodeSystemAlt.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.textObsCodeSystemAlt.Location = new System.Drawing.Point(143, 79);
-			this.textObsCodeSystemAlt.Name = "textObsCodeSystemAlt";
-			this.textObsCodeSystemAlt.Size = new System.Drawing.Size(157, 20);
-			this.textObsCodeSystemAlt.TabIndex = 3;
+			this.textObsUnitsCodeSystemAlt.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.textObsUnitsCodeSystemAlt.Location = new System.Drawing.Point(143, 79);
+			this.textObsUnitsCodeSystemAlt.Name = "textObsUnitsCodeSystemAlt";
+			this.textObsUnitsCodeSystemAlt.Size = new System.Drawing.Size(157, 20);
+			this.textObsUnitsCodeSystemAlt.TabIndex = 3;
 			// 
 			// label45
 			// 
@@ -327,13 +326,13 @@
 			this.label45.Text = "Code System";
 			this.label45.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textObsCodeSystem
+			// textObsUnitsCodeSystem
 			// 
-			this.textObsCodeSystem.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.textObsCodeSystem.Location = new System.Drawing.Point(143, 13);
-			this.textObsCodeSystem.Name = "textObsCodeSystem";
-			this.textObsCodeSystem.Size = new System.Drawing.Size(157, 20);
-			this.textObsCodeSystem.TabIndex = 0;
+			this.textObsUnitsCodeSystem.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.textObsUnitsCodeSystem.Location = new System.Drawing.Point(143, 13);
+			this.textObsUnitsCodeSystem.Name = "textObsUnitsCodeSystem";
+			this.textObsUnitsCodeSystem.Size = new System.Drawing.Size(157, 20);
+			this.textObsUnitsCodeSystem.TabIndex = 0;
 			// 
 			// label40
 			// 
@@ -956,6 +955,7 @@
 			this.comboObsValueType.Name = "comboObsValueType";
 			this.comboObsValueType.Size = new System.Drawing.Size(157, 21);
 			this.comboObsValueType.TabIndex = 2;
+			this.comboObsValueType.SelectedIndexChanged += new System.EventHandler(this.comboObsValueType_SelectedIndexChanged);
 			// 
 			// label2
 			// 
@@ -1164,8 +1164,8 @@
 			// 
 			// groupBox7
 			// 
-			this.groupBox7.Controls.Add(this.groupBox9);
-			this.groupBox7.Controls.Add(this.groupBox8);
+			this.groupBox7.Controls.Add(this.groupSN);
+			this.groupBox7.Controls.Add(this.groupCE);
 			this.groupBox7.Controls.Add(this.label12);
 			this.groupBox7.Controls.Add(this.label11);
 			this.groupBox7.Controls.Add(this.textAnalysisDateTime);
@@ -1186,22 +1186,22 @@
 			this.groupBox7.TabStop = false;
 			this.groupBox7.Text = "Observation Value";
 			// 
-			// groupBox9
+			// groupSN
 			// 
-			this.groupBox9.Controls.Add(this.label54);
-			this.groupBox9.Controls.Add(this.textStructNumSecond);
-			this.groupBox9.Controls.Add(this.label55);
-			this.groupBox9.Controls.Add(this.textStructNumComp);
-			this.groupBox9.Controls.Add(this.label59);
-			this.groupBox9.Controls.Add(this.textStructNumFirst);
-			this.groupBox9.Controls.Add(this.label60);
-			this.groupBox9.Controls.Add(this.textStructNumSeparator);
-			this.groupBox9.Location = new System.Drawing.Point(9, 348);
-			this.groupBox9.Name = "groupBox9";
-			this.groupBox9.Size = new System.Drawing.Size(308, 105);
-			this.groupBox9.TabIndex = 7;
-			this.groupBox9.TabStop = false;
-			this.groupBox9.Text = "Structured Numeric";
+			this.groupSN.Controls.Add(this.label54);
+			this.groupSN.Controls.Add(this.textStructNumSecond);
+			this.groupSN.Controls.Add(this.label55);
+			this.groupSN.Controls.Add(this.textStructNumComp);
+			this.groupSN.Controls.Add(this.label59);
+			this.groupSN.Controls.Add(this.textStructNumFirst);
+			this.groupSN.Controls.Add(this.label60);
+			this.groupSN.Controls.Add(this.textStructNumSeparator);
+			this.groupSN.Location = new System.Drawing.Point(9, 348);
+			this.groupSN.Name = "groupSN";
+			this.groupSN.Size = new System.Drawing.Size(308, 105);
+			this.groupSN.TabIndex = 7;
+			this.groupSN.TabStop = false;
+			this.groupSN.Text = "Structured Numeric";
 			// 
 			// label54
 			// 
@@ -1276,29 +1276,29 @@
 			this.textStructNumSeparator.Size = new System.Drawing.Size(157, 20);
 			this.textStructNumSeparator.TabIndex = 2;
 			// 
-			// groupBox8
+			// groupCE
 			// 
-			this.groupBox8.Controls.Add(this.butCodedElementSnomed);
-			this.groupBox8.Controls.Add(this.label47);
-			this.groupBox8.Controls.Add(this.textObsElementCodeSystemAlt);
-			this.groupBox8.Controls.Add(this.label48);
-			this.groupBox8.Controls.Add(this.textObsElementCodeSystem);
-			this.groupBox8.Controls.Add(this.label49);
-			this.groupBox8.Controls.Add(this.textObsElementOrigText);
-			this.groupBox8.Controls.Add(this.label50);
-			this.groupBox8.Controls.Add(this.textObsElementIDAlt);
-			this.groupBox8.Controls.Add(this.label51);
-			this.groupBox8.Controls.Add(this.textObsElementTextAlt);
-			this.groupBox8.Controls.Add(this.label52);
-			this.groupBox8.Controls.Add(this.textObsElementID);
-			this.groupBox8.Controls.Add(this.label53);
-			this.groupBox8.Controls.Add(this.textObsElementText);
-			this.groupBox8.Location = new System.Drawing.Point(10, 171);
-			this.groupBox8.Name = "groupBox8";
-			this.groupBox8.Size = new System.Drawing.Size(308, 171);
-			this.groupBox8.TabIndex = 6;
-			this.groupBox8.TabStop = false;
-			this.groupBox8.Text = "Coded Elements";
+			this.groupCE.Controls.Add(this.butCodedElementSnomed);
+			this.groupCE.Controls.Add(this.label47);
+			this.groupCE.Controls.Add(this.textObsElementCodeSystemAlt);
+			this.groupCE.Controls.Add(this.label48);
+			this.groupCE.Controls.Add(this.textObsElementCodeSystem);
+			this.groupCE.Controls.Add(this.label49);
+			this.groupCE.Controls.Add(this.textObsElementOrigText);
+			this.groupCE.Controls.Add(this.label50);
+			this.groupCE.Controls.Add(this.textObsElementIDAlt);
+			this.groupCE.Controls.Add(this.label51);
+			this.groupCE.Controls.Add(this.textObsElementTextAlt);
+			this.groupCE.Controls.Add(this.label52);
+			this.groupCE.Controls.Add(this.textObsElementID);
+			this.groupCE.Controls.Add(this.label53);
+			this.groupCE.Controls.Add(this.textObsElementText);
+			this.groupCE.Location = new System.Drawing.Point(10, 171);
+			this.groupCE.Name = "groupCE";
+			this.groupCE.Size = new System.Drawing.Size(308, 171);
+			this.groupCE.TabIndex = 6;
+			this.groupCE.TabStop = false;
+			this.groupCE.Text = "Coded Elements";
 			// 
 			// butCodedElementSnomed
 			// 
@@ -1308,7 +1308,6 @@
 			this.butCodedElementSnomed.TabIndex = 258;
 			this.butCodedElementSnomed.Text = "...";
 			this.butCodedElementSnomed.UseVisualStyleBackColor = true;
-			this.butCodedElementSnomed.Visible = false;
 			this.butCodedElementSnomed.Click += new System.EventHandler(this.butCodedElementLoinc_Click);
 			// 
 			// label47
@@ -1518,10 +1517,10 @@
 			this.groupBox6.PerformLayout();
 			this.groupBox7.ResumeLayout(false);
 			this.groupBox7.PerformLayout();
-			this.groupBox9.ResumeLayout(false);
-			this.groupBox9.PerformLayout();
-			this.groupBox8.ResumeLayout(false);
-			this.groupBox8.PerformLayout();
+			this.groupSN.ResumeLayout(false);
+			this.groupSN.PerformLayout();
+			this.groupCE.ResumeLayout(false);
+			this.groupCE.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -1629,10 +1628,10 @@
 		private System.Windows.Forms.Label label44;
 		private System.Windows.Forms.TextBox textObsIDCodeSystemNameAlt;
 		private System.Windows.Forms.Label label45;
-		private System.Windows.Forms.TextBox textObsCodeSystem;
+		private System.Windows.Forms.TextBox textObsUnitsCodeSystem;
 		private System.Windows.Forms.Label label46;
-		private System.Windows.Forms.TextBox textObsCodeSystemAlt;
-		private System.Windows.Forms.GroupBox groupBox8;
+		private System.Windows.Forms.TextBox textObsUnitsCodeSystemAlt;
+		private System.Windows.Forms.GroupBox groupCE;
 		private System.Windows.Forms.Label label47;
 		private System.Windows.Forms.TextBox textObsElementCodeSystemAlt;
 		private System.Windows.Forms.Label label48;
@@ -1647,7 +1646,7 @@
 		private System.Windows.Forms.TextBox textObsElementID;
 		private System.Windows.Forms.Label label53;
 		private System.Windows.Forms.TextBox textObsElementText;
-		private System.Windows.Forms.GroupBox groupBox9;
+		private System.Windows.Forms.GroupBox groupSN;
 		private System.Windows.Forms.Label label54;
 		private System.Windows.Forms.TextBox textStructNumSecond;
 		private System.Windows.Forms.Label label55;
