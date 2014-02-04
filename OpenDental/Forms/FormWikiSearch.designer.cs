@@ -31,6 +31,7 @@ namespace OpenDental{
 			this.webBrowserWiki = new System.Windows.Forms.WebBrowser();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.butRestore = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// gridMain
@@ -131,10 +132,27 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// butRestore
+			// 
+			this.butRestore.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butRestore.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.butRestore.Autosize = true;
+			this.butRestore.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRestore.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRestore.CornerRadius = 4F;
+			this.butRestore.Enabled = false;
+			this.butRestore.Location = new System.Drawing.Point(1097, 12);
+			this.butRestore.Name = "butRestore";
+			this.butRestore.Size = new System.Drawing.Size(75, 24);
+			this.butRestore.TabIndex = 16;
+			this.butRestore.Text = "Restore";
+			this.butRestore.Click += new System.EventHandler(this.butRestore_Click);
+			// 
 			// FormWikiSearch
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(1184, 662);
+			this.Controls.Add(this.butRestore);
 			this.Controls.Add(this.checkDeletedOnly);
 			this.Controls.Add(this.checkIgnoreContent);
 			this.Controls.Add(this.label1);
@@ -162,5 +180,6 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textSearch;
 		private System.Windows.Forms.CheckBox checkIgnoreContent;
 		private System.Windows.Forms.CheckBox checkDeletedOnly;
+		private UI.Button butRestore;
 	}
 }

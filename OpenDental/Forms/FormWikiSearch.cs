@@ -30,8 +30,10 @@ namespace OpenDental {
 
 		private void LoadWikiPage(string WikiPageTitleCur) {
 			webBrowserWiki.AllowNavigation=true;
+			butRestore.Enabled=false;
 			if(checkDeletedOnly.Checked) {
 				webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(WikiPageHists.GetDeletedByTitle(WikiPageTitleCur).PageContent,true);
+				butRestore.Enabled=true;
 			}
 			else {
 				webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(WikiPages.GetByTitle(WikiPageTitleCur).PageContent,true);
@@ -93,6 +95,21 @@ namespace OpenDental {
 			webBrowserWiki.AllowNavigation=false;//to disable links in pages.
 		}
 
+		private void butRestore_Click(object sender,EventArgs e) {
+			if(gridMain.GetSelectedIndex()==-1) {
+				return;//should never happen.
+			}
+			wikiPageTitleSelected=listWikiPageTitles[gridMain.SelectedIndices[0]];
+			if(WikiPages.GetByTitle(wikiPageTitleSelected)!=null) {
+				MsgBox.Show(this,"Selected page has already been restored.");//should never happen.
+				return;
+			}
+			WikiPage wikiPageRestored=WikiPageHists.RevertFrom(WikiPageHists.GetDeletedByTitle(listWikiPageTitles[gridMain.SelectedIndices[0]]));
+			wikiPageRestored.UserNum=Security.CurUser.UserNum;
+			WikiPages.InsertAndArchive(wikiPageRestored);
+			DialogResult=DialogResult.OK;
+		}
+
 		private void butOK_Click(object sender,EventArgs e) {
 			if(gridMain.SelectedIndices.Length>0) {
 				wikiPageTitleSelected=listWikiPageTitles[gridMain.SelectedIndices[0]];
@@ -103,5 +120,7 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+
 	}
 }
