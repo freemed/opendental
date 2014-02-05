@@ -891,7 +891,7 @@ namespace OpenDental {
 			string errors="";
 			string warnings="";
 			string errorIndent="  ";
-			strb.AppendLine("Co Code,Batch ID,File #,Rate Code,Reg Hours,O/T Hours");
+			strb.AppendLine("Co Code,Batch ID,File #"+(PrefC.GetBool(PrefName.TimeCardADPExportIncludesName)?",Employee Name":"")+",Rate Code,Reg Hours,O/T Hours");
 			string coCode=PrefC.GetString(PrefName.ADPCompanyCode);
 			string batchID=DateStop.ToString("yyyyMMdd");//max 8 characters
 			if(coCode.Length<2 || coCode.Length>3){
@@ -902,6 +902,7 @@ namespace OpenDental {
 				string errorsForEmployee="";
 				string warningsForEmployee="";
 				string fileNum="";
+				string employeeName="";
 				fileNum=MainTable.Rows[i]["PayrollID"].ToString();
 				try {
 					if(PIn.Int(fileNum)<51 || PIn.Int(fileNum)>999999) {
@@ -917,6 +918,12 @@ namespace OpenDental {
 				}
 				else {//pad payrollIDs that are too short. No effect if payroll ID is 6 digits long.
 					fileNum=fileNum.PadLeft(6,'0');
+				}
+				try {
+					employeeName=Employees.GetNameFL(Employees.GetEmp(PIn.Long(MainTable.Rows[i]["EmployeeNum"].ToString())));
+				}
+				catch {
+					employeeName="Error";
 				}
 				string r1hours	=(PIn.TSpan(MainTable.Rows[i]["rate1Hours"  ].ToString())).TotalHours.ToString("F2");//adp allows 2 digit precision
 				if(r1hours=="0.00"){//Was changing Exactly 80.00 hours with 8 hours.
@@ -936,10 +943,10 @@ namespace OpenDental {
 				}
 				string textToAdd="";
 				if(r1hours!="" || r1OThours!="") {//no entry should be made unless there are actually hours for this employee.
-					textToAdd+=coCode+","+batchID+","+fileNum+",,"+r1hours+","+r1OThours+"\r\n";
+					textToAdd+=coCode+","+batchID+","+fileNum+(PrefC.GetBool(PrefName.TimeCardADPExportIncludesName)?","+employeeName:"")+",,"+r1hours+","+r1OThours+"\r\n";
 				}
 				if(r2hours!="" || r2OThours!="") {//no entry should be made unless there are actually hours for this employee.
-					textToAdd+=coCode+","+batchID+","+fileNum+",2,"+r2hours+","+r2OThours+"\r\n";
+					textToAdd+=coCode+","+batchID+","+fileNum+(PrefC.GetBool(PrefName.TimeCardADPExportIncludesName)?","+employeeName:"")+",2,"+r2hours+","+r2OThours+"\r\n";
 				}
 				if(textToAdd=="") {
 					warningsForEmployee+=errorIndent+"No clocked hours.\r\n";// for "+Employees.GetNameFL(Employees.GetEmp(PIn.Long(MainTable.Rows[i]["EmployeeNum"].ToString())))+"\r\n";

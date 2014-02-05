@@ -3848,6 +3848,15 @@ namespace OpenDentBusiness {
 					command="ALTER TABLE ehrlab ADD OriginalPIDSegment varchar2(4000)";
 					Db.NonQ(command);
 				}
+				//Added TimeCardADPExportIncludesName preference
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('TimeCardADPExportIncludesName','0')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'TimeCardADPExportIncludesName','0')";
+					Db.NonQ(command);
+				}
 
 
 

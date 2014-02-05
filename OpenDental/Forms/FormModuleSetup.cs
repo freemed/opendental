@@ -111,6 +111,7 @@ namespace OpenDental{
 		private ValidNum textPayPlansBillInAdvanceDays;
 		private CheckBox checkStatementShowAdjNotes;
 		private CheckBox checkProcLockingIsAllowed;
+		private CheckBox checkTimeCardADP;
 		private bool IsLoading;
 
 		///<summary></summary>
@@ -196,6 +197,7 @@ namespace OpenDental{
 			this.checkClaimMedTypeIsInstWhenInsPlanIsMedical = new System.Windows.Forms.CheckBox();
 			this.tabTreatPlan = new System.Windows.Forms.TabPage();
 			this.tabChart = new System.Windows.Forms.TabPage();
+			this.checkProcLockingIsAllowed = new System.Windows.Forms.CheckBox();
 			this.textICD9DefaultForNewProcs = new System.Windows.Forms.TextBox();
 			this.checkMedicalFeeUsedForNewProcs = new System.Windows.Forms.CheckBox();
 			this.checkChartAddProcNoRefreshGrid = new System.Windows.Forms.CheckBox();
@@ -230,7 +232,7 @@ namespace OpenDental{
 			this.label16 = new System.Windows.Forms.Label();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.checkProcLockingIsAllowed = new System.Windows.Forms.CheckBox();
+			this.checkTimeCardADP = new System.Windows.Forms.CheckBox();
 			this.tabControl1.SuspendLayout();
 			this.tabAppts.SuspendLayout();
 			this.tabFamily.SuspendLayout();
@@ -975,6 +977,19 @@ namespace OpenDental{
 			this.tabChart.TabIndex = 4;
 			this.tabChart.Text = "Chart";
 			// 
+			// checkProcLockingIsAllowed
+			// 
+			this.checkProcLockingIsAllowed.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkProcLockingIsAllowed.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkProcLockingIsAllowed.Location = new System.Drawing.Point(59, 261);
+			this.checkProcLockingIsAllowed.Name = "checkProcLockingIsAllowed";
+			this.checkProcLockingIsAllowed.Size = new System.Drawing.Size(381, 15);
+			this.checkProcLockingIsAllowed.TabIndex = 210;
+			this.checkProcLockingIsAllowed.Text = "Procedure locking is allowed";
+			this.checkProcLockingIsAllowed.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkProcLockingIsAllowed.UseVisualStyleBackColor = true;
+			this.checkProcLockingIsAllowed.Click += new System.EventHandler(this.checkProcLockingIsAllowed_Click);
+			// 
 			// textICD9DefaultForNewProcs
 			// 
 			this.textICD9DefaultForNewProcs.Location = new System.Drawing.Point(358, 236);
@@ -1137,6 +1152,7 @@ namespace OpenDental{
 			// tabManage
 			// 
 			this.tabManage.BackColor = System.Drawing.SystemColors.Window;
+			this.tabManage.Controls.Add(this.checkTimeCardADP);
 			this.tabManage.Controls.Add(this.groupBox1);
 			this.tabManage.Controls.Add(this.comboTimeCardOvertimeFirstDayOfWeek);
 			this.tabManage.Controls.Add(this.label16);
@@ -1162,7 +1178,7 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.label18);
 			this.groupBox1.Controls.Add(this.textStatementsCalcDueDate);
 			this.groupBox1.Controls.Add(this.textPayPlansBillInAdvanceDays);
-			this.groupBox1.Location = new System.Drawing.Point(38, 57);
+			this.groupBox1.Location = new System.Drawing.Point(38, 76);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(413, 240);
 			this.groupBox1.TabIndex = 197;
@@ -1357,18 +1373,16 @@ namespace OpenDental{
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
-			// checkProcLockingIsAllowed
+			// checkTimeCardADP
 			// 
-			this.checkProcLockingIsAllowed.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkProcLockingIsAllowed.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkProcLockingIsAllowed.Location = new System.Drawing.Point(59, 261);
-			this.checkProcLockingIsAllowed.Name = "checkProcLockingIsAllowed";
-			this.checkProcLockingIsAllowed.Size = new System.Drawing.Size(381, 15);
-			this.checkProcLockingIsAllowed.TabIndex = 210;
-			this.checkProcLockingIsAllowed.Text = "Procedure locking is allowed";
-			this.checkProcLockingIsAllowed.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkProcLockingIsAllowed.UseVisualStyleBackColor = true;
-			this.checkProcLockingIsAllowed.Click += new System.EventHandler(this.checkProcLockingIsAllowed_Click);
+			this.checkTimeCardADP.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkTimeCardADP.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkTimeCardADP.Location = new System.Drawing.Point(82, 57);
+			this.checkTimeCardADP.Name = "checkTimeCardADP";
+			this.checkTimeCardADP.Size = new System.Drawing.Size(359, 17);
+			this.checkTimeCardADP.TabIndex = 198;
+			this.checkTimeCardADP.Text = "ADP export includes employee name";
+			this.checkTimeCardADP.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// FormModuleSetup
 			// 
@@ -1525,6 +1539,7 @@ namespace OpenDental{
 				comboTimeCardOvertimeFirstDayOfWeek.Items.Add(Lan.g("enumDayOfWeek",Enum.GetNames(typeof(DayOfWeek))[i]));
 			}
 			comboTimeCardOvertimeFirstDayOfWeek.SelectedIndex=PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek);
+			checkTimeCardADP.Checked=PrefC.GetBool(PrefName.TimeCardADPExportIncludesName);
 			//Statements
 			checkStatementShowReturnAddress.Checked=PrefC.GetBool(PrefName.StatementShowReturnAddress);
 			checkShowCC.Checked=PrefC.GetBool(PrefName.StatementShowCreditCard);
@@ -1723,6 +1738,7 @@ namespace OpenDental{
 				| Prefs.UpdateBool(PrefName.MedicalFeeUsedForNewProcs,checkMedicalFeeUsedForNewProcs.Checked)
 				| Prefs.UpdateString(PrefName.ICD9DefaultForNewProcs,textICD9DefaultForNewProcs.Text)
 				| Prefs.UpdateInt(PrefName.TimeCardOvertimeFirstDayOfWeek,comboTimeCardOvertimeFirstDayOfWeek.SelectedIndex)
+				| Prefs.UpdateBool(PrefName.TimeCardADPExportIncludesName,checkTimeCardADP.Checked)
 				| Prefs.UpdateBool(PrefName.TextMsgOkStatusTreatAsNo,checkTextMsgOkStatusTreatAsNo.Checked)
 				| Prefs.UpdateBool(PrefName.ProcLockingIsAllowed,checkProcLockingIsAllowed.Checked)
 				)

@@ -417,6 +417,7 @@ namespace OpenDentBusiness {
 		TasksShowOpenTickets,
 		TerminalClosePassword,
 		TextMsgOkStatusTreatAsNo,
+		TimeCardADPExportIncludesName,
 		///<summary>0=Sun,1=Mon...6=Sat</summary>
 		TimeCardOvertimeFirstDayOfWeek,
 		TimecardSecurityEnabled,
