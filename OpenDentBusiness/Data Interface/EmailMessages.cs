@@ -57,7 +57,7 @@ namespace OpenDentBusiness{
 					+POut.Int((int)EmailSentOrReceived.WebMailRecdRead)+","
 					+POut.Int((int)EmailSentOrReceived.WebMailReceived)
 					//can belong to either the RecipientAddress OR the ProvNumWebMail
-				+") AND (RecipientAddress='"+POut.String(emailAddressInbox)+"' OR ProvNumWebMail="+POut.Long(provNum)+") "
+				+") AND (RecipientAddress='"+POut.String(emailAddressInbox.Trim())+"' OR ProvNumWebMail="+POut.Long(provNum)+") "
 				+"ORDER BY MsgDateTime";
 			List<EmailMessage> retVal=Crud.EmailMessageCrud.SelectMany(command);
 			for(int i=0;i<retVal.Count;i++) {
@@ -185,7 +185,7 @@ namespace OpenDentBusiness{
 		///Surround with a try catch.</summary>
 		public static string SendEmailDirect(EmailMessage emailMessage,EmailAddress emailAddressFrom) {
 			//No need to check RemotingRole; no call to db.
-			emailMessage.FromAddress=emailAddressFrom.EmailUsername;//Cannot be emailAddressFrom.SenderAddress, or else will not find the correct encryption certificate.  Used in ConvertEmailMessageToMessage().
+			emailMessage.FromAddress=emailAddressFrom.EmailUsername.Trim();//Cannot be emailAddressFrom.SenderAddress, or else will not find the correct encryption certificate.  Used in ConvertEmailMessageToMessage().
 			//Start by converting the emailMessage to an unencrypted message using the Direct libraries. The email must be in this form to carry out encryption.
 			Health.Direct.Common.Mail.Message msgUnencrypted=ConvertEmailMessageToMessage(emailMessage,true);
 			Health.Direct.Agent.MessageEnvelope msgEnvelopeUnencrypted=new Health.Direct.Agent.MessageEnvelope(msgUnencrypted);
@@ -193,13 +193,14 @@ namespace OpenDentBusiness{
 			string strErrors=SendEmailDirect(outMsgUnencrypted,emailAddressFrom);
 			return strErrors;
 		}
+
 		///<summary>outMsgDirect must be unencrypted, because this function will encrypt.  Encrypts the message, verifies trust, locates the public encryption key for the To address (if already stored locally), etc.
 		///patNum can be zero.  emailSentOrReceived must be either SentDirect or a Direct Ack type such as AckDirectProcessed.
 		///Returns an empty string upon success, or an error string if there were errors.  It is possible that the email was sent to some trusted recipients and not sent to untrusted recipients (in which case there would be errors but some recipients would receive successfully).</summary>
 		private static string SendEmailDirect(Health.Direct.Agent.OutgoingMessage outMsgUnencrypted,EmailAddress emailAddressFrom) {
 			//No need to check RemotingRole; no call to db.
 			string strErrors="";
-			string strSenderAddress=emailAddressFrom.EmailUsername;//Cannot be emailAddressFrom.SenderAddress, or else will not find the right encryption certificate.
+			string strSenderAddress=emailAddressFrom.EmailUsername.Trim();//Cannot be emailAddressFrom.SenderAddress, or else will not find the right encryption certificate.
 			Health.Direct.Agent.DirectAgent directAgent=GetDirectAgentForEmailAddress(strSenderAddress);
 			//Locate or discover public certificates for each receiver for encryption purposes.
 			for(int i=0;i<outMsgUnencrypted.Recipients.Count;i++) {
@@ -207,7 +208,7 @@ namespace OpenDentBusiness{
 					continue;//The certificate(s) for this recipient were already located somehow. Skip.
 				}
 				try {
-					int certNewCount=FindPublicCertForAddress(outMsgUnencrypted.Recipients[i].Address);
+					int certNewCount=FindPublicCertForAddress(outMsgUnencrypted.Recipients[i].Address.Trim());
 					if(certNewCount!=0) {//If the certificate is already in the local public store or if one was discovered over the internet.
 						string strSenderDomain=strSenderAddress.Substring(strSenderAddress.IndexOf("@")+1);//For example, if strSenderAddress is ehr@opendental.com, then this will be opendental.com
 						//Refresh the directAgent class using the updated list of public certs while leaving everything else alone. This must be done, or else the certificate will not be found when encrypting the outgoing email.
@@ -240,7 +241,7 @@ namespace OpenDentBusiness{
 			for(int i=0;i<outMsgEncrypted.Message.Headers.Count;i++) {
 				nameValueCollectionHeaders.Add(outMsgEncrypted.Message.Headers[i].Name,outMsgEncrypted.Message.Headers[i].ValueRaw);
 			}
-			byte[] arrayEncryptedBody=Encoding.UTF8.GetBytes(outMsgEncrypted.Message.Body.Text);//The bytes of the encrypted and base 64 encoded body string.
+			byte[] arrayEncryptedBody=Encoding.UTF8.GetBytes(outMsgEncrypted.Message.Body.Text);//The bytes of the encrypted and base 64 encoded body string.  No need to call Tidy() here because this body text will be in base64.
 			MemoryStream ms=new MemoryStream(arrayEncryptedBody);
 			ms.Position=0;
 			//The memory stream for the alternate view must be mime (not an entire email), based on AlternateView use example http://msdn.microsoft.com/en-us/library/system.net.mail.mailmessage.alternateviews.aspx
@@ -325,7 +326,7 @@ namespace OpenDentBusiness{
 			//Get the time that the last Direct Ack was sent for the From address.
 			command=DbHelper.LimitOrderBy(
 				"SELECT MsgDateTime FROM emailmessage "
-					+"WHERE FromAddress='"+POut.String(emailAddressFrom.EmailUsername)+"' AND SentOrReceived="+POut.Long((int)EmailSentOrReceived.AckDirectProcessed)+" "
+					+"WHERE FromAddress='"+POut.String(emailAddressFrom.EmailUsername.Trim())+"' AND SentOrReceived="+POut.Long((int)EmailSentOrReceived.AckDirectProcessed)+" "
 					+"ORDER BY MsgDateTime DESC",
 				1);
 			DateTime dateTimeLastAck=PIn.DateT(Db.GetScalar(command));//dateTimeLastAck will be 0001-01-01 if there is not yet any sent Acks.
@@ -336,7 +337,7 @@ namespace OpenDentBusiness{
 			//Get the oldest Ack for the From address which has not been sent yet.
 			command=DbHelper.LimitOrderBy(
 				"SELECT * FROM emailmessage "
-					+"WHERE FromAddress='"+POut.String(emailAddressFrom.EmailUsername)+"' AND SentOrReceived="+POut.Long((int)EmailSentOrReceived.AckDirectNotSent)+" "
+					+"WHERE FromAddress='"+POut.String(emailAddressFrom.EmailUsername.Trim())+"' AND SentOrReceived="+POut.Long((int)EmailSentOrReceived.AckDirectNotSent)+" "
 					+"ORDER BY EmailMessageNum",//The oldest Ack is the one that was recorded first.  EmailMessageNum is better than using MsgDateTime, because MsgDateTime is only accurate down to the second.
 				1);
 			List <EmailMessage> listEmailMessageUnsentAcks=Crud.EmailMessageCrud.SelectMany(command);
@@ -381,12 +382,12 @@ namespace OpenDentBusiness{
 				message.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpserverport","465");
 				message.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendusing","2");//sendusing: cdoSendUsingPort, value 2, for sending the message using the network.
 				message.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpauthenticate","1");//0=anonymous,1=clear text auth,2=context
-				message.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendusername",emailAddress.EmailUsername);
+				message.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendusername",emailAddress.EmailUsername.Trim());
 				message.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendpassword",emailAddress.EmailPassword);
 				//if(PrefC.GetBool(PrefName.EmailUseSSL)) {
 				message.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpusessl","true");//false was also tested and does not work
-				message.From=emailMessage.FromAddress;
-				message.To=emailMessage.ToAddress;
+				message.From=emailMessage.FromAddress.Trim();
+				message.To=emailMessage.ToAddress.Trim();
 				message.Subject=Tidy(emailMessage.Subject);
 				message.Body=Tidy(emailMessage.BodyText);
 				//message.Cc=;
@@ -417,13 +418,13 @@ namespace OpenDentBusiness{
 				SmtpClient client=new SmtpClient(emailAddress.SMTPserver,emailAddress.ServerPort);
 				//The default credentials are not used by default, according to: 
 				//http://msdn2.microsoft.com/en-us/library/system.net.mail.smtpclient.usedefaultcredentials.aspx
-				client.Credentials=new NetworkCredential(emailAddress.EmailUsername,emailAddress.EmailPassword);
+				client.Credentials=new NetworkCredential(emailAddress.EmailUsername.Trim(),emailAddress.EmailPassword);
 				client.DeliveryMethod=SmtpDeliveryMethod.Network;
 				client.EnableSsl=emailAddress.UseSSL;
 				client.Timeout=180000;//3 minutes
 				MailMessage message=new MailMessage();
-				message.From=new MailAddress(emailMessage.FromAddress);
-				message.To.Add(emailMessage.ToAddress);
+				message.From=new MailAddress(emailMessage.FromAddress.Trim());
+				message.To.Add(emailMessage.ToAddress.Trim());
 				message.Subject=Tidy(emailMessage.Subject);
 				message.Body=Tidy(emailMessage.BodyText);
 				message.IsBodyHtml=false;
@@ -487,9 +488,9 @@ namespace OpenDentBusiness{
 			//This code is modified from the example at: http://hpop.sourceforge.net/exampleFetchAllMessages.php
 			using(OpenPop.Pop3.Pop3Client client=new OpenPop.Pop3.Pop3Client()) {//The client disconnects from the server when being disposed.
 				client.Connect(emailAddressInbox.Pop3ServerIncoming,emailAddressInbox.ServerPortIncoming,emailAddressInbox.UseSSL,180000,180000,null);//3 minute timeout, just as for sending emails.
-				client.Authenticate(emailAddressInbox.EmailUsername,emailAddressInbox.EmailPassword,OpenPop.Pop3.AuthenticationMethod.UsernameAndPassword);
+				client.Authenticate(emailAddressInbox.EmailUsername.Trim(),emailAddressInbox.EmailPassword,OpenPop.Pop3.AuthenticationMethod.UsernameAndPassword);
 				List <string> listMsgUids=client.GetMessageUids();//Get all unique identifiers for each email in the inbox.
-				List<EmailMessageUid> listDownloadedMsgUids=EmailMessageUids.GetForRecipientAddress(emailAddressInbox.EmailUsername);
+				List<EmailMessageUid> listDownloadedMsgUids=EmailMessageUids.GetForRecipientAddress(emailAddressInbox.EmailUsername.Trim());
 				int msgDownloadedCount=0;
 				for(int i=0;i<listMsgUids.Count;i++) {
 					int msgIndex=i+1;//The message indicies are 1-based.
@@ -501,7 +502,7 @@ namespace OpenDentBusiness{
 						//In the worst case scenario, we create a Uid for the message based off of the message header information, which takes a little extra time, 
 						//but is better than downloading old messages again, especially if some of those messages contain large attachments.
 						OpenPop.Mime.Header.MessageHeader messageHeader=client.GetMessageHeaders(msgIndex);//Takes 1-2 seconds to get this information from the server.  The message, minus body and minus attachments.
-						strMsgUid=messageHeader.DateSent.ToString("yyyyMMddHHmmss")+emailAddressInbox.EmailUsername+messageHeader.From.Address+messageHeader.Subject;
+						strMsgUid=messageHeader.DateSent.ToString("yyyyMMddHHmmss")+emailAddressInbox.EmailUsername.Trim()+messageHeader.From.Address+messageHeader.Subject;
 					}
 					else if(strMsgUid.Length>4000) {//The EmailMessageUid.MsgId field is only 4000 characters in size.
 						strMsgUid=strMsgUid.Substring(0,4000);
@@ -523,7 +524,7 @@ namespace OpenDentBusiness{
 						string strRawEmail=openPopMsg.MessagePart.BodyEncoding.GetString(openPopMsg.RawMessage);
 						EmailMessage emailMessage=ProcessRawEmailMessage(strRawEmail,0,emailAddressInbox);//Inserts to db.
 						EmailMessageUid emailMessageUid=new EmailMessageUid();
-						emailMessageUid.RecipientAddress=emailMessage.RecipientAddress;
+						emailMessageUid.RecipientAddress=emailMessage.RecipientAddress.Trim();
 						emailMessageUid.MsgId=strMsgUid;
 						EmailMessageUids.Insert(emailMessageUid);//Remember Uid was downloaded, to avoid email duplication the next time the inbox is refreshed.
 						retVal.Add(emailMessage);
@@ -737,16 +738,16 @@ namespace OpenDentBusiness{
 				emailMessage.SentOrReceived=EmailSentOrReceived.ReceivedEncrypted;
 				//The entire contents of the email are saved in the emailMessage.BodyText field, so that if decryption fails, the email will still be saved to the db for decryption later if possible.
 				emailMessage.BodyText=strRawEmail;
-				emailMessage.RecipientAddress=emailAddressReceiver.EmailUsername;
+				emailMessage.RecipientAddress=emailAddressReceiver.EmailUsername.Trim();
 				try {
-					Health.Direct.Agent.DirectAgent directAgent=GetDirectAgentForEmailAddress(inMsg.Message.ToValue);
+					Health.Direct.Agent.DirectAgent directAgent=GetDirectAgentForEmailAddress(inMsg.Message.ToValue.Trim());
 					//throw new ApplicationException("test decryption failure");
 					inMsg=directAgent.ProcessIncoming(inMsg);//Decrypts, valudates trust, etc.
 					emailMessage=ConvertMessageToEmailMessage(inMsg.Message,true);//If the message was wrapped, then the To, From, Subject and Date can change after decyption. We also need to create the attachments for the decrypted message.
 					emailMessage.RawEmailIn=inMsg.SerializeMessage();//Now that we have decrypted, we must get the raw email contents differently (cannot use strRawEmail). 
 					emailMessage.EmailMessageNum=emailMessageNum;
 					emailMessage.SentOrReceived=EmailSentOrReceived.ReceivedDirect;
-					emailMessage.RecipientAddress=emailAddressReceiver.EmailUsername;
+					emailMessage.RecipientAddress=emailAddressReceiver.EmailUsername.Trim();
 				}
 				catch(Exception ex) {
 					//SentOrReceived will be ReceivedEncrypted, indicating to the calling code that decryption failed.
@@ -763,7 +764,7 @@ namespace OpenDentBusiness{
 				emailMessage.RawEmailIn=strRawEmail;
 				emailMessage.EmailMessageNum=emailMessageNum;
 				emailMessage.SentOrReceived=EmailSentOrReceived.Received;
-				emailMessage.RecipientAddress=emailAddressReceiver.EmailUsername;
+				emailMessage.RecipientAddress=emailAddressReceiver.EmailUsername.Trim();
 			}
 			EhrSummaryCcd ehrSummaryCcd=null;
 			if(isEncrypted) {
@@ -816,7 +817,7 @@ namespace OpenDentBusiness{
 		private static EmailMessage ConvertMessageToEmailMessage(Health.Direct.Common.Mail.Message message,bool hasAttachments) {
 			//No need to check RemotingRole; no call to db.
 			EmailMessage emailMessage=new EmailMessage();
-			emailMessage.FromAddress=message.FromValue;
+			emailMessage.FromAddress=message.FromValue.Trim();
 			if(message.DateValue!=null) {//Is null when sending, but should not be null when receiving.
 				//The received email message date must be in a very specific format and must match the RFC822 standard.  Is a required field for RFC822.  http://tools.ietf.org/html/rfc822
 				//We need the received time from the server, so we can quickly identify messages which have already been downloaded and to avoid downloading duplicates.
@@ -841,8 +842,8 @@ namespace OpenDentBusiness{
 			else {//Sending the email.
 				emailMessage.MsgDateTime=DateTime.Now;
 			}
-			emailMessage.Subject=message.SubjectValue;
-			emailMessage.ToAddress=message.ToValue;
+			emailMessage.Subject=Tidy(message.SubjectValue);
+			emailMessage.ToAddress=message.ToValue.Trim();
 			List<Health.Direct.Common.Mime.MimeEntity> listMimeParts=new List<Health.Direct.Common.Mime.MimeEntity>();//We want to treat one part and multiple part emails the same way below, so we make our own list.  If GetParts() is called when IsMultiPart is false, then an exception will be thrown by the Direct library.
 			Health.Direct.Common.Mime.MimeEntity mimeEntity=null;
 			try {
@@ -916,9 +917,10 @@ namespace OpenDentBusiness{
 		private static Health.Direct.Common.Mail.Message ConvertEmailMessageToMessage(EmailMessage emailMessage,bool hasAttachments) {
 			//No need to check RemotingRole; no call to db.
 			//We need to use emailAddressFrom.Username instead of emailAddressFrom.SenderAddress, because of how strict encryption is for matching the name to the certificate.
-			Health.Direct.Common.Mail.Message message=new Health.Direct.Common.Mail.Message(emailMessage.ToAddress,emailMessage.FromAddress);
-			if(emailMessage.Subject!="") {
-				Health.Direct.Common.Mime.Header headerSubject=new Health.Direct.Common.Mime.Header("Subject",emailMessage.Subject);
+			Health.Direct.Common.Mail.Message message=new Health.Direct.Common.Mail.Message(emailMessage.ToAddress.Trim(),emailMessage.FromAddress.Trim());
+			string subject=Tidy(emailMessage.Subject);
+			if(subject!="") {
+				Health.Direct.Common.Mime.Header headerSubject=new Health.Direct.Common.Mime.Header("Subject",subject);
 				message.Headers.Add(headerSubject);
 			}
 			//The Transport Testing Tool (TTT) complained when we sent a message that was not wrapped.
@@ -931,9 +933,10 @@ namespace OpenDentBusiness{
 			message.AssignMessageID();//http://tools.ietf.org/html/rfc5322#section-3.6.4
 			string strBoundry="";
 			List<Health.Direct.Common.Mime.MimeEntity> listMimeParts=new List<Health.Direct.Common.Mime.MimeEntity>();
-			if(emailMessage.BodyText.Trim().Length>4 && emailMessage.BodyText.Trim().StartsWith("--") && emailMessage.BodyText.Trim().EndsWith("--")) {//The body text is multi-part.
-				strBoundry=emailMessage.BodyText.Trim().Split(new string[] { "\r\n","\r","\n" },StringSplitOptions.None)[0];
-				string[] arrayBodyTextParts=emailMessage.BodyText.Trim().TrimEnd('-').Split(new string[] { strBoundry },StringSplitOptions.RemoveEmptyEntries);
+			string bodyText=Tidy(emailMessage.BodyText);
+			if(bodyText.Trim().Length>4 && bodyText.Trim().StartsWith("--") && bodyText.Trim().EndsWith("--")) {//The body text is multi-part.
+				strBoundry=bodyText.Trim().Split(new string[] { "\r\n","\r","\n" },StringSplitOptions.None)[0];
+				string[] arrayBodyTextParts=bodyText.Trim().TrimEnd('-').Split(new string[] { strBoundry },StringSplitOptions.RemoveEmptyEntries);
 				for(int i=0;i<arrayBodyTextParts.Length;i++) {
 					Health.Direct.Common.Mime.MimeEntity mimeEntityBodyText=new Health.Direct.Common.Mime.MimeEntity(arrayBodyTextParts[i]);
 					mimeEntityBodyText.ContentType="text/plain;";
@@ -941,7 +944,7 @@ namespace OpenDentBusiness{
 				}
 			}
 			else {
-				Health.Direct.Common.Mime.MimeEntity mimeEntityBodyText=new Health.Direct.Common.Mime.MimeEntity(emailMessage.BodyText);
+				Health.Direct.Common.Mime.MimeEntity mimeEntityBodyText=new Health.Direct.Common.Mime.MimeEntity(bodyText);
 				mimeEntityBodyText.ContentType="text/plain;";
 				listMimeParts.Add(mimeEntityBodyText);
 			}
@@ -1084,8 +1087,8 @@ namespace OpenDentBusiness{
 			}
 			EmailAddress emailAddressFrom=EmailAddresses.GetByClinic(0);
 			EmailMessage emailMessage=new EmailMessage();
-			emailMessage.FromAddress=emailAddressFrom.EmailUsername;
-			emailMessage.ToAddress=strTo;
+			emailMessage.FromAddress=emailAddressFrom.EmailUsername.Trim();
+			emailMessage.ToAddress=strTo.Trim();
 			emailMessage.Subject=subjectAndBody;
 			emailMessage.BodyText=subjectAndBody;
 			if(attachName1!="") {
