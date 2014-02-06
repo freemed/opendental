@@ -428,7 +428,11 @@ namespace OpenDental {
 
 		private void gridItems_CellLeave(object sender,ODGridClickEventArgs e) {
 			//no need to check which cell was edited, just reprocess both cells
-			int qtyNew=PIn.Int(gridItems.Rows[e.Row].Cells[2].Text);//0 if not valid input
+			int qtyNew=0;//default value.
+			try {
+				qtyNew=PIn.Int(gridItems.Rows[e.Row].Cells[2].Text);//0 if not valid input
+			}
+			catch { }
 			double priceNew=PIn.Double(gridItems.Rows[e.Row].Cells[3].Text);//0 if not valid input
 			SupplyOrderItem suppOI=SupplyOrderItems.CreateObject(PIn.Long(tableOrderItems.Rows[e.Row]["SupplyOrderItemNum"].ToString()));
 			suppOI.Qty=qtyNew;
