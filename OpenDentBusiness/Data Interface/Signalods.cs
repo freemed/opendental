@@ -32,6 +32,35 @@ namespace OpenDentBusiness{
 			return sigList;
 		}
 
+		///<summary>Process all Signals and Acks Since a given DateTime.  Only to be used by OpenDentalWebService.  Returns latest valid signal Date/Time.  Can throw exception.</summary>
+		public static void RefreshForWeb(ref DateTime sinceDateT) {
+			//No need to check RemotingRole; no call to db.
+			try {
+				if(sinceDateT.Year<1880) {
+					sinceDateT=MiscData.GetNowDateTime();
+				}
+				//Get all invalid types since given time.
+				List<int> itypes=Signalods.GetInvalidTypes(Signalods.RefreshTimed(sinceDateT));
+				if(itypes.Count<=0) {
+					return;
+				}
+				string itypesStr="";
+				for(int i=0;i<itypes.Count;i++) {
+					if(i>0) {
+						itypesStr+=",";
+					}
+					itypesStr+=((int)itypes[i]).ToString();
+				}
+				//Refresh the cache for the given invalid types.
+				Cache.RefreshCache(itypesStr);
+				sinceDateT=OpenDentBusiness.MiscData.GetNowDateTime();
+			}
+			catch (Exception e){
+				Cache.Refresh(InvalidType.AllLocal);
+				throw new Exception("Server cache may be invalid. Please try again. Error: "+e.Message);
+			}			
+		}
+
 		///<summary>This excludes all Invalids.  It is only concerned with text and button messages.  It includes all messages, whether acked or not.  It's up to the UI to filter out acked if necessary.  Also includes all unacked messages regardless of date.</summary>
 		public static List<Signalod> RefreshFullText(DateTime sinceDateT) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
