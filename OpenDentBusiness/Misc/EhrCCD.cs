@@ -1887,7 +1887,7 @@ Laboratory Test Results
 					Start("tr");
 					_w.WriteElementString("td",listLabResultFiltered[i].ObservationIdentifierID);//LOINC Code
 					_w.WriteElementString("td",listLabResultFiltered[i].ObservationIdentifierText);//Test
-					_w.WriteElementString("td",value+" "+listLabResultFiltered[i].UnitsText);//Result
+					_w.WriteElementString("td",value+" "+listLabResultFiltered[i].UnitsID);//Result
 					_w.WriteElementString("td",listLabResultFiltered[i].AbnormalFlags);//Abnormal Flag
 					if(String.Compare(Regex.Match("input string",@"^\d{0,4}").Value.PadLeft(4,'0'),"1880")!=-1) {
 						_w.WriteElementString("td","");//Test
