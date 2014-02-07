@@ -490,7 +490,7 @@ namespace OpenDental{
 			ALpatSelect.Add("BalTotal");
 			ALpatSelect.Add("EmployerNum");
 			//EmploymentNote
-			ALpatSelect.Add("Race");
+			//ALpatSelect.Add("Race"); //This column is depricated.
 			ALpatSelect.Add("County");
 			//ALpatSelect.Add("GradeSchool");
 			ALpatSelect.Add("GradeLevel");
