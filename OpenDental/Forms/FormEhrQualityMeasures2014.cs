@@ -23,6 +23,7 @@ namespace OpenDental {
 		private long _provNum;
 		private DateTime _dateStart;
 		private DateTime _dateEnd;
+		public long selectedPatNum;
 
 		public FormEhrQualityMeasures2014() {
 			InitializeComponent();
@@ -109,6 +110,12 @@ namespace OpenDental {
 			FormEhrQualityMeasureEdit2014 FormQME=new FormEhrQualityMeasureEdit2014();
 			FormQME.MeasureCur=listQ[e.Row];
 			FormQME.ShowDialog();
+			if(FormQME.DialogResult==DialogResult.OK && FormQME.selectedPatNum!=0) {
+				selectedPatNum=FormQME.selectedPatNum;
+				DialogResult=DialogResult.OK;
+				Close();
+				return;
+			}
 		}
 
 		private void butRefresh_Click(object sender,EventArgs e) {

@@ -4572,6 +4572,13 @@ namespace OpenDental{
 			FormE.PatNotCur=PatientNoteCur;
 			FormE.PatFamCur=FamCur;
 			FormE.ShowDialog();
+			if(FormE.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			if(FormE.ResultOnClosing==EhrFormResult.PatientSelect) {
+				OnPatientSelected(Patients.GetPat(FormE.PatNum));
+				ModuleSelected(FormE.PatNum);
+			}
 		}
 
 		//private void Tool_EHR_Click_old(bool onLoadShowOrders) {

@@ -12,6 +12,8 @@ using OpenDental.UI;
 namespace OpenDental {
 	public partial class FormEhrQualityMeasureEdit2014:Form {
 		public QualityMeasure MeasureCur;
+		///<summary>Used to pass a patnum back up to the chart module.</summary>
+		public long selectedPatNum;
 
 		public FormEhrQualityMeasureEdit2014() {
 			InitializeComponent();
@@ -95,6 +97,7 @@ namespace OpenDental {
 						}
 						row.Cells.Add(categoryCur);
 						row.Cells.Add(kvpair.Value[i].Explanation);
+						row.Tag=kvpair.Key.ToString();
 						gridMain.Rows.Add(row);
 					}
 				}
@@ -123,10 +126,32 @@ namespace OpenDental {
 					}
 					row.Cells.Add(categoryCur);
 					row.Cells.Add(MeasureCur.ListEhrPats[i].Explanation);
+					row.Tag=MeasureCur.ListEhrPats[i].EhrCqmPat.PatNum.ToString();
 					gridMain.Rows.Add(row);
 				}
 			}
 			gridMain.EndUpdate();
+		}
+
+		private void gotoPatientRecordToolStripMenuItem_Click(object sender,EventArgs e) {
+			selectedPatNum=0;
+			try {
+				selectedPatNum=PIn.Long(gridMain.Rows[gridMain.GetSelectedIndex()].Tag.ToString());
+			}
+			catch { }
+			if(selectedPatNum==0) {
+				return;
+			}
+			DialogResult=DialogResult.OK;
+		}
+
+		private void gridMain_MouseUp(object sender,MouseEventArgs e) {
+			if(gridMain.GetSelectedIndex()==-1) {
+				return;
+			}
+			if(e.Button==MouseButtons.Right) {
+				patMenu.Show(gridMain,new Point(e.X,e.Y));
+			}
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {

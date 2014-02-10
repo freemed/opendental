@@ -23,6 +23,7 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormEhrQualityMeasureEdit2014));
 			this.butClose = new System.Windows.Forms.Button();
 			this.label1 = new System.Windows.Forms.Label();
@@ -51,6 +52,9 @@
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.textExclusExceptNA = new System.Windows.Forms.TextBox();
 			this.labelExclusExceptNA = new System.Windows.Forms.Label();
+			this.patMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.gotoPatientRecordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.patMenu.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// butClose
@@ -318,6 +322,7 @@
 			this.gridMain.TabIndex = 13;
 			this.gridMain.Title = "Audit";
 			this.gridMain.TranslationName = null;
+			this.gridMain.MouseUp += new System.Windows.Forms.MouseEventHandler(this.gridMain_MouseUp);
 			// 
 			// textExclusExceptNA
 			// 
@@ -340,6 +345,20 @@
 			this.labelExclusExceptNA.TabIndex = 36;
 			this.labelExclusExceptNA.Text = "Exclusions/Exceptions NA Label";
 			this.labelExclusExceptNA.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// patMenu
+			// 
+			this.patMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.gotoPatientRecordToolStripMenuItem});
+			this.patMenu.Name = "patMenu";
+			this.patMenu.Size = new System.Drawing.Size(181, 26);
+			// 
+			// gotoPatientRecordToolStripMenuItem
+			// 
+			this.gotoPatientRecordToolStripMenuItem.Name = "gotoPatientRecordToolStripMenuItem";
+			this.gotoPatientRecordToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.gotoPatientRecordToolStripMenuItem.Text = "Goto Patient Record";
+			this.gotoPatientRecordToolStripMenuItem.Click += new System.EventHandler(this.gotoPatientRecordToolStripMenuItem_Click);
 			// 
 			// FormEhrQualityMeasureEdit2014
 			// 
@@ -378,6 +397,7 @@
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Edit Quality Measure";
 			this.Load += new System.EventHandler(this.FormQualityEdit2014_Load);
+			this.patMenu.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -412,5 +432,7 @@
 		private System.Windows.Forms.TextBox textExclusExceptExplain;
 		private System.Windows.Forms.TextBox textExclusExceptNA;
 		private System.Windows.Forms.Label labelExclusExceptNA;
+		private System.Windows.Forms.ContextMenuStrip patMenu;
+		private System.Windows.Forms.ToolStripMenuItem gotoPatientRecordToolStripMenuItem;
 	}
 }

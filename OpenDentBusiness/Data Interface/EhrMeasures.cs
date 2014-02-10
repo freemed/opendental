@@ -4436,6 +4436,7 @@ namespace OpenDentBusiness{
 		MedReconcile,
 		Referrals,
 		MedicationPatNew,
-		MedicationPatEdit
+		MedicationPatEdit,
+		PatientSelect//When this form closes, OD will set the current patient to PatNum
 	}
 }

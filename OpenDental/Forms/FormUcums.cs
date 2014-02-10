@@ -20,7 +20,7 @@ namespace OpenDental {
 			Lan.F(this);
 		}
 
-		private void FormCvxs_Load(object sender,EventArgs e) {
+		private void FormUcums_Load(object sender,EventArgs e) {
 			if(IsSelectionMode) {
 				butClose.Text=Lan.g(this,"Cancel");
 			}

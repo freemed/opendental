@@ -379,12 +379,29 @@ namespace OpenDental {
 			#if EHRTEST
 				ObjFormEhrMeasures=new EHR.FormEhrMeasures();
 				((EHR.FormEhrMeasures)ObjFormEhrMeasures).ShowDialog();
+
 			#else
 				if(ObjFormEhrMeasures==null) {
 					return;
 				}
 				Type type=AssemblyEHR.GetType("EHR.FormEhrMeasures");//namespace.class
-				type.InvokeMember("ShowDialog",System.Reflection.BindingFlags.InvokeMethod,null,ObjFormEhrMeasures,null);
+				//type.InvokeMember("ShowDialog",System.Reflection.BindingFlags.InvokeMethod,null,ObjFormEhrMeasures,null);
+				Form FormEM=(Form)type.InvokeMember("FormEhrMeasures",System.Reflection.BindingFlags.CreateInstance,null,ObjFormEhrMeasures,null);
+				//AssemblyEHR.GetModule("FormEhrMeasures");
+				FormEM.ShowDialog();
+				long patNum=0;
+				try {
+					patNum=(long)type.InvokeMember("SelectedPatNum",System.Reflection.BindingFlags.GetProperty,null,FormEM,null);
+				}
+				catch { }
+				if(FormEM.DialogResult==DialogResult.OK && patNum!=0) {
+					PatNum=patNum;
+					ResultOnClosing=EhrFormResult.PatientSelect;
+					DialogResult=DialogResult.OK;
+					Close();
+					return;
+				}
+				//long patNum;
 			#endif
 			FillGridMu();
 		}
@@ -408,6 +425,13 @@ namespace OpenDental {
 		private void but2014CQM_Click(object sender,EventArgs e) {
 			FormEhrQualityMeasures2014 FormQ=new FormEhrQualityMeasures2014();
 			FormQ.ShowDialog();
+			if(FormQ.DialogResult==DialogResult.OK && FormQ.selectedPatNum!=0) {
+				PatNum=FormQ.selectedPatNum;
+				ResultOnClosing=EhrFormResult.PatientSelect;
+				DialogResult=DialogResult.OK;
+				Close();
+				return;
+			}
 			FillGridMu();
 		}
 

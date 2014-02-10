@@ -125,7 +125,7 @@ namespace OpenDental{
 			this.Name = "FormUcums";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Unified Code for Units of Measure";
-			this.Load += new System.EventHandler(this.FormCvxs_Load);
+			this.Load += new System.EventHandler(this.FormUcums_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
