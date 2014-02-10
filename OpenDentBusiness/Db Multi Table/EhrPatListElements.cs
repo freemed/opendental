@@ -306,12 +306,10 @@ namespace OpenDentBusiness {
 						command+=",patient.Birthdate ";
 						break;
 					case EhrRestrictionType.Problem:
-						command+=",(SELECT icd9.ICD9Num FROM disease,diseasedef,icd9 "
+						command+=",(SELECT diseasedef.ICD9Code FROM disease,diseasedef "
 							+"WHERE disease.PatNum=patient.PatNum "
 							+"AND disease.DiseaseDefNum=diseasedef.DiseaseDefNum "
-							+"AND diseasedef.ICD9Code=icd9.ICD9Code "
-							+"AND icd9.ICD9Num IN (SELECT ICD9Num FROM icd9 WHERE ICD9Code LIKE '"+compStr+"%') "
-							+DbHelper.LimitAnd(1)+") `"+compStr+"` ";
+							+"AND diseasedef.Icd9code LIKE '"+compStr+"%') `"+compStr+"` ";
 						break;
 					case EhrRestrictionType.LabResult:
 						command+=",(SELECT IFNULL(MAX(ObsValue),0) FROM labresult,labpanel WHERE labresult.LabPanelNum=labpanel.LabPanelNum AND labpanel.PatNum=patient.PatNum AND labresult.TestName='"+compStr+"') `"+compStr+"` ";
