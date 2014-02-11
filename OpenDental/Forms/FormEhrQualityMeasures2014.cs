@@ -155,6 +155,12 @@ namespace OpenDental {
 			}
 			try {
 				System.IO.Directory.CreateDirectory(folderPath);
+				for(int i=0;i<listQ.Count;i++) {
+					if(System.IO.Directory.Exists(folderPath+"\\Measure_"+listQ[i].eMeasureNum)) {
+						continue;
+					}
+					System.IO.Directory.CreateDirectory(folderPath+"\\Measure_"+listQ[i].eMeasureNum);
+				}
 			}
 			catch(Exception ex) {
 				MessageBox.Show("Folder was not created: "+ex.Message);
