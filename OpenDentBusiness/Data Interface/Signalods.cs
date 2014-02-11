@@ -56,6 +56,8 @@ namespace OpenDentBusiness{
 				sinceDateT=OpenDentBusiness.MiscData.GetNowDateTime();
 			}
 			catch (Exception e){
+				//Most likely cause for an exception here would be a thread collision between 2 consumers trying to refresh the cache at the exact same instant.
+				//There is a chance that performing as subsequent refresh here would cause yet another collision but it's the best we can do without redesigning the entire cache pattern.
 				Cache.Refresh(InvalidType.AllLocal);
 				throw new Exception("Server cache may be invalid. Please try again. Error: "+e.Message);
 			}			

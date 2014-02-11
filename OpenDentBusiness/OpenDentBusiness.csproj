@@ -450,6 +450,7 @@
     <Compile Include="Data Interface\Hcpcses.cs" />
     <Compile Include="Data Interface\Icd10s.cs" />
     <Compile Include="Data Interface\Interventions.cs" />
+    <Compile Include="Data Interface\Logods.cs" />
     <Compile Include="Data Interface\Loincs.cs" />
     <Compile Include="Data Interface\MapAreas.cs" />
     <Compile Include="Data Interface\OIDExternals.cs" />
@@ -855,6 +856,7 @@
     <Compile Include="TableTypes\EhrAptObs.cs" />
     <Compile Include="TableTypes\EhrLabImage.cs" />
     <Compile Include="TableTypes\EhrPatient.cs" />
+    <Compile Include="TableTypes\LogWeb.cs" />
     <Compile Include="TableTypes\OIDExternal.cs" />
     <Compile Include="TableTypes\OIDInternal.cs" />
     <Compile Include="TableTypes\EhrLabSpecimenRejectReason.cs" />

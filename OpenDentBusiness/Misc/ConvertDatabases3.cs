@@ -3857,7 +3857,39 @@ namespace OpenDentBusiness {
 					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'TimeCardADPExportIncludesName','0')";
 					Db.NonQ(command);
 				}
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS logod";
+					Db.NonQ(command);
+					command=@"CREATE TABLE logod (
+						LogNum bigint NOT NULL auto_increment PRIMARY KEY,
+						DateTStamp datetime NOT NULL DEFAULT '0001-01-01 00:00:00',
+						Message varchar(255) NOT NULL,
+						CallStack varchar(255) NOT NULL,
+						FunctionName varchar(255) NOT NULL,
+						IsException tinyint NOT NULL,
+						DataContext varchar(255) NOT NULL,
+						LogLevelOfEntry tinyint NOT NULL,
+						LogLevelOfApplication tinyint NOT NULL
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE logod'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE logod (
+						LogNum number(20) NOT NULL,
+						DateTStamp date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+						Message varchar2(255),
+						CallStack varchar2(255),
+						FunctionName varchar2(255),
+						IsException number(3) NOT NULL,
+						DataContext varchar2(255),
+						LogLevelOfEntry number(3) NOT NULL,
+						LogLevelOfApplication number(3) NOT NULL,
+						CONSTRAINT logod_LogNum PRIMARY KEY (LogNum)
+						)";
+					Db.NonQ(command);
+				}
 
 
 
@@ -3877,11 +3909,6 @@ namespace OpenDentBusiness {
 
 	}
 }
-
-
-
-
-
 
 
 
