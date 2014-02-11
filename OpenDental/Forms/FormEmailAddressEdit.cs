@@ -35,6 +35,8 @@ namespace OpenDental{
 		private TextBox textPortIncoming;
 		private TextBox textBox5;
 		private Label label11;
+		private Label label9;
+		private Label label12;
 		public bool IsNew;
 
 		///<summary></summary>
@@ -91,6 +93,8 @@ namespace OpenDental{
 			this.textPortIncoming = new System.Windows.Forms.TextBox();
 			this.textBox5 = new System.Windows.Forms.TextBox();
 			this.label11 = new System.Windows.Forms.Label();
+			this.label9 = new System.Windows.Forms.Label();
+			this.label12 = new System.Windows.Forms.Label();
 			this.groupOutgoing.SuspendLayout();
 			this.groupIncoming.SuspendLayout();
 			this.SuspendLayout();
@@ -104,7 +108,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(478, 384);
+			this.butCancel.Location = new System.Drawing.Point(509, 384);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 7;
@@ -119,7 +123,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(397, 384);
+			this.butOK.Location = new System.Drawing.Point(428, 384);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75, 24);
 			this.butOK.TabIndex = 6;
@@ -128,21 +132,21 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(12, 22);
+			this.label1.Location = new System.Drawing.Point(12, 19);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(173, 16);
+			this.label1.Size = new System.Drawing.Size(173, 20);
 			this.label1.TabIndex = 2;
 			this.label1.Text = "Outgoing SMTP Server";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(6, 145);
+			this.label2.Location = new System.Drawing.Point(6, 142);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(177, 20);
 			this.label2.TabIndex = 3;
 			this.label2.Text = "E-mail address of sender";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textSMTPserver
 			// 
@@ -155,7 +159,7 @@ namespace OpenDental{
 			// 
 			this.textSender.Location = new System.Drawing.Point(185, 142);
 			this.textSender.Name = "textSender";
-			this.textSender.Size = new System.Drawing.Size(340, 20);
+			this.textSender.Size = new System.Drawing.Size(218, 20);
 			this.textSender.TabIndex = 5;
 			// 
 			// textBox1
@@ -179,12 +183,12 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(97, 9);
+			this.label3.Location = new System.Drawing.Point(97, 6);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(98, 20);
 			this.label3.TabIndex = 18;
 			this.label3.Text = "Username";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textPassword
 			// 
@@ -196,12 +200,12 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(18, 29);
+			this.label4.Location = new System.Drawing.Point(18, 26);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(177, 20);
 			this.label4.TabIndex = 20;
 			this.label4.Text = "Password";
-			this.label4.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textPort
 			// 
@@ -212,25 +216,26 @@ namespace OpenDental{
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(9, 117);
+			this.label5.Location = new System.Drawing.Point(9, 114);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(174, 20);
 			this.label5.TabIndex = 22;
 			this.label5.Text = "Outgoing Port";
-			this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(247, 117);
+			this.label6.Location = new System.Drawing.Point(247, 114);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(251, 20);
 			this.label6.TabIndex = 23;
 			this.label6.Text = "Usually 587.  Sometimes 25 or 465.";
+			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// checkSSL
 			// 
 			this.checkSSL.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkSSL.Location = new System.Drawing.Point(21, 48);
+			this.checkSSL.Location = new System.Drawing.Point(21, 47);
 			this.checkSSL.Name = "checkSSL";
 			this.checkSSL.Size = new System.Drawing.Size(190, 17);
 			this.checkSSL.TabIndex = 4;
@@ -240,7 +245,7 @@ namespace OpenDental{
 			// 
 			// label7
 			// 
-			this.label7.Location = new System.Drawing.Point(217, 49);
+			this.label7.Location = new System.Drawing.Point(217, 48);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(251, 20);
 			this.label7.TabIndex = 25;
@@ -256,7 +261,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(12, 384);
+			this.butDelete.Location = new System.Drawing.Point(43, 384);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(75, 24);
 			this.butDelete.TabIndex = 6;
@@ -265,6 +270,7 @@ namespace OpenDental{
 			// 
 			// groupOutgoing
 			// 
+			this.groupOutgoing.Controls.Add(this.label9);
 			this.groupOutgoing.Controls.Add(this.textSMTPserver);
 			this.groupOutgoing.Controls.Add(this.label1);
 			this.groupOutgoing.Controls.Add(this.label2);
@@ -275,7 +281,7 @@ namespace OpenDental{
 			this.groupOutgoing.Controls.Add(this.label5);
 			this.groupOutgoing.Location = new System.Drawing.Point(12, 73);
 			this.groupOutgoing.Name = "groupOutgoing";
-			this.groupOutgoing.Size = new System.Drawing.Size(541, 180);
+			this.groupOutgoing.Size = new System.Drawing.Size(572, 180);
 			this.groupOutgoing.TabIndex = 26;
 			this.groupOutgoing.TabStop = false;
 			this.groupOutgoing.Text = "Outgoing Email Settings";
@@ -290,7 +296,7 @@ namespace OpenDental{
 			this.groupIncoming.Controls.Add(this.label11);
 			this.groupIncoming.Location = new System.Drawing.Point(12, 259);
 			this.groupIncoming.Name = "groupIncoming";
-			this.groupIncoming.Size = new System.Drawing.Size(541, 116);
+			this.groupIncoming.Size = new System.Drawing.Size(572, 116);
 			this.groupIncoming.TabIndex = 27;
 			this.groupIncoming.TabStop = false;
 			this.groupIncoming.Text = "Incoming Email Settings";
@@ -304,20 +310,21 @@ namespace OpenDental{
 			// 
 			// label8
 			// 
-			this.label8.Location = new System.Drawing.Point(12, 22);
+			this.label8.Location = new System.Drawing.Point(12, 19);
 			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(173, 16);
+			this.label8.Size = new System.Drawing.Size(173, 20);
 			this.label8.TabIndex = 2;
 			this.label8.Text = "Incoming POP3 Server";
-			this.label8.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label10
 			// 
-			this.label10.Location = new System.Drawing.Point(247, 91);
+			this.label10.Location = new System.Drawing.Point(247, 88);
 			this.label10.Name = "label10";
 			this.label10.Size = new System.Drawing.Size(251, 20);
 			this.label10.TabIndex = 23;
 			this.label10.Text = "Usually 110.  Sometimes 995.";
+			this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// textPortIncoming
 			// 
@@ -339,19 +346,38 @@ namespace OpenDental{
 			// 
 			// label11
 			// 
-			this.label11.Location = new System.Drawing.Point(9, 91);
+			this.label11.Location = new System.Drawing.Point(9, 88);
 			this.label11.Name = "label11";
 			this.label11.Size = new System.Drawing.Size(174, 20);
 			this.label11.TabIndex = 22;
 			this.label11.Text = "Incoming Port";
-			this.label11.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label9
+			// 
+			this.label9.Location = new System.Drawing.Point(404, 142);
+			this.label9.Name = "label9";
+			this.label9.Size = new System.Drawing.Size(159, 20);
+			this.label9.TabIndex = 24;
+			this.label9.Text = "(not used in encrypted email)";
+			this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// label12
+			// 
+			this.label12.Location = new System.Drawing.Point(416, 6);
+			this.label12.Name = "label12";
+			this.label12.Size = new System.Drawing.Size(178, 20);
+			this.label12.TabIndex = 28;
+			this.label12.Text = "(full email address)";
+			this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// FormEmailAddressEdit
 			// 
 			this.AcceptButton = this.butOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(569, 424);
+			this.ClientSize = new System.Drawing.Size(600, 424);
+			this.Controls.Add(this.label12);
 			this.Controls.Add(this.groupIncoming);
 			this.Controls.Add(this.groupOutgoing);
 			this.Controls.Add(this.label7);
