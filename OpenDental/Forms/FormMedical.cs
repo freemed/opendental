@@ -539,7 +539,13 @@ namespace OpenDental{
 			FillMeds();
 			FillProblems();
 			FillAllergies();
-			FillFamilyHealth();
+			if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
+				FillFamilyHealth();
+			}
+			else {
+				gridFamilyHealth.Visible=false;
+				butAddFamilyHistory.Visible=false;
+			}
 			List<EhrMeasureEvent> listDocumentedMedEvents=EhrMeasureEvents.RefreshByType(PatCur.PatNum,EhrMeasureEventType.CurrentMedsDocumented);
 			_EhrMeasureEventNum=0;
 			for(int i=0;i<listDocumentedMedEvents.Count;i++) {
