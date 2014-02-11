@@ -45,6 +45,11 @@ namespace OpenDental {
 
 		private void butGiveAccess_Click(object sender,EventArgs e) {
 			if(butGiveAccess.Text=="Provide Online Access") {//When form open opens with a blank password
+				string error=ValidatePatientAccess();
+				if(error!="") {
+					MessageBox.Show(error);
+					return;
+				}
 				Cursor=Cursors.WaitCursor;
 				//1. Fill password.
 				string passwordGenerated=GenerateRandomPassword(8);
@@ -300,6 +305,53 @@ namespace OpenDental {
 				return false;
 			}
 			return true;
+		}
+
+		private string ValidatePatientAccess() {
+			string strErrors="";
+			if(PatCur.FName.Trim()=="") {
+				if(strErrors!="") {
+					strErrors+="\r\n";
+				}
+				strErrors+="Missing patient first name.";
+			}
+			if(PatCur.LName.Trim()=="") {
+				if(strErrors!="") {
+					strErrors+="\r\n";
+				}
+				strErrors+="Missing patient last name.";
+			}
+			if(PatCur.Address.Trim()=="") {
+				if(strErrors!="") {
+					strErrors+="\r\n";
+				}
+				strErrors+="Missing patient address line 1.";
+			}
+			if(PatCur.City.Trim()=="") {
+				if(strErrors!="") {
+					strErrors+="\r\n";
+				}
+				strErrors+="Missing patient city.";
+			}
+			if(PatCur.State.Trim().Length!=2) {
+				if(strErrors!="") {
+					strErrors+="\r\n";
+				}
+				strErrors+="Invalid patient state.  Must be two letters.";
+			}
+			if(PatCur.Birthdate.Year<1880) {
+				if(strErrors!="") {
+					strErrors+="\r\n";
+				}
+				strErrors+="Missing patient birth date.";
+			}
+			if(PatCur.HmPhone.Trim()=="" && PatCur.WirelessPhone.Trim()=="" && PatCur.WkPhone.Trim()=="") {
+				if(strErrors!="") {
+					strErrors+="\r\n";
+				}
+				strErrors+="Missing patient phone. Must have home, wireless, or work phone.";
+			}
+			return strErrors;
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
