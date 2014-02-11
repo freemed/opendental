@@ -10,7 +10,6 @@ using OpenDentBusiness;
 namespace OpenDental {
 	public partial class FormAllergyDefEdit:Form {
 		public AllergyDef AllergyDefCur;
-		private Snomed snomedAllergicTo;
 
 		public FormAllergyDefEdit() {
 			InitializeComponent();
@@ -26,11 +25,8 @@ namespace OpenDental {
 				comboSnomedAllergyType.Items.Add(Enum.GetNames(typeof(SnomedAllergy))[i]);
 			}
 			comboSnomedAllergyType.SelectedIndex=(int)AllergyDefCur.SnomedType;
-			//snomedAllergicTo=Snomeds.GetByCode(AllergyDefCur.SnomedAllergyTo);// TODO: change to Unii
-			if(snomedAllergicTo!=null) {
-				//textSnomedAllergicTo.Text=snomedAllergicTo.Description;
-			}
 			textMedication.Text=Medications.GetDescription(AllergyDefCur.MedicationNum);
+			textUnii.Text=AllergyDefCur.UniiCode;
 		}
 
 		private void butUniiToSelect_Click(object sender,EventArgs e) {
@@ -68,11 +64,30 @@ namespace OpenDental {
 				MsgBox.Show(this,"Description cannot be blank.");
 				return;
 			}
+			if(textUnii.Text!="" && textMedication.Text!="") {
+				MsgBox.Show(this,"Only one code is allowed per allergy def.");
+				return;
+			}
+			string validChars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+			StringBuilder notAllowed=new StringBuilder();
+			for(int i=0;i<textUnii.Text.Length;i++) {
+				if(validChars.IndexOf(textUnii.Text[i])==-1) {//Not found.
+					notAllowed.Append(textUnii.Text[i]);
+				}
+			}
+			if(notAllowed.ToString()!="") {
+				MessageBox.Show(Lan.g(this,"UNII code has invalid characters: "+notAllowed));
+				return;
+			}
+			if(textUnii.Text.Length!=10) {
+				MsgBox.Show(this,"UNII code must be 10 characters in length.");
+				return;
+			}
 			AllergyDefCur.Description=textDescription.Text;
 			AllergyDefCur.IsHidden=checkHidden.Checked;
 			AllergyDefCur.SnomedType=(SnomedAllergy)comboSnomedAllergyType.SelectedIndex;
-			//AllergyDefCur.SnomedAllergyTo="";//TODO: Change to UNII
-			//if(snomedAllergicTo!=null) {
+			AllergyDefCur.UniiCode=textUnii.Text;
+			//if(snomedAllergicTo!=null) { //TODO: Do UNII check once the table is added
 			//	AllergyDefCur.SnomedAllergyTo=snomedAllergicTo.SnomedCode;
 			//}
 			if(AllergyDefCur.IsNew) {

@@ -48,8 +48,35 @@ namespace OpenDentBusiness {
 		private const string strCodeSystemNucc="2.16.840.1.113883.6.101";
 		///<summary>NUCC</summary>
 		private const string strCodeSystemNameNucc="NUCC";
+		///<summary>OID: 2.16.840.1.113883.4.9</summary>
+		private const string strCodeSystemUnii="2.16.840.1.113883.4.9";
+		///<summary>UNII</summary>
+		private const string strCodeSystemNameUnii="UNII";
+		
 		///<summary>Set each time GenerateCCD() is called. Used by helper functions to avoid sending the patient as a parameter to each helper function.</summary>
 		private Patient _patOutCcd=null;
+		///<summary>Set each time ValidateAll and ValidateAllergy is called.</summary>
+		private static List<Allergy> _listAllergiesFiltered;
+		///<summary>Set each time ValidateAll and ValidateEncounter is called.</summary>
+		private static List<Encounter> _listEncountersFiltered;
+		///<summary>Set each time ValidateAll and ValidateFunctionalStatus is called.</summary>
+		private static List<Disease> _listProblemsFuncFiltered;
+		///<summary>Set each time ValidateAll and ValidateImmunization is called.</summary>
+		private static List<VaccinePat> _listVaccinePatsFiltered;
+		///<summary>Set each time ValidateAll and ValidateMedication is called.</summary>
+		private static List<MedicationPat> _listMedPatsFiltered;
+		///<summary>Set each time ValidateAll and ValidatePlanOfCare is called.</summary>
+		private static List<EhrCarePlan> _listEhrCarePlansFiltered;
+		///<summary>Set each time ValidateAll and ValidateProblem is called.</summary>
+		private static List<Disease> _listProblemsFiltered;
+		///<summary>Set each time ValidateAll and ValidateProcedure is called.</summary>
+		private static List<Procedure> _listProcsFiltered;
+		///<summary>Set each time ValidateAll and ValidateLabResult is called.</summary>
+		private static List<EhrLabResult> _listLabResultFiltered;
+		///<summary>Set each time ValidateAll and ValidateSocialHistory is called.</summary>
+		private static List<EhrMeasureEvent> _listEhrMeasureEventsFiltered;
+		///<summary>Set each time ValidateAll and ValidateVitalSign is called.</summary>
+		private static List<Vitalsign> _listVitalSignsFiltered;
 		///<summary>Instantiated each time GenerateCCD() is called. Used by helper functions to avoid sending the writer as a parameter to each helper function.</summary>
 		private XmlWriter _w=null;
 		///<summary>Instantiated each time GenerateCCD() is called. Used to generate unique "id" element "root" attribute identifiers. The Ids in this list are random alpha-numeric and 32 characters in length.</summary>
@@ -99,11 +126,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Throws an exception if validation fails.</summary>
 		private string GenerateCCD(Patient pat,string referralReason,bool hasAllergy,bool hasEncounter,bool hasFunctionalStatus,bool hasImmunization,bool hasMedication,bool hasPlanOfCare,bool hasProblem,bool hasProcedure,bool hasReferral,bool hasResult,bool hasSocialHistory,bool hasVitalSign,string instructions) {
-			string strErrors=ValidateSettings();
-			if(strErrors!="") {
-				throw new ApplicationException(strErrors);
-			}
-			strErrors=ValidatePatient(pat);
+			string strErrors=ValidateAll(pat);
 			if(strErrors!="") {
 				throw new ApplicationException(strErrors);
 			}
@@ -411,31 +434,12 @@ Body
 Allergies
 =====================================================================================================");
 			AllergyDef allergyDef;
-			List<Allergy> listAllergiesAll=Allergies.Refresh(_patOutCcd.PatNum);
 			List<Allergy> listAllergiesFiltered=new List<Allergy>();
-			for(int i=0;i<listAllergiesAll.Count;i++) {
-				if(!hasAllergy) {
-					continue;
-				}
-				allergyDef=AllergyDefs.GetOne(listAllergiesAll[i].AllergyDefNum);
-				bool isMedAllergy=false;
-				if(allergyDef.MedicationNum!=0) {
-					Medication med=Medications.GetMedication(allergyDef.MedicationNum);
-					if(med.RxCui!=0) {
-						isMedAllergy=true;
-					}
-				}
-				if(allergyDef.SnomedType!=SnomedAllergy.AdverseReactionsToDrug && allergyDef.SnomedType!=SnomedAllergy.DrugAllergy && allergyDef.SnomedType!=SnomedAllergy.DrugIntolerance) {
-					isMedAllergy=false;
-				}
-				//bool isSnomedAllergy=false;
-				//if(allergyDef.SnomedAllergyTo!="") {
-				//	isSnomedAllergy=true;
-				//}
-				if(!isMedAllergy) {// && !isSnomedAllergy) {
-					continue;//TODO: We need to add support for 
-				}
-				listAllergiesFiltered.Add(listAllergiesAll[i]);
+			if(!hasAllergy) {
+				listAllergiesFiltered=new List<Allergy>();
+			}
+			else {
+				listAllergiesFiltered=_listAllergiesFiltered;
 			}
 			Start("component");
 			Start("section");
@@ -471,7 +475,12 @@ Allergies
 					//else {//Medication allergy
 						Medication med;
 						if(allergyDef.MedicationNum==0) {
-							_w.WriteElementString("td","");
+							if(allergyDef.UniiCode=="") {
+								_w.WriteElementString("td","");
+							}
+							else {
+								_w.WriteElementString("td",allergyDef.UniiCode+" - "+allergyDef.Description);
+							}
 						}
 						else {
 							med=Medications.GetMedication(allergyDef.MedicationNum);
@@ -594,7 +603,7 @@ Allergies
 				Start("playingEntity","classCode","MMAT");
 				//pg. 331 item 9:
 				//In an allergy to a specific medication the code SHALL be selected from the ValueSet 2.16.840.1.113883.3.88.12.80.16 Medication Brand Name (code system: RxNorm 2.16.840.1.113883.6.88); Example: 205734		RxNorm	Amoxicillin 25 MG/ML Oral Suspension [Amoxil]
-				//Or the ValueSet 2.16.840.1.113883.3.88.12.80.17 Medication Clinical Drug (code system: RxNorm 2.16.840.1.113883.6.88). Example: 313850	RxNorm	Amoxicillin 40 MG/ML Oral Suspension
+				//Or the ValueSet 2.16.840.1.113883.3.88.12.80.17 Medication Clinical Drug (code system: RxNorm 2.16.840.1.113883.6.88). Example: 313850	RxNorm	Amoxicillin 40 MG/ML Oral Suspensionv 
 				//In an allergy to a class of medications the code SHALL be selected from the ValueSet 2.16.840.1.113883.3.88.12.80.18 Medication Drug Class (code system: NDF-RT 2.16.840.1.113883.3.26.1.5). Example: 2-Propanol
 				//In an allergy to a food or other substance the code SHALL be selected from the ValueSet 2.16.840.1.113883.3.88.12.80.20 Ingredient Name (code system: Unique Ingredient Identifier (UNII) 2.16.840.1.113883.4.9). Example: Peanut.
 				//if(allergyDef.SnomedAllergyTo!="") {//Is Snomed allergy.
@@ -604,13 +613,17 @@ Allergies
 				//else {//Medication allergy
 				//TODO: We must handle allergies to classes of medications as well as food/substance allergies in the near future.
 				if(allergyDef.MedicationNum==0) {
-					StartAndEnd("code","nullFlavor","UNK");
+					if(allergyDef.UniiCode=="") {
+						StartAndEnd("code","nullFlavor","UNK");
+					}
+					else {
+						StartAndEnd("code","code",allergyDef.UniiCode,"displayName",allergyDef.Description,"codeSystem",strCodeSystemUnii,"codeSystemName",strCodeSystemNameUnii);
+					}
 				}
 				else {
 					Medication med=Medications.GetMedication(allergyDef.MedicationNum);
 					StartAndEnd("code","code",med.RxCui.ToString(),"displayName",med.MedName,"codeSystem",strCodeSystemRxNorm,"codeSystemName",strCodeSystemNameRxNorm);
 				}
-
 				//}
 				End("playingEntity");
 				End("participantRole");
@@ -689,16 +702,12 @@ Allergies
 =====================================================================================================
 Encounters
 =====================================================================================================");
-			List<Encounter> listEncountersAll=Encounters.Refresh(_patOutCcd.PatNum);
-			List<Encounter> listEncountersFiltered=new List<Encounter>();
-			for(int i=0;i<listEncountersAll.Count;i++) {
-				if(!hasEncounter) {
-					continue;
-				}
-				if(listEncountersAll[i].CodeSystem!="SNOMEDCT") {
-					continue;//The format only allows SNOMED codes and ICD10 codes. We do not have a way to enter ICD10 codes, and SNOMED appears to be the preferred code system anyway.
-				}
-				listEncountersFiltered.Add(listEncountersAll[i]);
+			List<Encounter> listEncountersFiltered;
+			if(!hasEncounter) {
+				listEncountersFiltered=new List<Encounter>();
+			}
+			else {
+				listEncountersFiltered=_listEncountersFiltered;
 			}
 			Start("component");
 			Start("section");
@@ -855,24 +864,16 @@ Encounters
 
 		///<summary>Helper for GenerateCCD().</summary>
 		private void GenerateCcdSectionFunctionalStatus(bool hasFunctionalStatus) {
-			string snomedProblemType="55607006";
 			_w.WriteComment(@"
 =====================================================================================================
 Functional and Cognitive Status
 =====================================================================================================");
-			List<Disease> listProblemsAll=Diseases.Refresh(_patOutCcd.PatNum);
-			List<Disease> listProblemsFiltered=new List<Disease>();
-			for(int i=0;i<listProblemsAll.Count;i++) {
-				if(!hasFunctionalStatus) {
-					continue;
-				}
-				if(listProblemsAll[i].SnomedProblemType!="" && listProblemsAll[i].SnomedProblemType!=snomedProblemType) {
-					continue;//Not a "problem".
-				}
-				if(listProblemsAll[i].FunctionStatus==FunctionalStatus.Problem) {
-					continue;//Is a standard problem, not a cognitive or functional problem.
-				}
-				listProblemsFiltered.Add(listProblemsAll[i]);
+			List<Disease> listProblemsFiltered;
+			if(!hasFunctionalStatus) {
+				listProblemsFiltered=new List<Disease>();
+			}
+			else {
+				listProblemsFiltered=_listProblemsFuncFiltered;
 			}
 			Start("component");
 			Start("section");
@@ -1085,13 +1086,12 @@ Functional and Cognitive Status
 =====================================================================================================
 Immunizations
 =====================================================================================================");
-			List<VaccinePat> listVaccinePatsAll=VaccinePats.Refresh(_patOutCcd.PatNum);
-			List<VaccinePat> listVaccinePatsFiltered=new List<VaccinePat>();
-			for(int i=0;i<listVaccinePatsAll.Count;i++) {
-				if(!hasImmunization) {
-					continue;
-				}
-				listVaccinePatsFiltered.Add(listVaccinePatsAll[i]);
+			List<VaccinePat> listVaccinePatsFiltered;
+			if(!hasImmunization) {
+				listVaccinePatsFiltered=new List<VaccinePat>();
+			}
+			else {
+				listVaccinePatsFiltered=_listVaccinePatsFiltered;
 			}
 			Start("component");
 			Start("section");
@@ -1231,13 +1231,12 @@ Instructions
 =====================================================================================================
 Medications
 =====================================================================================================");
-			List<MedicationPat> listMedPatsAll=MedicationPats.Refresh(_patOutCcd.PatNum,true);
 			List<MedicationPat> listMedPatsFiltered=new List<MedicationPat>();
-			for(int i=0;i<listMedPatsAll.Count;i++) {
-				if(!hasMedication) {
-					continue;
-				}
-				listMedPatsFiltered.Add(listMedPatsAll[i]);
+			if(!hasMedication) {
+				listMedPatsFiltered=new List<MedicationPat>();
+			}
+			else {
+				listMedPatsFiltered=_listMedPatsFiltered;
 			}
 			Start("component");
 			Start("section");
@@ -1366,13 +1365,12 @@ Medications
 Care Plan
 =====================================================================================================");
 			List<EhrCarePlan> listEhrCarePlansAll=EhrCarePlans.Refresh(_patOutCcd.PatNum);
-			List<EhrCarePlan> listEhrCarePlansFiltered=new List<EhrCarePlan>();
-			for(int i=0;i<listEhrCarePlansAll.Count;i++) {
-				if(!hasPlanOfCare) {
-					continue;
-				}
-				//No filters yet. This loop is here to match our pattern. If we need to add filters later, the change will be safer and more obvious.
-				listEhrCarePlansFiltered.Add(listEhrCarePlansAll[i]);
+			List<EhrCarePlan> listEhrCarePlansFiltered;
+			if(!hasPlanOfCare) {
+				listEhrCarePlansFiltered=new List<EhrCarePlan>();
+			}
+			else {
+				listEhrCarePlansFiltered=_listEhrCarePlansFiltered;
 			}
 			Start("component");
 			Start("section");
@@ -1459,24 +1457,17 @@ Care Plan
 
 		///<summary>Helper for GenerateCCD().  Problem section.</summary>
 		private void GenerateCcdSectionProblems(bool hasProblem) {
-			string snomedProblemType="55607006";
 			_w.WriteComment(@"
 =====================================================================================================
 Problems
 =====================================================================================================");
-			List<Disease> listProblemsAll=Diseases.Refresh(_patOutCcd.PatNum);
-			List<Disease> listProblemsFiltered=new List<Disease>();
-			for(int i=0;i<listProblemsAll.Count;i++) {
-				if(!hasProblem) {
-					continue;
-				}
-				if(listProblemsAll[i].SnomedProblemType!="" && listProblemsAll[i].SnomedProblemType!=snomedProblemType) {
-					continue;//Not a "problem".
-				}
-				if(listProblemsAll[i].FunctionStatus!=FunctionalStatus.Problem) {
-					continue;//Not a "problem".
-				}
-				listProblemsFiltered.Add(listProblemsAll[i]);
+			string snomedProblemType="55607006";
+			List<Disease> listProblemsFiltered;
+			if(!hasProblem) {
+				listProblemsFiltered=new List<Disease>();
+			}
+			else {
+				listProblemsFiltered=_listProblemsFiltered;
 			}
 			string status="Inactive";
 			string statusCode="73425007";
@@ -1667,23 +1658,12 @@ Problems
 =====================================================================================================
 Procedures
 =====================================================================================================");
-			List<Procedure> listProcsAll=Procedures.Refresh(_patOutCcd.PatNum);
-			List<Procedure> listProcsFiltered=new List<Procedure>();
-			for(int i=0;i<listProcsAll.Count;i++) {
-				if(!hasProcedure) {
-					continue;
-				}
-				ProcedureCode procCode=ProcedureCodes.GetProcCode(listProcsAll[i].CodeNum);
-				if(listProcsAll[i].ProcStatus==ProcStat.D) {
-					continue;//Ignore deleted procedures.
-				}
-				if(listProcsAll[i].ProcStatus==ProcStat.TP) {
-					continue;//Ignore treatment planned procedures.  These procedures should be sent out in the Care Plan section in the future.  We are not required to send treatment planned items.
-				}
-				if(listProcsAll[i].ProcStatus==ProcStat.R) {
-					continue;//Ignore procedures referred out.  It is the responsibility of the treating dentist to record work they have performed.
-				}
-				listProcsFiltered.Add(listProcsAll[i]);
+			List<Procedure> listProcsFiltered;
+			if(!hasProcedure) {
+				listProcsFiltered=new List<Procedure>();
+			}
+			else {
+				listProcsFiltered=_listProcsFiltered;
 			}
 			Start("component");
 			Start("section");
@@ -1828,16 +1808,12 @@ Reason for Referral
 =====================================================================================================
 Laboratory Test Results
 =====================================================================================================");
-			List<EhrLabResult> listLabResultAll=EhrLabResults.GetAllForPatient(_patOutCcd.PatNum);
-			List<EhrLabResult> listLabResultFiltered=new List<EhrLabResult>();
-			for(int i=0;i<listLabResultAll.Count;i++) {
-				if(!hasSectionResult) {
-					continue;
-				}
-				if(listLabResultAll[i].ObservationIdentifierID=="") {
-					continue;//Blank codes not allowed in format.
-				}
-				listLabResultFiltered.Add(listLabResultAll[i]);
+			List<EhrLabResult> listLabResultFiltered;
+			if(!hasSectionResult) {
+				listLabResultFiltered=new List<EhrLabResult>();
+			}
+			else {
+				listLabResultFiltered=_listLabResultFiltered;
 			}
 			EhrLab labPanel;
 			Start("component");
@@ -1860,6 +1836,7 @@ Laboratory Test Results
 				End("thead");
 				Start("tbody");
 				for(int i=0;i<listLabResultFiltered.Count;i++) {
+					Loinc labLoinc=Loincs.GetByCode(listLabResultFiltered[i].ObservationIdentifierID);
 					string value="";
 					switch(listLabResultFiltered[i].ValueType) {
 						case EhrLaboratories.HL70125.CE:
@@ -1886,7 +1863,12 @@ Laboratory Test Results
 					}
 					Start("tr");
 					_w.WriteElementString("td",listLabResultFiltered[i].ObservationIdentifierID);//LOINC Code
-					_w.WriteElementString("td",listLabResultFiltered[i].ObservationIdentifierText);//Test
+					if(labLoinc==null) {
+						_w.WriteElementString("td",listLabResultFiltered[i].ObservationIdentifierText);//Test
+					}
+					else {
+						_w.WriteElementString("td",labLoinc.NameShort);//Test
+					}
 					_w.WriteElementString("td",value+" "+listLabResultFiltered[i].UnitsID);//Result
 					_w.WriteElementString("td",listLabResultFiltered[i].AbnormalFlags);//Abnormal Flag
 					if(String.Compare(Regex.Match("input string",@"^\d{0,4}").Value.PadLeft(4,'0'),"1880")!=-1) {
@@ -1915,6 +1897,7 @@ Laboratory Test Results
 				else {
 					labPanel=EhrLabs.GetOne(listLabResultFiltered[i].EhrLabNum);
 				}
+				Loinc labLoinc=Loincs.GetByCode(listLabResultFiltered[i].ObservationIdentifierID);
 				string value="";
 				switch(listLabResultFiltered[i].ValueType) {
 					case EhrLaboratories.HL70125.CE:
@@ -1959,8 +1942,11 @@ Laboratory Test Results
 				if(String.IsNullOrEmpty(listLabResultFiltered[i].ObservationIdentifierID)) {
 					StartAndEnd("code","nullFlavor","UNK");
 				}
-				else {
+				else if(labLoinc==null) {
 					StartAndEnd("code","code",listLabResultFiltered[i].ObservationIdentifierID,"displayName",listLabResultFiltered[i].ObservationIdentifierText,"codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc);
+				}
+				else {
+					StartAndEnd("code","code",listLabResultFiltered[i].ObservationIdentifierID,"displayName",labLoinc.NameLongCommon,"codeSystem",strCodeSystemLoinc,"codeSystemName",strCodeSystemNameLoinc);
 				}
 				StartAndEnd("statusCode","code","completed");//Allowed values: aborted, active, cancelled, completed, held, or suspended.
 				DateTime dateTimeEffective=DateTimeFromString(listLabResultFiltered[i].ObservationDateTime);
@@ -2005,19 +1991,12 @@ Laboratory Test Results
 =====================================================================================================
 Social History
 =====================================================================================================");
-			List <EhrMeasureEvent> listEhrMeasureEventsAll=EhrMeasureEvents.Refresh(_patOutCcd.PatNum);
-			List <EhrMeasureEvent> listEhrMeasureEventsFiltered=new List<EhrMeasureEvent>();
-			for(int i=0;i<listEhrMeasureEventsAll.Count;i++) {
-				if(!hasSocialHistory) {
-					continue;
-				}
-				if(listEhrMeasureEventsAll[i].EventType!=EhrMeasureEventType.TobaccoUseAssessed) {
-					continue;
-				}
-				if(listEhrMeasureEventsAll[i].CodeSystemResult!="SNOMEDCT") {
-					continue;//The user is currently only allowed to pick SNOMED smoking statuses. This is here in case we add more code system in the future, to prevent the format from breaking until we enhance.
-				}
-				listEhrMeasureEventsFiltered.Add(listEhrMeasureEventsAll[i]);
+			List <EhrMeasureEvent> listEhrMeasureEventsFiltered;
+			if(!hasSocialHistory) {
+				listEhrMeasureEventsFiltered=new List<EhrMeasureEvent>();
+			}
+			else {
+				listEhrMeasureEventsFiltered=_listEhrMeasureEventsFiltered;
 			}
 			listEhrMeasureEventsFiltered.Sort(CompareEhrMeasureEvents);
 			//The pattern for this section is special. We do not have any lists to use in this section.
@@ -2154,19 +2133,12 @@ Social History
 =====================================================================================================
 Vital Signs
 =====================================================================================================");
-			List<Vitalsign> listVitalSignsAll=Vitalsigns.Refresh(_patOutCcd.PatNum);
-			List<Vitalsign> listVitalSignsFiltered=new List<Vitalsign>();
-			for(int i=0;i<listVitalSignsAll.Count;i++) {
-				if(!hasVitalSign) {
-					continue;
-				}
-				Vitalsign vitalsign=listVitalSignsAll[i];
-				//Each of the vital sign values are optional, so we must skip filter out empty vital signs.
-				float bmi=Vitalsigns.CalcBMI(vitalsign.Weight,vitalsign.Height);//will be 0 if either wight is 0 or height is 0.
-				if(vitalsign.Height==0 && vitalsign.Weight==0 && bmi==0 && (vitalsign.BpSystolic==0 || vitalsign.BpDiastolic==0)) {
-					continue;//Nothing to report.
-				}
-				listVitalSignsFiltered.Add(listVitalSignsAll[i]);
+			List<Vitalsign> listVitalSignsFiltered;
+			if(!hasVitalSign) {
+				listVitalSignsFiltered=new List<Vitalsign>();
+			}
+			else {
+				listVitalSignsFiltered=_listVitalSignsFiltered;
 			}
 			Start("component");
 			Start("section");
@@ -2415,6 +2387,25 @@ Vital Signs
 			End("addr");
 		}
 
+		///<summary>Does validation on the filtered lists. NEEDS TO BE ENHANCED.</summary>
+		private static string ValidateAll(Patient pat) {
+			string err="";
+			err=err+ValidateSettings();
+			err=err+ValidatePatient(pat);
+			err=err+ValidateAllergy(pat);
+			err=err+ValidateEncounter(pat);
+			err=err+ValidateFunctionalStatus(pat);
+			err=err+ValidateImmunization(pat);
+			err=err+ValidateLabResults(pat);
+			err=err+ValidateMedication(pat);
+			err=err+ValidatePlanOfCare(pat);
+			err=err+ValidateProblem(pat);
+			err=err+ValidateProcedure(pat);
+			err=err+ValidateSocialHistory(pat);
+			err=err+ValidateVitalsSign(pat);
+			return err;
+		}
+
 		///<summary>Checks data values for preferences and provider information to ensure required data is available for CCD creation.
 		///Returns empty string if no errors, otherwise returns a string containing error messages.</summary>
 		public static string ValidateSettings() {
@@ -2609,6 +2600,260 @@ Vital Signs
 				}
 			}
 			return strErrors;
+		}
+
+		///<summary>Does validation on the filtered list. NEEDS TO BE ENHANCED.</summary>
+		private static string ValidateAllergy(Patient pat) {
+			FilterAllergy(pat);
+			//TODO: Add validation
+			return "";
+		}
+
+		///<summary>Filters list of allergies. Also runs validation.</summary>
+		private static void FilterAllergy(Patient patCur) {
+			//TODO: Add validation for UNII codes once the table has been implemented.
+			AllergyDef allergyDef;
+			List<Allergy> listAllergiesAll=Allergies.Refresh(patCur.PatNum);
+			List<Allergy> listAllergiesFiltered=new List<Allergy>();
+			for(int i=0;i<listAllergiesAll.Count;i++) {
+				allergyDef=AllergyDefs.GetOne(listAllergiesAll[i].AllergyDefNum);
+				bool isMedAllergy=false;
+				if(allergyDef.MedicationNum!=0) {
+					Medication med=Medications.GetMedication(allergyDef.MedicationNum);
+					if(med.RxCui!=0) {
+						isMedAllergy=true;
+					}
+				}
+				if(allergyDef.SnomedType!=SnomedAllergy.AdverseReactionsToDrug && allergyDef.SnomedType!=SnomedAllergy.DrugAllergy && allergyDef.SnomedType!=SnomedAllergy.DrugIntolerance) {
+					isMedAllergy=false;
+				}
+				//bool isSnomedAllergy=false;
+				//if(allergyDef.SnomedAllergyTo!="") {
+				//	isSnomedAllergy=true;
+				//}
+				if(!isMedAllergy) {// && !isSnomedAllergy) {
+					if(allergyDef.UniiCode=="") {
+						continue;//TODO: We need to add support for Ndf-RT 
+					}
+				}
+				listAllergiesFiltered.Add(listAllergiesAll[i]);
+			}
+			_listAllergiesFiltered=listAllergiesFiltered;
+		}
+
+		///<summary>Does validation on the filtered list. NEEDS TO BE ENHANCED.</summary>
+		private static string ValidateEncounter(Patient pat) {
+			FilterEncounter(pat);
+			//TODO: Add validation
+			return "";
+		}
+
+		///<summary>Filters list of encounters. Also runs validation.</summary>
+		private static void FilterEncounter(Patient patCur) {
+			List<Encounter> listEncountersAll=Encounters.Refresh(patCur.PatNum);
+			List<Encounter> listEncountersFiltered=new List<Encounter>();
+			for(int i=0;i<listEncountersAll.Count;i++) {
+				if(listEncountersAll[i].CodeSystem!="SNOMEDCT") {
+					continue;//The format only allows SNOMED codes and ICD10 codes. We do not have a way to enter ICD10 codes, and SNOMED appears to be the preferred code system anyway.
+				}
+				listEncountersFiltered.Add(listEncountersAll[i]);
+			}
+			_listEncountersFiltered=listEncountersFiltered;
+		}
+
+		///<summary>Does validation on the filtered list. NEEDS TO BE ENHANCED.</summary>
+		private static string ValidateFunctionalStatus(Patient pat) {
+			FilterFunctionalStatus(pat);
+			//TODO: Add validation
+			return "";
+		}
+
+		///<summary>Filters list of encounters. Also runs validation.</summary>
+		private static void FilterFunctionalStatus(Patient patCur) {
+			string snomedProblemType="55607006";
+			List<Disease> listProblemsAll=Diseases.Refresh(patCur.PatNum);
+			List<Disease> listProblemsFiltered=new List<Disease>();
+			for(int i=0;i<listProblemsAll.Count;i++) {
+				if(listProblemsAll[i].SnomedProblemType!="" && listProblemsAll[i].SnomedProblemType!=snomedProblemType) {
+					continue;//Not a "problem".
+				}
+				if(listProblemsAll[i].FunctionStatus==FunctionalStatus.Problem) {
+					continue;//Is a standard problem, not a cognitive or functional problem.
+				}
+				listProblemsFiltered.Add(listProblemsAll[i]);
+			}
+			_listProblemsFuncFiltered=listProblemsFiltered;
+		}
+
+		///<summary>Does validation on the filtered list. NEEDS TO BE ENHANCED.</summary>
+		private static string ValidateImmunization(Patient pat) {
+			FilterImmunization(pat);
+			//TODO: Add validation
+			return "";
+		}
+
+		///<summary>Filters list of vaccines. Also runs validation.</summary>
+		private static void FilterImmunization(Patient patCur) {
+			List<VaccinePat> listVaccinePatsAll=VaccinePats.Refresh(patCur.PatNum);
+			List<VaccinePat> listVaccinePatsFiltered=new List<VaccinePat>();
+			for(int i=0;i<listVaccinePatsAll.Count;i++) {
+				//No Filters for this
+				listVaccinePatsFiltered.Add(listVaccinePatsAll[i]);
+			}
+			_listVaccinePatsFiltered=listVaccinePatsFiltered;
+		}
+
+		///<summary>Does validation on the filtered list. NEEDS TO BE ENHANCED.</summary>
+		private static string ValidateMedication(Patient pat) {
+			FilterMedication(pat);
+			//TODO: Add validation
+			return "";
+		}
+
+		///<summary>Filters list of medications. Also runs validation.</summary>
+		private static void FilterMedication(Patient patCur) {
+			List<MedicationPat> listMedPatsAll=MedicationPats.Refresh(patCur.PatNum,true);
+			List<MedicationPat> listMedPatsFiltered=new List<MedicationPat>();
+			for(int i=0;i<listMedPatsAll.Count;i++) {
+				//No filters currently
+				listMedPatsFiltered.Add(listMedPatsAll[i]);
+			}
+			_listMedPatsFiltered=listMedPatsFiltered;
+		}
+
+		///<summary>Does validation on the filtered list. NEEDS TO BE ENHANCED.</summary>
+		private static string ValidatePlanOfCare(Patient pat) {
+			FilterPlanOfCare(pat);
+			//TODO: Add validation
+			return "";
+		}
+
+		///<summary>Filters list of care plans. Also runs validation.</summary>
+		private static void FilterPlanOfCare(Patient patCur) {
+			List<EhrCarePlan> listEhrCarePlansAll=EhrCarePlans.Refresh(patCur.PatNum);
+			List<EhrCarePlan> listEhrCarePlansFiltered=new List<EhrCarePlan>();
+			for(int i=0;i<listEhrCarePlansAll.Count;i++) {
+				//No filters yet. This loop is here to match our pattern. If we need to add filters later, the change will be safer and more obvious.
+				listEhrCarePlansFiltered.Add(listEhrCarePlansAll[i]);
+			}
+			_listEhrCarePlansFiltered=listEhrCarePlansFiltered;
+		}
+
+		///<summary>Does validation on the filtered list. NEEDS TO BE ENHANCED.</summary>
+		private static string ValidateProblem(Patient pat) {
+			FilterProblem(pat);
+			//TODO: Add validation
+			return "";
+		}
+
+		///<summary>Filters list of problems. Also runs validation.</summary>
+		private static void FilterProblem(Patient patCur) {
+			string snomedProblemType="55607006";
+			List<Disease> listProblemsAll=Diseases.Refresh(patCur.PatNum);
+			List<Disease> listProblemsFiltered=new List<Disease>();
+			for(int i=0;i<listProblemsAll.Count;i++) {
+				if(listProblemsAll[i].SnomedProblemType!="" && listProblemsAll[i].SnomedProblemType!=snomedProblemType) {
+					continue;//Not a "problem".
+				}
+				if(listProblemsAll[i].FunctionStatus!=FunctionalStatus.Problem) {
+					continue;//Not a "problem".
+				}
+				listProblemsFiltered.Add(listProblemsAll[i]);
+			}
+			_listProblemsFiltered=listProblemsFiltered;
+		}
+
+		///<summary>Does validation on the filtered list. NEEDS TO BE ENHANCED.</summary>
+		private static string ValidateProcedure(Patient pat) {
+			FilterProcedure(pat);
+			//TODO: Add validation
+			return "";
+		}
+
+		///<summary>Filters list of procedures. Also runs validation.</summary>
+		private static void FilterProcedure(Patient patCur) {
+			List<Procedure> listProcsAll=Procedures.Refresh(patCur.PatNum);
+			List<Procedure> listProcsFiltered=new List<Procedure>();
+			for(int i=0;i<listProcsAll.Count;i++) {
+				ProcedureCode procCode=ProcedureCodes.GetProcCode(listProcsAll[i].CodeNum);
+				if(listProcsAll[i].ProcStatus==ProcStat.D) {
+					continue;//Ignore deleted procedures.
+				}
+				if(listProcsAll[i].ProcStatus==ProcStat.TP) {
+					continue;//Ignore treatment planned procedures.  These procedures should be sent out in the Care Plan section in the future.  We are not required to send treatment planned items.
+				}
+				if(listProcsAll[i].ProcStatus==ProcStat.R) {
+					continue;//Ignore procedures referred out.  It is the responsibility of the treating dentist to record work they have performed.
+				}
+				listProcsFiltered.Add(listProcsAll[i]);
+			}
+			_listProcsFiltered=listProcsFiltered;
+		}
+
+		///<summary>Does validation on the filtered list. NEEDS TO BE ENHANCED.</summary>
+		private static string ValidateLabResults(Patient pat) {
+			FilterLabResults(pat);
+			//TODO: Add validation
+			return "";
+		}
+
+		///<summary>Filters list of lab results. Also runs validation.</summary>
+		private static void FilterLabResults(Patient patCur) {
+			List<EhrLabResult> listLabResultAll=EhrLabResults.GetAllForPatient(patCur.PatNum);
+			List<EhrLabResult> listLabResultFiltered=new List<EhrLabResult>();
+			for(int i=0;i<listLabResultAll.Count;i++) {
+				if(listLabResultAll[i].ObservationIdentifierID=="") {
+					continue;//Blank codes not allowed in format.
+				}
+				listLabResultFiltered.Add(listLabResultAll[i]);
+			}
+			_listLabResultFiltered=listLabResultFiltered;
+		}
+
+		///<summary>Does validation on the filtered list. NEEDS TO BE ENHANCED.</summary>
+		private static string ValidateSocialHistory(Patient pat) {
+			FilterSocialHistory(pat);
+			//TODO: Add validation
+			return "";
+		}
+
+		///<summary>Filters list of procedures. Also runs validation.</summary>
+		private static void FilterSocialHistory(Patient patCur) {
+			List<EhrMeasureEvent> listEhrMeasureEventsAll=EhrMeasureEvents.Refresh(patCur.PatNum);
+			List<EhrMeasureEvent> listEhrMeasureEventsFiltered=new List<EhrMeasureEvent>();
+			for(int i=0;i<listEhrMeasureEventsAll.Count;i++) {
+				if(listEhrMeasureEventsAll[i].EventType!=EhrMeasureEventType.TobaccoUseAssessed) {
+					continue;
+				}
+				if(listEhrMeasureEventsAll[i].CodeSystemResult!="SNOMEDCT") {
+					continue;//The user is currently only allowed to pick SNOMED smoking statuses. This is here in case we add more code system in the future, to prevent the format from breaking until we enhance.
+				}
+				listEhrMeasureEventsFiltered.Add(listEhrMeasureEventsAll[i]);
+			}
+			_listEhrMeasureEventsFiltered=listEhrMeasureEventsFiltered;
+		}
+
+		///<summary>Does validation on the filtered list. NEEDS TO BE ENHANCED.</summary>
+		private static string ValidateVitalsSign(Patient pat) {
+			FilterVitalSign(pat);
+			//TODO: Add validation
+			return "";
+		}
+
+		///<summary>Filters list of procedures. Also runs validation.</summary>
+		private static void FilterVitalSign(Patient patCur) {
+			List<Vitalsign> listVitalSignsAll=Vitalsigns.Refresh(patCur.PatNum);
+			List<Vitalsign> listVitalSignsFiltered=new List<Vitalsign>();
+			for(int i=0;i<listVitalSignsAll.Count;i++) {
+				Vitalsign vitalsign=listVitalSignsAll[i];
+				//Each of the vital sign values are optional, so we must skip filter out empty vital signs.
+				float bmi=Vitalsigns.CalcBMI(vitalsign.Weight,vitalsign.Height);//will be 0 if either wight is 0 or height is 0.
+				if(vitalsign.Height==0 && vitalsign.Weight==0 && bmi==0 && (vitalsign.BpSystolic==0 || vitalsign.BpDiastolic==0)) {
+					continue;//Nothing to report.
+				}
+				listVitalSignsFiltered.Add(listVitalSignsAll[i]);
+			}
+			_listVitalSignsFiltered=listVitalSignsFiltered;
 		}
 
 		#endregion CCD Creation

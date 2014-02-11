@@ -138,10 +138,8 @@ namespace OpenDental{
 			// 
 			// textUnii
 			// 
-			this.textUnii.Enabled = false;
 			this.textUnii.Location = new System.Drawing.Point(118, 25);
 			this.textUnii.Name = "textUnii";
-			this.textUnii.ReadOnly = true;
 			this.textUnii.Size = new System.Drawing.Size(276, 20);
 			this.textUnii.TabIndex = 21;
 			// 
@@ -191,7 +189,6 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Enabled = false;
 			this.label1.Location = new System.Drawing.Point(6, 25);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(109, 20);
