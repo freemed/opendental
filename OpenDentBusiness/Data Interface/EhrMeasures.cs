@@ -273,7 +273,7 @@ namespace OpenDentBusiness{
 			string[] tempProv=provs.Split(',');
 			string provOID="";
 			for(int oi=0;oi<tempProv.Length;oi++) {
-				provOID=provOID+OIDInternals.GetForType(IdentifierType.Provider).IDRoot+"."+tempProv[oi];
+				provOID=provOID+tempProv[oi];
 				if(oi<tempProv.Length-1) {
 					provOID+=",";
 				}
@@ -2517,7 +2517,7 @@ namespace OpenDentBusiness{
 			string[] tempProv=provs.Split(',');
 			string provOID="";
 			for(int oi=0;oi<tempProv.Length;oi++) {
-				provOID=provOID+OIDInternals.GetForType(IdentifierType.Provider).IDRoot+"."+tempProv[oi];
+				provOID=provOID+tempProv[oi];
 				if(oi<tempProv.Length-1) {
 					provOID+=",";
 				}
@@ -3880,7 +3880,7 @@ namespace OpenDentBusiness{
 							if(dateT<DateTime.Now.AddYears(-1)) {//either no start date so not an order, or not within the last year so not during the reporting period
 								continue;
 							}
-							else if((ehrLabList[m].OrderingProviderID==OIDInternals.GetForType(IdentifierType.Provider).IDRoot+"."+pat.PriProv
+							else if((ehrLabList[m].OrderingProviderID==pat.PriProv.ToString()
 								|| ehrLabList[m].OrderingProviderID==Providers.GetProv(pat.PriProv).NationalProvID)
 								&& (loinc==null || !loinc.ClassType.Contains("%rad%"))) {//if there's a note and it was created by the patient's PriProv, then count as order created by this provider and would count toward the denominator for MU
 								labOrderCount++;
@@ -3912,7 +3912,7 @@ namespace OpenDentBusiness{
 							if(dateT<DateTime.Now.AddYears(-1)) {//either no start date so not an order, or not within the last year so not during the reporting period
 								continue;
 							}
-							else if((ehrLabList[m].OrderingProviderID==OIDInternals.GetForType(IdentifierType.Provider).IDRoot+"."+pat.PriProv 
+							else if((ehrLabList[m].OrderingProviderID==pat.PriProv.ToString() 
 								|| ehrLabList[m].OrderingProviderID==Providers.GetProv(pat.PriProv).NationalProvID)
 								&& loinc.ClassType.Contains("%rad%")) {//if there's a note and it was created by the patient's PriProv, then count as order created by this provider and would count toward the denominator for MU
 								radOrderCount++;

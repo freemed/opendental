@@ -69,7 +69,7 @@ namespace OpenDentBusiness{
 			if(validKeys.Count<1) {
 				return new DateTime(DateTime.Today.Year,1,1);
 			}
-			EhrQuarterlyKey ehrKey=validKeys[0];
+			EhrQuarterlyKey ehrKey=validKeys[validKeys.Count-1];
 			DateTime latestReportDate=GetLastDayOfQuarter(ehrKey);
 			DateTime earliestStartDate=latestReportDate.AddYears(-1).AddDays(1);
 			for(int i=validKeys.Count-1;i>-1;i--) {
