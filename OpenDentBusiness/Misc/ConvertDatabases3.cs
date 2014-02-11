@@ -3857,7 +3857,32 @@ namespace OpenDentBusiness {
 					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'TimeCardADPExportIncludesName','0')";
 					Db.NonQ(command);
 				}
-				if(DataConnection.DBtype==DatabaseType.MySql) {
+
+
+
+
+
+				command="UPDATE preference SET ValueString = '14.1.0.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
+			//To14_2_0();
+		}
+
+
+		
+
+
+
+
+
+	}
+}
+
+
+
+//todo: add this to the convert script if we decide to go with TableType format for logging
+/*
+ * 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS logod";
 					Db.NonQ(command);
 					command=@"CREATE TABLE logod (
@@ -3889,30 +3914,7 @@ namespace OpenDentBusiness {
 						CONSTRAINT logod_LogNum PRIMARY KEY (LogNum)
 						)";
 					Db.NonQ(command);
-				}
-
-
-
-
-				command="UPDATE preference SET ValueString = '14.1.0.0' WHERE PrefName = 'DataBaseVersion'";
-				Db.NonQ(command);
-			}
-			//To14_2_0();
-		}
-
-
-		
-
-
-
-
-
-	}
-}
-
-
-
-
+				}*/
 
 
 
