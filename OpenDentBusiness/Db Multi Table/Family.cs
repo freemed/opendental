@@ -103,6 +103,7 @@ namespace OpenDentBusiness
 			for(int i=0;i<ListPats.Length;i++){
 				if(ListPats[i].PatNum==patNum){
 					retVal=ListPats[i].Copy();
+					break;
 				}
 			}
 			return retVal;
