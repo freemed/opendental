@@ -7,7 +7,7 @@ using System.Text;
 
 namespace OpenDentBusiness {
 	public partial class ConvertDatabases {
-		public static System.Version LatestVersion=new Version("14.1.0.0");//This value must be changed when a new conversion is to be triggered.
+		public static System.Version LatestVersion=new Version("14.2.0.0");//This value must be changed when a new conversion is to be triggered.
 
 		///<summary>Oracle compatible: 07/11/2013</summary>
 		private static void To13_2_1() {
@@ -2213,11 +2213,11 @@ namespace OpenDentBusiness {
 				command="UPDATE preference SET ValueString = '13.3.7.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
-			To14_1_0();
+			To14_1_1();
 		}
 
-		private static void To14_1_0() {
-			if(FromVersion<new Version("14.1.0.0")) {
+		private static void To14_1_1() {
+			if(FromVersion<new Version("14.1.1.0")) {
 				string command;
 				//Added permission EhrShowCDS.     No one has this permission by default.  This is more like a user level preference than a permission.
 				//Added permission EhrInfoButton.  No one has this permission by default.  This is more like a user level preference than a permission.
@@ -3857,18 +3857,26 @@ namespace OpenDentBusiness {
 					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'TimeCardADPExportIncludesName','0')";
 					Db.NonQ(command);
 				}
-
-
-
-
-
-				command="UPDATE preference SET ValueString = '14.1.0.0' WHERE PrefName = 'DataBaseVersion'";
+				command="UPDATE preference SET ValueString = '14.1.1.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
-			//To14_2_0();
+			To14_2_0();
 		}
 
+		private static void To14_2_0() {
+			if(FromVersion<new Version("14.2.0.0")) {
+				string command;
 
+
+
+
+
+
+				command="UPDATE preference SET ValueString = '14.2.0.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
+			//To14_3_0();
+		}
 		
 
 
