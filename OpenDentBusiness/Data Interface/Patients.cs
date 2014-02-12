@@ -2179,8 +2179,12 @@ FROM insplan";
 				return new List<Patient>();//return empty list
 			}
 			//Should also work in Oracle.
-			string command = "SELECT DISTINCT * FROM patient WHERE PatNum IN (SELECT Guarantor FROM patient WHERE SuperFamily="+POut.Long(SuperFamilyNum)+") "
-				+"AND PatStatus!="+POut.Int((int)PatientStatus.Deleted);
+			//this query was taking 2.5 seconds on a large database
+			//string command = "SELECT DISTINCT * FROM patient WHERE PatNum IN (SELECT Guarantor FROM patient WHERE SuperFamily="+POut.Long(SuperFamilyNum)+") "
+			//	+"AND PatStatus!="+POut.Int((int)PatientStatus.Deleted);
+			//optimized to 0.001 second runtime on same db
+			string command = "SELECT DISTINCT * FROM patient WHERE SuperFamily="+POut.Long(SuperFamilyNum)
+				+" AND PatStatus!="+POut.Int((int)PatientStatus.Deleted)+" AND PatNum=Guarantor";
 			return Crud.PatientCrud.TableToList(Db.GetTable(command));
 		}
 
