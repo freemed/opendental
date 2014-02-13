@@ -23,6 +23,7 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormPayorTypeEdit));
 			this.butDelete = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
@@ -120,11 +121,14 @@
 			// comboSopCode
 			// 
 			this.comboSopCode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboSopCode.FormattingEnabled = true;
 			this.comboSopCode.Location = new System.Drawing.Point(95, 42);
+			this.comboSopCode.MaxDropDownItems = 30;
 			this.comboSopCode.Name = "comboSopCode";
 			this.comboSopCode.Size = new System.Drawing.Size(490, 21);
 			this.comboSopCode.TabIndex = 138;
+			this.comboSopCode.DropDown += new System.EventHandler(this.comboSopCode_DropDown);
+			this.comboSopCode.SelectionChangeCommitted += new System.EventHandler(this.comboSopCode_SelectionChangeCommitted);
+			this.comboSopCode.DropDownClosed += new System.EventHandler(this.comboSopCode_DropDownClosed);
 			// 
 			// textDate
 			// 
@@ -147,6 +151,7 @@
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.butOK);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "FormPayorTypeEdit";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Edit Payor Type";

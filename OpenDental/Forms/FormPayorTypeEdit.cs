@@ -12,7 +12,8 @@ namespace OpenDental {
 	public partial class FormPayorTypeEdit:Form {
 		public bool IsNew;
 		private PayorType PayorTypeCur;
-
+		private int _selectedIndex;//used to keep track of the selected index in the comboSopCode drop down box since we are setting the text differently than the contents of the drop down list
+		
 		public FormPayorTypeEdit(PayorType payorType) {
 			InitializeComponent();
 			Lan.F(this);
@@ -20,16 +21,48 @@ namespace OpenDental {
 		}
 
 		private void FormPayorTypeEdit_Load(object sender,EventArgs e) {
+			_selectedIndex=-1;
 			for(int i=0;i<Sops.Listt.Count;i++) {
-				comboSopCode.Items.Add(Sops.Listt[i].Description);
+				comboSopCode.Items.Add(Sops.Listt[i].SopCode+" - "+Sops.Listt[i].Description);
 				if(PayorTypeCur.SopCode==Sops.Listt[i].SopCode) {
 					comboSopCode.SelectedIndex=i;
 				}
 			}
+			_selectedIndex=comboSopCode.SelectedIndex;
 			textDate.Text=PayorTypeCur.DateStart.ToShortDateString();
 			textNote.Text=PayorTypeCur.Note;
 		}
 
+		private void comboSopCode_DropDown(object sender,EventArgs e) {
+			comboSopCode.Items.Clear();
+			for(int i=0;i<Sops.Listt.Count;i++) {
+				comboSopCode.Items.Add("".PadRight(Sops.Listt[i].SopCode.Length*4-4,' ')+Sops.Listt[i].SopCode+" - "+Sops.Listt[i].Description);
+			}
+			comboSopCode.SelectedIndex=_selectedIndex;
+		}
+
+		private void comboSopCode_SelectionChangeCommitted(object sender,EventArgs e) {
+			_selectedIndex=comboSopCode.SelectedIndex;
+			comboSopCode.Items.Clear();
+			for(int i=0;i<Sops.Listt.Count;i++) {
+				comboSopCode.Items.Add(Sops.Listt[i].SopCode+" - "+Sops.Listt[i].Description);
+			}
+			comboSopCode.SelectedIndex=_selectedIndex;
+		}
+
+		private void comboSopCode_DropDownClosed(object sender,EventArgs e) {
+			_selectedIndex=comboSopCode.SelectedIndex;
+			//if they expanded the drop down and then collapsed it without changing their selection, re-fill combo box without spaces for heirarchy
+			//we don't want to do this every time because you can see the text changing and it is an annoyance, better to do in SelectionChangeCommitted
+			if(comboSopCode.Items.Count>2 && comboSopCode.Items[1].ToString().Length>0 && comboSopCode.Items[1].ToString().Substring(0,1)==" ") {
+				comboSopCode.Items.Clear();
+				for(int i=0;i<Sops.Listt.Count;i++) {
+					comboSopCode.Items.Add(Sops.Listt[i].SopCode+" - "+Sops.Listt[i].Description);
+				}
+			}
+			comboSopCode.SelectedIndex=_selectedIndex;
+		}
+		
 		private void butDelete_Click(object sender,EventArgs e) {
 			if(IsNew) {
 				DialogResult=DialogResult.Cancel;
@@ -55,6 +88,19 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please select an Sop Code.");
 				return;
 			}
+			//Make sure there is not already a payor type entered with the selected date.
+			//If there is, they should edit the existing one for that date.  There should not be two payor types that start on the same date.
+			List<PayorType> listPayorTypes=PayorTypes.Refresh(PayorTypeCur.PatNum);
+			for(int i=0;i<listPayorTypes.Count;i++) {
+				//if updating an existing payor type, move past the current one
+				if(listPayorTypes[i].PayorTypeNum==PayorTypeCur.PayorTypeNum) {
+					continue;
+				}
+				if(listPayorTypes[i].DateStart==PIn.Date(textDate.Text)) {
+					MsgBox.Show(this,"There is already a payor type with the selected start date.  Either change the date of this payor type or edit the existing payor type with this date.");
+					return;
+				}
+			}
 			PayorTypeCur.SopCode=Sops.Listt[comboSopCode.SelectedIndex].SopCode;
 			PayorTypeCur.Note=textNote.Text;
 			PayorTypeCur.DateStart=PIn.Date(textDate.Text);
@@ -70,5 +116,6 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
 	}
 }

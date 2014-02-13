@@ -31,6 +31,8 @@ namespace OpenDental {
 			col=new ODGridColumn("Date End",70);
 			col.TextAlign=HorizontalAlignment.Center;
 			gridMain.Columns.Add(col);
+			col=new ODGridColumn("SOP Code",70);
+			gridMain.Columns.Add(col);
 			col=new ODGridColumn("Description",250);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("Note",100);
@@ -47,6 +49,7 @@ namespace OpenDental {
 				else {
 					row.Cells.Add(ListPayorTypes[i+1].DateStart.ToShortDateString());
 				}
+				row.Cells.Add(ListPayorTypes[i].SopCode);
 				row.Cells.Add(Sops.GetOneDescription(ListPayorTypes[i].SopCode));
 				row.Cells.Add(ListPayorTypes[i].Note);
 				gridMain.Rows.Add(row);

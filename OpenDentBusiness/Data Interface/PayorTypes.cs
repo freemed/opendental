@@ -16,7 +16,7 @@ namespace OpenDentBusiness{
 			return Crud.PayorTypeCrud.SelectMany(command);
 		}
 
-		
+		///<summary>This will return "SopCode - Description" or empty string if the patient does not have a payor type entered.</summary>
 		public static string GetCurrentDescription(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),patNum);
@@ -25,7 +25,7 @@ namespace OpenDentBusiness{
 			if(payorType==null) {
 				return "";
 			}
-			return Sops.GetDescriptionFromCode(payorType.SopCode);
+			return payorType.SopCode+" - "+Sops.GetDescriptionFromCode(payorType.SopCode);
 		}
 
 		///<summary>Gets most recent PayorType for a patient.</summary>
