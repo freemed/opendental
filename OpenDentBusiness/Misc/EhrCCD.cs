@@ -739,7 +739,9 @@ Encounters
 					if(snomedDiagnosis==null) {//Could be null if the code was imported from another EHR.
 						_w.WriteElementString("td","");
 					}
-					_w.WriteElementString("td",snomedDiagnosis.SnomedCode+" - "+snomedDiagnosis.Description);
+					else {
+						_w.WriteElementString("td",snomedDiagnosis.SnomedCode+" - "+snomedDiagnosis.Description);
+					}
 					if(listEncountersFiltered[i].DateEncounter.Year<1880) {
 						_w.WriteElementString("td","");
 					}
@@ -837,7 +839,8 @@ Encounters
 				//then the high element SHALL be present, and the nullFlavor attribute SHALL be set to 'UNK'.
 				//Therefore, the existence of an high element within a problem does indicate that the problem has been resolved."
 				End("effectiveTime");
-				if(String.IsNullOrEmpty(listEncountersFiltered[i].CodeValue)) {
+				Snomed snomedDiagnosis=Snomeds.GetByCode(listEncountersFiltered[i].CodeValue);
+				if(snomedDiagnosis==null) {
 					Start("value");
 					_w.WriteAttributeString("xsi","type",null,"CD");
 					Attribs("nullFlavor","UNK");
@@ -847,7 +850,7 @@ Encounters
 					Start("value");
 					_w.WriteAttributeString("xsi","type",null,"CD");
 					//The format only allows SNOMED and ICD10 code systems. If we support ICD10 in the future, then the value must be specified in a special manner. SNOMED appears to be preferred. See the guide for details.
-					Snomed snomedDiagnosis=Snomeds.GetByCode(listEncountersFiltered[i].CodeValue);
+					//Snomed snomedDiagnosis=Snomeds.GetByCode(listEncountersFiltered[i].CodeValue);
 					Attribs("code",snomedDiagnosis.SnomedCode,"codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed,"displayName",snomedDiagnosis.Description);
 					End("value");
 				}
@@ -893,22 +896,16 @@ Functional and Cognitive Status
 				End("thead");
 				Start("tbody");
 				for(int i=0;i<listProblemsFiltered.Count;i++) {
-					DiseaseDef diseaseDef;
-					Snomed snomedProblem;
-					if(listProblemsFiltered[i].DiseaseDefNum==0) {
-						diseaseDef=new DiseaseDef();
-					}
-					else {
+					DiseaseDef diseaseDef=null;
+					Snomed snomedProblem=null;
+					if(listProblemsFiltered[i].DiseaseDefNum>0) {
 						diseaseDef=DiseaseDefs.GetItem(listProblemsFiltered[i].DiseaseDefNum);
-					}
-					if(String.IsNullOrEmpty(diseaseDef.SnomedCode)) {
-						snomedProblem=new Snomed();
-					}
-					else {
-						snomedProblem=Snomeds.GetByCode(diseaseDef.SnomedCode);
+						if(diseaseDef!=null && !String.IsNullOrEmpty(diseaseDef.SnomedCode)) {
+							snomedProblem=Snomeds.GetByCode(diseaseDef.SnomedCode);
+						}
 					}
 					Start("tr");
-					if(String.IsNullOrEmpty(snomedProblem.SnomedCode)) {
+					if(diseaseDef==null || snomedProblem==null) {
 						_w.WriteElementString("td","");
 					}
 					else {
@@ -941,15 +938,17 @@ Functional and Cognitive Status
 				listProblemsFiltered.Add(dis);
 			}
 			for(int i=0;i<listProblemsFiltered.Count;i++) {
-				DiseaseDef diseaseDef;
-				Snomed snomedProblem;
-				if(listProblemsFiltered[i].PatNum==0) {
-					diseaseDef=new DiseaseDef();
-					snomedProblem=new Snomed();
-				}
-				else {
+				DiseaseDef diseaseDef=null;
+				Snomed snomedProblem=null;
+				if(listProblemsFiltered[i].PatNum!=0) {					
 					diseaseDef=DiseaseDefs.GetItem(listProblemsFiltered[i].DiseaseDefNum);
 					snomedProblem=Snomeds.GetByCode(diseaseDef.SnomedCode);
+				}
+				if(diseaseDef==null) {
+					diseaseDef=new DiseaseDef();
+				}
+				if(snomedProblem==null) {
+					snomedProblem=new Snomed();
 				}
 				Start("entry","typeCode","DRIV");
 				Start("observation","classCode","OBS","moodCode","EVN");
@@ -1432,12 +1431,11 @@ Care Plan
 				_w.WriteComment("Instructions template");
 				Start("code");
 				_w.WriteAttributeString("xsi","type",null,"CE");
-				Snomed snomedEducation;
-				if(String.IsNullOrEmpty(listEhrCarePlansFiltered[i].SnomedEducation)) {
+				Snomed snomedEducation=Snomeds.GetByCode(listEhrCarePlansFiltered[i].SnomedEducation);
+				if(snomedEducation==null) {
 					Attribs("nullFlavor","UNK");
 				}
 				else {
-					snomedEducation=Snomeds.GetByCode(listEhrCarePlansFiltered[i].SnomedEducation);
 					Attribs("code",snomedEducation.SnomedCode,"codeSystem",strCodeSystemSnomed,"displayName",snomedEducation.Description);
 				}
 				End("code");
@@ -2101,11 +2099,11 @@ Social History
 				End("effectiveTime");
 				Start("value");
 				_w.WriteAttributeString("xsi","type",null,"CD");
-				if(String.IsNullOrEmpty(listEhrMeasureEventsFiltered[i].CodeValueResult)) {
+				Snomed snomedSmoking=Snomeds.GetByCode(listEhrMeasureEventsFiltered[i].CodeValueResult);
+				if(snomedSmoking==null) {
 					Attribs("nullFlavor","UNK");
 				}
 				else {
-					Snomed snomedSmoking=Snomeds.GetByCode(listEhrMeasureEventsFiltered[i].CodeValueResult);
 					Attribs("code",snomedSmoking.SnomedCode,"displayName",snomedSmoking.Description,"codeSystem",strCodeSystemSnomed,"codeSystemName",strCodeSystemNameSnomed);
 				}
 				End("value");
