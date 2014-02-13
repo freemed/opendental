@@ -126,6 +126,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Throws an exception if validation fails.</summary>
 		private string GenerateCCD(Patient pat,string referralReason,bool hasAllergy,bool hasEncounter,bool hasFunctionalStatus,bool hasImmunization,bool hasMedication,bool hasPlanOfCare,bool hasProblem,bool hasProcedure,bool hasReferral,bool hasResult,bool hasSocialHistory,bool hasVitalSign,string instructions) {
+			Medications.Refresh();
 			string strErrors=ValidateAll(pat);
 			if(strErrors!="") {
 				throw new ApplicationException(strErrors);
@@ -133,7 +134,6 @@ namespace OpenDentBusiness {
 			_patOutCcd=pat;
 			_hashCcdIds=new HashSet<string>();//The IDs only need to be unique within each CCD document.
 			_hashCcdGuids=new HashSet<string>();//The UUIDs only need to be unique within each CCD document.
-			Medications.Refresh();
 			XmlWriterSettings xmlSettings=new XmlWriterSettings();
 			xmlSettings.Encoding=Encoding.UTF8;
 			xmlSettings.OmitXmlDeclaration=true;
